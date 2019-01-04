@@ -6,17 +6,17 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlTree<TKey, TValue> : IEnumerable<AvlNode<TKey, TValue>>, IAvlTree<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
+    public partial class AvlTree<TKey, TValue> : IEnumerable<IAvlNodeEquivalent<TKey, TValue>>, IAvlTree<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
 		public AvlTree()
 		{
 		}
 
-        public AvlNode<TKey, TValue> NodeAtIndex(long i)
+        public IAvlNodeEquivalent<TKey, TValue> NodeAtIndex(long i)
         {
             ConfirmInRange(i);
             
-			AvlNode<TKey, TValue> node = Root;
+			IAvlNodeEquivalent<TKey, TValue> node = Root;
 
             long index = node?.LeftCount ?? 0;
             while (node != null)
@@ -58,13 +58,13 @@ namespace Lazinator.Collections.Avl
         /// <param name="value"></param>
         /// <param name="parent"></param>
         /// <returns></returns>
-        protected internal virtual AvlNode<TKey, TValue> CreateNode(TKey key, TValue value, AvlNode<TKey, TValue> parent = null)
+        protected internal virtual IAvlNodeEquivalent<TKey, TValue> CreateNode(TKey key, TValue value, IAvlNodeEquivalent<TKey, TValue> parent = null)
         {
             return new AvlNode<TKey, TValue>()
             {
                 Key = key,
                 Value = value,
-                Parent = parent
+                Parent = (AvlNode<TKey, TValue>) parent
             };
         }
 
@@ -84,7 +84,7 @@ namespace Lazinator.Collections.Avl
         /// <returns></returns>
 		public bool ValueAtKey(TKey key, out TValue value)
 		{
-			AvlNode<TKey, TValue> node = Root;
+			IAvlNodeEquivalent<TKey, TValue> node = Root;
 
 			while (node != null)
 			{
@@ -115,7 +115,7 @@ namespace Lazinator.Collections.Avl
         /// </summary>
         /// <param name="key"></param>
         /// <returns>A node or null, if the key is after all keys in the tree</returns>
-        public (AvlNode<TKey, TValue> node, long index, bool found) GetMatchingOrNextNode(TKey key)
+        public (IAvlNodeEquivalent<TKey, TValue> node, long index, bool found) GetMatchingOrNextNode(TKey key)
         {
             var result = GetMatchingOrNextNodeHelper(key);
             if (result.found && AllowDuplicateKeys)
@@ -133,9 +133,9 @@ namespace Lazinator.Collections.Avl
             return result;
         }
 
-        private (AvlNode<TKey, TValue> node, long index, bool found) GetMatchingOrNextNodeHelper(TKey key)
+        private (IAvlNodeEquivalent<TKey, TValue> node, long index, bool found) GetMatchingOrNextNodeHelper(TKey key)
         {
-            AvlNode<TKey, TValue> node = Root;
+            IAvlNodeEquivalent<TKey, TValue> node = Root;
             if (node == null)
                 return (null, 0, false);
             long index = node?.LeftCount ?? 0;
@@ -173,7 +173,7 @@ namespace Lazinator.Collections.Avl
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public AvlNode<TKey, TValue> NodeForKey(TKey key)
+        public IAvlNodeEquivalent<TKey, TValue> NodeForKey(TKey key)
         {
             return GetMatchingOrNextNode(key).node ?? LastNode();
         }
@@ -182,7 +182,7 @@ namespace Lazinator.Collections.Avl
         /// Gets the last node.
         /// </summary>
         /// <returns></returns>
-        public AvlNode<TKey, TValue> LastNode()
+        public IAvlNodeEquivalent<TKey, TValue> LastNode()
         {
             var x = Root;
             while (x.Right != null)
@@ -214,7 +214,7 @@ namespace Lazinator.Collections.Avl
         /// <returns></returns>
         private (bool inserted, long location) InsertHelper(bool skipDuplicateKeys, TKey key, TValue value, long? nodeIndex = null)
 		{
-			AvlNode<TKey, TValue> node = Root;
+			IAvlNodeEquivalent<TKey, TValue> node = Root;
             long index = node?.LeftCount ?? 0;
 			while (node != null)
             {
@@ -224,7 +224,7 @@ namespace Lazinator.Collections.Avl
 
                 if (compare < 0 || (compare == 0 && nodeIndex != null))
                 {
-                    AvlNode<TKey, TValue> left = node.Left;
+                    IAvlNodeEquivalent<TKey, TValue> left = node.Left;
 
                     if (left == null)
                     {
@@ -277,7 +277,7 @@ namespace Lazinator.Collections.Avl
 			return (true, 0);
 		}
 
-        private int CompareKeyOrIndexToNode(bool skipDuplicateKeys, TKey key, AvlNode<TKey, TValue> node, long? desiredNodeIndex, long actualNodeIndex)
+        private int CompareKeyOrIndexToNode(bool skipDuplicateKeys, TKey key, IAvlNodeEquivalent<TKey, TValue> node, long? desiredNodeIndex, long actualNodeIndex)
         {
             int compare;
             if (desiredNodeIndex is long index)
@@ -302,7 +302,7 @@ namespace Lazinator.Collections.Avl
 
         #region Balancing
 
-        private void InsertBalance(AvlNode<TKey, TValue> node, int balance)
+        private void InsertBalance(IAvlNodeEquivalent<TKey, TValue> node, int balance)
 		{
 			while (node != null)
 			{
@@ -339,7 +339,7 @@ namespace Lazinator.Collections.Avl
 					return;
 				}
 
-				AvlNode<TKey, TValue> parent = node.Parent;
+				IAvlNodeEquivalent<TKey, TValue> parent = node.Parent;
 
 				if (parent != null)
 				{
@@ -350,11 +350,11 @@ namespace Lazinator.Collections.Avl
 			}
 		}
 
-		private AvlNode<TKey, TValue> RotateLeft(AvlNode<TKey, TValue> node)
+		private IAvlNodeEquivalent<TKey, TValue> RotateLeft(IAvlNodeEquivalent<TKey, TValue> node)
 		{
-			AvlNode<TKey, TValue> right = node.Right;
-			AvlNode<TKey, TValue> rightLeft = right.Left;
-			AvlNode<TKey, TValue> parent = node.Parent;
+			IAvlNodeEquivalent<TKey, TValue> right = node.Right;
+			IAvlNodeEquivalent<TKey, TValue> rightLeft = right.Left;
+			IAvlNodeEquivalent<TKey, TValue> parent = node.Parent;
 		    right.NodeVisitedDuringChange = true;
             if (rightLeft != null)
 		        rightLeft.NodeVisitedDuringChange = true;
@@ -388,11 +388,11 @@ namespace Lazinator.Collections.Avl
 			return right;
 		}
 
-		private AvlNode<TKey, TValue> RotateRight(AvlNode<TKey, TValue> node)
+		private IAvlNodeEquivalent<TKey, TValue> RotateRight(IAvlNodeEquivalent<TKey, TValue> node)
 		{
-			AvlNode<TKey, TValue> left = node.Left;
-			AvlNode<TKey, TValue> leftRight = left.Right;
-			AvlNode<TKey, TValue> parent = node.Parent;
+			IAvlNodeEquivalent<TKey, TValue> left = node.Left;
+			IAvlNodeEquivalent<TKey, TValue> leftRight = left.Right;
+			IAvlNodeEquivalent<TKey, TValue> parent = node.Parent;
 		    left.NodeVisitedDuringChange = true;
             if (leftRight != null)
 		        leftRight.NodeVisitedDuringChange = true;
@@ -426,13 +426,13 @@ namespace Lazinator.Collections.Avl
 			return left;
 		}
 
-		private AvlNode<TKey, TValue> RotateLeftRight(AvlNode<TKey, TValue> node)
+		private IAvlNodeEquivalent<TKey, TValue> RotateLeftRight(IAvlNodeEquivalent<TKey, TValue> node)
 		{
-			AvlNode<TKey, TValue> left = node.Left;
-			AvlNode<TKey, TValue> leftRight = left.Right;
-			AvlNode<TKey, TValue> parent = node.Parent;
-			AvlNode<TKey, TValue> leftRightRight = leftRight.Right;
-			AvlNode<TKey, TValue> leftRightLeft = leftRight.Left;
+			IAvlNodeEquivalent<TKey, TValue> left = node.Left;
+			IAvlNodeEquivalent<TKey, TValue> leftRight = left.Right;
+			IAvlNodeEquivalent<TKey, TValue> parent = node.Parent;
+			IAvlNodeEquivalent<TKey, TValue> leftRightRight = leftRight.Right;
+			IAvlNodeEquivalent<TKey, TValue> leftRightLeft = leftRight.Left;
 		    left.NodeVisitedDuringChange = true;
 		    leftRight.NodeVisitedDuringChange = true;
             if (leftRightRight != null)
@@ -492,13 +492,13 @@ namespace Lazinator.Collections.Avl
 			return leftRight;
 		}
 
-		private AvlNode<TKey, TValue> RotateRightLeft(AvlNode<TKey, TValue> node)
+		private IAvlNodeEquivalent<TKey, TValue> RotateRightLeft(IAvlNodeEquivalent<TKey, TValue> node)
 		{
-			AvlNode<TKey, TValue> right = node.Right;
-			AvlNode<TKey, TValue> rightLeft = right.Left;
-			AvlNode<TKey, TValue> parent = node.Parent;
-			AvlNode<TKey, TValue> rightLeftLeft = rightLeft.Left;
-			AvlNode<TKey, TValue> rightLeftRight = rightLeft.Right;
+			IAvlNodeEquivalent<TKey, TValue> right = node.Right;
+			IAvlNodeEquivalent<TKey, TValue> rightLeft = right.Left;
+			IAvlNodeEquivalent<TKey, TValue> parent = node.Parent;
+			IAvlNodeEquivalent<TKey, TValue> rightLeftLeft = rightLeft.Left;
+			IAvlNodeEquivalent<TKey, TValue> rightLeftRight = rightLeft.Right;
 		    right.NodeVisitedDuringChange = true;
 		    rightLeft.NodeVisitedDuringChange = true;
             if (rightLeftLeft != null)
@@ -585,7 +585,7 @@ namespace Lazinator.Collections.Avl
 
 		private bool RemoveHelper(TKey key, long? nodeIndex)
 		{
-			AvlNode<TKey, TValue> node = Root;
+			IAvlNodeEquivalent<TKey, TValue> node = Root;
 
             long index = node?.LeftCount ?? 0;
             while (node != null)
@@ -605,8 +605,8 @@ namespace Lazinator.Collections.Avl
                 }
 				else
 				{
-					AvlNode<TKey, TValue> left = node.Left;
-					AvlNode<TKey, TValue> right = node.Right;
+					IAvlNodeEquivalent<TKey, TValue> left = node.Left;
+					IAvlNodeEquivalent<TKey, TValue> right = node.Right;
 
 					if (left == null)
 					{
@@ -618,7 +618,7 @@ namespace Lazinator.Collections.Avl
 							}
 							else
 							{
-								AvlNode<TKey, TValue> parent = node.Parent;
+								IAvlNodeEquivalent<TKey, TValue> parent = node.Parent;
 
 								if (parent.Left == node)
 								{
@@ -651,12 +651,12 @@ namespace Lazinator.Collections.Avl
 					}
 					else
 					{
-						AvlNode<TKey, TValue> successor = right;
+						IAvlNodeEquivalent<TKey, TValue> successor = right;
 					    successor.NodeVisitedDuringChange = true;
 
 						if (successor.Left == null)
 						{
-							AvlNode<TKey, TValue> parent = node.Parent;
+							IAvlNodeEquivalent<TKey, TValue> parent = node.Parent;
 
 							successor.Parent = parent;
 							successor.Left = left;
@@ -689,9 +689,9 @@ namespace Lazinator.Collections.Avl
 							    successor.NodeVisitedDuringChange = true;
 							}
 
-							AvlNode<TKey, TValue> parent = node.Parent;
-							AvlNode<TKey, TValue> successorParent = successor.Parent;
-							AvlNode<TKey, TValue> successorRight = successor.Right;
+							IAvlNodeEquivalent<TKey, TValue> parent = node.Parent;
+							IAvlNodeEquivalent<TKey, TValue> successorParent = successor.Parent;
+							IAvlNodeEquivalent<TKey, TValue> successorRight = successor.Right;
                             if (successorRight != null)
 						        successorRight.NodeVisitedDuringChange = true;
 
@@ -743,7 +743,7 @@ namespace Lazinator.Collections.Avl
 			return false;
 		}
 
-		private void DeleteBalance(AvlNode<TKey, TValue> node, int balance)
+		private void DeleteBalance(IAvlNodeEquivalent<TKey, TValue> node, int balance)
 		{
 			while (node != null)
 			{
@@ -786,7 +786,7 @@ namespace Lazinator.Collections.Avl
 					return;
 				}
 
-				AvlNode<TKey, TValue> parent = node.Parent;
+				IAvlNodeEquivalent<TKey, TValue> parent = node.Parent;
 
 				if (parent != null)
 				{
@@ -797,10 +797,10 @@ namespace Lazinator.Collections.Avl
 			}
 		}
 
-		private static void Replace(AvlNode<TKey, TValue> target, AvlNode<TKey, TValue> source)
+		private static void Replace(IAvlNodeEquivalent<TKey, TValue> target, IAvlNodeEquivalent<TKey, TValue> source)
 		{
-			AvlNode<TKey, TValue> left = source.Left;
-			AvlNode<TKey, TValue> right = source.Right;
+			IAvlNodeEquivalent<TKey, TValue> left = source.Left;
+			IAvlNodeEquivalent<TKey, TValue> right = source.Right;
 
 			target.Balance = source.Balance;
             target.Key = (TKey)source.Key.CloneLazinator();
@@ -824,7 +824,7 @@ namespace Lazinator.Collections.Avl
         /// </summary>
         /// <param name="skip">The number of nodes to skip</param>
         /// <returns></returns>
-        public IEnumerable<AvlNode<TKey, TValue>> AsEnumerable(long skip = 0)
+        public IEnumerable<IAvlNodeEquivalent<TKey, TValue>> AsEnumerable(long skip = 0)
         {
             var enumerator = GetEnumerator(skip);
             while (enumerator.MoveNext())
@@ -884,7 +884,7 @@ namespace Lazinator.Collections.Avl
         /// Enumerates the nodes of the tree, starting with the lowest key
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<AvlNode<TKey, TValue>> GetEnumerator()
+        public IEnumerator<IAvlNodeEquivalent<TKey, TValue>> GetEnumerator()
         {
             var enumerator = new AvlNodeEnumerator<TKey, TValue>(this);
             return enumerator;
@@ -895,7 +895,7 @@ namespace Lazinator.Collections.Avl
         /// </summary>
         /// <param name="skip">Number of nodes to skip before enumeration</param>
         /// <returns></returns>
-        public IEnumerator<AvlNode<TKey, TValue>> GetEnumerator(long skip)
+        public IEnumerator<IAvlNodeEquivalent<TKey, TValue>> GetEnumerator(long skip)
         {
             var enumerator = new AvlNodeEnumerator<TKey, TValue>(this, skip);
             return enumerator;

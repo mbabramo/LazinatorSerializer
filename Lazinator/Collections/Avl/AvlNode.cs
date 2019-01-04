@@ -6,7 +6,7 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlNode<TKey, TValue> : IAvlNode<TKey, TValue>
+    public partial class AvlNode<TKey, TValue> : IAvlNode<TKey, TValue>, IAvlNodeEquivalent<TKey, TValue>
         where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         public KeyValuePair<TKey, TValue> KeyValuePair => new KeyValuePair<TKey, TValue>(Key, Value);
@@ -88,9 +88,8 @@ namespace Lazinator.Collections.Avl
             }
             return p;
         }
-
-        [NonSerialized]
-        internal bool NodeVisitedDuringChange;
+        
+        internal bool NodeVisitedDuringChange { get; set; }
 
         public void RecalculateCount()
         {
