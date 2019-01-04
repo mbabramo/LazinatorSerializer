@@ -10,7 +10,7 @@ namespace Lazinator.Collections.Avl
     { 
         public AvlList()
         {
-            UnderlyingTree2 = (ILazinatorOrderedKeyable<Placeholder, T>) new AvlTree<Placeholder, T>();
+            UnderlyingTree = (ILazinatorOrderedKeyable<Placeholder, T>) new AvlTree<Placeholder, T>();
         }
 
         public T this[int index]
@@ -19,7 +19,7 @@ namespace Lazinator.Collections.Avl
             set => SetAt(index, value);
         }
 
-        public long Count => UnderlyingTree2.Count;
+        public long Count => UnderlyingTree.Count;
 
         public bool IsReadOnly => false;
 
@@ -32,7 +32,7 @@ namespace Lazinator.Collections.Avl
 
         public void Clear()
         {
-            UnderlyingTree2 = (ILazinatorOrderedKeyable<Placeholder, T>) new AvlTree<Placeholder, T>();
+            UnderlyingTree = (ILazinatorOrderedKeyable<Placeholder, T>) new AvlTree<Placeholder, T>();
         }
 
         public bool Contains(T item)
@@ -46,7 +46,7 @@ namespace Lazinator.Collections.Avl
                 throw new ArgumentNullException();
             if (arrayIndex < 0)
                 throw new ArgumentOutOfRangeException();
-            if (UnderlyingTree2.Count > array.Length - arrayIndex + 1)
+            if (UnderlyingTree.Count > array.Length - arrayIndex + 1)
                 throw new ArgumentException();
             foreach (var item in this)
             {
@@ -56,12 +56,12 @@ namespace Lazinator.Collections.Avl
 
         public IEnumerator<T> GetEnumerator()
         {
-            return UnderlyingTree2.GetValueEnumerator();
+            return UnderlyingTree.GetValueEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return UnderlyingTree2.GetValueEnumerator();
+            return UnderlyingTree.GetValueEnumerator();
         }
 
         public int IndexOf(T item)
@@ -89,7 +89,7 @@ namespace Lazinator.Collections.Avl
             int index = IndexOf(item);
             if (index == -1)
                 return false;
-            UnderlyingTree2.RemoveAt(index);
+            UnderlyingTree.RemoveAt(index);
             return true;
         }
 
@@ -107,17 +107,14 @@ namespace Lazinator.Collections.Avl
 
         public long LongCount => Count;
 
-        public ILazinatorOrderedKeyable<Placeholder, T> UnderlyingTree22 { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public ILazinatorOrderedKeyable<Placeholder, T> UnderlyingTree2 { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public void InsertAt(long index, T item)
         {
-            UnderlyingTree2.InsertAtIndex(new Placeholder(), item, index);
+            UnderlyingTree.InsertAtIndex(new Placeholder(), item, index);
         }
 
         public void RemoveAt(long index)
         {
-            UnderlyingTree2.RemoveAt(index);
+            UnderlyingTree.RemoveAt(index);
         }
 
         public IEnumerable<T> AsEnumerable(long skip)
@@ -126,19 +123,19 @@ namespace Lazinator.Collections.Avl
                 throw new ArgumentException();
             if (Count == 0)
                 yield break;
-            var valueEnumerator = UnderlyingTree2.GetValueEnumerator(skip);
+            var valueEnumerator = UnderlyingTree.GetValueEnumerator(skip);
             while (valueEnumerator.MoveNext())
                 yield return valueEnumerator.Current;
         }
 
         public T GetAt(long index)
         {
-            return UnderlyingTree2.ValueAtIndex(index);
+            return UnderlyingTree.ValueAtIndex(index);
         }
 
         public void SetAt(long index, T value)
         {
-            UnderlyingTree2.SetValueAtIndex(index, value);
+            UnderlyingTree.SetValueAtIndex(index, value);
         }
 
         #endregion
