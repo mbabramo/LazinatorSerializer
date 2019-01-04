@@ -25,7 +25,7 @@ namespace LazinatorTests.Tests
             AvlSortedDictionaryMultiValue
         }
 
-        public ILazinatorKeyable<TKey, TValue> GetDictionary<TKey, TValue>(DictionaryToUse dictionaryToUse) where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
+        public ILazinatorKeyableDictionary<TKey, TValue> GetDictionary<TKey, TValue>(DictionaryToUse dictionaryToUse) where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
         {
             switch (dictionaryToUse)
             {
@@ -49,7 +49,7 @@ namespace LazinatorTests.Tests
         [InlineData(DictionaryToUse.AvlSortedDictionary)]
         public void DictionaryEnumerableWorks(DictionaryToUse dictionaryToUse)
         {
-            ILazinatorKeyable<WLong, WString> d = GetDictionary<WLong, WString>(dictionaryToUse);
+            ILazinatorKeyableDictionary<WLong, WString> d = GetDictionary<WLong, WString>(dictionaryToUse);
             List<int> l = Enumerable.Range(0, 100).ToList();
             Shuffle(l);
             foreach (int i in l)
@@ -74,7 +74,7 @@ namespace LazinatorTests.Tests
             }
         }
 
-        private static void ConfirmDictionary(ILazinatorKeyable<WLong, WString> d)
+        private static void ConfirmDictionary(ILazinatorKeyableDictionary<WLong, WString> d)
         {
             List<int> l = Enumerable.Range(0, 100).ToList();
             foreach (int i in l)
@@ -92,7 +92,7 @@ namespace LazinatorTests.Tests
         [InlineData(DictionaryToUse.AvlSortedDictionary)]
         public void DictionaryLongStringWorks(DictionaryToUse dictionaryToUse)
         {
-            ILazinatorKeyable<WLong, WString> d = GetDictionary<WLong, WString>(dictionaryToUse);
+            ILazinatorKeyableDictionary<WLong, WString> d = GetDictionary<WLong, WString>(dictionaryToUse);
             d.Count.Should().Be(0);
             d.Add(17, "seventeen");
             d.Count.Should().Be(1);
@@ -155,7 +155,7 @@ namespace LazinatorTests.Tests
         [InlineData(DictionaryToUse.AvlSortedDictionary)]
         public void DictionaryCanGrowAndShrink(DictionaryToUse dictionaryToUse)
         {
-            ILazinatorKeyable<WLong, WString> d = GetDictionary<WLong, WString>(dictionaryToUse);
+            ILazinatorKeyableDictionary<WLong, WString> d = GetDictionary<WLong, WString>(dictionaryToUse);
             const int numItems = 25;
             for (long i = 0; i < numItems; i++)
             {
@@ -172,7 +172,7 @@ namespace LazinatorTests.Tests
         [InlineData(DictionaryToUse.AvlSortedDictionary)]
         public void DictionaryRecognizesKeyEquivalent(DictionaryToUse dictionaryToUse)
         {
-            ILazinatorKeyable<WString, WLong> s = GetDictionary<WString, WLong>(dictionaryToUse);
+            ILazinatorKeyableDictionary<WString, WLong> s = GetDictionary<WString, WLong>(dictionaryToUse);
             s["mykey"] = 34;
             s["mykey"] = 56;
             s.Count().Should().Be(1);
@@ -184,18 +184,18 @@ namespace LazinatorTests.Tests
         [InlineData(DictionaryToUse.AvlSortedDictionary)]
         public void EmptyDictionary(DictionaryToUse dictionaryToUse)
         {
-            ILazinatorKeyable<WLong, WString> d = GetDictionary<WLong, WString>(dictionaryToUse);
+            ILazinatorKeyableDictionary<WLong, WString> d = GetDictionary<WLong, WString>(dictionaryToUse);
             bool result = d.TryGetValue(10, out WString value);
             result.Should().BeFalse();
         }
 
-        private static void RemoveAllItemsFromDictionary(ILazinatorKeyable<WLong, WString> d)
+        private static void RemoveAllItemsFromDictionary(ILazinatorKeyableDictionary<WLong, WString> d)
         {
             int numItems = d.Count;
             RemoveItemsFromDictionary(d, numItems);
         }
 
-        private static void RemoveItemsFromDictionary(ILazinatorKeyable<WLong, WString> d, int numItems)
+        private static void RemoveItemsFromDictionary(ILazinatorKeyableDictionary<WLong, WString> d, int numItems)
         {
             for (long i = 0; i < numItems; i++)
             {
@@ -210,7 +210,7 @@ namespace LazinatorTests.Tests
         public void SingleItemDictionary(DictionaryToUse dictionaryToUse)
         {
             // we have some optimizations for a single-item dictionary, so this tests them
-            ILazinatorKeyable<WLong, WString> d = GetDictionary<WLong, WString>(dictionaryToUse);
+            ILazinatorKeyableDictionary<WLong, WString> d = GetDictionary<WLong, WString>(dictionaryToUse);
             d[234] = "something";
             d.ContainsKey(123).Should().BeFalse();
             d.ContainsKey(234).Should().BeTrue();
@@ -243,7 +243,7 @@ namespace LazinatorTests.Tests
         public void DictionaryWithBadHashFunction(DictionaryToUse dictionaryToUse)
         {
             // With some dictionary implementations, all items with same hash are put in hash bucket. So, this ensures that dictionary will work in this case.
-            ILazinatorKeyable<StructWithBadHashFunction, WString> d = GetDictionary<StructWithBadHashFunction, WString>(dictionaryToUse);
+            ILazinatorKeyableDictionary<StructWithBadHashFunction, WString> d = GetDictionary<StructWithBadHashFunction, WString>(dictionaryToUse);
             for (int i = 0; i < 100; i++)
                 d[i] = i.ToString();
 
@@ -270,8 +270,8 @@ namespace LazinatorTests.Tests
         public void DictionarySearchWorksEvenIfLastKeyDisposed(DictionaryToUse dictionaryToUse)
         {
             // The concern here is that the dictionary remembers the last key searched as a shortcut. What happens if that is disposed? With a struct or class that contains only primitive properties, that is not a problem, because equality can be determined solely by looking at primitive properties. But it can be an issue with a Lazinator object that has child objects that need to be examined.
-            
-            ILazinatorKeyable<LazinatorTuple<WLong, WInt>, WString> d = GetDictionary<LazinatorTuple<WLong, WInt>, WString>(dictionaryToUse);
+
+            ILazinatorKeyableDictionary<LazinatorTuple<WLong, WInt>, WString> d = GetDictionary<LazinatorTuple<WLong, WInt>, WString>(dictionaryToUse);
             LazinatorTuple<WLong, WInt> a = new LazinatorTuple<WLong, WInt>(1, 2);
             LazinatorTuple<WLong, WInt> b = new LazinatorTuple<WLong, WInt>(3, 4);
             d[a] = "something";
@@ -294,7 +294,7 @@ namespace LazinatorTests.Tests
         [InlineData(DictionaryToUse.AvlSortedDictionaryMultiValue)]
         public void SortedMultivalueDictionaryWorks(DictionaryToUse dictionaryToUse)
         {
-            ILazinatorKeyableMultivalue<WLong, WInt> d = (ILazinatorKeyableMultivalue<WLong, WInt>)GetDictionary<WLong, WInt>(dictionaryToUse);
+            ILazinatorKeyableMultivalueDictionary<WLong, WInt> d = (ILazinatorKeyableMultivalueDictionary<WLong, WInt>)GetDictionary<WLong, WInt>(dictionaryToUse);
             const int numKeys = 100;
             const int numEntries = 150;
             List<int>[] itemsForNode = new List<int>[numKeys];

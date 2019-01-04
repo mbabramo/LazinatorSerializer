@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlSortedDictionary<TKey, TValue> : IAvlSortedDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ILazinatorKeyable<TKey, TValue>, ILazinatorKeyableMultivalue<TKey, TValue>, ILazinatorOrderedKeyable<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
+    public partial class AvlSortedDictionary<TKey, TValue> : IAvlSortedDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ILazinatorKeyableDictionary<TKey, TValue>, ILazinatorKeyableMultivalueDictionary<TKey, TValue>, ILazinatorOrderedKeyableDictionary<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         public AvlSortedDictionary()
         {

@@ -4,19 +4,22 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using Lazinator.Collections.Factories;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlBigNodeTree<TKey, TValue> : IEnumerable<LazinatorKeyValue<TKey, TValue>>, IAvlBigNodeTree<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
+    public partial class AvlListNodeTree<TKey, TValue> : IEnumerable<LazinatorKeyValue<TKey, TValue>>, IAvlBigNodeTree<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
-        public AvlBigNodeTree(int maxItemsPerNode, bool allowMultipleValuesPerKey)
+
+        private ILazinatorSortableFactory<LazinatorKeyValue<TKey, TValue>> SortableListFactory;
+
+        public AvlListNodeTree(int maxItemsPerNode, ILazinatorSortableFactory<LazinatorKeyValue<TKey, TValue>> sortableListFactory)
         {
-            UnderlyingTree = new AvlTree<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>>();
+            UnderlyingTree = new AvlTree<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>>();
             MaxItemsPerNode = maxItemsPerNode;
-            AllowMultipleValuesPerKey = allowMultipleValuesPerKey;
         }
 
-        public AvlBigNodeTree()
+        public AvlListNodeTree()
         {
 
         }
@@ -54,7 +57,7 @@ namespace Lazinator.Collections.Avl
         public void Insert(TKey key, IComparer<TKey> comparer, TValue value, long? itemIndex = null)
         {
             LazinatorKeyValue<TKey, TValue> keyValue = new LazinatorKeyValue<TKey, TValue>(key, value);
-            AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node;
+            AvlNode<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> node;
             int indexInNode;
             if (itemIndex is long itemIndexNonNull)
             {
@@ -114,14 +117,14 @@ namespace Lazinator.Collections.Avl
             return false;
         }
 
-        public AvlBigNodeContents<TKey, TValue> GetNodeContents(AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node)
+        public AvlListNodeContents<TKey, TValue> GetNodeContents(AvlNode<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> node)
         {
             var v = node.Value;
             v.SetCorrespondingNode(node);
             return v;
         }
 
-        public AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> GetNodeByNodeIndex(int nodeIndex)
+        public AvlNode<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> GetNodeByNodeIndex(int nodeIndex)
         {
             if (UnderlyingTree.Root == null)
                 return null;
@@ -148,7 +151,7 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        public (AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node, int indexInNode) GetNodeByItemIndex(long itemIndex)
+        public (AvlNode<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> node, int indexInNode) GetNodeByItemIndex(long itemIndex)
         {
             if (UnderlyingTree.Root == null)
                 return (null, -1);
@@ -179,12 +182,12 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        public (AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node, int indexInNode, bool exists) GetNodeByKey(TKey key)
+        public (AvlNode<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> node, int indexInNode, bool exists) GetNodeByKey(TKey key)
         {
             if (UnderlyingTree.Root == null)
                 return (null, -1, false);
             LazinatorKeyValue<TKey, TValue> keyWithDefaultValue = new LazinatorKeyValue<TKey, TValue>(key, default);
-            var node = UnderlyingTree.NodeForKey(keyWithDefaultValue, AvlBigNodeContents<TKey, TValue>.KeyOnlyComparer);
+            var node = UnderlyingTree.NodeForKey(keyWithDefaultValue, AvlListNodeContents<TKey, TValue>.KeyOnlyComparer);
             var contents = GetNodeContents(node);
             var result = contents.Find(key);
             return (node, result.exists ? (int) result.location : (int) contents.SelfItemsCount, result.exists);
@@ -192,7 +195,7 @@ namespace Lazinator.Collections.Avl
 
         static IComparer<LazinatorKeyValue<TKey, TValue>> DefaultKeyValueComparer = LazinatorKeyValue<TKey, TValue>.GetKeyValueComparer(Comparer<TKey>.Default, Comparer<TValue>.Default);
 
-        public (AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node, int indexInNode, bool exists) GetNodeByKeyAndValue(LazinatorKeyValue<TKey, TValue> keyAndValue, IComparer<TKey> comparer)
+        public (AvlNode<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> node, int indexInNode, bool exists) GetNodeByKeyAndValue(LazinatorKeyValue<TKey, TValue> keyAndValue, IComparer<TKey> comparer)
         {
             if (UnderlyingTree.Root == null)
                 return (null, -1, false);
@@ -205,12 +208,12 @@ namespace Lazinator.Collections.Avl
 
         public IEnumerator<LazinatorKeyValue<TKey, TValue>> GetEnumerator()
         {
-            return new AvlBigNodeTreeEnumerator<TKey, TValue>(this);
+            return new AvlListNodeTreeEnumerator<TKey, TValue>(this);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return new AvlBigNodeTreeEnumerator<TKey, TValue>(this);
+            return new AvlListNodeTreeEnumerator<TKey, TValue>(this);
         }
 
         public long ItemsCount

@@ -6,16 +6,16 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections.Avl
 {
-    public struct AvlBigNodeTreeEnumerator<TKey, TValue> : IEnumerator<LazinatorKeyValue<TKey, TValue>> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
+    public struct AvlListNodeTreeEnumerator<TKey, TValue> : IEnumerator<LazinatorKeyValue<TKey, TValue>> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         private long OverallIndex;
         private long TreeCount;
-        private AvlBigNodeTree<TKey, TValue> Tree;
-        AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> CurrentNode;
-        AvlBigNodeContents<TKey, TValue> CurrentNodeContents;
+        private AvlListNodeTree<TKey, TValue> Tree;
+        AvlNode<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> CurrentNode;
+        AvlListNodeContents<TKey, TValue> CurrentNodeContents;
         int IndexInNode;
 
-        public AvlBigNodeTreeEnumerator(AvlBigNodeTree<TKey, TValue> tree)
+        public AvlListNodeTreeEnumerator(AvlListNodeTree<TKey, TValue> tree)
         {
             Tree = tree;
             TreeCount = Tree.ItemsCount;

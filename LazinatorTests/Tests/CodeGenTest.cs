@@ -151,8 +151,8 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(AvlTree<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
             await CompleteGenerateCode(typeof(AvlDictionary<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
             await CompleteGenerateCode(typeof(AvlSortedDictionary<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
-            await CompleteGenerateCode(typeof(AvlBigNodeContents<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
-            await CompleteGenerateCode(typeof(AvlBigNodeTree<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
+            await CompleteGenerateCode(typeof(AvlListNodeContents<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
+            await CompleteGenerateCode(typeof(AvlListNodeTree<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
             await CompleteGenerateCode(typeof(WAbstract<>), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(WNullableStruct<>), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(Placeholder), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);

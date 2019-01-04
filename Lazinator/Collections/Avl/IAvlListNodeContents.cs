@@ -6,7 +6,7 @@ using Lazinator.Collections.Tuples;
 namespace Lazinator.Collections.Avl
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlBigNodeContents)]
-    public interface IAvlBigNodeContents<TKey, TValue>
+    public interface IAvlListNodeContents<TKey, TValue>
         where TKey : ILazinator, IComparable<TKey>
         where TValue : ILazinator
     {

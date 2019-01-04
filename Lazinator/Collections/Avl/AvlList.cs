@@ -134,7 +134,7 @@ namespace Lazinator.Collections.Avl
 
         public void SetAt(long index, T value)
         {
-            UnderlyingTree.NodeAtIndex(index).Value = value;
+            UnderlyingTree.SetValueAtIndex(index, value);
         }
 
         #endregion

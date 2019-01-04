@@ -53,13 +53,13 @@ namespace Lazinator.Collections.Avl
         }
 
         /// <summary>
-        /// Creates a node for the tree. This should be subclasses by trees with custom node types.
+        /// Creates a node for the tree.
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <param name="parent"></param>
         /// <returns></returns>
-        protected internal virtual AvlNode<TKey, TValue> CreateNode(TKey key, TValue value, AvlNode<TKey, TValue> parent = null)
+        public virtual AvlNode<TKey, TValue> CreateNode(TKey key, TValue value, AvlNode<TKey, TValue> parent = null)
         {
             return new AvlNode<TKey, TValue>()
             {

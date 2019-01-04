@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Lazinator.Collections
 {
-    [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IILazinatorSortable)]
+    [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorSortable)]
     public interface ILazinatorSortable<T> : ILazinatorCountableListable<T>, ILazinator where T : ILazinator, IComparable<T>
     {
         bool AllowDuplicates { get; set; }

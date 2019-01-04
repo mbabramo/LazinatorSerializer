@@ -7,16 +7,16 @@ using System.Linq;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlBigNodeContents<TKey, TValue> : IAvlBigNodeContents<TKey, TValue>
+    public partial class AvlListNodeContents<TKey, TValue> : IAvlListNodeContents<TKey, TValue>
         where TKey : ILazinator, IComparable<TKey>
         where TValue : ILazinator
     {
-        private AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> _CorrespondingNode;
+        private AvlNode<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> _CorrespondingNode;
 
         private ILazinatorSortableFactory<LazinatorKeyValue<TKey, TValue>> SortableFactory;
 
-        public AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> ParentNode => _CorrespondingNode.Parent;
-        public AvlBigNodeContents<TKey, TValue> ParentContents
+        public AvlNode<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> ParentNode => _CorrespondingNode.Parent;
+        public AvlListNodeContents<TKey, TValue> ParentContents
         {
             get
             {
@@ -45,24 +45,22 @@ namespace Lazinator.Collections.Avl
 
         public long TotalItemsCount => LeftItemsCount + SelfItemsCount + RightItemsCount;
 
-        public void SetCorrespondingNode(AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> correspondingNode)
+        public void SetCorrespondingNode(AvlNode<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> correspondingNode)
         {
             _CorrespondingNode = correspondingNode;
         }
 
-        public AvlBigNodeContents(LazinatorKeyValue<TKey, TValue> firstItem, ILazinatorSortableFactory<LazinatorKeyValue<TKey, TValue>> factory)
+        public AvlListNodeContents(LazinatorKeyValue<TKey, TValue> firstItem, ILazinatorSortableFactory<LazinatorKeyValue<TKey, TValue>> sortableFactory)
         {
-            Items = factory.CreateSortable();
-            Items.AllowDuplicates = false;
-            SortableFactory = factory;
+            Items = sortableFactory.CreateSortable();
+            SortableFactory = sortableFactory;
             Insert(firstItem);
         }
 
-        public AvlBigNodeContents(IEnumerable<LazinatorKeyValue<TKey, TValue>> items, ILazinatorSortableFactory<LazinatorKeyValue<TKey, TValue>> factory, IComparer<LazinatorKeyValue<TKey, TValue>> comparer = null)
+        public AvlListNodeContents(IEnumerable<LazinatorKeyValue<TKey, TValue>> items, ILazinatorSortableFactory<LazinatorKeyValue<TKey, TValue>> sortableFactory, IComparer<LazinatorKeyValue<TKey, TValue>> comparer = null)
         {
-            Items = factory.CreateSortable();
-            Items.AllowDuplicates = false;
-            SortableFactory = factory;
+            Items = sortableFactory.CreateSortable();
+            SortableFactory = sortableFactory;
             foreach (var item in items)
                 Items.InsertSorted(item, comparer);
             SelfItemsCount = Items.Count;
@@ -112,6 +110,7 @@ namespace Lazinator.Collections.Avl
         }
 
         protected internal static IComparer<LazinatorKeyValue<TKey, TValue>> KeyOnlyComparer = LazinatorKeyValue<TKey, TValue>.GetKeyOnlyComparer();
+        protected internal static IComparer<LazinatorKeyValue<TKey, TValue>> KeyValueComparer = LazinatorKeyValue<TKey, TValue>.GetKeyValueComparer(Comparer<TKey>.Default, Comparer<TValue>.Default);
 
         /// <summary>
         /// Find the first item containing the specified key.
@@ -121,24 +120,27 @@ namespace Lazinator.Collections.Avl
         public (long location, bool exists) Find(TKey key)
         {
             var result = Items.FindSorted(new LazinatorKeyValue<TKey, TValue>(key, default), KeyOnlyComparer);
-            if (result.exists)
-            {
-                bool matches = true;
-                do
-                { // make sure we have the first key match
-                    result.location--;
-                    matches = Items[(int) result.location].Key.Equals(key);
-                    if (!matches)
-                        result.location++;
-                }
-                while (matches && result.location > 0);
-            }
+            // DEBUG: Should be unnecessary, since it's implemented in Items.FindSorted
+            //if (result.exists)
+            //{
+            //    bool matches = true;
+            //    do
+            //    { // make sure we have the first key match
+            //        result.location--;
+            //        matches = Items[(int) result.location].Key.Equals(key);
+            //        if (!matches)
+            //            result.location++;
+            //    }
+            //    while (matches && result.location > 0);
+            //}
             return result;
         }
 
-        public (long priorLocation, bool existed) Remove(LazinatorKeyValue<TKey, TValue> keyAndValue)
+        public (long priorLocation, bool existed) Remove(LazinatorKeyValue<TKey, TValue> keyAndValue) => Remove(keyAndValue, KeyValueComparer);
+
+        public (long priorLocation, bool existed) Remove(LazinatorKeyValue<TKey, TValue> keyAndValue, IComparer<LazinatorKeyValue<TKey, TValue>> comparer)
         {
-            (long priorLocation, bool existed) result = Items.RemoveSorted(keyAndValue);
+            (long priorLocation, bool existed) result = Items.RemoveSorted(keyAndValue, comparer);
             SelfItemsCount = Items.Count;
             if (result.priorLocation == SelfItemsCount && SelfItemsCount > 0)
                 UpdateNodeKey();
@@ -161,22 +163,22 @@ namespace Lazinator.Collections.Avl
             return Items[itemsCount - 1].CloneNoBuffer();
         }
 
-        public (AvlBigNodeContents<TKey, TValue> node, long nodeIndex) SplitOffFirstHalf()
+        public (AvlListNodeContents<TKey, TValue> node, long nodeIndex) SplitOffFirstHalf()
         {
             int itemsCount = SelfItemsCount;
             if (itemsCount < 2)
                 throw new System.Exception("Insufficient number of items to split.");
             int numToRemove = itemsCount / 2;
-            var itemsToRemove = Items.Take(numToRemove).Select(x => x.CloneNoBuffer()).ToList();
+            var itemsToRemove = Items.Take(numToRemove).ToList();
             for (int i = 0; i < numToRemove; i++)
                 Items.RemoveAt(i);
             SelfItemsCount = Items.Count;
-            AvlBigNodeContents<TKey, TValue> node = new AvlBigNodeContents<TKey, TValue>(itemsToRemove, SortableFactory);
+            AvlListNodeContents<TKey, TValue> node = new AvlListNodeContents<TKey, TValue>(itemsToRemove, SortableFactory);
             return (node, NodeIndex); // new node will be at current node's index. This will result in this node's NodeIndex increasing
         }
 
         /// <summary>
-        /// Updates the node's key when the last item changes. Note that we will only do this in a way that maintains the order of the overall AvlBigNodeTree.
+        /// Updates the node's key when the last item changes. Note that we will only do this in a way that maintains the order of the overall AvlListNodeTree. When there are no items, the node is removed from the tree entirely.
         /// </summary>
         private void UpdateNodeKey()
         {

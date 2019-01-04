@@ -81,7 +81,7 @@
         ILazinatorCountable,
         ILazinatorIndexable,
         ILazinatorListable,
-        IILazinatorSortable,
+        ILazinatorSortable,
         ILazinatorBranchable,
         ILazinatorKeyable,
         ILazinatorOrderedKeyable,
@@ -95,5 +95,8 @@
         ILazinatorLinkedListNode,
         ILazinatorLinkedList,
         ISortedLazinatorLinkedList,
+        ILazinatorKeyableDictionary,
+        ILazinatorKeyableMultivalueDictionary,
+        ILazinatorOrderedKeyableDictionary,
     }
 }

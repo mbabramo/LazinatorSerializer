@@ -8,5 +8,6 @@ namespace Lazinator.Collections.Factories
     public interface ILazinatorSortableFactory<T>  where T : ILazinator, IComparable<T>
     {
         ILazinatorSortable<T> CreateSortable();
+        bool AllowDuplicates { get; }
     }
 }
