@@ -12,6 +12,7 @@ namespace Lazinator.Collections
         bool AllowDuplicateKeys { get; set; }
         IEnumerator<TKey> GetKeyEnumerator(long skip = 0);
         IEnumerator<TValue> GetValueEnumerator(long skip = 0);
+        IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(long skip = 0);
         TValue ValueAtIndex(long i);
         void SetValueAtIndex(long i, TValue value);
         TKey KeyAtIndex(long i);

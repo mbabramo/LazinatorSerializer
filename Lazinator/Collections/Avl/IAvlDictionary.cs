@@ -11,7 +11,7 @@ namespace Lazinator.Collections.Avl
         where TKey : ILazinator
         where TValue : ILazinator
     {
-        AvlTree<WUint, LazinatorTuple<TKey, TValue>> UnderlyingTree { get; set; }
+        ILazinatorOrderedKeyable<WUint, LazinatorTuple<TKey, TValue>> UnderlyingTree { get; set; }
         bool AllowDuplicateKeys { get; set; }
     }
 }

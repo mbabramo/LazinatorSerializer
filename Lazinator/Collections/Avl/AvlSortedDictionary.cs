@@ -219,6 +219,11 @@ namespace Lazinator.Collections.Avl
             return UnderlyingTree.GetValueEnumerator(skip);
         }
 
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(long skip = 0)
+        {
+            return UnderlyingTree.GetKeyValuePairEnumerator(skip);
+        }
+
         public TValue ValueAtIndex(long i)
         {
             return UnderlyingTree.ValueAtIndex(i);

@@ -53,9 +53,11 @@ namespace Lazinator.Collections.Avl
 
         private IEnumerable<(KeyValuePair<WUint, LazinatorTuple<TKey, TValue>> keyValue, long index)> EnumerateFrom(uint hash)
         {
-            var result = UnderlyingTree.GetMatchingOrNextNode(hash, Comparer<WUint>.Default);
-            foreach (var node in UnderlyingTree.AsEnumerable(result.index))
-                yield return (node.KeyValuePair, node.Index);
+            var result = UnderlyingTree.GetMatchingOrNext(hash, Comparer<WUint>.Default);
+            long index = result.index;
+            var enumerator = UnderlyingTree.GetKeyValuePairEnumerator(index);
+            while (enumerator.MoveNext())
+                yield return (enumerator.Current, index++);
         }
 
         public bool ContainsKey(TKey key)
@@ -243,20 +245,20 @@ namespace Lazinator.Collections.Avl
 
         private IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator()
         {
-            return new TransformEnumerator<LazinatorTuple<TKey, TValue>, KeyValuePair<TKey, TValue>>(GetUnderlyingTreeValueEnumerator(), x => new KeyValuePair<TKey, TValue>(x.Item1, x.Item2));
+            return new TransformEnumerator<LazinatorTuple<TKey, TValue>, KeyValuePair<TKey, TValue>>(GetUnderlyingTree2ValueEnumerator(), x => new KeyValuePair<TKey, TValue>(x.Item1, x.Item2));
         }
 
         public IEnumerator<TKey> GetKeyEnumerator()
         {
-            return new TransformEnumerator<LazinatorTuple<TKey, TValue>, TKey>(GetUnderlyingTreeValueEnumerator(), x => x.Item1);
+            return new TransformEnumerator<LazinatorTuple<TKey, TValue>, TKey>(GetUnderlyingTree2ValueEnumerator(), x => x.Item1);
         }
 
         public IEnumerator<TValue> GetValueEnumerator()
         {
-            return new TransformEnumerator<LazinatorTuple<TKey, TValue>, TValue>(GetUnderlyingTreeValueEnumerator(), x => x.Item2);
+            return new TransformEnumerator<LazinatorTuple<TKey, TValue>, TValue>(GetUnderlyingTree2ValueEnumerator(), x => x.Item2);
         }
 
-        private IEnumerator<LazinatorTuple<TKey, TValue>> GetUnderlyingTreeValueEnumerator()
+        private IEnumerator<LazinatorTuple<TKey, TValue>> GetUnderlyingTree2ValueEnumerator()
         {
             return UnderlyingTree.GetValueEnumerator();
         }
