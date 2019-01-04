@@ -38,9 +38,17 @@ namespace Lazinator.Collections.Avl
             return result;
         }
 
-        public bool TryGetValue(TKey key, out TValue value)
+        public bool TryGetValue(TKey key, out TValue value) => ValueAtKey(key, out value); // for IDictionary
+
+        public bool ValueAtKey(TKey key, out TValue value)
         {
             bool result = UnderlyingTree.ValueAtKey(key, Comparer<TKey>.Default, out value);
+            return result;
+        }
+
+        public bool ValueAtKey(TKey key, IComparer<TKey> comparer, out TValue value)
+        {
+            bool result = UnderlyingTree.ValueAtKey(key, comparer, out value);
             return result;
         }
 
@@ -48,7 +56,7 @@ namespace Lazinator.Collections.Avl
         {
             get
             {
-                bool result = TryGetValue(key, out TValue value);
+                bool result = ValueAtKey(key, out TValue value);
                 if (result == false)
                     throw new KeyNotFoundException();
                 return value;
@@ -72,9 +80,13 @@ namespace Lazinator.Collections.Avl
             UnderlyingTree.AllowDuplicateKeys = allowDuplicates;
         }
         
+        public bool Remove(TKey key, IComparer<TKey> comparer)
+        {
+            return UnderlyingTree.Remove(key, comparer);
+        }
         public bool Remove(TKey key)
         {
-            return UnderlyingTree.Remove(key);
+            return UnderlyingTree.Remove(key, Comparer<TKey>.Default);
         }
 
         public bool RemoveAll(TKey key)
@@ -117,9 +129,10 @@ namespace Lazinator.Collections.Avl
 
         public IEnumerable<KeyValuePair<TKey, TValue>> EnumerateFrom(TKey key)
         {
-            var result = UnderlyingTree.GetMatchingOrNextNode(key, Comparer<TKey>.Default);
-            foreach (var keyValuePair in UnderlyingTree.KeyValuePairs(result.index))
-                yield return keyValuePair;
+            var result = UnderlyingTree.GetMatchingOrNext(key, Comparer<TKey>.Default);
+            var enumerator = UnderlyingTree.GetKeyValuePairEnumerator();
+            while (enumerator.MoveNext())
+                yield return enumerator.Current;
         }
 
         public void AddValue(TKey key, TValue value)
@@ -152,7 +165,7 @@ namespace Lazinator.Collections.Avl
             }
             else
             {
-                bool found = TryGetValue(item.Key, out TValue value);
+                bool found = ValueAtKey(item.Key, out TValue value);
                 return found && System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(value, item.Value);
             }
         }
@@ -172,7 +185,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (AllowDuplicateKeys)
                 { // removes a single instance of the key-value pair. can remove all items within a key with RemoveAll.
-                    var result = UnderlyingTree.GetMatchingOrNextNode(item.Key, Comparer<TKey>.Default);
+                    var result = UnderlyingTree.GetMatchingOrNext(item.Key, Comparer<TKey>.Default);
                     if (result.found == false)
                         return false;
                     bool valueFound = false;

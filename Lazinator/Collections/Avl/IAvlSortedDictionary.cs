@@ -10,6 +10,6 @@ namespace Lazinator.Collections.Avl
         where TKey : ILazinator, IComparable<TKey>
         where TValue : ILazinator
     {
-        AvlTree<TKey, TValue> UnderlyingTree { get; set; }
+        ILazinatorOrderedKeyable<TKey, TValue> UnderlyingTree { get; set; }
     }
 }

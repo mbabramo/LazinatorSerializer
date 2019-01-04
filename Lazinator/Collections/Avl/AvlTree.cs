@@ -595,7 +595,7 @@ namespace Lazinator.Collections.Avl
         /// <param name="key"></param>
         /// <param name="comparer"></param>
         /// <returns>True if the item was contained in the tree, in which case it is removed</returns>
-        private bool Remove(TKey key, IComparer<TKey> comparer) => Remove(key, comparer, null);
+        public bool Remove(TKey key, IComparer<TKey> comparer) => Remove(key, comparer, null);
 
         /// <summary>
         /// Removes the node at the specified index.
