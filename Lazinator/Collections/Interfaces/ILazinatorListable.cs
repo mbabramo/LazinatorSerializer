@@ -7,7 +7,7 @@ using System.Text;
 namespace Lazinator.Collections
 {
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorListable)]
-    public interface ILazinatorListable<T> : ILazinatorIndexable<T>, IEnumerable<T> where T : ILazinator
+    public interface ILazinatorListable<T> : ILazinatorIndexable<T>, IEnumerable<T>, ILazinator where T : ILazinator
     {
         void InsertAt(long index, T item);
         void RemoveAt(long index);

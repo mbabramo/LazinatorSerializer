@@ -9,7 +9,7 @@ namespace Lazinator.Collections.Avl
         where TKey : ILazinator, IComparable<TKey>
         where TValue : ILazinator
     {
-        SortedLazinatorList<LazinatorKeyValue<TKey, TValue>> Items { get; set; }
+        ILazinatorSortable<LazinatorKeyValue<TKey, TValue>> Items { get; set; }
         int SelfItemsCount { get; set; }
         long LeftItemsCount { get; set; }
         long RightItemsCount { get; set; }

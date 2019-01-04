@@ -16,18 +16,18 @@ namespace Lazinator.Collections
             return (location, false);
         }
 
-        public (long priorLocation, bool existed) RemoveSorted(T item, IComparer<T> comparer = null)
+        public (long priorLocation, bool existed) RemoveSorted(T item)
         {
-            (long location, bool exists) = FindSorted(item, comparer);
+            (long location, bool exists) = FindSorted(item);
             if (exists)
                 RemoveAt(location);
             return (location, exists);
         }
 
-        public (long location, bool exists) FindSorted(T target, IComparer<T> comparer = null)
+        public (long location, bool exists) FindSorted(T target) => FindSorted(target, Comparer<T>.Default);
+
+        public (long location, bool exists) FindSorted(T target, IComparer<T> comparer)
         {
-            if (comparer == null)
-                comparer = Comparer<T>.Default;
             bool found = false;
             if (Count == 0)
                 return (0, false);
@@ -75,19 +75,7 @@ namespace Lazinator.Collections
             return (mid, false);
         }
 
-        public (long location, bool rejectedAsDuplicate) InsertSorted(T item)
-        {
-            return InsertSorted(item, null);
-        }
-
-        public (long priorLocation, bool existed) RemoveSorted(T item)
-        {
-            return RemoveSorted(item, null);
-        }
-
-        public (long location, bool exists) FindSorted(T target)
-        {
-            return FindSorted(target, null);
-        }
+        public (long location, bool rejectedAsDuplicate) InsertSorted(T item) => InsertSorted(item, Comparer<T>.Default);
+        
     }
 }

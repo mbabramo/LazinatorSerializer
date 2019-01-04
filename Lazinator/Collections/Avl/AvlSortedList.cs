@@ -159,7 +159,9 @@ namespace Lazinator.Collections.Avl
             UnderlyingTree.SetKeyAtIndex(index, value);
         }
 
-        public (long location, bool rejectedAsDuplicate) InsertSorted(T item)
+        public (long location, bool rejectedAsDuplicate) InsertSorted(T item) => InsertSorted(item, null);
+
+        public (long location, bool rejectedAsDuplicate) InsertSorted(T item, IComparer<T> comparer)
         {
             (bool inserted, long location) = UnderlyingTree.Insert(item, default);
             return (location, !inserted);
@@ -176,7 +178,11 @@ namespace Lazinator.Collections.Avl
             return (-1, false);
         }
 
-        public (long location, bool exists) FindSorted(T target)
+        // DEBUG -- must implement Comparer usage
+
+        public (long location, bool exists) FindSorted(T target) => FindSorted(target, Comparer<T>.Default);
+
+        public (long location, bool exists) FindSorted(T target, IComparer<T> comparer)
         {
             var result = UnderlyingTree.GetMatchingOrNextNode(target);
             return (result.index, result.found);

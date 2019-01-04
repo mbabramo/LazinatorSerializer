@@ -1,4 +1,5 @@
-﻿using Lazinator.Core;
+﻿using Lazinator.Collections.Factories;
+using Lazinator.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,9 @@ namespace Lazinator.Collections.Avl
         where TValue : ILazinator
     {
         private AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> _CorrespondingNode;
-        
+
+        private ILazinatorSortableFactory<LazinatorKeyValue<TKey, TValue>> SortableFactory;
+
         public AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> ParentNode => _CorrespondingNode.Parent;
         public AvlBigNodeContents<TKey, TValue> ParentContents
         {
@@ -32,7 +35,7 @@ namespace Lazinator.Collections.Avl
                 if (ParentContents == null)
                     return LeftItemsCount;
                 if (_CorrespondingNode.IsLeftNode)
-                    return ParentContents.ItemsIndex - RightItemsCount - 1;
+                    return ParentContents.ItemsIndex - (RightItemsCount + 1);
                 else if (_CorrespondingNode.IsRightNode)
                     return ParentContents.ItemsIndex + LeftItemsCount + 1;
                 throw new Exception("Malformed AvlTree.");
@@ -46,15 +49,19 @@ namespace Lazinator.Collections.Avl
             _CorrespondingNode = correspondingNode;
         }
 
-        public AvlBigNodeContents(LazinatorKeyValue<TKey, TValue> firstItem)
+        public AvlBigNodeContents(LazinatorKeyValue<TKey, TValue> firstItem, ILazinatorSortableFactory<LazinatorKeyValue<TKey, TValue>> factory)
         {
-            Items = new SortedLazinatorList<LazinatorKeyValue<TKey, TValue>>() { AllowDuplicates = false };
+            Items = factory.CreateSortable();
+            Items.AllowDuplicates = false;
+            SortableFactory = factory;
             Insert(firstItem);
         }
 
-        public AvlBigNodeContents(IEnumerable<LazinatorKeyValue<TKey, TValue>> items, IComparer<LazinatorKeyValue<TKey, TValue>> comparer = null)
+        public AvlBigNodeContents(IEnumerable<LazinatorKeyValue<TKey, TValue>> items, ILazinatorSortableFactory<LazinatorKeyValue<TKey, TValue>> factory, IComparer<LazinatorKeyValue<TKey, TValue>> comparer = null)
         {
-            Items = new SortedLazinatorList<LazinatorKeyValue<TKey, TValue>>() { AllowDuplicates = false };
+            Items = factory.CreateSortable();
+            Items.AllowDuplicates = false;
+            SortableFactory = factory;
             foreach (var item in items)
                 Items.InsertSorted(item, comparer);
             SelfItemsCount = Items.Count;
@@ -162,7 +169,7 @@ namespace Lazinator.Collections.Avl
             for (int i = 0; i < numToRemove; i++)
                 Items.RemoveAt(i);
             SelfItemsCount = Items.Count;
-            AvlBigNodeContents<TKey, TValue> node = new AvlBigNodeContents<TKey, TValue>(itemsToRemove);
+            AvlBigNodeContents<TKey, TValue> node = new AvlBigNodeContents<TKey, TValue>(itemsToRemove, SortableFactory);
             return (node, NodeIndex); // new node will be at current node's index. This will result in this node's NodeIndex increasing
         }
 
