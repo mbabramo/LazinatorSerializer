@@ -15,19 +15,19 @@ namespace Lazinator.Collections.Avl
 
         public AvlSortedList(bool allowDuplicates)
         {
-            UnderlyingTree2 = new AvlTree<T, Placeholder>();
-            UnderlyingTree2.AllowDuplicateKeys = allowDuplicates;
+            UnderlyingTree = new AvlTree<T, Placeholder>();
+            UnderlyingTree.AllowDuplicateKeys = allowDuplicates;
         }
 
         public bool AllowDuplicates
         {
             get
             {
-                return UnderlyingTree2.AllowDuplicateKeys;
+                return UnderlyingTree.AllowDuplicateKeys;
             }
             set
             {
-                UnderlyingTree2.AllowDuplicateKeys = value;
+                UnderlyingTree.AllowDuplicateKeys = value;
             }
         }
 
@@ -37,7 +37,7 @@ namespace Lazinator.Collections.Avl
             set => SetAt(index, value);
         }
 
-        public long Count => UnderlyingTree2.Count;
+        public long Count => UnderlyingTree.Count;
 
         public bool IsReadOnly => false;
 
@@ -51,8 +51,8 @@ namespace Lazinator.Collections.Avl
         public void Clear()
         {
             bool allowDuplicates = AllowDuplicates;
-            UnderlyingTree2 = new AvlTree<T, Placeholder>();
-            UnderlyingTree2.AllowDuplicateKeys = allowDuplicates;
+            UnderlyingTree = new AvlTree<T, Placeholder>();
+            UnderlyingTree.AllowDuplicateKeys = allowDuplicates;
         }
 
         public bool Contains(T item)
@@ -66,7 +66,7 @@ namespace Lazinator.Collections.Avl
                 throw new ArgumentNullException();
             if (arrayIndex < 0)
                 throw new ArgumentOutOfRangeException();
-            if (UnderlyingTree2.Count > array.Length - arrayIndex + 1)
+            if (UnderlyingTree.Count > array.Length - arrayIndex + 1)
                 throw new ArgumentException();
             foreach (var item in this)
             {
@@ -76,12 +76,12 @@ namespace Lazinator.Collections.Avl
 
         public IEnumerator<T> GetEnumerator()
         {
-            return UnderlyingTree2.GetKeyEnumerator();
+            return UnderlyingTree.GetKeyEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return UnderlyingTree2.GetKeyEnumerator();
+            return UnderlyingTree.GetKeyEnumerator();
         }
 
         public int IndexOf(T item)
@@ -109,7 +109,7 @@ namespace Lazinator.Collections.Avl
             int index = IndexOf(item);
             if (index == -1)
                 return false;
-            UnderlyingTree2.RemoveAt(index);
+            UnderlyingTree.RemoveAt(index);
             return true;
         }
 
@@ -129,12 +129,12 @@ namespace Lazinator.Collections.Avl
 
         public void InsertAt(long index, T item)
         {
-            UnderlyingTree2.InsertAtIndex(item, new Placeholder(), index);
+            UnderlyingTree.InsertAtIndex(item, new Placeholder(), index);
         }
 
         public void RemoveAt(long index)
         {
-            UnderlyingTree2.RemoveAt(index);
+            UnderlyingTree.RemoveAt(index);
         }
 
         public IEnumerable<T> AsEnumerable(long skip = 0)
@@ -143,26 +143,26 @@ namespace Lazinator.Collections.Avl
                 throw new ArgumentException();
             if (Count == 0)
                 yield break;
-            var keyEnumerator = UnderlyingTree2.GetKeyEnumerator(skip);
+            var keyEnumerator = UnderlyingTree.GetKeyEnumerator(skip);
             while (keyEnumerator.MoveNext())
                 yield return keyEnumerator.Current;
         }
 
         public T GetAt(long index)
         {
-            return UnderlyingTree2.KeyAtIndex(index);
+            return UnderlyingTree.KeyAtIndex(index);
         }
 
         public void SetAt(long index, T value)
         {
-            UnderlyingTree2.SetKeyAtIndex(index, value);
+            UnderlyingTree.SetKeyAtIndex(index, value);
         }
 
         public (long location, bool rejectedAsDuplicate) InsertSorted(T item) => InsertSorted(item, Comparer<T>.Default);
 
         public (long location, bool rejectedAsDuplicate) InsertSorted(T item, IComparer<T> comparer)
         {
-            (bool inserted, long location) = UnderlyingTree2.Insert(item, comparer, default);
+            (bool inserted, long location) = UnderlyingTree.Insert(item, comparer, default);
             return (location, !inserted);
         }
 
@@ -185,7 +185,7 @@ namespace Lazinator.Collections.Avl
 
         public (long location, bool exists) FindSorted(T target, IComparer<T> comparer)
         {
-            var result = UnderlyingTree2.GetMatchingOrNext(target, comparer);
+            var result = UnderlyingTree.GetMatchingOrNext(target, comparer);
             return (result.index, result.found);
         }
 
