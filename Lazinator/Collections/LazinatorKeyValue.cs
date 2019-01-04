@@ -25,13 +25,24 @@ namespace Lazinator.Collections
             return ((Key, Value)).CompareTo((other.Key, other.Value));
         }
 
-        static CustomComparer<LazinatorKeyValue<T, U>> KeyOnlyComparer = null;
+        static CustomComparer<LazinatorKeyValue<T, U>> KeyOnlyComparer = default;
 
         public static CustomComparer<LazinatorKeyValue<T, U>> GetKeyOnlyComparer()
         {
-            if (KeyOnlyComparer == null)
-                return new CustomComparer<LazinatorKeyValue<T, U>>((t, u) => t.Key.CompareTo(u.Key));
+            if (KeyOnlyComparer.Initialized == false)
+                KeyOnlyComparer = new CustomComparer<LazinatorKeyValue<T, U>>((t, u) => t.Key.CompareTo(u.Key));
             return KeyOnlyComparer;
+        }
+
+        public static CustomComparer<LazinatorKeyValue<T, U>> GetKeyValueComparer(IComparer<T> keyComparer, IComparer<U> valueComparer)
+        {
+            return new CustomComparer<LazinatorKeyValue<T, U>>((t, u) =>
+            {
+                var keyComparison = keyComparer.Compare(t.Key, u.Key);
+                if (keyComparison != 0)
+                    return keyComparison;
+                return valueComparer.Compare(t.Value, u.Value);
+            });
         }
 
         public override bool Equals(object obj)

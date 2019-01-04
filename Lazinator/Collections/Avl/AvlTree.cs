@@ -76,19 +76,21 @@ namespace Lazinator.Collections.Avl
 
         public long Count => Root?.Count ?? 0;
 
+        public bool ValueAtKey(TKey key, out TValue value) => ValueAtKey(key, Comparer<TKey>.Default, out value);
+
         /// <summary>
         /// Returns the value at the first node matching the key.
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-		public bool ValueAtKey(TKey key, out TValue value)
+		public bool ValueAtKey(TKey key, IComparer<TKey> comparer, out TValue value)
 		{
 			AvlNode<TKey, TValue> node = Root;
 
 			while (node != null)
 			{
-                int comparison = key.CompareTo(node.Key);
+                int comparison = comparer.Compare(key, node.Key);
                 if (comparison < 0)
 				{
 					node = node.Left;
@@ -110,14 +112,18 @@ namespace Lazinator.Collections.Avl
 			return false;
 		}
 
+        public (AvlNode<TKey, TValue> node, long index, bool found) GetMatchingOrNextNode(TKey key) => GetMatchingOrNextNode(key, Comparer<TKey>.Default);
+
         /// <summary>
         /// Gets the node that either contains the key or the next node (which would contain the key if inserted).
         /// </summary>
         /// <param name="key"></param>
         /// <returns>A node or null, if the key is after all keys in the tree</returns>
-        public (AvlNode<TKey, TValue> node, long index, bool found) GetMatchingOrNextNode(TKey key)
+        public (AvlNode<TKey, TValue> node, long index, bool found) GetMatchingOrNextNode(TKey key, IComparer<TKey> comparer)
         {
-            var result = GetMatchingOrNextNodeHelper(key);
+            if (comparer == null)
+                comparer = Comparer<TKey>.Default;
+            var result = GetMatchingOrNextNodeHelper(key, comparer);
             if (result.found && AllowDuplicateKeys)
             {
                 bool matches = true;
@@ -133,7 +139,7 @@ namespace Lazinator.Collections.Avl
             return result;
         }
 
-        private (AvlNode<TKey, TValue> node, long index, bool found) GetMatchingOrNextNodeHelper(TKey key)
+        private (AvlNode<TKey, TValue> node, long index, bool found) GetMatchingOrNextNodeHelper(TKey key, IComparer<TKey> comparer)
         {
             AvlNode<TKey, TValue> node = Root;
             if (node == null)
@@ -141,7 +147,7 @@ namespace Lazinator.Collections.Avl
             long index = node?.LeftCount ?? 0;
             while (true)
             {
-                int comparison = key.CompareTo(node.Key);
+                int comparison = comparer.Compare(key, node.Key);
                 if (comparison < 0)
                 {
                     if (node.Left == null)
@@ -167,15 +173,17 @@ namespace Lazinator.Collections.Avl
             }
         }
 
+        public AvlNode<TKey, TValue> NodeForKey(TKey key) => NodeForKey(key, Comparer<TKey>.Default);
+
         /// <summary>
         /// Gets the node containing the key, or which would contain the key if the key were inserted, or the last
         /// node if there is no such node.
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public AvlNode<TKey, TValue> NodeForKey(TKey key)
+        public AvlNode<TKey, TValue> NodeForKey(TKey key, IComparer<TKey> comparer)
         {
-            return GetMatchingOrNextNode(key).node ?? LastNode();
+            return GetMatchingOrNextNode(key, comparer).node ?? LastNode();
         }
 
         /// <summary>
@@ -190,13 +198,15 @@ namespace Lazinator.Collections.Avl
             return x;
         }
 
-        public (bool inserted, long location) InsertAtIndex(TKey key, TValue value, long? nodeIndex) => InsertByKeyOrIndex(key, value, nodeIndex);
+        public (bool inserted, long location) InsertAtIndex(TKey key, TValue value, long? nodeIndex) => InsertByKeyOrIndex(key, Comparer<TKey>.Default, value, nodeIndex);
 
-        public (bool inserted, long location) Insert(TKey key, TValue value) => InsertByKeyOrIndex(key, value, null);
+        public (bool inserted, long location) Insert(TKey key, TValue value) => Insert(key, Comparer<TKey>.Default, value);
 
-        private (bool inserted, long location) InsertByKeyOrIndex(TKey key, TValue value, long? nodeIndex = null)
+        public (bool inserted, long location) Insert(TKey key, IComparer<TKey> comparer, TValue value) => InsertByKeyOrIndex(key, comparer, value, null);
+
+        private (bool inserted, long location) InsertByKeyOrIndex(TKey key, IComparer<TKey> comparer, TValue value, long? nodeIndex = null)
         {
-            var result = InsertHelper(AllowDuplicateKeys, key, value, nodeIndex);
+            var result = InsertHelper(AllowDuplicateKeys, key, comparer, value, nodeIndex);
             if (Root != null)
             {
                 Root.RecalculateCount();
@@ -212,7 +222,7 @@ namespace Lazinator.Collections.Avl
         /// <param name="value">The value to insert</param>
         /// <param name="nodeIndex">If the insertion point is based on an index, the index at which to insert. Null if the insertion point is to be found from the key.</param>
         /// <returns></returns>
-        private (bool inserted, long location) InsertHelper(bool skipDuplicateKeys, TKey key, TValue value, long? nodeIndex = null)
+        private (bool inserted, long location) InsertHelper(bool skipDuplicateKeys, TKey key, IComparer<TKey> comparer, TValue value, long? nodeIndex = null)
 		{
 			AvlNode<TKey, TValue> node = Root;
             long index = node?.LeftCount ?? 0;
@@ -220,7 +230,7 @@ namespace Lazinator.Collections.Avl
             {
                 node.NodeVisitedDuringChange = true;
                 
-                int compare = CompareKeyOrIndexToNode(skipDuplicateKeys, key, node, nodeIndex, index);
+                int compare = CompareKeyOrIndexToNode(key, comparer, skipDuplicateKeys, nodeIndex, index, node);
 
                 if (compare < 0 || (compare == 0 && nodeIndex != null))
                 {
@@ -277,7 +287,7 @@ namespace Lazinator.Collections.Avl
 			return (true, 0);
 		}
 
-        private int CompareKeyOrIndexToNode(bool skipDuplicateKeys, TKey key, AvlNode<TKey, TValue> node, long? desiredNodeIndex, long actualNodeIndex)
+        private int CompareKeyOrIndexToNode(TKey key, IComparer<TKey> comparer, bool skipDuplicateKeys, long? desiredNodeIndex, long actualNodeIndex, AvlNode<TKey, TValue> node)
         {
             int compare;
             if (desiredNodeIndex is long index)
@@ -292,7 +302,8 @@ namespace Lazinator.Collections.Avl
                     compare = 1;
             }
             else
-                compare = key.CompareTo(node.Key);
+                compare = comparer.Compare(key, node.Key);
+
             if (compare == 0 && skipDuplicateKeys && desiredNodeIndex == null)
             {
                 compare = 1;
@@ -563,18 +574,26 @@ namespace Lazinator.Collections.Avl
         /// </summary>
         /// <param name="key"></param>
         /// <returns>True if the item was contained in the tree, in which case it is removed</returns>
-        public bool Remove(TKey key) => Remove(key, null);
+        public bool Remove(TKey key) => Remove(key, Comparer<TKey>.Default, null);
+
+        /// <summary>
+        /// Tries to remove the first node matching the specified key.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="comparer"></param>
+        /// <returns>True if the item was contained in the tree, in which case it is removed</returns>
+        private bool Remove(TKey key, IComparer<TKey> comparer) => Remove(key, comparer, null);
 
         /// <summary>
         /// Removes the node at the specified index.
         /// </summary>
         /// <param name="key"></param>
         /// <returns>True if the item was contained in the tree, in which case it is removed</returns>
-        public bool RemoveAt(long nodeIndex) => Remove(default, nodeIndex);
+        public bool RemoveAt(long nodeIndex) => Remove(default, Comparer<TKey>.Default, nodeIndex);
 
-        private bool Remove(TKey key, long? nodeIndex = null)
+        private bool Remove(TKey key, IComparer<TKey> comparer, long? nodeIndex = null)
         {
-            bool returnVal = RemoveHelper(key, nodeIndex);
+            bool returnVal = RemoveHelper(key, comparer, nodeIndex);
             if (Root != null)
             {
                 Root.RecalculateCount();
@@ -583,7 +602,7 @@ namespace Lazinator.Collections.Avl
             return returnVal;
         }
 
-		private bool RemoveHelper(TKey key, long? nodeIndex)
+		private bool RemoveHelper(TKey key, IComparer<TKey> comparer, long? nodeIndex)
 		{
 			AvlNode<TKey, TValue> node = Root;
 
@@ -592,7 +611,7 @@ namespace Lazinator.Collections.Avl
 			{
 			    node.NodeVisitedDuringChange = true;
 
-                int compare = CompareKeyOrIndexToNode(false, key, node, nodeIndex, index);
+                int compare = CompareKeyOrIndexToNode(key, comparer, false, nodeIndex, index, node);
                 if (compare < 0)
 				{
 					node = node.Left;

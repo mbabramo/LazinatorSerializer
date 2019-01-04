@@ -163,13 +163,15 @@ namespace Lazinator.Collections.Avl
 
         public (long location, bool rejectedAsDuplicate) InsertSorted(T item, IComparer<T> comparer)
         {
-            (bool inserted, long location) = UnderlyingTree.Insert(item, default);
+            (bool inserted, long location) = UnderlyingTree.Insert(item, comparer, default);
             return (location, !inserted);
         }
 
-        public (long priorLocation, bool existed) RemoveSorted(T item)
+        public (long priorLocation, bool existed) RemoveSorted(T item) => RemoveSorted(item, Comparer<T>.Default);
+
+        public (long priorLocation, bool existed) RemoveSorted(T item, IComparer<T> comparer)
         {
-            (long location, bool exists) = FindSorted(item);
+            (long location, bool exists) = FindSorted(item, comparer);
             if (exists)
             {
                 RemoveAt(location);
@@ -184,7 +186,7 @@ namespace Lazinator.Collections.Avl
 
         public (long location, bool exists) FindSorted(T target, IComparer<T> comparer)
         {
-            var result = UnderlyingTree.GetMatchingOrNextNode(target);
+            var result = UnderlyingTree.GetMatchingOrNextNode(target, comparer);
             return (result.index, result.found);
         }
 

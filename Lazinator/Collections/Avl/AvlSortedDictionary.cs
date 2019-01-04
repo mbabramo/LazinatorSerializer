@@ -34,13 +34,13 @@ namespace Lazinator.Collections.Avl
 
         public bool ContainsKey(TKey key)
         {
-            bool result = UnderlyingTree.ValueAtKey(key, out TValue value);
+            bool result = UnderlyingTree.ValueAtKey(key, Comparer<TKey>.Default, out TValue value);
             return result;
         }
 
         public bool TryGetValue(TKey key, out TValue value)
         {
-            bool result = UnderlyingTree.ValueAtKey(key, out value);
+            bool result = UnderlyingTree.ValueAtKey(key, Comparer<TKey>.Default, out value);
             return result;
         }
 
@@ -57,7 +57,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (AllowDuplicateKeys)
                     throw new Exception("With multiple keys, use AddValue method to add item.");
-                UnderlyingTree.Insert(key, value);
+                UnderlyingTree.Insert(key, Comparer<TKey>.Default, value);
             }
         }
 
@@ -117,14 +117,14 @@ namespace Lazinator.Collections.Avl
 
         public IEnumerable<KeyValuePair<TKey, TValue>> EnumerateFrom(TKey key)
         {
-            var result = UnderlyingTree.GetMatchingOrNextNode(key);
+            var result = UnderlyingTree.GetMatchingOrNextNode(key, Comparer<TKey>.Default);
             foreach (var keyValuePair in UnderlyingTree.KeyValuePairs(result.index))
                 yield return keyValuePair;
         }
 
         public void AddValue(TKey key, TValue value)
         {
-            UnderlyingTree.Insert(key, value);
+            UnderlyingTree.Insert(key, Comparer<TKey>.Default, value);
         }
 
         public void Add(TKey key, TValue value)
@@ -172,7 +172,7 @@ namespace Lazinator.Collections.Avl
             {
                 if (AllowDuplicateKeys)
                 { // removes a single instance of the key-value pair. can remove all items within a key with RemoveAll.
-                    var result = UnderlyingTree.GetMatchingOrNextNode(item.Key);
+                    var result = UnderlyingTree.GetMatchingOrNextNode(item.Key, Comparer<TKey>.Default);
                     if (result.found == false)
                         return false;
                     bool valueFound = false;

@@ -51,7 +51,7 @@ namespace Lazinator.Collections.Avl
 
         private IEnumerable<(KeyValuePair<WUint, LazinatorTuple<TKey, TValue>> keyValue, long index)> EnumerateFrom(uint hash)
         {
-            var result = UnderlyingTree.GetMatchingOrNextNode(hash);
+            var result = UnderlyingTree.GetMatchingOrNextNode(hash, Comparer<WUint>.Default);
             foreach (var node in UnderlyingTree.AsEnumerable(result.index))
                 yield return (node.KeyValuePair, node.Index);
         }
@@ -93,7 +93,7 @@ namespace Lazinator.Collections.Avl
                 var item = GetHashMatches(key, hash).FirstOrDefault();
                 if (item.keyValue == null)
                 {
-                    UnderlyingTree.Insert(key.GetBinaryHashCode32(), new LazinatorTuple<TKey, TValue>(key, value));
+                    UnderlyingTree.Insert(key.GetBinaryHashCode32(), Comparer<WUint>.Default, new LazinatorTuple<TKey, TValue>(key, value));
                 }
                 else
                     item.keyValue.Item2 = value;
@@ -152,7 +152,7 @@ namespace Lazinator.Collections.Avl
         public void AddValue(TKey key, TValue value)
         {
             uint hash = key.GetBinaryHashCode32();
-            UnderlyingTree.Insert(hash, new LazinatorTuple<TKey, TValue>(key, value));
+            UnderlyingTree.Insert(hash, Comparer<WUint>.Default, new LazinatorTuple<TKey, TValue>(key, value));
         }
 
         public void Add(TKey key, TValue value)

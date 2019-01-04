@@ -7,7 +7,13 @@ namespace Lazinator.Collections
 {
     public partial class SortedLazinatorList<T> : LazinatorList<T>, ISortedLazinatorList<T>, ILazinatorSortable<T> where T : ILazinator, IComparable<T>
     {
-        public (long location, bool rejectedAsDuplicate) InsertSorted(T item, IComparer<T> comparer = null)
+
+
+        public (long location, bool rejectedAsDuplicate) InsertSorted(T item) => InsertSorted(item, Comparer<T>.Default);
+        public (long priorLocation, bool existed) RemoveSorted(T item) => RemoveSorted(item, Comparer<T>.Default);
+        public (long location, bool exists) FindSorted(T target) => FindSorted(target, Comparer<T>.Default);
+
+        public (long location, bool rejectedAsDuplicate) InsertSorted(T item, IComparer<T> comparer)
         {
             (long location, bool exists) = FindSorted(item, comparer);
             if (exists && !AllowDuplicates)
@@ -16,15 +22,13 @@ namespace Lazinator.Collections
             return (location, false);
         }
 
-        public (long priorLocation, bool existed) RemoveSorted(T item)
+        public (long priorLocation, bool existed) RemoveSorted(T item, IComparer<T> comparer)
         {
             (long location, bool exists) = FindSorted(item);
             if (exists)
                 RemoveAt(location);
             return (location, exists);
         }
-
-        public (long location, bool exists) FindSorted(T target) => FindSorted(target, Comparer<T>.Default);
 
         public (long location, bool exists) FindSorted(T target, IComparer<T> comparer)
         {
@@ -74,8 +78,6 @@ namespace Lazinator.Collections
             }
             return (mid, false);
         }
-
-        public (long location, bool rejectedAsDuplicate) InsertSorted(T item) => InsertSorted(item, Comparer<T>.Default);
         
     }
 }

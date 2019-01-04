@@ -26,10 +26,10 @@ namespace Lazinator.Collections.Avl
             return result.exists;
         }
 
-        public bool Contains(TKey key, TValue value)
+        public bool Contains(TKey key, IComparer<TKey> comparer, TValue value)
         {
             LazinatorKeyValue<TKey, TValue> keyValue = new LazinatorKeyValue<TKey, TValue>(key, value);
-            var result = GetNodeByKeyAndValue(keyValue);
+            var result = GetNodeByKeyAndValue(keyValue, comparer);
             return result.exists;
         }
 
@@ -50,7 +50,7 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        public void Insert(TKey key, TValue value, long? itemIndex = null)
+        public void Insert(TKey key, IComparer<TKey> comparer, TValue value, long? itemIndex = null)
         {
             LazinatorKeyValue<TKey, TValue> keyValue = new LazinatorKeyValue<TKey, TValue>(key, value);
             AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node;
@@ -65,7 +65,7 @@ namespace Lazinator.Collections.Avl
             }
             else
             {
-                var result = GetNodeByKeyAndValue(keyValue);
+                var result = GetNodeByKeyAndValue(keyValue, comparer);
                 node = result.node;
                 indexInNode = result.indexInNode;
             }
@@ -98,10 +98,10 @@ namespace Lazinator.Collections.Avl
             return false;
         }
 
-        public bool Delete(TKey key, TValue value)
+        public bool Remove(TKey key, IComparer<TKey> comparer, TValue value)
         {
             LazinatorKeyValue<TKey, TValue> keyValue = new LazinatorKeyValue<TKey, TValue>(key, value);
-            var result = GetNodeByKeyAndValue(keyValue);
+            var result = GetNodeByKeyAndValue(keyValue, comparer);
             if (result.exists)
             {
                 var contents = GetNodeContents(result.node);
@@ -183,17 +183,17 @@ namespace Lazinator.Collections.Avl
             if (UnderlyingTree.Root == null)
                 return (null, -1, false);
             LazinatorKeyValue<TKey, TValue> keyWithDefaultValue = new LazinatorKeyValue<TKey, TValue>(key, default);
-            var node = UnderlyingTree.NodeForKey(keyWithDefaultValue);
+            var node = UnderlyingTree.NodeForKey(keyWithDefaultValue, LazinatorKeyValue<TKey, TValue>.GetKeyOnlyComparer());
             var contents = GetNodeContents(node);
             var result = contents.Find(key);
             return (node, result.exists ? (int) result.location : (int) contents.SelfItemsCount, result.exists);
         }
 
-        public (AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node, int indexInNode, bool exists) GetNodeByKeyAndValue(LazinatorKeyValue<TKey, TValue> keyAndValue)
+        public (AvlNode<LazinatorKeyValue<TKey, TValue>, AvlBigNodeContents<TKey, TValue>> node, int indexInNode, bool exists) GetNodeByKeyAndValue(LazinatorKeyValue<TKey, TValue> keyAndValue, IComparer<TKey> comparer)
         {
             if (UnderlyingTree.Root == null)
                 return (null, -1, false);
-            var node = UnderlyingTree.NodeForKey(keyAndValue);
+            var node = UnderlyingTree.NodeForKey(keyAndValue, LazinatorKeyValue<TKey, TValue>.GetKeyValueComparer(comparer, Comparer<TValue>.Default));
             var contents = GetNodeContents(node);
             var result = contents.Find(keyAndValue);
             return (node, result.exists ? (int) result.location : (int) contents.SelfItemsCount, result.exists);
