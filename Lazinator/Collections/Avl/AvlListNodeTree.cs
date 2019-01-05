@@ -20,6 +20,13 @@ namespace Lazinator.Collections.Avl
             SortableListFactory = sortableListFactory;
         }
 
+        public AvlListNodeTree(bool allowDuplicates, int maxItemsPerNode, ILazinatorSortableFactory<LazinatorKeyValue<TKey, TValue>> sortableListFactory, AvlTree<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> underlyingTree)
+        {
+            UnderlyingTree = underlyingTree;
+            MaxItemsPerInnerList = maxItemsPerNode;
+            SortableListFactory = sortableListFactory;
+        }
+
         public AvlListNodeTree()
         {
 
@@ -76,7 +83,7 @@ namespace Lazinator.Collections.Avl
             contents.InsertAt(indexInNode, keyValue);
             if (contents.SelfItemsCount > MaxItemsPerInnerList)
             {
-                var toInsert = contents.SplitOffFirstHalf();
+                var toInsert = contents.SplitOff();
                 UnderlyingTree.InsertAtIndex(toInsert.node.GetLastItem().Value, toInsert.node, toInsert.nodeIndex);
             }
         }
@@ -283,6 +290,12 @@ namespace Lazinator.Collections.Avl
         public void Clear()
         {
             throw new NotImplementedException();
+        }
+
+        public ILazinatorSplittable SplitOff()
+        {
+            AvlListNodeTree<TKey, TValue> partSplitOff = new AvlListNodeTree<TKey, TValue>(AllowDuplicates, MaxItemsPerInnerList, SortableListFactory, (AvlTree<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>>) UnderlyingTree.SplitOff());
+            return partSplitOff;
         }
 
         public long ItemsCount

@@ -57,6 +57,12 @@ namespace Lazinator.Collections.Avl
             Insert(firstItem);
         }
 
+        public AvlListNodeContents(ILazinatorSortable<LazinatorKeyValue<TKey, TValue>> items, ILazinatorSortableFactory<LazinatorKeyValue<TKey, TValue>> sortableFactory)
+        {
+            Items = items;
+            SortableFactory = sortableFactory;
+        }
+
         public AvlListNodeContents(IEnumerable<LazinatorKeyValue<TKey, TValue>> items, ILazinatorSortableFactory<LazinatorKeyValue<TKey, TValue>> sortableFactory, IComparer<LazinatorKeyValue<TKey, TValue>> comparer = null)
         {
             Items = sortableFactory.CreateSortable();
@@ -163,17 +169,11 @@ namespace Lazinator.Collections.Avl
             return Items[itemsCount - 1].CloneNoBuffer();
         }
 
-        public (AvlListNodeContents<TKey, TValue> node, long nodeIndex) SplitOffFirstHalf()
+        public (AvlListNodeContents<TKey, TValue> node, long nodeIndex) SplitOff()
         {
-            int itemsCount = SelfItemsCount;
-            if (itemsCount < 2)
-                throw new System.Exception("Insufficient number of items to split.");
-            int numToRemove = itemsCount / 2;
-            var itemsToRemove = Items.Take(numToRemove).ToList();
-            for (int i = 0; i < numToRemove; i++)
-                Items.RemoveAt(i);
+            var splitOffItems = Items.SplitOff();
             SelfItemsCount = Items.Count;
-            AvlListNodeContents<TKey, TValue> node = new AvlListNodeContents<TKey, TValue>(itemsToRemove, SortableFactory);
+            AvlListNodeContents<TKey, TValue> node = new AvlListNodeContents<TKey, TValue>((ILazinatorSortable<LazinatorKeyValue<TKey, TValue>>) splitOffItems, SortableFactory);
             return (node, NodeIndex); // new node will be at current node's index. This will result in this node's NodeIndex increasing
         }
 

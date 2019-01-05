@@ -998,6 +998,32 @@ namespace Lazinator.Collections.Avl
             return GetValueEnumerator(skip);
         }
 
+        public ILazinatorSplittable SplitOff()
+        {
+            if (Root.LeftCount == 0 || Root.RightCount == 0)
+                return new AvlTree<TKey, TValue>() { AllowDuplicates = AllowDuplicates };
+            // Create two separate trees, each of them balanced
+            var leftNode = Root.Left;
+            var rightNode = Root.Right;
+            var originalRoot = Root;
+            // Now, add the original root's item to the portion of the tree that we are keeping. That will ensure that the tree stays balanced.
+            if (leftNode.Count > rightNode.Count)
+            {
+                Root = rightNode; // Count will automatically adjust
+                // We add by index not by key in part because we don't know if a special comparer is used. If we change this, we may need to add a Comparer parameter or alternatively use a custom comparer that forces us to the left-most or right-most node.
+                InsertAtIndex(originalRoot.Key, originalRoot.Value, 0);
+                leftNode.Parent = null;
+                return new AvlTree<TKey, TValue>() { AllowDuplicates = AllowDuplicates, Root = leftNode };
+            }
+            else
+            {
+                Root = leftNode;
+                InsertAtIndex(originalRoot.Key, originalRoot.Value, Root.Count);
+                rightNode.Parent = null;
+                return new AvlTree<TKey, TValue>() { AllowDuplicates = AllowDuplicates, Root = rightNode };
+            }
+        }
+
         #endregion
     }
 }

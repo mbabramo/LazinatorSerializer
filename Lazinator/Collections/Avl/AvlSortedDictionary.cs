@@ -21,6 +21,12 @@ namespace Lazinator.Collections.Avl
             AllowDuplicates = allowDuplicates;
         }
 
+        public AvlSortedDictionary(bool allowDuplicates, ILazinatorOrderedKeyable<TKey, TValue> underlyingTree)
+        {
+            UnderlyingTree = underlyingTree;
+            AllowDuplicates = allowDuplicates;
+        }
+
         public bool AllowDuplicates
         {
             get => UnderlyingTree.AllowDuplicates;
@@ -272,6 +278,12 @@ namespace Lazinator.Collections.Avl
         public (TValue valueIfFound, long index, bool found) GetMatchingOrNext(TKey key, IComparer<TKey> comparer)
         {
             return UnderlyingTree.GetMatchingOrNext(key, comparer);
+        }
+
+        public ILazinatorSplittable SplitOff()
+        {
+            AvlSortedDictionary<TKey, TValue> partSplitOff = new AvlSortedDictionary<TKey, TValue>(AllowDuplicates, (ILazinatorOrderedKeyable<TKey, TValue>) UnderlyingTree.SplitOff());
+            return partSplitOff;
         }
     }
 }

@@ -9,11 +9,23 @@ namespace Lazinator.Collections.Avl
 {
     public partial class AvlList<T> : IAvlList<T>, IList<T>, ILazinatorListable<T> where T : ILazinator
     {
+        public static AvlList<T> CreateWithDefaultFactory(IEnumerable<T> itemsToAdd = null)
+        {
+            var l = new AvlList<T>((ILazinatorOrderedKeyableFactory<Placeholder, T>)new AvlTreeFactory<Placeholder, T>());
+            if (itemsToAdd != null)
+                foreach (T item in itemsToAdd)
+                    l.Add(item);
+            return l;
+        }
+
         public AvlList(ILazinatorOrderedKeyableFactory<Placeholder, T> factory)
         {
-            if (factory == null)
-                factory = (ILazinatorOrderedKeyableFactory<Placeholder, T>)new AvlTreeFactory<Placeholder, T>();
             UnderlyingTree = factory.Create();
+        }
+
+        public AvlList(ILazinatorOrderedKeyable<Placeholder, T> underlyingTree)
+        {
+            UnderlyingTree = underlyingTree;
         }
 
         public T this[int index]
@@ -139,6 +151,12 @@ namespace Lazinator.Collections.Avl
         public void SetAt(long index, T value)
         {
             UnderlyingTree.SetValueAtIndex(index, value);
+        }
+
+        public virtual ILazinatorSplittable SplitOff()
+        {
+            AvlList<T> partSplitOff = new AvlList<T>((ILazinatorOrderedKeyable<Placeholder, T>) UnderlyingTree.SplitOff());
+            return partSplitOff;
         }
 
         #endregion

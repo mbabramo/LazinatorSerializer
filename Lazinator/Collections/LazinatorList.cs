@@ -498,7 +498,7 @@ namespace Lazinator.Collections
             }
         }
 
-        #region ILazinatorCountableListableFactory 
+        #region Interface implementation 
 
         public long LongCount => Count;
 
@@ -538,6 +538,23 @@ namespace Lazinator.Collections
             if (index > Count || index < 0)
                 throw new ArgumentException();
             this[(int)index] = value;
+        }
+
+        protected virtual ILazinatorUncountedListable<T> CreateEmptyList()
+        {
+            return new LazinatorList<T>();
+        }
+
+        public ILazinatorSplittable SplitOff()
+        {
+            LazinatorList<T> partSplitOff = (LazinatorList<T>) CreateEmptyList();
+            int numToMove = Count / 2;
+            for (int i = 0; i < numToMove; i++)
+            {
+                partSplitOff.Add(this[0]);
+                RemoveAt(0);
+            }
+            return partSplitOff;
         }
 
         #endregion

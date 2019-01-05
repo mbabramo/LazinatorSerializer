@@ -68,7 +68,7 @@ namespace Lazinator.Collections
             int i = 0;
             foreach (T value in this)
             {
-                array[arrayIndex + i] = value;
+                array[arrayIndex + i++] = value;
             }
         }
 
@@ -259,6 +259,18 @@ namespace Lazinator.Collections
             if (index > Count || index < 0)
                 throw new ArgumentException();
             this[(int)index] = value;
+        }
+
+        public virtual ILazinatorSplittable SplitOff()
+        {
+            LazinatorLinkedList<T> partSplitOff = new LazinatorLinkedList<T>();
+            int numToMove = Count / 2;
+            for (int i = 0; i < numToMove; i++)
+            {
+                partSplitOff.Add(this[0]);
+                RemoveAt(0);
+            }
+            return partSplitOff;
         }
 
         #endregion

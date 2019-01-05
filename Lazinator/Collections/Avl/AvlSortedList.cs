@@ -20,6 +20,12 @@ namespace Lazinator.Collections.Avl
             AllowDuplicates = allowDuplicates;
         }
 
+        public AvlSortedList(bool allowDuplicates, ILazinatorOrderedKeyable<T, Placeholder> underlyingTree)
+        {
+            UnderlyingTree = underlyingTree;
+            AllowDuplicates = allowDuplicates;
+        }
+
         public bool AllowDuplicates
         {
             get => UnderlyingTree.AllowDuplicates;
@@ -185,6 +191,14 @@ namespace Lazinator.Collections.Avl
         {
             var result = UnderlyingTree.GetMatchingOrNext(target, comparer);
             return (result.index, result.found);
+        }
+
+
+
+        public virtual ILazinatorSplittable SplitOff()
+        {
+            AvlSortedList<T> partSplitOff = new AvlSortedList<T>(AllowDuplicates, (ILazinatorOrderedKeyable<T, Placeholder>) UnderlyingTree.SplitOff());
+            return partSplitOff;
         }
 
         #endregion
