@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Lazinator.Collections.Factories
 {
-    public partial class SortedLazinatorLinkedListFactory<T> : ISortedLazinatorLinkedListFactory<T>, ILazinatorCountableListableFactory<T>, ILazinatorSortableFactory<T> where T : ILazinator, IComparable<T>
+    public partial class SortedLazinatorLinkedListFactory<T> : ISortedLazinatorLinkedListFactory<T>, ILazinatorListableFactory<T>, ILazinatorSortableFactory<T> where T : ILazinator, IComparable<T>
     {
-        public ILazinatorCountableListable<T> CreateCountableListable()
+        public ILazinatorListable<T> CreateListable()
         {
             return new SortedLazinatorLinkedList<T>()
             {

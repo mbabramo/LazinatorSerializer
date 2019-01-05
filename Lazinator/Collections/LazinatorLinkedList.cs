@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Lazinator.Collections
 {
-    public partial class LazinatorLinkedList<T> : ILazinatorLinkedList<T>, IList<T>, ILazinatorCountableListable<T> where T : ILazinator
+    public partial class LazinatorLinkedList<T> : ILazinatorLinkedList<T>, IList<T>, ILazinatorListable<T> where T : ILazinator
     {
         LazinatorLinkedListNode<T> _lastAccessedNode = null;
         int? _lastAccessedIndex = null;

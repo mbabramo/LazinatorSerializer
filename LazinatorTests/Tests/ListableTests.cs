@@ -31,7 +31,7 @@ namespace LazinatorTests.Tests
             AvlSortedListAllowDuplicates,
         }
 
-        static ILazinatorCountableListableFactory<WInt> GetListFactory(ListFactoryToUse l)
+        static ILazinatorListableFactory<WInt> GetListFactory(ListFactoryToUse l)
         {
             switch (l)
             {
@@ -98,7 +98,7 @@ namespace LazinatorTests.Tests
         public void Listable_AddingAtEnd(ListFactoryToUse listFactoryToUse)
         {
             var factory = GetListFactory(listFactoryToUse);
-            ILazinatorCountableListable<WInt> l = factory.CreateCountableListable();
+            ILazinatorListable<WInt> l = factory.CreateListable();
             const int numItems = 500;
             for (int i = 0; i < numItems; i++)
             {
@@ -121,7 +121,7 @@ namespace LazinatorTests.Tests
         public void Listable_AddingAtBeginning(ListFactoryToUse listFactoryToUse)
         {
             var factory = GetListFactory(listFactoryToUse);
-            ILazinatorCountableListable<WInt> l = factory.CreateCountableListable();
+            ILazinatorListable<WInt> l = factory.CreateListable();
             const int numItems = 500;
             for (int i = 0; i < numItems; i++)
                 l.InsertAt(0, i);
@@ -151,7 +151,7 @@ namespace LazinatorTests.Tests
             {
                 int i = 0;
                 List<int> list = new List<int>();
-                ILazinatorCountableListable<WInt> l = factory.CreateCountableListable();
+                ILazinatorListable<WInt> l = factory.CreateListable();
                 foreach (var phase in phases)
                 {
                     for (int m = 0; m < phase.numModifications; m++)
@@ -231,7 +231,7 @@ namespace LazinatorTests.Tests
             bool trace = false;
             bool testIntermediateValues = false;
             Random r = new Random(0);
-            ILazinatorCountableListable<WInt> l = factory.CreateCountableListable();
+            ILazinatorListable<WInt> l = factory.CreateListable();
             List<int> o = new List<int>();
             for (int repetition = 0; repetition < repetitions; repetition++)
             {

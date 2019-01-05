@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Lazinator.Collections.Factories
 {
-    public partial class AvlListFactory<T> : IAvlListFactory<T>, ILazinatorCountableListableFactory<T> where T : ILazinator
+    public partial class AvlListFactory<T> : IAvlListFactory<T>, ILazinatorListableFactory<T> where T : ILazinator
     {
         public AvlListFactory(ILazinatorOrderedKeyableFactory<Placeholder, T> orderedKeyableFactory)
         {
@@ -17,7 +17,7 @@ namespace Lazinator.Collections.Factories
                 this.OrderedKeyableFactory = orderedKeyableFactory;
         }
 
-        public ILazinatorCountableListable<T> CreateCountableListable()
+        public ILazinatorListable<T> CreateListable()
         {
             return new AvlList<T>(OrderedKeyableFactory);
         }

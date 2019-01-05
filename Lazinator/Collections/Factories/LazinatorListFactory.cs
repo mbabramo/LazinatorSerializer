@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Lazinator.Collections.Factories
 {
-    public partial class LazinatorListFactory<T> : ILazinatorListFactory<T>, ILazinatorCountableListableFactory<T> where T : ILazinator
+    public partial class LazinatorListFactory<T> : ILazinatorListFactory<T>, ILazinatorListableFactory<T> where T : ILazinator
     {
-        public ILazinatorCountableListable<T> CreateCountableListable()
+        public ILazinatorListable<T> CreateListable()
         {
             return new LazinatorList<T>();
         }

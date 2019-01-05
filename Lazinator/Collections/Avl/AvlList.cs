@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlList<T> : IAvlList<T>, IList<T>, ILazinatorCountableListable<T> where T : ILazinator
+    public partial class AvlList<T> : IAvlList<T>, IList<T>, ILazinatorListable<T> where T : ILazinator
     {
         public AvlList(ILazinatorOrderedKeyableFactory<Placeholder, T> factory)
         {

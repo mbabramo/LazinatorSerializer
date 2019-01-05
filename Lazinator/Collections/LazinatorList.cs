@@ -13,7 +13,7 @@ using Lazinator.Collections.OffsetList;
 namespace Lazinator.Collections
 {
     [Implements(new string[] { "PreSerialization", "EnumerateLazinatorDescendants", "OnFreeInMemoryObjects", "AssignCloneProperties", "OnUpdateDeserializedChildren", "OnPropertiesWritten", "OnForEachLazinator" })]
-    public partial class LazinatorList<T> : IList<T>, IEnumerable, ILazinatorList<T>, ILazinatorList, ILazinatorCountableListable<T> where T : ILazinator
+    public partial class LazinatorList<T> : IList<T>, IEnumerable, ILazinatorList<T>, ILazinatorList, ILazinatorListable<T> where T : ILazinator
     {
         // The status of an item currently in the list. To avoid unnecessary deserialization, we keep track of 
         struct ItemStatus
