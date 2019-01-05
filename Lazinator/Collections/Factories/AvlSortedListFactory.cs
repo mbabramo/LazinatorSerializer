@@ -9,11 +9,9 @@ namespace Lazinator.Collections.Factories
 {
     public partial class AvlSortedListFactory<T> : IAvlSortedListFactory<T>, ILazinatorCountableListableFactory<T>, ILazinatorSortableFactory<T> where T : ILazinator, IComparable<T>
     {
-        public ILazinatorOrderedKeyableFactory<T, Placeholder> OrderedKeyableFactory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public AvlSortedListFactory(ILazinatorOrderedKeyableFactory<T, Placeholder> orderedKeyableFactory)
+        public AvlSortedListFactory(bool allowDuplicates, ILazinatorOrderedKeyableFactory<T, Placeholder> orderedKeyableFactory)
         {
+            AllowDuplicates = allowDuplicates;
             if (orderedKeyableFactory == null)
                 OrderedKeyableFactory = (ILazinatorOrderedKeyableFactory<T, Placeholder>)new AvlTreeFactory<T, Placeholder>();
             else

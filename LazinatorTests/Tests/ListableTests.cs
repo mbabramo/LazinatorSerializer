@@ -50,9 +50,9 @@ namespace LazinatorTests.Tests
                 case ListFactoryToUse.AvlList:
                     return new AvlListFactory<WInt>((ILazinatorOrderedKeyableFactory<Placeholder, WInt>) new AvlTreeFactory<Placeholder, WInt>());
                 case ListFactoryToUse.AvlSortedList:
-                    return new AvlSortedListFactory<WInt>((ILazinatorOrderedKeyableFactory<WInt, Placeholder>)new AvlTreeFactory<WInt, Placeholder>());
+                    return new AvlSortedListFactory<WInt>(false, (ILazinatorOrderedKeyableFactory<WInt, Placeholder>)new AvlTreeFactory<WInt, Placeholder>());
                 case ListFactoryToUse.AvlSortedListAllowDuplicates:
-                    return new AvlSortedListFactory<WInt>((ILazinatorOrderedKeyableFactory<WInt, Placeholder>)new AvlTreeFactory<WInt, Placeholder>()) { AllowDuplicates = true };
+                    return new AvlSortedListFactory<WInt>(true, (ILazinatorOrderedKeyableFactory<WInt, Placeholder>)new AvlTreeFactory<WInt, Placeholder>() { AllowDuplicates = true });
                 default:
                     throw new NotImplementedException();
             }

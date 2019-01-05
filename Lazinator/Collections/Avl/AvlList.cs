@@ -8,8 +8,8 @@ using System.Collections.Generic;
 namespace Lazinator.Collections.Avl
 {
     public partial class AvlList<T> : IAvlList<T>, IList<T>, ILazinatorCountableListable<T> where T : ILazinator
-    { 
-        public AvlList(ILazinatorOrderedKeyableFactory<Placeholder, T> factory = null)
+    {
+        public AvlList(ILazinatorOrderedKeyableFactory<Placeholder, T> factory)
         {
             if (factory == null)
                 factory = (ILazinatorOrderedKeyableFactory<Placeholder, T>)new AvlTreeFactory<Placeholder, T>();

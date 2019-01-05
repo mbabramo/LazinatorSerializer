@@ -20,7 +20,7 @@ namespace Lazinator.Collections.Avl
         public AvlDictionary(ILazinatorOrderedKeyableFactory<WUint, LazinatorTuple<TKey, TValue>> factory)
         {
             UnderlyingTree = factory.Create();
-            AllowDuplicateKeys = UnderlyingTree.AllowDuplicates; // sometimes we allow multiple items with same key
+            AllowDuplicates = UnderlyingTree.AllowDuplicates; // sometimes we allow multiple items with same key
         }
 
         public IEnumerable<TValue> GetAllValues(TKey key)
@@ -91,7 +91,7 @@ namespace Lazinator.Collections.Avl
             }
             set
             {
-                if (AllowDuplicateKeys)
+                if (AllowDuplicates)
                     throw new Exception("With multiple keys, use AddValue method to add item.");
                 uint hash = key.GetBinaryHashCode32();
                 var item = GetHashMatches(key, hash).FirstOrDefault();
@@ -110,7 +110,7 @@ namespace Lazinator.Collections.Avl
 
         public void Clear()
         {
-            bool allowDuplicates = AllowDuplicateKeys;
+            bool allowDuplicates = AllowDuplicates;
             UnderlyingTree.Clear();
             UnderlyingTree.AllowDuplicates = true;
         }
@@ -161,7 +161,7 @@ namespace Lazinator.Collections.Avl
 
         public void Add(TKey key, TValue value)
         {
-            if (AllowDuplicateKeys)
+            if (AllowDuplicates)
                 throw new Exception("With multiple keys, use AddValue method to add item.");
             if (this.ContainsKey(key))
                 throw new ArgumentException();
@@ -175,7 +175,7 @@ namespace Lazinator.Collections.Avl
 
         public bool Contains(KeyValuePair<TKey, TValue> item)
         {
-            if (AllowDuplicateKeys)
+            if (AllowDuplicates)
             {
                 foreach (var v in GetAllValues(item.Key))
                     if (System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(v, item.Value))
@@ -202,7 +202,7 @@ namespace Lazinator.Collections.Avl
         {
             if (Contains(item))
             {
-                if (AllowDuplicateKeys)
+                if (AllowDuplicates)
                 { // removes a single instance of the key-value pair. can remove all items within a key with RemoveAll.
 
                     uint hash = item.Key.GetBinaryHashCode32();

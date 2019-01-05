@@ -8,8 +8,6 @@ namespace Lazinator.Collections.Factories
 {
     public partial class AvlTreeFactory<TKey, TValue> : IAvlTreeFactory<TKey, TValue>, ILazinatorOrderedKeyableFactory<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
-        public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public ILazinatorOrderedKeyable<TKey, TValue> Create()
         {
             return new AvlTree<TKey, TValue>()

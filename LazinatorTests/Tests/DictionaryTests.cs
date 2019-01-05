@@ -37,9 +37,9 @@ namespace LazinatorTests.Tests
                 case DictionaryToUse.AvlDictionaryMultiValue:
                     return new AvlDictionary<TKey, TValue>((ILazinatorOrderedKeyableFactory<WUint, LazinatorTuple<TKey, TValue>>)new AvlTreeFactory<WUint, LazinatorTuple<TKey, TValue>>());
                 case DictionaryToUse.AvlSortedDictionary:
-                    return new AvlSortedDictionary<TKey, TValue>((ILazinatorOrderedKeyableFactory<TKey, TValue>) new AvlTreeFactory<TKey, TValue>());
+                    return new AvlSortedDictionary<TKey, TValue>(false, (ILazinatorOrderedKeyableFactory<TKey, TValue>) new AvlTreeFactory<TKey, TValue>());
                 case DictionaryToUse.AvlSortedDictionaryMultiValue:
-                    return new AvlSortedDictionary<TKey, TValue>((ILazinatorOrderedKeyableFactory<TKey, TValue>)new AvlTreeFactory<TKey, TValue>());
+                    return new AvlSortedDictionary<TKey, TValue>(true, (ILazinatorOrderedKeyableFactory<TKey, TValue>)new AvlTreeFactory<TKey, TValue>() { AllowDuplicates = true });
             }
             throw new InvalidOperationException();
         }

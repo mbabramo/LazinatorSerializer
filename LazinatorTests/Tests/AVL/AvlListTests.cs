@@ -15,7 +15,7 @@ namespace LazinatorTests.AVL
         [Fact]
         public void AvlListAddWorks()
         {
-            AvlList<WInt> list = new AvlList<WInt>();
+            AvlList<WInt> list = new AvlList<WInt>(null);
             const int numItems = 100;
             for (int i = 0; i < numItems; i++)
                 list.Add(i);
@@ -31,7 +31,7 @@ namespace LazinatorTests.AVL
                 return avlList.EnumerateLazinatorNodes(x => true, false, x => true, true, false).Where(x => x is AvlNode<WByte, WInt>).Count();
             }
 
-            AvlList<WInt> list = new AvlList<WInt>();
+            AvlList<WInt> list = new AvlList<WInt>(null);
             const int numItems = 1000;
             for (int i = 0; i < numItems; i++)
                 list.Add(i);
@@ -47,7 +47,7 @@ namespace LazinatorTests.AVL
         [Fact]
         public void AvlListIndexOfWorks()
         {
-            AvlList<WInt> avlList = new AvlList<WInt>() { 0, 1, 2 };
+            AvlList<WInt> avlList = new AvlList<WInt>(null) { 0, 1, 2 };
             avlList.IndexOf(0).Should().Be(0);
             avlList.IndexOf(1).Should().Be(1);
             avlList.IndexOf(2).Should().Be(2);
@@ -57,7 +57,7 @@ namespace LazinatorTests.AVL
         [Fact]
         public void AvlListCopyToWorks()
         {
-            AvlList<WInt> avlList = new AvlList<WInt>() { 0, 1, 2 };
+            AvlList<WInt> avlList = new AvlList<WInt>(null) { 0, 1, 2 };
             WInt[] array = new WInt[6];
             avlList.CopyTo(array, 2);
             array[2].WrappedValue.Should().Be(0);
@@ -68,14 +68,14 @@ namespace LazinatorTests.AVL
         [Fact]
         public void AvlListCountWorks()
         {
-            AvlList<WInt> avlList = new AvlList<WInt>() { 0, 1, 2 };
+            AvlList<WInt> avlList = new AvlList<WInt>(null) { 0, 1, 2 };
             avlList.Count.Should().Be(3);
         }
 
         [Fact]
         public void AvlListClearWorks()
         {
-            AvlList<WInt> avlList = new AvlList<WInt>() { 0, 1, 2 };
+            AvlList<WInt> avlList = new AvlList<WInt>(null) { 0, 1, 2 };
             avlList.Clear();
             avlList.Count.Should().Be(0);
         }

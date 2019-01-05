@@ -15,21 +15,19 @@ namespace Lazinator.Collections.Avl
         {
         }
 
-        public AvlSortedDictionary(ILazinatorOrderedKeyableFactory<TKey, TValue> factory)
+        public AvlSortedDictionary(bool allowDuplicates, ILazinatorOrderedKeyableFactory<TKey, TValue> factory)
         {
             UnderlyingTree = factory.Create();
-            AllowDuplicates = UnderlyingTree.AllowDuplicates;
+            AllowDuplicates = allowDuplicates;
         }
 
         public bool AllowDuplicates
         {
-            get
-            {
-                return UnderlyingTree.AllowDuplicates;
-            }
+            get => UnderlyingTree.AllowDuplicates;
             set
             {
-                UnderlyingTree.AllowDuplicates = value;
+                if (value != UnderlyingTree.AllowDuplicates)
+                    throw new Exception("AllowDuplicates must be same for sorted list and underlying tree.");
             }
         }
 

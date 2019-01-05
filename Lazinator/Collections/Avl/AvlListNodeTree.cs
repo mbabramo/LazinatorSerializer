@@ -297,10 +297,6 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public long Count => throw new NotImplementedException();
-
-        public ILazinatorSortableFactory<LazinatorKeyValue<TKey, TValue>> SortableListFactory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 }
