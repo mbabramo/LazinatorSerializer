@@ -3,7 +3,7 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections.Factories
 {
-    public class SortedLazinatorLinkedListWithDuplicatesFactory<T> : ILazinatorCountableListableFactory<T>, ILazinatorSortableFactory<T> where T : ILazinator, IComparable<T>
+    public class SortedLazinatorLinkedListWithDuplicatesFactory<T> : ISortedLazinatorLinkedListWithDuplicatesFactory<T>, ILazinatorCountableListableFactory<T>, ILazinatorSortableFactory<T> where T : ILazinator, IComparable<T>
     {
         public bool AllowDuplicates => true;
 

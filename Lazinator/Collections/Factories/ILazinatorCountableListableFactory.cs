@@ -1,10 +1,10 @@
 ﻿using Lazinator.Core;
+using Lazinator.Attributes;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Lazinator.Collections.Factories
 {
+    [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorCountableListableFactory)]
     public interface ILazinatorCountableListableFactory<T> where T : ILazinator
     {
         ILazinatorCountableListable<T> CreateCountableListable();

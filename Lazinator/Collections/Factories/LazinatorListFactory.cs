@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Lazinator.Collections.Factories
 {
-    public class LazinatorListFactory<T> : ILazinatorCountableListableFactory<T> where T : ILazinator
+    public class LazinatorListFactory<T> : ILazinatorListFactory<T>, ILazinatorCountableListableFactory<T> where T : ILazinator
     {
         public ILazinatorCountableListable<T> CreateCountableListable()
         {

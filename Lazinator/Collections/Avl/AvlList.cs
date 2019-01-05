@@ -1,4 +1,5 @@
-﻿using Lazinator.Core;
+﻿using Lazinator.Collections.Factories;
+using Lazinator.Core;
 using Lazinator.Wrappers;
 using System;
 using System.Collections;
@@ -8,9 +9,9 @@ namespace Lazinator.Collections.Avl
 {
     public partial class AvlList<T> : IAvlList<T>, IList<T>, ILazinatorCountableListable<T> where T : ILazinator
     { 
-        public AvlList()
+        public AvlList(ILazinatorOrderedKeyableFactory<Placeholder, T> factory)
         {
-            UnderlyingTree = (ILazinatorOrderedKeyable<Placeholder, T>) new AvlTree<Placeholder, T>();
+            UnderlyingTree = factory.Create();
         }
 
         public T this[int index]
