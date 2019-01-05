@@ -20,7 +20,8 @@ namespace Lazinator.Collections.Avl
         public AvlDictionary(ILazinatorOrderedKeyableFactory<WUint, LazinatorTuple<TKey, TValue>> factory)
         {
             UnderlyingTree = factory.Create();
-            AllowDuplicates = UnderlyingTree.AllowDuplicates; // sometimes we allow multiple items with same key
+            if (UnderlyingTree.AllowDuplicates == false)
+                throw new Exception("AvlDictionary requires an UnderlyingTree that allows duplicates."); // sometimes we allow multiple items with same key
         }
 
         public IEnumerable<TValue> GetAllValues(TKey key)

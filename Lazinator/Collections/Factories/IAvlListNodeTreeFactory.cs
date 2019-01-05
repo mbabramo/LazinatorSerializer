@@ -13,6 +13,6 @@ namespace Lazinator.Collections.Factories
     {
         bool AllowDuplicates { get; set; }
         ILazinatorSortableFactory<LazinatorKeyValue<TKey, TValue>> SortableListFactory { get; set; }
-        int MaxItemsPerNode { get; set; }
+        int MaxItemsPerInnerList { get; set; }
     }
 }

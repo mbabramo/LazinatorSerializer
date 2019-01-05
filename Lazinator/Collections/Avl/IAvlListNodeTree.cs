@@ -12,7 +12,7 @@ namespace Lazinator.Collections.Avl
     {
         AvlTree<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> UnderlyingTree { get; set; }
         ILazinatorSortableFactory<LazinatorKeyValue<TKey, TValue>> SortableListFactory { get; set; }
-        int MaxItemsPerNode { get; set; }
+        int MaxItemsPerInnerList { get; set; }
         bool AllowDuplicates { get; set; }
     }
 }

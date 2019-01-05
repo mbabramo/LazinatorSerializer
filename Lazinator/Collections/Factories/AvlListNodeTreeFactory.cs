@@ -12,7 +12,7 @@ namespace Lazinator.Collections.Factories
     {
         public ILazinatorOrderedKeyable<TKey, TValue> Create()
         {
-            return new AvlListNodeTree<TKey, TValue>(AllowDuplicates, MaxItemsPerNode, SortableListFactory);
+            return new AvlListNodeTree<TKey, TValue>(AllowDuplicates, MaxItemsPerInnerList, SortableListFactory);
         }
         
     }

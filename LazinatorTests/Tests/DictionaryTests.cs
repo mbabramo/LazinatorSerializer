@@ -33,13 +33,13 @@ namespace LazinatorTests.Tests
                 case DictionaryToUse.LazinatorDictionary:
                     return new LazinatorDictionary<TKey, TValue>();
                 case DictionaryToUse.AvlDictionary:
-                    return new AvlDictionary<TKey, TValue>((ILazinatorOrderedKeyableFactory<WUint, LazinatorTuple<TKey, TValue>>) new AvlTreeFactory<WUint, LazinatorTuple<TKey, TValue>>());
+                    return new AvlDictionary<TKey, TValue>((ILazinatorOrderedKeyableFactory<WUint, LazinatorTuple<TKey, TValue>>)new AvlTreeFactory<WUint, LazinatorTuple<TKey, TValue>>() { AllowDuplicates = true });
                 case DictionaryToUse.AvlDictionaryMultiValue:
-                    return new AvlDictionary<TKey, TValue>((ILazinatorOrderedKeyableFactory<WUint, LazinatorTuple<TKey, TValue>>)new AvlTreeFactory<WUint, LazinatorTuple<TKey, TValue>>());
+                    return new AvlDictionary<TKey, TValue>((ILazinatorOrderedKeyableFactory<WUint, LazinatorTuple<TKey, TValue>>)new AvlTreeFactory<WUint, LazinatorTuple<TKey, TValue>>() { AllowDuplicates = true }) { AllowDuplicates = true };
                 case DictionaryToUse.AvlSortedDictionary:
                     return new AvlSortedDictionary<TKey, TValue>(false, (ILazinatorOrderedKeyableFactory<TKey, TValue>) new AvlTreeFactory<TKey, TValue>());
                 case DictionaryToUse.AvlSortedDictionaryMultiValue:
-                    return new AvlSortedDictionary<TKey, TValue>(true, (ILazinatorOrderedKeyableFactory<TKey, TValue>)new AvlTreeFactory<TKey, TValue>() { AllowDuplicates = true });
+                    return new AvlSortedDictionary<TKey, TValue>(true, (ILazinatorOrderedKeyableFactory<TKey, TValue>)new AvlTreeFactory<TKey, TValue>() { AllowDuplicates = true }) { AllowDuplicates = true };
             }
             throw new InvalidOperationException();
         }
@@ -308,6 +308,7 @@ namespace LazinatorTests.Tests
                 int k = r.Next();
                 itemsForNode[j].Add(k);
                 d.AddValue(j, k);
+                d.Count.Should().Be(i + 1);
             }
             for (int i = 0; i < numKeys; i++)
             {

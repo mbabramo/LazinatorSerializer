@@ -16,7 +16,7 @@ namespace Lazinator.Collections.Avl
             {
                 AllowDuplicates = allowDuplicates
             };
-            MaxItemsPerNode = maxItemsPerNode;
+            MaxItemsPerInnerList = maxItemsPerNode;
             SortableListFactory = sortableListFactory;
         }
 
@@ -74,7 +74,7 @@ namespace Lazinator.Collections.Avl
             }
             var contents = GetNodeContents(node);
             contents.InsertAt(indexInNode, keyValue);
-            if (contents.SelfItemsCount > MaxItemsPerNode)
+            if (contents.SelfItemsCount > MaxItemsPerInnerList)
             {
                 var toInsert = contents.SplitOffFirstHalf();
                 UnderlyingTree.InsertAtIndex(toInsert.node.GetLastItem().Value, toInsert.node, toInsert.nodeIndex);
