@@ -851,6 +851,11 @@ namespace Lazinator.Collections.Avl
 			}
 		}
 
+        public void Clear()
+        {
+            Root = null;
+        }
+
         /// <summary>
         /// Enumerates the nodes of the tree, skipping a specified number of nodes.
         /// </summary>

@@ -25,5 +25,7 @@ namespace Lazinator.Collections
         bool Remove(TKey key, IComparer<TKey> comparer);
         bool RemoveAt(long i);
         long Count { get; }
+
+        void Clear();
     }
 }

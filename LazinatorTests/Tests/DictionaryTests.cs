@@ -10,6 +10,7 @@ using Lazinator.Collections;
 using Lazinator.Collections.Avl;
 using LazinatorTests.Examples;
 using Lazinator.Collections.Tuples;
+using Lazinator.Collections.Factories;
 
 namespace LazinatorTests.Tests
 {
@@ -32,13 +33,13 @@ namespace LazinatorTests.Tests
                 case DictionaryToUse.LazinatorDictionary:
                     return new LazinatorDictionary<TKey, TValue>();
                 case DictionaryToUse.AvlDictionary:
-                    return new AvlDictionary<TKey, TValue>(false);
+                    return new AvlDictionary<TKey, TValue>((ILazinatorOrderedKeyableFactory<WUint, LazinatorTuple<TKey, TValue>>) new AvlTreeFactory<WUint, LazinatorTuple<TKey, TValue>>());
                 case DictionaryToUse.AvlDictionaryMultiValue:
-                    return new AvlDictionary<TKey, TValue>(true);
+                    return new AvlDictionary<TKey, TValue>((ILazinatorOrderedKeyableFactory<WUint, LazinatorTuple<TKey, TValue>>)new AvlTreeFactory<WUint, LazinatorTuple<TKey, TValue>>());
                 case DictionaryToUse.AvlSortedDictionary:
-                    return new AvlSortedDictionary<TKey, TValue>(false);
+                    return new AvlSortedDictionary<TKey, TValue>((ILazinatorOrderedKeyableFactory<TKey, TValue>) new AvlTreeFactory<TKey, TValue>());
                 case DictionaryToUse.AvlSortedDictionaryMultiValue:
-                    return new AvlSortedDictionary<TKey, TValue>(true);
+                    return new AvlSortedDictionary<TKey, TValue>((ILazinatorOrderedKeyableFactory<TKey, TValue>)new AvlTreeWithDuplicatesFactory<TKey, TValue>());
             }
             throw new InvalidOperationException();
         }

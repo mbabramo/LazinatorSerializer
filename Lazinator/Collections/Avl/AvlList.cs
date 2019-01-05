@@ -9,8 +9,10 @@ namespace Lazinator.Collections.Avl
 {
     public partial class AvlList<T> : IAvlList<T>, IList<T>, ILazinatorCountableListable<T> where T : ILazinator
     { 
-        public AvlList(ILazinatorOrderedKeyableFactory<Placeholder, T> factory)
+        public AvlList(ILazinatorOrderedKeyableFactory<Placeholder, T> factory = null)
         {
+            if (factory == null)
+                factory = (ILazinatorOrderedKeyableFactory<Placeholder, T>)new AvlTreeFactory<Placeholder, T>();
             UnderlyingTree = factory.Create();
         }
 

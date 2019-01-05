@@ -1,4 +1,5 @@
 ﻿using Lazinator.Buffers;
+using Lazinator.Collections.Factories;
 using Lazinator.Core;
 using Lazinator.Wrappers;
 using System;
@@ -13,10 +14,9 @@ namespace Lazinator.Collections.Avl
         {
         }
 
-        public AvlSortedList(bool allowDuplicates)
+        public AvlSortedList(ILazinatorOrderedKeyableFactory<T, Placeholder> factory)
         {
-            UnderlyingTree = new AvlTree<T, Placeholder>();
-            UnderlyingTree.AllowDuplicateKeys = allowDuplicates;
+            UnderlyingTree = factory.Create();
         }
 
         public bool AllowDuplicates

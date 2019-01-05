@@ -6,6 +6,7 @@ using FluentAssertions;
 using Lazinator.Collections.Avl;
 using Lazinator.Core;
 using Lazinator.Wrappers;
+using Lazinator.Collections.Factories;
 
 namespace LazinatorTests.AVL
 {

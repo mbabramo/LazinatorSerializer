@@ -1,4 +1,5 @@
 ﻿using Lazinator.Buffers;
+using Lazinator.Collections.Factories;
 using Lazinator.Collections.Tuples;
 using Lazinator.Core;
 using Lazinator.Support;
@@ -16,11 +17,10 @@ namespace Lazinator.Collections.Avl
         {
         }
 
-        public AvlDictionary(bool allowDuplicates)
+        public AvlDictionary(ILazinatorOrderedKeyableFactory<WUint, LazinatorTuple<TKey, TValue>> factory)
         {
-            UnderlyingTree = new AvlTree<WUint, LazinatorTuple<TKey, TValue>>();
-            UnderlyingTree.AllowDuplicateKeys = true; // we always allow multiple items with same hash code
-            AllowDuplicateKeys = allowDuplicates; // sometimes we allow multiple items with same key
+            UnderlyingTree = factory.Create();
+            AllowDuplicateKeys = UnderlyingTree.AllowDuplicateKeys; // sometimes we allow multiple items with same key
         }
 
         public IEnumerable<TValue> GetAllValues(TKey key)
@@ -111,7 +111,7 @@ namespace Lazinator.Collections.Avl
         public void Clear()
         {
             bool allowDuplicates = AllowDuplicateKeys;
-            UnderlyingTree = new AvlTree<WUint, LazinatorTuple<TKey, TValue>>();
+            UnderlyingTree.Clear();
             UnderlyingTree.AllowDuplicateKeys = true;
         }
 
