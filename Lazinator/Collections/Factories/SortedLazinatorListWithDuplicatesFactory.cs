@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Lazinator.Collections.Factories
 {
-    public class SortedLazinatorListWithDuplicatesFactory<T> : ISortedLazinatorListWithDuplicatesFactory<T>, ILazinatorCountableListableFactory<T>, ILazinatorSortableFactory<T> where T : ILazinator, IComparable<T>
+    public partial class SortedLazinatorListWithDuplicatesFactory<T> : ISortedLazinatorListWithDuplicatesFactory<T>, ILazinatorCountableListableFactory<T>, ILazinatorSortableFactory<T> where T : ILazinator, IComparable<T>
     {
         public bool AllowDuplicates => true;
 

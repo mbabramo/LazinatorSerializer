@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Lazinator.Collections.Factories
 {
-    public partial class AvlTreeFactory<TKey, TValue> : IAvlTreeFactory<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
+    public partial class AvlListNodeTreeFactory<TKey, TValue> : IAvlListNodeTreeFactory<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         public bool AllowDuplicateKeys => false;
         public ILazinatorOrderedKeyable<TKey, TValue> Create()

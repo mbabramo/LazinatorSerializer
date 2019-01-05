@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Lazinator.Collections.Factories
 {
-    public class AvlSortedListWithDuplicatesFactory<T> : IAvlSortedListWithDuplicatesFactory<T>, ILazinatorCountableListableFactory<T>, ILazinatorSortableFactory<T> where T : ILazinator, IComparable<T>
+    public partial class AvlSortedListWithDuplicatesFactory<T> : IAvlSortedListWithDuplicatesFactory<T>, ILazinatorCountableListableFactory<T>, ILazinatorSortableFactory<T> where T : ILazinator, IComparable<T>
     {
         public bool AllowDuplicates => true;
 

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Lazinator.Collections.Factories
 {
-    public class AvlTreeWithDuplicatesFactory<TKey, TValue> : IAvlTreeWithDuplicatesFactory<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
+    public partial class AvlTreeWithDuplicatesFactory<TKey, TValue> : IAvlTreeWithDuplicatesFactory<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         public bool AllowDuplicateKeys => true;
     }

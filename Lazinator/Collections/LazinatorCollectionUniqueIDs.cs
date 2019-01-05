@@ -114,5 +114,6 @@
         IAvlTreeWithDuplicatesFactory,
         IAvlTreeFactory,
         IAvlSortedDictionaryWithDuplicatesFactory,
+        IAvlListNodeTreeFactory,
     }
 }

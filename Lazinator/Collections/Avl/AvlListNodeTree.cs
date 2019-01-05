@@ -8,7 +8,7 @@ using Lazinator.Collections.Factories;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlListNodeTree<TKey, TValue> : IEnumerable<LazinatorKeyValue<TKey, TValue>>, IAvlListNodeTree<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
+    public partial class AvlListNodeTree<TKey, TValue> : IEnumerable<LazinatorKeyValue<TKey, TValue>>, IAvlListNodeTree<TKey, TValue>, ILazinatorOrderedKeyable<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         public AvlListNodeTree(int maxItemsPerNode, AvlTreeFactory<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> factory)
         {

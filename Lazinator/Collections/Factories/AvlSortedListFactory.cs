@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Lazinator.Collections.Factories
 {
-    public class AvlSortedListFactory<T> : IAvlSortedListFactory<T>, ILazinatorCountableListableFactory<T>, ILazinatorSortableFactory<T> where T : ILazinator, IComparable<T>
+    public partial class AvlSortedListFactory<T> : IAvlSortedListFactory<T>, ILazinatorCountableListableFactory<T>, ILazinatorSortableFactory<T> where T : ILazinator, IComparable<T>
     {
         public ILazinatorOrderedKeyableFactory<T, Placeholder> OrderedKeyableFactory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
