@@ -209,7 +209,7 @@ namespace Lazinator.Collections.Avl
             _CorrespondingNode.Key = GetLastItem().Value;
         }
 
-        private LazinatorKeyValue<TKey, TValue>? GetLastItem()
+        internal LazinatorKeyValue<TKey, TValue>? GetLastItem()
         {
             int itemsCount = (int) SelfItemsCount;
             if (itemsCount == 0)

@@ -110,5 +110,6 @@
         IAvlSortedDictionaryAllowDuplicatesFactory,
         IAvlListNodeTreeFactory,
         IAvlDictionaryFactory,
+        INonComparableWrapper,
     }
 }

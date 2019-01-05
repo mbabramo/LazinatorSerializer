@@ -240,6 +240,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(WrapperContainer), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(SmallWrappersContainer), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(StructWithBadHashFunction), "LazinatorTests", "/Examples/", "Structs/", ws);
+            await CompleteGenerateCode(typeof(NonComparableWrapper), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(RecursiveExample), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(Abstract1), "LazinatorTests", "/Examples/", "Abstract/", ws);
             await CompleteGenerateCode(typeof(ContainerWithAbstract1), "LazinatorTests", "/Examples/", "Abstract/", ws);
