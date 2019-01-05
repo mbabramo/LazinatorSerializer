@@ -11,7 +11,7 @@ namespace Lazinator.Collections.Avl
         where TValue : ILazinator
     {
         ILazinatorSortable<LazinatorKeyValue<TKey, TValue>> Items { get; set; }
-        int SelfItemsCount { get; set; }
+        long SelfItemsCount { get; set; }
         long LeftItemsCount { get; set; }
         long RightItemsCount { get; set; }
     }

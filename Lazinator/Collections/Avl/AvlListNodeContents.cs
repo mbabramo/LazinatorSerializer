@@ -11,6 +11,8 @@ namespace Lazinator.Collections.Avl
         where TKey : ILazinator, IComparable<TKey>
         where TValue : ILazinator
     {
+        #region Node access and constructor
+
         private AvlNode<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> _CorrespondingNode;
 
         private ILazinatorSortableFactory<LazinatorKeyValue<TKey, TValue>> SortableFactory;
@@ -43,8 +45,6 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        public long TotalItemsCount => LeftItemsCount + SelfItemsCount + RightItemsCount;
-
         public void SetCorrespondingNode(AvlNode<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> correspondingNode)
         {
             _CorrespondingNode = correspondingNode;
@@ -69,13 +69,54 @@ namespace Lazinator.Collections.Avl
             SortableFactory = sortableFactory;
             foreach (var item in items)
                 Items.InsertSorted(item, comparer);
-            SelfItemsCount = Items.Count;
+            SelfItemsCount = Items.LongCount;
         }
+
+        #endregion
+
+        #region Count updating
+
+        public long TotalItemsCount => LeftItemsCount + SelfItemsCount + RightItemsCount;
+
+        public void UpdateSelfItemsCount()
+        {
+            SelfItemsCount = Items.LongCount;
+            ParentContents.UpdateParentCount();
+        }
+
+        public void UpdateLeftItemsCount(long updatedValue)
+        {
+            LeftItemsCount = updatedValue;
+            UpdateParentCount();
+        }
+
+        public void UpdateRightItemsCount(long relativeChange)
+        {
+            RightItemsCount += relativeChange;
+            UpdateParentCount();
+        }
+
+        private void UpdateParentCount()
+        {
+            var parentContents = ParentContents;
+            if (parentContents != null)
+            {
+                if (_CorrespondingNode.IsLeftNode)
+                    parentContents.UpdateLeftItemsCount(TotalItemsCount);
+                else
+                    parentContents.UpdateRightItemsCount(TotalItemsCount);
+            }
+        }
+
+        #endregion
+
+        #region Insertions/modifications in own storage
 
         public (long location, bool rejectedAsDuplicate) Insert(LazinatorKeyValue<TKey, TValue> keyAndValue)
         {
             var result = Items.InsertSorted(keyAndValue);
-            SelfItemsCount = Items.Count;
+            if (result.rejectedAsDuplicate == false)
+                UpdateSelfItemsCount();
             return result;
         }
 
@@ -87,6 +128,7 @@ namespace Lazinator.Collections.Avl
         public void InsertAt(int index, LazinatorKeyValue<TKey, TValue> keyAndValue)
         {
             Items.Insert(index, keyAndValue);
+            UpdateSelfItemsCount();
         }
 
         /// <summary>
@@ -103,6 +145,31 @@ namespace Lazinator.Collections.Avl
                 UpdateNodeKey();
         }
 
+        public (long priorLocation, bool existed) Remove(LazinatorKeyValue<TKey, TValue> keyAndValue) => Remove(keyAndValue, KeyValueComparer);
+
+        public (long priorLocation, bool existed) Remove(LazinatorKeyValue<TKey, TValue> keyAndValue, IComparer<LazinatorKeyValue<TKey, TValue>> comparer)
+        {
+            (long priorLocation, bool existed) result = Items.RemoveSorted(keyAndValue, comparer);
+            SelfItemsCount = Items.LongCount;
+            if (result.priorLocation == SelfItemsCount && SelfItemsCount > 0)
+                UpdateNodeKey();
+            UpdateSelfItemsCount();
+            return result;
+        }
+
+        public void RemoveAt(int index)
+        {
+            Items.RemoveAt(index);
+            SelfItemsCount = Items.LongCount;
+            if (index == SelfItemsCount && SelfItemsCount > 0)
+                UpdateNodeKey();
+            UpdateSelfItemsCount();
+        }
+
+        #endregion
+
+        #region Search within node items
+
         public bool Contains(LazinatorKeyValue<TKey, TValue> keyAndValue)
         {
             var result = Items.FindSorted(keyAndValue);
@@ -116,6 +183,7 @@ namespace Lazinator.Collections.Avl
         }
 
         protected internal static IComparer<LazinatorKeyValue<TKey, TValue>> KeyOnlyComparer = LazinatorKeyValue<TKey, TValue>.GetKeyOnlyComparer();
+
         protected internal static IComparer<LazinatorKeyValue<TKey, TValue>> KeyValueComparer = LazinatorKeyValue<TKey, TValue>.GetKeyValueComparer(Comparer<TKey>.Default, Comparer<TValue>.Default);
 
         /// <summary>
@@ -126,42 +194,22 @@ namespace Lazinator.Collections.Avl
         public (long location, bool exists) Find(TKey key)
         {
             var result = Items.FindSorted(new LazinatorKeyValue<TKey, TValue>(key, default), KeyOnlyComparer);
-            // DEBUG: Should be unnecessary, since it's implemented in Items.FindSorted
-            //if (result.exists)
-            //{
-            //    bool matches = true;
-            //    do
-            //    { // make sure we have the first key match
-            //        result.location--;
-            //        matches = Items[(int) result.location].Key.Equals(key);
-            //        if (!matches)
-            //            result.location++;
-            //    }
-            //    while (matches && result.location > 0);
-            //}
             return result;
         }
 
-        public (long priorLocation, bool existed) Remove(LazinatorKeyValue<TKey, TValue> keyAndValue) => Remove(keyAndValue, KeyValueComparer);
+        #endregion
 
-        public (long priorLocation, bool existed) Remove(LazinatorKeyValue<TKey, TValue> keyAndValue, IComparer<LazinatorKeyValue<TKey, TValue>> comparer)
+        #region Changes to node as a whole
+
+        /// <summary>
+        /// Updates the node's key when the last item changes. Note that we will only do this in a way that maintains the order of the overall AvlListNodeTree. When there are no items, the node is removed from the tree entirely.
+        /// </summary>
+        private void UpdateNodeKey()
         {
-            (long priorLocation, bool existed) result = Items.RemoveSorted(keyAndValue, comparer);
-            SelfItemsCount = Items.Count;
-            if (result.priorLocation == SelfItemsCount && SelfItemsCount > 0)
-                UpdateNodeKey();
-            return result;
+            _CorrespondingNode.Key = GetLastItem().Value;
         }
 
-        public void RemoveAt(int index)
-        {
-            Items.RemoveAt(index);
-            SelfItemsCount = Items.Count;
-            if (index == SelfItemsCount && SelfItemsCount > 0)
-                UpdateNodeKey();
-        }
-
-        public LazinatorKeyValue<TKey, TValue>? GetLastItem()
+        private LazinatorKeyValue<TKey, TValue>? GetLastItem()
         {
             int itemsCount = (int) SelfItemsCount;
             if (itemsCount == 0)
@@ -172,17 +220,12 @@ namespace Lazinator.Collections.Avl
         public (AvlListNodeContents<TKey, TValue> node, long nodeIndex) SplitOff()
         {
             var splitOffItems = Items.SplitOff();
-            SelfItemsCount = Items.Count;
+            UpdateSelfItemsCount();
             AvlListNodeContents<TKey, TValue> node = new AvlListNodeContents<TKey, TValue>((ILazinatorSortable<LazinatorKeyValue<TKey, TValue>>) splitOffItems, SortableFactory);
+            UpdateNodeKey();
             return (node, NodeIndex); // new node will be at current node's index. This will result in this node's NodeIndex increasing
         }
 
-        /// <summary>
-        /// Updates the node's key when the last item changes. Note that we will only do this in a way that maintains the order of the overall AvlListNodeTree. When there are no items, the node is removed from the tree entirely.
-        /// </summary>
-        private void UpdateNodeKey()
-        {
-            _CorrespondingNode.Key = GetLastItem().Value;
-        }
+        #endregion
     }
 }
