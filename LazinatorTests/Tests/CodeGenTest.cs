@@ -30,6 +30,7 @@ using Lazinator.Collections.OffsetList;
 using Lazinator.Collections.GeneralTree;
 using Lazinator.Collections.Tuples;
 using Lazinator.Collections.Factories;
+using Lazinator.Examples.Structs;
 
 namespace LazinatorTests.Tests
 {
@@ -241,6 +242,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(SmallWrappersContainer), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(StructWithBadHashFunction), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(NonComparableWrapper), "LazinatorTests", "/Examples/", "Structs/", ws);
+            await CompleteGenerateCode(typeof(NonComparableWrapperString), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(RecursiveExample), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(Abstract1), "LazinatorTests", "/Examples/", "Abstract/", ws);
             await CompleteGenerateCode(typeof(ContainerWithAbstract1), "LazinatorTests", "/Examples/", "Abstract/", ws);

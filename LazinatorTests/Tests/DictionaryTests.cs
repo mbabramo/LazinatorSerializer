@@ -11,6 +11,7 @@ using Lazinator.Collections.Avl;
 using LazinatorTests.Examples;
 using Lazinator.Collections.Tuples;
 using Lazinator.Collections.Factories;
+using Lazinator.Examples.Structs;
 
 namespace LazinatorTests.Tests
 {
@@ -50,7 +51,7 @@ namespace LazinatorTests.Tests
         [InlineData(DictionaryToUse.AvlSortedDictionary)]
         public void DictionaryEnumerableWorks(DictionaryToUse dictionaryToUse)
         {
-            ILazinatorKeyableDictionary<WLong, WString> d = GetDictionary<WLong, WString>(dictionaryToUse);
+            ILazinatorKeyableDictionary<WLong, NonComparableWrapperString> d = GetDictionary<WLong, NonComparableWrapperString>(dictionaryToUse);
             List<int> l = Enumerable.Range(0, 100).ToList();
             Shuffle(l);
             foreach (int i in l)
@@ -75,13 +76,13 @@ namespace LazinatorTests.Tests
             }
         }
 
-        private static void ConfirmDictionary(ILazinatorKeyableDictionary<WLong, WString> d)
+        private static void ConfirmDictionary(ILazinatorKeyableDictionary<WLong, NonComparableWrapperString> d)
         {
             List<int> l = Enumerable.Range(0, 100).ToList();
             foreach (int i in l)
                 d[new WLong(i)].Should().Be(i.ToString());
             var results = d.ToList().Select(x => x.Key.WrappedValue).ToList();
-            if (!(d is ILazinatorOrderedKeyable<WLong, WString>))
+            if (!(d is ILazinatorOrderedKeyable<WLong, NonComparableWrapperString>))
                 results = results.OrderBy(x => x).ToList();
             foreach (int i in l)
                 results[i].Should().Be(i);
@@ -93,7 +94,7 @@ namespace LazinatorTests.Tests
         [InlineData(DictionaryToUse.AvlSortedDictionary)]
         public void DictionaryLongStringWorks(DictionaryToUse dictionaryToUse)
         {
-            ILazinatorKeyableDictionary<WLong, WString> d = GetDictionary<WLong, WString>(dictionaryToUse);
+            ILazinatorKeyableDictionary<WLong, NonComparableWrapperString> d = GetDictionary<WLong, NonComparableWrapperString>(dictionaryToUse);
             d.Count.Should().Be(0);
             d.Add(17, "seventeen");
             d.Count.Should().Be(1);
@@ -107,12 +108,12 @@ namespace LazinatorTests.Tests
             d.Count.Should().Be(0);
             d.ContainsKey(17).Should().BeFalse();
             d[17] = "seventeen";
-            bool result = d.Remove(new KeyValuePair<WLong, WString>(17, "seventeen"));
+            bool result = d.Remove(new KeyValuePair<WLong, NonComparableWrapperString>(17, "seventeen"));
             result.Should().Be(true);
             d.Count.Should().Be(0);
             d.ContainsKey(17).Should().BeFalse();
             d[17] = "seventeen";
-            result = d.Remove(new KeyValuePair<WLong, WString>(17, "not a match"));
+            result = d.Remove(new KeyValuePair<WLong, NonComparableWrapperString>(17, "not a match"));
             result.Should().BeFalse();
             d.Add(15, "fifteen");
             d.Count.Should().Be(2);
@@ -127,11 +128,11 @@ namespace LazinatorTests.Tests
             d[18] = "eighteen";
             d[-1] = "negative one";
             d.Keys.OrderBy(x => x).ToList().SequenceEqual(new WLong[] { -1, 15, 17, 18, 23 }).Should().BeTrue();
-            d.Values.OrderBy(x => x).ToList().SequenceEqual((new WString[] { "negative one", "fifteen", "seventeen", "eighteen", "twenty-three" }).OrderBy(x => x)).Should().BeTrue();
+            d.Values.OrderBy(x => x).ToList().SequenceEqual((new NonComparableWrapperString[] { "negative one", "fifteen", "seventeen", "eighteen", "twenty-three" }).OrderBy(x => x)).Should().BeTrue();
             d.Select(x => x.Key).OrderBy(x => x).ToArray().SequenceEqual(new WLong[] { -1, 15, 17, 18, 23 }).Should().BeTrue();
-            d.Select(x => x.Value).OrderBy(x => x).ToArray().SequenceEqual((new WString[] { "negative one", "fifteen", "seventeen", "eighteen", "twenty-three" }).OrderBy(x => x)).Should().BeTrue();
+            d.Select(x => x.Value).OrderBy(x => x).ToArray().SequenceEqual((new NonComparableWrapperString[] { "negative one", "fifteen", "seventeen", "eighteen", "twenty-three" }).OrderBy(x => x)).Should().BeTrue();
             d.Count.Should().Be(5);
-            result = d.TryGetValue(17, out WString s);
+            result = d.TryGetValue(17, out NonComparableWrapperString s);
             result.Should().BeTrue();
             s.WrappedValue.Should().Be("seventeen");
             result = d.TryGetValue(12354, out s);
@@ -144,9 +145,9 @@ namespace LazinatorTests.Tests
             s.WrappedValue.Should().Be(null);
             d.Count.Should().Be(0);
             d.Keys.ToList().OrderBy(x => x).SequenceEqual(new WLong[] { }).Should().BeTrue();
-            d.Values.ToList().OrderBy(x => x).SequenceEqual(new WString[] { }).Should().BeTrue();
+            d.Values.ToList().OrderBy(x => x).SequenceEqual(new NonComparableWrapperString[] { }).Should().BeTrue();
             d.ToList().OrderBy(x => x).Select(x => x.Key).ToArray().SequenceEqual(new WLong[] { }).Should().BeTrue();
-            d.ToList().OrderBy(x => x).Select(x => x.Value).ToArray().SequenceEqual(new WString[] { }).Should().BeTrue();
+            d.ToList().OrderBy(x => x).Select(x => x.Value).ToArray().SequenceEqual(new NonComparableWrapperString[] { }).Should().BeTrue();
         }
 
 
@@ -156,7 +157,7 @@ namespace LazinatorTests.Tests
         [InlineData(DictionaryToUse.AvlSortedDictionary)]
         public void DictionaryCanGrowAndShrink(DictionaryToUse dictionaryToUse)
         {
-            ILazinatorKeyableDictionary<WLong, WString> d = GetDictionary<WLong, WString>(dictionaryToUse);
+            ILazinatorKeyableDictionary<WLong, NonComparableWrapperString> d = GetDictionary<WLong, NonComparableWrapperString>(dictionaryToUse);
             const int numItems = 25;
             for (long i = 0; i < numItems; i++)
             {
@@ -185,18 +186,18 @@ namespace LazinatorTests.Tests
         [InlineData(DictionaryToUse.AvlSortedDictionary)]
         public void EmptyDictionary(DictionaryToUse dictionaryToUse)
         {
-            ILazinatorKeyableDictionary<WLong, WString> d = GetDictionary<WLong, WString>(dictionaryToUse);
-            bool result = d.TryGetValue(10, out WString value);
+            ILazinatorKeyableDictionary<WLong, NonComparableWrapperString> d = GetDictionary<WLong, NonComparableWrapperString>(dictionaryToUse);
+            bool result = d.TryGetValue(10, out NonComparableWrapperString value);
             result.Should().BeFalse();
         }
 
-        private static void RemoveAllItemsFromDictionary(ILazinatorKeyableDictionary<WLong, WString> d)
+        private static void RemoveAllItemsFromDictionary(ILazinatorKeyableDictionary<WLong, NonComparableWrapperString> d)
         {
             int numItems = d.Count;
             RemoveItemsFromDictionary(d, numItems);
         }
 
-        private static void RemoveItemsFromDictionary(ILazinatorKeyableDictionary<WLong, WString> d, int numItems)
+        private static void RemoveItemsFromDictionary(ILazinatorKeyableDictionary<WLong, NonComparableWrapperString> d, int numItems)
         {
             for (long i = 0; i < numItems; i++)
             {
@@ -211,21 +212,21 @@ namespace LazinatorTests.Tests
         public void SingleItemDictionary(DictionaryToUse dictionaryToUse)
         {
             // we have some optimizations for a single-item dictionary, so this tests them
-            ILazinatorKeyableDictionary<WLong, WString> d = GetDictionary<WLong, WString>(dictionaryToUse);
+            ILazinatorKeyableDictionary<WLong, NonComparableWrapperString> d = GetDictionary<WLong, NonComparableWrapperString>(dictionaryToUse);
             d[234] = "something";
             d.ContainsKey(123).Should().BeFalse();
             d.ContainsKey(234).Should().BeTrue();
             d[234].WrappedValue.Should().Be("something");
 
             // try with a zero key
-            d = new LazinatorDictionary<WLong, WString>();
+            d = new LazinatorDictionary<WLong, NonComparableWrapperString>();
             d[0] = "something";
             d.ContainsKey(123).Should().BeFalse();
             d.ContainsKey(0).Should().BeTrue();
             d[0].WrappedValue.Should().Be("something");
 
             // try after initially adding items
-            d = new LazinatorDictionary<WLong, WString>();
+            d = new LazinatorDictionary<WLong, NonComparableWrapperString>();
             for (long i = 0; i < 25; i++)
             {
                 d[i] = i.ToString();
@@ -244,7 +245,7 @@ namespace LazinatorTests.Tests
         public void DictionaryWithBadHashFunction(DictionaryToUse dictionaryToUse)
         {
             // With some dictionary implementations, all items with same hash are put in hash bucket. So, this ensures that dictionary will work in this case.
-            ILazinatorKeyableDictionary<StructWithBadHashFunction, WString> d = GetDictionary<StructWithBadHashFunction, WString>(dictionaryToUse);
+            ILazinatorKeyableDictionary<StructWithBadHashFunction, NonComparableWrapperString> d = GetDictionary<StructWithBadHashFunction, NonComparableWrapperString>(dictionaryToUse);
             for (int i = 0; i < 100; i++)
                 d[i] = i.ToString();
 
@@ -258,7 +259,7 @@ namespace LazinatorTests.Tests
                 if (i % 3 == 0)
                     d.Remove(i);
                 else
-                    d.Remove(new KeyValuePair<StructWithBadHashFunction, WString>(i, i.ToString()));
+                    d.Remove(new KeyValuePair<StructWithBadHashFunction, NonComparableWrapperString>(i, i.ToString()));
 
             for (int i = 0; i < 100; i++)
                 d.ContainsKey(i).Should().BeFalse();
@@ -272,7 +273,7 @@ namespace LazinatorTests.Tests
         {
             // The concern here is that the dictionary remembers the last key searched as a shortcut. What happens if that is disposed? With a struct or class that contains only primitive properties, that is not a problem, because equality can be determined solely by looking at primitive properties. But it can be an issue with a Lazinator object that has child objects that need to be examined.
 
-            ILazinatorKeyableDictionary<LazinatorTuple<WLong, WInt>, WString> d = GetDictionary<LazinatorTuple<WLong, WInt>, WString>(dictionaryToUse);
+            ILazinatorKeyableDictionary<LazinatorTuple<WLong, WInt>, NonComparableWrapperString> d = GetDictionary<LazinatorTuple<WLong, WInt>, NonComparableWrapperString>(dictionaryToUse);
             LazinatorTuple<WLong, WInt> a = new LazinatorTuple<WLong, WInt>(1, 2);
             LazinatorTuple<WLong, WInt> b = new LazinatorTuple<WLong, WInt>(3, 4);
             d[a] = "something";
