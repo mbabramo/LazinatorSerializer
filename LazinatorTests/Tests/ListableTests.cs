@@ -18,55 +18,67 @@ namespace LazinatorTests.Tests
 {
     public class ListableTests : SerializationDeserializationTestBase
     {
+        public enum ListFactoryToUse
+        {
+            LazinatorList,
+            LazinatorLinkedList,
+            SortedLazinatorList,
+            SortedLazinatorListWithDuplicates,
+            SortedLazinatorLinkedList,
+            SortedLazinatorLinkedListWithDuplicates,
+            AvlList,
+            AvlSortedList,
+            AvlSortedListWithDuplicates,
+        }
 
-        static ILazinatorCountableListableFactory<WInt> GetListFactory(CountableListTypes l)
+        static ILazinatorCountableListableFactory<WInt> GetListFactory(ListFactoryToUse l)
         {
             switch (l)
             {
-                case CountableListTypes.LazinatorList:
+                case ListFactoryToUse.LazinatorList:
                     return new LazinatorListFactory<WInt>();
-                case CountableListTypes.LazinatorLinkedList:
+                case ListFactoryToUse.LazinatorLinkedList:
                     return new LazinatorLinkedListFactory<WInt>();
-                case CountableListTypes.SortedLazinatorList:
+                case ListFactoryToUse.SortedLazinatorList:
                     return new SortedLazinatorListFactory<WInt>();
-                case CountableListTypes.SortedLazinatorListWithDuplicates:
+                case ListFactoryToUse.SortedLazinatorListWithDuplicates:
                     return new SortedLazinatorListWithDuplicatesFactory<WInt>();
-                case CountableListTypes.SortedLazinatorLinkedList:
+                case ListFactoryToUse.SortedLazinatorLinkedList:
                     return new SortedLazinatorLinkedListFactory<WInt>();
-                case CountableListTypes.SortedLazinatorLinkedListWithDuplicates:
+                case ListFactoryToUse.SortedLazinatorLinkedListWithDuplicates:
                     return new SortedLazinatorLinkedListWithDuplicatesFactory<WInt>();
-                case CountableListTypes.AvlList:
+                case ListFactoryToUse.AvlList:
                     return new AvlListFactory<WInt>();
-                case CountableListTypes.AvlSortedList:
+                case ListFactoryToUse.AvlSortedList:
                     return new AvlSortedListFactory<WInt>();
-                case CountableListTypes.AvlSortedListWithDuplicates:
+                case ListFactoryToUse.AvlSortedListWithDuplicates:
                     return new AvlSortedListWithDuplicatesFactory<WInt>();
                 default:
                     throw new NotImplementedException();
             }
         }
 
-        static (bool isSorted, bool allowsDuplicates) GetSortedInfo(CountableListTypes l)
+        static (bool isSorted, bool allowsDuplicates) GetSortedInfo(ListFactoryToUse l)
         {
             switch (l)
             {
-                case CountableListTypes.LazinatorList:
+                case ListFactoryToUse.LazinatorList:
                     return (false, true);
-                case CountableListTypes.LazinatorLinkedList:
+                case ListFactoryToUse.LazinatorLinkedList:
                     return (false, true);
-                case CountableListTypes.SortedLazinatorList:
+                case ListFactoryToUse.SortedLazinatorList:
                     return (true, false);
-                case CountableListTypes.SortedLazinatorListWithDuplicates:
+                case ListFactoryToUse.SortedLazinatorListWithDuplicates:
                     return (true, true);
-                case CountableListTypes.SortedLazinatorLinkedList:
+                case ListFactoryToUse.SortedLazinatorLinkedList:
                     return (true, false);
-                case CountableListTypes.SortedLazinatorLinkedListWithDuplicates:
+                case ListFactoryToUse.SortedLazinatorLinkedListWithDuplicates:
                     return (true, true);
-                case CountableListTypes.AvlList:
+                case ListFactoryToUse.AvlList:
                     return (false, true);
-                case CountableListTypes.AvlSortedList:
+                case ListFactoryToUse.AvlSortedList:
                     return (true, false);
-                case CountableListTypes.AvlSortedListWithDuplicates:
+                case ListFactoryToUse.AvlSortedListWithDuplicates:
                     return (true, true);
                 default:
                     throw new NotImplementedException();
@@ -74,16 +86,16 @@ namespace LazinatorTests.Tests
         }
 
         [Theory]
-        [InlineData(CountableListTypes.LazinatorList)]
-        [InlineData(CountableListTypes.LazinatorLinkedList)]
-        [InlineData(CountableListTypes.SortedLazinatorList)]
-        [InlineData(CountableListTypes.SortedLazinatorListWithDuplicates)]
-        [InlineData(CountableListTypes.SortedLazinatorLinkedList)]
-        [InlineData(CountableListTypes.SortedLazinatorLinkedListWithDuplicates)]
-        [InlineData(CountableListTypes.AvlList)]
-        [InlineData(CountableListTypes.AvlSortedList)]
-        [InlineData(CountableListTypes.AvlSortedListWithDuplicates)]
-        public void Listable_AddingAtEnd(CountableListTypes listFactoryToUse)
+        [InlineData(ListFactoryToUse.LazinatorList)]
+        [InlineData(ListFactoryToUse.LazinatorLinkedList)]
+        [InlineData(ListFactoryToUse.SortedLazinatorList)]
+        [InlineData(ListFactoryToUse.SortedLazinatorListWithDuplicates)]
+        [InlineData(ListFactoryToUse.SortedLazinatorLinkedList)]
+        [InlineData(ListFactoryToUse.SortedLazinatorLinkedListWithDuplicates)]
+        [InlineData(ListFactoryToUse.AvlList)]
+        [InlineData(ListFactoryToUse.AvlSortedList)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithDuplicates)]
+        public void Listable_AddingAtEnd(ListFactoryToUse listFactoryToUse)
         {
             var factory = GetListFactory(listFactoryToUse);
             ILazinatorCountableListable<WInt> l = factory.CreateCountableListable();
@@ -97,16 +109,16 @@ namespace LazinatorTests.Tests
         }
 
         [Theory]
-        [InlineData(CountableListTypes.LazinatorList)]
-        [InlineData(CountableListTypes.LazinatorLinkedList)]
-        [InlineData(CountableListTypes.SortedLazinatorList)]
-        [InlineData(CountableListTypes.SortedLazinatorListWithDuplicates)]
-        [InlineData(CountableListTypes.SortedLazinatorLinkedList)]
-        [InlineData(CountableListTypes.SortedLazinatorLinkedListWithDuplicates)]
-        [InlineData(CountableListTypes.AvlList)]
-        [InlineData(CountableListTypes.AvlSortedList)]
-        [InlineData(CountableListTypes.AvlSortedListWithDuplicates)]
-        public void Listable_AddingAtBeginning(CountableListTypes listFactoryToUse)
+        [InlineData(ListFactoryToUse.LazinatorList)]
+        [InlineData(ListFactoryToUse.LazinatorLinkedList)]
+        [InlineData(ListFactoryToUse.SortedLazinatorList)]
+        [InlineData(ListFactoryToUse.SortedLazinatorListWithDuplicates)]
+        [InlineData(ListFactoryToUse.SortedLazinatorLinkedList)]
+        [InlineData(ListFactoryToUse.SortedLazinatorLinkedListWithDuplicates)]
+        [InlineData(ListFactoryToUse.AvlList)]
+        [InlineData(ListFactoryToUse.AvlSortedList)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithDuplicates)]
+        public void Listable_AddingAtBeginning(ListFactoryToUse listFactoryToUse)
         {
             var factory = GetListFactory(listFactoryToUse);
             ILazinatorCountableListable<WInt> l = factory.CreateCountableListable();
@@ -120,16 +132,16 @@ namespace LazinatorTests.Tests
 
 
         [Theory]
-        [InlineData(CountableListTypes.LazinatorList)]
-        [InlineData(CountableListTypes.LazinatorLinkedList)]
-        [InlineData(CountableListTypes.SortedLazinatorList)]
-        [InlineData(CountableListTypes.SortedLazinatorListWithDuplicates)]
-        [InlineData(CountableListTypes.SortedLazinatorLinkedList)]
-        [InlineData(CountableListTypes.SortedLazinatorLinkedListWithDuplicates)]
-        [InlineData(CountableListTypes.AvlList)]
-        [InlineData(CountableListTypes.AvlSortedList)]
-        [InlineData(CountableListTypes.AvlSortedListWithDuplicates)]
-        public void Listable_InsertAndRemoveWork(CountableListTypes listFactoryToUse)
+        [InlineData(ListFactoryToUse.LazinatorList)]
+        [InlineData(ListFactoryToUse.LazinatorLinkedList)]
+        [InlineData(ListFactoryToUse.SortedLazinatorList)]
+        [InlineData(ListFactoryToUse.SortedLazinatorListWithDuplicates)]
+        [InlineData(ListFactoryToUse.SortedLazinatorLinkedList)]
+        [InlineData(ListFactoryToUse.SortedLazinatorLinkedListWithDuplicates)]
+        [InlineData(ListFactoryToUse.AvlList)]
+        [InlineData(ListFactoryToUse.AvlSortedList)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithDuplicates)]
+        public void Listable_InsertAndRemoveWork(ListFactoryToUse listFactoryToUse)
         {
             var factory = GetListFactory(listFactoryToUse);
             (int numModifications, double removalProbability)[] phases = new (int numModifications, double removalProbability)[] { (2, 0.25), (4, 0.6), (8, 0.25), (16, 0.6), (32, 0.25), (64, 0.6), };
@@ -194,25 +206,25 @@ namespace LazinatorTests.Tests
         }
 
         [Theory]
-        [InlineData(CountableListTypes.SortedLazinatorList, 200, 1)]
-        [InlineData(CountableListTypes.SortedLazinatorListWithDuplicates, 200, 1)]
-        [InlineData(CountableListTypes.SortedLazinatorLinkedList, 200, 1)]
-        [InlineData(CountableListTypes.SortedLazinatorLinkedListWithDuplicates, 200, 1)]
-        [InlineData(CountableListTypes.AvlSortedList, 200, 1)]
-        [InlineData(CountableListTypes.AvlSortedListWithDuplicates, 200, 1)]
-        [InlineData(CountableListTypes.LazinatorList, 200, 1)]
-        [InlineData(CountableListTypes.LazinatorLinkedList, 200, 1)]
-        [InlineData(CountableListTypes.AvlList, 200, 1)]
-        [InlineData(CountableListTypes.SortedLazinatorList, 15, 20)]
-        [InlineData(CountableListTypes.SortedLazinatorListWithDuplicates, 15, 20)]
-        [InlineData(CountableListTypes.SortedLazinatorLinkedList, 15, 20)]
-        [InlineData(CountableListTypes.SortedLazinatorLinkedListWithDuplicates, 15, 20)]
-        [InlineData(CountableListTypes.AvlSortedList, 15, 20)]
-        [InlineData(CountableListTypes.AvlSortedListWithDuplicates, 15, 20)]
-        [InlineData(CountableListTypes.LazinatorList, 15, 20)]
-        [InlineData(CountableListTypes.LazinatorLinkedList, 15, 20)]
-        [InlineData(CountableListTypes.AvlList, 15, 20)]
-        public void Listable_Sortable(CountableListTypes listFactoryToUse, int totalChanges, int repetitions)
+        [InlineData(ListFactoryToUse.SortedLazinatorList, 200, 1)]
+        [InlineData(ListFactoryToUse.SortedLazinatorListWithDuplicates, 200, 1)]
+        [InlineData(ListFactoryToUse.SortedLazinatorLinkedList, 200, 1)]
+        [InlineData(ListFactoryToUse.SortedLazinatorLinkedListWithDuplicates, 200, 1)]
+        [InlineData(ListFactoryToUse.AvlSortedList, 200, 1)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithDuplicates, 200, 1)]
+        [InlineData(ListFactoryToUse.LazinatorList, 200, 1)]
+        [InlineData(ListFactoryToUse.LazinatorLinkedList, 200, 1)]
+        [InlineData(ListFactoryToUse.AvlList, 200, 1)]
+        [InlineData(ListFactoryToUse.SortedLazinatorList, 15, 20)]
+        [InlineData(ListFactoryToUse.SortedLazinatorListWithDuplicates, 15, 20)]
+        [InlineData(ListFactoryToUse.SortedLazinatorLinkedList, 15, 20)]
+        [InlineData(ListFactoryToUse.SortedLazinatorLinkedListWithDuplicates, 15, 20)]
+        [InlineData(ListFactoryToUse.AvlSortedList, 15, 20)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithDuplicates, 15, 20)]
+        [InlineData(ListFactoryToUse.LazinatorList, 15, 20)]
+        [InlineData(ListFactoryToUse.LazinatorLinkedList, 15, 20)]
+        [InlineData(ListFactoryToUse.AvlList, 15, 20)]
+        public void Listable_Sortable(ListFactoryToUse listFactoryToUse, int totalChanges, int repetitions)
         {
             (bool isSorted, bool allowsDuplicates) = GetSortedInfo(listFactoryToUse);
             var factory = GetListFactory(listFactoryToUse);
