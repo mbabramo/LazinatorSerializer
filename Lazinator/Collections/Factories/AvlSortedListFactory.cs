@@ -10,6 +10,7 @@ namespace Lazinator.Collections.Factories
     public partial class AvlSortedListFactory<T> : IAvlSortedListFactory<T>, ILazinatorCountableListableFactory<T>, ILazinatorSortableFactory<T> where T : ILazinator, IComparable<T>
     {
         public ILazinatorOrderedKeyableFactory<T, Placeholder> OrderedKeyableFactory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public AvlSortedListFactory(ILazinatorOrderedKeyableFactory<T, Placeholder> orderedKeyableFactory)
         {
@@ -19,16 +20,14 @@ namespace Lazinator.Collections.Factories
                 this.OrderedKeyableFactory = orderedKeyableFactory;
         }
 
-        public bool AllowDuplicates => false;
-
         public ILazinatorCountableListable<T> CreateCountableListable()
         {
-            return new AvlSortedList<T>(OrderedKeyableFactory);
+            return new AvlSortedList<T>(AllowDuplicates, OrderedKeyableFactory);
         }
 
         public ILazinatorSortable<T> CreateSortable()
         {
-            return new AvlSortedList<T>(OrderedKeyableFactory);
+            return new AvlSortedList<T>(AllowDuplicates, OrderedKeyableFactory);
         }
     }
 }

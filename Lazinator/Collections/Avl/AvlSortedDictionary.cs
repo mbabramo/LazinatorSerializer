@@ -18,18 +18,18 @@ namespace Lazinator.Collections.Avl
         public AvlSortedDictionary(ILazinatorOrderedKeyableFactory<TKey, TValue> factory)
         {
             UnderlyingTree = factory.Create();
-            AllowDuplicateKeys = UnderlyingTree.AllowDuplicateKeys;
+            AllowDuplicates = UnderlyingTree.AllowDuplicates;
         }
 
-        public bool AllowDuplicateKeys
+        public bool AllowDuplicates
         {
             get
             {
-                return UnderlyingTree.AllowDuplicateKeys;
+                return UnderlyingTree.AllowDuplicates;
             }
             set
             {
-                UnderlyingTree.AllowDuplicateKeys = value;
+                UnderlyingTree.AllowDuplicates = value;
             }
         }
 
@@ -64,7 +64,7 @@ namespace Lazinator.Collections.Avl
             }
             set
             {
-                if (AllowDuplicateKeys)
+                if (AllowDuplicates)
                     throw new Exception("With multiple keys, use AddValue method to add item.");
                 UnderlyingTree.Insert(key, Comparer<TKey>.Default, value);
             }
@@ -76,9 +76,7 @@ namespace Lazinator.Collections.Avl
 
         public void Clear()
         {
-            bool allowDuplicates = AllowDuplicateKeys;
-            UnderlyingTree = new AvlTree<TKey, TValue>();
-            UnderlyingTree.AllowDuplicateKeys = allowDuplicates;
+            UnderlyingTree.Clear();
         }
         
         public bool Remove(TKey key, IComparer<TKey> comparer)
@@ -143,7 +141,7 @@ namespace Lazinator.Collections.Avl
 
         public void Add(TKey key, TValue value)
         {
-            if (AllowDuplicateKeys)
+            if (AllowDuplicates)
                 throw new Exception("With multiple keys, use AddValue method to add item.");
             if (this.ContainsKey(key))
                 throw new ArgumentException();
@@ -157,7 +155,7 @@ namespace Lazinator.Collections.Avl
 
         public bool Contains(KeyValuePair<TKey, TValue> item)
         {
-            if (AllowDuplicateKeys)
+            if (AllowDuplicates)
             {
                 foreach (var v in GetAllValues(item.Key))
                     if (System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(v, item.Value))
@@ -184,7 +182,7 @@ namespace Lazinator.Collections.Avl
         {
             if (Contains(item))
             {
-                if (AllowDuplicateKeys)
+                if (AllowDuplicates)
                 { // removes a single instance of the key-value pair. can remove all items within a key with RemoveAll.
                     var result = UnderlyingTree.GetMatchingOrNext(item.Key, Comparer<TKey>.Default);
                     if (result.found == false)

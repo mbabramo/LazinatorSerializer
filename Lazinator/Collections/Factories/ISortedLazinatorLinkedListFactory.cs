@@ -7,5 +7,6 @@ namespace Lazinator.Collections.Factories
     [Lazinator((int)LazinatorCollectionUniqueIDs.ISortedLazinatorLinkedListFactory)]
     public interface ISortedLazinatorLinkedListFactory<T> where T : ILazinator, IComparable<T>
     {
+        bool AllowDuplicates { get; set; }
     }
 }

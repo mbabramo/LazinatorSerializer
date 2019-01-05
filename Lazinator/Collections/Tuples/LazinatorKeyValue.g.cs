@@ -417,12 +417,12 @@ namespace Lazinator.Collections.Tuples
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public int LazinatorUniqueID => 125;
+        public int LazinatorUniqueID => 119;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool ContainsOpenGenericParameters => true;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<LazinatorKeyValue<T, U>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(125, new Type[] { typeof(T), typeof(U) }));
+        public LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<LazinatorKeyValue<T, U>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(119, new Type[] { typeof(T), typeof(U) }));
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

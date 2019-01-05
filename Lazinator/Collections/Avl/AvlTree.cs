@@ -137,7 +137,7 @@ namespace Lazinator.Collections.Avl
             if (comparer == null)
                 comparer = Comparer<TKey>.Default;
             var result = GetMatchingOrNextNodeHelper(key, comparer);
-            if (result.found && AllowDuplicateKeys)
+            if (result.found && AllowDuplicates)
             {
                 bool matches = true;
                 do
@@ -219,7 +219,7 @@ namespace Lazinator.Collections.Avl
 
         private (bool inserted, long location) InsertByKeyOrIndex(TKey key, IComparer<TKey> comparer, TValue value, long? nodeIndex = null)
         {
-            var result = InsertHelper(AllowDuplicateKeys, key, comparer, value, nodeIndex);
+            var result = InsertHelper(AllowDuplicates, key, comparer, value, nodeIndex);
             if (Root != null)
             {
                 Root.RecalculateCount();

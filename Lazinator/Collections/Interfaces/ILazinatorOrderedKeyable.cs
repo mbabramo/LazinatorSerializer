@@ -9,7 +9,7 @@ namespace Lazinator.Collections
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorOrderedKeyable)]
     public interface ILazinatorOrderedKeyable<TKey, TValue> : ILazinator, ILazinatorKeyable<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
-        bool AllowDuplicateKeys { get; set; }
+        bool AllowDuplicates { get; set; }
         IEnumerator<TKey> GetKeyEnumerator(long skip = 0);
         IEnumerator<TValue> GetValueEnumerator(long skip = 0);
         IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(long skip = 0);

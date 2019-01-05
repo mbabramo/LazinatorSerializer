@@ -8,5 +8,6 @@ namespace Lazinator.Collections.Factories
     public interface ILazinatorOrderedKeyableFactory<TKey, TValue> : ILazinator, ILazinatorKeyable<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         ILazinatorOrderedKeyable<TKey, TValue> Create();
+        bool AllowDuplicates { get; set; }
     }
 }

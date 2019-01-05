@@ -5,7 +5,7 @@ using System;
 namespace Lazinator.Collections.Factories
 {
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorSortableFactory)]
-    public interface ILazinatorSortableFactory<T>  where T : ILazinator, IComparable<T>
+    public interface ILazinatorSortableFactory<T> : ILazinator where T : ILazinator, IComparable<T>
     {
         ILazinatorSortable<T> CreateSortable();
         bool AllowDuplicates { get; }

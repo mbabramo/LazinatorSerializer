@@ -6,12 +6,16 @@ using System.Text;
 
 namespace Lazinator.Collections.Factories
 {
-    public partial class AvlTreeFactory<TKey, TValue> : IAvlTreeFactory<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
+    public partial class AvlTreeFactory<TKey, TValue> : IAvlTreeFactory<TKey, TValue>, ILazinatorOrderedKeyableFactory<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
-        public bool AllowDuplicateKeys => false;
+        public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public ILazinatorOrderedKeyable<TKey, TValue> Create()
         {
-            return new AvlTree<TKey, TValue>();
+            return new AvlTree<TKey, TValue>()
+            {
+                AllowDuplicates = AllowDuplicates
+            };
         }
     }
 }

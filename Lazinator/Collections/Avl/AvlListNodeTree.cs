@@ -10,10 +10,14 @@ namespace Lazinator.Collections.Avl
 {
     public partial class AvlListNodeTree<TKey, TValue> : IEnumerable<LazinatorKeyValue<TKey, TValue>>, IAvlListNodeTree<TKey, TValue>, ILazinatorOrderedKeyable<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
-        public AvlListNodeTree(int maxItemsPerNode, AvlTreeFactory<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> factory)
+        public AvlListNodeTree(bool allowDuplicates, int maxItemsPerNode, ILazinatorSortableFactory<LazinatorKeyValue<TKey, TValue>> sortableListFactory)
         {
-            UnderlyingTree = factory.Create();
+            UnderlyingTree = new AvlTree<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>>()
+            {
+                AllowDuplicates = allowDuplicates
+            };
             MaxItemsPerNode = maxItemsPerNode;
+            SortableListFactory = sortableListFactory;
         }
 
         public AvlListNodeTree()
@@ -211,6 +215,76 @@ namespace Lazinator.Collections.Avl
             return new AvlListNodeTreeEnumerator<TKey, TValue>(this);
         }
 
+        public IEnumerator<TKey> GetKeyEnumerator(long skip = 0)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerator<TValue> GetValueEnumerator(long skip = 0)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(long skip = 0)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ValueAtKey(TKey key, IComparer<TKey> comparer, out TValue value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TValue ValueAtIndex(long i)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetValueAtIndex(long i, TValue value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TKey KeyAtIndex(long i)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetKeyAtIndex(long i, TKey key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public (bool inserted, long location) Insert(TKey key, IComparer<TKey> comparer, TValue value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void InsertAtIndex(TKey key, TValue value, long index)
+        {
+            throw new NotImplementedException();
+        }
+
+        public (TValue valueIfFound, long index, bool found) GetMatchingOrNext(TKey key, IComparer<TKey> comparer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Remove(TKey key, IComparer<TKey> comparer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool RemoveAt(long i)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
         public long ItemsCount
         {
             get
@@ -222,5 +296,11 @@ namespace Lazinator.Collections.Avl
                 return contents.TotalItemsCount;
             }
         }
+
+        public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public long Count => throw new NotImplementedException();
+
+        public ILazinatorSortableFactory<LazinatorKeyValue<TKey, TValue>> SortableListFactory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 }

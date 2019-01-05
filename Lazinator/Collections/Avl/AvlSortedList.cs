@@ -14,22 +14,22 @@ namespace Lazinator.Collections.Avl
         {
         }
 
-        public AvlSortedList(ILazinatorOrderedKeyableFactory<T, Placeholder> factory)
+        public AvlSortedList(bool allowDuplicates, ILazinatorOrderedKeyableFactory<T, Placeholder> factory)
         {
             UnderlyingTree = factory.Create();
+            AllowDuplicates = allowDuplicates;
         }
 
         public bool AllowDuplicates
         {
-            get
-            {
-                return UnderlyingTree.AllowDuplicateKeys;
-            }
+            get => UnderlyingTree.AllowDuplicates;
             set
             {
-                UnderlyingTree.AllowDuplicateKeys = value;
+                if (value != UnderlyingTree.AllowDuplicates)
+                    throw new Exception("AllowDuplicates must be same for sorted list and underlying tree.");
             }
-        }
+    }
+
 
         public T this[int index]
         {
@@ -50,9 +50,7 @@ namespace Lazinator.Collections.Avl
 
         public void Clear()
         {
-            bool allowDuplicates = AllowDuplicates;
-            UnderlyingTree = new AvlTree<T, Placeholder>();
-            UnderlyingTree.AllowDuplicateKeys = allowDuplicates;
+            UnderlyingTree.Clear();
         }
 
         public bool Contains(T item)

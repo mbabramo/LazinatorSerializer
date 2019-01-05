@@ -7,13 +7,13 @@ namespace Lazinator.Collections.Factories
 {
     public partial class SortedLazinatorLinkedListFactory<T> : ISortedLazinatorLinkedListFactory<T>, ILazinatorCountableListableFactory<T>, ILazinatorSortableFactory<T> where T : ILazinator, IComparable<T>
     {
-        public bool AllowDuplicates => false;
+        public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public ILazinatorCountableListable<T> CreateCountableListable()
         {
             return new SortedLazinatorLinkedList<T>()
             {
-                AllowDuplicates = false
+                AllowDuplicates = AllowDuplicates
             };
         }
 

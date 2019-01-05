@@ -6,9 +6,10 @@ using System.Collections.Generic;
 namespace Lazinator.Collections.Factories
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlTreeFactory)]
-    public interface IAvlTreeFactory<TKey, TValue> : ILazinatorOrderedKeyableFactory<TKey, TValue>
+    public interface IAvlTreeFactory<TKey, TValue> 
         where TKey : ILazinator, IComparable<TKey>
         where TValue : ILazinator
     {
+        bool AllowDuplicates { get; set; }
     }
 }

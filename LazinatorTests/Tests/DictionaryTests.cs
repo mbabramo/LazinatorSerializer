@@ -39,7 +39,7 @@ namespace LazinatorTests.Tests
                 case DictionaryToUse.AvlSortedDictionary:
                     return new AvlSortedDictionary<TKey, TValue>((ILazinatorOrderedKeyableFactory<TKey, TValue>) new AvlTreeFactory<TKey, TValue>());
                 case DictionaryToUse.AvlSortedDictionaryMultiValue:
-                    return new AvlSortedDictionary<TKey, TValue>((ILazinatorOrderedKeyableFactory<TKey, TValue>)new AvlTreeWithDuplicatesFactory<TKey, TValue>());
+                    return new AvlSortedDictionary<TKey, TValue>((ILazinatorOrderedKeyableFactory<TKey, TValue>)new AvlTreeFactory<TKey, TValue>());
             }
             throw new InvalidOperationException();
         }
