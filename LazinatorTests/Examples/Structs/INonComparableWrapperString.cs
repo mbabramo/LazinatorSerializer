@@ -4,7 +4,7 @@ using Lazinator.Wrappers;
 
 namespace Lazinator.Examples.Structs
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IWString, -1)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.INonComparableWrapperString, -1)]
     [NonbinaryHash]
     interface INonComparableWrapperString : IW<string>
     {

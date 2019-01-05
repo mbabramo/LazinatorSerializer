@@ -111,5 +111,6 @@
         IAvlListNodeTreeFactory,
         IAvlDictionaryFactory,
         INonComparableWrapper,
+        INonComparableWrapperString,
     }
 }
