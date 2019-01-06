@@ -213,11 +213,11 @@ namespace Lazinator.Collections.Avl
 
         public void InsertAtIndex(TKey key, TValue value, long nodeIndex) => InsertByKeyOrIndex(key, Comparer<TKey>.Default, value, nodeIndex);
 
-        public (bool inserted, long location) Insert(TKey key, TValue value) => Insert(key, Comparer<TKey>.Default, value);
+        public (bool inserted, long index) Insert(TKey key, TValue value) => Insert(key, Comparer<TKey>.Default, value);
 
-        public (bool inserted, long location) Insert(TKey key, IComparer<TKey> comparer, TValue value) => InsertByKeyOrIndex(key, comparer, value, null);
+        public (bool inserted, long index) Insert(TKey key, IComparer<TKey> comparer, TValue value) => InsertByKeyOrIndex(key, comparer, value, null);
 
-        private (bool inserted, long location) InsertByKeyOrIndex(TKey key, IComparer<TKey> comparer, TValue value, long? nodeIndex = null)
+        private (bool inserted, long index) InsertByKeyOrIndex(TKey key, IComparer<TKey> comparer, TValue value, long? nodeIndex = null)
         {
             var result = InsertHelper(AllowDuplicates, key, comparer, value, nodeIndex);
             if (Root != null)
@@ -235,7 +235,7 @@ namespace Lazinator.Collections.Avl
         /// <param name="value">The value to insert</param>
         /// <param name="nodeIndex">If the insertion point is based on an index, the index at which to insert. Null if the insertion point is to be found from the key.</param>
         /// <returns></returns>
-        private (bool inserted, long location) InsertHelper(bool skipDuplicateKeys, TKey key, IComparer<TKey> comparer, TValue value, long? nodeIndex = null)
+        private (bool inserted, long index) InsertHelper(bool skipDuplicateKeys, TKey key, IComparer<TKey> comparer, TValue value, long? nodeIndex = null)
 		{
 			AvlNode<TKey, TValue> node = Root;
             long index = node?.LeftCount ?? 0;
@@ -856,6 +856,33 @@ namespace Lazinator.Collections.Avl
             Root = null;
         }
 
+
+        public ILazinatorSplittable SplitOff()
+        {
+            if (Root.LeftCount == 0 || Root.RightCount == 0)
+                return new AvlTree<TKey, TValue>() { AllowDuplicates = AllowDuplicates };
+            // Create two separate trees, each of them balanced
+            var leftNode = Root.Left;
+            var rightNode = Root.Right;
+            var originalRoot = Root;
+            // Now, add the original root's item to the portion of the tree that we are keeping. That will ensure that the tree stays balanced.
+            if (leftNode.Count > rightNode.Count)
+            {
+                Root = rightNode; // Count will automatically adjust
+                // We add by index not by key in part because we don't know if a special comparer is used. If we change this, we may need to add a Comparer parameter or alternatively use a custom comparer that forces us to the left-most or right-most node.
+                InsertAtIndex(originalRoot.Key, originalRoot.Value, 0);
+                leftNode.Parent = null;
+                return new AvlTree<TKey, TValue>() { AllowDuplicates = AllowDuplicates, Root = leftNode };
+            }
+            else
+            {
+                Root = leftNode;
+                InsertAtIndex(originalRoot.Key, originalRoot.Value, Root.Count);
+                rightNode.Parent = null;
+                return new AvlTree<TKey, TValue>() { AllowDuplicates = AllowDuplicates, Root = rightNode };
+            }
+        }
+
         /// <summary>
         /// Enumerates the nodes of the tree, skipping a specified number of nodes.
         /// </summary>
@@ -988,40 +1015,39 @@ namespace Lazinator.Collections.Avl
             return new TransformEnumerator<AvlNode<TKey, TValue>, KeyValuePair<TKey, TValue>>(new AvlNodeEnumerator<TKey, TValue>(this, skip), x => new KeyValuePair<TKey, TValue>(x.Key, x.Value));
         }
 
-        IEnumerator<TKey> ILazinatorOrderedKeyable<TKey, TValue>.GetKeyEnumerator(long skip)
+        IEnumerator<TKey> ILazinatorKeyable<TKey, TValue>.GetKeyEnumerator(long skip)
         {
             return GetKeyEnumerator(skip);
         }
 
-        IEnumerator<TValue> ILazinatorOrderedKeyable<TKey, TValue>.GetValueEnumerator(long skip)
+        IEnumerator<TValue> ILazinatorKeyable<TKey, TValue>.GetValueEnumerator(long skip)
         {
             return GetValueEnumerator(skip);
         }
 
-        public ILazinatorSplittable SplitOff()
+        public bool ContainsKeyValue(TKey key, TValue value)
         {
-            if (Root.LeftCount == 0 || Root.RightCount == 0)
-                return new AvlTree<TKey, TValue>() { AllowDuplicates = AllowDuplicates };
-            // Create two separate trees, each of them balanced
-            var leftNode = Root.Left;
-            var rightNode = Root.Right;
-            var originalRoot = Root;
-            // Now, add the original root's item to the portion of the tree that we are keeping. That will ensure that the tree stays balanced.
-            if (leftNode.Count > rightNode.Count)
-            {
-                Root = rightNode; // Count will automatically adjust
-                // We add by index not by key in part because we don't know if a special comparer is used. If we change this, we may need to add a Comparer parameter or alternatively use a custom comparer that forces us to the left-most or right-most node.
-                InsertAtIndex(originalRoot.Key, originalRoot.Value, 0);
-                leftNode.Parent = null;
-                return new AvlTree<TKey, TValue>() { AllowDuplicates = AllowDuplicates, Root = leftNode };
-            }
-            else
-            {
-                Root = leftNode;
-                InsertAtIndex(originalRoot.Key, originalRoot.Value, Root.Count);
-                rightNode.Parent = null;
-                return new AvlTree<TKey, TValue>() { AllowDuplicates = AllowDuplicates, Root = rightNode };
-            }
+            throw new NotImplementedException();
+        }
+
+        public bool ContainsKeyValue(TKey key, IComparer<TKey> comparer, TValue value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ContainsKey(TKey key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ContainsKey(TKey key, IComparer<TKey> comparer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TValue ValueAtKey(TKey key, IComparer<TKey> comparer)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

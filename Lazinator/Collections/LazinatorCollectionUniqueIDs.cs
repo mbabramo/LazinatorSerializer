@@ -112,5 +112,14 @@
         IAvlDictionaryFactory,
         INonComparableWrapper,
         INonComparableWrapperString,
+        ILazinatorIndexableTree,
+        ILazinatorIndexableKeyValueTree,
+        ILazinatorKeyMultivalueTree,
+        ILazinatorKeyValueTree,
+        ILazinatorSortedKeyMultivalueTree,
+        ILazinatorSortedKeyValueTree,
+        ILazinatorTree,
+        ILazinatorSortedTree,
+        ILazinatorSortedIndexableTree,
     }
 }

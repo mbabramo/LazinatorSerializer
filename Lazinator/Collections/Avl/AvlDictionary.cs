@@ -264,14 +264,44 @@ namespace Lazinator.Collections.Avl
             return UnderlyingTree.GetValueEnumerator();
         }
 
+        // DEBUG -- the following methods must be tested
         public TValue ValueAtIndex(long i)
         {
-            throw new NotImplementedException();
+            return UnderlyingTree.ValueAtIndex(i).Item2;
         }
 
         public void SetValueAtIndex(long i, TValue value)
         {
-            throw new NotImplementedException();
+            var keyValue = UnderlyingTree.ValueAtIndex(i);
+            UnderlyingTree.SetValueAtIndex(i, new LazinatorTuple<TKey, TValue>(keyValue.Item1, value));
+        }
+
+        public bool ContainsKeyValue(TKey key, TValue value, out long index) => ContainsKeyValue(key, null, value, out index);
+
+        public bool ContainsKeyValue(TKey key, IComparer<TKey> comparer, TValue value, out long index)
+        {
+            // Note: comaprer isn't used, since we are storing by hash matches
+            uint hash = key.GetBinaryHashCode32();
+            var hashMatches = GetHashMatches(key, hash);
+            var match = hashMatches.FirstOrDefault(x => x.keyValue.Item2.Equals(value)); // DEBUG: Equality comparer
+            if (match.keyValue == null)
+            {
+                index = default;
+                return false;
+            }
+            index = match.index;
+            return true;
+        }
+
+        public bool RemoveKeyValue(TKey key, TValue value) => RemoveValue(key, Comparer<TKey>.Default, value);
+
+        public bool RemoveValue(TKey key, IComparer<TKey> comparer, TValue value)
+        {
+            bool exists = ContainsKeyValue(key, comparer, value, out long index);
+            if (!exists)
+                return false;
+            UnderlyingTree.RemoveAt(index);
+            return true;
         }
     }
 }

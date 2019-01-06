@@ -4,18 +4,18 @@ using System.Collections.Generic;
 using Lazinator.Core;
 using Lazinator.Wrappers;
 
-namespace Lazinator.Collections.Tuples
+namespace Lazinator.Collections.Enumerators
 {
-    public struct KeyEnumerator<TKey, TValue> : IEnumerator<TKey> where TKey : ILazinator where TValue : ILazinator
+    public struct ValueEnumerator<TKey, TValue> : IEnumerator<TValue> where TKey : ILazinator where TValue : ILazinator
     {
         private IEnumerator<KeyValuePair<TKey, TValue>> UnderlyingEnumerator;
 
-        public KeyEnumerator(IEnumerator<KeyValuePair<TKey, TValue>> underlyingEnumerator)
+        public ValueEnumerator(IEnumerator<KeyValuePair<TKey, TValue>> underlyingEnumerator)
         {
             UnderlyingEnumerator = underlyingEnumerator;
         }
 
-        public TKey Current => UnderlyingEnumerator.Current.Key;
+        public TValue Current => UnderlyingEnumerator.Current.Value;
 
         object IEnumerator.Current => Current;
 

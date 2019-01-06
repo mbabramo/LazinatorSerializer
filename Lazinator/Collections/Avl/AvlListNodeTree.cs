@@ -41,7 +41,7 @@ namespace Lazinator.Collections.Avl
         public bool Contains(TKey key, IComparer<TKey> comparer, TValue value)
         {
             LazinatorKeyValue<TKey, TValue> keyValue = new LazinatorKeyValue<TKey, TValue>(key, value);
-            var result = GetNodeByKeyAndValue(keyValue, comparer);
+            var result = GetNodeByKey(keyValue, comparer);
             return result.exists;
         }
 
@@ -75,7 +75,7 @@ namespace Lazinator.Collections.Avl
             }
             else
             {
-                var result = GetNodeByKeyAndValue(keyValue, comparer);
+                var result = GetNodeByKey(keyValue, comparer);
                 node = result.node;
                 indexInNode = result.indexInNode;
             }
@@ -110,8 +110,9 @@ namespace Lazinator.Collections.Avl
 
         public bool Remove(TKey key, IComparer<TKey> comparer, TValue value)
         {
+            debug; // we need to enumerate over all values from the first key
             LazinatorKeyValue<TKey, TValue> keyValue = new LazinatorKeyValue<TKey, TValue>(key, value);
-            var result = GetNodeByKeyAndValue(keyValue, comparer);
+            var result = GetNodeByKey(keyValue, comparer); 
             if (result.exists)
             {
                 var contents = GetNodeContents(result.node);
@@ -201,7 +202,7 @@ namespace Lazinator.Collections.Avl
 
         static IComparer<LazinatorKeyValue<TKey, TValue>> DefaultKeyValueComparer = LazinatorKeyValue<TKey, TValue>.GetKeyValueComparer(Comparer<TKey>.Default, Comparer<TValue>.Default);
 
-        public (AvlNode<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> node, int indexInNode, bool exists) GetNodeByKeyAndValue(LazinatorKeyValue<TKey, TValue> keyAndValue, IComparer<TKey> comparer)
+        public (AvlNode<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> node, int indexInNode, bool exists) GetNodeByKey(LazinatorKeyValue<TKey, TValue> keyAndValue, IComparer<TKey> comparer)
         {
             if (UnderlyingTree.Root == null)
                 return (null, -1, false);
@@ -262,7 +263,7 @@ namespace Lazinator.Collections.Avl
             throw new NotImplementedException();
         }
 
-        public (bool inserted, long location) Insert(TKey key, IComparer<TKey> comparer, TValue value)
+        public (bool inserted, long index) Insert(TKey key, IComparer<TKey> comparer, TValue value)
         {
             throw new NotImplementedException();
         }
@@ -296,6 +297,31 @@ namespace Lazinator.Collections.Avl
         {
             AvlListNodeTree<TKey, TValue> partSplitOff = new AvlListNodeTree<TKey, TValue>(AllowDuplicates, MaxItemsPerInnerList, SortableListFactory, (AvlTree<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>>) UnderlyingTree.SplitOff());
             return partSplitOff;
+        }
+
+        public bool ContainsKeyValue(TKey key, TValue value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ContainsKeyValue(TKey key, IComparer<TKey> comparer, TValue value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ContainsKey(TKey key)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool ContainsKey(TKey key, IComparer<TKey> comparer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TValue ValueAtKey(TKey key, IComparer<TKey> comparer)
+        {
+            throw new NotImplementedException();
         }
 
         public long ItemsCount

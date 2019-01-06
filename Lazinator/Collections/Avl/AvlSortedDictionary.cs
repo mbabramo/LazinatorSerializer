@@ -270,7 +270,7 @@ namespace Lazinator.Collections.Avl
             UnderlyingTree.SetKeyAtIndex(i, key);
         }
 
-        public (bool inserted, long location) Insert(TKey key, IComparer<TKey> comparer, TValue value)
+        public (bool inserted, long index) Insert(TKey key, IComparer<TKey> comparer, TValue value)
         {
             return UnderlyingTree.Insert(key, comparer, value);
         }
@@ -279,6 +279,42 @@ namespace Lazinator.Collections.Avl
         {
             return UnderlyingTree.GetMatchingOrNext(key, comparer);
         }
+
+        public bool ContainsKeyValue(TKey key, TValue value, out long index) => ContainsKeyValue(key, null, value, out index);
+
+        public bool ContainsKeyValue(TKey key, IComparer<TKey> comparer, TValue value, out long index)
+        {
+            if (AllowDuplicates)
+            {
+                bool result = UnderlyingTree.C
+            }
+            else
+            {
+
+            }
+            uint hash = key.GetBinaryHashCode32();
+            var hashMatches = GetHashMatches(key, hash);
+            var match = hashMatches.FirstOrDefault(x => x.keyValue.Item2.Equals(value)); // DEBUG: Equality comparer
+            if (match.keyValue == null)
+            {
+                index = default;
+                return false;
+            }
+            index = match.index;
+            return true;
+        }
+
+        public bool RemoveKeyValue(TKey key, TValue value) => RemoveKeyValue(key, Comparer<TKey>.Default, value);
+
+        public bool RemoveKeyValue(TKey key, IComparer<TKey> comparer, TValue value)
+        {
+            bool exists = ContainsKeyValue(key, comparer, value, out long index);
+            if (!exists)
+                return false;
+            UnderlyingTree.RemoveAt(index);
+            return true;
+        }
+
 
         public ILazinatorSplittable SplitOff()
         {

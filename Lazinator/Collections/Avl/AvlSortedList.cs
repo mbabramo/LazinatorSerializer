@@ -166,7 +166,7 @@ namespace Lazinator.Collections.Avl
 
         public (long location, bool rejectedAsDuplicate) InsertSorted(T item, IComparer<T> comparer)
         {
-            (bool inserted, long location) = UnderlyingTree.Insert(item, comparer, default);
+            (bool inserted, long index) = UnderlyingTree.Insert(item, comparer, default);
             return (location, !inserted);
         }
 
