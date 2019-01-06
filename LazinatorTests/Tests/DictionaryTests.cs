@@ -128,9 +128,9 @@ namespace LazinatorTests.Tests
             d[18] = "eighteen";
             d[-1] = "negative one";
             d.Keys.OrderBy(x => x).ToList().SequenceEqual(new WLong[] { -1, 15, 17, 18, 23 }).Should().BeTrue();
-            d.Values.OrderBy(x => x).ToList().SequenceEqual((new NonComparableWrapperString[] { "negative one", "fifteen", "seventeen", "eighteen", "twenty-three" }).OrderBy(x => x)).Should().BeTrue();
+            d.Values.Select(x => x.WrappedValue).OrderBy(x => x).ToList().SequenceEqual((new string[] { "negative one", "fifteen", "seventeen", "eighteen", "twenty-three" }).OrderBy(x => x)).Should().BeTrue();
             d.Select(x => x.Key).OrderBy(x => x).ToArray().SequenceEqual(new WLong[] { -1, 15, 17, 18, 23 }).Should().BeTrue();
-            d.Select(x => x.Value).OrderBy(x => x).ToArray().SequenceEqual((new NonComparableWrapperString[] { "negative one", "fifteen", "seventeen", "eighteen", "twenty-three" }).OrderBy(x => x)).Should().BeTrue();
+            d.Select(x => x.Value).Select(x => x.WrappedValue).OrderBy(x => x).ToArray().SequenceEqual((new string[] { "negative one", "fifteen", "seventeen", "eighteen", "twenty-three" }).OrderBy(x => x)).Should().BeTrue();
             d.Count.Should().Be(5);
             result = d.TryGetValue(17, out NonComparableWrapperString s);
             result.Should().BeTrue();
@@ -145,7 +145,7 @@ namespace LazinatorTests.Tests
             s.WrappedValue.Should().Be(null);
             d.Count.Should().Be(0);
             d.Keys.ToList().OrderBy(x => x).SequenceEqual(new WLong[] { }).Should().BeTrue();
-            d.Values.ToList().OrderBy(x => x).SequenceEqual(new NonComparableWrapperString[] { }).Should().BeTrue();
+            d.Values.ToList().Select(x => x.WrappedValue).OrderBy(x => x).SequenceEqual(new string[] { }).Should().BeTrue();
             d.ToList().OrderBy(x => x).Select(x => x.Key).ToArray().SequenceEqual(new WLong[] { }).Should().BeTrue();
             d.ToList().OrderBy(x => x).Select(x => x.Value).ToArray().SequenceEqual(new NonComparableWrapperString[] { }).Should().BeTrue();
         }
