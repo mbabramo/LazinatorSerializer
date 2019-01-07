@@ -7,7 +7,7 @@ using Lazinator.Core;
 namespace Lazinator.Collections.Interfaces
 {
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorKeyValueTree)]
-    public interface ILazinatorKeyValueTree<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
+    public interface IKeyValueContainer<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
         bool ContainsKey(TKey key, IComparer<TKey> comparer);
         bool ContainsKeyValue(TKey key, TValue value, IComparer<TKey> comparer);

@@ -7,7 +7,7 @@ using System.Text;
 namespace Lazinator.Collections.Interfaces
 {
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorIndexableTree)]
-    public interface ILazinatorIndexableTree<T> : ILazinatorTree<T> where T : ILazinator
+    public interface IIndexableContainer<T> : IOrderableContainer<T> where T : ILazinator
     {
         T GetAt(long index);
         void SetAt(long index, T value);

@@ -7,7 +7,7 @@ using Lazinator.Core;
 namespace Lazinator.Collections.Interfaces
 {
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorTree)]
-    public interface ILazinatorTree<T> where T : ILazinator
+    public interface IOrderableContainer<T> where T : ILazinator
     {
         bool Contains(T item, IComparer<T> comparer);
         bool TryInsertSorted(T item, IComparer<T> comparer);
