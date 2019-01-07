@@ -31,6 +31,23 @@ namespace Lazinator.Collections.Avl
             }
         }
 
+        public void DEBUG()
+        {
+
+            if (LeftCountedNode != null)
+            {
+                if (LeftCountedNode.Parent != this)
+                    throw new Exception("DEBUG");
+                LeftCountedNode.DEBUG();
+            }
+            if (RightCountedNode != null)
+            {
+                if (RightCountedNode.Parent != this)
+                    throw new Exception("DEBUG");
+                RightCountedNode.DEBUG();
+            }
+        }
+
         public override void UpdateFollowingTreeChange()
         {
             if (LeftCountedNode != null && LeftCountedNode.NodeVisitedDuringChange)
