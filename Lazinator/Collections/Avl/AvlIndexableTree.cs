@@ -21,17 +21,23 @@ namespace Lazinator.Collections.Avl
             return new AvlCountedNode<T>()
             {
                 Value = value,
+                SelfCount = 1,
                 Parent = parent
             };
         }
 
-        protected int CompareIndices(long desiredNodeIndex, AvlCountedNode<T> node)
+        protected int CompareIndices(long desiredNodeIndex, AvlCountedNode<T> node, MultivalueLocationOptions whichOne)
         {
             long actualNodeIndex = node.Index;
             int compare;
             if (desiredNodeIndex == actualNodeIndex)
             {
                 compare = 0;
+                // The following is needed for insertions. If on an insertion, we return compare = 0, that means we want to replace the item at that location.
+                if (whichOne == MultivalueLocationOptions.BeforeFirst)
+                    compare = 1;
+                else if (whichOne == MultivalueLocationOptions.AfterLast)
+                    compare = -1;
             }
             else if (desiredNodeIndex < actualNodeIndex)
                 compare = -1;
@@ -40,9 +46,9 @@ namespace Lazinator.Collections.Avl
             return compare;
         }
 
-        private Func<BinaryNode<T>, int> CompareIndexToNodesIndex(long index)
+        private Func<BinaryNode<T>, int> CompareIndexToNodesIndex(long index, MultivalueLocationOptions whichOne)
         {
-            return node => CompareIndices(index, (AvlCountedNode<T>) node);
+            return node => CompareIndices(index, (AvlCountedNode<T>) node, whichOne);
         }
 
         public long LongCount => (Root as AvlCountedNode<T>)?.LongCount ?? 0;
@@ -60,7 +66,7 @@ namespace Lazinator.Collections.Avl
         internal AvlNode<T> GetNodeAtIndex(long index)
         {
             ConfirmInRangeOrThrow(index);
-            var node = GetMatchingNode(MultivalueLocationOptions.Any, CompareIndexToNodesIndex(index));
+            var node = GetMatchingNode(MultivalueLocationOptions.Any, CompareIndexToNodesIndex(index, MultivalueLocationOptions.Any));
             return (AvlNode<T>) node;
         }
 
@@ -79,12 +85,12 @@ namespace Lazinator.Collections.Avl
         public void InsertAt(long index, T item)
         {
             ConfirmInRangeOrThrow(index, true);
-            TryInsertSorted(item, MultivalueLocationOptions.BeforeFirst, CompareIndexToNodesIndex(index));
+            TryInsertSorted(item, CompareIndexToNodesIndex(index, MultivalueLocationOptions.BeforeFirst));
         }
         public void RemoveAt(long index)
         {
             ConfirmInRangeOrThrow(index, true);
-            TryRemoveSorted(MultivalueLocationOptions.Any, CompareIndexToNodesIndex(index));
+            TryRemoveSorted(MultivalueLocationOptions.Any, CompareIndexToNodesIndex(index, MultivalueLocationOptions.First));
         }
 
         public override IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)

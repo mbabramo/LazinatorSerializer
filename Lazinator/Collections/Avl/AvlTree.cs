@@ -30,7 +30,7 @@ namespace Lazinator.Collections.Avl
             };
         }
 
-        protected override (BinaryNode<T> node, bool insertedNotReplaced) TryInsertSortedReturningNode(T item, MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
+        protected override (BinaryNode<T> node, bool insertedNotReplaced) TryInsertSortedReturningNode(T item, Func<BinaryNode<T>, int> comparisonFunc)
         {
             AvlNode<T> node = AvlRoot;
             while (node != null)
@@ -51,6 +51,7 @@ namespace Lazinator.Collections.Avl
                         // index is same as node
                         InsertBalance(node, 1);
 
+                        AvlRoot.UpdateFollowingTreeChange();
                         return (node, true);
                     }
                     else
@@ -70,6 +71,7 @@ namespace Lazinator.Collections.Avl
 
                         InsertBalance(node, -1);
 
+                        AvlRoot.UpdateFollowingTreeChange();
                         return (node, true);
                     }
                     else
@@ -81,12 +83,14 @@ namespace Lazinator.Collections.Avl
                 {
                     node.Value = item;
 
+                    AvlRoot.UpdateFollowingTreeChange();
                     return (node, false);
                 }
             }
 
             Root = CreateNode(item);
             AvlRoot.NodeVisitedDuringChange = true;
+            AvlRoot.UpdateFollowingTreeChange();
 
             return (node, true);
         }
@@ -241,10 +245,12 @@ namespace Lazinator.Collections.Avl
                         }
                     }
 
+                    AvlRoot.UpdateFollowingTreeChange();
                     return node;
                 }
             }
 
+            AvlRoot?.UpdateFollowingTreeChange();
             return null;
         }
 

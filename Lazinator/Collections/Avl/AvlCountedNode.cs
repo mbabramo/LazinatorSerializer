@@ -40,10 +40,32 @@ namespace Lazinator.Collections.Avl
             }
         }
 
+        public override void UpdateFollowingTreeChange()
+        {
+            if (_Left != null)
+            {
+                if (LeftCountedNode.NodeVisitedDuringChange)
+                {
+                    LeftCountedNode.UpdateFollowingTreeChange();
+                }
+                LeftCount = LeftCountedNode.LongCount;
+            }
+            if (_Right != null)
+            {
+                if (RightCountedNode.NodeVisitedDuringChange)
+                {
+                    RightCountedNode.UpdateFollowingTreeChange();
+                }
+                RightCount = RightCountedNode.LongCount;
+            }
+            if (NodeVisitedDuringChange)
+                NodeVisitedDuringChange = false;
+        }
+
 
         public override string ToString()
         {
-            return $"Index {Index}: {Value} (Count {LongCount})";
+            return $"Index {Index}: {Value} (Count {LongCount}) (visited {NodeVisitedDuringChange}";
         }
 
     }

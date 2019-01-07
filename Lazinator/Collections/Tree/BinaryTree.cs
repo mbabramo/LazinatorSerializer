@@ -136,17 +136,17 @@ namespace Lazinator.Collections.Tree
 
         public bool TryInsertSorted(T item, IComparer<T> comparer) => TryInsertSorted(item, MultivalueLocationOptions.Any, comparer);
 
-        public bool TryInsertSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryInsertSorted(item, whichOne, node => CompareValueToNode(item, node, whichOne, comparer));
+        public bool TryInsertSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryInsertSorted(item, node => CompareValueToNode(item, node, whichOne, comparer));
 
-        protected bool TryInsertSorted(T item, MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
+        protected bool TryInsertSorted(T item, Func<BinaryNode<T>, int> comparisonFunc)
         {
-            var result = TryInsertSortedReturningNode(item, whichOne, comparisonFunc);
+            var result = TryInsertSortedReturningNode(item, comparisonFunc);
             return result.insertedNotReplaced;
         }
 
-        public (BinaryNode<T> node, bool insertedNotReplaced) TryInsertSortedReturningNode(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryInsertSortedReturningNode(item, whichOne, node => CompareValueToNode(item, node, whichOne, comparer));
+        public (BinaryNode<T> node, bool insertedNotReplaced) TryInsertSortedReturningNode(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryInsertSortedReturningNode(item, node => CompareValueToNode(item, node, whichOne, comparer));
 
-        protected virtual (BinaryNode<T> node, bool insertedNotReplaced) TryInsertSortedReturningNode(T item, MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
+        protected virtual (BinaryNode<T> node, bool insertedNotReplaced) TryInsertSortedReturningNode(T item, Func<BinaryNode<T>, int> comparisonFunc)
         {
             BinaryNode<T> node = Root;
             while (node != null)
