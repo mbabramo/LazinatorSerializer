@@ -18,7 +18,7 @@ namespace Lazinator.Collections.Avl
         protected AvlNode<T> AvlLeftBackingField => (AvlNode<T>)_Left;
         protected AvlNode<T> AvlRightBackingField => (AvlNode<T>)_Right;
 
-        public virtual void UpdateFollowingTreeChange()
+        public virtual void UpdateFollowingTreeChange(AvlNode<T> parent = null)
         {
 
         }
