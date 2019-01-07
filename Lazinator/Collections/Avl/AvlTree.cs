@@ -9,16 +9,14 @@ using System.Text;
 namespace Lazinator.Collections.Avl
 {
     /// <summary>
-    /// A basic AvlTree class. Because it stores a value that need not implement IComparable, and because it is not countable,
-    /// direct users of this class must specify a custom comparer when searching, inserting or removing. Subclasses add
-    /// functionality for accessing items by index and adding items that implement IComparable without a custom comparer.
+    /// A basic AvlTree class, adding balancing to the BinaryTree class.
     /// </summary>
     /// <typeparam name="T">The type of the object to be stored on each node of the tree</typeparam>
     public class AvlTree<T> : BinaryTree<T>, IAvlTree<T>, IOrderableContainer<T>, IEnumerable<T> where T : ILazinator
     {
         public AvlNode<T> AvlRoot => (AvlNode<T>)Root;
 
-        protected virtual AvlNode<T> CreateNode(T value, AvlNode<T> parent = null)
+        protected override BinaryNode<T> CreateNode(T value, BinaryNode<T> parent = null)
         {
             return new AvlNode<T>()
             {
@@ -27,112 +25,7 @@ namespace Lazinator.Collections.Avl
             };
         }
 
-        protected (AvlNode<T> node, bool found) GetMatchingOrNextNode(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer) => GetMatchingOrNextNode(whichOne, node => CompareValueToNode(value, node, whichOne, comparer));
-
-        protected (AvlNode<T> node, bool found) GetMatchingOrNextNode(MultivalueLocationOptions whichOne, Func<AvlNode<T>, int> comparisonFunc)
-        {
-            AvlNode<T> node = AvlRoot;
-            if (node == null)
-                return (null, false);
-            while (true)
-            {
-                int comparison = comparisonFunc(node);
-                if (comparison < 0)
-                {
-                    if (node.Left == null)
-                        return (node, false);
-                    node = node.Left;
-                }
-                else if (comparison > 0)
-                {
-                    if (node.Right == null)
-                    {
-                        var next = node.GetNextNode();
-                        return (next, false);
-                    }
-                    node = node.Right;
-                }
-                else
-                {
-                    return (node, true);
-                }
-            }
-        }
-
-        private int CompareValueToNode(T value, AvlNode<T> node, MultivalueLocationOptions whichOne, IComparer<T> comparer)
-        {
-            int compare = comparer.Compare(value, node.Value);
-            if (compare == 0)
-            {
-                // Even though value is equal, we don't calculate it as equal if, for example, we're at the second value and the request is for the first.
-                if (whichOne == MultivalueLocationOptions.BeforeFirst)
-                    compare = 1;
-                else if (whichOne == MultivalueLocationOptions.AfterLast)
-                    compare = -1;
-                else if (whichOne == MultivalueLocationOptions.First)
-                {
-                    var previousNode = node.GetPreviousNode();
-                    if (previousNode != null && comparer.Compare(value, previousNode.Value) == 0)
-                        compare = 1;
-                }
-                else
-                {
-                    var nextNode = node.GetNextNode();
-                    if (nextNode != null && comparer.Compare(value, nextNode.Value) == 0)
-                        compare = -1;
-                }
-            }
-
-            return compare;
-        }
-
-        public bool Contains(T item, IComparer<T> comparer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual void Clear()
-        {
-            AvlRoot = null;
-        }
-
-        /// <summary>
-        /// Gets the last node.
-        /// </summary>
-        /// <returns></returns>
-        protected AvlNode<T> FirstNode()
-        {
-            var x = AvlRoot;
-            while (x.Left != null)
-                x = x.Left;
-            return x;
-        }
-
-        /// <summary>
-        /// Gets the last node.
-        /// </summary>
-        /// <returns></returns>
-        protected AvlNode<T> LastNode()
-        {
-            var x = AvlRoot;
-            while (x.Right != null)
-                x = x.Right;
-            return x;
-        }
-
-        public bool TryInsertSorted(T item, IComparer<T> comparer) => TryInsertSorted(item, MultivalueLocationOptions.Any, comparer);
-
-        public bool TryInsertSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryInsertSorted(item, whichOne, node => CompareValueToNode(item, node, whichOne, comparer));
-
-        protected bool TryInsertSorted(T item, MultivalueLocationOptions whichOne, Func<AvlNode<T>, int> comparisonFunc)
-        {
-            var result = TryInsertSortedReturningNode(item, whichOne, comparisonFunc);
-            return result.insertionNotReplacement;
-        }
-
-        public (AvlNode<T> node, bool insertionNotReplacement) TryInsertSortedReturningNode(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryInsertSortedReturningNode(item, whichOne, node => CompareValueToNode(item, node, whichOne, comparer));
-
-        protected (AvlNode<T> node, bool insertionNotReplacement) TryInsertSortedReturningNode(T item, MultivalueLocationOptions whichOne, Func<AvlNode<T>, int> comparisonFunc)
+        protected override (BinaryNode<T> node, bool insertionNotReplacement) TryInsertSortedReturningNode(T item, MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
         {
             AvlNode<T> node = AvlRoot;
             while (node != null)
@@ -143,11 +36,11 @@ namespace Lazinator.Collections.Avl
 
                 if (compare < 0)
                 {
-                    AvlNode<T> left = node.Left;
+                    AvlNode<T> left = node.AvlLeft;
 
                     if (left == null)
                     {
-                        var childNode = CreateNode(item, node);
+                        var childNode = (AvlNode<T>) CreateNode(item, node);
                         childNode.NodeVisitedDuringChange = true;
                         node.Left = childNode;
                         // index is same as node
@@ -162,11 +55,11 @@ namespace Lazinator.Collections.Avl
                 }
                 else if (compare > 0)
                 {
-                    AvlNode<T> right = node.Right;
+                    AvlNode<T> right = node.AvlRight;
 
                     if (right == null)
                     {
-                        var childNode = CreateNode(item, node);
+                        var childNode = (AvlNode<T>)CreateNode(item, node);
                         childNode.NodeVisitedDuringChange = true;
                         node.Right = childNode;
 
@@ -187,21 +80,13 @@ namespace Lazinator.Collections.Avl
                 }
             }
 
-            AvlRoot = CreateNode(item);
+            Root = CreateNode(item);
             AvlRoot.NodeVisitedDuringChange = true;
 
             return (node, true);
         }
-
-        public bool TryRemoveSorted(T item, IComparer<T> comparer) => TryRemoveSorted(item, MultivalueLocationOptions.Any, comparer);
-
-        public bool TryRemoveSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryRemoveSorted(whichOne, node => CompareValueToNode(item, node, whichOne, comparer));
-
-        protected bool TryRemoveSorted(MultivalueLocationOptions whichOne, Func<AvlNode<T>, int> comparisonFunc) => TryRemoveSortedReturningNode(whichOne, comparisonFunc) != null;
-
-        public AvlNode<T> TryRemoveSortedReturningNode(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryRemoveSortedReturningNode(whichOne, node => CompareValueToNode(item, node, whichOne, comparer));
-
-        protected AvlNode<T> TryRemoveSortedReturningNode(MultivalueLocationOptions whichOne, Func<AvlNode<T>, int> comparisonFunc)
+        
+        protected override BinaryNode<T> TryRemoveSortedReturningNode(MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
         {
             AvlNode<T> node = AvlRoot;
             
@@ -212,16 +97,16 @@ namespace Lazinator.Collections.Avl
                 int compare = comparisonFunc(node);
                 if (compare < 0)
                 {
-                    node = node.Left;
+                    node = node.AvlLeft;
                 }
                 else if (compare > 0)
                 {
-                    node = node.Right;
+                    node = node.AvlRight;
                 }
                 else
                 {
-                    AvlNode<T> left = node.Left;
-                    AvlNode<T> right = node.Right;
+                    AvlNode<T> left = node.AvlLeft;
+                    AvlNode<T> right = node.AvlRight;
 
                     if (left == null)
                     {
@@ -229,11 +114,11 @@ namespace Lazinator.Collections.Avl
                         {
                             if (node == AvlRoot)
                             {
-                                AvlRoot = null;
+                                Root = null;
                             }
                             else
                             {
-                                AvlNode<T> parent = node.Parent;
+                                AvlNode<T> parent = node.AvlParent;
 
                                 if (parent.Left == node)
                                 {
@@ -271,7 +156,7 @@ namespace Lazinator.Collections.Avl
 
                         if (successor.Left == null)
                         {
-                            AvlNode<T> parent = node.Parent;
+                            AvlNode<T> parent = node.AvlParent;
 
                             successor.Parent = parent;
                             successor.Left = left;
@@ -280,7 +165,7 @@ namespace Lazinator.Collections.Avl
 
                             if (node == AvlRoot)
                             {
-                                AvlRoot = successor;
+                                Root = successor;
                             }
                             else
                             {
@@ -298,15 +183,15 @@ namespace Lazinator.Collections.Avl
                         }
                         else
                         {
-                            while (successor.Left != null)
+                            while (successor.AvlLeft != null)
                             {
-                                successor = successor.Left;
+                                successor = successor.AvlLeft;
                                 successor.NodeVisitedDuringChange = true;
                             }
 
-                            AvlNode<T> parent = node.Parent;
-                            AvlNode<T> successorParent = successor.Parent;
-                            AvlNode<T> successorRight = successor.Right;
+                            AvlNode<T> parent = node.AvlParent;
+                            AvlNode<T> successorParent = successor.AvlParent;
+                            AvlNode<T> successorRight = successor.AvlRight;
                             if (successorRight != null)
                                 successorRight.NodeVisitedDuringChange = true;
 
@@ -333,7 +218,7 @@ namespace Lazinator.Collections.Avl
 
                             if (node == AvlRoot)
                             {
-                                AvlRoot = successor;
+                                Root = successor;
                             }
                             else
                             {
@@ -372,7 +257,7 @@ namespace Lazinator.Collections.Avl
                 }
                 else if (balance == 2)
                 {
-                    if (node.Left.Balance == 1)
+                    if (node.AvlLeft.Balance == 1)
                     {
                         RotateRight(node);
                     }
@@ -385,7 +270,7 @@ namespace Lazinator.Collections.Avl
                 }
                 else if (balance == -2)
                 {
-                    if (node.Right.Balance == -1)
+                    if (node.AvlRight.Balance == -1)
                     {
                         RotateLeft(node);
                     }
@@ -397,7 +282,7 @@ namespace Lazinator.Collections.Avl
                     return;
                 }
 
-                AvlNode<T> parent = node.Parent;
+                AvlNode<T> parent = node.AvlParent;
 
                 if (parent != null)
                 {
@@ -410,9 +295,9 @@ namespace Lazinator.Collections.Avl
 
         private AvlNode<T> RotateLeft(AvlNode<T> node)
         {
-            AvlNode<T> right = node.Right;
-            AvlNode<T> rightLeft = right.Left;
-            AvlNode<T> parent = node.Parent;
+            AvlNode<T> right = node.AvlRight;
+            AvlNode<T> rightLeft = right.AvlLeft;
+            AvlNode<T> parent = node.AvlParent;
             right.NodeVisitedDuringChange = true;
             if (rightLeft != null)
                 rightLeft.NodeVisitedDuringChange = true;
@@ -429,7 +314,7 @@ namespace Lazinator.Collections.Avl
 
             if (node == AvlRoot)
             {
-                AvlRoot = right;
+                Root = right;
             }
             else if (parent.Right == node)
             {
@@ -448,9 +333,9 @@ namespace Lazinator.Collections.Avl
 
         private AvlNode<T> RotateRight(AvlNode<T> node)
         {
-            AvlNode<T> left = node.Left;
-            AvlNode<T> leftRight = left.Right;
-            AvlNode<T> parent = node.Parent;
+            AvlNode<T> left = node.AvlLeft;
+            AvlNode<T> leftRight = left.AvlRight;
+            AvlNode<T> parent = node.AvlParent;
             left.NodeVisitedDuringChange = true;
             if (leftRight != null)
                 leftRight.NodeVisitedDuringChange = true;
@@ -467,7 +352,7 @@ namespace Lazinator.Collections.Avl
 
             if (node == AvlRoot)
             {
-                AvlRoot = left;
+                Root = left;
             }
             else if (parent.Left == node)
             {
@@ -486,11 +371,11 @@ namespace Lazinator.Collections.Avl
 
         private AvlNode<T> RotateLeftRight(AvlNode<T> node)
         {
-            AvlNode<T> left = node.Left;
-            AvlNode<T> leftRight = left.Right;
-            AvlNode<T> parent = node.Parent;
-            AvlNode<T> leftRightRight = leftRight.Right;
-            AvlNode<T> leftRightLeft = leftRight.Left;
+            AvlNode<T> left = node.AvlLeft;
+            AvlNode<T> leftRight = left.AvlRight;
+            AvlNode<T> parent = node.AvlParent;
+            AvlNode<T> leftRightRight = leftRight.AvlRight;
+            AvlNode<T> leftRightLeft = leftRight.AvlLeft;
             left.NodeVisitedDuringChange = true;
             leftRight.NodeVisitedDuringChange = true;
             if (leftRightRight != null)
@@ -518,7 +403,7 @@ namespace Lazinator.Collections.Avl
 
             if (node == AvlRoot)
             {
-                AvlRoot = leftRight;
+                Root = leftRight;
             }
             else if (parent.Left == node)
             {
@@ -552,11 +437,11 @@ namespace Lazinator.Collections.Avl
 
         private AvlNode<T> RotateRightLeft(AvlNode<T> node)
         {
-            AvlNode<T> right = node.Right;
-            AvlNode<T> rightLeft = right.Left;
-            AvlNode<T> parent = node.Parent;
-            AvlNode<T> rightLeftLeft = rightLeft.Left;
-            AvlNode<T> rightLeftRight = rightLeft.Right;
+            AvlNode<T> right = node.AvlRight;
+            AvlNode<T> rightLeft = right.AvlLeft;
+            AvlNode<T> parent = node.AvlParent;
+            AvlNode<T> rightLeftLeft = rightLeft.AvlLeft;
+            AvlNode<T> rightLeftRight = rightLeft.AvlRight;
             right.NodeVisitedDuringChange = true;
             rightLeft.NodeVisitedDuringChange = true;
             if (rightLeftLeft != null)
@@ -584,7 +469,7 @@ namespace Lazinator.Collections.Avl
 
             if (node == AvlRoot)
             {
-                AvlRoot = rightLeft;
+                Root = rightLeft;
             }
             else if (parent.Right == node)
             {
@@ -624,7 +509,7 @@ namespace Lazinator.Collections.Avl
 
                 if (balance == 2)
                 {
-                    if (node.Left.Balance >= 0)
+                    if (node.AvlLeft.Balance >= 0)
                     {
                         node = RotateRight(node);
 
@@ -640,7 +525,7 @@ namespace Lazinator.Collections.Avl
                 }
                 else if (balance == -2)
                 {
-                    if (node.Right.Balance <= 0)
+                    if (node.AvlRight.Balance <= 0)
                     {
                         node = RotateLeft(node);
 
@@ -659,7 +544,7 @@ namespace Lazinator.Collections.Avl
                     return;
                 }
 
-                AvlNode<T> parent = node.Parent;
+                AvlNode<T> parent = node.AvlParent;
 
                 if (parent != null)
                 {
@@ -677,17 +562,7 @@ namespace Lazinator.Collections.Avl
         }
         #endregion
 
-            #region Enumeration
-
-        public virtual IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
-        {
-            var enumerator = new AvlNodeEnumerator<T>(FirstNode());
-            long i = skip;
-            while (i > 0)
-                enumerator.MoveNext();
-            while (enumerator.MoveNext())
-                yield return enumerator.Current.Value;
-        }
+        #region Enumeration
 
         public IEnumerator<T> GetEnumerator()
         {

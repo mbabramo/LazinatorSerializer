@@ -12,7 +12,7 @@ namespace Lazinator.Collections.Avl
         private bool _reverse;
         bool _isFirst;
 
-        public AvlNodeEnumerator(AvlNode<T> node, bool reverse = false)
+        public AvlNodeEnumerator(AvlNode<T> node, bool reverse = false, long skip = 0)
         {
             _isFirst = true;
             _reverse = reverse;
@@ -25,6 +25,12 @@ namespace Lazinator.Collections.Avl
             {
                 _current = node;
                 _index = 0;
+                while (_index < skip)
+                {
+                    _index++;
+                    if (_current != null)
+                        _current = reverse ? (AvlNode<T>) _current.GetPreviousNode() : (AvlNode<T>)_current.GetNextNode();
+                }
             }
         }
 
@@ -49,7 +55,7 @@ namespace Lazinator.Collections.Avl
             if (_isFirst)
                 _isFirst = false;
             else
-                _current = _reverse ? _current?.GetPreviousNode() : _current?.GetNextNode();
+                _current = _reverse ? (AvlNode<T>)_current?.GetPreviousNode() : (AvlNode<T>)_current?.GetNextNode();
             if (_current == null)
                 return false;
             _index++;

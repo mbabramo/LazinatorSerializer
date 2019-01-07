@@ -1,4 +1,5 @@
 ﻿using Lazinator.Collections.Interfaces;
+using Lazinator.Collections.Tree;
 using Lazinator.Core;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace Lazinator.Collections.Avl
     public partial class AvlIndexableTree<T> : AvlTree<T>, IAvlIndexableTree<T>, IIndexableContainer<T> where T : ILazinator
     {
 
-        protected override AvlNode<T> CreateNode(T value, AvlNode<T> parent = null)
+        protected override BinaryNode<T> CreateNode(T value, BinaryNode<T> parent = null)
         {
             return new AvlCountedNode<T>()
             {
@@ -18,9 +19,9 @@ namespace Lazinator.Collections.Avl
             };
         }
 
-        protected int CompareIndices(long desiredNodeIndex, AvlNode<T> node)
+        protected int CompareIndices(long desiredNodeIndex, AvlCountedNode<T> node)
         {
-            long actualNodeIndex = ((AvlCountedNode<T>)node).Index;
+            long actualNodeIndex = node.Index;
             int compare;
             if (desiredNodeIndex == actualNodeIndex)
             {
@@ -33,9 +34,9 @@ namespace Lazinator.Collections.Avl
             return compare;
         }
 
-        private Func<AvlNode<T>, int> CompareIndexToNodesIndex(long index)
+        private Func<BinaryNode<T>, int> CompareIndexToNodesIndex(long index)
         {
-            return node => CompareIndices(index, node);
+            return node => CompareIndices(index, (AvlCountedNode<T>) node);
         }
 
         public long LongCount => (Root as AvlCountedNode<T>)?.LongCount ?? 0;
@@ -54,7 +55,7 @@ namespace Lazinator.Collections.Avl
         {
             ConfirmInRangeOrThrow(index);
             var node = GetMatchingNode(MultivalueLocationOptions.Any, CompareIndexToNodesIndex(index));
-            return node;
+            return (AvlNode<T>) node;
         }
 
         public T GetAt(long index)

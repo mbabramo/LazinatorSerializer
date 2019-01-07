@@ -39,6 +39,16 @@ namespace Lazinator.Collections.Tree
         public bool IsLeftNode => Parent != null && this == Parent._Left;
         public bool IsRightNode => Parent != null && this == Parent._Right;
 
+
+        protected virtual BinaryNode<T> CreateNode(T value, BinaryNode<T> parent = null)
+        {
+            return new BinaryNode<T>()
+            {
+                Value = value,
+                Parent = parent
+            };
+        }
+
         public BinaryNode<T> GetNextNode()
         {
             // All the nodes to the left are complete. Therefore, if there is a node to the right, we move to the right and then as far to the left as possible. Otherwise, we move to the first parent where this is on the left; if there is no such parent, we return null, because there is no last node.

@@ -16,6 +16,7 @@ namespace Lazinator.Collections.Avl
 
         public AvlNode<T> AvlLeft => (AvlNode<T>)Left;
         public AvlNode<T> AvlRight => (AvlNode<T>)Right;
+        public AvlNode<T> AvlParent => (AvlNode<T>)Parent;
         protected AvlNode<T> AvlLeftBackingField => (AvlNode<T>)_Left;
         protected AvlNode<T> AvlRightBackingField => (AvlNode<T>)_Right;
 

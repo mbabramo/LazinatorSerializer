@@ -6,7 +6,13 @@ using System.Text;
 
 namespace Lazinator.Collections.Tree
 {
-    public partial class BinaryTree<T> : IBinaryTree<T> where T : ILazinator
+    /// <summary>
+    /// A binary tree. Because it stores a value that need not implement IComparable, and because it is not countable,
+    /// direct users of this class must specify a custom comparer when searching, inserting or removing. Subclasses add
+    /// functionality for balancing, for accessing items by index, and for adding items that implement IComparable without a custom comparer.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public partial class BinaryTree<T> : IBinaryTree<T>, IOrderableContainer<T> where T : ILazinator
     {
         public BinaryNode<T> Root { get => throw new NotImplementedException(); set => throw new NotImplementedException(); } // DEBUG
 
@@ -136,7 +142,7 @@ namespace Lazinator.Collections.Tree
 
         public (BinaryNode<T> node, bool insertionNotReplacement) TryInsertSortedReturningNode(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryInsertSortedReturningNode(item, whichOne, node => CompareValueToNode(item, node, whichOne, comparer));
 
-        protected (BinaryNode<T> node, bool insertionNotReplacement) TryInsertSortedReturningNode(T item, MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
+        protected virtual (BinaryNode<T> node, bool insertionNotReplacement) TryInsertSortedReturningNode(T item, MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
         {
             BinaryNode<T> node = Root;
             while (node != null)
@@ -196,7 +202,7 @@ namespace Lazinator.Collections.Tree
 
         public BinaryNode<T> TryRemoveSortedReturningNode(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryRemoveSortedReturningNode(whichOne, node => CompareValueToNode(item, node, whichOne, comparer));
 
-        protected BinaryNode<T> TryRemoveSortedReturningNode(MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
+        protected virtual BinaryNode<T> TryRemoveSortedReturningNode(MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
         {
             BinaryNode<T> node = Root;
 
@@ -331,7 +337,7 @@ namespace Lazinator.Collections.Tree
             return null;
         }
 
-        protected internal void Replace(BinaryNode<T> target, BinaryNode<T> source)
+        protected internal virtual void Replace(BinaryNode<T> target, BinaryNode<T> source)
         {
             BinaryNode<T> left = source.Left;
             BinaryNode<T> right = source.Right;
@@ -349,6 +355,13 @@ namespace Lazinator.Collections.Tree
             {
                 right.Parent = target;
             }
+        }
+
+        public virtual IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
+        {
+            var enumerator = new BinaryNodeEnumerator<T>(reverse ? LastNode() : FirstNode(), reverse, skip);
+            while (enumerator.MoveNext())
+                yield return enumerator.Current.Value;
         }
 
     }
