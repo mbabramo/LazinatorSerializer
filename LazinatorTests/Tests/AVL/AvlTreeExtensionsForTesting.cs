@@ -8,7 +8,7 @@ namespace LazinatorTests.AVL
 {
     public static class AvlTreeExtensionsForTesting
     {
-        public static string Description<TKey>(this AvlTree<TKey, Placeholder> tree) where TKey : ILazinator, IComparable<TKey>
+        public static string Description<TKey>(this AvlOldTree<TKey, Placeholder> tree) where TKey : ILazinator, IComparable<TKey>
         {
             StringBuilder builder = new StringBuilder();
 
@@ -17,14 +17,14 @@ namespace LazinatorTests.AVL
             return builder.ToString();
         }
 
-        public static bool Insert<TKey>(this AvlTree<TKey, Placeholder> source, TKey key) where TKey : ILazinator, IComparable<TKey>
+        public static bool Insert<TKey>(this AvlOldTree<TKey, Placeholder> source, TKey key) where TKey : ILazinator, IComparable<TKey>
         {
             return source.Insert(key, default).inserted;
         }
 
-        public static int CountByEnumerating<TKey>(this AvlTree<TKey, Placeholder> source) where TKey : ILazinator, IComparable<TKey>
+        public static int CountByEnumerating<TKey>(this AvlOldTree<TKey, Placeholder> source) where TKey : ILazinator, IComparable<TKey>
         {
-            AvlNode<TKey, Placeholder> node = source.Root;
+            AvlOldNode<TKey, Placeholder> node = source.Root;
 
             if (node == null)
             {
@@ -36,7 +36,7 @@ namespace LazinatorTests.AVL
             }
         }
 
-        private static void Description<TKey>(StringBuilder builder, AvlNode<TKey, Placeholder> node) where TKey : ILazinator, IComparable<TKey>
+        private static void Description<TKey>(StringBuilder builder, AvlOldNode<TKey, Placeholder> node) where TKey : ILazinator, IComparable<TKey>
         {
             if (node != null)
             {

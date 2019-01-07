@@ -17,10 +17,10 @@ namespace LazinatorTests.AVL
         [Fact]
         public void DeserializedAvlTreeOrdersItemsCorrectly()
         {
-            GetTreeAndItems(out AvlTree<WInt, WInt> tree, out Dictionary<int, int> items, out int firstKey);
+            GetTreeAndItems(out AvlOldTree<WInt, WInt> tree, out Dictionary<int, int> items, out int firstKey);
 
             var enumerated = tree.Select(x => x.Value.WrappedValue).ToList();
-            AvlTree<WInt, WInt> clone = tree.CloneLazinatorTyped();
+            AvlOldTree<WInt, WInt> clone = tree.CloneLazinatorTyped();
             var enumerated2 = clone.Select(x => x.Value.WrappedValue).ToList();
             var correctOrder = items.OrderBy(x => x.Key).Select(x => x.Value).ToList();
             enumerated.SequenceEqual(correctOrder).Should().BeTrue();
@@ -30,13 +30,13 @@ namespace LazinatorTests.AVL
         [Fact]
         public void AvlTreeAllowsSearchAfterDeserialization()
         {
-            GetTreeAndItems(out AvlTree<WInt, WInt> tree, out Dictionary<int, int> items, out int firstKey);
+            GetTreeAndItems(out AvlOldTree<WInt, WInt> tree, out Dictionary<int, int> items, out int firstKey);
 
             LazinatorMemory b = tree.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
             //const int repetitions = 10000;
             //for (int i = 0; i < repetitions; i++)
             //{
-                var tree2 = new AvlTree<WInt, WInt>()
+                var tree2 = new AvlOldTree<WInt, WInt>()
                 {
                 };
                 tree2.DeserializeLazinator(b);
@@ -45,15 +45,15 @@ namespace LazinatorTests.AVL
             //}
         }
 
-        private AvlTree<WInt, WInt> GetTree()
+        private AvlOldTree<WInt, WInt> GetTree()
         {
-            GetTreeAndItems(out AvlTree<WInt, WInt> t, out _, out _ );
+            GetTreeAndItems(out AvlOldTree<WInt, WInt> t, out _, out _ );
             return t;
         }
 
-        private void GetTreeAndItems(out AvlTree<WInt, WInt> tree, out Dictionary<int, int> items, out int firstKey)
+        private void GetTreeAndItems(out AvlOldTree<WInt, WInt> tree, out Dictionary<int, int> items, out int firstKey)
         {
-            tree = new AvlTree<WInt, WInt>();
+            tree = new AvlOldTree<WInt, WInt>();
             items = new Dictionary<int, int>();
             firstKey = 0;
             for (int i = 0; i < 100; i++)

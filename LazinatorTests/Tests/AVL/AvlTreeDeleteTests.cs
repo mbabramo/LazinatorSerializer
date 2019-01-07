@@ -248,7 +248,7 @@ namespace LazinatorTests.AVL
 			AssertTreeValid("30+:{20-:{10,25+:{24,~}},35-:{~,36}}", tree);
 		}
 
-		private void AssertTreeValid(string description, AvlTree<WInt, Placeholder> tree)
+		private void AssertTreeValid(string description, AvlOldTree<WInt, Placeholder> tree)
 		{
 			Console.WriteLine(tree.Description());
 
@@ -264,9 +264,9 @@ namespace LazinatorTests.AVL
 			}
 		}
 
-		private AvlTree<WInt, Placeholder> SetupTree(params int[] values)
+		private AvlOldTree<WInt, Placeholder> SetupTree(params int[] values)
 		{
-			var tree = new AvlTree<WInt, Placeholder>();
+			var tree = new AvlOldTree<WInt, Placeholder>();
 
 			foreach (int value in values)
 			{

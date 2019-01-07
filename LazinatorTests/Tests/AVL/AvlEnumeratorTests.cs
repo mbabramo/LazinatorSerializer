@@ -57,15 +57,15 @@ namespace LazinatorTests.AVL
 			{
 				count++;
 
-				Assert.Equal(count, ((AvlNode<WInt, WByte>)enumerator.Current).Key.WrappedValue);
+				Assert.Equal(count, ((AvlOldNode<WInt, WByte>)enumerator.Current).Key.WrappedValue);
 			}
 
 			Assert.Equal(5, count);
 		}
 
-		private AvlTree<WInt, WByte> SetupTree(params int[] values)
+		private AvlOldTree<WInt, WByte> SetupTree(params int[] values)
 		{
-			var tree = new AvlTree<WInt, WByte>();
+			var tree = new AvlOldTree<WInt, WByte>();
 
 			foreach (int value in values)
 			{

@@ -13,11 +13,11 @@ namespace Lazinator.Collections.Avl
     {
         #region Node access and constructor
 
-        private AvlNode<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> _CorrespondingNode;
+        private AvlOldNode<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> _CorrespondingNode;
 
         private ILazinatorSortableFactory<LazinatorKeyValue<TKey, TValue>> SortableFactory;
 
-        public AvlNode<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> ParentNode => _CorrespondingNode.Parent;
+        public AvlOldNode<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> ParentNode => _CorrespondingNode.Parent;
         public AvlListNodeContents<TKey, TValue> ParentContents
         {
             get
@@ -45,7 +45,7 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        public void SetCorrespondingNode(AvlNode<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> correspondingNode)
+        public void SetCorrespondingNode(AvlOldNode<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> correspondingNode)
         {
             _CorrespondingNode = correspondingNode;
         }

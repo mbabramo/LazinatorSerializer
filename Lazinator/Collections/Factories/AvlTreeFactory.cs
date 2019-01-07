@@ -10,7 +10,7 @@ namespace Lazinator.Collections.Factories
     {
         public ILazinatorOrderedKeyable<TKey, TValue> Create()
         {
-            return new AvlTree<TKey, TValue>()
+            return new AvlOldTree<TKey, TValue>()
             {
                 AllowDuplicates = AllowDuplicates
             };

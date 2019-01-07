@@ -15,7 +15,7 @@ namespace LazinatorTests.AVL
         [Fact]
         public void AvlTreeSearchWorks()
         {
-            var tree = new AvlTree<WInt, WString>();
+            var tree = new AvlOldTree<WInt, WString>();
             int[] ints = new int[] { 1, 2, 3, 4, 6, 7, 8, 10, 13, 14 };
             foreach (int x in ints)
                 tree.Insert(x, x.ToString());
@@ -36,13 +36,13 @@ namespace LazinatorTests.AVL
         [Fact]
         public void SearchMatchOrNextWorks()
         {
-            var tree = new AvlTree<WInt, WString>();
+            var tree = new AvlOldTree<WInt, WString>();
             int[] ints = new int[] { 1, 2, 3, 4, 6, 7, 8, 10, 13, 14 };
             foreach (int x in ints)
                 tree.Insert(x, x.ToString());
             foreach (int x in ints)
             {
-                (AvlNode<WInt, WString> node, long index, bool found) = tree.GetMatchingOrNextNode(x);
+                (AvlOldNode<WInt, WString> node, long index, bool found) = tree.GetMatchingOrNextNode(x);
                 node.Value.WrappedValue.Should().Be(x.ToString());
             }
             for (int x = 0; x < 16; x++)

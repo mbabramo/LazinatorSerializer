@@ -11,7 +11,7 @@ namespace Lazinator.Collections.Avl
         private long OverallIndex;
         private long TreeCount;
         private AvlListNodeTree<TKey, TValue> Tree;
-        AvlNode<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> CurrentNode;
+        AvlOldNode<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> CurrentNode;
         AvlListNodeContents<TKey, TValue> CurrentNodeContents;
         int IndexInNode;
 

@@ -7,12 +7,12 @@ namespace LazinatorTests.AVL
 {
     public static class AvlNodeExtensionsForTesting
 	{
-		public static int CountByEnumerating<TKey>(this AvlNode<TKey, Placeholder> source) where TKey : ILazinator, IComparable<TKey>
+		public static int CountByEnumerating<TKey>(this AvlOldNode<TKey, Placeholder> source) where TKey : ILazinator, IComparable<TKey>
         {
 			int count = 1;
 
-			AvlNode<TKey, Placeholder> left = source.Left;
-			AvlNode<TKey, Placeholder> right = source.Right;
+			AvlOldNode<TKey, Placeholder> left = source.Left;
+			AvlOldNode<TKey, Placeholder> right = source.Right;
 
 			if (right != null)
 			{

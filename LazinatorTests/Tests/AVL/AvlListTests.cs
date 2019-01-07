@@ -28,7 +28,7 @@ namespace LazinatorTests.AVL
         {
             int DeserializedNodesCount(AvlList<WInt> avlList)
             {
-                return avlList.EnumerateLazinatorNodes(x => true, false, x => true, true, false).Where(x => x is AvlNode<WByte, WInt>).Count();
+                return avlList.EnumerateLazinatorNodes(x => true, false, x => true, true, false).Where(x => x is AvlOldNode<WByte, WInt>).Count();
             }
 
             AvlList<WInt> list = AvlList<WInt>.CreateWithDefaultFactory();

@@ -121,5 +121,7 @@
         ILazinatorTree,
         ILazinatorSortedTree,
         ILazinatorSortedIndexableTree,
+        ILazinatorSortedIndexableKeyValueTree,
+        ILazinatorSortedMultivalueTree,
     }
 }

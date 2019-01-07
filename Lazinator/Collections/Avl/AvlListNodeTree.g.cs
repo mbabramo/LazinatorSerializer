@@ -120,8 +120,8 @@ namespace Lazinator.Collections.Avl
         protected bool _SortableListFactory_Accessed;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected AvlTree<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> _UnderlyingTree;
-        public virtual AvlTree<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> UnderlyingTree
+        protected AvlOldTree<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> _UnderlyingTree;
+        public virtual AvlOldTree<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>> UnderlyingTree
         {
             [DebuggerStepThrough]
             get
@@ -130,13 +130,13 @@ namespace Lazinator.Collections.Avl
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _UnderlyingTree = default(AvlTree<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>>);
+                        _UnderlyingTree = default(AvlOldTree<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>>);
                     }
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _UnderlyingTree_ByteIndex, _UnderlyingTree_ByteLength, false, false, null);
                         
-                        _UnderlyingTree = DeserializationFactory.Instance.CreateBaseOrDerivedType(95, () => new AvlTree<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>>(), childData, this); 
+                        _UnderlyingTree = DeserializationFactory.Instance.CreateBaseOrDerivedType(95, () => new AvlOldTree<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>>(), childData, this); 
                     }
                     _UnderlyingTree_Accessed = true;
                 } 
@@ -243,11 +243,11 @@ namespace Lazinator.Collections.Avl
             {
                 if (UnderlyingTree == null)
                 {
-                    typedClone.UnderlyingTree = default(AvlTree<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>>);
+                    typedClone.UnderlyingTree = default(AvlOldTree<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>>);
                 }
                 else
                 {
-                    typedClone.UnderlyingTree = (AvlTree<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>>) UnderlyingTree.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.UnderlyingTree = (AvlOldTree<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>>) UnderlyingTree.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
             }
             
@@ -451,7 +451,7 @@ namespace Lazinator.Collections.Avl
             }
             if ((!exploreOnlyDeserializedChildren && UnderlyingTree != null) || (_UnderlyingTree_Accessed && _UnderlyingTree != null))
             {
-                _UnderlyingTree = (AvlTree<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>>) _UnderlyingTree.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
+                _UnderlyingTree = (AvlOldTree<LazinatorKeyValue<TKey, TValue>, AvlListNodeContents<TKey, TValue>>) _UnderlyingTree.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if (changeThisLevel)
             {

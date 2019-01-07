@@ -5,9 +5,9 @@ using System;
 namespace Lazinator.Collections.Avl
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlTree)]
-    public interface IAvlTree<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
+    public interface IAvlOldTree<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         bool AllowDuplicates { get; set; }
-        AvlNode<TKey, TValue> Root { get; set; }
+        AvlOldNode<TKey, TValue> Root { get; set; }
     }
 }

@@ -47,7 +47,7 @@ namespace Lazinator.Collections.Avl
 
         public void Clear()
         {
-            UnderlyingTree = (ILazinatorOrderedKeyable<Placeholder, T>) new AvlTree<Placeholder, T>();
+            UnderlyingTree = (ILazinatorOrderedKeyable<Placeholder, T>) new AvlOldTree<Placeholder, T>();
         }
 
         public bool Contains(T item)

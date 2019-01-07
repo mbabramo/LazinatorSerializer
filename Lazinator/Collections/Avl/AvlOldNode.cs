@@ -7,24 +7,24 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlNode<TKey, TValue> : IAvlNode<TKey, TValue>
+    public partial class AvlOldNode<TKey, TValue> : IAvlOldNode<TKey, TValue>
         where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         public KeyValuePair<TKey, TValue> KeyValuePair => new KeyValuePair<TKey, TValue>(Key, Value);
         public LazinatorKeyValue<TKey, TValue> LazinatorKeyValue => new LazinatorKeyValue<TKey, TValue>(Key, Value);
 
         // We can't serialize the Parent, because an item can't appear multiple times in a hierarchy, so we use the Lazinator built-in parent as a substitute.
-        private AvlNode<TKey, TValue> _Parent;
-        public AvlNode<TKey, TValue> Parent
+        private AvlOldNode<TKey, TValue> _Parent;
+        public AvlOldNode<TKey, TValue> Parent
         {
             get
             {
                 if (_Parent == null)
                 {
-                    if (LazinatorParents.LastAdded is AvlTree<TKey, TValue> p)
+                    if (LazinatorParents.LastAdded is AvlOldTree<TKey, TValue> p)
                         _Parent = null;
                     else
-                        _Parent = (AvlNode<TKey, TValue>) LazinatorParents.LastAdded;
+                        _Parent = (AvlOldNode<TKey, TValue>) LazinatorParents.LastAdded;
                 }
 
                 return _Parent;
@@ -36,10 +36,10 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        public AvlNode<TKey, TValue> GetNextNode()
+        public AvlOldNode<TKey, TValue> GetNextNode()
         {
             // All the nodes to the left are complete. Therefore, if there is a node to the right, we move to the right and then as far to the left as possible. Otherwise, we move to the first parent where this is on the left; if there is no such parent, we return null, because there is no last node.
-            AvlNode<TKey, TValue> current = this;
+            AvlOldNode<TKey, TValue> current = this;
             if (current.Right != null)
             {
                 current = current.Right;
@@ -62,10 +62,10 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        public AvlNode<TKey, TValue> GetPreviousNode()
+        public AvlOldNode<TKey, TValue> GetPreviousNode()
         {
             // If there is a left node, then we just came from there. 
-            AvlNode<TKey, TValue> current = this;
+            AvlOldNode<TKey, TValue> current = this;
             if (current.Left != null)
             {
                 current = current.Left;
