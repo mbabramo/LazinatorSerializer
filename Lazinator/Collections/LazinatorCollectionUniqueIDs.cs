@@ -126,5 +126,7 @@
         IAvlNode,
         IAvlTree,
         IAvlSortedTree,
+        IAvlCountedNode,
+        IAvlIndexableTree,
     }
 }

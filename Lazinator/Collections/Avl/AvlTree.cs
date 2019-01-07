@@ -1,12 +1,13 @@
 ﻿using Lazinator.Collections.Interfaces;
 using Lazinator.Core;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Lazinator.Collections.Avl
 {
-    public class AvlTree<T> : IAvlTree<T>, IOrderableContainer<T> where T : ILazinator
+    public class AvlTree<T> : IAvlTree<T>, IOrderableContainer<T>, IEnumerable<T> where T : ILazinator
     {
         public AvlNode<T> Root { get => throw new NotImplementedException(); set => throw new NotImplementedException(); } // DEBUG
 
@@ -19,14 +20,28 @@ namespace Lazinator.Collections.Avl
             };
         }
 
-        protected (AvlNode<T> node, bool found) GetMatchingOrNextNode(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer)
+        public string ToTreeString() => Root?.ToTreeString() ?? "";
+
+        protected AvlNode<T> GetMatchingNode(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer) => GetMatchingNode(whichOne, node => CompareValueToNode(value, node, whichOne, comparer));
+
+        protected AvlNode<T> GetMatchingNode(MultivalueLocationOptions whichOne, Func<AvlNode<T>, int> comparisonFunc)
+        {
+            var result = GetMatchingOrNextNode(whichOne, comparisonFunc);
+            if (result.found)
+                return result.node;
+            return null;
+        }
+
+        protected (AvlNode<T> node, bool found) GetMatchingOrNextNode(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer) => GetMatchingOrNextNode(whichOne, node => CompareValueToNode(value, node, whichOne, comparer));
+
+        protected (AvlNode<T> node, bool found) GetMatchingOrNextNode(MultivalueLocationOptions whichOne, Func<AvlNode<T>, int> comparisonFunc)
         {
             AvlNode<T> node = Root;
             if (node == null)
                 return (null, false);
             while (true)
             {
-                int comparison = CompareValueToNode(value, node, whichOne, comparer);
+                int comparison = comparisonFunc(node);
                 if (comparison < 0)
                 {
                     if (node.Left == null)
@@ -87,12 +102,15 @@ namespace Lazinator.Collections.Avl
         }
 
         /// <summary>
-        /// Gets the node containing the value, or which would contain the value if it were inserted, or the last node if there otherwise is no such node.
+        /// Gets the last node.
         /// </summary>
         /// <returns></returns>
-        protected AvlNode<T> NodeForValue(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer)
+        protected AvlNode<T> FirstNode()
         {
-            return GetMatchingOrNextNode(value, whichOne, comparer).node ?? LastNode();
+            var x = Root;
+            while (x.Left != null)
+                x = x.Left;
+            return x;
         }
 
         /// <summary>
@@ -109,14 +127,24 @@ namespace Lazinator.Collections.Avl
 
         public bool TryInsertSorted(T item, IComparer<T> comparer) => TryInsertSorted(item, MultivalueLocationOptions.Any, comparer);
 
-        public bool TryInsertSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
+        public bool TryInsertSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryInsertSorted(item, whichOne, node => CompareValueToNode(item, node, whichOne, comparer));
+
+        protected bool TryInsertSorted(T item, MultivalueLocationOptions whichOne, Func<AvlNode<T>, int> comparisonFunc)
+        {
+            var result = TryInsertSortedReturningNode(item, whichOne, comparisonFunc);
+            return result.insertionNotReplacement;
+        }
+
+        public (AvlNode<T> node, bool insertionNotReplacement) TryInsertSortedReturningNode(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryInsertSortedReturningNode(item, whichOne, node => CompareValueToNode(item, node, whichOne, comparer));
+
+        protected (AvlNode<T> node, bool insertionNotReplacement) TryInsertSortedReturningNode(T item, MultivalueLocationOptions whichOne, Func<AvlNode<T>, int> comparisonFunc)
         {
             AvlNode<T> node = Root;
             while (node != null)
             {
                 node.NodeVisitedDuringChange = true;
 
-                int compare = CompareValueToNode(item, node, whichOne, comparer);
+                int compare = comparisonFunc(node);
 
                 if (compare < 0)
                 {
@@ -130,7 +158,7 @@ namespace Lazinator.Collections.Avl
                         // index is same as node
                         InsertBalance(node, 1);
 
-                        return (true);
+                        return (node, true);
                     }
                     else
                     {
@@ -149,7 +177,7 @@ namespace Lazinator.Collections.Avl
 
                         InsertBalance(node, -1);
 
-                        return true;
+                        return (node, true);
                     }
                     else
                     {
@@ -160,19 +188,25 @@ namespace Lazinator.Collections.Avl
                 {
                     node.Value = item;
 
-                    return false;
+                    return (node, false);
                 }
             }
 
             Root = CreateNode(item);
             Root.NodeVisitedDuringChange = true;
 
-            return true;
+            return (node, true);
         }
 
         public bool TryRemoveSorted(T item, IComparer<T> comparer) => TryRemoveSorted(item, MultivalueLocationOptions.Any, comparer);
 
-        public bool TryRemoveSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
+        public bool TryRemoveSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryRemoveSorted(whichOne, node => CompareValueToNode(item, node, whichOne, comparer));
+
+        protected bool TryRemoveSorted(MultivalueLocationOptions whichOne, Func<AvlNode<T>, int> comparisonFunc) => TryRemoveSortedReturningNode(whichOne, comparisonFunc) != null;
+
+        public AvlNode<T> TryRemoveSortedReturningNode(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryRemoveSortedReturningNode(whichOne, node => CompareValueToNode(item, node, whichOne, comparer));
+
+        protected AvlNode<T> TryRemoveSortedReturningNode(MultivalueLocationOptions whichOne, Func<AvlNode<T>, int> comparisonFunc)
         {
             AvlNode<T> node = Root;
             
@@ -180,7 +214,7 @@ namespace Lazinator.Collections.Avl
             {
                 node.NodeVisitedDuringChange = true;
 
-                int compare = CompareValueToNode(item, node, whichOne, comparer);
+                int compare = comparisonFunc(node);
                 if (compare < 0)
                 {
                     node = node.Left;
@@ -322,11 +356,11 @@ namespace Lazinator.Collections.Avl
                         }
                     }
 
-                    return true;
+                    return node;
                 }
             }
 
-            return false;
+            return null;
         }
 
         #region Balancing
@@ -660,6 +694,30 @@ namespace Lazinator.Collections.Avl
             {
                 right.Parent = target;
             }
+        }
+
+        #endregion
+
+        #region Enumeration
+
+        public IEnumerable<T> AsEnumerable(long skip = 0)
+        {
+            var enumerator = new AvlNodeEnumerator<T>(FirstNode());
+            long i = skip;
+            while (i > 0)
+                enumerator.MoveNext();
+            while (enumerator.MoveNext())
+                yield return enumerator.Current.Value;
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            return (IEnumerator<T>)this;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return (IEnumerator<T>)this;
         }
 
         #endregion
