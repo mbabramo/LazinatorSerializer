@@ -22,11 +22,6 @@ namespace Lazinator.Collections.Avl
         {
         }
 
-        public virtual void EnsureInitialized()
-        {
-
-        }
-
 
     }
 }

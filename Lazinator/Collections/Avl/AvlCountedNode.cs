@@ -48,11 +48,6 @@ namespace Lazinator.Collections.Avl
                 NodeVisitedDuringChange = false;
         }
 
-        public override void EnsureInitialized()
-        {
-            var index = Index; // loads the index into _Index, thus allowing read of former index even if item is removed.
-        }
-
         internal void ResetIndicesFollowingTreeSplit()
         {
             _Index = null;
