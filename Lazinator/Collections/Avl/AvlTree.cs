@@ -132,13 +132,13 @@ namespace Lazinator.Collections.Avl
                                 if (parent.Left == node)
                                 {
                                     parent.Left = null;
-                                    node.Parent = null;
+
                                     DeleteBalance(parent, -1);
                                 }
                                 else
                                 {
                                     parent.Right = null;
-                                    node.Parent = null;
+
                                     DeleteBalance(parent, 1);
                                 }
                             }
@@ -181,12 +181,10 @@ namespace Lazinator.Collections.Avl
                                 if (parent.Left == node)
                                 {
                                     parent.Left = successor;
-                                    successor.Parent = parent;
                                 }
                                 else
                                 {
                                     parent.Right = successor;
-                                    successor.Parent = parent;
                                 }
                             }
 
@@ -236,12 +234,10 @@ namespace Lazinator.Collections.Avl
                                 if (parent.Left == node)
                                 {
                                     parent.Left = successor;
-                                    successor.Parent = parent;
                                 }
                                 else
                                 {
                                     parent.Right = successor;
-                                    successor.Parent = parent;
                                 }
                             }
 
