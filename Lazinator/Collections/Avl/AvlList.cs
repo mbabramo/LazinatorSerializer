@@ -9,21 +9,12 @@ namespace Lazinator.Collections.Avl
 {
     public partial class AvlList<T> : IAvlList<T>, IList<T>, ILazinatorListable<T> where T : ILazinator
     {
-        public static AvlList<T> CreateWithDefaultFactory(IEnumerable<T> itemsToAdd = null)
+        public AvlList()
         {
-            var l = new AvlList<T>((ILazinatorOrderedKeyableFactory<Placeholder, T>)new AvlTreeFactory<Placeholder, T>());
-            if (itemsToAdd != null)
-                foreach (T item in itemsToAdd)
-                    l.Add(item);
-            return l;
+            UnderlyingTree = new AvlIndexableTree<T>();
         }
 
-        public AvlList(ILazinatorOrderedKeyableFactory<Placeholder, T> factory)
-        {
-            UnderlyingTree = factory.Create();
-        }
-
-        public AvlList(ILazinatorOrderedKeyable<Placeholder, T> underlyingTree)
+        public AvlList(AvlIndexableTree<T> underlyingTree)
         {
             UnderlyingTree = underlyingTree;
         }
@@ -34,7 +25,7 @@ namespace Lazinator.Collections.Avl
             set => SetAt(index, value);
         }
 
-        public long Count => UnderlyingTree.Count;
+        public long Count => UnderlyingTree.LongCount;
 
         public bool IsReadOnly => false;
 
@@ -47,7 +38,7 @@ namespace Lazinator.Collections.Avl
 
         public void Clear()
         {
-            UnderlyingTree = (ILazinatorOrderedKeyable<Placeholder, T>) new AvlOldTree<Placeholder, T>();
+            UnderlyingTree = new AvlIndexableTree<T>();
         }
 
         public bool Contains(T item)
@@ -61,7 +52,7 @@ namespace Lazinator.Collections.Avl
                 throw new ArgumentNullException();
             if (arrayIndex < 0)
                 throw new ArgumentOutOfRangeException();
-            if (UnderlyingTree.Count > array.Length - arrayIndex + 1)
+            if (UnderlyingTree.LongCount > array.Length - arrayIndex + 1)
                 throw new ArgumentException();
             foreach (var item in this)
             {
@@ -71,12 +62,12 @@ namespace Lazinator.Collections.Avl
 
         public IEnumerator<T> GetEnumerator()
         {
-            return UnderlyingTree.GetValueEnumerator();
+            return UnderlyingTree.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return UnderlyingTree.GetValueEnumerator();
+            return UnderlyingTree.GetEnumerator();
         }
 
         public int IndexOf(T item)
@@ -118,13 +109,13 @@ namespace Lazinator.Collections.Avl
             InsertAt((long) index, item);
         }
 
-        #region ILazinatorCountableListableFactory 
+        #region ILazinatorListable 
 
         public long LongCount => Count;
 
         public void InsertAt(long index, T item)
         {
-            UnderlyingTree.InsertAtIndex(new Placeholder(), item, index);
+            UnderlyingTree.InsertAt(index, item);
         }
 
         public void RemoveAt(long index)
@@ -132,30 +123,25 @@ namespace Lazinator.Collections.Avl
             UnderlyingTree.RemoveAt(index);
         }
 
-        public IEnumerable<T> AsEnumerable(long skip)
+        public IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
         {
-            if (skip > Count || skip < 0)
-                throw new ArgumentException();
-            if (Count == 0)
-                yield break;
-            var valueEnumerator = UnderlyingTree.GetValueEnumerator(skip);
-            while (valueEnumerator.MoveNext())
-                yield return valueEnumerator.Current;
+            foreach (var item in UnderlyingTree.AsEnumerable(reverse, skip))
+                yield return item;
         }
 
         public T GetAt(long index)
         {
-            return UnderlyingTree.ValueAtIndex(index);
+            return UnderlyingTree.GetAt(index);
         }
 
         public void SetAt(long index, T value)
         {
-            UnderlyingTree.SetValueAtIndex(index, value);
+            UnderlyingTree.SetAt(index, value);
         }
 
         public virtual ILazinatorSplittable SplitOff()
         {
-            AvlList<T> partSplitOff = new AvlList<T>((ILazinatorOrderedKeyable<Placeholder, T>) UnderlyingTree.SplitOff());
+            AvlList<T> partSplitOff = new AvlList<T>((AvlIndexableTree<T>) UnderlyingTree.SplitOff());
             return partSplitOff;
         }
 

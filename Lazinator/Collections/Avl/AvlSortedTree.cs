@@ -8,6 +8,11 @@ namespace Lazinator.Collections.Avl
 {
     public partial class AvlSortedTree<T> : AvlTree<T>, IAvlSortedTree<T>, ISortedContainer<T> where T : ILazinator , IComparable<T>
     {
+        public override IOrderableContainer<T> CreateNewWithSameSettings()
+        {
+            return new AvlSortedTree<T>() { AllowDuplicates = AllowDuplicates };
+        }
+
         public bool Contains(T item) => Contains(item, Comparer<T>.Default);
 
         public bool TryInsertSorted(T item) => TryInsertSorted(item, AllowDuplicates ? MultivalueLocationOptions.AfterLast : MultivalueLocationOptions.Any);

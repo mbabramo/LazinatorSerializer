@@ -28,8 +28,6 @@
   <ItemGroup>
     <Compile Remove="Collections\Avl\AvlDictionary.cs" />
     <Compile Remove="Collections\Avl\AvlDictionary.g.cs" />
-    <Compile Remove="Collections\Avl\AvlList.cs" />
-    <Compile Remove="Collections\Avl\AvlList.g.cs" />
     <Compile Remove="Collections\Avl\AvlListNodeContents.cs" />
     <Compile Remove="Collections\Avl\AvlListNodeContents.g.cs" />
     <Compile Remove="Collections\Avl\AvlListNodeTree.cs" />
@@ -44,7 +42,6 @@
     <Compile Remove="Collections\Avl\AvlSortedList.cs" />
     <Compile Remove="Collections\Avl\AvlSortedList.g.cs" />
     <Compile Remove="Collections\Avl\IAvlDictionary.cs" />
-    <Compile Remove="Collections\Avl\IAvlList.cs" />
     <Compile Remove="Collections\Avl\IAvlListNodeContents.cs" />
     <Compile Remove="Collections\Avl\IAvlListNodeTree.cs" />
     <Compile Remove="Collections\Avl\IAvlOldNode.cs" />

@@ -11,6 +11,8 @@ namespace Lazinator.Collections.Avl
         public long LongCount => LeftCount + SelfCount + RightCount;
 
         public AvlCountedNode<T> ParentCountedNode => (AvlCountedNode<T>)Parent;
+        public AvlCountedNode<T> LeftCountedNode => (AvlCountedNode<T>)Left;
+        public AvlCountedNode<T> RightCountedNode => (AvlCountedNode<T>)Right;
 
         public long? _Index;
         public long Index

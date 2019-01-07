@@ -15,6 +15,11 @@ namespace Lazinator.Collections.Tree
     /// <typeparam name="T"></typeparam>
     public partial class BinaryTree<T> : IBinaryTree<T>, IOrderableContainer<T> where T : ILazinator
     {
+        public virtual IOrderableContainer<T> CreateNewWithSameSettings()
+        {
+            return new BinaryTree<T>();
+        }
+
         protected virtual BinaryNode<T> CreateNode(T value, BinaryNode<T> parent = null)
         {
             return new BinaryNode<T>()
