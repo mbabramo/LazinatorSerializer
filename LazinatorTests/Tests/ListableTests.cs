@@ -287,7 +287,7 @@ namespace LazinatorTests.Tests
             (bool isSorted, bool allowsDuplicates) = GetSortedInfo(listFactoryToUse);
             var factory = GetListFactory(listFactoryToUse);
             bool trace = false;
-            bool testIntermediateValues = true; // DEBUG
+            bool testIntermediateValues = false;
             Random r = new Random(0);
             ILazinatorListable<WInt> l = factory.CreateListable();
             List<int> o = new List<int>();
@@ -300,11 +300,6 @@ namespace LazinatorTests.Tests
                 int maxValue = isSorted ? totalChanges / 2 : 999999; // fewer possibilities if sorted so we can get some duplicates
                 for (int i = 0; i < totalChanges; i++)
                 {
-                    //if (i > 0 && l is Lazinator.Collections.Avl.AvlList<WInt> DEBUG)
-                    //{
-                    //    DEBUG.UnderlyingTree.Root.Print("", false);
-                    //    Debug.WriteLine($"");
-                    //}
                     if (o.Count == 0 || r.Next(0, 100) < (i > switchToMoreDeletionsAfter ? 30 : 70))
                     {
                         int j;
