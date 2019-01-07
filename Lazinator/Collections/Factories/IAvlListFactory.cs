@@ -7,6 +7,6 @@ namespace Lazinator.Collections.Factories
     [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlListFactory)]
     public interface IAvlListFactory<T> where T : ILazinator
     {
-        ILazinatorOrderedKeyableFactory<Placeholder, T> OrderedKeyableFactory { get; set; }
+        IIndexableContainerFactory<T> IndexableContainerFactory { get; set; }
     }
 }

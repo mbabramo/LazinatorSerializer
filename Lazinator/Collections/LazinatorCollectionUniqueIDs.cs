@@ -133,5 +133,7 @@
         IBinaryTree,
         ILazinatorDictionaryable,
         ILazinatorDictionaryableFactory,
+        IIndexableContainerFactory,
+        ISortedIndexableContainerFactory,
     }
 }

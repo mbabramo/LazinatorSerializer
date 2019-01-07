@@ -7,7 +7,7 @@ using System.Text;
 namespace Lazinator.Collections.Interfaces
 {
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorIndexableTree)]
-    public interface IIndexableContainer<T> : IOrderableContainer<T> where T : ILazinator
+    public interface IIndexableContainer<T> : IOrderableContainer<T>, ICountableContainer where T : ILazinator
     {
         T GetAt(long index);
         void SetAt(long index, T value);
@@ -16,8 +16,8 @@ namespace Lazinator.Collections.Interfaces
 
         (long index, bool exists) FindSorted(T target, IComparer<T> comparer);
         (long index, bool exists) FindSorted(T target, MultivalueLocationOptions whichOne, IComparer<T> comparer);
-        (long index, bool insertionNotReplacement) InsertSorted(T item, IComparer<T> comparer);
-        (long index, bool insertionNotReplacement) InsertSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer);
+        (long index, bool insertedNotReplaced) InsertSorted(T item, IComparer<T> comparer);
+        (long index, bool insertedNotReplaced) InsertSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer);
         (long priorIndex, bool existed) RemoveSorted(T item, IComparer<T> comparer);
         (long priorIndex, bool existed) RemoveSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer);
     }

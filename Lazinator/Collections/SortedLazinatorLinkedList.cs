@@ -1,4 +1,5 @@
-﻿using Lazinator.Core;
+﻿using Lazinator.Collections.Interfaces;
+using Lazinator.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,20 +8,20 @@ namespace Lazinator.Collections
 {
     public partial class SortedLazinatorLinkedList<T> : LazinatorLinkedList<T>, ISortedLazinatorLinkedList<T>, ILazinatorSortable<T> where T : IComparable<T>, ILazinator
     {
-        public (long location, bool rejectedAsDuplicate) InsertSorted(T item) => InsertSorted(item, Comparer<T>.Default);
-        public (long priorLocation, bool existed) RemoveSorted(T item) => RemoveSorted(item, Comparer<T>.Default);
-        public (long location, bool exists) FindSorted(T target) => FindSorted(target, Comparer<T>.Default);
+        public (long index, bool insertedNotReplaced) InsertSorted(T item) => InsertSorted(item, Comparer<T>.Default);
+        public (long priorIndex, bool existed) RemoveSorted(T item) => RemoveSorted(item, Comparer<T>.Default);
+        public (long index, bool exists) FindSorted(T target) => FindSorted(target, Comparer<T>.Default);
 
-        public (long location, bool rejectedAsDuplicate) InsertSorted(T item, IComparer<T> comparer)
+        public (long index, bool insertedNotReplaced) InsertSorted(T item, IComparer<T> comparer)
         {
-            (long location, bool exists) = FindSorted(item, comparer);
+            (long index, bool exists) = FindSorted(item, comparer);
             if (exists && !AllowDuplicates)
-                return (location, true);
-            Insert((int)location, item);
-            return (location, false);
+                return (index, false);
+            Insert((int)index, item);
+            return (index, true);
         }
 
-        public (long priorLocation, bool existed) RemoveSorted(T item, IComparer<T> comparer)
+        public (long priorIndex, bool existed) RemoveSorted(T item, IComparer<T> comparer)
         {
             (long location, bool exists) = FindSorted(item);
             if (exists)
@@ -28,7 +29,7 @@ namespace Lazinator.Collections
             return (location, exists);
         }
 
-        public (long location, bool exists) FindSorted(T target, IComparer<T> comparer)
+        public (long index, bool exists) FindSorted(T target, IComparer<T> comparer)
         {
             bool found = false;
             if (Count == 0)

@@ -1,4 +1,5 @@
 ﻿using Lazinator.Buffers;
+using Lazinator.Collections.Interfaces;
 using Lazinator.Core;
 using System;
 using System.Collections.Generic;
@@ -6,16 +7,8 @@ using System.Text;
 
 namespace Lazinator.Collections.Factories
 {
-    public partial class AvlSortedListFactory<T> : IAvlSortedListFactory<T>, ILazinatorSortableFactory<T> where T : ILazinator, IComparable<T>
+    public partial class AvlIndexableTreeFactory<T> : IAvlIndexableTreeFactory<T> where T : ILazinator
     {
-        public AvlSortedListFactory(bool allowDuplicates, ISortedIndexableContainerFactory<T> sortedIndexableContainerFactory)
-        {
-            AllowDuplicates = allowDuplicates;
-            SortedIndexableContainerFactory = sortedIndexableContainerFactory;
-        }
-
-        public ISortedIndexableContainerFactory<T> SortedIndexableContainerFactory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool HasChanged { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool DescendantHasChanged { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool IsDirty { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -41,12 +34,7 @@ namespace Lazinator.Collections.Factories
             throw new NotImplementedException();
         }
 
-        public ILazinatorListable<T> CreateListable()
-        {
-            throw new NotImplementedException();
-        }
-
-        public ILazinatorSortable<T> CreateSortable()
+        public IIndexableContainer<T> CreateIndexableContainer()
         {
             throw new NotImplementedException();
         }

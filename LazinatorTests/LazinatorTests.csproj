@@ -24,7 +24,6 @@
     <Compile Remove="Tests\AVL\AvlTreeExtensionsForTesting.cs" />
     <Compile Remove="Tests\AVL\AvlTreeInsertTests.cs" />
     <Compile Remove="Tests\DictionaryTests.cs" />
-    <Compile Remove="Tests\ListableTests.cs" />
   </ItemGroup>
   
   <ItemGroup>

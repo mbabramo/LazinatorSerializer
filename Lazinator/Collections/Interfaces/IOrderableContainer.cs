@@ -11,6 +11,7 @@ namespace Lazinator.Collections.Interfaces
     {
         IOrderableContainer<T> CreateNewWithSameSettings();
         IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0);
+        IEnumerator<T> GetEnumerator();
         bool Contains(T item, IComparer<T> comparer);
         bool TryInsertSorted(T item, IComparer<T> comparer);
         bool TryInsertSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer);

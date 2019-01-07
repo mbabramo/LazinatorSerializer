@@ -1,4 +1,5 @@
 ﻿using Lazinator.Collections.Factories;
+using Lazinator.Collections.Interfaces;
 using Lazinator.Core;
 using Lazinator.Wrappers;
 using System;
@@ -12,6 +13,11 @@ namespace Lazinator.Collections.Avl
         public AvlList()
         {
             UnderlyingTree = new AvlIndexableTree<T>();
+        }
+
+        public AvlList(IIndexableContainerFactory<T> factory)
+        {
+            UnderlyingTree = factory.CreateIndexableContainer();
         }
 
         public AvlList(AvlIndexableTree<T> underlyingTree)
@@ -113,6 +119,8 @@ namespace Lazinator.Collections.Avl
 
         public long LongCount => Count;
 
+        public IIndexableContainer<T> UnderlyingTree { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public void InsertAt(long index, T item)
         {
             UnderlyingTree.InsertAt(index, item);
@@ -141,7 +149,7 @@ namespace Lazinator.Collections.Avl
 
         public virtual ILazinatorSplittable SplitOff()
         {
-            AvlList<T> partSplitOff = new AvlList<T>((AvlIndexableTree<T>) UnderlyingTree.SplitOff());
+            AvlList<T> partSplitOff = new AvlList<T>((AvlIndexableTree<T>) ((ILazinatorSplittable)UnderlyingTree).SplitOff());
             return partSplitOff;
         }
 

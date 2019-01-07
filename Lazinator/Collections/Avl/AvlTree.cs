@@ -30,7 +30,7 @@ namespace Lazinator.Collections.Avl
             };
         }
 
-        protected override (BinaryNode<T> node, bool insertionNotReplacement) TryInsertSortedReturningNode(T item, MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
+        protected override (BinaryNode<T> node, bool insertedNotReplaced) TryInsertSortedReturningNode(T item, MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
         {
             AvlNode<T> node = AvlRoot;
             while (node != null)
@@ -568,11 +568,6 @@ namespace Lazinator.Collections.Avl
         #endregion
 
         #region Enumeration
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return (IEnumerator<T>)this;
-        }
 
         IEnumerator IEnumerable.GetEnumerator()
         {

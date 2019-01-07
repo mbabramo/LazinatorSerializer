@@ -103,12 +103,12 @@ namespace Lazinator.Collections.Avl
                 return (node.Index, true);
             return (node?.Index ?? LongCount, false);
         }
-        public (long index, bool insertionNotReplacement) InsertSorted(T item, IComparer<T> comparer) => InsertSorted(item, MultivalueLocationOptions.Any, comparer);
-        public (long index, bool insertionNotReplacement) InsertSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
+        public (long index, bool insertedNotReplaced) InsertSorted(T item, IComparer<T> comparer) => InsertSorted(item, MultivalueLocationOptions.Any, comparer);
+        public (long index, bool insertedNotReplaced) InsertSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
             var result = TryInsertSortedReturningNode(item, whichOne, comparer);
             var node = ((AvlCountedNode<T>)result.node);
-            return (node.Index, result.insertionNotReplacement);
+            return (node.Index, result.insertedNotReplaced);
         }
         public (long priorIndex, bool existed) RemoveSorted(T item, IComparer<T> comparer) => RemoveSorted(item, MultivalueLocationOptions.Any, comparer);
         public (long priorIndex, bool existed) RemoveSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)

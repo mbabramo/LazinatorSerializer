@@ -141,12 +141,12 @@ namespace Lazinator.Collections.Tree
         protected bool TryInsertSorted(T item, MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
         {
             var result = TryInsertSortedReturningNode(item, whichOne, comparisonFunc);
-            return result.insertionNotReplacement;
+            return result.insertedNotReplaced;
         }
 
-        public (BinaryNode<T> node, bool insertionNotReplacement) TryInsertSortedReturningNode(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryInsertSortedReturningNode(item, whichOne, node => CompareValueToNode(item, node, whichOne, comparer));
+        public (BinaryNode<T> node, bool insertedNotReplaced) TryInsertSortedReturningNode(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryInsertSortedReturningNode(item, whichOne, node => CompareValueToNode(item, node, whichOne, comparer));
 
-        protected virtual (BinaryNode<T> node, bool insertionNotReplacement) TryInsertSortedReturningNode(T item, MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
+        protected virtual (BinaryNode<T> node, bool insertedNotReplaced) TryInsertSortedReturningNode(T item, MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
         {
             BinaryNode<T> node = Root;
             while (node != null)
@@ -368,5 +368,9 @@ namespace Lazinator.Collections.Tree
                 yield return enumerator.Current.Value;
         }
 
+        public IEnumerator<T> GetEnumerator()
+        {
+            return (IEnumerator<T>)this;
+        }
     }
 }
