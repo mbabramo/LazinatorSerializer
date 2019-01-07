@@ -48,17 +48,16 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        public override void UpdateFollowingTreeChange(AvlNode<T> parent = null)
+        public override void UpdateFollowingTreeChange()
         {
-            Parent = parent;
             if (LeftCountedNode != null && LeftCountedNode.NodeVisitedDuringChange)
             {
-                LeftCountedNode.UpdateFollowingTreeChange(this);
+                LeftCountedNode.UpdateFollowingTreeChange();
             }
             LeftCount = LeftCountedNode?.LongCount ?? 0;
             if (RightCountedNode != null && RightCountedNode.NodeVisitedDuringChange)
             {
-                RightCountedNode.UpdateFollowingTreeChange(parent);
+                RightCountedNode.UpdateFollowingTreeChange();
             }
             RightCount = RightCountedNode?.LongCount ?? 0;
             _Index = null;
