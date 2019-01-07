@@ -8,11 +8,11 @@ using System.Text;
 
 namespace Lazinator.Collections.Factories
 {
-    public partial class AvlIndexableTreeFactory<T> : IAvlIndexableTreeFactory<T> where T : ILazinator
+    public partial class AvlSortedIndexableTreeFactory<T> : IAvlSortedIndexableTreeFactory<T> where T : ILazinator, IComparable<T>
     {
-        public IIndexableContainer<T> CreateIndexableContainer()
+        public ISortedIndexableContainer<T> CreateSortedIndexableContainer()
         {
-            return new AvlIndexableTree<T>();
+            return new AvlSortedIndexableTree<T>();
         }
     }
 }

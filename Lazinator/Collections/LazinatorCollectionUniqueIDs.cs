@@ -135,5 +135,7 @@
         ILazinatorDictionaryableFactory,
         IIndexableContainerFactory,
         ISortedIndexableContainerFactory,
+        IAvlIndexableTreeFactory,
+        IAvlSortedIndexableTreeFactory,
     }
 }
