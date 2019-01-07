@@ -1,5 +1,6 @@
 ﻿using Lazinator.Buffers;
 using Lazinator.Collections.Factories;
+using Lazinator.Collections.Interfaces;
 using Lazinator.Core;
 using Lazinator.Wrappers;
 using System;
@@ -10,17 +11,20 @@ namespace Lazinator.Collections.Avl
 {
     public partial class AvlSortedList<T> : IAvlSortedList<T>, IList<T>, ILazinatorSortable<T> where T : ILazinator, IComparable<T>
     {
+
+        public ISortedIndexableContainer<T> UnderlyingTree { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public AvlSortedList()
         {
         }
 
-        public AvlSortedList(bool allowDuplicates, ILazinatorOrderedKeyableFactory<T, Placeholder> factory)
+        public AvlSortedList(bool allowDuplicates, ISortedIndexableContainerFactory<T> factory)
         {
-            UnderlyingTree = factory.Create();
+            UnderlyingTree = factory.CreateSortedIndexableContainer();
             AllowDuplicates = allowDuplicates;
         }
 
-        public AvlSortedList(bool allowDuplicates, ILazinatorOrderedKeyable<T, Placeholder> underlyingTree)
+        public AvlSortedList(bool allowDuplicates, ISortedIndexableContainer<T> underlyingTree)
         {
             UnderlyingTree = underlyingTree;
             AllowDuplicates = allowDuplicates;
@@ -43,15 +47,15 @@ namespace Lazinator.Collections.Avl
             set => SetAt(index, value);
         }
 
-        public long Count => UnderlyingTree.Count;
+        public long LongCount => UnderlyingTree.LongCount;
 
         public bool IsReadOnly => false;
 
-        int ICollection<T>.Count => (int)Count;
+        int ICollection<T>.Count => (int)LongCount;
 
         public void Add(T item)
         {
-            InsertAt(Count, item);
+            InsertAt(LongCount, item);
         }
 
         public void Clear()
@@ -70,7 +74,7 @@ namespace Lazinator.Collections.Avl
                 throw new ArgumentNullException();
             if (arrayIndex < 0)
                 throw new ArgumentOutOfRangeException();
-            if (UnderlyingTree.Count > array.Length - arrayIndex + 1)
+            if (UnderlyingTree.LongCount > array.Length - arrayIndex + 1)
                 throw new ArgumentException();
             foreach (var item in this)
             {
@@ -80,12 +84,12 @@ namespace Lazinator.Collections.Avl
 
         public IEnumerator<T> GetEnumerator()
         {
-            return UnderlyingTree.GetKeyEnumerator();
+            return UnderlyingTree.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return UnderlyingTree.GetKeyEnumerator();
+            return UnderlyingTree.GetEnumerator();
         }
 
         public int IndexOf(T item)
@@ -127,13 +131,11 @@ namespace Lazinator.Collections.Avl
             InsertAt((long)index, item);
         }
 
-        #region ILazinatorCountableListableFactory 
-
-        public long LongCount => Count;
+        #region  
 
         public void InsertAt(long index, T item)
         {
-            UnderlyingTree.InsertAtIndex(item, new Placeholder(), index);
+            UnderlyingTree.InsertAt(index, item);
         }
 
         public void RemoveAt(long index)
@@ -143,61 +145,35 @@ namespace Lazinator.Collections.Avl
 
         public IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
         {
-            if (skip > Count || skip < 0)
-                throw new ArgumentException();
-            if (Count == 0)
-                yield break;
-            var keyEnumerator = UnderlyingTree.GetKeyEnumerator(skip);
-            while (keyEnumerator.MoveNext())
-                yield return keyEnumerator.Current;
+            foreach (T item in UnderlyingTree.AsEnumerable(reverse, skip))
+                yield return item;
         }
 
         public T GetAt(long index)
         {
-            return UnderlyingTree.KeyAtIndex(index);
+            return UnderlyingTree.GetAt(index);
         }
 
         public void SetAt(long index, T value)
         {
-            UnderlyingTree.SetKeyAtIndex(index, value);
+            UnderlyingTree.SetAt(index, value);
         }
 
-        public (long location, bool rejectedAsDuplicate) InsertSorted(T item) => InsertSorted(item, Comparer<T>.Default);
+        public (long index, bool insertedNotReplaced) InsertSorted(T item) => InsertSorted(item, Comparer<T>.Default);
 
-        public (long location, bool rejectedAsDuplicate) InsertSorted(T item, IComparer<T> comparer)
-        {
-            (bool inserted, long index) = UnderlyingTree.Insert(item, comparer, default);
-            return (location, !inserted);
-        }
+        public (long index, bool insertedNotReplaced) InsertSorted(T item, IComparer<T> comparer) => UnderlyingTree.InsertSorted(item, comparer);
 
-        public (long priorLocation, bool existed) RemoveSorted(T item) => RemoveSorted(item, Comparer<T>.Default);
+        public (long priorIndex, bool existed) RemoveSorted(T item) => RemoveSorted(item, Comparer<T>.Default);
 
-        public (long priorLocation, bool existed) RemoveSorted(T item, IComparer<T> comparer)
-        {
-            (long location, bool exists) = FindSorted(item, comparer);
-            if (exists)
-            {
-                RemoveAt(location);
-                return (location, true);
-            }
-            return (-1, false);
-        }
+        public (long priorIndex, bool existed) RemoveSorted(T item, IComparer<T> comparer) => RemoveSorted(item, comparer);
 
-        // DEBUG -- must implement Comparer usage
+        public (long index, bool exists) FindSorted(T target) => FindSorted(target, Comparer<T>.Default);
 
-        public (long location, bool exists) FindSorted(T target) => FindSorted(target, Comparer<T>.Default);
-
-        public (long location, bool exists) FindSorted(T target, IComparer<T> comparer)
-        {
-            var result = UnderlyingTree.GetMatchingOrNext(target, comparer);
-            return (result.index, result.found);
-        }
-
-
+        public (long index, bool exists) FindSorted(T target, IComparer<T> comparer) => UnderlyingTree.FindSorted(target, comparer);
 
         public virtual ILazinatorSplittable SplitOff()
         {
-            AvlSortedList<T> partSplitOff = new AvlSortedList<T>(AllowDuplicates, (ILazinatorOrderedKeyable<T, Placeholder>) UnderlyingTree.SplitOff());
+            AvlSortedList<T> partSplitOff = new AvlSortedList<T>(AllowDuplicates, (ISortedIndexableContainerFactory<T>) ((ILazinatorSplittable)UnderlyingTree).SplitOff());
             return partSplitOff;
         }
 

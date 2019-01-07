@@ -44,7 +44,8 @@ namespace Lazinator.Collections.Avl
 
         public void Clear()
         {
-            UnderlyingTree = new AvlIndexableTree<T>();
+            var replacement = UnderlyingTree.CreateNewWithSameSettings();
+            UnderlyingTree = (IIndexableContainer<T>) replacement;
         }
 
         public bool Contains(T item)
@@ -118,8 +119,6 @@ namespace Lazinator.Collections.Avl
         #region ILazinatorListable 
 
         public long LongCount => Count;
-
-        public IIndexableContainer<T> UnderlyingTree { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public void InsertAt(long index, T item)
         {

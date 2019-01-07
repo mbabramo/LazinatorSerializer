@@ -1,4 +1,5 @@
 ﻿using Lazinator.Buffers;
+using Lazinator.Collections.Interfaces;
 using Lazinator.Core;
 using System;
 using System.Collections.Generic;
@@ -47,6 +48,11 @@ namespace Lazinator.Collections.Factories
         }
 
         public ILazinatorSortable<T> CreateSortable()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ISortedIndexableContainer<T> CreateSortedIndexableContainer()
         {
             throw new NotImplementedException();
         }
