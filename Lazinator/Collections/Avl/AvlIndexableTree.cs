@@ -150,6 +150,9 @@ namespace Lazinator.Collections.Avl
             var newContainer = (AvlIndexableTree<T>)CreateNewWithSameSettings();
             newContainer.Root = splitOffLeft ? leftNode : rightNode;
             newContainer.Root.Parent = null;
+            newContainer.AvlIndexableRoot.ResetIndicesFollowingTreeSplit();
+            AvlIndexableRoot.Parent = null;
+            AvlIndexableRoot.ResetIndicesFollowingTreeSplit();
             return newContainer;
         }
     }

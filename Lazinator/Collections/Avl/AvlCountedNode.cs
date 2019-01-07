@@ -48,6 +48,15 @@ namespace Lazinator.Collections.Avl
                 NodeVisitedDuringChange = false;
         }
 
+        internal void ResetIndicesFollowingTreeSplit()
+        {
+            _Index = null;
+            if (_Left != null)
+                LeftCountedNode.ResetIndicesFollowingTreeSplit();
+            if (_Right != null)
+                RightCountedNode.ResetIndicesFollowingTreeSplit();
+        }
+
 
         public override string ToString()
         {

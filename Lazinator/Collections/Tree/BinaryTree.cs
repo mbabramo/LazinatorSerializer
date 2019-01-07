@@ -1,6 +1,8 @@
 ﻿using Lazinator.Collections.Interfaces;
 using Lazinator.Core;
+using Lazinator.Support;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +15,7 @@ namespace Lazinator.Collections.Tree
     /// functionality for balancing, for accessing items by index, and for adding items that implement IComparable without a custom comparer.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public partial class BinaryTree<T> : IBinaryTree<T>, IOrderableContainer<T> where T : ILazinator
+    public partial class BinaryTree<T> : IBinaryTree<T>, IOrderableContainer<T>, IEnumerable<T> where T : ILazinator
     {
         public virtual IOrderableContainer<T> CreateNewWithSameSettings()
         {
@@ -111,25 +113,25 @@ namespace Lazinator.Collections.Tree
         }
 
         /// <summary>
-        /// Gets the last node.
+        /// Gets the last node (or none if empty).
         /// </summary>
         /// <returns></returns>
         protected BinaryNode<T> FirstNode()
         {
             var x = Root;
-            while (x.Left != null)
+            while (x?.Left != null)
                 x = x.Left;
             return x;
         }
 
         /// <summary>
-        /// Gets the last node.
+        /// Gets the last node (or none if empty)
         /// </summary>
         /// <returns></returns>
         protected BinaryNode<T> LastNode()
         {
             var x = Root;
-            while (x.Right != null)
+            while (x?.Right != null)
                 x = x.Right;
             return x;
         }
@@ -370,7 +372,12 @@ namespace Lazinator.Collections.Tree
 
         public IEnumerator<T> GetEnumerator()
         {
-            return (IEnumerator<T>)this;
+            return new TransformEnumerator<BinaryNode<T>, T>(new BinaryNodeEnumerator<T>(FirstNode()), x => x.Value);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

@@ -98,7 +98,7 @@ namespace Lazinator.Collections.Avl
         protected override BinaryNode<T> TryRemoveSortedReturningNode(MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
         {
             AvlNode<T> node = AvlRoot;
-            
+
             while (node != null)
             {
                 node.NodeVisitedDuringChange = true;
@@ -245,7 +245,7 @@ namespace Lazinator.Collections.Avl
                         }
                     }
 
-                    AvlRoot.UpdateFollowingTreeChange();
+                    AvlRoot?.UpdateFollowingTreeChange();
                     return node;
                 }
             }
