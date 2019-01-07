@@ -106,7 +106,7 @@
         ILazinatorOrderedKeyableFactory,
         IAvlSortedDictionaryFactory,
         IAvlTreeAllowDuplicatesFactory,
-        IAvlTreeFactory,
+        IAvlKeyValueTreeFactory,
         IAvlSortedDictionaryAllowDuplicatesFactory,
         IAvlListNodeTreeFactory,
         IAvlDictionaryFactory,
@@ -131,5 +131,7 @@
         IAvlSortedIndexableTree,
         IBinaryNode,
         IBinaryTree,
+        ILazinatorDictionaryable,
+        ILazinatorDictionaryableFactory,
     }
 }

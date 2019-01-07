@@ -13,6 +13,6 @@ namespace Lazinator.Collections.Factories
         where TValue : ILazinator
     {
         bool AllowDuplicates { get; set; }
-        ILazinatorOrderedKeyableFactory<WUint, LazinatorTuple<TKey, TValue>> OrderedKeyableFactory { get; set; }
+        ILazinatorDictionaryable<WUint, LazinatorTuple<TKey, TValue>> OrderedKeyableFactory { get; set; }
     }
 }

@@ -16,8 +16,6 @@ namespace LazinatorTests.Tests
 {
     public class NodeEnumerationTests : SerializationDeserializationTestBase
     {
-
-
         [Fact]
         public void DirtinessEnumerationWorks()
         {

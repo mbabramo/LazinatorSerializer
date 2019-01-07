@@ -13,7 +13,7 @@ namespace Lazinator.Collections.Factories
         {
             AllowDuplicates = allowDuplicates;
             if (orderedKeyableFactory == null)
-                OrderedKeyableFactory = (ILazinatorOrderedKeyableFactory<T, Placeholder>)new AvlTreeFactory<T, Placeholder>();
+                OrderedKeyableFactory = (ILazinatorOrderedKeyableFactory<T, Placeholder>)new AvlKeyValueTreeFactory<T, Placeholder>();
             else
                 this.OrderedKeyableFactory = orderedKeyableFactory;
         }

@@ -13,6 +13,19 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Tests\AVL\AvlEnumeratorTests.cs" />
+    <Compile Remove="Tests\AVL\AvlListTests.cs" />
+    <Compile Remove="Tests\AVL\AvlNodeExtensionsForTesting.cs" />
+    <Compile Remove="Tests\AVL\AvlSerializationTest.cs" />
+    <Compile Remove="Tests\AVL\AvlSetTests.cs" />
+    <Compile Remove="Tests\AVL\AvlTreeDeleteTests.cs" />
+    <Compile Remove="Tests\AVL\AvlTreeExtensionsForTesting.cs" />
+    <Compile Remove="Tests\AVL\AvlTreeInsertTests.cs" />
+    <Compile Remove="Tests\DictionaryTests.cs" />
+    <Compile Remove="Tests\ListableTests.cs" />
+  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis" Version="2.9.0" />
@@ -37,6 +50,10 @@
     <None Update="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Tests\AVL\" />
   </ItemGroup>
 
 </Project>

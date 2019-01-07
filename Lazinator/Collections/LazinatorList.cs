@@ -516,13 +516,23 @@ namespace Lazinator.Collections
             RemoveAt((int)index);
         }
 
-        public IEnumerable<T> AsEnumerable(long index)
+        public IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
         {
-            if (index > Count || index < 0)
+            if (skip > Count || skip < 0)
                 throw new ArgumentException();
-            for (int i = (int) index; i < Count; i++)
+            if (reverse)
             {
-                yield return this[i];
+                for (int i = Count - 1 - (int)skip; i >= 0; i--)
+                {
+                    yield return this[i];
+                }
+            }
+            else
+            {
+                for (int i = (int)skip; i < Count; i++)
+                {
+                    yield return this[i];
+                }
             }
         }
 
@@ -540,7 +550,7 @@ namespace Lazinator.Collections
             this[(int)index] = value;
         }
 
-        protected virtual ILazinatorUncountedListable<T> CreateEmptyList()
+        protected virtual ILazinatorListable<T> CreateEmptyList()
         {
             return new LazinatorList<T>();
         }

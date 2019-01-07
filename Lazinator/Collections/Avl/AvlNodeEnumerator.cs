@@ -5,7 +5,7 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections.Avl
 {
-    public struct AvlNodeEnumerator<T> : IEnumerator<AvlNode<T>> where T : ILazinator where T : ILazinator
+    public struct AvlNodeEnumerator<T> : IEnumerator<AvlNode<T>> where T : ILazinator
     {
 		private AvlNode<T> _current;
         private long _index;

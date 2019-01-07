@@ -12,7 +12,7 @@ namespace Lazinator.Collections.Factories
         public AvlListFactory(ILazinatorOrderedKeyableFactory<Placeholder, T> orderedKeyableFactory)
         {
             if (orderedKeyableFactory == null)
-                OrderedKeyableFactory = (ILazinatorOrderedKeyableFactory<Placeholder, T>) new AvlTreeFactory<Placeholder, T>();
+                OrderedKeyableFactory = (ILazinatorOrderedKeyableFactory<Placeholder, T>) new AvlKeyValueTreeFactory<Placeholder, T>();
             else
                 this.OrderedKeyableFactory = orderedKeyableFactory;
         }

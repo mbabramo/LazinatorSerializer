@@ -77,7 +77,7 @@ namespace Lazinator.Collections
             return (mid, false);
         }
 
-        protected override ILazinatorUncountedListable<T> CreateEmptyList()
+        protected override ILazinatorListable<T> CreateEmptyList()
         {
             return new SortedLazinatorList<T>();
         }

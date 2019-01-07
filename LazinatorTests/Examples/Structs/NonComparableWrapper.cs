@@ -37,6 +37,11 @@ namespace LazinatorTests.Examples
             return false;
         }
 
+        public override int GetHashCode()
+        {
+            return WrappedValue.GetHashCode();
+        }
+
         public bool Equals(int other)
         {
             return WrappedValue.Equals(other);
