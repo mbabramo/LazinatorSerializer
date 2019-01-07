@@ -4,7 +4,7 @@ using System;
 
 namespace Lazinator.Collections.Avl
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlTree)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlOldTree)]
     public interface IAvlOldTree<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         bool AllowDuplicates { get; set; }

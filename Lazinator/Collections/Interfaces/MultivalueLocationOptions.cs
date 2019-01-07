@@ -7,7 +7,9 @@ namespace Lazinator.Collections.Interfaces
     public enum MultivalueLocationOptions
     {
         Any,
+        BeforeFirst,
         First,
-        Last
+        Last,
+        AfterLast
     }
 }

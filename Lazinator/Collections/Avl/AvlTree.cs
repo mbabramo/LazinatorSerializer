@@ -6,241 +6,193 @@ using System.Text;
 
 namespace Lazinator.Collections.Avl
 {
-    public class AvlTree<T> : IOrderableContainer<T> where T : ILazinator
+    public class AvlTree<T> : IAvlTree<T>, IOrderableContainer<T> where T : ILazinator
     {
-        public virtual AvlOldNode<T> CreateNode(T value, AvlOldNode<T> parent = null)
+        public AvlNode<T> Root { get => throw new NotImplementedException(); set => throw new NotImplementedException(); } // DEBUG
+
+        protected virtual AvlNode<T> CreateNode(T value, AvlNode<T> parent = null)
         {
-            return new AvlOldNode<T>()
+            return new AvlNode<T>()
             {
                 Value = value,
                 Parent = parent
             };
         }
 
-        /// <summary>
-        /// Gets the node that either contains the key or the next node (which would contain the key if inserted).
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns>A node or null, if the key is after all keys in the tree</returns>
-        public (AvlOldNode<T> node, long index, bool found) GetMatchingOrNextNode(TKey key, IComparer<TKey> comparer)
+        protected (AvlNode<T> node, bool found) GetMatchingOrNextNode(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
-            if (comparer == null)
-                comparer = Comparer<TKey>.Default;
-            var result = GetMatchingOrNextNodeHelper(key, comparer);
-            if (result.found && AllowDuplicates)
-            {
-                bool matches = true;
-                do
-                { // make sure we have the first key match
-                    result.index--;
-                    matches = result.index >= 0 && KeyAtIndex(result.index).Equals(key);
-                    if (!matches)
-                        result.index++;
-                }
-                while (matches);
-            }
-            return result;
-        }
-
-
-        private (AvlOldNode<T> node, long index, bool found) GetMatchingOrNextNodeHelper(TKey key, IComparer<TKey> comparer)
-        {
-            AvlOldNode<T> node = Root;
+            AvlNode<T> node = Root;
             if (node == null)
-                return (null, 0, false);
-            long index = node?.LeftCount ?? 0;
+                return (null, false);
             while (true)
             {
-                int comparison = comparer.Compare(key, node.Key);
+                int comparison = CompareValueToNode(value, node, whichOne, comparer);
                 if (comparison < 0)
                 {
                     if (node.Left == null)
-                        return (node, index, false);
+                        return (node, false);
                     node = node.Left;
-                    index -= 1 + node.RightCount;
                 }
                 else if (comparison > 0)
                 {
                     if (node.Right == null)
                     {
                         var next = node.GetNextNode();
-                        index++;
-                        return (next, index, false);
+                        return (next, false);
                     }
                     node = node.Right;
-                    index += 1 + node.LeftCount;
                 }
                 else
                 {
-                    return (node, index, true);
+                    return (node, true);
                 }
             }
         }
 
-        /// <summary>
-        /// Gets the node containing the key, or which would contain the key if the key were inserted, or the last
-        /// node if there is no such node.
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        public AvlOldNode<T> NodeForKey(TKey key, IComparer<TKey> comparer)
+        private int CompareValueToNode(T value, AvlNode<T> node, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
-            return GetMatchingOrNextNode(key, comparer).node ?? LastNode();
+            int compare = comparer.Compare(value, node.Value);
+            if (compare == 0)
+            {
+                // Even though value is equal, we don't calculate it as equal if, for example, we're at the second value and the request is for the first.
+                if (whichOne == MultivalueLocationOptions.BeforeFirst)
+                    compare = 1;
+                else if (whichOne == MultivalueLocationOptions.AfterLast)
+                    compare = -1;
+                else if (whichOne == MultivalueLocationOptions.First)
+                {
+                    var previousNode = node.GetPreviousNode();
+                    if (previousNode != null && comparer.Compare(value, previousNode.Value) == 0)
+                        compare = 1;
+                }
+                else
+                {
+                    var nextNode = node.GetNextNode();
+                    if (nextNode != null && comparer.Compare(value, nextNode.Value) == 0)
+                        compare = -1;
+                }
+            }
+
+            return compare;
+        }
+
+        public bool Contains(T item, IComparer<T> comparer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual void Clear()
+        {
+            Root = null;
+        }
+
+        /// <summary>
+        /// Gets the node containing the value, or which would contain the value if it were inserted, or the last node if there otherwise is no such node.
+        /// </summary>
+        /// <returns></returns>
+        protected AvlNode<T> NodeForValue(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer)
+        {
+            return GetMatchingOrNextNode(value, whichOne, comparer).node ?? LastNode();
         }
 
         /// <summary>
         /// Gets the last node.
         /// </summary>
         /// <returns></returns>
-        public AvlOldNode<T> LastNode()
+        protected AvlNode<T> LastNode()
         {
             var x = Root;
             while (x.Right != null)
                 x = x.Right;
             return x;
         }
-        private (bool inserted, long index) InsertByKeyOrIndex(TKey key, IComparer<TKey> comparer, TValue value, long? nodeIndex = null)
-        {
-            var result = InsertHelper(AllowDuplicates, key, comparer, value, nodeIndex);
-            if (Root != null)
-            {
-                Root.RecalculateCount();
-                //Root.Print("", false);
-            }
-            return result;
-        }
 
-        /// <summary>
-        /// Helps complete the insert by key or by node.
-        /// </summary>
-        /// <param name="key">The key to insert.</param>
-        /// <param name="value">The value to insert</param>
-        /// <param name="nodeIndex">If the insertion point is based on an index, the index at which to insert. Null if the insertion point is to be found from the key.</param>
-        /// <returns></returns>
-        private (bool inserted, long index) InsertHelper(bool skipDuplicateKeys, TKey key, IComparer<TKey> comparer, TValue value, long? nodeIndex = null)
+        public bool TryInsertSorted(T item, IComparer<T> comparer) => TryInsertSorted(item, MultivalueLocationOptions.Any, comparer);
+
+        public bool TryInsertSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
-            AvlOldNode<T> node = Root;
-            long index = node?.LeftCount ?? 0;
+            AvlNode<T> node = Root;
             while (node != null)
             {
                 node.NodeVisitedDuringChange = true;
 
-                int compare = CompareKeyOrIndexToNode(key, comparer, skipDuplicateKeys, nodeIndex, index, node);
+                int compare = CompareValueToNode(item, node, whichOne, comparer);
 
-                if (compare < 0 || (compare == 0 && nodeIndex != null))
+                if (compare < 0)
                 {
-                    AvlOldNode<T> left = node.Left;
+                    AvlNode<T> left = node.Left;
 
                     if (left == null)
                     {
-                        var childNode = CreateNode(key, value, node);
+                        var childNode = CreateNode(item, node);
                         childNode.NodeVisitedDuringChange = true;
                         node.Left = childNode;
                         // index is same as node
                         InsertBalance(node, 1);
 
-                        return (true, index);
+                        return (true);
                     }
                     else
                     {
                         node = left;
-                        index -= 1 + (node?.RightCount ?? 0);
                     }
                 }
                 else if (compare > 0)
                 {
-                    AvlOldNode<T> right = node.Right;
+                    AvlNode<T> right = node.Right;
 
                     if (right == null)
                     {
-                        var childNode = CreateNode(key, value, node);
+                        var childNode = CreateNode(item, node);
                         childNode.NodeVisitedDuringChange = true;
                         node.Right = childNode;
 
                         InsertBalance(node, -1);
 
-                        index += 1;
-                        return (true, index);
+                        return true;
                     }
                     else
                     {
                         node = right;
-                        index += 1 + (node?.LeftCount ?? 0);
                     }
                 }
                 else
                 {
-                    node.Value = value;
+                    node.Value = item;
 
-                    return (false, index);
+                    return false;
                 }
             }
 
-            Root = CreateNode(key, value);
+            Root = CreateNode(item);
             Root.NodeVisitedDuringChange = true;
 
-            return (true, 0);
+            return true;
         }
 
-        private int CompareKeyOrIndexToNode(TKey key, IComparer<TKey> comparer, bool skipDuplicateKeys, long? desiredNodeIndex, long actualNodeIndex, AvlOldNode<T> node)
+        public bool TryRemoveSorted(T item, IComparer<T> comparer) => TryRemoveSorted(item, MultivalueLocationOptions.Any, comparer);
+
+        public bool TryRemoveSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
-            int compare;
-            if (desiredNodeIndex is long index)
-            {
-                if (index == actualNodeIndex)
-                {
-                    compare = 0;
-                }
-                else if (index < actualNodeIndex)
-                    compare = -1;
-                else
-                    compare = 1;
-            }
-            else
-                compare = comparer.Compare(key, node.Key);
-
-            if (compare == 0 && skipDuplicateKeys && desiredNodeIndex == null)
-            {
-                compare = 1;
-            }
-            return compare;
-        }
-
-        private bool Remove(TKey key, IComparer<TKey> comparer, long? nodeIndex = null)
-        {
-            bool returnVal = RemoveHelper(key, comparer, nodeIndex);
-            if (Root != null)
-            {
-                Root.RecalculateCount();
-                //Root.Print("", false);
-            }
-            return returnVal;
-        }
-
-        private bool RemoveHelper(TKey key, IComparer<TKey> comparer, long? nodeIndex)
-        {
-            AvlOldNode<T> node = Root;
-
-            long index = node?.LeftCount ?? 0;
+            AvlNode<T> node = Root;
+            
             while (node != null)
             {
                 node.NodeVisitedDuringChange = true;
 
-                int compare = CompareKeyOrIndexToNode(key, comparer, false, nodeIndex, index, node);
+                int compare = CompareValueToNode(item, node, whichOne, comparer);
                 if (compare < 0)
                 {
                     node = node.Left;
-                    index -= 1 + (node?.RightCount ?? 0);
                 }
                 else if (compare > 0)
                 {
                     node = node.Right;
-                    index += 1 + (node?.LeftCount ?? 0);
                 }
                 else
                 {
-                    AvlOldNode<T> left = node.Left;
-                    AvlOldNode<T> right = node.Right;
+                    AvlNode<T> left = node.Left;
+                    AvlNode<T> right = node.Right;
 
                     if (left == null)
                     {
@@ -252,7 +204,7 @@ namespace Lazinator.Collections.Avl
                             }
                             else
                             {
-                                AvlOldNode<T> parent = node.Parent;
+                                AvlNode<T> parent = node.Parent;
 
                                 if (parent.Left == node)
                                 {
@@ -285,12 +237,12 @@ namespace Lazinator.Collections.Avl
                     }
                     else
                     {
-                        AvlOldNode<T> successor = right;
+                        AvlNode<T> successor = right;
                         successor.NodeVisitedDuringChange = true;
 
                         if (successor.Left == null)
                         {
-                            AvlOldNode<T> parent = node.Parent;
+                            AvlNode<T> parent = node.Parent;
 
                             successor.Parent = parent;
                             successor.Left = left;
@@ -323,9 +275,9 @@ namespace Lazinator.Collections.Avl
                                 successor.NodeVisitedDuringChange = true;
                             }
 
-                            AvlOldNode<T> parent = node.Parent;
-                            AvlOldNode<T> successorParent = successor.Parent;
-                            AvlOldNode<T> successorRight = successor.Right;
+                            AvlNode<T> parent = node.Parent;
+                            AvlNode<T> successorParent = successor.Parent;
+                            AvlNode<T> successorRight = successor.Right;
                             if (successorRight != null)
                                 successorRight.NodeVisitedDuringChange = true;
 
@@ -379,7 +331,7 @@ namespace Lazinator.Collections.Avl
 
         #region Balancing
 
-        private void InsertBalance(AvlOldNode<T> node, int balance)
+        private void InsertBalance(AvlNode<T> node, int balance)
         {
             while (node != null)
             {
@@ -416,7 +368,7 @@ namespace Lazinator.Collections.Avl
                     return;
                 }
 
-                AvlOldNode<T> parent = node.Parent;
+                AvlNode<T> parent = node.Parent;
 
                 if (parent != null)
                 {
@@ -427,11 +379,11 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        private AvlOldNode<T> RotateLeft(AvlOldNode<T> node)
+        private AvlNode<T> RotateLeft(AvlNode<T> node)
         {
-            AvlOldNode<T> right = node.Right;
-            AvlOldNode<T> rightLeft = right.Left;
-            AvlOldNode<T> parent = node.Parent;
+            AvlNode<T> right = node.Right;
+            AvlNode<T> rightLeft = right.Left;
+            AvlNode<T> parent = node.Parent;
             right.NodeVisitedDuringChange = true;
             if (rightLeft != null)
                 rightLeft.NodeVisitedDuringChange = true;
@@ -465,11 +417,11 @@ namespace Lazinator.Collections.Avl
             return right;
         }
 
-        private AvlOldNode<T> RotateRight(AvlOldNode<T> node)
+        private AvlNode<T> RotateRight(AvlNode<T> node)
         {
-            AvlOldNode<T> left = node.Left;
-            AvlOldNode<T> leftRight = left.Right;
-            AvlOldNode<T> parent = node.Parent;
+            AvlNode<T> left = node.Left;
+            AvlNode<T> leftRight = left.Right;
+            AvlNode<T> parent = node.Parent;
             left.NodeVisitedDuringChange = true;
             if (leftRight != null)
                 leftRight.NodeVisitedDuringChange = true;
@@ -503,13 +455,13 @@ namespace Lazinator.Collections.Avl
             return left;
         }
 
-        private AvlOldNode<T> RotateLeftRight(AvlOldNode<T> node)
+        private AvlNode<T> RotateLeftRight(AvlNode<T> node)
         {
-            AvlOldNode<T> left = node.Left;
-            AvlOldNode<T> leftRight = left.Right;
-            AvlOldNode<T> parent = node.Parent;
-            AvlOldNode<T> leftRightRight = leftRight.Right;
-            AvlOldNode<T> leftRightLeft = leftRight.Left;
+            AvlNode<T> left = node.Left;
+            AvlNode<T> leftRight = left.Right;
+            AvlNode<T> parent = node.Parent;
+            AvlNode<T> leftRightRight = leftRight.Right;
+            AvlNode<T> leftRightLeft = leftRight.Left;
             left.NodeVisitedDuringChange = true;
             leftRight.NodeVisitedDuringChange = true;
             if (leftRightRight != null)
@@ -569,13 +521,13 @@ namespace Lazinator.Collections.Avl
             return leftRight;
         }
 
-        private AvlOldNode<T> RotateRightLeft(AvlOldNode<T> node)
+        private AvlNode<T> RotateRightLeft(AvlNode<T> node)
         {
-            AvlOldNode<T> right = node.Right;
-            AvlOldNode<T> rightLeft = right.Left;
-            AvlOldNode<T> parent = node.Parent;
-            AvlOldNode<T> rightLeftLeft = rightLeft.Left;
-            AvlOldNode<T> rightLeftRight = rightLeft.Right;
+            AvlNode<T> right = node.Right;
+            AvlNode<T> rightLeft = right.Left;
+            AvlNode<T> parent = node.Parent;
+            AvlNode<T> rightLeftLeft = rightLeft.Left;
+            AvlNode<T> rightLeftRight = rightLeft.Right;
             right.NodeVisitedDuringChange = true;
             rightLeft.NodeVisitedDuringChange = true;
             if (rightLeftLeft != null)
@@ -634,38 +586,8 @@ namespace Lazinator.Collections.Avl
 
             return rightLeft;
         }
-        public void Clear()
-        {
-            throw new NotImplementedException();
-        }
 
-        public bool Contains(T item, IComparer<T> comparer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool TryInsertSorted(T item, IComparer<T> comparer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool TryInsertSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool TryRemoveSorted(T item, IComparer<T> comparer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool TryRemoveSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        private void DeleteBalance(AvlOldNode<T> node, int balance)
+        private void DeleteBalance(AvlNode<T> node, int balance)
         {
             while (node != null)
             {
@@ -708,7 +630,7 @@ namespace Lazinator.Collections.Avl
                     return;
                 }
 
-                AvlOldNode<T> parent = node.Parent;
+                AvlNode<T> parent = node.Parent;
 
                 if (parent != null)
                 {
@@ -718,16 +640,14 @@ namespace Lazinator.Collections.Avl
                 node = parent;
             }
         }
-        #endregion
 
-        private static void Replace(AvlOldNode<T> target, AvlOldNode<T> source)
+        internal static void Replace(AvlNode<T> target, AvlNode<T> source)
         {
-            AvlOldNode<T> left = source.Left;
-            AvlOldNode<T> right = source.Right;
+            AvlNode<T> left = source.Left;
+            AvlNode<T> right = source.Right;
 
             target.Balance = source.Balance;
-            target.Key = (TKey)source.Key.CloneLazinator();
-            target.Value = (TValue)source.Value.CloneLazinator();
+            target.Value = (T)source.Value.CloneLazinator();
             target.Left = left;
             target.Right = right;
 
@@ -741,5 +661,7 @@ namespace Lazinator.Collections.Avl
                 right.Parent = target;
             }
         }
+
+        #endregion
     }
 }

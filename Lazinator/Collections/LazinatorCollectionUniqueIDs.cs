@@ -46,8 +46,8 @@
         IByteSpanUnofficial,
         ILazinatorBitArray,
         ILazinatorBitArrayUnofficial,
-        IAvlNode,
-        IAvlTree,
+        IAvlOldNode,
+        IAvlOldTree,
         ILazinatorTuple,
         ILazinatorTriple,
         ILazinatorQueue,
@@ -123,5 +123,8 @@
         ILazinatorSortedIndexableTree,
         ILazinatorSortedIndexableKeyValueTree,
         ILazinatorSortedMultivalueTree,
+        IAvlNode,
+        IAvlTree,
+        IAvlSortedTree,
     }
 }
