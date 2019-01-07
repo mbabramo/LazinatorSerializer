@@ -79,7 +79,7 @@ namespace Lazinator.Collections.Avl
         public void InsertAt(long index, T item)
         {
             ConfirmInRangeOrThrow(index, true);
-            TryInsertSorted(item, MultivalueLocationOptions.Any, CompareIndexToNodesIndex(index));
+            TryInsertSorted(item, MultivalueLocationOptions.BeforeFirst, CompareIndexToNodesIndex(index));
         }
         public void RemoveAt(long index)
         {

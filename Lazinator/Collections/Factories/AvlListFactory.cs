@@ -13,12 +13,10 @@ namespace Lazinator.Collections.Factories
         public AvlListFactory(IIndexableContainerFactory<T> indexableContainerFactory)
         {
             if (indexableContainerFactory == null)
-                IndexableContainerFactory = (IIndexableContainerFactory<T>) new AvlIndexableTreeFactory<T>();
+                IndexableContainerFactory = new AvlIndexableTreeFactory<T>();
             else
                 this.IndexableContainerFactory = indexableContainerFactory;
         }
-
-        public IIndexableContainerFactory<T> IndexableContainerFactory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public ILazinatorListable<T> CreateListable()
         {

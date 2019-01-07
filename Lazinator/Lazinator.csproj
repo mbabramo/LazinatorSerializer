@@ -47,12 +47,10 @@
     <Compile Remove="Collections\Avl\IAvlOldTree.cs" />
     <Compile Remove="Collections\Avl\IAvlSortedDictionary.cs" />
     <Compile Remove="Collections\Factories\AvlDictionaryFactory.cs" />
-    <Compile Remove="Collections\Factories\AvlListFactory.g.cs" />
     <Compile Remove="Collections\Factories\AvlListNodeTreeFactory.cs" />
     <Compile Remove="Collections\Factories\AvlListNodeTreeFactory.g.cs" />
     <Compile Remove="Collections\Factories\AvlSortedDictionaryFactory.cs" />
     <Compile Remove="Collections\Factories\AvlSortedDictionaryFactory.g.cs" />
-    <Compile Remove="Collections\Factories\AvlSortedListFactory.g.cs" />
     <Compile Remove="Collections\Factories\IAvlDictionaryFactory.cs" />
     <Compile Remove="Collections\Factories\IAvlListNodeTreeFactory.cs" />
     <Compile Remove="Collections\Factories\IAvlSortedDictionaryFactory.cs" />
