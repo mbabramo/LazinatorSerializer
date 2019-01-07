@@ -6,10 +6,15 @@ using Lazinator.Support;
 
 namespace Lazinator.Collections.Tuples
 {
-    public partial struct LazinatorKeyValue<T, U> : ILazinatorKeyValue<T, U>, IComparable<LazinatorKeyValue<T, U>> where T : ILazinator, IComparable<T> where U : ILazinator
+    /// <summary>
+    /// A key-value pair. This implements IComparable by comparing the keys only, but implements equality by comparing both key and value.
+    /// </summary>
+    /// <typeparam name="TKey">The key type</typeparam>
+    /// <typeparam name="TValue">The value type</typeparam>
+    public partial struct LazinatorKeyValue<TKey, TValue> : ILazinatorKeyValue<TKey, TValue>, IComparable<LazinatorKeyValue<TKey, TValue>> where TKey : ILazinator, IComparable<TKey>, IComparable where TValue : ILazinator
     {
 
-        public LazinatorKeyValue(T key, U value) : this()
+        public LazinatorKeyValue(TKey key, TValue value) : this()
         {
             Key = key;
             Value = value;
@@ -20,19 +25,19 @@ namespace Lazinator.Collections.Tuples
             return $"({Key?.ToString()}, {Value?.ToString()})";
         }
 
-        public int CompareTo(LazinatorKeyValue<T, U> other)
+        public int CompareTo(LazinatorKeyValue<TKey, TValue> other)
         {
-            return ((Key, Value)).CompareTo((other.Key, other.Value));
+            return Comparer<TKey>.Default.Compare(Key, other.Key);
         }
 
-        public static CustomComparer<LazinatorKeyValue<T, U>> GetKeyOnlyComparer()
+        public static IComparer<LazinatorKeyValue<TKey, TValue>> GetKeyOnlyComparer()
         {
-            return new CustomComparer<LazinatorKeyValue<T, U>>((t, u) => t.Key.CompareTo(u.Key));
+            return Comparer<LazinatorKeyValue<TKey, TValue>>.Default;
         }
 
-        public static CustomComparer<LazinatorKeyValue<T, U>> GetKeyValueComparer(IComparer<T> keyComparer, IComparer<U> valueComparer)
+        public static CustomComparer<LazinatorKeyValue<TKey, TValue>> GetKeyValueComparer(IComparer<TKey> keyComparer, IComparer<TValue> valueComparer)
         {
-            return new CustomComparer<LazinatorKeyValue<T, U>>((t, u) =>
+            return new CustomComparer<LazinatorKeyValue<TKey, TValue>>((t, u) =>
             {
                 var keyComparison = keyComparer.Compare(t.Key, u.Key);
                 if (keyComparison != 0)
@@ -43,9 +48,9 @@ namespace Lazinator.Collections.Tuples
 
         public override bool Equals(object obj)
         {
-            if (obj is LazinatorKeyValue<T, U> otherKeyValue)
+            if (obj is LazinatorKeyValue<TKey, TValue> otherKeyValue)
             {
-                return EqualityComparer<T>.Default.Equals(Key, otherKeyValue.Key) && EqualityComparer<U>.Default.Equals(Value, otherKeyValue.Value);
+                return EqualityComparer<TKey>.Default.Equals(Key, otherKeyValue.Key) && EqualityComparer<TValue>.Default.Equals(Value, otherKeyValue.Value);
             }
             return false;
         }
@@ -55,9 +60,9 @@ namespace Lazinator.Collections.Tuples
             unchecked
             {
                 int hash = 233;
-                if (!EqualityComparer<T>.Default.Equals(Key, default(T)))
+                if (!EqualityComparer<TKey>.Default.Equals(Key, default(TKey)))
                     hash = hash * 23 + Key.GetHashCode();
-                if (!EqualityComparer<U>.Default.Equals(Value, default(U)))
+                if (!EqualityComparer<TValue>.Default.Equals(Value, default(TValue)))
                     hash = hash * 29 + Value.GetHashCode();
                 return hash;
             }

@@ -1,4 +1,5 @@
 ﻿using Lazinator.Collections.Interfaces;
+using Lazinator.Collections.Tree;
 using Lazinator.Core;
 using System;
 using System.Collections;
@@ -7,9 +8,15 @@ using System.Text;
 
 namespace Lazinator.Collections.Avl
 {
-    public class AvlTree<T> : IAvlTree<T>, IOrderableContainer<T>, IEnumerable<T> where T : ILazinator
+    /// <summary>
+    /// A basic AvlTree class. Because it stores a value that need not implement IComparable, and because it is not countable,
+    /// direct users of this class must specify a custom comparer when searching, inserting or removing. Subclasses add
+    /// functionality for accessing items by index and adding items that implement IComparable without a custom comparer.
+    /// </summary>
+    /// <typeparam name="T">The type of the object to be stored on each node of the tree</typeparam>
+    public class AvlTree<T> : BinaryTree<T>, IAvlTree<T>, IOrderableContainer<T>, IEnumerable<T> where T : ILazinator
     {
-        public AvlNode<T> Root { get => throw new NotImplementedException(); set => throw new NotImplementedException(); } // DEBUG
+        public AvlNode<T> AvlRoot => (AvlNode<T>)Root;
 
         protected virtual AvlNode<T> CreateNode(T value, AvlNode<T> parent = null)
         {
@@ -20,23 +27,11 @@ namespace Lazinator.Collections.Avl
             };
         }
 
-        public string ToTreeString() => Root?.ToTreeString() ?? "";
-
-        protected AvlNode<T> GetMatchingNode(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer) => GetMatchingNode(whichOne, node => CompareValueToNode(value, node, whichOne, comparer));
-
-        protected AvlNode<T> GetMatchingNode(MultivalueLocationOptions whichOne, Func<AvlNode<T>, int> comparisonFunc)
-        {
-            var result = GetMatchingOrNextNode(whichOne, comparisonFunc);
-            if (result.found)
-                return result.node;
-            return null;
-        }
-
         protected (AvlNode<T> node, bool found) GetMatchingOrNextNode(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer) => GetMatchingOrNextNode(whichOne, node => CompareValueToNode(value, node, whichOne, comparer));
 
         protected (AvlNode<T> node, bool found) GetMatchingOrNextNode(MultivalueLocationOptions whichOne, Func<AvlNode<T>, int> comparisonFunc)
         {
-            AvlNode<T> node = Root;
+            AvlNode<T> node = AvlRoot;
             if (node == null)
                 return (null, false);
             while (true)
@@ -98,7 +93,7 @@ namespace Lazinator.Collections.Avl
 
         public virtual void Clear()
         {
-            Root = null;
+            AvlRoot = null;
         }
 
         /// <summary>
@@ -107,7 +102,7 @@ namespace Lazinator.Collections.Avl
         /// <returns></returns>
         protected AvlNode<T> FirstNode()
         {
-            var x = Root;
+            var x = AvlRoot;
             while (x.Left != null)
                 x = x.Left;
             return x;
@@ -119,7 +114,7 @@ namespace Lazinator.Collections.Avl
         /// <returns></returns>
         protected AvlNode<T> LastNode()
         {
-            var x = Root;
+            var x = AvlRoot;
             while (x.Right != null)
                 x = x.Right;
             return x;
@@ -139,7 +134,7 @@ namespace Lazinator.Collections.Avl
 
         protected (AvlNode<T> node, bool insertionNotReplacement) TryInsertSortedReturningNode(T item, MultivalueLocationOptions whichOne, Func<AvlNode<T>, int> comparisonFunc)
         {
-            AvlNode<T> node = Root;
+            AvlNode<T> node = AvlRoot;
             while (node != null)
             {
                 node.NodeVisitedDuringChange = true;
@@ -192,8 +187,8 @@ namespace Lazinator.Collections.Avl
                 }
             }
 
-            Root = CreateNode(item);
-            Root.NodeVisitedDuringChange = true;
+            AvlRoot = CreateNode(item);
+            AvlRoot.NodeVisitedDuringChange = true;
 
             return (node, true);
         }
@@ -208,7 +203,7 @@ namespace Lazinator.Collections.Avl
 
         protected AvlNode<T> TryRemoveSortedReturningNode(MultivalueLocationOptions whichOne, Func<AvlNode<T>, int> comparisonFunc)
         {
-            AvlNode<T> node = Root;
+            AvlNode<T> node = AvlRoot;
             
             while (node != null)
             {
@@ -232,9 +227,9 @@ namespace Lazinator.Collections.Avl
                     {
                         if (right == null)
                         {
-                            if (node == Root)
+                            if (node == AvlRoot)
                             {
-                                Root = null;
+                                AvlRoot = null;
                             }
                             else
                             {
@@ -283,9 +278,9 @@ namespace Lazinator.Collections.Avl
                             successor.Balance = node.Balance;
                             left.Parent = successor;
 
-                            if (node == Root)
+                            if (node == AvlRoot)
                             {
-                                Root = successor;
+                                AvlRoot = successor;
                             }
                             else
                             {
@@ -336,9 +331,9 @@ namespace Lazinator.Collections.Avl
                             right.Parent = successor;
                             left.Parent = successor;
 
-                            if (node == Root)
+                            if (node == AvlRoot)
                             {
-                                Root = successor;
+                                AvlRoot = successor;
                             }
                             else
                             {
@@ -432,9 +427,9 @@ namespace Lazinator.Collections.Avl
                 rightLeft.Parent = node;
             }
 
-            if (node == Root)
+            if (node == AvlRoot)
             {
-                Root = right;
+                AvlRoot = right;
             }
             else if (parent.Right == node)
             {
@@ -470,9 +465,9 @@ namespace Lazinator.Collections.Avl
                 leftRight.Parent = node;
             }
 
-            if (node == Root)
+            if (node == AvlRoot)
             {
-                Root = left;
+                AvlRoot = left;
             }
             else if (parent.Left == node)
             {
@@ -521,9 +516,9 @@ namespace Lazinator.Collections.Avl
                 leftRightLeft.Parent = left;
             }
 
-            if (node == Root)
+            if (node == AvlRoot)
             {
-                Root = leftRight;
+                AvlRoot = leftRight;
             }
             else if (parent.Left == node)
             {
@@ -587,9 +582,9 @@ namespace Lazinator.Collections.Avl
                 rightLeftRight.Parent = right;
             }
 
-            if (node == Root)
+            if (node == AvlRoot)
             {
-                Root = rightLeft;
+                AvlRoot = rightLeft;
             }
             else if (parent.Right == node)
             {
@@ -675,32 +670,16 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        internal static void Replace(AvlNode<T> target, AvlNode<T> source)
+        protected internal override void Replace(BinaryNode<T> target, BinaryNode<T> source)
         {
-            AvlNode<T> left = source.Left;
-            AvlNode<T> right = source.Right;
-
-            target.Balance = source.Balance;
-            target.Value = (T)source.Value.CloneLazinator();
-            target.Left = left;
-            target.Right = right;
-
-            if (left != null)
-            {
-                left.Parent = target;
-            }
-
-            if (right != null)
-            {
-                right.Parent = target;
-            }
+            base.Replace(target, source);
+            ((AvlNode<T>)target).Balance = ((AvlNode<T>)source).Balance;
         }
-
         #endregion
 
-        #region Enumeration
+            #region Enumeration
 
-        public IEnumerable<T> AsEnumerable(long skip = 0)
+        public virtual IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
         {
             var enumerator = new AvlNodeEnumerator<T>(FirstNode());
             long i = skip;

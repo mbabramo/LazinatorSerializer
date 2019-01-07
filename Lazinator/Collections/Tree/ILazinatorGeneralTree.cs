@@ -1,10 +1,10 @@
 ﻿using Lazinator.Core;
 using Lazinator.Attributes;
 
-namespace Lazinator.Collections.GeneralTree
+namespace Lazinator.Collections.Tree
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorGeneralTree)]
-    [UnofficiallyIncorporateInterface("Lazinator.Collections.GeneralTree.ILazinatorGeneralTreeUnofficial`1", "protected")]
+    [UnofficiallyIncorporateInterface("Lazinator.Collections.Tree.ILazinatorGeneralTreeUnofficial`1", "protected")]
     public interface ILazinatorGeneralTree<T> where T : ILazinator
     {
         T Item { get; set; }

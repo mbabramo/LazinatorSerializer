@@ -26,8 +26,8 @@ namespace Lazinator.Collections.Interfaces
         (bool removed, long index) RemoveKeyValue(TKey key, TValue value, IComparer<TKey> comparer);
         (bool removed, long index) RemoveKeyValue(TKey key, TValue value, MultivalueLocationOptions whichOne, IComparer<TKey> comparer);
 
-        IEnumerator<TKey> GetKeyEnumerator(long skip = 0);
-        IEnumerator<TValue> GetValueEnumerator(long skip = 0);
-        IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(long skip = 0);
+        IEnumerator<TKey> GetKeyEnumerator(bool reverse = false, long skip = 0);
+        IEnumerator<TValue> GetValueEnumerator(bool reverse = false, long skip = 0);
+        IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(bool reverse = false, long skip = 0);
     }
 }

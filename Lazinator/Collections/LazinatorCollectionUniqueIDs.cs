@@ -128,5 +128,8 @@
         IAvlSortedTree,
         IAvlCountedNode,
         IAvlIndexableTree,
+        IAvlSortedIndexableTree,
+        IBinaryNode,
+        IBinaryTree,
     }
 }

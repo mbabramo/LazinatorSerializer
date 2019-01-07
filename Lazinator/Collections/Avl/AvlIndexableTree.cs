@@ -80,9 +80,9 @@ namespace Lazinator.Collections.Avl
             TryRemoveSorted(MultivalueLocationOptions.Any, CompareIndexToNodesIndex(index));
         }
 
-        public IEnumerable<T> AsEnumerable(long skip = 0)
+        public override IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
         {
-            var enumerator = new AvlNodeEnumerator<T>(this, skip);
+            var enumerator = new AvlNodeEnumerator<T>(this, reverse, skip);
             while (enumerator.MoveNext())
                 yield return enumerator.Current.Value;
         }

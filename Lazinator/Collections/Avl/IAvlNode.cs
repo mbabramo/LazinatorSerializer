@@ -7,13 +7,6 @@ namespace Lazinator.Collections.Avl
     [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlNode)]
     interface IAvlNode<T> where T: ILazinator
     {
-        T Value { get; set; }
-        AvlNode<T> Left { get; set; }
-        AvlNode<T> Right { get; set; }
-        [DoNotAutogenerate]
-        AvlNode<T> Parent { get; set; }
         int Balance { get; set; }
-        AvlNode<T> GetNextNode();
-        AvlNode<T> GetPreviousNode();
     }
 }

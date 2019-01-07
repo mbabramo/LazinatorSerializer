@@ -223,17 +223,17 @@ namespace Lazinator.Collections.Avl
             return new AvlListNodeTreeEnumerator<TKey, TValue>(this);
         }
 
-        public IEnumerator<TKey> GetKeyEnumerator(long skip = 0)
+        public IEnumerator<TKey> GetKeyEnumerator(bool reverse = false, long skip = 0)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerator<TValue> GetValueEnumerator(long skip = 0)
+        public IEnumerator<TValue> GetValueEnumerator(bool reverse = false, long skip = 0)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(long skip = 0)
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(bool reverse = false, long skip = 0)
         {
             throw new NotImplementedException();
         }

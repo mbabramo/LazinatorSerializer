@@ -9,7 +9,7 @@ namespace Lazinator.Collections.Interfaces
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorTree)]
     public interface IOrderableContainer<T> where T : ILazinator
     {
-        IEnumerable<T> AsEnumerable(long skip = 0);
+        IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0);
         bool Contains(T item, IComparer<T> comparer);
         bool TryInsertSorted(T item, IComparer<T> comparer);
         bool TryInsertSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer);

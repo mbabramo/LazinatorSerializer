@@ -15,7 +15,7 @@ namespace Lazinator.Collections.Avl
         public bool TryInsertSorted(T item) => TryInsertSorted(item, AllowDuplicates ? MultivalueLocationOptions.AfterLast : MultivalueLocationOptions.Any);
         public bool TryInsertSorted(T item, MultivalueLocationOptions whichOne) => TryInsertSorted(item, whichOne, Comparer<T>.Default);
 
-        public bool TryRemoveSorted(T item) => TryRemoveSorted(item, Comparer<T>.Default);
+        public bool TryRemoveSorted(T item) => TryRemoveSorted(item, MultivalueLocationOptions.Any);
         public bool TryRemoveSorted(T item, MultivalueLocationOptions whichOne) => TryRemoveSorted(item, Comparer<T>.Default);
     }
 }

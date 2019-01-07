@@ -10,7 +10,7 @@ using LazinatorTests.Examples.Tuples;
 using Xunit;
 using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
-using Lazinator.Collections.GeneralTree;
+using Lazinator.Collections.Tree;
 
 namespace LazinatorTests.Tests
 {

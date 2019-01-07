@@ -11,8 +11,8 @@ namespace Lazinator.Collections.Interfaces
     {
         (long index, bool exists) FindSorted(T target);
         (long index, bool exists) FindSorted(T target, MultivalueLocationOptions whichOne);
-        (long index, bool rejectedAsDuplicate) InsertSorted(T item);
-        (long index, bool rejectedAsDuplicate) InsertSorted(T item, MultivalueLocationOptions whichOne);
+        (long index, bool insertedNotReplaced) InsertSorted(T item);
+        (long index, bool insertedNotReplaced) InsertSorted(T item, MultivalueLocationOptions whichOne);
         (long priorIndex, bool existed) RemoveSorted(T item);
         (long priorIndex, bool existed) RemoveSorted(T item, MultivalueLocationOptions whichOne);
     }

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Lazinator.Collections.GeneralTree
+namespace Lazinator.Collections.Tree
 {
     /// <summary>
     /// A LazinatorGeneralTree with the ability to look up an element of the tree by location.

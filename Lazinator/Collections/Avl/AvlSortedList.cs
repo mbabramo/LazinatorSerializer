@@ -141,7 +141,7 @@ namespace Lazinator.Collections.Avl
             UnderlyingTree.RemoveAt(index);
         }
 
-        public IEnumerable<T> AsEnumerable(long skip = 0)
+        public IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
         {
             if (skip > Count || skip < 0)
                 throw new ArgumentException();

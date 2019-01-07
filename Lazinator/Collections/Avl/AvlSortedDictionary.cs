@@ -225,12 +225,12 @@ namespace Lazinator.Collections.Avl
             return UnderlyingTree.GetKeyValuePairEnumerator();
         }
 
-        public IEnumerator<TKey> GetKeyEnumerator(long skip = 0)
+        public IEnumerator<TKey> GetKeyEnumerator(bool reverse = false, long skip = 0)
         {
             return UnderlyingTree.GetKeyEnumerator(skip);
         }
 
-        public IEnumerator<TValue> GetValueEnumerator(long skip = 0)
+        public IEnumerator<TValue> GetValueEnumerator(bool reverse = false, long skip = 0)
         {
             return UnderlyingTree.GetValueEnumerator(skip);
         }

@@ -27,7 +27,7 @@ using LazinatorTests.Examples.NonLazinator;
 using LazinatorTests.Examples.Structs;
 using LazinatorTests.Examples.Subclasses;
 using Lazinator.Collections.OffsetList;
-using Lazinator.Collections.GeneralTree;
+using Lazinator.Collections.Tree;
 using Lazinator.Collections.Tuples;
 using Lazinator.Collections.Factories;
 using Lazinator.Examples.Structs;
