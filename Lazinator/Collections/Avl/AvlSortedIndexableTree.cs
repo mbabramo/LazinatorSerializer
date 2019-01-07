@@ -21,7 +21,7 @@ namespace Lazinator.Collections.Avl
         private MultivalueLocationOptions MultivalueLocationOptionForInsertion => AllowDuplicates ? MultivalueLocationOptions.AfterLast : MultivalueLocationOptions.Any;
         private MultivalueLocationOptions MultivalueLocationOptionForRemoval => MultivalueLocationOptions.Any; // because all items are same, it doesn't matter.
 
-        public (long index, bool exists) FindSorted(T target) => FindSorted(target, Comparer<T>.Default);
+        public (long index, bool exists) FindSorted(T target) => FindSorted(target, MultivalueLocationOptions.First);
         public (long index, bool exists) FindSorted(T target, MultivalueLocationOptions whichOne) => FindSorted(target, whichOne, Comparer<T>.Default);
         public (long index, bool insertedNotReplaced) InsertSorted(T item) => InsertSorted(item, MultivalueLocationOptionForInsertion);
         public (long index, bool insertedNotReplaced) InsertSorted(T item, MultivalueLocationOptions whichOne) => InsertSorted(item, whichOne, Comparer<T>.Default);

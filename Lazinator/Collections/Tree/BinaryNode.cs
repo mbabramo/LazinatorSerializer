@@ -71,11 +71,13 @@ namespace Lazinator.Collections.Tree
 
         public BinaryNode<T> GetPreviousNode()
         {
-            // If there is a left node, then we just came from there. 
+            // If there is a left node, then we just came from its rightmost descendant. 
             BinaryNode<T> current = this;
             if (current.Left != null)
             {
                 current = current.Left;
+                while (current.Right != null)
+                    current = current.Right;
                 return current;
             }
             var p = current.Parent;

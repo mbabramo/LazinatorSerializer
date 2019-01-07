@@ -13,6 +13,7 @@ using LazinatorTests.Examples.Structs;
 using System.Diagnostics;
 using Lazinator.Collections.Factories;
 using System.Collections;
+using Lazinator.Collections.Interfaces;
 
 namespace LazinatorTests.Tests
 {
@@ -286,7 +287,7 @@ namespace LazinatorTests.Tests
             (bool isSorted, bool allowsDuplicates) = GetSortedInfo(listFactoryToUse);
             var factory = GetListFactory(listFactoryToUse);
             bool trace = false;
-            bool testIntermediateValues = false;
+            bool testIntermediateValues = true; // DEBUG
             Random r = new Random(0);
             ILazinatorListable<WInt> l = factory.CreateListable();
             List<int> o = new List<int>();
@@ -363,7 +364,8 @@ namespace LazinatorTests.Tests
                                 int value = o[index];
                                 int expectedIndex = index;
                                 while (expectedIndex > 0 && o[expectedIndex - 1] == value)
-                                    expectedIndex--; // earlier key with same value
+                                    expectedIndex--; // first key with same value
+
                                 findResult = (l as ILazinatorSortable<WInt>).FindSorted(value);
                                 findResult.exists.Should().BeTrue();
                                 findResult.location.Should().Be(expectedIndex);

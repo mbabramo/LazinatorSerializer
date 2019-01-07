@@ -53,6 +53,7 @@ namespace Lazinator.Collections.Tree
             while (true)
             {
                 int comparison = comparisonFunc(node);
+                var DEBUG = node.GetPreviousNode();
                 if (comparison < 0)
                 {
                     if (node.Left == null)
@@ -89,13 +90,13 @@ namespace Lazinator.Collections.Tree
                 {
                     var previousNode = node.GetPreviousNode();
                     if (previousNode != null && comparer.Compare(value, previousNode.Value) == 0)
-                        compare = 1;
+                        compare = -1;
                 }
                 else
                 {
                     var nextNode = node.GetNextNode();
                     if (nextNode != null && comparer.Compare(value, nextNode.Value) == 0)
-                        compare = -1;
+                        compare = 1;
                 }
             }
 

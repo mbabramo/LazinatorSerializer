@@ -158,13 +158,13 @@ namespace Lazinator.Collections.Avl
 
         public (long index, bool insertedNotReplaced) InsertSorted(T item) => InsertSorted(item, Comparer<T>.Default);
 
-        public (long index, bool insertedNotReplaced) InsertSorted(T item, IComparer<T> comparer) => UnderlyingTree.InsertSorted(item, comparer);
+        public (long index, bool insertedNotReplaced) InsertSorted(T item, IComparer<T> comparer) => UnderlyingTree.InsertSorted(item, AllowDuplicates ? MultivalueLocationOptions.AfterLast : MultivalueLocationOptions.Any, comparer);
 
         public bool RemoveSorted(T item) => RemoveSorted(item, Comparer<T>.Default);
 
         public bool RemoveSorted(T item, IComparer<T> comparer) => UnderlyingTree.RemoveSorted(item, comparer);
 
-        public (long index, bool exists) FindSorted(T target) => FindSorted(target, Comparer<T>.Default);
+        public (long index, bool exists) FindSorted(T target) => UnderlyingTree.FindSorted(target, MultivalueLocationOptions.First, Comparer<T>.Default);
 
         public (long index, bool exists) FindSorted(T target, IComparer<T> comparer) => UnderlyingTree.FindSorted(target, comparer);
 
