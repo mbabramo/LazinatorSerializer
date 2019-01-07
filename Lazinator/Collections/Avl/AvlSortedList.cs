@@ -170,7 +170,7 @@ namespace Lazinator.Collections.Avl
 
         public virtual ILazinatorSplittable SplitOff()
         {
-            AvlSortedList<T> partSplitOff = new AvlSortedList<T>(AllowDuplicates, (ISortedIndexableContainerFactory<T>) ((ILazinatorSplittable)UnderlyingTree).SplitOff());
+            AvlSortedList<T> partSplitOff = new AvlSortedList<T>(AllowDuplicates, (ISortedIndexableContainer<T>) ((ILazinatorSplittable)UnderlyingTree).SplitOff());
             return partSplitOff;
         }
 

@@ -8,6 +8,7 @@ namespace Lazinator.Collections.Factories
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ISortedIndexableContainerFactory)]
     public interface ISortedIndexableContainerFactory<T> : ILazinator where T : ILazinator, IComparable<T>
     {
+        bool AllowDuplicates { get; set; }
         ISortedIndexableContainer<T> CreateSortedIndexableContainer();
     }
 }

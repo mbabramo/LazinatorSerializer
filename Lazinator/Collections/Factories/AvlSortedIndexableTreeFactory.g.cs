@@ -34,6 +34,23 @@ namespace Lazinator.Collections.Factories
         
         
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected bool _AllowDuplicates;
+        public bool AllowDuplicates
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                return _AllowDuplicates;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                IsDirty = true;
+                _AllowDuplicates = value;
+            }
+        }
+        
         /* Serialization, deserialization, and object relationships */
         
         public AvlSortedIndexableTreeFactory() : base()
@@ -101,6 +118,7 @@ namespace Lazinator.Collections.Factories
         {
             clone.FreeInMemoryObjects();
             AvlSortedIndexableTreeFactory<T> typedClone = (AvlSortedIndexableTreeFactory<T>) clone;
+            typedClone.AllowDuplicates = AllowDuplicates;
             
             return typedClone;
         }
@@ -243,6 +261,7 @@ namespace Lazinator.Collections.Factories
         
         public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
         {
+            yield return ("AllowDuplicates", (object)AllowDuplicates);
             yield break;
         }
         
@@ -282,6 +301,7 @@ namespace Lazinator.Collections.Factories
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            _AllowDuplicates = span.ToBoolean(ref bytesSoFar);
         }
         
         public virtual void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -342,6 +362,7 @@ namespace Lazinator.Collections.Factories
             CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            WriteUncompressedPrimitives.WriteBool(ref writer, _AllowDuplicates);
         }
         
     }

@@ -50,9 +50,9 @@ namespace LazinatorTests.Tests
                 case ListFactoryToUse.AvlList:
                     return new AvlListFactory<WInt>(new AvlIndexableTreeFactory<WInt>());
                 case ListFactoryToUse.AvlSortedList:
-                    return new AvlSortedListFactory<WInt>(false, new AvlSortedIndexableTreeFactory<WInt>());
+                    return new AvlSortedListFactory<WInt>(false, new AvlSortedIndexableTreeFactory<WInt>(false));
                 case ListFactoryToUse.AvlSortedListAllowDuplicates:
-                    return new AvlSortedListFactory<WInt>(true, new AvlSortedIndexableTreeFactory<WInt>());
+                    return new AvlSortedListFactory<WInt>(true, new AvlSortedIndexableTreeFactory<WInt>(true));
                 default:
                     throw new NotImplementedException();
             }

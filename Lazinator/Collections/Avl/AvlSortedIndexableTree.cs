@@ -8,6 +8,11 @@ namespace Lazinator.Collections.Avl
 {
     public partial class AvlSortedIndexableTree<T> : AvlIndexableTree<T>, IAvlSortedIndexableTree<T>, ISortedIndexableContainer<T> where T : ILazinator, IComparable<T>
     {
+        public AvlSortedIndexableTree(bool allowDuplicates)
+        {
+            AllowDuplicates = allowDuplicates;
+        }
+
         public override IOrderableContainer<T> CreateNewWithSameSettings()
         {
             return new AvlSortedIndexableTree<T>() { AllowDuplicates = AllowDuplicates };

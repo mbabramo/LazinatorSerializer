@@ -10,9 +10,15 @@ namespace Lazinator.Collections.Factories
 {
     public partial class AvlSortedIndexableTreeFactory<T> : IAvlSortedIndexableTreeFactory<T> where T : ILazinator, IComparable<T>
     {
+        public AvlSortedIndexableTreeFactory(bool allowDuplicates)
+        {
+            AllowDuplicates = allowDuplicates;
+        }
+            
+
         public ISortedIndexableContainer<T> CreateSortedIndexableContainer()
         {
-            return new AvlSortedIndexableTree<T>();
+            return new AvlSortedIndexableTree<T>(AllowDuplicates);
         }
     }
 }
