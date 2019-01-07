@@ -35,9 +35,9 @@ namespace Lazinator.Collections.Avl
                 compare = 0;
                 // The following is needed for insertions. If on an insertion, we return compare = 0, that means we want to replace the item at that location.
                 if (whichOne == MultivalueLocationOptions.BeforeFirst)
-                    compare = 1;
-                else if (whichOne == MultivalueLocationOptions.AfterLast)
                     compare = -1;
+                else if (whichOne == MultivalueLocationOptions.AfterLast)
+                    compare = 1;
             }
             else if (desiredNodeIndex < actualNodeIndex)
                 compare = -1;

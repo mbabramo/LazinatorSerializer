@@ -10,7 +10,7 @@ namespace Lazinator.Collections.Avl
     {
         [NonSerialized]
         protected bool _NodeVisitedDuringChange;
-        internal virtual bool NodeVisitedDuringChange { get; set; }
+        internal bool NodeVisitedDuringChange { get; set; }
 
         public AvlNode<T> AvlLeft => (AvlNode<T>)Left;
         public AvlNode<T> AvlRight => (AvlNode<T>)Right;

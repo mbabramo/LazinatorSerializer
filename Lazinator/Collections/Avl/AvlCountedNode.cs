@@ -31,33 +31,19 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        internal override bool NodeVisitedDuringChange
-        {
-            set
-            {
-                _NodeVisitedDuringChange = value;
-                _Index = null;
-            }
-        }
-
         public override void UpdateFollowingTreeChange()
         {
-            if (_Left != null)
+            if (LeftCountedNode != null && LeftCountedNode.NodeVisitedDuringChange)
             {
-                if (LeftCountedNode.NodeVisitedDuringChange)
-                {
-                    LeftCountedNode.UpdateFollowingTreeChange();
-                }
-                LeftCount = LeftCountedNode.LongCount;
+                LeftCountedNode.UpdateFollowingTreeChange();
             }
-            if (_Right != null)
+            LeftCount = LeftCountedNode?.LongCount ?? 0;
+            if (RightCountedNode != null && RightCountedNode.NodeVisitedDuringChange)
             {
-                if (RightCountedNode.NodeVisitedDuringChange)
-                {
-                    RightCountedNode.UpdateFollowingTreeChange();
-                }
-                RightCount = RightCountedNode.LongCount;
+                RightCountedNode.UpdateFollowingTreeChange();
             }
+            RightCount = RightCountedNode?.LongCount ?? 0;
+            _Index = null;
             if (NodeVisitedDuringChange)
                 NodeVisitedDuringChange = false;
         }
@@ -65,7 +51,7 @@ namespace Lazinator.Collections.Avl
 
         public override string ToString()
         {
-            return $"Index {Index}: {Value} (Count {LongCount}) (visited {NodeVisitedDuringChange}";
+            return $"Index {Index}: {Value} (Count {LongCount}: Left {LeftCount} Self {SelfCount} Right {RightCount}) (visited {NodeVisitedDuringChange})";
         }
 
     }

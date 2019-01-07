@@ -11,9 +11,6 @@ namespace Lazinator.Collections.Avl
 {
     public partial class AvlSortedList<T> : IAvlSortedList<T>, IList<T>, ILazinatorSortable<T> where T : ILazinator, IComparable<T>
     {
-
-        public ISortedIndexableContainer<T> UnderlyingTree { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public AvlSortedList()
         {
         }

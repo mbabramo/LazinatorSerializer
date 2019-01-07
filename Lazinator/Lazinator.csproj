@@ -39,7 +39,6 @@
     <Compile Remove="Collections\Avl\AvlOldTree.g.cs" />
     <Compile Remove="Collections\Avl\AvlSortedDictionary.cs" />
     <Compile Remove="Collections\Avl\AvlSortedDictionary.g.cs" />
-    <Compile Remove="Collections\Avl\AvlSortedList.g.cs" />
     <Compile Remove="Collections\Avl\IAvlDictionary.cs" />
     <Compile Remove="Collections\Avl\IAvlListNodeContents.cs" />
     <Compile Remove="Collections\Avl\IAvlListNodeTree.cs" />
