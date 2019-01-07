@@ -115,7 +115,9 @@ namespace Lazinator.Collections.Avl
                 else
                 {
                     AvlNode<T> left = node.AvlLeft;
+                    left.EnsureInitialized();
                     AvlNode<T> right = node.AvlRight;
+                    right.EnsureInitialized();
 
                     if (left == null)
                     {

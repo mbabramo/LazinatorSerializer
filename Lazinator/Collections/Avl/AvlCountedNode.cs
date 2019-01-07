@@ -31,23 +31,6 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        public void DEBUG()
-        {
-
-            if (LeftCountedNode != null)
-            {
-                if (LeftCountedNode.Parent != this)
-                    throw new Exception("DEBUG");
-                LeftCountedNode.DEBUG();
-            }
-            if (RightCountedNode != null)
-            {
-                if (RightCountedNode.Parent != this)
-                    throw new Exception("DEBUG");
-                RightCountedNode.DEBUG();
-            }
-        }
-
         public override void UpdateFollowingTreeChange()
         {
             if (LeftCountedNode != null && LeftCountedNode.NodeVisitedDuringChange)
@@ -65,6 +48,11 @@ namespace Lazinator.Collections.Avl
                 NodeVisitedDuringChange = false;
         }
 
+        public override void EnsureInitialized()
+        {
+            var index = Index; // loads the index into _Index, thus allowing read of former index even if item is removed.
+        }
+
         internal void ResetIndicesFollowingTreeSplit()
         {
             _Index = null;
@@ -77,7 +65,7 @@ namespace Lazinator.Collections.Avl
 
         public override string ToString()
         {
-            return $"Index {Index}: {Value} (Count {LongCount}: Left {LeftCount} Self {SelfCount} Right {RightCount}) (visited {NodeVisitedDuringChange})";
+            return $"Index {Index}: {Value} (Count {LongCount}: Left {LeftCount} Self {SelfCount} Right {RightCount}) (visited {NodeVisitedDuringChange}) (ParentIndex {(Parent is AvlCountedNode<T> p ? p.Index.ToString() : "N/A")})";
         }
 
     }

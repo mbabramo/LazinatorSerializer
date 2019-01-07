@@ -120,11 +120,10 @@ namespace Lazinator.Collections.Avl
         public (long priorIndex, bool existed) RemoveSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
             var result = TryRemoveSortedReturningNode(item, whichOne, comparer);
-            ((AvlCountedNode<T>)Root).DEBUG();
             if (result == null)
                 return (default, false);
             var node = ((AvlCountedNode<T>)result);
-            return (node.Index, true);
+            return ((long) node._Index, true);
         }
 
         public ILazinatorSplittable SplitOff()

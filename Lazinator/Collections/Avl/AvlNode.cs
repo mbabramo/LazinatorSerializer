@@ -20,8 +20,13 @@ namespace Lazinator.Collections.Avl
 
         public virtual void UpdateFollowingTreeChange()
         {
+        }
+
+        public virtual void EnsureInitialized()
+        {
 
         }
+
 
     }
 }
