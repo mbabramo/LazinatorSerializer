@@ -116,14 +116,14 @@ namespace Lazinator.Collections.Avl
             var node = ((AvlCountedNode<T>)result.node);
             return (node.Index, result.insertedNotReplaced);
         }
-        public (long priorIndex, bool existed) RemoveSorted(T item, IComparer<T> comparer) => RemoveSorted(item, MultivalueLocationOptions.Any, comparer);
-        public (long priorIndex, bool existed) RemoveSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
+        public bool RemoveSorted(T item, IComparer<T> comparer) => RemoveSorted(item, MultivalueLocationOptions.Any, comparer);
+        public bool RemoveSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
             var result = TryRemoveSortedReturningNode(item, whichOne, comparer);
             if (result == null)
-                return (default, false);
+                return false;
             var node = ((AvlCountedNode<T>)result);
-            return ((long) node._Index, true);
+            return true;
         }
 
         public ILazinatorSplittable SplitOff()

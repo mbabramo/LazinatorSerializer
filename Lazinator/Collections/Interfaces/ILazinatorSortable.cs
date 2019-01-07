@@ -16,10 +16,10 @@ namespace Lazinator.Collections
     {
         bool AllowDuplicates { get; set; }
         (long index, bool insertedNotReplaced) InsertSorted(T item);
-        (long priorIndex, bool existed) RemoveSorted(T item);
+        bool RemoveSorted(T item);
         (long index, bool exists) FindSorted(T target);
         (long index, bool insertedNotReplaced) InsertSorted(T item, IComparer<T> comparer);
-        (long priorIndex, bool existed) RemoveSorted(T item, IComparer<T> comparer);
+        bool RemoveSorted(T item, IComparer<T> comparer);
         (long index, bool exists) FindSorted(T target, IComparer<T> comparer);
     }
 }

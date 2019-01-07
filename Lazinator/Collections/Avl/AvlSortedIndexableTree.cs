@@ -25,8 +25,8 @@ namespace Lazinator.Collections.Avl
         public (long index, bool exists) FindSorted(T target, MultivalueLocationOptions whichOne) => FindSorted(target, whichOne, Comparer<T>.Default);
         public (long index, bool insertedNotReplaced) InsertSorted(T item) => InsertSorted(item, MultivalueLocationOptionForInsertion);
         public (long index, bool insertedNotReplaced) InsertSorted(T item, MultivalueLocationOptions whichOne) => InsertSorted(item, whichOne, Comparer<T>.Default);
-        public (long priorIndex, bool existed) RemoveSorted(T item) => RemoveSorted(item, MultivalueLocationOptionForRemoval);
-        public (long priorIndex, bool existed) RemoveSorted(T item, MultivalueLocationOptions whichOne) => RemoveSorted(item, whichOne, Comparer<T>.Default);
+        public bool RemoveSorted(T item) => RemoveSorted(item, MultivalueLocationOptionForRemoval);
+        public bool RemoveSorted(T item, MultivalueLocationOptions whichOne) => RemoveSorted(item, whichOne, Comparer<T>.Default);
 
 
         public bool TryInsertSorted(T item) => TryInsertSorted(item, MultivalueLocationOptionForInsertion);

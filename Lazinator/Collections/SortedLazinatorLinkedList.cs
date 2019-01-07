@@ -9,7 +9,7 @@ namespace Lazinator.Collections
     public partial class SortedLazinatorLinkedList<T> : LazinatorLinkedList<T>, ISortedLazinatorLinkedList<T>, ILazinatorSortable<T> where T : IComparable<T>, ILazinator
     {
         public (long index, bool insertedNotReplaced) InsertSorted(T item) => InsertSorted(item, Comparer<T>.Default);
-        public (long priorIndex, bool existed) RemoveSorted(T item) => RemoveSorted(item, Comparer<T>.Default);
+        public bool RemoveSorted(T item) => RemoveSorted(item, Comparer<T>.Default);
         public (long index, bool exists) FindSorted(T target) => FindSorted(target, Comparer<T>.Default);
 
         public (long index, bool insertedNotReplaced) InsertSorted(T item, IComparer<T> comparer)
@@ -21,12 +21,12 @@ namespace Lazinator.Collections
             return (index, true);
         }
 
-        public (long priorIndex, bool existed) RemoveSorted(T item, IComparer<T> comparer)
+        public bool RemoveSorted(T item, IComparer<T> comparer)
         {
             (long location, bool exists) = FindSorted(item);
             if (exists)
                 RemoveAt(location);
-            return (location, exists);
+            return exists;
         }
 
         public (long index, bool exists) FindSorted(T target, IComparer<T> comparer)

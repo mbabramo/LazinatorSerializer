@@ -160,9 +160,9 @@ namespace Lazinator.Collections.Avl
 
         public (long index, bool insertedNotReplaced) InsertSorted(T item, IComparer<T> comparer) => UnderlyingTree.InsertSorted(item, comparer);
 
-        public (long priorIndex, bool existed) RemoveSorted(T item) => RemoveSorted(item, Comparer<T>.Default);
+        public bool RemoveSorted(T item) => RemoveSorted(item, Comparer<T>.Default);
 
-        public (long priorIndex, bool existed) RemoveSorted(T item, IComparer<T> comparer) => UnderlyingTree.RemoveSorted(item, comparer);
+        public bool RemoveSorted(T item, IComparer<T> comparer) => UnderlyingTree.RemoveSorted(item, comparer);
 
         public (long index, bool exists) FindSorted(T target) => FindSorted(target, Comparer<T>.Default);
 
