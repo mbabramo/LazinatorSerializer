@@ -7,12 +7,6 @@ namespace Lazinator.Collections.Tree
 {
     public partial class BinaryNode<T> : IBinaryNode<T> where T : ILazinator
     {
-        public T Value { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public BinaryNode<T> _Left = null, _Right = null;
-        public BinaryNode<T> Left { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public BinaryNode<T> Right { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public LazinatorParentsCollection LazinatorParents { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         // We can't serialize the Parent, because an item can't appear multiple times in a hierarchy, so we use the Lazinator built-in parent as a substitute.
         private BinaryNode<T> _Parent;
         public BinaryNode<T> Parent

@@ -2,6 +2,7 @@
 using Lazinator.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Lazinator.Collections.Tree
@@ -14,8 +15,6 @@ namespace Lazinator.Collections.Tree
     /// <typeparam name="T"></typeparam>
     public partial class BinaryTree<T> : IBinaryTree<T>, IOrderableContainer<T> where T : ILazinator
     {
-        public BinaryNode<T> Root { get => throw new NotImplementedException(); set => throw new NotImplementedException(); } // DEBUG
-
         protected virtual BinaryNode<T> CreateNode(T value, BinaryNode<T> parent = null)
         {
             return new BinaryNode<T>()
@@ -98,7 +97,7 @@ namespace Lazinator.Collections.Tree
 
         public bool Contains(T item, IComparer<T> comparer)
         {
-            throw new NotImplementedException();
+            return AsEnumerable().Any(x => comparer.Compare(x, item) == 0);
         }
 
         public virtual void Clear()

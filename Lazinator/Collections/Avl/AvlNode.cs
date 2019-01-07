@@ -12,8 +12,6 @@ namespace Lazinator.Collections.Avl
         protected bool _NodeVisitedDuringChange;
         internal virtual bool NodeVisitedDuringChange { get; set; }
 
-        public int Balance { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public AvlNode<T> AvlLeft => (AvlNode<T>)Left;
         public AvlNode<T> AvlRight => (AvlNode<T>)Right;
         public AvlNode<T> AvlParent => (AvlNode<T>)Parent;

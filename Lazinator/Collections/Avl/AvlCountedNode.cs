@@ -8,10 +8,6 @@ namespace Lazinator.Collections.Avl
 {
     public partial class AvlCountedNode<T> : AvlNode<T>, IAvlCountedNode<T> where T : ILazinator
     {
-        public long LeftCount { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public long SelfCount { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public long RightCount { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public long LongCount => LeftCount + SelfCount + RightCount;
 
         public AvlCountedNode<T> ParentCountedNode => (AvlCountedNode<T>)Parent;

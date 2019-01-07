@@ -6,10 +6,8 @@ using System.Text;
 
 namespace Lazinator.Collections.Avl
 {
-    public class AvlSortedTree<T> : AvlTree<T>, IAvlSortedTree<T>, ISortedContainer<T> where T : ILazinator , IComparable<T>
+    public partial class AvlSortedTree<T> : AvlTree<T>, IAvlSortedTree<T>, ISortedContainer<T> where T : ILazinator , IComparable<T>
     {
-        public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public bool Contains(T item) => Contains(item, Comparer<T>.Default);
 
         public bool TryInsertSorted(T item) => TryInsertSorted(item, AllowDuplicates ? MultivalueLocationOptions.AfterLast : MultivalueLocationOptions.Any);
