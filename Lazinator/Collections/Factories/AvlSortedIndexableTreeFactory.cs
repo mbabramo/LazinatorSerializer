@@ -16,8 +16,6 @@ namespace Lazinator.Collections.Factories
             Unbalanced = unbalanced;
         }
 
-        public bool Unbalanced { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public ISortedIndexableMultivalueContainer<T> CreateSortedIndexableMultivalueContainer()
         {
             return new AvlSortedIndexableTree<T>(AllowDuplicates) { Unbalanced = Unbalanced };

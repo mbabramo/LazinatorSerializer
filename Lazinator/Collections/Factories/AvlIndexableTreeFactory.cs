@@ -10,7 +10,6 @@ namespace Lazinator.Collections.Factories
 {
     public partial class AvlIndexableTreeFactory<T> : IAvlIndexableTreeFactory<T> where T : ILazinator
     {
-        public bool Unbalanced { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public IIndexableContainer<T> CreateIndexableContainer()
         {

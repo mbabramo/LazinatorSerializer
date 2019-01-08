@@ -51,6 +51,23 @@ namespace Lazinator.Collections.Factories
             }
         }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected bool _Unbalanced;
+        public bool Unbalanced
+        {
+            [DebuggerStepThrough]
+            get
+            {
+                return _Unbalanced;
+            }
+            [DebuggerStepThrough]
+            set
+            {
+                IsDirty = true;
+                _Unbalanced = value;
+            }
+        }
+        
         /* Serialization, deserialization, and object relationships */
         
         public AvlSortedIndexableTreeFactory() : base()
@@ -119,6 +136,7 @@ namespace Lazinator.Collections.Factories
             clone.FreeInMemoryObjects();
             AvlSortedIndexableTreeFactory<T> typedClone = (AvlSortedIndexableTreeFactory<T>) clone;
             typedClone.AllowDuplicates = AllowDuplicates;
+            typedClone.Unbalanced = Unbalanced;
             
             return typedClone;
         }
@@ -262,6 +280,7 @@ namespace Lazinator.Collections.Factories
         public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
         {
             yield return ("AllowDuplicates", (object)AllowDuplicates);
+            yield return ("Unbalanced", (object)Unbalanced);
             yield break;
         }
         
@@ -302,6 +321,7 @@ namespace Lazinator.Collections.Factories
         {
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _AllowDuplicates = span.ToBoolean(ref bytesSoFar);
+            _Unbalanced = span.ToBoolean(ref bytesSoFar);
         }
         
         public virtual void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -363,6 +383,7 @@ namespace Lazinator.Collections.Factories
             writer.Write((byte)includeChildrenMode);
             // write properties
             WriteUncompressedPrimitives.WriteBool(ref writer, _AllowDuplicates);
+            WriteUncompressedPrimitives.WriteBool(ref writer, _Unbalanced);
         }
         
     }

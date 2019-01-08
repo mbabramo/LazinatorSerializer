@@ -8,6 +8,7 @@ namespace Lazinator.Collections.Tree
     public interface IBinaryTree<T> where T : ILazinator
     {
         bool AllowDuplicates { get; set; }
+        bool Unbalanced { get; set; }
         BinaryNode<T> Root { get; set; }
     }
 }
