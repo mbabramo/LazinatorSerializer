@@ -85,7 +85,7 @@ namespace Lazinator.Collections.Avl
         public void InsertAt(long index, T item)
         {
             ConfirmInRangeOrThrow(index, true);
-            TryInsertSorted(item, CompareIndexToNodesIndex(index, MultivalueLocationOptions.BeforeFirst));
+            TryInsert(item, CompareIndexToNodesIndex(index, MultivalueLocationOptions.BeforeFirst));
         }
         public void RemoveAt(long index)
         {
@@ -112,18 +112,9 @@ namespace Lazinator.Collections.Avl
         public (long index, bool insertedNotReplaced) InsertGetIndex(T item, IComparer<T> comparer) => InsertGetIndex(item, MultivalueLocationOptions.Any, comparer);
         public (long index, bool insertedNotReplaced) InsertGetIndex(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
-            var result = TryInsertSortedReturningNode(item, whichOne, comparer);
+            var result = TryInsertReturningNode(item, whichOne, comparer);
             var node = ((AvlCountedNode<T>)result.node);
             return (node.Index, result.insertedNotReplaced);
-        }
-        public bool TryRemove(T item, IComparer<T> comparer) => TryRemove(item, MultivalueLocationOptions.Any, comparer);
-        public bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
-        {
-            var result = TryRemoveReturningNode(item, whichOne, comparer);
-            if (result == null)
-                return false;
-            var node = ((AvlCountedNode<T>)result);
-            return true;
         }
 
         public ILazinatorSplittable SplitOff()

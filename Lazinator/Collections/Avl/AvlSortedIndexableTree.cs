@@ -26,16 +26,23 @@ namespace Lazinator.Collections.Avl
         public (long index, bool insertedNotReplaced) InsertGetIndex(T item) => InsertGetIndex(item, MultivalueLocationOptionForInsertion);
         public (long index, bool insertedNotReplaced) InsertGetIndex(T item, MultivalueLocationOptions whichOne) => InsertGetIndex(item, whichOne, Comparer<T>.Default);
         public bool RemoveSorted(T item) => TryRemove(item, MultivalueLocationOptionForRemoval);
+
+
+        public bool TryInsert(T item) => TryInsert(item, MultivalueLocationOptionForInsertion);
+        public bool TryInsert(T item, MultivalueLocationOptions whichOne) => TryInsert(item, whichOne, Comparer<T>.Default);
         public bool TryRemove(T item, MultivalueLocationOptions whichOne) => TryRemove(item, whichOne, Comparer<T>.Default);
-
-
-        public bool TryInsertSorted(T item) => TryInsertSorted(item, MultivalueLocationOptionForInsertion);
-        public bool TryInsertSorted(T item, MultivalueLocationOptions whichOne) => TryInsert(item, whichOne, Comparer<T>.Default);
-        public bool TryRemoveSorted(T item) => TryRemoveSorted(item, MultivalueLocationOptionForRemoval);
-        public bool TryRemoveSorted(T item, MultivalueLocationOptions whichOne) => TryRemove(item, Comparer<T>.Default);
+        public bool TryRemove(T item) => TryRemove(item, MultivalueLocationOptionForRemoval);
 
         public bool Contains(T item) => Contains(item, Comparer<T>.Default);
 
+        public int Count(T item)
+        {
+            throw new NotImplementedException();
+        }
 
+        public bool TryRemoveAll(T item)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

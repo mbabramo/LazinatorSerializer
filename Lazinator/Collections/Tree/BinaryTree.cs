@@ -165,7 +165,7 @@ namespace Lazinator.Collections.Tree
         public bool TryInsert(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
             CheckAllowDuplicates(whichOne);
-            return TryInsertSorted(item, node => CompareValueToNode(item, node, whichOne, comparer));
+            return TryInsert(item, node => CompareValueToNode(item, node, whichOne, comparer));
         }
 
         protected void CheckAllowDuplicates(MultivalueLocationOptions whichOne)
@@ -174,19 +174,19 @@ namespace Lazinator.Collections.Tree
                 throw new Exception("Allowing potential duplicates is forbidden. Use MultivalueLocationOptions.Any");
         }
 
-        protected bool TryInsertSorted(T item, Func<BinaryNode<T>, int> comparisonFunc)
+        protected bool TryInsert(T item, Func<BinaryNode<T>, int> comparisonFunc)
         {
-            var result = TryInsertSortedReturningNode(item, comparisonFunc);
+            var result = TryInsertReturningNode(item, comparisonFunc);
             return result.insertedNotReplaced;
         }
 
-        public (BinaryNode<T> node, bool insertedNotReplaced) TryInsertSortedReturningNode(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
+        public (BinaryNode<T> node, bool insertedNotReplaced) TryInsertReturningNode(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
             CheckAllowDuplicates(whichOne);
-            return TryInsertSortedReturningNode(item, node => CompareValueToNode(item, node, whichOne, comparer));
+            return TryInsertReturningNode(item, node => CompareValueToNode(item, node, whichOne, comparer));
         }
 
-        protected virtual (BinaryNode<T> node, bool insertedNotReplaced) TryInsertSortedReturningNode(T item, Func<BinaryNode<T>, int> comparisonFunc)
+        protected virtual (BinaryNode<T> node, bool insertedNotReplaced) TryInsertReturningNode(T item, Func<BinaryNode<T>, int> comparisonFunc)
         {
             BinaryNode<T> node = Root;
             while (node != null)
@@ -242,11 +242,11 @@ namespace Lazinator.Collections.Tree
 
         public bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryRemove(whichOne, node => CompareValueToNode(item, node, whichOne, comparer));
 
-        protected bool TryRemove(MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc) => TryRemoveSortedReturningNode(whichOne, comparisonFunc) != null;
+        protected bool TryRemove(MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc) => TryRemoveReturningNode(whichOne, comparisonFunc) != null;
 
-        protected BinaryNode<T> TryRemoveReturningNode(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryRemoveSortedReturningNode(whichOne, node => CompareValueToNode(item, node, whichOne, comparer));
+        protected BinaryNode<T> TryRemoveReturningNode(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryRemoveReturningNode(whichOne, node => CompareValueToNode(item, node, whichOne, comparer));
 
-        protected virtual BinaryNode<T> TryRemoveSortedReturningNode(MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
+        protected virtual BinaryNode<T> TryRemoveReturningNode(MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
         {
             BinaryNode<T> node = Root;
 

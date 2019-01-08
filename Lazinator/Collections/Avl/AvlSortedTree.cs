@@ -15,10 +15,31 @@ namespace Lazinator.Collections.Avl
 
         public bool Contains(T item) => Contains(item, Comparer<T>.Default);
 
-        public bool TryInsertSorted(T item) => TryInsertSorted(item, AllowDuplicates ? MultivalueLocationOptions.AfterLast : MultivalueLocationOptions.Any);
-        public bool TryInsertSorted(T item, MultivalueLocationOptions whichOne) => TryInsert(item, whichOne, Comparer<T>.Default);
+        public bool TryInsert(T item) => TryInsert(item, AllowDuplicates ? MultivalueLocationOptions.AfterLast : MultivalueLocationOptions.Any);
+        public bool TryInsert(T item, MultivalueLocationOptions whichOne) => TryInsert(item, whichOne, Comparer<T>.Default);
 
-        public bool TryRemoveSorted(T item) => TryRemoveSorted(item, MultivalueLocationOptions.Any);
-        public bool TryRemoveSorted(T item, MultivalueLocationOptions whichOne) => TryRemove(item, Comparer<T>.Default);
+        public bool TryRemove(T item) => TryRemove(item, MultivalueLocationOptions.Any);
+        public bool TryRemove(T item, MultivalueLocationOptions whichOne) => TryRemove(item, Comparer<T>.Default);
+
+        public int Count(T item)
+        {
+            var node = GetMatchingNode(item, MultivalueLocationOptions.First, Comparer<T>.Default);
+            if (node == null)
+                return 0;
+            int count = 0;
+            while (node != null)
+            {
+                count++;
+                node = node.GetNextNode();
+                if (!node.Value.Equals(item))
+                    node = null;
+            }
+            return count;
+        }
+
+        public bool TryRemoveAll(T item)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

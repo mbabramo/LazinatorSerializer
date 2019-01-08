@@ -13,6 +13,10 @@ namespace Lazinator.Collections.Avl
         public AvlTree<LazinatorKeyValue<TKey, TValue>> UnderlyingTree { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
+        public AvlKeyValueTree(bool allowDuplicates)
+        {
+            UnderlyingTree = new AvlTree<LazinatorKeyValue<TKey, TValue>>() { AllowDuplicates = allowDuplicates };
+        }
 
         LazinatorKeyValue<TKey, TValue> KeyPlusDefault(TKey key) => new LazinatorKeyValue<TKey, TValue>(key, default);
 
@@ -85,6 +89,41 @@ namespace Lazinator.Collections.Avl
         }
 
         public bool RemoveAll(TKey item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<TValue> GetAllValues(TKey key, IComparer<TKey> comparer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TryRemoveAll(TKey key, IComparer<TKey> comparer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IKeyValueContainer<TKey, TValue> CreateNewWithSameSettings()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Clear()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerator<TKey> GetKeyEnumerator(bool reverse = false, long skip = 0)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerator<TValue> GetValueEnumerator(bool reverse = false, long skip = 0)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(bool reverse = false, long skip = 0)
         {
             throw new NotImplementedException();
         }

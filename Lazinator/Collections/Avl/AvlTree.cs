@@ -32,11 +32,11 @@ namespace Lazinator.Collections.Avl
             };
         }
 
-        protected override (BinaryNode<T> node, bool insertedNotReplaced) TryInsertSortedReturningNode(T item, Func<BinaryNode<T>, int> comparisonFunc)
+        protected override (BinaryNode<T> node, bool insertedNotReplaced) TryInsertReturningNode(T item, Func<BinaryNode<T>, int> comparisonFunc)
         {
             if (!Balanced)
             {
-                return base.TryInsertSortedReturningNode(item, comparisonFunc);
+                return base.TryInsertReturningNode(item, comparisonFunc);
             }
             AvlNode<T> node = AvlRoot;
             while (node != null)
@@ -101,11 +101,11 @@ namespace Lazinator.Collections.Avl
             return (Root, true);
         }
         
-        protected override BinaryNode<T> TryRemoveSortedReturningNode(MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
+        protected override BinaryNode<T> TryRemoveReturningNode(MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
         {
             if (!Balanced)
             {
-                return base.TryRemoveSortedReturningNode(whichOne, comparisonFunc);
+                return base.TryRemoveReturningNode(whichOne, comparisonFunc);
             }
             AvlNode<T> node = AvlRoot;
 

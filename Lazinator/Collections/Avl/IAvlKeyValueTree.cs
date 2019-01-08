@@ -9,6 +9,7 @@ namespace Lazinator.Collections.Avl
         where TKey : ILazinator
         where TValue : ILazinator
     {
+        bool AllowDuplicates { get; set; }
         AvlTree<LazinatorKeyValue<TKey, TValue>> UnderlyingTree { get; set; }
     }
 }

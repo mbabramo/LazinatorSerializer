@@ -9,7 +9,6 @@ namespace Lazinator.Collections.Interfaces
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IKeyMultivalueContainer)]
     public interface IKeyMultivalueContainer<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
-        bool AllowDuplicates { get; set; }
         IEnumerable<TValue> GetAllValues(TKey key, IComparer<TKey> comparer);
         bool TryRemoveAll(TKey key, IComparer<TKey> comparer);
         
