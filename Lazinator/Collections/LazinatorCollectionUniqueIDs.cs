@@ -143,5 +143,9 @@
         IOrderableMultivalueContainer,
         ISortedIndexableMultivalueContainer,
         IIndexableMultivalueContainer,
+        IKeyMultivalueContainer,
+        ISortedKeyMultivalueContainer,
+        ISortedIndexableKeyMultivalueContainer,
+        IIndexableKeyMultivalueContainer,
     }
 }

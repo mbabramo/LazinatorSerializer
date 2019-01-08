@@ -17,17 +17,10 @@ namespace Lazinator.Collections.Interfaces
         bool RemoveAt(long i);
 
         (TValue valueIfFound, long index, bool found) GetMatchingOrNext(TKey key, IComparer<TKey> comparer);
-        (TValue valueIfFound, long index, bool found) GetMatchingOrNext(TKey key, MultivalueLocationOptions whichOne, IComparer<TKey> comparer);
         (bool inserted, long index) Insert(TKey key, TValue value, IComparer<TKey> comparer);
 
-        (bool inserted, long index) Insert(TKey key, TValue value, MultivalueLocationOptions whichOne, IComparer<TKey> comparer);
         (bool removed, long index) Remove(TKey key, IComparer<TKey> comparer);
-        (bool removed, long index) Remove(TKey key, MultivalueLocationOptions whichOne, IComparer<TKey> comparer);
         (bool removed, long index) RemoveKeyValue(TKey key, TValue value, IComparer<TKey> comparer);
-        (bool removed, long index) RemoveKeyValue(TKey key, TValue value, MultivalueLocationOptions whichOne, IComparer<TKey> comparer);
 
-        IEnumerator<TKey> GetKeyEnumerator(bool reverse = false, long skip = 0);
-        IEnumerator<TValue> GetValueEnumerator(bool reverse = false, long skip = 0);
-        IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(bool reverse = false, long skip = 0);
     }
 }
