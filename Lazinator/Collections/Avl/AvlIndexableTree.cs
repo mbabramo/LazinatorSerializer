@@ -90,7 +90,7 @@ namespace Lazinator.Collections.Avl
         public void RemoveAt(long index)
         {
             ConfirmInRangeOrThrow(index, true);
-            TryRemoveSorted(MultivalueLocationOptions.Any, CompareIndexToNodesIndex(index, MultivalueLocationOptions.First));
+            TryRemove(MultivalueLocationOptions.Any, CompareIndexToNodesIndex(index, MultivalueLocationOptions.First));
         }
 
         public override IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
@@ -119,7 +119,7 @@ namespace Lazinator.Collections.Avl
         public bool TryRemove(T item, IComparer<T> comparer) => TryRemove(item, MultivalueLocationOptions.Any, comparer);
         public bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
-            var result = TryRemoveSortedReturningNode(item, whichOne, comparer);
+            var result = TryRemoveReturningNode(item, whichOne, comparer);
             if (result == null)
                 return false;
             var node = ((AvlCountedNode<T>)result);

@@ -16,6 +16,8 @@ namespace Lazinator.Collections.Avl
     {
         public AvlNode<T> AvlRoot => (AvlNode<T>)Root;
 
+        public bool Balanced { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public override IValueContainer<T> CreateNewWithSameSettings()
         {
             return new AvlTree<T>();
@@ -32,6 +34,10 @@ namespace Lazinator.Collections.Avl
 
         protected override (BinaryNode<T> node, bool insertedNotReplaced) TryInsertSortedReturningNode(T item, Func<BinaryNode<T>, int> comparisonFunc)
         {
+            if (!Balanced)
+            {
+                return base.TryInsertSortedReturningNode(item, comparisonFunc);
+            }
             AvlNode<T> node = AvlRoot;
             while (node != null)
             {
@@ -97,6 +103,10 @@ namespace Lazinator.Collections.Avl
         
         protected override BinaryNode<T> TryRemoveSortedReturningNode(MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
         {
+            if (!Balanced)
+            {
+                return base.TryRemoveSortedReturningNode(whichOne, comparisonFunc);
+            }
             AvlNode<T> node = AvlRoot;
 
             while (node != null)
