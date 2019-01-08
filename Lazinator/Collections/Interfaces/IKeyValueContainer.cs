@@ -9,6 +9,11 @@ namespace Lazinator.Collections.Interfaces
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorKeyValueTree)]
     public interface IKeyValueContainer<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
+        bool AllowDuplicates { get; set; }
+        void AddValue(TKey key, TValue value);
+        IEnumerable<TValue> GetAllValues(TKey key);
+        bool RemoveAll(TKey item);
+
         bool ContainsKey(TKey key, IComparer<TKey> comparer);
         bool ContainsKeyValue(TKey key, TValue value, IComparer<TKey> comparer);
 

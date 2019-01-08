@@ -13,6 +13,8 @@ namespace Lazinator.Collections.Interfaces
         IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0);
         IEnumerator<T> GetEnumerator();
         bool Contains(T item, IComparer<T> comparer);
+        bool GetMatchingItem(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, out T match);
+        bool GetMatchingItem(T item, IComparer<T> comparer, out T match);
         bool TryInsertSorted(T item, IComparer<T> comparer);
         bool TryInsertSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer);
         bool TryRemoveSorted(T item, IComparer<T> comparer);

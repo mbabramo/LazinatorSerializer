@@ -104,7 +104,29 @@ namespace Lazinator.Collections.Tree
 
         public bool Contains(T item, IComparer<T> comparer)
         {
-            return AsEnumerable().Any(x => comparer.Compare(x, item) == 0);
+            var matchingNode = GetMatchingNode(item, MultivalueLocationOptions.Any, comparer);
+            return matchingNode != null;
+        }
+
+        public bool GetMatchingItem(T item, IComparer<T> comparer, out T match) => GetMatchingItem(item, MultivalueLocationOptions.Any, comparer, out match);
+
+        /// <summary>
+        /// Returns a matching item. This is useful if the comparer considers only part of the information in the item.
+        /// </summary>
+        /// <param name="item">The item to search for</param>
+        /// <param name="comparer">The comparer with which to conduct the search</param>
+        /// <param name="match">The matching item, or a default value</param>
+        /// <returns>True if a matching item was found</returns>
+        public bool GetMatchingItem(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, out T match)
+        {
+            var matchingNode = GetMatchingNode(item, whichOne, comparer);
+            if (matchingNode != null)
+            {
+                match = matchingNode.Value;
+                return true;
+            }
+            match = default;
+            return false;
         }
 
         public virtual void Clear()

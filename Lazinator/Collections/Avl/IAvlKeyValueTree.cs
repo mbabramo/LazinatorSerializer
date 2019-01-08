@@ -1,5 +1,6 @@
 ﻿using Lazinator.Core;
 using Lazinator.Attributes;
+using Lazinator.Collections.Tuples;
 
 namespace Lazinator.Collections.Avl
 {
@@ -8,5 +9,6 @@ namespace Lazinator.Collections.Avl
         where TKey : ILazinator
         where TValue : ILazinator
     {
+        AvlTree<LazinatorKeyValue<TKey, TValue>> UnderlyingTree { get; set; }
     }
 }
