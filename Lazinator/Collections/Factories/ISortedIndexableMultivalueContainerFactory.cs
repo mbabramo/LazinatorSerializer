@@ -9,6 +9,7 @@ namespace Lazinator.Collections.Factories
     public interface ISortedIndexableMultivalueContainerFactory<T> : ILazinator where T : ILazinator, IComparable<T>
     {
         bool AllowDuplicates { get; set; }
+        bool Unbalanced { get; set; }
         ISortedIndexableMultivalueContainer<T> CreateSortedIndexableMultivalueContainer();
     }
 }

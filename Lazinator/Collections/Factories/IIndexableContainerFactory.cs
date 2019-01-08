@@ -8,6 +8,7 @@ namespace Lazinator.Collections.Factories
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IIndexableContainerFactory)]
     public interface IIndexableContainerFactory<T> : ILazinator where T : ILazinator
     {
+        bool Unbalanced { get; set; }
         IIndexableContainer<T> CreateIndexableContainer();
     }
 }

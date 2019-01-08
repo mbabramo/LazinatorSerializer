@@ -27,9 +27,11 @@ namespace LazinatorTests.Tests
             SortedLazinatorListAllowDuplicates,
             SortedLazinatorLinkedList,
             SortedLazinatorLinkedListAllowDuplicates,
+            UnbalancedAvlList,
             AvlList,
             AvlSortedList,
             AvlSortedListAllowDuplicates,
+            UnbalancedAvlSortedList,
         }
 
         static ILazinatorListableFactory<WInt> GetListFactory(ListFactoryToUse l)
@@ -48,12 +50,16 @@ namespace LazinatorTests.Tests
                     return new SortedLazinatorLinkedListFactory<WInt>();
                 case ListFactoryToUse.SortedLazinatorLinkedListAllowDuplicates:
                     return new SortedLazinatorLinkedListFactory<WInt>() { AllowDuplicates = true };
+                case ListFactoryToUse.UnbalancedAvlList:
+                    return new AvlListFactory<WInt>(new AvlIndexableTreeFactory<WInt>() { Unbalanced = true });
                 case ListFactoryToUse.AvlList:
                     return new AvlListFactory<WInt>(new AvlIndexableTreeFactory<WInt>());
+                case ListFactoryToUse.UnbalancedAvlSortedList:
+                    return new AvlSortedListFactory<WInt>(false, new AvlSortedIndexableTreeFactory<WInt>(false, true));
                 case ListFactoryToUse.AvlSortedList:
-                    return new AvlSortedListFactory<WInt>(false, new AvlSortedIndexableTreeFactory<WInt>(false));
+                    return new AvlSortedListFactory<WInt>(false, new AvlSortedIndexableTreeFactory<WInt>(false, false));
                 case ListFactoryToUse.AvlSortedListAllowDuplicates:
-                    return new AvlSortedListFactory<WInt>(true, new AvlSortedIndexableTreeFactory<WInt>(true));
+                    return new AvlSortedListFactory<WInt>(true, new AvlSortedIndexableTreeFactory<WInt>(true, false));
                 default:
                     throw new NotImplementedException();
             }

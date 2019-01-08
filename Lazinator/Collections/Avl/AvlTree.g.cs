@@ -34,7 +34,7 @@ namespace Lazinator.Collections.Avl
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _Balanced;
-        public bool Balanced
+        public bool Unbalanced
         {
             [DebuggerStepThrough]
             get
@@ -68,7 +68,7 @@ namespace Lazinator.Collections.Avl
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
             AvlTree<T> typedClone = (AvlTree<T>) clone;
-            typedClone.Balanced = Balanced;
+            typedClone.Unbalanced = Unbalanced;
             
             return typedClone;
         }
@@ -91,7 +91,7 @@ namespace Lazinator.Collections.Avl
             {
                 yield return inheritedYield;
             }
-            yield return ("Balanced", (object)Balanced);
+            yield return ("Balanced", (object)Unbalanced);
             yield break;
         }
         

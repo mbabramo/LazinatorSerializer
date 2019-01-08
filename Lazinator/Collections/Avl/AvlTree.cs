@@ -32,7 +32,7 @@ namespace Lazinator.Collections.Avl
 
         protected override (BinaryNode<T> node, bool insertedNotReplaced) TryInsertReturningNode(T item, Func<BinaryNode<T>, int> comparisonFunc)
         {
-            if (!Balanced)
+            if (Unbalanced)
             {
                 return base.TryInsertReturningNode(item, comparisonFunc);
             }
@@ -101,7 +101,7 @@ namespace Lazinator.Collections.Avl
         
         protected override BinaryNode<T> TryRemoveReturningNode(MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
         {
-            if (!Balanced)
+            if (Unbalanced)
             {
                 return base.TryRemoveReturningNode(whichOne, comparisonFunc);
             }
