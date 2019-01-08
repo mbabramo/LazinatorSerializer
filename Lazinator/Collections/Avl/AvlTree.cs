@@ -16,8 +16,6 @@ namespace Lazinator.Collections.Avl
     {
         public AvlNode<T> AvlRoot => (AvlNode<T>)Root;
 
-        public bool Balanced { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public override IValueContainer<T> CreateNewWithSameSettings()
         {
             return new AvlTree<T>();

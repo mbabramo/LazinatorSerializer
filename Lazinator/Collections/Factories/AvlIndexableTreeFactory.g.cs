@@ -267,12 +267,12 @@ namespace Lazinator.Collections.Factories
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual int LazinatorUniqueID => 183;
+        public virtual int LazinatorUniqueID => 180;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual bool ContainsOpenGenericParameters => true;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<AvlIndexableTreeFactory<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(183, new Type[] { typeof(T) }));
+        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<AvlIndexableTreeFactory<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(180, new Type[] { typeof(T) }));
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

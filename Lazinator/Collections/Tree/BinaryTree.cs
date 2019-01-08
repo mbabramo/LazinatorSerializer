@@ -17,7 +17,6 @@ namespace Lazinator.Collections.Tree
     /// <typeparam name="T"></typeparam>
     public partial class BinaryTree<T> : IBinaryTree<T>, IValueContainer<T>, IMultivalueContainer<T>, IEnumerable<T> where T : ILazinator
     {
-        public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public virtual IValueContainer<T> CreateNewWithSameSettings()
         {

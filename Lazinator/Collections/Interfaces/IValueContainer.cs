@@ -9,6 +9,7 @@ namespace Lazinator.Collections.Interfaces
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IOrderableContainer)]
     public interface IValueContainer<T> where T : ILazinator
     {
+        bool AllowDuplicates { get; set; }
         IValueContainer<T> CreateNewWithSameSettings();
         bool Contains(T item, IComparer<T> comparer);
         /// <summary>
