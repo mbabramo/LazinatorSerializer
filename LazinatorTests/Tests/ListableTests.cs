@@ -110,7 +110,7 @@ namespace LazinatorTests.Tests
         {
             var factory = GetListFactory(listFactoryToUse);
             ILazinatorListable<WInt> l = factory.CreateListable();
-            const int numItems = 500;
+            int numItems = (listFactoryToUse == ListFactoryToUse.UnbalancedAvlList || listFactoryToUse == ListFactoryToUse.UnbalancedAvlSortedList) ? 20 : 1000;
             for (int i = 0; i < numItems; i++)
             {
                 l.Add(i);
@@ -135,7 +135,7 @@ namespace LazinatorTests.Tests
         {
             var factory = GetListFactory(listFactoryToUse);
             ILazinatorListable<WInt> l = factory.CreateListable();
-            const int numItems = 500;
+            int numItems = (listFactoryToUse == ListFactoryToUse.UnbalancedAvlList || listFactoryToUse == ListFactoryToUse.UnbalancedAvlSortedList) ? 20 : 500;
             for (int i = 0; i < numItems; i++)
                 l.InsertAt(0, i);
             var result = l.Select(x => x.WrappedValue).ToList();
@@ -160,7 +160,7 @@ namespace LazinatorTests.Tests
 
             var factory = GetListFactory(listFactoryToUse);
             ILazinatorListable<WInt> l = factory.CreateListable();
-            const int numItems = 1000;
+            int numItems = (listFactoryToUse == ListFactoryToUse.UnbalancedAvlList || listFactoryToUse == ListFactoryToUse.UnbalancedAvlSortedList) ? 20 : 1000;
             for (int i = 0; i < numItems; i++)
                 l.Add(i);
             WInt[] x = new WInt[numItems + 10];
