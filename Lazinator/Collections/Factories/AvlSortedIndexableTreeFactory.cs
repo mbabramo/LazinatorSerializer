@@ -16,7 +16,7 @@ namespace Lazinator.Collections.Factories
         }
             
 
-        public ISortedIndexableContainer<T> CreateSortedIndexableContainer()
+        public ISortedIndexableMultivalueContainer<T> CreateSortedIndexableMultivalueContainer()
         {
             return new AvlSortedIndexableTree<T>(AllowDuplicates);
         }

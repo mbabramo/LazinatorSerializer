@@ -6,14 +6,11 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections.Interfaces
 {
-    [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorSortedIndexableTree)]
+    [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ISortedIndexableContainer)]
     public interface ISortedIndexableContainer<T> : ISortedContainer<T>, IIndexableContainer<T>, ILazinator where T : ILazinator, IComparable<T>
     {
         (long index, bool exists) FindSorted(T target);
-        (long index, bool exists) FindSorted(T target, MultivalueLocationOptions whichOne);
         (long index, bool insertedNotReplaced) InsertSorted(T item);
-        (long index, bool insertedNotReplaced) InsertSorted(T item, MultivalueLocationOptions whichOne);
         bool RemoveSorted(T item);
-        bool RemoveSorted(T item, MultivalueLocationOptions whichOne);
     }
 }

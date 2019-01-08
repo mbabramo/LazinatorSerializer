@@ -15,13 +15,13 @@ namespace Lazinator.Collections.Avl
         {
         }
 
-        public AvlSortedList(bool allowDuplicates, ISortedIndexableContainerFactory<T> factory)
+        public AvlSortedList(bool allowDuplicates, ISortedIndexableMultivalueContainerFactory<T> factory)
         {
-            UnderlyingTree = factory.CreateSortedIndexableContainer();
+            UnderlyingTree = factory.CreateSortedIndexableMultivalueContainer();
             AllowDuplicates = allowDuplicates;
         }
 
-        public AvlSortedList(bool allowDuplicates, ISortedIndexableContainer<T> underlyingTree)
+        public AvlSortedList(bool allowDuplicates, ISortedIndexableMultivalueContainer<T> underlyingTree)
         {
             UnderlyingTree = underlyingTree;
             AllowDuplicates = allowDuplicates;
@@ -170,7 +170,7 @@ namespace Lazinator.Collections.Avl
 
         public virtual ILazinatorSplittable SplitOff()
         {
-            AvlSortedList<T> partSplitOff = new AvlSortedList<T>(AllowDuplicates, (ISortedIndexableContainer<T>) ((ILazinatorSplittable)UnderlyingTree).SplitOff());
+            AvlSortedList<T> partSplitOff = new AvlSortedList<T>(AllowDuplicates, (ISortedIndexableMultivalueContainer<T>) ((ILazinatorSplittable)UnderlyingTree).SplitOff());
             return partSplitOff;
         }
 

@@ -8,6 +8,6 @@ namespace Lazinator.Collections.Factories
     [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlSortedListFactory)]
     public interface IAvlSortedListFactory<T> : ILazinatorSortableFactory<T> where T : ILazinator, IComparable<T>
     {
-        ISortedIndexableContainerFactory<T> SortedIndexableContainerFactory { get; set; }
+        ISortedIndexableMultivalueContainerFactory<T> SortedIndexableContainerFactory { get; set; }
     }
 }

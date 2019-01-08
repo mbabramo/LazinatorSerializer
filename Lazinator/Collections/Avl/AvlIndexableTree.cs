@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlIndexableTree<T> : AvlTree<T>, IAvlIndexableTree<T>, IIndexableContainer<T>, ILazinatorSplittable where T : ILazinator
+    public partial class AvlIndexableTree<T> : AvlTree<T>, IAvlIndexableTree<T>, IIndexableContainer<T>, IIndexableMultivalueContainer<T>, ILazinatorSplittable where T : ILazinator
     {
         public override IOrderableContainer<T> CreateNewWithSameSettings()
         {

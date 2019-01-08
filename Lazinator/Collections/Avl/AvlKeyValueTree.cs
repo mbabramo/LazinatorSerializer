@@ -10,7 +10,7 @@ namespace Lazinator.Collections.Avl
 {
     public partial class AvlKeyValueTree<TKey, TValue> : IAvlKeyValueTree<TKey, TValue>, IKeyValueContainer<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
-        debug; // integrating the multivalue together with the single value for the key value store. We need this to make ContainsKeyValue work properly if duplicates are allowed.
+        // DEBUG; // integrating the multivalue together with the single value for the key value store. We need this to make ContainsKeyValue work properly if duplicates are allowed.
 
         public AvlTree<LazinatorKeyValue<TKey, TValue>> UnderlyingTree { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -40,7 +40,7 @@ namespace Lazinator.Collections.Avl
 
         public bool ContainsKeyValue(TKey key, TValue value, IComparer<TKey> comparer)
         {
-            debug; // need to consider multivalue possibility -- effectively, must implement GetAllValues. But we really can't do that, because we have no way to enumerate since we can't index. 
+            // DEBUG debug; // need to consider multivalue possibility -- effectively, must implement GetAllValues. But we really can't do that, because we have no way to enumerate since we can't index. 
             if (ContainsKey(key, comparer))
                 return GetValueForKey(key, comparer).Equals(value);
             return false;

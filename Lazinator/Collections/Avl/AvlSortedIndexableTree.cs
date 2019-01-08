@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlSortedIndexableTree<T> : AvlIndexableTree<T>, IAvlSortedIndexableTree<T>, ISortedIndexableContainer<T> where T : ILazinator, IComparable<T>
+    public partial class AvlSortedIndexableTree<T> : AvlIndexableTree<T>, IAvlSortedIndexableTree<T>, ISortedIndexableContainer<T>, ISortedIndexableMultivalueContainer<T> where T : ILazinator, IComparable<T>
     {
         public AvlSortedIndexableTree(bool allowDuplicates)
         {

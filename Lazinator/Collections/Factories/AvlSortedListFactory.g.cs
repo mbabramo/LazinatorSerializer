@@ -55,8 +55,8 @@ namespace Lazinator.Collections.Factories
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected ISortedIndexableContainerFactory<T> _SortedIndexableContainerFactory;
-        public virtual ISortedIndexableContainerFactory<T> SortedIndexableContainerFactory
+        protected ISortedIndexableMultivalueContainerFactory<T> _SortedIndexableContainerFactory;
+        public virtual ISortedIndexableMultivalueContainerFactory<T> SortedIndexableContainerFactory
         {
             [DebuggerStepThrough]
             get
@@ -65,13 +65,13 @@ namespace Lazinator.Collections.Factories
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _SortedIndexableContainerFactory = default(ISortedIndexableContainerFactory<T>);
+                        _SortedIndexableContainerFactory = default(ISortedIndexableMultivalueContainerFactory<T>);
                     }
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _SortedIndexableContainerFactory_ByteIndex, _SortedIndexableContainerFactory_ByteLength, false, false, null);
                         
-                        _SortedIndexableContainerFactory = DeserializationFactory.Instance.CreateBasedOnType<ISortedIndexableContainerFactory<T>>(childData, this); 
+                        _SortedIndexableContainerFactory = DeserializationFactory.Instance.CreateBasedOnType<ISortedIndexableMultivalueContainerFactory<T>>(childData, this); 
                     }
                     _SortedIndexableContainerFactory_Accessed = true;
                 } 
@@ -170,11 +170,11 @@ namespace Lazinator.Collections.Factories
             {
                 if (SortedIndexableContainerFactory == null)
                 {
-                    typedClone.SortedIndexableContainerFactory = default(ISortedIndexableContainerFactory<T>);
+                    typedClone.SortedIndexableContainerFactory = default(ISortedIndexableMultivalueContainerFactory<T>);
                 }
                 else
                 {
-                    typedClone.SortedIndexableContainerFactory = (ISortedIndexableContainerFactory<T>) SortedIndexableContainerFactory.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.SortedIndexableContainerFactory = (ISortedIndexableMultivalueContainerFactory<T>) SortedIndexableContainerFactory.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
             }
             
@@ -350,7 +350,7 @@ namespace Lazinator.Collections.Factories
         {
             if ((!exploreOnlyDeserializedChildren && SortedIndexableContainerFactory != null) || (_SortedIndexableContainerFactory_Accessed && _SortedIndexableContainerFactory != null))
             {
-                _SortedIndexableContainerFactory = (ISortedIndexableContainerFactory<T>) _SortedIndexableContainerFactory.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
+                _SortedIndexableContainerFactory = (ISortedIndexableMultivalueContainerFactory<T>) _SortedIndexableContainerFactory.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if (changeThisLevel)
             {

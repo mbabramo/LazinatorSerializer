@@ -7,7 +7,7 @@ using Lazinator.Core;
 namespace Lazinator.Collections.Interfaces
 {
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorSortedTree)]
-    public interface ISortedContainer<T> : IOrderableContainer<T> where T : ILazinator, IComparable<T>
+    public interface ISortedContainer<T> : IOrderableMultivalueContainer<T> where T : ILazinator, IComparable<T>
     {
         bool AllowDuplicates { get; set; }
         bool TryInsertSorted(T item, MultivalueLocationOptions whichOne);

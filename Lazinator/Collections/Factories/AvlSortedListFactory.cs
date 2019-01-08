@@ -10,7 +10,7 @@ namespace Lazinator.Collections.Factories
 {
     public partial class AvlSortedListFactory<T> : IAvlSortedListFactory<T>, ILazinatorSortableFactory<T> where T : ILazinator, IComparable<T>
     {
-        public AvlSortedListFactory(bool allowDuplicates, ISortedIndexableContainerFactory<T> sortedIndexableContainerFactory)
+        public AvlSortedListFactory(bool allowDuplicates, ISortedIndexableMultivalueContainerFactory<T> sortedIndexableContainerFactory)
         {
             AllowDuplicates = allowDuplicates;
             SortedIndexableContainerFactory = sortedIndexableContainerFactory;

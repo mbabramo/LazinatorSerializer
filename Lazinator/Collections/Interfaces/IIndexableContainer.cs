@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Lazinator.Collections.Interfaces
 {
-    [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorIndexableTree)]
+    [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IIndexableContainer)]
     public interface IIndexableContainer<T> : IOrderableContainer<T>, ICountableContainer, ILazinator where T : ILazinator
     {
         T GetAt(long index);
@@ -15,10 +15,7 @@ namespace Lazinator.Collections.Interfaces
         void RemoveAt(long index);
 
         (long index, bool exists) FindSorted(T target, IComparer<T> comparer);
-        (long index, bool exists) FindSorted(T target, MultivalueLocationOptions whichOne, IComparer<T> comparer);
         (long index, bool insertedNotReplaced) InsertSorted(T item, IComparer<T> comparer);
-        (long index, bool insertedNotReplaced) InsertSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer);
         bool RemoveSorted(T item, IComparer<T> comparer);
-        bool RemoveSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer);
     }
 }

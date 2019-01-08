@@ -12,7 +12,7 @@ namespace Lazinator.Collections.Avl
     /// A basic AvlTree class, adding balancing to the BinaryTree class.
     /// </summary>
     /// <typeparam name="T">The type of the object to be stored on each node of the tree</typeparam>
-    public partial class AvlTree<T> : BinaryTree<T>, IAvlTree<T>, IOrderableContainer<T>, IEnumerable<T> where T : ILazinator
+    public partial class AvlTree<T> : BinaryTree<T>, IAvlTree<T>, IEnumerable<T> where T : ILazinator
     {
         public AvlNode<T> AvlRoot => (AvlNode<T>)Root;
 

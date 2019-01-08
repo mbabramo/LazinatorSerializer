@@ -15,7 +15,7 @@ namespace Lazinator.Collections.Tree
     /// functionality for balancing, for accessing items by index, and for adding items that implement IComparable without a custom comparer.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public partial class BinaryTree<T> : IBinaryTree<T>, IOrderableContainer<T>, IEnumerable<T> where T : ILazinator
+    public partial class BinaryTree<T> : IBinaryTree<T>, IOrderableContainer<T>, IOrderableMultivalueContainer<T>, IEnumerable<T> where T : ILazinator
     {
         public virtual IOrderableContainer<T> CreateNewWithSameSettings()
         {

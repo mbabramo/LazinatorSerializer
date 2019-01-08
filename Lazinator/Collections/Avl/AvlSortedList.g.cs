@@ -39,8 +39,8 @@ namespace Lazinator.Collections.Avl
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected ISortedIndexableContainer<T> _UnderlyingTree;
-        public virtual ISortedIndexableContainer<T> UnderlyingTree
+        protected ISortedIndexableMultivalueContainer<T> _UnderlyingTree;
+        public virtual ISortedIndexableMultivalueContainer<T> UnderlyingTree
         {
             [DebuggerStepThrough]
             get
@@ -49,13 +49,13 @@ namespace Lazinator.Collections.Avl
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _UnderlyingTree = default(ISortedIndexableContainer<T>);
+                        _UnderlyingTree = default(ISortedIndexableMultivalueContainer<T>);
                     }
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _UnderlyingTree_ByteIndex, _UnderlyingTree_ByteLength, false, false, null);
                         
-                        _UnderlyingTree = DeserializationFactory.Instance.CreateBasedOnType<ISortedIndexableContainer<T>>(childData, this); 
+                        _UnderlyingTree = DeserializationFactory.Instance.CreateBasedOnType<ISortedIndexableMultivalueContainer<T>>(childData, this); 
                     }
                     _UnderlyingTree_Accessed = true;
                 } 
@@ -149,11 +149,11 @@ namespace Lazinator.Collections.Avl
             {
                 if (UnderlyingTree == null)
                 {
-                    typedClone.UnderlyingTree = default(ISortedIndexableContainer<T>);
+                    typedClone.UnderlyingTree = default(ISortedIndexableMultivalueContainer<T>);
                 }
                 else
                 {
-                    typedClone.UnderlyingTree = (ISortedIndexableContainer<T>) UnderlyingTree.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.UnderlyingTree = (ISortedIndexableMultivalueContainer<T>) UnderlyingTree.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
             }
             
@@ -328,7 +328,7 @@ namespace Lazinator.Collections.Avl
         {
             if ((!exploreOnlyDeserializedChildren && UnderlyingTree != null) || (_UnderlyingTree_Accessed && _UnderlyingTree != null))
             {
-                _UnderlyingTree = (ISortedIndexableContainer<T>) _UnderlyingTree.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
+                _UnderlyingTree = (ISortedIndexableMultivalueContainer<T>) _UnderlyingTree.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if (changeThisLevel)
             {
