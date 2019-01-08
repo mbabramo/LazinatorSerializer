@@ -119,6 +119,8 @@ namespace Lazinator.Collections.Avl
 
         public ILazinatorSplittable SplitOff()
         {
+            if (Unbalanced)
+                throw new NotSupportedException();
             if (AvlIndexableRoot.LeftCount == 0 || AvlIndexableRoot.RightCount == 0)
                 return new AvlIndexableTree<T>();
             // Create two separate trees, each of them balanced

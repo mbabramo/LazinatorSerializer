@@ -82,8 +82,10 @@ namespace LazinatorTests.Tests
                 case ListFactoryToUse.SortedLazinatorLinkedListAllowDuplicates:
                     return (true, true);
                 case ListFactoryToUse.AvlList:
+                case ListFactoryToUse.UnbalancedAvlList:
                     return (false, true);
                 case ListFactoryToUse.AvlSortedList:
+                case ListFactoryToUse.UnbalancedAvlSortedList:
                     return (true, false);
                 case ListFactoryToUse.AvlSortedListAllowDuplicates:
                     return (true, true);
@@ -175,9 +177,7 @@ namespace LazinatorTests.Tests
         [InlineData(ListFactoryToUse.SortedLazinatorLinkedList)]
         [InlineData(ListFactoryToUse.SortedLazinatorLinkedListAllowDuplicates)]
         [InlineData(ListFactoryToUse.AvlList)]
-        [InlineData(ListFactoryToUse.UnbalancedAvlList)]
         [InlineData(ListFactoryToUse.AvlSortedList)]
-        [InlineData(ListFactoryToUse.UnbalancedAvlSortedList)]
         [InlineData(ListFactoryToUse.AvlSortedListAllowDuplicates)]
         public void Listable_SplitOff(ListFactoryToUse listFactoryToUse)
         {

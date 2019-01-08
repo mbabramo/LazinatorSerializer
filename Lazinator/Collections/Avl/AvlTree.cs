@@ -32,10 +32,6 @@ namespace Lazinator.Collections.Avl
 
         protected override (BinaryNode<T> node, bool insertedNotReplaced) TryInsertReturningNode(T item, Func<BinaryNode<T>, int> comparisonFunc)
         {
-            if (Unbalanced)
-            {
-                return base.TryInsertReturningNode(item, comparisonFunc);
-            }
             AvlNode<T> node = AvlRoot;
             while (node != null)
             {
@@ -53,7 +49,8 @@ namespace Lazinator.Collections.Avl
                         childNode.NodeVisitedDuringChange = true;
                         node.Left = childNode;
                         // index is same as node
-                        InsertBalance(node, 1);
+                        if (!Unbalanced)
+                            InsertBalance(node, 1);
 
                         AvlRoot.UpdateFollowingTreeChange();
                         return (node, true);
@@ -73,7 +70,8 @@ namespace Lazinator.Collections.Avl
                         childNode.NodeVisitedDuringChange = true;
                         node.Right = childNode;
 
-                        InsertBalance(node, -1);
+                        if (!Unbalanced)
+                            InsertBalance(node, -1);
 
                         AvlRoot.UpdateFollowingTreeChange();
                         return (node, true);
@@ -101,10 +99,6 @@ namespace Lazinator.Collections.Avl
         
         protected override BinaryNode<T> TryRemoveReturningNode(MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
         {
-            if (Unbalanced)
-            {
-                return base.TryRemoveReturningNode(whichOne, comparisonFunc);
-            }
             AvlNode<T> node = AvlRoot;
 
             while (node != null)
@@ -141,13 +135,15 @@ namespace Lazinator.Collections.Avl
                                 {
                                     parent.Left = null;
 
-                                    DeleteBalance(parent, -1);
+                                    if (!Unbalanced)
+                                        DeleteBalance(parent, -1);
                                 }
                                 else
                                 {
                                     parent.Right = null;
 
-                                    DeleteBalance(parent, 1);
+                                    if (!Unbalanced)
+                                        DeleteBalance(parent, 1);
                                 }
                             }
                         }
@@ -156,7 +152,8 @@ namespace Lazinator.Collections.Avl
                             Replace(node, right);
                             right.NodeVisitedDuringChange = true;
 
-                            DeleteBalance(node, 0);
+                            if (!Unbalanced)
+                                DeleteBalance(node, 0);
                         }
                     }
                     else if (right == null)
@@ -164,7 +161,8 @@ namespace Lazinator.Collections.Avl
                         Replace(node, left);
                         left.NodeVisitedDuringChange = true;
 
-                        DeleteBalance(node, 0);
+                        if (!Unbalanced)
+                            DeleteBalance(node, 0);
                     }
                     else
                     {
@@ -196,7 +194,8 @@ namespace Lazinator.Collections.Avl
                                 }
                             }
 
-                            DeleteBalance(successor, 1);
+                            if (!Unbalanced)
+                                DeleteBalance(successor, 1);
                         }
                         else
                         {
@@ -249,7 +248,8 @@ namespace Lazinator.Collections.Avl
                                 }
                             }
 
-                            DeleteBalance(successorParent, -1);
+                            if (!Unbalanced)
+                                DeleteBalance(successorParent, -1);
                         }
                     }
 
