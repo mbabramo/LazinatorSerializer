@@ -137,5 +137,7 @@
         ISortedIndexableContainerFactory,
         IAvlIndexableTreeFactory,
         IAvlSortedIndexableTreeFactory,
+        IAvlKeyValueTree,
+        ILazinatorComparableKeyValue,
     }
 }

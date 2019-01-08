@@ -5,9 +5,9 @@ using System;
 namespace Lazinator.Collections
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorKeyValue)]
-    public interface ILazinatorKeyValue<T, U> : ILazinator where T : ILazinator, IComparable<T> where U : ILazinator
+    public interface ILazinatorKeyValue<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
-        T Key { get; set; }
-        U Value { get; set; }
+        TKey Key { get; set; }
+        TValue Value { get; set; }
     }
 }
