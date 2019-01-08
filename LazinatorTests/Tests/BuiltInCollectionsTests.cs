@@ -785,14 +785,14 @@ namespace LazinatorTests.Tests
                     int j = r.Next(basic.Count());
                     int n = basic[j];
                     basic.Remove(n);
-                    s.RemoveSorted(n);
+                    s.TryRemove(n);
                 }
                 else
                 { // add item
                     int n = r.Next(maxValue);
                     if (!basic.Contains(n) || allowDuplicates)
                         basic.Add(n);
-                    s.InsertSorted(n);
+                    s.InsertGetIndex(n);
                 }
             }
             List<int> sortedResult = s.Select(x => x.WrappedValue).ToList();

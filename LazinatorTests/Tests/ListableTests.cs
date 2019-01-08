@@ -322,7 +322,7 @@ namespace LazinatorTests.Tests
                                 else
                                     o.Insert(index, k);
                             }
-                            (l as ILazinatorSortable<WInt>).InsertSorted(k);
+                            (l as ILazinatorSortable<WInt>).InsertGetIndex(k);
                         }
                         else
                         {
@@ -339,7 +339,7 @@ namespace LazinatorTests.Tests
                         {
                             int value = o[j];
                             o.RemoveAt(j);
-                            (l as ILazinatorSortable<WInt>).RemoveSorted(value);
+                            (l as ILazinatorSortable<WInt>).TryRemove(value);
                         }
                         else
                         {
@@ -361,18 +361,18 @@ namespace LazinatorTests.Tests
                                 while (expectedIndex > 0 && o[expectedIndex - 1] == value)
                                     expectedIndex--; // first key with same value
 
-                                findResult = (l as ILazinatorSortable<WInt>).FindSorted(value);
+                                findResult = (l as ILazinatorSortable<WInt>).Find(value);
                                 findResult.exists.Should().BeTrue();
                                 findResult.location.Should().Be(expectedIndex);
                                 // previous value, if not in list, should produce same location
                                 if (!o.Contains(value - 1))
                                 {
-                                    findResult = (l as ILazinatorSortable<WInt>).FindSorted(value - 1);
+                                    findResult = (l as ILazinatorSortable<WInt>).Find(value - 1);
                                     findResult.exists.Should().BeFalse();
                                     findResult.location.Should().Be(expectedIndex);
                                 }
                             }
-                            findResult = (l as ILazinatorSortable<WInt>).FindSorted(o.Max() + 1);
+                            findResult = (l as ILazinatorSortable<WInt>).Find(o.Max() + 1);
                             findResult.exists.Should().BeFalse();
                             findResult.location.Should().Be(o.Count()); // i.e., location after last one
                         }

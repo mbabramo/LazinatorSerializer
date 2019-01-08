@@ -8,28 +8,28 @@ namespace Lazinator.Collections
 {
     public partial class SortedLazinatorLinkedList<T> : LazinatorLinkedList<T>, ISortedLazinatorLinkedList<T>, ILazinatorSortable<T> where T : IComparable<T>, ILazinator
     {
-        public (long index, bool insertedNotReplaced) InsertSorted(T item) => InsertSorted(item, Comparer<T>.Default);
-        public bool RemoveSorted(T item) => RemoveSorted(item, Comparer<T>.Default);
-        public (long index, bool exists) FindSorted(T target) => FindSorted(target, Comparer<T>.Default);
+        public (long index, bool insertedNotReplaced) InsertGetIndex(T item) => InsertGetIndex(item, Comparer<T>.Default);
+        public bool TryRemove(T item) => TryRemove(item, Comparer<T>.Default);
+        public (long index, bool exists) Find(T target) => Find(target, Comparer<T>.Default);
 
-        public (long index, bool insertedNotReplaced) InsertSorted(T item, IComparer<T> comparer)
+        public (long index, bool insertedNotReplaced) InsertGetIndex(T item, IComparer<T> comparer)
         {
-            (long index, bool exists) = FindSorted(item, comparer);
+            (long index, bool exists) = Find(item, comparer);
             if (exists && !AllowDuplicates)
                 return (index, false);
             Insert((int)index, item);
             return (index, true);
         }
 
-        public bool RemoveSorted(T item, IComparer<T> comparer)
+        public bool TryRemove(T item, IComparer<T> comparer)
         {
-            (long location, bool exists) = FindSorted(item);
+            (long location, bool exists) = Find(item);
             if (exists)
                 RemoveAt(location);
             return exists;
         }
 
-        public (long index, bool exists) FindSorted(T target, IComparer<T> comparer)
+        public (long index, bool exists) Find(T target, IComparer<T> comparer)
         {
             bool found = false;
             if (Count == 0)

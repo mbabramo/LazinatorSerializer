@@ -15,11 +15,11 @@ namespace Lazinator.Collections
     public interface ILazinatorSortable<T> : ILazinatorListable<T> where T : ILazinator, IComparable<T>
     {
         bool AllowDuplicates { get; set; }
-        (long index, bool insertedNotReplaced) InsertSorted(T item);
-        bool RemoveSorted(T item);
-        (long index, bool exists) FindSorted(T target);
-        (long index, bool insertedNotReplaced) InsertSorted(T item, IComparer<T> comparer);
-        bool RemoveSorted(T item, IComparer<T> comparer);
-        (long index, bool exists) FindSorted(T target, IComparer<T> comparer);
+        (long index, bool insertedNotReplaced) InsertGetIndex(T item);
+        bool TryRemove(T item);
+        (long index, bool exists) Find(T target);
+        (long index, bool insertedNotReplaced) InsertGetIndex(T item, IComparer<T> comparer);
+        bool TryRemove(T item, IComparer<T> comparer);
+        (long index, bool exists) Find(T target, IComparer<T> comparer);
     }
 }

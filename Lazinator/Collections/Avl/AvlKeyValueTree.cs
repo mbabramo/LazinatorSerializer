@@ -35,7 +35,7 @@ namespace Lazinator.Collections.Avl
 
         public TValue GetValueForKey(TKey key, MultivalueLocationOptions whichOne, IComparer<TKey> comparer)
         {
-            bool found = UnderlyingTree.GetMatchingItem(KeyPlusDefault(key), whichOne, KeyComparer(comparer), out var match);
+            bool found = UnderlyingTree.GetValue(KeyPlusDefault(key), whichOne, KeyComparer(comparer), out var match);
             if (!found)
                 throw new KeyNotFoundException();
             return match.Value;

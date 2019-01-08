@@ -13,7 +13,7 @@ namespace Lazinator.Collections.Avl
             AllowDuplicates = allowDuplicates;
         }
 
-        public override IOrderableContainer<T> CreateNewWithSameSettings()
+        public override IValueContainer<T> CreateNewWithSameSettings()
         {
             return new AvlSortedIndexableTree<T>() { AllowDuplicates = AllowDuplicates };
         }
@@ -21,18 +21,18 @@ namespace Lazinator.Collections.Avl
         private MultivalueLocationOptions MultivalueLocationOptionForInsertion => AllowDuplicates ? MultivalueLocationOptions.AfterLast : MultivalueLocationOptions.Any;
         private MultivalueLocationOptions MultivalueLocationOptionForRemoval => MultivalueLocationOptions.Any; // because all items are same, it doesn't matter.
 
-        public (long index, bool exists) FindSorted(T target) => FindSorted(target, MultivalueLocationOptions.First);
-        public (long index, bool exists) FindSorted(T target, MultivalueLocationOptions whichOne) => FindSorted(target, whichOne, Comparer<T>.Default);
-        public (long index, bool insertedNotReplaced) InsertSorted(T item) => InsertSorted(item, MultivalueLocationOptionForInsertion);
-        public (long index, bool insertedNotReplaced) InsertSorted(T item, MultivalueLocationOptions whichOne) => InsertSorted(item, whichOne, Comparer<T>.Default);
-        public bool RemoveSorted(T item) => RemoveSorted(item, MultivalueLocationOptionForRemoval);
-        public bool RemoveSorted(T item, MultivalueLocationOptions whichOne) => RemoveSorted(item, whichOne, Comparer<T>.Default);
+        public (long index, bool exists) Find(T target) => Find(target, MultivalueLocationOptions.First);
+        public (long index, bool exists) Find(T target, MultivalueLocationOptions whichOne) => Find(target, whichOne, Comparer<T>.Default);
+        public (long index, bool insertedNotReplaced) InsertGetIndex(T item) => InsertGetIndex(item, MultivalueLocationOptionForInsertion);
+        public (long index, bool insertedNotReplaced) InsertGetIndex(T item, MultivalueLocationOptions whichOne) => InsertGetIndex(item, whichOne, Comparer<T>.Default);
+        public bool RemoveSorted(T item) => TryRemove(item, MultivalueLocationOptionForRemoval);
+        public bool TryRemove(T item, MultivalueLocationOptions whichOne) => TryRemove(item, whichOne, Comparer<T>.Default);
 
 
         public bool TryInsertSorted(T item) => TryInsertSorted(item, MultivalueLocationOptionForInsertion);
-        public bool TryInsertSorted(T item, MultivalueLocationOptions whichOne) => TryInsertSorted(item, whichOne, Comparer<T>.Default);
+        public bool TryInsertSorted(T item, MultivalueLocationOptions whichOne) => TryInsert(item, whichOne, Comparer<T>.Default);
         public bool TryRemoveSorted(T item) => TryRemoveSorted(item, MultivalueLocationOptionForRemoval);
-        public bool TryRemoveSorted(T item, MultivalueLocationOptions whichOne) => TryRemoveSorted(item, Comparer<T>.Default);
+        public bool TryRemoveSorted(T item, MultivalueLocationOptions whichOne) => TryRemove(item, Comparer<T>.Default);
 
         public bool Contains(T item) => Contains(item, Comparer<T>.Default);
 

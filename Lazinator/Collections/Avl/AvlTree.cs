@@ -16,7 +16,7 @@ namespace Lazinator.Collections.Avl
     {
         public AvlNode<T> AvlRoot => (AvlNode<T>)Root;
 
-        public override IOrderableContainer<T> CreateNewWithSameSettings()
+        public override IValueContainer<T> CreateNewWithSameSettings()
         {
             return new AvlTree<T>();
         }

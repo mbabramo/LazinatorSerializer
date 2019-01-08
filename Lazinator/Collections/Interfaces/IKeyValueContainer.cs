@@ -9,6 +9,8 @@ namespace Lazinator.Collections.Interfaces
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorKeyValueTree)]
     public interface IKeyValueContainer<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
+        IKeyValueContainer<TKey, TValue> CreateNewWithSameSettings();
+
         bool ContainsKey(TKey key, IComparer<TKey> comparer);
         bool ContainsKeyValue(TKey key, TValue value, IComparer<TKey> comparer);
 
@@ -17,6 +19,8 @@ namespace Lazinator.Collections.Interfaces
 
         bool TryRemove(TKey key, IComparer<TKey> comparer);
         bool TryRemoveKeyValue(TKey key, TValue value, IComparer<TKey> comparer);
+
+        void Clear();
 
         // DEBUG: Should be in base but implemented better in indexable and its derivatives
         IEnumerator<TKey> GetKeyEnumerator(bool reverse = false, long skip = 0);

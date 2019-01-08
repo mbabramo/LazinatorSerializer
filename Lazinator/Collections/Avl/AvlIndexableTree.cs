@@ -9,7 +9,7 @@ namespace Lazinator.Collections.Avl
 {
     public partial class AvlIndexableTree<T> : AvlTree<T>, IAvlIndexableTree<T>, IIndexableContainer<T>, IIndexableMultivalueContainer<T>, ILazinatorSplittable where T : ILazinator
     {
-        public override IOrderableContainer<T> CreateNewWithSameSettings()
+        public override IValueContainer<T> CreateNewWithSameSettings()
         {
             return new AvlIndexableTree<T>();
         }
@@ -100,8 +100,8 @@ namespace Lazinator.Collections.Avl
                 yield return enumerator.Current.Value;
         }
 
-        public (long index, bool exists) FindSorted(T target, IComparer<T> comparer) => FindSorted(target, MultivalueLocationOptions.Any, comparer);
-        public (long index, bool exists) FindSorted(T target, MultivalueLocationOptions whichOne, IComparer<T> comparer)
+        public (long index, bool exists) Find(T target, IComparer<T> comparer) => Find(target, MultivalueLocationOptions.Any, comparer);
+        public (long index, bool exists) Find(T target, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
             var result = GetMatchingOrNextNode(target, whichOne, comparer);
             var node = ((AvlCountedNode<T>)result.node);
@@ -109,15 +109,15 @@ namespace Lazinator.Collections.Avl
                 return (node.Index, true);
             return (node?.Index ?? LongCount, false);
         }
-        public (long index, bool insertedNotReplaced) InsertSorted(T item, IComparer<T> comparer) => InsertSorted(item, MultivalueLocationOptions.Any, comparer);
-        public (long index, bool insertedNotReplaced) InsertSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
+        public (long index, bool insertedNotReplaced) InsertGetIndex(T item, IComparer<T> comparer) => InsertGetIndex(item, MultivalueLocationOptions.Any, comparer);
+        public (long index, bool insertedNotReplaced) InsertGetIndex(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
             var result = TryInsertSortedReturningNode(item, whichOne, comparer);
             var node = ((AvlCountedNode<T>)result.node);
             return (node.Index, result.insertedNotReplaced);
         }
-        public bool RemoveSorted(T item, IComparer<T> comparer) => RemoveSorted(item, MultivalueLocationOptions.Any, comparer);
-        public bool RemoveSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
+        public bool TryRemove(T item, IComparer<T> comparer) => TryRemove(item, MultivalueLocationOptions.Any, comparer);
+        public bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
             var result = TryRemoveSortedReturningNode(item, whichOne, comparer);
             if (result == null)

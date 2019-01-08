@@ -15,9 +15,9 @@ namespace Lazinator.Collections.Tree
     /// functionality for balancing, for accessing items by index, and for adding items that implement IComparable without a custom comparer.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public partial class BinaryTree<T> : IBinaryTree<T>, IOrderableContainer<T>, IOrderableMultivalueContainer<T>, IEnumerable<T> where T : ILazinator
+    public partial class BinaryTree<T> : IBinaryTree<T>, IValueContainer<T>, IMultivalueContainer<T>, IEnumerable<T> where T : ILazinator
     {
-        public virtual IOrderableContainer<T> CreateNewWithSameSettings()
+        public virtual IValueContainer<T> CreateNewWithSameSettings()
         {
             return new BinaryTree<T>();
         }
@@ -108,7 +108,7 @@ namespace Lazinator.Collections.Tree
             return matchingNode != null;
         }
 
-        public bool GetMatchingItem(T item, IComparer<T> comparer, out T match) => GetMatchingItem(item, MultivalueLocationOptions.Any, comparer, out match);
+        public bool GetValue(T item, IComparer<T> comparer, out T match) => GetValue(item, MultivalueLocationOptions.Any, comparer, out match);
 
         /// <summary>
         /// Returns a matching item. This is useful if the comparer considers only part of the information in the item.
@@ -117,7 +117,7 @@ namespace Lazinator.Collections.Tree
         /// <param name="comparer">The comparer with which to conduct the search</param>
         /// <param name="match">The matching item, or a default value</param>
         /// <returns>True if a matching item was found</returns>
-        public bool GetMatchingItem(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, out T match)
+        public bool GetValue(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, out T match)
         {
             var matchingNode = GetMatchingNode(item, whichOne, comparer);
             if (matchingNode != null)
@@ -158,9 +158,9 @@ namespace Lazinator.Collections.Tree
             return x;
         }
 
-        public bool TryInsertSorted(T item, IComparer<T> comparer) => TryInsertSorted(item, MultivalueLocationOptions.Any, comparer);
+        public bool TryInsert(T item, IComparer<T> comparer) => TryInsert(item, MultivalueLocationOptions.Any, comparer);
 
-        public bool TryInsertSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryInsertSorted(item, node => CompareValueToNode(item, node, whichOne, comparer));
+        public bool TryInsert(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryInsertSorted(item, node => CompareValueToNode(item, node, whichOne, comparer));
 
         protected bool TryInsertSorted(T item, Func<BinaryNode<T>, int> comparisonFunc)
         {
@@ -222,9 +222,9 @@ namespace Lazinator.Collections.Tree
             return (node, true);
         }
 
-        public bool TryRemoveSorted(T item, IComparer<T> comparer) => TryRemoveSorted(item, MultivalueLocationOptions.Any, comparer);
+        public bool TryRemove(T item, IComparer<T> comparer) => TryRemove(item, MultivalueLocationOptions.Any, comparer);
 
-        public bool TryRemoveSorted(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryRemoveSorted(whichOne, node => CompareValueToNode(item, node, whichOne, comparer));
+        public bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryRemoveSorted(whichOne, node => CompareValueToNode(item, node, whichOne, comparer));
 
         protected bool TryRemoveSorted(MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc) => TryRemoveSortedReturningNode(whichOne, comparisonFunc) != null;
 

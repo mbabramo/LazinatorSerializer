@@ -119,7 +119,7 @@
         ILazinatorSortedKeyMultivalueTree,
         ILazinatorSortedKeyValueTree,
         ILazinatorTree,
-        ILazinatorSortedTree,
+        ISortedMultivalueContainer,
         ISortedIndexableContainer,
         ILazinatorSortedIndexableKeyValueTree,
         ILazinatorSortedMultivalueTree,
@@ -147,5 +147,6 @@
         ISortedKeyMultivalueContainer,
         ISortedIndexableKeyMultivalueContainer,
         IIndexableKeyMultivalueContainer,
+        ISortedContainer,
     }
 }
