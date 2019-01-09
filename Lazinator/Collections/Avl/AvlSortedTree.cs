@@ -39,7 +39,15 @@ namespace Lazinator.Collections.Avl
 
         public bool TryRemoveAll(T item)
         {
-            throw new NotImplementedException();
+            bool found = false;
+            bool foundAny = false;
+            do
+            {
+                found = TryRemove(item);
+                if (found)
+                    foundAny = true;
+            } while (found);
+            return foundAny;
         }
     }
 }

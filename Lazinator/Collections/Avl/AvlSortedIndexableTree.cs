@@ -37,12 +37,31 @@ namespace Lazinator.Collections.Avl
 
         public int Count(T item)
         {
-            throw new NotImplementedException();
+            var node = GetMatchingNode(item, MultivalueLocationOptions.First, Comparer<T>.Default);
+            if (node == null)
+                return 0;
+            int count = 0;
+            while (node != null)
+            {
+                count++;
+                node = node.GetNextNode();
+                if (!node.Value.Equals(item))
+                    node = null;
+            }
+            return count;
         }
 
         public bool TryRemoveAll(T item)
         {
-            throw new NotImplementedException();
+            bool found = false;
+            bool foundAny = false;
+            do
+            {
+                found = TryRemove(item);
+                if (found)
+                    foundAny = true;
+            } while (found);
+            return foundAny;
         }
     }
 }

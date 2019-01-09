@@ -176,7 +176,7 @@ namespace Lazinator.Collections.Tree
             return TryInsert(item, node => CompareValueToNode(item, node, whichOne, comparer));
         }
 
-        protected void CheckAllowDuplicates(MultivalueLocationOptions whichOne)
+        protected internal void CheckAllowDuplicates(MultivalueLocationOptions whichOne)
         {
             if (!AllowDuplicates && whichOne != MultivalueLocationOptions.Any)
                 throw new Exception("Allowing potential duplicates is forbidden. Use MultivalueLocationOptions.Any");

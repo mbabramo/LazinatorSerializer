@@ -12,7 +12,7 @@ namespace Lazinator.Collections.Interfaces
         bool ContainsKey(TKey key);
         bool ContainsKeyValue(TKey key, TValue value);
 
-        TValue ValueForKey(TKey key);
+        TValue GetValueForKey(TKey key);
         bool SetValueForKey(TKey key, TValue value);
 
         bool TryRemove(TKey key);

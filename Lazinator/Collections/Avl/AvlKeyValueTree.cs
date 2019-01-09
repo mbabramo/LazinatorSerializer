@@ -52,11 +52,19 @@ namespace Lazinator.Collections.Avl
             return match.Value;
         }
 
-        public bool SetValueForKey(TKey key, TValue value, IComparer<TKey> comparer) => SetValueForKey(key, MultivalueLocationOptions.Any, value, comparer);
+        public bool SetValueForKey(TKey key, TValue value, IComparer<TKey> comparer) => SetValueForKey(key, value, MultivalueLocationOptions.Any, comparer);
 
-        public bool SetValueForKey(TKey key, MultivalueLocationOptions whichOne, TValue value, IComparer<TKey> comparer)
+        public bool SetValueForKey(TKey key, TValue value, MultivalueLocationOptions whichOne, IComparer<TKey> comparer)
         {
             return UnderlyingTree.TryInsert(new LazinatorKeyValue<TKey, TValue>(key, value), whichOne, KeyComparer(comparer));
+        }
+
+        public void AddValueForKey(TKey key, TValue value, IComparer<TKey> comparer)
+        {
+            if (AllowDuplicates)
+                UnderlyingTree.TryInsert(new LazinatorKeyValue<TKey, TValue>(key, value), MultivalueLocationOptions.AfterLast, KeyComparer(comparer));
+            else
+                SetValueForKey(key, value, comparer);
         }
 
         public bool TryRemove(TKey key, IComparer<TKey> comparer) => TryRemove(key, MultivalueLocationOptions.Any, comparer);
