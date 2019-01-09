@@ -17,6 +17,7 @@ namespace Lazinator.Collections.Interfaces
         void RemoveAt(long index);
 
         (TValue valueIfFound, long index, bool found) Find(TKey key, IComparer<TKey> comparer);
+        (long index, bool found) Find(TKey key, TValue value, IComparer<TKey> comparer);
         (long index, bool insertedNotReplaced) InsertGetIndex(TKey key, TValue value, IComparer<TKey> comparer);
 
     }

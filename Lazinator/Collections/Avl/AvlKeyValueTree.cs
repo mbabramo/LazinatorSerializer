@@ -18,7 +18,7 @@ namespace Lazinator.Collections.Avl
         }
 
 
-        public IKeyValueContainer<TKey, TValue> CreateNewWithSameSettings()
+        public virtual IKeyValueContainer<TKey, TValue> CreateNewWithSameSettings()
         {
             return (IKeyValueContainer<TKey, TValue>) new AvlTree<LazinatorKeyValue<TKey, TValue>>() { AllowDuplicates = AllowDuplicates };
         }

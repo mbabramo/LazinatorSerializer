@@ -9,7 +9,12 @@ namespace Lazinator.Collections.Avl
 {
     public partial class AvlIndexableKeyValueTree<TKey, TValue> : AvlKeyValueTree<TKey, TValue>, IAvlIndexableKeyValueTree<TKey, TValue>, IIndexableKeyValueContainer<TKey, TValue>, IIndexableKeyMultivalueContainer<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
-        AvlIndexableTree<LazinatorKeyValue<TKey, TValue>> UnderlyingIndexableTree => (AvlIndexableTree<LazinatorKeyValue<TKey, TValue>>) UnderlyingTree;
+        public override IKeyValueContainer<TKey, TValue> CreateNewWithSameSettings()
+        {
+            return new AvlIndexableKeyValueTree<TKey, TValue>() { AllowDuplicates = AllowDuplicates };
+        }
+
+        protected AvlIndexableTree<LazinatorKeyValue<TKey, TValue>> UnderlyingIndexableTree => (AvlIndexableTree<LazinatorKeyValue<TKey, TValue>>)UnderlyingTree;
 
         public (TValue valueIfFound, long index, bool found) Find(TKey key, IComparer<TKey> comparer) => Find(key, MultivalueLocationOptions.Any, comparer);
 
@@ -21,7 +26,25 @@ namespace Lazinator.Collections.Avl
             return (default, -1, false);
         }
 
-        public TKey GetKeyAt(long index)
+        public (long index, bool found) Find(TKey key, TValue value, IComparer<TKey> comparer)
+        {
+            // Finds the first occurrence of the key-value pair (note that there is no option to find the last)
+            var firstValue = Find(key, MultivalueLocationOptions.First, comparer);
+            if (firstValue.found == false)
+                return (-1, false);
+            var values = GetAllValues(key, comparer);
+            long index = firstValue.index;
+            foreach (var existingValue in values)
+            {
+                if (existingValue.Equals(value))
+                    return (index, true);
+                else
+                    index++;
+            }
+            return (-1, false);
+        }
+
+    public TKey GetKeyAt(long index)
         {
             return UnderlyingIndexableTree.GetAt(index).Key;
         }
