@@ -146,5 +146,6 @@
         IIndexableKeyMultivalueContainer,
         ISortedContainer,
         IAvlSortedKeyValueTree,
+        IAvlIndexableKeyValueTree,
     }
 }

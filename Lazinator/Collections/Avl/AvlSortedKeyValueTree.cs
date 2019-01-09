@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlSortedKeyValueTree<TKey, TValue> : AvlKeyValueTree<TKey, TValue>, IAvlSortedKeyValueTree<TKey, TValue>, ISortedKeyMultivalueContainer<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
+    public partial class AvlSortedKeyValueTree<TKey, TValue> : AvlKeyValueTree<TKey, TValue>, IAvlSortedKeyValueTree<TKey, TValue>, ISortedKeyValueContainer<TKey, TValue>, ISortedKeyMultivalueContainer<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         public bool ContainsKey(TKey key) => ContainsKey(key, Comparer<TKey>.Default);
 

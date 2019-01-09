@@ -13,11 +13,11 @@ namespace Lazinator.Collections.Interfaces
         void SetValueAt(long index, TValue value);
         TKey GetKeyAt(long index);
         void SetKeyAt(long index, TKey key);
-        void InsertAt(TKey key, TValue value, long index);
-        bool RemoveAt(long index);
+        void InsertAt(long index, TKey key, TValue value);
+        void RemoveAt(long index);
 
         (TValue valueIfFound, long index, bool found) Find(TKey key, IComparer<TKey> comparer);
-        (bool inserted, long index) InsertGetIndex(TKey key, TValue value, IComparer<TKey> comparer);
+        (long index, bool insertedNotReplaced) InsertGetIndex(TKey key, TValue value, IComparer<TKey> comparer);
 
     }
 }
