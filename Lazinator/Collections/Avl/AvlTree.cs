@@ -4,6 +4,7 @@ using Lazinator.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Lazinator.Collections.Avl
@@ -96,7 +97,33 @@ namespace Lazinator.Collections.Avl
 
             return (Root, true);
         }
-        
+
+        public void RemoveNode(BinaryNode<T> node)
+        {
+            Stack<bool> pathIsLeft = new Stack<bool>();
+            var onPathToNode = node;
+            while (onPathToNode.Parent != null)
+            {
+                pathIsLeft.Push(node.Parent.Left == onPathToNode);
+                onPathToNode = node.Parent;
+            }
+            BinaryNode<T> result = TryRemoveReturningNode(MultivalueLocationOptions.Any, x =>
+                {
+                    AvlNode<T> avlNode = (AvlNode<T>)x;
+                    if (!pathIsLeft.Any())
+                        return 0;
+                    // DEBUG -- must be tested. Could be the opposite order.
+                    // TODO: Use a long as a bitset instead of a stack to avoid allocation
+                    if (pathIsLeft.Pop())
+                        return 1;
+                    else
+                        return -1;
+
+                });
+            if (result != node)
+                throw new Exception("Internal exception on RemoveNode.");
+        }
+
         protected override BinaryNode<T> TryRemoveReturningNode(MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
         {
             AvlNode<T> node = AvlRoot;

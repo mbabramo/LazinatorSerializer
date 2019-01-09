@@ -24,6 +24,8 @@ namespace Lazinator.Collections.Tuples
             return $"({Key?.ToString()}, {Value?.ToString()})";
         }
 
+        public KeyValuePair<TKey, TValue> KeyValuePair => new KeyValuePair<TKey, TValue>(Key, Value);
+
         public int CompareTo(LazinatorComparableKeyValue<TKey, TValue> other)
         {
             return Comparer<TKey>.Default.Compare(Key, other.Key);
