@@ -7,25 +7,24 @@ namespace Lazinator.Buffers
     {
         #region Compression of int/long
 
-        public static byte WriteCompressedInt(ref BinaryBufferWriter writer, int value)
+        public static byte WriteCompressedUint(ref BinaryBufferWriter writer, uint value)
         {
-            uint num = (uint) value;
             byte numBytes = 0;
 
-            while (num >= 128U)
+            while (value >= 128U)
             {
-                writer.Write((byte) (num | 128U));
-                num >>= 7;
+                writer.Write((byte) (value | 128U));
+                value >>= 7;
                 numBytes++;
             }
 
-            writer.Write((byte) num);
+            writer.Write((byte) value);
             numBytes++;
 
             return numBytes;
         }
 
-        public static int ToDecompressedInt(this ReadOnlySpan<byte> bytes, ref int index)
+        public static uint ToDecompressedUint(this ReadOnlySpan<byte> bytes, ref int index)
         {
             int returnValue = 0;
             int bitIndex = 0;
@@ -40,11 +39,11 @@ namespace Lazinator.Buffers
                 if (((int) currentByte & 128) == 0)
                 {
                     index += numBytes;
-                    return returnValue;
+                    return (uint) returnValue;
                 }
             }
 
-            throw new FormatException("Format_Bad7BitInt32");
+            throw new FormatException("Format_Bad7Bit");
         }
 
         public static byte WriteCompressedLong(ref BinaryBufferWriter writer, long value)
@@ -115,12 +114,29 @@ namespace Lazinator.Buffers
 
         #region Unsigned (using int/long methods)
 
-        public static byte WriteCompressedUint(ref BinaryBufferWriter writer, uint value) => WriteCompressedInt(ref writer, (int) value);
+        //public static byte WriteCompressedInt(ref BinaryBufferWriter writer, int value)
+        //{
+        //    return WriteCompressedUint(ref writer, (uint)value);
+        //}
 
-        public static uint ToDecompressedUint(this ReadOnlySpan<byte> bytes, ref int index)
+        //public static int ToDecompressedInt(this ReadOnlySpan<byte> bytes, ref int index)
+        //{
+        //    uint value = ToDecompressedUint(bytes, ref index);
+        //    return (int) value;
+        //}
+
+        public static byte WriteCompressedInt(ref BinaryBufferWriter writer, int value)
         {
-            int value = ToDecompressedInt(bytes, ref index);
-            return (uint) value;
+            int zigzag = (value << 1) ^ (value >> 31);
+            return WriteCompressedUint(ref writer, (uint)zigzag);
+        }
+
+        public static int ToDecompressedInt(this ReadOnlySpan<byte> bytes, ref int index)
+        {
+            uint value = ToDecompressedUint(bytes, ref index);
+            int asInt = (int)value;
+            int dezigzagged = (asInt >> 1) ^ (~(asInt & 1) + 1);
+            return dezigzagged;
         }
 
         public static byte WriteCompressedUlong(ref BinaryBufferWriter writer, ulong value) => WriteCompressedLong(ref writer, (long) value);
@@ -136,7 +152,7 @@ namespace Lazinator.Buffers
 
         #region Nullable encoding int/long
 
-        // Supporting null: We use the usual approach to 7-bit encoding, but we take advantage of the fact that in standard 7-bit encoding, there are two byte sequences not corresponding to a number, specifically where the high bit of the first byte is set (indicating that there is more data) and the second byte is 0 (indicating that actually there isn't). We could just assign this to null, but since null is probably more common than 127, we use this special combination to represent null and we encode null as 127 (thus using only a single byte).
+        // Supporting null: We use the usual approach to 7-bit encoding, but we take advantage of the fact that in standard 7-bit encoding, the two byte sequences 128 0 does not corresponding to a number. (This is because 127 is written as 127 and 128 is written as 128 1, with the first "128" indicating that the number is greater than 127.) 
 
         public static byte WriteCompressedNullableInt(ref BinaryBufferWriter writer, int? value)
         {
