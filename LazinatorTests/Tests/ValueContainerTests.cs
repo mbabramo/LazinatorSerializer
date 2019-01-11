@@ -24,7 +24,28 @@ namespace LazinatorTests.Tests
         AvlSortedIndexableTree
     }
 
-    public class ValueContainerTests<T> : SerializationDeserializationTestBase where T : ILazinator, IComparable<T>
+    public class ValueContaienrTests_WInt : ValueContainerTests<WInt>
+    {
+        [Theory]
+        [InlineData(ValueContainerType.AvlTree, false, 100, 100)]
+        [InlineData(ValueContainerType.AvlIndexableTree, false, 100, 100)]
+        [InlineData(ValueContainerType.AvlSortedTree, false, 100, 100)]
+        [InlineData(ValueContainerType.AvlSortedIndexableTree, false, 100, 100)]
+
+        [InlineData(ValueContainerType.AvlTree, true, 100, 100)]
+        [InlineData(ValueContainerType.AvlIndexableTree, true, 100, 100)]
+        [InlineData(ValueContainerType.AvlSortedTree, true, 100, 100)]
+        [InlineData(ValueContainerType.AvlSortedIndexableTree, true, 100, 100)]
+        public void VerifyValueContainer(ValueContainerType containerType, bool allowDuplicates, int numRepetitions, int numInstructions) => VerifyValueContainerHelper(containerType, allowDuplicates, numRepetitions, numInstructions);
+
+        public override WInt GetRandomValue()
+        {
+            return ran.Next(100);
+        }
+
+    }
+
+    public abstract class ValueContainerTests<T> : SerializationDeserializationTestBase where T : ILazinator, IComparable<T>
     {
 
         public IValueContainer<T> GetValueContainer(ValueContainerType containerType)
@@ -44,16 +65,18 @@ namespace LazinatorTests.Tests
             }
         }
 
-        Random ran;
+        public Random ran = new Random(0);
+        bool AllowDuplicates;
+        
 
-        [Theory]
-        [InlineData(ValueContainerType.AvlTree, 100, 100)]
-        public void VerifyValueContainer(ValueContainerType containerType, int numRepetitions, int numInstructions)
+        public void VerifyValueContainerHelper(ValueContainerType containerType, bool allowDuplicates, int numRepetitions, int numInstructions)
         {
+            AllowDuplicates = allowDuplicates;
             for (int rep = 0; rep < numRepetitions; rep++)
             {
                 List<T> list = new List<T>();
                 IValueContainer<T> container = GetValueContainer(containerType);
+                container.AllowDuplicates = AllowDuplicates;
                 for (int i = 0; i < numInstructions; i++)
                 {
                     int r = ran.Next(100);
@@ -89,20 +112,20 @@ namespace LazinatorTests.Tests
                 lastIndex++;
         }
 
-        public MultivalueLocationOptions ChooseInsertOption()
+        public MultivalueLocationOptions ChooseMultivalueInsertOption()
         {
             int i = ran.Next(0, 5);
             switch (i)
             {
                 case 0:
                     return MultivalueLocationOptions.Any;
-                case 2:
+                case 1:
                     return MultivalueLocationOptions.First;
-                case 3:
+                case 2:
                     return MultivalueLocationOptions.Last;
-                case 4:
+                case 3:
                     return MultivalueLocationOptions.InsertBeforeFirst;
-                case 5:
+                case 4:
                     return MultivalueLocationOptions.InsertAfterLast;
                 default:
                     throw new NotImplementedException();
@@ -158,33 +181,21 @@ namespace LazinatorTests.Tests
             }
             else
             {
-                if (whichOne == MultivalueLocationOptions.InsertAfterLast || whichOne == MultivalueLocationOptions.InsertBeforeFirst)
+                int index = ran.Next(0, list.Count + 1);
+                if (whichOne == MultivalueLocationOptions.InsertAfterLast || whichOne == MultivalueLocationOptions.InsertBeforeFirst || list.Count == 0)
                 {
-                    int index = ran.Next(0, list.Count + 1);
                     list.Insert(index, item);
                     return (index, true);
                 }
                 else
                 {
-                    int index = ran.Next(0, list.Count);
                     list[index] = item;
                     return (index, false);
                 }
             }
         }
 
-        public int MaxIntValue;
-
-        public T GetRandomValue()
-        {
-            if (typeof(T) == typeof(WInt))
-            {
-                int random = ran.Next(0, MaxIntValue);
-                WInt w = new WInt(random);
-                return (T)(object)w;
-            }
-            throw new Exception();
-        }
+        public abstract T GetRandomValue();
 
         public abstract class RandomInstruction
         {
@@ -198,53 +209,56 @@ namespace LazinatorTests.Tests
                     switch (i)
                     {
                         case 0:
-                            Execute_Value(testClass, container, list);
-                            done = true;
+                            if (testClass.AllowDuplicates == false)
+                            {
+                                Execute_Value(testClass, container, list);
+                                done = true;
+                            }
                             break;
                         case 1:
-                            if (container is IIndexableContainer<T> indexableContainer)
+                            if (testClass.AllowDuplicates == false && container is IIndexableContainer<T> indexableContainer)
                             {
                                 Execute_Indexable(testClass, indexableContainer, list);
                                 done = true;
                             }
                             break;
                         case 2:
-                            if (container is ISortedContainer<T> sortedContainer)
+                            if (testClass.AllowDuplicates == false && container is ISortedContainer<T> sortedContainer)
                             {
                                 Execute_Sorted(testClass, sortedContainer, list);
                                 done = true;
                             }
                             break;
                         case 3:
-                            if (container is IMultivalueContainer<T> multivalueContainer)
+                            if (testClass.AllowDuplicates == true && container is IMultivalueContainer<T> multivalueContainer)
                             {
                                 Execute_Multivalue(testClass, multivalueContainer, list);
                                 done = true;
                             }
                             break;
                         case 4:
-                            if (container is ISortedMultivalueContainer<T> sortedMultivalueContainer)
+                            if (testClass.AllowDuplicates == true && container is ISortedMultivalueContainer<T> sortedMultivalueContainer)
                             {
                                 Execute_SortedMultivalue(testClass, sortedMultivalueContainer, list);
                                 done = true;
                             }
                             break;
                         case 5:
-                            if (container is ISortedIndexableContainer<T> sortedIndexableContainer)
+                            if (testClass.AllowDuplicates == false && container is ISortedIndexableContainer<T> sortedIndexableContainer)
                             {
                                 Execute_SortedIndexable(testClass, sortedIndexableContainer, list);
                                 done = true;
                             }
                             break;
                         case 6:
-                            if (container is IIndexableMultivalueContainer<T> indexableMultivalueContainer)
+                            if (testClass.AllowDuplicates == true && container is IIndexableMultivalueContainer<T> indexableMultivalueContainer)
                             {
                                 Execute_IndexableMultivalue(testClass, indexableMultivalueContainer, list);
                                 done = true;
                             }
                             break;
                         case 7:
-                            if (container is ISortedIndexableMultivalueContainer<T> sortedIndexableMultivalueContainer)
+                            if (testClass.AllowDuplicates == true &&  container is ISortedIndexableMultivalueContainer<T> sortedIndexableMultivalueContainer)
                             {
                                 Execute_SortedIndexableMultivalue(testClass, sortedIndexableMultivalueContainer, list);
                                 done = true;
@@ -464,10 +478,11 @@ namespace LazinatorTests.Tests
             public override void Execute(ValueContainerTests<T> testClass, IValueContainer<T> container, List<T> list)
             {
                 Item = testClass.GetRandomValue();
-                WhichOne = testClass.ChooseInsertOption();
+                WhichOne = testClass.AllowDuplicates ? testClass.ChooseMultivalueInsertOption() : MultivalueLocationOptions.Any; // if not multivalue, just replace the item
                 SortedContainer = container as ISortedContainer<T>;
                 ContainerIsSorted = container is ISortedContainer<T>;
-                (Index, InsertedNotReplaced) = testClass.InsertOrReplaceItem(list, Item, ContainerIsSorted, WhichOne);
+                // If we are using the base container type, then we can only add items with a comparer, so we treat it as a sorted container.
+                (Index, InsertedNotReplaced) = testClass.InsertOrReplaceItem(list, Item, ContainerIsSorted || !(container is IIndexableContainer<T>), WhichOne);
                 base.Execute(testClass, container, list);
             }
 
@@ -507,7 +522,8 @@ namespace LazinatorTests.Tests
                 }
                 else
                 {
-                    Execute_Value(testClass, container, list);
+                    bool insertedNotReplaced = container.TryInsert(Item, WhichOne, C);
+                    insertedNotReplaced.Should().Be(InsertedNotReplaced);
                 }
             }
 
