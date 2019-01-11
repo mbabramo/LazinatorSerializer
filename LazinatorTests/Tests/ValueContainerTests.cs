@@ -16,25 +16,162 @@ using Lazinator.Collections.Interfaces;
 
 namespace LazinatorTests.Tests
 {
+    public enum ValueContainerType
+    {
+        AvlTree,
+        AvlIndexableTree,
+        AvlSortedTree,
+        AvlSortedIndexableTree
+    }
+
     public class ValueContainerTests<T> : SerializationDeserializationTestBase where T : ILazinator, IComparable<T>
     {
-        Random r;
+
+        public IValueContainer<T> GetValueContainer(ValueContainerType containerType)
+        {
+            switch (containerType)
+            {
+                case ValueContainerType.AvlTree:
+                    return new AvlTree<T>();
+                case ValueContainerType.AvlIndexableTree:
+                    return new AvlIndexableTree<T>();
+                case ValueContainerType.AvlSortedTree:
+                    return new AvlSortedTree<T>();
+                case ValueContainerType.AvlSortedIndexableTree:
+                    return new AvlSortedIndexableTree<T>();
+                default:
+                    throw new NotSupportedException();
+            }
+        }
+
+        Random ran;
+
+        [Theory]
+        [InlineData(ValueContainerType.AvlTree, 100, 100)]
+        public void VerifyValueContainer(ValueContainerType containerType, int numRepetitions, int numInstructions)
+        {
+            for (int rep = 0; rep < numRepetitions; rep++)
+            {
+                List<T> list = new List<T>();
+                IValueContainer<T> container = GetValueContainer(containerType);
+                for (int i = 0; i < numInstructions; i++)
+                {
+                    int r = ran.Next(100);
+                    RandomInstruction instruction;
+                    if (r < 25)
+                        instruction = new GetValueInstruction();
+                    else
+                        instruction = new InsertValueInstruction();
+                    instruction.Execute(this, container, list);
+                }
+            }
+        }
 
         public (T item, int firstIndex, int lastIndex)? GetRandomItem(List<T> list)
         {
             if (!list.Any())
                 return null;
-            int index = r.Next(0, list.Count());
+            int index = ran.Next(0, list.Count());
             T item = list[index];
-            int firstIndex = index, lastIndex = index;
+            int firstIndex, lastIndex;
+            GetIndexRange(list, index, out firstIndex, out lastIndex);
+            return (item, firstIndex, lastIndex);
+        }
+
+        private static void GetIndexRange(List<T> list, int index, out int firstIndex, out int lastIndex)
+        {
+            T item = list[index];
+            firstIndex = index;
+            lastIndex = index;
             while (firstIndex > 0 && list[firstIndex - 1].Equals(item))
                 firstIndex--;
             while (lastIndex < list.Count() - 1 && list[lastIndex + 1].Equals(item))
                 lastIndex++;
-            return (item, firstIndex, lastIndex);
         }
 
+        public MultivalueLocationOptions ChooseInsertOption()
+        {
+            int i = ran.Next(0, 5);
+            switch (i)
+            {
+                case 0:
+                    return MultivalueLocationOptions.Any;
+                case 2:
+                    return MultivalueLocationOptions.First;
+                case 3:
+                    return MultivalueLocationOptions.Last;
+                case 4:
+                    return MultivalueLocationOptions.InsertBeforeFirst;
+                case 5:
+                    return MultivalueLocationOptions.InsertAfterLast;
+                default:
+                    throw new NotImplementedException();
+            }
+        }
 
+        public (int index, bool insertedNotReplaced) InsertOrReplaceItem(List<T> list, T item, bool sorted, MultivalueLocationOptions whichOne)
+        {
+            if (sorted)
+            {
+                int index = list.BinarySearch(item);
+                bool found = index >= 0;
+                if (!found)
+                    index = ~index;
+                bool replace = false;
+                if (found)
+                {
+                    GetIndexRange(list, index, out int firstIndex, out int lastIndex);
+                    switch (whichOne)
+                    {
+                        case MultivalueLocationOptions.Any:
+                            index = ran.Next(firstIndex, lastIndex + 1);
+                            replace = true;
+                            break;
+                        case MultivalueLocationOptions.First:
+                            index = firstIndex;
+                            replace = true;
+                            break;
+                        case MultivalueLocationOptions.Last:
+                            index = lastIndex;
+                            replace = true;
+                            break;
+                        case MultivalueLocationOptions.InsertBeforeFirst:
+                            index = firstIndex;
+                            replace = false;
+                            break;
+                        case MultivalueLocationOptions.InsertAfterLast:
+                            index = lastIndex + 1;
+                            replace = false;
+                            break;
+                    }
+                }
+                if (replace)
+                {
+                    list[index] = item;
+                    return (index, false);
+                }
+                else
+                {
+                    list.Insert(index, item);
+                    return (index, true);
+                }
+            }
+            else
+            {
+                if (whichOne == MultivalueLocationOptions.InsertAfterLast || whichOne == MultivalueLocationOptions.InsertBeforeFirst)
+                {
+                    int index = ran.Next(0, list.Count + 1);
+                    list.Insert(index, item);
+                    return (index, true);
+                }
+                else
+                {
+                    int index = ran.Next(0, list.Count);
+                    list[index] = item;
+                    return (index, false);
+                }
+            }
+        }
 
         public int MaxIntValue;
 
@@ -42,7 +179,7 @@ namespace LazinatorTests.Tests
         {
             if (typeof(T) == typeof(WInt))
             {
-                int random = r.Next(0, MaxIntValue);
+                int random = ran.Next(0, MaxIntValue);
                 WInt w = new WInt(random);
                 return (T)(object)w;
             }
@@ -51,13 +188,13 @@ namespace LazinatorTests.Tests
 
         public abstract class RandomInstruction
         {
-            public void Execute(ValueContainerTests<T> testClass, IValueContainer<T> container, List<T> list)
+            public virtual void Execute(ValueContainerTests<T> testClass, IValueContainer<T> container, List<T> list)
             {
                 // find a valid container type, and execute
                 bool done = false;
                 while (!done)
                 {
-                    int i = testClass.r.Next(8);
+                    int i = testClass.ran.Next(8);
                     switch (i)
                     {
                         case 0:
@@ -155,7 +292,7 @@ namespace LazinatorTests.Tests
             }
         }
 
-        public class GetValue : RandomInstruction
+        public class GetValueInstruction : RandomInstruction
         {
             public override void Execute_Indexable(ValueContainerTests<T> testClass, IIndexableContainer<T> container, List<T> list)
             {
@@ -313,8 +450,102 @@ namespace LazinatorTests.Tests
                 }
             }
         }
+        
+        public class InsertValueInstruction : RandomInstruction
+        {
 
-    
+            T Item;
+            MultivalueLocationOptions WhichOne;
+            bool ContainerIsSorted;
+            ISortedContainer<T> SortedContainer;
+            int Index;
+            bool InsertedNotReplaced;
+
+            public override void Execute(ValueContainerTests<T> testClass, IValueContainer<T> container, List<T> list)
+            {
+                Item = testClass.GetRandomValue();
+                WhichOne = testClass.ChooseInsertOption();
+                SortedContainer = container as ISortedContainer<T>;
+                ContainerIsSorted = container is ISortedContainer<T>;
+                (Index, InsertedNotReplaced) = testClass.InsertOrReplaceItem(list, Item, ContainerIsSorted, WhichOne);
+                base.Execute(testClass, container, list);
+            }
+
+            public override void Execute_Indexable(ValueContainerTests<T> testClass, IIndexableContainer<T> container, List<T> list)
+            {
+                if (ContainerIsSorted)
+                    Execute_SortedIndexable(testClass, (ISortedIndexableContainer<T>)SortedContainer, list);
+                else
+                {
+                    if (InsertedNotReplaced)
+                        container.InsertAt(Index, Item);
+                    else
+                        container.SetAt(Index, Item);
+                }
+            }
+
+            public override void Execute_IndexableMultivalue(ValueContainerTests<T> testClass, IIndexableMultivalueContainer<T> container, List<T> list)
+            {
+                if (ContainerIsSorted)
+                {
+                    (long index, bool insertedNotReplaced) = container.InsertGetIndex(Item, WhichOne, C);
+                    index.Should().Be(Index);
+                    insertedNotReplaced.Should().Be(InsertedNotReplaced);
+                }
+                else
+                {
+                    Execute_Indexable(testClass, container, list);
+                }
+            }
+
+            public override void Execute_Multivalue(ValueContainerTests<T> testClass, IMultivalueContainer<T> container, List<T> list)
+            {
+                if (ContainerIsSorted)
+                {
+                    bool insertedNotReplaced = container.TryInsert(Item, WhichOne, C);
+                    insertedNotReplaced.Should().Be(InsertedNotReplaced);
+                }
+                else
+                {
+                    Execute_Value(testClass, container, list);
+                }
+            }
+
+            public override void Execute_Sorted(ValueContainerTests<T> testClass, ISortedContainer<T> container, List<T> list)
+            {
+                bool insertedNotReplaced = container.TryInsert(Item);
+                insertedNotReplaced.Should().Be(InsertedNotReplaced);
+            }
+
+            public override void Execute_SortedIndexable(ValueContainerTests<T> testClass, ISortedIndexableContainer<T> container, List<T> list)
+            {
+                (long index, bool insertedNotReplaced) = container.InsertGetIndex(Item);
+                index.Should().Be(Index);
+                insertedNotReplaced.Should().Be(InsertedNotReplaced);
+            }
+
+            public override void Execute_SortedIndexableMultivalue(ValueContainerTests<T> testClass, ISortedIndexableMultivalueContainer<T> container, List<T> list)
+            {
+                (long index, bool insertedNotReplaced) = container.InsertGetIndex(Item, WhichOne);
+                index.Should().Be(Index);
+                insertedNotReplaced.Should().Be(InsertedNotReplaced);
+            }
+
+            public override void Execute_SortedMultivalue(ValueContainerTests<T> testClass, ISortedMultivalueContainer<T> container, List<T> list)
+            {
+                bool insertedNotReplaced = container.TryInsert(Item, WhichOne);
+                insertedNotReplaced.Should().Be(InsertedNotReplaced);
+            }
+
+            public override void Execute_Value(ValueContainerTests<T> testClass, IValueContainer<T> container, List<T> list)
+            {
+                bool insertedNotReplaced = container.TryInsert(Item, C);
+                insertedNotReplaced.Should().Be(InsertedNotReplaced);
+            }
+        }
+
+
+
 
 
     }

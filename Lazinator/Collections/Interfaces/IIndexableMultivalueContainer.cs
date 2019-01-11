@@ -11,6 +11,5 @@ namespace Lazinator.Collections.Interfaces
     {
         (long index, bool exists) Find(T target, MultivalueLocationOptions whichOne, IComparer<T> comparer);
         (long index, bool insertedNotReplaced) InsertGetIndex(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer);
-        bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer);
     }
 }
