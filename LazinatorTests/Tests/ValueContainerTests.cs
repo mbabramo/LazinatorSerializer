@@ -31,7 +31,6 @@ namespace LazinatorTests.Tests
         [InlineData(ValueContainerType.AvlIndexableTree, false, 100, 100)]
         [InlineData(ValueContainerType.AvlSortedTree, false, 100, 100)]
         [InlineData(ValueContainerType.AvlSortedIndexableTree, false, 100, 100)]
-
         [InlineData(ValueContainerType.AvlTree, true, 100, 100)]
         [InlineData(ValueContainerType.AvlIndexableTree, true, 100, 100)]
         [InlineData(ValueContainerType.AvlSortedTree, true, 100, 100)]
@@ -181,14 +180,15 @@ namespace LazinatorTests.Tests
             }
             else
             {
-                int index = ran.Next(0, list.Count + 1);
                 if (whichOne == MultivalueLocationOptions.InsertAfterLast || whichOne == MultivalueLocationOptions.InsertBeforeFirst || list.Count == 0)
                 {
+                    int index = ran.Next(0, list.Count + 1);
                     list.Insert(index, item);
                     return (index, true);
                 }
                 else
                 {
+                    int index = ran.Next(0, list.Count);
                     list[index] = item;
                     return (index, false);
                 }
