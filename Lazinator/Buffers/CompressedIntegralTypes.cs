@@ -136,7 +136,7 @@ namespace Lazinator.Buffers
 
         #region Nullable encoding int/long
 
-        // Supporting null: We use the usual approach to 7-bit encoding, but we take advantage of the fact that in standard 7-bit encoding, there are two byte sequences not corresponding to a number, specifically where the high bit of the first byte is set (indicating that there is more data) and the second byte is 0 (indicating that actually there isn't). We could just assign this to null, but since null is probably more common than 127, we use this special combination to represent null and we encode null as 127 (thus using only a single byte).
+        // Supporting null: We use the usual approach to 7-bit encoding, but we take advantage of the fact that in standard 7-bit encoding, there are two byte sequences not corresponding to a number, specifically where the high bit of the first byte is set (indicating that there is more data) and the second byte is 0 (indicating that actually there isn't). (Note that 128 is represented as 127, 1.) We could just assign this to null, but since null is probably more common than 127, we use this special combination to represent null and we encode null as 127 (thus using only a single byte).
 
         public static byte WriteCompressedNullableInt(ref BinaryBufferWriter writer, int? value)
         {
