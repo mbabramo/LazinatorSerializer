@@ -91,9 +91,9 @@ namespace Lazinator.Collections.Tree
             if (compare == 0)
             {
                 // Even though value is equal, we don't calculate it as equal if, for example, we're at the second value and the request is for the first.
-                if (whichOne == MultivalueLocationOptions.BeforeFirst)
+                if (whichOne == MultivalueLocationOptions.InsertBeforeFirst)
                     compare = 1;
-                else if (whichOne == MultivalueLocationOptions.AfterLast)
+                else if (whichOne == MultivalueLocationOptions.InsertAfterLast)
                     compare = -1;
                 else if (whichOne == MultivalueLocationOptions.First)
                 {

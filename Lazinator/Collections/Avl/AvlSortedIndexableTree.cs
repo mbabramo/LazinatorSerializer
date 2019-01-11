@@ -18,7 +18,7 @@ namespace Lazinator.Collections.Avl
             return new AvlSortedIndexableTree<T>() { AllowDuplicates = AllowDuplicates };
         }
 
-        private MultivalueLocationOptions MultivalueLocationOptionForInsertion => AllowDuplicates ? MultivalueLocationOptions.AfterLast : MultivalueLocationOptions.Any;
+        private MultivalueLocationOptions MultivalueLocationOptionForInsertion => AllowDuplicates ? MultivalueLocationOptions.InsertAfterLast : MultivalueLocationOptions.Any;
         private MultivalueLocationOptions MultivalueLocationOptionForRemoval => MultivalueLocationOptions.Any; // because all items are same, it doesn't matter.
 
         public (long index, bool exists) Find(T target) => Find(target, MultivalueLocationOptions.First);

@@ -10,9 +10,9 @@ namespace Lazinator.Collections.Interfaces
     public enum MultivalueLocationOptions
     {
         Any,
-        BeforeFirst,
+        InsertBeforeFirst,
         First,
         Last,
-        AfterLast
+        InsertAfterLast
     }
 }

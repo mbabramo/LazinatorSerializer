@@ -15,7 +15,7 @@ namespace Lazinator.Collections.Avl
 
         public bool Contains(T item) => Contains(item, Comparer<T>.Default);
 
-        public bool TryInsert(T item) => TryInsert(item, AllowDuplicates ? MultivalueLocationOptions.AfterLast : MultivalueLocationOptions.Any);
+        public bool TryInsert(T item) => TryInsert(item, AllowDuplicates ? MultivalueLocationOptions.InsertAfterLast : MultivalueLocationOptions.Any);
         public bool TryInsert(T item, MultivalueLocationOptions whichOne) => TryInsert(item, whichOne, Comparer<T>.Default);
 
         public bool TryRemove(T item) => TryRemove(item, MultivalueLocationOptions.Any);

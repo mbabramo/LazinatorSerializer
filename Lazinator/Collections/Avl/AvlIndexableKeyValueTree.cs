@@ -82,6 +82,6 @@ namespace Lazinator.Collections.Avl
             return result;
         }
 
-        public (long index, bool insertedNotReplaced) InsertGetIndex(TKey key, TValue value, IComparer<TKey> comparer) => InsertGetIndex(key, value, MultivalueLocationOptions.AfterLast, comparer);
+        public (long index, bool insertedNotReplaced) InsertGetIndex(TKey key, TValue value, IComparer<TKey> comparer) => InsertGetIndex(key, value, MultivalueLocationOptions.InsertAfterLast, comparer);
     }
 }

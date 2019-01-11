@@ -15,13 +15,13 @@ namespace LazinatorTests.AVL
         [Fact]
         public void AvlTreeSearchWorks()
         {
-            var tree = new AvlOldTree<WInt, WString>();
+            var tree = new AvlSortedIndexableKeyValueTree<WInt, WString>();
             int[] ints = new int[] { 1, 2, 3, 4, 6, 7, 8, 10, 13, 14 };
             foreach (int x in ints)
-                tree.Insert(x, x.ToString());
+                tree.SetValueForKey(x, x.ToString());
             foreach (int x in ints)
             {
-                bool found = tree.ValueAtKey(x, out WString value);
+                bool found = tree.GetValueForKey(x, out WString value);
                 found.Should().BeTrue();
                 value.WrappedValue.Should().Be(x.ToString());
             }

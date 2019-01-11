@@ -158,7 +158,7 @@ namespace Lazinator.Collections.Avl
 
         public (long index, bool insertedNotReplaced) InsertGetIndex(T item) => InsertGetIndex(item, Comparer<T>.Default);
 
-        public (long index, bool insertedNotReplaced) InsertGetIndex(T item, IComparer<T> comparer) => UnderlyingTree.InsertGetIndex(item, AllowDuplicates ? MultivalueLocationOptions.AfterLast : MultivalueLocationOptions.Any, comparer);
+        public (long index, bool insertedNotReplaced) InsertGetIndex(T item, IComparer<T> comparer) => UnderlyingTree.InsertGetIndex(item, AllowDuplicates ? MultivalueLocationOptions.InsertAfterLast : MultivalueLocationOptions.Any, comparer);
 
         public bool TryRemove(T item) => TryRemove(item, Comparer<T>.Default);
 

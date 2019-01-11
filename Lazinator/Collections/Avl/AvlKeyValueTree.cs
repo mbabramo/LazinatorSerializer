@@ -62,7 +62,7 @@ namespace Lazinator.Collections.Avl
         public void AddValueForKey(TKey key, TValue value, IComparer<TKey> comparer)
         {
             if (AllowDuplicates)
-                UnderlyingTree.TryInsert(new LazinatorKeyValue<TKey, TValue>(key, value), MultivalueLocationOptions.AfterLast, KeyComparer(comparer));
+                UnderlyingTree.TryInsert(new LazinatorKeyValue<TKey, TValue>(key, value), MultivalueLocationOptions.InsertAfterLast, KeyComparer(comparer));
             else
                 SetValueForKey(key, value, comparer);
         }
