@@ -29,7 +29,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void VerifyValueContainerDEBUG()
         {
-            VerifyValueContainer(ValueContainerType.AvlSortedIndexableTree, true, 100, 100);
+            VerifyValueContainer(ValueContainerType.AvlIndexableTree, true, 100, 100);
         }
 
         [Theory]
@@ -570,16 +570,33 @@ namespace LazinatorTests.Tests
             bool ValueExisted;
             int IndexBeforeRemove;
             MultivalueLocationOptions WhichOne;
+            bool RemoveAll;
             int FirstIndex, LastIndex;
 
             public override void Execute(ValueContainerTests<T> testClass, IValueContainer<T> container, List<T> list)
             {
-                WhichOne = testClass.AllowDuplicates ? testClass.ChooseMultivalueDeleteOption() : MultivalueLocationOptions.Any; // if not multivalue, just replace the item
                 EstablishSorted(container);
+                if (testClass.AllowDuplicates)
+                {
+                    if (ContainerIsSorted && testClass.ran.Next(0, 5) == 0)
+                    {
+                        RemoveAll = true; // overrides remaining settings
+                        WhichOne = MultivalueLocationOptions.InsertAfterLast; // invalid -- but we won't use it in a call; we use something invalid to ensure that if we do, we'll get an error
+                    }
+                    else
+                        WhichOne = testClass.ChooseMultivalueDeleteOption();
+                }
+                else
+                    WhichOne = MultivalueLocationOptions.Any;
                 PlanRemoval(testClass, list);
                 if (ValueExisted)
                 {
-                    switch (WhichOne)
+                    if (RemoveAll)
+                    {
+                        for (int i = FirstIndex; i <= LastIndex; i++)
+                            list.RemoveAt(FirstIndex);
+                    }
+                    else switch (WhichOne)
                     {
                         case MultivalueLocationOptions.Any:
                             list.RemoveAt(IndexBeforeRemove);
@@ -632,6 +649,7 @@ namespace LazinatorTests.Tests
                             ValueToTryToRemove = randomValue;
                             IndexBeforeRemove = index;
                             ValueExisted = true;
+                            ValueContainerTests<T>.GetIndexRange(list, IndexBeforeRemove, out FirstIndex, out LastIndex);
                             return;
                         }
                     }
@@ -665,8 +683,13 @@ namespace LazinatorTests.Tests
 
             public override void Execute_Multivalue(ValueContainerTests<T> testClass, IMultivalueContainer<T> container, List<T> list)
             {
-                bool result = container.TryRemove(ValueToTryToRemove, WhichOne, Comparer<T>.Default);
-                VerifySuccess(result);
+                if (RemoveAll)
+                    container.TryRemoveAll(ValueToTryToRemove, Comparer<T>.Default);
+                else
+                {
+                    bool result = container.TryRemove(ValueToTryToRemove, WhichOne, Comparer<T>.Default);
+                    VerifySuccess(result);
+                }
             }
 
             public override void Execute_Sorted(ValueContainerTests<T> testClass, ISortedContainer<T> container, List<T> list)
@@ -693,16 +716,26 @@ namespace LazinatorTests.Tests
 
             public override void Execute_SortedIndexableMultivalue(ValueContainerTests<T> testClass, ISortedIndexableMultivalueContainer<T> container, List<T> list)
             {
-                if (testClass.ran.Next(2) == 0)
-                    Execute_SortedMultivalue(testClass, container, list);
+                if (RemoveAll)
+                    container.TryRemoveAll(ValueToTryToRemove);
                 else
-                    Execute_Indexable(testClass, container, list);
+                {
+                    if (testClass.ran.Next(2) == 0)
+                        Execute_SortedMultivalue(testClass, container, list);
+                    else
+                        Execute_Indexable(testClass, container, list);
+                }
             }
 
             public override void Execute_SortedMultivalue(ValueContainerTests<T> testClass, ISortedMultivalueContainer<T> container, List<T> list)
             {
-                bool result = container.TryRemove(ValueToTryToRemove, WhichOne);
-                VerifySuccess(result);
+                if (RemoveAll)
+                    container.TryRemoveAll(ValueToTryToRemove);
+                else
+                {
+                    bool result = container.TryRemove(ValueToTryToRemove, WhichOne);
+                    VerifySuccess(result);
+                }
             }
 
             public override void Execute_Value(ValueContainerTests<T> testClass, IValueContainer<T> container, List<T> list)
@@ -714,10 +747,5 @@ namespace LazinatorTests.Tests
                     result.Should().BeTrue();
             }
         }
-
-
-
-
-
     }
 }

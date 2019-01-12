@@ -87,6 +87,7 @@ namespace Lazinator.Collections.Avl
             ConfirmInRangeOrThrow(index, true);
             TryInsert(item, CompareIndexToNodesIndex(index, MultivalueLocationOptions.InsertBeforeFirst));
         }
+
         public void RemoveAt(long index)
         {
             ConfirmInRangeOrThrow(index, true);
@@ -116,6 +117,8 @@ namespace Lazinator.Collections.Avl
             var node = ((AvlCountedNode<T>)result.node);
             return (node.Index, result.insertedNotReplaced);
         }
+
+        public bool TryRemoveAll(T item) => TryRemoveAll(item, Comparer<T>.Default);
 
         public ILazinatorSplittable SplitOff()
         {

@@ -37,17 +37,6 @@ namespace Lazinator.Collections.Avl
             return count;
         }
 
-        public bool TryRemoveAll(T item)
-        {
-            bool found = false;
-            bool foundAny = false;
-            do
-            {
-                found = TryRemove(item);
-                if (found)
-                    foundAny = true;
-            } while (found);
-            return foundAny;
-        }
+        public bool TryRemoveAll(T item) => TryRemoveAll(item, Comparer<T>.Default);
     }
 }

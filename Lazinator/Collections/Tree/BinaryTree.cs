@@ -252,6 +252,19 @@ namespace Lazinator.Collections.Tree
 
         protected bool TryRemove(MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc) => TryRemoveReturningNode(whichOne, comparisonFunc) != null;
 
+        public bool TryRemoveAll(T item, IComparer<T> comparer)
+        {
+            bool found = false;
+            bool foundAny = false;
+            do
+            {
+                found = TryRemove(item, comparer);
+                if (found)
+                    foundAny = true;
+            } while (found);
+            return foundAny;
+        }
+
         protected BinaryNode<T> TryRemoveReturningNode(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryRemoveReturningNode(whichOne, node => CompareValueToNode(item, node, whichOne, comparer));
 
         protected virtual BinaryNode<T> TryRemoveReturningNode(MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
