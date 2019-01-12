@@ -26,6 +26,12 @@ namespace LazinatorTests.Tests
 
     public class ValueContainerTests_WInt : ValueContainerTests<WInt>
     {
+        [Fact]
+        public void VerifyValueContainerDEBUG()
+        {
+            VerifyValueContainer(ValueContainerType.AvlSortedIndexableTree, true, 100, 100);
+        }
+
         [Theory]
         [InlineData(ValueContainerType.AvlTree, false, 100, 100)]
         [InlineData(ValueContainerType.AvlIndexableTree, false, 100, 100)]
@@ -84,9 +90,16 @@ namespace LazinatorTests.Tests
                         instruction = new GetValueInstruction();
                     else
                         instruction = new InsertValueInstruction();
+                    VerifyEntireList(container, list); // DEBUG
                     instruction.Execute(this, container, list);
                 }
             }
+        }
+
+        public void VerifyEntireList(IValueContainer<T> valueContainer, List<T> list)
+        {
+            var values = valueContainer.AsEnumerable().ToList();
+            values.SequenceEqual(list).Should().BeTrue();
         }
 
         public (T item, int firstIndex, int lastIndex)? GetRandomItem(List<T> list)
@@ -146,7 +159,6 @@ namespace LazinatorTests.Tests
                     switch (whichOne)
                     {
                         case MultivalueLocationOptions.Any:
-                            index = ran.Next(firstIndex, lastIndex + 1);
                             replace = true;
                             break;
                         case MultivalueLocationOptions.First:
@@ -199,8 +211,12 @@ namespace LazinatorTests.Tests
 
         public abstract class RandomInstruction
         {
+            protected bool ContainerIsSorted;
+            protected ISortedContainer<T> SortedContainer;
+
             public virtual void Execute(ValueContainerTests<T> testClass, IValueContainer<T> container, List<T> list)
             {
+                EstablishSorted(container);
                 switch (container)
                 {
                     case AvlSortedIndexableTree<T> sortedIndexableContainer when sortedIndexableContainer.AllowDuplicates == true:
@@ -231,6 +247,14 @@ namespace LazinatorTests.Tests
                         throw new NotImplementedException();
                 }
             }
+
+
+            protected void EstablishSorted(IValueContainer<T> container)
+            {
+                SortedContainer = container as ISortedContainer<T>;
+                ContainerIsSorted = container is ISortedContainer<T>;
+            }
+
             public abstract void Execute_Value(ValueContainerTests<T> testClass, IValueContainer<T> container, List<T> list);
             public abstract void Execute_Indexable(ValueContainerTests<T> testClass, IIndexableContainer<T> container, List<T> list);
             public abstract void Execute_Sorted(ValueContainerTests<T> testClass, ISortedContainer<T> container, List<T> list);
@@ -272,19 +296,30 @@ namespace LazinatorTests.Tests
         {
             public override void Execute_Indexable(ValueContainerTests<T> testClass, IIndexableContainer<T> container, List<T> list)
             {
+                Execute_IndexableHelper(testClass, container, list, MultivalueLocationOptions.Any);
+            }
+
+            private void Execute_IndexableHelper(ValueContainerTests<T> testClass, IIndexableContainer<T> container, List<T> list, MultivalueLocationOptions whichOne)
+            {
                 var listResultOrNull = testClass.GetRandomItem(list);
                 if (listResultOrNull == null)
                 {
-                    var findResult = container.Find(default, C);
-                    findResult.index.Should().Be(-1);
-                    findResult.exists.Should().BeFalse();
+                    if (ContainerIsSorted)
+                    {
+                        var findResult = container.Find(default, C);
+                        findResult.index.Should().Be(0);
+                        findResult.exists.Should().BeFalse();
+                    }
                 }
                 else
                 {
                     var listResult = listResultOrNull.Value;
-                    var findResult = container.Find(listResult.item, C);
-                    VerifyExpectedIndex(MultivalueLocationOptions.Any, listResult, findResult.index);
-                    findResult.exists.Should().BeTrue();
+                    if (ContainerIsSorted)
+                    {
+                        var findResult = container.Find(listResult.item, C);
+                        VerifyExpectedIndex(MultivalueLocationOptions.Any, listResult, findResult.index);
+                        findResult.exists.Should().BeTrue();
+                    }
                     for (int i = listResult.firstIndex; i <= listResult.lastIndex; i++)
                     {
                         T getAtResult = container.GetAt(i);
@@ -295,20 +330,9 @@ namespace LazinatorTests.Tests
 
             public override void Execute_IndexableMultivalue(ValueContainerTests<T> testClass, IIndexableMultivalueContainer<T> container, List<T> list)
             {
-                var listResultOrNull = testClass.GetRandomItem(list);
-                if (listResultOrNull == null)
+                foreach (MultivalueLocationOptions whichOne in new MultivalueLocationOptions[] { MultivalueLocationOptions.First, MultivalueLocationOptions.Any, MultivalueLocationOptions.Last }) // other options are undefined
                 {
-                    Execute_Indexable(testClass, container, list);
-                }
-                else
-                {
-                    var listResult = listResultOrNull.Value;
-                    foreach (MultivalueLocationOptions whichOne in new MultivalueLocationOptions[] { MultivalueLocationOptions.First, MultivalueLocationOptions.Any, MultivalueLocationOptions.Last }) // other options are undefined
-                    {
-                        var findResult = container.Find(listResult.item, whichOne, C);
-                        VerifyExpectedIndex(whichOne, listResult, findResult.index);
-                        findResult.exists.Should().BeTrue();
-                    }
+                    Execute_IndexableHelper(testClass, container, list, whichOne);
                 }
             }
 
@@ -432,8 +456,6 @@ namespace LazinatorTests.Tests
 
             T Item;
             MultivalueLocationOptions WhichOne;
-            bool ContainerIsSorted;
-            ISortedContainer<T> SortedContainer;
             int Index;
             bool InsertedNotReplaced;
 
@@ -441,8 +463,7 @@ namespace LazinatorTests.Tests
             {
                 Item = testClass.GetRandomValue();
                 WhichOne = testClass.AllowDuplicates ? testClass.ChooseMultivalueInsertOption() : MultivalueLocationOptions.Any; // if not multivalue, just replace the item
-                SortedContainer = container as ISortedContainer<T>;
-                ContainerIsSorted = container is ISortedContainer<T>;
+                EstablishSorted(container);
                 // If we are using the base container type, then we can only add items with a comparer, so we treat it as a sorted container.
                 (Index, InsertedNotReplaced) = testClass.InsertOrReplaceItem(list, Item, ContainerIsSorted || !(container is IIndexableContainer<T>), WhichOne);
                 base.Execute(testClass, container, list);
@@ -505,7 +526,9 @@ namespace LazinatorTests.Tests
             public override void Execute_SortedIndexableMultivalue(ValueContainerTests<T> testClass, ISortedIndexableMultivalueContainer<T> container, List<T> list)
             {
                 (long index, bool insertedNotReplaced) = container.InsertGetIndex(Item, WhichOne);
-                index.Should().Be(Index);
+                // if WhichOne == Any, then exact location is undefined, so we don't verify it. The behavior may be different from our list implementation because which one is selected may be based on the ordering of the binary tree. The list binary search algorithm always starts from the middle element, while a tree search will start from the top of the tree, which may not be the exact middle element.
+                if (WhichOne != MultivalueLocationOptions.Any)
+                    index.Should().Be(Index);
                 insertedNotReplaced.Should().Be(InsertedNotReplaced);
             }
 

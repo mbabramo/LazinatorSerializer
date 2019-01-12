@@ -92,16 +92,16 @@ namespace Lazinator.Collections.Tree
             {
                 // Even though value is equal, we don't calculate it as equal if, for example, we're at the second value and the request is for the first.
                 if (whichOne == MultivalueLocationOptions.InsertBeforeFirst)
-                    compare = 1;
-                else if (whichOne == MultivalueLocationOptions.InsertAfterLast)
                     compare = -1;
+                else if (whichOne == MultivalueLocationOptions.InsertAfterLast)
+                    compare = 1;
                 else if (whichOne == MultivalueLocationOptions.First)
                 {
                     var previousNode = node.GetPreviousNode();
                     if (previousNode != null && comparer.Compare(value, previousNode.Value) == 0)
                         compare = -1;
                 }
-                else
+                else if (whichOne == MultivalueLocationOptions.Last)
                 {
                     var nextNode = node.GetNextNode();
                     if (nextNode != null && comparer.Compare(value, nextNode.Value) == 0)
