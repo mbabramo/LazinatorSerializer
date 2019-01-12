@@ -54,7 +54,7 @@ namespace Lazinator.Collections.Avl
                             InsertBalance(node, 1);
 
                         AvlRoot.UpdateFollowingTreeChange();
-                        return (node, true);
+                        return (childNode, true);
                     }
                     else
                     {
@@ -75,7 +75,7 @@ namespace Lazinator.Collections.Avl
                             InsertBalance(node, -1);
 
                         AvlRoot.UpdateFollowingTreeChange();
-                        return (node, true);
+                        return (childNode, true);
                     }
                     else
                     {

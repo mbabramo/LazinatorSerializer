@@ -24,7 +24,7 @@ namespace LazinatorTests.Tests
         AvlSortedIndexableTree
     }
 
-    public class ValueContaienrTests_WInt : ValueContainerTests<WInt>
+    public class ValueContainerTests_WInt : ValueContainerTests<WInt>
     {
         [Theory]
         [InlineData(ValueContainerType.AvlTree, false, 100, 100)]
@@ -201,72 +201,34 @@ namespace LazinatorTests.Tests
         {
             public virtual void Execute(ValueContainerTests<T> testClass, IValueContainer<T> container, List<T> list)
             {
-                // find a valid container type, and execute
-                bool done = false;
-                while (!done)
+                switch (container)
                 {
-                    int i = testClass.ran.Next(8);
-                    switch (i)
-                    {
-                        case 0:
-                            if (testClass.AllowDuplicates == false)
-                            {
-                                Execute_Value(testClass, container, list);
-                                done = true;
-                            }
-                            break;
-                        case 1:
-                            if (testClass.AllowDuplicates == false && container is IIndexableContainer<T> indexableContainer)
-                            {
-                                Execute_Indexable(testClass, indexableContainer, list);
-                                done = true;
-                            }
-                            break;
-                        case 2:
-                            if (testClass.AllowDuplicates == false && container is ISortedContainer<T> sortedContainer)
-                            {
-                                Execute_Sorted(testClass, sortedContainer, list);
-                                done = true;
-                            }
-                            break;
-                        case 3:
-                            if (testClass.AllowDuplicates == true && container is IMultivalueContainer<T> multivalueContainer)
-                            {
-                                Execute_Multivalue(testClass, multivalueContainer, list);
-                                done = true;
-                            }
-                            break;
-                        case 4:
-                            if (testClass.AllowDuplicates == true && container is ISortedMultivalueContainer<T> sortedMultivalueContainer)
-                            {
-                                Execute_SortedMultivalue(testClass, sortedMultivalueContainer, list);
-                                done = true;
-                            }
-                            break;
-                        case 5:
-                            if (testClass.AllowDuplicates == false && container is ISortedIndexableContainer<T> sortedIndexableContainer)
-                            {
-                                Execute_SortedIndexable(testClass, sortedIndexableContainer, list);
-                                done = true;
-                            }
-                            break;
-                        case 6:
-                            if (testClass.AllowDuplicates == true && container is IIndexableMultivalueContainer<T> indexableMultivalueContainer)
-                            {
-                                Execute_IndexableMultivalue(testClass, indexableMultivalueContainer, list);
-                                done = true;
-                            }
-                            break;
-                        case 7:
-                            if (testClass.AllowDuplicates == true &&  container is ISortedIndexableMultivalueContainer<T> sortedIndexableMultivalueContainer)
-                            {
-                                Execute_SortedIndexableMultivalue(testClass, sortedIndexableMultivalueContainer, list);
-                                done = true;
-                            }
-                            break;
-                        default:
-                            throw new NotImplementedException();
-                    }
+                    case AvlSortedIndexableTree<T> sortedIndexableContainer when sortedIndexableContainer.AllowDuplicates == true:
+                        Execute_SortedIndexableMultivalue(testClass, sortedIndexableContainer, list);
+                        break;
+                    case AvlSortedTree<T> sortedContainer when sortedContainer.AllowDuplicates == true:
+                        Execute_SortedMultivalue(testClass, sortedContainer, list);
+                        break;
+                    case AvlIndexableTree<T> indexableContainer when indexableContainer.AllowDuplicates == true:
+                        Execute_IndexableMultivalue(testClass, indexableContainer, list);
+                        break;
+                    case AvlTree<T> basicContainer when basicContainer.AllowDuplicates == true:
+                        Execute_Multivalue(testClass, basicContainer, list);
+                        break;
+                    case AvlSortedIndexableTree<T> sortedIndexableContainer when sortedIndexableContainer.AllowDuplicates == false:
+                        Execute_SortedIndexable(testClass, sortedIndexableContainer, list);
+                        break;
+                    case AvlSortedTree<T> sortedContainer when sortedContainer.AllowDuplicates == false:
+                        Execute_Sorted(testClass, sortedContainer, list);
+                        break;
+                    case AvlIndexableTree<T> indexableContainer when indexableContainer.AllowDuplicates == false:
+                        Execute_Indexable(testClass, indexableContainer, list);
+                        break;
+                    case AvlTree<T> basicContainer when basicContainer.AllowDuplicates == false:
+                        Execute_Value(testClass, basicContainer, list);
+                        break;
+                    default:
+                        throw new NotImplementedException();
                 }
             }
             public abstract void Execute_Value(ValueContainerTests<T> testClass, IValueContainer<T> container, List<T> list);
