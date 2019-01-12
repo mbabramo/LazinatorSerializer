@@ -94,8 +94,9 @@ namespace LazinatorTests.Tests
                     else
                         instruction = new RemoveInstruction();
                     instruction.Execute(this, container, list);
-                    VerifyEntireList(container, list); // DEBUG
                 }
+                VerifyEntireList(container, list);
+                VerifyEnumerableSkipAndReverse(container, list);
             }
         }
 
@@ -103,6 +104,16 @@ namespace LazinatorTests.Tests
         {
             var values = valueContainer.AsEnumerable().ToList();
             values.SequenceEqual(list).Should().BeTrue();
+        }
+
+        public void VerifyEnumerableSkipAndReverse(IValueContainer<T> valueContainer, List<T> list)
+        {
+            var list2 = list.ToList();
+            list2.Reverse();
+            int numToSkip = ran.Next(0, list.Count + 1);
+            var withSkips = list2.Skip(numToSkip).ToList();
+            var values = valueContainer.AsEnumerable(true, numToSkip).ToList();
+            values.SequenceEqual(withSkips).Should().BeTrue();
         }
 
         public (T item, int firstIndex, int lastIndex)? GetRandomItem(List<T> list)
