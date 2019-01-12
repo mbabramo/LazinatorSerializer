@@ -100,28 +100,38 @@ namespace LazinatorTests.Tests
             }
         }
 
-        public void VerifyEntireList(IKeyValueContainer<TKey, TValue> valueKeyValueContainer, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+        public void VerifyEntireList(IKeyValueContainer<TKey, TValue> keyValueContainer, List<LazinatorComparableKeyValue<TKey,TValue>> list)
         {
-            var values = valueKeyValueContainer.AsEnumerable().ToList();
-            values.SequenceEqual(list).Should().BeTrue();
+            var pairsEnumerator = keyValueContainer.GetKeyValuePairEnumerator();
+            List<LazinatorComparableKeyValue<TKey, TValue>> pairsList = new List<LazinatorComparableKeyValue<TKey, TValue>>();
+            while (pairsEnumerator.MoveNext())
+                pairsList.Add(new LazinatorComparableKeyValue<TKey, TValue>(pairsEnumerator.Current.Key, pairsEnumerator.Current.Value));
+            pairsList.SequenceEqual(list).Should().BeTrue();
         }
 
-        public void VerifyEnumerableSkipAndReverse(IKeyValueContainer<TKey, TValue> valueKeyValueContainer, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+        public void VerifyEnumerableSkipAndReverse(IKeyValueContainer<TKey, TValue> keyValueContainer, List<LazinatorComparableKeyValue<TKey,TValue>> list)
         {
+
             var list2 = list.ToList();
             list2.Reverse();
             int numToSkip = ran.Next(0, list.Count + 1);
             var withSkips = list2.Skip(numToSkip).ToList();
-            var values = valueKeyValueContainer.AsEnumerable(true, numToSkip).ToList();
-            values.SequenceEqual(withSkips).Should().BeTrue();
+
+            var pairsEnumerator = keyValueContainer.GetKeyValuePairEnumerator(true, numToSkip);
+            List<LazinatorComparableKeyValue<TKey, TValue>> pairsList = new List<LazinatorComparableKeyValue<TKey, TValue>>();
+            while (pairsEnumerator.MoveNext())
+                pairsList.Add(new LazinatorComparableKeyValue<TKey, TValue>(pairsEnumerator.Current.Key, pairsEnumerator.Current.Value));
+            pairsList.SequenceEqual(list).Should().BeTrue();
+            
+            pairsList.SequenceEqual(withSkips).Should().BeTrue();
         }
 
-        public (T item, int firstIndex, int lastIndex)? GetRandomItem(List<LazinatorComparableKeyValue<TKey,TValue>> list)
+        public (LazinatorComparableKeyValue<TKey, TValue> item, int firstIndex, int lastIndex)? GetRandomItem(List<LazinatorComparableKeyValue<TKey,TValue>> list)
         {
             if (!list.Any())
                 return null;
             int index = ran.Next(0, list.Count());
-            T item = list[index];
+            var item = list[index];
             int firstIndex, lastIndex;
             GetIndexRange(list, index, out firstIndex, out lastIndex);
             return (item, firstIndex, lastIndex);
@@ -129,12 +139,12 @@ namespace LazinatorTests.Tests
 
         public static void GetIndexRange(List<LazinatorComparableKeyValue<TKey,TValue>> list, int index, out int firstIndex, out int lastIndex)
         {
-            T item = list[index];
+            var item = list[index];
             firstIndex = index;
             lastIndex = index;
-            while (firstIndex > 0 && list[firstIndex - 1].Equals(item))
+            while (firstIndex > 0 && list[firstIndex - 1].Key.Equals(item.Key))
                 firstIndex--;
-            while (lastIndex < list.Count() - 1 && list[lastIndex + 1].Equals(item))
+            while (lastIndex < list.Count() - 1 && list[lastIndex + 1].Key.Equals(item.Key))
                 lastIndex++;
         }
 
@@ -174,11 +184,13 @@ namespace LazinatorTests.Tests
             }
         }
 
-        public (int index, bool insertedNotReplaced) InsertOrReplaceItem(List<LazinatorComparableKeyValue<TKey,TValue>> list, T item, bool sorted, MultivalueLocationOptions whichOne)
+        public IComparer<LazinatorComparableKeyValue<TKey, TValue>> KeyOnlyComparer => LazinatorComparableKeyValue<TKey, TValue>.GetKeyOnlyComparer();
+
+        public (int index, bool insertedNotReplaced) InsertOrReplaceItem(List<LazinatorComparableKeyValue<TKey,TValue>> list, LazinatorComparableKeyValue<TKey, TValue> item, bool sorted, MultivalueLocationOptions whichOne)
         {
             if (sorted)
             {
-                int index = list.BinarySearch(item);
+                int index = list.BinarySearch(item, KeyOnlyComparer);
                 bool found = index >= 0;
                 if (!found)
                     index = ~index;
@@ -237,7 +249,7 @@ namespace LazinatorTests.Tests
             }
         }
 
-        public abstract T GetRandomValue();
+        public abstract TKey GetRandomValue();
 
         public abstract class RandomInstruction
         {
@@ -294,19 +306,20 @@ namespace LazinatorTests.Tests
             public abstract void Execute_IndexableMultivalue(KeyValueContainerTests<TKey, TValue> testClass, IIndexableKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list);
             public abstract void Execute_SortedIndexableMultivalue(KeyValueContainerTests<TKey, TValue> testClass, ISortedIndexableKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list);
             public IComparer<TKey> C => Comparer<TKey>.Default;
-            public bool Eq(T item, T other)
+
+            public bool Eq(LazinatorComparableKeyValue<TKey, TValue> item, LazinatorComparableKeyValue<TKey, TValue> other)
             {
-                return EqualityComparer<TKey>.Default.Equals(item, other);
+                return EqualityComparer<LazinatorComparableKeyValue<TKey, TValue>>.Default.Equals(item, other);
             }
-            public void AssertEqual(T item, T other)
+            public void AssertEqual(LazinatorComparableKeyValue<TKey, TValue> item, LazinatorComparableKeyValue<TKey, TValue> other)
             {
                 Eq(item, other).Should().BeTrue();
             }
-            public void AssertNotEqual(T item, T other)
+            public void AssertNotEqual(LazinatorComparableKeyValue<TKey, TValue> item, LazinatorComparableKeyValue<TKey, TValue> other)
             {
                 Eq(item, other).Should().BeFalse();
             }
-            public void VerifyExpectedIndex(MultivalueLocationOptions whichOne, (T item, int firstIndex, int lastIndex) listResult, long indexableKeyValueContainerResult)
+            public void VerifyExpectedIndex(MultivalueLocationOptions whichOne, (TKey item, int firstIndex, int lastIndex) listResult, long indexableKeyValueContainerResult)
             {
                 if (whichOne == MultivalueLocationOptions.First || whichOne == MultivalueLocationOptions.InsertBeforeFirst)
                     indexableKeyValueContainerResult.Should().Be(listResult.firstIndex);
@@ -336,9 +349,12 @@ namespace LazinatorTests.Tests
                 {
                     if (KeyValueContainerIsSorted)
                     {
-                        var findResult = container.Find(default, C);
-                        findResult.index.Should().Be(0);
-                        findResult.exists.Should().BeFalse();
+                        var findKeyResult = container.Find(default, C);
+                        findKeyResult.index.Should().Be(0);
+                        findKeyResult.exists.Should().BeFalse();
+                        var findKeyValueResult = container.Find(default, default, C);
+                        findKeyValueResult.index.Should().Be(0);
+                        findKeyValueResult.exists.Should().BeFalse();
                     }
                 }
                 else
@@ -352,7 +368,7 @@ namespace LazinatorTests.Tests
                     }
                     for (int i = listResult.firstIndex; i <= listResult.lastIndex; i++)
                     {
-                        T getAtResult = container.GetAt(i);
+                        TKey getAtResult = container.GetAt(i);
                         AssertEqual(getAtResult, listResult.item);
                     }
                 }
@@ -371,22 +387,22 @@ namespace LazinatorTests.Tests
                 var listResultOrNull = testClass.GetRandomItem(list);
                 if (listResultOrNull == null)
                 {
-                    var getValueResult = container.GetValue(default, MultivalueLocationOptions.Any, C, out T getValueMatch);
+                    var getValueResult = container.GetValue(default, MultivalueLocationOptions.Any, C, out TKey getValueMatch);
                     getValueResult.Should().BeFalse();
-                    AssertEqual(getValueMatch, default(T));
+                    AssertEqual(getValueMatch, default(TKey));
                 }
                 else
                 {
                     var listResult = listResultOrNull.Value;
                     foreach (MultivalueLocationOptions whichOne in new MultivalueLocationOptions[] { MultivalueLocationOptions.First, MultivalueLocationOptions.Any, MultivalueLocationOptions.Last })
                     {
-                        var getValueResult = container.GetValue(listResult.item, whichOne, C, out T getValueMatch);
+                        var getValueResult = container.GetValue(listResult.item, whichOne, C, out TKey getValueMatch);
                         getValueResult.Should().BeTrue();
                         AssertEqual(getValueMatch, listResult.item);
                     }
                     foreach (MultivalueLocationOptions whichOne in new MultivalueLocationOptions[] { MultivalueLocationOptions.InsertBeforeFirst, MultivalueLocationOptions.InsertAfterLast })
                     {
-                        var getValueResult = container.GetValue(listResult.item, whichOne, C, out T getValueMatch);
+                        var getValueResult = container.GetValue(listResult.item, whichOne, C, out TKey getValueMatch);
                         getValueResult.Should().BeFalse();
                         AssertEqual(getValueMatch, default);
                     }
@@ -400,14 +416,21 @@ namespace LazinatorTests.Tests
                 var listResultOrNull = testClass.GetRandomItem(list);
                 if (listResultOrNull == null)
                 {
-                    bool containsResult = container.Contains(default);
-                    containsResult.Should().BeFalse();
+                    bool keyPresent = container.ContainsKey(default);
+                    bool keyValuePresent = container.ContainsKeyValue(default, default);
+                    keyPresent.Should().BeFalse();
+                    keyValuePresent.Should().BeFalse();
                 }
                 else
                 {
                     var listResult = listResultOrNull.Value;
-                    bool containsResult = container.Contains(listResult.item);
-                    containsResult.Should().BeTrue();
+                    bool keyPresent = container.ContainsKey(listResult.item.Key);
+                    bool keyValuePresent = container.ContainsKeyValue(listResult.item.Key, listResult.item.Value, C);
+                    keyPresent.Should().BeTrue();
+                    keyValuePresent.Should().BeTrue();
+
+                    TValue value = container.GetValueForKey(listResult.item.Key);
+                    EqualityComparer<TValue>.Default.Equals(value, listResult.item.Value).Should().BeTrue();
                 }
             }
 
@@ -426,7 +449,7 @@ namespace LazinatorTests.Tests
                     findResult.exists.Should().BeTrue();
                     for (int i = listResult.firstIndex; i <= listResult.lastIndex; i++)
                     {
-                        T getAtResult = container.GetAt(i);
+                        TKey getAtResult = container.GetAt(i);
                         AssertEqual(getAtResult, listResult.item);
                     }
                 }
@@ -468,16 +491,21 @@ namespace LazinatorTests.Tests
                 var listResultOrNull = testClass.GetRandomItem(list);
                 if (listResultOrNull == null)
                 {
-                    bool present = container.GetValue(default, C, out T match);
-                    present.Should().BeFalse();
-                    AssertEqual(match, default(T));
+                    bool keyPresent = container.ContainsKey(default, C);
+                    bool keyValuePresent = container.ContainsKeyValue(default, default, C);
+                    keyPresent.Should().BeFalse();
+                    keyValuePresent.Should().BeFalse();
                 }
                 else
                 {
                     var listResult = listResultOrNull.Value;
-                    bool present = container.GetValue(listResult.item, C, out T match);
-                    present.Should().BeTrue();
-                    AssertEqual(match, listResultOrNull.Value.item);
+                    bool keyPresent = container.ContainsKey(listResult.item.Key, C);
+                    bool keyValuePresent = container.ContainsKeyValue(listResult.item.Key, listResult.item.Value, C);
+                    keyPresent.Should().BeTrue();
+                    keyValuePresent.Should().BeTrue();
+
+                    TValue value = container.GetValueForKey(listResult.item.Key, C);
+                    EqualityComparer<TValue>.Default.Equals(value, listResult.item.Value).Should().BeTrue();
                 }
             }
         }
@@ -485,7 +513,7 @@ namespace LazinatorTests.Tests
         public class InsertValueInstruction : RandomInstruction
         {
 
-            T Item;
+            TKey Item;
             MultivalueLocationOptions WhichOne;
             int Index;
             bool InsertedNotReplaced;
@@ -578,7 +606,7 @@ namespace LazinatorTests.Tests
 
         public class RemoveInstruction : RandomInstruction
         {
-            T ValueToTryToRemove;
+            TKey ValueToTryToRemove;
             bool ValueExisted;
             int IndexBeforeRemove;
             MultivalueLocationOptions WhichOne;
@@ -647,7 +675,7 @@ namespace LazinatorTests.Tests
                     const int maxTriesToFindNotIncludedItem = 10;
                     for (int i = 0; i < maxTriesToFindNotIncludedItem; i++)
                     {
-                        T randomValue = testClass.GetRandomValue();
+                        TKey randomValue = testClass.GetRandomValue();
                         int index = list.BinarySearch(randomValue, Comparer<TKey>.Default);
                         if (index < 0)
                         {

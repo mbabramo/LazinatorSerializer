@@ -10,6 +10,7 @@ namespace Lazinator.Collections.Interfaces
     public interface IKeyValueContainer<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
         IKeyValueContainer<TKey, TValue> CreateNewWithSameSettings();
+        bool AllowDuplicates { get; set; }
 
         bool ContainsKey(TKey key, IComparer<TKey> comparer);
         bool ContainsKeyValue(TKey key, TValue value, IComparer<TKey> comparer);
