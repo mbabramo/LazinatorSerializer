@@ -26,11 +26,11 @@ namespace LazinatorTests.Tests
 
     public class ValueContainerTests_WInt : ValueContainerTests<WInt>
     {
-        [Fact]
-        public void VerifyValueContainerDEBUG()
-        {
-            VerifyValueContainer(ValueContainerType.AvlIndexableTree, true, 100, 100);
-        }
+        //[Fact]
+        //public void VerifyValueContainerDEBUG()
+        //{
+        //    VerifyValueContainer(ValueContainerType.AvlIndexableTree, true, 100, 100);
+        //}
 
         [Theory]
         [InlineData(ValueContainerType.AvlTree, false, 100, 100)]
@@ -41,13 +41,44 @@ namespace LazinatorTests.Tests
         [InlineData(ValueContainerType.AvlIndexableTree, true, 100, 100)]
         [InlineData(ValueContainerType.AvlSortedTree, true, 100, 100)]
         [InlineData(ValueContainerType.AvlSortedIndexableTree, true, 100, 100)]
-        public void VerifyValueContainer(ValueContainerType containerType, bool allowDuplicates, int numRepetitions, int numInstructions) => VerifyValueContainerHelper(containerType, allowDuplicates, numRepetitions, numInstructions);
+        public void VerifyIntContainer(ValueContainerType containerType, bool allowDuplicates, int numRepetitions, int numInstructions) => VerifyValueContainerHelper(containerType, allowDuplicates, numRepetitions, numInstructions);
 
         public override WInt GetRandomValue()
         {
             return ran.Next(100);
         }
+    }
 
+    public class ValueContainerTests_WString : ValueContainerTests<WString>
+    {
+        //[Fact]
+        //public void VerifyValueContainerDEBUG()
+        //{
+        //    VerifyStringContainer(ValueContainerType.AvlIndexableTree, true, 100, 100);
+        //}
+
+        [Theory]
+        [InlineData(ValueContainerType.AvlTree, false, 100, 100)]
+        [InlineData(ValueContainerType.AvlIndexableTree, false, 100, 100)]
+        [InlineData(ValueContainerType.AvlSortedTree, false, 100, 100)]
+        [InlineData(ValueContainerType.AvlSortedIndexableTree, false, 100, 100)]
+        [InlineData(ValueContainerType.AvlTree, true, 100, 100)]
+        [InlineData(ValueContainerType.AvlIndexableTree, true, 100, 100)]
+        [InlineData(ValueContainerType.AvlSortedTree, true, 100, 100)]
+        [InlineData(ValueContainerType.AvlSortedIndexableTree, true, 100, 100)]
+        public void VerifyStringContainer(ValueContainerType containerType, bool allowDuplicates, int numRepetitions, int numInstructions) => VerifyValueContainerHelper(containerType, allowDuplicates, numRepetitions, numInstructions);
+
+        public override WString GetRandomValue()
+        {
+            string[] malePetNames = { "Rufus", "Bear", "Dakota", "Fido",
+                                "Vanya", "Samuel", "Koani", "Volodya",
+                                "Prince", "Yiska" };
+
+            string result = malePetNames[ran.Next(malePetNames.Length)];
+            if (ran.Next(5) > 0)
+                result += ran.Next(99).ToString();
+            return result;
+        }
     }
 
     public abstract class ValueContainerTests<T> : SerializationDeserializationTestBase where T : ILazinator, IComparable<T>
