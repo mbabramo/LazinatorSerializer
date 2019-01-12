@@ -72,7 +72,7 @@ namespace LazinatorTests.Tests
 
         public Random ran = new Random(0);
         bool AllowDuplicates;
-        
+
 
         public void VerifyValueContainerHelper(ValueContainerType containerType, bool allowDuplicates, int numRepetitions, int numInstructions)
         {
@@ -89,9 +89,12 @@ namespace LazinatorTests.Tests
                     if (r < 25)
                         instruction = new GetValueInstruction();
                     else
+                        if (r < 75)
                         instruction = new InsertValueInstruction();
-                    VerifyEntireList(container, list); // DEBUG
+                    else
+                        instruction = new RemoveInstruction();
                     instruction.Execute(this, container, list);
+                    VerifyEntireList(container, list); // DEBUG
                 }
             }
         }
@@ -113,7 +116,7 @@ namespace LazinatorTests.Tests
             return (item, firstIndex, lastIndex);
         }
 
-        private static void GetIndexRange(List<T> list, int index, out int firstIndex, out int lastIndex)
+        public static void GetIndexRange(List<T> list, int index, out int firstIndex, out int lastIndex)
         {
             T item = list[index];
             firstIndex = index;
@@ -140,7 +143,23 @@ namespace LazinatorTests.Tests
                 case 4:
                     return MultivalueLocationOptions.InsertAfterLast;
                 default:
-                    throw new NotImplementedException();
+                    throw new NotSupportedException();
+            }
+        }
+
+        public MultivalueLocationOptions ChooseMultivalueDeleteOption()
+        {
+            int i = ran.Next(0, 3);
+            switch (i)
+            {
+                case 0:
+                    return MultivalueLocationOptions.Any;
+                case 1:
+                    return MultivalueLocationOptions.First;
+                case 2:
+                    return MultivalueLocationOptions.Last;
+                default:
+                    throw new NotSupportedException();
             }
         }
 
@@ -388,7 +407,7 @@ namespace LazinatorTests.Tests
                 }
                 else
                 {
-                    var listResult = listResultOrNull.Value; 
+                    var listResult = listResultOrNull.Value;
                     var findResult = container.Find(listResult.item);
                     VerifyExpectedIndex(MultivalueLocationOptions.Any, listResult, findResult.index);
                     findResult.exists.Should().BeTrue();
@@ -450,7 +469,7 @@ namespace LazinatorTests.Tests
                 }
             }
         }
-        
+
         public class InsertValueInstruction : RandomInstruction
         {
 
@@ -542,6 +561,157 @@ namespace LazinatorTests.Tests
             {
                 bool insertedNotReplaced = container.TryInsert(Item, C);
                 insertedNotReplaced.Should().Be(InsertedNotReplaced);
+            }
+        }
+
+        public class RemoveInstruction : RandomInstruction
+        {
+            T ValueToTryToRemove;
+            bool ValueExisted;
+            int IndexBeforeRemove;
+            MultivalueLocationOptions WhichOne;
+            int FirstIndex, LastIndex;
+
+            public override void Execute(ValueContainerTests<T> testClass, IValueContainer<T> container, List<T> list)
+            {
+                WhichOne = testClass.AllowDuplicates ? testClass.ChooseMultivalueDeleteOption() : MultivalueLocationOptions.Any; // if not multivalue, just replace the item
+                EstablishSorted(container);
+                PlanRemoval(testClass, list);
+                if (ValueExisted)
+                {
+                    switch (WhichOne)
+                    {
+                        case MultivalueLocationOptions.Any:
+                            list.RemoveAt(IndexBeforeRemove);
+                            break;
+                        case MultivalueLocationOptions.First:
+                            list.RemoveAt(FirstIndex);
+                            break;
+                        case MultivalueLocationOptions.Last:
+                            list.RemoveAt(LastIndex);
+                            break;
+                        default: throw new NotSupportedException();
+                    }
+                }
+                base.Execute(testClass, container, list);
+            }
+
+            public void PlanRemoval(ValueContainerTests<T> testClass, List<T> list)
+            {
+                if (!ContainerIsSorted)
+                {
+                    // Removing by index
+                    if (list.Any())
+                    {
+                        ChooseItemInListToRemove(testClass, list);
+                    }
+                    else
+                    {
+                        ValueExisted = false;
+                        ValueToTryToRemove = default;
+                        IndexBeforeRemove = -1;
+                    }
+                    return;
+                }
+                if (!list.Any() || testClass.ran.Next(5) == 0)
+                { // try to find something NOT in list to try (and fail) to remove
+                    const int maxTriesToFindNotIncludedItem = 10;
+                    for (int i = 0; i < maxTriesToFindNotIncludedItem; i++)
+                    {
+                        T randomValue = testClass.GetRandomValue();
+                        int index = list.BinarySearch(randomValue, Comparer<T>.Default);
+                        if (index < 0)
+                        {
+                            ValueToTryToRemove = randomValue;
+                            ValueExisted = false;
+                            IndexBeforeRemove = -1;
+                            return;
+                        }
+                        else if (i == maxTriesToFindNotIncludedItem - 1)
+                        { // We'll go with something in the list
+                            ValueToTryToRemove = randomValue;
+                            IndexBeforeRemove = index;
+                            ValueExisted = true;
+                            return;
+                        }
+                    }
+                }
+                else
+                {
+                    ChooseItemInListToRemove(testClass, list);
+                }
+            }
+
+            private void ChooseItemInListToRemove(ValueContainerTests<T> testClass, List<T> list)
+            {
+                ValueExisted = true;
+                IndexBeforeRemove = testClass.ran.Next(list.Count);
+                ValueToTryToRemove = list[IndexBeforeRemove];
+                ValueContainerTests<T>.GetIndexRange(list, IndexBeforeRemove, out FirstIndex, out LastIndex);
+            }
+
+            public override void Execute_Indexable(ValueContainerTests<T> testClass, IIndexableContainer<T> container, List<T> list)
+            {
+                if (IndexBeforeRemove != -1)
+                {
+                    container.RemoveAt(IndexBeforeRemove);
+                }
+            }
+
+            public override void Execute_IndexableMultivalue(ValueContainerTests<T> testClass, IIndexableMultivalueContainer<T> container, List<T> list)
+            {
+                Execute_Indexable(testClass, container, list);
+            }
+
+            public override void Execute_Multivalue(ValueContainerTests<T> testClass, IMultivalueContainer<T> container, List<T> list)
+            {
+                bool result = container.TryRemove(ValueToTryToRemove, WhichOne, Comparer<T>.Default);
+                VerifySuccess(result);
+            }
+
+            public override void Execute_Sorted(ValueContainerTests<T> testClass, ISortedContainer<T> container, List<T> list)
+            {
+                bool result = container.TryRemove(ValueToTryToRemove);
+                VerifySuccess(result);
+            }
+
+            private void VerifySuccess(bool result)
+            {
+                if (IndexBeforeRemove == -1)
+                    result.Should().BeFalse();
+                else
+                    result.Should().BeTrue();
+            }
+
+            public override void Execute_SortedIndexable(ValueContainerTests<T> testClass, ISortedIndexableContainer<T> container, List<T> list)
+            {
+                if (testClass.ran.Next(2) == 0)
+                    Execute_Sorted(testClass, container, list);
+                else
+                    Execute_Indexable(testClass, container, list);
+            }
+
+            public override void Execute_SortedIndexableMultivalue(ValueContainerTests<T> testClass, ISortedIndexableMultivalueContainer<T> container, List<T> list)
+            {
+                if (testClass.ran.Next(2) == 0)
+                    Execute_SortedMultivalue(testClass, container, list);
+                else
+                    Execute_Indexable(testClass, container, list);
+            }
+
+            public override void Execute_SortedMultivalue(ValueContainerTests<T> testClass, ISortedMultivalueContainer<T> container, List<T> list)
+            {
+                bool result = container.TryRemove(ValueToTryToRemove, WhichOne);
+                VerifySuccess(result);
+            }
+
+            public override void Execute_Value(ValueContainerTests<T> testClass, IValueContainer<T> container, List<T> list)
+            {
+                bool result = container.TryRemove(ValueToTryToRemove, Comparer<T>.Default);
+                if (IndexBeforeRemove == -1)
+                    result.Should().BeFalse();
+                else
+                    result.Should().BeTrue();
             }
         }
 
