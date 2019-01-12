@@ -11,7 +11,7 @@ namespace Lazinator.Collections.Interfaces
     {
         bool TryInsert(T item, MultivalueLocationOptions whichOne);
         bool TryRemove(T item, MultivalueLocationOptions whichOne);
-        int Count(T item);
+        long Count(T item);
         bool TryRemoveAll(T item);
     }
 }

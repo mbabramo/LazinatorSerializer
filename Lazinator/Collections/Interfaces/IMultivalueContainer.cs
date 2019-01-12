@@ -13,5 +13,6 @@ namespace Lazinator.Collections.Interfaces
         bool TryInsert(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer);
         bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer);
         bool TryRemoveAll(T item, IComparer<T> comparer);
+        long Count(T item, IComparer<T> comparer);
     }
 }

@@ -35,20 +35,6 @@ namespace Lazinator.Collections.Avl
 
         public bool Contains(T item) => Contains(item, Comparer<T>.Default);
 
-        public int Count(T item)
-        {
-            var node = GetMatchingNode(item, MultivalueLocationOptions.First, Comparer<T>.Default);
-            if (node == null)
-                return 0;
-            int count = 0;
-            while (node != null)
-            {
-                count++;
-                node = node.GetNextNode();
-                if (!node.Value.Equals(item))
-                    node = null;
-            }
-            return count;
-        }
+        public long Count(T item) => Count(item, Comparer<T>.Default);
     }
 }

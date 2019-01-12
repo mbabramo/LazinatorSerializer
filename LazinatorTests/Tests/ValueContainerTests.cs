@@ -379,6 +379,8 @@ namespace LazinatorTests.Tests
                         getValueResult.Should().BeFalse();
                         AssertEqual(getValueMatch, default);
                     }
+                    long count = container.Count(listResult.item, Comparer<T>.Default);
+                    count.Should().Be(listResult.lastIndex - listResult.firstIndex + 1);
                 }
             }
 
@@ -440,14 +442,13 @@ namespace LazinatorTests.Tests
 
             public override void Execute_SortedMultivalue(ValueContainerTests<T> testClass, ISortedMultivalueContainer<T> container, List<T> list)
             {
+                Execute_Multivalue(testClass, container, list);
                 var listResultOrNull = testClass.GetRandomItem(list);
-                if (listResultOrNull == null)
-                {
-                    Execute_Multivalue(testClass, container, list);
-                }
-                else
+                if (listResultOrNull != null)
                 {
                     var listResult = listResultOrNull.Value;
+                    long count = container.Count(listResult.item, Comparer<T>.Default);
+                    count.Should().Be(listResult.lastIndex - listResult.firstIndex + 1);
                 }
             }
 

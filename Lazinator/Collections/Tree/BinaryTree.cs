@@ -35,6 +35,22 @@ namespace Lazinator.Collections.Tree
             };
         }
 
+        public long Count(T item, IComparer<T> comparer)
+        {
+            var node = GetMatchingNode(item, MultivalueLocationOptions.First, comparer);
+            if (node == null)
+                return 0;
+            long count = 0;
+            while (node != null)
+            {
+                count++;
+                node = node.GetNextNode();
+                if (node != null && !node.Value.Equals(item))
+                    node = null;
+            }
+            return count;
+        }
+
         protected virtual BinaryNode<T> CreateNode(T value, BinaryNode<T> parent = null)
         {
             return new BinaryNode<T>()

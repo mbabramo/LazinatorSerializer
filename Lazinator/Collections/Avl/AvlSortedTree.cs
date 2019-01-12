@@ -21,22 +21,8 @@ namespace Lazinator.Collections.Avl
         public bool TryRemove(T item) => TryRemove(item, MultivalueLocationOptions.Any);
         public bool TryRemove(T item, MultivalueLocationOptions whichOne) => TryRemove(item, Comparer<T>.Default);
 
-        public int Count(T item)
-        {
-            var node = GetMatchingNode(item, MultivalueLocationOptions.First, Comparer<T>.Default);
-            if (node == null)
-                return 0;
-            int count = 0;
-            while (node != null)
-            {
-                count++;
-                node = node.GetNextNode();
-                if (!node.Value.Equals(item))
-                    node = null;
-            }
-            return count;
-        }
-
         public bool TryRemoveAll(T item) => TryRemoveAll(item, Comparer<T>.Default);
+
+        public long Count(T item) => Count(item, Comparer<T>.Default);
     }
 }
