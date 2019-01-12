@@ -19,7 +19,10 @@ namespace Lazinator.Collections.Avl
 
         public override IValueContainer<T> CreateNewWithSameSettings()
         {
-            return new AvlTree<T>();
+            return new AvlTree<T>()
+            {
+                AllowDuplicates = AllowDuplicates
+            };
         }
 
         protected override BinaryNode<T> CreateNode(T value, BinaryNode<T> parent = null)

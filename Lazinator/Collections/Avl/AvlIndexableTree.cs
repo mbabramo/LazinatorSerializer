@@ -11,7 +11,10 @@ namespace Lazinator.Collections.Avl
     {
         public override IValueContainer<T> CreateNewWithSameSettings()
         {
-            return new AvlIndexableTree<T>();
+            return new AvlIndexableTree<T>()
+            {
+                AllowDuplicates = AllowDuplicates
+            };
         }
 
         public AvlCountedNode<T> AvlIndexableRoot => (AvlCountedNode<T>)Root;

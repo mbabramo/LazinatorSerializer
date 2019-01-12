@@ -29,7 +29,10 @@ namespace Lazinator.Collections.Tree
 
         public virtual IValueContainer<T> CreateNewWithSameSettings()
         {
-            return new BinaryTree<T>();
+            return new BinaryTree<T>()
+            {
+                AllowDuplicates = AllowDuplicates
+            };
         }
 
         protected virtual BinaryNode<T> CreateNode(T value, BinaryNode<T> parent = null)
