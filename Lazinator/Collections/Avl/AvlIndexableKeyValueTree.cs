@@ -9,8 +9,9 @@ namespace Lazinator.Collections.Avl
 {
     public partial class AvlIndexableKeyValueTree<TKey, TValue> : AvlKeyValueTree<TKey, TValue>, IAvlIndexableKeyValueTree<TKey, TValue>, IIndexableKeyValueContainer<TKey, TValue>, IIndexableKeyMultivalueContainer<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
-        public AvlIndexableKeyValueTree(bool allowDuplicates) : base(allowDuplicates)
+        public AvlIndexableKeyValueTree(bool allowDuplicates)
         {
+            UnderlyingTree = new AvlIndexableTree<LazinatorKeyValue<TKey, TValue>>() { AllowDuplicates = allowDuplicates };
         }
 
         public override IKeyValueContainer<TKey, TValue> CreateNewWithSameSettings()
@@ -96,6 +97,6 @@ namespace Lazinator.Collections.Avl
             return result;
         }
 
-        public (long index, bool insertedNotReplaced) InsertGetIndex(TKey key, TValue value, IComparer<TKey> comparer) => InsertGetIndex(key, value, MultivalueLocationOptions.InsertAfterLast, comparer);
+        public (long index, bool insertedNotReplaced) InsertGetIndex(TKey key, TValue value, IComparer<TKey> comparer) => InsertGetIndex(key, value, AllowDuplicates ? MultivalueLocationOptions.InsertAfterLast : MultivalueLocationOptions.Any, comparer);
     }
 }

@@ -98,7 +98,7 @@ namespace LazinatorTests.Tests
                         instruction = new InsertValueInstruction();
                     else
                         instruction = new RemoveInstruction();
-                    if (rep == 46 && i == 68)
+                    if (rep == 0 && i == 2)
                     {
                         var DEBUG = 0;
                     }
@@ -790,6 +790,7 @@ namespace LazinatorTests.Tests
                 KeyValueExisted = true;
                 IndexBeforeRemove = testClass.ran.Next(list.Count);
                 KeyValueContainerTests<TKey, TValue>.GetIndexRange(list, IndexBeforeRemove, out FirstIndex, out LastIndex);
+                KeyToTryToRemove = list[IndexBeforeRemove].Key;
                 if (ContainerIsMultivalue)
                 {
                     if (WhichOne == MultivalueLocationOptions.Any)
@@ -811,7 +812,7 @@ namespace LazinatorTests.Tests
                     else if (WhichOne == MultivalueLocationOptions.Last)
                         IndexBeforeRemove = LastIndex;
                 }
-                KeyToTryToRemove = list[IndexBeforeRemove].Key;
+                KeyToTryToRemove = list[IndexBeforeRemove].Key; // potentially updated
                 ValueToTryToRemove = list[IndexBeforeRemove].Value;
             }
 
