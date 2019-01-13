@@ -124,7 +124,12 @@ namespace LazinatorTests.Tests
                         instruction = new InsertValueInstruction();
                     else
                         instruction = new RemoveInstruction();
+                    if (rep == 1 && i == 43)
+                    {
+                        var DEBUG = 0;
+                    }
                     instruction.Execute(this, container, list);
+                    VerifyEntireList(container, list); // DEBUG
                 }
                 VerifyEntireList(container, list);
                 VerifyEnumerableSkipAndReverse(container, list);
@@ -593,7 +598,7 @@ namespace LazinatorTests.Tests
                 EstablishSorted(container);
                 if (testClass.AllowDuplicates)
                 {
-                    if (testClass.ran.Next(0, 5) == 0)
+                    if (ContainerIsSorted && testClass.ran.Next(0, 5) == 0)
                     {
                         RemoveAll = true; // overrides remaining settings
                         WhichOne = MultivalueLocationOptions.InsertAfterLast; // invalid -- but we won't use it in a call; we use something invalid to ensure that if we do, we'll get an error
@@ -693,7 +698,10 @@ namespace LazinatorTests.Tests
 
             public override void Execute_IndexableMultivalue(ValueContainerTests<T> testClass, IIndexableMultivalueContainer<T> container, List<T> list)
             {
-                Execute_Indexable(testClass, container, list);
+                if (RemoveAll)
+                    container.TryRemoveAll(ValueToTryToRemove, Comparer<T>.Default);
+                else
+                    Execute_Indexable(testClass, container, list);
             }
 
             public override void Execute_Multivalue(ValueContainerTests<T> testClass, IMultivalueContainer<T> container, List<T> list)

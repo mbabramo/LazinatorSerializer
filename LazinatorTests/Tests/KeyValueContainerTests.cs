@@ -29,7 +29,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void VerifyKeyValueContainerDEBUG()
         {
-            VerifyKeyValueContainer(KeyValueContainerType.AvlIndexableKeyValueTree, true, 100, 100);
+            VerifyKeyValueContainer(KeyValueContainerType.AvlKeyValueTree, false, 100, 100);
         }
 
         [Theory]
@@ -678,7 +678,7 @@ namespace LazinatorTests.Tests
                 RemoveSpecificKeyValue = testClass.ran.Next(2) == 0;
                 if (testClass.AllowDuplicates)
                 {
-                    if (!RemoveSpecificKeyValue && testClass.ran.Next(0, 5) == 0)
+                    if (!RemoveSpecificKeyValue && KeyValueContainerIsSorted && testClass.ran.Next(0, 5) == 0)
                     {
                         RemoveAll = true; // overrides remaining settings
                         WhichOne = MultivalueLocationOptions.InsertAfterLast; // invalid -- but we won't use it in a call; we use something invalid to ensure that if we do, we'll get an error
