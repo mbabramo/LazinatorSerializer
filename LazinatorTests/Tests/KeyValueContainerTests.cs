@@ -43,6 +43,11 @@ namespace LazinatorTests.Tests
         [InlineData(KeyValueContainerType.AvlSortedIndexableKeyValueTree, true, 100, 100)]
         public void VerifyKeyValueContainer(KeyValueContainerType containerType, bool allowDuplicates, int numRepetitions, int numInstructions) => VerifyKeyValueContainerHelper(containerType, allowDuplicates, numRepetitions, numInstructions);
 
+        public override WInt GetRandomKey()
+        {
+            return ran.Next(100);
+        }
+
         public override WInt GetRandomValue()
         {
             return ran.Next(100);
@@ -249,7 +254,8 @@ namespace LazinatorTests.Tests
             }
         }
 
-        public abstract TKey GetRandomValue();
+        public abstract TKey GetRandomKey();
+        public abstract TValue GetRandomValue();
 
         public abstract class RandomInstruction
         {
@@ -571,31 +577,35 @@ namespace LazinatorTests.Tests
         public class InsertValueInstruction : RandomInstruction
         {
 
-            TKey Item;
+            TKey Key;
+            TValue Value;
+            LazinatorComparableKeyValue<TKey, TValue> ComparableKeyValue;
             MultivalueLocationOptions WhichOne;
             int Index;
             bool InsertedNotReplaced;
 
             public override void Execute(KeyValueContainerTests<TKey, TValue> testClass, IKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
             {
-                Item = testClass.GetRandomValue();
-                WhichOne = testClass.AllowDuplicates ? testClass.ChooseMultivalueInsertOption() : MultivalueLocationOptions.Any; // if not multivalue, just replace the item
+                Key = testClass.GetRandomKey();
+                Value = testClass.GetRandomValue();
+                ComparableKeyValue = new LazinatorComparableKeyValue<TKey, TValue>(Key, Value);
+                WhichOne = testClass.AllowDuplicates ? testClass.ChooseMultivalueInsertOption() : MultivalueLocationOptions.Any; // if not multivalue, just replace the value associated with this key
                 EstablishSorted(container);
                 // If we are using the base container type, then we can only add items with a comparer, so we treat it as a sorted container.
-                (Index, InsertedNotReplaced) = testClass.InsertOrReplaceItem(list, Item, KeyValueContainerIsSorted || !(container is IIndexableKeyValueContainer<TKey, TValue>), WhichOne);
+                (Index, InsertedNotReplaced) = testClass.InsertOrReplaceItem(list, ComparableKeyValue, KeyValueContainerIsSorted || !(container is IIndexableKeyValueContainer<TKey, TValue>), WhichOne);
                 base.Execute(testClass, container, list);
             }
 
             public override void Execute_Indexable(KeyValueContainerTests<TKey, TValue> testClass, IIndexableKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
             {
-                if (KeyValueContainerIsSorted)
+                if (KeyValueContainerIsSorted) // DEBUG -- is this necessary now? change also in ValueContainerTests. Shouldn't be since we treat that separately.
                     Execute_SortedIndexable(testClass, (ISortedIndexableKeyValueContainer<TKey, TValue>)SortedKeyValueContainer, list);
                 else
                 {
                     if (InsertedNotReplaced)
-                        container.InsertAt(Index, Item);
+                        container.InsertAt(Index, Key);
                     else
-                        container.SetAt(Index, Item);
+                        container.SetAt(Index, Key);
                 }
             }
 
@@ -603,7 +613,7 @@ namespace LazinatorTests.Tests
             {
                 if (KeyValueContainerIsSorted)
                 {
-                    (long index, bool insertedNotReplaced) = container.InsertGetIndex(Item, WhichOne, C);
+                    (long index, bool insertedNotReplaced) = container.InsertGetIndex(Key, WhichOne, C);
                     index.Should().Be(Index);
                     insertedNotReplaced.Should().Be(InsertedNotReplaced);
                 }
@@ -615,34 +625,32 @@ namespace LazinatorTests.Tests
 
             public override void Execute_Multivalue(KeyValueContainerTests<TKey, TValue> testClass, IKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
             {
-                if (KeyValueContainerIsSorted)
-                {
-                    bool insertedNotReplaced = container.TryInsert(Item, WhichOne, C);
-                    insertedNotReplaced.Should().Be(InsertedNotReplaced);
-                }
+                bool insertedNotReplaced = true;
+                if (WhichOne == MultivalueLocationOptions.InsertAfterLast && testClass.ran.Next(2) == 0)
+                    container.AddValueForKey(Key, Value, C); // note that this just calls SetValueForKey anyway.
                 else
                 {
-                    bool insertedNotReplaced = container.TryInsert(Item, WhichOne, C);
+                    insertedNotReplaced = container.SetValueForKey(Key, Value, WhichOne, C);
                     insertedNotReplaced.Should().Be(InsertedNotReplaced);
                 }
             }
 
             public override void Execute_Sorted(KeyValueContainerTests<TKey, TValue> testClass, ISortedKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
             {
-                bool insertedNotReplaced = container.TryInsert(Item);
+                bool insertedNotReplaced = container.SetValueForKey(Key, Value);
                 insertedNotReplaced.Should().Be(InsertedNotReplaced);
             }
 
             public override void Execute_SortedIndexable(KeyValueContainerTests<TKey, TValue> testClass, ISortedIndexableKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
             {
-                (long index, bool insertedNotReplaced) = container.InsertGetIndex(Item);
+                (long index, bool insertedNotReplaced) = container.InsertGetIndex(Key);
                 index.Should().Be(Index);
                 insertedNotReplaced.Should().Be(InsertedNotReplaced);
             }
 
             public override void Execute_SortedIndexableMultivalue(KeyValueContainerTests<TKey, TValue> testClass, ISortedIndexableKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
             {
-                (long index, bool insertedNotReplaced) = container.InsertGetIndex(Item, WhichOne);
+                (long index, bool insertedNotReplaced) = container.InsertGetIndex(Key, WhichOne);
                 // if WhichOne == Any, then exact location is undefined, so we don't verify it. The behavior may be different from our list implementation because which one is selected may be based on the ordering of the binary tree. The list binary search algorithm always starts from the middle element, while a tree search will start from the top of the tree, which may not be the exact middle element.
                 if (WhichOne != MultivalueLocationOptions.Any)
                     index.Should().Be(Index);
@@ -651,13 +659,19 @@ namespace LazinatorTests.Tests
 
             public override void Execute_SortedMultivalue(KeyValueContainerTests<TKey, TValue> testClass, ISortedKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
             {
-                bool insertedNotReplaced = container.TryInsert(Item, WhichOne);
-                insertedNotReplaced.Should().Be(InsertedNotReplaced);
+                bool insertedNotReplaced = true;
+                if (WhichOne == MultivalueLocationOptions.InsertAfterLast && testClass.ran.Next(2) == 0)
+                    container.AddValueForKey(Key, Value); // note that this just calls SetValueForKey anyway.
+                else
+                {
+                    insertedNotReplaced = container.SetValueForKey(Key, Value, WhichOne);
+                    insertedNotReplaced.Should().Be(InsertedNotReplaced);
+                }
             }
 
             public override void Execute_Value(KeyValueContainerTests<TKey, TValue> testClass, IKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
             {
-                bool insertedNotReplaced = container.TryInsert(Item, C);
+                bool insertedNotReplaced = container.SetValueForKey(Key, Value, C);
                 insertedNotReplaced.Should().Be(InsertedNotReplaced);
             }
         }
@@ -733,7 +747,7 @@ namespace LazinatorTests.Tests
                     const int maxTriesToFindNotIncludedItem = 10;
                     for (int i = 0; i < maxTriesToFindNotIncludedItem; i++)
                     {
-                        TKey randomValue = testClass.GetRandomValue();
+                        TKey randomValue = testClass.GetRandomKey();
                         int index = list.BinarySearch(randomValue, Comparer<TKey>.Default);
                         if (index < 0)
                         {

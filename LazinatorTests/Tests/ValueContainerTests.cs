@@ -560,16 +560,8 @@ namespace LazinatorTests.Tests
 
             public override void Execute_Multivalue(ValueContainerTests<T> testClass, IMultivalueContainer<T> container, List<T> list)
             {
-                if (ContainerIsSorted)
-                {
-                    bool insertedNotReplaced = container.TryInsert(Item, WhichOne, C);
-                    insertedNotReplaced.Should().Be(InsertedNotReplaced);
-                }
-                else
-                {
-                    bool insertedNotReplaced = container.TryInsert(Item, WhichOne, C);
-                    insertedNotReplaced.Should().Be(InsertedNotReplaced);
-                }
+                bool insertedNotReplaced = container.TryInsert(Item, WhichOne, C);
+                insertedNotReplaced.Should().Be(InsertedNotReplaced);
             }
 
             public override void Execute_Sorted(ValueContainerTests<T> testClass, ISortedContainer<T> container, List<T> list)
