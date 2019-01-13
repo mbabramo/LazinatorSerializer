@@ -4,13 +4,14 @@ using Lazinator.Collections.Tuples;
 using Lazinator.Core;
 using Lazinator.Support;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlKeyValueTree<TKey, TValue> : IAvlKeyValueTree<TKey, TValue>, IKeyValueContainer<TKey, TValue>, IKeyMultivalueContainer<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
+    public partial class AvlKeyValueTree<TKey, TValue> : IAvlKeyValueTree<TKey, TValue>, IKeyValueContainer<TKey, TValue>, IKeyMultivalueContainer<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>> where TKey : ILazinator where TValue : ILazinator
     {
         public AvlKeyValueTree(bool allowDuplicates)
         {
@@ -148,6 +149,16 @@ namespace Lazinator.Collections.Avl
         public IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(bool reverse = false, long skip = 0)
         {
             return new TransformEnumerator<LazinatorKeyValue<TKey, TValue>, KeyValuePair<TKey, TValue>>(UnderlyingTree.GetEnumerator(reverse, skip), x => x.KeyValuePair);
+        }
+
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
+        {
+            return GetKeyValuePairEnumerator(false, 0);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetKeyValuePairEnumerator(false, 0);
         }
     }
 }

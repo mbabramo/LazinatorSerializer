@@ -15,14 +15,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Tests\AVL\AvlEnumeratorTests.cs" />
-    <Compile Remove="Tests\AVL\AvlListTests.cs" />
-    <Compile Remove="Tests\AVL\AvlNodeExtensionsForTesting.cs" />
-    <Compile Remove="Tests\AVL\AvlSerializationTest.cs" />
-    <Compile Remove="Tests\AVL\AvlSetTests.cs" />
-    <Compile Remove="Tests\AVL\AvlTreeDeleteTests.cs" />
-    <Compile Remove="Tests\AVL\AvlTreeExtensionsForTesting.cs" />
-    <Compile Remove="Tests\AVL\AvlTreeInsertTests.cs" />
     <Compile Remove="Tests\DictionaryTests.cs" />
   </ItemGroup>
   
@@ -49,10 +41,6 @@
     <None Update="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="Tests\AVL\" />
   </ItemGroup>
 
 </Project>

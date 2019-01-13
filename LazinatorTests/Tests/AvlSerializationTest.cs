@@ -17,10 +17,10 @@ namespace LazinatorTests.AVL
         [Fact]
         public void DeserializedAvlTreeOrdersItemsCorrectly()
         {
-            GetTreeAndItems(out AvlOldTree<WInt, WInt> tree, out Dictionary<int, int> items, out int firstKey);
+            GetTreeAndItems(out AvlKeyValueTree<WInt, WInt> tree, out Dictionary<int, int> items, out int firstKey);
 
             var enumerated = tree.Select(x => x.Value.WrappedValue).ToList();
-            AvlOldTree<WInt, WInt> clone = tree.CloneLazinatorTyped();
+            AvlKeyValueTree<WInt, WInt> clone = tree.CloneLazinatorTyped();
             var enumerated2 = clone.Select(x => x.Value.WrappedValue).ToList();
             var correctOrder = items.OrderBy(x => x.Key).Select(x => x.Value).ToList();
             enumerated.SequenceEqual(correctOrder).Should().BeTrue();
@@ -30,30 +30,30 @@ namespace LazinatorTests.AVL
         [Fact]
         public void AvlTreeAllowsSearchAfterDeserialization()
         {
-            GetTreeAndItems(out AvlOldTree<WInt, WInt> tree, out Dictionary<int, int> items, out int firstKey);
+            GetTreeAndItems(out AvlKeyValueTree<WInt, WInt> tree, out Dictionary<int, int> items, out int firstKey);
 
             LazinatorMemory b = tree.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
             //const int repetitions = 10000;
             //for (int i = 0; i < repetitions; i++)
             //{
-                var tree2 = new AvlOldTree<WInt, WInt>()
+                var tree2 = new AvlKeyValueTree<WInt, WInt>(false)
                 {
                 };
                 tree2.DeserializeLazinator(b);
-                bool found = tree2.ValueAtKey(firstKey, out WInt value);
+                bool found = tree2.ContainsKey(firstKey, Comparer<WInt>.Default);
                 found.Should().BeTrue();
             //}
         }
 
-        private AvlOldTree<WInt, WInt> GetTree()
+        private AvlKeyValueTree<WInt, WInt> GetTree()
         {
-            GetTreeAndItems(out AvlOldTree<WInt, WInt> t, out _, out _ );
+            GetTreeAndItems(out AvlKeyValueTree<WInt, WInt> t, out _, out _ );
             return t;
         }
 
-        private void GetTreeAndItems(out AvlOldTree<WInt, WInt> tree, out Dictionary<int, int> items, out int firstKey)
+        private void GetTreeAndItems(out AvlKeyValueTree<WInt, WInt> tree, out Dictionary<int, int> items, out int firstKey)
         {
-            tree = new AvlOldTree<WInt, WInt>();
+            tree = new AvlKeyValueTree<WInt, WInt>(false);
             items = new Dictionary<int, int>();
             firstKey = 0;
             for (int i = 0; i < 100; i++)
@@ -68,7 +68,7 @@ namespace LazinatorTests.AVL
                     firstKey = k;
                 int v = r.Next();
                 items.Add(k, v);
-                tree.Insert(k, v);
+                tree.SetValueForKey(k, v, Comparer<WInt>.Default);
             }
         }
     }

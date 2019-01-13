@@ -164,8 +164,8 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(AvlSortedIndexableKeyValueTree<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
             await CompleteGenerateCode(typeof(AvlList<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
             await CompleteGenerateCode(typeof(AvlSortedList<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
-            //await CompleteGenerateCode(typeof(AvlOldNode<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
-            //await CompleteGenerateCode(typeof(AvlOldTree<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
+            //await CompleteGenerateCode(typeof(AvlKeyValueTree<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
+            //await CompleteGenerateCode(typeof(AvlKeyValueTree<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
             //await CompleteGenerateCode(typeof(AvlDictionary<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
             //await CompleteGenerateCode(typeof(AvlSortedDictionary<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);
             //await CompleteGenerateCode(typeof(AvlListNodeContents<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/", ws);

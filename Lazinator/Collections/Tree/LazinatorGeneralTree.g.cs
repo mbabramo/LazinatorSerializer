@@ -450,12 +450,12 @@ namespace Lazinator.Collections.Tree
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual int LazinatorUniqueID => 113;
+        public virtual int LazinatorUniqueID => 111;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual bool ContainsOpenGenericParameters => true;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<LazinatorGeneralTree<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(113, new Type[] { typeof(T) }));
+        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<LazinatorGeneralTree<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(111, new Type[] { typeof(T) }));
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

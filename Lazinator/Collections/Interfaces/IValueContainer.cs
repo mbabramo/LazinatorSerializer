@@ -7,7 +7,7 @@ using Lazinator.Core;
 namespace Lazinator.Collections.Interfaces
 {
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IOrderableContainer)]
-    public interface IValueContainer<T> where T : ILazinator
+    public interface IValueContainer<T> : IEnumerable<T> where T : ILazinator
     {
         bool Unbalanced { get; set; }
         bool AllowDuplicates { get; set; }
@@ -34,6 +34,5 @@ namespace Lazinator.Collections.Interfaces
         void Clear();
         IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0);
         IEnumerator<T> GetEnumerator(bool reverse = false, long skip = 0);
-        IEnumerator<T> GetEnumerator();
     }
 }

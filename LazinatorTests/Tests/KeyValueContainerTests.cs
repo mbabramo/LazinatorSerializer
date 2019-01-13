@@ -98,12 +98,8 @@ namespace LazinatorTests.Tests
                         instruction = new InsertValueInstruction();
                     else
                         instruction = new RemoveInstruction();
-                    if (rep == 0 && i == 75)
-                    {
-                        var DEBUG = 0;
-                    }
                     instruction.Execute(this, container, list);
-                    VerifyEntireList(container, list); // DEBUG
+                    // uncomment to find problem: VerifyEntireList(container, list);
                 }
                 VerifyEntireList(container, list);
                 VerifyEnumerableSkipAndReverse(container, list);

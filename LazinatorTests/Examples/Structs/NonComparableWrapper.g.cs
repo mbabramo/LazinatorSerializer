@@ -264,7 +264,7 @@ namespace LazinatorTests.Examples
         
         /* Conversion */
         
-        public int LazinatorUniqueID => 155;
+        public int LazinatorUniqueID => 153;
         
         bool ContainsOpenGenericParameters => false;
         public LazinatorGenericIDType LazinatorGenericID => default;

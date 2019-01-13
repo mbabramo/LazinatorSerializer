@@ -54,7 +54,7 @@ namespace Lazinator.Collections.Tree
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Locations_ByteIndex, _Locations_ByteLength, false, false, null);
                         
-                        _Locations = DeserializationFactory.Instance.CreateBaseOrDerivedType(102, () => new LazinatorDictionary<T, LazinatorList<WInt>>(), childData, this); 
+                        _Locations = DeserializationFactory.Instance.CreateBaseOrDerivedType(100, () => new LazinatorDictionary<T, LazinatorList<WInt>>(), childData, this); 
                     }
                     _Locations_Accessed = true;
                 } 
@@ -187,12 +187,12 @@ namespace Lazinator.Collections.Tree
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public override int LazinatorUniqueID => 115;
+        public override int LazinatorUniqueID => 113;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override bool ContainsOpenGenericParameters => true;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public override LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<LazinatorLocationAwareTree<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(115, new Type[] { typeof(T) }));
+        public override LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<LazinatorLocationAwareTree<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(113, new Type[] { typeof(T) }));
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
