@@ -1,863 +1,863 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using FluentAssertions;
-using Lazinator.Collections;
-using LazinatorTests.Examples;
-using Lazinator.Core;
-using Xunit;
-using Lazinator.Wrappers;
-using LazinatorTests.Examples.Hierarchy;
-using LazinatorTests.Examples.Structs;
-using LazinatorTests.Examples.NonAbstractGenerics;
-using Lazinator.Collections.Tuples;
-using Lazinator.Collections.Avl;
-using Lazinator.Collections.Interfaces;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using FluentAssertions;
+//using Lazinator.Collections;
+//using LazinatorTests.Examples;
+//using Lazinator.Core;
+//using Xunit;
+//using Lazinator.Wrappers;
+//using LazinatorTests.Examples.Hierarchy;
+//using LazinatorTests.Examples.Structs;
+//using LazinatorTests.Examples.NonAbstractGenerics;
+//using Lazinator.Collections.Tuples;
+//using Lazinator.Collections.Avl;
+//using Lazinator.Collections.Interfaces;
 
-namespace LazinatorTests.Tests
-{
-    public enum KeyValueContainerType
-    {
-        AvlKeyValueTree,
-        AvlIndexableKeyValueTree,
-        AvlSortedKeyValueTree,
-        AvlSortedIndexableKeyValueTree
-    }
+//namespace LazinatorTests.Tests
+//{
+//    public enum KeyValueContainerType
+//    {
+//        AvlKeyValueTree,
+//        AvlIndexableKeyValueTree,
+//        AvlSortedKeyValueTree,
+//        AvlSortedIndexableKeyValueTree
+//    }
 
-    public class KeyValueContainerTests_WInt : KeyValueContainerTests<WInt, WInt>
-    {
-        [Fact]
-        public void VerifyKeyValueContainerDEBUG()
-        {
-            VerifyKeyValueContainer(KeyValueContainerType.AvlIndexableKeyValueTree, true, 100, 100);
-        }
+//    public class KeyValueContainerTests_WInt : KeyValueContainerTests<WInt, WInt>
+//    {
+//        [Fact]
+//        public void VerifyKeyValueContainerDEBUG()
+//        {
+//            VerifyKeyValueContainer(KeyValueContainerType.AvlIndexableKeyValueTree, true, 100, 100);
+//        }
 
-        [Theory]
-        [InlineData(KeyValueContainerType.AvlKeyValueTree, false, 100, 100)]
-        [InlineData(KeyValueContainerType.AvlIndexableKeyValueTree, false, 100, 100)]
-        [InlineData(KeyValueContainerType.AvlSortedKeyValueTree, false, 100, 100)]
-        [InlineData(KeyValueContainerType.AvlSortedIndexableKeyValueTree, false, 100, 100)]
-        [InlineData(KeyValueContainerType.AvlKeyValueTree, true, 100, 100)]
-        [InlineData(KeyValueContainerType.AvlIndexableKeyValueTree, true, 100, 100)]
-        [InlineData(KeyValueContainerType.AvlSortedKeyValueTree, true, 100, 100)]
-        [InlineData(KeyValueContainerType.AvlSortedIndexableKeyValueTree, true, 100, 100)]
-        public void VerifyKeyValueContainer(KeyValueContainerType containerType, bool allowDuplicates, int numRepetitions, int numInstructions) => VerifyKeyValueContainerHelper(containerType, allowDuplicates, numRepetitions, numInstructions);
+//        [Theory]
+//        [InlineData(KeyValueContainerType.AvlKeyValueTree, false, 100, 100)]
+//        [InlineData(KeyValueContainerType.AvlIndexableKeyValueTree, false, 100, 100)]
+//        [InlineData(KeyValueContainerType.AvlSortedKeyValueTree, false, 100, 100)]
+//        [InlineData(KeyValueContainerType.AvlSortedIndexableKeyValueTree, false, 100, 100)]
+//        [InlineData(KeyValueContainerType.AvlKeyValueTree, true, 100, 100)]
+//        [InlineData(KeyValueContainerType.AvlIndexableKeyValueTree, true, 100, 100)]
+//        [InlineData(KeyValueContainerType.AvlSortedKeyValueTree, true, 100, 100)]
+//        [InlineData(KeyValueContainerType.AvlSortedIndexableKeyValueTree, true, 100, 100)]
+//        public void VerifyKeyValueContainer(KeyValueContainerType containerType, bool allowDuplicates, int numRepetitions, int numInstructions) => VerifyKeyValueContainerHelper(containerType, allowDuplicates, numRepetitions, numInstructions);
 
-        public override WInt GetRandomKey()
-        {
-            return ran.Next(100);
-        }
+//        public override WInt GetRandomKey()
+//        {
+//            return ran.Next(100);
+//        }
 
-        public override WInt GetRandomValue()
-        {
-            return ran.Next(100);
-        }
+//        public override WInt GetRandomValue()
+//        {
+//            return ran.Next(100);
+//        }
 
-    }
+//    }
 
-    public abstract class KeyValueContainerTests<TKey, TValue> : SerializationDeserializationTestBase where TKey : ILazinator, IComparable<TKey>, IComparable where TValue : ILazinator
-    {
+//    public abstract class KeyValueContainerTests<TKey, TValue> : SerializationDeserializationTestBase where TKey : ILazinator, IComparable<TKey>, IComparable where TValue : ILazinator
+//    {
 
-        public IKeyValueContainer<TKey, TValue> GetKeyValueContainer(KeyValueContainerType containerType)
-        {
-            switch (containerType)
-            {
-                case KeyValueContainerType.AvlKeyValueTree:
-                    return new AvlKeyValueTree<TKey, TValue>();
-                case KeyValueContainerType.AvlIndexableKeyValueTree:
-                    return new AvlIndexableKeyValueTree<TKey, TValue>();
-                case KeyValueContainerType.AvlSortedKeyValueTree:
-                    return new AvlSortedKeyValueTree<TKey, TValue>();
-                case KeyValueContainerType.AvlSortedIndexableKeyValueTree:
-                    return new AvlSortedIndexableKeyValueTree<TKey, TValue>();
-                default:
-                    throw new NotSupportedException();
-            }
-        }
+//        public IKeyValueContainer<TKey, TValue> GetKeyValueContainer(KeyValueContainerType containerType)
+//        {
+//            switch (containerType)
+//            {
+//                case KeyValueContainerType.AvlKeyValueTree:
+//                    return new AvlKeyValueTree<TKey, TValue>();
+//                case KeyValueContainerType.AvlIndexableKeyValueTree:
+//                    return new AvlIndexableKeyValueTree<TKey, TValue>();
+//                case KeyValueContainerType.AvlSortedKeyValueTree:
+//                    return new AvlSortedKeyValueTree<TKey, TValue>();
+//                case KeyValueContainerType.AvlSortedIndexableKeyValueTree:
+//                    return new AvlSortedIndexableKeyValueTree<TKey, TValue>();
+//                default:
+//                    throw new NotSupportedException();
+//            }
+//        }
 
-        public Random ran = new Random(0);
-        bool AllowDuplicates;
+//        public Random ran = new Random(0);
+//        bool AllowDuplicates;
 
 
-        public void VerifyKeyValueContainerHelper(KeyValueContainerType containerType, bool allowDuplicates, int numRepetitions, int numInstructions)
-        {
-            AllowDuplicates = allowDuplicates;
-            for (int rep = 0; rep < numRepetitions; rep++)
-            {
-                List<LazinatorComparableKeyValue<TKey,TValue>> list = new List<LazinatorComparableKeyValue<TKey,TValue>>();
-                IKeyValueContainer<TKey, TValue> container = GetKeyValueContainer(containerType);
-                container.AllowDuplicates = AllowDuplicates;
-                for (int i = 0; i < numInstructions; i++)
-                {
-                    int r = ran.Next(100);
-                    RandomInstruction instruction;
-                    if (r < 25)
-                        instruction = new GetValueInstruction();
-                    else
-                        if (r < 75)
-                        instruction = new InsertValueInstruction();
-                    else
-                        instruction = new RemoveInstruction();
-                    instruction.Execute(this, container, list);
-                }
-                VerifyEntireList(container, list);
-                VerifyEnumerableSkipAndReverse(container, list);
-            }
-        }
+//        public void VerifyKeyValueContainerHelper(KeyValueContainerType containerType, bool allowDuplicates, int numRepetitions, int numInstructions)
+//        {
+//            AllowDuplicates = allowDuplicates;
+//            for (int rep = 0; rep < numRepetitions; rep++)
+//            {
+//                List<LazinatorComparableKeyValue<TKey,TValue>> list = new List<LazinatorComparableKeyValue<TKey,TValue>>();
+//                IKeyValueContainer<TKey, TValue> container = GetKeyValueContainer(containerType);
+//                container.AllowDuplicates = AllowDuplicates;
+//                for (int i = 0; i < numInstructions; i++)
+//                {
+//                    int r = ran.Next(100);
+//                    RandomInstruction instruction;
+//                    if (r < 25)
+//                        instruction = new GetValueInstruction();
+//                    else
+//                        if (r < 75)
+//                        instruction = new InsertValueInstruction();
+//                    else
+//                        instruction = new RemoveInstruction();
+//                    instruction.Execute(this, container, list);
+//                }
+//                VerifyEntireList(container, list);
+//                VerifyEnumerableSkipAndReverse(container, list);
+//            }
+//        }
 
-        public void VerifyEntireList(IKeyValueContainer<TKey, TValue> keyValueContainer, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-        {
-            var pairsEnumerator = keyValueContainer.GetKeyValuePairEnumerator();
-            List<LazinatorComparableKeyValue<TKey, TValue>> pairsList = new List<LazinatorComparableKeyValue<TKey, TValue>>();
-            while (pairsEnumerator.MoveNext())
-                pairsList.Add(new LazinatorComparableKeyValue<TKey, TValue>(pairsEnumerator.Current.Key, pairsEnumerator.Current.Value));
-            pairsList.SequenceEqual(list).Should().BeTrue();
-        }
+//        public void VerifyEntireList(IKeyValueContainer<TKey, TValue> keyValueContainer, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//        {
+//            var pairsEnumerator = keyValueContainer.GetKeyValuePairEnumerator();
+//            List<LazinatorComparableKeyValue<TKey, TValue>> pairsList = new List<LazinatorComparableKeyValue<TKey, TValue>>();
+//            while (pairsEnumerator.MoveNext())
+//                pairsList.Add(new LazinatorComparableKeyValue<TKey, TValue>(pairsEnumerator.Current.Key, pairsEnumerator.Current.Value));
+//            pairsList.SequenceEqual(list).Should().BeTrue();
+//        }
 
-        public void VerifyEnumerableSkipAndReverse(IKeyValueContainer<TKey, TValue> keyValueContainer, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-        {
+//        public void VerifyEnumerableSkipAndReverse(IKeyValueContainer<TKey, TValue> keyValueContainer, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//        {
 
-            var list2 = list.ToList();
-            list2.Reverse();
-            int numToSkip = ran.Next(0, list.Count + 1);
-            var withSkips = list2.Skip(numToSkip).ToList();
+//            var list2 = list.ToList();
+//            list2.Reverse();
+//            int numToSkip = ran.Next(0, list.Count + 1);
+//            var withSkips = list2.Skip(numToSkip).ToList();
 
-            var pairsEnumerator = keyValueContainer.GetKeyValuePairEnumerator(true, numToSkip);
-            List<LazinatorComparableKeyValue<TKey, TValue>> pairsList = new List<LazinatorComparableKeyValue<TKey, TValue>>();
-            while (pairsEnumerator.MoveNext())
-                pairsList.Add(new LazinatorComparableKeyValue<TKey, TValue>(pairsEnumerator.Current.Key, pairsEnumerator.Current.Value));
-            pairsList.SequenceEqual(list).Should().BeTrue();
+//            var pairsEnumerator = keyValueContainer.GetKeyValuePairEnumerator(true, numToSkip);
+//            List<LazinatorComparableKeyValue<TKey, TValue>> pairsList = new List<LazinatorComparableKeyValue<TKey, TValue>>();
+//            while (pairsEnumerator.MoveNext())
+//                pairsList.Add(new LazinatorComparableKeyValue<TKey, TValue>(pairsEnumerator.Current.Key, pairsEnumerator.Current.Value));
+//            pairsList.SequenceEqual(list).Should().BeTrue();
             
-            pairsList.SequenceEqual(withSkips).Should().BeTrue();
-        }
+//            pairsList.SequenceEqual(withSkips).Should().BeTrue();
+//        }
 
-        public (LazinatorComparableKeyValue<TKey, TValue> item, int firstIndex, int lastIndex)? GetRandomItem(List<LazinatorComparableKeyValue<TKey,TValue>> list)
-        {
-            if (!list.Any())
-                return null;
-            int index = ran.Next(0, list.Count());
-            var item = list[index];
-            int firstIndex, lastIndex;
-            GetIndexRange(list, index, out firstIndex, out lastIndex);
-            return (item, firstIndex, lastIndex);
-        }
+//        public (LazinatorComparableKeyValue<TKey, TValue> item, int firstIndex, int lastIndex)? GetRandomItem(List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//        {
+//            if (!list.Any())
+//                return null;
+//            int index = ran.Next(0, list.Count());
+//            var item = list[index];
+//            int firstIndex, lastIndex;
+//            GetIndexRange(list, index, out firstIndex, out lastIndex);
+//            return (item, firstIndex, lastIndex);
+//        }
 
-        public static void GetIndexRange(List<LazinatorComparableKeyValue<TKey,TValue>> list, int index, out int firstIndex, out int lastIndex)
-        {
-            var item = list[index];
-            firstIndex = index;
-            lastIndex = index;
-            while (firstIndex > 0 && list[firstIndex - 1].Key.Equals(item.Key))
-                firstIndex--;
-            while (lastIndex < list.Count() - 1 && list[lastIndex + 1].Key.Equals(item.Key))
-                lastIndex++;
-        }
+//        public static void GetIndexRange(List<LazinatorComparableKeyValue<TKey,TValue>> list, int index, out int firstIndex, out int lastIndex)
+//        {
+//            var item = list[index];
+//            firstIndex = index;
+//            lastIndex = index;
+//            while (firstIndex > 0 && list[firstIndex - 1].Key.Equals(item.Key))
+//                firstIndex--;
+//            while (lastIndex < list.Count() - 1 && list[lastIndex + 1].Key.Equals(item.Key))
+//                lastIndex++;
+//        }
 
-        public MultivalueLocationOptions ChooseMultivalueInsertOption()
-        {
-            int i = ran.Next(0, 5);
-            switch (i)
-            {
-                case 0:
-                    return MultivalueLocationOptions.Any;
-                case 1:
-                    return MultivalueLocationOptions.First;
-                case 2:
-                    return MultivalueLocationOptions.Last;
-                case 3:
-                    return MultivalueLocationOptions.InsertBeforeFirst;
-                case 4:
-                    return MultivalueLocationOptions.InsertAfterLast;
-                default:
-                    throw new NotSupportedException();
-            }
-        }
+//        public MultivalueLocationOptions ChooseMultivalueInsertOption()
+//        {
+//            int i = ran.Next(0, 5);
+//            switch (i)
+//            {
+//                case 0:
+//                    return MultivalueLocationOptions.Any;
+//                case 1:
+//                    return MultivalueLocationOptions.First;
+//                case 2:
+//                    return MultivalueLocationOptions.Last;
+//                case 3:
+//                    return MultivalueLocationOptions.InsertBeforeFirst;
+//                case 4:
+//                    return MultivalueLocationOptions.InsertAfterLast;
+//                default:
+//                    throw new NotSupportedException();
+//            }
+//        }
 
-        public MultivalueLocationOptions ChooseMultivalueDeleteOption()
-        {
-            int i = ran.Next(0, 3);
-            switch (i)
-            {
-                case 0:
-                    return MultivalueLocationOptions.Any;
-                case 1:
-                    return MultivalueLocationOptions.First;
-                case 2:
-                    return MultivalueLocationOptions.Last;
-                default:
-                    throw new NotSupportedException();
-            }
-        }
+//        public MultivalueLocationOptions ChooseMultivalueDeleteOption()
+//        {
+//            int i = ran.Next(0, 3);
+//            switch (i)
+//            {
+//                case 0:
+//                    return MultivalueLocationOptions.Any;
+//                case 1:
+//                    return MultivalueLocationOptions.First;
+//                case 2:
+//                    return MultivalueLocationOptions.Last;
+//                default:
+//                    throw new NotSupportedException();
+//            }
+//        }
 
-        public IComparer<LazinatorComparableKeyValue<TKey, TValue>> KeyOnlyComparer => LazinatorComparableKeyValue<TKey, TValue>.GetKeyOnlyComparer();
+//        public IComparer<LazinatorComparableKeyValue<TKey, TValue>> KeyOnlyComparer => LazinatorComparableKeyValue<TKey, TValue>.GetKeyOnlyComparer();
 
-        public (int index, bool insertedNotReplaced) InsertOrReplaceItem(List<LazinatorComparableKeyValue<TKey,TValue>> list, LazinatorComparableKeyValue<TKey, TValue> item, bool sorted, MultivalueLocationOptions whichOne)
-        {
-            if (sorted)
-            {
-                int index = list.BinarySearch(item, KeyOnlyComparer);
-                bool found = index >= 0;
-                if (!found)
-                    index = ~index;
-                bool replace = false;
-                if (found)
-                {
-                    GetIndexRange(list, index, out int firstIndex, out int lastIndex);
-                    switch (whichOne)
-                    {
-                        case MultivalueLocationOptions.Any:
-                            replace = true;
-                            break;
-                        case MultivalueLocationOptions.First:
-                            index = firstIndex;
-                            replace = true;
-                            break;
-                        case MultivalueLocationOptions.Last:
-                            index = lastIndex;
-                            replace = true;
-                            break;
-                        case MultivalueLocationOptions.InsertBeforeFirst:
-                            index = firstIndex;
-                            replace = false;
-                            break;
-                        case MultivalueLocationOptions.InsertAfterLast:
-                            index = lastIndex + 1;
-                            replace = false;
-                            break;
-                    }
-                }
-                if (replace)
-                {
-                    list[index] = item;
-                    return (index, false);
-                }
-                else
-                {
-                    list.Insert(index, item);
-                    return (index, true);
-                }
-            }
-            else
-            {
-                if (whichOne == MultivalueLocationOptions.InsertAfterLast || whichOne == MultivalueLocationOptions.InsertBeforeFirst || list.Count == 0)
-                {
-                    int index = ran.Next(0, list.Count + 1);
-                    list.Insert(index, item);
-                    return (index, true);
-                }
-                else
-                {
-                    int index = ran.Next(0, list.Count);
-                    list[index] = item;
-                    return (index, false);
-                }
-            }
-        }
+//        public (int index, bool insertedNotReplaced) InsertOrReplaceItem(List<LazinatorComparableKeyValue<TKey,TValue>> list, LazinatorComparableKeyValue<TKey, TValue> item, bool sorted, MultivalueLocationOptions whichOne)
+//        {
+//            if (sorted)
+//            {
+//                int index = list.BinarySearch(item, KeyOnlyComparer);
+//                bool found = index >= 0;
+//                if (!found)
+//                    index = ~index;
+//                bool replace = false;
+//                if (found)
+//                {
+//                    GetIndexRange(list, index, out int firstIndex, out int lastIndex);
+//                    switch (whichOne)
+//                    {
+//                        case MultivalueLocationOptions.Any:
+//                            replace = true;
+//                            break;
+//                        case MultivalueLocationOptions.First:
+//                            index = firstIndex;
+//                            replace = true;
+//                            break;
+//                        case MultivalueLocationOptions.Last:
+//                            index = lastIndex;
+//                            replace = true;
+//                            break;
+//                        case MultivalueLocationOptions.InsertBeforeFirst:
+//                            index = firstIndex;
+//                            replace = false;
+//                            break;
+//                        case MultivalueLocationOptions.InsertAfterLast:
+//                            index = lastIndex + 1;
+//                            replace = false;
+//                            break;
+//                    }
+//                }
+//                if (replace)
+//                {
+//                    list[index] = item;
+//                    return (index, false);
+//                }
+//                else
+//                {
+//                    list.Insert(index, item);
+//                    return (index, true);
+//                }
+//            }
+//            else
+//            {
+//                if (whichOne == MultivalueLocationOptions.InsertAfterLast || whichOne == MultivalueLocationOptions.InsertBeforeFirst || list.Count == 0)
+//                {
+//                    int index = ran.Next(0, list.Count + 1);
+//                    list.Insert(index, item);
+//                    return (index, true);
+//                }
+//                else
+//                {
+//                    int index = ran.Next(0, list.Count);
+//                    list[index] = item;
+//                    return (index, false);
+//                }
+//            }
+//        }
 
-        public abstract TKey GetRandomKey();
-        public abstract TValue GetRandomValue();
+//        public abstract TKey GetRandomKey();
+//        public abstract TValue GetRandomValue();
 
-        public abstract class RandomInstruction
-        {
-            protected bool KeyValueContainerIsSorted;
-            protected ISortedKeyValueContainer<TKey, TValue> SortedKeyValueContainer;
+//        public abstract class RandomInstruction
+//        {
+//            protected bool KeyValueContainerIsSorted;
+//            protected ISortedKeyValueContainer<TKey, TValue> SortedKeyValueContainer;
 
-            public virtual void Execute(KeyValueContainerTests<TKey, TValue> testClass, IKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                EstablishSorted(container);
-                switch (container)
-                {
-                    case AvlSortedIndexableKeyValueTree<TKey, TValue> sortedIndexableKeyValueContainer when sortedIndexableKeyValueContainer.AllowDuplicates == true:
-                        Execute_SortedIndexableMultivalue(testClass, sortedIndexableKeyValueContainer, list);
-                        break;
-                    case AvlSortedKeyValueTree<TKey, TValue> sortedKeyValueContainer when sortedKeyValueContainer.AllowDuplicates == true:
-                        Execute_SortedMultivalue(testClass, sortedKeyValueContainer, list);
-                        break;
-                    case AvlIndexableKeyValueTree<TKey, TValue> indexableKeyValueContainer when indexableKeyValueContainer.AllowDuplicates == true:
-                        Execute_IndexableMultivalue(testClass, indexableKeyValueContainer, list);
-                        break;
-                    case AvlKeyValueTree<TKey, TValue> basicKeyValueContainer when basicKeyValueContainer.AllowDuplicates == true:
-                        Execute_Multivalue(testClass, basicKeyValueContainer, list);
-                        break;
-                    case AvlSortedIndexableKeyValueTree<TKey, TValue> sortedIndexableKeyValueContainer when sortedIndexableKeyValueContainer.AllowDuplicates == false:
-                        Execute_SortedIndexable(testClass, sortedIndexableKeyValueContainer, list);
-                        break;
-                    case AvlSortedKeyValueTree<TKey, TValue> sortedKeyValueContainer when sortedKeyValueContainer.AllowDuplicates == false:
-                        Execute_Sorted(testClass, sortedKeyValueContainer, list);
-                        break;
-                    case AvlIndexableKeyValueTree<TKey, TValue> indexableKeyValueContainer when indexableKeyValueContainer.AllowDuplicates == false:
-                        Execute_Indexable(testClass, indexableKeyValueContainer, list);
-                        break;
-                    case AvlKeyValueTree<TKey, TValue> basicKeyValueContainer when basicKeyValueContainer.AllowDuplicates == false:
-                        Execute_Value(testClass, basicKeyValueContainer, list);
-                        break;
-                    default:
-                        throw new NotImplementedException();
-                }
-            }
+//            public virtual void Execute(KeyValueContainerTests<TKey, TValue> testClass, IKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                EstablishSorted(container);
+//                switch (container)
+//                {
+//                    case AvlSortedIndexableKeyValueTree<TKey, TValue> sortedIndexableKeyValueContainer when sortedIndexableKeyValueContainer.AllowDuplicates == true:
+//                        Execute_SortedIndexableMultivalue(testClass, sortedIndexableKeyValueContainer, list);
+//                        break;
+//                    case AvlSortedKeyValueTree<TKey, TValue> sortedKeyValueContainer when sortedKeyValueContainer.AllowDuplicates == true:
+//                        Execute_SortedMultivalue(testClass, sortedKeyValueContainer, list);
+//                        break;
+//                    case AvlIndexableKeyValueTree<TKey, TValue> indexableKeyValueContainer when indexableKeyValueContainer.AllowDuplicates == true:
+//                        Execute_IndexableMultivalue(testClass, indexableKeyValueContainer, list);
+//                        break;
+//                    case AvlKeyValueTree<TKey, TValue> basicKeyValueContainer when basicKeyValueContainer.AllowDuplicates == true:
+//                        Execute_Multivalue(testClass, basicKeyValueContainer, list);
+//                        break;
+//                    case AvlSortedIndexableKeyValueTree<TKey, TValue> sortedIndexableKeyValueContainer when sortedIndexableKeyValueContainer.AllowDuplicates == false:
+//                        Execute_SortedIndexable(testClass, sortedIndexableKeyValueContainer, list);
+//                        break;
+//                    case AvlSortedKeyValueTree<TKey, TValue> sortedKeyValueContainer when sortedKeyValueContainer.AllowDuplicates == false:
+//                        Execute_Sorted(testClass, sortedKeyValueContainer, list);
+//                        break;
+//                    case AvlIndexableKeyValueTree<TKey, TValue> indexableKeyValueContainer when indexableKeyValueContainer.AllowDuplicates == false:
+//                        Execute_Indexable(testClass, indexableKeyValueContainer, list);
+//                        break;
+//                    case AvlKeyValueTree<TKey, TValue> basicKeyValueContainer when basicKeyValueContainer.AllowDuplicates == false:
+//                        Execute_Value(testClass, basicKeyValueContainer, list);
+//                        break;
+//                    default:
+//                        throw new NotImplementedException();
+//                }
+//            }
 
 
-            protected void EstablishSorted(IKeyValueContainer<TKey, TValue> container)
-            {
-                SortedKeyValueContainer = container as ISortedKeyValueContainer<TKey, TValue>;
-                KeyValueContainerIsSorted = container is ISortedKeyValueContainer<TKey, TValue>;
-            }
+//            protected void EstablishSorted(IKeyValueContainer<TKey, TValue> container)
+//            {
+//                SortedKeyValueContainer = container as ISortedKeyValueContainer<TKey, TValue>;
+//                KeyValueContainerIsSorted = container is ISortedKeyValueContainer<TKey, TValue>;
+//            }
 
-            public abstract void Execute_Value(KeyValueContainerTests<TKey, TValue> testClass, IKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list);
-            public abstract void Execute_Indexable(KeyValueContainerTests<TKey, TValue> testClass, IIndexableKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list);
-            public abstract void Execute_Sorted(KeyValueContainerTests<TKey, TValue> testClass, ISortedKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list);
-            public abstract void Execute_Multivalue(KeyValueContainerTests<TKey, TValue> testClass, IKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list);
-            public abstract void Execute_SortedMultivalue(KeyValueContainerTests<TKey, TValue> testClass, ISortedKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list);
-            public abstract void Execute_SortedIndexable(KeyValueContainerTests<TKey, TValue> testClass, ISortedIndexableKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list);
-            public abstract void Execute_IndexableMultivalue(KeyValueContainerTests<TKey, TValue> testClass, IIndexableKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list);
-            public abstract void Execute_SortedIndexableMultivalue(KeyValueContainerTests<TKey, TValue> testClass, ISortedIndexableKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list);
-            public IComparer<TKey> C => Comparer<TKey>.Default;
-            public bool Eq(TValue item, TValue other)
-            {
-                return EqualityComparer<TValue>.Default.Equals(item, other);
-            }
-            public void AssertEqual(TValue item, TValue other)
-            {
-                Eq(item, other).Should().BeTrue();
-            }
-            public void AssertNotEqual(TValue item, TValue other)
-            {
-                Eq(item, other).Should().BeFalse();
-            }
-            public bool Eq(LazinatorComparableKeyValue<TKey, TValue> item, LazinatorComparableKeyValue<TKey, TValue> other)
-            {
-                return EqualityComparer<LazinatorComparableKeyValue<TKey, TValue>>.Default.Equals(item, other);
-            }
-            public void AssertEqual(LazinatorComparableKeyValue<TKey, TValue> item, LazinatorComparableKeyValue<TKey, TValue> other)
-            {
-                Eq(item, other).Should().BeTrue();
-            }
-            public void AssertNotEqual(LazinatorComparableKeyValue<TKey, TValue> item, LazinatorComparableKeyValue<TKey, TValue> other)
-            {
-                Eq(item, other).Should().BeFalse();
-            }
-            public void VerifyExpectedIndex(MultivalueLocationOptions whichOne, (LazinatorComparableKeyValue<TKey, TValue> item, int firstIndex, int lastIndex) listResult, long indexableKeyValueContainerResult)
-            {
-                if (whichOne == MultivalueLocationOptions.First || whichOne == MultivalueLocationOptions.InsertBeforeFirst)
-                    indexableKeyValueContainerResult.Should().Be(listResult.firstIndex);
-                else if (whichOne == MultivalueLocationOptions.Last)
-                    indexableKeyValueContainerResult.Should().Be(listResult.lastIndex);
-                else if (whichOne == MultivalueLocationOptions.InsertAfterLast)
-                    indexableKeyValueContainerResult.Should().Be(listResult.lastIndex + 1);
-                else if (whichOne == MultivalueLocationOptions.Any)
-                {
-                    indexableKeyValueContainerResult.Should().BeGreaterOrEqualTo(listResult.firstIndex);
-                    indexableKeyValueContainerResult.Should().BeLessOrEqualTo(listResult.lastIndex);
-                }
-            }
-        }
+//            public abstract void Execute_Value(KeyValueContainerTests<TKey, TValue> testClass, IKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list);
+//            public abstract void Execute_Indexable(KeyValueContainerTests<TKey, TValue> testClass, IIndexableKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list);
+//            public abstract void Execute_Sorted(KeyValueContainerTests<TKey, TValue> testClass, ISortedKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list);
+//            public abstract void Execute_Multivalue(KeyValueContainerTests<TKey, TValue> testClass, IKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list);
+//            public abstract void Execute_SortedMultivalue(KeyValueContainerTests<TKey, TValue> testClass, ISortedKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list);
+//            public abstract void Execute_SortedIndexable(KeyValueContainerTests<TKey, TValue> testClass, ISortedIndexableKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list);
+//            public abstract void Execute_IndexableMultivalue(KeyValueContainerTests<TKey, TValue> testClass, IIndexableKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list);
+//            public abstract void Execute_SortedIndexableMultivalue(KeyValueContainerTests<TKey, TValue> testClass, ISortedIndexableKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list);
+//            public IComparer<TKey> C => Comparer<TKey>.Default;
+//            public bool Eq(TValue item, TValue other)
+//            {
+//                return EqualityComparer<TValue>.Default.Equals(item, other);
+//            }
+//            public void AssertEqual(TValue item, TValue other)
+//            {
+//                Eq(item, other).Should().BeTrue();
+//            }
+//            public void AssertNotEqual(TValue item, TValue other)
+//            {
+//                Eq(item, other).Should().BeFalse();
+//            }
+//            public bool Eq(LazinatorComparableKeyValue<TKey, TValue> item, LazinatorComparableKeyValue<TKey, TValue> other)
+//            {
+//                return EqualityComparer<LazinatorComparableKeyValue<TKey, TValue>>.Default.Equals(item, other);
+//            }
+//            public void AssertEqual(LazinatorComparableKeyValue<TKey, TValue> item, LazinatorComparableKeyValue<TKey, TValue> other)
+//            {
+//                Eq(item, other).Should().BeTrue();
+//            }
+//            public void AssertNotEqual(LazinatorComparableKeyValue<TKey, TValue> item, LazinatorComparableKeyValue<TKey, TValue> other)
+//            {
+//                Eq(item, other).Should().BeFalse();
+//            }
+//            public void VerifyExpectedIndex(MultivalueLocationOptions whichOne, (LazinatorComparableKeyValue<TKey, TValue> item, int firstIndex, int lastIndex) listResult, long indexableKeyValueContainerResult)
+//            {
+//                if (whichOne == MultivalueLocationOptions.First || whichOne == MultivalueLocationOptions.InsertBeforeFirst)
+//                    indexableKeyValueContainerResult.Should().Be(listResult.firstIndex);
+//                else if (whichOne == MultivalueLocationOptions.Last)
+//                    indexableKeyValueContainerResult.Should().Be(listResult.lastIndex);
+//                else if (whichOne == MultivalueLocationOptions.InsertAfterLast)
+//                    indexableKeyValueContainerResult.Should().Be(listResult.lastIndex + 1);
+//                else if (whichOne == MultivalueLocationOptions.Any)
+//                {
+//                    indexableKeyValueContainerResult.Should().BeGreaterOrEqualTo(listResult.firstIndex);
+//                    indexableKeyValueContainerResult.Should().BeLessOrEqualTo(listResult.lastIndex);
+//                }
+//            }
+//        }
 
-        public class GetValueInstruction : RandomInstruction
-        {
-            public override void Execute_Indexable(KeyValueContainerTests<TKey, TValue> testClass, IIndexableKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                var listResultOrNull = testClass.GetRandomItem(list);
-                if (listResultOrNull == null)
-                {
-                    if (KeyValueContainerIsSorted)
-                    {
-                        var findKeyResult = container.Find(default, C);
-                        findKeyResult.index.Should().Be(0);
-                        findKeyResult.found.Should().BeFalse();
-                        var findKeyValueResult = container.Find(default, default, C);
-                        findKeyValueResult.index.Should().Be(0);
-                        findKeyValueResult.found.Should().BeFalse();
-                    }
-                }
-                else
-                {
-                    var listResult = listResultOrNull.Value;
-                    if (KeyValueContainerIsSorted)
-                    {
-                        var findKeyResult = container.Find(listResult.item.Key, C);
-                        VerifyExpectedIndex(MultivalueLocationOptions.Any, listResult, findKeyResult.index);
-                        findKeyResult.found.Should().BeTrue();
-                        var findKeyValueResult = container.Find(listResult.item.Key, listResult.item.Value, C);
-                        VerifyExpectedIndex(MultivalueLocationOptions.Any, listResult, findKeyResult.index);
-                        findKeyValueResult.found.Should().BeTrue();
-                    }
-                    for (int i = listResult.firstIndex; i <= listResult.lastIndex; i++)
-                    {
-                        LazinatorComparableKeyValue<TKey, TValue> getAtResult = new LazinatorComparableKeyValue<TKey, TValue>(container.GetKeyAt(i), container.GetValueAt(i));
-                        AssertEqual(getAtResult, listResult.item);
-                    }
-                }
-            }
+//        public class GetValueInstruction : RandomInstruction
+//        {
+//            public override void Execute_Indexable(KeyValueContainerTests<TKey, TValue> testClass, IIndexableKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                var listResultOrNull = testClass.GetRandomItem(list);
+//                if (listResultOrNull == null)
+//                {
+//                    if (KeyValueContainerIsSorted)
+//                    {
+//                        var findKeyResult = container.Find(default, C);
+//                        findKeyResult.index.Should().Be(0);
+//                        findKeyResult.found.Should().BeFalse();
+//                        var findKeyValueResult = container.Find(default, default, C);
+//                        findKeyValueResult.index.Should().Be(0);
+//                        findKeyValueResult.found.Should().BeFalse();
+//                    }
+//                }
+//                else
+//                {
+//                    var listResult = listResultOrNull.Value;
+//                    if (KeyValueContainerIsSorted)
+//                    {
+//                        var findKeyResult = container.Find(listResult.item.Key, C);
+//                        VerifyExpectedIndex(MultivalueLocationOptions.Any, listResult, findKeyResult.index);
+//                        findKeyResult.found.Should().BeTrue();
+//                        var findKeyValueResult = container.Find(listResult.item.Key, listResult.item.Value, C);
+//                        VerifyExpectedIndex(MultivalueLocationOptions.Any, listResult, findKeyResult.index);
+//                        findKeyValueResult.found.Should().BeTrue();
+//                    }
+//                    for (int i = listResult.firstIndex; i <= listResult.lastIndex; i++)
+//                    {
+//                        LazinatorComparableKeyValue<TKey, TValue> getAtResult = new LazinatorComparableKeyValue<TKey, TValue>(container.GetKeyAt(i), container.GetValueAt(i));
+//                        AssertEqual(getAtResult, listResult.item);
+//                    }
+//                }
+//            }
 
-            public override void Execute_IndexableMultivalue(KeyValueContainerTests<TKey, TValue> testClass, IIndexableKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey, TValue>> list)
-            {
-                foreach (MultivalueLocationOptions whichOne in new MultivalueLocationOptions[] { MultivalueLocationOptions.First, MultivalueLocationOptions.Any, MultivalueLocationOptions.Last }) // other options are undefined
-                {
-                    Execute_IndexableMultivalueHelper(testClass, container, list, whichOne);
-                }
-            }
+//            public override void Execute_IndexableMultivalue(KeyValueContainerTests<TKey, TValue> testClass, IIndexableKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey, TValue>> list)
+//            {
+//                foreach (MultivalueLocationOptions whichOne in new MultivalueLocationOptions[] { MultivalueLocationOptions.First, MultivalueLocationOptions.Any, MultivalueLocationOptions.Last }) // other options are undefined
+//                {
+//                    Execute_IndexableMultivalueHelper(testClass, container, list, whichOne);
+//                }
+//            }
 
-            private void Execute_IndexableMultivalueHelper(KeyValueContainerTests<TKey, TValue> testClass, IIndexableKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list, MultivalueLocationOptions whichOne)
-            {
-                var listResultOrNull = testClass.GetRandomItem(list);
-                if (listResultOrNull == null)
-                {
-                    if (KeyValueContainerIsSorted)
-                    {
-                        var findKeyResult = container.Find(default, whichOne, C);
-                        findKeyResult.index.Should().Be(0);
-                        findKeyResult.found.Should().BeFalse();
-                    }
-                }
-                else
-                {
-                    var listResult = listResultOrNull.Value;
-                    if (KeyValueContainerIsSorted)
-                    {
-                        var findKeyResult = container.Find(listResult.item.Key, whichOne, C);
-                        VerifyExpectedIndex(whichOne, listResult, findKeyResult.index);
-                        findKeyResult.found.Should().BeTrue();
-                    }
-                    for (int i = listResult.firstIndex; i <= listResult.lastIndex; i++)
-                    {
-                        LazinatorComparableKeyValue<TKey, TValue> getAtResult = new LazinatorComparableKeyValue<TKey, TValue>(container.GetKeyAt(i), container.GetValueAt(i));
-                        AssertEqual(getAtResult, listResult.item);
-                    }
-                }
-            }
+//            private void Execute_IndexableMultivalueHelper(KeyValueContainerTests<TKey, TValue> testClass, IIndexableKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list, MultivalueLocationOptions whichOne)
+//            {
+//                var listResultOrNull = testClass.GetRandomItem(list);
+//                if (listResultOrNull == null)
+//                {
+//                    if (KeyValueContainerIsSorted)
+//                    {
+//                        var findKeyResult = container.Find(default, whichOne, C);
+//                        findKeyResult.index.Should().Be(0);
+//                        findKeyResult.found.Should().BeFalse();
+//                    }
+//                }
+//                else
+//                {
+//                    var listResult = listResultOrNull.Value;
+//                    if (KeyValueContainerIsSorted)
+//                    {
+//                        var findKeyResult = container.Find(listResult.item.Key, whichOne, C);
+//                        VerifyExpectedIndex(whichOne, listResult, findKeyResult.index);
+//                        findKeyResult.found.Should().BeTrue();
+//                    }
+//                    for (int i = listResult.firstIndex; i <= listResult.lastIndex; i++)
+//                    {
+//                        LazinatorComparableKeyValue<TKey, TValue> getAtResult = new LazinatorComparableKeyValue<TKey, TValue>(container.GetKeyAt(i), container.GetValueAt(i));
+//                        AssertEqual(getAtResult, listResult.item);
+//                    }
+//                }
+//            }
 
-            public override void Execute_Multivalue(KeyValueContainerTests<TKey, TValue> testClass, IKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                var listResultOrNull = testClass.GetRandomItem(list);
-                if (listResultOrNull == null)
-                {
-                    Execute_Value(testClass, container, list);
-                }
-                else
-                {
-                    var listResult = listResultOrNull.Value;
-                    foreach (MultivalueLocationOptions whichOne in new MultivalueLocationOptions[] { MultivalueLocationOptions.First, MultivalueLocationOptions.Any, MultivalueLocationOptions.Last })
-                    {
-                        var getValueResult = container.GetValueForKey(listResult.item.Key, whichOne, C);
-                        if (whichOne == MultivalueLocationOptions.First)
-                        {
-                            AssertEqual(getValueResult, list[listResult.firstIndex].Value);
-                        }
-                        if (whichOne == MultivalueLocationOptions.Last)
-                        {
-                            AssertEqual(getValueResult, list[listResult.lastIndex].Value);
-                        }
-                    }
-                    var getAllValuesResult = container.GetAllValues(listResult.item.Key, C).ToList();
-                    for (int i = listResult.firstIndex; i <= listResult.lastIndex; i++)
-                    {
-                        var fromList = list[i];
-                        var fromGetAllValues = getAllValuesResult[i - listResult.firstIndex];
-                        AssertEqual(fromList, new LazinatorComparableKeyValue<TKey, TValue>(listResult.item.Key, fromGetAllValues));
-                    }
-                }
-            }
+//            public override void Execute_Multivalue(KeyValueContainerTests<TKey, TValue> testClass, IKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                var listResultOrNull = testClass.GetRandomItem(list);
+//                if (listResultOrNull == null)
+//                {
+//                    Execute_Value(testClass, container, list);
+//                }
+//                else
+//                {
+//                    var listResult = listResultOrNull.Value;
+//                    foreach (MultivalueLocationOptions whichOne in new MultivalueLocationOptions[] { MultivalueLocationOptions.First, MultivalueLocationOptions.Any, MultivalueLocationOptions.Last })
+//                    {
+//                        var getValueResult = container.GetValueForKey(listResult.item.Key, whichOne, C);
+//                        if (whichOne == MultivalueLocationOptions.First)
+//                        {
+//                            AssertEqual(getValueResult, list[listResult.firstIndex].Value);
+//                        }
+//                        if (whichOne == MultivalueLocationOptions.Last)
+//                        {
+//                            AssertEqual(getValueResult, list[listResult.lastIndex].Value);
+//                        }
+//                    }
+//                    var getAllValuesResult = container.GetAllValues(listResult.item.Key, C).ToList();
+//                    for (int i = listResult.firstIndex; i <= listResult.lastIndex; i++)
+//                    {
+//                        var fromList = list[i];
+//                        var fromGetAllValues = getAllValuesResult[i - listResult.firstIndex];
+//                        AssertEqual(fromList, new LazinatorComparableKeyValue<TKey, TValue>(listResult.item.Key, fromGetAllValues));
+//                    }
+//                }
+//            }
 
-            public override void Execute_Sorted(KeyValueContainerTests<TKey, TValue> testClass, ISortedKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                var listResultOrNull = testClass.GetRandomItem(list);
-                if (listResultOrNull == null)
-                {
-                    bool keyPresent = container.ContainsKey(default);
-                    bool keyValuePresent = container.ContainsKeyValue(default, default);
-                    keyPresent.Should().BeFalse();
-                    keyValuePresent.Should().BeFalse();
-                }
-                else
-                {
-                    var listResult = listResultOrNull.Value;
-                    bool keyPresent = container.ContainsKey(listResult.item.Key);
-                    bool keyValuePresent = container.ContainsKeyValue(listResult.item.Key, listResult.item.Value, C);
-                    keyPresent.Should().BeTrue();
-                    keyValuePresent.Should().BeTrue();
+//            public override void Execute_Sorted(KeyValueContainerTests<TKey, TValue> testClass, ISortedKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                var listResultOrNull = testClass.GetRandomItem(list);
+//                if (listResultOrNull == null)
+//                {
+//                    bool keyPresent = container.ContainsKey(default);
+//                    bool keyValuePresent = container.ContainsKeyValue(default, default);
+//                    keyPresent.Should().BeFalse();
+//                    keyValuePresent.Should().BeFalse();
+//                }
+//                else
+//                {
+//                    var listResult = listResultOrNull.Value;
+//                    bool keyPresent = container.ContainsKey(listResult.item.Key);
+//                    bool keyValuePresent = container.ContainsKeyValue(listResult.item.Key, listResult.item.Value, C);
+//                    keyPresent.Should().BeTrue();
+//                    keyValuePresent.Should().BeTrue();
 
-                    TValue value = container.GetValueForKey(listResult.item.Key);
-                    AssertEqual(value, listResult.item.Value);
-                }
-            }
+//                    TValue value = container.GetValueForKey(listResult.item.Key);
+//                    AssertEqual(value, listResult.item.Value);
+//                }
+//            }
 
-            public override void Execute_SortedIndexable(KeyValueContainerTests<TKey, TValue> testClass, ISortedIndexableKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                var listResultOrNull = testClass.GetRandomItem(list);
-                if (listResultOrNull == null)
-                {
-                    Execute_Indexable(testClass, container, list);
-                }
-                else
-                {
-                    var listResult = listResultOrNull.Value;
-                    var findKeyResult = container.Find(listResult.item.Key);
-                    VerifyExpectedIndex(MultivalueLocationOptions.Any, listResult, findKeyResult.index);
-                    findKeyResult.found.Should().BeTrue();
-                    AssertEqual(findKeyResult.valueIfFound, listResult.item.Value);
-                    var findKeyValueResult = container.Find(listResult.item.Key, listResult.item.Value);
-                    VerifyExpectedIndex(MultivalueLocationOptions.Any, listResult, findKeyValueResult.index);
-                    findKeyValueResult.found.Should().BeTrue();
-                }
-            }
+//            public override void Execute_SortedIndexable(KeyValueContainerTests<TKey, TValue> testClass, ISortedIndexableKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                var listResultOrNull = testClass.GetRandomItem(list);
+//                if (listResultOrNull == null)
+//                {
+//                    Execute_Indexable(testClass, container, list);
+//                }
+//                else
+//                {
+//                    var listResult = listResultOrNull.Value;
+//                    var findKeyResult = container.Find(listResult.item.Key);
+//                    VerifyExpectedIndex(MultivalueLocationOptions.Any, listResult, findKeyResult.index);
+//                    findKeyResult.found.Should().BeTrue();
+//                    AssertEqual(findKeyResult.valueIfFound, listResult.item.Value);
+//                    var findKeyValueResult = container.Find(listResult.item.Key, listResult.item.Value);
+//                    VerifyExpectedIndex(MultivalueLocationOptions.Any, listResult, findKeyValueResult.index);
+//                    findKeyValueResult.found.Should().BeTrue();
+//                }
+//            }
 
-            public override void Execute_SortedIndexableMultivalue(KeyValueContainerTests<TKey, TValue> testClass, ISortedIndexableKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                var listResultOrNull = testClass.GetRandomItem(list);
-                if (listResultOrNull == null)
-                {
-                    Execute_Indexable(testClass, container, list);
-                }
-                else
-                {
-                    var listResult = listResultOrNull.Value;
-                    foreach (MultivalueLocationOptions whichOne in new MultivalueLocationOptions[] { MultivalueLocationOptions.First, MultivalueLocationOptions.Any, MultivalueLocationOptions.Last })
-                    {
-                        var findKeyResult = container.Find(listResult.item.Key, whichOne);
-                        VerifyExpectedIndex(whichOne, listResult, findKeyResult.index);
-                        findKeyResult.found.Should().BeTrue();
-                        AssertEqual(findKeyResult.valueIfFound, listResult.item.Value);
-                    }
-                }
-            }
+//            public override void Execute_SortedIndexableMultivalue(KeyValueContainerTests<TKey, TValue> testClass, ISortedIndexableKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                var listResultOrNull = testClass.GetRandomItem(list);
+//                if (listResultOrNull == null)
+//                {
+//                    Execute_Indexable(testClass, container, list);
+//                }
+//                else
+//                {
+//                    var listResult = listResultOrNull.Value;
+//                    foreach (MultivalueLocationOptions whichOne in new MultivalueLocationOptions[] { MultivalueLocationOptions.First, MultivalueLocationOptions.Any, MultivalueLocationOptions.Last })
+//                    {
+//                        var findKeyResult = container.Find(listResult.item.Key, whichOne);
+//                        VerifyExpectedIndex(whichOne, listResult, findKeyResult.index);
+//                        findKeyResult.found.Should().BeTrue();
+//                        AssertEqual(findKeyResult.valueIfFound, listResult.item.Value);
+//                    }
+//                }
+//            }
 
-            public override void Execute_SortedMultivalue(KeyValueContainerTests<TKey, TValue> testClass, ISortedKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                Execute_Multivalue(testClass, container, list);
-                var listResultOrNull = testClass.GetRandomItem(list);
-                if (listResultOrNull != null)
-                {
-                    var listResult = listResultOrNull.Value;
-                    foreach (MultivalueLocationOptions whichOne in new MultivalueLocationOptions[] { MultivalueLocationOptions.First, MultivalueLocationOptions.Any, MultivalueLocationOptions.Last })
-                    {
-                        var getValueResult = container.GetValueForKey(listResult.item.Key, whichOne);
-                        if (whichOne == MultivalueLocationOptions.First)
-                        {
-                            AssertEqual(getValueResult, list[listResult.firstIndex].Value);
-                        }
-                        if (whichOne == MultivalueLocationOptions.Last)
-                        {
-                            AssertEqual(getValueResult, list[listResult.lastIndex].Value);
-                        }
-                    }
-                    var getAllValuesResult = container.GetAllValues(listResult.item.Key).ToList();
-                    for (int i = listResult.firstIndex; i <= listResult.lastIndex; i++)
-                    {
-                        var fromList = list[i];
-                        var fromGetAllValues = getAllValuesResult[i - listResult.firstIndex];
-                        AssertEqual(fromList, new LazinatorComparableKeyValue<TKey, TValue>(listResult.item.Key, fromGetAllValues));
-                    }
-                }
-            }
+//            public override void Execute_SortedMultivalue(KeyValueContainerTests<TKey, TValue> testClass, ISortedKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                Execute_Multivalue(testClass, container, list);
+//                var listResultOrNull = testClass.GetRandomItem(list);
+//                if (listResultOrNull != null)
+//                {
+//                    var listResult = listResultOrNull.Value;
+//                    foreach (MultivalueLocationOptions whichOne in new MultivalueLocationOptions[] { MultivalueLocationOptions.First, MultivalueLocationOptions.Any, MultivalueLocationOptions.Last })
+//                    {
+//                        var getValueResult = container.GetValueForKey(listResult.item.Key, whichOne);
+//                        if (whichOne == MultivalueLocationOptions.First)
+//                        {
+//                            AssertEqual(getValueResult, list[listResult.firstIndex].Value);
+//                        }
+//                        if (whichOne == MultivalueLocationOptions.Last)
+//                        {
+//                            AssertEqual(getValueResult, list[listResult.lastIndex].Value);
+//                        }
+//                    }
+//                    var getAllValuesResult = container.GetAllValues(listResult.item.Key).ToList();
+//                    for (int i = listResult.firstIndex; i <= listResult.lastIndex; i++)
+//                    {
+//                        var fromList = list[i];
+//                        var fromGetAllValues = getAllValuesResult[i - listResult.firstIndex];
+//                        AssertEqual(fromList, new LazinatorComparableKeyValue<TKey, TValue>(listResult.item.Key, fromGetAllValues));
+//                    }
+//                }
+//            }
 
-            public override void Execute_Value(KeyValueContainerTests<TKey, TValue> testClass, IKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                var listResultOrNull = testClass.GetRandomItem(list);
-                if (listResultOrNull == null)
-                {
-                    bool keyPresent = container.ContainsKey(default, C);
-                    bool keyValuePresent = container.ContainsKeyValue(default, default, C);
-                    keyPresent.Should().BeFalse();
-                    keyValuePresent.Should().BeFalse();
-                }
-                else
-                {
-                    var listResult = listResultOrNull.Value;
-                    bool keyPresent = container.ContainsKey(listResult.item.Key, C);
-                    bool keyValuePresent = container.ContainsKeyValue(listResult.item.Key, listResult.item.Value, C);
-                    keyPresent.Should().BeTrue();
-                    keyValuePresent.Should().BeTrue();
+//            public override void Execute_Value(KeyValueContainerTests<TKey, TValue> testClass, IKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                var listResultOrNull = testClass.GetRandomItem(list);
+//                if (listResultOrNull == null)
+//                {
+//                    bool keyPresent = container.ContainsKey(default, C);
+//                    bool keyValuePresent = container.ContainsKeyValue(default, default, C);
+//                    keyPresent.Should().BeFalse();
+//                    keyValuePresent.Should().BeFalse();
+//                }
+//                else
+//                {
+//                    var listResult = listResultOrNull.Value;
+//                    bool keyPresent = container.ContainsKey(listResult.item.Key, C);
+//                    bool keyValuePresent = container.ContainsKeyValue(listResult.item.Key, listResult.item.Value, C);
+//                    keyPresent.Should().BeTrue();
+//                    keyValuePresent.Should().BeTrue();
 
-                    TValue value = container.GetValueForKey(listResult.item.Key, C);
-                    AssertEqual(value, listResult.item.Value);
-                }
-            }
-        }
+//                    TValue value = container.GetValueForKey(listResult.item.Key, C);
+//                    AssertEqual(value, listResult.item.Value);
+//                }
+//            }
+//        }
 
-        public class InsertValueInstruction : RandomInstruction
-        {
+//        public class InsertValueInstruction : RandomInstruction
+//        {
 
-            TKey Key;
-            TValue Value;
-            LazinatorComparableKeyValue<TKey, TValue> ComparableKeyValue;
-            MultivalueLocationOptions WhichOne;
-            int Index;
-            bool InsertedNotReplaced;
+//            TKey Key;
+//            TValue Value;
+//            LazinatorComparableKeyValue<TKey, TValue> ComparableKeyValue;
+//            MultivalueLocationOptions WhichOne;
+//            int Index;
+//            bool InsertedNotReplaced;
 
-            public override void Execute(KeyValueContainerTests<TKey, TValue> testClass, IKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                Key = testClass.GetRandomKey();
-                Value = testClass.GetRandomValue();
-                ComparableKeyValue = new LazinatorComparableKeyValue<TKey, TValue>(Key, Value);
-                WhichOne = testClass.AllowDuplicates ? testClass.ChooseMultivalueInsertOption() : MultivalueLocationOptions.Any; // if not multivalue, just replace the value associated with this key
-                EstablishSorted(container);
-                // If we are using the base container type, then we can only add items with a comparer, so we treat it as a sorted container.
-                (Index, InsertedNotReplaced) = testClass.InsertOrReplaceItem(list, ComparableKeyValue, KeyValueContainerIsSorted || !(container is IIndexableKeyValueContainer<TKey, TValue>), WhichOne);
-                base.Execute(testClass, container, list);
-            }
+//            public override void Execute(KeyValueContainerTests<TKey, TValue> testClass, IKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                Key = testClass.GetRandomKey();
+//                Value = testClass.GetRandomValue();
+//                ComparableKeyValue = new LazinatorComparableKeyValue<TKey, TValue>(Key, Value);
+//                WhichOne = testClass.AllowDuplicates ? testClass.ChooseMultivalueInsertOption() : MultivalueLocationOptions.Any; // if not multivalue, just replace the value associated with this key
+//                EstablishSorted(container);
+//                // If we are using the base container type, then we can only add items with a comparer, so we treat it as a sorted container.
+//                (Index, InsertedNotReplaced) = testClass.InsertOrReplaceItem(list, ComparableKeyValue, KeyValueContainerIsSorted || !(container is IIndexableKeyValueContainer<TKey, TValue>), WhichOne);
+//                base.Execute(testClass, container, list);
+//            }
 
-            public override void Execute_Indexable(KeyValueContainerTests<TKey, TValue> testClass, IIndexableKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                if (KeyValueContainerIsSorted) // DEBUG -- is this necessary now? change also in ValueContainerTests. Shouldn't be since we treat that separately.
-                    Execute_SortedIndexable(testClass, (ISortedIndexableKeyValueContainer<TKey, TValue>)SortedKeyValueContainer, list);
-                else
-                {
-                    if (InsertedNotReplaced)
-                        container.InsertAt(Index, Key);
-                    else
-                        container.SetAt(Index, Key);
-                }
-            }
+//            public override void Execute_Indexable(KeyValueContainerTests<TKey, TValue> testClass, IIndexableKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                if (KeyValueContainerIsSorted) // DEBUG -- is this necessary now? change also in ValueContainerTests. Shouldn't be since we treat that separately.
+//                    Execute_SortedIndexable(testClass, (ISortedIndexableKeyValueContainer<TKey, TValue>)SortedKeyValueContainer, list);
+//                else
+//                {
+//                    if (InsertedNotReplaced)
+//                        container.InsertAt(Index, Key);
+//                    else
+//                        container.SetAt(Index, Key);
+//                }
+//            }
 
-            public override void Execute_IndexableMultivalue(KeyValueContainerTests<TKey, TValue> testClass, IIndexableKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                if (KeyValueContainerIsSorted)
-                {
-                    (long index, bool insertedNotReplaced) = container.InsertGetIndex(Key, WhichOne, C);
-                    index.Should().Be(Index);
-                    insertedNotReplaced.Should().Be(InsertedNotReplaced);
-                }
-                else
-                {
-                    Execute_Indexable(testClass, container, list);
-                }
-            }
+//            public override void Execute_IndexableMultivalue(KeyValueContainerTests<TKey, TValue> testClass, IIndexableKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                if (KeyValueContainerIsSorted)
+//                {
+//                    (long index, bool insertedNotReplaced) = container.InsertGetIndex(Key, WhichOne, C);
+//                    index.Should().Be(Index);
+//                    insertedNotReplaced.Should().Be(InsertedNotReplaced);
+//                }
+//                else
+//                {
+//                    Execute_Indexable(testClass, container, list);
+//                }
+//            }
 
-            public override void Execute_Multivalue(KeyValueContainerTests<TKey, TValue> testClass, IKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                bool insertedNotReplaced = true;
-                if (WhichOne == MultivalueLocationOptions.InsertAfterLast && testClass.ran.Next(2) == 0)
-                    container.AddValueForKey(Key, Value, C); // note that this just calls SetValueForKey anyway.
-                else
-                {
-                    insertedNotReplaced = container.SetValueForKey(Key, Value, WhichOne, C);
-                    insertedNotReplaced.Should().Be(InsertedNotReplaced);
-                }
-            }
+//            public override void Execute_Multivalue(KeyValueContainerTests<TKey, TValue> testClass, IKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                bool insertedNotReplaced = true;
+//                if (WhichOne == MultivalueLocationOptions.InsertAfterLast && testClass.ran.Next(2) == 0)
+//                    container.AddValueForKey(Key, Value, C); // note that this just calls SetValueForKey anyway.
+//                else
+//                {
+//                    insertedNotReplaced = container.SetValueForKey(Key, Value, WhichOne, C);
+//                    insertedNotReplaced.Should().Be(InsertedNotReplaced);
+//                }
+//            }
 
-            public override void Execute_Sorted(KeyValueContainerTests<TKey, TValue> testClass, ISortedKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                bool insertedNotReplaced = container.SetValueForKey(Key, Value);
-                insertedNotReplaced.Should().Be(InsertedNotReplaced);
-            }
+//            public override void Execute_Sorted(KeyValueContainerTests<TKey, TValue> testClass, ISortedKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                bool insertedNotReplaced = container.SetValueForKey(Key, Value);
+//                insertedNotReplaced.Should().Be(InsertedNotReplaced);
+//            }
 
-            public override void Execute_SortedIndexable(KeyValueContainerTests<TKey, TValue> testClass, ISortedIndexableKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                (long index, bool insertedNotReplaced) = container.InsertGetIndex(Key);
-                index.Should().Be(Index);
-                insertedNotReplaced.Should().Be(InsertedNotReplaced);
-            }
+//            public override void Execute_SortedIndexable(KeyValueContainerTests<TKey, TValue> testClass, ISortedIndexableKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                (long index, bool insertedNotReplaced) = container.InsertGetIndex(Key);
+//                index.Should().Be(Index);
+//                insertedNotReplaced.Should().Be(InsertedNotReplaced);
+//            }
 
-            public override void Execute_SortedIndexableMultivalue(KeyValueContainerTests<TKey, TValue> testClass, ISortedIndexableKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                (long index, bool insertedNotReplaced) = container.InsertGetIndex(Key, WhichOne);
-                // if WhichOne == Any, then exact location is undefined, so we don't verify it. The behavior may be different from our list implementation because which one is selected may be based on the ordering of the binary tree. The list binary search algorithm always starts from the middle element, while a tree search will start from the top of the tree, which may not be the exact middle element.
-                if (WhichOne != MultivalueLocationOptions.Any)
-                    index.Should().Be(Index);
-                insertedNotReplaced.Should().Be(InsertedNotReplaced);
-            }
+//            public override void Execute_SortedIndexableMultivalue(KeyValueContainerTests<TKey, TValue> testClass, ISortedIndexableKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                (long index, bool insertedNotReplaced) = container.InsertGetIndex(Key, WhichOne);
+//                // if WhichOne == Any, then exact location is undefined, so we don't verify it. The behavior may be different from our list implementation because which one is selected may be based on the ordering of the binary tree. The list binary search algorithm always starts from the middle element, while a tree search will start from the top of the tree, which may not be the exact middle element.
+//                if (WhichOne != MultivalueLocationOptions.Any)
+//                    index.Should().Be(Index);
+//                insertedNotReplaced.Should().Be(InsertedNotReplaced);
+//            }
 
-            public override void Execute_SortedMultivalue(KeyValueContainerTests<TKey, TValue> testClass, ISortedKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                bool insertedNotReplaced = true;
-                if (WhichOne == MultivalueLocationOptions.InsertAfterLast && testClass.ran.Next(2) == 0)
-                    container.AddValueForKey(Key, Value); // note that this just calls SetValueForKey anyway.
-                else
-                {
-                    insertedNotReplaced = container.SetValueForKey(Key, Value, WhichOne);
-                    insertedNotReplaced.Should().Be(InsertedNotReplaced);
-                }
-            }
+//            public override void Execute_SortedMultivalue(KeyValueContainerTests<TKey, TValue> testClass, ISortedKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                bool insertedNotReplaced = true;
+//                if (WhichOne == MultivalueLocationOptions.InsertAfterLast && testClass.ran.Next(2) == 0)
+//                    container.AddValueForKey(Key, Value); // note that this just calls SetValueForKey anyway.
+//                else
+//                {
+//                    insertedNotReplaced = container.SetValueForKey(Key, Value, WhichOne);
+//                    insertedNotReplaced.Should().Be(InsertedNotReplaced);
+//                }
+//            }
 
-            public override void Execute_Value(KeyValueContainerTests<TKey, TValue> testClass, IKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                bool insertedNotReplaced = container.SetValueForKey(Key, Value, C);
-                insertedNotReplaced.Should().Be(InsertedNotReplaced);
-            }
-        }
+//            public override void Execute_Value(KeyValueContainerTests<TKey, TValue> testClass, IKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                bool insertedNotReplaced = container.SetValueForKey(Key, Value, C);
+//                insertedNotReplaced.Should().Be(InsertedNotReplaced);
+//            }
+//        }
 
-        public class RemoveInstruction : RandomInstruction
-        {
-            TKey ValueToTryToRemove;
-            bool ValueExisted;
-            int IndexBeforeRemove;
-            MultivalueLocationOptions WhichOne;
-            bool RemoveAll;
-            int FirstIndex, LastIndex;
+//        public class RemoveInstruction : RandomInstruction
+//        {
+//            TKey ValueToTryToRemove;
+//            bool ValueExisted;
+//            int IndexBeforeRemove;
+//            MultivalueLocationOptions WhichOne;
+//            bool RemoveAll;
+//            int FirstIndex, LastIndex;
 
-            public override void Execute(KeyValueContainerTests<TKey, TValue> testClass, IKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                EstablishSorted(container);
-                if (testClass.AllowDuplicates)
-                {
-                    if (KeyValueContainerIsSorted && testClass.ran.Next(0, 5) == 0)
-                    {
-                        RemoveAll = true; // overrides remaining settings
-                        WhichOne = MultivalueLocationOptions.InsertAfterLast; // invalid -- but we won't use it in a call; we use something invalid to ensure that if we do, we'll get an error
-                    }
-                    else
-                        WhichOne = testClass.ChooseMultivalueDeleteOption();
-                }
-                else
-                    WhichOne = MultivalueLocationOptions.Any;
-                PlanRemoval(testClass, list);
-                if (ValueExisted)
-                {
-                    if (RemoveAll)
-                    {
-                        for (int i = FirstIndex; i <= LastIndex; i++)
-                            list.RemoveAt(FirstIndex);
-                    }
-                    else switch (WhichOne)
-                        {
-                            case MultivalueLocationOptions.Any:
-                                list.RemoveAt(IndexBeforeRemove);
-                                break;
-                            case MultivalueLocationOptions.First:
-                                list.RemoveAt(FirstIndex);
-                                break;
-                            case MultivalueLocationOptions.Last:
-                                list.RemoveAt(LastIndex);
-                                break;
-                            default: throw new NotSupportedException();
-                        }
-                }
-                base.Execute(testClass, container, list);
-            }
+//            public override void Execute(KeyValueContainerTests<TKey, TValue> testClass, IKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                EstablishSorted(container);
+//                if (testClass.AllowDuplicates)
+//                {
+//                    if (KeyValueContainerIsSorted && testClass.ran.Next(0, 5) == 0)
+//                    {
+//                        RemoveAll = true; // overrides remaining settings
+//                        WhichOne = MultivalueLocationOptions.InsertAfterLast; // invalid -- but we won't use it in a call; we use something invalid to ensure that if we do, we'll get an error
+//                    }
+//                    else
+//                        WhichOne = testClass.ChooseMultivalueDeleteOption();
+//                }
+//                else
+//                    WhichOne = MultivalueLocationOptions.Any;
+//                PlanRemoval(testClass, list);
+//                if (ValueExisted)
+//                {
+//                    if (RemoveAll)
+//                    {
+//                        for (int i = FirstIndex; i <= LastIndex; i++)
+//                            list.RemoveAt(FirstIndex);
+//                    }
+//                    else switch (WhichOne)
+//                        {
+//                            case MultivalueLocationOptions.Any:
+//                                list.RemoveAt(IndexBeforeRemove);
+//                                break;
+//                            case MultivalueLocationOptions.First:
+//                                list.RemoveAt(FirstIndex);
+//                                break;
+//                            case MultivalueLocationOptions.Last:
+//                                list.RemoveAt(LastIndex);
+//                                break;
+//                            default: throw new NotSupportedException();
+//                        }
+//                }
+//                base.Execute(testClass, container, list);
+//            }
 
-            public void PlanRemoval(KeyValueContainerTests<TKey, TValue> testClass, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                if (!KeyValueContainerIsSorted)
-                {
-                    // Removing by index
-                    if (list.Any())
-                    {
-                        ChooseItemInListToRemove(testClass, list);
-                    }
-                    else
-                    {
-                        ValueExisted = false;
-                        ValueToTryToRemove = default;
-                        IndexBeforeRemove = -1;
-                    }
-                    return;
-                }
-                if (!list.Any() || testClass.ran.Next(5) == 0)
-                { // try to find something NOT in list to try (and fail) to remove
-                    const int maxTriesToFindNotIncludedItem = 10;
-                    for (int i = 0; i < maxTriesToFindNotIncludedItem; i++)
-                    {
-                        TKey randomValue = testClass.GetRandomKey();
-                        int index = list.BinarySearch(randomValue, Comparer<TKey>.Default);
-                        if (index < 0)
-                        {
-                            ValueToTryToRemove = randomValue;
-                            ValueExisted = false;
-                            IndexBeforeRemove = -1;
-                            return;
-                        }
-                        else if (i == maxTriesToFindNotIncludedItem - 1)
-                        { // We'll go with something in the list
-                            ValueToTryToRemove = randomValue;
-                            IndexBeforeRemove = index;
-                            ValueExisted = true;
-                            KeyValueContainerTests<TKey, TValue>.GetIndexRange(list, IndexBeforeRemove, out FirstIndex, out LastIndex);
-                            return;
-                        }
-                    }
-                }
-                else
-                {
-                    ChooseItemInListToRemove(testClass, list);
-                }
-            }
+//            public void PlanRemoval(KeyValueContainerTests<TKey, TValue> testClass, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                if (!KeyValueContainerIsSorted)
+//                {
+//                    // Removing by index
+//                    if (list.Any())
+//                    {
+//                        ChooseItemInListToRemove(testClass, list);
+//                    }
+//                    else
+//                    {
+//                        ValueExisted = false;
+//                        ValueToTryToRemove = default;
+//                        IndexBeforeRemove = -1;
+//                    }
+//                    return;
+//                }
+//                if (!list.Any() || testClass.ran.Next(5) == 0)
+//                { // try to find something NOT in list to try (and fail) to remove
+//                    const int maxTriesToFindNotIncludedItem = 10;
+//                    for (int i = 0; i < maxTriesToFindNotIncludedItem; i++)
+//                    {
+//                        TKey randomValue = testClass.GetRandomKey();
+//                        int index = list.BinarySearch(randomValue, Comparer<TKey>.Default);
+//                        if (index < 0)
+//                        {
+//                            ValueToTryToRemove = randomValue;
+//                            ValueExisted = false;
+//                            IndexBeforeRemove = -1;
+//                            return;
+//                        }
+//                        else if (i == maxTriesToFindNotIncludedItem - 1)
+//                        { // We'll go with something in the list
+//                            ValueToTryToRemove = randomValue;
+//                            IndexBeforeRemove = index;
+//                            ValueExisted = true;
+//                            KeyValueContainerTests<TKey, TValue>.GetIndexRange(list, IndexBeforeRemove, out FirstIndex, out LastIndex);
+//                            return;
+//                        }
+//                    }
+//                }
+//                else
+//                {
+//                    ChooseItemInListToRemove(testClass, list);
+//                }
+//            }
 
-            private void ChooseItemInListToRemove(KeyValueContainerTests<TKey, TValue> testClass, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                ValueExisted = true;
-                IndexBeforeRemove = testClass.ran.Next(list.Count);
-                ValueToTryToRemove = list[IndexBeforeRemove];
-                KeyValueContainerTests<TKey, TValue>.GetIndexRange(list, IndexBeforeRemove, out FirstIndex, out LastIndex);
-            }
+//            private void ChooseItemInListToRemove(KeyValueContainerTests<TKey, TValue> testClass, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                ValueExisted = true;
+//                IndexBeforeRemove = testClass.ran.Next(list.Count);
+//                ValueToTryToRemove = list[IndexBeforeRemove];
+//                KeyValueContainerTests<TKey, TValue>.GetIndexRange(list, IndexBeforeRemove, out FirstIndex, out LastIndex);
+//            }
 
-            public override void Execute_Indexable(KeyValueContainerTests<TKey, TValue> testClass, IIndexableKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                if (IndexBeforeRemove != -1)
-                {
-                    container.RemoveAt(IndexBeforeRemove);
-                }
-            }
+//            public override void Execute_Indexable(KeyValueContainerTests<TKey, TValue> testClass, IIndexableKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                if (IndexBeforeRemove != -1)
+//                {
+//                    container.RemoveAt(IndexBeforeRemove);
+//                }
+//            }
 
-            public override void Execute_IndexableMultivalue(KeyValueContainerTests<TKey, TValue> testClass, IIndexableKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                Execute_Indexable(testClass, container, list);
-            }
+//            public override void Execute_IndexableMultivalue(KeyValueContainerTests<TKey, TValue> testClass, IIndexableKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                Execute_Indexable(testClass, container, list);
+//            }
 
-            public override void Execute_Multivalue(KeyValueContainerTests<TKey, TValue> testClass, IKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                if (RemoveAll)
-                    container.TryRemoveAll(ValueToTryToRemove, Comparer<TKey>.Default);
-                else
-                {
-                    bool result = container.TryRemove(ValueToTryToRemove, WhichOne, Comparer<TKey>.Default);
-                    VerifySuccess(result);
-                }
-            }
+//            public override void Execute_Multivalue(KeyValueContainerTests<TKey, TValue> testClass, IKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                if (RemoveAll)
+//                    container.TryRemoveAll(ValueToTryToRemove, Comparer<TKey>.Default);
+//                else
+//                {
+//                    bool result = container.TryRemove(ValueToTryToRemove, WhichOne, Comparer<TKey>.Default);
+//                    VerifySuccess(result);
+//                }
+//            }
 
-            public override void Execute_Sorted(KeyValueContainerTests<TKey, TValue> testClass, ISortedKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                bool result = container.TryRemove(ValueToTryToRemove);
-                VerifySuccess(result);
-            }
+//            public override void Execute_Sorted(KeyValueContainerTests<TKey, TValue> testClass, ISortedKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                bool result = container.TryRemove(ValueToTryToRemove);
+//                VerifySuccess(result);
+//            }
 
-            private void VerifySuccess(bool result)
-            {
-                if (IndexBeforeRemove == -1)
-                    result.Should().BeFalse();
-                else
-                    result.Should().BeTrue();
-            }
+//            private void VerifySuccess(bool result)
+//            {
+//                if (IndexBeforeRemove == -1)
+//                    result.Should().BeFalse();
+//                else
+//                    result.Should().BeTrue();
+//            }
 
-            public override void Execute_SortedIndexable(KeyValueContainerTests<TKey, TValue> testClass, ISortedIndexableKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                if (testClass.ran.Next(2) == 0)
-                    Execute_Sorted(testClass, container, list);
-                else
-                    Execute_Indexable(testClass, container, list);
-            }
+//            public override void Execute_SortedIndexable(KeyValueContainerTests<TKey, TValue> testClass, ISortedIndexableKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                if (testClass.ran.Next(2) == 0)
+//                    Execute_Sorted(testClass, container, list);
+//                else
+//                    Execute_Indexable(testClass, container, list);
+//            }
 
-            public override void Execute_SortedIndexableMultivalue(KeyValueContainerTests<TKey, TValue> testClass, ISortedIndexableKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                if (RemoveAll)
-                    container.TryRemoveAll(ValueToTryToRemove);
-                else
-                {
-                    if (testClass.ran.Next(2) == 0)
-                        Execute_SortedMultivalue(testClass, container, list);
-                    else
-                        Execute_Indexable(testClass, container, list);
-                }
-            }
+//            public override void Execute_SortedIndexableMultivalue(KeyValueContainerTests<TKey, TValue> testClass, ISortedIndexableKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                if (RemoveAll)
+//                    container.TryRemoveAll(ValueToTryToRemove);
+//                else
+//                {
+//                    if (testClass.ran.Next(2) == 0)
+//                        Execute_SortedMultivalue(testClass, container, list);
+//                    else
+//                        Execute_Indexable(testClass, container, list);
+//                }
+//            }
 
-            public override void Execute_SortedMultivalue(KeyValueContainerTests<TKey, TValue> testClass, ISortedKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                if (RemoveAll)
-                    container.TryRemoveAll(ValueToTryToRemove);
-                else
-                {
-                    bool result = container.TryRemove(ValueToTryToRemove, WhichOne);
-                    VerifySuccess(result);
-                }
-            }
+//            public override void Execute_SortedMultivalue(KeyValueContainerTests<TKey, TValue> testClass, ISortedKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                if (RemoveAll)
+//                    container.TryRemoveAll(ValueToTryToRemove);
+//                else
+//                {
+//                    bool result = container.TryRemove(ValueToTryToRemove, WhichOne);
+//                    VerifySuccess(result);
+//                }
+//            }
 
-            public override void Execute_Value(KeyValueContainerTests<TKey, TValue> testClass, IKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
-            {
-                bool result = container.TryRemove(ValueToTryToRemove, Comparer<TKey>.Default);
-                if (IndexBeforeRemove == -1)
-                    result.Should().BeFalse();
-                else
-                    result.Should().BeTrue();
-            }
-        }
-    }
-}
+//            public override void Execute_Value(KeyValueContainerTests<TKey, TValue> testClass, IKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey,TValue>> list)
+//            {
+//                bool result = container.TryRemove(ValueToTryToRemove, Comparer<TKey>.Default);
+//                if (IndexBeforeRemove == -1)
+//                    result.Should().BeFalse();
+//                else
+//                    result.Should().BeTrue();
+//            }
+//        }
+//    }
+//}

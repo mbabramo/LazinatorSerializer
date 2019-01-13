@@ -20,7 +20,7 @@ namespace Lazinator.Collections.Avl
 
         public (long index, bool insertedNotReplaced) InsertGetIndex(TKey key, TValue value) => InsertGetIndex(key, value, Comparer<TKey>.Default);
 
-        public (TValue valueIfFound, long index, bool exists) Find(TKey key, MultivalueLocationOptions whichOne) => Find(key, whichOne, Comparer<TKey>.Default);
+        public (TValue valueIfFound, long index, bool found) Find(TKey key, MultivalueLocationOptions whichOne) => Find(key, whichOne, Comparer<TKey>.Default);
 
         public (long index, bool found) Find(TKey key, TValue value) => Find(key, value, Comparer<TKey>.Default);
 
