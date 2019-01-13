@@ -58,18 +58,18 @@ namespace LazinatorTests.Tests
     public abstract class KeyValueContainerTests<TKey, TValue> : SerializationDeserializationTestBase where TKey : ILazinator, IComparable<TKey>, IComparable where TValue : ILazinator
     {
 
-        public IKeyValueContainer<TKey, TValue> GetKeyValueContainer(KeyValueContainerType containerType)
+        public IKeyValueContainer<TKey, TValue> GetKeyValueContainer(KeyValueContainerType containerType, bool allowDuplicates)
         {
             switch (containerType)
             {
                 case KeyValueContainerType.AvlKeyValueTree:
-                    return new AvlKeyValueTree<TKey, TValue>();
+                    return new AvlKeyValueTree<TKey, TValue>(allowDuplicates);
                 case KeyValueContainerType.AvlIndexableKeyValueTree:
-                    return new AvlIndexableKeyValueTree<TKey, TValue>();
+                    return new AvlIndexableKeyValueTree<TKey, TValue>(allowDuplicates);
                 case KeyValueContainerType.AvlSortedKeyValueTree:
-                    return new AvlSortedKeyValueTree<TKey, TValue>();
+                    return new AvlSortedKeyValueTree<TKey, TValue>(allowDuplicates);
                 case KeyValueContainerType.AvlSortedIndexableKeyValueTree:
-                    return new AvlSortedIndexableKeyValueTree<TKey, TValue>();
+                    return new AvlSortedIndexableKeyValueTree<TKey, TValue>(allowDuplicates);
                 default:
                     throw new NotSupportedException();
             }
@@ -85,7 +85,7 @@ namespace LazinatorTests.Tests
             for (int rep = 0; rep < numRepetitions; rep++)
             {
                 List<LazinatorComparableKeyValue<TKey, TValue>> list = new List<LazinatorComparableKeyValue<TKey, TValue>>();
-                IKeyValueContainer<TKey, TValue> container = GetKeyValueContainer(containerType);
+                IKeyValueContainer<TKey, TValue> container = GetKeyValueContainer(containerType, allowDuplicates);
                 container.AllowDuplicates = AllowDuplicates;
                 for (int i = 0; i < numInstructions; i++)
                 {
@@ -126,8 +126,6 @@ namespace LazinatorTests.Tests
             List<LazinatorComparableKeyValue<TKey, TValue>> pairsList = new List<LazinatorComparableKeyValue<TKey, TValue>>();
             while (pairsEnumerator.MoveNext())
                 pairsList.Add(new LazinatorComparableKeyValue<TKey, TValue>(pairsEnumerator.Current.Key, pairsEnumerator.Current.Value));
-            pairsList.SequenceEqual(list).Should().BeTrue();
-
             pairsList.SequenceEqual(withSkips).Should().BeTrue();
         }
 

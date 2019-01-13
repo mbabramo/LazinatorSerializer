@@ -33,6 +33,7 @@ namespace Lazinator.Collections.Interfaces
         bool TryRemove(T item, IComparer<T> comparer);
         void Clear();
         IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0);
+        IEnumerator<T> GetEnumerator(bool reverse = false, long skip = 0);
         IEnumerator<T> GetEnumerator();
     }
 }

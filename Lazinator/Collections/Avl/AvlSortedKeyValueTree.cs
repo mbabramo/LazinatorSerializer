@@ -9,10 +9,13 @@ namespace Lazinator.Collections.Avl
 {
     public partial class AvlSortedKeyValueTree<TKey, TValue> : AvlKeyValueTree<TKey, TValue>, IAvlSortedKeyValueTree<TKey, TValue>, ISortedKeyValueContainer<TKey, TValue>, ISortedKeyMultivalueContainer<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
+        public AvlSortedKeyValueTree(bool allowDuplicates) : base(allowDuplicates)
+        {
+        }
 
         public override IKeyValueContainer<TKey, TValue> CreateNewWithSameSettings()
         {
-            return new AvlSortedKeyValueTree<TKey, TValue>() { AllowDuplicates = AllowDuplicates };
+            return new AvlSortedKeyValueTree<TKey, TValue>(AllowDuplicates);
         }
 
         public bool ContainsKey(TKey key) => ContainsKey(key, Comparer<TKey>.Default);

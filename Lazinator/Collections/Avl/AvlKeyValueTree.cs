@@ -20,7 +20,12 @@ namespace Lazinator.Collections.Avl
 
         public virtual IKeyValueContainer<TKey, TValue> CreateNewWithSameSettings()
         {
-            return (IKeyValueContainer<TKey, TValue>) new AvlTree<LazinatorKeyValue<TKey, TValue>>() { AllowDuplicates = AllowDuplicates };
+            return new AvlKeyValueTree<TKey, TValue>(AllowDuplicates);
+        }
+
+        public string ToTreeString()
+        {
+            return UnderlyingTree.ToTreeString();
         }
 
         protected LazinatorKeyValue<TKey, TValue> KeyPlusDefault(TKey key) => new LazinatorKeyValue<TKey, TValue>(key, default);
@@ -132,17 +137,17 @@ namespace Lazinator.Collections.Avl
 
         public IEnumerator<TKey> GetKeyEnumerator(bool reverse = false, long skip = 0)
         {
-            return new TransformEnumerator<LazinatorKeyValue<TKey, TValue>, TKey>(UnderlyingTree.GetEnumerator(), x => x.Key);
+            return new TransformEnumerator<LazinatorKeyValue<TKey, TValue>, TKey>(UnderlyingTree.GetEnumerator(reverse, skip), x => x.Key);
         }
 
         public IEnumerator<TValue> GetValueEnumerator(bool reverse = false, long skip = 0)
         {
-            return new TransformEnumerator<LazinatorKeyValue<TKey, TValue>, TValue>(UnderlyingTree.GetEnumerator(), x => x.Value);
+            return new TransformEnumerator<LazinatorKeyValue<TKey, TValue>, TValue>(UnderlyingTree.GetEnumerator(reverse, skip), x => x.Value);
         }
 
         public IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(bool reverse = false, long skip = 0)
         {
-            return new TransformEnumerator<LazinatorKeyValue<TKey, TValue>, KeyValuePair<TKey, TValue>>(UnderlyingTree.GetEnumerator(), x => x.KeyValuePair);
+            return new TransformEnumerator<LazinatorKeyValue<TKey, TValue>, KeyValuePair<TKey, TValue>>(UnderlyingTree.GetEnumerator(reverse, skip), x => x.KeyValuePair);
         }
     }
 }

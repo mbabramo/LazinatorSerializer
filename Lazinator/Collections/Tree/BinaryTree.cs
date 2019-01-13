@@ -441,16 +441,26 @@ namespace Lazinator.Collections.Tree
             }
         }
 
+        private BinaryNodeEnumerator<T> GetBinaryNodeEnumerator(bool reverse, long skip)
+        {
+            return new BinaryNodeEnumerator<T>(reverse ? LastNode() : FirstNode(), reverse, skip);
+        }
+
         public virtual IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
         {
-            var enumerator = new BinaryNodeEnumerator<T>(reverse ? LastNode() : FirstNode(), reverse, skip);
+            var enumerator = GetBinaryNodeEnumerator(reverse, skip);
             while (enumerator.MoveNext())
                 yield return enumerator.Current.Value;
         }
 
+        public IEnumerator<T> GetEnumerator(bool reverse = false, long skip = 0)
+        {
+            return new TransformEnumerator<BinaryNode<T>, T>(GetBinaryNodeEnumerator(reverse, skip), x => x.Value);
+        }
+
         public IEnumerator<T> GetEnumerator()
         {
-            return new TransformEnumerator<BinaryNode<T>, T>(new BinaryNodeEnumerator<T>(FirstNode()), x => x.Value);
+            return GetEnumerator(false, 0);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
