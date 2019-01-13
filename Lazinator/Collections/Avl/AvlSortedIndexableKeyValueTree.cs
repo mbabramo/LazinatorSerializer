@@ -46,9 +46,7 @@ namespace Lazinator.Collections.Avl
 
         public bool TryRemove(TKey key) => TryRemove(key, MultivalueLocationOptions.First);
 
-        public bool TryRemoveKeyValue(TKey key, TValue value, MultivalueLocationOptions whichOne) => TryRemoveKeyValue(key, value, whichOne, Comparer<TKey>.Default);
-
-        public bool TryRemoveKeyValue(TKey key, TValue value) => TryRemoveKeyValue(key, value, MultivalueLocationOptions.Any);
+        public bool TryRemoveKeyValue(TKey key, TValue value) => TryRemoveKeyValue(key, value, Comparer<TKey>.Default);
 
         public TValue GetValueForKey(TKey key, MultivalueLocationOptions whichOne) => GetValueForKey(key, whichOne, Comparer<TKey>.Default);
 

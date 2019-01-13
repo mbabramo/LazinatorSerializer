@@ -17,6 +17,5 @@ namespace Lazinator.Collections.Interfaces
         void AddValueForKey(TKey key, TValue value, IComparer<TKey> comparer);
 
         bool TryRemove(TKey key, MultivalueLocationOptions whichOne, IComparer<TKey> comparer);
-        bool TryRemoveKeyValue(TKey key, TValue value, MultivalueLocationOptions whichOne, IComparer<TKey> comparer);
     }
 }

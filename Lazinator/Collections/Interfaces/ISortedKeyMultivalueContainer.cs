@@ -15,7 +15,6 @@ namespace Lazinator.Collections.Interfaces
         TValue GetValueForKey(TKey key, MultivalueLocationOptions whichOne);
         bool SetValueForKey(TKey key, TValue value, MultivalueLocationOptions whichOne);
         bool TryRemove(TKey key, MultivalueLocationOptions whichOne);
-        bool TryRemoveKeyValue(TKey key, TValue value, MultivalueLocationOptions whichOne);
         void AddValueForKey(TKey key, TValue value);
     }
 }

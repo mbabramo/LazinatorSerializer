@@ -44,25 +44,35 @@ namespace Lazinator.Collections.Avl
             return (-1, false);
         }
 
-    public TKey GetKeyAt(long index)
+        public TKey GetKeyAt(long index)
         {
-            return UnderlyingIndexableTree.GetAt(index).Key;
+            return GetKeyValueAt(index).Key;
         }
 
         public TValue GetValueAt(long index)
         {
-            return UnderlyingIndexableTree.GetAt(index).Value;
+            return GetKeyValueAt(index).Value;
+        }
+
+        public LazinatorKeyValue<TKey, TValue> GetKeyValueAt(long index)
+        {
+            return UnderlyingIndexableTree.GetAt(index);
         }
 
         public void SetKeyAt(long index, TKey key)
         {
             var value = GetValueAt(index);
-            UnderlyingIndexableTree.SetAt(index, new LazinatorKeyValue<TKey, TValue>(key, value));
+            SetKeyValueAt(index, key, value);
         }
 
         public void SetValueAt(long index, TValue value)
         {
             var key = GetKeyAt(index);
+            SetKeyValueAt(index, key, value);
+        }
+
+        public void SetKeyValueAt(long index, TKey key, TValue value)
+        {
             UnderlyingIndexableTree.SetAt(index, new LazinatorKeyValue<TKey, TValue>(key, value));
         }
 

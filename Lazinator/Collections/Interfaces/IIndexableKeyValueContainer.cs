@@ -1,4 +1,5 @@
 ﻿using Lazinator.Attributes;
+using Lazinator.Collections.Tuples;
 using Lazinator.Core;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,8 @@ namespace Lazinator.Collections.Interfaces
         void SetValueAt(long index, TValue value);
         TKey GetKeyAt(long index);
         void SetKeyAt(long index, TKey key);
+        LazinatorKeyValue<TKey, TValue> GetKeyValueAt(long index);
+        void SetKeyValueAt(long index, TKey key, TValue value);
         void InsertAt(long index, TKey key, TValue value);
         void RemoveAt(long index);
 

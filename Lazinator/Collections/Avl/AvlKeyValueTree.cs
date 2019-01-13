@@ -74,9 +74,7 @@ namespace Lazinator.Collections.Avl
             return UnderlyingTree.TryRemove(KeyPlusDefault(key), whichOne, KeyComparer(comparer));
         }
 
-        public bool TryRemoveKeyValue(TKey key, TValue value, IComparer<TKey> comparer) => TryRemoveKeyValue(key, value, MultivalueLocationOptions.Any, comparer);
-
-        public bool TryRemoveKeyValue(TKey key, TValue value, MultivalueLocationOptions whichOne, IComparer<TKey> comparer)
+        public bool TryRemoveKeyValue(TKey key, TValue value, IComparer<TKey> comparer)
         {
             if (!AllowDuplicates)
             {
@@ -87,9 +85,15 @@ namespace Lazinator.Collections.Avl
             }
             else
             {
-
                 LazinatorKeyValue<TKey, TValue> keyValue = new LazinatorKeyValue<TKey, TValue>(key, value);
-                var match = UnderlyingTree.GetMatchingOrNextNode(keyValue, whichOne, KeyComparer(comparer));
+                // first, find a matching key
+                var match = UnderlyingTree.GetMatchingOrNextNode(keyValue, MultivalueLocationOptions.First, KeyComparer(comparer));
+                // Now, find a matching value
+                while (match.found && !EqualityComparer<TValue>.Default.Equals(match.node.Value.Value, value))
+                {
+                    match.node = match.node.GetNextNode();
+                    match.found = match.node != null;
+                }
                 if (match.found == false)
                     return false;
                 UnderlyingTree.RemoveNode(match.node);
