@@ -7,7 +7,7 @@ using Lazinator.Core;
 namespace Lazinator.Collections.Interfaces
 {
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IKeyMultivalueContainer)]
-    public interface IKeyMultivalueContainer<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
+    public interface IKeyMultivalueContainer<TKey, TValue> : IKeyValueContainer<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
         IEnumerable<TValue> GetAllValues(TKey key, IComparer<TKey> comparer);
         bool TryRemoveAll(TKey key, IComparer<TKey> comparer);
