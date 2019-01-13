@@ -49,7 +49,7 @@ namespace Lazinator.Collections.Avl
 
                     if (left == null)
                     {
-                        var childNode = (AvlNode<T>) CreateNode(item, node);
+                        var childNode = (AvlNode<T>)CreateNode(item, node);
                         childNode.NodeVisitedDuringChange = true;
                         node.Left = childNode;
                         // index is same as node
@@ -101,14 +101,44 @@ namespace Lazinator.Collections.Avl
             return (Root, true);
         }
 
+        private struct MiniBoolStack
+        {
+            ulong storage;
+            byte index;
+
+            public void Push(bool value)
+            {
+                if (value)
+                    storage = storage | ((ulong) 1 << index);
+                else
+                    storage &= ~((ulong) 1 << index);
+                index++;
+            }
+
+            public bool Pop()
+            {
+                if (index == 0)
+                    throw new Exception();
+                index--;
+                bool set = (storage & ((ulong)1 << index)) != 0;
+                return set;
+            }
+
+            public bool Any()
+            {
+                return index > 0;
+            }
+        }
+
+
         public void RemoveNode(BinaryNode<T> node)
         {
-            Stack<bool> pathIsLeft = new Stack<bool>();
+            MiniBoolStack pathIsLeft = new MiniBoolStack();
             var onPathToNode = node;
             while (onPathToNode.Parent != null)
             {
-                pathIsLeft.Push(node.Parent.Left == onPathToNode);
-                onPathToNode = node.Parent;
+                pathIsLeft.Push(onPathToNode.Parent.Left == onPathToNode);
+                onPathToNode = onPathToNode.Parent;
             }
             BinaryNode<T> result = TryRemoveReturningNode(MultivalueLocationOptions.Any, x =>
                 {
@@ -118,9 +148,9 @@ namespace Lazinator.Collections.Avl
                     // DEBUG -- must be tested. Could be the opposite order.
                     // TODO: Use a long as a bitset instead of a stack to avoid allocation
                     if (pathIsLeft.Pop())
-                        return 1;
-                    else
                         return -1;
+                    else
+                        return 1;
 
                 });
             if (result != node)

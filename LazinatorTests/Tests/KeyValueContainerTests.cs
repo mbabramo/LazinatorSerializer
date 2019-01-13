@@ -29,7 +29,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void VerifyKeyValueContainerDEBUG()
         {
-            VerifyKeyValueContainer(KeyValueContainerType.AvlKeyValueTree, false, 100, 100);
+            VerifyKeyValueContainer(KeyValueContainerType.AvlKeyValueTree, true, 100, 100);
         }
 
         [Theory]
@@ -98,7 +98,12 @@ namespace LazinatorTests.Tests
                         instruction = new InsertValueInstruction();
                     else
                         instruction = new RemoveInstruction();
+                    if (rep == 46 && i == 68)
+                    {
+                        var DEBUG = 0;
+                    }
                     instruction.Execute(this, container, list);
+                    VerifyEntireList(container, list); // DEBUG
                 }
                 VerifyEntireList(container, list);
                 VerifyEnumerableSkipAndReverse(container, list);
@@ -157,7 +162,7 @@ namespace LazinatorTests.Tests
             switch (i)
             {
                 case 0:
-                    return MultivalueLocationOptions.Any;
+                    return MultivalueLocationOptions.Last; // for now, at least, we won't test Any when inserting in a multivalue store; it is difficult to test, because its behavior is undefined. But we are still testing it in the single value scenario.
                 case 1:
                     return MultivalueLocationOptions.First;
                 case 2:
@@ -688,7 +693,7 @@ namespace LazinatorTests.Tests
                 }
                 else
                     WhichOne = MultivalueLocationOptions.Any;
-                PlanRemoval(testClass, list);
+                PlanRemoval(testClass, container, list);
                 if (KeyValueExisted)
                 {
                     if (RemoveAll)
@@ -729,14 +734,14 @@ namespace LazinatorTests.Tests
                 base.Execute(testClass, container, list);
             }
 
-            public void PlanRemoval(KeyValueContainerTests<TKey, TValue> testClass, List<LazinatorComparableKeyValue<TKey, TValue>> list)
+            public void PlanRemoval(KeyValueContainerTests<TKey, TValue> testClass, IKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey, TValue>> list)
             {
                 if (!KeyValueContainerIsSorted)
                 {
                     // Removing by index
                     if (list.Any())
                     {
-                        ChooseItemInListToRemove(testClass, list);
+                        ChooseItemInListToRemove(testClass, container, list);
                     }
                     else
                     {
@@ -776,17 +781,31 @@ namespace LazinatorTests.Tests
                 }
                 else
                 {
-                    ChooseItemInListToRemove(testClass, list);
+                    ChooseItemInListToRemove(testClass, container, list);
                 }
             }
 
-            private void ChooseItemInListToRemove(KeyValueContainerTests<TKey, TValue> testClass, List<LazinatorComparableKeyValue<TKey, TValue>> list)
+            private void ChooseItemInListToRemove(KeyValueContainerTests<TKey, TValue> testClass, IKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey, TValue>> list)
             {
                 KeyValueExisted = true;
                 IndexBeforeRemove = testClass.ran.Next(list.Count);
                 KeyValueContainerTests<TKey, TValue>.GetIndexRange(list, IndexBeforeRemove, out FirstIndex, out LastIndex);
-                if (RemoveSpecificKeyValue && ContainerIsMultivalue)
+                if (ContainerIsMultivalue)
                 {
+                    if (WhichOne == MultivalueLocationOptions.Any)
+                    {
+                        if (container is IIndexableKeyMultivalueContainer<TKey, TValue> indexableContainer)
+                        {
+                            // we need to figure out which one will be removed.
+                            var result = ((IIndexableKeyMultivalueContainer<TKey, TValue>)container).Find(KeyToTryToRemove, MultivalueLocationOptions.Any, Comparer<TKey>.Default);
+                            IndexBeforeRemove = (int)result.index;
+                        }
+                        else
+                        {
+                            // there is no easy way to figure out which one will be removed, so we just remove the first instead
+                            WhichOne = MultivalueLocationOptions.First;
+                        }
+                    }
                     if (WhichOne == MultivalueLocationOptions.First)
                         IndexBeforeRemove = FirstIndex;
                     else if (WhichOne == MultivalueLocationOptions.Last)
