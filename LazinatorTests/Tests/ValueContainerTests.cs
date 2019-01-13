@@ -593,7 +593,7 @@ namespace LazinatorTests.Tests
                 EstablishSorted(container);
                 if (testClass.AllowDuplicates)
                 {
-                    if (ContainerIsSorted && testClass.ran.Next(0, 5) == 0)
+                    if (testClass.ran.Next(0, 5) == 0)
                     {
                         RemoveAll = true; // overrides remaining settings
                         WhichOne = MultivalueLocationOptions.InsertAfterLast; // invalid -- but we won't use it in a call; we use something invalid to ensure that if we do, we'll get an error

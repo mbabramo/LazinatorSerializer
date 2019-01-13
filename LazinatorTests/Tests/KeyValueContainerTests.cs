@@ -261,10 +261,13 @@ namespace LazinatorTests.Tests
         {
             protected bool KeyValueContainerIsSorted;
             protected ISortedKeyValueContainer<TKey, TValue> SortedKeyValueContainer;
+            protected IKeyMultivalueContainer<TKey, TValue> KeyMultivalueContainer;
+            protected bool ContainerIsMultivalue;
 
             public virtual void Execute(KeyValueContainerTests<TKey, TValue> testClass, IKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey, TValue>> list)
             {
                 EstablishSorted(container);
+                EstablishMultivalue(container);
                 switch (container)
                 {
                     case AvlSortedIndexableKeyValueTree<TKey, TValue> sortedIndexableKeyValueContainer when sortedIndexableKeyValueContainer.AllowDuplicates == true:
@@ -302,6 +305,13 @@ namespace LazinatorTests.Tests
                 SortedKeyValueContainer = container as ISortedKeyValueContainer<TKey, TValue>;
                 KeyValueContainerIsSorted = container is ISortedKeyValueContainer<TKey, TValue>;
             }
+
+            protected void EstablishMultivalue(IKeyValueContainer<TKey, TValue> container)
+            {
+                KeyMultivalueContainer = container as IKeyMultivalueContainer<TKey, TValue>;
+                ContainerIsMultivalue = container is IKeyMultivalueContainer<TKey, TValue>;
+            }
+
 
             public abstract void Execute_Value(KeyValueContainerTests<TKey, TValue> testClass, IKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey, TValue>> list);
             public abstract void Execute_Indexable(KeyValueContainerTests<TKey, TValue> testClass, IIndexableKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey, TValue>> list);
@@ -652,6 +662,7 @@ namespace LazinatorTests.Tests
 
         public class RemoveInstruction : RandomInstruction
         {
+            bool RemoveSpecificKeyValue;
             TKey KeyToTryToRemove;
             TValue ValueToTryToRemove;
             bool KeyValueExisted;
@@ -663,13 +674,17 @@ namespace LazinatorTests.Tests
             public override void Execute(KeyValueContainerTests<TKey, TValue> testClass, IKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey, TValue>> list)
             {
                 EstablishSorted(container);
+                EstablishMultivalue(container);
+                RemoveSpecificKeyValue = testClass.ran.Next(2) == 0;
                 if (testClass.AllowDuplicates)
                 {
-                    if (KeyValueContainerIsSorted && testClass.ran.Next(0, 5) == 0)
+                    if (!RemoveSpecificKeyValue && testClass.ran.Next(0, 5) == 0)
                     {
                         RemoveAll = true; // overrides remaining settings
                         WhichOne = MultivalueLocationOptions.InsertAfterLast; // invalid -- but we won't use it in a call; we use something invalid to ensure that if we do, we'll get an error
                     }
+                    else if (RemoveSpecificKeyValue)
+                        WhichOne = MultivalueLocationOptions.InsertAfterLast; // again invalid, designed to cause error if we use it
                     else
                         WhichOne = testClass.ChooseMultivalueDeleteOption();
                 }
@@ -683,7 +698,22 @@ namespace LazinatorTests.Tests
                         for (int i = FirstIndex; i <= LastIndex; i++)
                             list.RemoveAt(FirstIndex);
                     }
-                    else switch (WhichOne)
+                    else if (RemoveSpecificKeyValue)
+                    {
+                        bool removed = false;
+                        for (int i = FirstIndex; i <= LastIndex; i++)
+                            if (EqualityComparer<TValue>.Default.Equals(list[i].Value, ValueToTryToRemove))
+                            {
+                                list.RemoveAt(i);
+                                removed = true;
+                                break;
+                            }
+                        if (!removed)
+                            throw new Exception("Logic error.");
+                    }
+                    else
+                    {
+                        switch (WhichOne)
                         {
                             case MultivalueLocationOptions.Any:
                                 list.RemoveAt(IndexBeforeRemove);
@@ -696,6 +726,7 @@ namespace LazinatorTests.Tests
                                 break;
                             default: throw new NotSupportedException();
                         }
+                    }
                 }
                 base.Execute(testClass, container, list);
             }
@@ -713,6 +744,7 @@ namespace LazinatorTests.Tests
                     {
                         KeyValueExisted = false;
                         KeyToTryToRemove = default;
+                        ValueToTryToRemove = default;
                         IndexBeforeRemove = -1;
                     }
                     return;
@@ -754,9 +786,16 @@ namespace LazinatorTests.Tests
             {
                 KeyValueExisted = true;
                 IndexBeforeRemove = testClass.ran.Next(list.Count);
+                KeyValueContainerTests<TKey, TValue>.GetIndexRange(list, IndexBeforeRemove, out FirstIndex, out LastIndex);
+                if (RemoveSpecificKeyValue && ContainerIsMultivalue)
+                {
+                    if (WhichOne == MultivalueLocationOptions.First)
+                        IndexBeforeRemove = FirstIndex;
+                    else if (WhichOne == MultivalueLocationOptions.Last)
+                        IndexBeforeRemove = LastIndex;
+                }
                 KeyToTryToRemove = list[IndexBeforeRemove].Key;
                 ValueToTryToRemove = list[IndexBeforeRemove].Value;
-                KeyValueContainerTests<TKey, TValue>.GetIndexRange(list, IndexBeforeRemove, out FirstIndex, out LastIndex);
             }
 
             public override void Execute_Indexable(KeyValueContainerTests<TKey, TValue> testClass, IIndexableKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey, TValue>> list)
@@ -769,6 +808,11 @@ namespace LazinatorTests.Tests
 
             public override void Execute_IndexableMultivalue(KeyValueContainerTests<TKey, TValue> testClass, IIndexableKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey, TValue>> list)
             {
+                if (RemoveAll)
+                {
+                    bool result = container.TryRemoveAll(KeyToTryToRemove, Comparer<TKey>.Default);
+                    VerifySuccess(result);
+                }
                 Execute_Indexable(testClass, container, list);
             }
 
@@ -778,7 +822,7 @@ namespace LazinatorTests.Tests
                     container.TryRemoveAll(KeyToTryToRemove, Comparer<TKey>.Default);
                 else
                 {
-                    bool result = container.TryRemove(KeyToTryToRemove, WhichOne, Comparer<TKey>.Default);
+                    bool result = RemoveSpecificKeyValue ? container.TryRemoveKeyValue(KeyToTryToRemove, ValueToTryToRemove, Comparer<TKey>.Default) : container.TryRemove(KeyToTryToRemove, WhichOne, Comparer<TKey>.Default);
                     VerifySuccess(result);
                 }
             }
@@ -791,10 +835,10 @@ namespace LazinatorTests.Tests
 
             private void VerifySuccess(bool result)
             {
-                if (IndexBeforeRemove == -1)
-                    result.Should().BeFalse();
-                else
+                if (KeyValueExisted)
                     result.Should().BeTrue();
+                else
+                    result.Should().BeFalse();
             }
 
             public override void Execute_SortedIndexable(KeyValueContainerTests<TKey, TValue> testClass, ISortedIndexableKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey, TValue>> list)
@@ -807,15 +851,10 @@ namespace LazinatorTests.Tests
 
             public override void Execute_SortedIndexableMultivalue(KeyValueContainerTests<TKey, TValue> testClass, ISortedIndexableKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey, TValue>> list)
             {
-                if (RemoveAll)
-                    container.TryRemoveAll(KeyToTryToRemove);
+                if (testClass.ran.Next(2) == 0)
+                    Execute_SortedMultivalue(testClass, container, list);
                 else
-                {
-                    if (testClass.ran.Next(2) == 0)
-                        Execute_SortedMultivalue(testClass, container, list);
-                    else
-                        Execute_Indexable(testClass, container, list);
-                }
+                    Execute_IndexableMultivalue(testClass, container, list);
             }
 
             public override void Execute_SortedMultivalue(KeyValueContainerTests<TKey, TValue> testClass, ISortedKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey, TValue>> list)
@@ -824,18 +863,15 @@ namespace LazinatorTests.Tests
                     container.TryRemoveAll(KeyToTryToRemove);
                 else
                 {
-                    bool result = container.TryRemove(KeyToTryToRemove, WhichOne);
+                    bool result = RemoveSpecificKeyValue ? container.TryRemoveKeyValue(KeyToTryToRemove, ValueToTryToRemove) : container.TryRemove(KeyToTryToRemove, WhichOne);
                     VerifySuccess(result);
                 }
             }
 
             public override void Execute_Value(KeyValueContainerTests<TKey, TValue> testClass, IKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey, TValue>> list)
             {
-                bool result = container.TryRemove(KeyToTryToRemove, Comparer<TKey>.Default);
-                if (IndexBeforeRemove == -1)
-                    result.Should().BeFalse();
-                else
-                    result.Should().BeTrue();
+                bool result = RemoveSpecificKeyValue ? container.TryRemoveKeyValue(KeyToTryToRemove, ValueToTryToRemove, Comparer<TKey>.Default) : container.TryRemove(KeyToTryToRemove, Comparer<TKey>.Default);
+                VerifySuccess(result);
             }
         }
     }
