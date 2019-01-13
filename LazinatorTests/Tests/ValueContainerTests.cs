@@ -375,12 +375,6 @@ namespace LazinatorTests.Tests
                 else
                 {
                     var listResult = listResultOrNull.Value;
-                    if (ContainerIsSorted)
-                    {
-                        var findResult = container.Find(listResult.item, C);
-                        VerifyExpectedIndex(MultivalueLocationOptions.Any, listResult, findResult.index);
-                        findResult.exists.Should().BeTrue();
-                    }
                     for (int i = listResult.firstIndex; i <= listResult.lastIndex; i++)
                     {
                         T getAtResult = container.GetAt(i);
@@ -533,29 +527,15 @@ namespace LazinatorTests.Tests
 
             public override void Execute_Indexable(ValueContainerTests<T> testClass, IIndexableContainer<T> container, List<T> list)
             {
-                if (ContainerIsSorted)
-                    Execute_SortedIndexable(testClass, (ISortedIndexableContainer<T>)SortedContainer, list);
+                if (InsertedNotReplaced)
+                    container.InsertAt(Index, Item);
                 else
-                {
-                    if (InsertedNotReplaced)
-                        container.InsertAt(Index, Item);
-                    else
-                        container.SetAt(Index, Item);
-                }
+                    container.SetAt(Index, Item);
             }
 
             public override void Execute_IndexableMultivalue(ValueContainerTests<T> testClass, IIndexableMultivalueContainer<T> container, List<T> list)
             {
-                if (ContainerIsSorted)
-                {
-                    (long index, bool insertedNotReplaced) = container.InsertGetIndex(Item, WhichOne, C);
-                    index.Should().Be(Index);
-                    insertedNotReplaced.Should().Be(InsertedNotReplaced);
-                }
-                else
-                {
-                    Execute_Indexable(testClass, container, list);
-                }
+                Execute_Indexable(testClass, container, list);
             }
 
             public override void Execute_Multivalue(ValueContainerTests<T> testClass, IMultivalueContainer<T> container, List<T> list)
