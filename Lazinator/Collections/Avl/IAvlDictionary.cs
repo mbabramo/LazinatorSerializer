@@ -12,7 +12,7 @@ namespace Lazinator.Collections.Avl
         where TKey : ILazinator
         where TValue : ILazinator
     {
-        ISortedKeyMultivalueContainer<WUint, LazinatorTuple<TKey, TValue>> UnderlyingTree { get; set; }
+        ISortedKeyMultivalueContainer<WUint, LazinatorKeyValue<TKey, TValue>> UnderlyingTree { get; set; }
         bool AllowDuplicates { get; set; }
     }
 }

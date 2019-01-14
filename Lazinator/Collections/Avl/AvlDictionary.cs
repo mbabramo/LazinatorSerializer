@@ -14,11 +14,15 @@ namespace Lazinator.Collections.Avl
 {
     public partial class AvlDictionary<TKey, TValue> : IAvlDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ILazinatorDictionaryable<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
+
+        public ISortedKeyMultivalueContainer<WUint, LazinatorKeyValue<TKey, TValue>> UnderlyingTree { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         public AvlDictionary()
         {
         }
 
-        public AvlDictionary(ISortedKeyMultivalueContainerFactory<WUint, LazinatorTuple<TKey, TValue>> factory)
+        public AvlDictionary(ISortedKeyMultivalueContainerFactory<WUint, LazinatorKeyValue<TKey, TValue>> factory)
         {
             UnderlyingTree = factory.Create();
             if (UnderlyingTree.AllowDuplicates == false)
@@ -28,58 +32,39 @@ namespace Lazinator.Collections.Avl
         public IEnumerable<TValue> GetAllValues(TKey key)
         {
             uint hash = key.GetBinaryHashCode32();
-            foreach (var result in GetHashMatches(key, hash))
+            return GetHashMatches(key, hash);
+        }
+
+        private IEnumerable<TValue> GetHashMatches(TKey key, uint hash)
+        {
+            return GetAllInHashBucket(hash).Where(x => EqualityComparer<TKey>.Default.Equals(x.Key, key)).Select(x => x.Value);
+        }
+
+        private IEnumerable<LazinatorKeyValue<TKey, TValue>> GetAllInHashBucket(uint hash)
+        {
+            foreach (LazinatorKeyValue<TKey, TValue> keyValue in UnderlyingTree.GetAllValues(hash))
             {
-                if (result.keyValue.Item1.Equals(key))
-                    yield return result.keyValue.Item2;
-                else
-                    yield break;
+                if (keyValue.Key.GetBinaryHashCode32().Equals(hash))
+                    yield return keyValue;
             }
-        }
-
-        private IEnumerable<(LazinatorTuple<TKey, TValue> keyValue, long index)> GetHashMatches(TKey key, uint hash)
-        {
-            return GetAllInHashBucket(hash).Where(x => x.keyValue.Item1.Equals(key));
-        }
-
-        private IEnumerable<(LazinatorTuple<TKey, TValue> keyValue, long index)> GetAllInHashBucket(uint hash)
-        {
-            foreach ((KeyValuePair<WUint, LazinatorTuple<TKey, TValue>> keyValue, long index) p in EnumerateFrom(hash))
-            {
-                if (p.keyValue.Key.GetBinaryHashCode32().Equals(hash))
-                    yield return (p.keyValue.Value, p.index);
-                else
-                    yield break;
-            }
-        }
-
-        private IEnumerable<(KeyValuePair<WUint, LazinatorTuple<TKey, TValue>> keyValue, long index)> EnumerateFrom(uint hash)
-        {
-            var result = UnderlyingTree.Fin(hash, Comparer<WUint>.Default);
-            long index = result.index;
-            var enumerator = UnderlyingTree.GetKeyValuePairEnumerator(index);
-            while (enumerator.MoveNext())
-                yield return (enumerator.Current, index++);
         }
 
         public bool ContainsKey(TKey key)
         {
-            uint hash = key.GetBinaryHashCode32();
-            bool result = GetHashMatches(key, hash).Any();
-            return result;
+            return GetAllValues(key).Any();
         }
 
         public bool TryGetValue(TKey key, out TValue value)
         {
             uint hash = key.GetBinaryHashCode32();
-            var item = GetHashMatches(key, hash).FirstOrDefault();
-            if (item.keyValue == null)
+            var values = GetAllValues(key);
+            if (values.Any())
             {
-                value = default;
-                return false;
+                value = values.First();
+                return true;
             }
-            value = item.keyValue.Item2;
-            return true;
+            value = default;
+            return false;
         }
 
         public TValue this[TKey key]
@@ -95,18 +80,12 @@ namespace Lazinator.Collections.Avl
             {
                 if (AllowDuplicates)
                     throw new Exception("With multiple keys, use AddValue method to add item.");
-                uint hash = key.GetBinaryHashCode32();
-                var item = GetHashMatches(key, hash).FirstOrDefault();
-                if (item.keyValue == null)
-                {
-                    UnderlyingTree.Insert(key.GetBinaryHashCode32(), Comparer<WUint>.Default, new LazinatorTuple<TKey, TValue>(key, value));
-                }
-                else
-                    item.keyValue.Item2 = value;
+                Remove(key);
+                UnderlyingTree.AddValueForKey(key.GetBinaryHashCode32(), new LazinatorKeyValue<TKey, TValue>(key, value));
             }
         }
 
-        public long Count => UnderlyingTree.Count;
+        public long Count => UnderlyingTree is ICountableContainer countable ? countable.LongCount : UnderlyingTree.Count();
 
         public bool IsReadOnly => false;
 
@@ -120,13 +99,10 @@ namespace Lazinator.Collections.Avl
         public bool Remove(TKey key)
         {
             uint hash = key.GetBinaryHashCode32();
-            var match = GetHashMatches(key, hash).FirstOrDefault();
-            if (match.keyValue == null)
-            {
-                return false;
-            }
-            UnderlyingTree.RemoveAt(match.index);
-            return true;
+            bool result = TryGetValue(key, out TValue value2);
+            if (result)
+                UnderlyingTree.TryRemoveKeyValue(hash, new LazinatorKeyValue<TKey, TValue>(key, value2));
+            return result;
         }
 
         public bool RemoveAll(TKey key)
@@ -141,27 +117,29 @@ namespace Lazinator.Collections.Avl
             return any;
         }
 
-        public ICollection<TKey> Keys => GetKeysAndValues().Select(x => x.Item1).ToList();
+        public ICollection<TKey> Keys => GetKeysAndValues().Select(x => x.Key).ToList();
 
-        public ICollection<TValue> Values => GetKeysAndValues().Select(x => x.Item2).ToList();
+        public ICollection<TValue> Values => GetKeysAndValues().Select(x => x.Value).ToList();
 
-        private IEnumerable<LazinatorTuple<TKey, TValue>> GetKeysAndValues()
+        int ICollection<KeyValuePair<TKey, TValue>>.Count => (int) Count;
+
+        private IEnumerable<LazinatorKeyValue<TKey, TValue>> GetKeysAndValues()
         {
-            var enumerator = UnderlyingTree.GetValueEnumerator(0);
+            var enumerator = UnderlyingTree.GetValueEnumerator();
             while (enumerator.MoveNext())
                 yield return enumerator.Current;
             enumerator.Dispose();
         }
 
-        int ICollection<KeyValuePair<TKey, TValue>>.Count => (int)Count;
-
-        public ISortedKeyMultivalueContainer<WUint, LazinatorTuple<TKey, TValue>> UnderlyingTree { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public void AddValue(TKey key, TValue value)
         {
-            uint hash = key.GetBinaryHashCode32();
-            UnderlyingTree.Insert(hash, Comparer<WUint>.Default, new LazinatorTuple<TKey, TValue>(key, value));
+            if (AllowDuplicates)
+            {
+                uint hash = key.GetBinaryHashCode32();
+                UnderlyingTree.AddValueForKey(hash, new LazinatorKeyValue<TKey, TValue>(key, value));
+            }
+            else
+                this[key] = value;
         }
 
         public void Add(TKey key, TValue value)
@@ -180,62 +158,30 @@ namespace Lazinator.Collections.Avl
 
         public bool Contains(KeyValuePair<TKey, TValue> item)
         {
-            if (AllowDuplicates)
-            {
-                foreach (var v in GetAllValues(item.Key))
-                    if (System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(v, item.Value))
-                        return true;
-                return false;
-            }
-            else
-            {
-                bool found = TryGetValue(item.Key, out TValue value);
-                return found && System.Collections.Generic.EqualityComparer<TValue>.Default.Equals(value, item.Value);
-            }
+            return UnderlyingTree.ContainsKeyValue(item.Key.GetBinaryHashCode32(), new LazinatorKeyValue<TKey, TValue>(item.Key, item.Value));
         }
 
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
             int i = 0;
-            foreach (LazinatorTuple<TKey, TValue> pair in GetKeysAndValues())
+            foreach (LazinatorKeyValue<TKey, TValue> pair in GetKeysAndValues())
             {
-                array[arrayIndex + i++] = new KeyValuePair<TKey, TValue>(pair.Item1, pair.Item2);
+                array[arrayIndex + i++] = new KeyValuePair<TKey, TValue>(pair.Key, pair.Value);
             }
         }
 
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
-            if (Contains(item))
-            {
-                if (AllowDuplicates)
-                { // removes a single instance of the key-value pair. can remove all items within a key with RemoveAll.
+            uint hash = item.Key.GetBinaryHashCode32();
+            bool result = UnderlyingTree.TryRemoveKeyValue(hash, new LazinatorKeyValue<TKey, TValue>(item.Key, item.Value));
+            return result;
+        }
 
-                    uint hash = item.Key.GetBinaryHashCode32();
-                    var firstMatch = GetHashMatches(item.Key, hash).FirstOrDefault();
-                    if (firstMatch.keyValue == null)
-                        return false;
-                    bool valueFound = false;
-                    int distanceFromFirst = 0;
-                    foreach (var value in GetAllValues(item.Key))
-                    {
-                        if (item.Value.Equals(value))
-                        {
-                            valueFound = true;
-                            break;
-                        }
-                        else
-                            distanceFromFirst++;
-                    }
-                    if (valueFound)
-                    {
-                        UnderlyingTree.RemoveAt(firstMatch.index + distanceFromFirst);
-                        return true;
-                    }
-                    return false;
-                }
-                return Remove(item.Key);
-            }
-            return false;
+        public bool RemoveKeyValue(TKey key, TValue value)
+        {
+            uint hash = key.GetBinaryHashCode32();
+            bool result = UnderlyingTree.TryRemoveKeyValue(hash, new LazinatorKeyValue<TKey, TValue>(key, value));
+            return result;
         }
 
         public IEnumerator GetEnumerator()
@@ -250,67 +196,22 @@ namespace Lazinator.Collections.Avl
 
         private IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator()
         {
-            return new TransformEnumerator<LazinatorTuple<TKey, TValue>, KeyValuePair<TKey, TValue>>(GetUnderlyingTree2ValueEnumerator(), x => new KeyValuePair<TKey, TValue>(x.Item1, x.Item2));
+            return new TransformEnumerator<LazinatorKeyValue<TKey, TValue>, KeyValuePair<TKey, TValue>>(GetUnderlyingTree2ValueEnumerator(), x => new KeyValuePair<TKey, TValue>(x.Key, x.Value));
         }
 
         public IEnumerator<TKey> GetKeyEnumerator()
         {
-            return new TransformEnumerator<LazinatorTuple<TKey, TValue>, TKey>(GetUnderlyingTree2ValueEnumerator(), x => x.Item1);
+            return new TransformEnumerator<LazinatorKeyValue<TKey, TValue>, TKey>(GetUnderlyingTree2ValueEnumerator(), x => x.Key);
         }
 
         public IEnumerator<TValue> GetValueEnumerator()
         {
-            return new TransformEnumerator<LazinatorTuple<TKey, TValue>, TValue>(GetUnderlyingTree2ValueEnumerator(), x => x.Item2);
+            return new TransformEnumerator<LazinatorKeyValue<TKey, TValue>, TValue>(GetUnderlyingTree2ValueEnumerator(), x => x.Value);
         }
 
-        private IEnumerator<LazinatorTuple<TKey, TValue>> GetUnderlyingTree2ValueEnumerator()
+        private IEnumerator<LazinatorKeyValue<TKey, TValue>> GetUnderlyingTree2ValueEnumerator()
         {
             return UnderlyingTree.GetValueEnumerator();
-        }
-
-        // DEBUG -- the following methods must be tested
-        public TValue ValueAtIndex(long i)
-        {
-            return UnderlyingTree.ValueAtIndex(i).Item2;
-        }
-
-        public void SetValueAtIndex(long i, TValue value)
-        {
-            var keyValue = UnderlyingTree.ValueAtIndex(i);
-            UnderlyingTree.SetValueAtIndex(i, new LazinatorTuple<TKey, TValue>(keyValue.Item1, value));
-        }
-
-        public bool ContainsKeyValue(TKey key, TValue value, out long index) => ContainsKeyValue(key, null, value, out index);
-
-        public bool ContainsKeyValue(TKey key, IComparer<TKey> comparer, TValue value, out long index)
-        {
-            // Note: comaprer isn't used, since we are storing by hash matches
-            uint hash = key.GetBinaryHashCode32();
-            var hashMatches = GetHashMatches(key, hash);
-            var match = hashMatches.FirstOrDefault(x => x.keyValue.Item2.Equals(value)); // DEBUG: Equality comparer
-            if (match.keyValue == null)
-            {
-                index = default;
-                return false;
-            }
-            index = match.index;
-            return true;
-        }
-
-        public bool RemoveKeyValue(TKey key, TValue value) => RemoveValue(key, Comparer<TKey>.Default, value);
-
-        public bool RemoveValue(TKey key, IComparer<TKey> comparer, TValue value)
-        {
-            bool exists = ContainsKeyValue(key, comparer, value, out long index);
-            if (!exists)
-                return false;
-            UnderlyingTree.RemoveAt(index);
-            return true;
-        }
-
-        public ILazinatorSplittable SplitOff()
-        {
-            throw new NotImplementedException();
         }
     }
 }
