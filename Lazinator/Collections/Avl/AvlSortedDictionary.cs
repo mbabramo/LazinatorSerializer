@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlSortedDictionary<TKey, TValue> : IAvlSortedDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ILazinatorDictionaryable<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
+    public partial class AvlSortedDictionary<TKey, TValue> : IAvlSortedDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ILazinatorDictionaryable<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         public AvlSortedDictionary()
         {
@@ -27,6 +27,8 @@ namespace Lazinator.Collections.Avl
             UnderlyingTree = underlyingTree;
             AllowDuplicates = allowDuplicates;
         }
+
+        public bool IsSorted => true;
 
         public bool AllowDuplicates
         {
@@ -146,6 +148,23 @@ namespace Lazinator.Collections.Avl
             var enumerator = UnderlyingTree.GetKeyValuePairEnumerator();
             while (enumerator.MoveNext())
                 yield return enumerator.Current;
+            enumerator.Dispose();
+        }
+
+        public IEnumerable<TKey> GetKeysDistinct()
+        {
+            bool isFirst = true;
+            TKey lastKey = default;
+            var enumerator = UnderlyingTree.GetKeyValuePairEnumerator();
+            while (enumerator.MoveNext())
+            {
+                if (isFirst || !EqualityComparer<TKey>.Default.Equals(lastKey, enumerator.Current.Key))
+                {
+                    lastKey = enumerator.Current.Key;
+                    yield return lastKey;
+                    isFirst = false;
+                }
+            }
             enumerator.Dispose();
         }
 

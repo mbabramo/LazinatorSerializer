@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlDictionary<TKey, TValue> : IAvlDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ILazinatorDictionaryable<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
+    public partial class AvlDictionary<TKey, TValue> : IAvlDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ILazinatorDictionaryable<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>> where TKey : ILazinator where TValue : ILazinator
     {
 
         public AvlDictionary()
@@ -25,6 +25,8 @@ namespace Lazinator.Collections.Avl
             if (UnderlyingTree.AllowDuplicates == false)
                 throw new Exception("AvlDictionary requires an UnderlyingTree that allows duplicates."); // sometimes we allow multiple items with same key
         }
+
+        public bool IsSorted => false;
 
         public IEnumerable<TValue> GetAllValues(TKey key)
         {

@@ -8,11 +8,12 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections.Dictionary
 {
-    public partial class LazinatorDictionary<TKey, TValue> : ILazinatorDictionary<TKey, TValue>, IDictionary<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
+    public partial class LazinatorDictionary<TKey, TValue> : ILazinatorDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ILazinatorDictionaryable<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
         private const int InitialNumBuckets = 1;
         private int NumBuckets => Buckets.Count;
 
+        public bool IsSorted => false;
         public bool IsReadOnly => false;
 
         private void EnsureBucketsExist()
