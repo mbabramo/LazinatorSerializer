@@ -26,8 +26,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Collections\Avl\AvlDictionary.cs" />
-    <Compile Remove="Collections\Avl\AvlDictionary.g.cs" />
     <Compile Remove="Collections\Avl\AvlListNodeContents.cs" />
     <Compile Remove="Collections\Avl\AvlListNodeContents.g.cs" />
     <Compile Remove="Collections\Avl\AvlListNodeTree.cs" />
@@ -39,7 +37,6 @@
     <Compile Remove="Collections\Avl\AvlOldTree.g.cs" />
     <Compile Remove="Collections\Avl\AvlSortedDictionary.cs" />
     <Compile Remove="Collections\Avl\AvlSortedDictionary.g.cs" />
-    <Compile Remove="Collections\Avl\IAvlDictionary.cs" />
     <Compile Remove="Collections\Avl\IAvlListNodeContents.cs" />
     <Compile Remove="Collections\Avl\IAvlListNodeTree.cs" />
     <Compile Remove="Collections\Avl\IAvlOldNode.cs" />

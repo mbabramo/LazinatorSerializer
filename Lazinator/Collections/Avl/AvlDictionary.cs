@@ -1,5 +1,6 @@
 ﻿using Lazinator.Buffers;
 using Lazinator.Collections.Factories;
+using Lazinator.Collections.Interfaces;
 using Lazinator.Collections.Tuples;
 using Lazinator.Core;
 using Lazinator.Support;
@@ -11,13 +12,13 @@ using System.Linq;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlDictionary<TKey, TValue> : IAvlDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ILazinatorKeyableDictionary<TKey, TValue>, ILazinatorKeyableMultivalueDictionary<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
+    public partial class AvlDictionary<TKey, TValue> : IAvlDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ILazinatorDictionaryable<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
         public AvlDictionary()
         {
         }
 
-        public AvlDictionary(ILazinatorOrderedKeyableFactory<WUint, LazinatorTuple<TKey, TValue>> factory)
+        public AvlDictionary(ISortedKeyMultivalueContainerFactory<WUint, LazinatorTuple<TKey, TValue>> factory)
         {
             UnderlyingTree = factory.Create();
             if (UnderlyingTree.AllowDuplicates == false)
@@ -54,7 +55,7 @@ namespace Lazinator.Collections.Avl
 
         private IEnumerable<(KeyValuePair<WUint, LazinatorTuple<TKey, TValue>> keyValue, long index)> EnumerateFrom(uint hash)
         {
-            var result = UnderlyingTree.GetMatchingOrNext(hash, Comparer<WUint>.Default);
+            var result = UnderlyingTree.Fin(hash, Comparer<WUint>.Default);
             long index = result.index;
             var enumerator = UnderlyingTree.GetKeyValuePairEnumerator(index);
             while (enumerator.MoveNext())
@@ -153,6 +154,9 @@ namespace Lazinator.Collections.Avl
         }
 
         int ICollection<KeyValuePair<TKey, TValue>>.Count => (int)Count;
+
+        public ISortedKeyMultivalueContainer<WUint, LazinatorTuple<TKey, TValue>> UnderlyingTree { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public void AddValue(TKey key, TValue value)
         {
@@ -302,6 +306,11 @@ namespace Lazinator.Collections.Avl
                 return false;
             UnderlyingTree.RemoveAt(index);
             return true;
+        }
+
+        public ILazinatorSplittable SplitOff()
+        {
+            throw new NotImplementedException();
         }
     }
 }

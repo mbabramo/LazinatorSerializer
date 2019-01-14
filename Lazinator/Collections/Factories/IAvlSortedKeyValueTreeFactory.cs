@@ -5,8 +5,8 @@ using System.Collections.Generic;
 
 namespace Lazinator.Collections.Factories
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlKeyValueTreeFactory)]
-    public interface IAvlKeyValueTreeFactory<TKey, TValue> 
+    [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlSortedKeyMultivalueTreeFactory)]
+    public interface IAvlSortedKeyMultivalueTreeFactory<TKey, TValue> 
         where TKey : ILazinator, IComparable<TKey>
         where TValue : ILazinator
     {

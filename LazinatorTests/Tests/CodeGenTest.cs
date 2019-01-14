@@ -177,7 +177,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(AvlSortedListFactory<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);
             //await CompleteGenerateCode(typeof(AvlSortedDictionaryFactory<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);
             //await CompleteGenerateCode(typeof(AvlSortedListFactory<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);
-            await CompleteGenerateCode(typeof(AvlKeyValueTreeFactory<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);
+            await CompleteGenerateCode(typeof(AvlSortedKeyMultivalueTreeFactory<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);
             await CompleteGenerateCode(typeof(LazinatorLinkedListFactory<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);
             await CompleteGenerateCode(typeof(LazinatorListFactory<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);
             await CompleteGenerateCode(typeof(SortedLazinatorLinkedListFactory<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);

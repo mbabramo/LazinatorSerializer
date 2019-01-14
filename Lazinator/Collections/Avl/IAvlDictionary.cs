@@ -1,4 +1,5 @@
 ﻿using Lazinator.Attributes;
+using Lazinator.Collections.Interfaces;
 using Lazinator.Collections.Tuples;
 using Lazinator.Core;
 using Lazinator.Wrappers;
@@ -11,7 +12,7 @@ namespace Lazinator.Collections.Avl
         where TKey : ILazinator
         where TValue : ILazinator
     {
-        ILazinatorOrderedKeyable<WUint, LazinatorTuple<TKey, TValue>> UnderlyingTree { get; set; }
+        ISortedKeyMultivalueContainer<WUint, LazinatorTuple<TKey, TValue>> UnderlyingTree { get; set; }
         bool AllowDuplicates { get; set; }
     }
 }
