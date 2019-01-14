@@ -15,9 +15,6 @@ namespace Lazinator.Collections.Avl
     public partial class AvlDictionary<TKey, TValue> : IAvlDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ILazinatorDictionaryable<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
 
-        public ISortedKeyMultivalueContainer<WUint, LazinatorKeyValue<TKey, TValue>> UnderlyingTree { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public AvlDictionary()
         {
         }
