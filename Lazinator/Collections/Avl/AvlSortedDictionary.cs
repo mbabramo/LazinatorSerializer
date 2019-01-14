@@ -1,5 +1,6 @@
 ﻿using Lazinator.Buffers;
 using Lazinator.Collections.Factories;
+using Lazinator.Collections.Interfaces;
 using Lazinator.Core;
 using Lazinator.Wrappers;
 using System;
@@ -9,19 +10,19 @@ using System.Linq;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlSortedDictionary<TKey, TValue> : IAvlSortedDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ILazinatorKeyableDictionary<TKey, TValue>, ILazinatorKeyableMultivalueDictionary<TKey, TValue>, ILazinatorOrderedKeyableDictionary<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
+    public partial class AvlSortedDictionary<TKey, TValue> : IAvlSortedDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ILazinatorDictionaryable<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         public AvlSortedDictionary()
         {
         }
 
-        public AvlSortedDictionary(bool allowDuplicates, ILazinatorOrderedKeyableFactory<TKey, TValue> factory)
+        public AvlSortedDictionary(bool allowDuplicates, ISortedKeyMultivalueContainerFactory<TKey, TValue> factory)
         {
             UnderlyingTree = factory.Create();
             AllowDuplicates = allowDuplicates;
         }
 
-        public AvlSortedDictionary(bool allowDuplicates, ILazinatorOrderedKeyable<TKey, TValue> underlyingTree)
+        public AvlSortedDictionary(bool allowDuplicates, ISortedKeyMultivalueContainer<TKey, TValue> underlyingTree)
         {
             UnderlyingTree = underlyingTree;
             AllowDuplicates = allowDuplicates;
@@ -82,7 +83,7 @@ namespace Lazinator.Collections.Avl
         {
             UnderlyingTree.Clear();
         }
-        
+
         public bool Remove(TKey key, IComparer<TKey> comparer)
         {
             return UnderlyingTree.Remove(key, comparer);
@@ -117,7 +118,7 @@ namespace Lazinator.Collections.Avl
             enumerator.Dispose();
         }
 
-        int ICollection<KeyValuePair<TKey, TValue>>.Count => (int) Count;
+        int ICollection<KeyValuePair<TKey, TValue>>.Count => (int)Count;
 
         public IEnumerable<TValue> GetAllValues(TKey key)
         {
@@ -194,7 +195,7 @@ namespace Lazinator.Collections.Avl
                     bool valueFound = false;
                     int distanceFromFirst = 0;
                     foreach (var value in GetAllValues(item.Key))
-                    { 
+                    {
                         if (item.Value.Equals(value))
                         {
                             valueFound = true;
@@ -318,8 +319,9 @@ namespace Lazinator.Collections.Avl
 
         public ILazinatorSplittable SplitOff()
         {
-            AvlSortedDictionary<TKey, TValue> partSplitOff = new AvlSortedDictionary<TKey, TValue>(AllowDuplicates, (ILazinatorOrderedKeyable<TKey, TValue>) UnderlyingTree.SplitOff());
+            AvlSortedDictionary<TKey, TValue> partSplitOff = new AvlSortedDictionary<TKey, TValue>(AllowDuplicates, (ILazinatorOrderedKeyable<TKey, TValue>)UnderlyingTree.SplitOff());
             return partSplitOff;
         }
+
     }
 }

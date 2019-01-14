@@ -35,13 +35,10 @@
     <Compile Remove="Collections\Avl\AvlOldNode.g.cs" />
     <Compile Remove="Collections\Avl\AvlOldTree.cs" />
     <Compile Remove="Collections\Avl\AvlOldTree.g.cs" />
-    <Compile Remove="Collections\Avl\AvlSortedDictionary.cs" />
-    <Compile Remove="Collections\Avl\AvlSortedDictionary.g.cs" />
     <Compile Remove="Collections\Avl\IAvlListNodeContents.cs" />
     <Compile Remove="Collections\Avl\IAvlListNodeTree.cs" />
     <Compile Remove="Collections\Avl\IAvlOldNode.cs" />
     <Compile Remove="Collections\Avl\IAvlOldTree.cs" />
-    <Compile Remove="Collections\Avl\IAvlSortedDictionary.cs" />
     <Compile Remove="Collections\Factories\AvlDictionaryFactory.cs" />
     <Compile Remove="Collections\Factories\AvlListNodeTreeFactory.cs" />
     <Compile Remove="Collections\Factories\AvlListNodeTreeFactory.g.cs" />
