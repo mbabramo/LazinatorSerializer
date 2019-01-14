@@ -6,8 +6,8 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections.Interfaces
 {
-    [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IOrderableContainer)]
-    public interface IValueContainer<T> : IEnumerable<T> where T : ILazinator
+    [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IValueContainer)]
+    public interface IValueContainer<T> : IEnumerable<T>, ILazinator where T : ILazinator
     {
         bool Unbalanced { get; set; }
         bool AllowDuplicates { get; set; }

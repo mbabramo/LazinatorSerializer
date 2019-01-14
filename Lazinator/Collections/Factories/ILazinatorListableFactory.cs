@@ -5,7 +5,7 @@ using System;
 namespace Lazinator.Collections.Factories
 {
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorListableFactory)]
-    public interface ILazinatorListableFactory<T> where T : ILazinator
+    public interface ILazinatorListableFactory<T> : ILazinator where T : ILazinator
     {
         ILazinatorListable<T> CreateListable();
     }

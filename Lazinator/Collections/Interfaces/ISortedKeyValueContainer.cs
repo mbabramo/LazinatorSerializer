@@ -6,8 +6,8 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections.Interfaces
 {
-    [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorSortedKeyValueTree)]
-    public interface ISortedKeyValueContainer<TKey, TValue> : IKeyValueContainer<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
+    [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ISortedKeyValueContainer)]
+    public interface ISortedKeyValueContainer<TKey, TValue> : IKeyValueContainer<TKey, TValue>, ILazinator where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         bool ContainsKey(TKey key);
         bool ContainsKeyValue(TKey key, TValue value);

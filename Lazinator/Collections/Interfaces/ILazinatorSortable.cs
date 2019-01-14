@@ -12,7 +12,7 @@ namespace Lazinator.Collections
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorSortable)]
-    public interface ILazinatorSortable<T> : ILazinatorListable<T> where T : ILazinator, IComparable<T>
+    public interface ILazinatorSortable<T> : ILazinatorListable<T>, ILazinator where T : ILazinator, IComparable<T>
     {
         bool AllowDuplicates { get; set; }
         (long index, bool insertedNotReplaced) InsertGetIndex(T item);

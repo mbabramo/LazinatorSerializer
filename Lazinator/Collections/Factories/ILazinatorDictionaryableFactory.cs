@@ -5,7 +5,7 @@ using System;
 namespace Lazinator.Collections.Factories
 {
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorDictionaryableFactory)]
-    public interface ILazinatorDictionaryableFactory<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
+    public interface ILazinatorDictionaryableFactory<TKey, TValue> : ILazinator where TKey : ILazinator where TValue : ILazinator
     {
         ILazinatorDictionaryable<TKey, TValue> CreateDictionaryable();
     }

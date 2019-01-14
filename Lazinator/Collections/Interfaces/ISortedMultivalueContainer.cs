@@ -7,7 +7,7 @@ using Lazinator.Core;
 namespace Lazinator.Collections.Interfaces
 {
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ISortedMultivalueContainer)]
-    public interface ISortedMultivalueContainer<T> : IMultivalueContainer<T>, ISortedContainer<T> where T : ILazinator, IComparable<T>
+    public interface ISortedMultivalueContainer<T> : IMultivalueContainer<T>, ISortedContainer<T>, ILazinator where T : ILazinator, IComparable<T>
     {
         bool TryInsert(T item, MultivalueLocationOptions whichOne);
         bool TryRemove(T item, MultivalueLocationOptions whichOne);

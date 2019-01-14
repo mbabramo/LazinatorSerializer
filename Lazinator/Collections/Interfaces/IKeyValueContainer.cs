@@ -6,8 +6,8 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections.Interfaces
 {
-    [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorKeyValueTree)]
-    public interface IKeyValueContainer<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>> where TKey : ILazinator where TValue : ILazinator
+    [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IKeyValueContainer)]
+    public interface IKeyValueContainer<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>, ILazinator where TKey : ILazinator where TValue : ILazinator
     {
         IKeyValueContainer<TKey, TValue> CreateNewWithSameSettings();
         bool AllowDuplicates { get; set; }

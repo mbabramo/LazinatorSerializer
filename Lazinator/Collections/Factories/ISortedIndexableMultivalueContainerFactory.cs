@@ -5,7 +5,7 @@ using Lazinator.Collections.Interfaces;
 
 namespace Lazinator.Collections.Factories
 {
-    [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ISortedIndexableContainerFactory)]
+    [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ISortedIndexableMultivalueContainerFactory)]
     public interface ISortedIndexableMultivalueContainerFactory<T> : ILazinator where T : ILazinator, IComparable<T>
     {
         bool AllowDuplicates { get; set; }
