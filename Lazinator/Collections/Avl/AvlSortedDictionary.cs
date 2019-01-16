@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlSortedDictionary<TKey, TValue> : IAvlSortedDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ILazinatorDictionaryable<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
+    public partial class AvlSortedDictionary<TKey, TValue> : IAvlSortedDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ILazinatorDictionaryable<TKey, TValue>, ILazinatorMultivalueDictionaryable<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         public AvlSortedDictionary()
         {
@@ -207,6 +207,30 @@ namespace Lazinator.Collections.Avl
         public IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(bool reverse = false, long skip = 0)
         {
             return UnderlyingTree.GetKeyValuePairEnumerator(reverse, skip);
+        }
+
+        public void AddValueForKey(TKey key, TValue value)
+        {
+            ConfirmMultivalue();
+            UnderlyingTree.AddValueForKey(key, value);
+        }
+
+        public bool TryRemoveKeyValue(TKey key, TValue value)
+        {
+            ConfirmMultivalue();
+            return UnderlyingTree.TryRemoveKeyValue(key, value);
+        }
+
+        public bool TryRemoveAll(TKey key)
+        {
+            ConfirmMultivalue();
+            return UnderlyingTree.TryRemoveAll(key);
+        }
+
+        private void ConfirmMultivalue()
+        {
+            if (!AllowDuplicates)
+                throw new NotSupportedException("AddValueForKey is for dictionaries with duplicates only.");
         }
     }
 }

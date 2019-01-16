@@ -79,8 +79,8 @@ namespace Lazinator.Collections.Dictionary
                 uint itemHash = Keys.GetListMemberHash32(i);
                 if (searchHash == itemHash)
                 {
-                    TKey item = Keys[i];
-                    if (key.Equals(item))
+                    TKey anotherKey = Keys[i];
+                    if (key.Equals(anotherKey))
                         return _lastResult = i;
                 }
             }

@@ -12,6 +12,7 @@ using LazinatorTests.Examples;
 using Lazinator.Collections.Tuples;
 using Lazinator.Collections.Factories;
 using Lazinator.Examples.Structs;
+using Lazinator.Collections.Interfaces;
 
 namespace LazinatorTests.Tests
 {
@@ -34,13 +35,13 @@ namespace LazinatorTests.Tests
                 case DictionaryToUse.LazinatorDictionary:
                     return new LazinatorDictionary<TKey, TValue>();
                 case DictionaryToUse.AvlDictionary:
-                    return new AvlDictionary<TKey, TValue>((ISortedKeyMultivalueContainerFactory<WUint, LazinatorTuple<TKey, TValue>>)new AvlKeyValueTreeFactory<WUint, LazinatorTuple<TKey, TValue>>() { AllowDuplicates = true });
+                    return new AvlDictionary<TKey, TValue>(false, new AvlSortedKeyMultivalueTreeFactory<WUint, LazinatorKeyValue<TKey, TValue>>(true, false)); // even though AvlDictionary is not multivalue on key, it's organized by hash, so underlying dictionary must be multivalue.
                 case DictionaryToUse.AvlDictionaryMultiValue:
-                    return new AvlDictionary<TKey, TValue>((ISortedKeyMultivalueContainerFactory<WUint, LazinatorTuple<TKey, TValue>>)new AvlKeyValueTreeFactory<WUint, LazinatorTuple<TKey, TValue>>() { AllowDuplicates = true }) { AllowDuplicates = true };
+                    return new AvlDictionary<TKey, TValue>(true, new AvlSortedKeyMultivalueTreeFactory<WUint, LazinatorKeyValue<TKey, TValue>>(true, false));
                 case DictionaryToUse.AvlSortedDictionary:
-                    return new AvlSortedDictionary<TKey, TValue>(false, (ISortedKeyMultivalueContainerFactory<TKey, TValue>) new AvlKeyValueTreeFactory<TKey, TValue>());
+                    return new AvlSortedDictionary<TKey, TValue>(false, new AvlSortedKeyMultivalueTreeFactory<TKey, TValue>(false, false)); 
                 case DictionaryToUse.AvlSortedDictionaryMultiValue:
-                    return new AvlSortedDictionary<TKey, TValue>(true, (ISortedKeyMultivalueContainerFactory<TKey, TValue>)new AvlKeyValueTreeFactory<TKey, TValue>() { AllowDuplicates = true }) { AllowDuplicates = true };
+                    return new AvlSortedDictionary<TKey, TValue>(true, new AvlSortedKeyMultivalueTreeFactory<TKey, TValue>(true, false));
             }
             throw new InvalidOperationException();
         }
@@ -296,8 +297,7 @@ namespace LazinatorTests.Tests
         [InlineData(DictionaryToUse.AvlSortedDictionaryMultiValue)]
         public void SortedMultivalueDictionaryWorks(DictionaryToUse dictionaryToUse)
         {
-            debug; // add ILazinatorMultivalueDictionaryable
-            ILazinatorDictionaryable<WLong, WInt> d = (ILazinatorDictionaryable<WLong, WInt>)GetDictionary<WLong, WInt>(dictionaryToUse);
+            ILazinatorMultivalueDictionaryable<WLong, WInt> d = (ILazinatorMultivalueDictionaryable<WLong, WInt>)GetDictionary<WLong, WInt>(dictionaryToUse);
             const int numKeys = 100;
             const int numEntries = 150;
             List<int>[] itemsForNode = new List<int>[numKeys];
@@ -306,10 +306,10 @@ namespace LazinatorTests.Tests
             Random r = new Random(0);
             for (int i = 0; i < numEntries; i++)
             {
-                int j = r.Next(numKeys);
-                int k = r.Next();
-                itemsForNode[j].Add(k);
-                d.SetV(j, k);
+                int key = r.Next(numKeys);
+                int value = r.Next();
+                itemsForNode[key].Add(value);
+                d.AddValueForKey(key, value);
                 d.Count.Should().Be(i + 1);
             }
             for (int i = 0; i < numKeys; i++)
@@ -318,7 +318,7 @@ namespace LazinatorTests.Tests
                 var items = d.GetAllValues(key).Select(x => x.WrappedValue).ToList();
                 d.ContainsKey(key).Should().Be(items.Any());
                 items.SequenceEqual(itemsForNode[i]).Should().BeTrue();
-                d.RemoveAll(key);
+                d.TryRemoveAll(key);
                 d.GetAllValues(key).Any().Should().BeFalse();
             }
         }

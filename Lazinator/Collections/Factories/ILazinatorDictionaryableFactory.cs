@@ -1,6 +1,7 @@
 ﻿using Lazinator.Core;
 using Lazinator.Attributes;
 using System;
+using Lazinator.Collections.Interfaces;
 
 namespace Lazinator.Collections.Factories
 {

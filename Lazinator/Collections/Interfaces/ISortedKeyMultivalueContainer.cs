@@ -10,7 +10,7 @@ namespace Lazinator.Collections.Interfaces
     public interface ISortedKeyMultivalueContainer<TKey, TValue> : ISortedKeyValueContainer<TKey, TValue>, IKeyMultivalueContainer<TKey, TValue>, ILazinator where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         IEnumerable<TValue> GetAllValues(TKey key);
-        bool TryRemoveAll(TKey item);
+        bool TryRemoveAll(TKey key);
 
         TValue GetValueForKey(TKey key, MultivalueLocationOptions whichOne);
         bool SetValueForKey(TKey key, TValue value, MultivalueLocationOptions whichOne);

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Lazinator.Collections
+namespace Lazinator.Collections.Interfaces
 {
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorDictionaryable)]
     public interface ILazinatorDictionaryable<TKey, TValue> : IDictionary<TKey, TValue>, ILazinator where TKey : ILazinator where TValue : ILazinator

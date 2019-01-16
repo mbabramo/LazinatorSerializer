@@ -12,18 +12,19 @@ using System.Linq;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlDictionary<TKey, TValue> : IAvlDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ILazinatorDictionaryable<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>> where TKey : ILazinator where TValue : ILazinator
+    public partial class AvlDictionary<TKey, TValue> : IAvlDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ILazinatorDictionaryable<TKey, TValue>, ILazinatorMultivalueDictionaryable<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>> where TKey : ILazinator where TValue : ILazinator
     {
 
         public AvlDictionary()
         {
         }
 
-        public AvlDictionary(ISortedKeyMultivalueContainerFactory<WUint, LazinatorKeyValue<TKey, TValue>> factory)
+        public AvlDictionary(bool allowDuplicates, ISortedKeyMultivalueContainerFactory<WUint, LazinatorKeyValue<TKey, TValue>> factory)
         {
             UnderlyingTree = factory.Create();
             if (UnderlyingTree.AllowDuplicates == false)
-                throw new Exception("AvlDictionary requires an UnderlyingTree that allows duplicates."); // sometimes we allow multiple items with same key
+                throw new Exception("AvlDictionary requires an UnderlyingTree that allows duplicates."); // the underlying tree is organized by the hash value, and multiple items can share a hash value, regardless of whether multiple items can share a key
+            AllowDuplicates = allowDuplicates;
         }
 
         public bool IsSorted => false;
@@ -211,6 +212,35 @@ namespace Lazinator.Collections.Avl
         private IEnumerator<LazinatorKeyValue<TKey, TValue>> GetUnderlyingTree2ValueEnumerator()
         {
             return UnderlyingTree.GetValueEnumerator();
+        }
+
+        public void AddValueForKey(TKey key, TValue value)
+        {
+            ConfirmMultivalue();
+            uint hash = key.GetBinaryHashCode32();
+            LazinatorKeyValue<TKey, TValue> keyValue = new LazinatorKeyValue<TKey, TValue>(key, value);
+            UnderlyingTree.AddValueForKey(hash, keyValue);
+        }
+
+        public bool TryRemoveKeyValue(TKey key, TValue value)
+        {
+            ConfirmMultivalue();
+            uint hash = key.GetBinaryHashCode32();
+            LazinatorKeyValue<TKey, TValue> keyValue = new LazinatorKeyValue<TKey, TValue>(key, value);
+            bool result = UnderlyingTree.TryRemoveKeyValue(hash, keyValue);
+            return result;
+        }
+
+        public bool TryRemoveAll(TKey key)
+        {
+            ConfirmMultivalue();
+            return RemoveAll(key);
+        }
+
+        private void ConfirmMultivalue()
+        {
+            if (!AllowDuplicates)
+                throw new NotSupportedException("AddValueForKey is for dictionaries with duplicates only.");
         }
     }
 }

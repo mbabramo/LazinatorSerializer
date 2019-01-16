@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Lazinator.Collections.Enumerators;
+using Lazinator.Collections.Interfaces;
 using Lazinator.Collections.Tuples;
 using Lazinator.Core;
 

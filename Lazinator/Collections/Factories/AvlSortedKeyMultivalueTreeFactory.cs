@@ -9,9 +9,21 @@ namespace Lazinator.Collections.Factories
 {
     public partial class AvlSortedKeyMultivalueTreeFactory<TKey, TValue> : IAvlSortedKeyMultivalueTreeFactory<TKey, TValue>, ISortedKeyMultivalueContainerFactory<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
+
+        public bool Indexable { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public AvlSortedKeyMultivalueTreeFactory(bool allowDuplicates, bool indexable)
+        {
+            AllowDuplicates = allowDuplicates;
+            Indexable = indexable;
+        }
+
         public ISortedKeyMultivalueContainer<TKey, TValue> Create()
         {
-            return null; // DEBUG
+            if (Indexable)
+                return new AvlSortedIndexableKeyValueTree<TKey, TValue>(AllowDuplicates);
+            else
+                return new AvlSortedKeyValueTree<TKey, TValue>(AllowDuplicates);
         }
     }
 }

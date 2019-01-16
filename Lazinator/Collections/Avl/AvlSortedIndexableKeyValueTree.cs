@@ -39,7 +39,7 @@ namespace Lazinator.Collections.Avl
 
         public IEnumerable<TValue> GetAllValues(TKey key) => GetAllValues(key, Comparer<TKey>.Default);
 
-        public bool TryRemoveAll(TKey item) => TryRemoveAll(item, Comparer<TKey>.Default);
+        public bool TryRemoveAll(TKey key) => TryRemoveAll(key, Comparer<TKey>.Default);
 
         public bool SetValueForKey(TKey key, TValue value, MultivalueLocationOptions whichOne) => SetValueForKey(key, value, whichOne, Comparer<TKey>.Default);
 

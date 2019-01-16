@@ -10,6 +10,7 @@ namespace Lazinator.Collections.Factories
         where TKey : ILazinator, IComparable<TKey>
         where TValue : ILazinator
     {
+        bool Indexable { get; set; }
         bool AllowDuplicates { get; set; }
     }
 }
