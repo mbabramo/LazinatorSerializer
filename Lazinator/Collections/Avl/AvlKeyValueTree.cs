@@ -16,6 +16,7 @@ namespace Lazinator.Collections.Avl
         public AvlKeyValueTree(bool allowDuplicates)
         {
             UnderlyingTree = new AvlTree<LazinatorKeyValue<TKey, TValue>>() { AllowDuplicates = allowDuplicates };
+            AllowDuplicates = allowDuplicates;
         }
 
 
