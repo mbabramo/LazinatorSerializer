@@ -9,9 +9,6 @@ namespace Lazinator.Collections.Factories
 {
     public partial class AvlSortedKeyMultivalueTreeFactory<TKey, TValue> : IAvlSortedKeyMultivalueTreeFactory<TKey, TValue>, ISortedKeyMultivalueContainerFactory<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
-
-        public bool Indexable { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public AvlSortedKeyMultivalueTreeFactory(bool allowDuplicates, bool indexable)
         {
             AllowDuplicates = allowDuplicates;
