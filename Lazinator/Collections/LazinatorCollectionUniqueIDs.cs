@@ -146,5 +146,7 @@
         IAvlSortedIndexableKeyValueTree,
         IAvlSortedKeyMultivalueTreeFactory,
         ILazinatorMultivalueDictionaryable,
+        IAvlWeightedNode,
+        IAvlListTree,
     }
 }
