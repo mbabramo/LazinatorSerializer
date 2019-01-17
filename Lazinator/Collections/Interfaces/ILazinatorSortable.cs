@@ -8,16 +8,13 @@ using System.Text;
 namespace Lazinator.Collections
 {
     /// <summary>
-    /// An interface allowing insertion and removal of sorted comparable items
+    /// An interface allowing insertion and removal of sorted items, using a custom comparer
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorSortable)]
-    public interface ILazinatorSortable<T> : ILazinatorListable<T>, ILazinator where T : ILazinator, IComparable<T>
+    public interface ILazinatorSortable<T> : ILazinatorListable<T>, ILazinator where T : ILazinator
     {
         bool AllowDuplicates { get; set; }
-        (long index, bool insertedNotReplaced) InsertGetIndex(T item);
-        bool TryRemove(T item);
-        (long index, bool exists) Find(T target);
         (long index, bool insertedNotReplaced) InsertGetIndex(T item, IComparer<T> comparer);
         bool TryRemove(T item, IComparer<T> comparer);
         (long index, bool exists) Find(T target, IComparer<T> comparer);

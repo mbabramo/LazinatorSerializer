@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Lazinator.Collections.Factories
 {
-    public partial class AvlSortedListFactory<T> : IAvlSortedListFactory<T>, ILazinatorSortableFactory<T> where T : ILazinator, IComparable<T>
+    public partial class AvlSortedListFactory<T> : IAvlSortedListFactory<T>, ILazinatorSortedFactory<T> where T : ILazinator, IComparable<T>
     {
         public AvlSortedListFactory(bool allowDuplicates, ISortedIndexableMultivalueContainerFactory<T> sortedIndexableContainerFactory)
         {
@@ -21,7 +21,7 @@ namespace Lazinator.Collections.Factories
             return new AvlSortedList<T>(AllowDuplicates, SortedIndexableContainerFactory);
         }
 
-        public ILazinatorSortable<T> CreateSortable()
+        public ILazinatorSorted<T> CreateSorted()
         {
             return new AvlSortedList<T>(AllowDuplicates, SortedIndexableContainerFactory);
         }

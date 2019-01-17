@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Lazinator.Collections.Factories
 {
-    public partial class SortedLazinatorListFactory<T> : ISortedLazinatorListFactory<T>, ILazinatorListableFactory<T>, ILazinatorSortableFactory<T> where T : ILazinator, IComparable<T>
+    public partial class SortedLazinatorListFactory<T> : ISortedLazinatorListFactory<T>, ILazinatorListableFactory<T>, ILazinatorSortedFactory<T> where T : ILazinator, IComparable<T>
     {
         public ILazinatorListable<T> CreateListable()
         {
@@ -15,7 +15,7 @@ namespace Lazinator.Collections.Factories
             };
         }
 
-        public ILazinatorSortable<T> CreateSortable()
+        public ILazinatorSorted<T> CreateSorted()
         {
             return new SortedLazinatorList<T>()
             {

@@ -71,7 +71,7 @@
         ICountableContainer,
         ILazinatorIndexable,
         ILazinatorUncountedListable,
-        ILazinatorSortable,
+        ILazinatorSorted,
         ILazinatorBranchable,
         ILazinatorKeyable,
         ILazinatorListable,
@@ -90,7 +90,7 @@
         IAvlListFactory,
         IAvlSortedListFactory,
         IAvlSortedListAllowDuplicatesFactory,
-        ILazinatorSortableFactory,
+        ILazinatorSortedFactory,
         ILazinatorListFactory,
         ILazinatorLinkedListFactory,
         ISortedLazinatorLinkedListFactory,
@@ -146,5 +146,6 @@
         ILazinatorMultivalueDictionaryable,
         IAvlWeightedNode,
         IAvlListTree,
+        ILazinatorSortable,
     }
 }

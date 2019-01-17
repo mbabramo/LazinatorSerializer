@@ -103,18 +103,6 @@ namespace Lazinator.Collections.Avl.ListTree
             return UnderlyingTree.Last().Last();
         }
 
-        public bool Contains(T item, IComparer<T> comparer)
-        {
-            var node = GetNodeForValue(item, MultivalueLocationOptions.Any, comparer, false);
-            if (node == null)
-                return false;
-            if (node.Value is ILazinatorSortable<T> sortable)
-            {
-
-            }
-            return node.Value.Contains(item);
-        }
-
         public bool GetValue(T item, IComparer<T> comparer, out T match)
         {
             throw new NotImplementedException();
@@ -151,6 +139,36 @@ namespace Lazinator.Collections.Avl.ListTree
         }
 
         IEnumerator IEnumerable.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool GetValue(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, out T match)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TryInsert(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool TryRemoveAll(T item, IComparer<T> comparer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public long Count(T item, IComparer<T> comparer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ILazinatorSplittable SplitOff()
         {
             throw new NotImplementedException();
         }

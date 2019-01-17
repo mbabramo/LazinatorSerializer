@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace Lazinator.Collections.Avl
 {
-    public partial class AvlSortedList<T> : IAvlSortedList<T>, IList<T>, ILazinatorSortable<T> where T : ILazinator, IComparable<T>
+    public partial class AvlSortedList<T> : IAvlSortedList<T>, IList<T>, ILazinatorSorted<T> where T : ILazinator, IComparable<T>
     {
         public AvlSortedList()
         {
