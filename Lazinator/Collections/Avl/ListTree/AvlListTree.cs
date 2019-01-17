@@ -159,8 +159,17 @@ namespace Lazinator.Collections.Avl.ListTree
                 match = default;
                 return false;
             }
-            var result = sortable.Find(item, comparer);
-            throw new NotImplementedException();
+            var result = sortable.Find(item, whichOne, comparer);
+            if (result.exists)
+            {
+                match = sortable.GetAt(result.index);
+                return true;
+            }
+            else
+            {
+                match = default;
+                return false;
+            }
         }
 
         public bool TryInsert(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
