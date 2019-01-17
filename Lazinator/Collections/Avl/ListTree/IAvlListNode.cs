@@ -2,7 +2,7 @@
 using Lazinator.Attributes;
 using System;
 
-namespace Lazinator.Collections.Avl.ListNodeTree
+namespace Lazinator.Collections.Avl.ListTree
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlWeightedNode)]
     internal interface IAvlListNode<T> where T : ILazinator

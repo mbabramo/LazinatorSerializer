@@ -8,7 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Lazinator.Collections.Avl.ListNodeTree
+namespace Lazinator.Collections.Avl.ListTree
 {
     public partial class AvlListTree<T> : IAvlListTree<T>, IIndexableContainer<T>, ILazinatorSplittable where T : ILazinator
     {

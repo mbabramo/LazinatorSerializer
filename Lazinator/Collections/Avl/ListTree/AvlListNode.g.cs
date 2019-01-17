@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Lazinator.Collections.Avl.ListNodeTree
+namespace Lazinator.Collections.Avl.ListTree
 {
     using Lazinator.Attributes;
     using Lazinator.Buffers;

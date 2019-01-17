@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Lazinator.Collections.Avl.ListNodeTree
+namespace Lazinator.Collections.Avl.ListTree
 {
     public partial class AvlListNode<T> : AvlCountedNode<T>, IAvlListNode<T> where T : ILazinator
     {

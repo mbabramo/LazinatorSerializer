@@ -3,7 +3,7 @@ using Lazinator.Attributes;
 using System;
 using Lazinator.Collections.Avl.ValueTree;
 
-namespace Lazinator.Collections.Avl.ListNodeTree
+namespace Lazinator.Collections.Avl.ListTree
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlListTree)]
     internal interface IAvlListTree<T> where T : ILazinator
