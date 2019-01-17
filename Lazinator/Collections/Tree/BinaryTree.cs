@@ -200,7 +200,7 @@ namespace Lazinator.Collections.Tree
         /// Gets the last node (or none if empty).
         /// </summary>
         /// <returns></returns>
-        protected BinaryNode<T> FirstNode()
+        protected internal BinaryNode<T> FirstNode()
         {
             var x = Root;
             while (x?.Left != null)
@@ -212,7 +212,7 @@ namespace Lazinator.Collections.Tree
         /// Gets the last node (or none if empty)
         /// </summary>
         /// <returns></returns>
-        protected BinaryNode<T> LastNode()
+        protected internal BinaryNode<T> LastNode()
         {
             var x = Root;
             while (x?.Right != null)

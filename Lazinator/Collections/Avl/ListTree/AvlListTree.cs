@@ -10,121 +10,50 @@ using System.Text;
 
 namespace Lazinator.Collections.Avl.ListTree
 {
-    public partial class AvlListTree<T> : IAvlListTree<T>, IIndexableContainer<T>, ILazinatorSplittable where T : ILazinator
+    public partial class AvlListTree<T> : IAvlListTree<T>, IValueContainer<T>, IMultivalueContainer<T>, ILazinatorSplittable where T : ILazinator
     {
-        public bool Unbalanced { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public long LongCount => throw new NotImplementedException();
-
-        public bool Any()
+        private int CompareBasedOnEndItems(BinaryNode<ILazinatorListable<T>> node, T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
-            throw new NotImplementedException();
+            T last = node.Value.Last();
+            var lastComparison = comparer.Compare(item, last);
+            if (lastComparison >= 0)
+                return lastComparison; // item is last or after
+            T first = node.Value.First();
+            var firstComparison = comparer.Compare(item, first);
+            if (firstComparison <= 0)
+                return firstComparison; // item is first or before
+            return 0; // item is between first and last
         }
 
-        public IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
+        protected int Foo(int? x)
         {
-            throw new NotImplementedException();
+            if (x is int y)
+                return y;
+            return default;
         }
 
-        public void Clear()
+        protected AvlCountedNode<ILazinatorListable<T>> GetNodeForValue(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, bool chooseShorterIfInBetween)
         {
-            throw new NotImplementedException();
-        }
-
-        public bool Contains(T item, IComparer<T> comparer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IValueContainer<T> CreateNewWithSameSettings()
-        {
-            throw new NotImplementedException();
-        }
-
-        public (long index, bool exists) Find(T target, IComparer<T> comparer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public T First()
-        {
-            throw new NotImplementedException();
-        }
-
-        public T FirstOrDefault()
-        {
-            throw new NotImplementedException();
-        }
-
-        public T GetAt(long index)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerator<T> GetEnumerator(bool reverse = false, long skip = 0)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool GetValue(T item, IComparer<T> comparer, out T match)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void InsertAt(long index, T item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public (long index, bool insertedNotReplaced) InsertGetIndex(T item, IComparer<T> comparer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public T Last()
-        {
-            throw new NotImplementedException();
-        }
-
-        public T LastOrDefault()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveAt(long index)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetAt(long index, T value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ILazinatorSplittable SplitOff()
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool TryInsert(T item, IComparer<T> comparer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool TryRemove(T item, IComparer<T> comparer)
-        {
-            throw new NotImplementedException();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
+            var matchInfo = UnderlyingTree.GetMatchingOrNextNode(whichOne, n => CompareBasedOnEndItems((AvlCountedNode<ILazinatorListable<T>>)n, item, whichOne, comparer));
+            var node = matchInfo.found ? (AvlCountedNode<ILazinatorListable<T>>)matchInfo.node : (AvlCountedNode<ILazinatorListable<T>>)UnderlyingTree.LastNode();
+            if (node == null || !chooseShorterIfInBetween)
+                return node;
+            bool isBeforeThis = comparer.Compare(item, node.Value.First()) == -1;
+            if (isBeforeThis)
+            {
+                AvlCountedNode<ILazinatorListable<T>> previousNode = (AvlCountedNode<ILazinatorListable<T>>)node.GetPreviousNode();
+                bool inBetweenThisAndPrevious = previousNode != null && comparer.Compare(item, previousNode.Value.Last()) == 1;
+                if (inBetweenThisAndPrevious)
+                {
+                    long previousCount = previousNode.Value.LongCount;
+                    long currentCount = node.Value.LongCount;
+                    if (previousCount < currentCount)
+                        return previousNode;
+                }
+            }
+            return node;
         }
     }
 
