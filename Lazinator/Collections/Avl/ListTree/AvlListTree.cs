@@ -13,10 +13,6 @@ namespace Lazinator.Collections.Avl.ListTree
 {
     public partial class AvlListTree<T> : IAvlListTree<T>, IValueContainer<T>, IMultivalueContainer<T>, ILazinatorSplittable where T : ILazinator
     {
-        public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool Unbalanced { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public ILazinatorListableFactory<T> ListableFactory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public AvlListTree(bool allowDuplicates, bool unbalanced, ILazinatorListableFactory<T> listableFactory)
         {
             AllowDuplicates = allowDuplicates;
