@@ -13,6 +13,7 @@ using LazinatorTests.Examples.NonAbstractGenerics;
 using Lazinator.Collections.Tuples;
 using Lazinator.Collections.Avl;
 using Lazinator.Collections.Interfaces;
+using Lazinator.Collections.Avl.KeyValueTree;
 
 namespace LazinatorTests.Tests
 {

@@ -31,6 +31,9 @@ using Lazinator.Collections.Tree;
 using Lazinator.Collections.Tuples;
 using Lazinator.Collections.Factories;
 using Lazinator.Examples.Structs;
+using Lazinator.Collections.Avl.ValueTree;
+using Lazinator.Collections.Avl.KeyValueTree;
+using Lazinator.Collections.Avl.ListNodeTree;
 
 namespace LazinatorTests.Tests
 {

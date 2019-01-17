@@ -4,6 +4,7 @@ using System.Linq;
 using FluentAssertions;
 using Lazinator.Buffers;
 using Lazinator.Collections.Avl;
+using Lazinator.Collections.Avl.KeyValueTree;
 using Lazinator.Core;
 using Lazinator.Wrappers;
 using Xunit;
