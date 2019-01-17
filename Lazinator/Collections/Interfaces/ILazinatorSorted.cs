@@ -17,5 +17,8 @@ namespace Lazinator.Collections
         (long index, bool insertedNotReplaced) InsertGetIndex(T item);
         bool TryRemove(T item);
         (long index, bool exists) Find(T target);
+        (long index, bool insertedNotReplaced) InsertGetIndex(T item, MultivalueLocationOptions whichOne);
+        bool TryRemove(T item, MultivalueLocationOptions whichOne);
+        (long index, bool exists) Find(T target, MultivalueLocationOptions whichOne);
     }
 }

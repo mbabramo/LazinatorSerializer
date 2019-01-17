@@ -189,16 +189,19 @@ namespace Lazinator.Collections.Avl
         }
 
         public (long index, bool insertedNotReplaced) InsertGetIndex(T item) => InsertGetIndex(item, Comparer<T>.Default);
-
+        public (long index, bool insertedNotReplaced) InsertGetIndex(T item, MultivalueLocationOptions whichOne) => InsertGetIndex(item, whichOne, Comparer<T>.Default);
         public (long index, bool insertedNotReplaced) InsertGetIndex(T item, IComparer<T> comparer) => UnderlyingTree.InsertGetIndex(item, AllowDuplicates ? MultivalueLocationOptions.InsertAfterLast : MultivalueLocationOptions.Any, comparer);
+        public (long index, bool insertedNotReplaced) InsertGetIndex(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => UnderlyingTree.InsertGetIndex(item, whichOne, comparer);
 
         public bool TryRemove(T item) => TryRemove(item, Comparer<T>.Default);
-
+        public bool TryRemove(T item, MultivalueLocationOptions whichOne) => TryRemove(item, whichOne, Comparer<T>.Default);
         public bool TryRemove(T item, IComparer<T> comparer) => UnderlyingTree.TryRemove(item, comparer);
+        public bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => UnderlyingTree.TryRemove(item, whichOne, comparer);
 
         public (long index, bool exists) Find(T target) => UnderlyingTree.Find(target, MultivalueLocationOptions.First, Comparer<T>.Default);
-
+        public (long index, bool exists) Find(T target, MultivalueLocationOptions whichOne) => UnderlyingTree.Find(target, whichOne, Comparer<T>.Default);
         public (long index, bool exists) Find(T target, IComparer<T> comparer) => UnderlyingTree.Find(target, comparer);
+        public (long index, bool exists) Find(T target, MultivalueLocationOptions whichOne, IComparer<T> comparer) => UnderlyingTree.Find(target, whichOne, comparer);
 
         public virtual ILazinatorSplittable SplitOff()
         {

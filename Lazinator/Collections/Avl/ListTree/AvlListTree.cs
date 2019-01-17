@@ -66,6 +66,18 @@ namespace Lazinator.Collections.Avl.ListTree
             return node;
         }
 
+        private ILazinatorSortable<T> GetSortable(AvlCountedNode<ILazinatorListable<T>> node)
+        {
+            if (node == null)
+                return null;
+            var result = node.Value as ILazinatorSortable<T>;
+            if (result == null)
+                throw new Exception("The list in the AvlListTree must be sortable to use this method.");
+            return result;
+        }
+
+        private ILazinatorSortable<T> GetSortableForValue(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, bool chooseShorterIfInBetween) => GetSortable(GetNodeForValue(item, whichOne, comparer, chooseShorterIfInBetween));
+
         public bool Any()
         {
             return UnderlyingTree.Any();
@@ -141,6 +153,13 @@ namespace Lazinator.Collections.Avl.ListTree
 
         public bool GetValue(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, out T match)
         {
+            var sortable = GetSortableForValue(item, whichOne, comparer, false);
+            if (sortable == null)
+            {
+                match = default;
+                return false;
+            }
+            var result = sortable.Find(item, comparer);
             throw new NotImplementedException();
         }
 
