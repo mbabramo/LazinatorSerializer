@@ -21,7 +21,8 @@ namespace Lazinator.Collections.Avl.ValueTree
         {
             return new AvlTree<T>()
             {
-                AllowDuplicates = AllowDuplicates
+                AllowDuplicates = AllowDuplicates,
+                Unbalanced = Unbalanced
             };
         }
 

@@ -221,7 +221,7 @@ namespace Lazinator.Collections
             }
         }
 
-        public bool Contains(T item)
+        public virtual bool Contains(T item)
         {
             return (this.Any(x => System.Collections.Generic.EqualityComparer<T>.Default.Equals(x, item)));
         }
