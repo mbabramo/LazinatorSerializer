@@ -12,6 +12,11 @@ namespace Lazinator.Collections.Interfaces
         bool Unbalanced { get; set; }
         bool AllowDuplicates { get; set; }
         IValueContainer<T> CreateNewWithSameSettings();
+        bool Any();
+        T First();
+        T FirstOrDefault();
+        T Last();
+        T LastOrDefault();
         bool Contains(T item, IComparer<T> comparer);
         /// <summary>
         /// Gets a matching value using a custom comparer, which may match on only part of the item.

@@ -17,6 +17,11 @@ namespace Lazinator.Collections.Avl.ListNodeTree
 
         public long LongCount => throw new NotImplementedException();
 
+        public bool Any()
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
         {
             throw new NotImplementedException();
@@ -38,6 +43,16 @@ namespace Lazinator.Collections.Avl.ListNodeTree
         }
 
         public (long index, bool exists) Find(T target, IComparer<T> comparer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public T First()
+        {
+            throw new NotImplementedException();
+        }
+
+        public T FirstOrDefault()
         {
             throw new NotImplementedException();
         }
@@ -68,6 +83,16 @@ namespace Lazinator.Collections.Avl.ListNodeTree
         }
 
         public (long index, bool insertedNotReplaced) InsertGetIndex(T item, IComparer<T> comparer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public T Last()
+        {
+            throw new NotImplementedException();
+        }
+
+        public T LastOrDefault()
         {
             throw new NotImplementedException();
         }

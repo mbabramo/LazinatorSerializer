@@ -35,6 +35,39 @@ namespace Lazinator.Collections.Tree
             };
         }
 
+        public bool Any()
+        {
+            return Root != null;
+        }
+
+        public T Last()
+        {
+            if (!Any())
+                throw new Exception("The tree is empty.");
+            return LastNode().Value;
+        }
+
+        public T LastOrDefault()
+        {
+            if (Any())
+                return LastNode().Value;
+            return default(T);
+        }
+
+        public T First()
+        {
+            if (!Any())
+                throw new Exception("The tree is empty.");
+            return FirstNode().Value;
+        }
+
+        public T FirstOrDefault()
+        {
+            if (Any())
+                return FirstNode().Value;
+            return default(T);
+        }
+
         public long Count(T item, IComparer<T> comparer)
         {
             var node = GetMatchingNode(item, MultivalueLocationOptions.First, comparer);

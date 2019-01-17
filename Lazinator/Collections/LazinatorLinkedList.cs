@@ -275,6 +275,39 @@ namespace Lazinator.Collections
             this[(int)index] = value;
         }
 
+        public bool Any()
+        {
+            return Count == 0;
+        }
+
+        public T First()
+        {
+            if (!Any())
+                throw new Exception("The list is empty.");
+            return this[0];
+        }
+
+        public T FirstOrDefault()
+        {
+            if (Any())
+                return this[0];
+            return default(T);
+        }
+
+        public T Last()
+        {
+            if (!Any())
+                throw new Exception("The list is empty.");
+            return this[Count - 1];
+        }
+
+        public T LastOrDefault()
+        {
+            if (Any())
+                return this[Count - 1];
+            return default(T);
+        }
+
         public virtual ILazinatorSplittable SplitOff()
         {
             LazinatorLinkedList<T> partSplitOff = new LazinatorLinkedList<T>();

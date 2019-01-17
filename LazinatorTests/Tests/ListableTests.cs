@@ -141,6 +141,55 @@ namespace LazinatorTests.Tests
             var result = l.Select(x => x.WrappedValue).ToList();
             result.Reverse();
             result.SequenceEqual(Enumerable.Range(0, numItems)).Should().BeTrue();
+            l.Any().Should().BeTrue();
+            l.First().Should().Be(0);
+            l.FirstOrDefault().Should().Be(0);
+            l.Last().Should().Be(numItems - 1);
+            l.LastOrDefault().Should().Be(numItems - 1);
+        }
+
+        [Theory]
+        [InlineData(ListFactoryToUse.LazinatorList)]
+        [InlineData(ListFactoryToUse.LazinatorLinkedList)]
+        [InlineData(ListFactoryToUse.SortedLazinatorList)]
+        [InlineData(ListFactoryToUse.SortedLazinatorListAllowDuplicates)]
+        [InlineData(ListFactoryToUse.SortedLazinatorLinkedList)]
+        [InlineData(ListFactoryToUse.SortedLazinatorLinkedListAllowDuplicates)]
+        [InlineData(ListFactoryToUse.AvlList)]
+        [InlineData(ListFactoryToUse.UnbalancedAvlList)]
+        [InlineData(ListFactoryToUse.AvlSortedList)]
+        [InlineData(ListFactoryToUse.UnbalancedAvlSortedList)]
+        [InlineData(ListFactoryToUse.AvlSortedListAllowDuplicates)]
+        public void Listable_Empty(ListFactoryToUse listFactoryToUse)
+        {
+            var factory = GetListFactory(listFactoryToUse);
+            ILazinatorListable<WInt> l = factory.CreateListable();
+            l.Any().Should().BeFalse();
+            l.FirstOrDefault().Should().Be(default);
+            l.LastOrDefault().Should().Be(default);
+        }
+
+        [Theory]
+        [InlineData(ListFactoryToUse.LazinatorList)]
+        [InlineData(ListFactoryToUse.LazinatorLinkedList)]
+        [InlineData(ListFactoryToUse.SortedLazinatorList)]
+        [InlineData(ListFactoryToUse.SortedLazinatorListAllowDuplicates)]
+        [InlineData(ListFactoryToUse.SortedLazinatorLinkedList)]
+        [InlineData(ListFactoryToUse.SortedLazinatorLinkedListAllowDuplicates)]
+        [InlineData(ListFactoryToUse.AvlList)]
+        [InlineData(ListFactoryToUse.UnbalancedAvlList)]
+        [InlineData(ListFactoryToUse.AvlSortedList)]
+        [InlineData(ListFactoryToUse.UnbalancedAvlSortedList)]
+        [InlineData(ListFactoryToUse.AvlSortedListAllowDuplicates)]
+        public void Listable_EmptyAfterNotEmpty(ListFactoryToUse listFactoryToUse)
+        {
+            var factory = GetListFactory(listFactoryToUse);
+            ILazinatorListable<WInt> l = factory.CreateListable();
+            l.Add(1);
+            l.RemoveAt(0);
+            l.Any().Should().BeFalse();
+            l.FirstOrDefault().Should().Be(default);
+            l.LastOrDefault().Should().Be(default);
         }
 
         [Theory]

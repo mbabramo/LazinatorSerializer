@@ -128,8 +128,6 @@ namespace Lazinator.Collections.Avl
             InsertAt((long)index, item);
         }
 
-        #region  
-
         public void InsertAt(long index, T item)
         {
             UnderlyingTree.InsertAt(index, item);
@@ -156,6 +154,40 @@ namespace Lazinator.Collections.Avl
             UnderlyingTree.SetAt(index, value);
         }
 
+
+        public bool Any()
+        {
+            return UnderlyingTree.Any();
+        }
+
+        public T First()
+        {
+            if (!Any())
+                throw new Exception("The list is empty.");
+            return this.GetAt(0); ;
+        }
+
+        public T FirstOrDefault()
+        {
+            if (Any())
+                return this.GetAt(0);
+            return default(T);
+        }
+
+        public T Last()
+        {
+            if (!Any())
+                throw new Exception("The list is empty.");
+            return this.GetAt(LongCount - 1);
+        }
+
+        public T LastOrDefault()
+        {
+            if (Any())
+                return this.GetAt(LongCount - 1);
+            return default(T);
+        }
+
         public (long index, bool insertedNotReplaced) InsertGetIndex(T item) => InsertGetIndex(item, Comparer<T>.Default);
 
         public (long index, bool insertedNotReplaced) InsertGetIndex(T item, IComparer<T> comparer) => UnderlyingTree.InsertGetIndex(item, AllowDuplicates ? MultivalueLocationOptions.InsertAfterLast : MultivalueLocationOptions.Any, comparer);
@@ -173,8 +205,6 @@ namespace Lazinator.Collections.Avl
             AvlSortedList<T> partSplitOff = new AvlSortedList<T>(AllowDuplicates, (ISortedIndexableMultivalueContainer<T>) ((ILazinatorSplittable)UnderlyingTree).SplitOff());
             return partSplitOff;
         }
-
-        #endregion
 
     }
 }

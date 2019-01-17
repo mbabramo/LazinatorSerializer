@@ -12,5 +12,10 @@ namespace Lazinator.Collections
         void InsertAt(long index, T item);
         void RemoveAt(long index);
         IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0);
+        bool Any();
+        T First();
+        T FirstOrDefault();
+        T Last();
+        T LastOrDefault();
     }
 }

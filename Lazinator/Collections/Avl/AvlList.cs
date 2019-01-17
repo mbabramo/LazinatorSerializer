@@ -153,6 +153,39 @@ namespace Lazinator.Collections.Avl
             return partSplitOff;
         }
 
+        public bool Any()
+        {
+            return UnderlyingTree.Any();
+        }
+
+        public T First()
+        {
+            if (!Any())
+                throw new Exception("The list is empty.");
+            return this.GetAt(0); ;
+        }
+
+        public T FirstOrDefault()
+        {
+            if (Any())
+                return this.GetAt(0);
+            return default(T);
+        }
+
+        public T Last()
+        {
+            if (!Any())
+                throw new Exception("The list is empty.");
+            return this.GetAt(LongCount - 1);
+        }
+
+        public T LastOrDefault()
+        {
+            if (Any())
+                return this.GetAt(LongCount - 1);
+            return default(T);
+        }
+
         #endregion
 
     }
