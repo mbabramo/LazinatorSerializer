@@ -277,7 +277,7 @@ namespace Lazinator.Collections
 
         public bool Any()
         {
-            return Count == 0;
+            return Count != 0;
         }
 
         public T First()

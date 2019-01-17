@@ -138,14 +138,14 @@ namespace LazinatorTests.Tests
             int numItems = (listFactoryToUse == ListFactoryToUse.UnbalancedAvlList || listFactoryToUse == ListFactoryToUse.UnbalancedAvlSortedList) ? 20 : 500;
             for (int i = 0; i < numItems; i++)
                 l.InsertAt(0, i);
+            l.Any().Should().BeTrue();
+            l.First().Should().Be(numItems - 1);
+            l.FirstOrDefault().Should().Be(numItems - 1);
+            l.Last().Should().Be(0);
+            l.LastOrDefault().Should().Be(0);
             var result = l.Select(x => x.WrappedValue).ToList();
             result.Reverse();
             result.SequenceEqual(Enumerable.Range(0, numItems)).Should().BeTrue();
-            l.Any().Should().BeTrue();
-            l.First().Should().Be(0);
-            l.FirstOrDefault().Should().Be(0);
-            l.Last().Should().Be(numItems - 1);
-            l.LastOrDefault().Should().Be(numItems - 1);
         }
 
         [Theory]
@@ -165,8 +165,8 @@ namespace LazinatorTests.Tests
             var factory = GetListFactory(listFactoryToUse);
             ILazinatorListable<WInt> l = factory.CreateListable();
             l.Any().Should().BeFalse();
-            l.FirstOrDefault().Should().Be(default);
-            l.LastOrDefault().Should().Be(default);
+            l.FirstOrDefault().Should().Be(default(WInt));
+            l.LastOrDefault().Should().Be(default(WInt));
         }
 
         [Theory]
@@ -188,8 +188,8 @@ namespace LazinatorTests.Tests
             l.Add(1);
             l.RemoveAt(0);
             l.Any().Should().BeFalse();
-            l.FirstOrDefault().Should().Be(default);
-            l.LastOrDefault().Should().Be(default);
+            l.FirstOrDefault().Should().Be(default(WInt));
+            l.LastOrDefault().Should().Be(default(WInt));
         }
 
         [Theory]
