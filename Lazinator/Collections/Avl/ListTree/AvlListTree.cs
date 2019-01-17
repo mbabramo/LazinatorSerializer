@@ -4,6 +4,7 @@ using Lazinator.Collections.Factories;
 using Lazinator.Collections.Interfaces;
 using Lazinator.Collections.Tree;
 using Lazinator.Core;
+using Lazinator.Support;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,12 +14,13 @@ namespace Lazinator.Collections.Avl.ListTree
 {
     public partial class AvlListTree<T> : IAvlListTree<T>, IValueContainer<T>, IMultivalueContainer<T>, ILazinatorSplittable where T : ILazinator
     {
+
         public AvlListTree(bool allowDuplicates, bool unbalanced, ILazinatorListableFactory<T> listableFactory)
         {
             AllowDuplicates = allowDuplicates;
             Unbalanced = unbalanced;
             ListableFactory = listableFactory;
-            UnderlyingTree = new AvlIndexableTree<ILazinatorListable<T>>() { Unbalanced = Unbalanced, AllowDuplicates = AllowDuplicates };
+            UnderlyingTree2 = new AvlIndexableTree<ILazinatorListable<T>>() { Unbalanced = Unbalanced, AllowDuplicates = AllowDuplicates };
         }
 
         public IValueContainer<T> CreateNewWithSameSettings()
@@ -46,8 +48,8 @@ namespace Lazinator.Collections.Avl.ListTree
 
         protected AvlCountedNode<ILazinatorListable<T>> GetNodeForValue(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, bool chooseShorterIfInBetween)
         {
-            var matchInfo = UnderlyingTree.GetMatchingOrNextNode(whichOne, n => CompareBasedOnEndItems((AvlCountedNode<ILazinatorListable<T>>)n, item, whichOne, comparer));
-            var node = matchInfo.found ? (AvlCountedNode<ILazinatorListable<T>>)matchInfo.node : (AvlCountedNode<ILazinatorListable<T>>)UnderlyingTree.LastNode();
+            var matchInfo = UnderlyingTree2.GetMatchingOrNextNode(whichOne, n => CompareBasedOnEndItems((AvlCountedNode<ILazinatorListable<T>>)n, item, whichOne, comparer));
+            var node = matchInfo.found ? (AvlCountedNode<ILazinatorListable<T>>)matchInfo.node : (AvlCountedNode<ILazinatorListable<T>>)UnderlyingTree2.LastNode();
             if (node == null || !chooseShorterIfInBetween)
                 return node;
             bool isBeforeThis = comparer.Compare(item, node.Value.First()) == -1;
@@ -80,76 +82,80 @@ namespace Lazinator.Collections.Avl.ListTree
 
         public bool Any()
         {
-            return UnderlyingTree.Any();
+            return UnderlyingTree2.Any();
         }
 
         public T First()
         {
             if (!Any())
                 throw new Exception("The list is empty.");
-            return UnderlyingTree.First().First();
+            return UnderlyingTree2.First().First();
         }
 
         public T FirstOrDefault()
         {
             if (!Any())
                 return default;
-            return UnderlyingTree.First().First();
+            return UnderlyingTree2.First().First();
         }
 
         public T Last()
         {
             if (!Any())
                 throw new Exception("The list is empty.");
-            return UnderlyingTree.Last().Last();
+            return UnderlyingTree2.Last().Last();
         }
 
         public T LastOrDefault()
         {
             if (!Any())
                 return default;
-            return UnderlyingTree.Last().Last();
-        }
-
-        public bool GetValue(T item, IComparer<T> comparer, out T match)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool TryInsert(T item, IComparer<T> comparer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool TryRemove(T item, IComparer<T> comparer)
-        {
-            throw new NotImplementedException();
+            return UnderlyingTree2.Last().Last();
         }
 
         public void Clear()
         {
-            throw new NotImplementedException();
+            UnderlyingTree2.Clear();
         }
 
         public IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
         {
-            throw new NotImplementedException();
+            foreach (var sortable in UnderlyingTree2.AsEnumerable(reverse, 0))
+            {
+                if (skip >= sortable.LongCount)
+                {
+                    skip -= sortable.LongCount;
+                    continue;
+                }
+                else
+                {
+                    foreach (T t in sortable.AsEnumerable(reverse, skip))
+                        yield return t;
+                }
+            }
         }
 
         public IEnumerator<T> GetEnumerator(bool reverse = false, long skip = 0)
         {
-            throw new NotImplementedException();
+            return (IEnumerator<T>)AsEnumerable(reverse, skip);
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return GetEnumerator(false, 0);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return GetEnumerator(false, 0);
         }
+
+
+        public bool GetValue(T item, IComparer<T> comparer, out T match) => GetValue(item, MultivalueLocationOptions.Any, comparer, out match);
+
+        public bool TryInsert(T item, IComparer<T> comparer) => TryInsert(item, AllowDuplicates ? MultivalueLocationOptions.InsertAfterLast : MultivalueLocationOptions.Any, comparer);
+
+        public bool TryRemove(T item, IComparer<T> comparer) => TryRemove(item, MultivalueLocationOptions.Any, comparer);
 
         public bool GetValue(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, out T match)
         {
@@ -174,22 +180,69 @@ namespace Lazinator.Collections.Avl.ListTree
 
         public bool TryInsert(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
-            throw new NotImplementedException();
+            var node = GetNodeForValue(item, whichOne, comparer, false);
+            var sortable = GetSortable(node);
+            (long index, bool insertedNotReplaced) = sortable.InsertGetIndex(item, whichOne, comparer);
+            // var DEBUG
+            return insertedNotReplaced;
         }
 
         public bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
-            throw new NotImplementedException();
+            var node = GetNodeForValue(item, whichOne, comparer, false);
+            var sortable = GetSortable(node);
+            bool result = sortable.TryRemove(item, whichOne, comparer);
+            if (result && sortable.Any() == false)
+            {
+                // Remove the node, since nothing is left in it.
+                UnderlyingTree2.RemoveAt(node.Index);
+            }
+            return result;
         }
 
         public bool TryRemoveAll(T item, IComparer<T> comparer)
         {
-            throw new NotImplementedException();
+            var sortable = GetSortableForValue(item, MultivalueLocationOptions.Any, comparer, false);
+            bool any = sortable.TryRemove(item, comparer);
+            if (any)
+            {
+                do
+                {
+                } while (sortable.TryRemove(item, comparer));
+            }
+            return any;
         }
 
         public long Count(T item, IComparer<T> comparer)
         {
-            throw new NotImplementedException();
+            var node = GetNodeForValue(item, MultivalueLocationOptions.First, comparer, false);
+            if (node == null)
+                return 0;
+            // The item might appear in multiple nodes, so we need to check this node and subsequent nodes.
+            bool keepGoing = true;
+            long count = 0;
+            while (keepGoing)
+            {
+                count += CountInNode(item, comparer, node);
+                if (count == 0)
+                    keepGoing = false;
+                else
+                {
+                    node = (AvlCountedNode<ILazinatorListable<T>>) node.GetNextNode();
+                    keepGoing = node != null;
+                }
+            }
+            return count;
+        }
+
+        private long CountInNode(T item, IComparer<T> comparer, AvlCountedNode<ILazinatorListable<T>> node)
+        {
+            ILazinatorSortable<T> sortable = GetSortable(node);
+            var first = sortable.Find(item, MultivalueLocationOptions.First, comparer);
+            if (first.exists == false)
+                return 0;
+            var last = sortable.Find(item, MultivalueLocationOptions.Last, comparer);
+            return (last.index - first.index + 1);
         }
 
         public ILazinatorSplittable SplitOff()
