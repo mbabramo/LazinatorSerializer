@@ -11,6 +11,11 @@ namespace Lazinator.Collections.Factories
     {
         public bool Unbalanced { get => false; set => throw new NotSupportedException(); }
 
+        public AvlListTreeWithInteriorLazinatorListFactory(int interiorMaxCapacity)
+        {
+            InteriorMaxCapacity = interiorMaxCapacity;
+        }
+
         public IMultivalueContainer<T> CreateMultivalueContainer()
         {
             return new LazinatorList<T>()

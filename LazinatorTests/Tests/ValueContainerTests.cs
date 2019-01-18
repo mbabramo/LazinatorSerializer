@@ -15,6 +15,7 @@ using Lazinator.Collections.Avl;
 using Lazinator.Collections.Interfaces;
 using Lazinator.Collections.Avl.ValueTree;
 using Lazinator.Collections.Avl.ListTree;
+using Lazinator.Collections.Factories;
 
 namespace LazinatorTests.Tests
 {
@@ -134,7 +135,7 @@ namespace LazinatorTests.Tests
                 case ValueContainerType.AvlSortedIndexableTree:
                     return new AvlSortedIndexableTree<T>();
                 case ValueContainerType.AvlListTree:
-                    return new AvlListTree<T>();
+                    return new AvlListTree<T>(false, false, new AvlListTreeWithInteriorLazinatorListFactory<T>(3));
                 case ValueContainerType.LazinatorList:
                     return new LazinatorList<T>();
                 case ValueContainerType.LazinatorLinkedList:
