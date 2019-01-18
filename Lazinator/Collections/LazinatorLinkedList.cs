@@ -338,7 +338,6 @@ namespace Lazinator.Collections
             return partSplitOff;
         }
 
-        public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool Unbalanced { get => false; set => throw new NotImplementedException(); }
 
 
