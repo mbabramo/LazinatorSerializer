@@ -33,17 +33,33 @@ namespace Lazinator.Collections.Avl.ListTree
             return new AvlListTree<T>(AllowDuplicates, Unbalanced, InteriorCollectionFactory);
         }
 
-        private int CompareBasedOnEndItems(BinaryNode<IMultivalueContainer<T>> node, T item, IComparer<T> comparer)
+        private static int CompareBasedOnEndItems(IMultivalueContainer<T> container, T item, IComparer<T> comparer)
         {
-            T last = node.Value.Last();
+            T last = container.Last();
             var lastComparison = comparer.Compare(item, last);
             if (lastComparison >= 0)
                 return lastComparison; // item is last or after
-            T first = node.Value.First();
+            T first = container.First();
             var firstComparison = comparer.Compare(item, first);
             if (firstComparison <= 0)
                 return firstComparison; // item is first or before
             return 0; // item is between first and last
+        }
+
+        /// <summary>
+        /// Returns a comparer to compare an item to an interior collection. Usually, the custom comparer can only compare like objects, so null should be passed as the interior collection being compared; this custom comparer then substitutes the item.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="comparer"></param>
+        /// <returns></returns>
+        private CustomComparer<IMultivalueContainer<T>> GetItemToInteriorCollectionComparer(T item, IComparer<T> comparer)
+        {
+            return new CustomComparer<IMultivalueContainer<T>>((a, b) =>
+            {
+                if (a == null)
+                    return CompareBasedOnEndItems(b, item, comparer);
+                return 0 - CompareBasedOnEndItems(a, item, comparer);
+            });
         }
 
         private CustomComparer<IMultivalueContainer<T>> GetInteriorCollectionsComparer(IComparer<T> comparer)
@@ -60,13 +76,19 @@ namespace Lazinator.Collections.Avl.ListTree
                 var aLast = a.Last();
                 var bLast = b.Last();
                 int lastComparison = comparer.Compare(aLast, bLast);
-                return firstComparison;
+                return lastComparison;
             });
         }
 
         protected AvlCountedNode<IMultivalueContainer<T>> GetNodeForValue(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, bool chooseShorterIfInBetween)
         {
-            var matchInfo = UnderlyingTree.GetMatchingOrNextNode(whichOne, n => CompareBasedOnEndItems((AvlCountedNode<IMultivalueContainer<T>>)n, item, comparer));
+            // If inserting before the first or after the last, we still want the node containing the first or last.
+            MultivalueLocationOptions whichOneModified = whichOne;
+            if (whichOne == MultivalueLocationOptions.InsertAfterLast)
+                whichOneModified = MultivalueLocationOptions.Last;
+            else if (whichOne == MultivalueLocationOptions.InsertBeforeFirst)
+                whichOneModified = MultivalueLocationOptions.First;
+            var matchInfo = UnderlyingTree.GetMatchingOrNextNode(null, whichOneModified, GetItemToInteriorCollectionComparer(item, comparer));
             var node = (AvlCountedNode<IMultivalueContainer<T>>)matchInfo.node ?? (AvlCountedNode<IMultivalueContainer<T>>)UnderlyingTree.LastNode();
             if (node == null || !chooseShorterIfInBetween)
                 return node;
@@ -168,7 +190,7 @@ namespace Lazinator.Collections.Avl.ListTree
 
         public IEnumerator<T> GetEnumerator(bool reverse = false, long skip = 0)
         {
-            return (IEnumerator<T>)AsEnumerable(reverse, skip);
+            return AsEnumerable(reverse, skip).GetEnumerator();
         }
 
         public IEnumerator<T> GetEnumerator()
