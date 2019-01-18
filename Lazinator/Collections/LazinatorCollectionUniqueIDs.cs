@@ -147,5 +147,7 @@
         IAvlWeightedNode,
         IAvlListTree,
         ILazinatorSortable,
+        IMultivalueContainerFactory,
+        IAvlListTreeInteriorCollectionFactory,
     }
 }

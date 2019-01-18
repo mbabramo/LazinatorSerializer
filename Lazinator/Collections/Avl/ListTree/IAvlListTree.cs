@@ -13,7 +13,6 @@ namespace Lazinator.Collections.Avl.ListTree
         bool AllowDuplicates { get; set; }
         bool Unbalanced { get; set; }
         AvlIndexableTree<IMultivalueContainer<T>> UnderlyingTree2 { get; set; }
-        AvlIndexableTree<ILazinatorListable<T>> UnderlyingTree { get; set; }
-        ILazinatorListableFactory<T> ListableFactory { get; set; }
+        IAvlListTreeInteriorCollectionFactory<T> InteriorCollectionFactory { get; set; }
     }
 }
