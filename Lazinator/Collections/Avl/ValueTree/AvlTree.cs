@@ -102,34 +102,7 @@ namespace Lazinator.Collections.Avl.ValueTree
             return (Root, true);
         }
 
-        private struct MiniBoolStack
-        {
-            ulong storage;
-            byte index;
-
-            public void Push(bool value)
-            {
-                if (value)
-                    storage = storage | ((ulong) 1 << index);
-                else
-                    storage &= ~((ulong) 1 << index);
-                index++;
-            }
-
-            public bool Pop()
-            {
-                if (index == 0)
-                    throw new Exception();
-                index--;
-                bool set = (storage & ((ulong)1 << index)) != 0;
-                return set;
-            }
-
-            public bool Any()
-            {
-                return index > 0;
-            }
-        }
+       
 
 
         public void RemoveNode(BinaryNode<T> node)
@@ -146,8 +119,6 @@ namespace Lazinator.Collections.Avl.ValueTree
                     AvlNode<T> avlNode = (AvlNode<T>)x;
                     if (!pathIsLeft.Any())
                         return 0;
-                    // DEBUG -- must be tested. Could be the opposite order.
-                    // TODO: Use a long as a bitset instead of a stack to avoid allocation
                     if (pathIsLeft.Pop())
                         return -1;
                     else
@@ -156,6 +127,38 @@ namespace Lazinator.Collections.Avl.ValueTree
                 });
             if (result != node)
                 throw new Exception("Internal exception on RemoveNode.");
+        }
+
+        /// <summary>
+        /// A mini-stack for bools that fits in a struct. We can use this because we can be sure that our tree will have fewer than 2^64 items. 
+        /// </summary>
+        private struct MiniBoolStack
+        {
+            ulong storage;
+            byte index;
+
+            public void Push(bool value)
+            {
+                if (value)
+                    storage = storage | ((ulong)1 << index);
+                else
+                    storage &= ~((ulong)1 << index);
+                index++;
+            }
+
+            public bool Pop()
+            {
+                if (index == 0)
+                    throw new Exception();
+                index--;
+                bool set = (storage & ((ulong)1 << index)) != 0;
+                return set;
+            }
+
+            public bool Any()
+            {
+                return index > 0;
+            }
         }
 
         protected override BinaryNode<T> TryRemoveReturningNode(MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)

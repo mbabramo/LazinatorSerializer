@@ -29,12 +29,6 @@ namespace LazinatorTests.Tests
 
     public class ValueContainerTests_WInt : ValueContainerTests<WInt>
     {
-        //[Fact]
-        //public void VerifyValueContainerDEBUG()
-        //{
-        //    VerifyValueContainer(ValueContainerType.AvlIndexableTree, true, 100, 100);
-        //}
-
         [Theory]
         [InlineData(ValueContainerType.AvlTree, false, 100, 100)]
         [InlineData(ValueContainerType.AvlIndexableTree, false, 100, 100)]
@@ -89,12 +83,6 @@ namespace LazinatorTests.Tests
 
     public class ValueContainerTests_WString : ValueContainerTests<WString>
     {
-        //[Fact]
-        //public void VerifyValueContainerDEBUG()
-        //{
-        //    VerifyStringContainer(ValueContainerType.AvlIndexableTree, true, 100, 100);
-        //}
-
         [Theory]
         [InlineData(ValueContainerType.AvlTree, false, 100, 100)]
         [InlineData(ValueContainerType.AvlIndexableTree, false, 100, 100)]

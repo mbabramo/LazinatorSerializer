@@ -27,12 +27,6 @@ namespace LazinatorTests.Tests
 
     public class KeyValueContainerTests_WInt : KeyValueContainerTests<WInt, WInt>
     {
-        [Fact]
-        public void VerifyKeyValueContainerDEBUG()
-        {
-            VerifyKeyValueContainer(KeyValueContainerType.AvlSortedIndexableKeyValueTree, true, 100, 100);
-        }
-
         [Theory]
         [InlineData(KeyValueContainerType.AvlKeyValueTree, false, 100, 100)]
         [InlineData(KeyValueContainerType.AvlIndexableKeyValueTree, false, 100, 100)]
