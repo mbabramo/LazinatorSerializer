@@ -14,14 +14,12 @@ namespace Lazinator.Collections.Avl.ListTree
 {
     public partial class AvlListTree<T> : IAvlListTree<T>, IValueContainer<T>, IMultivalueContainer<T>, ILazinatorSplittable where T : ILazinator
     {
-        public IAvlListTreeInteriorCollectionFactory<T> InteriorCollectionFactory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public AvlListTree(bool allowDuplicates, bool unbalanced, IAvlListTreeInteriorCollectionFactory<T> interiorCollectionFactory)
         {
             AllowDuplicates = allowDuplicates;
             Unbalanced = unbalanced;
             InteriorCollectionFactory = interiorCollectionFactory;
-            UnderlyingTree2 = new AvlIndexableTree<IMultivalueContainer<T>>() { Unbalanced = Unbalanced, AllowDuplicates = AllowDuplicates };
+            UnderlyingTree = new AvlIndexableTree<IMultivalueContainer<T>>() { Unbalanced = Unbalanced, AllowDuplicates = AllowDuplicates };
         }
 
         public IValueContainer<T> CreateNewWithSameSettings()
@@ -49,8 +47,8 @@ namespace Lazinator.Collections.Avl.ListTree
 
         protected AvlCountedNode<IMultivalueContainer<T>> GetNodeForValue(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, bool chooseShorterIfInBetween)
         {
-            var matchInfo = UnderlyingTree2.GetMatchingOrNextNode(whichOne, n => CompareBasedOnEndItems((AvlCountedNode<IMultivalueContainer<T>>)n, item, whichOne, comparer));
-            var node = matchInfo.found ? (AvlCountedNode<IMultivalueContainer<T>>)matchInfo.node : (AvlCountedNode<IMultivalueContainer<T>>)UnderlyingTree2.LastNode();
+            var matchInfo = UnderlyingTree.GetMatchingOrNextNode(whichOne, n => CompareBasedOnEndItems((AvlCountedNode<IMultivalueContainer<T>>)n, item, whichOne, comparer));
+            var node = matchInfo.found ? (AvlCountedNode<IMultivalueContainer<T>>)matchInfo.node : (AvlCountedNode<IMultivalueContainer<T>>)UnderlyingTree.LastNode();
             if (node == null || !chooseShorterIfInBetween)
                 return node;
             bool isBeforeThis = comparer.Compare(item, node.Value.First()) == -1;
@@ -79,45 +77,45 @@ namespace Lazinator.Collections.Avl.ListTree
 
         public bool Any()
         {
-            return UnderlyingTree2.Any();
+            return UnderlyingTree.Any();
         }
 
         public T First()
         {
             if (!Any())
                 throw new Exception("The list is empty.");
-            return UnderlyingTree2.First().First();
+            return UnderlyingTree.First().First();
         }
 
         public T FirstOrDefault()
         {
             if (!Any())
                 return default;
-            return UnderlyingTree2.First().First();
+            return UnderlyingTree.First().First();
         }
 
         public T Last()
         {
             if (!Any())
                 throw new Exception("The list is empty.");
-            return UnderlyingTree2.Last().Last();
+            return UnderlyingTree.Last().Last();
         }
 
         public T LastOrDefault()
         {
             if (!Any())
                 return default;
-            return UnderlyingTree2.Last().Last();
+            return UnderlyingTree.Last().Last();
         }
 
         public void Clear()
         {
-            UnderlyingTree2.Clear();
+            UnderlyingTree.Clear();
         }
 
         public IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
         {
-            foreach (var multivalueContainer in UnderlyingTree2.AsEnumerable(reverse, 0))
+            foreach (var multivalueContainer in UnderlyingTree.AsEnumerable(reverse, 0))
             {
                 if (multivalueContainer is ICountableContainer countable)
                 { // enumerate by skipping entire containers
@@ -186,7 +184,7 @@ namespace Lazinator.Collections.Avl.ListTree
             var result = multivalueContainer.TryInsert(item, whichOne, comparer);
             if (InteriorCollectionFactory.RequiresSplitting(multivalueContainer))
             {
-                var splitOff = multivalueContainer.Splitt
+                // DEBUG var splitOff = multivalueContainer.Splitt
             }
             return result;
         }
@@ -199,7 +197,7 @@ namespace Lazinator.Collections.Avl.ListTree
             if (result && multivalueContainer.Any() == false)
             {
                 // Remove the node, since nothing is left in it.
-                UnderlyingTree2.RemoveAt(node.Index);
+                UnderlyingTree.RemoveAt(node.Index);
             }
             return result;
         }
