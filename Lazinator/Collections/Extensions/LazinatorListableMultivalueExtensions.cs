@@ -11,6 +11,11 @@ namespace Lazinator.Collections.Extensions
         public static bool MultivalueGetValue<L, T>(this L list, bool allowDuplicates, T item, IComparer<T> comparer, out T match) where L : ILazinatorListable<T> where T : ILazinator => MultivalueGetValue(list, allowDuplicates, item, MultivalueLocationOptions.Any, comparer, out match);
         public static bool MultivalueGetValue<L, T>(this L list, bool allowDuplicates, T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, out T match) where L : ILazinatorListable<T> where T : ILazinator
         {
+            if (whichOne == MultivalueLocationOptions.InsertBeforeFirst || whichOne == MultivalueLocationOptions.InsertAfterLast)
+            {
+                match = default;
+                return false;
+            }
             (long index, bool exists) = list.SortedFind(allowDuplicates, item, whichOne, comparer);
             if (exists)
                 match = list.GetAt(index);

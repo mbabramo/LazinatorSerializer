@@ -228,6 +228,7 @@ namespace Lazinator.Collections
                         return false;
                     Index++;
                 }
+                Started = true;
                 return true;
             }
 
