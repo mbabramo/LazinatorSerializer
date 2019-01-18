@@ -8,7 +8,7 @@ namespace Lazinator.Collections
 {
     public static class LazinatorListableSortedExtensions 
     {
-        public static (long index, bool insertedNotReplaced) SortedInsertGetIndex<L, T>(this L list, bool allowDuplicates, T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator, IComparable<T>
+        public static (long index, bool insertedNotReplaced) SortedInsertGetIndex<L, T>(this L list, bool allowDuplicates, T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator
         {
             (long index, bool exists) = list.SortedFind(allowDuplicates, item, whichOne, comparer);
             if (allowDuplicates && (whichOne == MultivalueLocationOptions.InsertBeforeFirst || whichOne == MultivalueLocationOptions.InsertAfterLast))
@@ -32,7 +32,7 @@ namespace Lazinator.Collections
             return (index, true);
         }
 
-        public static bool SortedTryRemove<L, T>(this L list, bool allowDuplicates, T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator, IComparable<T>
+        public static bool SortedTryRemove<L, T>(this L list, bool allowDuplicates, T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator
         {
             (long location, bool exists) = list.SortedFind(allowDuplicates, item, whichOne, comparer);
             if (exists)
@@ -40,7 +40,7 @@ namespace Lazinator.Collections
             return exists;
         }
 
-        public static (long index, bool exists) SortedFind<L, T>(this L list, bool allowDuplicates, T target, MultivalueLocationOptions whichOne, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator, IComparable<T>
+        public static (long index, bool exists) SortedFind<L, T>(this L list, bool allowDuplicates, T target, MultivalueLocationOptions whichOne, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator
         {
             (long index, bool exists) result = list.SortedFind(allowDuplicates, target, comparer);
             if (!result.exists || whichOne == MultivalueLocationOptions.Any)
@@ -64,7 +64,7 @@ namespace Lazinator.Collections
             }
         }
 
-        public static (long index, bool exists) SortedFind<L, T>(this L list, bool allowDuplicates, T target, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator, IComparable<T>
+        public static (long index, bool exists) SortedFind<L, T>(this L list, bool allowDuplicates, T target, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator
         {
             bool found = false;
             if (list.LongCount == 0)

@@ -25,5 +25,6 @@ namespace Lazinator.Collections
         [PlaceholderMemory("WriteMainList")]
         ReadOnlyMemory<byte> MainListSerialized { get; set; }
         LazinatorOffsetList Offsets { get; set; }
+        bool AllowDuplicates { get; set; }
     }
 }

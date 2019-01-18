@@ -9,12 +9,16 @@ using Lazinator.Attributes;
 using System.Buffers;
 using System.Linq;
 using Lazinator.Collections.OffsetList;
+using Lazinator.Collections.Interfaces;
+using Lazinator.Collections.Extensions;
 
 namespace Lazinator.Collections
 {
     [Implements(new string[] { "PreSerialization", "EnumerateLazinatorDescendants", "OnFreeInMemoryObjects", "AssignCloneProperties", "OnUpdateDeserializedChildren", "OnPropertiesWritten", "OnForEachLazinator" })]
-    public partial class LazinatorList<T> : IList<T>, IEnumerable, ILazinatorList<T>, ILazinatorList, ILazinatorListable<T> where T : ILazinator
+    public partial class LazinatorList<T> : IList<T>, IEnumerable, ILazinatorList<T>, ILazinatorList, ILazinatorListable<T>, IMultivalueContainer<T> where T : ILazinator
     {
+        public bool AllowDuplicates { get; set; } // DEBUG
+
         // The status of an item currently in the list. To avoid unnecessary deserialization, we keep track of 
         struct ItemStatus
         {
@@ -183,11 +187,16 @@ namespace Lazinator.Collections
         struct Enumerator : IEnumerator<T>
         {
             LazinatorList<T> List;
+            bool Started;
+            bool Reverse;
             int Index;
 
-            public Enumerator(LazinatorList<T> list)
+            public Enumerator(LazinatorList<T> list, bool reverse, long skip)
             {
-                Index = -1;
+                Started = false;
+                Reverse = reverse;
+                int skipAdjusted = (int) Math.Min(skip, list.Count);
+                Index = reverse ? list.Count - skipAdjusted : skipAdjusted - 1;
                 List = list;
             }
 
@@ -195,7 +204,7 @@ namespace Lazinator.Collections
             {
                 get
                 {
-                    if (Index == -1)
+                    if (!Started)
                         throw new ArgumentException();
                     return List[Index];
                 }
@@ -209,9 +218,18 @@ namespace Lazinator.Collections
 
             public bool MoveNext()
             {
-                if (Index == List.Count - 1)
-                    return false;
-                Index++;
+                if (Reverse)
+                {
+                    if (Index == 0)
+                        return false;
+                    Index--;
+                }
+                else
+                {
+                    if (Index == List.Count - 1)
+                        return false;
+                    Index++;
+                }
                 return true;
             }
 
@@ -241,12 +259,17 @@ namespace Lazinator.Collections
 
         public IEnumerator<T> GetEnumerator()
         {
-            return new LazinatorList<T>.Enumerator(this);
+            return new LazinatorList<T>.Enumerator(this, false, 0);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return new LazinatorList<T>.Enumerator(this);
+            return new LazinatorList<T>.Enumerator(this, false, 0);
+        }
+
+        public IEnumerator<T> GetEnumerator(bool reverse = false, long skip = 0)
+        {
+            return new LazinatorList<T>.Enumerator(this, reverse, skip);
         }
 
         public int IndexOf(T item)
@@ -501,6 +524,8 @@ namespace Lazinator.Collections
         #region Interface implementation 
 
         public long LongCount => Count;
+        
+        public bool Unbalanced { get => false; set => throw new NotSupportedException(); }
 
         public void InsertAt(long index, T item)
         {
@@ -594,6 +619,29 @@ namespace Lazinator.Collections
                 return this[Count - 1];
             return default(T);
         }
+
+        public bool GetValue(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, out T match) => this.MultivalueGetValue(AllowDuplicates, item, whichOne, comparer, out match);
+
+        public bool TryInsert(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => this.MultivalueTryInsert(AllowDuplicates, item, whichOne, comparer);
+
+        public bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => this.MultivalueTryRemove(AllowDuplicates, item, whichOne, comparer);
+
+        public bool TryRemoveAll(T item, IComparer<T> comparer) => this.MultivalueTryRemoveAll(AllowDuplicates, item, comparer);
+
+        long IMultivalueContainer<T>.Count(T item, IComparer<T> comparer) => this.MultivalueCount(AllowDuplicates, item, comparer);
+
+        public IValueContainer<T> CreateNewWithSameSettings()
+        {
+            return new LazinatorList<T>()
+            {
+                AllowDuplicates = AllowDuplicates
+            };
+        }
+
+        public bool GetValue(T item, IComparer<T> comparer, out T match) => this.MultivalueGetValue(AllowDuplicates, item, comparer, out match);
+
+        public bool TryInsert(T item, IComparer<T> comparer) => this.MultivalueTryInsert(AllowDuplicates, item, comparer);
+        public bool TryRemove(T item, IComparer<T> comparer) => this.MultivalueTryRemove(AllowDuplicates, item, comparer);
 
         #endregion
     }

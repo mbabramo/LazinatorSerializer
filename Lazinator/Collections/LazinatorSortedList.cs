@@ -21,8 +21,6 @@ namespace Lazinator.Collections
 
         public bool TryRemove(T item) => TryRemove(item, Comparer<T>.Default);
         public bool TryRemove(T item, MultivalueLocationOptions whichOne) => TryRemove(item, whichOne, Comparer<T>.Default);
-        public bool TryRemove(T item, IComparer<T> comparer) => TryRemove(item, MultivalueLocationOptions.Any, comparer);
-        public bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => this.SortedTryRemove(AllowDuplicates, item, whichOne, comparer);
 
         public (long index, bool exists) Find(T target) => Find(target, Comparer<T>.Default);
         public (long index, bool exists) Find(T target, MultivalueLocationOptions whichOne) => Find(target, whichOne, Comparer<T>.Default);
