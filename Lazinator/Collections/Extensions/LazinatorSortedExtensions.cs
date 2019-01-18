@@ -8,15 +8,15 @@ namespace Lazinator.Collections
 {
     public static class LazinatorSortedExtensions 
     {
-        public static (long index, bool insertedNotReplaced) SortedInsertGetIndex<L, T>(this L list, T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) where L : ILazinatorSortable<T> where T : ILazinator, IComparable<T>
+        public static (long index, bool insertedNotReplaced) SortedInsertGetIndex<L, T>(this L list, bool allowDuplicates, T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator, IComparable<T>
         {
-            (long index, bool exists) = list.SortedFind(item, whichOne, comparer);
-            if (list.AllowDuplicates && (whichOne == MultivalueLocationOptions.InsertBeforeFirst || whichOne == MultivalueLocationOptions.InsertAfterLast))
+            (long index, bool exists) = list.SortedFind(allowDuplicates, item, whichOne, comparer);
+            if (allowDuplicates && (whichOne == MultivalueLocationOptions.InsertBeforeFirst || whichOne == MultivalueLocationOptions.InsertAfterLast))
             {
                 list.Insert((int)index, item);
                 return (index, true);
             }
-            if (!list.AllowDuplicates && whichOne != MultivalueLocationOptions.Any)
+            if (!allowDuplicates && whichOne != MultivalueLocationOptions.Any)
                 throw new Exception("Allowing potential duplicates is forbidden. Use MultivalueLocationOptions.Any");
 
             if (index < list.LongCount)
@@ -32,17 +32,17 @@ namespace Lazinator.Collections
             return (index, true);
         }
 
-        public static bool SortedTryRemove<L, T>(this L list, T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) where L : ILazinatorSortable<T> where T : ILazinator, IComparable<T>
+        public static bool SortedTryRemove<L, T>(this L list, bool allowDuplicates, T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator, IComparable<T>
         {
-            (long location, bool exists) = list.SortedFind(item, whichOne, comparer);
+            (long location, bool exists) = list.SortedFind(allowDuplicates, item, whichOne, comparer);
             if (exists)
                 list.RemoveAt(location);
             return exists;
         }
 
-        public static (long index, bool exists) SortedFind<L, T>(this L list, T target, MultivalueLocationOptions whichOne, IComparer<T> comparer) where L : ILazinatorSortable<T> where T : ILazinator, IComparable<T>
+        public static (long index, bool exists) SortedFind<L, T>(this L list, bool allowDuplicates, T target, MultivalueLocationOptions whichOne, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator, IComparable<T>
         {
-            (long index, bool exists) result = list.SortedFind(target, comparer);
+            (long index, bool exists) result = list.SortedFind(allowDuplicates, target, comparer);
             if (!result.exists || whichOne == MultivalueLocationOptions.Any)
                 return result;
             long firstIndex = result.index, lastIndex = result.index;
@@ -64,7 +64,7 @@ namespace Lazinator.Collections
             }
         }
 
-        public static (long index, bool exists) SortedFind<L, T>(this L list, T target, IComparer<T> comparer) where L : ILazinatorSortable<T> where T : ILazinator, IComparable<T>
+        public static (long index, bool exists) SortedFind<L, T>(this L list, bool allowDuplicates, T target, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator, IComparable<T>
         {
             bool found = false;
             if (list.LongCount == 0)
@@ -80,7 +80,7 @@ namespace Lazinator.Collections
                 int comparison = comparer.Compare(target, list.GetAt(mid));
                 if (comparison == 0)
                 {
-                    if (list.AllowDuplicates)
+                    if (allowDuplicates)
                     { // return first match
                         bool matches = true;
                         while (matches && mid > 0)
