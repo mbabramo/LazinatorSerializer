@@ -6,6 +6,5 @@ namespace Lazinator.Collections
     [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorSortedList)]
     internal interface ILazinatorSortedList<T> where T : ILazinator
     {
-        bool AllowDuplicates { get; set; }
     }
 }
