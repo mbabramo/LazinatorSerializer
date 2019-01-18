@@ -10,7 +10,7 @@ namespace Lazinator.Collections.Avl.ListTree
     [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlListTree)]
     internal interface IAvlListTree<T> where T : ILazinator
     {
-        [OnSet("", "AllowDuplicatesChanged(value);\n")]
+        [OnSet("", "\nAllowDuplicatesChanged(value);")]
         bool AllowDuplicates { get; set; }
         bool Unbalanced { get; set; }
         AvlIndexableTree<IMultivalueContainer<T>> UnderlyingTree { get; set; }

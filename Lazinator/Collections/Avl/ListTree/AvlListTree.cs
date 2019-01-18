@@ -24,17 +24,13 @@ namespace Lazinator.Collections.Avl.ListTree
 
         private void AllowDuplicatesChanged(bool value)
         {
-            UnderlyingTree.AllowDuplicates = value;
+            if (UnderlyingTree != null)
+                UnderlyingTree.AllowDuplicates = value;
         }
 
         public IValueContainer<T> CreateNewWithSameSettings()
         {
-            return new AvlListTree<T>()
-            {
-                AllowDuplicates = AllowDuplicates,
-                Unbalanced = Unbalanced,
-                InteriorCollectionFactory = InteriorCollectionFactory
-            };
+            return new AvlListTree<T>(AllowDuplicates, Unbalanced, InteriorCollectionFactory);
         }
 
         private int CompareBasedOnEndItems(BinaryNode<IMultivalueContainer<T>> node, T item, IComparer<T> comparer)

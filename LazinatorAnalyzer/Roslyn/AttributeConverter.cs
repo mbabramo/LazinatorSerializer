@@ -59,7 +59,7 @@ namespace LazinatorCodeGen.Roslyn
                     return new CloneInsertCodeAttribute((string)codeToInsert);
                 case "OnSetAttribute":
                     var codeBeforeSet = attributeData.GetAttributeConstructorValueByParameterName("codeBeforeSet");
-                    var codeAfterSet = attributeData.GetAttributeConstructorValueByParameterName("codeBeforeSet");
+                    var codeAfterSet = attributeData.GetAttributeConstructorValueByParameterName("codeAfterSet");
                     if (codeBeforeSet != null && !(codeBeforeSet is string))
                         return null;
                     if (codeAfterSet != null && !(codeAfterSet is string))

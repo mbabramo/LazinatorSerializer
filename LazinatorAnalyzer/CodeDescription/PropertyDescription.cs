@@ -258,8 +258,8 @@ namespace Lazinator.CodeDescription
             AllowLazinatorInNonLazinator = allowLazinatorInNonLazinator != null;
 
             CloneOnSetAttribute onSetAttribute = UserAttributes.OfType<CloneOnSetAttribute>().FirstOrDefault();
-            CodeBeforeSet = onSetAttribute.CodeBeforeSet ?? "";
-            CodeAfterSet = onSetAttribute.CodeAfterSet ?? "";
+            CodeBeforeSet = onSetAttribute?.CodeBeforeSet ?? "";
+            CodeAfterSet = onSetAttribute?.CodeAfterSet ?? "";
 
             CloneRelativeOrderAttribute relativeOrder = UserAttributes.OfType<CloneRelativeOrderAttribute>().FirstOrDefault();
             RelativeOrder = relativeOrder?.RelativeOrder ?? 0;
