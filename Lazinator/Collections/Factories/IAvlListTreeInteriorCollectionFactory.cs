@@ -6,9 +6,10 @@ using Lazinator.Collections.Interfaces;
 namespace Lazinator.Collections.Factories
 {
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IAvlListTreeInteriorCollectionFactory)]
-    public interface IAvlListTreeInteriorCollectionFactory<T> : IMultivalueContainerFactory<T>, ILazinator where T : ILazinator
+    public interface IAvlListTreeInteriorCollectionFactory<T> : ILazinator where T : ILazinator
     {
         bool RequiresSplitting(IMultivalueContainer<T> container);
         bool FirstIsShorter(IMultivalueContainer<T> first, IMultivalueContainer<T> second);
+        IMultivalueContainer<T> CreateMultivalueContainer(bool allowDuplicates);
     }
 }

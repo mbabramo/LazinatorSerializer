@@ -16,14 +16,6 @@ namespace Lazinator.Collections.Factories
             InteriorMaxCapacity = interiorMaxCapacity;
         }
 
-        public IMultivalueContainer<T> CreateMultivalueContainer()
-        {
-            return new LazinatorList<T>()
-            {
-                AllowDuplicates = AllowDuplicates
-            };
-        }
-
         public bool FirstIsShorter(IMultivalueContainer<T> first, IMultivalueContainer<T> second)
         {
             return ((LazinatorList<T>)first).Count < ((LazinatorList<T>)second).Count;
@@ -32,6 +24,14 @@ namespace Lazinator.Collections.Factories
         public bool RequiresSplitting(IMultivalueContainer<T> container)
         {
             return ((LazinatorList<T>)container).Count > InteriorMaxCapacity;
+        }
+
+        public IMultivalueContainer<T> CreateMultivalueContainer(bool allowDuplicates)
+        {
+            return new LazinatorList<T>()
+            {
+                AllowDuplicates = allowDuplicates
+            };
         }
     }
 }
