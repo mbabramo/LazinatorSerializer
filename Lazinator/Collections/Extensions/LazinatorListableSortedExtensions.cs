@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Lazinator.Collections
 {
-    public static class LazinatorSortedExtensions 
+    public static class LazinatorListableSortedExtensions 
     {
         public static (long index, bool insertedNotReplaced) SortedInsertGetIndex<L, T>(this L list, bool allowDuplicates, T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator, IComparable<T>
         {
