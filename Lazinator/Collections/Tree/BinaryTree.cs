@@ -483,11 +483,11 @@ namespace Lazinator.Collections.Tree
             var rightNode = Root.Right;
             var originalRoot = Root;
             Root = rightNode;
+            Root.Parent = null;
             TryInsert(originalRoot.Value, comparer);
             var newContainer = (BinaryTree<T>)CreateNewWithSameSettings();
             newContainer.Root = (BinaryNode<T>) leftNode;
             newContainer.Root.Parent = null;
-            Root.Parent = null;
             return newContainer;
         }
 

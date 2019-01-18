@@ -136,13 +136,13 @@ namespace Lazinator.Collections.Avl.ValueTree
             // Now, add the original root's item to the portion of the tree that we are keeping. That will ensure that the tree stays balanced.
             // We will always split off the left, because that allows for more consistency with AvlListTree.
             Root = rightNode; // Count will automatically adjust
+            Root.Parent = null;
             // We add by index not by key in part because we don't know if a special comparer is used. If we change this, we may need to add a Comparer parameter or alternatively use a custom comparer that forces us to the left-most or right-most node.
             InsertAt(0, originalRoot.Value);
             var newContainer = (AvlIndexableTree<T>)CreateNewWithSameSettings();
             newContainer.Root = leftNode;
             newContainer.Root.Parent = null;
             newContainer.AvlIndexableRoot.ResetIndicesFollowingTreeSplit();
-            AvlIndexableRoot.Parent = null;
             AvlIndexableRoot.ResetIndicesFollowingTreeSplit();
             return newContainer;
         }
