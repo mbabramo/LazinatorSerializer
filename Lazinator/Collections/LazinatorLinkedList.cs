@@ -12,6 +12,11 @@ namespace Lazinator.Collections
         LazinatorLinkedListNode<T> _lastAccessedNode = null;
         int? _lastAccessedIndex = null;
 
+        protected virtual ILazinatorListable<T> CreateEmptyList()
+        {
+            return new LazinatorLinkedList<T>();
+        }
+
         public T this[int index]
         {
             get

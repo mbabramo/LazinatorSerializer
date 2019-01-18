@@ -8,138 +8,25 @@ namespace Lazinator.Collections
 {
     public partial class LazinatorSortedList<T> : LazinatorList<T>, ILazinatorSortedList<T>, ILazinatorSorted<T> where T : ILazinator, IComparable<T>
     {
-        // NOTE: Code is same as LazinatorSortedLinkedList, so changes should be made in both places.
-
-        public (long index, bool insertedNotReplaced) InsertGetIndex(T item) => InsertGetIndex(item, Comparer<T>.Default);
-        public (long index, bool insertedNotReplaced) InsertGetIndex(T item, MultivalueLocationOptions whichOne) => InsertGetIndex(item, whichOne, Comparer<T>.Default);
-        public bool TryRemove(T item) => TryRemove(item, Comparer<T>.Default);
-        public bool TryRemove(T item, MultivalueLocationOptions whichOne) => TryRemove(item, whichOne, Comparer<T>.Default);
-        public (long index, bool exists) Find(T target) => Find(target, Comparer<T>.Default);
-        public (long index, bool exists) Find(T target, MultivalueLocationOptions whichOne) => Find(target, whichOne, Comparer<T>.Default);
-
-        public (long index, bool insertedNotReplaced) InsertGetIndex(T item, IComparer<T> comparer) => InsertGetIndex(item, AllowDuplicates ? MultivalueLocationOptions.InsertAfterLast : MultivalueLocationOptions.Any, comparer);
-        public (long index, bool insertedNotReplaced) InsertGetIndex(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
-        {
-            (long index, bool exists) = Find(item, whichOne, comparer);
-            if (AllowDuplicates)
-            {
-                if (whichOne == MultivalueLocationOptions.InsertBeforeFirst || whichOne == MultivalueLocationOptions.InsertAfterLast)
-                {
-                    Insert((int)index, item);
-                    return (index, true);
-                }
-                else
-                    return InsertGetIndex_ReplacingIfExists(item, comparer, index);
-            }
-            else
-            {
-                if (whichOne != MultivalueLocationOptions.Any)
-                    throw new Exception("Allowing potential duplicates is forbidden. Use MultivalueLocationOptions.Any");
-                return InsertGetIndex_ReplacingIfExists(item, comparer, index);
-            }
-        }
-
-        private (long index, bool insertedNotReplaced) InsertGetIndex_ReplacingIfExists(T item, IComparer<T> comparer, long index)
-        {
-            if (index < LongCount)
-            {
-                var existing = GetAt(index);
-                if (comparer.Compare(existing, item) == 0)
-                {
-                    this[(int)index] = item;
-                    return (index, false);
-                }
-            }
-            Insert((int)index, item);
-            return (index, true);
-        }
-
-        public bool TryRemove(T item, IComparer<T> comparer) => TryRemove(item, MultivalueLocationOptions.Any, comparer);
-        public bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
-        {
-            (long location, bool exists) = Find(item, whichOne, comparer);
-            if (exists)
-                RemoveAt(location);
-            return exists;
-        }
-
-        public (long index, bool exists) Find(T target, MultivalueLocationOptions whichOne, IComparer<T> comparer)
-        {
-            (long index, bool exists) result = Find(target, comparer);
-            if (!result.exists || whichOne == MultivalueLocationOptions.Any)
-                return result;
-            long firstIndex = result.index, lastIndex = result.index;
-            while (firstIndex > 0 && EqualityComparer<T>.Default.Equals(this[(int)(firstIndex - 1)], target))
-                firstIndex--;
-            while (lastIndex < Count - 1 && EqualityComparer<T>.Default.Equals(this[(int)(lastIndex + 1)], target))
-                lastIndex++;
-            switch (whichOne)
-            {
-                case MultivalueLocationOptions.InsertBeforeFirst:
-                case MultivalueLocationOptions.First:
-                    return (firstIndex, true);
-                case MultivalueLocationOptions.Last:
-                    return (lastIndex, true);
-                case MultivalueLocationOptions.InsertAfterLast:
-                    return (lastIndex + 1, true);
-                default:
-                    throw new NotSupportedException();
-            }
-
-        }
-        public (long index, bool exists) Find(T target, IComparer<T> comparer)
-        {
-            bool found = false;
-            if (Count == 0)
-                return (0, false);
-            int first = 0, last = Count - 1;
-            int mid = 0;
-
-            //for a sorted array with descending values
-            while (!found && first <= last)
-            {
-                mid = (first + last) / 2;
-
-                int comparison = comparer.Compare(target, this[mid]);
-                if (comparison == 0)
-                {
-                    if (AllowDuplicates)
-                    { // return first match
-                        bool matches = true;
-                        while (matches && mid > 0)
-                        {
-                            var previous = this[mid - 1];
-                            matches = previous.Equals(target);
-                            if (matches)
-                            {
-                                mid--;
-                            }
-                        }
-                    }
-                    return (mid, true);
-                }
-                if (first == last)
-                {
-                    if (comparison > 0)
-                        return (mid + 1, false);
-                    return (mid, false);
-                }
-                if (comparison > 0)
-                {
-                    first = mid + 1;
-                }
-                else
-                {
-                    last = mid - 1;
-                }
-            }
-            return (mid, false);
-        }
-
         protected override ILazinatorListable<T> CreateEmptyList()
         {
             return new LazinatorSortedList<T>();
         }
+
+        public (long index, bool insertedNotReplaced) InsertGetIndex(T item) => InsertGetIndex(item, Comparer<T>.Default);
+        public (long index, bool insertedNotReplaced) InsertGetIndex(T item, MultivalueLocationOptions whichOne) => InsertGetIndex(item, whichOne, Comparer<T>.Default);
+        public (long index, bool insertedNotReplaced) InsertGetIndex(T item, IComparer<T> comparer) => InsertGetIndex(item, AllowDuplicates ? MultivalueLocationOptions.InsertAfterLast : MultivalueLocationOptions.Any, comparer);
+        public (long index, bool insertedNotReplaced) InsertGetIndex(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => this.SortedInsertGetIndex(item, whichOne, comparer);
+
+        public bool TryRemove(T item) => TryRemove(item, Comparer<T>.Default);
+        public bool TryRemove(T item, MultivalueLocationOptions whichOne) => TryRemove(item, whichOne, Comparer<T>.Default);
+        public bool TryRemove(T item, IComparer<T> comparer) => TryRemove(item, MultivalueLocationOptions.Any, comparer);
+        public bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => this.SortedTryRemove(item, whichOne, comparer);
+
+        public (long index, bool exists) Find(T target) => Find(target, Comparer<T>.Default);
+        public (long index, bool exists) Find(T target, MultivalueLocationOptions whichOne) => Find(target, whichOne, Comparer<T>.Default);
+        public (long index, bool exists) Find(T target, MultivalueLocationOptions whichOne, IComparer<T> comparer) => this.SortedFind(target, whichOne, comparer);
+        public (long index, bool exists) Find(T target, IComparer<T> comparer) => this.SortedFind(target, comparer);
 
     }
 }
