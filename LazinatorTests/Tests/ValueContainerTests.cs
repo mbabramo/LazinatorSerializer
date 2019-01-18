@@ -29,7 +29,10 @@ namespace LazinatorTests.Tests
         LazinatorLinkedList,
         AvlListTreeTinyLazinatorList,
         AvlListTreeSmallLazinatorList,
-        AvlListTreeRegularLazinatorList
+        AvlListTreeRegularLazinatorList,
+        AvlListTreeTinyLinkedList,
+        AvlListTreeSmallLinkedList,
+        AvlListTreeRegularLinkedList
     }
 
     public class ValueContainerTests_WInt : ValueContainerTests<WInt>
@@ -42,6 +45,9 @@ namespace LazinatorTests.Tests
         [InlineData(ValueContainerType.AvlListTreeTinyLazinatorList, false, 100, 100)]
         [InlineData(ValueContainerType.AvlListTreeSmallLazinatorList, false, 100, 100)]
         [InlineData(ValueContainerType.AvlListTreeRegularLazinatorList, false, 100, 100)]
+        [InlineData(ValueContainerType.AvlListTreeTinyLinkedList, false, 100, 100)]
+        [InlineData(ValueContainerType.AvlListTreeSmallLinkedList, false, 100, 100)]
+        [InlineData(ValueContainerType.AvlListTreeRegularLinkedList, false, 100, 100)]
         [InlineData(ValueContainerType.LazinatorList, false, 100, 100)]
         [InlineData(ValueContainerType.LazinatorLinkedList, false, 100, 100)]
         [InlineData(ValueContainerType.AvlTree, true, 100, 100)]
@@ -51,6 +57,9 @@ namespace LazinatorTests.Tests
         [InlineData(ValueContainerType.AvlListTreeTinyLazinatorList, true, 100, 100)]
         [InlineData(ValueContainerType.AvlListTreeSmallLazinatorList, true, 100, 100)]
         [InlineData(ValueContainerType.AvlListTreeRegularLazinatorList, true, 100, 100)]
+        [InlineData(ValueContainerType.AvlListTreeTinyLinkedList, true, 100, 100)]
+        [InlineData(ValueContainerType.AvlListTreeSmallLinkedList, true, 100, 100)]
+        [InlineData(ValueContainerType.AvlListTreeRegularLinkedList, true, 100, 100)]
         [InlineData(ValueContainerType.LazinatorList, true, 100, 100)]
         [InlineData(ValueContainerType.LazinatorLinkedList, true, 100, 100)]
         public void VerifyIntContainer(ValueContainerType containerType, bool allowDuplicates, int numRepetitions, int numInstructions) => VerifyValueContainerHelper(containerType, allowDuplicates, numRepetitions, numInstructions);
@@ -65,6 +74,9 @@ namespace LazinatorTests.Tests
         [InlineData(ValueContainerType.AvlListTreeTinyLazinatorList)]
         [InlineData(ValueContainerType.AvlListTreeSmallLazinatorList)]
         [InlineData(ValueContainerType.AvlListTreeRegularLazinatorList)]
+        [InlineData(ValueContainerType.AvlListTreeTinyLinkedList)]
+        [InlineData(ValueContainerType.AvlListTreeSmallLinkedList)]
+        [InlineData(ValueContainerType.AvlListTreeRegularLinkedList)]
         [InlineData(ValueContainerType.LazinatorList)]
         [InlineData(ValueContainerType.LazinatorLinkedList)]
         public void ValueContainer_SplitOff(ValueContainerType containerType)
@@ -105,6 +117,9 @@ namespace LazinatorTests.Tests
         [InlineData(ValueContainerType.AvlListTreeTinyLazinatorList, false, 100, 100)]
         [InlineData(ValueContainerType.AvlListTreeSmallLazinatorList, false, 100, 100)]
         [InlineData(ValueContainerType.AvlListTreeRegularLazinatorList, false, 100, 100)]
+        [InlineData(ValueContainerType.AvlListTreeTinyLinkedList, false, 100, 100)]
+        [InlineData(ValueContainerType.AvlListTreeSmallLinkedList, false, 100, 100)]
+        [InlineData(ValueContainerType.AvlListTreeRegularLinkedList, false, 100, 100)]
         [InlineData(ValueContainerType.LazinatorList, false, 100, 100)]
         [InlineData(ValueContainerType.LazinatorLinkedList, false, 100, 100)]
         [InlineData(ValueContainerType.AvlTree, true, 100, 100)]
@@ -114,6 +129,9 @@ namespace LazinatorTests.Tests
         [InlineData(ValueContainerType.AvlListTreeTinyLazinatorList, true, 100, 100)]
         [InlineData(ValueContainerType.AvlListTreeSmallLazinatorList, true, 100, 100)]
         [InlineData(ValueContainerType.AvlListTreeRegularLazinatorList, true, 100, 100)]
+        [InlineData(ValueContainerType.AvlListTreeTinyLinkedList, true, 100, 100)]
+        [InlineData(ValueContainerType.AvlListTreeSmallLinkedList, true, 100, 100)]
+        [InlineData(ValueContainerType.AvlListTreeRegularLinkedList, true, 100, 100)]
         [InlineData(ValueContainerType.LazinatorList, true, 100, 100)]
         [InlineData(ValueContainerType.LazinatorLinkedList, true, 100, 100)]
         public void VerifyStringContainer(ValueContainerType containerType, bool allowDuplicates, int numRepetitions, int numInstructions) => VerifyValueContainerHelper(containerType, allowDuplicates, numRepetitions, numInstructions);
@@ -147,11 +165,17 @@ namespace LazinatorTests.Tests
                 case ValueContainerType.AvlSortedIndexableTree:
                     return new AvlSortedIndexableTree<T>();
                 case ValueContainerType.AvlListTreeTinyLazinatorList:
-                    return new AvlListTree<T>(false, false, new AvlListTreeWithInteriorLazinatorListFactory<T>(1));
+                    return new AvlListTree<T>(false, false, new AvlListTreeWithInteriorListFactory<T>(false, 1));
                 case ValueContainerType.AvlListTreeSmallLazinatorList:
-                    return new AvlListTree<T>(false, false, new AvlListTreeWithInteriorLazinatorListFactory<T>(3));
+                    return new AvlListTree<T>(false, false, new AvlListTreeWithInteriorListFactory<T>(false, 3));
                 case ValueContainerType.AvlListTreeRegularLazinatorList:
-                    return new AvlListTree<T>(false, false, new AvlListTreeWithInteriorLazinatorListFactory<T>(50));
+                    return new AvlListTree<T>(false, false, new AvlListTreeWithInteriorListFactory<T>(false, 5));
+                case ValueContainerType.AvlListTreeTinyLinkedList:
+                    return new AvlListTree<T>(false, false, new AvlListTreeWithInteriorListFactory<T>(false, 1));
+                case ValueContainerType.AvlListTreeSmallLinkedList:
+                    return new AvlListTree<T>(false, false, new AvlListTreeWithInteriorListFactory<T>(false, 3));
+                case ValueContainerType.AvlListTreeRegularLinkedList:
+                    return new AvlListTree<T>(false, false, new AvlListTreeWithInteriorListFactory<T>(false, 5));
                 case ValueContainerType.LazinatorList:
                     return new LazinatorList<T>();
                 case ValueContainerType.LazinatorLinkedList:
