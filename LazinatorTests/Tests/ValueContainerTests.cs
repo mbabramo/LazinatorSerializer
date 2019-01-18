@@ -170,7 +170,7 @@ namespace LazinatorTests.Tests
                     else
                         instruction = new RemoveInstruction();
                     instruction.Execute(this, container, list);
-                    // VerifyEntireList(container, list);
+                    VerifyEntireList(container, list); // DEBUG
                 }
                 VerifyEntireList(container, list);
                 VerifyEnumerableSkipAndReverse(container, list);

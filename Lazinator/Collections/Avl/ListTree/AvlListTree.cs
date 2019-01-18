@@ -66,7 +66,7 @@ namespace Lazinator.Collections.Avl.ListTree
         protected AvlCountedNode<IMultivalueContainer<T>> GetNodeForValue(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, bool chooseShorterIfInBetween)
         {
             var matchInfo = UnderlyingTree.GetMatchingOrNextNode(whichOne, n => CompareBasedOnEndItems((AvlCountedNode<IMultivalueContainer<T>>)n, item, comparer));
-            var node = matchInfo.found ? (AvlCountedNode<IMultivalueContainer<T>>)matchInfo.node : (AvlCountedNode<IMultivalueContainer<T>>)UnderlyingTree.LastNode();
+            var node = (AvlCountedNode<IMultivalueContainer<T>>)matchInfo.node ?? (AvlCountedNode<IMultivalueContainer<T>>)UnderlyingTree.LastNode();
             if (node == null || !chooseShorterIfInBetween)
                 return node;
             bool isBeforeThis = comparer.Compare(item, node.Value.First()) == -1;
@@ -133,19 +133,23 @@ namespace Lazinator.Collections.Avl.ListTree
 
         public IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
         {
+            // Because this tree doesn't store indexing, we still have to go through container by container, though this should be a little faster than going through item by item.
             foreach (var multivalueContainer in UnderlyingTree.AsEnumerable(reverse, 0))
             {
-                if (multivalueContainer is ICountableContainer countable)
-                { // enumerate by skipping entire containers
+                if (skip > 0 && multivalueContainer is ICountableContainer countable)
+                { 
                     if (skip >= countable.LongCount)
-                    {
+                    { // enumerate by skipping entire containers
                         skip -= countable.LongCount;
                         continue;
                     }
                     else
-                    {
+                    { // skip all that we have left to skip, then enumerate
                         foreach (T t in multivalueContainer.AsEnumerable(reverse, skip))
+                        {
                             yield return t;
+                        }
+                        skip = 0;
                     }
                 }
                 else
@@ -198,12 +202,19 @@ namespace Lazinator.Collections.Avl.ListTree
         public bool TryInsert(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
             var node = GetNodeForValue(item, whichOne, comparer, true);
+            if (node == null)
+            {
+                IMultivalueContainer<T> initialContainer = InteriorCollectionFactory.CreateMultivalueContainer();
+                initialContainer.TryInsert(item, comparer);
+                UnderlyingTree.TryInsert(initialContainer, GetInteriorCollectionsComparer(comparer));
+                return true;
+            }
             var multivalueContainer = GetMultivalueContainer(node);
             var result = multivalueContainer.TryInsert(item, whichOne, comparer);
             if (InteriorCollectionFactory.RequiresSplitting(multivalueContainer))
             {
                 IMultivalueContainer<T> splitOff = (IMultivalueContainer<T>) multivalueContainer.SplitOff(comparer);
-                UnderlyingTree.TryInsert(splitOff, AllowDuplicates ? MultivalueLocationOptions.Any : MultivalueLocationOptions.InsertBeforeFirst, GetInteriorCollectionsComparer(comparer)); // note: a duplicate here would be a duplicate of the entire inner node, meaning that all items are the same according to the comparer. But they may not always be exactly identical, if the comparer is a key-only comparer. We always split off the left in our multivalue containers, so this ensures consistency.
+                UnderlyingTree.TryInsert(splitOff, AllowDuplicates ? MultivalueLocationOptions.InsertBeforeFirst : MultivalueLocationOptions.Any, GetInteriorCollectionsComparer(comparer)); // note: a duplicate here would be a duplicate of the entire inner node, meaning that all items are the same according to the comparer. But they may not always be exactly identical, if the comparer is a key-only comparer. We always split off the left in our multivalue containers, so this ensures consistency.
             }
             return result;
         }
@@ -211,6 +222,8 @@ namespace Lazinator.Collections.Avl.ListTree
         public bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
             var node = GetNodeForValue(item, whichOne, comparer, false);
+            if (node == null)
+                return false;
             var multivalueContainer = GetMultivalueContainer(node);
             bool result = multivalueContainer.TryRemove(item, whichOne, comparer);
             if (result && multivalueContainer.Any() == false)

@@ -584,5 +584,11 @@ namespace Lazinator.Collections
 
 
         #endregion
+
+        public override string ToString()
+        {
+            var firstSeven = this.Take(7).ToArray();
+            return $"[{String.Join(", ", firstSeven)}{(firstSeven.Length == 7 ? ", ..." : "")}]";
+        }
     }
 }
