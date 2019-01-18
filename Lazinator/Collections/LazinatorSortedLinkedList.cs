@@ -9,9 +9,12 @@ namespace Lazinator.Collections
 {
     public partial class LazinatorSortedLinkedList<T> : LazinatorLinkedList<T>, ILazinatorSortedLinkedList<T>, ILazinatorSorted<T> where T : IComparable<T>, ILazinator
     {
-        protected override ILazinatorListable<T> CreateEmptyList()
+        public override IValueContainer<T> CreateNewWithSameSettings()
         {
-            return new LazinatorSortedLinkedList<T>();
+            return new LazinatorSortedLinkedList<T>()
+            {
+                AllowDuplicates = AllowDuplicates
+            };
         }
 
         public (long index, bool insertedNotReplaced) InsertGetIndex(T item) => InsertGetIndex(item, Comparer<T>.Default);
@@ -21,8 +24,6 @@ namespace Lazinator.Collections
 
         public bool TryRemove(T item) => TryRemove(item, Comparer<T>.Default);
         public bool TryRemove(T item, MultivalueLocationOptions whichOne) => TryRemove(item, whichOne, Comparer<T>.Default);
-        public bool TryRemove(T item, IComparer<T> comparer) => TryRemove(item, MultivalueLocationOptions.Any, comparer);
-        public bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => this.SortedTryRemove(AllowDuplicates, item, whichOne, comparer);
 
         public (long index, bool exists) Find(T target) => Find(target, Comparer<T>.Default);
         public (long index, bool exists) Find(T target, MultivalueLocationOptions whichOne) => Find(target, whichOne, Comparer<T>.Default);

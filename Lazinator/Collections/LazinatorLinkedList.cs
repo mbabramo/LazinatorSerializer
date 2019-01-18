@@ -1,4 +1,7 @@
-﻿using Lazinator.Core;
+﻿using Lazinator.Collections.Enumerators;
+using Lazinator.Collections.Extensions;
+using Lazinator.Collections.Interfaces;
+using Lazinator.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,14 +10,17 @@ using System.Text;
 
 namespace Lazinator.Collections
 {
-    public partial class LazinatorLinkedList<T> : ILazinatorLinkedList<T>, IList<T>, ILazinatorListable<T> where T : ILazinator
+    public partial class LazinatorLinkedList<T> : ILazinatorLinkedList<T>, IList<T>, ILazinatorListable<T>, IMultivalueContainer<T> where T : ILazinator
     {
         LazinatorLinkedListNode<T> _lastAccessedNode = null;
         int? _lastAccessedIndex = null;
 
-        protected virtual ILazinatorListable<T> CreateEmptyList()
+        public virtual IValueContainer<T> CreateNewWithSameSettings()
         {
-            return new LazinatorLinkedList<T>();
+            return new LazinatorLinkedList<T>()
+            {
+                AllowDuplicates = AllowDuplicates
+            };
         }
 
         public T this[int index]
@@ -224,6 +230,13 @@ namespace Lazinator.Collections
             return new ValueEnumerator(this);
         }
 
+        public IEnumerator<T> GetEnumerator(bool reverse = false, long skip = 0)
+        {
+            if (reverse == false && skip == 0)
+                return new ValueEnumerator(this);
+            return new ListableEnumerator<T>(this, reverse, skip);
+        }
+
         #endregion
 
         #region ILazinatorCountableListableFactory 
@@ -324,6 +337,19 @@ namespace Lazinator.Collections
             }
             return partSplitOff;
         }
+
+        public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool Unbalanced { get => false; set => throw new NotImplementedException(); }
+
+
+        public bool GetValue(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, out T match) => this.MultivalueGetValue(AllowDuplicates, item, whichOne, comparer, out match);
+        public bool TryInsert(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => this.MultivalueTryInsert(AllowDuplicates, item, whichOne, comparer);
+        public bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => this.MultivalueTryRemove(AllowDuplicates, item, whichOne, comparer);
+        public bool TryRemoveAll(T item, IComparer<T> comparer) => this.MultivalueTryRemoveAll(AllowDuplicates, item, comparer);
+        long IMultivalueContainer<T>.Count(T item, IComparer<T> comparer) => this.MultivalueCount(AllowDuplicates, item, comparer);
+        public bool GetValue(T item, IComparer<T> comparer, out T match) => this.MultivalueGetValue(AllowDuplicates, item, comparer, out match);
+        public bool TryInsert(T item, IComparer<T> comparer) => this.MultivalueTryInsert(AllowDuplicates, item, comparer);
+        public bool TryRemove(T item, IComparer<T> comparer) => this.MultivalueTryRemove(AllowDuplicates, item, comparer);
 
         #endregion
     }

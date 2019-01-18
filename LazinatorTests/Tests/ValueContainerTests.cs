@@ -23,7 +23,8 @@ namespace LazinatorTests.Tests
         AvlIndexableTree,
         AvlSortedTree,
         AvlSortedIndexableTree,
-        LazinatorList
+        LazinatorList,
+        LazinatorLinkedList
     }
 
     public class ValueContainerTests_WInt : ValueContainerTests<WInt>
@@ -40,11 +41,13 @@ namespace LazinatorTests.Tests
         [InlineData(ValueContainerType.AvlSortedTree, false, 100, 100)]
         [InlineData(ValueContainerType.AvlSortedIndexableTree, false, 100, 100)]
         [InlineData(ValueContainerType.LazinatorList, false, 100, 100)]
+        [InlineData(ValueContainerType.LazinatorLinkedList, false, 100, 100)]
         [InlineData(ValueContainerType.AvlTree, true, 100, 100)]
         [InlineData(ValueContainerType.AvlIndexableTree, true, 100, 100)]
         [InlineData(ValueContainerType.AvlSortedTree, true, 100, 100)]
         [InlineData(ValueContainerType.AvlSortedIndexableTree, true, 100, 100)]
         [InlineData(ValueContainerType.LazinatorList, true, 100, 100)]
+        [InlineData(ValueContainerType.LazinatorLinkedList, true, 100, 100)]
         public void VerifyIntContainer(ValueContainerType containerType, bool allowDuplicates, int numRepetitions, int numInstructions) => VerifyValueContainerHelper(containerType, allowDuplicates, numRepetitions, numInstructions);
 
         public override WInt GetRandomValue()
@@ -67,11 +70,13 @@ namespace LazinatorTests.Tests
         [InlineData(ValueContainerType.AvlSortedTree, false, 100, 100)]
         [InlineData(ValueContainerType.AvlSortedIndexableTree, false, 100, 100)]
         [InlineData(ValueContainerType.LazinatorList, false, 100, 100)]
+        [InlineData(ValueContainerType.LazinatorLinkedList, false, 100, 100)]
         [InlineData(ValueContainerType.AvlTree, true, 100, 100)]
         [InlineData(ValueContainerType.AvlIndexableTree, true, 100, 100)]
         [InlineData(ValueContainerType.AvlSortedTree, true, 100, 100)]
         [InlineData(ValueContainerType.AvlSortedIndexableTree, true, 100, 100)]
         [InlineData(ValueContainerType.LazinatorList, true, 100, 100)]
+        [InlineData(ValueContainerType.LazinatorLinkedList, true, 100, 100)]
         public void VerifyStringContainer(ValueContainerType containerType, bool allowDuplicates, int numRepetitions, int numInstructions) => VerifyValueContainerHelper(containerType, allowDuplicates, numRepetitions, numInstructions);
 
         public override WString GetRandomValue()
@@ -103,6 +108,8 @@ namespace LazinatorTests.Tests
                 case ValueContainerType.AvlSortedIndexableTree:
                     return new AvlSortedIndexableTree<T>();
                 case ValueContainerType.LazinatorList:
+                    return new LazinatorList<T>();
+                case ValueContainerType.LazinatorLinkedList:
                     return new LazinatorList<T>();
                 default:
                     throw new NotSupportedException();
