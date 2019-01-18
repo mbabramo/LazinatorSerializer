@@ -9,9 +9,12 @@ namespace Lazinator.Collections
 {
     public partial class LazinatorSortedList<T> : LazinatorList<T>, ILazinatorSortedList<T>, ILazinatorSorted<T> where T : ILazinator, IComparable<T>
     {
-        protected override ILazinatorListable<T> CreateEmptyList()
+        public override IValueContainer<T> CreateNewWithSameSettings()
         {
-            return new LazinatorSortedList<T>();
+            return new LazinatorSortedList<T>()
+            {
+                AllowDuplicates = AllowDuplicates
+            };
         }
 
         public (long index, bool insertedNotReplaced) InsertGetIndex(T item) => InsertGetIndex(item, Comparer<T>.Default);

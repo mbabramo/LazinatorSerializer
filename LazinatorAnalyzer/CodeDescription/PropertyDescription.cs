@@ -134,6 +134,8 @@ namespace Lazinator.CodeDescription
         internal bool TrackDirtinessNonSerialized { get; set; }
         private string ReadInclusionConditional { get; set; }
         private string WriteInclusionConditional { get; set; }
+        private string CodeBeforeSet { get; set; }
+        private string CodeAfterSet { get; set; }
         private bool IsGuaranteedFixedLength { get; set; }
         private int FixedLength { get; set; }
         private bool IsGuaranteedSmall { get; set; }
@@ -254,6 +256,11 @@ namespace Lazinator.CodeDescription
                 throw new LazinatorCodeGenException($"The IncludeRefPropertyAttribute was applied to {PropertySymbol}, but can be used only with a non-primitive property.");
             CloneAllowLazinatorInNonLazinatorAttribute allowLazinatorInNonLazinator = UserAttributes.OfType<CloneAllowLazinatorInNonLazinatorAttribute>().FirstOrDefault();
             AllowLazinatorInNonLazinator = allowLazinatorInNonLazinator != null;
+
+            CloneOnSetAttribute onSetAttribute = UserAttributes.OfType<CloneOnSetAttribute>().FirstOrDefault();
+            CodeBeforeSet = onSetAttribute.CodeBeforeSet ?? "";
+            CodeAfterSet = onSetAttribute.CodeAfterSet ?? "";
+
             CloneRelativeOrderAttribute relativeOrder = UserAttributes.OfType<CloneRelativeOrderAttribute>().FirstOrDefault();
             RelativeOrder = relativeOrder?.RelativeOrder ?? 0;
             CloneSkipIfAttribute skipIf = UserAttributes.OfType<CloneSkipIfAttribute>().FirstOrDefault();
@@ -856,7 +863,7 @@ namespace Lazinator.CodeDescription
             {SetterAccessibilityString}set
             {{
                 IsDirty = true;
-                _{PropertyName} = value;{RepeatedCodeExecution}
+                {CodeBeforeSet}_{PropertyName} = value;{CodeAfterSet}{RepeatedCodeExecution}
             }}
         }}
 ";
@@ -1016,7 +1023,7 @@ namespace Lazinator.CodeDescription
             {{{propertyTypeDependentSet}{RepeatedCodeExecution}
                 IsDirty = true;
                 DescendantIsDirty = true;
-                _{PropertyName} = value;{IIF(IsNonLazinatorType && TrackDirtinessNonSerialized, $@"
+                {CodeBeforeSet}_{PropertyName} = value;{CodeAfterSet}{IIF(IsNonLazinatorType && TrackDirtinessNonSerialized, $@"
                 _{PropertyName}_Dirty = true;")}
                 _{PropertyName}_Accessed = true;{RepeatedCodeExecution}
             }}

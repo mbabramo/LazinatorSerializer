@@ -19,7 +19,7 @@ namespace Lazinator.Collections
     public partial class LazinatorList<T> : IList<T>, IEnumerable, ILazinatorList<T>, ILazinatorList, ILazinatorListable<T>, IMultivalueContainer<T> where T : ILazinator
     {
 
-        public IValueContainer<T> CreateNewWithSameSettings()
+        public virtual IValueContainer<T> CreateNewWithSameSettings()
         {
             return new LazinatorList<T>()
             {
@@ -55,13 +55,13 @@ namespace Lazinator.Collections
             _TypeRequiresNonBinaryHashing = DeserializationFactory.Instance.HasNonBinaryHashAttribute(typeof(T));
         }
 
-        public LazinatorList(int numItems)
+        public LazinatorList(int numItems) : this()
         {
             for (int i = 0; i < numItems; i++)
                 Add(default);
         }
 
-        public LazinatorList(IEnumerable<T> items)
+        public LazinatorList(IEnumerable<T> items) : this()
         {
             foreach (T item in items)
                 Add(item);
@@ -528,14 +528,9 @@ namespace Lazinator.Collections
             this[(int)index] = value;
         }
 
-        protected virtual ILazinatorListable<T> CreateEmptyList()
-        {
-            return new LazinatorList<T>();
-        }
-
         public IValueContainer<T> SplitOff(IComparer<T> comparer)
         {
-            LazinatorList<T> partSplitOff = (LazinatorList<T>) CreateEmptyList();
+            LazinatorList<T> partSplitOff = (LazinatorList<T>)CreateNewWithSameSettings();
             int numToMove = Count / 2;
             for (int i = 0; i < numToMove; i++)
             {
