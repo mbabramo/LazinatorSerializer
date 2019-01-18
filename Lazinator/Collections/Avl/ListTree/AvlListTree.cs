@@ -197,7 +197,7 @@ namespace Lazinator.Collections.Avl.ListTree
 
         public bool TryInsert(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
-            var node = GetNodeForValue(item, whichOne, comparer, false);
+            var node = GetNodeForValue(item, whichOne, comparer, true);
             var multivalueContainer = GetMultivalueContainer(node);
             var result = multivalueContainer.TryInsert(item, whichOne, comparer);
             if (InteriorCollectionFactory.RequiresSplitting(multivalueContainer))
