@@ -356,7 +356,7 @@ namespace LazinatorTests.Tests
             (bool isSorted, bool allowsDuplicates) = GetSortedInfo(listFactoryToUse);
             var factory = GetListFactory(listFactoryToUse);
             bool trace = false;
-            bool testIntermediateValues = false;
+            bool testIntermediateValues = true; // DEBUG
             Random r = new Random(0);
             ILazinatorListable<WInt> l = factory.CreateListable();
             List<int> o = new List<int>();

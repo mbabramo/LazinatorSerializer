@@ -29,17 +29,31 @@ namespace Lazinator.Collections
                     return (index, true);
                 }
                 else
+                    return InsertGetIndex_ReplacingIfExists(item, comparer, index);
+            }
+            else
+            {
+                if (whichOne != MultivalueLocationOptions.Any)
+                    throw new Exception("Allowing potential duplicates is forbidden. Use MultivalueLocationOptions.Any");
+                return InsertGetIndex_ReplacingIfExists(item, comparer, index);
+            }
+        }
+
+        private (long index, bool insertedNotReplaced) InsertGetIndex_ReplacingIfExists(T item, IComparer<T> comparer, long index)
+        {
+            if (index < LongCount)
+            {
+                var existing = GetAt(index);
+                if (comparer.Compare(existing, item) == 0)
                 {
                     this[(int)index] = item;
                     return (index, false);
                 }
             }
-            else
-            {
-                Insert((int)index, item);
-                return (index, true);
-            }
+            Insert((int)index, item);
+            return (index, true);
         }
+
         public bool TryRemove(T item, IComparer<T> comparer) => TryRemove(item, MultivalueLocationOptions.Any, comparer);
         public bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
