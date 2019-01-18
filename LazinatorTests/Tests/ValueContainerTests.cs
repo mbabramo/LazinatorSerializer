@@ -113,7 +113,8 @@ namespace LazinatorTests.Tests
             {
                 List<T> list = new List<T>();
                 IValueContainer<T> container = GetValueContainer(containerType);
-                container.AllowDuplicates = AllowDuplicates;
+                if (container is IMultivalueContainer<T> multivalue)
+                    multivalue.AllowDuplicates = AllowDuplicates;
                 for (int i = 0; i < numInstructions; i++)
                 {
                     int r = ran.Next(100);

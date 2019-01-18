@@ -10,7 +10,6 @@ namespace Lazinator.Collections.Interfaces
     public interface IValueContainer<T> : IEnumerable<T>, ILazinator where T : ILazinator
     {
         bool Unbalanced { get; set; }
-        bool AllowDuplicates { get; set; }
         IValueContainer<T> CreateNewWithSameSettings();
         bool Any();
         T First();
