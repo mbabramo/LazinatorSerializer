@@ -4,8 +4,8 @@ using System;
 
 namespace Lazinator.Collections.Factories
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.ISortedLazinatorListFactory)]
-    public interface ISortedLazinatorListFactory<T> where T : ILazinator, IComparable<T>
+    [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorSortedListFactory)]
+    public interface ILazinatorSortedListFactory<T> where T : ILazinator, IComparable<T>
     {
         bool AllowDuplicates { get; set; }
     }

@@ -6,9 +6,9 @@ using System.Text;
 
 namespace Lazinator.Collections
 {
-    public partial class SortedLazinatorList<T> : LazinatorList<T>, ISortedLazinatorList<T>, ILazinatorSorted<T> where T : ILazinator, IComparable<T>
+    public partial class LazinatorSortedList<T> : LazinatorList<T>, ILazinatorSortedList<T>, ILazinatorSorted<T> where T : ILazinator, IComparable<T>
     {
-        // NOTE: Code is same as SortedLazinatorLinkedList, so changes should be made in both places.
+        // NOTE: Code is same as LazinatorSortedLinkedList, so changes should be made in both places.
 
         public (long index, bool insertedNotReplaced) InsertGetIndex(T item) => InsertGetIndex(item, Comparer<T>.Default);
         public (long index, bool insertedNotReplaced) InsertGetIndex(T item, MultivalueLocationOptions whichOne) => InsertGetIndex(item, whichOne, Comparer<T>.Default);
@@ -124,7 +124,7 @@ namespace Lazinator.Collections
 
         protected override ILazinatorListable<T> CreateEmptyList()
         {
-            return new SortedLazinatorList<T>();
+            return new LazinatorSortedList<T>();
         }
 
     }

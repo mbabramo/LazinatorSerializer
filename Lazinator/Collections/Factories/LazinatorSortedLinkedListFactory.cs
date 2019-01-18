@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Lazinator.Collections.Factories
 {
-    public partial class SortedLazinatorListFactory<T> : ISortedLazinatorListFactory<T>, ILazinatorListableFactory<T>, ILazinatorSortedFactory<T> where T : ILazinator, IComparable<T>
+    public partial class LazinatorSortedLinkedListFactory<T> : ILazinatorSortedLinkedListFactory<T>, ILazinatorListableFactory<T>, ILazinatorSortedFactory<T> where T : ILazinator, IComparable<T>
     {
         public ILazinatorListable<T> CreateListable()
         {
-            return new SortedLazinatorList<T>()
+            return new LazinatorSortedLinkedList<T>()
             {
                 AllowDuplicates = AllowDuplicates
             };
@@ -17,7 +17,7 @@ namespace Lazinator.Collections.Factories
 
         public ILazinatorSorted<T> CreateSorted()
         {
-            return new SortedLazinatorList<T>()
+            return new LazinatorSortedLinkedList<T>()
             {
                 AllowDuplicates = false
             };

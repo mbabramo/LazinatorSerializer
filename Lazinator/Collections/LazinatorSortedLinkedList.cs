@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Lazinator.Collections
 {
-    public partial class SortedLazinatorLinkedList<T> : LazinatorLinkedList<T>, ISortedLazinatorLinkedList<T>, ILazinatorSorted<T> where T : IComparable<T>, ILazinator
+    public partial class LazinatorSortedLinkedList<T> : LazinatorLinkedList<T>, ILazinatorSortedLinkedList<T>, ILazinatorSorted<T> where T : IComparable<T>, ILazinator
     {
         public (long index, bool insertedNotReplaced) InsertGetIndex(T item) => InsertGetIndex(item, Comparer<T>.Default);
         public (long index, bool insertedNotReplaced) InsertGetIndex(T item, MultivalueLocationOptions whichOne) => InsertGetIndex(item, whichOne, Comparer<T>.Default);

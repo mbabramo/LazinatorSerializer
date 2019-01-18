@@ -768,12 +768,12 @@ namespace LazinatorTests.Tests
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void SortedLazinatorListWorks(bool allowDuplicates)
+        public void LazinatorSortedListWorks(bool allowDuplicates)
         {
             const int numOperations = 100;
             const int maxValue = 60;
             Random r = new Random();
-            SortedLazinatorList<WInt> s = new SortedLazinatorList<WInt>()
+            LazinatorSortedList<WInt> s = new LazinatorSortedList<WInt>()
             {
                 AllowDuplicates = allowDuplicates
             };

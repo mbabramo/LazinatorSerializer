@@ -23,10 +23,10 @@ namespace LazinatorTests.Tests
         {
             LazinatorList,
             LazinatorLinkedList,
-            SortedLazinatorList,
-            SortedLazinatorListAllowDuplicates,
-            SortedLazinatorLinkedList,
-            SortedLazinatorLinkedListAllowDuplicates,
+            LazinatorSortedList,
+            LazinatorSortedListAllowDuplicates,
+            LazinatorSortedLinkedList,
+            LazinatorSortedLinkedListAllowDuplicates,
             UnbalancedAvlList,
             AvlList,
             AvlSortedList,
@@ -42,14 +42,14 @@ namespace LazinatorTests.Tests
                     return new LazinatorListFactory<WInt>();
                 case ListFactoryToUse.LazinatorLinkedList:
                     return new LazinatorLinkedListFactory<WInt>();
-                case ListFactoryToUse.SortedLazinatorList:
-                    return new SortedLazinatorListFactory<WInt>();
-                case ListFactoryToUse.SortedLazinatorListAllowDuplicates:
-                    return new SortedLazinatorListFactory<WInt>() { AllowDuplicates = true };
-                case ListFactoryToUse.SortedLazinatorLinkedList:
-                    return new SortedLazinatorLinkedListFactory<WInt>();
-                case ListFactoryToUse.SortedLazinatorLinkedListAllowDuplicates:
-                    return new SortedLazinatorLinkedListFactory<WInt>() { AllowDuplicates = true };
+                case ListFactoryToUse.LazinatorSortedList:
+                    return new LazinatorSortedListFactory<WInt>();
+                case ListFactoryToUse.LazinatorSortedListAllowDuplicates:
+                    return new LazinatorSortedListFactory<WInt>() { AllowDuplicates = true };
+                case ListFactoryToUse.LazinatorSortedLinkedList:
+                    return new LazinatorSortedLinkedListFactory<WInt>();
+                case ListFactoryToUse.LazinatorSortedLinkedListAllowDuplicates:
+                    return new LazinatorSortedLinkedListFactory<WInt>() { AllowDuplicates = true };
                 case ListFactoryToUse.UnbalancedAvlList:
                     return new AvlListFactory<WInt>(new AvlIndexableTreeFactory<WInt>() { Unbalanced = true });
                 case ListFactoryToUse.AvlList:
@@ -73,13 +73,13 @@ namespace LazinatorTests.Tests
                     return (false, true);
                 case ListFactoryToUse.LazinatorLinkedList:
                     return (false, true);
-                case ListFactoryToUse.SortedLazinatorList:
+                case ListFactoryToUse.LazinatorSortedList:
                     return (true, false);
-                case ListFactoryToUse.SortedLazinatorListAllowDuplicates:
+                case ListFactoryToUse.LazinatorSortedListAllowDuplicates:
                     return (true, true);
-                case ListFactoryToUse.SortedLazinatorLinkedList:
+                case ListFactoryToUse.LazinatorSortedLinkedList:
                     return (true, false);
-                case ListFactoryToUse.SortedLazinatorLinkedListAllowDuplicates:
+                case ListFactoryToUse.LazinatorSortedLinkedListAllowDuplicates:
                     return (true, true);
                 case ListFactoryToUse.AvlList:
                 case ListFactoryToUse.UnbalancedAvlList:
@@ -97,10 +97,10 @@ namespace LazinatorTests.Tests
         [Theory]
         [InlineData(ListFactoryToUse.LazinatorList)]
         [InlineData(ListFactoryToUse.LazinatorLinkedList)]
-        [InlineData(ListFactoryToUse.SortedLazinatorList)]
-        [InlineData(ListFactoryToUse.SortedLazinatorListAllowDuplicates)]
-        [InlineData(ListFactoryToUse.SortedLazinatorLinkedList)]
-        [InlineData(ListFactoryToUse.SortedLazinatorLinkedListAllowDuplicates)]
+        [InlineData(ListFactoryToUse.LazinatorSortedList)]
+        [InlineData(ListFactoryToUse.LazinatorSortedListAllowDuplicates)]
+        [InlineData(ListFactoryToUse.LazinatorSortedLinkedList)]
+        [InlineData(ListFactoryToUse.LazinatorSortedLinkedListAllowDuplicates)]
         [InlineData(ListFactoryToUse.AvlList)]
         [InlineData(ListFactoryToUse.UnbalancedAvlList)]
         [InlineData(ListFactoryToUse.AvlSortedList)]
@@ -122,10 +122,10 @@ namespace LazinatorTests.Tests
         [Theory]
         [InlineData(ListFactoryToUse.LazinatorList)]
         [InlineData(ListFactoryToUse.LazinatorLinkedList)]
-        [InlineData(ListFactoryToUse.SortedLazinatorList)]
-        [InlineData(ListFactoryToUse.SortedLazinatorListAllowDuplicates)]
-        [InlineData(ListFactoryToUse.SortedLazinatorLinkedList)]
-        [InlineData(ListFactoryToUse.SortedLazinatorLinkedListAllowDuplicates)]
+        [InlineData(ListFactoryToUse.LazinatorSortedList)]
+        [InlineData(ListFactoryToUse.LazinatorSortedListAllowDuplicates)]
+        [InlineData(ListFactoryToUse.LazinatorSortedLinkedList)]
+        [InlineData(ListFactoryToUse.LazinatorSortedLinkedListAllowDuplicates)]
         [InlineData(ListFactoryToUse.AvlList)]
         [InlineData(ListFactoryToUse.UnbalancedAvlList)]
         [InlineData(ListFactoryToUse.AvlSortedList)]
@@ -151,10 +151,10 @@ namespace LazinatorTests.Tests
         [Theory]
         [InlineData(ListFactoryToUse.LazinatorList)]
         [InlineData(ListFactoryToUse.LazinatorLinkedList)]
-        [InlineData(ListFactoryToUse.SortedLazinatorList)]
-        [InlineData(ListFactoryToUse.SortedLazinatorListAllowDuplicates)]
-        [InlineData(ListFactoryToUse.SortedLazinatorLinkedList)]
-        [InlineData(ListFactoryToUse.SortedLazinatorLinkedListAllowDuplicates)]
+        [InlineData(ListFactoryToUse.LazinatorSortedList)]
+        [InlineData(ListFactoryToUse.LazinatorSortedListAllowDuplicates)]
+        [InlineData(ListFactoryToUse.LazinatorSortedLinkedList)]
+        [InlineData(ListFactoryToUse.LazinatorSortedLinkedListAllowDuplicates)]
         [InlineData(ListFactoryToUse.AvlList)]
         [InlineData(ListFactoryToUse.UnbalancedAvlList)]
         [InlineData(ListFactoryToUse.AvlSortedList)]
@@ -172,10 +172,10 @@ namespace LazinatorTests.Tests
         [Theory]
         [InlineData(ListFactoryToUse.LazinatorList)]
         [InlineData(ListFactoryToUse.LazinatorLinkedList)]
-        [InlineData(ListFactoryToUse.SortedLazinatorList)]
-        [InlineData(ListFactoryToUse.SortedLazinatorListAllowDuplicates)]
-        [InlineData(ListFactoryToUse.SortedLazinatorLinkedList)]
-        [InlineData(ListFactoryToUse.SortedLazinatorLinkedListAllowDuplicates)]
+        [InlineData(ListFactoryToUse.LazinatorSortedList)]
+        [InlineData(ListFactoryToUse.LazinatorSortedListAllowDuplicates)]
+        [InlineData(ListFactoryToUse.LazinatorSortedLinkedList)]
+        [InlineData(ListFactoryToUse.LazinatorSortedLinkedListAllowDuplicates)]
         [InlineData(ListFactoryToUse.AvlList)]
         [InlineData(ListFactoryToUse.UnbalancedAvlList)]
         [InlineData(ListFactoryToUse.AvlSortedList)]
@@ -195,10 +195,10 @@ namespace LazinatorTests.Tests
         [Theory]
         [InlineData(ListFactoryToUse.LazinatorList)]
         [InlineData(ListFactoryToUse.LazinatorLinkedList)]
-        [InlineData(ListFactoryToUse.SortedLazinatorList)]
-        [InlineData(ListFactoryToUse.SortedLazinatorListAllowDuplicates)]
-        [InlineData(ListFactoryToUse.SortedLazinatorLinkedList)]
-        [InlineData(ListFactoryToUse.SortedLazinatorLinkedListAllowDuplicates)]
+        [InlineData(ListFactoryToUse.LazinatorSortedList)]
+        [InlineData(ListFactoryToUse.LazinatorSortedListAllowDuplicates)]
+        [InlineData(ListFactoryToUse.LazinatorSortedLinkedList)]
+        [InlineData(ListFactoryToUse.LazinatorSortedLinkedListAllowDuplicates)]
         [InlineData(ListFactoryToUse.AvlList)]
         [InlineData(ListFactoryToUse.UnbalancedAvlList)]
         [InlineData(ListFactoryToUse.AvlSortedList)]
@@ -221,10 +221,10 @@ namespace LazinatorTests.Tests
         [Theory]
         [InlineData(ListFactoryToUse.LazinatorList)]
         [InlineData(ListFactoryToUse.LazinatorLinkedList)]
-        [InlineData(ListFactoryToUse.SortedLazinatorList)]
-        [InlineData(ListFactoryToUse.SortedLazinatorListAllowDuplicates)]
-        [InlineData(ListFactoryToUse.SortedLazinatorLinkedList)]
-        [InlineData(ListFactoryToUse.SortedLazinatorLinkedListAllowDuplicates)]
+        [InlineData(ListFactoryToUse.LazinatorSortedList)]
+        [InlineData(ListFactoryToUse.LazinatorSortedListAllowDuplicates)]
+        [InlineData(ListFactoryToUse.LazinatorSortedLinkedList)]
+        [InlineData(ListFactoryToUse.LazinatorSortedLinkedListAllowDuplicates)]
         [InlineData(ListFactoryToUse.AvlList)]
         [InlineData(ListFactoryToUse.AvlSortedList)]
         [InlineData(ListFactoryToUse.AvlSortedListAllowDuplicates)]
@@ -255,10 +255,10 @@ namespace LazinatorTests.Tests
         [Theory]
         [InlineData(ListFactoryToUse.LazinatorList)]
         [InlineData(ListFactoryToUse.LazinatorLinkedList)]
-        [InlineData(ListFactoryToUse.SortedLazinatorList)]
-        [InlineData(ListFactoryToUse.SortedLazinatorListAllowDuplicates)]
-        [InlineData(ListFactoryToUse.SortedLazinatorLinkedList)]
-        [InlineData(ListFactoryToUse.SortedLazinatorLinkedListAllowDuplicates)]
+        [InlineData(ListFactoryToUse.LazinatorSortedList)]
+        [InlineData(ListFactoryToUse.LazinatorSortedListAllowDuplicates)]
+        [InlineData(ListFactoryToUse.LazinatorSortedLinkedList)]
+        [InlineData(ListFactoryToUse.LazinatorSortedLinkedListAllowDuplicates)]
         [InlineData(ListFactoryToUse.AvlList)]
         [InlineData(ListFactoryToUse.UnbalancedAvlList)]
         [InlineData(ListFactoryToUse.AvlSortedList)]
@@ -329,10 +329,10 @@ namespace LazinatorTests.Tests
         }
 
         [Theory]
-        [InlineData(ListFactoryToUse.SortedLazinatorList, 200, 1)]
-        [InlineData(ListFactoryToUse.SortedLazinatorListAllowDuplicates, 200, 1)]
-        [InlineData(ListFactoryToUse.SortedLazinatorLinkedList, 200, 1)]
-        [InlineData(ListFactoryToUse.SortedLazinatorLinkedListAllowDuplicates, 200, 1)]
+        [InlineData(ListFactoryToUse.LazinatorSortedList, 200, 1)]
+        [InlineData(ListFactoryToUse.LazinatorSortedListAllowDuplicates, 200, 1)]
+        [InlineData(ListFactoryToUse.LazinatorSortedLinkedList, 200, 1)]
+        [InlineData(ListFactoryToUse.LazinatorSortedLinkedListAllowDuplicates, 200, 1)]
         [InlineData(ListFactoryToUse.AvlSortedList, 200, 1)]
         [InlineData(ListFactoryToUse.UnbalancedAvlSortedList, 200, 1)]
         [InlineData(ListFactoryToUse.AvlSortedListAllowDuplicates, 200, 1)]
@@ -340,10 +340,10 @@ namespace LazinatorTests.Tests
         [InlineData(ListFactoryToUse.LazinatorLinkedList, 200, 1)]
         [InlineData(ListFactoryToUse.AvlList, 200, 1)]
         [InlineData(ListFactoryToUse.UnbalancedAvlList, 200, 1)]
-        [InlineData(ListFactoryToUse.SortedLazinatorList, 15, 20)]
-        [InlineData(ListFactoryToUse.SortedLazinatorListAllowDuplicates, 15, 20)]
-        [InlineData(ListFactoryToUse.SortedLazinatorLinkedList, 15, 20)]
-        [InlineData(ListFactoryToUse.SortedLazinatorLinkedListAllowDuplicates, 15, 20)]
+        [InlineData(ListFactoryToUse.LazinatorSortedList, 15, 20)]
+        [InlineData(ListFactoryToUse.LazinatorSortedListAllowDuplicates, 15, 20)]
+        [InlineData(ListFactoryToUse.LazinatorSortedLinkedList, 15, 20)]
+        [InlineData(ListFactoryToUse.LazinatorSortedLinkedListAllowDuplicates, 15, 20)]
         [InlineData(ListFactoryToUse.AvlSortedList, 15, 20)]
         [InlineData(ListFactoryToUse.UnbalancedAvlSortedList, 15, 20)]
         [InlineData(ListFactoryToUse.AvlSortedListAllowDuplicates, 15, 20)]
