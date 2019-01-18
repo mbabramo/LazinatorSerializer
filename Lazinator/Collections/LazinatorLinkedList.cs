@@ -326,7 +326,7 @@ namespace Lazinator.Collections
             return default(T);
         }
 
-        public virtual ILazinatorSplittable SplitOff()
+        public virtual IValueContainer<T> SplitOff(IComparer<T> comparer)
         {
             LazinatorLinkedList<T> partSplitOff = new LazinatorLinkedList<T>();
             int numToMove = Count / 2;

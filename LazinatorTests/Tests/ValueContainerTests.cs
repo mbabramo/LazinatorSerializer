@@ -50,6 +50,37 @@ namespace LazinatorTests.Tests
         [InlineData(ValueContainerType.LazinatorLinkedList, true, 100, 100)]
         public void VerifyIntContainer(ValueContainerType containerType, bool allowDuplicates, int numRepetitions, int numInstructions) => VerifyValueContainerHelper(containerType, allowDuplicates, numRepetitions, numInstructions);
 
+
+
+        [Theory]
+        [InlineData(ValueContainerType.AvlTree)]
+        [InlineData(ValueContainerType.AvlIndexableTree)]
+        [InlineData(ValueContainerType.AvlSortedTree)]
+        [InlineData(ValueContainerType.AvlSortedIndexableTree)]
+        [InlineData(ValueContainerType.LazinatorList)]
+        [InlineData(ValueContainerType.LazinatorLinkedList)]
+        public void ValueContainer_SplitOff(ValueContainerType containerType)
+        {
+            IValueContainer<WInt> container = GetValueContainer(containerType);
+            const int numItems = 1000;
+            for (int i = 0; i < numItems; i++)
+                container.TryInsert(i, Comparer<WInt>.Default);
+            var splitOff = container.SplitOff(Comparer<WInt>.Default);
+            (container.Count() + splitOff.Count()).Should().Be(numItems);
+            if (splitOff.First() > container.First())
+            {
+                foreach (var x in splitOff)
+                    container.TryInsert(x, Comparer<WInt>.Default);
+            }
+            else
+            {
+                foreach (var x in container)
+                    splitOff.TryInsert(x, Comparer<WInt>.Default);
+                container = splitOff;
+            }
+            container.Select(x => x.WrappedValue).SequenceEqual(Enumerable.Range(0, numItems)).Should().BeTrue();
+        }
+
         public override WInt GetRandomValue()
         {
             return ran.Next(100);

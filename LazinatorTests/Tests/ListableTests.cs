@@ -226,40 +226,6 @@ namespace LazinatorTests.Tests
         [InlineData(ListFactoryToUse.LazinatorSortedLinkedList)]
         [InlineData(ListFactoryToUse.LazinatorSortedLinkedListAllowDuplicates)]
         [InlineData(ListFactoryToUse.AvlList)]
-        [InlineData(ListFactoryToUse.AvlSortedList)]
-        [InlineData(ListFactoryToUse.AvlSortedListAllowDuplicates)]
-        public void Listable_SplitOff(ListFactoryToUse listFactoryToUse)
-        {
-            var factory = GetListFactory(listFactoryToUse);
-            ILazinatorListable<WInt> l = factory.CreateListable();
-            const int numItems = 1000;
-            for (int i = 0; i < numItems; i++)
-                l.Add(i);
-            var splitOff = (ILazinatorListable<WInt>) l.SplitOff();
-            (l.Count + splitOff.Count).Should().Be(numItems);
-            if (splitOff[0] > l[0])
-            {
-                foreach (var x in splitOff)
-                    l.Add(x);
-            }
-            else
-            {
-                var reversed = splitOff.ToList().Select(x => x.WrappedValue).ToList();
-                reversed.Reverse();
-                foreach (var x in reversed)
-                    l.InsertAt(0, x);
-            }
-            l.Select(x => x.WrappedValue).SequenceEqual(Enumerable.Range(0, numItems)).Should().BeTrue();
-        }
-
-        [Theory]
-        [InlineData(ListFactoryToUse.LazinatorList)]
-        [InlineData(ListFactoryToUse.LazinatorLinkedList)]
-        [InlineData(ListFactoryToUse.LazinatorSortedList)]
-        [InlineData(ListFactoryToUse.LazinatorSortedListAllowDuplicates)]
-        [InlineData(ListFactoryToUse.LazinatorSortedLinkedList)]
-        [InlineData(ListFactoryToUse.LazinatorSortedLinkedListAllowDuplicates)]
-        [InlineData(ListFactoryToUse.AvlList)]
         [InlineData(ListFactoryToUse.UnbalancedAvlList)]
         [InlineData(ListFactoryToUse.AvlSortedList)]
         [InlineData(ListFactoryToUse.UnbalancedAvlSortedList)]

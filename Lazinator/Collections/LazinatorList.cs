@@ -533,7 +533,7 @@ namespace Lazinator.Collections
             return new LazinatorList<T>();
         }
 
-        public ILazinatorSplittable SplitOff()
+        public IValueContainer<T> SplitOff(IComparer<T> comparer)
         {
             LazinatorList<T> partSplitOff = (LazinatorList<T>) CreateEmptyList();
             int numToMove = Count / 2;

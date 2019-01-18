@@ -12,7 +12,7 @@ using System.Text;
 
 namespace Lazinator.Collections.Avl.ListTree
 {
-    public partial class AvlListTree<T> : IAvlListTree<T>, IValueContainer<T>, IMultivalueContainer<T>, ILazinatorSplittable where T : ILazinator
+    public partial class AvlListTree<T> : IAvlListTree<T>, IValueContainer<T>, IMultivalueContainer<T> where T : ILazinator
     {
         public AvlListTree(bool allowDuplicates, bool unbalanced, IAvlListTreeInteriorCollectionFactory<T> interiorCollectionFactory)
         {
@@ -237,7 +237,7 @@ namespace Lazinator.Collections.Avl.ListTree
             return count;
         }
 
-        public ILazinatorSplittable SplitOff()
+        public IValueContainer<T> SplitOff(IComparer<T> comparer)
         {
             throw new NotImplementedException();
         }

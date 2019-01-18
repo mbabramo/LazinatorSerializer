@@ -147,12 +147,6 @@ namespace Lazinator.Collections.Avl
             UnderlyingTree.SetAt(index, value);
         }
 
-        public virtual ILazinatorSplittable SplitOff()
-        {
-            AvlList<T> partSplitOff = new AvlList<T>((AvlIndexableTree<T>) ((ILazinatorSplittable)UnderlyingTree).SplitOff());
-            return partSplitOff;
-        }
-
         public bool Any()
         {
             return UnderlyingTree.Any();

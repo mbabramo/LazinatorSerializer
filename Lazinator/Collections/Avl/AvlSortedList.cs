@@ -203,11 +203,5 @@ namespace Lazinator.Collections.Avl
         public (long index, bool exists) Find(T target, IComparer<T> comparer) => UnderlyingTree.Find(target, comparer);
         public (long index, bool exists) Find(T target, MultivalueLocationOptions whichOne, IComparer<T> comparer) => UnderlyingTree.Find(target, whichOne, comparer);
 
-        public virtual ILazinatorSplittable SplitOff()
-        {
-            AvlSortedList<T> partSplitOff = new AvlSortedList<T>(AllowDuplicates, (ISortedIndexableMultivalueContainer<T>) ((ILazinatorSplittable)UnderlyingTree).SplitOff());
-            return partSplitOff;
-        }
-
     }
 }

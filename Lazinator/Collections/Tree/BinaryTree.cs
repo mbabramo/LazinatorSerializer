@@ -474,6 +474,23 @@ namespace Lazinator.Collections.Tree
             }
         }
 
+        public virtual IValueContainer<T> SplitOff(IComparer<T> comparer)
+        {
+            if (Root.Left == null || Root.Right == null)
+                return CreateNewWithSameSettings();
+            // Create two separate trees
+            var leftNode = Root.Left;
+            var rightNode = Root.Right;
+            var originalRoot = Root;
+            Root = rightNode;
+            TryInsert(originalRoot.Value, comparer);
+            var newContainer = (BinaryTree<T>)CreateNewWithSameSettings();
+            newContainer.Root = (BinaryNode<T>) leftNode;
+            newContainer.Root.Parent = null;
+            Root.Parent = null;
+            return newContainer;
+        }
+
         private BinaryNodeEnumerator<T> GetBinaryNodeEnumerator(bool reverse, long skip)
         {
             return new BinaryNodeEnumerator<T>(reverse ? LastNode() : FirstNode(), reverse, skip);

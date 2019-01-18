@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Lazinator.Collections.Avl.ValueTree
 {
-    public partial class AvlIndexableTree<T> : AvlTree<T>, IAvlIndexableTree<T>, IIndexableContainer<T>, IIndexableMultivalueContainer<T>, ILazinatorSplittable where T : ILazinator
+    public partial class AvlIndexableTree<T> : AvlTree<T>, IAvlIndexableTree<T>, IIndexableContainer<T>, IIndexableMultivalueContainer<T> where T : ILazinator
     {
         public override IValueContainer<T> CreateNewWithSameSettings()
         {
@@ -123,12 +123,12 @@ namespace Lazinator.Collections.Avl.ValueTree
 
         public bool TryRemoveAll(T item) => TryRemoveAll(item, Comparer<T>.Default);
 
-        public ILazinatorSplittable SplitOff()
+        public override IValueContainer<T> SplitOff(IComparer<T> comparer)
         {
             if (Unbalanced)
-                throw new NotSupportedException();
+                return base.SplitOff(comparer);
             if (AvlIndexableRoot.LeftCount == 0 || AvlIndexableRoot.RightCount == 0)
-                return new AvlIndexableTree<T>();
+                return CreateNewWithSameSettings();
             // Create two separate trees, each of them balanced
             var leftNode = AvlIndexableRoot.LeftCountedNode;
             var rightNode = AvlIndexableRoot.RightCountedNode;

@@ -11,6 +11,7 @@ namespace Lazinator.Collections.Interfaces
     {
         bool Unbalanced { get; set; }
         IValueContainer<T> CreateNewWithSameSettings();
+        IValueContainer<T> SplitOff(IComparer<T> comparer);
         bool Any();
         T First();
         T FirstOrDefault();
