@@ -24,7 +24,7 @@ namespace Lazinator.Collections
                 var existing = list.GetAt(index);
                 if (comparer.Compare(existing, item) == 0)
                 {
-                    list[(int)index] = item;
+                    list.SetAt(index, item);
                     return (index, false);
                 }
             }
@@ -46,9 +46,9 @@ namespace Lazinator.Collections
             if (!result.exists || whichOne == MultivalueLocationOptions.Any)
                 return result;
             long firstIndex = result.index, lastIndex = result.index;
-            while (firstIndex > 0 && EqualityComparer<T>.Default.Equals(list[(int)(firstIndex - 1)], target))
+            while (firstIndex > 0 && comparer.Compare(list.GetAt((firstIndex - 1)), target) == 0)
                 firstIndex--;
-            while (lastIndex < list.Count - 1 && EqualityComparer<T>.Default.Equals(list[(int)(lastIndex + 1)], target))
+            while (lastIndex < list.LongCount - 1 && comparer.Compare(list.GetAt(lastIndex + 1), target) == 0)
                 lastIndex++;
             switch (whichOne)
             {
@@ -67,17 +67,17 @@ namespace Lazinator.Collections
         public static (long index, bool exists) SortedFind<L, T>(this L list, T target, IComparer<T> comparer) where L : ILazinatorSortable<T> where T : ILazinator, IComparable<T>
         {
             bool found = false;
-            if (list.Count == 0)
+            if (list.LongCount == 0)
                 return (0, false);
-            int first = 0, last = list.Count - 1;
-            int mid = 0;
+            long first = 0, last = list.LongCount - 1;
+            long mid = 0;
 
             //for a sorted array with descending values
             while (!found && first <= last)
             {
                 mid = (first + last) / 2;
 
-                int comparison = comparer.Compare(target, list[mid]);
+                int comparison = comparer.Compare(target, list.GetAt(mid));
                 if (comparison == 0)
                 {
                     if (list.AllowDuplicates)
@@ -85,7 +85,7 @@ namespace Lazinator.Collections
                         bool matches = true;
                         while (matches && mid > 0)
                         {
-                            var previous = list[mid - 1];
+                            var previous = list.GetAt(mid - 1);
                             matches = previous.Equals(target);
                             if (matches)
                             {
