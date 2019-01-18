@@ -32,7 +32,7 @@ namespace Lazinator.Collections.Avl.ListTree
             };
         }
 
-        private int CompareBasedOnEndItems(BinaryNode<IMultivalueContainer<T>> node, T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
+        private int CompareBasedOnEndItems(BinaryNode<IMultivalueContainer<T>> node, T item, IComparer<T> comparer)
         {
             T last = node.Value.Last();
             var lastComparison = comparer.Compare(item, last);
@@ -45,9 +45,27 @@ namespace Lazinator.Collections.Avl.ListTree
             return 0; // item is between first and last
         }
 
+        private CustomComparer<IMultivalueContainer<T>> GetInteriorCollectionsComparer(IComparer<T> comparer)
+        {
+            return new CustomComparer<IMultivalueContainer<T>>((a, b) =>
+            {
+                // compare based on firsts
+                var aFirst = a.First();
+                var bFirst = b.First();
+                int firstComparison = comparer.Compare(aFirst, bFirst);
+                if (firstComparison != 0)
+                    return firstComparison;
+                // compare based on lasts
+                var aLast = a.Last();
+                var bLast = b.Last();
+                int lastComparison = comparer.Compare(aLast, bLast);
+                return firstComparison;
+            });
+        }
+
         protected AvlCountedNode<IMultivalueContainer<T>> GetNodeForValue(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, bool chooseShorterIfInBetween)
         {
-            var matchInfo = UnderlyingTree.GetMatchingOrNextNode(whichOne, n => CompareBasedOnEndItems((AvlCountedNode<IMultivalueContainer<T>>)n, item, whichOne, comparer));
+            var matchInfo = UnderlyingTree.GetMatchingOrNextNode(whichOne, n => CompareBasedOnEndItems((AvlCountedNode<IMultivalueContainer<T>>)n, item, comparer));
             var node = matchInfo.found ? (AvlCountedNode<IMultivalueContainer<T>>)matchInfo.node : (AvlCountedNode<IMultivalueContainer<T>>)UnderlyingTree.LastNode();
             if (node == null || !chooseShorterIfInBetween)
                 return node;
@@ -184,7 +202,8 @@ namespace Lazinator.Collections.Avl.ListTree
             var result = multivalueContainer.TryInsert(item, whichOne, comparer);
             if (InteriorCollectionFactory.RequiresSplitting(multivalueContainer))
             {
-                // DEBUG var splitOff = multivalueContainer.Splitt
+                IMultivalueContainer<T> splitOff = (IMultivalueContainer<T>) multivalueContainer.SplitOff(comparer);
+                UnderlyingTree.TryInsert(splitOff, AllowDuplicates ? MultivalueLocationOptions.Any : MultivalueLocationOptions.InsertBeforeFirst, GetInteriorCollectionsComparer(comparer)); // note: a duplicate here would be a duplicate of the entire inner node, meaning that all items are the same according to the comparer. But they may not always be exactly identical, if the comparer is a key-only comparer. We always split off the left in our multivalue containers, so this ensures consistency.
             }
             return result;
         }
