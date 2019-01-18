@@ -258,7 +258,10 @@ namespace Lazinator.Collections.Avl.ListTree
 
         public IValueContainer<T> SplitOff(IComparer<T> comparer)
         {
-            throw new NotImplementedException();
+            var splitOffUnderlying = (AvlIndexableTree<IMultivalueContainer<T>>) UnderlyingTree.SplitOff(GetInteriorCollectionsComparer(comparer));
+            var splitOff = (AvlListTree<T>)CreateNewWithSameSettings();
+            splitOff.UnderlyingTree = splitOffUnderlying;
+            return splitOff;
         }
     }
 

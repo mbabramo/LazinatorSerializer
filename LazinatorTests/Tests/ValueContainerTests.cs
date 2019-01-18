@@ -24,7 +24,8 @@ namespace LazinatorTests.Tests
         AvlSortedTree,
         AvlSortedIndexableTree,
         LazinatorList,
-        LazinatorLinkedList
+        LazinatorLinkedList,
+        AvlListTree
     }
 
     public class ValueContainerTests_WInt : ValueContainerTests<WInt>
@@ -34,12 +35,14 @@ namespace LazinatorTests.Tests
         [InlineData(ValueContainerType.AvlIndexableTree, false, 100, 100)]
         [InlineData(ValueContainerType.AvlSortedTree, false, 100, 100)]
         [InlineData(ValueContainerType.AvlSortedIndexableTree, false, 100, 100)]
+        [InlineData(ValueContainerType.AvlListTree, false, 100, 100)]
         [InlineData(ValueContainerType.LazinatorList, false, 100, 100)]
         [InlineData(ValueContainerType.LazinatorLinkedList, false, 100, 100)]
         [InlineData(ValueContainerType.AvlTree, true, 100, 100)]
         [InlineData(ValueContainerType.AvlIndexableTree, true, 100, 100)]
         [InlineData(ValueContainerType.AvlSortedTree, true, 100, 100)]
         [InlineData(ValueContainerType.AvlSortedIndexableTree, true, 100, 100)]
+        [InlineData(ValueContainerType.AvlListTree, true, 100, 100)]
         [InlineData(ValueContainerType.LazinatorList, true, 100, 100)]
         [InlineData(ValueContainerType.LazinatorLinkedList, true, 100, 100)]
         public void VerifyIntContainer(ValueContainerType containerType, bool allowDuplicates, int numRepetitions, int numInstructions) => VerifyValueContainerHelper(containerType, allowDuplicates, numRepetitions, numInstructions);
@@ -51,6 +54,7 @@ namespace LazinatorTests.Tests
         [InlineData(ValueContainerType.AvlIndexableTree)]
         [InlineData(ValueContainerType.AvlSortedTree)]
         [InlineData(ValueContainerType.AvlSortedIndexableTree)]
+        [InlineData(ValueContainerType.AvlListTree)]
         [InlineData(ValueContainerType.LazinatorList)]
         [InlineData(ValueContainerType.LazinatorLinkedList)]
         public void ValueContainer_SplitOff(ValueContainerType containerType)
@@ -88,12 +92,14 @@ namespace LazinatorTests.Tests
         [InlineData(ValueContainerType.AvlIndexableTree, false, 100, 100)]
         [InlineData(ValueContainerType.AvlSortedTree, false, 100, 100)]
         [InlineData(ValueContainerType.AvlSortedIndexableTree, false, 100, 100)]
+        [InlineData(ValueContainerType.AvlListTree, false, 100, 100)]
         [InlineData(ValueContainerType.LazinatorList, false, 100, 100)]
         [InlineData(ValueContainerType.LazinatorLinkedList, false, 100, 100)]
         [InlineData(ValueContainerType.AvlTree, true, 100, 100)]
         [InlineData(ValueContainerType.AvlIndexableTree, true, 100, 100)]
         [InlineData(ValueContainerType.AvlSortedTree, true, 100, 100)]
         [InlineData(ValueContainerType.AvlSortedIndexableTree, true, 100, 100)]
+        [InlineData(ValueContainerType.AvlListTree, true, 100, 100)]
         [InlineData(ValueContainerType.LazinatorList, true, 100, 100)]
         [InlineData(ValueContainerType.LazinatorLinkedList, true, 100, 100)]
         public void VerifyStringContainer(ValueContainerType containerType, bool allowDuplicates, int numRepetitions, int numInstructions) => VerifyValueContainerHelper(containerType, allowDuplicates, numRepetitions, numInstructions);
@@ -126,6 +132,8 @@ namespace LazinatorTests.Tests
                     return new AvlSortedTree<T>();
                 case ValueContainerType.AvlSortedIndexableTree:
                     return new AvlSortedIndexableTree<T>();
+                case ValueContainerType.AvlListTree:
+                    return new AvlListTree<T>();
                 case ValueContainerType.LazinatorList:
                     return new LazinatorList<T>();
                 case ValueContainerType.LazinatorLinkedList:
