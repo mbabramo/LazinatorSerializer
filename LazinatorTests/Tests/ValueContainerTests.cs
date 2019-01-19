@@ -397,7 +397,7 @@ namespace LazinatorTests.Tests
         public abstract class RandomInstruction
         {
             protected bool ContainerIsSorted;
-            protected ISortedContainer<T> SortedContainer;
+            protected ISortedValueContainer<T> SortedContainer;
 
             public virtual void Execute(ValueContainerTests<T> testClass, IValueContainer<T> container, List<T> list)
             {
@@ -436,13 +436,13 @@ namespace LazinatorTests.Tests
 
             protected void EstablishSorted(IValueContainer<T> container)
             {
-                SortedContainer = container as ISortedContainer<T>;
-                ContainerIsSorted = container is ISortedContainer<T>;
+                SortedContainer = container as ISortedValueContainer<T>;
+                ContainerIsSorted = container is ISortedValueContainer<T>;
             }
 
             public abstract void Execute_Value(ValueContainerTests<T> testClass, IValueContainer<T> container, List<T> list);
-            public abstract void Execute_Indexable(ValueContainerTests<T> testClass, IIndexableContainer<T> container, List<T> list);
-            public abstract void Execute_Sorted(ValueContainerTests<T> testClass, ISortedContainer<T> container, List<T> list);
+            public abstract void Execute_Indexable(ValueContainerTests<T> testClass, IIndexableValueContainer<T> container, List<T> list);
+            public abstract void Execute_Sorted(ValueContainerTests<T> testClass, ISortedValueContainer<T> container, List<T> list);
             public abstract void Execute_Multivalue(ValueContainerTests<T> testClass, IMultivalueContainer<T> container, List<T> list);
             public abstract void Execute_SortedMultivalue(ValueContainerTests<T> testClass, ISortedMultivalueContainer<T> container, List<T> list);
             public abstract void Execute_SortedIndexable(ValueContainerTests<T> testClass, ISortedIndexableContainer<T> container, List<T> list);
@@ -479,12 +479,12 @@ namespace LazinatorTests.Tests
 
         public class GetValueInstruction : RandomInstruction
         {
-            public override void Execute_Indexable(ValueContainerTests<T> testClass, IIndexableContainer<T> container, List<T> list)
+            public override void Execute_Indexable(ValueContainerTests<T> testClass, IIndexableValueContainer<T> container, List<T> list)
             {
                 Execute_IndexableHelper(testClass, container, list, MultivalueLocationOptions.Any);
             }
 
-            private void Execute_IndexableHelper(ValueContainerTests<T> testClass, IIndexableContainer<T> container, List<T> list, MultivalueLocationOptions whichOne)
+            private void Execute_IndexableHelper(ValueContainerTests<T> testClass, IIndexableValueContainer<T> container, List<T> list, MultivalueLocationOptions whichOne)
             {
                 var listResultOrNull = testClass.GetRandomItem(list);
                 if (listResultOrNull == null)
@@ -544,7 +544,7 @@ namespace LazinatorTests.Tests
                 }
             }
 
-            public override void Execute_Sorted(ValueContainerTests<T> testClass, ISortedContainer<T> container, List<T> list)
+            public override void Execute_Sorted(ValueContainerTests<T> testClass, ISortedValueContainer<T> container, List<T> list)
             {
                 var listResultOrNull = testClass.GetRandomItem(list);
                 if (listResultOrNull == null)
@@ -645,11 +645,11 @@ namespace LazinatorTests.Tests
                 WhichOne = testClass.AllowDuplicates ? testClass.ChooseMultivalueInsertOption() : MultivalueLocationOptions.Any; // if not multivalue, just replace the item
                 EstablishSorted(container);
                 // If we are using the base container type, then we can only add items with a comparer, so we treat it as a sorted container.
-                (Index, InsertedNotReplaced) = testClass.InsertOrReplaceItem(list, Item, ContainerIsSorted || !(container is IIndexableContainer<T>), WhichOne);
+                (Index, InsertedNotReplaced) = testClass.InsertOrReplaceItem(list, Item, ContainerIsSorted || !(container is IIndexableValueContainer<T>), WhichOne);
                 base.Execute(testClass, container, list);
             }
 
-            public override void Execute_Indexable(ValueContainerTests<T> testClass, IIndexableContainer<T> container, List<T> list)
+            public override void Execute_Indexable(ValueContainerTests<T> testClass, IIndexableValueContainer<T> container, List<T> list)
             {
                 if (InsertedNotReplaced)
                     container.InsertAt(Index, Item);
@@ -668,7 +668,7 @@ namespace LazinatorTests.Tests
                 insertedNotReplaced.Should().Be(InsertedNotReplaced);
             }
 
-            public override void Execute_Sorted(ValueContainerTests<T> testClass, ISortedContainer<T> container, List<T> list)
+            public override void Execute_Sorted(ValueContainerTests<T> testClass, ISortedValueContainer<T> container, List<T> list)
             {
                 bool insertedNotReplaced = container.TryInsert(Item);
                 insertedNotReplaced.Should().Be(InsertedNotReplaced);
@@ -807,7 +807,7 @@ namespace LazinatorTests.Tests
                 ValueContainerTests<T>.GetIndexRange(list, IndexBeforeRemove, out FirstIndex, out LastIndex);
             }
 
-            public override void Execute_Indexable(ValueContainerTests<T> testClass, IIndexableContainer<T> container, List<T> list)
+            public override void Execute_Indexable(ValueContainerTests<T> testClass, IIndexableValueContainer<T> container, List<T> list)
             {
                 if (IndexBeforeRemove != -1)
                 {
@@ -834,7 +834,7 @@ namespace LazinatorTests.Tests
                 }
             }
 
-            public override void Execute_Sorted(ValueContainerTests<T> testClass, ISortedContainer<T> container, List<T> list)
+            public override void Execute_Sorted(ValueContainerTests<T> testClass, ISortedValueContainer<T> container, List<T> list)
             {
                 bool result = container.TryRemove(ValueToTryToRemove);
                 VerifySuccess(result);

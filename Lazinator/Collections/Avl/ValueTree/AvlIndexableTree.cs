@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Lazinator.Collections.Avl.ValueTree
 {
-    public partial class AvlIndexableTree<T> : AvlTree<T>, IAvlIndexableTree<T>, IIndexableContainer<T>, IIndexableMultivalueContainer<T> where T : ILazinator
+    public partial class AvlIndexableTree<T> : AvlTree<T>, IAvlIndexableTree<T>, IIndexableValueContainer<T>, IIndexableMultivalueContainer<T> where T : ILazinator
     {
         public AvlIndexableTree(bool allowDuplicates, bool unbalanced) : base(allowDuplicates, unbalanced)
         {

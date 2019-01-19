@@ -18,7 +18,7 @@ namespace Lazinator.Collections.Avl
 
         public AvlList(ContainerFactory<T> factory)
         {
-            UnderlyingTree = (IIndexableContainer<T>) factory.CreateValueContainer();
+            UnderlyingTree = (IIndexableValueContainer<T>) factory.CreateValueContainer();
         }
 
         public AvlList(AvlIndexableTree<T> underlyingTree)
@@ -46,7 +46,7 @@ namespace Lazinator.Collections.Avl
         public void Clear()
         {
             var replacement = UnderlyingTree.CreateNewWithSameSettings();
-            UnderlyingTree = (IIndexableContainer<T>) replacement;
+            UnderlyingTree = (IIndexableValueContainer<T>) replacement;
         }
 
         public bool Contains(T item)
