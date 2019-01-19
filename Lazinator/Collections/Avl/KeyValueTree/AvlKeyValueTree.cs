@@ -14,8 +14,6 @@ namespace Lazinator.Collections.Avl.KeyValueTree
 {
     public partial class AvlKeyValueTree<TKey, TValue> : IAvlKeyValueTree<TKey, TValue>, IKeyValueContainer<TKey, TValue>, IKeyMultivalueContainer<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>> where TKey : ILazinator where TValue : ILazinator
     {
-        public bool Unbalanced { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public AvlKeyValueTree(bool allowDuplicates, bool unbalanced)
         {
             UnderlyingTree = new AvlTree<LazinatorKeyValue<TKey, TValue>>(allowDuplicates, unbalanced);

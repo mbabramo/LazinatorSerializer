@@ -157,12 +157,12 @@ namespace Lazinator.Collections.Avl.ListTree
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public override int LazinatorUniqueID => 192;
+        public override int LazinatorUniqueID => 172;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override bool ContainsOpenGenericParameters => true;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public override LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<AvlListNode<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(192, new Type[] { typeof(T) }));
+        public override LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<AvlListNode<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(172, new Type[] { typeof(T) }));
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

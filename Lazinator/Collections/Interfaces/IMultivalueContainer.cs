@@ -9,6 +9,7 @@ namespace Lazinator.Collections.Interfaces
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IMultivalueContainer)]
     public interface IMultivalueContainer<T> : IValueContainer<T>, ILazinator where T : ILazinator
     {
+        [SetterAccessibility("protected")]
         bool AllowDuplicates { get; }
         bool GetValue(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, out T match);
         bool TryInsert(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer);
