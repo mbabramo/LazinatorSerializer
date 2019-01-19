@@ -773,10 +773,7 @@ namespace LazinatorTests.Tests
             const int numOperations = 100;
             const int maxValue = 60;
             Random r = new Random();
-            LazinatorSortedList<WInt> s = new LazinatorSortedList<WInt>()
-            {
-                AllowDuplicates = allowDuplicates
-            };
+            LazinatorSortedList<WInt> s = new LazinatorSortedList<WInt>(allowDuplicates);
             List<int> basic = new List<int>();
             for (int i = 0; i < numOperations; i++)
             {

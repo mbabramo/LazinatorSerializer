@@ -17,14 +17,10 @@ namespace Lazinator.Collections.Tree
     /// <typeparam name="T"></typeparam>
     public partial class BinaryTree<T> : IBinaryTree<T>, IValueContainer<T>, IMultivalueContainer<T>, IEnumerable<T> where T : ILazinator
     {
-        public virtual bool Unbalanced
+        public BinaryTree(bool allowDuplicates, bool unbalanced)
         {
-            get => true;
-            set
-            {
-                if (value == false)
-                    throw new NotImplementedException();
-            }
+            AllowDuplicates = allowDuplicates;
+            Unbalanced = unbalanced;
         }
 
         public virtual IValueContainer<T> CreateNewWithSameSettings()

@@ -27,27 +27,13 @@ namespace Lazinator.Collections.Factories
             switch (ThisLevel.ContainerType)
             {
                 case ContainerType.LazinatorSortedList:
-                    return new LazinatorSortedList<T>()
-                    {
-                        AllowDuplicates = ThisLevel.AllowDuplicates
-                    };
+                    return new LazinatorSortedList<T>(ThisLevel.AllowDuplicates);
                 case ContainerType.LazinatorSortedLinkedList:
-                    return new LazinatorSortedLinkedList<T>()
-                    {
-                        AllowDuplicates = ThisLevel.AllowDuplicates
-                    };
+                    return new LazinatorSortedLinkedList<T>(ThisLevel.AllowDuplicates);
                 case ContainerType.AvlSortedTree:
-                    return new AvlSortedTree<T>()
-                    {
-                        AllowDuplicates = ThisLevel.AllowDuplicates,
-                        Unbalanced = ThisLevel.Unbalanced
-                    };
+                    return new AvlSortedTree<T>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
                 case ContainerType.AvlSortedIndexableTree:
-                    return new AvlSortedIndexableTree<T>()
-                    {
-                        AllowDuplicates = ThisLevel.AllowDuplicates,
-                        Unbalanced = ThisLevel.Unbalanced
-                    };
+                    return new AvlSortedIndexableTree<T>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
                 case ContainerType.AvlSortedListTree:
                     throw new NotImplementedException();
                 case ContainerType.AvlSortedIndexableListTree:
@@ -62,15 +48,9 @@ namespace Lazinator.Collections.Factories
             switch (ThisLevel.ContainerType)
             {
                 case ContainerType.LazinatorSortedList:
-                    return new LazinatorSortedList<T>()
-                    {
-                        AllowDuplicates = ThisLevel.AllowDuplicates
-                    };
+                    return new LazinatorSortedList<T>(ThisLevel.AllowDuplicates);
                 case ContainerType.LazinatorSortedLinkedList:
-                    return new LazinatorSortedLinkedList<T>()
-                    {
-                        AllowDuplicates = ThisLevel.AllowDuplicates
-                    };
+                    return new LazinatorSortedLinkedList<T>(ThisLevel.AllowDuplicates);
                 case ContainerType.AvlSortedList:
                     return new AvlSortedList<T>(ThisLevel.AllowDuplicates, InteriorFactory);
                 default:
@@ -94,9 +74,9 @@ namespace Lazinator.Collections.Factories
             switch (ThisLevel.ContainerType)
             {
                 case ContainerType.AvlSortedKeyValueTree:
-                    return new AvlSortedKeyValueTree<T, V>(ThisLevel.AllowDuplicates);
+                    return new AvlSortedKeyValueTree<T, V>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
                 case ContainerType.AvlSortedIndexableKeyValueTree:
-                    return new AvlSortedIndexableKeyValueTree<T, V>(ThisLevel.AllowDuplicates);
+                    return new AvlSortedIndexableKeyValueTree<T, V>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
                 default:
                     return base.CreateKeyValueContainer<V>();
             }
@@ -107,9 +87,9 @@ namespace Lazinator.Collections.Factories
             switch (ThisLevel.ContainerType)
             {
                 case ContainerType.AvlSortedKeyValueTree:
-                    return new AvlSortedKeyValueTree<WUint, LazinatorKeyValue<T, V>>(ThisLevel.AllowDuplicates);
+                    return new AvlSortedKeyValueTree<WUint, LazinatorKeyValue<T, V>>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
                 case ContainerType.AvlSortedIndexableKeyValueTree:
-                    return new AvlSortedIndexableKeyValueTree<WUint, LazinatorKeyValue<T, V>>(ThisLevel.AllowDuplicates);
+                    return new AvlSortedIndexableKeyValueTree<WUint, LazinatorKeyValue<T, V>>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
                 default:
                     throw new NotImplementedException();
             }

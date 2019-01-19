@@ -13,7 +13,8 @@ namespace Lazinator.Collections.Avl.ListTree
         [OnSet("", "\nAllowDuplicatesChanged(value);")]
         [SetterAccessibility("protected")]
         bool AllowDuplicates { get; }
-        bool Unbalanced { get; set; }
+        [SetterAccessibility("protected")]
+        bool Unbalanced { get; }
         AvlIndexableTree<IMultivalueContainer<T>> UnderlyingTree { get; set; }
         ContainerFactory<T> InteriorContainerFactory { get; set; }
     }

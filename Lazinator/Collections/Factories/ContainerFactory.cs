@@ -40,27 +40,13 @@ namespace Lazinator.Collections.Factories
             switch (ThisLevel.ContainerType)
             {
                 case ContainerType.LazinatorList:
-                    return new LazinatorList<T>()
-                    {
-                        AllowDuplicates = ThisLevel.AllowDuplicates
-                    };
+                    return new LazinatorList<T>(ThisLevel.AllowDuplicates);
                 case ContainerType.LazinatorLinkedList:
-                    return new LazinatorLinkedList<T>()
-                    {
-                        AllowDuplicates = ThisLevel.AllowDuplicates
-                    };
+                    return new LazinatorLinkedList<T>(ThisLevel.AllowDuplicates);
                 case ContainerType.AvlTree:
-                    return new AvlTree<T>()
-                    {
-                        AllowDuplicates = ThisLevel.AllowDuplicates,
-                        Unbalanced = ThisLevel.Unbalanced
-                    };
+                    return new AvlTree<T>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
                 case ContainerType.AvlIndexableTree:
-                    return new AvlIndexableTree<T>()
-                    {
-                        AllowDuplicates = ThisLevel.AllowDuplicates,
-                        Unbalanced = ThisLevel.Unbalanced
-                    };
+                    return new AvlIndexableTree<T>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
                 case ContainerType.AvlListTree:
                     return new AvlListTree<T>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced, InteriorFactory);
                 case ContainerType.AvlIndexableListTree:
@@ -75,16 +61,9 @@ namespace Lazinator.Collections.Factories
             switch (ThisLevel.ContainerType)
             {
                 case ContainerType.LazinatorList:
-                    return new LazinatorList<T>()
-                    {
-                        AllowDuplicates = ThisLevel.AllowDuplicates
-                    };
+                    return new LazinatorList<T>(ThisLevel.AllowDuplicates);
                 case ContainerType.LazinatorLinkedList:
-                    return new LazinatorLinkedList<T>()
-                    {
-                        AllowDuplicates = ThisLevel.AllowDuplicates
-                    };
-                
+                    return new LazinatorLinkedList<T>(ThisLevel.AllowDuplicates);
                 case ContainerType.AvlList:
                     return new AvlList<T>(InteriorFactory);
                 default:
@@ -110,9 +89,9 @@ namespace Lazinator.Collections.Factories
             switch (ThisLevel.ContainerType)
             {
                 case ContainerType.AvlKeyValueTree:
-                    return new AvlKeyValueTree<T, V>(ThisLevel.AllowDuplicates);
+                    return new AvlKeyValueTree<T, V>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
                 case ContainerType.AvlIndexableKeyValueTree:
-                    return new AvlIndexableKeyValueTree<T, V>(ThisLevel.AllowDuplicates);
+                    return new AvlIndexableKeyValueTree<T, V>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
                 default:
                     throw new NotImplementedException();
             }
@@ -123,9 +102,9 @@ namespace Lazinator.Collections.Factories
             switch (ThisLevel.ContainerType)
             {
                 case ContainerType.AvlKeyValueTree:
-                    return new AvlKeyValueTree<WUint, LazinatorKeyValue<T, V>>(ThisLevel.AllowDuplicates);
+                    return new AvlKeyValueTree<WUint, LazinatorKeyValue<T, V>>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
                 case ContainerType.AvlIndexableKeyValueTree:
-                    return new AvlIndexableKeyValueTree<WUint, LazinatorKeyValue<T, V>>(ThisLevel.AllowDuplicates);
+                    return new AvlIndexableKeyValueTree<WUint, LazinatorKeyValue<T, V>>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
                 default:
                     throw new NotImplementedException();
             }

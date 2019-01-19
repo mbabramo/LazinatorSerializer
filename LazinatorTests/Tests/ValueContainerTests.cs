@@ -214,9 +214,9 @@ namespace LazinatorTests.Tests
                     );
                     return factory.CreateValueContainer();
                 case ValueContainerToUse.LazinatorList:
-                    return new LazinatorList<T>();
+                    return new LazinatorList<T>(false);
                 case ValueContainerToUse.LazinatorLinkedList:
-                    return new LazinatorList<T>();
+                    return new LazinatorLinkedList<T>(false);
                 default:
                     throw new NotSupportedException();
             }
@@ -234,7 +234,8 @@ namespace LazinatorTests.Tests
                 List<T> list = new List<T>();
                 IValueContainer<T> container = GetValueContainer(containerType);
                 if (container is IMultivalueContainer<T> multivalue)
-                    multivalue.AllowDuplicates = AllowDuplicates;
+                    if (multivalue.AllowDuplicates != AllowDuplicates)
+                        throw new Exception("Internal error on AllowDuplicates.");
                 for (int i = 0; i < numInstructions; i++)
                 {
                     int r = ran.Next(100);

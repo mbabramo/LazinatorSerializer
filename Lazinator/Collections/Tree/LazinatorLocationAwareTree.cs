@@ -82,7 +82,7 @@ namespace Lazinator.Collections.Tree
 
         private LazinatorList<WInt> ConvertToLazinatorList(List<int> list)
         {
-            return new LazinatorList<WInt>(list.Select(x => new WInt(x)));
+            return new LazinatorList<WInt>(list.Select(x => new WInt(x)), false);
         }
 
         private List<int> ConvertToRegularList(LazinatorList<WInt> list)

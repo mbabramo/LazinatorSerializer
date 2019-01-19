@@ -19,12 +19,14 @@ namespace Lazinator.Collections
     public partial class LazinatorList<T> : IList<T>, IEnumerable, ILazinatorList<T>, ILazinatorList, ILazinatorListable<T>, IMultivalueContainer<T> where T : ILazinator
     {
 
+        public LazinatorList()
+        {
+
+        }
+
         public virtual IValueContainer<T> CreateNewWithSameSettings()
         {
-            return new LazinatorList<T>()
-            {
-                AllowDuplicates = AllowDuplicates
-            };
+            return new LazinatorList<T>(AllowDuplicates);
         }
 
         // The status of an item currently in the list. To avoid unnecessary deserialization, we keep track of 
@@ -49,19 +51,20 @@ namespace Lazinator.Collections
         [NonSerialized] private bool _TypeRequiresNonBinaryHashing;
         [NonSerialized] private LazinatorOffsetList _PreviousOffsets;
 
-        public LazinatorList()
+        public LazinatorList(bool allowDuplicates)
         {
+            AllowDuplicates = allowDuplicates;
             _FixedID = DeserializationFactory.Instance.GetFixedUniqueID(typeof(T));
             _TypeRequiresNonBinaryHashing = DeserializationFactory.Instance.HasNonBinaryHashAttribute(typeof(T));
         }
 
-        public LazinatorList(int numItems) : this()
+        public LazinatorList(int numItems, bool allowDuplicates) : this(allowDuplicates)
         {
             for (int i = 0; i < numItems; i++)
                 Add(default);
         }
 
-        public LazinatorList(IEnumerable<T> items) : this()
+        public LazinatorList(IEnumerable<T> items, bool allowDuplicates) : this(allowDuplicates)
         {
             foreach (T item in items)
                 Add(item);

@@ -17,6 +17,10 @@ namespace Lazinator.Collections.Avl.ValueTree
     {
         public AvlNode<T> AvlRoot => (AvlNode<T>)Root;
 
+        public AvlTree(bool allowDuplicates, bool unbalanced) : base(allowDuplicates, unbalanced)
+        {
+        }
+
         public override IValueContainer<T> CreateNewWithSameSettings()
         {
             return new AvlTree<T>()

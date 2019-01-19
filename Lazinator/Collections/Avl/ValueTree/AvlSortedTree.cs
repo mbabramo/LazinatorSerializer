@@ -8,6 +8,10 @@ namespace Lazinator.Collections.Avl.ValueTree
 {
     public partial class AvlSortedTree<T> : AvlTree<T>, IAvlSortedTree<T>, ISortedMultivalueContainer<T> where T : ILazinator , IComparable<T>
     {
+        public AvlSortedTree(bool allowDuplicates, bool unbalanced) : base(allowDuplicates, unbalanced)
+        {
+        }
+
         public override IValueContainer<T> CreateNewWithSameSettings()
         {
             return new AvlSortedTree<T>() { AllowDuplicates = AllowDuplicates };

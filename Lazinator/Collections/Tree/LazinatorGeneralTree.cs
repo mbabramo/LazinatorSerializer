@@ -237,7 +237,7 @@ namespace Lazinator.Collections.Tree
         public void Order()
         {
             var children = GetChildren();
-            Children = new LazinatorList<LazinatorGeneralTree<T>>(children.OrderBy(x => x.Item));
+            Children = new LazinatorList<LazinatorGeneralTree<T>>(children.OrderBy(x => x.Item), false);
             foreach (var child in Children)
                 child.Order();
             if (ParentTree == null)
@@ -250,7 +250,7 @@ namespace Lazinator.Collections.Tree
         public void Order<T2>(Func<LazinatorGeneralTree<T>, T2> orderByItem) where T2 : IComparable<T2>
         {
             var children = GetChildren();
-            Children = new LazinatorList<LazinatorGeneralTree<T>>(children.OrderBy(x => orderByItem(x)));
+            Children = new LazinatorList<LazinatorGeneralTree<T>>(children.OrderBy(x => orderByItem(x)), false);
             foreach (var child in Children)
                 child.Order(orderByItem);
             if (ParentTree == null)

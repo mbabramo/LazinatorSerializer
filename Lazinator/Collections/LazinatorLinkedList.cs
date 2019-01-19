@@ -15,12 +15,14 @@ namespace Lazinator.Collections
         LazinatorLinkedListNode<T> _lastAccessedNode = null;
         int? _lastAccessedIndex = null;
 
+        public LazinatorLinkedList(bool allowDuplicates)
+        {
+            AllowDuplicates = allowDuplicates;
+        }
+
         public virtual IValueContainer<T> CreateNewWithSameSettings()
         {
-            return new LazinatorLinkedList<T>()
-            {
-                AllowDuplicates = AllowDuplicates
-            };
+            return new LazinatorLinkedList<T>(AllowDuplicates);
         }
 
         public T this[int index]

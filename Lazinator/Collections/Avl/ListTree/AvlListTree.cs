@@ -19,13 +19,12 @@ namespace Lazinator.Collections.Avl.ListTree
             AllowDuplicates = allowDuplicates;
             Unbalanced = unbalanced;
             InteriorContainerFactory = interiorCollectionFactory;
-            UnderlyingTree = new AvlIndexableTree<IMultivalueContainer<T>>() { Unbalanced = Unbalanced, AllowDuplicates = AllowDuplicates };
+            UnderlyingTree = new AvlIndexableTree<IMultivalueContainer<T>>(AllowDuplicates, Unbalanced);
         }
 
         private void AllowDuplicatesChanged(bool value)
         {
-            if (UnderlyingTree != null)
-                UnderlyingTree.AllowDuplicates = value;
+            // DEBUG -- delete this
         }
 
         public IValueContainer<T> CreateNewWithSameSettings()

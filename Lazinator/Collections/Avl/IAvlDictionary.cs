@@ -14,6 +14,6 @@ namespace Lazinator.Collections.Avl
     {
         ISortedKeyMultivalueContainer<WUint, LazinatorKeyValue<TKey, TValue>> UnderlyingTree { get; set; }
         [SetterAccessibility("protected")]
-        bool AllowDuplicates { get; set; }
+        bool AllowDuplicates { get; }
     }
 }

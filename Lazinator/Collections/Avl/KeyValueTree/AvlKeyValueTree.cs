@@ -14,15 +14,18 @@ namespace Lazinator.Collections.Avl.KeyValueTree
 {
     public partial class AvlKeyValueTree<TKey, TValue> : IAvlKeyValueTree<TKey, TValue>, IKeyValueContainer<TKey, TValue>, IKeyMultivalueContainer<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>> where TKey : ILazinator where TValue : ILazinator
     {
-        public AvlKeyValueTree(bool allowDuplicates)
+        public bool Unbalanced { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public AvlKeyValueTree(bool allowDuplicates, bool unbalanced)
         {
-            UnderlyingTree = new AvlTree<LazinatorKeyValue<TKey, TValue>>() { AllowDuplicates = allowDuplicates };
+            UnderlyingTree = new AvlTree<LazinatorKeyValue<TKey, TValue>>(allowDuplicates, unbalanced);
             AllowDuplicates = allowDuplicates;
+            Unbalanced = unbalanced;
         }
 
         public virtual IKeyValueContainer<TKey, TValue> CreateNewWithSameSettings()
         {
-            return new AvlKeyValueTree<TKey, TValue>(AllowDuplicates);
+            return new AvlKeyValueTree<TKey, TValue>(AllowDuplicates, Unbalanced);
         }
 
         public string ToTreeString()

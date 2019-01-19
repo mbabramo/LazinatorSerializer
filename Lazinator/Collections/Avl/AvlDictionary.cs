@@ -91,9 +91,7 @@ namespace Lazinator.Collections.Avl
 
         public void Clear()
         {
-            bool allowDuplicates = AllowDuplicates;
             UnderlyingTree.Clear();
-            UnderlyingTree.AllowDuplicates = true;
         }
 
         public bool Remove(TKey key)

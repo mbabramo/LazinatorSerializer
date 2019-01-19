@@ -9,6 +9,8 @@ namespace Lazinator.Collections.Tree
     {
         [SetterAccessibility("protected")]
         bool AllowDuplicates { get; }
+        [SetterAccessibility("protected")]
+        bool Unbalanced { get; }
         BinaryNode<T> Root { get; set; }
     }
 }

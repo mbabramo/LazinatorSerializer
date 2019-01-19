@@ -9,7 +9,8 @@ namespace Lazinator.Collections.Interfaces
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IValueContainer)]
     public interface IValueContainer<T> : IEnumerable<T>, ILazinator where T : ILazinator
     {
-        bool Unbalanced { get; set; }
+        [SetterAccessibility("protected")]
+        bool Unbalanced { get; }
         IValueContainer<T> CreateNewWithSameSettings();
         IValueContainer<T> SplitOff(IComparer<T> comparer);
         bool Any();

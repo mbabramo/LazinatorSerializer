@@ -22,21 +22,25 @@ namespace LazinatorTests.Tests
         AvlKeyValueTree,
         AvlIndexableKeyValueTree,
         AvlSortedKeyValueTree,
-        AvlSortedIndexableKeyValueTree
+        AvlSortedIndexableKeyValueTree,
+        AvlKeyValueTreeWithDuplicates,
+        AvlIndexableKeyValueTreeWithDuplicates,
+        AvlSortedKeyValueTreeWithDuplicates,
+        AvlSortedIndexableKeyValueTreeWithDuplicates,
     }
 
     public class KeyValueContainerTests_WInt : KeyValueContainerTests<WInt, WInt>
     {
         [Theory]
-        [InlineData(KeyValueContainerType.AvlKeyValueTree, false, 100, 100)]
-        [InlineData(KeyValueContainerType.AvlIndexableKeyValueTree, false, 100, 100)]
-        [InlineData(KeyValueContainerType.AvlSortedKeyValueTree, false, 100, 100)]
-        [InlineData(KeyValueContainerType.AvlSortedIndexableKeyValueTree, false, 100, 100)]
-        [InlineData(KeyValueContainerType.AvlKeyValueTree, true, 100, 100)]
-        [InlineData(KeyValueContainerType.AvlIndexableKeyValueTree, true, 100, 100)]
-        [InlineData(KeyValueContainerType.AvlSortedKeyValueTree, true, 100, 100)]
-        [InlineData(KeyValueContainerType.AvlSortedIndexableKeyValueTree, true, 100, 100)]
-        public void VerifyKeyValueContainer(KeyValueContainerType containerType, bool allowDuplicates, int numRepetitions, int numInstructions) => VerifyKeyValueContainerHelper(containerType, allowDuplicates, numRepetitions, numInstructions);
+        [InlineData(KeyValueContainerType.AvlKeyValueTree, 100, 100)]
+        [InlineData(KeyValueContainerType.AvlIndexableKeyValueTree, 100, 100)]
+        [InlineData(KeyValueContainerType.AvlSortedKeyValueTree, 100, 100)]
+        [InlineData(KeyValueContainerType.AvlSortedIndexableKeyValueTree, 100, 100)]
+        [InlineData(KeyValueContainerType.AvlKeyValueTreeWithDuplicates, 100, 100)]
+        [InlineData(KeyValueContainerType.AvlIndexableKeyValueTreeWithDuplicates, 100, 100)]
+        [InlineData(KeyValueContainerType.AvlSortedKeyValueTreeWithDuplicates, 100, 100)]
+        [InlineData(KeyValueContainerType.AvlSortedIndexableKeyValueTreeWithDuplicates, 100, 100)]
+        public void VerifyKeyValueContainer(KeyValueContainerType containerType, int numRepetitions, int numInstructions) => VerifyKeyValueContainerHelper(containerType, numRepetitions, numInstructions);
 
         public override WInt GetRandomKey()
         {
@@ -53,35 +57,40 @@ namespace LazinatorTests.Tests
     public abstract class KeyValueContainerTests<TKey, TValue> : SerializationDeserializationTestBase where TKey : ILazinator, IComparable<TKey>, IComparable where TValue : ILazinator
     {
 
-        public IKeyValueContainer<TKey, TValue> GetKeyValueContainer(KeyValueContainerType containerType, bool allowDuplicates)
+        public IKeyValueContainer<TKey, TValue> GetKeyValueContainer(KeyValueContainerType containerType)
         {
             switch (containerType)
             {
                 case KeyValueContainerType.AvlKeyValueTree:
-                    return new AvlKeyValueTree<TKey, TValue>(allowDuplicates);
+                    return new AvlKeyValueTree<TKey, TValue>(false, false);
                 case KeyValueContainerType.AvlIndexableKeyValueTree:
-                    return new AvlIndexableKeyValueTree<TKey, TValue>(allowDuplicates);
+                    return new AvlIndexableKeyValueTree<TKey, TValue>(false, false);
                 case KeyValueContainerType.AvlSortedKeyValueTree:
-                    return new AvlSortedKeyValueTree<TKey, TValue>(allowDuplicates);
+                    return new AvlSortedKeyValueTree<TKey, TValue>(false, false);
                 case KeyValueContainerType.AvlSortedIndexableKeyValueTree:
-                    return new AvlSortedIndexableKeyValueTree<TKey, TValue>(allowDuplicates);
+                    return new AvlSortedIndexableKeyValueTree<TKey, TValue>(false, false);
+                case KeyValueContainerType.AvlKeyValueTreeWithDuplicates:
+                    return new AvlKeyValueTree<TKey, TValue>(true, false);
+                case KeyValueContainerType.AvlIndexableKeyValueTreeWithDuplicates:
+                    return new AvlIndexableKeyValueTree<TKey, TValue>(true, false);
+                case KeyValueContainerType.AvlSortedKeyValueTreeWithDuplicates:
+                    return new AvlSortedKeyValueTree<TKey, TValue>(true, false);
+                case KeyValueContainerType.AvlSortedIndexableKeyValueTreeWithDuplicates:
+                    return new AvlSortedIndexableKeyValueTree<TKey, TValue>(true, false);
                 default:
                     throw new NotSupportedException();
             }
         }
 
         public Random ran = new Random(0);
-        bool AllowDuplicates;
 
 
-        public void VerifyKeyValueContainerHelper(KeyValueContainerType containerType, bool allowDuplicates, int numRepetitions, int numInstructions)
+        public void VerifyKeyValueContainerHelper(KeyValueContainerType containerType, int numRepetitions, int numInstructions)
         {
-            AllowDuplicates = allowDuplicates;
             for (int rep = 0; rep < numRepetitions; rep++)
             {
                 List<LazinatorComparableKeyValue<TKey, TValue>> list = new List<LazinatorComparableKeyValue<TKey, TValue>>();
-                IKeyValueContainer<TKey, TValue> container = GetKeyValueContainer(containerType, allowDuplicates);
-                container.AllowDuplicates = AllowDuplicates;
+                IKeyValueContainer<TKey, TValue> container = GetKeyValueContainer(containerType);
                 for (int i = 0; i < numInstructions; i++)
                 {
                     int r = ran.Next(100);
@@ -590,7 +599,7 @@ namespace LazinatorTests.Tests
                 Key = testClass.GetRandomKey();
                 Value = testClass.GetRandomValue();
                 ComparableKeyValue = new LazinatorComparableKeyValue<TKey, TValue>(Key, Value);
-                WhichOne = testClass.AllowDuplicates ? testClass.ChooseMultivalueInsertOption() : MultivalueLocationOptions.Any; // if not multivalue, just replace the value associated with this key
+                WhichOne = container.AllowDuplicates ? testClass.ChooseMultivalueInsertOption() : MultivalueLocationOptions.Any; // if not multivalue, just replace the value associated with this key
                 EstablishSorted(container);
                 // If we are using the base container type, then we can only add items with a comparer, so we treat it as a sorted container.
                 (Index, InsertedNotReplaced) = testClass.InsertOrReplaceItem(list, ComparableKeyValue, KeyValueContainerIsSorted || !(container is IIndexableKeyValueContainer<TKey, TValue>), WhichOne);
@@ -682,7 +691,7 @@ namespace LazinatorTests.Tests
                 EstablishSorted(container);
                 EstablishMultivalue(container);
                 RemoveSpecificKeyValue = testClass.ran.Next(2) == 0;
-                if (testClass.AllowDuplicates)
+                if (container.AllowDuplicates)
                 {
                     if (!RemoveSpecificKeyValue && KeyValueContainerIsSorted && testClass.ran.Next(0, 5) == 0)
                     {

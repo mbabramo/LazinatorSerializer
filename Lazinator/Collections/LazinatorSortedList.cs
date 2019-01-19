@@ -9,6 +9,10 @@ namespace Lazinator.Collections
 {
     public partial class LazinatorSortedList<T> : LazinatorList<T>, ILazinatorSortedList<T>, ILazinatorSorted<T> where T : ILazinator, IComparable<T>
     {
+        public LazinatorSortedList(bool allowDuplicates) : base(allowDuplicates)
+        {
+        }
+
         public override IValueContainer<T> CreateNewWithSameSettings()
         {
             return new LazinatorSortedList<T>()
