@@ -18,17 +18,6 @@ namespace Lazinator.Collections
     [Implements(new string[] { "PreSerialization", "EnumerateLazinatorDescendants", "OnFreeInMemoryObjects", "AssignCloneProperties", "OnUpdateDeserializedChildren", "OnPropertiesWritten", "OnForEachLazinator" })]
     public partial class LazinatorList<T> : IList<T>, IEnumerable, ILazinatorList<T>, ILazinatorList, ILazinatorListable<T>, IMultivalueContainer<T> where T : ILazinator
     {
-
-        public LazinatorList()
-        {
-
-        }
-
-        public virtual IValueContainer<T> CreateNewWithSameSettings()
-        {
-            return new LazinatorList<T>(AllowDuplicates);
-        }
-
         // The status of an item currently in the list. To avoid unnecessary deserialization, we keep track of 
         struct ItemStatus
         {
@@ -50,6 +39,15 @@ namespace Lazinator.Collections
         [NonSerialized] private int? _FixedID;
         [NonSerialized] private bool _TypeRequiresNonBinaryHashing;
         [NonSerialized] private LazinatorOffsetList _PreviousOffsets;
+
+        public LazinatorList() : this(false)
+        {
+        }
+
+        public virtual IValueContainer<T> CreateNewWithSameSettings()
+        {
+            return new LazinatorList<T>(AllowDuplicates);
+        }
 
         public LazinatorList(bool allowDuplicates)
         {

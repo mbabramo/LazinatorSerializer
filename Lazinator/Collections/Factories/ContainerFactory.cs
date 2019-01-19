@@ -110,11 +110,6 @@ namespace Lazinator.Collections.Factories
             }
         }
 
-        public IValueContainer<T> CreateInteriorValueContainer()
-        {
-            return InteriorFactory.CreateValueContainer();
-        }
-
         public bool RequiresSplitting(IValueContainer<T> container)
         {
             if (container is ICountableContainer countable)

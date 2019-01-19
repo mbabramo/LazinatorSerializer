@@ -226,7 +226,7 @@ namespace Lazinator.Collections.Avl.ListTree
             var node = GetNodeForValue(item, whichOne, comparer, true);
             if (node == null)
             {
-                IMultivalueContainer<T> initialContainer = (IMultivalueContainer<T>) InteriorContainerFactory.CreateInteriorValueContainer();
+                IMultivalueContainer<T> initialContainer = (IMultivalueContainer<T>) InteriorContainerFactory.CreateValueContainer();
                 initialContainer.TryInsert(item, comparer);
                 UnderlyingTree.TryInsert(initialContainer, GetInteriorCollectionsComparer(comparer));
                 return true;
