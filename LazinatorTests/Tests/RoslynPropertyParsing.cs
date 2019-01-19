@@ -16,18 +16,18 @@ namespace LazinatorTests.Tests
 {
     public class RoslynPropertyParsing
     {
-        [Fact]
-        public async Task CanParseInterfaceProperties()
-        {
-            LazinatorCompilation lazinatorFiles = await GetMiniRoslynFileSet(typeof(Example));
-            var exampleInterface = lazinatorFiles.LookupSymbol("IExample");
-            var properties = exampleInterface.GetPropertySymbols();
-            properties[0].Name.Should().Be("MyBool");
-            properties[0].GetMethod.Name.Should().Be("get_MyBool");
-            properties[0].SetMethod.Name.Should().Be("set_MyBool");
-            properties[0].Type.Name.Should().Be("Boolean");
-        }
-
+        // The following is too slow, but can be uncommented.
+        //[Fact]
+        //public async Task CanParseInterfaceProperties()
+        //{
+        //    LazinatorCompilation lazinatorFiles = await GetMiniRoslynFileSet(typeof(Example));
+        //    var exampleInterface = lazinatorFiles.LookupSymbol("IExample");
+        //    var properties = exampleInterface.GetPropertySymbols();
+        //    properties[0].Name.Should().Be("MyBool");
+        //    properties[0].GetMethod.Name.Should().Be("get_MyBool");
+        //    properties[0].SetMethod.Name.Should().Be("set_MyBool");
+        //    properties[0].Type.Name.Should().Be("Boolean");
+        //}
 
         [Fact]
         public async Task CanParseInterfaceAttributes()
