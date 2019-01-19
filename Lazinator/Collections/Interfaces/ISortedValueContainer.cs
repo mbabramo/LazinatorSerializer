@@ -10,7 +10,7 @@ namespace Lazinator.Collections.Interfaces
     public interface ISortedValueContainer<T> : IValueContainer<T>, ILazinator where T : ILazinator, IComparable<T>
     {
         bool Contains(T item);
-        bool TryInsert(T item);
+        (IContainerLocation location, bool insertedNotReplaced) TryInsert(T item);
         bool TryRemove(T item);
     }
 }

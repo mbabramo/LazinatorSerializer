@@ -27,8 +27,8 @@ namespace Lazinator.Collections.Avl.ValueTree
         public bool RemoveSorted(T item) => TryRemove(item, MultivalueLocationOptionForRemoval);
 
 
-        public bool TryInsert(T item) => TryInsert(item, MultivalueLocationOptionForInsertion);
-        public bool TryInsert(T item, MultivalueLocationOptions whichOne) => TryInsert(item, whichOne, Comparer<T>.Default);
+        public (IContainerLocation location, bool insertedNotReplaced) TryInsert(T item) => TryInsert(item, MultivalueLocationOptionForInsertion);
+        public (IContainerLocation location, bool insertedNotReplaced) TryInsert(T item, MultivalueLocationOptions whichOne) => TryInsert(item, whichOne, Comparer<T>.Default);
         public bool TryRemove(T item, MultivalueLocationOptions whichOne) => TryRemove(item, whichOne, Comparer<T>.Default);
         public bool TryRemove(T item) => TryRemove(item, MultivalueLocationOptionForRemoval);
 

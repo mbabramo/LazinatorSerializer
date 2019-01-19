@@ -36,7 +36,7 @@ namespace Lazinator.Collections.Interfaces
         /// <param name="item"></param>
         /// <param name="comparer"></param>
         /// <returns>True if the result is an insertion rather than a replacement</returns>
-        bool TryInsert(T item, IComparer<T> comparer);
+        (IContainerLocation location, bool insertedNotReplaced) TryInsert(T item, IComparer<T> comparer);
         /// <summary>
         /// Removes a matching value.
         /// </summary>

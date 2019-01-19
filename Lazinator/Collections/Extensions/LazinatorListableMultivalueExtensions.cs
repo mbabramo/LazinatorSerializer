@@ -30,13 +30,6 @@ namespace Lazinator.Collections.Extensions
             return exists;
         }
 
-        public static bool MultivalueTryInsert<L, T>(this L list, bool allowDuplicates, T item, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator => MultivalueTryInsert(list, allowDuplicates, item, MultivalueLocationOptions.Any, comparer);
-        public static bool MultivalueTryInsert<L, T>(this L list, bool allowDuplicates, T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator
-        {
-            var result = list.SortedInsertOrReplace(allowDuplicates, item, whichOne, comparer);
-            return result.insertedNotReplaced;
-        }
-
         public static bool MultivalueTryRemove<L, T>(this L list, bool allowDuplicates, T item, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator => MultivalueTryRemove(list, allowDuplicates, item, MultivalueLocationOptions.Any, comparer);
         public static bool MultivalueTryRemove<L, T>(this L list, bool allowDuplicates, T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator
         {

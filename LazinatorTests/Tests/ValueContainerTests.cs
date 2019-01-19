@@ -658,14 +658,14 @@ namespace LazinatorTests.Tests
 
             public override void Execute_Multivalue(ValueContainerTests<T> testClass, IMultivalueContainer<T> container, List<T> list)
             {
-                bool insertedNotReplaced = container.TryInsert(Item, WhichOne, C);
-                insertedNotReplaced.Should().Be(InsertedNotReplaced);
+                var result = container.TryInsert(Item, WhichOne, C);
+                result.insertedNotReplaced.Should().Be(InsertedNotReplaced);
             }
 
             public override void Execute_Sorted(ValueContainerTests<T> testClass, ISortedValueContainer<T> container, List<T> list)
             {
-                bool insertedNotReplaced = container.TryInsert(Item);
-                insertedNotReplaced.Should().Be(InsertedNotReplaced);
+                var result = container.TryInsert(Item);
+                result.insertedNotReplaced.Should().Be(InsertedNotReplaced);
             }
 
             public override void Execute_SortedIndexable(ValueContainerTests<T> testClass, ISortedIndexableContainer<T> container, List<T> list)
@@ -686,14 +686,14 @@ namespace LazinatorTests.Tests
 
             public override void Execute_SortedMultivalue(ValueContainerTests<T> testClass, ISortedMultivalueContainer<T> container, List<T> list)
             {
-                bool insertedNotReplaced = container.TryInsert(Item, WhichOne);
-                insertedNotReplaced.Should().Be(InsertedNotReplaced);
+                var result = container.TryInsert(Item, WhichOne);
+                result.insertedNotReplaced.Should().Be(InsertedNotReplaced);
             }
 
             public override void Execute_Value(ValueContainerTests<T> testClass, IValueContainer<T> container, List<T> list)
             {
-                bool insertedNotReplaced = container.TryInsert(Item, C);
-                insertedNotReplaced.Should().Be(InsertedNotReplaced);
+                var result = container.TryInsert(Item, C);
+                result.insertedNotReplaced.Should().Be(InsertedNotReplaced);
             }
         }
 

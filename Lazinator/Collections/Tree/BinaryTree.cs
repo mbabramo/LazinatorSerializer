@@ -220,9 +220,9 @@ namespace Lazinator.Collections.Tree
             return x;
         }
 
-        public bool TryInsert(T item, IComparer<T> comparer) => TryInsert(item, MultivalueLocationOptions.Any, comparer);
+        public (IContainerLocation location, bool insertedNotReplaced) TryInsert(T item, IComparer<T> comparer) => TryInsert(item, MultivalueLocationOptions.Any, comparer);
 
-        public bool TryInsert(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
+        public (IContainerLocation location, bool insertedNotReplaced) TryInsert(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
             CheckAllowDuplicates(whichOne);
             return TryInsert(item, node => CompareValueToNode(item, node, whichOne, comparer));
@@ -234,11 +234,7 @@ namespace Lazinator.Collections.Tree
                 throw new Exception("Allowing potential duplicates is forbidden. Use MultivalueLocationOptions.Any");
         }
 
-        protected bool TryInsert(T item, Func<BinaryNode<T>, int> comparisonFunc)
-        {
-            var result = TryInsertReturningNode(item, comparisonFunc);
-            return result.insertedNotReplaced;
-        }
+        protected (IContainerLocation location, bool insertedNotReplaced) TryInsert(T item, Func<BinaryNode<T>, int> comparisonFunc) => TryInsertReturningNode(item, comparisonFunc);
 
         public (BinaryNode<T> node, bool insertedNotReplaced) TryInsertReturningNode(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {

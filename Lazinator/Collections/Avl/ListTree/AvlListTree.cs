@@ -206,7 +206,7 @@ namespace Lazinator.Collections.Avl.ListTree
 
         public bool GetValue(T item, IComparer<T> comparer, out T match) => GetValue(item, MultivalueLocationOptions.Any, comparer, out match);
 
-        public bool TryInsert(T item, IComparer<T> comparer) => TryInsert(item, AllowDuplicates ? MultivalueLocationOptions.InsertAfterLast : MultivalueLocationOptions.Any, comparer);
+        public (IContainerLocation location, bool insertedNotReplaced) TryInsert(T item, IComparer<T> comparer) => TryInsert(item, AllowDuplicates ? MultivalueLocationOptions.InsertAfterLast : MultivalueLocationOptions.Any, comparer);
 
         public bool TryRemove(T item, IComparer<T> comparer) => TryRemove(item, MultivalueLocationOptions.Any, comparer);
 
@@ -222,7 +222,7 @@ namespace Lazinator.Collections.Avl.ListTree
             return result;
         }
 
-        public bool TryInsert(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
+        public (IContainerLocation location, bool insertedNotReplaced) TryInsert(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
             var node = GetNodeForValue(item, whichOne, comparer, true);
             if (node == null)
@@ -239,14 +239,14 @@ namespace Lazinator.Collections.Avl.ListTree
             return result;
         }
 
-        private bool InsertInitialNode(T item, IComparer<T> comparer)
+        private (IContainerLocation location, bool insertedNotReplaced) InsertInitialNode(T item, IComparer<T> comparer)
         {
             IMultivalueContainer<T> initialContainer = (IMultivalueContainer<T>)InteriorContainerFactory.CreateValueContainer();
             if (initialContainer.AllowDuplicates != AllowDuplicates)
                 throw new Exception("AllowDuplicates must be same for interior container.");
             initialContainer.TryInsert(item, comparer);
-            UnderlyingTree.TryInsert(initialContainer, GetInteriorCollectionsComparer(comparer));
-            return true;
+            var result = UnderlyingTree.TryInsert(initialContainer, GetInteriorCollectionsComparer(comparer));
+            return result;
         }
 
         public bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
