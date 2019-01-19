@@ -27,17 +27,6 @@ namespace Lazinator.Collections.Avl
             AllowDuplicates = allowDuplicates;
         }
 
-        public bool AllowDuplicates
-        {
-            get => UnderlyingTree.AllowDuplicates;
-            set
-            {
-                if (value != UnderlyingTree.AllowDuplicates)
-                    throw new Exception("AllowDuplicates must be same for sorted list and underlying tree.");
-            }
-        }
-
-
         public T this[int index]
         {
             get => GetAt(index);
