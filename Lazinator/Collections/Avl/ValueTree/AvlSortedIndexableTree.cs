@@ -22,8 +22,8 @@ namespace Lazinator.Collections.Avl.ValueTree
 
         public (long index, bool exists) Find(T target) => Find(target, MultivalueLocationOptions.First);
         public (long index, bool exists) Find(T target, MultivalueLocationOptions whichOne) => Find(target, whichOne, Comparer<T>.Default);
-        public (long index, bool insertedNotReplaced) InsertGetIndex(T item) => InsertGetIndex(item, MultivalueLocationOptionForInsertion);
-        public (long index, bool insertedNotReplaced) InsertGetIndex(T item, MultivalueLocationOptions whichOne) => InsertGetIndex(item, whichOne, Comparer<T>.Default);
+        public (long index, bool insertedNotReplaced) InsertOrReplace(T item) => InsertOrReplace(item, MultivalueLocationOptionForInsertion);
+        public (long index, bool insertedNotReplaced) InsertOrReplace(T item, MultivalueLocationOptions whichOne) => InsertOrReplace(item, whichOne, Comparer<T>.Default);
         public bool RemoveSorted(T item) => TryRemove(item, MultivalueLocationOptionForRemoval);
 
 

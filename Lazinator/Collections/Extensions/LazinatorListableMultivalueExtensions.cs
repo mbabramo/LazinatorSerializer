@@ -27,7 +27,7 @@ namespace Lazinator.Collections.Extensions
         public static bool MultivalueTryInsert<L, T>(this L list, bool allowDuplicates, T item, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator => MultivalueTryInsert(list, allowDuplicates, item, MultivalueLocationOptions.Any, comparer);
         public static bool MultivalueTryInsert<L, T>(this L list, bool allowDuplicates, T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator
         {
-            var result = list.SortedInsertGetIndex(allowDuplicates, item, whichOne, comparer);
+            var result = list.SortedInsertOrReplace(allowDuplicates, item, whichOne, comparer);
             return result.insertedNotReplaced;
         }
 

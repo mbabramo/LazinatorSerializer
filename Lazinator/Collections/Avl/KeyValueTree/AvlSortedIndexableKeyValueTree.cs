@@ -24,13 +24,13 @@ namespace Lazinator.Collections.Avl.KeyValueTree
 
         public (TValue valueIfFound, long index, bool found) Find(TKey key) => Find(key, Comparer<TKey>.Default);
 
-        public (long index, bool insertedNotReplaced) InsertGetIndex(TKey key, TValue value) => InsertGetIndex(key, value, Comparer<TKey>.Default);
+        public (long index, bool insertedNotReplaced) InsertOrReplace(TKey key, TValue value) => InsertOrReplace(key, value, Comparer<TKey>.Default);
 
         public (TValue valueIfFound, long index, bool found) Find(TKey key, MultivalueLocationOptions whichOne) => Find(key, whichOne, Comparer<TKey>.Default);
 
         public (long index, bool found) Find(TKey key, TValue value) => Find(key, value, Comparer<TKey>.Default);
 
-        public (long index, bool insertedNotReplaced) InsertGetIndex(TKey key, TValue value, MultivalueLocationOptions whichOne) => InsertGetIndex(key, value, whichOne, Comparer<TKey>.Default);
+        public (long index, bool insertedNotReplaced) InsertOrReplace(TKey key, TValue value, MultivalueLocationOptions whichOne) => InsertOrReplace(key, value, whichOne, Comparer<TKey>.Default);
 
         public bool ContainsKey(TKey key) => ContainsKey(key, Comparer<TKey>.Default);
 

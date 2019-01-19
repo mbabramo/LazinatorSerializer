@@ -10,6 +10,6 @@ namespace Lazinator.Collections.Interfaces
     public interface ISortedIndexableContainer<T> : ISortedValueContainer<T>, IIndexableValueContainer<T>, ILazinator where T : ILazinator, IComparable<T>
     {
         (long index, bool exists) Find(T target);
-        (long index, bool insertedNotReplaced) InsertGetIndex(T item);
+        (long index, bool insertedNotReplaced) InsertOrReplace(T item);
     }
 }

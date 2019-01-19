@@ -11,6 +11,6 @@ namespace Lazinator.Collections.Interfaces
     {
         (TValue valueIfFound, long index, bool found) Find(TKey key, MultivalueLocationOptions whichOne);
 
-        (long index, bool insertedNotReplaced) InsertGetIndex(TKey key, TValue value, MultivalueLocationOptions whichOne);
+        (long index, bool insertedNotReplaced) InsertOrReplace(TKey key, TValue value, MultivalueLocationOptions whichOne);
     }
 }

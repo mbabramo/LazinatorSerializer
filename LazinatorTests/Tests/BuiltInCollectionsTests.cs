@@ -789,7 +789,7 @@ namespace LazinatorTests.Tests
                     int n = r.Next(maxValue);
                     if (!basic.Contains(n) || allowDuplicates)
                         basic.Add(n);
-                    s.InsertGetIndex(n);
+                    s.InsertOrReplace(n);
                 }
             }
             List<int> sortedResult = s.Select(x => x.WrappedValue).ToList();

@@ -642,14 +642,14 @@ namespace LazinatorTests.Tests
 
             public override void Execute_SortedIndexable(KeyValueContainerTests<TKey, TValue> testClass, ISortedIndexableKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey, TValue>> list)
             {
-                (long index, bool insertedNotReplaced) = container.InsertGetIndex(Key, Value);
+                (long index, bool insertedNotReplaced) = container.InsertOrReplace(Key, Value);
                 index.Should().Be(Index);
                 insertedNotReplaced.Should().Be(InsertedNotReplaced);
             }
 
             public override void Execute_SortedIndexableMultivalue(KeyValueContainerTests<TKey, TValue> testClass, ISortedIndexableKeyMultivalueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey, TValue>> list)
             {
-                (long index, bool insertedNotReplaced) = container.InsertGetIndex(Key, Value, WhichOne);
+                (long index, bool insertedNotReplaced) = container.InsertOrReplace(Key, Value, WhichOne);
                 // if WhichOne == Any, then exact location is undefined, so we don't verify it. The behavior may be different from our list implementation because which one is selected may be based on the ordering of the binary tree. The list binary search algorithm always starts from the middle element, while a tree search will start from the top of the tree, which may not be the exact middle element.
                 if (WhichOne != MultivalueLocationOptions.Any)
                     index.Should().Be(Index);

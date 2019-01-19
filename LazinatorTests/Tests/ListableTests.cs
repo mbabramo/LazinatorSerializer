@@ -377,7 +377,7 @@ namespace LazinatorTests.Tests
                                 else
                                     o.Insert(index, k);
                             }
-                            (l as ILazinatorSorted<WInt>).InsertGetIndex(k);
+                            (l as ILazinatorSorted<WInt>).InsertOrReplace(k);
                         }
                         else
                         {

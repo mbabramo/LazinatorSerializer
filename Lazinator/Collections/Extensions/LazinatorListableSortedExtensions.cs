@@ -8,7 +8,7 @@ namespace Lazinator.Collections
 {
     public static class LazinatorListableSortedExtensions 
     {
-        public static (long index, bool insertedNotReplaced) SortedInsertGetIndex<L, T>(this L list, bool allowDuplicates, T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator
+        public static (long index, bool insertedNotReplaced) SortedInsertOrReplace<L, T>(this L list, bool allowDuplicates, T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator
         {
             (long index, bool exists) = list.SortedFind(allowDuplicates, item, whichOne, comparer);
             if (allowDuplicates && (whichOne == MultivalueLocationOptions.InsertBeforeFirst || whichOne == MultivalueLocationOptions.InsertAfterLast))

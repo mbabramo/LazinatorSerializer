@@ -14,10 +14,10 @@ namespace Lazinator.Collections
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorSorted)]
     public interface ILazinatorSorted<T> : ILazinatorSortable<T> where T : ILazinator, IComparable<T>
     {
-        (long index, bool insertedNotReplaced) InsertGetIndex(T item);
+        (long index, bool insertedNotReplaced) InsertOrReplace(T item);
         bool TryRemove(T item);
         (long index, bool exists) Find(T target);
-        (long index, bool insertedNotReplaced) InsertGetIndex(T item, MultivalueLocationOptions whichOne);
+        (long index, bool insertedNotReplaced) InsertOrReplace(T item, MultivalueLocationOptions whichOne);
         bool TryRemove(T item, MultivalueLocationOptions whichOne);
         (long index, bool exists) Find(T target, MultivalueLocationOptions whichOne);
     }

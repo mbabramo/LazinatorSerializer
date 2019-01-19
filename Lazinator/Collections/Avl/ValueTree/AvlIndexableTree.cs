@@ -114,8 +114,8 @@ namespace Lazinator.Collections.Avl.ValueTree
                 return (node.Index, true);
             return (node?.Index ?? LongCount, false);
         }
-        public (long index, bool insertedNotReplaced) InsertGetIndex(T item, IComparer<T> comparer) => InsertGetIndex(item, MultivalueLocationOptions.Any, comparer);
-        public (long index, bool insertedNotReplaced) InsertGetIndex(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
+        public (long index, bool insertedNotReplaced) InsertOrReplace(T item, IComparer<T> comparer) => InsertOrReplace(item, MultivalueLocationOptions.Any, comparer);
+        public (long index, bool insertedNotReplaced) InsertOrReplace(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
             var result = TryInsertReturningNode(item, whichOne, comparer);
             var node = ((AvlCountedNode<T>)result.node);

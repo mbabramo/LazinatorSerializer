@@ -21,7 +21,7 @@ namespace Lazinator.Collections.Interfaces
 
         (TValue valueIfFound, long index, bool found) Find(TKey key, IComparer<TKey> comparer);
         (long index, bool found) Find(TKey key, TValue value, IComparer<TKey> comparer);
-        (long index, bool insertedNotReplaced) InsertGetIndex(TKey key, TValue value, IComparer<TKey> comparer);
+        (long index, bool insertedNotReplaced) InsertOrReplace(TKey key, TValue value, IComparer<TKey> comparer);
 
     }
 }
