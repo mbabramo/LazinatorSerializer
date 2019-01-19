@@ -165,17 +165,17 @@ namespace LazinatorTests.Tests
                 case ValueContainerType.AvlSortedIndexableTree:
                     return new AvlSortedIndexableTree<T>();
                 case ValueContainerType.AvlListTreeTinyLazinatorList:
-                    return new AvlListTree<T>(false, false, new AvlListTreeWithInteriorListFactory<T>(false, 1));
+                    return new AvlListTree<T>(false, false, new AvlListTreeFactory<T>(false, 1));
                 case ValueContainerType.AvlListTreeSmallLazinatorList:
-                    return new AvlListTree<T>(false, false, new AvlListTreeWithInteriorListFactory<T>(false, 3));
+                    return new AvlListTree<T>(false, false, new AvlListTreeFactory<T>(false, 3));
                 case ValueContainerType.AvlListTreeRegularLazinatorList:
-                    return new AvlListTree<T>(false, false, new AvlListTreeWithInteriorListFactory<T>(false, 5));
+                    return new AvlListTree<T>(false, false, new AvlListTreeFactory<T>(false, 5));
                 case ValueContainerType.AvlListTreeTinyLinkedList:
-                    return new AvlListTree<T>(false, false, new AvlListTreeWithInteriorListFactory<T>(false, 1));
+                    return new AvlListTree<T>(false, false, new AvlListTreeFactory<T>(false, 1));
                 case ValueContainerType.AvlListTreeSmallLinkedList:
-                    return new AvlListTree<T>(false, false, new AvlListTreeWithInteriorListFactory<T>(false, 3));
+                    return new AvlListTree<T>(false, false, new AvlListTreeFactory<T>(false, 3));
                 case ValueContainerType.AvlListTreeRegularLinkedList:
-                    return new AvlListTree<T>(false, false, new AvlListTreeWithInteriorListFactory<T>(false, 5));
+                    return new AvlListTree<T>(false, false, new AvlListTreeFactory<T>(false, 5));
                 case ValueContainerType.LazinatorList:
                     return new LazinatorList<T>();
                 case ValueContainerType.LazinatorLinkedList:

@@ -7,11 +7,17 @@ using System.Text;
 
 namespace Lazinator.Collections.Factories
 {
-    public partial class AvlListTreeWithInteriorListFactory<T> : IAvlListTreeWithInteriorListFactory<T>, IAvlListTreeInteriorCollectionFactory<T> where T : ILazinator
+    public partial class AvlListTreeFactory<T> : IAvlListTreeFactory<T> where T : ILazinator
     {
-        public bool Unbalanced { get => false; set => throw new NotSupportedException(); }
+        public enum TreeLevelType
+        {
+            AvlTree,
+            AvlListTree,
+            LazinatorList,
+            LazinatorLinkedList
+        }
 
-        public AvlListTreeWithInteriorListFactory(bool useLinkedList, int interiorMaxCapacity)
+        public AvlListTreeFactory(bool useLinkedList, int interiorMaxCapacity)
         {
             UseLinkedList = useLinkedList;
             InteriorMaxCapacity = interiorMaxCapacity;
@@ -31,7 +37,7 @@ namespace Lazinator.Collections.Factories
             return ((LazinatorList<T>)container).Count > InteriorMaxCapacity;
         }
 
-        public IMultivalueContainer<T> CreateMultivalueContainer(bool allowDuplicates)
+        public IMultivalueContainer<T> CreateInteriorCollection(bool allowDuplicates)
         {
             if (UseLinkedList)
                 return new LazinatorLinkedList<T>()

@@ -14,6 +14,7 @@ namespace Lazinator.Collections.Avl.ListTree
 {
     public partial class AvlListTree<T> : IAvlListTree<T>, IValueContainer<T>, IMultivalueContainer<T> where T : ILazinator
     {
+
         public AvlListTree(bool allowDuplicates, bool unbalanced, IAvlListTreeInteriorCollectionFactory<T> interiorCollectionFactory)
         {
             AllowDuplicates = allowDuplicates;
@@ -227,7 +228,7 @@ namespace Lazinator.Collections.Avl.ListTree
             var node = GetNodeForValue(item, whichOne, comparer, true);
             if (node == null)
             {
-                IMultivalueContainer<T> initialContainer = InteriorCollectionFactory.CreateMultivalueContainer(AllowDuplicates);
+                IMultivalueContainer<T> initialContainer = InteriorCollectionFactory.CreateInteriorCollection(AllowDuplicates);
                 initialContainer.TryInsert(item, comparer);
                 UnderlyingTree.TryInsert(initialContainer, GetInteriorCollectionsComparer(comparer));
                 return true;
