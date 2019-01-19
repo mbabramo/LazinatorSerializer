@@ -149,7 +149,7 @@
         ILazinatorSortable,
         IMultivalueContainerFactory,
         IAvlListTreeInteriorCollectionFactory,
-        IValueContainerFactory,
+        IContainerFactory,
         ISortedValueContainerFactory,
         IValueContainerLevel,
     }

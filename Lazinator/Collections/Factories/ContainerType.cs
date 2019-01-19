@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Lazinator.Collections.Factories
 {
-    public enum ValueContainerType
+    public enum ContainerType
     {
         LazinatorList,
         LazinatorSortedList,
@@ -14,9 +14,19 @@ namespace Lazinator.Collections.Factories
         AvlSortedTree,
         AvlIndexableTree,
         AvlSortedIndexableTree,
+        AvlKeyValueTree,
+        AvlSortedKeyValueTree,
+        AvlIndexableKeyValueTree,
+        AvlSortedIndexableKeyValueTree,
         AvlListTree,
         AvlSortedListTree,
         AvlIndexableListTree,
-        AvlSortedIndexableListTree
+        AvlSortedIndexableListTree,
+        AvlList,
+        AvlSortedList,
+        AvlDictionary,
+        AvlSortedDictionary,
+        LazinatorDictionary,
+
     }
 }

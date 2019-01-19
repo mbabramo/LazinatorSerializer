@@ -17,7 +17,7 @@ namespace Lazinator.Collections.Avl.ListTree
         public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool Unbalanced { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public AvlIndexableTree<IMultivalueContainer<T>> UnderlyingTree { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public ValueContainerFactory<T> InteriorContainerFactory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public ContainerFactory<T> InteriorContainerFactory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool HasChanged { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool DescendantHasChanged { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public bool IsDirty { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -33,7 +33,7 @@ namespace Lazinator.Collections.Avl.ListTree
         public LazinatorParentsCollection LazinatorParents { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         public int LazinatorObjectVersion { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public AvlListTree(bool allowDuplicates, bool unbalanced, ValueContainerFactory<T> interiorCollectionFactory)
+        public AvlListTree(bool allowDuplicates, bool unbalanced, ContainerFactory<T> interiorCollectionFactory)
         {
             AllowDuplicates = allowDuplicates;
             Unbalanced = unbalanced;
@@ -246,7 +246,7 @@ namespace Lazinator.Collections.Avl.ListTree
             var node = GetNodeForValue(item, whichOne, comparer, true);
             if (node == null)
             {
-                IMultivalueContainer<T> initialContainer = (IMultivalueContainer<T>) InteriorContainerFactory.CreateInteriorContainer();
+                IMultivalueContainer<T> initialContainer = (IMultivalueContainer<T>) InteriorContainerFactory.CreateInteriorValueContainer();
                 initialContainer.TryInsert(item, comparer);
                 UnderlyingTree.TryInsert(initialContainer, GetInteriorCollectionsComparer(comparer));
                 return true;

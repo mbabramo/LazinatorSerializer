@@ -19,9 +19,9 @@ namespace Lazinator.Collections.Avl
         {
         }
 
-        public AvlDictionary(bool allowDuplicates, ISortedKeyMultivalueContainerFactory<WUint, LazinatorKeyValue<TKey, TValue>> factory)
+        public AvlDictionary(bool allowDuplicates, ContainerFactory<TKey> interiorFactory)
         {
-            UnderlyingTree = factory.Create();
+            UnderlyingTree = (ISortedKeyMultivalueContainer<WUint, LazinatorKeyValue<TKey, TValue>>) interiorFactory.GetHashableKeyValueContainer<TValue>();
             if (UnderlyingTree.AllowDuplicates == false)
                 throw new Exception("AvlDictionary requires an UnderlyingTree that allows duplicates."); // the underlying tree is organized by the hash value, and multiple items can share a hash value, regardless of whether multiple items can share a key
             AllowDuplicates = allowDuplicates;

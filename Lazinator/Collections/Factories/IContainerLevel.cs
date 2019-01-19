@@ -4,12 +4,12 @@ using Lazinator.Attributes;
 namespace Lazinator.Collections.Factories
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.IValueContainerLevel)]
-    public interface IValueContainerLevel
+    public interface IContainerLevel
     {
         /// <summary>
-        /// The type of value container to be used at this level.
+        /// The type of container to be used at this level.
         /// </summary>
-        ValueContainerType ValueContainerType { get; set; }
+        ContainerType ContainerType { get; set; }
         /// <summary>
         /// Whether the value container should be unbalanced, if that option is available for this type of container.
         /// </summary>

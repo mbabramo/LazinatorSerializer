@@ -28,22 +28,45 @@ namespace LazinatorTests.Tests
             AvlSortedDictionaryMultiValue
         }
 
-        public ILazinatorDictionaryable<TKey, TValue> GetDictionary<TKey, TValue>(DictionaryToUse dictionaryToUse) where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
+        public ContainerFactory<TKey> GetDictionaryFactory<TKey, TValue>(DictionaryToUse dictionaryToUse) where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
         {
             switch (dictionaryToUse)
             {
                 case DictionaryToUse.LazinatorDictionary:
-                    return new LazinatorDictionary<TKey, TValue>();
+                    return new ContainerFactory<TKey>(new ContainerLevel(ContainerType.LazinatorDictionary));
                 case DictionaryToUse.AvlDictionary:
-                    return new AvlDictionary<TKey, TValue>(false, new AvlSortedKeyMultivalueTreeFactory<WUint, LazinatorKeyValue<TKey, TValue>>(true, false)); // even though AvlDictionary is not multivalue on key, it's organized by hash, so underlying dictionary must be multivalue.
+                    return new ContainerFactory<TKey>(new List<ContainerLevel>()
+                    {
+                        new ContainerLevel(ContainerType.AvlDictionary),
+                        new ContainerLevel(ContainerType.AvlKeyValueTree)
+                    });
                 case DictionaryToUse.AvlDictionaryMultiValue:
-                    return new AvlDictionary<TKey, TValue>(true, new AvlSortedKeyMultivalueTreeFactory<WUint, LazinatorKeyValue<TKey, TValue>>(true, false));
+                    return new ContainerFactory<TKey>(new List<ContainerLevel>()
+                    {
+                        new ContainerLevel(ContainerType.AvlDictionary),
+                        new ContainerLevel(ContainerType.AvlKeyValueTree, true)
+                    });
                 case DictionaryToUse.AvlSortedDictionary:
-                    return new AvlSortedDictionary<TKey, TValue>(false, new AvlSortedKeyMultivalueTreeFactory<TKey, TValue>(false, false)); 
+                    return new SortedContainerFactory<TKey>(new List<ContainerLevel>()
+                    {
+                        new ContainerLevel(ContainerType.AvlSortedDictionary),
+                        new ContainerLevel(ContainerType.AvlSortedKeyValueTree)
+                    });
                 case DictionaryToUse.AvlSortedDictionaryMultiValue:
-                    return new AvlSortedDictionary<TKey, TValue>(true, new AvlSortedKeyMultivalueTreeFactory<TKey, TValue>(true, false));
+                    return new SortedContainerFactory<TKey>(new List<ContainerLevel>()
+                    {
+                        new ContainerLevel(ContainerType.AvlSortedDictionary),
+                        new ContainerLevel(ContainerType.AvlSortedKeyValueTree, true)
+                    });
+                default:
+                    throw new NotSupportedException();
             }
-            throw new InvalidOperationException();
+        }
+
+        public ILazinatorDictionaryable<TKey, TValue> GetDictionary<TKey, TValue>(DictionaryToUse dictionaryToUse) where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
+        {
+            var factory = GetDictionaryFactory<TKey, TValue>(dictionaryToUse);
+            return factory.CreateLazinatorDictionaryable<TValue>();
         }
         
         [Theory]

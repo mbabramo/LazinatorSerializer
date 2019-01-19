@@ -81,7 +81,6 @@
     <Compile Remove="Collections\Factories\ILazinatorSortedLinkedListFactory.cs" />
     <Compile Remove="Collections\Factories\ILazinatorSortedListFactory.cs" />
     <Compile Remove="Collections\Factories\ISortedIndexableMultivalueContainerFactory.cs" />
-    <Compile Remove="Collections\Factories\ISortedKeyMultivalueContainerFactory.cs" />
     <Compile Remove="Collections\Factories\LazinatorLinkedListFactory.cs" />
     <Compile Remove="Collections\Factories\LazinatorLinkedListFactory.g.cs" />
     <Compile Remove="Collections\Factories\LazinatorListFactory.cs" />
