@@ -11,7 +11,7 @@ using System.Text;
 
 namespace Lazinator.Collections.Factories
 {
-    public partial class SortedContainerFactory<T> : ContainerFactory<T>, ISortedValueContainerFactory<T> where T : ILazinator, IComparable<T>
+    public partial class SortedContainerFactory<T> : ContainerFactory<T>, ISortedContainerFactory<T> where T : ILazinator, IComparable<T>
     {
 
         public SortedContainerFactory(ContainerLevel thisLevel) : base(thisLevel)
