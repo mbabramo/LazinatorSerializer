@@ -172,7 +172,10 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(AvlListNode<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/ListTree/", ws);
             await CompleteGenerateCode(typeof(AvlListTree<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/ListTree/", ws);
 
+
+            await CompleteGenerateCode(typeof(ContainerLevel), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);
             await CompleteGenerateCode(typeof(ContainerFactory<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);
+            await CompleteGenerateCode(typeof(SortedContainerFactory<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);
 
             await CompleteGenerateCode(typeof(WAbstract<>), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(WNullableStruct<>), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);

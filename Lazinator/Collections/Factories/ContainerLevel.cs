@@ -29,10 +29,5 @@ namespace Lazinator.Collections.Factories
             Unbalanced = unbalanced;
             AllowDuplicates = allowDuplicates;
         }
-
-        public ContainerType ContainerType { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool Unbalanced { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public long SplitThreshold { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 }
