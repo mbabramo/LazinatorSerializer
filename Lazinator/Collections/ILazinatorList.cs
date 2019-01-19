@@ -17,8 +17,6 @@ namespace Lazinator.Collections
     [UnofficiallyIncorporateInterface("Lazinator.Collections.ILazinatorListUnofficial", "protected")]
     public interface ILazinatorList<T> where T : ILazinator
     {
-        [SetterAccessibility("protected")]
-        bool AllowDuplicates { get; }
     }
 
     [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorListUnofficial)]
@@ -27,5 +25,7 @@ namespace Lazinator.Collections
         [PlaceholderMemory("WriteMainList")]
         ReadOnlyMemory<byte> MainListSerialized { get; set; }
         LazinatorOffsetList Offsets { get; set; }
+        [SetterAccessibility("protected")]
+        bool AllowDuplicates { get; }
     }
 }
