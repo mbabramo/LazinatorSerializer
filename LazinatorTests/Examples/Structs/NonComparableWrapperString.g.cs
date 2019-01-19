@@ -266,7 +266,7 @@ namespace Lazinator.Examples.Structs
         
         /* Conversion */
         
-        public int LazinatorUniqueID => 150;
+        public int LazinatorUniqueID => 136;
         
         bool ContainsOpenGenericParameters => false;
         public LazinatorGenericIDType LazinatorGenericID => default;

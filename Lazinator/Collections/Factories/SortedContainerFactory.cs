@@ -7,19 +7,25 @@ using Lazinator.Core;
 using Lazinator.Wrappers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Lazinator.Collections.Factories
 {
     public partial class SortedContainerFactory<T> : ContainerFactory<T>, ISortedContainerFactory<T> where T : ILazinator, IComparable<T>
     {
-
         public SortedContainerFactory(ContainerLevel thisLevel) : base(thisLevel)
         {
         }
 
-        public SortedContainerFactory(IEnumerable<ContainerLevel> levels) : base(levels)
+        public SortedContainerFactory(IEnumerable<ContainerLevel> levels)
         {
+            ThisLevel = levels.First();
+            var remaining = levels.Skip(1);
+            if (remaining.Any())
+            {
+                InteriorFactory = SortedInteriorFactory = new SortedContainerFactory<T>(remaining);
+            }
         }
 
         public override  IValueContainer<T> CreateValueContainer()
@@ -52,7 +58,7 @@ namespace Lazinator.Collections.Factories
                 case ContainerType.LazinatorSortedLinkedList:
                     return new LazinatorSortedLinkedList<T>(ThisLevel.AllowDuplicates);
                 case ContainerType.AvlSortedList:
-                    return new AvlSortedList<T>(ThisLevel.AllowDuplicates, InteriorFactory);
+                    return new AvlSortedList<T>(ThisLevel.AllowDuplicates, SortedInteriorFactory);
                 default:
                     return base.CreateLazinatorListable();
             }

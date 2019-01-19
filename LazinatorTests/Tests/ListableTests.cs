@@ -68,13 +68,13 @@ namespace LazinatorTests.Tests
                     return new SortedContainerFactory<WInt>(new List<ContainerLevel>()
                     {
                         new ContainerLevel(ContainerType.AvlSortedList),
-                        new ContainerLevel(ContainerType.AvlIndexableTree)
+                        new ContainerLevel(ContainerType.AvlSortedIndexableTree)
                     });
                 case ListFactoryToUse.AvlSortedListAllowDuplicates:
                     return new SortedContainerFactory<WInt>(new List<ContainerLevel>()
                     {
                         new ContainerLevel(ContainerType.AvlSortedList, true),
-                        new ContainerLevel(ContainerType.AvlIndexableTree)
+                        new ContainerLevel(ContainerType.AvlSortedIndexableTree)
                     });
                 default:
                     throw new NotImplementedException();
