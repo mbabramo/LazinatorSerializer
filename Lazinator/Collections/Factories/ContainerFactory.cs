@@ -102,9 +102,9 @@ namespace Lazinator.Collections.Factories
             switch (ThisLevel.ContainerType)
             {
                 case ContainerType.AvlKeyValueTree:
-                    return new AvlKeyValueTree<WUint, LazinatorKeyValue<T, V>>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
+                    return new AvlSortedKeyValueTree<WUint, LazinatorKeyValue<T, V>>(true, ThisLevel.Unbalanced);
                 case ContainerType.AvlIndexableKeyValueTree:
-                    return new AvlIndexableKeyValueTree<WUint, LazinatorKeyValue<T, V>>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
+                    return new AvlSortedIndexableKeyValueTree<WUint, LazinatorKeyValue<T, V>>(true, ThisLevel.Unbalanced);
                 default:
                     throw new NotImplementedException();
             }

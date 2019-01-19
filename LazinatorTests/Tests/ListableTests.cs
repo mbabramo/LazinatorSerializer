@@ -78,7 +78,7 @@ namespace LazinatorTests.Tests
                     return new SortedContainerFactory<WInt>(new List<ContainerLevel>()
                     {
                         new ContainerLevel(ContainerType.AvlSortedList, true),
-                        new ContainerLevel(ContainerType.AvlSortedIndexableTree)
+                        new ContainerLevel(ContainerType.AvlSortedIndexableTree, true)
                     });
                 default:
                     throw new NotImplementedException();

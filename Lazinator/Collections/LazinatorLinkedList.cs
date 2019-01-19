@@ -330,7 +330,7 @@ namespace Lazinator.Collections
 
         public virtual IValueContainer<T> SplitOff(IComparer<T> comparer)
         {
-            LazinatorLinkedList<T> partSplitOff = new LazinatorLinkedList<T>();
+            LazinatorLinkedList<T> partSplitOff = (LazinatorLinkedList<T>)CreateNewWithSameSettings();
             int numToMove = Count / 2;
             for (int i = 0; i < numToMove; i++)
             {

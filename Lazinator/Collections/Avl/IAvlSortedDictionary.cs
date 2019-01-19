@@ -12,5 +12,7 @@ namespace Lazinator.Collections.Avl
         where TValue : ILazinator
     {
         ISortedKeyMultivalueContainer<TKey, TValue> UnderlyingTree { get; set; }
+        [SetterAccessibility("protected")]
+        bool AllowDuplicates { get; }
     }
 }

@@ -30,16 +30,6 @@ namespace Lazinator.Collections.Avl
 
         public bool IsSorted => true;
 
-        public bool AllowDuplicates
-        {
-            get => UnderlyingTree.AllowDuplicates;
-            set
-            {
-                if (value != UnderlyingTree.AllowDuplicates)
-                    throw new Exception("AllowDuplicates must be same for sorted list and underlying tree.");
-            }
-        }
-
         public bool ContainsKey(TKey key)
         {
             bool result = UnderlyingTree.ContainsKey(key);

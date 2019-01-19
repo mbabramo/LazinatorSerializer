@@ -43,7 +43,7 @@ namespace LazinatorTests.Tests
                 case DictionaryToUse.AvlDictionaryMultiValue:
                     return new ContainerFactory<TKey>(new List<ContainerLevel>()
                     {
-                        new ContainerLevel(ContainerType.AvlDictionary),
+                        new ContainerLevel(ContainerType.AvlDictionary, true),
                         new ContainerLevel(ContainerType.AvlKeyValueTree, true)
                     });
                 case DictionaryToUse.AvlSortedDictionary:
@@ -55,7 +55,7 @@ namespace LazinatorTests.Tests
                 case DictionaryToUse.AvlSortedDictionaryMultiValue:
                     return new SortedContainerFactory<TKey>(new List<ContainerLevel>()
                     {
-                        new ContainerLevel(ContainerType.AvlSortedDictionary),
+                        new ContainerLevel(ContainerType.AvlSortedDictionary, true),
                         new ContainerLevel(ContainerType.AvlSortedKeyValueTree, true)
                     });
                 default:

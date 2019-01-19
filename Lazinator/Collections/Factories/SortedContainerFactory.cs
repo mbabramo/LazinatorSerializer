@@ -69,7 +69,7 @@ namespace Lazinator.Collections.Factories
             switch (ThisLevel.ContainerType)
             {
                 case ContainerType.AvlSortedDictionary:
-                    return new AvlSortedDictionary<T, V>();
+                    return new AvlSortedDictionary<T, V>(ThisLevel.AllowDuplicates, SortedInteriorFactory);
                 default:
                     return base.CreateLazinatorDictionaryable<V>();
             }

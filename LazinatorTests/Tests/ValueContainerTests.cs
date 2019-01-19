@@ -533,12 +533,6 @@ namespace LazinatorTests.Tests
                         getValueResult.Should().BeTrue();
                         AssertEqual(getValueMatch, listResult.item);
                     }
-                    foreach (MultivalueLocationOptions whichOne in new MultivalueLocationOptions[] { MultivalueLocationOptions.InsertBeforeFirst, MultivalueLocationOptions.InsertAfterLast })
-                    {
-                        var getValueResult = container.GetValue(listResult.item, whichOne, C, out T getValueMatch);
-                        getValueResult.Should().BeFalse();
-                        AssertEqual(getValueMatch, default);
-                    }
                     long count = container.Count(listResult.item, Comparer<T>.Default);
                     count.Should().Be(listResult.lastIndex - listResult.firstIndex + 1);
                 }

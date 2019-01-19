@@ -227,10 +227,7 @@ namespace Lazinator.Collections.Avl.ListTree
             var node = GetNodeForValue(item, whichOne, comparer, true);
             if (node == null)
             {
-                IMultivalueContainer<T> initialContainer = (IMultivalueContainer<T>) InteriorContainerFactory.CreateValueContainer();
-                initialContainer.TryInsert(item, comparer);
-                UnderlyingTree.TryInsert(initialContainer, GetInteriorCollectionsComparer(comparer));
-                return true;
+                return InsertInitialNode(item, comparer);
             }
             var multivalueContainer = GetMultivalueContainer(node);
             var result = multivalueContainer.TryInsert(item, whichOne, comparer);
@@ -240,6 +237,16 @@ namespace Lazinator.Collections.Avl.ListTree
                 UnderlyingTree.TryInsert(splitOff, AllowDuplicates ? MultivalueLocationOptions.InsertBeforeFirst : MultivalueLocationOptions.Any, GetInteriorCollectionsComparer(comparer)); // note: a duplicate here would be a duplicate of the entire inner node, meaning that all items are the same according to the comparer. But they may not always be exactly identical, if the comparer is a key-only comparer. We always split off the left in our multivalue containers, so this ensures consistency.
             }
             return result;
+        }
+
+        private bool InsertInitialNode(T item, IComparer<T> comparer)
+        {
+            IMultivalueContainer<T> initialContainer = (IMultivalueContainer<T>)InteriorContainerFactory.CreateValueContainer();
+            if (initialContainer.AllowDuplicates != AllowDuplicates)
+                throw new Exception("AllowDuplicates must be same for interior container.");
+            initialContainer.TryInsert(item, comparer);
+            UnderlyingTree.TryInsert(initialContainer, GetInteriorCollectionsComparer(comparer));
+            return true;
         }
 
         public bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
