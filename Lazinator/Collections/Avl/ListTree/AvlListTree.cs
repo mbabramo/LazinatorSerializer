@@ -14,12 +14,30 @@ namespace Lazinator.Collections.Avl.ListTree
 {
     public partial class AvlListTree<T> : IAvlListTree<T>, IValueContainer<T>, IMultivalueContainer<T> where T : ILazinator
     {
+        public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool Unbalanced { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public AvlIndexableTree<IMultivalueContainer<T>> UnderlyingTree { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public ValueContainerFactory<T> InteriorContainerFactory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool HasChanged { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool DescendantHasChanged { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool IsDirty { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool DescendantIsDirty { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public LazinatorMemory LazinatorMemoryStorage { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-        public AvlListTree(bool allowDuplicates, bool unbalanced, IAvlListTreeInteriorCollectionFactory<T> interiorCollectionFactory)
+        public IncludeChildrenMode OriginalIncludeChildrenMode => throw new NotImplementedException();
+
+        public bool IsStruct => throw new NotImplementedException();
+
+        public bool NonBinaryHash32 => throw new NotImplementedException();
+
+        public LazinatorParentsCollection LazinatorParents { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public int LazinatorObjectVersion { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public AvlListTree(bool allowDuplicates, bool unbalanced, ValueContainerFactory<T> interiorCollectionFactory)
         {
             AllowDuplicates = allowDuplicates;
             Unbalanced = unbalanced;
-            InteriorCollectionFactory = interiorCollectionFactory;
+            InteriorContainerFactory = interiorCollectionFactory;
             UnderlyingTree = new AvlIndexableTree<IMultivalueContainer<T>>() { Unbalanced = Unbalanced, AllowDuplicates = AllowDuplicates };
         }
 
@@ -31,7 +49,7 @@ namespace Lazinator.Collections.Avl.ListTree
 
         public IValueContainer<T> CreateNewWithSameSettings()
         {
-            return new AvlListTree<T>(AllowDuplicates, Unbalanced, InteriorCollectionFactory);
+            return new AvlListTree<T>(AllowDuplicates, Unbalanced, InteriorContainerFactory);
         }
 
         private static int CompareBasedOnEndItems(IMultivalueContainer<T> container, T item, IComparer<T> comparer)
@@ -100,7 +118,7 @@ namespace Lazinator.Collections.Avl.ListTree
                 bool inBetweenThisAndPrevious = previousNode != null && comparer.Compare(item, previousNode.Value.Last()) == 1;
                 if (inBetweenThisAndPrevious)
                 {
-                    if (InteriorCollectionFactory.FirstIsShorter(previousNode.Value, node.Value))
+                    if (InteriorContainerFactory.FirstIsShorter(previousNode.Value, node.Value))
                         return previousNode;
                 }
             }
@@ -161,7 +179,7 @@ namespace Lazinator.Collections.Avl.ListTree
             foreach (var multivalueContainer in UnderlyingTree.AsEnumerable(reverse, 0))
             {
                 if (skip > 0 && multivalueContainer is ICountableContainer countable)
-                { 
+                {
                     if (skip >= countable.LongCount)
                     { // enumerate by skipping entire containers
                         skip -= countable.LongCount;
@@ -228,16 +246,16 @@ namespace Lazinator.Collections.Avl.ListTree
             var node = GetNodeForValue(item, whichOne, comparer, true);
             if (node == null)
             {
-                IMultivalueContainer<T> initialContainer = InteriorCollectionFactory.CreateInteriorCollection(AllowDuplicates);
+                IMultivalueContainer<T> initialContainer = (IMultivalueContainer<T>) InteriorContainerFactory.CreateInteriorContainer();
                 initialContainer.TryInsert(item, comparer);
                 UnderlyingTree.TryInsert(initialContainer, GetInteriorCollectionsComparer(comparer));
                 return true;
             }
             var multivalueContainer = GetMultivalueContainer(node);
             var result = multivalueContainer.TryInsert(item, whichOne, comparer);
-            if (InteriorCollectionFactory.RequiresSplitting(multivalueContainer))
+            if (InteriorContainerFactory.RequiresSplitting(multivalueContainer))
             {
-                IMultivalueContainer<T> splitOff = (IMultivalueContainer<T>) multivalueContainer.SplitOff(comparer);
+                IMultivalueContainer<T> splitOff = (IMultivalueContainer<T>)multivalueContainer.SplitOff(comparer);
                 UnderlyingTree.TryInsert(splitOff, AllowDuplicates ? MultivalueLocationOptions.InsertBeforeFirst : MultivalueLocationOptions.Any, GetInteriorCollectionsComparer(comparer)); // note: a duplicate here would be a duplicate of the entire inner node, meaning that all items are the same according to the comparer. But they may not always be exactly identical, if the comparer is a key-only comparer. We always split off the left in our multivalue containers, so this ensures consistency.
             }
             return result;
@@ -286,7 +304,7 @@ namespace Lazinator.Collections.Avl.ListTree
                     keepGoing = false;
                 else
                 {
-                    node = (AvlCountedNode<IMultivalueContainer<T>>) node.GetNextNode();
+                    node = (AvlCountedNode<IMultivalueContainer<T>>)node.GetNextNode();
                     keepGoing = node != null;
                 }
             }
@@ -295,10 +313,75 @@ namespace Lazinator.Collections.Avl.ListTree
 
         public IValueContainer<T> SplitOff(IComparer<T> comparer)
         {
-            var splitOffUnderlying = (AvlIndexableTree<IMultivalueContainer<T>>) UnderlyingTree.SplitOff(GetInteriorCollectionsComparer(comparer));
+            var splitOffUnderlying = (AvlIndexableTree<IMultivalueContainer<T>>)UnderlyingTree.SplitOff(GetInteriorCollectionsComparer(comparer));
             var splitOff = (AvlListTree<T>)CreateNewWithSameSettings();
             splitOff.UnderlyingTree = splitOffUnderlying;
             return splitOff;
+        }
+
+        public LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeserializeLazinator(LazinatorMemory serialized)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateStoredBuffer()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void FreeInMemoryObjects()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetByteLength()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        {
+            throw new NotImplementedException();
         }
     }
 

@@ -1,8 +1,19 @@
-﻿namespace Lazinator.Collections.Factories
+﻿using Lazinator.Core;
+using Lazinator.Attributes;
+using System;
+using Lazinator.Collections.Interfaces;
+
+namespace Lazinator.Collections.Factories
 {
-    public interface IValueContainerFactory<T>
+    [Lazinator((int)LazinatorCollectionUniqueIDs.IValueContainerFactory)]
+    public interface IValueContainerFactory<T> where T : ILazinator
     {
-        IValueContainerFactory<T> InteriorFactory { get; set; }
-        long InteriorContainerMax { get; set; }
+        ValueContainerLevel ThisLevel { get; set; }
+        ValueContainerFactory<T> InteriorFactory { get; set; }
+
+        IValueContainer<T> CreateContainer();
+        IValueContainer<T> CreateInteriorContainer();
+        bool RequiresSplitting(IValueContainer<T> container);
+        bool FirstIsShorter(IValueContainer<T> first, IValueContainer<T> second);
     }
 }

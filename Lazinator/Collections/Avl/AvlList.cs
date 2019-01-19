@@ -16,9 +16,9 @@ namespace Lazinator.Collections.Avl
             UnderlyingTree = new AvlIndexableTree<T>();
         }
 
-        public AvlList(IIndexableContainerFactory<T> factory)
+        public AvlList(IValueContainerFactory<T> factory)
         {
-            UnderlyingTree = factory.CreateIndexableContainer();
+            UnderlyingTree = (IIndexableContainer<T>) factory.CreateContainer();
         }
 
         public AvlList(AvlIndexableTree<T> underlyingTree)

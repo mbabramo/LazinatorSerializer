@@ -474,6 +474,23 @@ namespace Lazinator.Collections.Tree
             }
         }
 
+
+        /// <summary>
+        /// Returns the depth identified when taking a route through the tree. To reduce allocations, this will be a route already taken if possible. This does not guarantee the maximum depth, but this can be used as an effective way to determine when the depth is so great that a split is necessary.
+        /// </summary>
+        /// <returns></returns>
+        public int GetApproximateDepth()
+        {
+            BinaryNode<T> node = Root;
+            int depth = 0;
+            while (node != null)
+            {
+                depth++;
+                node = node.SomeChild;
+            }
+            return depth;
+        }
+
         public virtual IValueContainer<T> SplitOff(IComparer<T> comparer)
         {
             if (Root.Left == null || Root.Right == null)

@@ -172,19 +172,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(AvlListNode<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/ListTree/", ws);
             await CompleteGenerateCode(typeof(AvlListTree<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/ListTree/", ws);
 
-            await CompleteGenerateCode(typeof(AvlIndexableTreeFactory<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);
-            await CompleteGenerateCode(typeof(AvlListTreeFactory<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);
-            await CompleteGenerateCode(typeof(AvlListFactory<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);
-            await CompleteGenerateCode(typeof(AvlSortedIndexableTreeFactory<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);
-            await CompleteGenerateCode(typeof(AvlSortedListFactory<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);
-            //await CompleteGenerateCode(typeof(AvlSortedDictionaryFactory<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);
-            //await CompleteGenerateCode(typeof(AvlSortedListFactory<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);
-            await CompleteGenerateCode(typeof(AvlSortedKeyMultivalueTreeFactory<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);
-            await CompleteGenerateCode(typeof(LazinatorLinkedListFactory<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);
-            await CompleteGenerateCode(typeof(LazinatorListFactory<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);
-            await CompleteGenerateCode(typeof(LazinatorSortedLinkedListFactory<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);
-            await CompleteGenerateCode(typeof(LazinatorSortedListFactory<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);
-            //await CompleteGenerateCode(typeof(AvlListTreeFactory<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);
+            await CompleteGenerateCode(typeof(ValueContainerFactory<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Factories/", ws);
 
             await CompleteGenerateCode(typeof(WAbstract<>), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(WNullableStruct<>), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);

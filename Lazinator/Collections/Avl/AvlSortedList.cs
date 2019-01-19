@@ -15,9 +15,9 @@ namespace Lazinator.Collections.Avl
         {
         }
 
-        public AvlSortedList(bool allowDuplicates, ISortedIndexableMultivalueContainerFactory<T> factory)
+        public AvlSortedList(bool allowDuplicates, IValueContainerFactory<T> factory)
         {
-            UnderlyingTree = factory.CreateSortedIndexableMultivalueContainer();
+            UnderlyingTree = (ISortedIndexableMultivalueContainer<T>) factory.CreateContainer();
             AllowDuplicates = allowDuplicates;
         }
 
