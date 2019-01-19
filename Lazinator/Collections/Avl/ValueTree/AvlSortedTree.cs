@@ -19,8 +19,8 @@ namespace Lazinator.Collections.Avl.ValueTree
 
         public bool Contains(T item) => Contains(item, Comparer<T>.Default);
 
-        public (IContainerLocation location, bool insertedNotReplaced) TryInsert(T item) => TryInsert(item, AllowDuplicates ? MultivalueLocationOptions.InsertAfterLast : MultivalueLocationOptions.Any);
-        public (IContainerLocation location, bool insertedNotReplaced) TryInsert(T item, MultivalueLocationOptions whichOne) => TryInsert(item, whichOne, Comparer<T>.Default);
+        public (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item) => InsertOrReplace(item, AllowDuplicates ? MultivalueLocationOptions.InsertAfterLast : MultivalueLocationOptions.Any);
+        public (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item, MultivalueLocationOptions whichOne) => InsertOrReplace(item, whichOne, Comparer<T>.Default);
 
         public bool TryRemove(T item) => TryRemove(item, MultivalueLocationOptions.Any);
         public bool TryRemove(T item, MultivalueLocationOptions whichOne) => TryRemove(item, Comparer<T>.Default);

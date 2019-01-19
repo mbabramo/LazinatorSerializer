@@ -89,7 +89,7 @@ namespace Lazinator.Collections.Avl.ValueTree
         public void InsertAtIndex(long index, T item)
         {
             ConfirmInRangeOrThrow(index, true);
-            TryInsert(item, CompareIndexToNodesIndex(index, MultivalueLocationOptions.InsertBeforeFirst));
+            InsertOrReplace(item, CompareIndexToNodesIndex(index, MultivalueLocationOptions.InsertBeforeFirst));
         }
 
         public void RemoveAtIndex(long index)
@@ -114,10 +114,9 @@ namespace Lazinator.Collections.Avl.ValueTree
                 return (node.Index, true);
             return (node?.Index ?? LongCount, false);
         }
-        public (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item, IComparer<T> comparer) => InsertOrReplace(item, MultivalueLocationOptions.Any, comparer);
-        public (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
+        public override (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
-            var result = TryInsertReturningNode(item, whichOne, comparer);
+            var result = InsertOrReplaceReturningNode(item, whichOne, comparer);
             var node = ((AvlCountedNode<T>)result.node);
             return (new IndexLocation(node.Index, LongCount), result.insertedNotReplaced);
         }

@@ -189,7 +189,7 @@ namespace Lazinator.Collections.Avl
 
         public (long index, bool exists) FindIndex(T target) => UnderlyingTree.FindIndex(target, MultivalueLocationOptions.First, Comparer<T>.Default);
         public (long index, bool exists) FindIndex(T target, MultivalueLocationOptions whichOne) => UnderlyingTree.FindIndex(target, whichOne, Comparer<T>.Default);
-        public (long index, bool exists) FindINdex(T target, IComparer<T> comparer) => UnderlyingTree.FindIndex(target, comparer);
+        public (long index, bool exists) FindIndex(T target, IComparer<T> comparer) => UnderlyingTree.FindIndex(target, comparer);
         public (long index, bool exists) FindIndex(T target, MultivalueLocationOptions whichOne, IComparer<T> comparer) => UnderlyingTree.FindIndex(target, whichOne, comparer);
 
     }

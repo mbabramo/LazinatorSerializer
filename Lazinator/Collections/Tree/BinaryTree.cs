@@ -220,12 +220,12 @@ namespace Lazinator.Collections.Tree
             return x;
         }
 
-        public (IContainerLocation location, bool insertedNotReplaced) TryInsert(T item, IComparer<T> comparer) => TryInsert(item, MultivalueLocationOptions.Any, comparer);
+        public (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item, IComparer<T> comparer) => InsertOrReplace(item, MultivalueLocationOptions.Any, comparer);
 
-        public (IContainerLocation location, bool insertedNotReplaced) TryInsert(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
+        public virtual (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
             CheckAllowDuplicates(whichOne);
-            return TryInsert(item, node => CompareValueToNode(item, node, whichOne, comparer));
+            return InsertOrReplace(item, node => CompareValueToNode(item, node, whichOne, comparer));
         }
 
         protected internal void CheckAllowDuplicates(MultivalueLocationOptions whichOne)
@@ -234,15 +234,15 @@ namespace Lazinator.Collections.Tree
                 throw new Exception("Allowing potential duplicates is forbidden. Use MultivalueLocationOptions.Any");
         }
 
-        protected (IContainerLocation location, bool insertedNotReplaced) TryInsert(T item, Func<BinaryNode<T>, int> comparisonFunc) => TryInsertReturningNode(item, comparisonFunc);
+        protected (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item, Func<BinaryNode<T>, int> comparisonFunc) => InsertOrReplaceReturningNode(item, comparisonFunc);
 
-        public (BinaryNode<T> node, bool insertedNotReplaced) TryInsertReturningNode(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
+        public (BinaryNode<T> node, bool insertedNotReplaced) InsertOrReplaceReturningNode(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
             CheckAllowDuplicates(whichOne);
-            return TryInsertReturningNode(item, node => CompareValueToNode(item, node, whichOne, comparer));
+            return InsertOrReplaceReturningNode(item, node => CompareValueToNode(item, node, whichOne, comparer));
         }
 
-        protected virtual (BinaryNode<T> node, bool insertedNotReplaced) TryInsertReturningNode(T item, Func<BinaryNode<T>, int> comparisonFunc)
+        protected virtual (BinaryNode<T> node, bool insertedNotReplaced) InsertOrReplaceReturningNode(T item, Func<BinaryNode<T>, int> comparisonFunc)
         {
             BinaryNode<T> node = Root;
             while (node != null)
@@ -497,7 +497,7 @@ namespace Lazinator.Collections.Tree
             var originalRoot = Root;
             Root = rightNode;
             Root.Parent = null;
-            TryInsert(originalRoot.Value, comparer);
+            InsertOrReplace(originalRoot.Value, comparer);
             var newContainer = (BinaryTree<T>)CreateNewWithSameSettings();
             newContainer.Root = (BinaryNode<T>) leftNode;
             newContainer.Root.Parent = null;

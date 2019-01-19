@@ -84,18 +84,18 @@ namespace LazinatorTests.Tests
             IValueContainer<WInt> container = GetValueContainer(containerType, false);
             const int numItems = 1000;
             for (int i = 0; i < numItems; i++)
-                container.TryInsert(i, Comparer<WInt>.Default);
+                container.InsertOrReplace(i, Comparer<WInt>.Default);
             var splitOff = container.SplitOff(Comparer<WInt>.Default);
             (container.Count() + splitOff.Count()).Should().Be(numItems);
             if (splitOff.First() > container.First())
             {
                 foreach (var x in splitOff)
-                    container.TryInsert(x, Comparer<WInt>.Default);
+                    container.InsertOrReplace(x, Comparer<WInt>.Default);
             }
             else
             {
                 foreach (var x in container)
-                    splitOff.TryInsert(x, Comparer<WInt>.Default);
+                    splitOff.InsertOrReplace(x, Comparer<WInt>.Default);
                 container = splitOff;
             }
             container.Select(x => x.WrappedValue).SequenceEqual(Enumerable.Range(0, numItems)).Should().BeTrue();
@@ -658,13 +658,13 @@ namespace LazinatorTests.Tests
 
             public override void Execute_Multivalue(ValueContainerTests<T> testClass, IMultivalueContainer<T> container, List<T> list)
             {
-                var result = container.TryInsert(Item, WhichOne, C);
+                var result = container.InsertOrReplace(Item, WhichOne, C);
                 result.insertedNotReplaced.Should().Be(InsertedNotReplaced);
             }
 
             public override void Execute_Sorted(ValueContainerTests<T> testClass, ISortedValueContainer<T> container, List<T> list)
             {
-                var result = container.TryInsert(Item);
+                var result = container.InsertOrReplace(Item);
                 result.insertedNotReplaced.Should().Be(InsertedNotReplaced);
             }
 
@@ -686,13 +686,13 @@ namespace LazinatorTests.Tests
 
             public override void Execute_SortedMultivalue(ValueContainerTests<T> testClass, ISortedMultivalueContainer<T> container, List<T> list)
             {
-                var result = container.TryInsert(Item, WhichOne);
+                var result = container.InsertOrReplace(Item, WhichOne);
                 result.insertedNotReplaced.Should().Be(InsertedNotReplaced);
             }
 
             public override void Execute_Value(ValueContainerTests<T> testClass, IValueContainer<T> container, List<T> list)
             {
-                var result = container.TryInsert(Item, C);
+                var result = container.InsertOrReplace(Item, C);
                 result.insertedNotReplaced.Should().Be(InsertedNotReplaced);
             }
         }

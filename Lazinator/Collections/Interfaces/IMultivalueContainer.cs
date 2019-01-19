@@ -21,7 +21,7 @@ namespace Lazinator.Collections.Interfaces
         /// <returns>The location, along with an indication of whether an exact match was found</returns>
         (IContainerLocation location, bool found) FindContainerLocation(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer);
         bool GetValue(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, out T match);
-        (IContainerLocation location, bool insertedNotReplaced) TryInsert(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer);
+        (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer);
         bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer);
         bool TryRemoveAll(T item, IComparer<T> comparer);
         long Count(T item, IComparer<T> comparer);

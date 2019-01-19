@@ -39,7 +39,7 @@ namespace Lazinator.Collections.Avl.ValueTree
             };
         }
 
-        protected override (BinaryNode<T> node, bool insertedNotReplaced) TryInsertReturningNode(T item, Func<BinaryNode<T>, int> comparisonFunc)
+        protected override (BinaryNode<T> node, bool insertedNotReplaced) InsertOrReplaceReturningNode(T item, Func<BinaryNode<T>, int> comparisonFunc)
         {
             AvlNode<T> node = AvlRoot;
             while (node != null)

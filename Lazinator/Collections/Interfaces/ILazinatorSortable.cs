@@ -18,7 +18,7 @@ namespace Lazinator.Collections
         bool AllowDuplicates { get; }
         (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item, IComparer<T> comparer);
         bool TryRemove(T item, IComparer<T> comparer);
-        (long index, bool exists) FindINdex(T target, IComparer<T> comparer);
+        (long index, bool exists) FindIndex(T target, IComparer<T> comparer);
 
         (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer);
         bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer);
