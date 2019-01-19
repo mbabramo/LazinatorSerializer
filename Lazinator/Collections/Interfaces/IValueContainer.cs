@@ -19,6 +19,14 @@ namespace Lazinator.Collections.Interfaces
         T Last();
         T LastOrDefault();
         /// <summary>
+        /// Finds the item in the sorted container, using the comparer. If the item is found, the exact location is returned. Otherwise,
+        /// the next location is returned (or null, if it would be after the end of the list).
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="comparer"></param>
+        /// <returns>The location, along with an indication of whether an exact match was found</returns>
+        (IContainerLocation location, bool found) FindContainerLocation(T value, IComparer<T> comparer);
+        /// <summary>
         /// Gets a matching value using a custom comparer, which may match on only part of the item.
         /// </summary>
         bool GetValue(T item, IComparer<T> comparer, out T match);
@@ -27,7 +35,7 @@ namespace Lazinator.Collections.Interfaces
         /// </summary>
         /// <param name="item"></param>
         /// <param name="comparer"></param>
-        /// <returns></returns>
+        /// <returns>True if the result is an insertion rather than a replacement</returns>
         bool TryInsert(T item, IComparer<T> comparer);
         /// <summary>
         /// Removes a matching value.

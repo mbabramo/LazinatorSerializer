@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Lazinator.Collections.Interfaces
 {
-    [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IIndexableContainer)]
+    [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IIndexableValueContainer)]
     public interface IIndexableValueContainer<T> : IValueContainer<T>, ICountableContainer, ILazinator where T : ILazinator
     {
         T GetAt(long index);

@@ -6,7 +6,7 @@ using Lazinator.Core;
 
 namespace Lazinator.Collections.Interfaces
 {
-    [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ISortedContainer)]
+    [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ISortedValueContainer)]
     public interface ISortedValueContainer<T> : IValueContainer<T>, ILazinator where T : ILazinator, IComparable<T>
     {
         bool Contains(T item);

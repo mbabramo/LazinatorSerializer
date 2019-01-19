@@ -1,5 +1,6 @@
 ﻿using Lazinator.Buffers;
 using Lazinator.Collections.Avl.ValueTree;
+using Lazinator.Collections.Extensions;
 using Lazinator.Collections.Factories;
 using Lazinator.Collections.Interfaces;
 using Lazinator.Collections.Tree;
@@ -298,7 +299,10 @@ namespace Lazinator.Collections.Avl.ListTree
             splitOff.UnderlyingTree = splitOffUnderlying;
             return splitOff;
         }
-        
+
+        public (IContainerLocation location, bool found) FindContainerLocation(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer) => UnderlyingTree.GetMatchingOrNextNode(null, whichOne, GetItemToInteriorCollectionComparer(value, comparer));
+        public (IContainerLocation location, bool found) FindContainerLocation(T value, IComparer<T> comparer) => UnderlyingTree.GetMatchingOrNextNode(null, MultivalueLocationOptions.Any, GetItemToInteriorCollectionComparer(value, comparer));
+
     }
 
 }

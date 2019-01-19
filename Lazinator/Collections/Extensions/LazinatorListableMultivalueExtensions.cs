@@ -8,13 +8,19 @@ namespace Lazinator.Collections.Extensions
 {
     public static class LazinatorListableMultivalueExtensions
     {
+        public static (IContainerLocation location, bool found) MultivalueFindMatchOrNext<L, T>(this L list, bool allowDuplicates, T value, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator => MultivalueFindMatchOrNext(list, allowDuplicates, value, MultivalueLocationOptions.Any, comparer);
+        public static (IContainerLocation location, bool found) MultivalueFindMatchOrNext<L, T>(this L list, bool allowDuplicates, T value, MultivalueLocationOptions whichOne, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator
+        {
+            (long index, bool exists) = list.SortedFind(allowDuplicates, value, whichOne, comparer);
+            return (new IndexLocation(index, list.LongCount), exists);
+        }
+
         public static bool MultivalueGetValue<L, T>(this L list, bool allowDuplicates, T item, IComparer<T> comparer, out T match) where L : ILazinatorListable<T> where T : ILazinator => MultivalueGetValue(list, allowDuplicates, item, MultivalueLocationOptions.Any, comparer, out match);
         public static bool MultivalueGetValue<L, T>(this L list, bool allowDuplicates, T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, out T match) where L : ILazinatorListable<T> where T : ILazinator
         {
             if (whichOne == MultivalueLocationOptions.InsertBeforeFirst || whichOne == MultivalueLocationOptions.InsertAfterLast)
             {
-                match = default;
-                return false;
+                throw new ArgumentException();
             }
             (long index, bool exists) = list.SortedFind(allowDuplicates, item, whichOne, comparer);
             if (exists)

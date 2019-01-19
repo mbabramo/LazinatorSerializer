@@ -1,11 +1,12 @@
-﻿using Lazinator.Core;
+﻿using Lazinator.Collections.Interfaces;
+using Lazinator.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Lazinator.Collections.Tree
 {
-    public partial class BinaryNode<T> : IBinaryNode<T> where T : ILazinator
+    public partial class BinaryNode<T> : IBinaryNode<T>, IContainerLocation where T : ILazinator
     {
         // We can't serialize the Parent, because an item can't appear multiple times in a hierarchy, so we use the Lazinator built-in parent as a substitute.
         private BinaryNode<T> _Parent;
@@ -103,6 +104,10 @@ namespace Lazinator.Collections.Tree
             }
             return p;
         }
+
+        public IContainerLocation GetNextLocation() => GetNextNode();
+
+        public IContainerLocation GetPreviousLocation() => GetPreviousNode();
 
         public string ToTreeString()
         {

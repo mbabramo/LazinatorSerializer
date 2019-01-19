@@ -89,7 +89,7 @@
         IAvlSortedKeyValueTreeDictionary,
         INonComparableWrapper,
         INonComparableWrapperString,
-        IIndexableContainer,
+        IIndexableValueContainer,
         IIndexableKeyValueTree,
         ILazinatorKeyMultivalueTree,
         IKeyValueContainer,
@@ -119,7 +119,7 @@
         ISortedKeyMultivalueContainer,
         ISortedIndexableKeyMultivalueContainer,
         IIndexableKeyMultivalueContainer,
-        ISortedContainer,
+        ISortedValueContainer,
         IAvlSortedKeyValueTree,
         IAvlIndexableKeyValueTree,
         IAvlSortedIndexableKeyValueTree,
@@ -130,5 +130,7 @@
         IContainerFactory,
         IContainerLevel,
         ISortedContainerFactory,
+        IContainerLocation,
+        IIndexLocation,
     }
 }

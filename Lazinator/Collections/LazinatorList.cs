@@ -569,11 +569,13 @@ namespace Lazinator.Collections
             return default(T);
         }
 
+        public (IContainerLocation location, bool found) FindContainerLocation(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer) => this.MultivalueFindMatchOrNext(AllowDuplicates, value, whichOne, comparer);
         public bool GetValue(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, out T match) => this.MultivalueGetValue(AllowDuplicates, item, whichOne, comparer, out match);
         public bool TryInsert(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => this.MultivalueTryInsert(AllowDuplicates, item, whichOne, comparer);
         public bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => this.MultivalueTryRemove(AllowDuplicates, item, whichOne, comparer);
         public bool TryRemoveAll(T item, IComparer<T> comparer) => this.MultivalueTryRemoveAll(AllowDuplicates, item, comparer);
         long IMultivalueContainer<T>.Count(T item, IComparer<T> comparer) => this.MultivalueCount(AllowDuplicates, item, comparer);
+        public (IContainerLocation location, bool found) FindContainerLocation(T value, IComparer<T> comparer) => this.MultivalueFindMatchOrNext(AllowDuplicates, value, comparer);
         public bool GetValue(T item, IComparer<T> comparer, out T match) => this.MultivalueGetValue(AllowDuplicates, item, comparer, out match);
         public bool TryInsert(T item, IComparer<T> comparer) => this.MultivalueTryInsert(AllowDuplicates, item, comparer);
         public bool TryRemove(T item, IComparer<T> comparer) => this.MultivalueTryRemove(AllowDuplicates, item, comparer);
