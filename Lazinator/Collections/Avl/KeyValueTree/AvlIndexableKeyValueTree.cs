@@ -92,12 +92,12 @@ namespace Lazinator.Collections.Avl.KeyValueTree
             UnderlyingIndexableTree.InsertAtIndex(index, new LazinatorKeyValue<TKey, TValue>(key, value));
         }
 
-        public (long index, bool insertedNotReplaced) InsertOrReplace(TKey key, TValue value, MultivalueLocationOptions whichOne, IComparer<TKey> comparer)
+        public (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(TKey key, TValue value, MultivalueLocationOptions whichOne, IComparer<TKey> comparer)
         {
             var result = UnderlyingIndexableTree.InsertOrReplace(new LazinatorKeyValue<TKey, TValue>(key, value), whichOne, KeyComparer(comparer));
             return result;
         }
 
-        public (long index, bool insertedNotReplaced) InsertOrReplace(TKey key, TValue value, IComparer<TKey> comparer) => InsertOrReplace(key, value, AllowDuplicates ? MultivalueLocationOptions.InsertAfterLast : MultivalueLocationOptions.Any, comparer);
+        public (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(TKey key, TValue value, IComparer<TKey> comparer) => InsertOrReplace(key, value, AllowDuplicates ? MultivalueLocationOptions.InsertAfterLast : MultivalueLocationOptions.Any, comparer);
     }
 }

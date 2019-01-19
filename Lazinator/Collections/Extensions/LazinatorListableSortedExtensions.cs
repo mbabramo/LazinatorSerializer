@@ -8,13 +8,13 @@ namespace Lazinator.Collections
 {
     public static class LazinatorListableSortedExtensions 
     {
-        public static (long index, bool insertedNotReplaced) SortedInsertOrReplace<L, T>(this L list, bool allowDuplicates, T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator
+        public static (IContainerLocation location, bool insertedNotReplaced) SortedInsertOrReplace<L, T>(this L list, bool allowDuplicates, T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator
         {
             (long index, bool exists) = list.SortedFind(allowDuplicates, item, whichOne, comparer);
             if (allowDuplicates && (whichOne == MultivalueLocationOptions.InsertBeforeFirst || whichOne == MultivalueLocationOptions.InsertAfterLast))
             {
                 list.Insert((int)index, item);
-                return (index, true);
+                return (new IndexLocation(index, list.LongCount), true);
             }
             if (!allowDuplicates && whichOne != MultivalueLocationOptions.Any)
                 throw new Exception("Allowing potential duplicates is forbidden. Use MultivalueLocationOptions.Any");
@@ -25,11 +25,11 @@ namespace Lazinator.Collections
                 if (comparer.Compare(existing, item) == 0)
                 {
                     list.SetAtIndex(index, item);
-                    return (index, false);
+                    return (new IndexLocation(index, list.LongCount), false);
                 }
             }
             list.Insert((int)index, item);
-            return (index, true);
+            return (new IndexLocation(index, list.LongCount), true);
         }
 
         public static bool SortedTryRemove<L, T>(this L list, bool allowDuplicates, T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator

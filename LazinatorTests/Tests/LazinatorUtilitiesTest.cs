@@ -29,7 +29,7 @@ namespace LazinatorTests.Tests
             {
                 int bufferSize = 100;
                 e = new ExpandableBytes();
-                for (int j = 0; j < 20; j++)
+                for (int j = 0; j < 10; j++)
                 {
                     bufferSize *= 2;
                     e.EnsureMinBufferSize(bufferSize);

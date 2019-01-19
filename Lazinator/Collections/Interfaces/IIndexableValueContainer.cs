@@ -15,6 +15,6 @@ namespace Lazinator.Collections.Interfaces
         void RemoveAtIndex(long index);
 
         (long index, bool exists) FindIndex(T target, IComparer<T> comparer);
-        (long index, bool insertedNotReplaced) InsertOrReplace(T item, IComparer<T> comparer);
+        (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item, IComparer<T> comparer);
     }
 }

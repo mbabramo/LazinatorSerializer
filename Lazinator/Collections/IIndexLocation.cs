@@ -10,7 +10,7 @@ namespace Lazinator.Collections
         /// <summary>
         /// The location where the item would be located.
         /// </summary>
-        long Location { get; set; }
+        long Index { get; set; }
         /// <summary>
         /// The number of items in the collection.
         /// </summary>

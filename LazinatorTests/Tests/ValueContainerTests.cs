@@ -42,10 +42,10 @@ namespace LazinatorTests.Tests
         [InlineData(ValueContainerToUse.AvlIndexableTree, false, 100, 100)]
         [InlineData(ValueContainerToUse.AvlSortedTree, false, 100, 100)]
         [InlineData(ValueContainerToUse.AvlSortedIndexableTree, false, 100, 100)]
-        [InlineData(ValueContainerToUse.AvlListTreeTinyLazinatorList, false, 100, 100)]
+        [InlineData(ValueContainerToUse.AvlListTreeTinyLazinatorList, false, 20, 20)]
         [InlineData(ValueContainerToUse.AvlListTreeSmallLazinatorList, false, 100, 100)]
         [InlineData(ValueContainerToUse.AvlListTreeRegularLazinatorList, false, 100, 100)]
-        [InlineData(ValueContainerToUse.AvlListTreeTinyLinkedList, false, 100, 100)]
+        [InlineData(ValueContainerToUse.AvlListTreeTinyLinkedList, false, 20, 20)]
         [InlineData(ValueContainerToUse.AvlListTreeSmallLinkedList, false, 100, 100)]
         [InlineData(ValueContainerToUse.AvlListTreeRegularLinkedList, false, 100, 100)]
         [InlineData(ValueContainerToUse.LazinatorList, false, 100, 100)]
@@ -54,10 +54,10 @@ namespace LazinatorTests.Tests
         [InlineData(ValueContainerToUse.AvlIndexableTree, true, 100, 100)]
         [InlineData(ValueContainerToUse.AvlSortedTree, true, 100, 100)]
         [InlineData(ValueContainerToUse.AvlSortedIndexableTree, true, 100, 100)]
-        [InlineData(ValueContainerToUse.AvlListTreeTinyLazinatorList, true, 100, 100)]
+        [InlineData(ValueContainerToUse.AvlListTreeTinyLazinatorList, true, 20, 20)]
         [InlineData(ValueContainerToUse.AvlListTreeSmallLazinatorList, true, 100, 100)]
         [InlineData(ValueContainerToUse.AvlListTreeRegularLazinatorList, true, 100, 100)]
-        [InlineData(ValueContainerToUse.AvlListTreeTinyLinkedList, true, 100, 100)]
+        [InlineData(ValueContainerToUse.AvlListTreeTinyLinkedList, true, 20, 20)]
         [InlineData(ValueContainerToUse.AvlListTreeSmallLinkedList, true, 100, 100)]
         [InlineData(ValueContainerToUse.AvlListTreeRegularLinkedList, true, 100, 100)]
         [InlineData(ValueContainerToUse.LazinatorList, true, 100, 100)]
@@ -114,10 +114,10 @@ namespace LazinatorTests.Tests
         [InlineData(ValueContainerToUse.AvlIndexableTree, false, 100, 100)]
         [InlineData(ValueContainerToUse.AvlSortedTree, false, 100, 100)]
         [InlineData(ValueContainerToUse.AvlSortedIndexableTree, false, 100, 100)]
-        [InlineData(ValueContainerToUse.AvlListTreeTinyLazinatorList, false, 100, 100)]
+        [InlineData(ValueContainerToUse.AvlListTreeTinyLazinatorList, false, 20, 20)]
         [InlineData(ValueContainerToUse.AvlListTreeSmallLazinatorList, false, 100, 100)]
         [InlineData(ValueContainerToUse.AvlListTreeRegularLazinatorList, false, 100, 100)]
-        [InlineData(ValueContainerToUse.AvlListTreeTinyLinkedList, false, 100, 100)]
+        [InlineData(ValueContainerToUse.AvlListTreeTinyLinkedList, false, 20, 20)]
         [InlineData(ValueContainerToUse.AvlListTreeSmallLinkedList, false, 100, 100)]
         [InlineData(ValueContainerToUse.AvlListTreeRegularLinkedList, false, 100, 100)]
         [InlineData(ValueContainerToUse.LazinatorList, false, 100, 100)]
@@ -126,10 +126,10 @@ namespace LazinatorTests.Tests
         [InlineData(ValueContainerToUse.AvlIndexableTree, true, 100, 100)]
         [InlineData(ValueContainerToUse.AvlSortedTree, true, 100, 100)]
         [InlineData(ValueContainerToUse.AvlSortedIndexableTree, true, 100, 100)]
-        [InlineData(ValueContainerToUse.AvlListTreeTinyLazinatorList, true, 100, 100)]
+        [InlineData(ValueContainerToUse.AvlListTreeTinyLazinatorList, true, 20, 20)]
         [InlineData(ValueContainerToUse.AvlListTreeSmallLazinatorList, true, 100, 100)]
         [InlineData(ValueContainerToUse.AvlListTreeRegularLazinatorList, true, 100, 100)]
-        [InlineData(ValueContainerToUse.AvlListTreeTinyLinkedList, true, 100, 100)]
+        [InlineData(ValueContainerToUse.AvlListTreeTinyLinkedList, true, 20, 20)]
         [InlineData(ValueContainerToUse.AvlListTreeSmallLinkedList, true, 100, 100)]
         [InlineData(ValueContainerToUse.AvlListTreeRegularLinkedList, true, 100, 100)]
         [InlineData(ValueContainerToUse.LazinatorList, true, 100, 100)]
@@ -670,17 +670,17 @@ namespace LazinatorTests.Tests
 
             public override void Execute_SortedIndexable(ValueContainerTests<T> testClass, ISortedIndexableContainer<T> container, List<T> list)
             {
-                (long index, bool insertedNotReplaced) = container.InsertOrReplace(Item);
-                index.Should().Be(Index);
+                (IContainerLocation location, bool insertedNotReplaced) = container.InsertOrReplace(Item);
+                ((IndexLocation)location).Index.Should().Be(Index);
                 insertedNotReplaced.Should().Be(InsertedNotReplaced);
             }
 
             public override void Execute_SortedIndexableMultivalue(ValueContainerTests<T> testClass, ISortedIndexableMultivalueContainer<T> container, List<T> list)
             {
-                (long index, bool insertedNotReplaced) = container.InsertOrReplace(Item, WhichOne);
+                (IContainerLocation location, bool insertedNotReplaced) = container.InsertOrReplace(Item, WhichOne);
                 // if WhichOne == Any, then exact location is undefined, so we don't verify it. The behavior may be different from our list implementation because which one is selected may be based on the ordering of the binary tree. The list binary search algorithm always starts from the middle element, while a tree search will start from the top of the tree, which may not be the exact middle element.
                 if (WhichOne != MultivalueLocationOptions.Any)
-                    index.Should().Be(Index);
+                    ((IndexLocation)location).Index.Should().Be(Index);
                 insertedNotReplaced.Should().Be(InsertedNotReplaced);
             }
 

@@ -7,26 +7,26 @@ namespace Lazinator.Collections
 {
     public partial class IndexLocation : IIndexLocation, IContainerLocation
     {
-        public IndexLocation(long location, long count)
+        public IndexLocation(long index, long count)
         {
-            Location = location;
+            Index = index;
             Count = count;
         }
 
-        public bool IsAfterCollection => Location == Count;
+        public bool IsAfterCollection => Index == Count;
 
         public IContainerLocation GetNextLocation()
         {
-            if (Location == Count - 1)
+            if (Index == Count - 1)
                 return null;
-            return new IndexLocation(Location + 1, Count);
+            return new IndexLocation(Index + 1, Count);
         }
 
         public IContainerLocation GetPreviousLocation()
         {
-            if (Location == 0)
+            if (Index == 0)
                 return null;
-            return new IndexLocation(Location - 1, Count);
+            return new IndexLocation(Index - 1, Count);
         }
     }
 }
