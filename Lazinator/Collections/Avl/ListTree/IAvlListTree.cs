@@ -11,7 +11,8 @@ namespace Lazinator.Collections.Avl.ListTree
     internal interface IAvlListTree<T> where T : ILazinator
     {
         [OnSet("", "\nAllowDuplicatesChanged(value);")]
-        bool AllowDuplicates { get; set; }
+        [SetterAccessibility("protected")]
+        bool AllowDuplicates { get; }
         bool Unbalanced { get; set; }
         AvlIndexableTree<IMultivalueContainer<T>> UnderlyingTree { get; set; }
         ContainerFactory<T> InteriorContainerFactory { get; set; }

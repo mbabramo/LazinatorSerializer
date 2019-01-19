@@ -10,7 +10,8 @@ namespace Lazinator.Collections.Avl.KeyValueTree
         where TKey : ILazinator
         where TValue : ILazinator
     {
-        bool AllowDuplicates { get; set; }
+        [SetterAccessibility("protected")]
+        bool AllowDuplicates { get; }
         AvlTree<LazinatorKeyValue<TKey, TValue>> UnderlyingTree { get; set; }
     }
 }

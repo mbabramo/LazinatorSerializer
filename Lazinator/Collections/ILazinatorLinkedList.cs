@@ -8,6 +8,7 @@ namespace Lazinator.Collections
     {
         int Count { get; set; }
         LazinatorLinkedListNode<T> FirstNode { get; set; }
-        bool AllowDuplicates { get; set; }
+        [SetterAccessibility("protected")]
+        bool AllowDuplicates { get; }
     }
 }

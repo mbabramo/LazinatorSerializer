@@ -17,7 +17,8 @@ namespace Lazinator.Collections
     [UnofficiallyIncorporateInterface("Lazinator.Collections.ILazinatorListUnofficial", "protected")]
     public interface ILazinatorList<T> where T : ILazinator
     {
-        bool AllowDuplicates { get; set; }
+        [SetterAccessibility("protected")]
+        bool AllowDuplicates { get; }
     }
 
     [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorListUnofficial)]

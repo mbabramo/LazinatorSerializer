@@ -14,7 +14,8 @@ namespace Lazinator.Collections
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorSortable)]
     public interface ILazinatorSortable<T> : ILazinatorListable<T>, ILazinator where T : ILazinator
     {
-        bool AllowDuplicates { get; set; }
+        [SetterAccessibility("protected")]
+        bool AllowDuplicates { get; }
         (long index, bool insertedNotReplaced) InsertGetIndex(T item, IComparer<T> comparer);
         bool TryRemove(T item, IComparer<T> comparer);
         (long index, bool exists) Find(T target, IComparer<T> comparer);
