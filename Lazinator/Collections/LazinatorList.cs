@@ -481,14 +481,14 @@ namespace Lazinator.Collections
         
         public bool Unbalanced { get => false; set => throw new NotSupportedException(); }
 
-        public void InsertAt(long index, T item)
+        public void InsertAtIndex(long index, T item)
         {
             if (index > Count || index < 0)
                 throw new ArgumentException();
             Insert((int) index, item);
         }
 
-        public void RemoveAt(long index)
+        public void RemoveAtIndex(long index)
         {
             if (index > Count || index < 0)
                 throw new ArgumentException();
@@ -515,14 +515,14 @@ namespace Lazinator.Collections
             }
         }
 
-        public T GetAt(long index)
+        public T GetAtIndex(long index)
         {
             if (index > Count || index < 0)
                 throw new ArgumentException();
             return this[(int) index];
         }
 
-        public void SetAt(long index, T value)
+        public void SetAtIndex(long index, T value)
         {
             if (index > Count || index < 0)
                 throw new ArgumentException();

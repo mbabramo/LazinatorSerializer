@@ -21,10 +21,10 @@ namespace Lazinator.Collections
 
             if (index < list.LongCount)
             {
-                var existing = list.GetAt(index);
+                var existing = list.GetAtIndex(index);
                 if (comparer.Compare(existing, item) == 0)
                 {
-                    list.SetAt(index, item);
+                    list.SetAtIndex(index, item);
                     return (index, false);
                 }
             }
@@ -36,7 +36,7 @@ namespace Lazinator.Collections
         {
             (long location, bool exists) = list.SortedFind(allowDuplicates, item, whichOne, comparer);
             if (exists)
-                list.RemoveAt(location);
+                list.RemoveAtIndex(location);
             return exists;
         }
 
@@ -46,9 +46,9 @@ namespace Lazinator.Collections
             if (!result.exists || whichOne == MultivalueLocationOptions.Any)
                 return result;
             long firstIndex = result.index, lastIndex = result.index;
-            while (firstIndex > 0 && comparer.Compare(list.GetAt((firstIndex - 1)), target) == 0)
+            while (firstIndex > 0 && comparer.Compare(list.GetAtIndex((firstIndex - 1)), target) == 0)
                 firstIndex--;
-            while (lastIndex < list.LongCount - 1 && comparer.Compare(list.GetAt(lastIndex + 1), target) == 0)
+            while (lastIndex < list.LongCount - 1 && comparer.Compare(list.GetAtIndex(lastIndex + 1), target) == 0)
                 lastIndex++;
             switch (whichOne)
             {
@@ -77,7 +77,7 @@ namespace Lazinator.Collections
             {
                 mid = (first + last) / 2;
 
-                int comparison = comparer.Compare(target, list.GetAt(mid));
+                int comparison = comparer.Compare(target, list.GetAtIndex(mid));
                 if (comparison == 0)
                 {
                     if (allowDuplicates)
@@ -85,7 +85,7 @@ namespace Lazinator.Collections
                         bool matches = true;
                         while (matches && mid > 0)
                         {
-                            var previous = list.GetAt(mid - 1);
+                            var previous = list.GetAtIndex(mid - 1);
                             matches = previous.Equals(target);
                             if (matches)
                             {

@@ -157,7 +157,7 @@ namespace LazinatorTests.Tests
             ILazinatorListable<WInt> l = factory.CreateLazinatorListable();
             int numItems = (listFactoryToUse == ListFactoryToUse.UnbalancedAvlList || listFactoryToUse == ListFactoryToUse.UnbalancedAvlSortedList) ? 20 : 500;
             for (int i = 0; i < numItems; i++)
-                l.InsertAt(0, i);
+                l.InsertAtIndex(0, i);
             l.Any().Should().BeTrue();
             l.First().Should().Be(numItems - 1);
             l.FirstOrDefault().Should().Be(numItems - 1);
@@ -206,7 +206,7 @@ namespace LazinatorTests.Tests
             var factory = GetListFactory(listFactoryToUse);
             ILazinatorListable<WInt> l = factory.CreateLazinatorListable();
             l.Add(1);
-            l.RemoveAt(0);
+            l.RemoveAtIndex(0);
             l.Any().Should().BeFalse();
             l.FirstOrDefault().Should().Be(default(WInt));
             l.LastOrDefault().Should().Be(default(WInt));
@@ -382,7 +382,7 @@ namespace LazinatorTests.Tests
                         else
                         {
                             o.Insert(j, k);
-                            l.InsertAt(j, k);
+                            l.InsertAtIndex(j, k);
                         }
                     }
                     else
@@ -399,7 +399,7 @@ namespace LazinatorTests.Tests
                         else
                         {
                             o.RemoveAt(j);
-                            l.RemoveAt(j);
+                            l.RemoveAtIndex(j);
                         }
                     }
                     if ((testIntermediateValues || i == totalChanges - 1) && o.Any())
@@ -416,18 +416,18 @@ namespace LazinatorTests.Tests
                                 while (expectedIndex > 0 && o[expectedIndex - 1] == value)
                                     expectedIndex--; // first key with same value
 
-                                findResult = (l as ILazinatorSorted<WInt>).Find(value);
+                                findResult = (l as ILazinatorSorted<WInt>).FindIndex(value);
                                 findResult.exists.Should().BeTrue();
                                 findResult.location.Should().Be(expectedIndex);
                                 // previous value, if not in list, should produce same location
                                 if (!o.Contains(value - 1))
                                 {
-                                    findResult = (l as ILazinatorSorted<WInt>).Find(value - 1);
+                                    findResult = (l as ILazinatorSorted<WInt>).FindIndex(value - 1);
                                     findResult.exists.Should().BeFalse();
                                     findResult.location.Should().Be(expectedIndex);
                                 }
                             }
-                            findResult = (l as ILazinatorSorted<WInt>).Find(o.Max() + 1);
+                            findResult = (l as ILazinatorSorted<WInt>).FindIndex(o.Max() + 1);
                             findResult.exists.Should().BeFalse();
                             findResult.location.Should().Be(o.Count()); // i.e., location after last one
                         }

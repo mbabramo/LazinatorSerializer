@@ -29,10 +29,10 @@ namespace Lazinator.Collections
         public bool TryRemove(T item) => TryRemove(item, Comparer<T>.Default);
         public bool TryRemove(T item, MultivalueLocationOptions whichOne) => TryRemove(item, whichOne, Comparer<T>.Default);
 
-        public (long index, bool exists) Find(T target) => Find(target, Comparer<T>.Default);
-        public (long index, bool exists) Find(T target, MultivalueLocationOptions whichOne) => Find(target, whichOne, Comparer<T>.Default);
-        public (long index, bool exists) Find(T target, MultivalueLocationOptions whichOne, IComparer<T> comparer) => this.SortedFind(AllowDuplicates, target, whichOne, comparer);
-        public (long index, bool exists) Find(T target, IComparer<T> comparer) => this.SortedFind(AllowDuplicates, target, comparer);
+        public (long index, bool exists) FindIndex(T target) => FindINdex(target, Comparer<T>.Default);
+        public (long index, bool exists) FindIndex(T target, MultivalueLocationOptions whichOne) => FindIndex(target, whichOne, Comparer<T>.Default);
+        public (long index, bool exists) FindIndex(T target, MultivalueLocationOptions whichOne, IComparer<T> comparer) => this.SortedFind(AllowDuplicates, target, whichOne, comparer);
+        public (long index, bool exists) FindINdex(T target, IComparer<T> comparer) => this.SortedFind(AllowDuplicates, target, comparer);
 
     }
 }

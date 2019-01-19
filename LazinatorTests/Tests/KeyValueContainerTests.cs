@@ -375,10 +375,10 @@ namespace LazinatorTests.Tests
                 {
                     if (KeyValueContainerIsSorted)
                     {
-                        var findKeyResult = container.Find(default, C);
+                        var findKeyResult = container.FindIndex(default, C);
                         findKeyResult.index.Should().Be(-1);
                         findKeyResult.found.Should().BeFalse();
-                        var findKeyValueResult = container.Find(default, default, C);
+                        var findKeyValueResult = container.FindIndex(default, default, C);
                         findKeyValueResult.index.Should().Be(-1);
                         findKeyValueResult.found.Should().BeFalse();
                     }
@@ -388,7 +388,7 @@ namespace LazinatorTests.Tests
                     var listResult = listResultOrNull.Value;
                     for (int i = listResult.firstIndex; i <= listResult.lastIndex; i++)
                     {
-                        LazinatorComparableKeyValue<TKey, TValue> getAtResult = new LazinatorComparableKeyValue<TKey, TValue>(container.GetKeyAt(i), container.GetValueAt(i));
+                        LazinatorComparableKeyValue<TKey, TValue> getAtResult = new LazinatorComparableKeyValue<TKey, TValue>(container.GetKeyAtIndex(i), container.GetValueAtIndex(i));
                         AssertEqual(getAtResult, listResult.item);
                     }
                 }
@@ -409,7 +409,7 @@ namespace LazinatorTests.Tests
                 {
                     if (KeyValueContainerIsSorted)
                     {
-                        var findKeyResult = container.Find(default, whichOne, C);
+                        var findKeyResult = container.FindIndex(default, whichOne, C);
                         findKeyResult.index.Should().Be(0);
                         findKeyResult.found.Should().BeFalse();
                     }
@@ -418,11 +418,11 @@ namespace LazinatorTests.Tests
                 {
                     var listResult = listResultOrNull.Value;
 
-                    LazinatorComparableKeyValue<TKey, TValue> getAtResult = new LazinatorComparableKeyValue<TKey, TValue>(container.GetKeyAt(listResult.index), container.GetValueAt(listResult.index));
+                    LazinatorComparableKeyValue<TKey, TValue> getAtResult = new LazinatorComparableKeyValue<TKey, TValue>(container.GetKeyAtIndex(listResult.index), container.GetValueAtIndex(listResult.index));
                     AssertEqual(getAtResult, listResult.item);
                     for (int i = listResult.firstIndex; i <= listResult.lastIndex; i++)
                     {
-                        var keyResult = container.GetKeyAt(i);
+                        var keyResult = container.GetKeyAtIndex(i);
                         EqualityComparer<TKey>.Default.Equals(keyResult, listResult.item.Key).Should().BeTrue();
                         AssertEqual(getAtResult, listResult.item);
                     }
@@ -494,11 +494,11 @@ namespace LazinatorTests.Tests
                 else
                 {
                     var listResult = listResultOrNull.Value;
-                    var findKeyResult = container.Find(listResult.item.Key);
+                    var findKeyResult = container.FindIndex(listResult.item.Key);
                     VerifyExpectedIndex(MultivalueLocationOptions.Any, listResult, findKeyResult.index);
                     findKeyResult.found.Should().BeTrue();
                     AssertEqual(findKeyResult.valueIfFound, listResult.item.Value);
-                    var findKeyValueResult = container.Find(listResult.item.Key, listResult.item.Value);
+                    var findKeyValueResult = container.FindIndex(listResult.item.Key, listResult.item.Value);
                     VerifyExpectedIndex(MultivalueLocationOptions.Any, listResult, findKeyValueResult.index);
                     findKeyValueResult.found.Should().BeTrue();
                 }
@@ -523,7 +523,7 @@ namespace LazinatorTests.Tests
                         whichOne = null;
                     if (whichOne != null)
                     {
-                        var findKeyResult = container.Find(listResult.item.Key, whichOne.Value);
+                        var findKeyResult = container.FindIndex(listResult.item.Key, whichOne.Value);
                         VerifyExpectedIndex(whichOne.Value, listResult, findKeyResult.index);
                         findKeyResult.found.Should().BeTrue();
                         AssertEqual(findKeyResult.valueIfFound, listResult.item.Value);
@@ -609,11 +609,11 @@ namespace LazinatorTests.Tests
             public override void Execute_Indexable(KeyValueContainerTests<TKey, TValue> testClass, IIndexableKeyValueContainer<TKey, TValue> container, List<LazinatorComparableKeyValue<TKey, TValue>> list)
             {
                 if (InsertedNotReplaced)
-                    container.InsertAt(Index, Key, Value);
+                    container.InsertAtIndex(Index, Key, Value);
                 else
                 { // we set key and value separately to make sure these work; these will in turn call SetKeyValueAt
-                    container.SetKeyAt(Index, Key);
-                    container.SetValueAt(Index, Value);
+                    container.SetKeyAtIndex(Index, Key);
+                    container.SetValueAtIndex(Index, Value);
                 }
             }
 
@@ -810,7 +810,7 @@ namespace LazinatorTests.Tests
                         if (container is ISortedIndexableKeyMultivalueContainer<TKey, TValue> sortedIndexableContainer)
                         {
                             // we need to figure out which one will be removed.
-                            var result = sortedIndexableContainer.Find(KeyToTryToRemove, MultivalueLocationOptions.Any, Comparer<TKey>.Default);
+                            var result = sortedIndexableContainer.FindIndex(KeyToTryToRemove, MultivalueLocationOptions.Any, Comparer<TKey>.Default);
                             IndexBeforeRemove = (int)result.index;
                         }
                         else
@@ -832,7 +832,7 @@ namespace LazinatorTests.Tests
             {
                 if (IndexBeforeRemove != -1)
                 {
-                    container.RemoveAt(IndexBeforeRemove);
+                    container.RemoveAtIndex(IndexBeforeRemove);
                 }
             }
 

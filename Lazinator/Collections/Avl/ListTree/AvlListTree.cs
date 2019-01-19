@@ -252,7 +252,7 @@ namespace Lazinator.Collections.Avl.ListTree
             if (result && multivalueContainer.Any() == false)
             {
                 // Remove the node, since nothing is left in it.
-                UnderlyingTree.RemoveAt(node.Index);
+                UnderlyingTree.RemoveAtIndex(node.Index);
             }
             return result;
         }

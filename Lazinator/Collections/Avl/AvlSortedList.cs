@@ -29,8 +29,8 @@ namespace Lazinator.Collections.Avl
 
         public T this[int index]
         {
-            get => GetAt(index);
-            set => SetAt(index, value);
+            get => GetAtIndex(index);
+            set => SetAtIndex(index, value);
         }
 
         public long LongCount => UnderlyingTree.LongCount;
@@ -41,7 +41,7 @@ namespace Lazinator.Collections.Avl
 
         public void Add(T item)
         {
-            InsertAt(LongCount, item);
+            InsertAtIndex(LongCount, item);
         }
 
         public void Clear()
@@ -103,28 +103,28 @@ namespace Lazinator.Collections.Avl
             int index = IndexOf(item);
             if (index == -1)
                 return false;
-            UnderlyingTree.RemoveAt(index);
+            UnderlyingTree.RemoveAtIndex(index);
             return true;
         }
 
         public void RemoveAt(int index)
         {
-            RemoveAt((long)index);
+            RemoveAtIndex((long)index);
         }
 
         public void Insert(int index, T item)
         {
-            InsertAt((long)index, item);
+            InsertAtIndex((long)index, item);
         }
 
-        public void InsertAt(long index, T item)
+        public void InsertAtIndex(long index, T item)
         {
-            UnderlyingTree.InsertAt(index, item);
+            UnderlyingTree.InsertAtIndex(index, item);
         }
 
-        public void RemoveAt(long index)
+        public void RemoveAtIndex(long index)
         {
-            UnderlyingTree.RemoveAt(index);
+            UnderlyingTree.RemoveAtIndex(index);
         }
 
         public IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
@@ -133,14 +133,14 @@ namespace Lazinator.Collections.Avl
                 yield return item;
         }
 
-        public T GetAt(long index)
+        public T GetAtIndex(long index)
         {
-            return UnderlyingTree.GetAt(index);
+            return UnderlyingTree.GetAtIndex(index);
         }
 
-        public void SetAt(long index, T value)
+        public void SetAtIndex(long index, T value)
         {
-            UnderlyingTree.SetAt(index, value);
+            UnderlyingTree.SetAtIndex(index, value);
         }
 
 
@@ -153,13 +153,13 @@ namespace Lazinator.Collections.Avl
         {
             if (!Any())
                 throw new Exception("The list is empty.");
-            return this.GetAt(0); ;
+            return this.GetAtIndex(0); ;
         }
 
         public T FirstOrDefault()
         {
             if (Any())
-                return this.GetAt(0);
+                return this.GetAtIndex(0);
             return default(T);
         }
 
@@ -167,13 +167,13 @@ namespace Lazinator.Collections.Avl
         {
             if (!Any())
                 throw new Exception("The list is empty.");
-            return this.GetAt(LongCount - 1);
+            return this.GetAtIndex(LongCount - 1);
         }
 
         public T LastOrDefault()
         {
             if (Any())
-                return this.GetAt(LongCount - 1);
+                return this.GetAtIndex(LongCount - 1);
             return default(T);
         }
 
@@ -187,10 +187,10 @@ namespace Lazinator.Collections.Avl
         public bool TryRemove(T item, IComparer<T> comparer) => UnderlyingTree.TryRemove(item, comparer);
         public bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => UnderlyingTree.TryRemove(item, whichOne, comparer);
 
-        public (long index, bool exists) Find(T target) => UnderlyingTree.Find(target, MultivalueLocationOptions.First, Comparer<T>.Default);
-        public (long index, bool exists) Find(T target, MultivalueLocationOptions whichOne) => UnderlyingTree.Find(target, whichOne, Comparer<T>.Default);
-        public (long index, bool exists) Find(T target, IComparer<T> comparer) => UnderlyingTree.Find(target, comparer);
-        public (long index, bool exists) Find(T target, MultivalueLocationOptions whichOne, IComparer<T> comparer) => UnderlyingTree.Find(target, whichOne, comparer);
+        public (long index, bool exists) FindIndex(T target) => UnderlyingTree.FindIndex(target, MultivalueLocationOptions.First, Comparer<T>.Default);
+        public (long index, bool exists) FindIndex(T target, MultivalueLocationOptions whichOne) => UnderlyingTree.FindIndex(target, whichOne, Comparer<T>.Default);
+        public (long index, bool exists) FindINdex(T target, IComparer<T> comparer) => UnderlyingTree.FindIndex(target, comparer);
+        public (long index, bool exists) FindIndex(T target, MultivalueLocationOptions whichOne, IComparer<T> comparer) => UnderlyingTree.FindIndex(target, whichOne, comparer);
 
     }
 }

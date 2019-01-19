@@ -42,7 +42,7 @@ namespace Lazinator.Collections
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _AllowDuplicates;
-        protected bool AllowDuplicates
+        public bool AllowDuplicates
         {
             [DebuggerStepThrough]
             get
@@ -50,7 +50,7 @@ namespace Lazinator.Collections
                 return _AllowDuplicates;
             }
             [DebuggerStepThrough]
-            protected set
+            set
             {
                 IsDirty = true;
                 _AllowDuplicates = value;

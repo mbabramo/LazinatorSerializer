@@ -20,8 +20,8 @@ namespace Lazinator.Collections.Avl.ValueTree
         private MultivalueLocationOptions MultivalueLocationOptionForInsertion => AllowDuplicates ? MultivalueLocationOptions.InsertAfterLast : MultivalueLocationOptions.Any;
         private MultivalueLocationOptions MultivalueLocationOptionForRemoval => MultivalueLocationOptions.Any; // because all items are same, it doesn't matter.
 
-        public (long index, bool exists) Find(T target) => Find(target, MultivalueLocationOptions.First);
-        public (long index, bool exists) Find(T target, MultivalueLocationOptions whichOne) => Find(target, whichOne, Comparer<T>.Default);
+        public (long index, bool exists) FindIndex(T target) => FindIndex(target, MultivalueLocationOptions.First);
+        public (long index, bool exists) FindIndex(T target, MultivalueLocationOptions whichOne) => FindIndex(target, whichOne, Comparer<T>.Default);
         public (long index, bool insertedNotReplaced) InsertOrReplace(T item) => InsertOrReplace(item, MultivalueLocationOptionForInsertion);
         public (long index, bool insertedNotReplaced) InsertOrReplace(T item, MultivalueLocationOptions whichOne) => InsertOrReplace(item, whichOne, Comparer<T>.Default);
         public bool RemoveSorted(T item) => TryRemove(item, MultivalueLocationOptionForRemoval);

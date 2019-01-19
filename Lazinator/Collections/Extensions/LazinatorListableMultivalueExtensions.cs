@@ -24,7 +24,7 @@ namespace Lazinator.Collections.Extensions
             }
             (long index, bool exists) = list.SortedFind(allowDuplicates, item, whichOne, comparer);
             if (exists)
-                match = list.GetAt(index);
+                match = list.GetAtIndex(index);
             else
                 match = default;
             return exists;

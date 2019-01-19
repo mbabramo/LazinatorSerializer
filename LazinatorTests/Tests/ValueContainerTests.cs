@@ -491,7 +491,7 @@ namespace LazinatorTests.Tests
                 {
                     if (ContainerIsSorted)
                     {
-                        var findResult = container.Find(default, C);
+                        var findResult = container.FindIndex(default, C);
                         findResult.index.Should().Be(0);
                         findResult.exists.Should().BeFalse();
                     }
@@ -501,7 +501,7 @@ namespace LazinatorTests.Tests
                     var listResult = listResultOrNull.Value;
                     for (int i = listResult.firstIndex; i <= listResult.lastIndex; i++)
                     {
-                        T getAtResult = container.GetAt(i);
+                        T getAtResult = container.GetAtIndex(i);
                         AssertEqual(getAtResult, listResult.item);
                     }
                 }
@@ -570,12 +570,12 @@ namespace LazinatorTests.Tests
                 else
                 {
                     var listResult = listResultOrNull.Value;
-                    var findResult = container.Find(listResult.item);
+                    var findResult = container.FindIndex(listResult.item);
                     VerifyExpectedIndex(MultivalueLocationOptions.Any, listResult, findResult.index);
                     findResult.exists.Should().BeTrue();
                     for (int i = listResult.firstIndex; i <= listResult.lastIndex; i++)
                     {
-                        T getAtResult = container.GetAt(i);
+                        T getAtResult = container.GetAtIndex(i);
                         AssertEqual(getAtResult, listResult.item);
                     }
                 }
@@ -593,7 +593,7 @@ namespace LazinatorTests.Tests
                     var listResult = listResultOrNull.Value;
                     foreach (MultivalueLocationOptions whichOne in new MultivalueLocationOptions[] { MultivalueLocationOptions.First, MultivalueLocationOptions.Any, MultivalueLocationOptions.Last }) // other options are undefined
                     {
-                        var findResult = container.Find(listResult.item, whichOne);
+                        var findResult = container.FindIndex(listResult.item, whichOne);
                         VerifyExpectedIndex(whichOne, listResult, findResult.index);
                         findResult.exists.Should().BeTrue();
                     }
@@ -652,9 +652,9 @@ namespace LazinatorTests.Tests
             public override void Execute_Indexable(ValueContainerTests<T> testClass, IIndexableValueContainer<T> container, List<T> list)
             {
                 if (InsertedNotReplaced)
-                    container.InsertAt(Index, Item);
+                    container.InsertAtIndex(Index, Item);
                 else
-                    container.SetAt(Index, Item);
+                    container.SetAtIndex(Index, Item);
             }
 
             public override void Execute_IndexableMultivalue(ValueContainerTests<T> testClass, IIndexableMultivalueContainer<T> container, List<T> list)
@@ -811,7 +811,7 @@ namespace LazinatorTests.Tests
             {
                 if (IndexBeforeRemove != -1)
                 {
-                    container.RemoveAt(IndexBeforeRemove);
+                    container.RemoveAtIndex(IndexBeforeRemove);
                 }
             }
 

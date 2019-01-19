@@ -74,25 +74,25 @@ namespace Lazinator.Collections.Avl.ValueTree
             return (AvlNode<T>) node;
         }
 
-        public T GetAt(long index)
+        public T GetAtIndex(long index)
         {
             AvlNode<T> node = GetNodeAtIndex(index);
             return node.Value;
         }
 
-        public void SetAt(long index, T value)
+        public void SetAtIndex(long index, T value)
         {
             AvlNode<T> node = GetNodeAtIndex(index);
             node.Value = value;
         }
 
-        public void InsertAt(long index, T item)
+        public void InsertAtIndex(long index, T item)
         {
             ConfirmInRangeOrThrow(index, true);
             TryInsert(item, CompareIndexToNodesIndex(index, MultivalueLocationOptions.InsertBeforeFirst));
         }
 
-        public void RemoveAt(long index)
+        public void RemoveAtIndex(long index)
         {
             ConfirmInRangeOrThrow(index, true);
             TryRemove(MultivalueLocationOptions.Any, CompareIndexToNodesIndex(index, MultivalueLocationOptions.First));
@@ -105,8 +105,8 @@ namespace Lazinator.Collections.Avl.ValueTree
                 yield return enumerator.Current.Value;
         }
 
-        public (long index, bool exists) Find(T target, IComparer<T> comparer) => Find(target, MultivalueLocationOptions.Any, comparer);
-        public (long index, bool exists) Find(T target, MultivalueLocationOptions whichOne, IComparer<T> comparer)
+        public (long index, bool exists) FindIndex(T target, IComparer<T> comparer) => FindIndex(target, MultivalueLocationOptions.Any, comparer);
+        public (long index, bool exists) FindIndex(T target, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
             var result = GetMatchingOrNextNode(target, whichOne, comparer);
             var node = ((AvlCountedNode<T>)result.node);
@@ -139,7 +139,7 @@ namespace Lazinator.Collections.Avl.ValueTree
             Root = rightNode; // Count will automatically adjust
             Root.Parent = null;
             // We add by index not by key in part because we don't know if a special comparer is used. If we change this, we may need to add a Comparer parameter or alternatively use a custom comparer that forces us to the left-most or right-most node.
-            InsertAt(0, originalRoot.Value);
+            InsertAtIndex(0, originalRoot.Value);
             var newContainer = (AvlIndexableTree<T>)CreateNewWithSameSettings();
             newContainer.Root = leftNode;
             newContainer.Root.Parent = null;

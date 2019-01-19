@@ -10,17 +10,17 @@ namespace Lazinator.Collections.Interfaces
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IIndexableKeyValueTree)]
     public interface IIndexableKeyValueContainer<TKey, TValue> : IKeyValueContainer<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
-        TValue GetValueAt(long index);
-        void SetValueAt(long index, TValue value);
-        TKey GetKeyAt(long index);
-        void SetKeyAt(long index, TKey key);
-        LazinatorKeyValue<TKey, TValue> GetKeyValueAt(long index);
-        void SetKeyValueAt(long index, TKey key, TValue value);
-        void InsertAt(long index, TKey key, TValue value);
-        void RemoveAt(long index);
+        TValue GetValueAtIndex(long index);
+        void SetValueAtIndex(long index, TValue value);
+        TKey GetKeyAtIndex(long index);
+        void SetKeyAtIndex(long index, TKey key);
+        LazinatorKeyValue<TKey, TValue> GetKeyValueAtIndex(long index);
+        void SetKeyValueAtIndex(long index, TKey key, TValue value);
+        void InsertAtIndex(long index, TKey key, TValue value);
+        void RemoveAtIndex(long index);
 
-        (TValue valueIfFound, long index, bool found) Find(TKey key, IComparer<TKey> comparer);
-        (long index, bool found) Find(TKey key, TValue value, IComparer<TKey> comparer);
+        (TValue valueIfFound, long index, bool found) FindIndex(TKey key, IComparer<TKey> comparer);
+        (long index, bool found) FindIndex(TKey key, TValue value, IComparer<TKey> comparer);
         (long index, bool insertedNotReplaced) InsertOrReplace(TKey key, TValue value, IComparer<TKey> comparer);
 
     }

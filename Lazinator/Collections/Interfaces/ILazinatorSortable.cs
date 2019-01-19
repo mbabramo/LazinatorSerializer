@@ -18,10 +18,10 @@ namespace Lazinator.Collections
         bool AllowDuplicates { get; }
         (long index, bool insertedNotReplaced) InsertOrReplace(T item, IComparer<T> comparer);
         bool TryRemove(T item, IComparer<T> comparer);
-        (long index, bool exists) Find(T target, IComparer<T> comparer);
+        (long index, bool exists) FindINdex(T target, IComparer<T> comparer);
 
         (long index, bool insertedNotReplaced) InsertOrReplace(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer);
         bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer);
-        (long index, bool exists) Find(T target, MultivalueLocationOptions whichOne, IComparer<T> comparer);
+        (long index, bool exists) FindIndex(T target, MultivalueLocationOptions whichOne, IComparer<T> comparer);
     }
 }

@@ -9,12 +9,12 @@ namespace Lazinator.Collections.Interfaces
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IIndexableValueContainer)]
     public interface IIndexableValueContainer<T> : IValueContainer<T>, ICountableContainer, ILazinator where T : ILazinator
     {
-        T GetAt(long index);
-        void SetAt(long index, T value);
-        void InsertAt(long index, T item);
-        void RemoveAt(long index);
+        T GetAtIndex(long index);
+        void SetAtIndex(long index, T value);
+        void InsertAtIndex(long index, T item);
+        void RemoveAtIndex(long index);
 
-        (long index, bool exists) Find(T target, IComparer<T> comparer);
+        (long index, bool exists) FindIndex(T target, IComparer<T> comparer);
         (long index, bool insertedNotReplaced) InsertOrReplace(T item, IComparer<T> comparer);
     }
 }
