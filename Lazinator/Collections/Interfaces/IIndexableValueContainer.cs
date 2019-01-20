@@ -12,7 +12,7 @@ namespace Lazinator.Collections.Interfaces
         T GetAtIndex(long index);
         void SetAtIndex(long index, T value);
         void InsertAtIndex(long index, T item);
-        void RemoveAtIndex(long index);
+        void RemoveAt(long index);
 
         (long index, bool exists) FindIndex(T target, IComparer<T> comparer);
     }

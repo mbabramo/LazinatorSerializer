@@ -258,7 +258,62 @@ namespace Lazinator.Collections.Tree
 
         #endregion
 
+        #region Path to node
+
+        private static Func<BinaryNode<T>, int> ComparisonToFollowPath(Stack<bool> pathIsLeft)
+        {
+            return x =>
+            {
+                if (!pathIsLeft.Any())
+                    return 0;
+                if (pathIsLeft.Pop())
+                    return -1;
+                else
+                    return 1;
+
+            };
+        }
+
+        private static Stack<bool> GetPathToNode(BinaryNode<T> node)
+        {
+            Stack<bool> pathIsLeft = new Stack<bool>();
+            var onPathToNode = node;
+            while (onPathToNode.Parent != null)
+            {
+                pathIsLeft.Push(onPathToNode.Parent.Left == onPathToNode);
+                onPathToNode = onPathToNode.Parent;
+            }
+
+            return pathIsLeft;
+        }
+
+        #endregion
+
         #region Insertion
+
+        public virtual void InsertAt(IContainerLocation location, T item)
+        {
+            var node = (BinaryNode<T>)location;
+            Func<BinaryNode<T>, int> comparisonFunc;
+            if (node == null)
+                comparisonFunc = n => 1; // insert after last node
+            else
+            {
+                Stack<bool> pathIsLeft = GetPathToNode(node);
+                comparisonFunc = ComparisonToFollowPath(pathIsLeft);
+            }
+            InsertOrReplaceReturningNode(item, comparisonFunc);
+        }
+
+        protected void InsertAtStart(T item)
+        {
+            InsertOrReplaceReturningNode(item, n => -1);
+        }
+
+        protected void InsertAtEnd(T item)
+        {
+            InsertOrReplaceReturningNode(item, n => 1);
+        }
 
         public (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item, IComparer<T> comparer) => InsertOrReplace(item, MultivalueLocationOptions.Any, comparer);
 
@@ -503,23 +558,8 @@ namespace Lazinator.Collections.Tree
 
         public virtual void RemoveNode(BinaryNode<T> node)
         {
-            Stack<bool> pathIsLeft = new Stack<bool>();
-            var onPathToNode = node;
-            while (onPathToNode.Parent != null)
-            {
-                pathIsLeft.Push(onPathToNode.Parent.Left == onPathToNode);
-                onPathToNode = onPathToNode.Parent;
-            }
-            BinaryNode<T> result = TryRemoveReturningNode(MultivalueLocationOptions.Any, x =>
-            {
-                if (!pathIsLeft.Any())
-                    return 0;
-                if (pathIsLeft.Pop())
-                    return -1;
-                else
-                    return 1;
-
-            });
+            Stack<bool> pathIsLeft = GetPathToNode(node);
+            BinaryNode<T> result = TryRemoveReturningNode(MultivalueLocationOptions.Any, ComparisonToFollowPath(pathIsLeft));
             if (result != node)
                 throw new Exception("Internal exception on RemoveNode.");
         }
@@ -554,7 +594,7 @@ namespace Lazinator.Collections.Tree
             var originalRoot = Root;
             Root = rightNode;
             Root.Parent = null;
-            InsertOrReplace(originalRoot.Value, comparer);
+            InsertAtStart(originalRoot.Value);
             var newContainer = (BinaryTree<T>)CreateNewWithSameSettings();
             newContainer.Root = (BinaryNode<T>)leftNode;
             newContainer.Root.Parent = null;

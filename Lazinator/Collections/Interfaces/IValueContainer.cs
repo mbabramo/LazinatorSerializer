@@ -31,6 +31,7 @@ namespace Lazinator.Collections.Interfaces
         T GetAt(IContainerLocation location);
         void SetAt(IContainerLocation location, T value);
         void RemoveAt(IContainerLocation location);
+        void InsertAt(IContainerLocation location, T item);
         /// <summary>
         /// Gets a matching value using a custom comparer, which may match on only part of the item.
         /// </summary>

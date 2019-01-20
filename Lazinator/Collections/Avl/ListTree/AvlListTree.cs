@@ -223,6 +223,18 @@ namespace Lazinator.Collections.Avl.ListTree
 
         public bool GetValue(T item, IComparer<T> comparer, out T match) => GetValue(item, MultivalueLocationOptions.Any, comparer, out match);
 
+        public void InsertAt(IContainerLocation location, T item)
+        {
+            AvlListTreeLocation<T> listTreeLocation = (AvlListTreeLocation<T>)location;
+            var multivalueContainer = listTreeLocation.OuterNode.Value;
+            multivalueContainer.InsertAt(listTreeLocation.InnerLocation, item);
+            if (InteriorContainerFactory.RequiresSplitting(multivalueContainer))
+            {
+                IMultivalueContainer<T> splitOff = (IMultivalueContainer<T>)multivalueContainer.SplitOff(null);
+                UnderlyingTree.InsertAt((BinaryNode<T>)multivalueContainer, splitOff);
+            }
+        }
+
         public (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item, IComparer<T> comparer) => InsertOrReplace(item, AllowDuplicates ? MultivalueLocationOptions.InsertAfterLast : MultivalueLocationOptions.Any, comparer);
 
         public bool TryRemove(T item, IComparer<T> comparer) => TryRemove(item, MultivalueLocationOptions.Any, comparer);
@@ -251,7 +263,8 @@ namespace Lazinator.Collections.Avl.ListTree
             if (InteriorContainerFactory.RequiresSplitting(multivalueContainer))
             {
                 IMultivalueContainer<T> splitOff = (IMultivalueContainer<T>)multivalueContainer.SplitOff(comparer);
-                UnderlyingTree.InsertOrReplace(splitOff, AllowDuplicates ? MultivalueLocationOptions.InsertBeforeFirst : MultivalueLocationOptions.Any, GetInteriorCollectionsComparer(comparer)); // note: a duplicate here would be a duplicate of the entire inner node, meaning that all items are the same according to the comparer. But they may not always be exactly identical, if the comparer is a key-only comparer. We always split off the left in our multivalue containers, so this ensures consistency.
+                UnderlyingTree.InsertAt((BinaryNode<T>)multivalueContainer, splitOff);
+                //DEBUG UnderlyingTree.InsertOrReplace(splitOff, AllowDuplicates ? MultivalueLocationOptions.InsertBeforeFirst : MultivalueLocationOptions.Any, GetInteriorCollectionsComparer(comparer)); // note: a duplicate here would be a duplicate of the entire inner node, meaning that all items are the same according to the comparer. But they may not always be exactly identical, if the comparer is a key-only comparer. We always split off the left in our multivalue containers, so this ensures consistency.
                 // The splitting has changed the location, so we need to find the item, using the same comparer, but we modify the location if we were inserting before or after. Note that if we were inserting at ANY location, this could return a different result.
                 var revisedLocation = FindContainerLocation(item, FirstOrLastFromBeforeOrAfter(whichOne), comparer);
                 return (revisedLocation.location, resultWithinContainer.insertedNotReplaced);
@@ -292,7 +305,7 @@ namespace Lazinator.Collections.Avl.ListTree
             if (result && multivalueContainer.Any() == false)
             {
                 // Remove the node, since nothing is left in it.
-                UnderlyingTree.RemoveAtIndex(node.Index);
+                UnderlyingTree.RemoveAt(node.Index);
             }
             return result;
         }

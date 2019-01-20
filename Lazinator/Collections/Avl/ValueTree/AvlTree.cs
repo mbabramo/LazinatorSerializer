@@ -43,7 +43,84 @@ namespace Lazinator.Collections.Avl.ValueTree
 
         #endregion
 
+        #region Path to node
+
+        private static Func<BinaryNode<T>, int> ComparisonToFollowCompactPath(MiniBoolStack pathIsLeft)
+        {
+            return x =>
+            {
+                if (!pathIsLeft.Any())
+                    return 0;
+                if (pathIsLeft.Pop())
+                    return -1;
+                else
+                    return 1;
+
+            };
+        }
+
+        private static MiniBoolStack GetCompactPathToNode(BinaryNode<T> node)
+        {
+            MiniBoolStack pathIsLeft = new MiniBoolStack();
+            var onPathToNode = node;
+            while (onPathToNode.Parent != null)
+            {
+                pathIsLeft.Push(onPathToNode.Parent.Left == onPathToNode);
+                onPathToNode = onPathToNode.Parent;
+            }
+
+            return pathIsLeft;
+        }
+
+        /// <summary>
+        /// A mini-stack for bools that fits in a struct. We can use this because we can be sure that our tree will have fewer than 2^64 items. 
+        /// </summary>
+        private struct MiniBoolStack
+        {
+            ulong storage;
+            byte index;
+
+            public void Push(bool value)
+            {
+                if (value)
+                    storage = storage | ((ulong)1 << index);
+                else
+                    storage &= ~((ulong)1 << index);
+                index++;
+            }
+
+            public bool Pop()
+            {
+                if (index == 0)
+                    throw new Exception();
+                index--;
+                bool set = (storage & ((ulong)1 << index)) != 0;
+                return set;
+            }
+
+            public bool Any()
+            {
+                return index > 0;
+            }
+        }
+
+        #endregion
+
         #region Insertion
+
+        public override void InsertAt(IContainerLocation location, T item)
+        {
+            var node = (BinaryNode<T>)location;
+            Func<BinaryNode<T>, int> comparisonFunc;
+            if (node == null)
+                comparisonFunc = n => 1; // insert after last node
+            else
+            {
+                MiniBoolStack pathIsLeft = GetCompactPathToNode(node);
+                comparisonFunc = ComparisonToFollowCompactPath(pathIsLeft);
+            }
+            InsertOrReplaceReturningNode(item, comparisonFunc);
+        }
 
         protected override (BinaryNode<T> node, bool insertedNotReplaced) InsertOrReplaceReturningNode(T item, Func<BinaryNode<T>, int> comparisonFunc)
         {
@@ -118,57 +195,10 @@ namespace Lazinator.Collections.Avl.ValueTree
 
         public override void RemoveNode(BinaryNode<T> node)
         {
-            MiniBoolStack pathIsLeft = new MiniBoolStack();
-            var onPathToNode = node;
-            while (onPathToNode.Parent != null)
-            {
-                pathIsLeft.Push(onPathToNode.Parent.Left == onPathToNode);
-                onPathToNode = onPathToNode.Parent;
-            }
-            BinaryNode<T> result = TryRemoveReturningNode(MultivalueLocationOptions.Any, x =>
-                {
-                    if (!pathIsLeft.Any())
-                        return 0;
-                    if (pathIsLeft.Pop())
-                        return -1;
-                    else
-                        return 1;
-
-                });
+            MiniBoolStack pathIsLeft = GetCompactPathToNode(node);
+            BinaryNode<T> result = TryRemoveReturningNode(MultivalueLocationOptions.Any, ComparisonToFollowCompactPath(pathIsLeft));
             if (result != node)
                 throw new Exception("Internal exception on RemoveNode.");
-        }
-
-        /// <summary>
-        /// A mini-stack for bools that fits in a struct. We can use this because we can be sure that our tree will have fewer than 2^64 items. 
-        /// </summary>
-        private struct MiniBoolStack
-        {
-            ulong storage;
-            byte index;
-
-            public void Push(bool value)
-            {
-                if (value)
-                    storage = storage | ((ulong)1 << index);
-                else
-                    storage &= ~((ulong)1 << index);
-                index++;
-            }
-
-            public bool Pop()
-            {
-                if (index == 0)
-                    throw new Exception();
-                index--;
-                bool set = (storage & ((ulong)1 << index)) != 0;
-                return set;
-            }
-
-            public bool Any()
-            {
-                return index > 0;
-            }
         }
 
         protected override BinaryNode<T> TryRemoveReturningNode(MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)

@@ -84,7 +84,7 @@ namespace Lazinator.Collections.Avl.KeyValueTree
 
         public void RemoveAtIndex(long index)
         {
-            UnderlyingIndexableTree.RemoveAtIndex(index);
+            UnderlyingIndexableTree.RemoveAt(index);
         }
 
         public void InsertAtIndex(long index, TKey key, TValue value)

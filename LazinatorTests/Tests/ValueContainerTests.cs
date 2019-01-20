@@ -915,7 +915,7 @@ namespace LazinatorTests.Tests
             {
                 if (IndexBeforeRemove != -1)
                 {
-                    container.RemoveAtIndex(IndexBeforeRemove);
+                    container.RemoveAt(IndexBeforeRemove);
                 }
             }
 

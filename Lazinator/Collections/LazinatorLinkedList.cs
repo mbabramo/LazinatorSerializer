@@ -99,6 +99,8 @@ namespace Lazinator.Collections
             return -1;
         }
 
+        public virtual void InsertAt(IContainerLocation location, T item) => InsertAtIndex((int)((IndexLocation)location).Index, item);
+
         public void Insert(int index, T item)
         {
             if (index < 0 || index > Count)

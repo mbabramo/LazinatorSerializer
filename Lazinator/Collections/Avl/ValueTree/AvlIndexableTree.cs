@@ -147,13 +147,13 @@ namespace Lazinator.Collections.Avl.ValueTree
         {
             if (location is IndexLocation indexLocation)
             {
-                RemoveAtIndex(indexLocation.Index);
+                RemoveAt(indexLocation.Index);
             }
             else
                 base.RemoveAt(location);
         }
 
-        public void RemoveAtIndex(long index)
+        public void RemoveAt(long index)
         {
             ConfirmInRangeOrThrow(index, true);
             TryRemove(MultivalueLocationOptions.Any, CompareIndexToNodesIndex(index, MultivalueLocationOptions.First));

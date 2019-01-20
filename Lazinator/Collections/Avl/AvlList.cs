@@ -103,7 +103,7 @@ namespace Lazinator.Collections.Avl
             int index = IndexOf(item);
             if (index == -1)
                 return false;
-            UnderlyingTree.RemoveAtIndex(index);
+            UnderlyingTree.RemoveAt(index);
             return true;
         }
 
@@ -128,7 +128,7 @@ namespace Lazinator.Collections.Avl
 
         public void RemoveAtIndex(long index)
         {
-            UnderlyingTree.RemoveAtIndex(index);
+            UnderlyingTree.RemoveAt(index);
         }
 
         public IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
