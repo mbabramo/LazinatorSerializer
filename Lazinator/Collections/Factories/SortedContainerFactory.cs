@@ -80,9 +80,9 @@ namespace Lazinator.Collections.Factories
             switch (ThisLevel.ContainerType)
             {
                 case ContainerType.AvlSortedKeyValueTree:
-                    return new AvlSortedKeyValueTree<T, V>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
+                    return new AvlSortedKeyValueTree<T, V>(InteriorFactorySameType, ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
                 case ContainerType.AvlSortedIndexableKeyValueTree:
-                    return new AvlSortedIndexableKeyValueTree<T, V>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
+                    return new AvlSortedIndexableKeyValueTree<T, V>(InteriorFactorySameType, ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
                 default:
                     return base.CreateKeyValueContainer<V>();
             }
@@ -93,9 +93,9 @@ namespace Lazinator.Collections.Factories
             switch (ThisLevel.ContainerType)
             {
                 case ContainerType.AvlSortedKeyValueTree:
-                    return new AvlSortedKeyValueTree<WUint, LazinatorKeyValue<T, V>>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
+                    return new AvlSortedKeyValueTree<WUint, LazinatorKeyValue<T, V>>(InteriorHashableKeyValueFactory, ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
                 case ContainerType.AvlSortedIndexableKeyValueTree:
-                    return new AvlSortedIndexableKeyValueTree<WUint, LazinatorKeyValue<T, V>>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
+                    return new AvlSortedIndexableKeyValueTree<WUint, LazinatorKeyValue<T, V>>(InteriorHashableKeyValueFactory, ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
                 default:
                     throw new NotImplementedException();
             }

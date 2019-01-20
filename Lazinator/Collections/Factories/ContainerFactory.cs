@@ -23,6 +23,7 @@ namespace Lazinator.Collections.Factories
 
         public ContainerFactory<T> InteriorFactorySameType => (ContainerFactory<T>)InteriorFactory;
         public ContainerFactory<LazinatorKeyValue<T, V>> InteriorKeyValueFactory<V>() where V : ILazinator => (ContainerFactory<LazinatorKeyValue<T, V>>)InteriorFactory;
+        public ContainerFactory<WUint> InteriorHashableKeyValueFactory => (ContainerFactory<WUint>)InteriorFactory;
 
         public ContainerFactory()
         {
@@ -31,6 +32,12 @@ namespace Lazinator.Collections.Factories
         public ContainerFactory(ContainerLevel thisLevel)
         {
             ThisLevel = thisLevel;
+        }
+
+        public ContainerFactory(ContainerLevel thisLevel, IContainerFactory interiorContainerFactory)
+        {
+            ThisLevel = thisLevel;
+            InteriorFactory = interiorContainerFactory;
         }
 
         public ContainerFactory(IEnumerable<ContainerLevel> levels)
@@ -129,9 +136,9 @@ namespace Lazinator.Collections.Factories
             switch (ThisLevel.ContainerType)
             {
                 case ContainerType.AvlKeyValueTree:
-                    return new AvlSortedKeyValueTree<WUint, LazinatorKeyValue<T, V>>(true, ThisLevel.Unbalanced);
+                    return new AvlSortedKeyValueTree<WUint, LazinatorKeyValue<T, V>>(InteriorHashableKeyValueFactory, true, ThisLevel.Unbalanced);
                 case ContainerType.AvlIndexableKeyValueTree:
-                    return new AvlSortedIndexableKeyValueTree<WUint, LazinatorKeyValue<T, V>>(true, ThisLevel.Unbalanced);
+                    return new AvlSortedIndexableKeyValueTree<WUint, LazinatorKeyValue<T, V>>(InteriorHashableKeyValueFactory, true, ThisLevel.Unbalanced);
                 default:
                     throw new NotImplementedException();
             }

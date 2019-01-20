@@ -16,7 +16,7 @@ namespace Lazinator.Collections.Avl.KeyValueTree
 
         public override IKeyValueContainer<TKey, TValue> CreateNewWithSameSettings()
         {
-            return new AvlSortedKeyValueTree<TKey, TValue>(InnerContainerFactory);
+            return new AvlSortedKeyValueTree<TKey, TValue>(InnerContainerFactory, AllowDuplicates, Unbalanced);
         }
 
         public bool ContainsKey(TKey key) => ContainsKey(key, Comparer<TKey>.Default);
