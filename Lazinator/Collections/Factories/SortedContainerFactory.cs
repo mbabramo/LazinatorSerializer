@@ -14,8 +14,6 @@ namespace Lazinator.Collections.Factories
 {
     public partial class SortedContainerFactory<T> : ContainerFactory<T>, ISortedContainerFactory<T> where T : ILazinator, IComparable<T>
     {
-        public SortedContainerFactory<T> SortedInnerFactory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public SortedContainerFactory(ContainerLevel thisLevel) : base(thisLevel)
         {
         }
