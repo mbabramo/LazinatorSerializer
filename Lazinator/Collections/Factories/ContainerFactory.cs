@@ -16,8 +16,14 @@ using System.Text;
 
 namespace Lazinator.Collections.Factories
 {
-    public partial class ContainerFactory<T> : IContainerFactory<T> where T : ILazinator
+    public partial class ContainerFactory<T> : IContainerFactory<T>, IContainerFactory where T : ILazinator
     {
+        public ContainerLevel ThisLevel { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public IContainerFactory InteriorFactory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public ContainerFactory<T> InteriorFactorySameType => (ContainerFactory<T>)InteriorFactory;
+        public ContainerFactory<LazinatorKeyValue<T, V>> InteriorKeyValueFactory<V>() where V : ILazinator => (ContainerFactory<LazinatorKeyValue<T, V>>)InteriorFactory;
+
         public ContainerFactory()
         {
         }
@@ -48,7 +54,7 @@ namespace Lazinator.Collections.Factories
                 case ContainerType.AvlIndexableTree:
                     return new AvlIndexableTree<T>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
                 case ContainerType.AvlListTree:
-                    return new AvlListTree<T>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced, InteriorFactory);
+                    return new AvlListTree<T>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced, InteriorFactorySameType);
                 case ContainerType.AvlIndexableListTree:
                     throw new NotImplementedException();
                 default:
@@ -65,7 +71,7 @@ namespace Lazinator.Collections.Factories
                 case ContainerType.LazinatorLinkedList:
                     return new LazinatorLinkedList<T>(ThisLevel.AllowDuplicates);
                 case ContainerType.AvlList:
-                    return new AvlList<T>(InteriorFactory);
+                    return new AvlList<T>(InteriorFactorySameType);
                 default:
                     throw new NotImplementedException();
             }
@@ -78,7 +84,7 @@ namespace Lazinator.Collections.Factories
                 case ContainerType.LazinatorDictionary:
                     return new LazinatorDictionary<T, V>();
                 case ContainerType.AvlDictionary:
-                    return new AvlDictionary<T, V>(ThisLevel.AllowDuplicates, InteriorFactory);
+                    return new AvlDictionary<T, V>(ThisLevel.AllowDuplicates, InteriorFactorySameType);
                 default:
                     throw new NotImplementedException();
             }
@@ -89,9 +95,30 @@ namespace Lazinator.Collections.Factories
             switch (ThisLevel.ContainerType)
             {
                 case ContainerType.AvlKeyValueTree:
-                    return new AvlKeyValueTree<T, V>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
+                    return new AvlKeyValueTree<T, V>(InteriorFactorySameType, ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
                 case ContainerType.AvlIndexableKeyValueTree:
                     return new AvlIndexableKeyValueTree<T, V>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        public virtual IValueContainer<LazinatorKeyValue<T, V>> CreateContainerOfKeyValues<V>() where V : ILazinator
+        {
+            switch (ThisLevel.ContainerType)
+            {
+                case ContainerType.LazinatorList:
+                    return new LazinatorList<LazinatorKeyValue<T, V>>(ThisLevel.AllowDuplicates);
+                case ContainerType.LazinatorLinkedList:
+                    return new LazinatorLinkedList<LazinatorKeyValue<T, V>>(ThisLevel.AllowDuplicates);
+                case ContainerType.AvlTree:
+                    return new AvlTree<LazinatorKeyValue<T, V>>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
+                case ContainerType.AvlIndexableTree:
+                    return new AvlIndexableTree<LazinatorKeyValue<T, V>>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
+                case ContainerType.AvlListTree:
+                    return new AvlListTree<LazinatorKeyValue<T, V>>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced, InteriorFactorySameType);
+                case ContainerType.AvlIndexableListTree:
+                    throw new NotImplementedException();
                 default:
                     throw new NotImplementedException();
             }

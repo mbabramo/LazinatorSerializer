@@ -1,4 +1,5 @@
 ﻿using Lazinator.Collections.Avl.ValueTree;
+using Lazinator.Collections.Factories;
 using Lazinator.Collections.Interfaces;
 using Lazinator.Collections.Tuples;
 using Lazinator.Core;
@@ -10,14 +11,13 @@ namespace Lazinator.Collections.Avl.KeyValueTree
 {
     public partial class AvlIndexableKeyValueTree<TKey, TValue> : AvlKeyValueTree<TKey, TValue>, IAvlIndexableKeyValueTree<TKey, TValue>, IIndexableKeyValueContainer<TKey, TValue>, IIndexableKeyMultivalueContainer<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
-        public AvlIndexableKeyValueTree(bool allowDuplicates, bool unbalanced)
+        public AvlIndexableKeyValueTree(ContainerFactory<LazinatorKeyValue<TKey, TValue>> innerContainerFactory) : base(innerContainerFactory)
         {
-            UnderlyingContainer = new AvlIndexableTree<LazinatorKeyValue<TKey, TValue>>(allowDuplicates, unbalanced);
         }
 
         public override IKeyValueContainer<TKey, TValue> CreateNewWithSameSettings()
         {
-            return new AvlIndexableKeyValueTree<TKey, TValue>(AllowDuplicates, Unbalanced);
+            return new AvlIndexableKeyValueTree<TKey, TValue>(InnerContainerFactory);
         }
 
         protected IIndexableMultivalueContainer<LazinatorKeyValue<TKey, TValue>> UnderlyingIndexableContainer => (IIndexableMultivalueContainer<LazinatorKeyValue<TKey, TValue>>)UnderlyingContainer;

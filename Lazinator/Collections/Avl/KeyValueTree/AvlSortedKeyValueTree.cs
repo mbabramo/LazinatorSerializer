@@ -1,4 +1,5 @@
-﻿using Lazinator.Collections.Interfaces;
+﻿using Lazinator.Collections.Factories;
+using Lazinator.Collections.Interfaces;
 using Lazinator.Collections.Tuples;
 using Lazinator.Core;
 using System;
@@ -9,13 +10,13 @@ namespace Lazinator.Collections.Avl.KeyValueTree
 {
     public partial class AvlSortedKeyValueTree<TKey, TValue> : AvlKeyValueTree<TKey, TValue>, IAvlSortedKeyValueTree<TKey, TValue>, ISortedKeyValueContainer<TKey, TValue>, ISortedKeyMultivalueContainer<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
-        public AvlSortedKeyValueTree(bool allowDuplicates, bool unbalanced) : base(allowDuplicates, unbalanced)
+        public AvlSortedKeyValueTree(ContainerFactory<LazinatorKeyValue<TKey, TValue>> innerContainerFactory) : base(innerContainerFactory)
         {
         }
 
         public override IKeyValueContainer<TKey, TValue> CreateNewWithSameSettings()
         {
-            return new AvlSortedKeyValueTree<TKey, TValue>(AllowDuplicates, Unbalanced);
+            return new AvlSortedKeyValueTree<TKey, TValue>(InnerContainerFactory);
         }
 
         public bool ContainsKey(TKey key) => ContainsKey(key, Comparer<TKey>.Default);

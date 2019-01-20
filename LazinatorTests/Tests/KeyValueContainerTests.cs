@@ -14,6 +14,7 @@ using Lazinator.Collections.Tuples;
 using Lazinator.Collections.Avl;
 using Lazinator.Collections.Interfaces;
 using Lazinator.Collections.Avl.KeyValueTree;
+using Lazinator.Collections.Factories;
 
 namespace LazinatorTests.Tests
 {
@@ -59,24 +60,25 @@ namespace LazinatorTests.Tests
 
         public IKeyValueContainer<TKey, TValue> GetKeyValueContainer(KeyValueContainerType containerType)
         {
+            ContainerFactory<LazinatorKeyValue<TKey, TValue>> GetInnerContainerFactory(ContainerType innerContainerType, bool allowDuplicates) => new ContainerFactory<LazinatorKeyValue<TKey, TValue>>(new ContainerLevel(innerContainerType, false));
             switch (containerType)
             {
                 case KeyValueContainerType.AvlKeyValueTree:
-                    return new AvlKeyValueTree<TKey, TValue>(false, false);
+                    return new AvlKeyValueTree<TKey, TValue>(GetInnerContainerFactory(ContainerType.AvlTree, false));
                 case KeyValueContainerType.AvlIndexableKeyValueTree:
-                    return new AvlIndexableKeyValueTree<TKey, TValue>(false, false);
+                    return new AvlIndexableKeyValueTree<TKey, TValue>(GetInnerContainerFactory(ContainerType.AvlIndexableTree, false));
                 case KeyValueContainerType.AvlSortedKeyValueTree:
-                    return new AvlSortedKeyValueTree<TKey, TValue>(false, false);
+                    return new AvlSortedKeyValueTree<TKey, TValue>(GetInnerContainerFactory(ContainerType.AvlTree, false));
                 case KeyValueContainerType.AvlSortedIndexableKeyValueTree:
-                    return new AvlSortedIndexableKeyValueTree<TKey, TValue>(false, false);
+                    return new AvlSortedIndexableKeyValueTree<TKey, TValue>(GetInnerContainerFactory(ContainerType.AvlIndexableTree, false));
                 case KeyValueContainerType.AvlKeyValueTreeWithDuplicates:
-                    return new AvlKeyValueTree<TKey, TValue>(true, false);
+                    return new AvlKeyValueTree<TKey, TValue>(GetInnerContainerFactory(ContainerType.AvlTree, true));
                 case KeyValueContainerType.AvlIndexableKeyValueTreeWithDuplicates:
-                    return new AvlIndexableKeyValueTree<TKey, TValue>(true, false);
+                    return new AvlIndexableKeyValueTree<TKey, TValue>(GetInnerContainerFactory(ContainerType.AvlIndexableTree, true));
                 case KeyValueContainerType.AvlSortedKeyValueTreeWithDuplicates:
-                    return new AvlSortedKeyValueTree<TKey, TValue>(true, false);
+                    return new AvlSortedKeyValueTree<TKey, TValue>(GetInnerContainerFactory(ContainerType.AvlTree, true));
                 case KeyValueContainerType.AvlSortedIndexableKeyValueTreeWithDuplicates:
-                    return new AvlSortedIndexableKeyValueTree<TKey, TValue>(true, false);
+                    return new AvlSortedIndexableKeyValueTree<TKey, TValue>(GetInnerContainerFactory(ContainerType.AvlIndexableTree, true));
                 default:
                     throw new NotSupportedException();
             }

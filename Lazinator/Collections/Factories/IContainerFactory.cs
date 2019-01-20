@@ -9,6 +9,12 @@ namespace Lazinator.Collections.Factories
     public interface IContainerFactory<T> where T : ILazinator
     {
         ContainerLevel ThisLevel { get; set; }
-        ContainerFactory<T> InteriorFactory { get; set; }
+        IContainerFactory InteriorFactory { get; set; }
+    }
+
+    [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IContainerFactoryNonGeneric)]
+    public interface IContainerFactory
+    {
+
     }
 }

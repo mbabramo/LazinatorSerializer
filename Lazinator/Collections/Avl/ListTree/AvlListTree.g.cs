@@ -35,9 +35,9 @@ namespace Lazinator.Collections.Avl.ListTree
         
         /* Property definitions */
         
-        protected int _InteriorContainerFactory_ByteIndex;
+        protected int _InnerContainerFactory_ByteIndex;
         protected int _UnderlyingTree_ByteIndex;
-        protected virtual int _InteriorContainerFactory_ByteLength => _UnderlyingTree_ByteIndex - _InteriorContainerFactory_ByteIndex;
+        protected virtual int _InnerContainerFactory_ByteLength => _UnderlyingTree_ByteIndex - _InnerContainerFactory_ByteIndex;
         private int _AvlListTree_T_EndByteIndex;
         protected virtual int _UnderlyingTree_ByteLength => _AvlListTree_T_EndByteIndex - _UnderlyingTree_ByteIndex;
         
@@ -77,34 +77,34 @@ namespace Lazinator.Collections.Avl.ListTree
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected ContainerFactory<T> _InteriorContainerFactory;
-        public virtual ContainerFactory<T> InteriorContainerFactory
+        protected ContainerFactory<T> _InnerContainerFactory;
+        public virtual ContainerFactory<T> InnerContainerFactory
         {
             [DebuggerStepThrough]
             get
             {
-                if (!_InteriorContainerFactory_Accessed)
+                if (!_InnerContainerFactory_Accessed)
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _InteriorContainerFactory = default(ContainerFactory<T>);
+                        _InnerContainerFactory = default(ContainerFactory<T>);
                     }
                     else
                     {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _InteriorContainerFactory_ByteIndex, _InteriorContainerFactory_ByteLength, false, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _InnerContainerFactory_ByteIndex, _InnerContainerFactory_ByteLength, false, false, null);
                         
-                        _InteriorContainerFactory = DeserializationFactory.Instance.CreateBaseOrDerivedType(175, () => new ContainerFactory<T>(), childData, this); 
+                        _InnerContainerFactory = DeserializationFactory.Instance.CreateBaseOrDerivedType(175, () => new ContainerFactory<T>(), childData, this); 
                     }
-                    _InteriorContainerFactory_Accessed = true;
+                    _InnerContainerFactory_Accessed = true;
                 } 
-                return _InteriorContainerFactory;
+                return _InnerContainerFactory;
             }
             [DebuggerStepThrough]
             set
             {
-                if (_InteriorContainerFactory != null)
+                if (_InnerContainerFactory != null)
                 {
-                    _InteriorContainerFactory.LazinatorParents = _InteriorContainerFactory.LazinatorParents.WithRemoved(this);
+                    _InnerContainerFactory.LazinatorParents = _InnerContainerFactory.LazinatorParents.WithRemoved(this);
                 }
                 if (value != null)
                 {
@@ -113,12 +113,12 @@ namespace Lazinator.Collections.Avl.ListTree
                 
                 IsDirty = true;
                 DescendantIsDirty = true;
-                _InteriorContainerFactory = value;
-                _InteriorContainerFactory_Accessed = true;
+                _InnerContainerFactory = value;
+                _InnerContainerFactory_Accessed = true;
             }
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected bool _InteriorContainerFactory_Accessed;
+        protected bool _InnerContainerFactory_Accessed;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected AvlIndexableTree<IMultivalueContainer<T>> _UnderlyingTree;
@@ -235,13 +235,13 @@ namespace Lazinator.Collections.Avl.ListTree
             typedClone.Unbalanced = Unbalanced;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if (InteriorContainerFactory == null)
+                if (InnerContainerFactory == null)
                 {
-                    typedClone.InteriorContainerFactory = default(ContainerFactory<T>);
+                    typedClone.InnerContainerFactory = default(ContainerFactory<T>);
                 }
                 else
                 {
-                    typedClone.InteriorContainerFactory = (ContainerFactory<T>) InteriorContainerFactory.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.InnerContainerFactory = (ContainerFactory<T>) InnerContainerFactory.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
@@ -391,25 +391,25 @@ namespace Lazinator.Collections.Avl.ListTree
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _InteriorContainerFactory_Accessed) && InteriorContainerFactory == null)
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _InnerContainerFactory_Accessed) && InnerContainerFactory == null)
             {
-                yield return ("InteriorContainerFactory", default);
+                yield return ("InnerContainerFactory", default);
             }
             else
             {
-                if ((!exploreOnlyDeserializedChildren && InteriorContainerFactory != null) || (_InteriorContainerFactory_Accessed && _InteriorContainerFactory != null))
+                if ((!exploreOnlyDeserializedChildren && InnerContainerFactory != null) || (_InnerContainerFactory_Accessed && _InnerContainerFactory != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(InteriorContainerFactory);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(InteriorContainerFactory);
+                    bool isMatch = matchCriterion == null || matchCriterion(InnerContainerFactory);
+                    bool shouldExplore = exploreCriterion == null || exploreCriterion(InnerContainerFactory);
                     if (isMatch)
                     {
-                        yield return ("InteriorContainerFactory", InteriorContainerFactory);
+                        yield return ("InnerContainerFactory", InnerContainerFactory);
                     }
                     if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
                     {
-                        foreach (var toYield in InteriorContainerFactory.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                        foreach (var toYield in InnerContainerFactory.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
-                            yield return ("InteriorContainerFactory" + "." + toYield.propertyName, toYield.descendant);
+                            yield return ("InnerContainerFactory" + "." + toYield.propertyName, toYield.descendant);
                         }
                     }
                 }
@@ -450,9 +450,9 @@ namespace Lazinator.Collections.Avl.ListTree
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && InteriorContainerFactory != null) || (_InteriorContainerFactory_Accessed && _InteriorContainerFactory != null))
+            if ((!exploreOnlyDeserializedChildren && InnerContainerFactory != null) || (_InnerContainerFactory_Accessed && _InnerContainerFactory != null))
             {
-                _InteriorContainerFactory = (ContainerFactory<T>) _InteriorContainerFactory.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
+                _InnerContainerFactory = (ContainerFactory<T>) _InnerContainerFactory.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if ((!exploreOnlyDeserializedChildren && UnderlyingTree != null) || (_UnderlyingTree_Accessed && _UnderlyingTree != null))
             {
@@ -467,9 +467,9 @@ namespace Lazinator.Collections.Avl.ListTree
         
         public virtual void FreeInMemoryObjects()
         {
-            _InteriorContainerFactory = default;
+            _InnerContainerFactory = default;
             _UnderlyingTree = default;
-            _InteriorContainerFactory_Accessed = _UnderlyingTree_Accessed = false;
+            _InnerContainerFactory_Accessed = _UnderlyingTree_Accessed = false;
             IsDirty = false;
             DescendantIsDirty = false;
             HasChanged = false;
@@ -496,7 +496,7 @@ namespace Lazinator.Collections.Avl.ListTree
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _AllowDuplicates = span.ToBoolean(ref bytesSoFar);
             _Unbalanced = span.ToBoolean(ref bytesSoFar);
-            _InteriorContainerFactory_ByteIndex = bytesSoFar;
+            _InnerContainerFactory_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
@@ -546,9 +546,9 @@ namespace Lazinator.Collections.Avl.ListTree
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_InteriorContainerFactory_Accessed && _InteriorContainerFactory != null)
+            if (_InnerContainerFactory_Accessed && _InnerContainerFactory != null)
             {
-                _InteriorContainerFactory.UpdateStoredBuffer(ref writer, startPosition + _InteriorContainerFactory_ByteIndex + sizeof(int), _InteriorContainerFactory_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                _InnerContainerFactory.UpdateStoredBuffer(ref writer, startPosition + _InnerContainerFactory_ByteIndex + sizeof(int), _InnerContainerFactory_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_UnderlyingTree_Accessed && _UnderlyingTree != null)
             {
@@ -582,15 +582,15 @@ namespace Lazinator.Collections.Avl.ListTree
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
-                if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_InteriorContainerFactory_Accessed)
+                if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_InnerContainerFactory_Accessed)
                 {
-                    var deserialized = InteriorContainerFactory;
+                    var deserialized = InnerContainerFactory;
                 }
-                WriteChild(ref writer, ref _InteriorContainerFactory, includeChildrenMode, _InteriorContainerFactory_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _InteriorContainerFactory_ByteIndex, _InteriorContainerFactory_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
+                WriteChild(ref writer, ref _InnerContainerFactory, includeChildrenMode, _InnerContainerFactory_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _InnerContainerFactory_ByteIndex, _InnerContainerFactory_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             if (updateStoredBuffer)
             {
-                _InteriorContainerFactory_ByteIndex = startOfObjectPosition - startPosition;
+                _InnerContainerFactory_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 

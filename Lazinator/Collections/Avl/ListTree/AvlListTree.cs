@@ -19,13 +19,13 @@ namespace Lazinator.Collections.Avl.ListTree
         {
             AllowDuplicates = allowDuplicates;
             Unbalanced = unbalanced;
-            InteriorContainerFactory = interiorCollectionFactory;
+            InnerContainerFactory = interiorCollectionFactory;
             UnderlyingTree = new AvlIndexableTree<IMultivalueContainer<T>>(AllowDuplicates, Unbalanced);
         }
 
         public IValueContainer<T> CreateNewWithSameSettings()
         {
-            return new AvlListTree<T>(AllowDuplicates, Unbalanced, InteriorContainerFactory);
+            return new AvlListTree<T>(AllowDuplicates, Unbalanced, InnerContainerFactory);
         }
 
         private static int CompareBasedOnEndItems(IMultivalueContainer<T> container, T item, IComparer<T> comparer)
@@ -90,7 +90,7 @@ namespace Lazinator.Collections.Avl.ListTree
                 bool inBetweenThisAndPrevious = previousNode != null && comparer.Compare(item, previousNode.Value.Last()) == 1;
                 if (inBetweenThisAndPrevious)
                 {
-                    if (InteriorContainerFactory.FirstIsShorter(previousNode.Value, node.Value))
+                    if (InnerContainerFactory.FirstIsShorter(previousNode.Value, node.Value))
                         return previousNode;
                 }
             }
@@ -233,7 +233,7 @@ namespace Lazinator.Collections.Avl.ListTree
             AvlListTreeLocation<T> listTreeLocation = ToAvlListTreeLocation(location);
             var multivalueContainer = listTreeLocation.OuterNode.Value;
             multivalueContainer.InsertAt(listTreeLocation.InnerLocation, item);
-            if (InteriorContainerFactory.RequiresSplitting(multivalueContainer))
+            if (InnerContainerFactory.RequiresSplitting(multivalueContainer))
             {
                 IMultivalueContainer<T> splitOff = (IMultivalueContainer<T>)multivalueContainer.SplitOff();
                 UnderlyingTree.InsertAt(listTreeLocation.OuterNode, splitOff);
@@ -278,7 +278,7 @@ namespace Lazinator.Collections.Avl.ListTree
             }
             var multivalueContainer = GetMultivalueContainer(node);
             var resultWithinContainer = multivalueContainer.InsertOrReplace(item, whichOne, comparer);
-            if (InteriorContainerFactory.RequiresSplitting(multivalueContainer))
+            if (InnerContainerFactory.RequiresSplitting(multivalueContainer))
             {
                 IMultivalueContainer<T> splitOff = (IMultivalueContainer<T>)multivalueContainer.SplitOff();
                 UnderlyingTree.InsertAt(node, splitOff);
@@ -292,7 +292,7 @@ namespace Lazinator.Collections.Avl.ListTree
 
         private (IContainerLocation location, bool insertedNotReplaced) InsertInitialNode(T item, IComparer<T> comparer)
         {
-            IMultivalueContainer<T> initialContainer = (IMultivalueContainer<T>)InteriorContainerFactory.CreateValueContainer();
+            IMultivalueContainer<T> initialContainer = (IMultivalueContainer<T>)InnerContainerFactory.CreateValueContainer();
             if (initialContainer.AllowDuplicates != AllowDuplicates)
                 throw new Exception("AllowDuplicates must be same for interior container.");
             initialContainer.InsertOrReplace(item, comparer);
