@@ -64,6 +64,9 @@ namespace Lazinator.Collections.Tree
             return default(T);
         }
 
+        public IContainerLocation FirstLocation() => FirstNode();
+        public IContainerLocation LastLocation() => LastLocation();
+
         public long Count(T item, IComparer<T> comparer)
         {
             var node = GetMatchingNode(item, MultivalueLocationOptions.First, comparer);

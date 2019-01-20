@@ -132,5 +132,6 @@
         ISortedContainerFactory,
         IContainerLocation,
         IIndexLocation,
+        IAvlListTreeLocation,
     }
 }

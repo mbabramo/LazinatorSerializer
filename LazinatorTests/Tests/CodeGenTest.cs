@@ -155,6 +155,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(LazinatorComparableKeyValue<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Tuples/", ws);
             await CompleteGenerateCode(typeof(LazinatorTriple<,,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Tuples/", ws);
             await CompleteGenerateCode(typeof(IndexLocation), project: "Lazinator", mainFolder: "/Collections", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(AvlListTreeLocation<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/ListTree/", ws);
 
             await CompleteGenerateCode(typeof(AvlNode<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/ValueTree/", ws);
             await CompleteGenerateCode(typeof(AvlCountedNode<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/ValueTree/", ws);

@@ -328,6 +328,9 @@ namespace Lazinator.Collections
             return default(T);
         }
 
+        public IContainerLocation FirstLocation() => new IndexLocation(0, LongCount);
+        public IContainerLocation LastLocation() => new IndexLocation(LongCount - 1, LongCount);
+
         public virtual IValueContainer<T> SplitOff(IComparer<T> comparer)
         {
             LazinatorLinkedList<T> partSplitOff = (LazinatorLinkedList<T>)CreateNewWithSameSettings();

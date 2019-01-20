@@ -149,6 +149,10 @@ namespace Lazinator.Collections.Avl.ListTree
             return UnderlyingTree.Last().Last();
         }
 
+
+        public IContainerLocation FirstLocation() => new AvlListTreeLocation<T>() { OuterNode = (AvlCountedNode<IMultivalueContainer<T>>) UnderlyingTree.FirstNode(), InnerLocation = UnderlyingTree.First().FirstLocation() };
+        public IContainerLocation LastLocation() => new AvlListTreeLocation<T>() { OuterNode = (AvlCountedNode<IMultivalueContainer<T>>)UnderlyingTree.LastNode(), InnerLocation = UnderlyingTree.Last().LastLocation() };
+
         public void Clear()
         {
             UnderlyingTree.Clear();

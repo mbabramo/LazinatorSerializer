@@ -569,6 +569,9 @@ namespace Lazinator.Collections
             return default(T);
         }
 
+        public IContainerLocation FirstLocation() => new IndexLocation(0, LongCount);
+        public IContainerLocation LastLocation() => new IndexLocation(LongCount - 1, LongCount);
+
         public (IContainerLocation location, bool found) FindContainerLocation(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer) => this.MultivalueFindMatchOrNext(AllowDuplicates, value, whichOne, comparer);
         public bool GetValue(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, out T match) => this.MultivalueGetValue(AllowDuplicates, item, whichOne, comparer, out match);
         public (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => this.SortedInsertOrReplace(AllowDuplicates, item, whichOne, comparer);

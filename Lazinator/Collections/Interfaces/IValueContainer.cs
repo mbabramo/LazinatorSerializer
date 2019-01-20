@@ -26,6 +26,8 @@ namespace Lazinator.Collections.Interfaces
         /// <param name="comparer"></param>
         /// <returns>The location, along with an indication of whether an exact match was found</returns>
         (IContainerLocation location, bool found) FindContainerLocation(T value, IComparer<T> comparer);
+        IContainerLocation FirstLocation();
+        IContainerLocation LastLocation();
         /// <summary>
         /// Gets a matching value using a custom comparer, which may match on only part of the item.
         /// </summary>
