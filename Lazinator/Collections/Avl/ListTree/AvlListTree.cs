@@ -42,7 +42,7 @@ namespace Lazinator.Collections.Avl.ListTree
         }
 
         /// <summary>
-        /// Returns a comparer to compare an item to an interior collection. Usually, the custom comparer can only compare like objects, so null should be passed as the interior collection being compared; this custom comparer then substitutes the item.
+        /// Returns a comparer to compare an item to an inner collection. Usually, the custom comparer can only compare like objects, so null should be passed as the inner collection being compared; this custom comparer then substitutes the item.
         /// </summary>
         /// <param name="item"></param>
         /// <param name="comparer"></param>
@@ -294,7 +294,7 @@ namespace Lazinator.Collections.Avl.ListTree
         {
             IMultivalueContainer<T> initialContainer = (IMultivalueContainer<T>)InnerContainerFactory.CreateValueContainer();
             if (initialContainer.AllowDuplicates != AllowDuplicates)
-                throw new Exception("AllowDuplicates must be same for interior container.");
+                throw new Exception("AllowDuplicates must be same for inner container.");
             initialContainer.InsertOrReplace(item, comparer);
             var resultWithinContainer = UnderlyingTree.InsertOrReplace(initialContainer, GetInnerContainersComparer(comparer));
             return (new AvlListTreeLocation<T>(UnderlyingTree.AvlIndexableRoot, resultWithinContainer.location), resultWithinContainer.insertedNotReplaced);

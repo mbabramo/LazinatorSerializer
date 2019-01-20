@@ -6,14 +6,14 @@ using Lazinator.Collections.Interfaces;
 namespace Lazinator.Collections.Factories
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.IContainerFactory)]
-    public interface IContainerFactory<T> where T : ILazinator
+    public interface IContainerFactory<T> : ILazinator where T : ILazinator
     {
         ContainerLevel ThisLevel { get; set; }
-        IContainerFactory InteriorFactory { get; set; }
+        IContainerFactory InnerFactory { get; set; }
     }
 
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IContainerFactoryNonGeneric)]
-    public interface IContainerFactory
+    public interface IContainerFactory : ILazinator
     {
 
     }

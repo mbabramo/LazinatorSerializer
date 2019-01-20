@@ -19,7 +19,7 @@ namespace Lazinator.Collections.Factories
         /// </summary>
         bool AllowDuplicates { get; set; }
         /// <summary>
-        /// The size at which this level should be split. If this level is an interior collection, then the interior collection is split once the interior collection exceeds this threshold. The size may represent the total number of items, if the value container is counted, or the approproximate depth, if it is not. 
+        /// The size at which this level should be split. If this level is an inner collection, then the inner collection is split once the inner collection exceeds this threshold. The size may represent the total number of items, if the value container is counted, or the approproximate depth, if it is not. 
         /// </summary>
         long SplitThreshold { get; set; }
     }
