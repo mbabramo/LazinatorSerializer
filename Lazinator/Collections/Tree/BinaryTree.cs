@@ -343,6 +343,8 @@ namespace Lazinator.Collections.Tree
             Root = null;
         }
 
+        public virtual void RemoveAt(IContainerLocation location) => RemoveNode((BinaryNode<T>)location);
+
         public bool TryRemove(T item, IComparer<T> comparer) => TryRemove(item, MultivalueLocationOptions.Any, comparer);
 
         public bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) => TryRemove(whichOne, node => CompareValueToNode(item, node, whichOne, comparer));
@@ -497,6 +499,29 @@ namespace Lazinator.Collections.Tree
             }
 
             return null;
+        }
+
+        public virtual void RemoveNode(BinaryNode<T> node)
+        {
+            Stack<bool> pathIsLeft = new Stack<bool>();
+            var onPathToNode = node;
+            while (onPathToNode.Parent != null)
+            {
+                pathIsLeft.Push(onPathToNode.Parent.Left == onPathToNode);
+                onPathToNode = onPathToNode.Parent;
+            }
+            BinaryNode<T> result = TryRemoveReturningNode(MultivalueLocationOptions.Any, x =>
+            {
+                if (!pathIsLeft.Any())
+                    return 0;
+                if (pathIsLeft.Pop())
+                    return -1;
+                else
+                    return 1;
+
+            });
+            if (result != node)
+                throw new Exception("Internal exception on RemoveNode.");
         }
 
         protected internal virtual void Replace(BinaryNode<T> target, BinaryNode<T> source)

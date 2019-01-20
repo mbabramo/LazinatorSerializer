@@ -130,6 +130,8 @@ namespace Lazinator.Collections
             return true;
         }
 
+        public void RemoveAt(IContainerLocation location) => RemoveAt((int)((IndexLocation)location).Index);
+
         public void RemoveAt(int index)
         {
             if (index < 0 || index > Count - 1)

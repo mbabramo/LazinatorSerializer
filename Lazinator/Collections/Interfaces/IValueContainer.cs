@@ -30,6 +30,7 @@ namespace Lazinator.Collections.Interfaces
         IContainerLocation LastLocation();
         T GetAt(IContainerLocation location);
         void SetAt(IContainerLocation location, T value);
+        void RemoveAt(IContainerLocation location);
         /// <summary>
         /// Gets a matching value using a custom comparer, which may match on only part of the item.
         /// </summary>

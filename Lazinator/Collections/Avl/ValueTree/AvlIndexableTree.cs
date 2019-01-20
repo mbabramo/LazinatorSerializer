@@ -143,6 +143,16 @@ namespace Lazinator.Collections.Avl.ValueTree
 
         #region Removal
 
+        public override void RemoveAt(IContainerLocation location)
+        {
+            if (location is IndexLocation indexLocation)
+            {
+                RemoveAtIndex(indexLocation.Index);
+            }
+            else
+                base.RemoveAt(location);
+        }
+
         public void RemoveAtIndex(long index)
         {
             ConfirmInRangeOrThrow(index, true);

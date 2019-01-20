@@ -270,6 +270,18 @@ namespace Lazinator.Collections.Avl.ListTree
             return (new AvlListTreeLocation<T>(UnderlyingTree.AvlIndexableRoot, resultWithinContainer.location), resultWithinContainer.insertedNotReplaced);
         }
 
+        public void RemoveAt(IContainerLocation location)
+        {
+            AvlListTreeLocation<T> listTreeLocation = (AvlListTreeLocation<T>)location;
+            var node = listTreeLocation.OuterNode;
+            var multivalueContainer = GetMultivalueContainer(node);
+            multivalueContainer.RemoveAt(listTreeLocation.InnerLocation);
+            if (multivalueContainer.Any() == false)
+            {
+                UnderlyingTree.RemoveAt(listTreeLocation.OuterNode);
+            }
+        }
+
         public bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
             var node = GetNodeForValue(item, whichOne, comparer, false);

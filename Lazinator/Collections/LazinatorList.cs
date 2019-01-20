@@ -294,6 +294,8 @@ namespace Lazinator.Collections
             return matches;
         }
 
+        public void RemoveAt(IContainerLocation location) => RemoveAt((int) ((IndexLocation)location).Index);
+
         public virtual void RemoveAt(int currentIndex)
         {
             SetupItemsTracker();

@@ -837,7 +837,23 @@ namespace LazinatorTests.Tests
                         default: throw new NotSupportedException();
                     }
                 }
-                base.Execute(testClass, container, list);
+                if (ValueExisted && !RemoveAll && testClass.ran.Next(2) == 0)
+                {
+                    // test RemoveAt with location
+                    (IContainerLocation location, bool found) findResult;
+                    if (!ContainerIsSorted && container is IIndexableValueContainer<T>)
+                    {
+                        findResult.location = new IndexLocation(IndexBeforeRemove, list.Count());
+                    }
+                    else
+                    {
+                        findResult = container.FindContainerLocation(ValueToTryToRemove, Comparer<T>.Default);
+                        findResult.found.Should().BeTrue();
+                    }
+                    container.RemoveAt(findResult.location);
+                }
+                else
+                    base.Execute(testClass, container, list);
             }
 
             public void PlanRemoval(ValueContainerTests<T> testClass, List<T> list)

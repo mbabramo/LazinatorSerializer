@@ -116,9 +116,7 @@ namespace Lazinator.Collections.Avl.ValueTree
 
         #region Removal
 
-        public void RemoveAt(IContainerLocation location) => RemoveNode((BinaryNode<T>)location);
-
-        public void RemoveNode(BinaryNode<T> node)
+        public override void RemoveNode(BinaryNode<T> node)
         {
             MiniBoolStack pathIsLeft = new MiniBoolStack();
             var onPathToNode = node;
@@ -129,7 +127,6 @@ namespace Lazinator.Collections.Avl.ValueTree
             }
             BinaryNode<T> result = TryRemoveReturningNode(MultivalueLocationOptions.Any, x =>
                 {
-                    AvlNode<T> avlNode = (AvlNode<T>)x;
                     if (!pathIsLeft.Any())
                         return 0;
                     if (pathIsLeft.Pop())
