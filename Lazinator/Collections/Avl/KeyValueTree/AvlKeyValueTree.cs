@@ -152,8 +152,12 @@ namespace Lazinator.Collections.Avl.KeyValueTree
                         }
                     }
                 }
-                UnderlyingTree.RemoveAt(match.location);
-                return true;
+                if (match.found)
+                {
+                    UnderlyingTree.RemoveAt(match.location);
+                    return true;
+                }
+                return false;
             }
         }
 

@@ -38,6 +38,16 @@ namespace Lazinator.Collections.Avl.ValueTree
 
         #region Find
 
+        public override (IContainerLocation location, bool found) FindContainerLocation(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer)
+        {
+            var result = base.FindContainerLocation(value, whichOne, comparer);
+            if (result.location == null)
+                return result;
+            // Convert result to index
+            var node = (AvlCountedNode<T>) result.location;
+            return (new IndexLocation(node.Index, LongCount), result.found);
+        }
+
         protected int CompareIndices(long desiredNodeIndex, AvlCountedNode<T> node, MultivalueLocationOptions whichOne)
         {
             long actualNodeIndex = node.Index;

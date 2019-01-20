@@ -20,15 +20,18 @@ namespace Lazinator.Collections.Avl.KeyValueTree
             return new AvlIndexableKeyValueTree<TKey, TValue>(AllowDuplicates, Unbalanced);
         }
 
-        protected AvlIndexableTree<LazinatorKeyValue<TKey, TValue>> UnderlyingIndexableTree => (AvlIndexableTree<LazinatorKeyValue<TKey, TValue>>)UnderlyingTree;
+        protected IIndexableMultivalueContainer<LazinatorKeyValue<TKey, TValue>> UnderlyingIndexableContainer => (IIndexableMultivalueContainer<LazinatorKeyValue<TKey, TValue>>)UnderlyingTree;
 
         public (TValue valueIfFound, long index, bool found) FindIndex(TKey key, IComparer<TKey> comparer) => FindIndex(key, MultivalueLocationOptions.Any, comparer);
 
         public (TValue valueIfFound, long index, bool found) FindIndex(TKey key, MultivalueLocationOptions whichOne, IComparer<TKey> comparer)
         {
-            var result = UnderlyingIndexableTree.GetMatchingOrNextNode(KeyPlusDefault(key), whichOne, KeyComparer(comparer));
+            var result = UnderlyingIndexableContainer.FindContainerLocation(KeyPlusDefault(key), whichOne, KeyComparer(comparer));
             if (result.found)
-                return (result.node.Value.Value, ((AvlCountedNode<LazinatorKeyValue<TKey, TValue>>)result.node).Index, true);
+            {
+                var item = UnderlyingIndexableContainer.GetAt(result.location);
+                return (item.Value, ((IndexLocation)result.location).Index, true);
+            }
             return (default, -1, false);
         }
 
@@ -62,7 +65,7 @@ namespace Lazinator.Collections.Avl.KeyValueTree
 
         public LazinatorKeyValue<TKey, TValue> GetKeyValueAtIndex(long index)
         {
-            return UnderlyingIndexableTree.GetAtIndex(index);
+            return UnderlyingIndexableContainer.GetAt(new IndexLocation(index, UnderlyingIndexableContainer.LongCount));
         }
 
         public void SetKeyAtIndex(long index, TKey key)
@@ -79,22 +82,25 @@ namespace Lazinator.Collections.Avl.KeyValueTree
 
         public void SetKeyValueAtIndex(long index, TKey key, TValue value)
         {
-            UnderlyingIndexableTree.SetAtIndex(index, new LazinatorKeyValue<TKey, TValue>(key, value));
+            var location = new IndexLocation(index, UnderlyingIndexableContainer.LongCount);
+            UnderlyingIndexableContainer.SetAt(location, new LazinatorKeyValue<TKey, TValue>(key, value));
         }
 
         public void RemoveAtIndex(long index)
         {
-            UnderlyingIndexableTree.RemoveAt(index);
+            var location = new IndexLocation(index, UnderlyingIndexableContainer.LongCount);
+            UnderlyingIndexableContainer.RemoveAt(location);
         }
 
         public void InsertAtIndex(long index, TKey key, TValue value)
         {
-            UnderlyingIndexableTree.InsertAtIndex(index, new LazinatorKeyValue<TKey, TValue>(key, value));
+            var location = new IndexLocation(index, UnderlyingIndexableContainer.LongCount);
+            UnderlyingIndexableContainer.InsertAt(location, new LazinatorKeyValue<TKey, TValue>(key, value));
         }
 
         public (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(TKey key, TValue value, MultivalueLocationOptions whichOne, IComparer<TKey> comparer)
         {
-            var result = UnderlyingIndexableTree.InsertOrReplace(new LazinatorKeyValue<TKey, TValue>(key, value), whichOne, KeyComparer(comparer));
+            var result = UnderlyingIndexableContainer.InsertOrReplace(new LazinatorKeyValue<TKey, TValue>(key, value), whichOne, KeyComparer(comparer));
             return result;
         }
 
