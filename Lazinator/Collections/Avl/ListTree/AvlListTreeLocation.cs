@@ -8,8 +8,11 @@ using System.Text;
 
 namespace Lazinator.Collections.Avl.ListTree
 {
-    public partial class AvlListTreeLocation<T> : IAvlListTreeLocation<T>, IContainerLocation where T : ILazinator
+    public struct AvlListTreeLocation<T> : IContainerLocation where T : ILazinator
     {
+        public readonly AvlCountedNode<IMultivalueContainer<T>> OuterNode;
+        public readonly IContainerLocation InnerLocation;
+
         public AvlListTreeLocation(AvlCountedNode<IMultivalueContainer<T>> outerNode, IContainerLocation innerLocation)
         {
             OuterNode = outerNode;

@@ -5,8 +5,11 @@ using System.Text;
 
 namespace Lazinator.Collections
 {
-    public partial class IndexLocation : IIndexLocation, IContainerLocation
+    public readonly struct IndexLocation : IContainerLocation
     {
+        public readonly long Index;
+        public readonly long Count;
+
         public IndexLocation(long index, long count)
         {
             Index = index;
