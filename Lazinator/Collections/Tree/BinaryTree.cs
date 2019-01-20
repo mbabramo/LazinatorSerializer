@@ -65,9 +65,9 @@ namespace Lazinator.Collections.Tree
         }
 
         public IContainerLocation FirstLocation() => FirstNode();
-        public IContainerLocation LastLocation() => LastLocation();
-        public T GetAt(IContainerLocation location) => ((BinaryNode<T>)location).Value;
-        public void SetAt(IContainerLocation location, T value) => ((BinaryNode<T>)location).Value = value;
+        public IContainerLocation LastLocation() => LastNode();
+        public virtual T GetAt(IContainerLocation location) => ((BinaryNode<T>)location).Value;
+        public virtual void SetAt(IContainerLocation location, T value) => ((BinaryNode<T>)location).Value = value;
 
         public long Count(T item, IComparer<T> comparer)
         {

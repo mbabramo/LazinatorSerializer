@@ -98,6 +98,20 @@ namespace Lazinator.Collections.Avl.ValueTree
             TryRemove(MultivalueLocationOptions.Any, CompareIndexToNodesIndex(index, MultivalueLocationOptions.First));
         }
 
+        public override T GetAt(IContainerLocation location)
+        {
+            if (location is IndexLocation indexLocation)
+                return GetAtIndex(indexLocation.Index);
+            return base.GetAt(location);
+        }
+        public override void SetAt(IContainerLocation location, T value)
+        {
+            if (location is IndexLocation indexLocation)
+                SetAtIndex(indexLocation.Index, value);
+            else
+                base.SetAt(location, value);
+        }
+
         public override IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
         {
             var enumerator = new AvlNodeEnumerator<T>(this, reverse, skip);

@@ -249,6 +249,10 @@ namespace LazinatorTests.Tests
                         instruction = new InsertValueInstruction();
                     else
                         instruction = new RemoveInstruction();
+                    if (rep == 2 && i == 36)
+                    {
+                        var DEBUG = 0;
+                    }
                     instruction.Execute(this, container, list);
                     VerifyEntireList(container, list); // DEBUG
                 }
@@ -641,7 +645,24 @@ namespace LazinatorTests.Tests
                 T value = list[index];
                 IContainerLocation location;
                 bool found;
-                if (container is IMultivalueContainer<T> multivalueContainer)
+                if ((container is IMultivalueContainer<T> && !ContainerIsSorted) || testClass.ran.Next(5) == 0)
+                {
+                    // if list isn't sorted, we can't use FindContainerLocation. But this gives us an opportunity to test FirstLocation / LastLocation / GetNextLocation / GetPreviousLocation instead
+                    if (testClass.ran.Next(2) == 0)
+                    {
+                        location = container.FirstLocation();
+                        for (int i = 0; i < index; i++)
+                            location = location.GetNextLocation();
+                    }
+                    else
+                    {
+                        location = container.LastLocation();
+                        for (int i = list.Count() - 1; i > index; i--)
+                            location = location.GetPreviousLocation();
+                    }
+                    found = true;
+                }
+                else if (container is IMultivalueContainer<T> multivalueContainer)
                 {
                      (location, found) = multivalueContainer.FindContainerLocation(value, WhichOne, Comparer<T>.Default);
                 }
