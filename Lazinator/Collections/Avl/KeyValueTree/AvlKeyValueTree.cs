@@ -128,16 +128,31 @@ namespace Lazinator.Collections.Avl.KeyValueTree
             {
                 LazinatorKeyValue<TKey, TValue> keyValue = new LazinatorKeyValue<TKey, TValue>(key, value);
                 // first, find a matching key
-                var match = UnderlyingTree.GetMatchingOrNextNode(keyValue, MultivalueLocationOptions.First, KeyComparer(comparer));
-                // Now, find a matching value
-                while (match.found && !EqualityComparer<TValue>.Default.Equals(match.node.Value.Value, value))
-                {
-                    match.node = match.node.GetNextNode();
-                    match.found = match.node != null;
-                }
+                var match = UnderlyingTree.FindContainerLocation(keyValue, MultivalueLocationOptions.First, KeyComparer(comparer));
                 if (match.found == false)
                     return false;
-                UnderlyingTree.RemoveNode(match.node);
+                // Now, find a matching value
+                bool keepGoing = match.found;
+                LazinatorKeyValue<TKey, TValue> keyValueWithKeyMatch = UnderlyingTree.GetAt(match.location);
+                while (keepGoing) 
+                {
+                    if (EqualityComparer<TValue>.Default.Equals(keyValueWithKeyMatch.Value, value))
+                        keepGoing = false; // value found
+                    else
+                    {
+                        match.location = match.location.GetNextLocation();
+                        if (match.location == null)
+                        {
+                            keepGoing = false; // value doesn't exist
+                            match.found = false;
+                        }
+                        else
+                        {
+                            keyValueWithKeyMatch = UnderlyingTree.GetAt(match.location);
+                        }
+                    }
+                }
+                UnderlyingTree.RemoveAt(match.location);
                 return true;
             }
         }
