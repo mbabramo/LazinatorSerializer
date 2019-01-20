@@ -59,15 +59,9 @@ namespace Lazinator.Collections.Avl.ValueTree
             };
         }
 
-        private static MiniBoolStack GetCompactPathToNode(BinaryNode<T> node, bool justBeforeNode)
+        private static MiniBoolStack GetCompactPathToNode(BinaryNode<T> node)
         {
             MiniBoolStack pathFromRoot = new MiniBoolStack();
-            if (justBeforeNode)
-            { // the path is between this node and its left node)
-                if (node.Left != null)
-                    pathFromRoot.Push(false);
-                pathFromRoot.Push(true); 
-            }
             var onPathToNode = node;
             while (onPathToNode.Parent != null)
             {
@@ -122,20 +116,32 @@ namespace Lazinator.Collections.Avl.ValueTree
                 comparisonFunc = n => 1; // insert after last node
             else
             {
-                MiniBoolStack pathFromRoot = GetCompactPathToNode(node, true);
+                MiniBoolStack pathFromRoot = GetCompactPathToNode(node);
                 comparisonFunc = ComparisonToFollowCompactPath(pathFromRoot);
             }
-            InsertOrReplaceReturningNode(item, comparisonFunc);
+            InsertOrReplaceReturningNode(item, comparisonFunc, true);
         }
 
-        protected override (BinaryNode<T> node, bool insertedNotReplaced) InsertOrReplaceReturningNode(T item, Func<BinaryNode<T>, int> comparisonFunc)
+        protected override (BinaryNode<T> node, bool insertedNotReplaced) InsertOrReplaceReturningNode(T item, Func<BinaryNode<T>, int> comparisonFunc, bool alwaysInsert = false)
         {
             AvlNode<T> node = AvlRoot;
+            bool alwaysInsertTargetFound = false;
             while (node != null)
             {
                 node.NodeVisitedDuringChange = true;
 
-                int compare = comparisonFunc(node);
+                int compare = alwaysInsertTargetFound ? 0 : comparisonFunc(node);
+
+                if (compare == 0 && alwaysInsert)
+                {
+                    if (!alwaysInsertTargetFound)
+                    {
+                        compare = -1; // move to left ...
+                        alwaysInsertTargetFound = true;
+                    }
+                    else
+                        compare = 1; // .. then keep moving to right
+                }
 
                 if (compare < 0)
                 {
@@ -201,7 +207,7 @@ namespace Lazinator.Collections.Avl.ValueTree
 
         public override void RemoveNode(BinaryNode<T> node)
         {
-            MiniBoolStack pathFromRoot = GetCompactPathToNode(node, false);
+            MiniBoolStack pathFromRoot = GetCompactPathToNode(node);
             BinaryNode<T> result = TryRemoveReturningNode(MultivalueLocationOptions.Any, ComparisonToFollowCompactPath(pathFromRoot));
             if (result != node)
                 throw new Exception("Internal exception on RemoveNode.");

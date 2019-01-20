@@ -274,22 +274,15 @@ namespace Lazinator.Collections.Tree
             };
         }
 
-        private static Stack<bool> GetPathToNode(BinaryNode<T> node, bool justBeforeNode)
+        private static Stack<bool> GetPathToNode(BinaryNode<T> node)
         {
             Stack<bool> pathFromRoot = new Stack<bool>();
-            if (justBeforeNode)
-            { // the path is between this node and its left node)
-                if (node.Left != null)
-                    pathFromRoot.Push(false);
-                pathFromRoot.Push(true);
-            }
             var onPathToNode = node;
             while (onPathToNode.Parent != null)
             {
                 pathFromRoot.Push(onPathToNode.Parent.Left == onPathToNode);
                 onPathToNode = onPathToNode.Parent;
             }
-
             return pathFromRoot;
         }
 
@@ -305,10 +298,10 @@ namespace Lazinator.Collections.Tree
                 comparisonFunc = n => 1; // insert after last node
             else
             {
-                Stack<bool> pathFromRoot = GetPathToNode(node, true);
+                Stack<bool> pathFromRoot = GetPathToNode(node);
                 comparisonFunc = ComparisonToFollowPath(pathFromRoot);
             }
-            InsertOrReplaceReturningNode(item, comparisonFunc);
+            InsertOrReplaceReturningNode(item, comparisonFunc, true);
         }
 
         protected void InsertAtStart(T item)
@@ -343,12 +336,24 @@ namespace Lazinator.Collections.Tree
             return InsertOrReplaceReturningNode(item, node => CompareValueToNode(item, node, whichOne, comparer));
         }
 
-        protected virtual (BinaryNode<T> node, bool insertedNotReplaced) InsertOrReplaceReturningNode(T item, Func<BinaryNode<T>, int> comparisonFunc)
+        protected virtual (BinaryNode<T> node, bool insertedNotReplaced) InsertOrReplaceReturningNode(T item, Func<BinaryNode<T>, int> comparisonFunc, bool alwaysInsert = false)
         {
             BinaryNode<T> node = Root;
+            bool alwaysInsertTargetFound = false;
             while (node != null)
             {
-                int compare = comparisonFunc(node);
+                int compare = alwaysInsertTargetFound ? 0 : comparisonFunc(node);
+
+                if (compare == 0 && alwaysInsert)
+                {
+                    if (!alwaysInsertTargetFound)
+                    {
+                        compare = -1; // move to left ...
+                        alwaysInsertTargetFound = true;
+                    }
+                    else
+                        compare = 1; // .. then keep moving to right
+                }
 
                 if (compare < 0)
                 {
@@ -564,7 +569,7 @@ namespace Lazinator.Collections.Tree
 
         public virtual void RemoveNode(BinaryNode<T> node)
         {
-            Stack<bool> pathFromRoot = GetPathToNode(node, false);
+            Stack<bool> pathFromRoot = GetPathToNode(node);
             BinaryNode<T> result = TryRemoveReturningNode(MultivalueLocationOptions.Any, ComparisonToFollowPath(pathFromRoot));
             if (result != node)
                 throw new Exception("Internal exception on RemoveNode.");
