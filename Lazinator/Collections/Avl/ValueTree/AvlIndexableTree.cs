@@ -161,10 +161,10 @@ namespace Lazinator.Collections.Avl.ValueTree
 
         public bool TryRemoveAll(T item) => TryRemoveAll(item, Comparer<T>.Default);
 
-        public override IValueContainer<T> SplitOff(IComparer<T> comparer)
+        public override IValueContainer<T> SplitOff()
         {
             if (Unbalanced)
-                return base.SplitOff(comparer);
+                return base.SplitOff();
             if (AvlIndexableRoot.LeftCount == 0 || AvlIndexableRoot.RightCount == 0)
                 return CreateNewWithSameSettings();
             // Create two separate trees, each of them balanced

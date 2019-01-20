@@ -595,7 +595,7 @@ namespace Lazinator.Collections.Tree
             }
         }
 
-        public virtual IValueContainer<T> SplitOff(IComparer<T> comparer)
+        public virtual IValueContainer<T> SplitOff()
         {
             if (Root.Left == null || Root.Right == null)
                 return CreateNewWithSameSettings();

@@ -337,7 +337,7 @@ namespace Lazinator.Collections
         public T GetAt(IContainerLocation location) => GetAtIndex(((IndexLocation)location).Index);
         public void SetAt(IContainerLocation location, T value) => SetAtIndex(((IndexLocation)location).Index, value);
 
-        public virtual IValueContainer<T> SplitOff(IComparer<T> comparer)
+        public virtual IValueContainer<T> SplitOff()
         {
             LazinatorLinkedList<T> partSplitOff = (LazinatorLinkedList<T>)CreateNewWithSameSettings();
             int numToMove = Count / 2;

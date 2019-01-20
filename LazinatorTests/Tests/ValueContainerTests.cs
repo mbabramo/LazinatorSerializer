@@ -85,7 +85,7 @@ namespace LazinatorTests.Tests
             const int numItems = 1000;
             for (int i = 0; i < numItems; i++)
                 container.InsertOrReplace(i, Comparer<WInt>.Default);
-            var splitOff = container.SplitOff(Comparer<WInt>.Default);
+            var splitOff = container.SplitOff();
             (container.Count() + splitOff.Count()).Should().Be(numItems);
             if (splitOff.First() > container.First())
             {

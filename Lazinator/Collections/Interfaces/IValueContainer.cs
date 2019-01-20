@@ -12,7 +12,7 @@ namespace Lazinator.Collections.Interfaces
         [SetterAccessibility("protected")]
         bool Unbalanced { get; }
         IValueContainer<T> CreateNewWithSameSettings();
-        IValueContainer<T> SplitOff(IComparer<T> comparer);
+        IValueContainer<T> SplitOff();
         bool Any();
         T First();
         T FirstOrDefault();

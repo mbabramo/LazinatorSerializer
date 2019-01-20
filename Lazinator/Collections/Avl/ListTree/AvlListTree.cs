@@ -230,7 +230,7 @@ namespace Lazinator.Collections.Avl.ListTree
             multivalueContainer.InsertAt(listTreeLocation.InnerLocation, item);
             if (InteriorContainerFactory.RequiresSplitting(multivalueContainer))
             {
-                IMultivalueContainer<T> splitOff = (IMultivalueContainer<T>)multivalueContainer.SplitOff(null);
+                IMultivalueContainer<T> splitOff = (IMultivalueContainer<T>)multivalueContainer.SplitOff();
                 UnderlyingTree.InsertAt((BinaryNode<T>)multivalueContainer, splitOff);
             }
         }
@@ -262,9 +262,8 @@ namespace Lazinator.Collections.Avl.ListTree
             var resultWithinContainer = multivalueContainer.InsertOrReplace(item, whichOne, comparer);
             if (InteriorContainerFactory.RequiresSplitting(multivalueContainer))
             {
-                IMultivalueContainer<T> splitOff = (IMultivalueContainer<T>)multivalueContainer.SplitOff(comparer);
+                IMultivalueContainer<T> splitOff = (IMultivalueContainer<T>)multivalueContainer.SplitOff();
                 UnderlyingTree.InsertAt(node, splitOff);
-                //DEBUG UnderlyingTree.InsertOrReplace(splitOff, AllowDuplicates ? MultivalueLocationOptions.InsertBeforeFirst : MultivalueLocationOptions.Any, GetInteriorCollectionsComparer(comparer)); // note: a duplicate here would be a duplicate of the entire inner node, meaning that all items are the same according to the comparer. But they may not always be exactly identical, if the comparer is a key-only comparer. We always split off the left in our multivalue containers, so this ensures consistency.
                 // The splitting has changed the location, so we need to find the item, using the same comparer, but we modify the location if we were inserting before or after. Note that if we were inserting at ANY location, this could return a different result.
                 var revisedLocation = FindContainerLocation(item, FirstOrLastFromBeforeOrAfter(whichOne), comparer);
                 return (revisedLocation.location, resultWithinContainer.insertedNotReplaced);
@@ -345,9 +344,9 @@ namespace Lazinator.Collections.Avl.ListTree
             return count;
         }
 
-        public IValueContainer<T> SplitOff(IComparer<T> comparer)
+        public IValueContainer<T> SplitOff()
         {
-            var splitOffUnderlying = (AvlIndexableTree<IMultivalueContainer<T>>)UnderlyingTree.SplitOff(GetInteriorCollectionsComparer(comparer));
+            var splitOffUnderlying = (AvlIndexableTree<IMultivalueContainer<T>>)UnderlyingTree.SplitOff();
             var splitOff = (AvlListTree<T>)CreateNewWithSameSettings();
             splitOff.UnderlyingTree = splitOffUnderlying;
             return splitOff;
