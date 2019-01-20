@@ -263,7 +263,7 @@ namespace Lazinator.Collections.Avl.ListTree
             if (InteriorContainerFactory.RequiresSplitting(multivalueContainer))
             {
                 IMultivalueContainer<T> splitOff = (IMultivalueContainer<T>)multivalueContainer.SplitOff(comparer);
-                UnderlyingTree.InsertAt((BinaryNode<T>)multivalueContainer, splitOff);
+                UnderlyingTree.InsertAt(node, splitOff);
                 //DEBUG UnderlyingTree.InsertOrReplace(splitOff, AllowDuplicates ? MultivalueLocationOptions.InsertBeforeFirst : MultivalueLocationOptions.Any, GetInteriorCollectionsComparer(comparer)); // note: a duplicate here would be a duplicate of the entire inner node, meaning that all items are the same according to the comparer. But they may not always be exactly identical, if the comparer is a key-only comparer. We always split off the left in our multivalue containers, so this ensures consistency.
                 // The splitting has changed the location, so we need to find the item, using the same comparer, but we modify the location if we were inserting before or after. Note that if we were inserting at ANY location, this could return a different result.
                 var revisedLocation = FindContainerLocation(item, FirstOrLastFromBeforeOrAfter(whichOne), comparer);

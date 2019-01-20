@@ -363,5 +363,11 @@ namespace Lazinator.Collections
         public bool TryRemove(T item, IComparer<T> comparer) => this.MultivalueTryRemove(AllowDuplicates, item, comparer);
 
         #endregion
+
+        public override string ToString()
+        {
+            var firstSeven = this.Take(7).ToArray();
+            return $"[{String.Join(", ", firstSeven)}{(firstSeven.Length == 7 ? ", ..." : "")}]";
+        }
     }
 }

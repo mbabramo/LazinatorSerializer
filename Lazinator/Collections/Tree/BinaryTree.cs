@@ -274,9 +274,15 @@ namespace Lazinator.Collections.Tree
             };
         }
 
-        private static Stack<bool> GetPathToNode(BinaryNode<T> node)
+        private static Stack<bool> GetPathToNode(BinaryNode<T> node, bool justBeforeNode)
         {
             Stack<bool> pathIsLeft = new Stack<bool>();
+            if (justBeforeNode)
+            { // the path is between this node and its left node)
+                if (node.Left != null)
+                    pathIsLeft.Push(false);
+                pathIsLeft.Push(true);
+            }
             var onPathToNode = node;
             while (onPathToNode.Parent != null)
             {
@@ -299,7 +305,7 @@ namespace Lazinator.Collections.Tree
                 comparisonFunc = n => 1; // insert after last node
             else
             {
-                Stack<bool> pathIsLeft = GetPathToNode(node);
+                Stack<bool> pathIsLeft = GetPathToNode(node, true);
                 comparisonFunc = ComparisonToFollowPath(pathIsLeft);
             }
             InsertOrReplaceReturningNode(item, comparisonFunc);
@@ -558,7 +564,7 @@ namespace Lazinator.Collections.Tree
 
         public virtual void RemoveNode(BinaryNode<T> node)
         {
-            Stack<bool> pathIsLeft = GetPathToNode(node);
+            Stack<bool> pathIsLeft = GetPathToNode(node, false);
             BinaryNode<T> result = TryRemoveReturningNode(MultivalueLocationOptions.Any, ComparisonToFollowPath(pathIsLeft));
             if (result != node)
                 throw new Exception("Internal exception on RemoveNode.");

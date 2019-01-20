@@ -59,9 +59,15 @@ namespace Lazinator.Collections.Avl.ValueTree
             };
         }
 
-        private static MiniBoolStack GetCompactPathToNode(BinaryNode<T> node)
+        private static MiniBoolStack GetCompactPathToNode(BinaryNode<T> node, bool justBeforeNode)
         {
             MiniBoolStack pathIsLeft = new MiniBoolStack();
+            if (justBeforeNode)
+            { // the path is between this node and its left node)
+                if (node.Left != null)
+                    pathIsLeft.Push(false);
+                pathIsLeft.Push(true); 
+            }
             var onPathToNode = node;
             while (onPathToNode.Parent != null)
             {
@@ -116,7 +122,7 @@ namespace Lazinator.Collections.Avl.ValueTree
                 comparisonFunc = n => 1; // insert after last node
             else
             {
-                MiniBoolStack pathIsLeft = GetCompactPathToNode(node);
+                MiniBoolStack pathIsLeft = GetCompactPathToNode(node, true);
                 comparisonFunc = ComparisonToFollowCompactPath(pathIsLeft);
             }
             InsertOrReplaceReturningNode(item, comparisonFunc);
@@ -195,7 +201,7 @@ namespace Lazinator.Collections.Avl.ValueTree
 
         public override void RemoveNode(BinaryNode<T> node)
         {
-            MiniBoolStack pathIsLeft = GetCompactPathToNode(node);
+            MiniBoolStack pathIsLeft = GetCompactPathToNode(node, false);
             BinaryNode<T> result = TryRemoveReturningNode(MultivalueLocationOptions.Any, ComparisonToFollowCompactPath(pathIsLeft));
             if (result != node)
                 throw new Exception("Internal exception on RemoveNode.");
