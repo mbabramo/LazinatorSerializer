@@ -10,7 +10,6 @@ namespace Lazinator.Collections.Avl.ListTree
     [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlListTree)]
     internal interface IAvlListTree<T> where T : ILazinator
     {
-        [OnSet("", "\nAllowDuplicatesChanged(value);")]
         [SetterAccessibility("protected")]
         bool AllowDuplicates { get; }
         [SetterAccessibility("protected")]

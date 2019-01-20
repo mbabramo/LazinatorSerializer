@@ -28,6 +28,8 @@ namespace Lazinator.Collections.Interfaces
         (IContainerLocation location, bool found) FindContainerLocation(T value, IComparer<T> comparer);
         IContainerLocation FirstLocation();
         IContainerLocation LastLocation();
+        T GetAt(IContainerLocation location);
+        void SetAt(IContainerLocation location, T value);
         /// <summary>
         /// Gets a matching value using a custom comparer, which may match on only part of the item.
         /// </summary>

@@ -330,6 +330,8 @@ namespace Lazinator.Collections
 
         public IContainerLocation FirstLocation() => new IndexLocation(0, LongCount);
         public IContainerLocation LastLocation() => new IndexLocation(LongCount - 1, LongCount);
+        public T GetAt(IContainerLocation location) => GetAtIndex(((IndexLocation)location).Index);
+        public void SetAt(IContainerLocation location, T value) => SetAtIndex(((IndexLocation)location).Index, value);
 
         public virtual IValueContainer<T> SplitOff(IComparer<T> comparer)
         {

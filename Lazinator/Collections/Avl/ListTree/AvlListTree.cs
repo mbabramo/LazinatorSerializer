@@ -156,8 +156,21 @@ namespace Lazinator.Collections.Avl.ListTree
         }
 
 
-        public IContainerLocation FirstLocation() => new AvlListTreeLocation<T>((AvlCountedNode<IMultivalueContainer<T>>) UnderlyingTree.FirstNode(), UnderlyingTree.First().FirstLocation());
-        public IContainerLocation LastLocation() => new AvlListTreeLocation<T>((AvlCountedNode<IMultivalueContainer<T>>)UnderlyingTree.LastNode(),  UnderlyingTree.Last().LastLocation());
+        public IContainerLocation FirstLocation() => new AvlListTreeLocation<T>((AvlCountedNode<IMultivalueContainer<T>>)UnderlyingTree.FirstNode(), UnderlyingTree.First().FirstLocation());
+        public IContainerLocation LastLocation() => new AvlListTreeLocation<T>((AvlCountedNode<IMultivalueContainer<T>>)UnderlyingTree.LastNode(), UnderlyingTree.Last().LastLocation());
+
+        public T GetAt(IContainerLocation location)
+        {
+            AvlListTreeLocation<T> avlLocation = (AvlListTreeLocation<T>)location;
+            var node = avlLocation.OuterNode;
+            return node.Value.GetAt(avlLocation.InnerLocation);
+        }
+        public void SetAt(IContainerLocation location, T value)
+        {
+            AvlListTreeLocation<T> avlLocation = (AvlListTreeLocation<T>)location;
+            var node = avlLocation.OuterNode;
+            node.Value.SetAt(avlLocation.InnerLocation, value);
+        }
 
         public void Clear()
         {

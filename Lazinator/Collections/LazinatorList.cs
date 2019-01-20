@@ -571,6 +571,8 @@ namespace Lazinator.Collections
 
         public IContainerLocation FirstLocation() => new IndexLocation(0, LongCount);
         public IContainerLocation LastLocation() => new IndexLocation(LongCount - 1, LongCount);
+        public T GetAt(IContainerLocation location) => GetAtIndex(((IndexLocation)location).Index);
+        public void SetAt(IContainerLocation location, T value) => SetAtIndex(((IndexLocation)location).Index, value);
 
         public (IContainerLocation location, bool found) FindContainerLocation(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer) => this.MultivalueFindMatchOrNext(AllowDuplicates, value, whichOne, comparer);
         public bool GetValue(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, out T match) => this.MultivalueGetValue(AllowDuplicates, item, whichOne, comparer, out match);
