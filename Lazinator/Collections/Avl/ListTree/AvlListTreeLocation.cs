@@ -10,26 +10,32 @@ namespace Lazinator.Collections.Avl.ListTree
 {
     public partial class AvlListTreeLocation<T> : IAvlListTreeLocation<T>, IContainerLocation where T : ILazinator
     {
+        public AvlListTreeLocation(AvlCountedNode<IMultivalueContainer<T>> outerNode, IContainerLocation innerLocation)
+        {
+            OuterNode = outerNode;
+            InnerLocation = innerLocation;
+        }
+
         public IContainerLocation GetNextLocation()
         {
             var nextInner = InnerLocation.GetNextLocation();
             if (nextInner != null)
-                return new AvlListTreeLocation<T>() { OuterNode = OuterNode, InnerLocation = nextInner };
+                return new AvlListTreeLocation<T>(OuterNode, nextInner);
             var nextOuter = (AvlCountedNode<IMultivalueContainer<T>>) OuterNode.GetNextNode();
             if (nextOuter == null)
                 return null;
-            return new AvlListTreeLocation<T>() { OuterNode = nextOuter, InnerLocation = nextOuter.Value.FirstLocation() };
+            return new AvlListTreeLocation<T>(nextOuter, nextOuter.Value.FirstLocation());
         }
 
         public IContainerLocation GetPreviousLocation()
         {
             var nextInner = InnerLocation.GetPreviousLocation();
             if (nextInner != null)
-                return new AvlListTreeLocation<T>() { OuterNode = OuterNode, InnerLocation = nextInner };
+                return new AvlListTreeLocation<T>(OuterNode, nextInner);
             var nextOuter = (AvlCountedNode<IMultivalueContainer<T>>)OuterNode.GetPreviousNode();
             if (nextOuter == null)
                 return null;
-            return new AvlListTreeLocation<T>() { OuterNode = nextOuter, InnerLocation = nextOuter.Value.LastLocation() };
+            return new AvlListTreeLocation<T>(nextOuter, nextOuter.Value.LastLocation());
         }
     }
 }
