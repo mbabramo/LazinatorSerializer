@@ -9,6 +9,12 @@ namespace Lazinator.Collections.Avl.ValueTree
 {
     public partial class AvlIndexableTree<T> : AvlTree<T>, IAvlIndexableTree<T>, IIndexableValueContainer<T>, IIndexableMultivalueContainer<T> where T : ILazinator
     {
+        public AvlCountedNode<T> AvlIndexableRoot => (AvlCountedNode<T>)Root;
+
+        public long LongCount => (Root as AvlCountedNode<T>)?.LongCount ?? 0;
+
+        #region Construction
+
         public AvlIndexableTree(bool allowDuplicates, bool unbalanced) : base(allowDuplicates, unbalanced)
         {
         }
@@ -17,8 +23,6 @@ namespace Lazinator.Collections.Avl.ValueTree
         {
             return new AvlIndexableTree<T>(AllowDuplicates, Unbalanced);
         }
-
-        public AvlCountedNode<T> AvlIndexableRoot => (AvlCountedNode<T>)Root;
 
         protected override BinaryNode<T> CreateNode(T value, BinaryNode<T> parent = null)
         {
@@ -29,6 +33,10 @@ namespace Lazinator.Collections.Avl.ValueTree
                 Parent = parent
             };
         }
+
+        #endregion
+
+        #region Find
 
         protected int CompareIndices(long desiredNodeIndex, AvlCountedNode<T> node, MultivalueLocationOptions whichOne)
         {
@@ -54,13 +62,26 @@ namespace Lazinator.Collections.Avl.ValueTree
         {
             return node => CompareIndices(index, (AvlCountedNode<T>) node, whichOne);
         }
+        
+        public (long index, bool exists) FindIndex(T target, IComparer<T> comparer) => FindIndex(target, MultivalueLocationOptions.Any, comparer);
+        public (long index, bool exists) FindIndex(T target, MultivalueLocationOptions whichOne, IComparer<T> comparer)
+        {
+            var result = GetMatchingOrNextNode(target, whichOne, comparer);
+            var node = ((AvlCountedNode<T>)result.node);
+            if (result.found)
+                return (node.Index, true);
+            return (node?.Index ?? LongCount, false);
+        }
 
-        public long LongCount => (Root as AvlCountedNode<T>)?.LongCount ?? 0;
+        #endregion
+
+        #region Access by index
 
         private bool ConfirmInRange(long index, bool allowAtCount = false)
         {
             return index >= 0 && (index < LongCount || (allowAtCount && index == LongCount));
         }
+
         private void ConfirmInRangeOrThrow(long index, bool allowAtCount = false)
         {
             if (!ConfirmInRange(index, allowAtCount))
@@ -86,24 +107,13 @@ namespace Lazinator.Collections.Avl.ValueTree
             node.Value = value;
         }
 
-        public void InsertAtIndex(long index, T item)
-        {
-            ConfirmInRangeOrThrow(index, true);
-            InsertOrReplace(item, CompareIndexToNodesIndex(index, MultivalueLocationOptions.InsertBeforeFirst));
-        }
-
-        public void RemoveAtIndex(long index)
-        {
-            ConfirmInRangeOrThrow(index, true);
-            TryRemove(MultivalueLocationOptions.Any, CompareIndexToNodesIndex(index, MultivalueLocationOptions.First));
-        }
-
         public override T GetAt(IContainerLocation location)
         {
             if (location is IndexLocation indexLocation)
                 return GetAtIndex(indexLocation.Index);
             return base.GetAt(location);
         }
+
         public override void SetAt(IContainerLocation location, T value)
         {
             if (location is IndexLocation indexLocation)
@@ -112,27 +122,31 @@ namespace Lazinator.Collections.Avl.ValueTree
                 base.SetAt(location, value);
         }
 
-        public override IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
+        #endregion
+
+        #region Insertion
+
+        public void InsertAtIndex(long index, T item)
         {
-            var enumerator = new AvlNodeEnumerator<T>(this, reverse, skip);
-            while (enumerator.MoveNext())
-                yield return enumerator.Current.Value;
+            ConfirmInRangeOrThrow(index, true);
+            InsertOrReplace(item, CompareIndexToNodesIndex(index, MultivalueLocationOptions.InsertBeforeFirst));
         }
 
-        public (long index, bool exists) FindIndex(T target, IComparer<T> comparer) => FindIndex(target, MultivalueLocationOptions.Any, comparer);
-        public (long index, bool exists) FindIndex(T target, MultivalueLocationOptions whichOne, IComparer<T> comparer)
-        {
-            var result = GetMatchingOrNextNode(target, whichOne, comparer);
-            var node = ((AvlCountedNode<T>)result.node);
-            if (result.found)
-                return (node.Index, true);
-            return (node?.Index ?? LongCount, false);
-        }
         public override (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
             var result = InsertOrReplaceReturningNode(item, whichOne, comparer);
             var node = ((AvlCountedNode<T>)result.node);
             return (new IndexLocation(node.Index, LongCount), result.insertedNotReplaced);
+        }
+
+        #endregion
+
+        #region Removal
+
+        public void RemoveAtIndex(long index)
+        {
+            ConfirmInRangeOrThrow(index, true);
+            TryRemove(MultivalueLocationOptions.Any, CompareIndexToNodesIndex(index, MultivalueLocationOptions.First));
         }
 
         public bool TryRemoveAll(T item) => TryRemoveAll(item, Comparer<T>.Default);
@@ -160,5 +174,19 @@ namespace Lazinator.Collections.Avl.ValueTree
             AvlIndexableRoot.ResetIndicesFollowingTreeSplit();
             return newContainer;
         }
+
+        #endregion
+
+        #region Enumeration
+
+        public override IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
+        {
+            var enumerator = new AvlNodeEnumerator<T>(this, reverse, skip);
+            while (enumerator.MoveNext())
+                yield return enumerator.Current.Value;
+        }
+
+        #endregion
+        
     }
 }

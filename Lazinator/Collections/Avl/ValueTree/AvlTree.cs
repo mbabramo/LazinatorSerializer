@@ -17,6 +17,8 @@ namespace Lazinator.Collections.Avl.ValueTree
     {
         public AvlNode<T> AvlRoot => (AvlNode<T>)Root;
 
+        #region Construction
+
         public AvlTree(bool allowDuplicates, bool unbalanced) : base(allowDuplicates, unbalanced)
         {
         }
@@ -38,6 +40,10 @@ namespace Lazinator.Collections.Avl.ValueTree
                 Parent = parent
             };
         }
+
+        #endregion
+
+        #region Insertion
 
         protected override (BinaryNode<T> node, bool insertedNotReplaced) InsertOrReplaceReturningNode(T item, Func<BinaryNode<T>, int> comparisonFunc)
         {
@@ -106,8 +112,11 @@ namespace Lazinator.Collections.Avl.ValueTree
             return (Root, true);
         }
 
-       
+        #endregion
 
+        #region Removal
+
+        public void RemoveAt(IContainerLocation location) => RemoveNode((BinaryNode<T>)location);
 
         public void RemoveNode(BinaryNode<T> node)
         {
@@ -329,6 +338,8 @@ namespace Lazinator.Collections.Avl.ValueTree
             AvlRoot?.UpdateFollowingTreeChange();
             return null;
         }
+
+        #endregion
 
         #region Balancing
 
@@ -647,6 +658,7 @@ namespace Lazinator.Collections.Avl.ValueTree
             base.Replace(target, source);
             ((AvlNode<T>)target).Balance = ((AvlNode<T>)source).Balance;
         }
+
         #endregion
 
         #region Enumeration

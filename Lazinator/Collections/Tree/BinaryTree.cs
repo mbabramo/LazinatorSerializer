@@ -17,6 +17,8 @@ namespace Lazinator.Collections.Tree
     /// <typeparam name="T"></typeparam>
     public partial class BinaryTree<T> : IBinaryTree<T>, IValueContainer<T>, IMultivalueContainer<T>, IEnumerable<T> where T : ILazinator
     {
+        #region Construction
+
         public BinaryTree(bool allowDuplicates, bool unbalanced)
         {
             AllowDuplicates = allowDuplicates;
@@ -31,9 +33,92 @@ namespace Lazinator.Collections.Tree
             };
         }
 
+        protected virtual BinaryNode<T> CreateNode(T value, BinaryNode<T> parent = null)
+        {
+            return new BinaryNode<T>()
+            {
+                Value = value,
+                Parent = parent
+            };
+        }
+
+        public string ToTreeString() => Root?.ToTreeString() ?? "";
+
+        #endregion
+
+        #region Access by location
+
+        public virtual T GetAt(IContainerLocation location) => ((BinaryNode<T>)location).Value;
+
+        public virtual void SetAt(IContainerLocation location, T value) => ((BinaryNode<T>)location).Value = value;
+
+        #endregion
+
+        #region Size
+
         public bool Any()
         {
             return Root != null;
+        }
+
+        public long Count(T item, IComparer<T> comparer)
+        {
+            var node = GetMatchingNode(item, MultivalueLocationOptions.First, comparer);
+            if (node == null)
+                return 0;
+            long count = 0;
+            while (node != null)
+            {
+                count++;
+                node = node.GetNextNode();
+                if (node != null && !node.Value.Equals(item))
+                    node = null;
+            }
+            return count;
+        }
+
+        /// <summary>
+        /// Returns the depth identified when taking a route through the tree. To reduce allocations, this will be a route already taken if possible. This does not guarantee the maximum depth, but this can be used as an effective way to determine when the depth is so great that a split is necessary.
+        /// </summary>
+        /// <returns></returns>
+        public int GetApproximateDepth()
+        {
+            BinaryNode<T> node = Root;
+            int depth = 0;
+            while (node != null)
+            {
+                depth++;
+                node = node.SomeChild;
+            }
+            return depth;
+        }
+
+        #endregion
+
+        #region First and last
+
+        /// <summary>
+        /// Gets the last node (or none if empty).
+        /// </summary>
+        /// <returns></returns>
+        protected internal BinaryNode<T> FirstNode()
+        {
+            var x = Root;
+            while (x?.Left != null)
+                x = x.Left;
+            return x;
+        }
+
+        /// <summary>
+        /// Gets the last node (or none if empty)
+        /// </summary>
+        /// <returns></returns>
+        protected internal BinaryNode<T> LastNode()
+        {
+            var x = Root;
+            while (x?.Right != null)
+                x = x.Right;
+            return x;
         }
 
         public T Last()
@@ -65,36 +150,12 @@ namespace Lazinator.Collections.Tree
         }
 
         public IContainerLocation FirstLocation() => FirstNode();
+
         public IContainerLocation LastLocation() => LastNode();
-        public virtual T GetAt(IContainerLocation location) => ((BinaryNode<T>)location).Value;
-        public virtual void SetAt(IContainerLocation location, T value) => ((BinaryNode<T>)location).Value = value;
 
-        public long Count(T item, IComparer<T> comparer)
-        {
-            var node = GetMatchingNode(item, MultivalueLocationOptions.First, comparer);
-            if (node == null)
-                return 0;
-            long count = 0;
-            while (node != null)
-            {
-                count++;
-                node = node.GetNextNode();
-                if (node != null && !node.Value.Equals(item))
-                    node = null;
-            }
-            return count;
-        }
+        #endregion
 
-        protected virtual BinaryNode<T> CreateNode(T value, BinaryNode<T> parent = null)
-        {
-            return new BinaryNode<T>()
-            {
-                Value = value,
-                Parent = parent
-            };
-        }
-
-        public string ToTreeString() => Root?.ToTreeString() ?? "";
+        #region Find by value
 
         protected BinaryNode<T> GetMatchingNode(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer) => GetMatchingNode(whichOne, node => CompareValueToNode(value, node, whichOne, comparer));
 
@@ -176,7 +237,6 @@ namespace Lazinator.Collections.Tree
         }
 
         public bool GetValue(T item, IComparer<T> comparer, out T match) => GetValue(item, MultivalueLocationOptions.Any, comparer, out match);
-
         /// <summary>
         /// Returns a matching item. This is useful if the comparer considers only part of the information in the item.
         /// </summary>
@@ -196,34 +256,9 @@ namespace Lazinator.Collections.Tree
             return false;
         }
 
-        public virtual void Clear()
-        {
-            Root = null;
-        }
+        #endregion
 
-        /// <summary>
-        /// Gets the last node (or none if empty).
-        /// </summary>
-        /// <returns></returns>
-        protected internal BinaryNode<T> FirstNode()
-        {
-            var x = Root;
-            while (x?.Left != null)
-                x = x.Left;
-            return x;
-        }
-
-        /// <summary>
-        /// Gets the last node (or none if empty)
-        /// </summary>
-        /// <returns></returns>
-        protected internal BinaryNode<T> LastNode()
-        {
-            var x = Root;
-            while (x?.Right != null)
-                x = x.Right;
-            return x;
-        }
+        #region Insertion
 
         public (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item, IComparer<T> comparer) => InsertOrReplace(item, MultivalueLocationOptions.Any, comparer);
 
@@ -297,6 +332,15 @@ namespace Lazinator.Collections.Tree
             Root = CreateNode(item);
 
             return (node, true);
+        }
+
+        #endregion
+
+        #region Removal
+
+        public virtual void Clear()
+        {
+            Root = null;
         }
 
         public bool TryRemove(T item, IComparer<T> comparer) => TryRemove(item, MultivalueLocationOptions.Any, comparer);
@@ -459,7 +503,7 @@ namespace Lazinator.Collections.Tree
         {
             BinaryNode<T> left = source.Left;
             BinaryNode<T> right = source.Right;
-            
+
             target.Value = (T)source.Value.CloneLazinator();
             target.Left = left;
             target.Right = right;
@@ -475,23 +519,6 @@ namespace Lazinator.Collections.Tree
             }
         }
 
-
-        /// <summary>
-        /// Returns the depth identified when taking a route through the tree. To reduce allocations, this will be a route already taken if possible. This does not guarantee the maximum depth, but this can be used as an effective way to determine when the depth is so great that a split is necessary.
-        /// </summary>
-        /// <returns></returns>
-        public int GetApproximateDepth()
-        {
-            BinaryNode<T> node = Root;
-            int depth = 0;
-            while (node != null)
-            {
-                depth++;
-                node = node.SomeChild;
-            }
-            return depth;
-        }
-
         public virtual IValueContainer<T> SplitOff(IComparer<T> comparer)
         {
             if (Root.Left == null || Root.Right == null)
@@ -504,10 +531,14 @@ namespace Lazinator.Collections.Tree
             Root.Parent = null;
             InsertOrReplace(originalRoot.Value, comparer);
             var newContainer = (BinaryTree<T>)CreateNewWithSameSettings();
-            newContainer.Root = (BinaryNode<T>) leftNode;
+            newContainer.Root = (BinaryNode<T>)leftNode;
             newContainer.Root.Parent = null;
             return newContainer;
         }
+
+        #endregion
+
+        #region Enumeration
 
         private BinaryNodeEnumerator<T> GetBinaryNodeEnumerator(bool reverse, long skip)
         {
@@ -535,5 +566,7 @@ namespace Lazinator.Collections.Tree
         {
             return GetEnumerator();
         }
+
+        #endregion
     }
 }
