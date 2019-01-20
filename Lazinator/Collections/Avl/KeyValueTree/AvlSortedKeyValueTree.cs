@@ -10,7 +10,7 @@ namespace Lazinator.Collections.Avl.KeyValueTree
 {
     public partial class AvlSortedKeyValueTree<TKey, TValue> : AvlKeyValueTree<TKey, TValue>, IAvlSortedKeyValueTree<TKey, TValue>, ISortedKeyValueContainer<TKey, TValue>, ISortedKeyMultivalueContainer<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
-        public AvlSortedKeyValueTree(ContainerFactory<LazinatorKeyValue<TKey, TValue>> innerContainerFactory) : base(innerContainerFactory)
+        public AvlSortedKeyValueTree(ContainerFactory<TKey> innerContainerFactory, bool allowDuplicates, bool unbalanced) : base(innerContainerFactory, allowDuplicates, unbalanced)
         {
         }
 

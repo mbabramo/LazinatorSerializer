@@ -15,12 +15,12 @@ namespace Lazinator.Collections.Avl.KeyValueTree
 {
     public partial class AvlKeyValueTree<TKey, TValue> : IAvlKeyValueTree<TKey, TValue>, IKeyValueContainer<TKey, TValue>, IKeyMultivalueContainer<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>> where TKey : ILazinator where TValue : ILazinator
     {
-        public ContainerFactory<LazinatorKeyValue<TKey, TValue>> InnerContainerFactory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public ContainerFactory<TKey> InnerContainerFactory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         #region Construction
 
-        public AvlKeyValueTree(ContainerFactory<LazinatorKeyValue<TKey, TValue>> innerContainerFactory, bool allowDuplicates, bool unbalanced)
+        public AvlKeyValueTree(ContainerFactory<TKey> innerContainerFactory, bool allowDuplicates, bool unbalanced)
         {
-            UnderlyingContainer = (IMultivalueContainer<LazinatorKeyValue<TKey, TValue>>)innerContainerFactory.CreateValueContainer();
+            UnderlyingContainer = (IMultivalueContainer<LazinatorKeyValue<TKey, TValue>>)innerContainerFactory.CreateContainerOfKeyValues<TValue>();
             AllowDuplicates = UnderlyingContainer.AllowDuplicates;
             Unbalanced = UnderlyingContainer.Unbalanced;
             if (AllowDuplicates != allowDuplicates || Unbalanced != unbalanced)

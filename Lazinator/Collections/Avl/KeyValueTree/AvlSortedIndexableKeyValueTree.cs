@@ -11,13 +11,13 @@ namespace Lazinator.Collections.Avl.KeyValueTree
 {
     public partial class AvlSortedIndexableKeyValueTree<TKey, TValue> : AvlIndexableKeyValueTree<TKey, TValue>, IAvlSortedIndexableKeyValueTree<TKey, TValue>, ISortedIndexableKeyValueContainer<TKey, TValue>, ISortedIndexableKeyMultivalueContainer<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
-        public AvlSortedIndexableKeyValueTree(ContainerFactory<LazinatorKeyValue<TKey, TValue>> innerContainerFactory) : base(innerContainerFactory)
+        public AvlSortedIndexableKeyValueTree(ContainerFactory<TKey> innerContainerFactory, bool allowDuplicates, bool unbalanced) : base(innerContainerFactory, allowDuplicates, unbalanced)
         {
         }
 
         public override IKeyValueContainer<TKey, TValue> CreateNewWithSameSettings()
         {
-            return new AvlSortedIndexableKeyValueTree<TKey, TValue>(InnerContainerFactory);
+            return new AvlSortedIndexableKeyValueTree<TKey, TValue>(InnerContainerFactory, AllowDuplicates, Unbalanced);
         }
 
         // from indexable
