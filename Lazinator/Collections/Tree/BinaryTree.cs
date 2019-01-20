@@ -260,13 +260,13 @@ namespace Lazinator.Collections.Tree
 
         #region Path to node
 
-        private static Func<BinaryNode<T>, int> ComparisonToFollowPath(Stack<bool> pathIsLeft)
+        private static Func<BinaryNode<T>, int> ComparisonToFollowPath(Stack<bool> pathFromRoot)
         {
             return x =>
             {
-                if (!pathIsLeft.Any())
+                if (!pathFromRoot.Any())
                     return 0;
-                if (pathIsLeft.Pop())
+                if (pathFromRoot.Pop())
                     return -1;
                 else
                     return 1;
@@ -276,21 +276,21 @@ namespace Lazinator.Collections.Tree
 
         private static Stack<bool> GetPathToNode(BinaryNode<T> node, bool justBeforeNode)
         {
-            Stack<bool> pathIsLeft = new Stack<bool>();
+            Stack<bool> pathFromRoot = new Stack<bool>();
             if (justBeforeNode)
             { // the path is between this node and its left node)
                 if (node.Left != null)
-                    pathIsLeft.Push(false);
-                pathIsLeft.Push(true);
+                    pathFromRoot.Push(false);
+                pathFromRoot.Push(true);
             }
             var onPathToNode = node;
             while (onPathToNode.Parent != null)
             {
-                pathIsLeft.Push(onPathToNode.Parent.Left == onPathToNode);
+                pathFromRoot.Push(onPathToNode.Parent.Left == onPathToNode);
                 onPathToNode = onPathToNode.Parent;
             }
 
-            return pathIsLeft;
+            return pathFromRoot;
         }
 
         #endregion
@@ -305,8 +305,8 @@ namespace Lazinator.Collections.Tree
                 comparisonFunc = n => 1; // insert after last node
             else
             {
-                Stack<bool> pathIsLeft = GetPathToNode(node, true);
-                comparisonFunc = ComparisonToFollowPath(pathIsLeft);
+                Stack<bool> pathFromRoot = GetPathToNode(node, true);
+                comparisonFunc = ComparisonToFollowPath(pathFromRoot);
             }
             InsertOrReplaceReturningNode(item, comparisonFunc);
         }
@@ -564,8 +564,8 @@ namespace Lazinator.Collections.Tree
 
         public virtual void RemoveNode(BinaryNode<T> node)
         {
-            Stack<bool> pathIsLeft = GetPathToNode(node, false);
-            BinaryNode<T> result = TryRemoveReturningNode(MultivalueLocationOptions.Any, ComparisonToFollowPath(pathIsLeft));
+            Stack<bool> pathFromRoot = GetPathToNode(node, false);
+            BinaryNode<T> result = TryRemoveReturningNode(MultivalueLocationOptions.Any, ComparisonToFollowPath(pathFromRoot));
             if (result != node)
                 throw new Exception("Internal exception on RemoveNode.");
         }
