@@ -240,7 +240,9 @@ namespace LazinatorTests.Tests
                 {
                     int r = ran.Next(100);
                     RandomInstruction instruction;
-                    if (r < 25)
+                    if (r < 10)
+                        instruction = new ChangeValueToSelfInstruction();
+                    else if (r < 25)
                         instruction = new GetValueInstruction();
                     else
                         if (r < 75)
@@ -622,6 +624,77 @@ namespace LazinatorTests.Tests
                     present.Should().BeTrue();
                     AssertEqual(match, listResultOrNull.Value.item);
                 }
+            }
+        }
+
+        public class ChangeValueToSelfInstruction : RandomInstruction
+        {
+            MultivalueLocationOptions WhichOne;
+
+            public override void Execute(ValueContainerTests<T> testClass, IValueContainer<T> container, List<T> list)
+            {
+                EstablishSorted(container);
+                WhichOne = testClass.ran.Next(2) == 0 ? MultivalueLocationOptions.First : MultivalueLocationOptions.Last;
+                if (!list.Any())
+                    return;
+                int index = testClass.ran.Next(list.Count);
+                T value = list[index];
+                IContainerLocation location;
+                bool found;
+                if (container is IMultivalueContainer<T> multivalueContainer)
+                {
+                     (location, found) = multivalueContainer.FindContainerLocation(value, WhichOne, Comparer<T>.Default);
+                }
+                else
+                {
+                    (location, found) = container.FindContainerLocation(value, Comparer<T>.Default);
+                }
+
+                found.Should().BeTrue();
+                container.GetAt(location).Equals(value).Should().BeTrue();
+                container.SetAt(location, value); // should have no effect
+            }
+
+            // Since logic is handled above, there is no need to implement abstract methods.
+
+            public override void Execute_Indexable(ValueContainerTests<T> testClass, IIndexableValueContainer<T> container, List<T> list)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void Execute_IndexableMultivalue(ValueContainerTests<T> testClass, IIndexableMultivalueContainer<T> container, List<T> list)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void Execute_Multivalue(ValueContainerTests<T> testClass, IMultivalueContainer<T> container, List<T> list)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void Execute_Sorted(ValueContainerTests<T> testClass, ISortedValueContainer<T> container, List<T> list)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void Execute_SortedIndexable(ValueContainerTests<T> testClass, ISortedIndexableContainer<T> container, List<T> list)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void Execute_SortedIndexableMultivalue(ValueContainerTests<T> testClass, ISortedIndexableMultivalueContainer<T> container, List<T> list)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void Execute_SortedMultivalue(ValueContainerTests<T> testClass, ISortedMultivalueContainer<T> container, List<T> list)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void Execute_Value(ValueContainerTests<T> testClass, IValueContainer<T> container, List<T> list)
+            {
+                throw new NotImplementedException();
             }
         }
 

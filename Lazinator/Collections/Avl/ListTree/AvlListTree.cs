@@ -155,7 +155,6 @@ namespace Lazinator.Collections.Avl.ListTree
             return UnderlyingTree.Last().Last();
         }
 
-
         public IContainerLocation FirstLocation() => new AvlListTreeLocation<T>((AvlCountedNode<IMultivalueContainer<T>>)UnderlyingTree.FirstNode(), UnderlyingTree.First().FirstLocation());
         public IContainerLocation LastLocation() => new AvlListTreeLocation<T>((AvlCountedNode<IMultivalueContainer<T>>)UnderlyingTree.LastNode(), UnderlyingTree.Last().LastLocation());
 
