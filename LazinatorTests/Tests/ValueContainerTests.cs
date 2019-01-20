@@ -249,7 +249,7 @@ namespace LazinatorTests.Tests
                         instruction = new InsertValueInstruction();
                     else
                         instruction = new RemoveInstruction();
-                    if (rep == 4 && i == 52)
+                    if (rep == 0 && i == 3)
                     {
                         var DEBUG = 0;
                     }
@@ -734,7 +734,31 @@ namespace LazinatorTests.Tests
                 EstablishSorted(container);
                 // If we are using the base container type, then we can only add items with a comparer, so we treat it as a sorted container.
                 (Index, InsertedNotReplaced) = testClass.InsertOrReplaceItem(list, Item, ContainerIsSorted || !(container is IIndexableValueContainer<T>), WhichOne);
-                base.Execute(testClass, container, list);
+                if (InsertedNotReplaced && testClass.ran.Next(2) == 0)
+                {
+                    // test InsertAt with location
+                    (IContainerLocation location, bool found) findResult;
+                    if (!ContainerIsSorted && container is IIndexableValueContainer<T>)
+                    {
+                        findResult.location = new IndexLocation(Index, list.Count());
+                    }
+                    else
+                    {
+
+                        MultivalueLocationOptions whichOneModified = WhichOne;
+                        if (WhichOne == MultivalueLocationOptions.InsertAfterLast)
+                            whichOneModified = MultivalueLocationOptions.Last;
+                        else if (WhichOne == MultivalueLocationOptions.InsertBeforeFirst)
+                            whichOneModified = MultivalueLocationOptions.First;
+                        if (container is IMultivalueContainer<T> multivalueContainer)
+                            findResult = multivalueContainer.FindContainerLocation(Item, whichOneModified, Comparer<T>.Default);
+                        else
+                            findResult = container.FindContainerLocation(Item, Comparer<T>.Default);
+                    }
+                    container.InsertAt(findResult.location, Item);
+                }
+                else
+                    base.Execute(testClass, container, list);
             }
 
             public override void Execute_Indexable(ValueContainerTests<T> testClass, IIndexableValueContainer<T> container, List<T> list)

@@ -125,6 +125,16 @@ namespace Lazinator.Collections.Avl.ValueTree
         #endregion
 
         #region Insertion
+        
+        public override void InsertAt(IContainerLocation location, T item)
+        {
+            if (location is IndexLocation indexLocation)
+            {
+                InsertAtIndex(indexLocation.Index, item);
+            }
+            else
+                base.InsertAt(location, item);
+        }
 
         public void InsertAtIndex(long index, T item)
         {
