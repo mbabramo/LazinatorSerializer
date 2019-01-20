@@ -2,6 +2,7 @@
 using Lazinator.Attributes;
 using Lazinator.Collections.Tuples;
 using Lazinator.Collections.Avl.ValueTree;
+using Lazinator.Collections.Interfaces;
 
 namespace Lazinator.Collections.Avl.KeyValueTree
 {
@@ -14,6 +15,6 @@ namespace Lazinator.Collections.Avl.KeyValueTree
         bool AllowDuplicates { get; }
         [SetterAccessibility("protected")]
         bool Unbalanced { get; }
-        AvlTree<LazinatorKeyValue<TKey, TValue>> UnderlyingTree { get; set; }
+        IMultivalueContainer<LazinatorKeyValue<TKey, TValue>> UnderlyingContainer { get; set; }
     }
 }

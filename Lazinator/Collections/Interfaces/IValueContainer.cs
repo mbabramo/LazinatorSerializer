@@ -32,6 +32,7 @@ namespace Lazinator.Collections.Interfaces
         void SetAt(IContainerLocation location, T value);
         void RemoveAt(IContainerLocation location);
         void InsertAt(IContainerLocation location, T item);
+        bool Contains(T item, IComparer<T> comparer);
         /// <summary>
         /// Gets a matching value using a custom comparer, which may match on only part of the item.
         /// </summary>

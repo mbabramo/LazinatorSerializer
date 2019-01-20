@@ -12,7 +12,7 @@ namespace Lazinator.Collections.Avl.KeyValueTree
     {
         public AvlSortedIndexableKeyValueTree(bool allowDuplicates, bool unbalanced)
         {
-            UnderlyingTree = new AvlIndexableTree<LazinatorKeyValue<TKey, TValue>>(allowDuplicates, unbalanced);
+            UnderlyingContainer = new AvlIndexableTree<LazinatorKeyValue<TKey, TValue>>(allowDuplicates, unbalanced);
         }
 
         public override IKeyValueContainer<TKey, TValue> CreateNewWithSameSettings()

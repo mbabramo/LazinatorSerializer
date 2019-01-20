@@ -198,6 +198,12 @@ namespace Lazinator.Collections
             return (this.Any(x => System.Collections.Generic.EqualityComparer<T>.Default.Equals(x, item)));
         }
 
+        public bool Contains(T item, IComparer<T> comparer)
+        {
+            var result = FindContainerLocation(item, comparer);
+            return result.found;
+        }
+
         public void CopyTo(T[] array, int arrayIndex)
         {
             for (int i = 0; i < Count; i++)

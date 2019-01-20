@@ -18,7 +18,7 @@ namespace Lazinator.Collections.Avl.KeyValueTree
 
         public AvlKeyValueTree(bool allowDuplicates, bool unbalanced)
         {
-            UnderlyingTree = new AvlTree<LazinatorKeyValue<TKey, TValue>>(allowDuplicates, unbalanced);
+            UnderlyingContainer = new AvlTree<LazinatorKeyValue<TKey, TValue>>(allowDuplicates, unbalanced);
             AllowDuplicates = allowDuplicates;
             Unbalanced = unbalanced;
         }
@@ -30,7 +30,9 @@ namespace Lazinator.Collections.Avl.KeyValueTree
 
         public string ToTreeString()
         {
-            return UnderlyingTree.ToTreeString();
+            if (UnderlyingContainer is AvlTree<LazinatorKeyValue<TKey, TValue>> tree)
+                return tree.ToTreeString();
+            return "N/A";
         }
 
         #endregion
@@ -43,7 +45,7 @@ namespace Lazinator.Collections.Avl.KeyValueTree
 
         protected static CustomComparer<LazinatorKeyValue<TKey, TValue>> KeyValueComparer(IComparer<TKey> keyComparer, IComparer<TValue> valueComparer) => LazinatorKeyValue<TKey, TValue>.GetKeyValueComparer(keyComparer, valueComparer);
 
-        public bool ContainsKey(TKey key, IComparer<TKey> comparer) => UnderlyingTree.Contains(KeyPlusDefault(key), KeyComparer(comparer));
+        public bool ContainsKey(TKey key, IComparer<TKey> comparer) => UnderlyingContainer.Contains(KeyPlusDefault(key), KeyComparer(comparer));
 
         #endregion
 
@@ -51,11 +53,11 @@ namespace Lazinator.Collections.Avl.KeyValueTree
 
         public IEnumerable<TValue> GetAllValues(TKey key, IComparer<TKey> comparer)
         {
-            var match = UnderlyingTree.FindContainerLocation(KeyPlusDefault(key), MultivalueLocationOptions.First, KeyComparer(comparer));
+            var match = UnderlyingContainer.FindContainerLocation(KeyPlusDefault(key), MultivalueLocationOptions.First, KeyComparer(comparer));
             var location = match.location;
             while (location != null)
             {
-                LazinatorKeyValue<TKey, TValue> lazinatorKeyValue = UnderlyingTree.GetAt(location);
+                LazinatorKeyValue<TKey, TValue> lazinatorKeyValue = UnderlyingContainer.GetAt(location);
                 if (lazinatorKeyValue.Key.Equals(key))
                 {
                     yield return lazinatorKeyValue.Value;
@@ -82,7 +84,7 @@ namespace Lazinator.Collections.Avl.KeyValueTree
 
         public TValue GetValueForKey(TKey key, MultivalueLocationOptions whichOne, IComparer<TKey> comparer)
         {
-            bool found = UnderlyingTree.GetValue(KeyPlusDefault(key), whichOne, KeyComparer(comparer), out var match);
+            bool found = UnderlyingContainer.GetValue(KeyPlusDefault(key), whichOne, KeyComparer(comparer), out var match);
             if (!found)
                 throw new KeyNotFoundException();
             return match.Value;
@@ -92,14 +94,14 @@ namespace Lazinator.Collections.Avl.KeyValueTree
 
         public bool SetValueForKey(TKey key, TValue value, MultivalueLocationOptions whichOne, IComparer<TKey> comparer)
         {
-            var result = UnderlyingTree.InsertOrReplace(new LazinatorKeyValue<TKey, TValue>(key, value), whichOne, KeyComparer(comparer));
+            var result = UnderlyingContainer.InsertOrReplace(new LazinatorKeyValue<TKey, TValue>(key, value), whichOne, KeyComparer(comparer));
             return result.insertedNotReplaced;
         }
 
         public void AddValueForKey(TKey key, TValue value, IComparer<TKey> comparer)
         {
             if (AllowDuplicates)
-                UnderlyingTree.InsertOrReplace(new LazinatorKeyValue<TKey, TValue>(key, value), MultivalueLocationOptions.InsertAfterLast, KeyComparer(comparer));
+                UnderlyingContainer.InsertOrReplace(new LazinatorKeyValue<TKey, TValue>(key, value), MultivalueLocationOptions.InsertAfterLast, KeyComparer(comparer));
             else
                 SetValueForKey(key, value, comparer);
         }
@@ -112,7 +114,7 @@ namespace Lazinator.Collections.Avl.KeyValueTree
 
         public bool TryRemove(TKey key, MultivalueLocationOptions whichOne, IComparer<TKey> comparer)
         {
-            return UnderlyingTree.TryRemove(KeyPlusDefault(key), whichOne, KeyComparer(comparer));
+            return UnderlyingContainer.TryRemove(KeyPlusDefault(key), whichOne, KeyComparer(comparer));
         }
 
         public bool TryRemoveKeyValue(TKey key, TValue value, IComparer<TKey> comparer)
@@ -128,12 +130,12 @@ namespace Lazinator.Collections.Avl.KeyValueTree
             {
                 LazinatorKeyValue<TKey, TValue> keyValue = new LazinatorKeyValue<TKey, TValue>(key, value);
                 // first, find a matching key
-                var match = UnderlyingTree.FindContainerLocation(keyValue, MultivalueLocationOptions.First, KeyComparer(comparer));
+                var match = UnderlyingContainer.FindContainerLocation(keyValue, MultivalueLocationOptions.First, KeyComparer(comparer));
                 if (match.found == false)
                     return false;
                 // Now, find a matching value
                 bool keepGoing = match.found;
-                LazinatorKeyValue<TKey, TValue> keyValueWithKeyMatch = UnderlyingTree.GetAt(match.location);
+                LazinatorKeyValue<TKey, TValue> keyValueWithKeyMatch = UnderlyingContainer.GetAt(match.location);
                 while (keepGoing) 
                 {
                     if (EqualityComparer<TValue>.Default.Equals(keyValueWithKeyMatch.Value, value))
@@ -148,13 +150,13 @@ namespace Lazinator.Collections.Avl.KeyValueTree
                         }
                         else
                         {
-                            keyValueWithKeyMatch = UnderlyingTree.GetAt(match.location);
+                            keyValueWithKeyMatch = UnderlyingContainer.GetAt(match.location);
                         }
                     }
                 }
                 if (match.found)
                 {
-                    UnderlyingTree.RemoveAt(match.location);
+                    UnderlyingContainer.RemoveAt(match.location);
                     return true;
                 }
                 return false;
@@ -176,7 +178,7 @@ namespace Lazinator.Collections.Avl.KeyValueTree
 
         public void Clear()
         {
-            UnderlyingTree.Clear();
+            UnderlyingContainer.Clear();
         }
 
         #endregion
@@ -185,17 +187,17 @@ namespace Lazinator.Collections.Avl.KeyValueTree
 
         public IEnumerator<TKey> GetKeyEnumerator(bool reverse = false, long skip = 0)
         {
-            return new TransformEnumerator<LazinatorKeyValue<TKey, TValue>, TKey>(UnderlyingTree.GetEnumerator(reverse, skip), x => x.Key);
+            return new TransformEnumerator<LazinatorKeyValue<TKey, TValue>, TKey>(UnderlyingContainer.GetEnumerator(reverse, skip), x => x.Key);
         }
 
         public IEnumerator<TValue> GetValueEnumerator(bool reverse = false, long skip = 0)
         {
-            return new TransformEnumerator<LazinatorKeyValue<TKey, TValue>, TValue>(UnderlyingTree.GetEnumerator(reverse, skip), x => x.Value);
+            return new TransformEnumerator<LazinatorKeyValue<TKey, TValue>, TValue>(UnderlyingContainer.GetEnumerator(reverse, skip), x => x.Value);
         }
 
         public IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(bool reverse = false, long skip = 0)
         {
-            return new TransformEnumerator<LazinatorKeyValue<TKey, TValue>, KeyValuePair<TKey, TValue>>(UnderlyingTree.GetEnumerator(reverse, skip), x => x.KeyValuePair);
+            return new TransformEnumerator<LazinatorKeyValue<TKey, TValue>, KeyValuePair<TKey, TValue>>(UnderlyingContainer.GetEnumerator(reverse, skip), x => x.KeyValuePair);
         }
 
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()

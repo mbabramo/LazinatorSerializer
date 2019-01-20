@@ -71,9 +71,15 @@ namespace Lazinator.Collections
             Count = 0;
         }
 
-        public bool Contains(T item)
+        public virtual bool Contains(T item)
         {
             return IndexOf(item) != -1;
+        }
+
+        public bool Contains(T item, IComparer<T> comparer)
+        {
+            var result = FindContainerLocation(item, comparer);
+            return result.found;
         }
 
         public void CopyTo(T[] array, int arrayIndex)

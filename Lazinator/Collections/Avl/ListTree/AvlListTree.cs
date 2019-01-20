@@ -116,7 +116,7 @@ namespace Lazinator.Collections.Avl.ListTree
         }
 
         private IMultivalueContainer<T> GetMultivalueContainerForValue(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, bool chooseShorterIfInBetween) => GetMultivalueContainer(GetNodeForValue(item, whichOne, comparer, chooseShorterIfInBetween));
-
+        
         public bool Any()
         {
             return UnderlyingTree.Any();
@@ -380,6 +380,12 @@ namespace Lazinator.Collections.Avl.ListTree
             return (new AvlListTreeLocation<T>(node, insideNodeResult.location), nodeResult.found);
         }
         public (IContainerLocation location, bool found) FindContainerLocation(T value, IComparer<T> comparer) => FindContainerLocation(value, MultivalueLocationOptions.Any, comparer);
+
+        public bool Contains(T item, IComparer<T> comparer)
+        {
+            var result = FindContainerLocation(item, comparer);
+            return result.found;
+        }
 
     }
 

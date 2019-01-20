@@ -18,6 +18,8 @@ namespace Lazinator.Collections
             return new LazinatorSortedLinkedList<T>(AllowDuplicates);
         }
 
+        public override bool Contains(T item) => Contains(item, Comparer<T>.Default);
+
         public (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item) => InsertOrReplace(item, Comparer<T>.Default);
         public (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item, MultivalueLocationOptions whichOne) => InsertOrReplace(item, whichOne, Comparer<T>.Default);
 
