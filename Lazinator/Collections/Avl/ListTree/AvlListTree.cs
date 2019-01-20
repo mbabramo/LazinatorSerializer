@@ -225,14 +225,32 @@ namespace Lazinator.Collections.Avl.ListTree
 
         public void InsertAt(IContainerLocation location, T item)
         {
-            AvlListTreeLocation<T> listTreeLocation = (AvlListTreeLocation<T>)location;
+            if (UnderlyingTree.Any() == false)
+            {
+                InsertInitialNode(item, Comparer<T>.Default);
+                return;
+            }
+            AvlListTreeLocation<T> listTreeLocation = ToAvlListTreeLocation(location);
             var multivalueContainer = listTreeLocation.OuterNode.Value;
             multivalueContainer.InsertAt(listTreeLocation.InnerLocation, item);
             if (InteriorContainerFactory.RequiresSplitting(multivalueContainer))
             {
                 IMultivalueContainer<T> splitOff = (IMultivalueContainer<T>)multivalueContainer.SplitOff();
-                UnderlyingTree.InsertAt((BinaryNode<T>)multivalueContainer, splitOff);
+                UnderlyingTree.InsertAt(listTreeLocation.OuterNode, splitOff);
             }
+        }
+
+        private AvlListTreeLocation<T> ToAvlListTreeLocation(IContainerLocation location)
+        {
+            AvlListTreeLocation<T> listTreeLocation;
+            if (location == null)
+            {
+                var lastLocation = UnderlyingTree.LastLocation();
+                listTreeLocation = new AvlListTreeLocation<T>((AvlCountedNode<IMultivalueContainer<T>>)lastLocation, null);
+            }
+            else
+                listTreeLocation = (AvlListTreeLocation<T>)location;
+            return listTreeLocation;
         }
 
         public (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item, IComparer<T> comparer) => InsertOrReplace(item, AllowDuplicates ? MultivalueLocationOptions.InsertAfterLast : MultivalueLocationOptions.Any, comparer);
@@ -284,7 +302,7 @@ namespace Lazinator.Collections.Avl.ListTree
 
         public void RemoveAt(IContainerLocation location)
         {
-            AvlListTreeLocation<T> listTreeLocation = (AvlListTreeLocation<T>)location;
+            AvlListTreeLocation<T> listTreeLocation = ToAvlListTreeLocation(location);
             var node = listTreeLocation.OuterNode;
             var multivalueContainer = GetMultivalueContainer(node);
             multivalueContainer.RemoveAt(listTreeLocation.InnerLocation);
@@ -359,8 +377,6 @@ namespace Lazinator.Collections.Avl.ListTree
                 return (null, false);
             var node = (AvlCountedNode<IMultivalueContainer<T>>)nodeResult.node;
             var insideNodeResult = node.Value.FindContainerLocation(value, whichOne, comparer);
-            if (nodeResult.found != insideNodeResult.found)
-                throw new Exception();
             return (new AvlListTreeLocation<T>(node, insideNodeResult.location), nodeResult.found);
         }
         public (IContainerLocation location, bool found) FindContainerLocation(T value, IComparer<T> comparer) => FindContainerLocation(value, MultivalueLocationOptions.Any, comparer);

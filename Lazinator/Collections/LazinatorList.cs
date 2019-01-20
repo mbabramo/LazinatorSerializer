@@ -253,7 +253,7 @@ namespace Lazinator.Collections
             CompleteInsert(Count, item);
         }
 
-        public virtual void InsertAt(IContainerLocation location, T item) => InsertAtIndex((int)((IndexLocation)location).Index, item);
+        public virtual void InsertAt(IContainerLocation location, T item) => InsertAtIndex(location == null ? Count : (int)((IndexLocation)location).Index, item);
 
         public virtual void Insert(int index, T item)
         {

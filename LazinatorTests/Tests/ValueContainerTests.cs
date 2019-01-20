@@ -249,7 +249,7 @@ namespace LazinatorTests.Tests
                         instruction = new InsertValueInstruction();
                     else
                         instruction = new RemoveInstruction();
-                    if (rep == 0 && i == 3)
+                    if (rep == 0 && i == 16)
                     {
                         var DEBUG = 0;
                     }
