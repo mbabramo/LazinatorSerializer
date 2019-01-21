@@ -16,7 +16,7 @@ namespace Lazinator.Collections.Avl.KeyValueTree
         bool AllowDuplicates { get; }
         [SetterAccessibility("protected")]
         bool Unbalanced { get; }
-        ContainerFactory<TKey> InnerContainerFactory { get; set; }
+        ContainerFactory InnerContainerFactory { get; set; }
         IMultivalueContainer<LazinatorKeyValue<TKey, TValue>> UnderlyingContainer { get; set; }
     }
 }

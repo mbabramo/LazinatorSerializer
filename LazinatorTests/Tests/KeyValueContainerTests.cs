@@ -60,7 +60,7 @@ namespace LazinatorTests.Tests
 
         public IKeyValueContainer<TKey, TValue> GetKeyValueContainer(KeyValueContainerType containerType)
         {
-            ContainerFactory<TKey> GetInnerContainerFactory(ContainerType innerContainerType, bool allowDuplicates) => new ContainerFactory<TKey>(new ContainerLevel(innerContainerType, false));
+            ContainerFactory GetInnerContainerFactory(ContainerType innerContainerType, bool allowDuplicates) => new ContainerFactory(new ContainerLevel(innerContainerType, false));
             switch (containerType)
             {
                 case KeyValueContainerType.AvlKeyValueTree:

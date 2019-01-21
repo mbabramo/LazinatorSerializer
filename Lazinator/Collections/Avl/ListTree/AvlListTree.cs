@@ -15,7 +15,7 @@ namespace Lazinator.Collections.Avl.ListTree
 {
     public partial class AvlListTree<T> : IAvlListTree<T>, IValueContainer<T>, IMultivalueContainer<T> where T : ILazinator
     {
-        public AvlListTree(bool allowDuplicates, bool unbalanced, ContainerFactory<T> innerContainerFactory)
+        public AvlListTree(bool allowDuplicates, bool unbalanced, ContainerFactory innerContainerFactory)
         {
             AllowDuplicates = allowDuplicates;
             Unbalanced = unbalanced;

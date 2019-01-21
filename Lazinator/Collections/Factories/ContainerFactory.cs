@@ -19,7 +19,7 @@ namespace Lazinator.Collections.Factories
     public partial class ContainerFactory : IContainerFactory
     {
         public ContainerLevel ThisLevel { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public IContainerFactory InnerFactory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public ContainerFactory InnerFactory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public ContainerFactory()
         {
@@ -30,7 +30,7 @@ namespace Lazinator.Collections.Factories
             ThisLevel = thisLevel;
         }
 
-        public ContainerFactory(ContainerLevel thisLevel, IContainerFactory innerContainerFactory)
+        public ContainerFactory(ContainerLevel thisLevel, ContainerFactory innerContainerFactory)
         {
             ThisLevel = thisLevel;
             InnerFactory = innerContainerFactory;
@@ -127,7 +127,7 @@ namespace Lazinator.Collections.Factories
             }
         }
 
-        public virtual IKeyValueContainer<WUint, LazinatorKeyValue<K, V>> GetHashableKeyValueContainer<V>() where V : ILazinator
+        public virtual IKeyValueContainer<WUint, LazinatorKeyValue<K, V>> GetHashableKeyValueContainer<K, V>() where K : ILazinator where V : ILazinator
         {
             switch (ThisLevel.ContainerType)
             {
@@ -140,18 +140,18 @@ namespace Lazinator.Collections.Factories
             }
         }
 
-        public bool RequiresSplitting(IValueContainer<K> container)
+        public bool RequiresSplitting<T>(IValueContainer<T> container) where T : ILazinator
         {
             if (container is ICountableContainer countable)
                 return countable.LongCount > ThisLevel.SplitThreshold;
-            if (container is BinaryTree<K> binaryTree)
+            if (container is BinaryTree<T> binaryTree)
             {
                 return binaryTree.GetApproximateDepth() > ThisLevel.SplitThreshold;
             }
             throw new NotImplementedException();
         }
 
-        public bool FirstIsShorter(IValueContainer<K> first, IValueContainer<K> second)
+        public bool FirstIsShorter<T>(IValueContainer<T> first, IValueContainer<T> second) where T : ILazinator
         {
             if (first is ICountableContainer countableFirst && second is ICountableContainer countableSecond)
                 return countableFirst.LongCount < countableSecond.LongCount;

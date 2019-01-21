@@ -9,6 +9,6 @@ namespace Lazinator.Collections.Factories
     public interface IContainerFactory 
     {
         ContainerLevel ThisLevel { get; set; }
-        IContainerFactory InnerFactory { get; set; }
+        ContainerFactory InnerFactory { get; set; }
     }
 }

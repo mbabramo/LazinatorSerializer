@@ -154,7 +154,7 @@ namespace LazinatorTests.Tests
 
         public IValueContainer<T> GetValueContainer(ValueContainerToUse containerType, bool allowDuplicates)
         {
-            ContainerFactory<T> factory;
+            ContainerFactory factory;
             switch (containerType)
             {
                 case ValueContainerToUse.AvlTree:
@@ -166,7 +166,7 @@ namespace LazinatorTests.Tests
                 case ValueContainerToUse.AvlSortedIndexableTree:
                     return new AvlSortedIndexableTree<T>(allowDuplicates, false);
                 case ValueContainerToUse.AvlListTreeTinyLazinatorList:
-                    factory = new ContainerFactory<T>(new List<ContainerLevel>()
+                    factory = new ContainerFactory(new List<ContainerLevel>()
                     {
                         new ContainerLevel(ContainerType.AvlListTree, long.MaxValue, false, allowDuplicates),
                         new ContainerLevel(ContainerType.LazinatorList, 1, false, allowDuplicates),
@@ -174,7 +174,7 @@ namespace LazinatorTests.Tests
                     );
                     return factory.CreateValueContainer();
                 case ValueContainerToUse.AvlListTreeSmallLazinatorList:
-                    factory = new ContainerFactory<T>(new List<ContainerLevel>()
+                    factory = new ContainerFactory(new List<ContainerLevel>()
                     {
                         new ContainerLevel(ContainerType.AvlListTree, long.MaxValue, false, allowDuplicates),
                         new ContainerLevel(ContainerType.LazinatorList, 3, false, allowDuplicates),
@@ -182,7 +182,7 @@ namespace LazinatorTests.Tests
                     );
                     return factory.CreateValueContainer();
                 case ValueContainerToUse.AvlListTreeRegularLazinatorList:
-                    factory = new ContainerFactory<T>(new List<ContainerLevel>()
+                    factory = new ContainerFactory(new List<ContainerLevel>()
                     {
                         new ContainerLevel(ContainerType.AvlListTree, long.MaxValue, false, allowDuplicates),
                         new ContainerLevel(ContainerType.LazinatorList, 5, false, allowDuplicates),
@@ -190,7 +190,7 @@ namespace LazinatorTests.Tests
                     );
                     return factory.CreateValueContainer();
                 case ValueContainerToUse.AvlListTreeTinyLinkedList:
-                    factory = new ContainerFactory<T>(new List<ContainerLevel>()
+                    factory = new ContainerFactory(new List<ContainerLevel>()
                     {
                         new ContainerLevel(ContainerType.AvlListTree, long.MaxValue, false, allowDuplicates),
                         new ContainerLevel(ContainerType.LazinatorLinkedList, 1, false, allowDuplicates),
@@ -198,7 +198,7 @@ namespace LazinatorTests.Tests
                     );
                     return factory.CreateValueContainer();
                 case ValueContainerToUse.AvlListTreeSmallLinkedList:
-                    factory = new ContainerFactory<T>(new List<ContainerLevel>()
+                    factory = new ContainerFactory(new List<ContainerLevel>()
                     {
                         new ContainerLevel(ContainerType.AvlListTree, long.MaxValue, false, allowDuplicates),
                         new ContainerLevel(ContainerType.LazinatorLinkedList, 3, false, allowDuplicates),
@@ -206,7 +206,7 @@ namespace LazinatorTests.Tests
                     );
                     return factory.CreateValueContainer();
                 case ValueContainerToUse.AvlListTreeRegularLinkedList:
-                    factory = new ContainerFactory<T>(new List<ContainerLevel>()
+                    factory = new ContainerFactory(new List<ContainerLevel>()
                     {
                         new ContainerLevel(ContainerType.AvlListTree, long.MaxValue, false, allowDuplicates),
                         new ContainerLevel(ContainerType.LazinatorLinkedList, 5, false, allowDuplicates),

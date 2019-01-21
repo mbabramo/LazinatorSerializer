@@ -19,7 +19,7 @@ namespace Lazinator.Collections.Avl
         {
         }
 
-        public AvlDictionary(bool allowDuplicates, ContainerFactory<TKey> innerFactory)
+        public AvlDictionary(bool allowDuplicates, ContainerFactory innerFactory)
         {
             UnderlyingTree = (ISortedKeyMultivalueContainer<WUint, LazinatorKeyValue<TKey, TValue>>) innerFactory.GetHashableKeyValueContainer<TValue>();
             if (UnderlyingTree.AllowDuplicates == false)

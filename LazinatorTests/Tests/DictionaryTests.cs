@@ -28,32 +28,32 @@ namespace LazinatorTests.Tests
             AvlSortedDictionaryMultiValue
         }
 
-        public ContainerFactory<TKey> GetDictionaryFactory<TKey, TValue>(DictionaryToUse dictionaryToUse) where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
+        public ContainerFactory GetDictionaryFactory<TKey, TValue>(DictionaryToUse dictionaryToUse) where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
         {
             switch (dictionaryToUse)
             {
                 case DictionaryToUse.LazinatorDictionary:
-                    return new ContainerFactory<TKey>(new ContainerLevel(ContainerType.LazinatorDictionary));
+                    return new ContainerFactory(new ContainerLevel(ContainerType.LazinatorDictionary));
                 case DictionaryToUse.AvlDictionary:
-                    return new ContainerFactory<TKey>(new List<ContainerLevel>()
+                    return new ContainerFactory(new List<ContainerLevel>()
                     {
                         new ContainerLevel(ContainerType.AvlDictionary),
                         new ContainerLevel(ContainerType.AvlKeyValueTree)
                     });
                 case DictionaryToUse.AvlDictionaryMultiValue:
-                    return new ContainerFactory<TKey>(new List<ContainerLevel>()
+                    return new ContainerFactory(new List<ContainerLevel>()
                     {
                         new ContainerLevel(ContainerType.AvlDictionary, true),
                         new ContainerLevel(ContainerType.AvlKeyValueTree, true)
                     });
                 case DictionaryToUse.AvlSortedDictionary:
-                    return new SortedContainerFactory<TKey>(new List<ContainerLevel>()
+                    return new SortedContainerFactory(new List<ContainerLevel>()
                     {
                         new ContainerLevel(ContainerType.AvlSortedDictionary),
                         new ContainerLevel(ContainerType.AvlSortedKeyValueTree)
                     });
                 case DictionaryToUse.AvlSortedDictionaryMultiValue:
-                    return new SortedContainerFactory<TKey>(new List<ContainerLevel>()
+                    return new SortedContainerFactory(new List<ContainerLevel>()
                     {
                         new ContainerLevel(ContainerType.AvlSortedDictionary, true),
                         new ContainerLevel(ContainerType.AvlSortedKeyValueTree, true)

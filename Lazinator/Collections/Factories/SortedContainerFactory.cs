@@ -12,7 +12,8 @@ using System.Text;
 
 namespace Lazinator.Collections.Factories
 {
-    public partial class SortedContainerFactory<T> : ContainerFactory<T>, ISortedContainerFactory<T> where T : ILazinator, IComparable<T>
+    debug; // move all
+    public partial class SortedContainerFactory : ContainerFactory, ISortedContainerFactory where T : ILazinator, IComparable<T>
     {
         public SortedContainerFactory(ContainerLevel thisLevel) : base(thisLevel)
         {
@@ -24,7 +25,7 @@ namespace Lazinator.Collections.Factories
             var remaining = levels.Skip(1);
             if (remaining.Any())
             {
-                InnerFactory = SortedInnerFactory = new SortedContainerFactory<T>(remaining);
+                InnerFactory = SortedInnerFactory = new SortedContainerFactory(remaining);
             }
         }
 

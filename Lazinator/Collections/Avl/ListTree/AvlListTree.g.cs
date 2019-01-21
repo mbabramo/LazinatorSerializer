@@ -77,8 +77,8 @@ namespace Lazinator.Collections.Avl.ListTree
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected ContainerFactory<T> _InnerContainerFactory;
-        public virtual ContainerFactory<T> InnerContainerFactory
+        protected ContainerFactory _InnerContainerFactory;
+        public virtual ContainerFactory InnerContainerFactory
         {
             [DebuggerStepThrough]
             get
@@ -87,13 +87,13 @@ namespace Lazinator.Collections.Avl.ListTree
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        _InnerContainerFactory = default(ContainerFactory<T>);
+                        _InnerContainerFactory = default(ContainerFactory);
                     }
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _InnerContainerFactory_ByteIndex, _InnerContainerFactory_ByteLength, false, false, null);
                         
-                        _InnerContainerFactory = DeserializationFactory.Instance.CreateBaseOrDerivedType(175, () => new ContainerFactory<T>(), childData, this); 
+                        _InnerContainerFactory = DeserializationFactory.Instance.CreateBaseOrDerivedType(175, () => new ContainerFactory(), childData, this); 
                     }
                     _InnerContainerFactory_Accessed = true;
                 } 
@@ -237,11 +237,11 @@ namespace Lazinator.Collections.Avl.ListTree
             {
                 if (InnerContainerFactory == null)
                 {
-                    typedClone.InnerContainerFactory = default(ContainerFactory<T>);
+                    typedClone.InnerContainerFactory = default(ContainerFactory);
                 }
                 else
                 {
-                    typedClone.InnerContainerFactory = (ContainerFactory<T>) InnerContainerFactory.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.InnerContainerFactory = (ContainerFactory) InnerContainerFactory.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
@@ -452,7 +452,7 @@ namespace Lazinator.Collections.Avl.ListTree
         {
             if ((!exploreOnlyDeserializedChildren && InnerContainerFactory != null) || (_InnerContainerFactory_Accessed && _InnerContainerFactory != null))
             {
-                _InnerContainerFactory = (ContainerFactory<T>) _InnerContainerFactory.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
+                _InnerContainerFactory = (ContainerFactory) _InnerContainerFactory.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if ((!exploreOnlyDeserializedChildren && UnderlyingTree != null) || (_UnderlyingTree_Accessed && _UnderlyingTree != null))
             {
