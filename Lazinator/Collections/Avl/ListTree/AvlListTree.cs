@@ -110,7 +110,7 @@ namespace Lazinator.Collections.Avl.ListTree
                     bool inBetweenThisAndPrevious = previousInnerContainer != null && comparer.Compare(item, previousInnerContainer.Last()) == 1;
                     if (inBetweenThisAndPrevious)
                     {
-                        if (InnerContainerFactory.FirstIsShorter(previousInnerContainer, initialInnerContainer))
+                        if (previousInnerContainer.IsShorterThan(initialInnerContainer))
                             return (previousInnerContainerLocation, previousInnerContainer);
                     }
                 }
@@ -259,30 +259,24 @@ namespace Lazinator.Collections.Avl.ListTree
                 InsertInitialNode(item, Comparer<T>.Default);
                 return;
             }
-            AvlListTreeLocation<T> listTreeLocation = ToAvlListTreeLocation(location);
+            if (location.IsAfterContainer)
+            {
+                if (UnderlyingTree == null || !UnderlyingTree.Any())
+                {
+                    InsertInitialNode(item, Comparer<T>.Default);
+                    return;
+                }
+                var innerContainer = UnderlyingTree.Last();
+                innerContainer.InsertAt(new AfterContainerLocation(), item);
+                return;
+            }
+            AvlListTreeLocation<T> listTreeLocation = (AvlListTreeLocation<T>)(location);
             listTreeLocation.InnerContainer.InsertAt(listTreeLocation.LocationInInnerContainer, item);
-            if (InnerContainerFactory.RequiresSplitting(listTreeLocation.InnerContainer))
+            if (InnerContainerFactory.ShouldSplit(listTreeLocation.InnerContainer))
             {
                 IMultivalueContainer<T> splitOff = (IMultivalueContainer<T>) listTreeLocation.InnerContainer.SplitOff();
                 UnderlyingTree.InsertAt(listTreeLocation.LocationOfInnerContainer, splitOff);
             }
-        }
-
-        private AvlListTreeLocation<T> ToAvlListTreeLocation(IContainerLocation location)
-        {
-            AvlListTreeLocation<T> listTreeLocation;
-            if (location.IsAfterContainer)
-            {
-                if (UnderlyingTree == null || !UnderlyingTree.Any())
-                    return default;
-                // Create a location that is at the end (null location) of the last inner container
-                var locationOfInnerContainer = UnderlyingTree.LastLocation();
-                var innerContainer = UnderlyingTree.GetAt(locationOfInnerContainer);
-                listTreeLocation = new AvlListTreeLocation<T>(UnderlyingTree, locationOfInnerContainer, innerContainer, null);
-            }
-            else
-                listTreeLocation = (AvlListTreeLocation<T>)location;
-            return listTreeLocation;
         }
 
         public (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item, IComparer<T> comparer) => InsertOrReplace(item, AllowDuplicates ? MultivalueLocationOptions.InsertAfterLast : MultivalueLocationOptions.Any, comparer);
@@ -309,7 +303,7 @@ namespace Lazinator.Collections.Avl.ListTree
                 return InsertInitialNode(item, comparer);
             }
             var resultWithinContainer = innerContainer.InsertOrReplace(item, whichOne, comparer);
-            if (InnerContainerFactory.RequiresSplitting(innerContainer))
+            if (InnerContainerFactory.ShouldSplit(innerContainer))
             {
                 IMultivalueContainer<T> splitOff = (IMultivalueContainer<T>)innerContainer.SplitOff();
                 UnderlyingTree.InsertAt(innerContainerLocation, splitOff);
@@ -333,7 +327,7 @@ namespace Lazinator.Collections.Avl.ListTree
 
         public void RemoveAt(IContainerLocation location)
         {
-            AvlListTreeLocation<T> listTreeLocation = ToAvlListTreeLocation(location);
+            AvlListTreeLocation<T> listTreeLocation = (AvlListTreeLocation<T>)location;
             listTreeLocation.InnerContainer.RemoveAt(listTreeLocation.LocationInInnerContainer);
             if (listTreeLocation.InnerContainer.Any() == false)
             {
@@ -388,6 +382,16 @@ namespace Lazinator.Collections.Avl.ListTree
                     innerContainer = UnderlyingTree.GetAt(innerContainerLocation);
                 }
             }
+        }
+
+        public bool ShouldSplit(long splitThreshold)
+        {
+            return UnderlyingTree.ShouldSplit(splitThreshold);
+        }
+
+        public bool IsShorterThan(IValueContainer<T> second)
+        {
+            return UnderlyingTree.IsShorterThan(((AvlListTree<T>)second).UnderlyingTree);
         }
 
         public IValueContainer<T> SplitOff()

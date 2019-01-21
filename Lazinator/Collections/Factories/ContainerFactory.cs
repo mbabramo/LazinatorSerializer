@@ -318,26 +318,9 @@ namespace Lazinator.Collections.Factories
             }
         }
 
-        public bool RequiresSplitting<T>(IValueContainer<T> container) where T : ILazinator
+        public bool ShouldSplit<T>(IValueContainer<T> container) where T : ILazinator
         {
-            if (container is ICountableContainer countable)
-                return countable.LongCount > ThisLevel.SplitThreshold;
-            if (container is BinaryTree<T> binaryTree)
-            {
-                return binaryTree.GetApproximateDepth() > ThisLevel.SplitThreshold;
-            }
-            throw new NotImplementedException();
-        }
-
-        public bool FirstIsShorter<T>(IValueContainer<T> first, IValueContainer<T> second) where T : ILazinator
-        {
-            if (first is ICountableContainer countableFirst && second is ICountableContainer countableSecond)
-                return countableFirst.LongCount < countableSecond.LongCount;
-            if (first is BinaryTree<T> firstTree && second is BinaryTree<T> secondTree)
-            {
-                return firstTree.GetApproximateDepth() < secondTree.GetApproximateDepth();
-            }
-            throw new NotImplementedException();
+            return container.ShouldSplit(ThisLevel.SplitThreshold);
         }
 
     }

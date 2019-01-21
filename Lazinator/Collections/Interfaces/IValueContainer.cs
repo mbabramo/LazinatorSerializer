@@ -13,6 +13,8 @@ namespace Lazinator.Collections.Interfaces
         [SetterAccessibility("protected")]
         bool Unbalanced { get; }
         IValueContainer<T> CreateNewWithSameSettings();
+        bool IsShorterThan(IValueContainer<T> second);
+        bool ShouldSplit(long splitThreshold);
         IValueContainer<T> SplitOff();
         bool Any();
         T First();

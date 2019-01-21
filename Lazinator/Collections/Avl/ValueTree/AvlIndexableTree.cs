@@ -42,7 +42,7 @@ namespace Lazinator.Collections.Avl.ValueTree
         public override (IContainerLocation location, bool found) FindContainerLocation(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
             var result = base.FindContainerLocation(value, whichOne, comparer);
-            if (result.location == null)
+            if (!result.found)
                 return result;
             // Convert result to index
             var node = (AvlCountedNode<T>) ((BinaryTreeLocation<T>)result.location).BinaryNode;

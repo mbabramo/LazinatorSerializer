@@ -260,7 +260,7 @@ namespace Lazinator.Collections
             CompleteInsert(Count, item);
         }
 
-        public virtual void InsertAt(IContainerLocation location, T item) => InsertAtIndex(location == null ? Count : (int)((IndexLocation)location).Index, item);
+        public virtual void InsertAt(IContainerLocation location, T item) => InsertAtIndex(location.IsAfterContainer ? Count : (int)((IndexLocation)location).Index, item);
 
         public virtual void Insert(int index, T item)
         {
@@ -538,6 +538,16 @@ namespace Lazinator.Collections
             if (index > Count || index < 0)
                 throw new ArgumentException();
             this[(int)index] = value;
+        }
+
+        public bool ShouldSplit(long splitThreshold)
+        {
+            return Count > splitThreshold;
+        }
+
+        public bool IsShorterThan(IValueContainer<T> second)
+        {
+            return Count < ((LazinatorList<T>)second).Count;
         }
 
         public IValueContainer<T> SplitOff()

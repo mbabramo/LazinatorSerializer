@@ -106,7 +106,7 @@ namespace Lazinator.Collections
             return -1;
         }
 
-        public virtual void InsertAt(IContainerLocation location, T item) => InsertAtIndex(location == null ? Count : (int)((IndexLocation)location).Index, item);
+        public virtual void InsertAt(IContainerLocation location, T item) => InsertAtIndex(location.IsAfterContainer ? Count : (int)((IndexLocation)location).Index, item);
 
         public void Insert(int index, T item)
         {
@@ -343,6 +343,16 @@ namespace Lazinator.Collections
         public IContainerLocation LastLocation() => new IndexLocation(LongCount - 1, LongCount);
         public T GetAt(IContainerLocation location) => GetAtIndex(((IndexLocation)location).Index);
         public void SetAt(IContainerLocation location, T value) => SetAtIndex(((IndexLocation)location).Index, value);
+
+        public bool ShouldSplit(long splitThreshold)
+        {
+            return Count > splitThreshold;
+        }
+
+        public bool IsShorterThan(IValueContainer<T> second)
+        {
+            return Count < ((LazinatorLinkedList<T>)second).Count;
+        }
 
         public virtual IValueContainer<T> SplitOff()
         {

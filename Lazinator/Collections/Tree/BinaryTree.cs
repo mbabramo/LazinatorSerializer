@@ -612,6 +612,19 @@ namespace Lazinator.Collections.Tree
             }
         }
 
+
+        public bool ShouldSplit(long splitThreshold)
+        {
+            if (this is ICountableContainer countable)
+                return countable.LongCount > splitThreshold;
+            return GetApproximateDepth() > splitThreshold;
+        }
+
+        public bool IsShorterThan(IValueContainer<T> second)
+        {
+            return GetApproximateDepth() < ((BinaryTree<T>)second).GetApproximateDepth();
+        }
+
         public virtual IValueContainer<T> SplitOff()
         {
             if (Root.Left == null || Root.Right == null)
