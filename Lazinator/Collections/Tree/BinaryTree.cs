@@ -48,9 +48,17 @@ namespace Lazinator.Collections.Tree
 
         #region Access by location
 
-        public virtual T GetAt(IContainerLocation location) => ((BinaryNode<T>)location).Value;
+        public BinaryNode<T> GetNodeFromLocation(IContainerLocation location) => ((BinaryTreeLocation<T>)location).BinaryNode;
 
-        public virtual void SetAt(IContainerLocation location, T value) => ((BinaryNode<T>)location).Value = value;
+        public virtual T GetAt(IContainerLocation location) => location == null || location.IsAfterCollection ? throw new ArgumentException() : GetNodeFromLocation(location).Value;
+
+        public virtual void SetAt(IContainerLocation location, T value)
+        {
+            if (location == null || location.IsAfterCollection)
+                throw new ArgumentException();
+            else
+                GetNodeFromLocation(location).Value = value;
+        }
 
         #endregion
 
@@ -172,7 +180,7 @@ namespace Lazinator.Collections.Tree
         public virtual (IContainerLocation location, bool found) FindContainerLocation(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
             var result = GetMatchingOrNextNode(value, whichOne, comparer);
-            return (result.node.GetLocation(), result.found);
+            return (result.node?.GetLocation() ?? new BinaryTreeLocation<T>(null), result.found);
         }
 
         protected internal (BinaryNode<T> node, bool found) GetMatchingOrNextNode(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer) => GetMatchingOrNextNode(whichOne, node => CompareValueToNode(value, node, whichOne, comparer));
@@ -296,7 +304,7 @@ namespace Lazinator.Collections.Tree
 
         public virtual void InsertAt(IContainerLocation location, T item)
         {
-            var node = (BinaryNode<T>)location;
+            var node = GetNodeFromLocation(location);
             Func<BinaryNode<T>, int> comparisonFunc;
             if (node == null)
                 comparisonFunc = n => 1; // insert after last node
@@ -417,7 +425,7 @@ namespace Lazinator.Collections.Tree
             Root = null;
         }
 
-        public virtual void RemoveAt(IContainerLocation location) => RemoveNode((BinaryNode<T>)location);
+        public virtual void RemoveAt(IContainerLocation location) => RemoveNode(GetNodeFromLocation(location));
 
         public bool TryRemove(T item, IComparer<T> comparer) => TryRemove(item, MultivalueLocationOptions.Any, comparer);
 
@@ -615,7 +623,7 @@ namespace Lazinator.Collections.Tree
             Root.Parent = null;
             InsertAtStart(originalRoot.Value);
             var newContainer = (BinaryTree<T>)CreateNewWithSameSettings();
-            newContainer.Root = (BinaryNode<T>)leftNode;
+            newContainer.Root = leftNode;
             newContainer.Root.Parent = null;
             return newContainer;
         }

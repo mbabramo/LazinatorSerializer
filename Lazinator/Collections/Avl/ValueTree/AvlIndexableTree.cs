@@ -44,7 +44,9 @@ namespace Lazinator.Collections.Avl.ValueTree
             if (result.location == null)
                 return result;
             // Convert result to index
-            var node = (AvlCountedNode<T>) result.location;
+            var node = (AvlCountedNode<T>) ((BinaryTreeLocation<T>)result.location).BinaryNode;
+            if (node == null)
+                return (new IndexLocation(LongCount, LongCount), false);
             return (new IndexLocation(node.Index, LongCount), result.found);
         }
 

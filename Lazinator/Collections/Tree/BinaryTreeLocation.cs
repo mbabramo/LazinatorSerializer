@@ -17,10 +17,10 @@ namespace Lazinator.Collections.Tree
             BinaryNode = binaryNode;
         }
 
-        public bool IsAfterCollection => BinaryNode != null;
+        public bool IsAfterCollection => BinaryNode == null;
 
         public IContainerLocation GetNextLocation() => new BinaryTreeLocation<T>(BinaryNode.GetNextNode());
 
-        public IContainerLocation GetPreviousLocation() => new BinaryTreeLocation<T>(BinaryNode.GetNextNode());
+        public IContainerLocation GetPreviousLocation() => new BinaryTreeLocation<T>(BinaryNode.GetPreviousNode());
     }
 }

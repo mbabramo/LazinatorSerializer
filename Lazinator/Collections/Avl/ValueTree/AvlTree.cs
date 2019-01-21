@@ -110,7 +110,7 @@ namespace Lazinator.Collections.Avl.ValueTree
 
         public override void InsertAt(IContainerLocation location, T item)
         {
-            var node = (BinaryNode<T>)location;
+            var node = ((BinaryTreeLocation<T>)location).BinaryNode;
             Func<BinaryNode<T>, int> comparisonFunc;
             if (node == null)
                 comparisonFunc = n => 1; // insert after last node
