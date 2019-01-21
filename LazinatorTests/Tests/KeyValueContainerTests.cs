@@ -22,6 +22,7 @@ namespace LazinatorTests.Tests
     public enum KeyValueContainerType
     {
         AvlKeyValueTree,
+        AvlKeyValueTreeWithUnderlyingAvlListTree,
         AvlIndexableKeyValueTree,
         AvlSortedKeyValueTree,
         AvlSortedIndexableKeyValueTree,
@@ -35,6 +36,7 @@ namespace LazinatorTests.Tests
     {
         [Theory]
         [InlineData(KeyValueContainerType.AvlKeyValueTree, 100, 100)]
+        [InlineData(KeyValueContainerType.AvlKeyValueTreeWithUnderlyingAvlListTree, 100, 100)]
         [InlineData(KeyValueContainerType.AvlIndexableKeyValueTree, 100, 100)]
         [InlineData(KeyValueContainerType.AvlSortedKeyValueTree, 100, 100)]
         [InlineData(KeyValueContainerType.AvlSortedIndexableKeyValueTree, 100, 100)]
@@ -66,6 +68,8 @@ namespace LazinatorTests.Tests
             {
                 case KeyValueContainerType.AvlKeyValueTree:
                     return new AvlKeyValueTree<TKey, TValue>(GetInnerContainerFactory(ContainerType.AvlTree, false), false, false);
+                case KeyValueContainerType.AvlKeyValueTreeWithUnderlyingAvlListTree:
+                    return new AvlKeyValueTree<TKey, TValue>(GetInnerContainerFactory(ContainerType.AvlListTree, false), false, false);
                 case KeyValueContainerType.AvlIndexableKeyValueTree:
                     return new AvlIndexableKeyValueTree<TKey, TValue>(GetInnerContainerFactory(ContainerType.AvlIndexableTree, false), false, false);
                 case KeyValueContainerType.AvlSortedKeyValueTree:

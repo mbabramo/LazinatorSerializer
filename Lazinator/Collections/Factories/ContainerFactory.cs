@@ -24,7 +24,7 @@ namespace Lazinator.Collections.Factories
 
         public ContainerFactory(ContainerLevel thisLevel)
         {
-            ThisLevel = thisLevel;
+            InitializeLevels(new List<ContainerLevel>() { thisLevel });
         }
 
         public ContainerFactory(ContainerLevel thisLevel, ContainerFactory innerContainerFactory)
@@ -34,6 +34,11 @@ namespace Lazinator.Collections.Factories
         }
 
         public ContainerFactory(IEnumerable<ContainerLevel> levels)
+        {
+            InitializeLevels(levels);
+        }
+
+        private void InitializeLevels(IEnumerable<ContainerLevel> levels)
         {
             ThisLevel = levels.First();
             var remaining = levels.Skip(1);
