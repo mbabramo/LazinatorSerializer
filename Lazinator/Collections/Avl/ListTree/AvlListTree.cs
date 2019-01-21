@@ -15,19 +15,13 @@ namespace Lazinator.Collections.Avl.ListTree
 {
     public partial class AvlListTree<T> : IAvlListTree<T>, IValueContainer<T>, IMultivalueContainer<T> where T : ILazinator
     {
-        public bool AllowDuplicates { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public bool Unbalanced { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
-        public IMultivalueContainer<IMultivalueContainer<T>> UnderlyingTree { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public ContainerFactory InnerContainerFactory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public AvlListTree(bool allowDuplicates, bool unbalanced, ContainerFactory innerContainerFactory)
         {
             AllowDuplicates = allowDuplicates;
             Unbalanced = unbalanced;
             InnerContainerFactory = innerContainerFactory;
-            UnderlyingTree = (IIndexableMultivalueContainer<IMultivalueContainer<T>>) innerContainerFactory.CreateValueContainer<IMultivalueContainer<T>>();
+            UnderlyingTree = (IMultivalueContainer<IMultivalueContainer<T>>) innerContainerFactory.CreateValueContainer<IMultivalueContainer<T>>();
         }
 
         public IValueContainer<T> CreateNewWithSameSettings()
@@ -89,12 +83,14 @@ namespace Lazinator.Collections.Avl.ListTree
 
         protected (IContainerLocation location, IMultivalueContainer<T> container) GetInnerLocationAndContainer(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, bool chooseShorterIfInBetween)
         {
-            if (UnderlyingTree == null)
+            if (UnderlyingTree == null || !UnderlyingTree.Any())
                 return default;
             // If inserting before the first or after the last, we still want the node containing the first or last.
             MultivalueLocationOptions whichOneModified = FirstOrLastFromBeforeOrAfter(whichOne);
             var matchInfo = UnderlyingTree.FindContainerLocation(null, whichOneModified, GetItemToInnerContainerComparer(item, comparer)); // Note: GetItemToInnerContainerComparer will result in comparing the item to the inner containers, so the "null" is a placeholder
             var locationOfInitialInnerContainer = matchInfo.location ?? UnderlyingTree.LastLocation();
+            if (locationOfInitialInnerContainer == null || locationOfInitialInnerContainer.IsAfterCollection)
+                return default;
             var initialInnerContainer = UnderlyingTree.GetAt(locationOfInitialInnerContainer);
             if (locationOfInitialInnerContainer == null || !chooseShorterIfInBetween)
                 return (locationOfInitialInnerContainer, initialInnerContainer);
@@ -107,12 +103,15 @@ namespace Lazinator.Collections.Avl.ListTree
             if (isBeforeThis)
             {
                 IContainerLocation previousInnerContainerLocation = locationOfInitialInnerContainer.GetPreviousLocation();
-                IMultivalueContainer<T> previousInnerContainer = UnderlyingTree.GetAt(previousInnerContainerLocation);
-                bool inBetweenThisAndPrevious = previousInnerContainer != null && comparer.Compare(item, previousInnerContainer.Last()) == 1;
-                if (inBetweenThisAndPrevious)
+                if (previousInnerContainerLocation != null)
                 {
-                    if (InnerContainerFactory.FirstIsShorter(previousInnerContainer, initialInnerContainer))
-                        return (previousInnerContainerLocation, previousInnerContainer);
+                    IMultivalueContainer<T> previousInnerContainer = UnderlyingTree.GetAt(previousInnerContainerLocation);
+                    bool inBetweenThisAndPrevious = previousInnerContainer != null && comparer.Compare(item, previousInnerContainer.Last()) == 1;
+                    if (inBetweenThisAndPrevious)
+                    {
+                        if (InnerContainerFactory.FirstIsShorter(previousInnerContainer, initialInnerContainer))
+                            return (previousInnerContainerLocation, previousInnerContainer);
+                    }
                 }
             }
             return (locationOfInitialInnerContainer, initialInnerContainer);
@@ -273,7 +272,7 @@ namespace Lazinator.Collections.Avl.ListTree
             AvlListTreeLocation<T> listTreeLocation;
             if (location == null)
             {
-                if (UnderlyingTree == null)
+                if (UnderlyingTree == null || !UnderlyingTree.Any())
                     return default;
                 // Create a location that is at the end (null location) of the last inner container
                 var locationOfInnerContainer = UnderlyingTree.LastLocation();
@@ -344,6 +343,8 @@ namespace Lazinator.Collections.Avl.ListTree
         public bool TryRemove(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
             (var innerContainerLocation, var innerContainer) = GetInnerLocationAndContainer(item, whichOne, comparer, true);
+            if (innerContainer == null)
+                return false;
             bool result = innerContainer.TryRemove(item, whichOne, comparer);
             if (result && !innerContainer.Any())
             {
@@ -390,16 +391,16 @@ namespace Lazinator.Collections.Avl.ListTree
 
         public IValueContainer<T> SplitOff()
         {
-            var splitOffUnderlying = (AvlIndexableTree<IMultivalueContainer<T>>)UnderlyingTree.SplitOff();
+            var splitOffUnderlying = UnderlyingTree.SplitOff();
             var splitOff = (AvlListTree<T>)CreateNewWithSameSettings();
-            splitOff.UnderlyingTree = splitOffUnderlying;
+            splitOff.UnderlyingTree = (IMultivalueContainer<IMultivalueContainer<T>>) splitOffUnderlying;
             return splitOff;
         }
 
         public (IContainerLocation location, bool found) FindContainerLocation(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
             var matchInfo = UnderlyingTree.FindContainerLocation(null, whichOne, GetItemToInnerContainerComparer(value, comparer)); // Note: GetItemToInnerContainerComparer will result in comparing the item to the inner containers, so the "null" is a placeholder
-            if (matchInfo.location == null)
+            if (matchInfo.location == null || matchInfo.location.IsAfterCollection)
                 return (null, false);
             var innerContainer = UnderlyingTree.GetAt(matchInfo.location);
             var innerContainerResult = innerContainer.FindContainerLocation(value, whichOne, comparer);

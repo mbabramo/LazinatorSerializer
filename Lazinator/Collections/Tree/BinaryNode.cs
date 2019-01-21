@@ -31,6 +31,8 @@ namespace Lazinator.Collections.Tree
             }
         }
 
+        public bool IsAfterCollection => false;
+
         public bool IsLeftNode => Parent != null && this == Parent._Left;
         public bool IsRightNode => Parent != null && this == Parent._Right;
 
@@ -38,7 +40,6 @@ namespace Lazinator.Collections.Tree
         /// Returns either the right or left child, preferring already allocated to nonallocated child and right to left.
         /// </summary>
         public BinaryNode<T> SomeChild => _Right ?? _Left ?? Right ?? Left;
-
 
         protected virtual BinaryNode<T> CreateNode(T value, BinaryNode<T> parent = null)
         {

@@ -8,6 +8,7 @@ namespace Lazinator.Collections.Interfaces
 {
     public interface IContainerLocation
     {
+        bool IsAfterCollection { get; }
         IContainerLocation GetNextLocation();
         IContainerLocation GetPreviousLocation();
     }

@@ -23,6 +23,8 @@ namespace Lazinator.Collections.Avl.ListTree
             LocationInInnerContainer = locationInInnerContainer;
         }
 
+        public bool IsAfterCollection => (LocationOfInnerContainer == null || LocationOfInnerContainer.IsAfterCollection || LocationInInnerContainer == null || LocationInInnerContainer.IsAfterCollection);
+
         public IContainerLocation GetNextLocation()
         {
             var nextInner = LocationInInnerContainer.GetNextLocation();
