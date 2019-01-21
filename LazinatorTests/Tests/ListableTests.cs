@@ -53,7 +53,7 @@ namespace LazinatorTests.Tests
                 case ListFactoryToUse.UnbalancedAvlList:
                     return new ContainerFactory(new List<ContainerLevel>()
                     {
-                        new ContainerLevel(ContainerType.AvlList, long.MaxValue, true, false),
+                        new ContainerLevel(ContainerType.AvlList, false, long.MaxValue, true),
                         new ContainerLevel(ContainerType.AvlIndexableTree)
                     });
                 case ListFactoryToUse.AvlList:
@@ -65,7 +65,7 @@ namespace LazinatorTests.Tests
                 case ListFactoryToUse.UnbalancedAvlSortedList:
                     return new ContainerFactory(new List<ContainerLevel>()
                     {
-                        new ContainerLevel(ContainerType.AvlSortedList, long.MaxValue, true, false),
+                        new ContainerLevel(ContainerType.AvlSortedList, false, long.MaxValue, true),
                         new ContainerLevel(ContainerType.AvlSortedIndexableTree)
                     });
                 case ListFactoryToUse.AvlSortedList:

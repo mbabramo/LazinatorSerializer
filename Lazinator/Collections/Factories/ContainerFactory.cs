@@ -18,9 +18,6 @@ namespace Lazinator.Collections.Factories
 {
     public partial class ContainerFactory : IContainerFactory
     {
-        public ContainerLevel ThisLevel { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public ContainerFactory InnerFactory { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         public ContainerFactory()
         {
         }
@@ -40,8 +37,63 @@ namespace Lazinator.Collections.Factories
         {
             ThisLevel = levels.First();
             var remaining = levels.Skip(1);
+            var next = remaining.FirstOrDefault();
+            if (next == null)
+            {
+                next = GetDefaultInnerFactory();
+                if (next != null)
+                    remaining = new List<ContainerLevel>() { next };
+            }
             if (remaining.Any())
                 InnerFactory = new ContainerFactory(remaining);
+        }
+
+        public virtual ContainerLevel GetDefaultInnerFactory()
+        {
+            switch (ThisLevel.ContainerType)
+            {
+                case ContainerType.LazinatorList:
+                    break;
+                case ContainerType.LazinatorSortedList:
+                    break;
+                case ContainerType.LazinatorLinkedList:
+                    break;
+                case ContainerType.LazinatorSortedLinkedList:
+                    break;
+                case ContainerType.AvlTree:
+                    break;
+                case ContainerType.AvlSortedTree:
+                    break;
+                case ContainerType.AvlIndexableTree:
+                    break;
+                case ContainerType.AvlSortedIndexableTree:
+                    break;
+                case ContainerType.AvlKeyValueTree:
+                case ContainerType.AvlSortedKeyValueTree:
+                    return new ContainerLevel(ContainerType.AvlTree, ThisLevel.AllowDuplicates, long.MaxValue, ThisLevel.Unbalanced);
+                case ContainerType.AvlIndexableKeyValueTree:
+                case ContainerType.AvlSortedIndexableKeyValueTree:
+                    return new ContainerLevel(ContainerType.AvlIndexableTree, ThisLevel.AllowDuplicates, long.MaxValue, ThisLevel.Unbalanced);
+                case ContainerType.AvlListTree:
+                case ContainerType.AvlIndexableListTree:
+                    return new ContainerLevel(ContainerType.LazinatorList, ThisLevel.AllowDuplicates, 10, ThisLevel.Unbalanced);
+                case ContainerType.AvlSortedListTree:
+                case ContainerType.AvlSortedIndexableListTree:
+                    return new ContainerLevel(ContainerType.LazinatorSortedList, ThisLevel.AllowDuplicates, 10, ThisLevel.Unbalanced);
+                case ContainerType.AvlList:
+                    return new ContainerLevel(ContainerType.AvlTree, ThisLevel.AllowDuplicates, long.MaxValue, ThisLevel.Unbalanced);
+                case ContainerType.AvlSortedList:
+                    return new ContainerLevel(ContainerType.AvlSortedTree, ThisLevel.AllowDuplicates, long.MaxValue, ThisLevel.Unbalanced);
+                case ContainerType.AvlDictionary:
+                    return new ContainerLevel(ContainerType.AvlSortedKeyValueTree, ThisLevel.AllowDuplicates, long.MaxValue, ThisLevel.Unbalanced);
+                case ContainerType.AvlSortedDictionary:
+                    return new ContainerLevel(ContainerType.AvlSortedKeyValueTree, ThisLevel.AllowDuplicates, long.MaxValue, ThisLevel.Unbalanced);
+                case ContainerType.LazinatorDictionary:
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+            return null;
         }
 
         public virtual IValueContainer<T> CreateValueContainer<T>() where T : ILazinator
@@ -222,6 +274,6 @@ namespace Lazinator.Collections.Factories
             }
             throw new NotImplementedException();
         }
-        
+
     }
 }
