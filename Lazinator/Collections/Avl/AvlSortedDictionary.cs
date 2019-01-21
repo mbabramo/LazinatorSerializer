@@ -18,7 +18,7 @@ namespace Lazinator.Collections.Avl
 
         public AvlSortedDictionary(bool allowDuplicates, ContainerFactory factory)
         {
-            UnderlyingTree = (ISortedKeyMultivalueContainer<TKey, TValue>)factory.CreateSortedKeyValueContainer<TKey, TValue>();
+            UnderlyingTree = (ISortedKeyMultivalueContainer<TKey, TValue>)factory.CreatePossiblySortedKeyValueContainer<TKey, TValue>();
             AllowDuplicates = allowDuplicates;
         }
 

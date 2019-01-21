@@ -154,7 +154,7 @@ namespace Lazinator.Collections.Factories
             }
         }
 
-        public ILazinatorListable<T> CreateSortedLazinatorListable<T>() where T : ILazinator, IComparable<T>
+        public ILazinatorListable<T> CreatePossiblySortedLazinatorListable<T>() where T : ILazinator, IComparable<T>
         {
             switch (ThisLevel.ContainerType)
             {
@@ -165,7 +165,7 @@ namespace Lazinator.Collections.Factories
                 case ContainerType.AvlSortedList:
                     return new AvlSortedList<T>(ThisLevel.AllowDuplicates, InnerFactory);
                 default:
-                    throw new NotImplementedException();
+                    return CreateLazinatorListable<T>();
             }
         }
 
@@ -182,40 +182,40 @@ namespace Lazinator.Collections.Factories
             }
         }
 
-        public IKeyValueContainer<T, V> CreateSortedKeyValueContainer<T, V>() where T : ILazinator, IComparable<T> where V : ILazinator
+        public IKeyValueContainer<K, V> CreatePossiblySortedKeyValueContainer<K, V>() where K : ILazinator, IComparable<K> where V : ILazinator
         {
             switch (ThisLevel.ContainerType)
             {
                 case ContainerType.AvlSortedKeyValueTree:
-                    return new AvlSortedKeyValueTree<T, V>(InnerFactory, ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
+                    return new AvlSortedKeyValueTree<K, V>(InnerFactory, ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
                 case ContainerType.AvlSortedIndexableKeyValueTree:
-                    return new AvlSortedIndexableKeyValueTree<T, V>(InnerFactory, ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
+                    return new AvlSortedIndexableKeyValueTree<K, V>(InnerFactory, ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
                 default:
-                    throw new NotImplementedException();
+                    return CreateKeyValueContainer<K, V>();
             }
         }
 
-        public ILazinatorDictionaryable<T, V> CreateLazinatorDictionaryable<T, V>() where T : ILazinator where V : ILazinator
+        public ILazinatorDictionaryable<K, V> CreateLazinatorDictionaryable<K, V>() where K : ILazinator where V : ILazinator
         {
             switch (ThisLevel.ContainerType)
             {
                 case ContainerType.AvlDictionary:
-                    return new AvlDictionary<T, V>(ThisLevel.AllowDuplicates, InnerFactory);
+                    return new AvlDictionary<K, V>(ThisLevel.AllowDuplicates, InnerFactory);
                 case ContainerType.LazinatorDictionary:
-                    return new LazinatorDictionary<T, V>();
+                    return new LazinatorDictionary<K, V>();
                 default:
                     throw new NotImplementedException();
             }
         }
 
-        public ILazinatorDictionaryable<T, V> CreateSortedLazinatorDictionaryable<T, V>() where T : ILazinator, IComparable<T> where V : ILazinator
+        public ILazinatorDictionaryable<K, V> CreatePossiblySortedLazinatorDictionaryable<K, V>() where K : ILazinator, IComparable<K> where V : ILazinator
         {
             switch (ThisLevel.ContainerType)
             {
                 case ContainerType.AvlSortedDictionary:
-                    return new AvlSortedDictionary<T, V>(ThisLevel.AllowDuplicates, InnerFactory);
+                    return new AvlSortedDictionary<K, V>(ThisLevel.AllowDuplicates, InnerFactory);
                 default:
-                    throw new NotImplementedException();
+                    return CreateLazinatorDictionaryable<K, V>();
             }
         }
 

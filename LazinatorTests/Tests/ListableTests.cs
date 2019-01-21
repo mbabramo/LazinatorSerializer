@@ -129,7 +129,7 @@ namespace LazinatorTests.Tests
         public void Listable_AddingAtEnd(ListFactoryToUse listFactoryToUse)
         {
             var factory = GetListFactory(listFactoryToUse);
-            ILazinatorListable<WInt> l = factory.CreateLazinatorListable<WInt>();
+            ILazinatorListable<WInt> l = factory.CreatePossiblySortedLazinatorListable<WInt>();
             int numItems = (listFactoryToUse == ListFactoryToUse.UnbalancedAvlList || listFactoryToUse == ListFactoryToUse.UnbalancedAvlSortedList) ? 20 : 1000;
             for (int i = 0; i < numItems; i++)
             {
@@ -154,7 +154,7 @@ namespace LazinatorTests.Tests
         public void Listable_AddingAtBeginning(ListFactoryToUse listFactoryToUse)
         {
             var factory = GetListFactory(listFactoryToUse);
-            ILazinatorListable<WInt> l = factory.CreateLazinatorListable<WInt>();
+            ILazinatorListable<WInt> l = factory.CreatePossiblySortedLazinatorListable<WInt>();
             int numItems = (listFactoryToUse == ListFactoryToUse.UnbalancedAvlList || listFactoryToUse == ListFactoryToUse.UnbalancedAvlSortedList) ? 20 : 500;
             for (int i = 0; i < numItems; i++)
                 l.InsertAtIndex(0, i);
@@ -183,7 +183,7 @@ namespace LazinatorTests.Tests
         public void Listable_Empty(ListFactoryToUse listFactoryToUse)
         {
             var factory = GetListFactory(listFactoryToUse);
-            ILazinatorListable<WInt> l = factory.CreateLazinatorListable<WInt>();
+            ILazinatorListable<WInt> l = factory.CreatePossiblySortedLazinatorListable<WInt>();
             l.Any().Should().BeFalse();
             l.FirstOrDefault().Should().Be(default(WInt));
             l.LastOrDefault().Should().Be(default(WInt));
@@ -204,7 +204,7 @@ namespace LazinatorTests.Tests
         public void Listable_EmptyAfterNotEmpty(ListFactoryToUse listFactoryToUse)
         {
             var factory = GetListFactory(listFactoryToUse);
-            ILazinatorListable<WInt> l = factory.CreateLazinatorListable<WInt>();
+            ILazinatorListable<WInt> l = factory.CreatePossiblySortedLazinatorListable<WInt>();
             l.Add(1);
             l.RemoveAtIndex(0);
             l.Any().Should().BeFalse();
@@ -228,7 +228,7 @@ namespace LazinatorTests.Tests
         {
 
             var factory = GetListFactory(listFactoryToUse);
-            ILazinatorListable<WInt> l = factory.CreateLazinatorListable<WInt>();
+            ILazinatorListable<WInt> l = factory.CreatePossiblySortedLazinatorListable<WInt>();
             int numItems = (listFactoryToUse == ListFactoryToUse.UnbalancedAvlList || listFactoryToUse == ListFactoryToUse.UnbalancedAvlSortedList) ? 20 : 1000;
             for (int i = 0; i < numItems; i++)
                 l.Add(i);
@@ -260,7 +260,7 @@ namespace LazinatorTests.Tests
             {
                 int i = 0;
                 List<int> list = new List<int>();
-                ILazinatorListable<WInt> l = factory.CreateLazinatorListable<WInt>();
+                ILazinatorListable<WInt> l = factory.CreatePossiblySortedLazinatorListable<WInt>();
                 foreach (var phase in phases)
                 {
                     for (int m = 0; m < phase.numModifications; m++)
@@ -344,7 +344,7 @@ namespace LazinatorTests.Tests
             bool trace = false;
             bool testIntermediateValues = true;  // DEBUG
             Random r = new Random(0);
-            ILazinatorListable<WInt> l = factory.CreateLazinatorListable<WInt>();
+            ILazinatorListable<WInt> l = factory.CreatePossiblySortedLazinatorListable<WInt>();
             List<int> o = new List<int>();
             for (int repetition = 0; repetition < repetitions; repetition++)
             {
