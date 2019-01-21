@@ -34,48 +34,48 @@ namespace LazinatorTests.Tests
             UnbalancedAvlSortedList,
         }
 
-        static ContainerFactory<WInt> GetListFactory(ListFactoryToUse l)
+        static ContainerFactory GetListFactory(ListFactoryToUse l)
         {
             switch (l)
             {
                 case ListFactoryToUse.LazinatorList:
-                    return new ContainerFactory<WInt>(new ContainerLevel(ContainerType.LazinatorList));
+                    return new ContainerFactory(new ContainerLevel(ContainerType.LazinatorList));
                 case ListFactoryToUse.LazinatorLinkedList:
-                    return new ContainerFactory<WInt>(new ContainerLevel(ContainerType.LazinatorLinkedList));
+                    return new ContainerFactory(new ContainerLevel(ContainerType.LazinatorLinkedList));
                 case ListFactoryToUse.LazinatorSortedList:
-                    return new SortedContainerFactory<WInt>(new ContainerLevel(ContainerType.LazinatorSortedList));
+                    return new ContainerFactory(new ContainerLevel(ContainerType.LazinatorSortedList));
                 case ListFactoryToUse.LazinatorSortedListAllowDuplicates:
-                    return new SortedContainerFactory<WInt>(new ContainerLevel(ContainerType.LazinatorSortedList, true));
+                    return new ContainerFactory(new ContainerLevel(ContainerType.LazinatorSortedList, true));
                 case ListFactoryToUse.LazinatorSortedLinkedList:
-                    return new SortedContainerFactory<WInt>(new ContainerLevel(ContainerType.LazinatorSortedLinkedList));
+                    return new ContainerFactory(new ContainerLevel(ContainerType.LazinatorSortedLinkedList));
                 case ListFactoryToUse.LazinatorSortedLinkedListAllowDuplicates:
-                    return new SortedContainerFactory<WInt>(new ContainerLevel(ContainerType.LazinatorSortedLinkedList, true));
+                    return new ContainerFactory(new ContainerLevel(ContainerType.LazinatorSortedLinkedList, true));
                 case ListFactoryToUse.UnbalancedAvlList:
-                    return new ContainerFactory<WInt>(new List<ContainerLevel>()
+                    return new ContainerFactory(new List<ContainerLevel>()
                     {
                         new ContainerLevel(ContainerType.AvlList, long.MaxValue, true, false),
                         new ContainerLevel(ContainerType.AvlIndexableTree)
                     });
                 case ListFactoryToUse.AvlList:
-                    return new ContainerFactory<WInt>(new List<ContainerLevel>()
+                    return new ContainerFactory(new List<ContainerLevel>()
                     {
                         new ContainerLevel(ContainerType.AvlList),
                         new ContainerLevel(ContainerType.AvlIndexableTree)
                     });
                 case ListFactoryToUse.UnbalancedAvlSortedList:
-                    return new SortedContainerFactory<WInt>(new List<ContainerLevel>()
+                    return new ContainerFactory(new List<ContainerLevel>()
                     {
                         new ContainerLevel(ContainerType.AvlSortedList, long.MaxValue, true, false),
                         new ContainerLevel(ContainerType.AvlSortedIndexableTree)
                     });
                 case ListFactoryToUse.AvlSortedList:
-                    return new SortedContainerFactory<WInt>(new List<ContainerLevel>()
+                    return new ContainerFactory(new List<ContainerLevel>()
                     {
                         new ContainerLevel(ContainerType.AvlSortedList),
                         new ContainerLevel(ContainerType.AvlSortedIndexableTree)
                     });
                 case ListFactoryToUse.AvlSortedListAllowDuplicates:
-                    return new SortedContainerFactory<WInt>(new List<ContainerLevel>()
+                    return new ContainerFactory(new List<ContainerLevel>()
                     {
                         new ContainerLevel(ContainerType.AvlSortedList, true),
                         new ContainerLevel(ContainerType.AvlSortedIndexableTree, true)
@@ -129,7 +129,7 @@ namespace LazinatorTests.Tests
         public void Listable_AddingAtEnd(ListFactoryToUse listFactoryToUse)
         {
             var factory = GetListFactory(listFactoryToUse);
-            ILazinatorListable<WInt> l = factory.CreateLazinatorListable();
+            ILazinatorListable<WInt> l = factory.CreateLazinatorListable<WInt>();
             int numItems = (listFactoryToUse == ListFactoryToUse.UnbalancedAvlList || listFactoryToUse == ListFactoryToUse.UnbalancedAvlSortedList) ? 20 : 1000;
             for (int i = 0; i < numItems; i++)
             {
@@ -154,7 +154,7 @@ namespace LazinatorTests.Tests
         public void Listable_AddingAtBeginning(ListFactoryToUse listFactoryToUse)
         {
             var factory = GetListFactory(listFactoryToUse);
-            ILazinatorListable<WInt> l = factory.CreateLazinatorListable();
+            ILazinatorListable<WInt> l = factory.CreateLazinatorListable<WInt>();
             int numItems = (listFactoryToUse == ListFactoryToUse.UnbalancedAvlList || listFactoryToUse == ListFactoryToUse.UnbalancedAvlSortedList) ? 20 : 500;
             for (int i = 0; i < numItems; i++)
                 l.InsertAtIndex(0, i);
@@ -183,7 +183,7 @@ namespace LazinatorTests.Tests
         public void Listable_Empty(ListFactoryToUse listFactoryToUse)
         {
             var factory = GetListFactory(listFactoryToUse);
-            ILazinatorListable<WInt> l = factory.CreateLazinatorListable();
+            ILazinatorListable<WInt> l = factory.CreateLazinatorListable<WInt>();
             l.Any().Should().BeFalse();
             l.FirstOrDefault().Should().Be(default(WInt));
             l.LastOrDefault().Should().Be(default(WInt));
@@ -204,7 +204,7 @@ namespace LazinatorTests.Tests
         public void Listable_EmptyAfterNotEmpty(ListFactoryToUse listFactoryToUse)
         {
             var factory = GetListFactory(listFactoryToUse);
-            ILazinatorListable<WInt> l = factory.CreateLazinatorListable();
+            ILazinatorListable<WInt> l = factory.CreateLazinatorListable<WInt>();
             l.Add(1);
             l.RemoveAtIndex(0);
             l.Any().Should().BeFalse();
@@ -228,7 +228,7 @@ namespace LazinatorTests.Tests
         {
 
             var factory = GetListFactory(listFactoryToUse);
-            ILazinatorListable<WInt> l = factory.CreateLazinatorListable();
+            ILazinatorListable<WInt> l = factory.CreateLazinatorListable<WInt>();
             int numItems = (listFactoryToUse == ListFactoryToUse.UnbalancedAvlList || listFactoryToUse == ListFactoryToUse.UnbalancedAvlSortedList) ? 20 : 1000;
             for (int i = 0; i < numItems; i++)
                 l.Add(i);
@@ -260,7 +260,7 @@ namespace LazinatorTests.Tests
             {
                 int i = 0;
                 List<int> list = new List<int>();
-                ILazinatorListable<WInt> l = factory.CreateLazinatorListable();
+                ILazinatorListable<WInt> l = factory.CreateLazinatorListable<WInt>();
                 foreach (var phase in phases)
                 {
                     for (int m = 0; m < phase.numModifications; m++)
@@ -344,7 +344,7 @@ namespace LazinatorTests.Tests
             bool trace = false;
             bool testIntermediateValues = true;  // DEBUG
             Random r = new Random(0);
-            ILazinatorListable<WInt> l = factory.CreateLazinatorListable();
+            ILazinatorListable<WInt> l = factory.CreateLazinatorListable<WInt>();
             List<int> o = new List<int>();
             for (int repetition = 0; repetition < repetitions; repetition++)
             {

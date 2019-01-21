@@ -17,7 +17,7 @@ namespace Lazinator.Collections.Avl.KeyValueTree
 
         public override IKeyValueContainer<TKey, TValue> CreateNewWithSameSettings()
         {
-            return new AvlIndexableKeyValueTree<TKey, TValue>(InnerContainerFactory.InnerFactorySameType, AllowDuplicates, Unbalanced);
+            return new AvlIndexableKeyValueTree<TKey, TValue>(InnerContainerFactory, AllowDuplicates, Unbalanced);
         }
 
         protected IIndexableMultivalueContainer<LazinatorKeyValue<TKey, TValue>> UnderlyingIndexableContainer => (IIndexableMultivalueContainer<LazinatorKeyValue<TKey, TValue>>)UnderlyingContainer;

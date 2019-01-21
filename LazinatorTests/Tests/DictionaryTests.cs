@@ -47,13 +47,13 @@ namespace LazinatorTests.Tests
                         new ContainerLevel(ContainerType.AvlKeyValueTree, true)
                     });
                 case DictionaryToUse.AvlSortedDictionary:
-                    return new SortedContainerFactory(new List<ContainerLevel>()
+                    return new ContainerFactory(new List<ContainerLevel>()
                     {
                         new ContainerLevel(ContainerType.AvlSortedDictionary),
                         new ContainerLevel(ContainerType.AvlSortedKeyValueTree)
                     });
                 case DictionaryToUse.AvlSortedDictionaryMultiValue:
-                    return new SortedContainerFactory(new List<ContainerLevel>()
+                    return new ContainerFactory(new List<ContainerLevel>()
                     {
                         new ContainerLevel(ContainerType.AvlSortedDictionary, true),
                         new ContainerLevel(ContainerType.AvlSortedKeyValueTree, true)
@@ -66,7 +66,7 @@ namespace LazinatorTests.Tests
         public ILazinatorDictionaryable<TKey, TValue> GetDictionary<TKey, TValue>(DictionaryToUse dictionaryToUse) where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
         {
             var factory = GetDictionaryFactory<TKey, TValue>(dictionaryToUse);
-            return factory.CreateLazinatorDictionaryable<TValue>();
+            return factory.CreateLazinatorDictionaryable<TKey, TValue>();
         }
         
         [Theory]

@@ -19,7 +19,7 @@ namespace Lazinator.Collections.Avl.KeyValueTree
 
         public AvlKeyValueTree(ContainerFactory innerContainerFactory, bool allowDuplicates, bool unbalanced)
         {
-            UnderlyingContainer = (IMultivalueContainer<LazinatorKeyValue<TKey, TValue>>)innerContainerFactory.CreateContainerOfKeyValues<TValue>();
+            UnderlyingContainer = (IMultivalueContainer<LazinatorKeyValue<TKey, TValue>>)innerContainerFactory.CreateContainerOfKeyValues<TKey, TValue>();
             AllowDuplicates = UnderlyingContainer.AllowDuplicates;
             Unbalanced = UnderlyingContainer.Unbalanced;
             if (AllowDuplicates != allowDuplicates || Unbalanced != unbalanced)

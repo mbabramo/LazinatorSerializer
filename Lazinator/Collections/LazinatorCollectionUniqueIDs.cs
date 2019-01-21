@@ -129,7 +129,6 @@
         ILazinatorSortable,
         IContainerFactory,
         IContainerLevel,
-        ISortedContainerFactory,
         IContainerLocation,
         IIndexLocation,
         IAvlListTreeLocation,

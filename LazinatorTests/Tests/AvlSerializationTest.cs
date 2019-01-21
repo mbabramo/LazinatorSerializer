@@ -38,7 +38,7 @@ namespace LazinatorTests.AVL
             //const int repetitions = 10000;
             //for (int i = 0; i < repetitions; i++)
             //{
-                var tree2 = new AvlKeyValueTree<WInt, WInt>(new ContainerFactory<WInt>(new ContainerLevel(ContainerType.AvlTree)), false, false)
+                var tree2 = new AvlKeyValueTree<WInt, WInt>(new ContainerFactory(new ContainerLevel(ContainerType.AvlTree)), false, false)
                 {
                 };
                 tree2.DeserializeLazinator(b);
@@ -55,7 +55,7 @@ namespace LazinatorTests.AVL
 
         private void GetTreeAndItems(out AvlKeyValueTree<WInt, WInt> tree, out Dictionary<int, int> items, out int firstKey)
         {
-            tree = new AvlKeyValueTree<WInt, WInt>(new ContainerFactory<WInt>(new ContainerLevel(ContainerType.AvlTree)), false, false);
+            tree = new AvlKeyValueTree<WInt, WInt>(new ContainerFactory(new ContainerLevel(ContainerType.AvlTree)), false, false);
             items = new Dictionary<int, int>();
             firstKey = 0;
             for (int i = 0; i < 100; i++)

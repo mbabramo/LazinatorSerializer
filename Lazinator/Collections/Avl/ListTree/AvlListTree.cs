@@ -292,7 +292,7 @@ namespace Lazinator.Collections.Avl.ListTree
 
         private (IContainerLocation location, bool insertedNotReplaced) InsertInitialNode(T item, IComparer<T> comparer)
         {
-            IMultivalueContainer<T> initialContainer = (IMultivalueContainer<T>)InnerContainerFactory.CreateValueContainer();
+            IMultivalueContainer<T> initialContainer = (IMultivalueContainer<T>)InnerContainerFactory.CreateValueContainer<T>();
             if (initialContainer.AllowDuplicates != AllowDuplicates)
                 throw new Exception("AllowDuplicates must be same for inner container.");
             initialContainer.InsertOrReplace(item, comparer);
