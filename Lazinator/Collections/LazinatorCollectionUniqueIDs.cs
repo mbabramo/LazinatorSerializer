@@ -133,6 +133,5 @@
         IContainerLocation,
         IIndexLocation,
         IAvlListTreeLocation,
-        IContainerFactoryNonGeneric,
     }
 }
