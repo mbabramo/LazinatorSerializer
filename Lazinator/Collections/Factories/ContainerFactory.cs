@@ -44,6 +44,7 @@ namespace Lazinator.Collections.Factories
                 if (next != null)
                     remaining = new List<ContainerLevel>() { next };
             }
+            VerifyNextLevel(next);
             if (remaining.Any())
                 InnerFactory = new ContainerFactory(remaining);
         }
@@ -94,6 +95,70 @@ namespace Lazinator.Collections.Factories
                     throw new NotImplementedException();
             }
             return null;
+        }
+
+        public virtual void VerifyNextLevel(ContainerLevel nextLevel)
+        {
+            switch (ThisLevel.ContainerType)
+            {
+                case ContainerType.AvlKeyValueTree:
+                case ContainerType.AvlSortedKeyValueTree:
+                case ContainerType.AvlIndexableKeyValueTree:
+                case ContainerType.AvlSortedIndexableKeyValueTree:
+                case ContainerType.AvlListTree:
+                case ContainerType.AvlSortedListTree:
+                case ContainerType.AvlIndexableListTree:
+                case ContainerType.AvlSortedIndexableListTree:
+                case ContainerType.AvlList:
+                case ContainerType.AvlSortedList:
+                case ContainerType.AvlDictionary:
+                case ContainerType.AvlSortedDictionary:
+                    if (nextLevel == null)
+                        throw new Exception($"{ThisLevel.ContainerType} requires a next container level.");
+                    break;
+                default:
+                    break;
+            }
+
+            switch (ThisLevel.ContainerType)
+            {
+                case ContainerType.AvlKeyValueTree:
+                case ContainerType.AvlSortedKeyValueTree:
+                case ContainerType.AvlIndexableKeyValueTree:
+                case ContainerType.AvlSortedIndexableKeyValueTree:
+                case ContainerType.AvlListTree:
+                case ContainerType.AvlSortedListTree:
+                case ContainerType.AvlIndexableListTree:
+                case ContainerType.AvlSortedIndexableListTree:
+                case ContainerType.AvlList:
+                case ContainerType.AvlSortedList:
+                case ContainerType.AvlSortedDictionary:
+                    if (nextLevel.AllowDuplicates != ThisLevel.AllowDuplicates)
+                        throw new Exception($"{ThisLevel.ContainerType} requires a next level with the same setting for AllowDuplicates.");
+                    break;
+                default:
+                    break;
+            }
+
+            switch (ThisLevel.ContainerType)
+            {
+                case ContainerType.AvlKeyValueTree:
+                case ContainerType.AvlSortedKeyValueTree:
+                case ContainerType.AvlIndexableKeyValueTree:
+                case ContainerType.AvlSortedIndexableKeyValueTree:
+                case ContainerType.AvlSortedDictionary:
+                    if (nextLevel.Unbalanced != ThisLevel.Unbalanced)
+                        throw new Exception($"{ThisLevel.ContainerType} requires a next level with the same setting for Unbalanced.");
+                    break;
+                default:
+                    break;
+            }
+
+            if (ThisLevel.ContainerType == ContainerType.AvlDictionary)
+            {
+                if (nextLevel.AllowDuplicates == false)
+                    throw new Exception($"AvlDictionary requires a next container level that allows duplicates, even if the dictionary itself does not.");
+            }
         }
 
         public virtual IValueContainer<T> CreateValueContainer<T>() where T : ILazinator
