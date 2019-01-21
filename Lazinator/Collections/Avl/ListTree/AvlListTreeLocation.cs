@@ -10,35 +10,43 @@ namespace Lazinator.Collections.Avl.ListTree
 {
     public struct AvlListTreeLocation<T> : IContainerLocation where T : ILazinator
     {
-        public readonly AvlCountedNode<IMultivalueContainer<T>> OuterNode;
-        public readonly IContainerLocation InnerLocation;
+        public readonly IMultivalueContainer<IMultivalueContainer<T>> OuterContainer;
+        public readonly IContainerLocation LocationOfInnerContainer;
+        public readonly IMultivalueContainer<T> InnerContainer;
+        public readonly IContainerLocation LocationInInnerContainer;
 
-        public AvlListTreeLocation(AvlCountedNode<IMultivalueContainer<T>> outerNode, IContainerLocation innerLocation)
+        public AvlListTreeLocation(IMultivalueContainer<IMultivalueContainer<T>> outerContainer, IContainerLocation locationOfInnerContainer, IMultivalueContainer<T> innerContainer, IContainerLocation locationInInnerContainer)
         {
-            OuterNode = outerNode;
-            InnerLocation = innerLocation;
+            OuterContainer = outerContainer;
+            LocationOfInnerContainer = locationOfInnerContainer;
+            InnerContainer = innerContainer;
+            LocationInInnerContainer = locationInInnerContainer;
         }
 
         public IContainerLocation GetNextLocation()
         {
-            var nextInner = InnerLocation.GetNextLocation();
+            var nextInner = LocationInInnerContainer.GetNextLocation();
             if (nextInner != null)
-                return new AvlListTreeLocation<T>(OuterNode, nextInner);
-            var nextOuter = (AvlCountedNode<IMultivalueContainer<T>>) OuterNode.GetNextNode();
-            if (nextOuter == null)
+                return new AvlListTreeLocation<T>(OuterContainer, LocationOfInnerContainer, InnerContainer, nextInner);
+            var nextOuterLocation = LocationOfInnerContainer.GetNextLocation();
+            if (nextOuterLocation == null)
                 return null;
-            return new AvlListTreeLocation<T>(nextOuter, nextOuter.Value.FirstLocation());
+            var nextInnerContainer = OuterContainer.GetAt(nextOuterLocation);
+            var nextInnerLocation = nextInnerContainer.FirstLocation();
+            return new AvlListTreeLocation<T>(OuterContainer, nextOuterLocation, nextInnerContainer, nextInnerLocation);
         }
 
         public IContainerLocation GetPreviousLocation()
         {
-            var nextInner = InnerLocation.GetPreviousLocation();
-            if (nextInner != null)
-                return new AvlListTreeLocation<T>(OuterNode, nextInner);
-            var nextOuter = (AvlCountedNode<IMultivalueContainer<T>>)OuterNode.GetPreviousNode();
-            if (nextOuter == null)
+            var previousInner = LocationInInnerContainer.GetPreviousLocation();
+            if (previousInner != null)
+                return new AvlListTreeLocation<T>(OuterContainer, LocationOfInnerContainer, InnerContainer, previousInner);
+            var previousOuterLocation = LocationOfInnerContainer.GetPreviousLocation();
+            if (previousOuterLocation == null)
                 return null;
-            return new AvlListTreeLocation<T>(nextOuter, nextOuter.Value.LastLocation());
+            var previousInnerContainer = OuterContainer.GetAt(previousOuterLocation);
+            var previousInnerLocation = previousInnerContainer.LastLocation();
+            return new AvlListTreeLocation<T>(OuterContainer, previousOuterLocation, previousInnerContainer, previousInnerLocation);
         }
     }
 }
