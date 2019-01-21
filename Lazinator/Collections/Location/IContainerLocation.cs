@@ -4,11 +4,12 @@ using System.Text;
 using Lazinator.Attributes;
 using Lazinator.Core;
 
-namespace Lazinator.Collections.Interfaces
+namespace Lazinator.Collections.Location
 {
     public interface IContainerLocation
     {
-        bool IsAfterCollection { get; }
+        bool IsBeforeContainer { get; }
+        bool IsAfterContainer { get; }
         IContainerLocation GetNextLocation();
         IContainerLocation GetPreviousLocation();
     }

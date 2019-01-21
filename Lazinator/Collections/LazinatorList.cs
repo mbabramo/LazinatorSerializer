@@ -12,6 +12,7 @@ using Lazinator.Collections.OffsetList;
 using Lazinator.Collections.Interfaces;
 using Lazinator.Collections.Extensions;
 using Lazinator.Collections.Enumerators;
+using Lazinator.Collections.Location;
 
 namespace Lazinator.Collections
 {

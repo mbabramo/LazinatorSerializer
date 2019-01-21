@@ -15,6 +15,7 @@ using Lazinator.Collections.Avl;
 using Lazinator.Collections.Interfaces;
 using Lazinator.Collections.Avl.KeyValueTree;
 using Lazinator.Collections.Factories;
+using Lazinator.Collections.Location;
 
 namespace LazinatorTests.Tests
 {

@@ -1,6 +1,7 @@
 ﻿using Lazinator.Collections.Avl.ValueTree;
 using Lazinator.Collections.Factories;
 using Lazinator.Collections.Interfaces;
+using Lazinator.Collections.Location;
 using Lazinator.Collections.Tree;
 using Lazinator.Collections.Tuples;
 using Lazinator.Core;
@@ -58,7 +59,7 @@ namespace Lazinator.Collections.Avl.KeyValueTree
         {
             var match = UnderlyingContainer.FindContainerLocation(KeyPlusDefault(key), MultivalueLocationOptions.First, KeyComparer(comparer));
             var location = match.location;
-            while (location != null && !location.IsAfterCollection)
+            while (!location.IsAfterContainer)
             {
                 LazinatorKeyValue<TKey, TValue> lazinatorKeyValue = UnderlyingContainer.GetAt(location);
                 if (lazinatorKeyValue.Key.Equals(key))
@@ -67,7 +68,7 @@ namespace Lazinator.Collections.Avl.KeyValueTree
                     location = location.GetNextLocation();
                 }
                 else
-                    location = null;
+                    location = new AfterContainerLocation();
             }
         }
 
@@ -146,7 +147,7 @@ namespace Lazinator.Collections.Avl.KeyValueTree
                     else
                     {
                         match.location = match.location.GetNextLocation();
-                        if (match.location == null || match.location.IsAfterCollection)
+                        if (match.location.IsAfterContainer)
                         {
                             keepGoing = false; // value doesn't exist
                             match.found = false;

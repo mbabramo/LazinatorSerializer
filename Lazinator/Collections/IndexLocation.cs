@@ -1,4 +1,5 @@
 ﻿using Lazinator.Collections.Interfaces;
+using Lazinator.Collections.Location;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,19 +17,16 @@ namespace Lazinator.Collections
             Count = count;
         }
 
-        public bool IsAfterCollection => Index == Count;
+        public bool IsBeforeContainer => Index < 0;
+        public bool IsAfterContainer => Index == Count;
 
         public IContainerLocation GetNextLocation()
         {
-            if (Index == Count - 1)
-                return null;
             return new IndexLocation(Index + 1, Count);
         }
 
         public IContainerLocation GetPreviousLocation()
         {
-            if (Index == 0)
-                return null;
             return new IndexLocation(Index - 1, Count);
         }
     }

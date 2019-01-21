@@ -1,4 +1,5 @@
 ﻿using Lazinator.Collections.Interfaces;
+using Lazinator.Collections.Location;
 using Lazinator.Collections.Tree;
 using Lazinator.Core;
 using System;

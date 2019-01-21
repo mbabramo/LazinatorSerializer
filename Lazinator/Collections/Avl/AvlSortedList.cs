@@ -1,6 +1,7 @@
 ﻿using Lazinator.Buffers;
 using Lazinator.Collections.Factories;
 using Lazinator.Collections.Interfaces;
+using Lazinator.Collections.Location;
 using Lazinator.Core;
 using Lazinator.Wrappers;
 using System;

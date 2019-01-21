@@ -1,4 +1,5 @@
 ﻿using Lazinator.Collections.Interfaces;
+using Lazinator.Collections.Location;
 using Lazinator.Core;
 using Lazinator.Support;
 using System;
@@ -50,11 +51,11 @@ namespace Lazinator.Collections.Tree
 
         public BinaryNode<T> GetNodeFromLocation(IContainerLocation location) => ((BinaryTreeLocation<T>)location).BinaryNode;
 
-        public virtual T GetAt(IContainerLocation location) => location == null || location.IsAfterCollection ? throw new ArgumentException() : GetNodeFromLocation(location).Value;
+        public virtual T GetAt(IContainerLocation location) => location.IsAfterContainer ? throw new ArgumentException() : GetNodeFromLocation(location).Value;
 
         public virtual void SetAt(IContainerLocation location, T value)
         {
-            if (location == null || location.IsAfterCollection)
+            if (location.IsAfterContainer)
                 throw new ArgumentException();
             else
                 GetNodeFromLocation(location).Value = value;

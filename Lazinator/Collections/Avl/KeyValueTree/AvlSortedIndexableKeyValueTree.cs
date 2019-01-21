@@ -1,6 +1,7 @@
 ﻿using Lazinator.Collections.Avl.ValueTree;
 using Lazinator.Collections.Factories;
 using Lazinator.Collections.Interfaces;
+using Lazinator.Collections.Location;
 using Lazinator.Collections.Tuples;
 using Lazinator.Core;
 using System;

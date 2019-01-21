@@ -3,6 +3,7 @@ using Lazinator.Collections.Avl.ValueTree;
 using Lazinator.Collections.Extensions;
 using Lazinator.Collections.Factories;
 using Lazinator.Collections.Interfaces;
+using Lazinator.Collections.Location;
 using Lazinator.Collections.Tree;
 using Lazinator.Core;
 using Lazinator.Support;
@@ -89,7 +90,7 @@ namespace Lazinator.Collections.Avl.ListTree
             MultivalueLocationOptions whichOneModified = FirstOrLastFromBeforeOrAfter(whichOne);
             var matchInfo = UnderlyingTree.FindContainerLocation(null, whichOneModified, GetItemToInnerContainerComparer(item, comparer)); // Note: GetItemToInnerContainerComparer will result in comparing the item to the inner containers, so the "null" is a placeholder
             var locationOfInitialInnerContainer = matchInfo.location ?? UnderlyingTree.LastLocation();
-            if (locationOfInitialInnerContainer == null || locationOfInitialInnerContainer.IsAfterCollection)
+            if (locationOfInitialInnerContainer.IsAfterContainer)
                 return default;
             var initialInnerContainer = UnderlyingTree.GetAt(locationOfInitialInnerContainer);
             if (locationOfInitialInnerContainer == null || !chooseShorterIfInBetween)
@@ -103,7 +104,7 @@ namespace Lazinator.Collections.Avl.ListTree
             if (isBeforeThis)
             {
                 IContainerLocation previousInnerContainerLocation = locationOfInitialInnerContainer.GetPreviousLocation();
-                if (previousInnerContainerLocation != null)
+                if (!previousInnerContainerLocation.IsBeforeContainer)
                 {
                     IMultivalueContainer<T> previousInnerContainer = UnderlyingTree.GetAt(previousInnerContainerLocation);
                     bool inBetweenThisAndPrevious = previousInnerContainer != null && comparer.Compare(item, previousInnerContainer.Last()) == 1;
@@ -270,7 +271,7 @@ namespace Lazinator.Collections.Avl.ListTree
         private AvlListTreeLocation<T> ToAvlListTreeLocation(IContainerLocation location)
         {
             AvlListTreeLocation<T> listTreeLocation;
-            if (location == null)
+            if (location.IsAfterContainer)
             {
                 if (UnderlyingTree == null || !UnderlyingTree.Any())
                     return default;
@@ -370,7 +371,7 @@ namespace Lazinator.Collections.Avl.ListTree
         public long Count(T item, IComparer<T> comparer)
         {
             (var innerContainerLocation, var innerContainer) = GetInnerLocationAndContainer(item, MultivalueLocationOptions.First, comparer, true);
-            if (innerContainerLocation == null)
+            if (innerContainerLocation.IsBeforeContainer)
                 return 0;
             // The item might appear in multiple inner containers
             long count = 0;
@@ -382,7 +383,7 @@ namespace Lazinator.Collections.Avl.ListTree
                 else
                 {
                     innerContainerLocation = innerContainerLocation.GetNextLocation();
-                    if (innerContainerLocation == null)
+                    if (innerContainerLocation.IsAfterContainer)
                         return count;
                     innerContainer = UnderlyingTree.GetAt(innerContainerLocation);
                 }
@@ -400,8 +401,8 @@ namespace Lazinator.Collections.Avl.ListTree
         public (IContainerLocation location, bool found) FindContainerLocation(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
             var matchInfo = UnderlyingTree.FindContainerLocation(null, whichOne, GetItemToInnerContainerComparer(value, comparer)); // Note: GetItemToInnerContainerComparer will result in comparing the item to the inner containers, so the "null" is a placeholder
-            if (matchInfo.location == null || matchInfo.location.IsAfterCollection)
-                return (null, false);
+            if (matchInfo.location.IsAfterContainer)
+                return (matchInfo.location, false);
             var innerContainer = UnderlyingTree.GetAt(matchInfo.location);
             var innerContainerResult = innerContainer.FindContainerLocation(value, whichOne, comparer);
             return (new AvlListTreeLocation<T>(UnderlyingTree, matchInfo.location, innerContainer, innerContainerResult.location), innerContainerResult.found);

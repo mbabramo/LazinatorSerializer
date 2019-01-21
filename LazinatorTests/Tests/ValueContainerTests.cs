@@ -16,6 +16,7 @@ using Lazinator.Collections.Interfaces;
 using Lazinator.Collections.Avl.ValueTree;
 using Lazinator.Collections.Avl.ListTree;
 using Lazinator.Collections.Factories;
+using Lazinator.Collections.Location;
 
 namespace LazinatorTests.Tests
 {
@@ -249,7 +250,7 @@ namespace LazinatorTests.Tests
                         instruction = new InsertValueInstruction();
                     else
                         instruction = new RemoveInstruction();
-                    if (rep == 0 && i == 16)
+                    if (rep == 0 && i == 7)
                     {
                         var DEBUG = 0;
                     }
@@ -652,7 +653,11 @@ namespace LazinatorTests.Tests
                     {
                         location = container.FirstLocation();
                         for (int i = 0; i < index; i++)
+                        {
+                            var DEBUG = container.GetAt(location);
+                            System.Diagnostics.Debug.WriteLine(DEBUG);
                             location = location.GetNextLocation();
+                        }
                     }
                     else
                     {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Lazinator.Attributes;
+using Lazinator.Collections.Location;
 using Lazinator.Core;
 
 namespace Lazinator.Collections.Interfaces
