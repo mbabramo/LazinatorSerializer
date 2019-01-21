@@ -8,7 +8,7 @@ namespace Lazinator.Collections.Tree
 {
     // DEBUG -- not in use yet. We really also need IsBeforeLocation to be part of interface to immplement this. If we do this, we should also constrain IContainerLocation to struct
 
-    public struct BinaryTreeLocation<T> : IContainerLocation where T : IComparable<T>, ILazinator
+    public struct BinaryTreeLocation<T> : IContainerLocation where T : ILazinator
     {
         public readonly BinaryNode<T> BinaryNode;
 

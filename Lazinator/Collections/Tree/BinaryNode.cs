@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Lazinator.Collections.Tree
 {
-    public partial class BinaryNode<T> : IBinaryNode<T>, IContainerLocation where T : ILazinator
+    public partial class BinaryNode<T> : IBinaryNode<T> where T : ILazinator
     {
         // We can't serialize the Parent, because an item can't appear multiple times in a hierarchy, so we use the Lazinator built-in parent as a substitute.
         private BinaryNode<T> _Parent;
@@ -106,9 +106,7 @@ namespace Lazinator.Collections.Tree
             return p;
         }
 
-        public IContainerLocation GetNextLocation() => GetNextNode();
-
-        public IContainerLocation GetPreviousLocation() => GetPreviousNode();
+        public IContainerLocation GetLocation() => new BinaryTreeLocation<T>(this);
 
         public string ToTreeString()
         {

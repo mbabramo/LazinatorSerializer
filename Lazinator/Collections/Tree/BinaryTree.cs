@@ -149,9 +149,9 @@ namespace Lazinator.Collections.Tree
             return default(T);
         }
 
-        public IContainerLocation FirstLocation() => FirstNode();
+        public IContainerLocation FirstLocation() => FirstNode().GetLocation();
 
-        public IContainerLocation LastLocation() => LastNode();
+        public IContainerLocation LastLocation() => LastNode().GetLocation();
 
         #endregion
 
@@ -169,7 +169,11 @@ namespace Lazinator.Collections.Tree
 
         public virtual (IContainerLocation location, bool found) FindContainerLocation(T value, IComparer<T> comparer) => FindContainerLocation(value, MultivalueLocationOptions.Any, comparer);
 
-        public virtual (IContainerLocation location, bool found) FindContainerLocation(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer) => GetMatchingOrNextNode(value, whichOne, comparer);
+        public virtual (IContainerLocation location, bool found) FindContainerLocation(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer)
+        {
+            var result = GetMatchingOrNextNode(value, whichOne, comparer);
+            return (result.node.GetLocation(), result.found);
+        }
 
         protected internal (BinaryNode<T> node, bool found) GetMatchingOrNextNode(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer) => GetMatchingOrNextNode(whichOne, node => CompareValueToNode(value, node, whichOne, comparer));
 
@@ -328,7 +332,11 @@ namespace Lazinator.Collections.Tree
                 throw new Exception("Allowing potential duplicates is forbidden. Use MultivalueLocationOptions.Any");
         }
 
-        protected (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item, Func<BinaryNode<T>, int> comparisonFunc) => InsertOrReplaceReturningNode(item, comparisonFunc);
+        protected (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item, Func<BinaryNode<T>, int> comparisonFunc)
+        {
+            var result = InsertOrReplaceReturningNode(item, comparisonFunc);
+            return (result.node.GetLocation(), result.insertedNotReplaced);
+        }
 
         public (BinaryNode<T> node, bool insertedNotReplaced) InsertOrReplaceReturningNode(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
