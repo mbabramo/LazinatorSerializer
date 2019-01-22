@@ -27,7 +27,7 @@ namespace Lazinator.Collections.Avl.ListTree
 
         protected virtual void CreateUnderlyingTree(ContainerFactory innerContainerFactory)
         {
-            UnderlyingTree = (IMultivalueContainer<IMultivalueContainer<T>>)innerContainerFactory.CreateValueContainer<IMultivalueContainer<T>>();
+            UnderlyingTree = new AvlTree<IMultivalueContainer<T>>(AllowDuplicates, Unbalanced);
         }
 
         public virtual IValueContainer<T> CreateNewWithSameSettings()
