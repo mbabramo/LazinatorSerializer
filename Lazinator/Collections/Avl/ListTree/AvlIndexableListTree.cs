@@ -1,4 +1,5 @@
 ﻿using Lazinator.Collections.Avl.ValueTree;
+using Lazinator.Collections.Factories;
 using Lazinator.Collections.Interfaces;
 using Lazinator.Collections.Location;
 using Lazinator.Core;
@@ -10,6 +11,20 @@ namespace Lazinator.Collections.Avl.ListTree
 {
     public partial class AvlIndexableListTree<T> : AvlListTree<T>, IAvlIndexableListTree<T>, IIndexableMultivalueContainer<T> where T : ILazinator
     {
+        public AvlIndexableListTree(bool allowDuplicates, bool unbalanced, ContainerFactory innerContainerFactory) : base(allowDuplicates, unbalanced, innerContainerFactory)
+        {
+        }
+
+        protected override void CreateUnderlyingTree(ContainerFactory innerContainerFactory)
+        {
+            UnderlyingTree = (IMultivalueContainer<IMultivalueContainer<T>>) innerContainerFactory.CreateAggregatedValueContainer<T>();
+        }
+
+        public override IValueContainer<T> CreateNewWithSameSettings()
+        {
+            return new AvlIndexableListTree<T>(AllowDuplicates, Unbalanced, InnerContainerFactory);
+        }
+
         IAggregatedMultivalueContainer<IIndexableMultivalueContainer<T>> UnderlyingAggregatedContainer => (IAggregatedMultivalueContainer<IIndexableMultivalueContainer<T>>)UnderlyingTree;
 
         public long LongCount => UnderlyingAggregatedContainer.LongAggregatedCount;

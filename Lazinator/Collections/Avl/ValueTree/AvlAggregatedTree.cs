@@ -14,6 +14,29 @@ namespace Lazinator.Collections.Avl.ValueTree
 
         public long LongAggregatedCount => (Root as AvlAggregatedNode<T>)?.LongAggregatedCount ?? 0;
 
+        #region Construction
+
+        public AvlAggregatedTree(bool allowDuplicates, bool unbalanced) : base(allowDuplicates, unbalanced)
+        {
+        }
+
+        public override IValueContainer<T> CreateNewWithSameSettings()
+        {
+            return new AvlAggregatedTree<T>(AllowDuplicates, Unbalanced);
+        }
+
+        protected override BinaryNode<T> CreateNode(T value, BinaryNode<T> parent = null)
+        {
+            return new AvlAggregatedNode<T>()
+            {
+                Value = value,
+                SelfAggregatedCount = value.LongCount,
+                Parent = parent
+            };
+        }
+
+        #endregion
+
         public (long firstAggregatedIndex, long lastAggregatedIndex) GetAggregatedIndexRange(IContainerLocation locationOfInnerContainer)
         {
             var node = GetNodeFromLocation(locationOfInnerContainer);

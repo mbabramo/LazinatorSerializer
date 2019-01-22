@@ -13,6 +13,7 @@ namespace Lazinator.Collections.Factories
         AvlTree,
         AvlSortedTree,
         AvlIndexableTree,
+        AvlAggregatedTree,
         AvlSortedIndexableTree,
         AvlKeyValueTree,
         AvlSortedKeyValueTree,

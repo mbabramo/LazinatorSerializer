@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Lazinator.Collections
 {
-    public partial class LazinatorSortedLinkedList<T> : LazinatorLinkedList<T>, ILazinatorSortedLinkedList<T>, ILazinatorSorted<T> where T : IComparable<T>, ILazinator
+    public partial class LazinatorSortedLinkedList<T> : LazinatorLinkedList<T>, ILazinatorSortedLinkedList<T>, ILazinatorSorted<T>, ISortedValueContainer<T> where T : IComparable<T>, ILazinator
     {
         public LazinatorSortedLinkedList(bool allowDuplicates) : base(allowDuplicates)
         {

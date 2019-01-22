@@ -181,13 +181,24 @@ namespace Lazinator.Collections.Factories
                 case ContainerType.AvlListTree:
                     return new AvlListTree<T>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced, InnerFactory);
                 case ContainerType.AvlIndexableListTree:
-                    throw new NotImplementedException();
+                    return new AvlListTree<T>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced, InnerFactory);
                 default:
                     throw new NotImplementedException();
             }
         }
 
-        public IValueContainer<T> CreateSortedValueContainer<T>() where T : ILazinator, IComparable<T>
+        public virtual IAggregatedMultivalueContainer<IIndexableMultivalueContainer<T>> CreateAggregatedValueContainer<T>() where T : ILazinator
+        {
+            switch (ThisLevel.ContainerType)
+            {
+                case ContainerType.AvlAggregatedTree:
+                    return new AvlAggregatedTree<IIndexableMultivalueContainer<T>>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
+        public ISortedValueContainer<T> CreateSortedValueContainer<T>() where T : ILazinator, IComparable<T>
         {
             switch (ThisLevel.ContainerType)
             {
