@@ -213,9 +213,7 @@ namespace Lazinator.Collections
 
         public bool Any()
         {
-            if (_ItemsTracker != null)
-                return _ItemsTracker.Any();
-            return _CountWhenDeserialized > 0;
+            return Count > 0;
         }
 
         public IEnumerator<T> GetEnumerator()
