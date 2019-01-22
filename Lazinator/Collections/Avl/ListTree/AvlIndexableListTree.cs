@@ -15,12 +15,12 @@ namespace Lazinator.Collections.Avl.ListTree
         {
         }
 
-        protected override void CreateUnderlyingTree(ContainerFactory innerContainerFactory)
-        {
-            AvlAggregatedTree<IIndexableMultivalueContainer<T>> tree = new AvlAggregatedTree<IIndexableMultivalueContainer<T>>(AllowDuplicates, Unbalanced);
-            var DEBUG = (IMultivalueContainer<IIndexableMultivalueContainer<T>>)tree;
-            base.UnderlyingTree = (IMultivalueContainer<IMultivalueContainer<T>>)tree;
-        }
+        //protected override void CreateUnderlyingTree(ContainerFactory innerContainerFactory)
+        //{
+        //    AvlAggregatedTree<IIndexableMultivalueContainer<T>> tree = new AvlAggregatedTree<IIndexableMultivalueContainer<T>>(AllowDuplicates, Unbalanced);
+        //    //var DEBUG = (IMultivalueContainer<IIndexableMultivalueContainer<T>>)tree;
+        //    // var DEBUG UnderlyingTree = (AvlAggregatedTree<IMultivalueContainer<T>>)tree;
+        //}
 
         public override IValueContainer<T> CreateNewWithSameSettings()
         {

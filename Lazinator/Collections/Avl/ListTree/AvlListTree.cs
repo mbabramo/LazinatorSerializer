@@ -403,7 +403,7 @@ namespace Lazinator.Collections.Avl.ListTree
         {
             var splitOffUnderlying = UnderlyingTree.SplitOff();
             var splitOff = (AvlListTree<T>)CreateNewWithSameSettings();
-            splitOff.UnderlyingTree = (IMultivalueContainer<IMultivalueContainer<T>>) splitOffUnderlying;
+            splitOff.UnderlyingTree = (AvlTree<IMultivalueContainer<T>>) splitOffUnderlying;
             return splitOff;
         }
 

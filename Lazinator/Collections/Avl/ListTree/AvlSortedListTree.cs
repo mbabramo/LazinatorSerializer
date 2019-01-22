@@ -1,4 +1,5 @@
-﻿using Lazinator.Collections.Factories;
+﻿using Lazinator.Collections.Avl.ValueTree;
+using Lazinator.Collections.Factories;
 using Lazinator.Collections.Interfaces;
 using Lazinator.Collections.Location;
 using Lazinator.Core;
@@ -16,7 +17,7 @@ namespace Lazinator.Collections.Avl.ListTree
 
         protected override void CreateUnderlyingTree(ContainerFactory innerContainerFactory)
         {
-            UnderlyingTree = (IMultivalueContainer<IMultivalueContainer<T>>)innerContainerFactory.CreateValueContainer<ISortedMultivalueContainer<T>>();
+            UnderlyingTree = (AvlTree<IMultivalueContainer<T>>)innerContainerFactory.CreateValueContainer<ISortedMultivalueContainer<T>>();
         }
 
         public override IValueContainer<T> CreateNewWithSameSettings()
