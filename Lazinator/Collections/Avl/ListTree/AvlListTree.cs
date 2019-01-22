@@ -87,7 +87,7 @@ namespace Lazinator.Collections.Avl.ListTree
 
         private IContainerLocation GetInnerLocation(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, bool chooseShorterIfInBetween) => GetInnerLocationAndContainer(item, whichOne, comparer, chooseShorterIfInBetween).location;
 
-        protected (IContainerLocation location, IMultivalueContainer<T> container) GetInnerLocationAndContainer(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, bool chooseShorterIfInBetween)
+        protected internal (IContainerLocation location, IMultivalueContainer<T> container) GetInnerLocationAndContainer(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, bool chooseShorterIfInBetween)
         {
             if (UnderlyingTree == null || !UnderlyingTree.Any())
                 return default;

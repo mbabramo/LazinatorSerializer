@@ -135,5 +135,8 @@
         IAvlSortedListTree,
         IAvlAggregatedNode,
         IAvlAggregatedTree,
+        IAvlIndexableListTree,
+        IAggregatedValueContainer,
+        IAggregatedMultivalueContainer,
     }
 }

@@ -13,13 +13,13 @@ namespace Lazinator.Collections.Avl.ValueTree
         public AvlAggregatedNode<T> LeftAggregatedNode => (AvlAggregatedNode<T>)Left;
         public AvlAggregatedNode<T> RightAggregatedNode => (AvlAggregatedNode<T>)Right;
 
-        public long? _AggregatedIndex;
-        public long AggregatedIndex
+        public long? _FirstAggregatedIndex;
+        public long FirstAggregatedIndex
         {
             get
             {
-                if (_AggregatedIndex != null)
-                    return (long)_AggregatedIndex;
+                if (_FirstAggregatedIndex != null)
+                    return (long)_FirstAggregatedIndex;
                 if (Parent == null)
                     return LeftAggregatedCount;
                 if (IsLeftNode)
@@ -28,6 +28,15 @@ namespace Lazinator.Collections.Avl.ValueTree
                     return ParentAggregatedNode.Index + LeftAggregatedCount + 1;
                 throw new Exception("Malformed AvlTree.");
             }
+        }
+
+        public long LastAggregatedIndex => FirstAggregatedIndex + SelfAggregatedCount - 1;
+
+        public bool ContainsAggregatedIndex(long aggregatedIndex)
+        {
+            if (SelfAggregatedCount == 0)
+                return false;
+            return aggregatedIndex >= FirstAggregatedIndex && aggregatedIndex < FirstAggregatedIndex + SelfAggregatedCount;
         }
 
         public override void UpdateFollowingTreeChange()
