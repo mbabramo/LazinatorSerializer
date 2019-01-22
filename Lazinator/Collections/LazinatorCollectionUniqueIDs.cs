@@ -134,5 +134,6 @@
         IAvlListTreeLocation,
         IAvlSortedListTree,
         IAvlAggregatedNode,
+        IAvlAggregatedTree,
     }
 }

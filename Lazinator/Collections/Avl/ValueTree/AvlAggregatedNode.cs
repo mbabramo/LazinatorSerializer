@@ -7,7 +7,6 @@ namespace Lazinator.Collections.Avl.ValueTree
 {
     public partial class AvlAggregatedNode<T> : AvlCountedNode<T>, IAvlAggregatedNode<T> where T : ILazinator
     {
-
         public long LongAggregatedCount => LeftAggregatedCount + SelfAggregatedCount + RightAggregatedCount;
 
         public AvlAggregatedNode<T> ParentAggregatedNode => (AvlAggregatedNode<T>)Parent;

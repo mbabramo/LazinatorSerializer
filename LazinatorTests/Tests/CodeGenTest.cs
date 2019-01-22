@@ -128,7 +128,8 @@ public class MyOtherClass
         [Fact]
         public async Task CodeGenerationProducesActualCode_CoreCollections()
         {
-            AdhocWorkspace ws = GetAdhocWorkspace(); await CompleteGenerateCode(typeof(LazinatorByteSpan), project: "Lazinator", mainFolder: "/Spans/", subfolder: "", ws);
+            AdhocWorkspace ws = GetAdhocWorkspace();
+            await CompleteGenerateCode(typeof(LazinatorByteSpan), project: "Lazinator", mainFolder: "/Spans/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorBitArray), project: "Lazinator", mainFolder: "/Spans/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorFastReadList<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "OffsetList/", ws);
             await CompleteGenerateCode(typeof(LazinatorFastReadListInt16), project: "Lazinator", mainFolder: "/Collections/", subfolder: "OffsetList/", ws);
@@ -145,8 +146,6 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(LazinatorGeneralTree<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Tree/", ws);
             await CompleteGenerateCode(typeof(LazinatorLocationAwareTree<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Tree/", ws);
             await CompleteGenerateCode(typeof(LazinatorLocationAwareTree<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Tree/", ws);
-            await CompleteGenerateCode(typeof(BinaryTree<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Tree/", ws);
-            await CompleteGenerateCode(typeof(BinaryNode<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Tree/", ws);
             await CompleteGenerateCode(typeof(DictionaryBucket<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Dictionary/", ws);
             await CompleteGenerateCode(typeof(LazinatorDictionary<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Dictionary/", ws);
             await CompleteGenerateCode(typeof(LazinatorTuple<,>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Tuples/", ws);
@@ -159,6 +158,8 @@ public class MyOtherClass
         public async Task CodeGenerationProducesActualCode_Avl()
         {
             AdhocWorkspace ws = GetAdhocWorkspace();
+            await CompleteGenerateCode(typeof(BinaryTree<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Tree/", ws);
+            await CompleteGenerateCode(typeof(BinaryNode<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Tree/", ws);
             await CompleteGenerateCode(typeof(AvlNode<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/ValueTree/", ws);
             await CompleteGenerateCode(typeof(AvlCountedNode<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/ValueTree/", ws);
             await CompleteGenerateCode(typeof(AvlAggregatedNode<>), project: "Lazinator", mainFolder: "/Collections/", subfolder: "Avl/ValueTree/", ws);
