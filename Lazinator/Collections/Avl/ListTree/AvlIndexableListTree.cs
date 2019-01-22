@@ -17,7 +17,9 @@ namespace Lazinator.Collections.Avl.ListTree
 
         protected override void CreateUnderlyingTree(ContainerFactory innerContainerFactory)
         {
-            UnderlyingTree = (IMultivalueContainer<IMultivalueContainer<T>>)new AvlAggregatedTree<IIndexableMultivalueContainer<T>>(AllowDuplicates, Unbalanced);
+            AvlAggregatedTree<IIndexableMultivalueContainer<T>> tree = new AvlAggregatedTree<IIndexableMultivalueContainer<T>>(AllowDuplicates, Unbalanced);
+            var DEBUG = (IMultivalueContainer<IIndexableMultivalueContainer<T>>)tree;
+            base.UnderlyingTree = (IMultivalueContainer<IMultivalueContainer<T>>)tree;
         }
 
         public override IValueContainer<T> CreateNewWithSameSettings()

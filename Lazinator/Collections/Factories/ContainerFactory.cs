@@ -181,7 +181,7 @@ namespace Lazinator.Collections.Factories
                 case ContainerType.AvlListTree:
                     return new AvlListTree<T>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced, InnerFactory);
                 case ContainerType.AvlIndexableListTree:
-                    return new AvlListTree<T>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced, InnerFactory);
+                    return new AvlIndexableListTree<T>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced, InnerFactory);
                 default:
                     throw new NotImplementedException();
             }
@@ -315,7 +315,7 @@ namespace Lazinator.Collections.Factories
                 case ContainerType.AvlListTree:
                     return new AvlListTree<LazinatorKeyValue<K, V>>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced, InnerFactory);
                 case ContainerType.AvlIndexableListTree:
-                    throw new NotImplementedException();
+                    return new AvlIndexableListTree<LazinatorKeyValue<K, V>>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced, InnerFactory);
                 default:
                     throw new NotImplementedException();
             }

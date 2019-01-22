@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Lazinator.Collections.Avl.ValueTree
 {
-    public partial class AvlAggregatedTree<T> : AvlIndexableTree<T>, IAvlAggregatedTree<T>, IAggregatedMultivalueContainer<T> where T : ILazinator, ICountableContainer
+    public partial class AvlAggregatedTree<T> : AvlIndexableTree<T>, IAvlAggregatedTree<T>, IAggregatedMultivalueContainer<T>, IMultivalueContainer<T> where T : ILazinator, ICountableContainer
     {
         public AvlAggregatedNode<T> AvlAggregatedRoot => (AvlAggregatedNode<T>)Root;
 

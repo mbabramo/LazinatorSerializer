@@ -68,7 +68,7 @@ namespace LazinatorTests.Tests
                     {
                         new ContainerLevel(ContainerType.AvlList),
                         new ContainerLevel(ContainerType.AvlIndexableListTree),
-                        new ContainerLevel(ContainerType.LazinatorList, true, 3)
+                        new ContainerLevel(ContainerType.LazinatorList, false, 3)
                     });
                 case ListFactoryToUse.UnbalancedAvlSortedList:
                     return new ContainerFactory(new List<ContainerLevel>()
@@ -98,9 +98,9 @@ namespace LazinatorTests.Tests
             switch (l)
             {
                 case ListFactoryToUse.LazinatorList:
-                    return (false, true);
+                    return (false, false);
                 case ListFactoryToUse.LazinatorLinkedList:
-                    return (false, true);
+                    return (false, false);
                 case ListFactoryToUse.LazinatorSortedList:
                     return (true, false);
                 case ListFactoryToUse.LazinatorSortedListAllowDuplicates:
@@ -112,7 +112,7 @@ namespace LazinatorTests.Tests
                 case ListFactoryToUse.AvlList:
                 case ListFactoryToUse.AvlListWithAvlIndexableListTree:
                 case ListFactoryToUse.UnbalancedAvlList:
-                    return (false, true);
+                    return (false, false);
                 case ListFactoryToUse.AvlSortedList:
                 case ListFactoryToUse.UnbalancedAvlSortedList:
                     return (true, false);
