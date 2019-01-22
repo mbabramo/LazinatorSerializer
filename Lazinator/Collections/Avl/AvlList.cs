@@ -13,7 +13,7 @@ namespace Lazinator.Collections.Avl
     {
         public AvlList()
         {
-            UnderlyingTree = new AvlIndexableTree<T>();
+            UnderlyingTree = new AvlIndexableTree<T>(true, false);
         }
 
         public AvlList(ContainerFactory factory)

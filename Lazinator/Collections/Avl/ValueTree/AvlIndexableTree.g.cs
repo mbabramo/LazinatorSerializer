@@ -33,10 +33,6 @@ namespace Lazinator.Collections.Avl.ValueTree
         
         /* Clone overrides */
         
-        public AvlIndexableTree() : base()
-        {
-        }
-        
         public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
             var clone = new AvlIndexableTree<T>()

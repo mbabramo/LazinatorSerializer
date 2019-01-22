@@ -16,6 +16,11 @@ namespace Lazinator.Collections.Avl.ValueTree
 
         #region Construction
 
+        public AvlIndexableTree() : base(true, false)
+        {
+
+        }
+
         public AvlIndexableTree(bool allowDuplicates, bool unbalanced) : base(allowDuplicates, unbalanced)
         {
         }
