@@ -8,7 +8,8 @@ namespace Lazinator.Collections.Avl.ValueTree
     public interface IAvlCountedNode<T> where T : ILazinator
     {
         long LeftCount { get; set; }
-        long SelfCount { get; set; }
+        [DoNotAutogenerate]
+        long SelfCount { get; }
         long RightCount { get; set; }
     }
 }

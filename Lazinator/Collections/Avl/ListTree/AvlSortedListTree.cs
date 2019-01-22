@@ -1,21 +1,27 @@
-﻿using Lazinator.Collections.Interfaces;
+﻿using Lazinator.Collections.Factories;
+using Lazinator.Collections.Interfaces;
 using Lazinator.Collections.Location;
 using Lazinator.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Lazinator.Collections.Avl.ValueTree
+namespace Lazinator.Collections.Avl.ListTree
 {
-    public partial class AvlSortedTree<T> : AvlTree<T>, IAvlSortedTree<T>, ISortedMultivalueContainer<T> where T : ILazinator , IComparable<T>
+    public partial class AvlSortedListTree<T> : AvlListTree<T>, IAvlSortedListTree<T>, ISortedMultivalueContainer<T> where T : ILazinator, IComparable<T>
     {
-        public AvlSortedTree(bool allowDuplicates, bool unbalanced) : base(allowDuplicates, unbalanced)
+        public AvlSortedListTree(bool allowDuplicates, bool unbalanced, ContainerFactory innerContainerFactory) : base(allowDuplicates, unbalanced, innerContainerFactory)
         {
+        }
+
+        protected override void CreateUnderlyingTree(ContainerFactory innerContainerFactory)
+        {
+            UnderlyingTree = (IMultivalueContainer<IMultivalueContainer<T>>)innerContainerFactory.CreateValueContainer<ISortedMultivalueContainer<T>>();
         }
 
         public override IValueContainer<T> CreateNewWithSameSettings()
         {
-            return new AvlSortedTree<T>(AllowDuplicates, Unbalanced);
+            return new AvlSortedListTree<T>(AllowDuplicates, Unbalanced, InnerContainerFactory);
         }
 
         public bool Contains(T item) => Contains(item, Comparer<T>.Default);

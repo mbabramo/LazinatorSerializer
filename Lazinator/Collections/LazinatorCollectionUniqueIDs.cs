@@ -132,5 +132,7 @@
         IContainerLocation,
         IIndexLocation,
         IAvlListTreeLocation,
+        IAvlSortedListTree,
+        IAvlAggregatedNode,
     }
 }

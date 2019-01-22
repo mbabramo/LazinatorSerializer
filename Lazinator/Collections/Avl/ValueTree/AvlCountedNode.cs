@@ -8,6 +8,7 @@ namespace Lazinator.Collections.Avl.ValueTree
 {
     public partial class AvlCountedNode<T> : AvlNode<T>, IAvlCountedNode<T> where T : ILazinator
     {
+        public long SelfCount => 1;
         public long LongCount => LeftCount + SelfCount + RightCount;
 
         public AvlCountedNode<T> ParentCountedNode => (AvlCountedNode<T>)Parent;
@@ -37,11 +38,11 @@ namespace Lazinator.Collections.Avl.ValueTree
             {
                 LeftCountedNode.UpdateFollowingTreeChange();
             }
-            LeftCount = LeftCountedNode?.LongCount ?? 0;
             if (RightCountedNode != null && RightCountedNode.NodeVisitedDuringChange)
             {
                 RightCountedNode.UpdateFollowingTreeChange();
             }
+            LeftCount = LeftCountedNode?.LongCount ?? 0;
             RightCount = RightCountedNode?.LongCount ?? 0;
             _Index = null;
             if (NodeVisitedDuringChange)

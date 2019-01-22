@@ -22,10 +22,15 @@ namespace Lazinator.Collections.Avl.ListTree
             AllowDuplicates = allowDuplicates;
             Unbalanced = unbalanced;
             InnerContainerFactory = innerContainerFactory;
-            UnderlyingTree = (IMultivalueContainer<IMultivalueContainer<T>>) innerContainerFactory.CreateValueContainer<IMultivalueContainer<T>>();
+            CreateUnderlyingTree(innerContainerFactory);
         }
 
-        public IValueContainer<T> CreateNewWithSameSettings()
+        protected virtual void CreateUnderlyingTree(ContainerFactory innerContainerFactory)
+        {
+            UnderlyingTree = (IMultivalueContainer<IMultivalueContainer<T>>)innerContainerFactory.CreateValueContainer<IMultivalueContainer<T>>();
+        }
+
+        public virtual IValueContainer<T> CreateNewWithSameSettings()
         {
             return new AvlListTree<T>(AllowDuplicates, Unbalanced, InnerContainerFactory);
         }

@@ -30,7 +30,6 @@ namespace Lazinator.Collections.Avl.ValueTree
             return new AvlCountedNode<T>()
             {
                 Value = value,
-                SelfCount = 1,
                 Parent = parent
             };
         }
