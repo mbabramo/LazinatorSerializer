@@ -46,6 +46,14 @@ namespace Lazinator.Collections.Avl.ValueTree
             RightAggregatedCount = RightAggregatedNode?.LongAggregatedCount ?? 0;
         }
 
+        public void UpdateFollowingNodeChange()
+        {
+            LeftAggregatedCount = LeftAggregatedNode?.LongAggregatedCount ?? 0;
+            RightAggregatedCount = RightAggregatedNode?.LongAggregatedCount ?? 0;
+            if (ParentAggregatedNode != null)
+                ParentAggregatedNode.UpdateFollowingNodeChange();
+        }
+
 
         public override string ToString()
         {

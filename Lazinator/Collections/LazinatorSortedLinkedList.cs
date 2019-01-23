@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Lazinator.Collections
 {
-    public partial class LazinatorSortedLinkedList<T> : LazinatorLinkedList<T>, ILazinatorSortedLinkedList<T>, ILazinatorSorted<T>, ISortedValueContainer<T> where T : IComparable<T>, ILazinator
+    public partial class LazinatorSortedLinkedList<T> : LazinatorLinkedList<T>, ILazinatorSortedLinkedList<T>, ILazinatorSorted<T>, ISortedIndexableMultivalueContainer<T> where T : IComparable<T>, ILazinator
     {
         public LazinatorSortedLinkedList(bool allowDuplicates) : base(allowDuplicates)
         {
@@ -29,7 +29,20 @@ namespace Lazinator.Collections
 
         public (long index, bool exists) FindIndex(T target) => FindIndex(target, Comparer<T>.Default);
         public (long index, bool exists) FindIndex(T target, MultivalueLocationOptions whichOne) => FindIndex(target, whichOne, Comparer<T>.Default);
-        public (long index, bool exists) FindIndex(T target, MultivalueLocationOptions whichOne, IComparer<T> comparer) => this.SortedFind(AllowDuplicates, target, whichOne, comparer);
-        public (long index, bool exists) FindIndex(T target, IComparer<T> comparer) => this.SortedFind(AllowDuplicates, target, comparer);
+
+        long ISortedMultivalueContainer<T>.Count(T item) => ((IMultivalueContainer<T>)this).Count(item, Comparer<T>.Default);
+
+        public bool TryRemoveAll(T item)
+        {
+            bool found = false;
+            bool foundAny = false;
+            do
+            {
+                found = TryRemove(item);
+                if (found)
+                    foundAny = true;
+            } while (found);
+            return foundAny;
+        }
     }
 }

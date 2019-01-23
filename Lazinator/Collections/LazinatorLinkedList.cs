@@ -11,7 +11,7 @@ using System.Text;
 
 namespace Lazinator.Collections
 {
-    public partial class LazinatorLinkedList<T> : ILazinatorLinkedList<T>, IList<T>, ILazinatorListable<T>, IMultivalueContainer<T> where T : ILazinator
+    public partial class LazinatorLinkedList<T> : ILazinatorLinkedList<T>, IList<T>, ILazinatorListable<T>, IIndexableMultivalueContainer<T> where T : ILazinator
     {
         LazinatorLinkedListNode<T> _lastAccessedNode = null;
         int? _lastAccessedIndex = null;
@@ -24,6 +24,12 @@ namespace Lazinator.Collections
         public virtual IValueContainer<T> CreateNewWithSameSettings()
         {
             return new LazinatorLinkedList<T>(AllowDuplicates);
+        }
+
+        public override string ToString()
+        {
+            var firstSeven = this.Take(7).ToArray();
+            return $"[{String.Join(", ", firstSeven)}{(firstSeven.Length == 7 ? ", ..." : "")}]";
         }
 
         public T this[int index]
@@ -381,10 +387,23 @@ namespace Lazinator.Collections
 
         #endregion
 
-        public override string ToString()
+        #region IIndexable
+
+        public (long index, bool exists) FindIndex(T target, IComparer<T> comparer) => FindIndex(target, MultivalueLocationOptions.Any, comparer);
+
+        public (long index, bool exists) FindIndex(T target, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
-            var firstSeven = this.Take(7).ToArray();
-            return $"[{String.Join(", ", firstSeven)}{(firstSeven.Length == 7 ? ", ..." : "")}]";
+            var result = FindContainerLocation(target, whichOne, comparer);
+            return (((IndexLocation)result.location).Index, result.found);
+
         }
+
+        public void RemoveAt(long index)
+        {
+            RemoveAt((int)index);
+        }
+
+        #endregion
+
     }
 }

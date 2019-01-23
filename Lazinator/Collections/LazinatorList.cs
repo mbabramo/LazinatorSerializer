@@ -17,7 +17,7 @@ using Lazinator.Collections.Location;
 namespace Lazinator.Collections
 {
     [Implements(new string[] { "PreSerialization", "EnumerateLazinatorDescendants", "OnFreeInMemoryObjects", "AssignCloneProperties", "OnUpdateDeserializedChildren", "OnPropertiesWritten", "OnForEachLazinator" })]
-    public partial class LazinatorList<T> : IList<T>, IEnumerable, ILazinatorList<T>, ILazinatorList, ILazinatorListable<T>, IMultivalueContainer<T> where T : ILazinator
+    public partial class LazinatorList<T> : IList<T>, IEnumerable, ILazinatorList<T>, ILazinatorList, ILazinatorListable<T>, IIndexableMultivalueContainer<T> where T : ILazinator
     {
         // The status of an item currently in the list. To avoid unnecessary deserialization, we keep track of 
         struct ItemStatus
@@ -81,6 +81,12 @@ namespace Lazinator.Collections
                     _ItemsTracker.Add(new ItemStatus(i, null)); // these items have not yet been deserialized, so index is reference to original list
                 }
             }
+        }
+
+        public override string ToString()
+        {
+            var firstSeven = this.Take(7).ToArray();
+            return $"[{String.Join(", ", firstSeven)}{(firstSeven.Length == 7 ? ", ..." : "")}]";
         }
 
         private T GetSerializedContents(int originalIndex)
@@ -607,10 +613,22 @@ namespace Lazinator.Collections
 
         #endregion
 
-        public override string ToString()
+        #region IIndexable
+
+        public (long index, bool exists) FindIndex(T target, IComparer<T> comparer) => FindIndex(target, MultivalueLocationOptions.Any, comparer);
+
+        public (long index, bool exists) FindIndex(T target, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
-            var firstSeven = this.Take(7).ToArray();
-            return $"[{String.Join(", ", firstSeven)}{(firstSeven.Length == 7 ? ", ..." : "")}]";
+            var result = FindContainerLocation(target, whichOne, comparer);
+            return (((IndexLocation)result.location).Index, result.found);
+
         }
+
+        public void RemoveAt(long index)
+        {
+            RemoveAt((int)index);
+        }
+
+        #endregion
     }
 }

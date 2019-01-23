@@ -263,7 +263,9 @@ namespace Lazinator.Collections.Avl.ListTree
             {
                 InsertInitialNode(item, Comparer<T>.Default);
                 return;
+
             }
+            AvlListTreeLocation<T> listTreeLocation;
             if (location.IsAfterContainer)
             {
                 if (UnderlyingTree == null || !UnderlyingTree.Any())
@@ -273,13 +275,16 @@ namespace Lazinator.Collections.Avl.ListTree
                 }
                 var innerContainer = UnderlyingTree.Last();
                 innerContainer.InsertAt(new AfterContainerLocation(), item);
-                return;
+                listTreeLocation = (AvlListTreeLocation<T>)UnderlyingTree.LastLocation();
             }
-            AvlListTreeLocation<T> listTreeLocation = (AvlListTreeLocation<T>)(location);
-            listTreeLocation.InnerContainer.InsertAt(listTreeLocation.LocationInInnerContainer, item);
+            else
+            {
+                listTreeLocation = (AvlListTreeLocation<T>)(location);
+                listTreeLocation.InnerContainer.InsertAt(listTreeLocation.LocationInInnerContainer, item);
+            }
             if (InnerContainerFactory.ShouldSplit(listTreeLocation.InnerContainer))
             {
-                IMultivalueContainer<T> splitOff = (IMultivalueContainer<T>) listTreeLocation.InnerContainer.SplitOff();
+                IIndexableMultivalueContainer<T> splitOff = (IIndexableMultivalueContainer<T>)listTreeLocation.InnerContainer.SplitOff();
                 UnderlyingTree.InsertAt(listTreeLocation.LocationOfInnerContainer, splitOff);
             }
         }
