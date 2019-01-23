@@ -69,6 +69,8 @@ namespace LazinatorTests.Tests
         [InlineData(ValueContainerToUse.LazinatorLinkedList, true, 50, 50)]
         public void VerifyIntContainer(ValueContainerToUse containerType, bool allowDuplicates, int numRepetitions, int numInstructions) => VerifyValueContainerHelper(containerType, allowDuplicates, numRepetitions, numInstructions);
 
+        [Fact]
+        public void VerifyIntContainerDEBUG() => VerifyIntContainer(ValueContainerToUse.LazinatorList, false, 50, 50);
 
 
         [Theory]
@@ -432,7 +434,7 @@ namespace LazinatorTests.Tests
                     case AvlSortedTree<T> sortedContainer when sortedContainer.AllowDuplicates == true:
                         Execute_SortedMultivalue(testClass, sortedContainer, list);
                         break;
-                    case AvlIndexableTree<T> indexableContainer when indexableContainer.AllowDuplicates == true:
+                    case IIndexableMultivalueContainer<T> indexableContainer when indexableContainer.AllowDuplicates == true:
                         Execute_IndexableMultivalue(testClass, indexableContainer, list);
                         break;
                     case IMultivalueContainer<T> basicContainer when basicContainer.AllowDuplicates == true:
@@ -444,7 +446,7 @@ namespace LazinatorTests.Tests
                     case AvlSortedTree<T> sortedContainer when sortedContainer.AllowDuplicates == false:
                         Execute_Sorted(testClass, sortedContainer, list);
                         break;
-                    case AvlIndexableTree<T> indexableContainer when indexableContainer.AllowDuplicates == false:
+                    case IIndexableMultivalueContainer<T> indexableContainer when indexableContainer.AllowDuplicates == false:
                         Execute_Indexable(testClass, indexableContainer, list);
                         break;
                     case IValueContainer<T> basicContainer:
