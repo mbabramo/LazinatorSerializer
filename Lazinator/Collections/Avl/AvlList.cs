@@ -124,12 +124,6 @@ namespace Lazinator.Collections.Avl
         public void InsertAtIndex(long index, T item)
         {
             UnderlyingTree.InsertAtIndex(index, item);
-            if (UnderlyingTree is ListTree.AvlIndexableListTree<WInt>)
-            {
-                var DEBUG = (ListTree.AvlIndexableListTree<WInt>)UnderlyingTree;
-                var DEBUG2 = DEBUG.UnderlyingTree.ToTreeString();
-                System.Diagnostics.Debug.WriteLine($"\nInserting {item}\n{DEBUG2}");
-            }
         }
 
         public void RemoveAtIndex(long index)
