@@ -68,7 +68,7 @@ namespace Lazinator.Collections.Avl.ListTree
             var outerResult = GetInnerLocationAndContainer(target, whichOne, comparer, false);
             if (outerResult.location.IsAfterContainer)
                 return (LongCount, false);
-            AvlIndexableListTreeLocation<T> avlLocation = (AvlIndexableListTreeLocation<T>)outerResult.location;
+            AvlIndexableListTreeLocation<T> avlLocation = outerResult.location is AvlIndexableListTreeLocation<T> listTreeLocation ? listTreeLocation : (IndexLocation)outerResult.location;
             var locationOfInnerContainer = avlLocation.LocationOfInnerContainer;
             (long firstAggregatedIndex, long lastAggregatedIndex) = UnderlyingTree.GetAggregatedIndexRange(locationOfInnerContainer);
             var innerResult = outerResult.container.FindIndex(target, comparer);
@@ -100,56 +100,6 @@ namespace Lazinator.Collections.Avl.ListTree
             return location;
         }
 
-        // DEBUG -- move next three into separate shared file with static class
-
-        private static int CompareBasedOnEndItems(IIndexableMultivalueContainer<T> container, T item, IComparer<T> comparer)
-        {
-            T last = container.Last();
-            var lastComparison = comparer.Compare(item, last);
-            if (lastComparison >= 0)
-                return lastComparison; // item is last or after
-            T first = container.First();
-            var firstComparison = comparer.Compare(item, first);
-            if (firstComparison <= 0)
-                return firstComparison; // item is first or before
-            return 0; // item is between first and last
-        }
-
-        /// <summary>
-        /// Returns a comparer to compare an item to an inner collection. Usually, the custom comparer can only compare like objects, so null should be passed as the inner collection being compared; this custom comparer then substitutes the item.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <param name="comparer"></param>
-        /// <returns></returns>
-        private static CustomComparer<IIndexableMultivalueContainer<T>> GetItemToInnerContainerComparer(T item, IComparer<T> comparer)
-        {
-            return new CustomComparer<IIndexableMultivalueContainer<T>>((a, b) =>
-            {
-                if (a == null)
-                    return CompareBasedOnEndItems(b, item, comparer);
-                return 0 - CompareBasedOnEndItems(a, item, comparer);
-            });
-        }
-
-        private static CustomComparer<IIndexableMultivalueContainer<T>> GetInnerContainersComparer(IComparer<T> comparer)
-        {
-            return new CustomComparer<IIndexableMultivalueContainer<T>>((a, b) =>
-            {
-                // compare based on firsts
-                var aFirst = a.First();
-                var bFirst = b.First();
-                int firstComparison = comparer.Compare(aFirst, bFirst);
-                if (firstComparison != 0)
-                    return firstComparison;
-                // compare based on lasts
-                var aLast = a.Last();
-                var bLast = b.Last();
-                int lastComparison = comparer.Compare(aLast, bLast);
-                return lastComparison;
-            });
-        }
-
-
         private IIndexableMultivalueContainer<T> GetInnerContainer(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, bool chooseShorterIfInBetween) => GetInnerLocationAndContainer(item, whichOne, comparer, chooseShorterIfInBetween).container;
 
         private IContainerLocation GetInnerLocation(T item, MultivalueLocationOptions whichOne, IComparer<T> comparer, bool chooseShorterIfInBetween) => GetInnerLocationAndContainer(item, whichOne, comparer, chooseShorterIfInBetween).location;
@@ -160,7 +110,7 @@ namespace Lazinator.Collections.Avl.ListTree
                 return default;
             // If inserting before the first or after the last, we still want the node containing the first or last.
             MultivalueLocationOptions whichOneModified = FirstOrLastFromBeforeOrAfter(whichOne);
-            var matchInfo = UnderlyingTree.FindContainerLocation(null, whichOneModified, GetItemToInnerContainerComparer(item, comparer)); // Note: GetItemToInnerContainerComparer will result in comparing the item to the inner containers, so the "null" is a placeholder
+            var matchInfo = UnderlyingTree.FindContainerLocation(null, whichOneModified, ListTreeComparisons<T>.GetItemToInnerContainerComparer(item, comparer)); // Note: GetItemToInnerContainerComparer will result in comparing the item to the inner containers, so the "null" is a placeholder
             var locationOfInitialInnerContainer = matchInfo.location ?? UnderlyingTree.LastLocation();
             if (locationOfInitialInnerContainer.IsAfterContainer)
                 return default;
@@ -402,12 +352,17 @@ namespace Lazinator.Collections.Avl.ListTree
 
         private (IContainerLocation location, bool insertedNotReplaced) InsertInitialNode(T item, IComparer<T> comparer)
         {
-            IIndexableMultivalueContainer<T> onlyInnerContainer = (IIndexableMultivalueContainer<T>)InnerContainerFactory.CreateValueContainer<T>();
+            IIndexableMultivalueContainer<T> onlyInnerContainer = CreateInnerContainer();
             if (onlyInnerContainer.AllowDuplicates != AllowDuplicates)
                 throw new Exception("AllowDuplicates must be same for inner container.");
             onlyInnerContainer.InsertOrReplace(item, comparer);
-            var resultWithinContainer = UnderlyingTree.InsertOrReplace(onlyInnerContainer, GetInnerContainersComparer(comparer));
+            var resultWithinContainer = UnderlyingTree.InsertOrReplace(onlyInnerContainer, ListTreeComparisons<T>.GetInnerContainersComparer(comparer));
             return (new AvlIndexableListTreeLocation<T>(UnderlyingTree, UnderlyingTree.FirstLocation(), onlyInnerContainer.FirstLocation()), resultWithinContainer.insertedNotReplaced);
+        }
+
+        protected virtual IIndexableMultivalueContainer<T> CreateInnerContainer()
+        {
+            return (IIndexableMultivalueContainer<T>)InnerContainerFactory.CreateValueContainer<T>();
         }
 
         public void RemoveAt(IContainerLocation location)
@@ -490,7 +445,7 @@ namespace Lazinator.Collections.Avl.ListTree
 
         public (IContainerLocation location, bool found) FindContainerLocation(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
-            var matchInfo = UnderlyingTree.FindContainerLocation(null, whichOne, GetItemToInnerContainerComparer(value, comparer)); // Note: GetItemToInnerContainerComparer will result in comparing the item to the inner containers, so the "null" is a placeholder
+            var matchInfo = UnderlyingTree.FindContainerLocation(null, whichOne, ListTreeComparisons<T>.GetItemToInnerContainerComparer(value, comparer)); // Note: GetItemToInnerContainerComparer will result in comparing the item to the inner containers, so the "null" is a placeholder
             if (matchInfo.location.IsAfterContainer)
                 return (matchInfo.location, false);
             var innerContainer = UnderlyingTree.GetAt(matchInfo.location);

@@ -32,6 +32,8 @@ namespace LazinatorTests.Tests
             AvlListWithAvlIndexableListTree,
             AvlSortedList,
             AvlSortedListAllowDuplicates,
+            AvlSortedListWithAvlSortedIndexableListTree,
+            AvlSortedListWithAvlSortedIndexableListTreeAllowDuplicates,
             UnbalancedAvlSortedList,
         }
 
@@ -88,6 +90,20 @@ namespace LazinatorTests.Tests
                         new ContainerLevel(ContainerType.AvlSortedList, true),
                         new ContainerLevel(ContainerType.AvlSortedIndexableTree, true)
                     });
+                case ListFactoryToUse.AvlSortedListWithAvlSortedIndexableListTree:
+                    return new ContainerFactory(new List<ContainerLevel>()
+                    {
+                        new ContainerLevel(ContainerType.AvlSortedList),
+                        new ContainerLevel(ContainerType.AvlSortedIndexableListTree),
+                        new ContainerLevel(ContainerType.LazinatorSortedList, false, 3)
+                    });
+                case ListFactoryToUse.AvlSortedListWithAvlSortedIndexableListTreeAllowDuplicates:
+                    return new ContainerFactory(new List<ContainerLevel>()
+                    {
+                        new ContainerLevel(ContainerType.AvlSortedList, true),
+                        new ContainerLevel(ContainerType.AvlSortedIndexableListTree, true),
+                        new ContainerLevel(ContainerType.LazinatorSortedList, true, 3)
+                    });
                 default:
                     throw new NotImplementedException();
             }
@@ -114,9 +130,11 @@ namespace LazinatorTests.Tests
                 case ListFactoryToUse.UnbalancedAvlList:
                     return (false, false);
                 case ListFactoryToUse.AvlSortedList:
+                case ListFactoryToUse.AvlSortedListWithAvlSortedIndexableListTree:
                 case ListFactoryToUse.UnbalancedAvlSortedList:
                     return (true, false);
                 case ListFactoryToUse.AvlSortedListAllowDuplicates:
+                case ListFactoryToUse.AvlSortedListWithAvlSortedIndexableListTreeAllowDuplicates:
                     return (true, true);
                 default:
                     throw new NotImplementedException();
@@ -136,6 +154,8 @@ namespace LazinatorTests.Tests
         [InlineData(ListFactoryToUse.AvlSortedList)]
         [InlineData(ListFactoryToUse.UnbalancedAvlSortedList)]
         [InlineData(ListFactoryToUse.AvlSortedListAllowDuplicates)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithAvlSortedIndexableListTree)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithAvlSortedIndexableListTreeAllowDuplicates)]
         public void Listable_AddingAtEnd(ListFactoryToUse listFactoryToUse)
         {
             var factory = GetListFactory(listFactoryToUse);
@@ -165,6 +185,8 @@ namespace LazinatorTests.Tests
         [InlineData(ListFactoryToUse.AvlSortedList)]
         [InlineData(ListFactoryToUse.UnbalancedAvlSortedList)]
         [InlineData(ListFactoryToUse.AvlSortedListAllowDuplicates)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithAvlSortedIndexableListTree)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithAvlSortedIndexableListTreeAllowDuplicates)]
         public void Listable_AddingAtBeginning(ListFactoryToUse listFactoryToUse)
         {
             var factory = GetListFactory(listFactoryToUse);
@@ -195,6 +217,8 @@ namespace LazinatorTests.Tests
         [InlineData(ListFactoryToUse.AvlSortedList)]
         [InlineData(ListFactoryToUse.UnbalancedAvlSortedList)]
         [InlineData(ListFactoryToUse.AvlSortedListAllowDuplicates)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithAvlSortedIndexableListTree)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithAvlSortedIndexableListTreeAllowDuplicates)]
         public void Listable_Empty(ListFactoryToUse listFactoryToUse)
         {
             var factory = GetListFactory(listFactoryToUse);
@@ -217,6 +241,8 @@ namespace LazinatorTests.Tests
         [InlineData(ListFactoryToUse.AvlSortedList)]
         [InlineData(ListFactoryToUse.UnbalancedAvlSortedList)]
         [InlineData(ListFactoryToUse.AvlSortedListAllowDuplicates)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithAvlSortedIndexableListTree)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithAvlSortedIndexableListTreeAllowDuplicates)]
         public void Listable_EmptyAfterNotEmpty(ListFactoryToUse listFactoryToUse)
         {
             var factory = GetListFactory(listFactoryToUse);
@@ -241,6 +267,8 @@ namespace LazinatorTests.Tests
         [InlineData(ListFactoryToUse.AvlSortedList)]
         [InlineData(ListFactoryToUse.UnbalancedAvlSortedList)]
         [InlineData(ListFactoryToUse.AvlSortedListAllowDuplicates)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithAvlSortedIndexableListTree)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithAvlSortedIndexableListTreeAllowDuplicates)]
         public void Listable_CopyToArray(ListFactoryToUse listFactoryToUse)
         {
 
@@ -268,6 +296,8 @@ namespace LazinatorTests.Tests
         [InlineData(ListFactoryToUse.AvlSortedList)]
         [InlineData(ListFactoryToUse.UnbalancedAvlSortedList)]
         [InlineData(ListFactoryToUse.AvlSortedListAllowDuplicates)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithAvlSortedIndexableListTree)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithAvlSortedIndexableListTreeAllowDuplicates)]
         public void Listable_InsertAndRemoveWork(ListFactoryToUse listFactoryToUse)
         {
             var factory = GetListFactory(listFactoryToUse);
@@ -345,6 +375,8 @@ namespace LazinatorTests.Tests
         [InlineData(ListFactoryToUse.AvlList, 200, 1)]
         [InlineData(ListFactoryToUse.AvlListWithAvlIndexableListTree, 200, 1)]
         [InlineData(ListFactoryToUse.UnbalancedAvlList, 200, 1)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithAvlSortedIndexableListTree, 200, 1)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithAvlSortedIndexableListTreeAllowDuplicates, 200, 1)]
         [InlineData(ListFactoryToUse.LazinatorSortedList, 15, 20)]
         [InlineData(ListFactoryToUse.LazinatorSortedListAllowDuplicates, 15, 20)]
         [InlineData(ListFactoryToUse.LazinatorSortedLinkedList, 15, 20)]
@@ -357,6 +389,8 @@ namespace LazinatorTests.Tests
         [InlineData(ListFactoryToUse.AvlList, 15, 20)]
         [InlineData(ListFactoryToUse.AvlListWithAvlIndexableListTree, 15, 20)]
         [InlineData(ListFactoryToUse.UnbalancedAvlList, 15, 20)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithAvlSortedIndexableListTree, 15, 20)]
+        [InlineData(ListFactoryToUse.AvlSortedListWithAvlSortedIndexableListTreeAllowDuplicates, 15, 20)]
         public void Listable_Sorted(ListFactoryToUse listFactoryToUse, int totalChanges, int repetitions)
         {
             (bool isSorted, bool allowsDuplicates) = GetSortedInfo(listFactoryToUse);

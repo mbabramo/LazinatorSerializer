@@ -211,9 +211,9 @@ namespace Lazinator.Collections.Factories
                 case ContainerType.AvlSortedIndexableTree:
                     return new AvlSortedIndexableTree<T>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced);
                 case ContainerType.AvlSortedListTree:
-                    throw new NotImplementedException();
+                    return new AvlSortedListTree<T>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced, InnerFactory);
                 case ContainerType.AvlSortedIndexableListTree:
-                    throw new NotImplementedException();
+                    return new AvlSortedIndexableListTree<T>(ThisLevel.AllowDuplicates, ThisLevel.Unbalanced, InnerFactory);
                 default:
                     throw new NotImplementedException();
             }
