@@ -265,7 +265,8 @@ namespace Lazinator.Collections.Avl.ListTree
                 return;
 
             }
-            AvlListTreeLocation<T> listTreeLocation;
+            IMultivalueContainer<T> innerContainer;
+            IContainerLocation locationOfInnerContainer;
             if (location.IsAfterContainer)
             {
                 if (UnderlyingTree == null || !UnderlyingTree.Any())
@@ -273,19 +274,21 @@ namespace Lazinator.Collections.Avl.ListTree
                     InsertInitialNode(item, Comparer<T>.Default);
                     return;
                 }
-                var innerContainer = UnderlyingTree.Last();
+                innerContainer = UnderlyingTree.Last();
                 innerContainer.InsertAt(new AfterContainerLocation(), item);
-                listTreeLocation = (AvlListTreeLocation<T>)UnderlyingTree.LastLocation();
+                locationOfInnerContainer = UnderlyingTree.LastLocation();
             }
             else
             {
-                listTreeLocation = (AvlListTreeLocation<T>)(location);
-                listTreeLocation.InnerContainer.InsertAt(listTreeLocation.LocationInInnerContainer, item);
+                var listTreeLocation = (AvlListTreeLocation<T>)(location);
+                innerContainer = listTreeLocation.InnerContainer;
+                locationOfInnerContainer = listTreeLocation.LocationOfInnerContainer;
+                innerContainer.InsertAt(listTreeLocation.LocationInInnerContainer, item);
             }
-            if (InnerContainerFactory.ShouldSplit(listTreeLocation.InnerContainer))
+            if (InnerContainerFactory.ShouldSplit(innerContainer))
             {
-                IIndexableMultivalueContainer<T> splitOff = (IIndexableMultivalueContainer<T>)listTreeLocation.InnerContainer.SplitOff();
-                UnderlyingTree.InsertAt(listTreeLocation.LocationOfInnerContainer, splitOff);
+                IMultivalueContainer<T> splitOff = (IMultivalueContainer<T>)innerContainer.SplitOff();
+                UnderlyingTree.InsertAt(locationOfInnerContainer, splitOff);
             }
         }
 

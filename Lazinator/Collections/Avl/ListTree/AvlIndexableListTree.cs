@@ -319,8 +319,10 @@ namespace Lazinator.Collections.Avl.ListTree
             {
                 InsertInitialNode(item, Comparer<T>.Default);
                 return;
+
             }
-            AvlIndexableListTreeLocation<T> listTreeLocation;
+            IIndexableMultivalueContainer<T> innerContainer;
+            IContainerLocation locationOfInnerContainer;
             if (location.IsAfterContainer)
             {
                 if (UnderlyingTree == null || !UnderlyingTree.Any())
@@ -328,22 +330,25 @@ namespace Lazinator.Collections.Avl.ListTree
                     InsertInitialNode(item, Comparer<T>.Default);
                     return;
                 }
-                var innerContainer = UnderlyingTree.Last();
+                innerContainer = UnderlyingTree.Last();
                 innerContainer.InsertAt(new AfterContainerLocation(), item);
-                listTreeLocation = (AvlIndexableListTreeLocation<T>) UnderlyingTree.LastLocation();
+                locationOfInnerContainer = UnderlyingTree.LastLocation();
             }
             else
             {
-                listTreeLocation = (AvlIndexableListTreeLocation<T>)(location);
-                listTreeLocation.InnerContainer.InsertAt(listTreeLocation.LocationInInnerContainer, item);
+                var listTreeLocation = (AvlIndexableListTreeLocation<T>)(location);
+                innerContainer = listTreeLocation.InnerContainer;
+                locationOfInnerContainer = listTreeLocation.LocationOfInnerContainer;
+                innerContainer.InsertAt(listTreeLocation.LocationInInnerContainer, item);
             }
-            UpdateAfterChange(listTreeLocation.LocationOfInnerContainer);
-            if (InnerContainerFactory.ShouldSplit(listTreeLocation.InnerContainer))
+            if (InnerContainerFactory.ShouldSplit(innerContainer))
             {
-                IIndexableMultivalueContainer<T> splitOff = (IIndexableMultivalueContainer<T>)listTreeLocation.InnerContainer.SplitOff();
-                UnderlyingTree.InsertAt(listTreeLocation.LocationOfInnerContainer, splitOff);
+                IIndexableMultivalueContainer<T> splitOff = (IIndexableMultivalueContainer<T>)innerContainer.SplitOff();
+                UnderlyingTree.InsertAt(locationOfInnerContainer, splitOff);
             }
         }
+
+        
 
         public (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item, IComparer<T> comparer) => InsertOrReplace(item, AllowDuplicates ? MultivalueLocationOptions.InsertAfterLast : MultivalueLocationOptions.Any, comparer);
 
