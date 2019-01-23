@@ -364,13 +364,12 @@ namespace Lazinator.Collections.Avl.ListTree
 
         public bool TryRemoveAll(T item, IComparer<T> comparer)
         {
-            var innerContainer = GetInnerContainer(item, MultivalueLocationOptions.Any, comparer, false);
-            bool any = innerContainer.TryRemove(item, comparer);
+            bool any = TryRemove(item, comparer);
             if (any)
             {
                 do
                 {
-                } while (innerContainer.TryRemove(item, comparer));
+                } while (TryRemove(item, comparer));
             }
             return any;
         }

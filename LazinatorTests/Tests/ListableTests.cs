@@ -149,6 +149,9 @@ namespace LazinatorTests.Tests
             result.SequenceEqual(Enumerable.Range(0, numItems)).Should().BeTrue();
         }
 
+        [Fact]
+        public void ListableDEBUG() => Listable_AddingAtBeginning(ListFactoryToUse.AvlListWithAvlIndexableListTree);
+
         [Theory]
         [InlineData(ListFactoryToUse.LazinatorList)]
         [InlineData(ListFactoryToUse.LazinatorLinkedList)]

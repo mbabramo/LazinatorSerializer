@@ -67,6 +67,18 @@ namespace Lazinator.Collections.Avl.ValueTree
             return (node.Index, node.FirstAggregatedIndex, node.LastAggregatedIndex);
         }
 
+        public AvlAggregatedNode<T> GetNodeAtAggregatedIndex(long aggregatedIndex, bool allowAtCount = false)
+        {
+            ConfirmInAggregatedRangeOrThrow(aggregatedIndex, allowAtCount);
+            var node = GetMatchingNode(MultivalueLocationOptions.Any, CompareAggregatedIndexToNodesIndex(aggregatedIndex, MultivalueLocationOptions.Any));
+            return (AvlAggregatedNode<T>)node;
+        }
+
+        public AvlAggregatedNode<T> GetNodeAtNonaggregatedIndex(long nonaggregatedIndex)
+        {
+            return (AvlAggregatedNode<T>)GetNodeAtIndex(nonaggregatedIndex);
+        }
+
         protected int CompareAggregatedIndices(long desiredNodeAggregatedIndex, AvlAggregatedNode<T> node, MultivalueLocationOptions whichOne)
         {
             long actualNodeFirstAggregatedIndex = node.FirstAggregatedIndex;
@@ -101,13 +113,6 @@ namespace Lazinator.Collections.Avl.ValueTree
         {
             if (!ConfirmInAggregatedRange(aggregatedIndex, allowAtCount))
                 throw new ArgumentException();
-        }
-
-        private AvlAggregatedNode<T> GetNodeAtAggregatedIndex(long aggregatedIndex, bool allowAtCount = false)
-        {
-            ConfirmInAggregatedRangeOrThrow(aggregatedIndex, allowAtCount);
-            var node = GetMatchingNode(MultivalueLocationOptions.Any, CompareAggregatedIndexToNodesIndex(aggregatedIndex, MultivalueLocationOptions.Any));
-            return (AvlAggregatedNode<T>)node;
         }
     }
 }
