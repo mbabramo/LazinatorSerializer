@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Lazinator.Collections.Avl.ValueTree
 {
-    public partial class AvlAggregatedNode<T> : AvlCountedNode<T>, IAvlAggregatedNode<T> where T : ILazinator
+    public partial class AvlAggregatedNode<T> : AvlCountedNode<T>, IAvlAggregatedNode<T> where T : ILazinator, ICountableContainer
     {
         public long LongAggregatedCount => LeftAggregatedCount + SelfAggregatedCount + RightAggregatedCount;
 
@@ -23,9 +23,9 @@ namespace Lazinator.Collections.Avl.ValueTree
                 if (Parent == null)
                     return LeftAggregatedCount;
                 if (IsLeftNode)
-                    return ParentAggregatedNode.Index - RightAggregatedCount - 1;
+                    return ParentAggregatedNode.FirstAggregatedIndex - RightAggregatedCount - SelfAggregatedCount;
                 else if (IsRightNode)
-                    return ParentAggregatedNode.Index + LeftAggregatedCount + 1;
+                    return ParentAggregatedNode.FirstAggregatedIndex + LeftAggregatedCount + ParentAggregatedNode.SelfAggregatedCount;
                 throw new Exception("Malformed AvlTree.");
             }
         }
@@ -42,22 +42,27 @@ namespace Lazinator.Collections.Avl.ValueTree
         public override void UpdateFollowingTreeChange()
         {
             base.UpdateFollowingTreeChange();
-            LeftAggregatedCount = LeftAggregatedNode?.LongAggregatedCount ?? 0;
-            RightAggregatedCount = RightAggregatedNode?.LongAggregatedCount ?? 0;
+            UpdateCountsForThisNode();
         }
 
         public void UpdateFollowingNodeChange()
         {
-            LeftAggregatedCount = LeftAggregatedNode?.LongAggregatedCount ?? 0;
-            RightAggregatedCount = RightAggregatedNode?.LongAggregatedCount ?? 0;
+            UpdateCountsForThisNode();
             if (ParentAggregatedNode != null)
                 ParentAggregatedNode.UpdateFollowingNodeChange();
         }
 
+        private void UpdateCountsForThisNode()
+        {
+            LeftAggregatedCount = LeftAggregatedNode?.LongAggregatedCount ?? 0;
+            SelfAggregatedCount = Value.LongCount;
+            RightAggregatedCount = RightAggregatedNode?.LongAggregatedCount ?? 0;
+            _FirstAggregatedIndex = null;
+        }
 
         public override string ToString()
         {
-            return $"Index {Index}: {Value} (Count {LongCount} ({LongAggregatedCount}): Left {LeftCount} ({LeftAggregatedCount}) Self {SelfCount} ({SelfAggregatedCount}) Right {RightCount} {RightAggregatedCount}) (visited {NodeVisitedDuringChange}) (ParentIndex {(Parent is AvlCountedNode<T> p ? p.Index.ToString() : "N/A")})";
+            return $"Index {Index} (items {FirstAggregatedIndex}-{LastAggregatedIndex}): {Value} Node count (total {LongCount} left {LeftCount} self {SelfCount} right {RightCount}) Aggregated items count (total {LongAggregatedCount} left {LeftAggregatedCount} self {SelfAggregatedCount} right {RightAggregatedCount})  (visited {NodeVisitedDuringChange}) (ParentIndex {(Parent is AvlCountedNode<T> p ? p.Index.ToString() : "N/A")})";
         }
     }
 }

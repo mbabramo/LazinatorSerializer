@@ -11,6 +11,8 @@ namespace Lazinator.Collections.Avl.ValueTree
     public partial class AvlAggregatedTree<T> : AvlIndexableTree<T>, IAvlAggregatedTree<T>, IAggregatedMultivalueContainer<T>, IMultivalueContainer<T> where T : ILazinator, ICountableContainer
     {
         public AvlAggregatedNode<T> AvlAggregatedRoot => (AvlAggregatedNode<T>)Root;
+        public AvlAggregatedNode<T> FirstAggregatedNode => (AvlAggregatedNode<T>)FirstNode();
+        public AvlAggregatedNode<T> LastAggregatedNode => (AvlAggregatedNode<T>)LastNode();
 
         public long LongAggregatedCount => (Root as AvlAggregatedNode<T>)?.LongAggregatedCount ?? 0;
 

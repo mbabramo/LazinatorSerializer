@@ -332,7 +332,7 @@ namespace Lazinator.Collections.Avl.ListTree
                 return;
             }
             IIndexableMultivalueContainer<T> innerContainer;
-            IContainerLocation locationOfInnerContainer;
+            AvlAggregatedNode<IIndexableMultivalueContainer<T>> innerNode;
             if (location.IsAfterContainer)
             {
                 if (UnderlyingTree == null || !UnderlyingTree.Any())
@@ -342,19 +342,21 @@ namespace Lazinator.Collections.Avl.ListTree
                 }
                 innerContainer = UnderlyingTree.Last();
                 innerContainer.InsertAt(new AfterContainerLocation(), item);
-                locationOfInnerContainer = UnderlyingTree.LastLocation();
+                innerNode = UnderlyingTree.LastAggregatedNode;
             }
             else
             {
                 var listTreeLocation = (AvlIndexableListTreeLocation<T>)location;
                 innerContainer = listTreeLocation.InnerContainer;
-                locationOfInnerContainer = listTreeLocation.LocationOfInnerContainer;
+                innerNode = listTreeLocation.InnerContainerNode;
                 innerContainer.InsertAt(listTreeLocation.LocationInInnerContainer, item);
             }
+            innerNode.UpdateFollowingNodeChange();
             if (InnerContainerFactory.ShouldSplit(innerContainer))
             {
                 IIndexableMultivalueContainer<T> splitOff = (IIndexableMultivalueContainer<T>)innerContainer.SplitOff();
-                UnderlyingTree.InsertAt(locationOfInnerContainer, splitOff);
+                IContainerLocation innerNodeLocation = new BinaryTreeLocation<IIndexableMultivalueContainer<T>>(innerNode);
+                UnderlyingTree.InsertAt(innerNodeLocation, splitOff);
             }
         }
 
@@ -507,7 +509,7 @@ namespace Lazinator.Collections.Avl.ListTree
         private void UpdateAfterChange(IContainerLocation locationOfInnerContainer)
         {
             var innerContainer = UnderlyingTree.GetAt(locationOfInnerContainer);
-            var node = (AvlAggregatedNode<T>)innerContainer;
+            var node = (AvlAggregatedNode<IIndexableMultivalueContainer<T>>)locationOfInnerContainer;
             node.UpdateFollowingNodeChange();
         }
     }
