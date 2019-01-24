@@ -204,6 +204,21 @@ namespace Lazinator.Collections.Avl.KeyValueTree
             return new TransformEnumerator<LazinatorKeyValue<TKey, TValue>, KeyValuePair<TKey, TValue>>(UnderlyingContainer.GetEnumerator(reverse, skip), x => x.KeyValuePair);
         }
 
+        public IEnumerator<TKey> GetKeyEnumerator(bool reverse, TKey startKey, IComparer<TKey> comparer)
+        {
+            return new TransformEnumerator<LazinatorKeyValue<TKey, TValue>, TKey>(UnderlyingContainer.GetEnumerator(reverse, KeyPlusDefault(startKey), KeyComparer(comparer)), x => x.Key);
+        }
+
+        public IEnumerator<TValue> GetValueEnumerator(bool reverse, TKey startKey, IComparer<TKey> comparer)
+        {
+            return new TransformEnumerator<LazinatorKeyValue<TKey, TValue>, TValue>(UnderlyingContainer.GetEnumerator(reverse, KeyPlusDefault(startKey), KeyComparer(comparer)), x => x.Value);
+        }
+
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(bool reverse, TKey startKey, IComparer<TKey> comparer)
+        {
+            return new TransformEnumerator<LazinatorKeyValue<TKey, TValue>, KeyValuePair<TKey, TValue>>(UnderlyingContainer.GetEnumerator(reverse, KeyPlusDefault(startKey), KeyComparer(comparer)), x => x.KeyValuePair);
+        }
+
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
             return GetKeyValuePairEnumerator(false, 0);
