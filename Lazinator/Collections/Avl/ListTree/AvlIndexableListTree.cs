@@ -244,35 +244,22 @@ namespace Lazinator.Collections.Avl.ListTree
 
         public IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
         {
-            // Because this tree doesn't store indexing, we still have to go through container by container, though this should be a little faster than going through item by item.
-            foreach (var multivalueContainer in UnderlyingTree.AsEnumerable(reverse, 0))
+            if (LongCount == 0)
+                yield break;
+            long startIndex = reverse ? LongCount - skip - 1 : skip;
+            var node = UnderlyingTree.GetNodeAtAggregatedIndex(startIndex);
+            long skipWithinNode = reverse ? node.LastAggregatedIndex - startIndex : startIndex - node.FirstAggregatedIndex;
+            while (node != null)
             {
-                if (skip > 0 && multivalueContainer is ICountableContainer countable)
+                foreach (T t in node.Value.AsEnumerable(reverse, skipWithinNode))
                 {
-                    if (skip >= countable.LongCount)
-                    { // enumerate by skipping entire containers
-                        skip -= countable.LongCount;
-                        continue;
-                    }
+                    if (skip > 0)
+                        skip--;
                     else
-                    { // skip all that we have left to skip, then enumerate
-                        foreach (T t in multivalueContainer.AsEnumerable(reverse, skip))
-                        {
-                            yield return t;
-                        }
-                        skip = 0;
-                    }
+                        yield return t;
                 }
-                else
-                { // enumerate each item one by one
-                    foreach (T t in multivalueContainer.AsEnumerable(reverse, 0))
-                    {
-                        if (skip > 0)
-                            skip--;
-                        else
-                            yield return t;
-                    }
-                }
+                skipWithinNode = 0;
+                node = (AvlAggregatedNode<IIndexableMultivalueContainer<T>>) (reverse ? node.GetPreviousNode() : node.GetNextNode());
             }
         }
 

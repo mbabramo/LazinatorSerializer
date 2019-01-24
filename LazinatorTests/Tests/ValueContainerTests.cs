@@ -289,7 +289,8 @@ namespace LazinatorTests.Tests
                     VerifyEntireList(container, list); // DEBUG
                 }
                 VerifyEntireList(container, list);
-                VerifyEnumerableSkipAndReverse(container, list);
+                VerifyEnumerableSkipForwards(container, list);
+                VerifyEnumerableSkipReversed(container, list);
             }
         }
 
@@ -299,13 +300,41 @@ namespace LazinatorTests.Tests
             values.SequenceEqual(list).Should().BeTrue();
         }
 
-        public void VerifyEnumerableSkipAndReverse(IValueContainer<T> valueContainer, List<T> list)
+        private List<T> GetValues(IValueContainer<T> valueContainer, bool reverse, long skip, bool useEnumerator)
+        {
+            // This method allows us to test either the AsEnumerable method or the GetEnumerator method. 
+            if (useEnumerator)
+            {
+                List<T> l = new List<T>();
+                var enumerator = valueContainer.GetEnumerator(reverse, skip);
+                while (enumerator.MoveNext())
+                    l.Add(enumerator.Current);
+                return l;
+            }
+            else
+                return valueContainer.AsEnumerable(reverse, skip).ToList();
+        }
+
+        public void VerifyEnumerableSkipForwards(IValueContainer<T> valueContainer, List<T> list)
+        {
+            var list2 = list.ToList();
+            int numToSkip = ran.Next(0, list.Count + 1);
+            var withSkips = list2.Skip(numToSkip).ToList();
+            var values = GetValues(valueContainer, false, numToSkip, false);
+            values.SequenceEqual(withSkips).Should().BeTrue();
+            values = GetValues(valueContainer, false, numToSkip, true);
+            values.SequenceEqual(withSkips).Should().BeTrue();
+        }
+
+        public void VerifyEnumerableSkipReversed(IValueContainer<T> valueContainer, List<T> list)
         {
             var list2 = list.ToList();
             list2.Reverse();
             int numToSkip = ran.Next(0, list.Count + 1);
             var withSkips = list2.Skip(numToSkip).ToList();
-            var values = valueContainer.AsEnumerable(true, numToSkip).ToList();
+            var values = GetValues(valueContainer, true, numToSkip, false);
+            values.SequenceEqual(withSkips).Should().BeTrue();
+            values = GetValues(valueContainer, true, numToSkip, true);
             values.SequenceEqual(withSkips).Should().BeTrue();
         }
 

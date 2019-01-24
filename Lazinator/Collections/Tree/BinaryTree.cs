@@ -216,6 +216,38 @@ namespace Lazinator.Collections.Tree
             }
         }
 
+        protected internal (BinaryNode<T> node, bool found) GetMatchingOrPreviousNode(T value, MultivalueLocationOptions whichOne, IComparer<T> comparer) => GetMatchingOrPreviousNode(whichOne, node => CompareValueToNode(value, node, whichOne, comparer));
+
+        protected internal (BinaryNode<T> node, bool found) GetMatchingOrPreviousNode(MultivalueLocationOptions whichOne, Func<BinaryNode<T>, int> comparisonFunc)
+        {
+            BinaryNode<T> node = Root;
+            if (node == null)
+                return (null, false);
+            while (true)
+            {
+                int comparison = comparisonFunc(node);
+                if (comparison < 0)
+                {
+                    if (node.Left == null)
+                    {
+                        var next = node.GetPreviousNode();
+                        return (next, false);
+                    }
+                    node = node.Left;
+                }
+                else if (comparison > 0)
+                {
+                    if (node.Right == null)
+                        return (node, false);
+                    node = node.Right;
+                }
+                else
+                {
+                    return (node, true);
+                }
+            }
+        }
+
         private int CompareValueToNode(T value, BinaryNode<T> node, MultivalueLocationOptions whichOne, IComparer<T> comparer)
         {
             int compare = comparer.Compare(value, node.Value);
@@ -651,6 +683,11 @@ namespace Lazinator.Collections.Tree
             return new BinaryNodeEnumerator<T>(reverse ? LastNode() : FirstNode(), reverse, skip);
         }
 
+        private BinaryNodeEnumerator<T> GetBinaryNodeEnumerator(bool reverse, T startValue, IComparer<T> comparer) 
+        {
+            return new BinaryNodeEnumerator<T>(reverse ? GetMatchingOrPreviousNode(startValue, MultivalueLocationOptions.Last, comparer).node : GetMatchingOrNextNode(startValue, MultivalueLocationOptions.First, comparer).node, reverse, 0);
+        }
+
         public virtual IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
         {
             var enumerator = GetBinaryNodeEnumerator(reverse, skip);
@@ -661,6 +698,11 @@ namespace Lazinator.Collections.Tree
         public IEnumerator<T> GetEnumerator(bool reverse = false, long skip = 0)
         {
             return new TransformEnumerator<BinaryNode<T>, T>(GetBinaryNodeEnumerator(reverse, skip), x => x.Value);
+        }
+
+        public IEnumerator<T> GetEnumerator(bool reverse, T startValue, IComparer<T> comparer)
+        {
+            return new TransformEnumerator<BinaryNode<T>, T>(GetBinaryNodeEnumerator(reverse, startValue, comparer), x => x.Value);
         }
 
         public IEnumerator<T> GetEnumerator()
