@@ -99,6 +99,23 @@ namespace Lazinator.Collections.Avl.ListTree
             return location;
         }
 
+        private AvlIndexableListTreeLocation<T> GetIndexableListTreeLocation(IContainerLocation innerContainerLocation)
+        {
+            switch (innerContainerLocation)
+            {
+                case AvlIndexableListTreeLocation<T> listTreeLocation:
+                    return listTreeLocation;
+                case IndexLocation indexLocation:
+                    var result = GetInnerContainerNodeAndIndexWithin(indexLocation.Index);
+                    return new AvlIndexableListTreeLocation<T>(UnderlyingTree, result.innerContainerNode, new IndexLocation(result.indexInInnerContainer, LongCount));
+                case BinaryTreeLocation<IIndexableMultivalueContainer<T>> binaryTreeLocation:
+                    AvlAggregatedNode<IIndexableMultivalueContainer<T>> avlAggregatedNode = GetAggregatedNodeAtLocation(binaryTreeLocation);
+                    return new AvlIndexableListTreeLocation<T>(UnderlyingTree, avlAggregatedNode, avlAggregatedNode.Value.FirstLocation());
+                default:
+                    throw new NotImplementedException();
+            }
+        }
+
 
         private AvlAggregatedNode<IIndexableMultivalueContainer<T>> GetAggregatedNodeAtLocation(IContainerLocation innerContainerLocation)
         {
@@ -228,13 +245,13 @@ namespace Lazinator.Collections.Avl.ListTree
 
         public T GetAt(IContainerLocation location)
         {
-            AvlIndexableListTreeLocation<T> avlLocation = (AvlIndexableListTreeLocation<T>)location;
+            AvlIndexableListTreeLocation<T> avlLocation = GetIndexableListTreeLocation(location);
             return avlLocation.InnerContainer.GetAt(avlLocation.LocationInInnerContainer);
         }
 
         public void SetAt(IContainerLocation location, T value)
         {
-            AvlIndexableListTreeLocation<T> avlLocation = (AvlIndexableListTreeLocation<T>)location;
+            AvlIndexableListTreeLocation<T> avlLocation = GetIndexableListTreeLocation(location);
             avlLocation.InnerContainer.SetAt(avlLocation.LocationInInnerContainer, value);
         }
 
@@ -245,7 +262,7 @@ namespace Lazinator.Collections.Avl.ListTree
 
         public IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
         {
-            if (LongCount == 0)
+            if (LongCount == 0 || skip >= LongCount)
                 yield break;
             long startIndex = reverse ? LongCount - skip - 1 : skip;
             var node = UnderlyingTree.GetNodeAtAggregatedIndex(startIndex);
@@ -379,12 +396,12 @@ namespace Lazinator.Collections.Avl.ListTree
 
         public void RemoveAt(IContainerLocation location)
         {
-            AvlIndexableListTreeLocation<T> listTreeLocation = (AvlIndexableListTreeLocation<T>)location;
-            listTreeLocation.InnerContainer.RemoveAt(listTreeLocation.LocationInInnerContainer);
-            listTreeLocation.InnerContainerNode.UpdateFollowingNodeChange();
-            if (listTreeLocation.InnerContainer.Any() == false)
+            AvlIndexableListTreeLocation<T> avlLocation = GetIndexableListTreeLocation(location);
+            avlLocation.InnerContainer.RemoveAt(avlLocation.LocationInInnerContainer);
+            avlLocation.InnerContainerNode.UpdateFollowingNodeChange();
+            if (avlLocation.InnerContainer.Any() == false)
             {
-                UnderlyingTree.RemoveAt(listTreeLocation.LocationOfInnerContainer);
+                UnderlyingTree.RemoveAt(avlLocation.LocationOfInnerContainer);
             }
         }
 

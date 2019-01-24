@@ -24,6 +24,7 @@ namespace LazinatorTests.Tests
         AvlKeyValueTree,
         AvlKeyValueTreeWithUnderlyingAvlListTree,
         AvlIndexableKeyValueTree,
+        AvlIndexableKeyValueTreeWithUnderlyingAvlIndexableListTree,
         AvlSortedKeyValueTree,
         AvlSortedIndexableKeyValueTree,
         AvlKeyValueTreeWithDuplicates,
@@ -38,6 +39,7 @@ namespace LazinatorTests.Tests
         [InlineData(KeyValueContainerType.AvlKeyValueTree, 100, 100)]
         [InlineData(KeyValueContainerType.AvlKeyValueTreeWithUnderlyingAvlListTree, 100, 100)]
         [InlineData(KeyValueContainerType.AvlIndexableKeyValueTree, 100, 100)]
+        [InlineData(KeyValueContainerType.AvlIndexableKeyValueTreeWithUnderlyingAvlIndexableListTree, 100, 100)]
         [InlineData(KeyValueContainerType.AvlSortedKeyValueTree, 100, 100)]
         [InlineData(KeyValueContainerType.AvlSortedIndexableKeyValueTree, 100, 100)]
         [InlineData(KeyValueContainerType.AvlKeyValueTreeWithDuplicates, 100, 100)]
@@ -72,6 +74,8 @@ namespace LazinatorTests.Tests
                     return new AvlKeyValueTree<TKey, TValue>(GetInnerContainerFactory(ContainerType.AvlListTree, false), false, false);
                 case KeyValueContainerType.AvlIndexableKeyValueTree:
                     return new AvlIndexableKeyValueTree<TKey, TValue>(GetInnerContainerFactory(ContainerType.AvlIndexableTree, false), false, false);
+                case KeyValueContainerType.AvlIndexableKeyValueTreeWithUnderlyingAvlIndexableListTree:
+                    return new AvlIndexableKeyValueTree<TKey, TValue>(GetInnerContainerFactory(ContainerType.AvlIndexableListTree, false), false, false);
                 case KeyValueContainerType.AvlSortedKeyValueTree:
                     return new AvlSortedKeyValueTree<TKey, TValue>(GetInnerContainerFactory(ContainerType.AvlTree, false), false, false);
                 case KeyValueContainerType.AvlSortedIndexableKeyValueTree:
