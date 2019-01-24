@@ -19,27 +19,7 @@ namespace Lazinator.Collections
     [Implements(new string[] { "PreSerialization", "EnumerateLazinatorDescendants", "OnFreeInMemoryObjects", "AssignCloneProperties", "OnUpdateDeserializedChildren", "OnPropertiesWritten", "OnForEachLazinator" })]
     public partial class LazinatorList<T> : IList<T>, IEnumerable, ILazinatorList<T>, ILazinatorList, ILazinatorListable<T>, IIndexableMultivalueContainer<T> where T : ILazinator
     {
-        // The status of an item currently in the list. To avoid unnecessary deserialization, we keep track of 
-        struct ItemStatus
-        {
-            public int OriginalIndex;
-            public int DeserializedIndex;
-            public bool IsInOriginalItems => OriginalIndex != -1;
-            public bool IsDeserialized => DeserializedIndex != -1;
-
-            public ItemStatus(int? originalIndex, int? indexInDeserializedItems)
-            {
-                OriginalIndex = originalIndex ?? -1;
-                DeserializedIndex = indexInDeserializedItems ?? -1;
-            }
-        }
-
-        [NonSerialized] private int _CountWhenDeserialized;
-        [NonSerialized] private List<T> _DeserializedItems;
-        [NonSerialized] private List<ItemStatus> _ItemsTracker; // if isDeserialized is true, then index is to _DeserializedItems; otherwise, it is an index to the original items
-        [NonSerialized] private int? _FixedID;
-        [NonSerialized] private bool _TypeRequiresNonBinaryHashing;
-        [NonSerialized] private LazinatorOffsetList _PreviousOffsets;
+        #region Construction 
 
         public LazinatorList() : this(false)
         {
@@ -69,6 +49,32 @@ namespace Lazinator.Collections
                 Add(item);
         }
 
+        #endregion
+
+        #region Item access and status
+
+        // The status of an item currently in the list. To avoid unnecessary deserialization, we keep track of 
+        struct ItemStatus
+        {
+            public int OriginalIndex;
+            public int DeserializedIndex;
+            public bool IsInOriginalItems => OriginalIndex != -1;
+            public bool IsDeserialized => DeserializedIndex != -1;
+
+            public ItemStatus(int? originalIndex, int? indexInDeserializedItems)
+            {
+                OriginalIndex = originalIndex ?? -1;
+                DeserializedIndex = indexInDeserializedItems ?? -1;
+            }
+        }
+
+        [NonSerialized] private int _CountWhenDeserialized;
+        [NonSerialized] private List<T> _DeserializedItems;
+        [NonSerialized] private List<ItemStatus> _ItemsTracker; // if isDeserialized is true, then index is to _DeserializedItems; otherwise, it is an index to the original items
+        [NonSerialized] private int? _FixedID;
+        [NonSerialized] private bool _TypeRequiresNonBinaryHashing;
+        [NonSerialized] private LazinatorOffsetList _PreviousOffsets;
+
         private void SetupItemsTracker()
         {
             if (_DeserializedItems == null)
@@ -81,6 +87,13 @@ namespace Lazinator.Collections
                     _ItemsTracker.Add(new ItemStatus(i, null)); // these items have not yet been deserialized, so index is reference to original list
                 }
             }
+        }
+
+        private bool ItemHasBeenAccessed(int currentIndex)
+        {
+            if (_ItemsTracker == null)
+                return false;
+            return _ItemsTracker[currentIndex].IsDeserialized;
         }
 
         public override string ToString()
@@ -211,6 +224,22 @@ namespace Lazinator.Collections
             return result.found;
         }
 
+        public int IndexOf(T item)
+        {
+            for (int i = 0; i < Count; i++)
+                if (System.Collections.Generic.EqualityComparer<T>.Default.Equals(this[i], item))
+                    return i;
+            return -1;
+        }
+
+        public int IndexOf(Predicate<T> match)
+        {
+            for (int i = 0; i < Count; i++)
+                if (match(this[i]))
+                    return i;
+            return -1;
+        }
+
         public void CopyTo(T[] array, int arrayIndex)
         {
             for (int i = 0; i < Count; i++)
@@ -221,6 +250,9 @@ namespace Lazinator.Collections
         {
             return Count > 0;
         }
+        #endregion
+
+        #region Enumeration
 
         public IEnumerator<T> GetEnumerator()
         {
@@ -237,21 +269,33 @@ namespace Lazinator.Collections
             return new ListableEnumerator<T>(this, reverse, skip);
         }
 
-        public int IndexOf(T item)
+        public IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
         {
-            for (int i = 0; i < Count; i++)
-                if (System.Collections.Generic.EqualityComparer<T>.Default.Equals(this[i], item))
-                    return i;
-            return -1;
+            if (skip > Count || skip < 0)
+                throw new ArgumentException();
+            if (reverse)
+            {
+                for (int i = Count - 1 - (int)skip; i >= 0; i--)
+                {
+                    yield return this[i];
+                }
+            }
+            else
+            {
+                for (int i = (int)skip; i < Count; i++)
+                {
+                    yield return this[i];
+                }
+            }
         }
 
-        public int IndexOf(Predicate<T> match)
-        {
-            for (int i = 0; i < Count; i++)
-                if (match(this[i]))
-                    return i;
-            return -1;
-        }
+        public IEnumerator<T> GetEnumerator(bool reverse, T startValue, IComparer<T> comparer) => this.MultivalueGetEnumerator(reverse, startValue, comparer);
+
+        public IEnumerable<T> AsEnumerable(bool reverse, T startValue, IComparer<T> comparer) => this.MultivalueAsEnumerable(reverse, startValue, comparer);
+
+        #endregion
+
+        #region Insertion
 
         public virtual void Add(T item)
         {
@@ -280,6 +324,10 @@ namespace Lazinator.Collections
             _ItemsTracker.Insert(index, new ItemStatus(null, _DeserializedItems.Count - 1));
             MarkDirty();
         }
+
+        #endregion
+
+        #region Removal
 
         public virtual bool Remove(T item)
         {
@@ -325,6 +373,10 @@ namespace Lazinator.Collections
             }
             MarkDirty();
         }
+
+        #endregion
+
+        #region Serialization
 
         public virtual void PreSerialization(bool verifyCleanness, bool updateStoredBuffer)
         {
@@ -372,13 +424,6 @@ namespace Lazinator.Collections
                     }
                 }
             }
-        }
-
-        private bool ItemHasBeenAccessed(int currentIndex)
-        {
-            if (_ItemsTracker == null)
-                return false;
-            return _ItemsTracker[currentIndex].IsDeserialized;
         }
 
         private void WriteMainList(ref BinaryBufferWriter writer, ReadOnlyMemory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -490,7 +535,9 @@ namespace Lazinator.Collections
             }
         }
 
-        #region Interface implementation 
+        #endregion
+
+        #region Interface implementations 
 
         public long LongCount => Count;
         
@@ -508,26 +555,6 @@ namespace Lazinator.Collections
             if (index > Count || index < 0)
                 throw new ArgumentException();
             RemoveAt((int)index);
-        }
-
-        public IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0)
-        {
-            if (skip > Count || skip < 0)
-                throw new ArgumentException();
-            if (reverse)
-            {
-                for (int i = Count - 1 - (int)skip; i >= 0; i--)
-                {
-                    yield return this[i];
-                }
-            }
-            else
-            {
-                for (int i = (int)skip; i < Count; i++)
-                {
-                    yield return this[i];
-                }
-            }
         }
 
         public T GetAtIndex(long index)
@@ -609,8 +636,7 @@ namespace Lazinator.Collections
         public bool GetValue(T item, IComparer<T> comparer, out T match) => this.MultivalueGetValue(AllowDuplicates, item, comparer, out match);
         public (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item, IComparer<T> comparer) => this.SortedInsertOrReplace(AllowDuplicates, item, AllowDuplicates ? MultivalueLocationOptions.InsertAfterLast : MultivalueLocationOptions.Any, comparer);
         public bool TryRemove(T item, IComparer<T> comparer) => this.MultivalueTryRemove(AllowDuplicates, item, comparer);
-
-
+        
         #endregion
 
         #region IIndexable

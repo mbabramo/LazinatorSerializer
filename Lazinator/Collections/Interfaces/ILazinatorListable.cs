@@ -14,6 +14,7 @@ namespace Lazinator.Collections
         void InsertAtIndex(long index, T item);
         void RemoveAtIndex(long index);
         IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0);
+        IEnumerable<T> AsEnumerable(bool reverse, T startValue, IComparer<T> comparer);
         bool Any();
         T First();
         T FirstOrDefault();

@@ -57,5 +57,7 @@ namespace Lazinator.Collections.Interfaces
         void Clear();
         IEnumerable<T> AsEnumerable(bool reverse = false, long skip = 0);
         IEnumerator<T> GetEnumerator(bool reverse = false, long skip = 0);
+        IEnumerable<T> AsEnumerable(bool reverse, T startValue, IComparer<T> comparer);
+        IEnumerator<T> GetEnumerator(bool reverse, T startValue, IComparer<T> comparer);
     }
 }

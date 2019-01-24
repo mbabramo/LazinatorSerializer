@@ -256,6 +256,10 @@ namespace Lazinator.Collections
             return new ListableEnumerator<T>(this, reverse, skip);
         }
 
+        public IEnumerator<T> GetEnumerator(bool reverse, T startValue, IComparer<T> comparer) => this.MultivalueGetEnumerator(reverse, startValue, comparer);
+
+        public IEnumerable<T> AsEnumerable(bool reverse, T startValue, IComparer<T> comparer) => this.MultivalueAsEnumerable(reverse, startValue, comparer);
+
         #endregion
 
         #region ILazinatorCountableListableFactory 

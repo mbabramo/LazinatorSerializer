@@ -695,6 +695,13 @@ namespace Lazinator.Collections.Tree
                 yield return enumerator.Current.Value;
         }
 
+        public virtual IEnumerable<T> AsEnumerable(bool reverse, T startValue, IComparer<T> comparer)
+        {
+            var enumerator = GetBinaryNodeEnumerator(reverse, startValue, comparer);
+            while (enumerator.MoveNext())
+                yield return enumerator.Current.Value;
+        }
+
         public IEnumerator<T> GetEnumerator(bool reverse = false, long skip = 0)
         {
             return new TransformEnumerator<BinaryNode<T>, T>(GetBinaryNodeEnumerator(reverse, skip), x => x.Value);

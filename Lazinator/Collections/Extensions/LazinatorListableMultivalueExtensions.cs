@@ -1,4 +1,5 @@
-﻿using Lazinator.Collections.Interfaces;
+﻿using Lazinator.Collections.Enumerators;
+using Lazinator.Collections.Interfaces;
 using Lazinator.Collections.Location;
 using Lazinator.Core;
 using System;
@@ -9,6 +10,20 @@ namespace Lazinator.Collections.Extensions
 {
     public static class LazinatorListableMultivalueExtensions
     {
+        public static IEnumerator<T> MultivalueGetEnumerator<L, T>(this L list, bool reverse, T startValue, IComparer<T> comparer) where L : ILazinatorListable<T>, IIndexableMultivalueContainer<T> where T : ILazinator
+        {
+            var result = list.FindIndex(startValue, reverse ? MultivalueLocationOptions.Last : MultivalueLocationOptions.First, comparer);
+            long skipAdjusted = reverse ? list.LongCount - result.index - 1 : result.index;
+            return new ListableEnumerator<T>(list, reverse, skipAdjusted);
+        }
+
+        public static IEnumerable<T> MultivalueAsEnumerable<L, T>(this L list, bool reverse, T startValue, IComparer<T> comparer) where L : ILazinatorListable<T>, IIndexableMultivalueContainer<T> where T : ILazinator
+        {
+            var result = list.FindIndex(startValue, reverse ? MultivalueLocationOptions.Last : MultivalueLocationOptions.First, comparer);
+            long skipAdjusted = reverse ? list.LongCount - result.index - 1 : result.index;
+            return ((ILazinatorListable<T>)list).AsEnumerable(reverse, skipAdjusted);
+        }
+
         public static (IContainerLocation location, bool found) MultivalueFindMatchOrNext<L, T>(this L list, bool allowDuplicates, T value, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator => MultivalueFindMatchOrNext(list, allowDuplicates, value, MultivalueLocationOptions.Any, comparer);
         public static (IContainerLocation location, bool found) MultivalueFindMatchOrNext<L, T>(this L list, bool allowDuplicates, T value, MultivalueLocationOptions whichOne, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator
         {
