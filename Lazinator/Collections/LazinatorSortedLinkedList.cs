@@ -44,5 +44,8 @@ namespace Lazinator.Collections
             } while (found);
             return foundAny;
         }
+
+        public IEnumerable<T> AsEnumerable(bool reverse, T startValue) => AsEnumerable(reverse, startValue, Comparer<T>.Default);
+        public IEnumerator<T> GetEnumerator(bool reverse, T startValue) => GetEnumerator(reverse, startValue, Comparer<T>.Default);
     }
 }

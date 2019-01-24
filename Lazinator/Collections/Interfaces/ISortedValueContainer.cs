@@ -13,5 +13,7 @@ namespace Lazinator.Collections.Interfaces
         bool Contains(T item);
         (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item);
         bool TryRemove(T item);
+        IEnumerable<T> AsEnumerable(bool reverse, T startValue);
+        IEnumerator<T> GetEnumerator(bool reverse, T startValue);
     }
 }

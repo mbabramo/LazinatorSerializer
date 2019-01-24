@@ -35,6 +35,9 @@ namespace Lazinator.Collections
 
         long ISortedMultivalueContainer<T>.Count(T item) => ((IMultivalueContainer<T>)this).Count(item, Comparer<T>.Default);
 
+        public IEnumerable<T> AsEnumerable(bool reverse, T startValue) => AsEnumerable(reverse, startValue, Comparer<T>.Default);
+        public IEnumerator<T> GetEnumerator(bool reverse, T startValue) => GetEnumerator(reverse, startValue, Comparer<T>.Default);
+
         public bool TryRemoveAll(T item)
         {
             bool found = false;
