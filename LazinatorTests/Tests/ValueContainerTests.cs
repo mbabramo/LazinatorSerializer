@@ -26,6 +26,7 @@ namespace LazinatorTests.Tests
         AvlIndexableTree,
         AvlSortedTree,
         AvlSortedIndexableTree,
+        AvlSortedListTree,
         LazinatorList,
         LazinatorLinkedList,
         AvlListTreeTinyLazinatorList,
@@ -45,6 +46,7 @@ namespace LazinatorTests.Tests
         [InlineData(ValueContainerToUse.AvlIndexableTree, false, 50, 50)]
         [InlineData(ValueContainerToUse.AvlSortedTree, false, 50, 50)]
         [InlineData(ValueContainerToUse.AvlSortedIndexableTree, false, 50, 50)]
+        [InlineData(ValueContainerToUse.AvlSortedListTree, false, 50, 50)]
         [InlineData(ValueContainerToUse.AvlListTreeTinyLazinatorList, false, 20, 20)]
         [InlineData(ValueContainerToUse.AvlListTreeSmallLazinatorList, false, 50, 50)]
         [InlineData(ValueContainerToUse.AvlListTreeRegularLazinatorList, false, 50, 50)]
@@ -58,6 +60,7 @@ namespace LazinatorTests.Tests
         [InlineData(ValueContainerToUse.AvlIndexableTree, true, 50, 50)]
         [InlineData(ValueContainerToUse.AvlSortedTree, true, 50, 50)]
         [InlineData(ValueContainerToUse.AvlSortedIndexableTree, true, 50, 50)]
+        [InlineData(ValueContainerToUse.AvlSortedListTree, true, 50, 50)]
         [InlineData(ValueContainerToUse.AvlListTreeTinyLazinatorList, true, 20, 20)]
         [InlineData(ValueContainerToUse.AvlListTreeSmallLazinatorList, true, 50, 50)]
         [InlineData(ValueContainerToUse.AvlListTreeRegularLazinatorList, true, 50, 50)]
@@ -78,6 +81,7 @@ namespace LazinatorTests.Tests
         [InlineData(ValueContainerToUse.AvlIndexableTree)]
         [InlineData(ValueContainerToUse.AvlSortedTree)]
         [InlineData(ValueContainerToUse.AvlSortedIndexableTree)]
+        [InlineData(ValueContainerToUse.AvlSortedListTree)]
         [InlineData(ValueContainerToUse.AvlListTreeTinyLazinatorList)]
         [InlineData(ValueContainerToUse.AvlListTreeSmallLazinatorList)]
         [InlineData(ValueContainerToUse.AvlListTreeRegularLazinatorList)]
@@ -122,6 +126,7 @@ namespace LazinatorTests.Tests
         [InlineData(ValueContainerToUse.AvlIndexableTree, false, 50, 50)]
         [InlineData(ValueContainerToUse.AvlSortedTree, false, 50, 50)]
         [InlineData(ValueContainerToUse.AvlSortedIndexableTree, false, 50, 50)]
+        [InlineData(ValueContainerToUse.AvlSortedListTree, false, 50, 50)]
         [InlineData(ValueContainerToUse.AvlListTreeTinyLazinatorList, false, 20, 20)]
         [InlineData(ValueContainerToUse.AvlListTreeSmallLazinatorList, false, 50, 50)]
         [InlineData(ValueContainerToUse.AvlListTreeRegularLazinatorList, false, 50, 50)]
@@ -135,6 +140,7 @@ namespace LazinatorTests.Tests
         [InlineData(ValueContainerToUse.AvlIndexableTree, true, 50, 50)]
         [InlineData(ValueContainerToUse.AvlSortedTree, true, 50, 50)]
         [InlineData(ValueContainerToUse.AvlSortedIndexableTree, true, 50, 50)]
+        [InlineData(ValueContainerToUse.AvlSortedListTree, true, 50, 50)]
         [InlineData(ValueContainerToUse.AvlListTreeTinyLazinatorList, true, 20, 20)]
         [InlineData(ValueContainerToUse.AvlListTreeSmallLazinatorList, true, 50, 50)]
         [InlineData(ValueContainerToUse.AvlListTreeCompoundedFollowedByLinkedList, true, 50, 50)]
@@ -175,6 +181,14 @@ namespace LazinatorTests.Tests
                     return new AvlSortedTree<T>(allowDuplicates, false);
                 case ValueContainerToUse.AvlSortedIndexableTree:
                     return new AvlSortedIndexableTree<T>(allowDuplicates, false);
+                case ValueContainerToUse.AvlSortedListTree:
+                    factory = new ContainerFactory(new List<ContainerLevel>()
+                    {
+                        new ContainerLevel(ContainerType.AvlSortedListTree, allowDuplicates, long.MaxValue, false),
+                        new ContainerLevel(ContainerType.LazinatorSortedList, allowDuplicates, 3, false),
+                    }
+                    );
+                    return factory.CreateSortedValueContainer<T>();
                 case ValueContainerToUse.AvlListTreeTinyLazinatorList:
                     factory = new ContainerFactory(new List<ContainerLevel>()
                     {
