@@ -78,6 +78,14 @@ namespace Lazinator.Collections.Avl
             return UnderlyingTree.GetEnumerator();
         }
 
+        public IEnumerator<T> GetEnumerator(bool reverse, T startValue, IComparer<T> comparer) => AsEnumerable(reverse, startValue, comparer).GetEnumerator();
+
+        public IEnumerable<T> AsEnumerable(bool reverse, T startValue, IComparer<T> comparer)
+        {
+            foreach (T t in UnderlyingTree.AsEnumerable(reverse, startValue, comparer))
+                yield return t;
+        }
+
         public int IndexOf(T item)
         {
             int i = 0;

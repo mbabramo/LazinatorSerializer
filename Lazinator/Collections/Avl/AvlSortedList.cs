@@ -134,6 +134,14 @@ namespace Lazinator.Collections.Avl
                 yield return item;
         }
 
+        public IEnumerator<T> GetEnumerator(bool reverse, T startValue, IComparer<T> comparer) => AsEnumerable(reverse, startValue, comparer).GetEnumerator();
+
+        public IEnumerable<T> AsEnumerable(bool reverse, T startValue, IComparer<T> comparer)
+        {
+            foreach (T item in UnderlyingTree.AsEnumerable(reverse, startValue, comparer))
+                yield return item;
+        }
+
         public T GetAtIndex(long index)
         {
             return UnderlyingTree.GetAtIndex(index);

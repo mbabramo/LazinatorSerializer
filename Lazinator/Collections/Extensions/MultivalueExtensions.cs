@@ -29,7 +29,5 @@ namespace Lazinator.Collections.Extensions
                 }
             }
         }
-
-        public static IEnumerator<T> MultivalueGetEnumerator<C, T>(this IMultivalueContainer<T> container, bool reverse, T startValue, IComparer<T> comparer) where C : IMultivalueContainer<T> where T : ILazinator => MultivalueAsEnumerable<C, T>(container, reverse, startValue, comparer).GetEnumerator();
     }
 }

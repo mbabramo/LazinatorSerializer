@@ -289,9 +289,9 @@ namespace Lazinator.Collections
             }
         }
 
-        public IEnumerator<T> GetEnumerator(bool reverse, T startValue, IComparer<T> comparer) => this.MultivalueGetEnumerator(reverse, startValue, comparer);
+        public IEnumerator<T> GetEnumerator(bool reverse, T startValue, IComparer<T> comparer) => this.MultivalueAsEnumerable<LazinatorList<T>, T>(reverse, startValue, comparer).GetEnumerator();
 
-        public IEnumerable<T> AsEnumerable(bool reverse, T startValue, IComparer<T> comparer) => this.MultivalueAsEnumerable(reverse, startValue, comparer);
+        public IEnumerable<T> AsEnumerable(bool reverse, T startValue, IComparer<T> comparer) => this.MultivalueAsEnumerable<LazinatorList<T>, T>(reverse, startValue, comparer);
 
         #endregion
 

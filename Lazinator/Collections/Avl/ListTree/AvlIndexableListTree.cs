@@ -1,5 +1,6 @@
 ﻿using Lazinator.Buffers;
 using Lazinator.Collections.Avl.ValueTree;
+using Lazinator.Collections.Extensions;
 using Lazinator.Collections.Factories;
 using Lazinator.Collections.Interfaces;
 using Lazinator.Collections.Location;
@@ -262,6 +263,10 @@ namespace Lazinator.Collections.Avl.ListTree
                 node = (AvlAggregatedNode<IIndexableMultivalueContainer<T>>) (reverse ? node.GetPreviousNode() : node.GetNextNode());
             }
         }
+
+        public IEnumerator<T> GetEnumerator(bool reverse, T startValue, IComparer<T> comparer) => this.MultivalueAsEnumerable<AvlIndexableListTree<T>, T>(reverse, startValue, comparer).GetEnumerator();
+
+        public IEnumerable<T> AsEnumerable(bool reverse, T startValue, IComparer<T> comparer) => this.MultivalueAsEnumerable<AvlIndexableListTree<T>, T>(reverse, startValue, comparer);
 
         public IEnumerator<T> GetEnumerator(bool reverse = false, long skip = 0)
         {

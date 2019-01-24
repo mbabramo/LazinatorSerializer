@@ -191,29 +191,9 @@ namespace Lazinator.Collections.Avl.ListTree
             }
         }
 
-        public IEnumerable<T> AsEnumerable(bool reverse, T startValue, IComparer<T> comparer)
-        {
-            if (reverse)
-            {
-                var result = FindContainerLocation(startValue, MultivalueLocationOptions.Last, comparer);
-                while (!result.location.IsBeforeContainer)
-                {
-                    yield return GetAt(result.location);
-                    result.location = result.location.GetPreviousLocation();
-                }
-            }
-            else
-            {
-                var result = FindContainerLocation(startValue, MultivalueLocationOptions.First, comparer);
-                while (!result.location.IsAfterContainer)
-                {
-                    yield return GetAt(result.location);
-                    result.location = result.location.GetNextLocation();
-                }
-            }
-        }
+        public IEnumerable<T> AsEnumerable(bool reverse, T startValue, IComparer<T> comparer) => this.MultivalueAsEnumerable<AvlListTree<T>, T>(reverse, startValue, comparer);
 
-        public IEnumerator<T> GetEnumerator(bool reverse, T startValue, IComparer<T> comparer) => AsEnumerable(reverse, startValue, comparer).GetEnumerator();
+        public IEnumerator<T> GetEnumerator(bool reverse, T startValue, IComparer<T> comparer) => this.MultivalueAsEnumerable<AvlListTree<T>, T>(reverse, startValue, comparer).GetEnumerator();
 
 
         public IEnumerator<T> GetEnumerator(bool reverse = false, long skip = 0)
