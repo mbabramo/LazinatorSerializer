@@ -24,10 +24,10 @@ namespace Lazinator.Collections.Avl.ListTree
             LocationInInnerContainer = locationInInnerContainer;
         }
 
-        public AvlIndexableListTreeLocation(AvlAggregatedTree<IIndexableMultivalueContainer<T>> tree, IContainerLocation innerContainerLocation, IContainerLocation locationInInnerContainer)
+        public AvlIndexableListTreeLocation(AvlAggregatedTree<IIndexableMultivalueContainer<T>> tree, BinaryTreeLocation<IIndexableMultivalueContainer<T>> innerContainerLocation, IContainerLocation locationInInnerContainer)
         {
             Tree = tree;
-            InnerContainerNode = (AvlAggregatedNode<IIndexableMultivalueContainer<T>>)((BinaryTreeLocation<IIndexableMultivalueContainer<T>>)innerContainerLocation).BinaryNode;
+            InnerContainerNode = (AvlAggregatedNode<IIndexableMultivalueContainer<T>>)innerContainerLocation.BinaryNode;
             LocationInInnerContainer = locationInInnerContainer;
         }
 

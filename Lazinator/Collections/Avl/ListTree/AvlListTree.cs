@@ -48,7 +48,7 @@ namespace Lazinator.Collections.Avl.ListTree
             var matchInfo = UnderlyingTree.FindContainerLocation(null, whichOneModified, ListTreeComparisons<T>.GetItemToInnerContainerComparer(item, comparer)); // Note: GetItemToInnerContainerComparer will result in comparing the item to the inner containers, so the "null" is a placeholder
             var locationOfInitialInnerContainer = matchInfo.location ?? UnderlyingTree.LastLocation();
             if (locationOfInitialInnerContainer.IsAfterContainer)
-                return default;
+                return (new AfterContainerLocation(), default);
             var initialInnerContainer = UnderlyingTree.GetAt(locationOfInitialInnerContainer);
             if (locationOfInitialInnerContainer == null || !chooseShorterIfInBetween)
                 return (locationOfInitialInnerContainer, initialInnerContainer);
