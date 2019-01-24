@@ -139,5 +139,6 @@
         IAggregatedValueContainer,
         IAggregatedMultivalueContainer,
         IAvlSortedIndexableListTree,
+        IAvlHashSet,
     }
 }
