@@ -10,6 +10,8 @@ namespace Lazinator.Collections.Extensions
     {
         public static IEnumerable<T> MultivalueAsEnumerable<C, T>(this IMultivalueContainer<T> container, bool reverse, T startValue, IComparer<T> comparer) where C : IMultivalueContainer<T> where T : ILazinator
         {
+            if (!container.Any())
+                yield break;
             if (reverse)
             {
                 var result = container.FindContainerLocation(startValue, MultivalueLocationOptions.Last, comparer);
