@@ -174,30 +174,20 @@ namespace Lazinator.Collections.Avl
             }
         }
 
-        public IEnumerator GetEnumerator()
-        {
-            return UnderlyingTree.GetKeyValuePairEnumerator();
-        }
-
-        IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
-        {
-            return UnderlyingTree.GetKeyValuePairEnumerator();
-        }
-
-        public IEnumerator<TKey> GetKeyEnumerator(bool reverse = false, long skip = 0)
-        {
-            return UnderlyingTree.GetKeyEnumerator(reverse, skip);
-        }
-
-        public IEnumerator<TValue> GetValueEnumerator(bool reverse = false, long skip = 0)
-        {
-            return UnderlyingTree.GetValueEnumerator(reverse, skip);
-        }
-
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(bool reverse = false, long skip = 0)
-        {
-            return UnderlyingTree.GetKeyValuePairEnumerator(reverse, skip);
-        }
+        public IEnumerable<TKey> KeysAsEnumerable(bool reverse = false, long skip = 0) => UnderlyingTree.KeysAsEnumerable(reverse, skip);
+        public IEnumerable<TValue> ValuesAsEnumerable(bool reverse = false, long skip = 0) => UnderlyingTree.ValuesAsEnumerable(reverse, skip);
+        public IEnumerable<KeyValuePair<TKey, TValue>> KeyValuePairsAsEnumerable(bool reverse = false, long skip = 0) => UnderlyingTree.KeyValuePairsAsEnumerable(reverse, skip);
+        public IEnumerable<TKey> KeysAsEnumerable(bool reverse, TKey startKey) => UnderlyingTree.KeysAsEnumerable(reverse, startKey);
+        public IEnumerable<TValue> ValuesAsEnumerable(bool reverse, TKey startKey) => UnderlyingTree.ValuesAsEnumerable(reverse, startKey);
+        public IEnumerable<KeyValuePair<TKey, TValue>> KeyValuePairsAsEnumerable(bool reverse, TKey startKey) => UnderlyingTree.KeyValuePairsAsEnumerable(reverse, startKey);
+        public IEnumerator GetEnumerator() => UnderlyingTree.GetKeyValuePairEnumerator();
+        IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator() => UnderlyingTree.GetKeyValuePairEnumerator();
+        public virtual IEnumerator<TKey> GetKeyEnumerator(bool reverse = false, long skip = 0) => UnderlyingTree.GetKeyEnumerator(reverse, skip);
+        public virtual IEnumerator<TValue> GetValueEnumerator(bool reverse = false, long skip = 0) => UnderlyingTree.GetValueEnumerator(reverse, skip);
+        public virtual IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(bool reverse = false, long skip = 0) => UnderlyingTree.GetKeyValuePairEnumerator(reverse, skip);
+        public IEnumerator<TKey> GetKeyEnumerator(bool reverse, TKey startKey) => UnderlyingTree.GetKeyEnumerator(reverse, startKey);
+        public IEnumerator<TValue> GetValueEnumerator(bool reverse, TKey startKey) => UnderlyingTree.GetValueEnumerator(reverse, startKey);
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(bool reverse, TKey startKey) => UnderlyingTree.GetKeyValuePairEnumerator(reverse, startKey);
 
         public void AddValueForKey(TKey key, TValue value)
         {

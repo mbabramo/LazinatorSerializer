@@ -27,6 +27,7 @@ namespace Lazinator.Collections.Factories
         AvlSortedList,
         AvlDictionary,
         AvlSortedDictionary,
+        AvlSortedIndexableDictionary,
         LazinatorDictionary,
 
     }

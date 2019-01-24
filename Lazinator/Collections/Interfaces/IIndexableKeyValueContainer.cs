@@ -9,7 +9,7 @@ using System.Text;
 namespace Lazinator.Collections.Interfaces
 {
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IIndexableKeyValueTree)]
-    public interface IIndexableKeyValueContainer<TKey, TValue> : IKeyValueContainer<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
+    public interface IIndexableKeyValueContainer<TKey, TValue> : IKeyValueContainer<TKey, TValue>, ICountableContainer where TKey : ILazinator where TValue : ILazinator
     {
         TValue GetValueAtIndex(long index);
         void SetValueAtIndex(long index, TValue value);

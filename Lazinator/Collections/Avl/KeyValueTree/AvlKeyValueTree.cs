@@ -189,6 +189,36 @@ namespace Lazinator.Collections.Avl.KeyValueTree
 
         #region Enumeration
 
+        public IEnumerable<TKey> KeysAsEnumerable(bool reverse = false, long skip = 0)
+        {
+            return UnderlyingContainer.AsEnumerable(reverse, skip).Select(x => x.Key);
+        }
+
+        public IEnumerable<TValue> ValuesAsEnumerable(bool reverse = false, long skip = 0)
+        {
+            return UnderlyingContainer.AsEnumerable(reverse, skip).Select(x => x.Value);
+        }
+
+        public IEnumerable<KeyValuePair<TKey, TValue>> KeyValuePairsAsEnumerable(bool reverse = false, long skip = 0)
+        {
+            return UnderlyingContainer.AsEnumerable(reverse, skip).Select(x => x.KeyValuePair);
+        }
+
+        public IEnumerable<TKey> KeysAsEnumerable(bool reverse, TKey startKey, IComparer<TKey> comparer)
+        {
+            return UnderlyingContainer.AsEnumerable(reverse, KeyPlusDefault(startKey), KeyComparer(comparer)).Select(x => x.Key);
+        }
+
+        public IEnumerable<TValue> ValuesAsEnumerable(bool reverse, TKey startKey, IComparer<TKey> comparer)
+        {
+            return UnderlyingContainer.AsEnumerable(reverse, KeyPlusDefault(startKey), KeyComparer(comparer)).Select(x => x.Value);
+        }
+
+        public IEnumerable<KeyValuePair<TKey, TValue>> KeyValuePairsAsEnumerable(bool reverse, TKey startKey, IComparer<TKey> comparer)
+        {
+            return UnderlyingContainer.AsEnumerable(reverse, KeyPlusDefault(startKey), KeyComparer(comparer)).Select(x => x.KeyValuePair);
+        }
+
         public IEnumerator<TKey> GetKeyEnumerator(bool reverse = false, long skip = 0)
         {
             return new TransformEnumerator<LazinatorKeyValue<TKey, TValue>, TKey>(UnderlyingContainer.GetEnumerator(reverse, skip), x => x.Key);

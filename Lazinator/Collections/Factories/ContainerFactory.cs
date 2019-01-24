@@ -94,6 +94,8 @@ namespace Lazinator.Collections.Factories
                     return new ContainerLevel(ContainerType.AvlSortedKeyValueTree, ThisLevel.AllowDuplicates, long.MaxValue, ThisLevel.Unbalanced);
                 case ContainerType.AvlSortedDictionary:
                     return new ContainerLevel(ContainerType.AvlSortedKeyValueTree, ThisLevel.AllowDuplicates, long.MaxValue, ThisLevel.Unbalanced);
+                case ContainerType.AvlSortedIndexableDictionary:
+                    return new ContainerLevel(ContainerType.AvlSortedIndexableKeyValueTree, ThisLevel.AllowDuplicates, long.MaxValue, ThisLevel.Unbalanced);
                 case ContainerType.LazinatorDictionary:
                     break;
                 default:
@@ -118,6 +120,7 @@ namespace Lazinator.Collections.Factories
                 case ContainerType.AvlSortedList:
                 case ContainerType.AvlDictionary:
                 case ContainerType.AvlSortedDictionary:
+                case ContainerType.AvlSortedIndexableDictionary:
                     if (nextLevel == null)
                         throw new Exception($"{ThisLevel.ContainerType} requires a next container level.");
                     break;
@@ -135,6 +138,7 @@ namespace Lazinator.Collections.Factories
                 case ContainerType.AvlSortedListTree:
                 case ContainerType.AvlIndexableListTree:
                 case ContainerType.AvlSortedIndexableListTree:
+                case ContainerType.AvlSortedIndexableDictionary:
                 case ContainerType.AvlList:
                 case ContainerType.AvlSortedList:
                 case ContainerType.AvlSortedDictionary:
@@ -152,6 +156,7 @@ namespace Lazinator.Collections.Factories
                 case ContainerType.AvlIndexableKeyValueTree:
                 case ContainerType.AvlSortedIndexableKeyValueTree:
                 case ContainerType.AvlSortedDictionary:
+                case ContainerType.AvlSortedIndexableDictionary:
                     if (nextLevel.Unbalanced != ThisLevel.Unbalanced)
                         throw new Exception($"{ThisLevel.ContainerType} requires a next level with the same setting for Unbalanced.");
                     break;
@@ -294,6 +299,8 @@ namespace Lazinator.Collections.Factories
             switch (ThisLevel.ContainerType)
             {
                 case ContainerType.AvlSortedDictionary:
+                    return new AvlSortedDictionary<K, V>(ThisLevel.AllowDuplicates, InnerFactory);
+                case ContainerType.AvlSortedIndexableDictionary:
                     return new AvlSortedDictionary<K, V>(ThisLevel.AllowDuplicates, InnerFactory);
                 default:
                     return CreateLazinatorDictionaryable<K, V>();

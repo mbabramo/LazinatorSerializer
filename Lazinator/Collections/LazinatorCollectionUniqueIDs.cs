@@ -140,5 +140,7 @@
         IAggregatedMultivalueContainer,
         IAvlSortedIndexableListTree,
         IAvlHashSet,
+        IAvlSortedIndexableDictionary,
+        IKeyAndValueEnumerators,
     }
 }

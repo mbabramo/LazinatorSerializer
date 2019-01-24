@@ -24,8 +24,11 @@ namespace LazinatorTests.Tests
             LazinatorDictionary,
             AvlDictionary,
             AvlDictionaryMultiValue,
+            AvlDictionaryWithUnderlyingIndexableListTree,
             AvlSortedDictionary,
-            AvlSortedDictionaryMultiValue
+            AvlSortedIndexableDictionary,
+            AvlSortedDictionaryMultiValue,
+            AvlSortedDictionaryWithUnderlyingIndexableListTree
         }
 
         public ContainerFactory GetDictionaryFactory<TKey, TValue>(DictionaryToUse dictionaryToUse) where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
@@ -46,10 +49,24 @@ namespace LazinatorTests.Tests
                         new ContainerLevel(ContainerType.AvlDictionary, true),
                         new ContainerLevel(ContainerType.AvlSortedKeyValueTree, true)
                     });
+                case DictionaryToUse.AvlDictionaryWithUnderlyingIndexableListTree:
+                    return new ContainerFactory(new List<ContainerLevel>()
+                    {
+                        new ContainerLevel(ContainerType.AvlDictionary, false),
+                        new ContainerLevel(ContainerType.AvlSortedKeyValueTree, true),
+                        new ContainerLevel(ContainerType.AvlIndexableListTree, true),
+                        new ContainerLevel(ContainerType.LazinatorList, true)
+                    });
                 case DictionaryToUse.AvlSortedDictionary:
                     return new ContainerFactory(new List<ContainerLevel>()
                     {
                         new ContainerLevel(ContainerType.AvlSortedDictionary),
+                        new ContainerLevel(ContainerType.AvlSortedKeyValueTree)
+                    });
+                case DictionaryToUse.AvlSortedIndexableDictionary:
+                    return new ContainerFactory(new List<ContainerLevel>()
+                    {
+                        new ContainerLevel(ContainerType.AvlSortedIndexableDictionary),
                         new ContainerLevel(ContainerType.AvlSortedKeyValueTree)
                     });
                 case DictionaryToUse.AvlSortedDictionaryMultiValue:
@@ -57,6 +74,14 @@ namespace LazinatorTests.Tests
                     {
                         new ContainerLevel(ContainerType.AvlSortedDictionary, true),
                         new ContainerLevel(ContainerType.AvlSortedKeyValueTree, true)
+                    });
+                case DictionaryToUse.AvlSortedDictionaryWithUnderlyingIndexableListTree:
+                    return new ContainerFactory(new List<ContainerLevel>()
+                    {
+                        new ContainerLevel(ContainerType.AvlSortedDictionary, false),
+                        new ContainerLevel(ContainerType.AvlSortedKeyValueTree, false),
+                        new ContainerLevel(ContainerType.AvlIndexableListTree, false),
+                        new ContainerLevel(ContainerType.LazinatorList, false)
                     });
                 default:
                     throw new NotSupportedException();
@@ -73,6 +98,9 @@ namespace LazinatorTests.Tests
         [InlineData(DictionaryToUse.LazinatorDictionary)]
         [InlineData(DictionaryToUse.AvlDictionary)]
         [InlineData(DictionaryToUse.AvlSortedDictionary)]
+        [InlineData(DictionaryToUse.AvlSortedIndexableDictionary)]
+        [InlineData(DictionaryToUse.AvlDictionaryWithUnderlyingIndexableListTree)]
+        [InlineData(DictionaryToUse.AvlSortedDictionaryWithUnderlyingIndexableListTree)]
         public void DictionaryEnumerableWorks(DictionaryToUse dictionaryToUse)
         {
             ILazinatorDictionaryable<WLong, NonComparableWrapperString> d = GetDictionary<WLong, NonComparableWrapperString>(dictionaryToUse);
@@ -110,12 +138,21 @@ namespace LazinatorTests.Tests
                 results = results.OrderBy(x => x).ToList();
             foreach (int i in l)
                 results[i].Should().Be(i);
+            if (d is AvlSortedIndexableDictionary<WLong, NonComparableWrapperString> indexable)
+            {
+                var result = indexable.FindIndex(50, MultivalueLocationOptions.First);
+                result.index.Should().Be(50);
+                var enumeratedFrom = indexable.KeysAsEnumerable(false, (WLong)60).Skip(5).First().WrappedValue.Should().Be(65);
+            }
         }
 
         [Theory]
         [InlineData(DictionaryToUse.LazinatorDictionary)]
         [InlineData(DictionaryToUse.AvlDictionary)]
         [InlineData(DictionaryToUse.AvlSortedDictionary)]
+        [InlineData(DictionaryToUse.AvlSortedIndexableDictionary)]
+        [InlineData(DictionaryToUse.AvlDictionaryWithUnderlyingIndexableListTree)]
+        [InlineData(DictionaryToUse.AvlSortedDictionaryWithUnderlyingIndexableListTree)]
         public void DictionaryLongStringWorks(DictionaryToUse dictionaryToUse)
         {
             ILazinatorDictionaryable<WLong, NonComparableWrapperString> d = GetDictionary<WLong, NonComparableWrapperString>(dictionaryToUse);
@@ -178,7 +215,10 @@ namespace LazinatorTests.Tests
         [Theory]
         [InlineData(DictionaryToUse.LazinatorDictionary)]
         [InlineData(DictionaryToUse.AvlDictionary)]
+        [InlineData(DictionaryToUse.AvlSortedIndexableDictionary)]
         [InlineData(DictionaryToUse.AvlSortedDictionary)]
+        [InlineData(DictionaryToUse.AvlDictionaryWithUnderlyingIndexableListTree)]
+        [InlineData(DictionaryToUse.AvlSortedDictionaryWithUnderlyingIndexableListTree)]
         public void DictionaryCanGrowAndShrink(DictionaryToUse dictionaryToUse)
         {
             ILazinatorDictionaryable<WLong, NonComparableWrapperString> d = GetDictionary<WLong, NonComparableWrapperString>(dictionaryToUse);
@@ -188,6 +228,8 @@ namespace LazinatorTests.Tests
                 d[i] = i.ToString();
             }
             d.Count.Should().Be(numItems);
+            if (d is ICountableContainer countable)
+                countable.LongCount.Should().Be(numItems);
             RemoveAllItemsFromDictionary(d);
             d.Count().Should().Be(0);
         }
@@ -195,7 +237,10 @@ namespace LazinatorTests.Tests
         [Theory]
         [InlineData(DictionaryToUse.LazinatorDictionary)]
         [InlineData(DictionaryToUse.AvlDictionary)]
+        [InlineData(DictionaryToUse.AvlSortedIndexableDictionary)]
         [InlineData(DictionaryToUse.AvlSortedDictionary)]
+        [InlineData(DictionaryToUse.AvlDictionaryWithUnderlyingIndexableListTree)]
+        [InlineData(DictionaryToUse.AvlSortedDictionaryWithUnderlyingIndexableListTree)]
         public void DictionaryRecognizesKeyEquivalent(DictionaryToUse dictionaryToUse)
         {
             ILazinatorDictionaryable<WString, WLong> s = GetDictionary<WString, WLong>(dictionaryToUse);
@@ -207,7 +252,10 @@ namespace LazinatorTests.Tests
         [Theory]
         [InlineData(DictionaryToUse.LazinatorDictionary)]
         [InlineData(DictionaryToUse.AvlDictionary)]
+        [InlineData(DictionaryToUse.AvlSortedIndexableDictionary)]
         [InlineData(DictionaryToUse.AvlSortedDictionary)]
+        [InlineData(DictionaryToUse.AvlDictionaryWithUnderlyingIndexableListTree)]
+        [InlineData(DictionaryToUse.AvlSortedDictionaryWithUnderlyingIndexableListTree)]
         public void EmptyDictionary(DictionaryToUse dictionaryToUse)
         {
             ILazinatorDictionaryable<WLong, NonComparableWrapperString> d = GetDictionary<WLong, NonComparableWrapperString>(dictionaryToUse);
@@ -232,7 +280,10 @@ namespace LazinatorTests.Tests
         [Theory]
         [InlineData(DictionaryToUse.LazinatorDictionary)]
         [InlineData(DictionaryToUse.AvlDictionary)]
+        [InlineData(DictionaryToUse.AvlSortedIndexableDictionary)]
         [InlineData(DictionaryToUse.AvlSortedDictionary)]
+        [InlineData(DictionaryToUse.AvlDictionaryWithUnderlyingIndexableListTree)]
+        [InlineData(DictionaryToUse.AvlSortedDictionaryWithUnderlyingIndexableListTree)]
         public void SingleItemDictionary(DictionaryToUse dictionaryToUse)
         {
             // we have some optimizations for a single-item dictionary, so this tests them
@@ -265,7 +316,10 @@ namespace LazinatorTests.Tests
         [Theory]
         [InlineData(DictionaryToUse.LazinatorDictionary)]
         [InlineData(DictionaryToUse.AvlDictionary)]
+        [InlineData(DictionaryToUse.AvlSortedIndexableDictionary)]
         [InlineData(DictionaryToUse.AvlSortedDictionary)]
+        [InlineData(DictionaryToUse.AvlDictionaryWithUnderlyingIndexableListTree)]
+        [InlineData(DictionaryToUse.AvlSortedDictionaryWithUnderlyingIndexableListTree)]
         public void DictionaryWithBadHashFunction(DictionaryToUse dictionaryToUse)
         {
             // With some dictionary implementations, all items with same hash are put in hash bucket. So, this ensures that dictionary will work in this case.
@@ -292,7 +346,10 @@ namespace LazinatorTests.Tests
         [Theory]
         [InlineData(DictionaryToUse.LazinatorDictionary)]
         [InlineData(DictionaryToUse.AvlDictionary)]
+        [InlineData(DictionaryToUse.AvlSortedIndexableDictionary)]
         [InlineData(DictionaryToUse.AvlSortedDictionary)]
+        [InlineData(DictionaryToUse.AvlDictionaryWithUnderlyingIndexableListTree)]
+        [InlineData(DictionaryToUse.AvlSortedDictionaryWithUnderlyingIndexableListTree)]
         public void DictionarySearchWorksEvenIfLastKeyDisposed(DictionaryToUse dictionaryToUse)
         {
             // The concern here is that the dictionary remembers the last key searched as a shortcut. What happens if that is disposed? With a struct or class that contains only primitive properties, that is not a problem, because equality can be determined solely by looking at primitive properties. But it can be an issue with a Lazinator object that has child objects that need to be examined.

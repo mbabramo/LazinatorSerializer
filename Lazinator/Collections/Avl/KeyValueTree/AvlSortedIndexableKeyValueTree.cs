@@ -62,5 +62,8 @@ namespace Lazinator.Collections.Avl.KeyValueTree
         public IEnumerator<TKey> GetKeyEnumerator(bool reverse, TKey startKey) => GetKeyEnumerator(reverse, startKey, Comparer<TKey>.Default);
         public IEnumerator<TValue> GetValueEnumerator(bool reverse, TKey startKey) => GetValueEnumerator(reverse, startKey, Comparer<TKey>.Default);
         public IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(bool reverse, TKey startKey) => GetKeyValuePairEnumerator(reverse, startKey, Comparer<TKey>.Default);
+        public IEnumerable<TKey> KeysAsEnumerable(bool reverse, TKey startKey) => KeysAsEnumerable(reverse, startKey, Comparer<TKey>.Default);
+        public IEnumerable<TValue> ValuesAsEnumerable(bool reverse, TKey startKey) => ValuesAsEnumerable(reverse, startKey, Comparer<TKey>.Default);
+        public IEnumerable<KeyValuePair<TKey, TValue>> KeyValuePairsAsEnumerable(bool reverse, TKey startKey) => KeyValuePairsAsEnumerable(reverse, startKey, Comparer<TKey>.Default);
     }
 }
