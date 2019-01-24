@@ -113,7 +113,13 @@ namespace LazinatorTests.Tests
                     // uncomment to find problem: VerifyEntireList(container, list);
                 }
                 VerifyEntireList(container, list);
-                VerifyEnumerableSkipAndReverse(container, list);
+                if (container is ISortedKeyValueContainer<TKey, TValue> sortedContainer)
+                {
+                    VerifyEnumerableFromValue(false, sortedContainer, list);
+                    VerifyEnumerableFromValue(true, sortedContainer, list);
+                }
+                VerifyEnumerableSkip(false, container, list);
+                VerifyEnumerableSkip(true, container, list);
             }
         }
 
@@ -126,15 +132,38 @@ namespace LazinatorTests.Tests
             pairsList.SequenceEqual(list).Should().BeTrue();
         }
 
-        public void VerifyEnumerableSkipAndReverse(IKeyValueContainer<TKey, TValue> keyValueContainer, List<LazinatorComparableKeyValue<TKey, TValue>> list)
+        public void VerifyEnumerableFromValue(bool reverse, ISortedKeyValueContainer<TKey, TValue> keyValueContainer, List<LazinatorComparableKeyValue<TKey, TValue>> list)
+        {
+            if (!list.Any())
+                return;
+            var list2 = list.ToList();
+            if (reverse)
+                list2.Reverse();
+            TKey randomStartingKey = default;
+            if (list2.Any())
+            {
+                int randomStartingPoint = ran.Next(0, list.Count);
+                randomStartingKey = list2[randomStartingPoint].Key;
+            }
+            var withSkips = list2.SkipWhile(x => reverse ? Comparer<TKey>.Default.Compare(x.Key, randomStartingKey) > 0 : Comparer<TKey>.Default.Compare(x.Key, randomStartingKey) < 0).ToList();
+
+            var pairsEnumerator = keyValueContainer.GetKeyValuePairEnumerator(reverse, randomStartingKey);
+            List<LazinatorComparableKeyValue<TKey, TValue>> pairsList = new List<LazinatorComparableKeyValue<TKey, TValue>>();
+            while (pairsEnumerator.MoveNext())
+                pairsList.Add(new LazinatorComparableKeyValue<TKey, TValue>(pairsEnumerator.Current.Key, pairsEnumerator.Current.Value));
+            pairsList.SequenceEqual(withSkips).Should().BeTrue();
+        }
+
+        public void VerifyEnumerableSkip(bool reverse, IKeyValueContainer<TKey, TValue> keyValueContainer, List<LazinatorComparableKeyValue<TKey, TValue>> list)
         {
 
             var list2 = list.ToList();
-            list2.Reverse();
+            if (reverse)
+                list2.Reverse();
             int numToSkip = ran.Next(0, list.Count + 1);
             var withSkips = list2.Skip(numToSkip).ToList();
 
-            var pairsEnumerator = keyValueContainer.GetKeyValuePairEnumerator(true, numToSkip);
+            var pairsEnumerator = keyValueContainer.GetKeyValuePairEnumerator(reverse, numToSkip);
             List<LazinatorComparableKeyValue<TKey, TValue>> pairsList = new List<LazinatorComparableKeyValue<TKey, TValue>>();
             while (pairsEnumerator.MoveNext())
                 pairsList.Add(new LazinatorComparableKeyValue<TKey, TValue>(pairsEnumerator.Current.Key, pairsEnumerator.Current.Value));

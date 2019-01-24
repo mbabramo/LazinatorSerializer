@@ -27,5 +27,8 @@ namespace Lazinator.Collections.Interfaces
         IEnumerator<TKey> GetKeyEnumerator(bool reverse = false, long skip = 0);
         IEnumerator<TValue> GetValueEnumerator(bool reverse = false, long skip = 0);
         IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(bool reverse = false, long skip = 0);
+        IEnumerator<TKey> GetKeyEnumerator(bool reverse, TKey startKey, IComparer<TKey> comparer);
+        IEnumerator<TValue> GetValueEnumerator(bool reverse, TKey startKey, IComparer<TKey> comparer);
+        IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(bool reverse, TKey startKey, IComparer<TKey> comparer);
     }
 }

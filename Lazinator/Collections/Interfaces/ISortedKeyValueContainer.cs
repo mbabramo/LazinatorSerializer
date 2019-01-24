@@ -17,5 +17,9 @@ namespace Lazinator.Collections.Interfaces
 
         bool TryRemove(TKey key);
         bool TryRemoveKeyValue(TKey key, TValue value);
+
+        IEnumerator<TKey> GetKeyEnumerator(bool reverse, TKey startKey);
+        IEnumerator<TValue> GetValueEnumerator(bool reverse, TKey startKey);
+        IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(bool reverse, TKey startKey);
     }
 }

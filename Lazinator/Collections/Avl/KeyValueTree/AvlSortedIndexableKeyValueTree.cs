@@ -58,5 +58,9 @@ namespace Lazinator.Collections.Avl.KeyValueTree
         public TValue GetValueForKey(TKey key, MultivalueLocationOptions whichOne) => GetValueForKey(key, whichOne, Comparer<TKey>.Default);
 
         public TValue GetValueForKey(TKey key) => GetValueForKey(key, MultivalueLocationOptions.Any);
+
+        public IEnumerator<TKey> GetKeyEnumerator(bool reverse, TKey startKey) => GetKeyEnumerator(reverse, startKey, Comparer<TKey>.Default);
+        public IEnumerator<TValue> GetValueEnumerator(bool reverse, TKey startKey) => GetValueEnumerator(reverse, startKey, Comparer<TKey>.Default);
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetKeyValuePairEnumerator(bool reverse, TKey startKey) => GetKeyValuePairEnumerator(reverse, startKey, Comparer<TKey>.Default);
     }
 }
