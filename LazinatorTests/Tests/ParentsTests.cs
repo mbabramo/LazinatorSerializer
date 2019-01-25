@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Lazinator.Collections;
+using LazinatorCollections;
 using LazinatorTests.Examples;
 using Lazinator.Core;
 using Xunit;
 using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
-using Lazinator.Collections.Dictionary;
+using LazinatorCollections.Dictionary;
 using Lazinator.Buffers;
 using LazinatorTests.Examples.NonAbstractGenerics;
 using LazinatorTests.Examples.Abstract;
 using LazinatorTests.Examples.Collections;
-using Lazinator.Collections.Tuples;
+using LazinatorCollections.Tuples;
 
 namespace LazinatorTests.Tests
 {

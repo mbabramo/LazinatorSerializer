@@ -1,5 +1,5 @@
 ﻿using Lazinator.Attributes;
-using Lazinator.Collections;
+using LazinatorCollections;
 using Lazinator.Core;
 
 namespace LazinatorTests.Examples

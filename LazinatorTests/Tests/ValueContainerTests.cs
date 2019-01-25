@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Lazinator.Collections;
+using LazinatorCollections;
 using LazinatorTests.Examples;
 using Lazinator.Core;
 using Xunit;
@@ -10,13 +10,13 @@ using Lazinator.Wrappers;
 using LazinatorTests.Examples.Hierarchy;
 using LazinatorTests.Examples.Structs;
 using LazinatorTests.Examples.NonAbstractGenerics;
-using Lazinator.Collections.Tuples;
-using Lazinator.Collections.Avl;
-using Lazinator.Collections.Interfaces;
-using Lazinator.Collections.Avl.ValueTree;
-using Lazinator.Collections.Avl.ListTree;
-using Lazinator.Collections.Factories;
-using Lazinator.Collections.Location;
+using LazinatorCollections.Tuples;
+using LazinatorCollections.Avl;
+using LazinatorCollections.Interfaces;
+using LazinatorCollections.Avl.ValueTree;
+using LazinatorCollections.Avl.ListTree;
+using LazinatorCollections.Factories;
+using LazinatorCollections.Location;
 
 namespace LazinatorTests.Tests
 {

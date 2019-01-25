@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 using FluentAssertions;
-using Lazinator.Collections.Dictionary;
+using LazinatorCollections.Dictionary;
 using Lazinator.Wrappers;
 using Lazinator.Core;
-using Lazinator.Collections;
-using Lazinator.Collections.Avl;
+using LazinatorCollections;
+using LazinatorCollections.Avl;
 using LazinatorTests.Examples;
-using Lazinator.Collections.Tuples;
-using Lazinator.Collections.Factories;
+using LazinatorCollections.Tuples;
+using LazinatorCollections.Factories;
 using Lazinator.Examples.Structs;
-using Lazinator.Collections.Interfaces;
+using LazinatorCollections.Interfaces;
 
 namespace LazinatorTests.Tests
 {

@@ -8,12 +8,12 @@ using LazinatorTests.Examples;
 using LazinatorTests.Examples.Collections;
 using LazinatorTests.Examples.Tuples;
 using Xunit;
-using Lazinator.Collections;
+using LazinatorCollections;
 using Lazinator.Wrappers;
 using Microsoft.CodeAnalysis;
 using System.Threading.Tasks;
-using Lazinator.Collections.Avl;
-using Lazinator.Collections.Dictionary;
+using LazinatorCollections.Avl;
+using LazinatorCollections.Dictionary;
 using LazinatorAnalyzer.Settings;
 using LazinatorCodeGen.Roslyn;
 using LazinatorTests.Examples.NonAbstractGenerics;
@@ -25,16 +25,16 @@ using LazinatorTests.Examples.Hierarchy;
 using LazinatorTests.Examples.NonLazinator;
 using LazinatorTests.Examples.Structs;
 using LazinatorTests.Examples.Subclasses;
-using Lazinator.Collections.OffsetList;
-using Lazinator.Collections.Tree;
-using Lazinator.Collections.Tuples;
-using Lazinator.Collections.Factories;
+using LazinatorCollections.OffsetList;
+using LazinatorCollections.Tree;
+using LazinatorCollections.Tuples;
+using LazinatorCollections.Factories;
 using Lazinator.Examples.Structs;
-using Lazinator.Collections.Avl.ValueTree;
-using Lazinator.Collections.Avl.KeyValueTree;
-using Lazinator.Collections.Avl.ListTree;
-using Lazinator.Collections.BitArray;
-using Lazinator.Collections.ByteSpan;
+using LazinatorCollections.Avl.ValueTree;
+using LazinatorCollections.Avl.KeyValueTree;
+using LazinatorCollections.Avl.ListTree;
+using LazinatorCollections.BitArray;
+using LazinatorCollections.ByteSpan;
 
 namespace LazinatorTests.Tests
 {
@@ -130,61 +130,61 @@ public class MyOtherClass
         public async Task CodeGenerationProducesActualCode_CoreCollections()
         {
             AdhocWorkspace ws = GetAdhocWorkspace();
-            await CompleteGenerateCode(typeof(LazinatorBitArray), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "BitArray/", ws);
-            await CompleteGenerateCode(typeof(LazinatorByteSpan), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "ByteSpan/", ws);
-            await CompleteGenerateCode(typeof(LazinatorFastReadList<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "OffsetList/", ws);
-            await CompleteGenerateCode(typeof(LazinatorFastReadListInt16), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "OffsetList/", ws);
-            await CompleteGenerateCode(typeof(LazinatorFastReadListInt32), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "OffsetList/", ws);
-            await CompleteGenerateCode(typeof(LazinatorOffsetList), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "OffsetList/", ws);
-            await CompleteGenerateCode(typeof(LazinatorLinkedListNode<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorLinkedList<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorSortedLinkedList<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorList<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorSortedList<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorArray<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorQueue<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorStack<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorGeneralTree<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Tree/", ws);
-            await CompleteGenerateCode(typeof(LazinatorLocationAwareTree<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Tree/", ws);
-            await CompleteGenerateCode(typeof(LazinatorLocationAwareTree<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Tree/", ws);
-            await CompleteGenerateCode(typeof(DictionaryBucket<,>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Dictionary/", ws);
-            await CompleteGenerateCode(typeof(LazinatorDictionary<,>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Dictionary/", ws);
-            await CompleteGenerateCode(typeof(LazinatorTuple<,>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Tuples/", ws);
-            await CompleteGenerateCode(typeof(LazinatorKeyValue<,>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Tuples/", ws);
-            await CompleteGenerateCode(typeof(LazinatorComparableKeyValue<,>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Tuples/", ws);
-            await CompleteGenerateCode(typeof(LazinatorTriple<,,>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Tuples/", ws);
+            await CompleteGenerateCode(typeof(LazinatorBitArray), project: "LazinatorCollections", mainFolder: "/BitArray/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorByteSpan), project: "LazinatorCollections", mainFolder: "/ByteSpan/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorFastReadList<>), project: "LazinatorCollections", mainFolder: "/OffsetList/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorFastReadListInt16), project: "LazinatorCollections", mainFolder: "/OffsetList/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorFastReadListInt32), project: "LazinatorCollections", mainFolder: "/OffsetList/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorOffsetList), project: "LazinatorCollections", mainFolder: "/OffsetList/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorLinkedListNode<>), project: "LazinatorCollections", mainFolder: "", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorLinkedList<>), project: "LazinatorCollections", mainFolder: "", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorSortedLinkedList<>), project: "LazinatorCollections", mainFolder: "", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorList<>), project: "LazinatorCollections", mainFolder: "", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorSortedList<>), project: "LazinatorCollections", mainFolder: "", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorArray<>), project: "LazinatorCollections", mainFolder: "", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorQueue<>), project: "LazinatorCollections", mainFolder: "", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorStack<>), project: "LazinatorCollections", mainFolder: "", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorGeneralTree<>), project: "LazinatorCollections", mainFolder: "/Tree/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorLocationAwareTree<>), project: "LazinatorCollections", mainFolder: "/Tree/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorLocationAwareTree<>), project: "LazinatorCollections", mainFolder: "/Tree/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(DictionaryBucket<,>), project: "LazinatorCollections", mainFolder: "/Dictionary/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorDictionary<,>), project: "LazinatorCollections", mainFolder: "/Dictionary/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorTuple<,>), project: "LazinatorCollections", mainFolder: "/Tuples/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorKeyValue<,>), project: "LazinatorCollections", mainFolder: "/Tuples/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorComparableKeyValue<,>), project: "LazinatorCollections", mainFolder: "/Tuples/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorTriple<,,>), project: "LazinatorCollections", mainFolder: "/Tuples/", subfolder: "", ws);
         }
 
         [Fact]
         public async Task CodeGenerationProducesActualCode_Avl()
         {
             AdhocWorkspace ws = GetAdhocWorkspace();
-            await CompleteGenerateCode(typeof(BinaryTree<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Tree/", ws);
-            await CompleteGenerateCode(typeof(BinaryNode<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Tree/", ws);
-            await CompleteGenerateCode(typeof(AvlNode<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Avl/ValueTree/", ws);
-            await CompleteGenerateCode(typeof(AvlCountedNode<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Avl/ValueTree/", ws);
-            await CompleteGenerateCode(typeof(AvlAggregatedNode<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Avl/ValueTree/", ws);
-            await CompleteGenerateCode(typeof(AvlTree<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Avl/ValueTree/", ws);
-            await CompleteGenerateCode(typeof(AvlSortedTree<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Avl/ValueTree/", ws);
-            await CompleteGenerateCode(typeof(AvlIndexableTree<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Avl/ValueTree/", ws);
-            await CompleteGenerateCode(typeof(AvlSortedIndexableTree<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Avl/ValueTree/", ws);
-            await CompleteGenerateCode(typeof(AvlKeyValueTree<,>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Avl/KeyValueTree/", ws);
-            await CompleteGenerateCode(typeof(AvlIndexableKeyValueTree<,>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Avl/KeyValueTree/", ws);
-            await CompleteGenerateCode(typeof(AvlSortedKeyValueTree<,>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Avl/KeyValueTree/", ws);
-            await CompleteGenerateCode(typeof(AvlSortedIndexableKeyValueTree<,>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Avl/KeyValueTree/", ws);
-            await CompleteGenerateCode(typeof(AvlList<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Avl/", ws);
-            await CompleteGenerateCode(typeof(AvlSortedList<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Avl/", ws);
-            await CompleteGenerateCode(typeof(AvlDictionary<,>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Avl/", ws);
-            await CompleteGenerateCode(typeof(AvlHashSet<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Avl/", ws);
-            await CompleteGenerateCode(typeof(AvlSortedDictionary<,>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Avl/", ws);
-            await CompleteGenerateCode(typeof(AvlListNode<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Avl/ListTree/", ws);
-            await CompleteGenerateCode(typeof(AvlListTree<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Avl/ListTree/", ws);
-            await CompleteGenerateCode(typeof(AvlAggregatedTree<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Avl/ValueTree/", ws);
-            await CompleteGenerateCode(typeof(AvlIndexableListTree<>), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Avl/ListTree/", ws);
+            await CompleteGenerateCode(typeof(BinaryTree<>), project: "LazinatorCollections", mainFolder: "/Tree/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(BinaryNode<>), project: "LazinatorCollections", mainFolder: "/Tree/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(AvlNode<>), project: "LazinatorCollections", mainFolder: "", subfolder: "Avl/ValueTree/", ws);
+            await CompleteGenerateCode(typeof(AvlCountedNode<>), project: "LazinatorCollections", mainFolder: "", subfolder: "Avl/ValueTree/", ws);
+            await CompleteGenerateCode(typeof(AvlAggregatedNode<>), project: "LazinatorCollections", mainFolder: "", subfolder: "Avl/ValueTree/", ws);
+            await CompleteGenerateCode(typeof(AvlTree<>), project: "LazinatorCollections", mainFolder: "", subfolder: "Avl/ValueTree/", ws);
+            await CompleteGenerateCode(typeof(AvlSortedTree<>), project: "LazinatorCollections", mainFolder: "", subfolder: "Avl/ValueTree/", ws);
+            await CompleteGenerateCode(typeof(AvlIndexableTree<>), project: "LazinatorCollections", mainFolder: "", subfolder: "Avl/ValueTree/", ws);
+            await CompleteGenerateCode(typeof(AvlSortedIndexableTree<>), project: "LazinatorCollections", mainFolder: "", subfolder: "Avl/ValueTree/", ws);
+            await CompleteGenerateCode(typeof(AvlKeyValueTree<,>), project: "LazinatorCollections", mainFolder: "", subfolder: "Avl/KeyValueTree/", ws);
+            await CompleteGenerateCode(typeof(AvlIndexableKeyValueTree<,>), project: "LazinatorCollections", mainFolder: "", subfolder: "Avl/KeyValueTree/", ws);
+            await CompleteGenerateCode(typeof(AvlSortedKeyValueTree<,>), project: "LazinatorCollections", mainFolder: "", subfolder: "Avl/KeyValueTree/", ws);
+            await CompleteGenerateCode(typeof(AvlSortedIndexableKeyValueTree<,>), project: "LazinatorCollections", mainFolder: "", subfolder: "Avl/KeyValueTree/", ws);
+            await CompleteGenerateCode(typeof(AvlList<>), project: "LazinatorCollections", mainFolder: "/Avl/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(AvlSortedList<>), project: "LazinatorCollections", mainFolder: "/Avl/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(AvlDictionary<,>), project: "LazinatorCollections", mainFolder: "/Avl/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(AvlHashSet<>), project: "LazinatorCollections", mainFolder: "/Avl/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(AvlSortedDictionary<,>), project: "LazinatorCollections", mainFolder: "/Avl/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(AvlListNode<>), project: "LazinatorCollections", mainFolder: "", subfolder: "Avl/ListTree/", ws);
+            await CompleteGenerateCode(typeof(AvlListTree<>), project: "LazinatorCollections", mainFolder: "", subfolder: "Avl/ListTree/", ws);
+            await CompleteGenerateCode(typeof(AvlAggregatedTree<>), project: "LazinatorCollections", mainFolder: "", subfolder: "Avl/ValueTree/", ws);
+            await CompleteGenerateCode(typeof(AvlIndexableListTree<>), project: "LazinatorCollections", mainFolder: "", subfolder: "Avl/ListTree/", ws);
 
 
-            await CompleteGenerateCode(typeof(ContainerLevel), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Factories/", ws);
-            await CompleteGenerateCode(typeof(ContainerFactory), project: "LazinatorCollections", mainFolder: "/Collections/", subfolder: "Factories/", ws);
+            await CompleteGenerateCode(typeof(ContainerLevel), project: "LazinatorCollections", mainFolder: "", subfolder: "Factories/", ws);
+            await CompleteGenerateCode(typeof(ContainerFactory), project: "LazinatorCollections", mainFolder: "", subfolder: "Factories/", ws);
         }
 
         [Fact]
@@ -337,10 +337,10 @@ public class MyOtherClass
             return new List<string>()
             {
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Attributes",
-                ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/Collections",
-                ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/Collections/Avl",
-                ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/Collections/ByteSpan",
-                ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/Collections/BitArray",
+                ReadCodeFile.GetCodeBasePath("LazinatorCollections"),
+                ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/Avl",
+                ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/ByteSpan",
+                ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/BitArray",
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Wrappers",
                 ReadCodeFile.GetCodeBasePath("LazinatorTests") + "/Examples",
             };

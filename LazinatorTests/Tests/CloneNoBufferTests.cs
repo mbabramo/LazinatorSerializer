@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Lazinator.Collections;
+using LazinatorCollections;
 using LazinatorTests.Examples;
 using Lazinator.Core;
 using Xunit;
@@ -11,7 +11,7 @@ using LazinatorTests.Examples.NonAbstractGenerics;
 using LazinatorTests.Examples.Collections;
 using LazinatorTests.Examples.Abstract;
 using LazinatorTests.Examples.Subclasses;
-using Lazinator.Collections.Dictionary;
+using LazinatorCollections.Dictionary;
 using LazinatorTests.Examples.Tuples;
 
 namespace LazinatorTests.Tests

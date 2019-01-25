@@ -1,4 +1,4 @@
-﻿using Lazinator.Collections;
+﻿using LazinatorCollections;
 using Lazinator.Wrappers;
 
 namespace LazinatorTests.Examples.Collections

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Lazinator.Collections;
+using LazinatorCollections;
 using LazinatorTests.Examples;
 using Lazinator.Core;
 using Xunit;
@@ -10,7 +10,7 @@ using Lazinator.Wrappers;
 using LazinatorTests.Examples.Hierarchy;
 using LazinatorTests.Examples.Structs;
 using LazinatorTests.Examples.NonAbstractGenerics;
-using Lazinator.Collections.Tuples;
+using LazinatorCollections.Tuples;
 
 namespace LazinatorTests.Tests
 {

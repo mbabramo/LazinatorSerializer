@@ -4,8 +4,8 @@ using FluentAssertions;
 using LazinatorTests.Examples.Collections;
 using Lazinator.Core;
 using Xunit;
-using Lazinator.Collections.ByteSpan;
-using Lazinator.Collections.BitArray;
+using LazinatorCollections.ByteSpan;
+using LazinatorCollections.BitArray;
 
 namespace LazinatorTests.Tests
 {

@@ -12,7 +12,7 @@ namespace LazinatorTests.Examples.Collections
 {
     using Lazinator.Attributes;
     using Lazinator.Buffers;
-    using Lazinator.Collections;
+    using LazinatorCollections;
     using Lazinator.Core;
     using Lazinator.Exceptions;
     using Lazinator.Support;

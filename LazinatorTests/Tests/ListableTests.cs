@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using Lazinator.Collections;
+using LazinatorCollections;
 using LazinatorTests.Examples;
 using LazinatorTests.Examples.Collections;
 using Lazinator.Core;
@@ -11,9 +11,9 @@ using Xunit;
 using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
 using System.Diagnostics;
-using Lazinator.Collections.Factories;
+using LazinatorCollections.Factories;
 using System.Collections;
-using Lazinator.Collections.Interfaces;
+using LazinatorCollections.Interfaces;
 
 namespace LazinatorTests.Tests
 {
