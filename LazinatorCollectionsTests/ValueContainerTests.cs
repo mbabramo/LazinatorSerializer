@@ -166,7 +166,7 @@ namespace LazinatorCollectionsTests
         }
     }
 
-    public abstract class ValueContainerTests<T> : SerializationDeserializationTestBase where T : ILazinator, IComparable<T>
+    public abstract class ValueContainerTests<T> where T : ILazinator, IComparable<T>
     {
 
         public IValueContainer<T> GetValueContainer(ValueContainerToUse containerType, bool allowDuplicates)

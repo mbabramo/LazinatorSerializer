@@ -18,7 +18,7 @@ using LazinatorTests.Tests;
 
 namespace LazinatorCollectionsTests
 {
-    public class ListableTests : SerializationDeserializationTestBase
+    public class ListableTests
     {
         public enum ListFactoryToUse
         {

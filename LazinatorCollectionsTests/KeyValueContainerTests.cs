@@ -61,7 +61,7 @@ namespace LazinatorCollectionsTests
 
     }
 
-    public abstract class KeyValueContainerTests<TKey, TValue> : SerializationDeserializationTestBase where TKey : ILazinator, IComparable<TKey>, IComparable where TValue : ILazinator
+    public abstract class KeyValueContainerTests<TKey, TValue> where TKey : ILazinator, IComparable<TKey>, IComparable where TValue : ILazinator
     {
 
         public IKeyValueContainer<TKey, TValue> GetKeyValueContainer(KeyValueContainerType containerType)
