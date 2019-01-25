@@ -11,6 +11,7 @@ using LazinatorTests.Examples.Structs;
 using System.Dynamic;
 using System;
 using System.Text;
+using Lazinator.List;
 
 namespace LazinatorTests.Tests
 {

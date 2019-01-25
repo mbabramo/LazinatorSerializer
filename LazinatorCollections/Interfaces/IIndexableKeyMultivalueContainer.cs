@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Lazinator.Attributes;
-using LazinatorCollections.Location;
+using Lazinator.ContainerLocation;
 using Lazinator.Core;
 
 namespace LazinatorCollections.Interfaces

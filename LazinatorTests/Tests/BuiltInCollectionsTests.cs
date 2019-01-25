@@ -11,8 +11,10 @@ using Xunit;
 using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
 using System.Diagnostics;
-using LazinatorCollections.OffsetList;
+using Lazinator.OffsetList;
 using LazinatorCollections.Tuples;
+using LazinatorCollections.ListDerivatives;
+using Lazinator.List;
 
 namespace LazinatorTests.Tests
 {

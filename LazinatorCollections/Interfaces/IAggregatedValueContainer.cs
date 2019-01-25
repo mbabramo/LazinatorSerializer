@@ -1,5 +1,5 @@
 ﻿using Lazinator.Attributes;
-using LazinatorCollections.Location;
+using Lazinator.ContainerLocation;
 using Lazinator.Core;
 using System;
 using System.Collections.Generic;

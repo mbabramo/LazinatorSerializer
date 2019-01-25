@@ -10,7 +10,7 @@ using LazinatorCollections.Tuples;
 using LazinatorCollections.Interfaces;
 using LazinatorCollections.Avl.KeyValueTree;
 using LazinatorCollections.Factories;
-using LazinatorCollections.Location;
+using Lazinator.ContainerLocation;
 
 namespace LazinatorCollectionsTests
 {

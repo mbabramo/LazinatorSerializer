@@ -1,6 +1,6 @@
 ﻿using LazinatorCollections.Enumerators;
 using LazinatorCollections.Interfaces;
-using LazinatorCollections.Location;
+using Lazinator.ContainerLocation;
 using Lazinator.Core;
 using System;
 using System.Collections.Generic;

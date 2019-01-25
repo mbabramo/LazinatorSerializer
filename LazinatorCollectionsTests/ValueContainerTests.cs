@@ -9,7 +9,9 @@ using Lazinator.Wrappers;
 using LazinatorCollections.Interfaces;
 using LazinatorCollections.Avl.ValueTree;
 using LazinatorCollections.Factories;
-using LazinatorCollections.Location;
+using Lazinator.ContainerLocation;
+using Lazinator.ContainerInterfaces;
+using Lazinator.List;
 
 namespace LazinatorCollectionsTests
 {

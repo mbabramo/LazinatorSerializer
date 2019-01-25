@@ -14,6 +14,7 @@ namespace LazinatorTests.Examples.Structs
     using Lazinator.Buffers;
     using Lazinator.Core;
     using Lazinator.Exceptions;
+    using Lazinator.List;
     using Lazinator.Support;
     using Lazinator.Wrappers;
     using LazinatorCollections;

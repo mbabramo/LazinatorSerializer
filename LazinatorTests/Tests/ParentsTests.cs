@@ -14,6 +14,7 @@ using LazinatorTests.Examples.NonAbstractGenerics;
 using LazinatorTests.Examples.Abstract;
 using LazinatorTests.Examples.Collections;
 using LazinatorCollections.Tuples;
+using Lazinator.List;
 
 namespace LazinatorTests.Tests
 {
