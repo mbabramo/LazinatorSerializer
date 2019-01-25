@@ -98,12 +98,12 @@ namespace Lazinator.Collections.Avl.KeyValueTree
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public override int LazinatorUniqueID => 170;
+        public override int LazinatorUniqueID => 161;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override bool ContainsOpenGenericParameters => true;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public override LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<AvlSortedIndexableKeyValueTree<TKey, TValue>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(170, new Type[] { typeof(TKey), typeof(TValue) }));
+        public override LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<AvlSortedIndexableKeyValueTree<TKey, TValue>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(161, new Type[] { typeof(TKey), typeof(TValue) }));
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

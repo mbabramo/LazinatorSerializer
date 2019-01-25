@@ -137,12 +137,12 @@ namespace Lazinator.Collections.Avl.ValueTree
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public override int LazinatorUniqueID => 151;
+        public override int LazinatorUniqueID => 142;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override bool ContainsOpenGenericParameters => true;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public override LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<AvlCountedNode<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(151, new Type[] { typeof(T) }));
+        public override LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<AvlCountedNode<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(142, new Type[] { typeof(T) }));
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

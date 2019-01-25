@@ -70,7 +70,7 @@ namespace LazinatorTests.Examples.Structs
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ListWrappedBytes_ByteIndex, _ListWrappedBytes_ByteLength, false, false, null);
                         
-                        _ListWrappedBytes = DeserializationFactory.Instance.CreateBaseOrDerivedType(51, () => new LazinatorList<WByte>(), childData, this); 
+                        _ListWrappedBytes = DeserializationFactory.Instance.CreateBaseOrDerivedType(101, () => new LazinatorList<WByte>(), childData, this); 
                     }
                     _ListWrappedBytes_Accessed = true;
                 } 
@@ -1075,7 +1075,7 @@ namespace LazinatorTests.Examples.Structs
         
         /* Conversion */
         
-        public virtual int LazinatorUniqueID => 262;
+        public virtual int LazinatorUniqueID => 1062;
         
         protected virtual bool ContainsOpenGenericParameters => false;
         public virtual LazinatorGenericIDType LazinatorGenericID => default;

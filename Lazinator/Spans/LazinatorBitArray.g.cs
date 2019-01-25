@@ -350,7 +350,7 @@ namespace Lazinator.Spans
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public int LazinatorUniqueID => 92;
+        public int LazinatorUniqueID => 103;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool ContainsOpenGenericParameters => false;

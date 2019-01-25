@@ -72,7 +72,7 @@ namespace Lazinator.Collections.Dictionary
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Buckets_ByteIndex, _Buckets_ByteLength, false, false, null);
                         
-                        _Buckets = DeserializationFactory.Instance.CreateBaseOrDerivedType(51, () => new LazinatorList<DictionaryBucket<TKey, TValue>>(), childData, this); 
+                        _Buckets = DeserializationFactory.Instance.CreateBaseOrDerivedType(101, () => new LazinatorList<DictionaryBucket<TKey, TValue>>(), childData, this); 
                     }
                     _Buckets_Accessed = true;
                 } 
@@ -369,12 +369,12 @@ namespace Lazinator.Collections.Dictionary
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual int LazinatorUniqueID => 100;
+        public virtual int LazinatorUniqueID => 111;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual bool ContainsOpenGenericParameters => true;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<LazinatorDictionary<TKey, TValue>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(100, new Type[] { typeof(TKey), typeof(TValue) }));
+        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<LazinatorDictionary<TKey, TValue>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(111, new Type[] { typeof(TKey), typeof(TValue) }));
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

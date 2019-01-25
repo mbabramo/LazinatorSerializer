@@ -112,7 +112,7 @@ namespace LazinatorTests.Examples.Abstract
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, false, false, null);
                         
-                        _MyT = DeserializationFactory.Instance.CreateBaseOrDerivedType(212, () => new Example(), childData, this); 
+                        _MyT = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, () => new Example(), childData, this); 
                     }
                     _MyT_Accessed = true;
                 } 
@@ -152,7 +152,7 @@ namespace LazinatorTests.Examples.Abstract
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _LazinatorExample_ByteIndex, _LazinatorExample_ByteLength, false, false, null);
                         
-                        _LazinatorExample = DeserializationFactory.Instance.CreateBaseOrDerivedType(212, () => new Example(), childData, this); 
+                        _LazinatorExample = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, () => new Example(), childData, this); 
                     }
                     _LazinatorExample_Accessed = true;
                 } 
@@ -484,7 +484,7 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Conversion */
         
-        public override int LazinatorUniqueID => 242;
+        public override int LazinatorUniqueID => 1042;
         
         protected override bool ContainsOpenGenericParameters => false;
         public override LazinatorGenericIDType LazinatorGenericID => default;

@@ -93,7 +93,7 @@ namespace Lazinator.Collections.Avl.ListTree
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _InnerContainerFactory_ByteIndex, _InnerContainerFactory_ByteLength, false, false, null);
                         
-                        _InnerContainerFactory = DeserializationFactory.Instance.CreateBaseOrDerivedType(175, () => new ContainerFactory(), childData, this); 
+                        _InnerContainerFactory = DeserializationFactory.Instance.CreateBaseOrDerivedType(166, () => new ContainerFactory(), childData, this); 
                     }
                     _InnerContainerFactory_Accessed = true;
                 } 
@@ -137,7 +137,7 @@ namespace Lazinator.Collections.Avl.ListTree
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _UnderlyingTree_ByteIndex, _UnderlyingTree_ByteLength, false, false, null);
                         
-                        _UnderlyingTree = DeserializationFactory.Instance.CreateBaseOrDerivedType(182, () => new AvlAggregatedTree<IIndexableMultivalueContainer<T>>(), childData, this); 
+                        _UnderlyingTree = DeserializationFactory.Instance.CreateBaseOrDerivedType(170, () => new AvlAggregatedTree<IIndexableMultivalueContainer<T>>(), childData, this); 
                     }
                     _UnderlyingTree_Accessed = true;
                 } 
@@ -479,12 +479,12 @@ namespace Lazinator.Collections.Avl.ListTree
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual int LazinatorUniqueID => 183;
+        public virtual int LazinatorUniqueID => 171;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual bool ContainsOpenGenericParameters => true;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<AvlIndexableListTree<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(183, new Type[] { typeof(T) }));
+        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<AvlIndexableListTree<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(171, new Type[] { typeof(T) }));
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

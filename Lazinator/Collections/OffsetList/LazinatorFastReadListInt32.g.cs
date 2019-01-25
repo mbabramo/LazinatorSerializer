@@ -98,7 +98,7 @@ namespace Lazinator.Collections.OffsetList
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public override int LazinatorUniqueID => 108;
+        public override int LazinatorUniqueID => 114;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override bool ContainsOpenGenericParameters => false;

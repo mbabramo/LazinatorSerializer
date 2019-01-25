@@ -157,7 +157,7 @@ namespace LazinatorTests.Examples.Collections
         
         /* Conversion */
         
-        public override int LazinatorUniqueID => 260;
+        public override int LazinatorUniqueID => 1060;
         
         protected override bool ContainsOpenGenericParameters => false;
         public override LazinatorGenericIDType LazinatorGenericID => default;

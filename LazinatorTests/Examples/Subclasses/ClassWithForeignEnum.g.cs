@@ -271,7 +271,7 @@ namespace LazinatorTests.Examples.Subclasses
         
         /* Conversion */
         
-        public virtual int LazinatorUniqueID => 256;
+        public virtual int LazinatorUniqueID => 1056;
         
         protected virtual bool ContainsOpenGenericParameters => false;
         public virtual LazinatorGenericIDType LazinatorGenericID => default;

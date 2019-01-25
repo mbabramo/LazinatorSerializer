@@ -54,7 +54,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _RecursiveClass_ByteIndex, _RecursiveClass_ByteLength, false, false, null);
                         
-                        _RecursiveClass = DeserializationFactory.Instance.CreateBaseOrDerivedType(247, () => new RecursiveExample(), childData, this); 
+                        _RecursiveClass = DeserializationFactory.Instance.CreateBaseOrDerivedType(1047, () => new RecursiveExample(), childData, this); 
                     }
                     _RecursiveClass_Accessed = true;
                 } 
@@ -419,7 +419,7 @@ namespace LazinatorTests.Examples.Hierarchy
         
         /* Conversion */
         
-        public virtual int LazinatorUniqueID => 247;
+        public virtual int LazinatorUniqueID => 1047;
         
         protected virtual bool ContainsOpenGenericParameters => false;
         public virtual LazinatorGenericIDType LazinatorGenericID => default;

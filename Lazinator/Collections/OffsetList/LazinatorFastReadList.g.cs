@@ -304,7 +304,7 @@ namespace Lazinator.Collections.OffsetList
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual int LazinatorUniqueID => 52;
+        public virtual int LazinatorUniqueID => 102;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual bool ContainsOpenGenericParameters => false;

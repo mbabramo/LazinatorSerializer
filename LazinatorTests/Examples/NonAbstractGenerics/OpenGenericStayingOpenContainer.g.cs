@@ -63,7 +63,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericBase_ByteIndex, _ClosedGenericBase_ByteLength, false, false, null);
                         
-                        _ClosedGenericBase = DeserializationFactory.Instance.CreateBaseOrDerivedType(233, () => new OpenGeneric<Base>(), childData, this); 
+                        _ClosedGenericBase = DeserializationFactory.Instance.CreateBaseOrDerivedType(1033, () => new OpenGeneric<Base>(), childData, this); 
                     }
                     _ClosedGenericBase_Accessed = true;
                 } 
@@ -104,7 +104,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericFloat_ByteIndex, _ClosedGenericFloat_ByteLength, false, false, null);
                         
-                        _ClosedGenericFloat = DeserializationFactory.Instance.CreateBaseOrDerivedType(233, () => new OpenGeneric<WFloat>(), childData, this); 
+                        _ClosedGenericFloat = DeserializationFactory.Instance.CreateBaseOrDerivedType(1033, () => new OpenGeneric<WFloat>(), childData, this); 
                     }
                     _ClosedGenericFloat_Accessed = true;
                 } 
@@ -145,7 +145,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericFromBaseWithBase_ByteIndex, _ClosedGenericFromBaseWithBase_ByteLength, false, false, null);
                         
-                        _ClosedGenericFromBaseWithBase = DeserializationFactory.Instance.CreateBaseOrDerivedType(267, () => new GenericFromBase<Base>(), childData, this); 
+                        _ClosedGenericFromBaseWithBase = DeserializationFactory.Instance.CreateBaseOrDerivedType(1067, () => new GenericFromBase<Base>(), childData, this); 
                     }
                     _ClosedGenericFromBaseWithBase_Accessed = true;
                 } 
@@ -186,7 +186,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericInterface_ByteIndex, _ClosedGenericInterface_ByteLength, false, false, null);
                         
-                        _ClosedGenericInterface = DeserializationFactory.Instance.CreateBaseOrDerivedType(233, () => new OpenGeneric<IExampleChild>(), childData, this); 
+                        _ClosedGenericInterface = DeserializationFactory.Instance.CreateBaseOrDerivedType(1033, () => new OpenGeneric<IExampleChild>(), childData, this); 
                     }
                     _ClosedGenericInterface_Accessed = true;
                 } 
@@ -227,7 +227,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericNonexclusiveInterface_ByteIndex, _ClosedGenericNonexclusiveInterface_ByteLength, false, false, null);
                         
-                        _ClosedGenericNonexclusiveInterface = DeserializationFactory.Instance.CreateBaseOrDerivedType(233, () => new OpenGeneric<IExampleNonexclusiveInterface>(), childData, this); 
+                        _ClosedGenericNonexclusiveInterface = DeserializationFactory.Instance.CreateBaseOrDerivedType(1033, () => new OpenGeneric<IExampleNonexclusiveInterface>(), childData, this); 
                     }
                     _ClosedGenericNonexclusiveInterface_Accessed = true;
                 } 
@@ -668,7 +668,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         /* Conversion */
         
-        public virtual int LazinatorUniqueID => 234;
+        public virtual int LazinatorUniqueID => 1034;
         
         protected virtual bool ContainsOpenGenericParameters => false;
         public virtual LazinatorGenericIDType LazinatorGenericID => default;

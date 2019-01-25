@@ -74,7 +74,7 @@ namespace Lazinator.Collections.Dictionary
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Keys_ByteIndex, _Keys_ByteLength, false, false, null);
                         
-                        _Keys = DeserializationFactory.Instance.CreateBaseOrDerivedType(51, () => new LazinatorList<TKey>(), childData, this); 
+                        _Keys = DeserializationFactory.Instance.CreateBaseOrDerivedType(101, () => new LazinatorList<TKey>(), childData, this); 
                     }
                     _Keys_Accessed = true;
                 } 
@@ -118,7 +118,7 @@ namespace Lazinator.Collections.Dictionary
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Values_ByteIndex, _Values_ByteLength, false, false, null);
                         
-                        _Values = DeserializationFactory.Instance.CreateBaseOrDerivedType(51, () => new LazinatorList<TValue>(), childData, this); 
+                        _Values = DeserializationFactory.Instance.CreateBaseOrDerivedType(101, () => new LazinatorList<TValue>(), childData, this); 
                     }
                     _Values_Accessed = true;
                 } 
@@ -458,12 +458,12 @@ namespace Lazinator.Collections.Dictionary
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual int LazinatorUniqueID => 99;
+        public virtual int LazinatorUniqueID => 110;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual bool ContainsOpenGenericParameters => true;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<DictionaryBucket<TKey, TValue>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(99, new Type[] { typeof(TKey), typeof(TValue) }));
+        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<DictionaryBucket<TKey, TValue>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(110, new Type[] { typeof(TKey), typeof(TValue) }));
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

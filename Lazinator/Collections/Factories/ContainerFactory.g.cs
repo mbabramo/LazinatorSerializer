@@ -56,7 +56,7 @@ namespace Lazinator.Collections.Factories
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _InnerFactory_ByteIndex, _InnerFactory_ByteLength, false, false, null);
                         
-                        _InnerFactory = DeserializationFactory.Instance.CreateBaseOrDerivedType(175, () => new ContainerFactory(), childData, this); 
+                        _InnerFactory = DeserializationFactory.Instance.CreateBaseOrDerivedType(166, () => new ContainerFactory(), childData, this); 
                     }
                     _InnerFactory_Accessed = true;
                 } 
@@ -100,7 +100,7 @@ namespace Lazinator.Collections.Factories
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ThisLevel_ByteIndex, _ThisLevel_ByteLength, false, false, null);
                         
-                        _ThisLevel = DeserializationFactory.Instance.CreateBaseOrDerivedType(176, () => new ContainerLevel(), childData, this); 
+                        _ThisLevel = DeserializationFactory.Instance.CreateBaseOrDerivedType(167, () => new ContainerLevel(), childData, this); 
                     }
                     _ThisLevel_Accessed = true;
                 } 
@@ -434,7 +434,7 @@ namespace Lazinator.Collections.Factories
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual int LazinatorUniqueID => 175;
+        public virtual int LazinatorUniqueID => 166;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual bool ContainsOpenGenericParameters => false;

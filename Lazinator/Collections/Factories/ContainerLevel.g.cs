@@ -343,7 +343,7 @@ namespace Lazinator.Collections.Factories
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual int LazinatorUniqueID => 176;
+        public virtual int LazinatorUniqueID => 167;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual bool ContainsOpenGenericParameters => false;

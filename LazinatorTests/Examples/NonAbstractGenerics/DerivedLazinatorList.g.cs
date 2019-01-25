@@ -98,10 +98,10 @@ namespace LazinatorTests.Examples
         
         /* Conversion */
         
-        public override int LazinatorUniqueID => 203;
+        public override int LazinatorUniqueID => 1003;
         
         protected override bool ContainsOpenGenericParameters => true;
-        public override LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<DerivedLazinatorList<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(203, new Type[] { typeof(T) }));
+        public override LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<DerivedLazinatorList<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(1003, new Type[] { typeof(T) }));
         
         
         public override int LazinatorObjectVersion { get; set; } = 0;

@@ -379,7 +379,7 @@ namespace LazinatorTests.Examples.Hierarchy
         
         /* Conversion */
         
-        public virtual int LazinatorUniqueID => 246;
+        public virtual int LazinatorUniqueID => 1046;
         
         protected virtual bool ContainsOpenGenericParameters => false;
         public virtual LazinatorGenericIDType LazinatorGenericID => default;

@@ -389,10 +389,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         /* Conversion */
         
-        public virtual int LazinatorUniqueID => 233;
+        public virtual int LazinatorUniqueID => 1033;
         
         protected virtual bool ContainsOpenGenericParameters => true;
-        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<OpenGeneric<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(233, new Type[] { typeof(T) }));
+        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<OpenGeneric<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(1033, new Type[] { typeof(T) }));
         
         
         public virtual int LazinatorObjectVersion { get; set; } = 0;

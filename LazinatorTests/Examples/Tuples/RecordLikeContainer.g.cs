@@ -439,7 +439,7 @@ namespace LazinatorTests.Examples.Tuples
         
         /* Conversion */
         
-        public virtual int LazinatorUniqueID => 226;
+        public virtual int LazinatorUniqueID => 1026;
         
         protected virtual bool ContainsOpenGenericParameters => false;
         public virtual LazinatorGenericIDType LazinatorGenericID => default;
