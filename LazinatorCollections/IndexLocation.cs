@@ -1,10 +1,10 @@
-﻿namespace LazinatorCollections.Basic.Interfaces;
-namespace LazinatorCollections.Basic.Location;
+﻿using LazinatorCollections.Interfaces;
+using LazinatorCollections.Location;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LazinatorCollections.Basic.Basic
+namespace LazinatorCollections
 {
     public readonly struct IndexLocation : IContainerLocation
     {

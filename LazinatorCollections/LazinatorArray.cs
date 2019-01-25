@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace LazinatorCollections.Basic.Basic
+namespace LazinatorCollections
 {
     public partial class LazinatorArray<T> : LazinatorList<T>, ILazinatorArray<T> where T : ILazinator
     {

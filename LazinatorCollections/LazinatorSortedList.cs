@@ -1,22 +1,25 @@
-﻿namespace LazinatorCollections.Basic.Extensions;
-namespace LazinatorCollections.Basic.Interfaces;
-namespace LazinatorCollections.Basic.Location;
+﻿using LazinatorCollections.Extensions;
+using LazinatorCollections.Interfaces;
+using LazinatorCollections.Location;
 using Lazinator.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LazinatorCollections.Basic.Basic
+namespace LazinatorCollections
 {
-    public partial class LazinatorSortedLinkedList<T> : LazinatorLinkedList<T>, ILazinatorSortedLinkedList<T>, ILazinatorSorted<T>, ISortedIndexableMultivalueContainer<T> where T : IComparable<T>, ILazinator
+    public partial class LazinatorSortedList<T> : LazinatorList<T>, ILazinatorSortedList<T>, ILazinatorSorted<T>, ISortedIndexableMultivalueContainer<T> where T : ILazinator, IComparable<T>
     {
-        public LazinatorSortedLinkedList(bool allowDuplicates) : base(allowDuplicates)
+        public LazinatorSortedList(bool allowDuplicates) : base(allowDuplicates)
         {
         }
 
         public override IValueContainer<T> CreateNewWithSameSettings()
         {
-            return new LazinatorSortedLinkedList<T>(AllowDuplicates);
+            return new LazinatorSortedList<T>()
+            {
+                AllowDuplicates = AllowDuplicates
+            };
         }
 
         public override bool Contains(T item) => Contains(item, Comparer<T>.Default);
@@ -32,6 +35,9 @@ namespace LazinatorCollections.Basic.Basic
 
         long ISortedMultivalueContainer<T>.Count(T item) => ((IMultivalueContainer<T>)this).Count(item, Comparer<T>.Default);
 
+        public IEnumerable<T> AsEnumerable(bool reverse, T startValue) => AsEnumerable(reverse, startValue, Comparer<T>.Default);
+        public IEnumerator<T> GetEnumerator(bool reverse, T startValue) => GetEnumerator(reverse, startValue, Comparer<T>.Default);
+
         public bool TryRemoveAll(T item)
         {
             bool found = false;
@@ -44,8 +50,5 @@ namespace LazinatorCollections.Basic.Basic
             } while (found);
             return foundAny;
         }
-
-        public IEnumerable<T> AsEnumerable(bool reverse, T startValue) => AsEnumerable(reverse, startValue, Comparer<T>.Default);
-        public IEnumerator<T> GetEnumerator(bool reverse, T startValue) => GetEnumerator(reverse, startValue, Comparer<T>.Default);
     }
 }

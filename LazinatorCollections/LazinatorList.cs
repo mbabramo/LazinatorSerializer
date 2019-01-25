@@ -8,13 +8,13 @@ using static Lazinator.Core.LazinatorUtilities;
 using Lazinator.Attributes;
 using System.Buffers;
 using System.Linq;
-namespace LazinatorCollections.Basic.OffsetList;
-namespace LazinatorCollections.Basic.Interfaces;
-namespace LazinatorCollections.Basic.Extensions;
-namespace LazinatorCollections.Basic.Enumerators;
-namespace LazinatorCollections.Basic.Location;
+using LazinatorCollections.OffsetList;
+using LazinatorCollections.Interfaces;
+using LazinatorCollections.Extensions;
+using LazinatorCollections.Enumerators;
+using LazinatorCollections.Location;
 
-namespace LazinatorCollections.Basic.Basic
+namespace LazinatorCollections
 {
     [Implements(new string[] { "PreSerialization", "EnumerateLazinatorDescendants", "OnFreeInMemoryObjects", "AssignCloneProperties", "OnUpdateDeserializedChildren", "OnPropertiesWritten", "OnForEachLazinator" })]
     public partial class LazinatorList<T> : IList, IList<T>, IEnumerable, ILazinatorList<T>, ILazinatorList, ILazinatorListable<T>, IIndexableMultivalueContainer<T> where T : ILazinator

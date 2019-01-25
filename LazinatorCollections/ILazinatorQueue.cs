@@ -1,8 +1,8 @@
 ﻿using Lazinator.Core;
 using Lazinator.Attributes;
-namespace LazinatorCollections.Basic.Avl;
+using LazinatorCollections.Avl;
 
-namespace LazinatorCollections.Basic.Basic
+namespace LazinatorCollections
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorQueue)]
     interface ILazinatorQueue<T> where T : ILazinator

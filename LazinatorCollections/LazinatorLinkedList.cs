@@ -1,7 +1,7 @@
-﻿namespace LazinatorCollections.Basic.Enumerators;
-namespace LazinatorCollections.Basic.Extensions;
-namespace LazinatorCollections.Basic.Interfaces;
-namespace LazinatorCollections.Basic.Location;
+﻿using LazinatorCollections.Enumerators;
+using LazinatorCollections.Extensions;
+using LazinatorCollections.Interfaces;
+using LazinatorCollections.Location;
 using Lazinator.Core;
 using System;
 using System.Collections;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace LazinatorCollections.Basic.Basic
+namespace LazinatorCollections
 {
     public partial class LazinatorLinkedList<T> : ILazinatorLinkedList<T>, IList<T>, ILazinatorListable<T>, IIndexableMultivalueContainer<T> where T : ILazinator
     {

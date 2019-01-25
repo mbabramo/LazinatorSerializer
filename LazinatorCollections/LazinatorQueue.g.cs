@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace LazinatorCollections.Basic.Basic
+namespace LazinatorCollections
 {
     using Lazinator.Attributes;
     using Lazinator.Buffers;
