@@ -29,7 +29,6 @@ using LazinatorCollections.OffsetList;
 using LazinatorCollections.Tree;
 using LazinatorCollections.Tuples;
 using LazinatorCollections.Factories;
-using Lazinator.Examples.Structs;
 using LazinatorCollections.Avl.ValueTree;
 using LazinatorCollections.Avl.KeyValueTree;
 using LazinatorCollections.Avl.ListTree;
@@ -266,9 +265,6 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(Simplifiable), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(WrapperContainer), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(SmallWrappersContainer), "LazinatorTests", "/Examples/", "Structs/", ws);
-            await CompleteGenerateCode(typeof(StructWithBadHashFunction), "LazinatorTests", "/Examples/", "Structs/", ws);
-            await CompleteGenerateCode(typeof(NonComparableWrapper), "LazinatorTests", "/Examples/", "Structs/", ws);
-            await CompleteGenerateCode(typeof(NonComparableWrapperString), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(RecursiveExample), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(Abstract1), "LazinatorTests", "/Examples/", "Abstract/", ws);
             await CompleteGenerateCode(typeof(ContainerWithAbstract1), "LazinatorTests", "/Examples/", "Abstract/", ws);

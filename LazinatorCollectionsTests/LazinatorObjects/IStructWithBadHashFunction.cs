@@ -1,13 +1,14 @@
 ﻿using Lazinator.Attributes;
 using LazinatorCollections;
 using Lazinator.Wrappers;
+using LazinatorTests.Examples;
 
-namespace LazinatorTests.Examples
+namespace LazinatorCollectionsTests
 {
     [SmallLazinator]
     [ExcludeLazinatorVersionByte]
     [NonbinaryHash]
-    [Lazinator((int)ExampleUniqueIDs.IStructWithBadHashFunction, -1)]
+    [Lazinator((int)CollectionsTestsObjectIDs.IStructWithBadHashFunction, -1)]
     interface IStructWithBadHashFunction : IW<int>
     {
     }

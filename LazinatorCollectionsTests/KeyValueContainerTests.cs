@@ -3,20 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using LazinatorCollections;
-using LazinatorTests.Examples;
 using Lazinator.Core;
 using Xunit;
 using Lazinator.Wrappers;
-using LazinatorTests.Examples.Hierarchy;
-using LazinatorTests.Examples.Structs;
-using LazinatorTests.Examples.NonAbstractGenerics;
 using LazinatorCollections.Tuples;
-using LazinatorCollections.Avl;
 using LazinatorCollections.Interfaces;
 using LazinatorCollections.Avl.KeyValueTree;
 using LazinatorCollections.Factories;
 using LazinatorCollections.Location;
-using LazinatorTests.Tests;
 
 namespace LazinatorCollectionsTests
 {

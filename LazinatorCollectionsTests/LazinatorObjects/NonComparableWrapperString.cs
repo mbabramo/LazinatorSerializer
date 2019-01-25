@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lazinator.Examples.Structs
+namespace LazinatorCollectionsTests
 {
     public partial struct NonComparableWrapperString : INonComparableWrapperString
     {

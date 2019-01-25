@@ -3,9 +3,9 @@ using LazinatorCollections;
 using Lazinator.Wrappers;
 using LazinatorTests.Examples;
 
-namespace Lazinator.Examples.Structs
+namespace LazinatorCollectionsTests
 {
-    [Lazinator((int)ExampleUniqueIDs.INonComparableWrapperString, -1)]
+    [Lazinator((int)CollectionsTestsObjectIDs.INonComparableWrapperString, -1)]
     [NonbinaryHash]
     interface INonComparableWrapperString : IW<string>
     {

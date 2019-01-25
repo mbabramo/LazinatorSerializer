@@ -1,12 +1,13 @@
 ﻿using Lazinator.Attributes;
 using LazinatorCollections;
 using Lazinator.Wrappers;
+using LazinatorTests.Examples;
 
-namespace LazinatorTests.Examples
+namespace LazinatorCollectionsTests
 {
     [SmallLazinator]
     [ExcludeLazinatorVersionByte]
-    [Lazinator((int)ExampleUniqueIDs.INonComparableWrapper, -1)]
+    [Lazinator((int)CollectionsTestsObjectIDs.INonComparableWrapper, -1)]
     interface INonComparableWrapper : IW<int>
     {
     }

@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 using FluentAssertions;
-using LazinatorCollections.Dictionary;
 using Lazinator.Wrappers;
 using Lazinator.Core;
 using LazinatorCollections;
 using LazinatorCollections.Avl;
-using LazinatorTests.Examples;
 using LazinatorCollections.Tuples;
 using LazinatorCollections.Factories;
-using Lazinator.Examples.Structs;
 using LazinatorCollections.Interfaces;
 
 namespace LazinatorCollectionsTests

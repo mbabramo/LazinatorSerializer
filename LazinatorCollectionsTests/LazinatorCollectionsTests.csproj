@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LazinatorCollections\LazinatorCollections.csproj" />
-    <ProjectReference Include="..\LazinatorTests\LazinatorTests.csproj" />
     <ProjectReference Include="..\Lazinator\Lazinator.csproj" />
   </ItemGroup>
 

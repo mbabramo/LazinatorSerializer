@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LazinatorTests.Examples
+namespace LazinatorCollectionsTests
 {
     public partial struct StructWithBadHashFunction : IStructWithBadHashFunction, IComparable, IComparable<int>, IEquatable<int>, IComparable<StructWithBadHashFunction>, IEquatable<StructWithBadHashFunction>
     {

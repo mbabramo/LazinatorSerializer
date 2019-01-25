@@ -86,8 +86,5 @@
         ExampleGrandchild,
         SpanInDotNetList,
         RecordLikeCollections,
-        IStructWithBadHashFunction,
-        INonComparableWrapper,
-        INonComparableWrapperString,
     }
 }
