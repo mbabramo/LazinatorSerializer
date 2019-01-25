@@ -88,7 +88,7 @@ namespace LazinatorCollections.Tree
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Root_ByteIndex, _Root_ByteLength, false, false, null);
                         
-                        _Root = DeserializationFactory.Instance.CreateBaseOrDerivedType(145, () => new BinaryNode<T>(), childData, this); 
+                        _Root = DeserializationFactory.Instance.CreateBaseOrDerivedType(135, () => new BinaryNode<T>(), childData, this); 
                     }
                     _Root_Accessed = true;
                 } 
@@ -391,12 +391,12 @@ namespace LazinatorCollections.Tree
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual int LazinatorUniqueID => 146;
+        public virtual int LazinatorUniqueID => 136;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual bool ContainsOpenGenericParameters => true;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<BinaryTree<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(146, new Type[] { typeof(T) }));
+        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<BinaryTree<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(136, new Type[] { typeof(T) }));
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

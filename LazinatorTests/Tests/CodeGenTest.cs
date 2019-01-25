@@ -144,6 +144,8 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(LazinatorQueue<>), project: "LazinatorCollections", mainFolder: "", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorStack<>), project: "LazinatorCollections", mainFolder: "", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorGeneralTree<>), project: "LazinatorCollections", mainFolder: "/Tree/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(BinaryTree<>), project: "LazinatorCollections", mainFolder: "/Tree/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(BinaryNode<>), project: "LazinatorCollections", mainFolder: "/Tree/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorLocationAwareTree<>), project: "LazinatorCollections", mainFolder: "/Tree/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorLocationAwareTree<>), project: "LazinatorCollections", mainFolder: "/Tree/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(DictionaryBucket<,>), project: "LazinatorCollections", mainFolder: "/Dictionary/", subfolder: "", ws);
@@ -158,8 +160,6 @@ public class MyOtherClass
         public async Task CodeGenerationProducesActualCode_Avl()
         {
             AdhocWorkspace ws = GetAdhocWorkspace();
-            await CompleteGenerateCode(typeof(BinaryTree<>), project: "LazinatorAvlCollections", mainFolder: "/Tree/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(BinaryNode<>), project: "LazinatorAvlCollections", mainFolder: "/Tree/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(AvlNode<>), project: "LazinatorAvlCollections", mainFolder: "/Avl/", subfolder: "ValueTree/", ws);
             await CompleteGenerateCode(typeof(AvlCountedNode<>), project: "LazinatorAvlCollections", mainFolder: "/Avl/", subfolder: "ValueTree/", ws);
             await CompleteGenerateCode(typeof(AvlAggregatedNode<>), project: "LazinatorAvlCollections", mainFolder: "/Avl/", subfolder: "ValueTree/", ws);
@@ -334,9 +334,13 @@ public class MyOtherClass
             {
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Attributes",
                 ReadCodeFile.GetCodeBasePath("LazinatorCollections"),
-                ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/Avl",
+                ReadCodeFile.GetCodeBasePath("LazinatorAvlCollections") + "/Avl",
+                ReadCodeFile.GetCodeBasePath("LazinatorAvlCollections") + "/Factories",
                 ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/ByteSpan",
                 ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/BitArray",
+                ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/Dictionary",
+                ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/Enumerators",
+                ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/OffsetList",
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Wrappers",
                 ReadCodeFile.GetCodeBasePath("LazinatorTests") + "/Examples",
             };

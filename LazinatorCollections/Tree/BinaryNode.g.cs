@@ -58,7 +58,7 @@ namespace LazinatorCollections.Tree
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Left_ByteIndex, _Left_ByteLength, false, false, null);
                         
-                        _Left = DeserializationFactory.Instance.CreateBaseOrDerivedType(145, () => new BinaryNode<T>(), childData, this); 
+                        _Left = DeserializationFactory.Instance.CreateBaseOrDerivedType(135, () => new BinaryNode<T>(), childData, this); 
                     }
                     _Left_Accessed = true;
                 } 
@@ -102,7 +102,7 @@ namespace LazinatorCollections.Tree
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Right_ByteIndex, _Right_ByteLength, false, false, null);
                         
-                        _Right = DeserializationFactory.Instance.CreateBaseOrDerivedType(145, () => new BinaryNode<T>(), childData, this); 
+                        _Right = DeserializationFactory.Instance.CreateBaseOrDerivedType(135, () => new BinaryNode<T>(), childData, this); 
                     }
                     _Right_Accessed = true;
                 } 
@@ -534,12 +534,12 @@ namespace LazinatorCollections.Tree
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual int LazinatorUniqueID => 145;
+        public virtual int LazinatorUniqueID => 135;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual bool ContainsOpenGenericParameters => true;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<BinaryNode<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(145, new Type[] { typeof(T) }));
+        public virtual LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<BinaryNode<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(135, new Type[] { typeof(T) }));
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
