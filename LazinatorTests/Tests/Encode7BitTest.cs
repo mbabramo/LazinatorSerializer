@@ -62,6 +62,7 @@ namespace LazinatorTests.Tests
         [InlineData(-356)]
         [InlineData(234231)]
         [InlineData(-345732)]
+        [InlineData(1000000224)]
         [InlineData(int.MaxValue)]
         [InlineData(int.MinValue)]
         public void SevenBitEncodingIntWorks(int valueToWrite)

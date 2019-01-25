@@ -8,7 +8,6 @@ using Lazinator.Core;
 using Xunit;
 using LazinatorTests.Examples.Structs;
 using Lazinator.Wrappers;
-using LazinatorCollections;
 using LazinatorCollections.Tuples;
 
 namespace LazinatorTests.Tests

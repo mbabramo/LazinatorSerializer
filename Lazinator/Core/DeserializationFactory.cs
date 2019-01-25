@@ -137,6 +137,7 @@ namespace Lazinator.Core
         /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
         public T CreateAbstractType<T>(LazinatorMemory storage, ILazinator parent = null) where T : ILazinator => (T)CreateFromBytesIncludingID(storage, parent);
 
+        static int DEBUG = 0;
         /// <summary>
         /// Create a Lazinator item from bytes and set a mechanism for informing its parent when the item has changed. This is generally used when the item is contained in a non-Lazinator collection, such as a .Net List. This assumes that the serialized bytes contain type information.
         /// </summary>
@@ -144,6 +145,7 @@ namespace Lazinator.Core
         /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
         public ILazinator CreateFromBytesIncludingID(LazinatorMemory storage, ILazinator parent = null)
         {
+            DEBUG++;
             if (storage.Memory.Length <= 1)
                 return null;
             int bytesSoFar = 0;
@@ -258,7 +260,7 @@ namespace Lazinator.Core
             }
         }
 
-        const int AddThisWhenSerializingExclusiveInterface = 1000000000;
+        const int AddThisWhenSerializingExclusiveInterface = 1_000_000_000;
 
         private void SetTypes(Type[] typesImplementingILazinator)
         {
@@ -293,6 +295,10 @@ namespace Lazinator.Core
                     if (attribute == null)
                         continue;
                     NonBinaryHashing[type] = LazinatorReflection.CorrespondingInterfaceHasUseNonbinaryHashAttribute(type);
+                    if (type.ToString().Contains("LazinatorLinkedListNode"))
+                    {
+                        var DEBUG = 0;
+                    }
                     uniqueID = attribute.UniqueID;
                 }
                 TypeToUniqueIDMap[type] = uniqueID;

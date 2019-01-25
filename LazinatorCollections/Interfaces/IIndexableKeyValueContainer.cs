@@ -1,10 +1,8 @@
 ﻿using Lazinator.Attributes;
-using Lazinator.ContainerLocation;
+using LazinatorCollections.Location;
 using LazinatorCollections.Tuples;
 using Lazinator.Core;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace LazinatorCollections.Interfaces
 {

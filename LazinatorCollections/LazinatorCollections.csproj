@@ -32,8 +32,4 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02" PrivateAssets="All" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="LocalPackages\" />
-  </ItemGroup>
 </Project>

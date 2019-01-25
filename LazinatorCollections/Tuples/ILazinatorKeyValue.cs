@@ -1,6 +1,5 @@
 ﻿using Lazinator.Attributes;
 using Lazinator.Core;
-using System;
 
 namespace LazinatorCollections
 {

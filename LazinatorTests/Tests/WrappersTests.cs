@@ -6,7 +6,6 @@ using Lazinator.Core;
 using Xunit;
 using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
-using Lazinator.List;
 
 namespace LazinatorTests.Tests
 {

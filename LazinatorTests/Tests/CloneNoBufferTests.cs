@@ -13,8 +13,6 @@ using LazinatorTests.Examples.Abstract;
 using LazinatorTests.Examples.Subclasses;
 using LazinatorCollections.Dictionary;
 using LazinatorTests.Examples.Tuples;
-using Lazinator.List;
-using LazinatorCollections.ListDerivatives;
 
 namespace LazinatorTests.Tests
 {

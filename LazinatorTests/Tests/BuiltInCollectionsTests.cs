@@ -10,11 +10,8 @@ using LazinatorTests.Examples.Tuples;
 using Xunit;
 using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
-using System.Diagnostics;
-using Lazinator.OffsetList;
+using LazinatorCollections.OffsetList;
 using LazinatorCollections.Tuples;
-using LazinatorCollections.ListDerivatives;
-using Lazinator.List;
 
 namespace LazinatorTests.Tests
 {

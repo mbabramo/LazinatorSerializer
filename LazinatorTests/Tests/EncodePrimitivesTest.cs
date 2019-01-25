@@ -102,10 +102,16 @@ namespace LazinatorTests.Tests
             }
         }
 
-        [Fact]
-        public void ReadOnlySpan_CanEncodeInt32()
+        [Theory]
+        [InlineData(1000000224)]
+        [InlineData(179021)]
+        [InlineData(100)]
+        [InlineData(0)]
+        [InlineData(128)]
+        [InlineData(129)]
+        [InlineData(-1)]
+        public void ReadOnlySpan_CanEncodeInt32(Int32 valueToWrite)
         {
-            Int32 valueToWrite = 179021;
             Int32 valueRead = 0;
             int numBytesExpected = 0, numBytesRead = 0;
             ReadOnlyMemory<byte> bytes;

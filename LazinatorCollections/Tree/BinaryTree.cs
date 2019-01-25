@@ -1,13 +1,10 @@
 ﻿using LazinatorCollections.Interfaces;
-using Lazinator.ContainerLocation;
+using LazinatorCollections.Location;
 using Lazinator.Core;
-using Lazinator.Support;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Lazinator.ContainerInterfaces;
 
 namespace LazinatorCollections.Tree
 {

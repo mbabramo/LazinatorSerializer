@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Lazinator.Core;
-using Lazinator.Support;
 
 namespace LazinatorCollections.Tuples
 {
