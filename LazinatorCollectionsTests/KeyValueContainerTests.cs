@@ -8,8 +8,8 @@ using Xunit;
 using Lazinator.Wrappers;
 using LazinatorCollections.Tuples;
 using LazinatorCollections.Interfaces;
-using LazinatorCollections.Avl.KeyValueTree;
-using LazinatorCollections.Factories;
+using LazinatorAvlCollections.Avl.KeyValueTree;
+using LazinatorAvlCollections.Factories;
 using LazinatorCollections.Location;
 
 namespace LazinatorCollectionsTests

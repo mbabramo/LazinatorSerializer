@@ -7,8 +7,8 @@ using Lazinator.Core;
 using Xunit;
 using Lazinator.Wrappers;
 using LazinatorCollections.Interfaces;
-using LazinatorCollections.Avl.ValueTree;
-using LazinatorCollections.Factories;
+using LazinatorAvlCollections.Avl.ValueTree;
+using LazinatorAvlCollections.Factories;
 using LazinatorCollections.Location;
 
 namespace LazinatorCollectionsTests

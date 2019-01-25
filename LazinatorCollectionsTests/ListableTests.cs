@@ -6,7 +6,7 @@ using LazinatorCollections;
 using Xunit;
 using Lazinator.Wrappers;
 using System.Diagnostics;
-using LazinatorCollections.Factories;
+using LazinatorAvlCollections.Factories;
 
 namespace LazinatorCollectionsTests
 {

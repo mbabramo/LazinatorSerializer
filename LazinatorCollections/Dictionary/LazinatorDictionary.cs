@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using LazinatorCollections.Enumerators;
 using LazinatorCollections.Interfaces;
-using LazinatorCollections.Tuples;
 using Lazinator.Core;
 
 namespace LazinatorCollections.Dictionary

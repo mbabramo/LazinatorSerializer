@@ -6,9 +6,9 @@ using FluentAssertions;
 using Lazinator.Wrappers;
 using Lazinator.Core;
 using LazinatorCollections;
-using LazinatorCollections.Avl;
+using LazinatorAvlCollections.Avl;
 using LazinatorCollections.Tuples;
-using LazinatorCollections.Factories;
+using LazinatorAvlCollections.Factories;
 using LazinatorCollections.Interfaces;
 
 namespace LazinatorCollectionsTests

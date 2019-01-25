@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LazinatorAvlCollections\LazinatorAvlCollections.csproj" />
     <ProjectReference Include="..\LazinatorCollections\LazinatorCollections.csproj" />
     <ProjectReference Include="..\Lazinator\Lazinator.csproj" />
   </ItemGroup>

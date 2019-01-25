@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Lazinator.Attributes;
-using Lazinator.Core;
-
-namespace LazinatorCollections.Location
+﻿namespace LazinatorCollections.Location
 {
     public interface IContainerLocation
     {

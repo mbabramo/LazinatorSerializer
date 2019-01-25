@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Lazinator.Core;
-using Lazinator.Wrappers;
 
 namespace LazinatorCollections.Enumerators
 {
