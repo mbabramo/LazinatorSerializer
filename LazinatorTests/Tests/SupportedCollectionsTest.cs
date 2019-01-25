@@ -556,9 +556,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorMultidimensionalArray()
         {
-            ArrayMultidimensional_Values GetObject()
+            ArrayMultidimensional GetObject()
             {
-                return new ArrayMultidimensional_Values()
+                return new ArrayMultidimensional()
                 {
                     MyArrayInt = new int[,] { { 1, 2, 3 }, { 4, 5, 6 } }
                 };
