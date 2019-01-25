@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using LazinatorCollections;
@@ -8,11 +7,6 @@ using Lazinator.Core;
 using Xunit;
 using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
-using LazinatorCollections.Dictionary;
-using Lazinator.Buffers;
-using LazinatorTests.Examples.NonAbstractGenerics;
-using LazinatorTests.Examples.Abstract;
-using LazinatorTests.Examples.Collections;
 using LazinatorCollections.Tuples;
 
 namespace LazinatorTests.Tests

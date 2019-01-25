@@ -6,7 +6,6 @@ using LazinatorTests.Examples;
 using Lazinator.Core;
 using Lazinator.Wrappers;
 using LazinatorTests.Examples.Abstract;
-using LazinatorCollections;
 using System.Linq;
 using Lazinator.Buffers;
 using LazinatorCollections.Tuples;
