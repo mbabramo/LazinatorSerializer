@@ -4,7 +4,7 @@
 
     public enum CollectionsTestsObjectIDs
     {
-        INonComparableWrapper = 2000,
+        INonComparableWrapper = 2100,
         INonComparableWrapperString,
         IStructWithBadHashFunction,
     }
