@@ -12,7 +12,7 @@ using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
 using LazinatorCollections.Tree;
 
-namespace LazinatorTests.Tests
+namespace LazinatorCollectionsTests
 {
     public class LazinatorTreeTests
     {

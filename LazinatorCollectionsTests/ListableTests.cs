@@ -14,8 +14,9 @@ using System.Diagnostics;
 using LazinatorCollections.Factories;
 using System.Collections;
 using LazinatorCollections.Interfaces;
+using LazinatorTests.Tests;
 
-namespace LazinatorTests.Tests
+namespace LazinatorCollectionsTests
 {
     public class ListableTests : SerializationDeserializationTestBase
     {

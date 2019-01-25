@@ -17,8 +17,9 @@ using LazinatorCollections.Avl.ValueTree;
 using LazinatorCollections.Avl.ListTree;
 using LazinatorCollections.Factories;
 using LazinatorCollections.Location;
+using LazinatorTests.Tests;
 
-namespace LazinatorTests.Tests
+namespace LazinatorCollectionsTests
 {
     public enum ValueContainerToUse
     {

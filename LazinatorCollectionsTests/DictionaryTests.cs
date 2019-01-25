@@ -14,7 +14,7 @@ using LazinatorCollections.Factories;
 using Lazinator.Examples.Structs;
 using LazinatorCollections.Interfaces;
 
-namespace LazinatorTests.Tests
+namespace LazinatorCollectionsTests
 {
 
     public class DictionaryTests

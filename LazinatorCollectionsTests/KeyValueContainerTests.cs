@@ -16,8 +16,9 @@ using LazinatorCollections.Interfaces;
 using LazinatorCollections.Avl.KeyValueTree;
 using LazinatorCollections.Factories;
 using LazinatorCollections.Location;
+using LazinatorTests.Tests;
 
-namespace LazinatorTests.Tests
+namespace LazinatorCollectionsTests
 {
     public enum KeyValueContainerType
     {
