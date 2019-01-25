@@ -3,7 +3,7 @@
 
     public enum LazinatorCollectionUniqueIDs
     { 
-        ILazinatorOffsetList = 100, // leave room for 
+        ILazinatorOffsetList = 200,
         ILazinatorList,
         ILazinatorFastReadList,
         ILazinatorBitArray,

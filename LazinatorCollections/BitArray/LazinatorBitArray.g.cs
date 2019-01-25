@@ -350,7 +350,7 @@ namespace LazinatorCollections.BitArray
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public int LazinatorUniqueID => 103;
+        public int LazinatorUniqueID => 203;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool ContainsOpenGenericParameters => false;
