@@ -12,12 +12,12 @@ namespace LazinatorCollections.Avl
 {
     using Lazinator.Attributes;
     using Lazinator.Buffers;
-    using LazinatorCollections.Interfaces;
-    using LazinatorCollections.Tuples;
     using Lazinator.Core;
     using Lazinator.Exceptions;
     using Lazinator.Support;
     using Lazinator.Wrappers;
+    using LazinatorCollections.Interfaces;
+    using LazinatorCollections.Tuples;
     using System;
     using System.Buffers;
     using System.Collections.Generic;

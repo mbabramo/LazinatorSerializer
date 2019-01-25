@@ -12,10 +12,10 @@ namespace LazinatorCollections.Avl.ValueTree
 {
     using Lazinator.Attributes;
     using Lazinator.Buffers;
-    using LazinatorCollections.Tree;
     using Lazinator.Core;
     using Lazinator.Exceptions;
     using Lazinator.Support;
+    using LazinatorCollections.Tree;
     using System;
     using System.Buffers;
     using System.Collections.Generic;

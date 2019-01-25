@@ -12,11 +12,11 @@ namespace LazinatorTests.Examples.Collections
 {
     using Lazinator.Attributes;
     using Lazinator.Buffers;
-    using LazinatorCollections;
     using Lazinator.Core;
     using Lazinator.Exceptions;
     using Lazinator.Support;
     using Lazinator.Wrappers;
+    using LazinatorCollections;
     using LazinatorTests.Examples;
     using System;
     using System.Buffers;
