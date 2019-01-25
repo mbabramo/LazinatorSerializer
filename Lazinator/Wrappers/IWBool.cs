@@ -7,7 +7,7 @@ namespace Lazinator.Wrappers
     [FixedLengthLazinator(1)]
     [ExcludeLazinatorVersionByte]
     [NonbinaryHash]
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IWBool, -1)]
+    [Lazinator((int)LazinatorCoreUniqueIDs.IWBool, -1)]
     interface IWBool : IW<bool>
     {
     }

@@ -7,7 +7,7 @@ namespace Lazinator.Wrappers
     [FixedLengthLazinator(0)]
     [ExcludeLazinatorVersionByte]
     [NonbinaryHash]
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IPlaceholder, -1)]
+    [Lazinator((int)LazinatorCoreUniqueIDs.IPlaceholder, -1)]
     interface IPlaceholder
     {
     }

@@ -3,7 +3,7 @@ using Lazinator.Collections;
 
 namespace Lazinator.Wrappers
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IWFloatArray, -1)]
+    [Lazinator((int)LazinatorCoreUniqueIDs.IWFloatArray, -1)]
     interface IWFloatArray : IW<float[]>
     {
     }

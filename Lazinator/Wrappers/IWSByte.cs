@@ -7,7 +7,7 @@ namespace Lazinator.Wrappers
     [FixedLengthLazinator(1)]
     [ExcludeLazinatorVersionByte]
     [NonbinaryHash]
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IWSByte, -1)]
+    [Lazinator((int)LazinatorCoreUniqueIDs.IWSByte, -1)]
     interface IWSByte : IW<sbyte>
     {
     }

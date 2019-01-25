@@ -7,7 +7,7 @@ namespace Lazinator.Wrappers
     [SmallLazinator]
     [ExcludeLazinatorVersionByte]
     [NonbinaryHash]
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IWDateTime, -1)]
+    [Lazinator((int)LazinatorCoreUniqueIDs.IWDateTime, -1)]
     interface IWDateTime : IW<DateTime>
     {
     }

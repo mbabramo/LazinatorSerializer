@@ -26,13 +26,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Collections\AvlListNodeOldDEBUG\AvlListNodeContents.cs" />
-    <Compile Remove="Collections\AvlListNodeOldDEBUG\AvlListNodeContents.g.cs" />
-    <Compile Remove="Collections\AvlListNodeOldDEBUG\AvlListNodeTree.cs" />
-    <Compile Remove="Collections\AvlListNodeOldDEBUG\AvlListNodeTree.g.cs" />
-    <Compile Remove="Collections\AvlListNodeOldDEBUG\AvlListNodeTreeEnumerator.cs" />
-    <Compile Remove="Collections\AvlListNodeOldDEBUG\IAvlListNodeContents.cs" />
-    <Compile Remove="Collections\AvlListNodeOldDEBUG\IAvlListNodeTree.cs" />
     <Compile Remove="Collections\Avl\AvlListNodeContents.cs" />
     <Compile Remove="Collections\Avl\AvlListNodeContents.g.cs" />
     <Compile Remove="Collections\Avl\AvlListNodeTree.cs" />
@@ -104,10 +97,6 @@
   
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-62925-02" PrivateAssets="All" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="Collections\AvlListNodeOldDEBUG\" />
   </ItemGroup>
   
 </Project>

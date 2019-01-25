@@ -7,7 +7,7 @@ namespace LazinatorTests.Examples
     [SmallLazinator]
     [ExcludeLazinatorVersionByte]
     [NonbinaryHash]
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IStructWithBadHashFunction, -1)]
+    [Lazinator((int)ExampleUniqueIDs.IStructWithBadHashFunction, -1)]
     interface IStructWithBadHashFunction : IW<int>
     {
     }

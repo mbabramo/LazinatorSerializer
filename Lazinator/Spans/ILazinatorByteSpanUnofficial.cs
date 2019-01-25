@@ -4,7 +4,7 @@ using Lazinator.Collections;
 
 namespace Lazinator.Spans
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IByteSpanUnofficial)]
+    [Lazinator((int)LazinatorCoreUniqueIDs.IByteSpanUnofficial)]
     interface ILazinatorByteSpanUnofficial
     {
         Memory<byte> ReadOrWrite { get; set; }

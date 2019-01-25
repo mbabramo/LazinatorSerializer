@@ -4,7 +4,7 @@
 
     public enum ExampleUniqueIDs
     {
-        ArrayMultidimensionalAndJagged = 200,
+        ArrayMultidimensionalAndJagged = 1000,
         Array_Values,
         ClosedGenericWithoutBase,
         DerivedLazinatorList,
@@ -85,6 +85,9 @@
         NonLazinatorInterchangeableStruct_LazinatorInterchange,
         ExampleGrandchild,
         SpanInDotNetList,
-        RecordLikeCollections
+        RecordLikeCollections,
+        IStructWithBadHashFunction,
+        INonComparableWrapper,
+        INonComparableWrapperString,
     }
 }

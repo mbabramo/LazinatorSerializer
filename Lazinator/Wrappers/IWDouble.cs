@@ -5,7 +5,7 @@ namespace Lazinator.Wrappers
 {
     [SmallLazinator]
     [NonbinaryHash]
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IWDouble, -1)]
+    [Lazinator((int)LazinatorCoreUniqueIDs.IWDouble, -1)]
     interface IWDouble : IW<double>
     {
     }

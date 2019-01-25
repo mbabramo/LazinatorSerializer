@@ -31,7 +31,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void CanGetTypeFromGenericTypeIDs_MaxOneTypeParameter()
         {
-            List<int> IDs = new List<int>() { (int)ExampleUniqueIDs.GenericFromBase, (int)ExampleUniqueIDs.GenericFromBase, (int)Lazinator.Collections.LazinatorCollectionUniqueIDs.IWInt };
+            List<int> IDs = new List<int>() { (int)ExampleUniqueIDs.GenericFromBase, (int)ExampleUniqueIDs.GenericFromBase, (int)Lazinator.LazinatorCoreUniqueIDs.IWInt };
             DeserializationFactory deserializationFactory = DeserializationFactory.Instance;
             (Type t, int numberIDsConsumed) = deserializationFactory.GetTypeBasedOnGenericIDType(new LazinatorGenericIDType(IDs));
             Type expectedType = typeof(GenericFromBase<GenericFromBase<WInt>>);
@@ -43,7 +43,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void CanGetTypeFromGenericTypeIDs_MultipleTypeParameters()
         {
-            List<int> IDs = new List<int>() { (int)Lazinator.Collections.LazinatorCollectionUniqueIDs.ILazinatorTriple, (int)ExampleUniqueIDs.GenericFromBase, (int)Lazinator.Collections.LazinatorCollectionUniqueIDs.IWInt, (int)Lazinator.Collections.LazinatorCollectionUniqueIDs.IWLong, (int)ExampleUniqueIDs.GenericFromBase, (int)ExampleUniqueIDs.GenericFromBase, (int)Lazinator.Collections.LazinatorCollectionUniqueIDs.IWByte };
+            List<int> IDs = new List<int>() { (int)Lazinator.Collections.LazinatorCollectionUniqueIDs.ILazinatorTriple, (int)ExampleUniqueIDs.GenericFromBase, (int)Lazinator.LazinatorCoreUniqueIDs.IWInt, (int)Lazinator.LazinatorCoreUniqueIDs.IWLong, (int)ExampleUniqueIDs.GenericFromBase, (int)ExampleUniqueIDs.GenericFromBase, (int)Lazinator.LazinatorCoreUniqueIDs.IWByte };
             DeserializationFactory deserializationFactory = DeserializationFactory.Instance;
             (Type t, int numberIDsConsumed) = deserializationFactory.GetTypeBasedOnGenericIDType(new LazinatorGenericIDType(IDs));
             Type expectedType = typeof(LazinatorTriple<GenericFromBase<WInt>, WLong, GenericFromBase<GenericFromBase<WByte>>>);

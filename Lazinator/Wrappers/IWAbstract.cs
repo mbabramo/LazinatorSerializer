@@ -3,7 +3,7 @@ using Lazinator.Collections;
 
 namespace Lazinator.Wrappers
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IWAbstract)]
+    [Lazinator((int)LazinatorCoreUniqueIDs.IWAbstract)]
     interface IWAbstract<T>
     {
         T Wrapped { get; set; }
