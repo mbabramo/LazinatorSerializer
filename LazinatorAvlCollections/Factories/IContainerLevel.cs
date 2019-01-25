@@ -3,7 +3,7 @@ using Lazinator.Attributes;
 
 namespace LazinatorAvlCollections.Factories
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IContainerLevel)]
+    [Lazinator((int)LazinatorAvlCollectionUniqueIDs.IContainerLevel)]
     public interface IContainerLevel
     {
         /// <summary>

@@ -5,7 +5,7 @@ using LazinatorCollections;
 
 namespace LazinatorAvlCollections.Avl.ListTree
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlWeightedNode)]
+    [Lazinator((int)LazinatorAvlCollectionUniqueIDs.IAvlWeightedNode)]
     internal interface IAvlListNode<T> where T : ILazinator
     {
         long LeftAggregate { get; set; }

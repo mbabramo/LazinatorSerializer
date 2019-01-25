@@ -5,7 +5,7 @@ using Lazinator.Wrappers;
 
 namespace LazinatorAvlCollections.Avl
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlHashSet)]
+    [Lazinator((int)LazinatorAvlCollectionUniqueIDs.IAvlHashSet)]
     public interface IAvlHashSet<T> where T : ILazinator
     {
         AvlDictionary<T, Placeholder> UnderlyingDictionary { get; set; }

@@ -8,7 +8,7 @@ using LazinatorCollections;
 
 namespace LazinatorAvlCollections.Avl.ListTree
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlIndexableListTree)]
+    [Lazinator((int)LazinatorAvlCollectionUniqueIDs.IAvlIndexableListTree)]
     internal interface IAvlIndexableListTree<T> where T : ILazinator
     {
         [SetterAccessibility("protected")]

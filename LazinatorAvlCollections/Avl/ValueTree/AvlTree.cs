@@ -693,7 +693,7 @@ namespace LazinatorAvlCollections.Avl.ValueTree
             }
         }
 
-        protected internal override void Replace(BinaryNode<T> target, BinaryNode<T> source)
+        protected override void Replace(BinaryNode<T> target, BinaryNode<T> source)
         {
             base.Replace(target, source);
             ((AvlNode<T>)target).Balance = ((AvlNode<T>)source).Balance;

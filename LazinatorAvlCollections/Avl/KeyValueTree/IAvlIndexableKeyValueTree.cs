@@ -5,7 +5,7 @@ using LazinatorCollections;
 
 namespace LazinatorAvlCollections.Avl.KeyValueTree
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlIndexableKeyValueTree)]
+    [Lazinator((int)LazinatorAvlCollectionUniqueIDs.IAvlIndexableKeyValueTree)]
     internal interface IAvlIndexableKeyValueTree<TKey, TValue>
         where TKey : ILazinator
         where TValue : ILazinator

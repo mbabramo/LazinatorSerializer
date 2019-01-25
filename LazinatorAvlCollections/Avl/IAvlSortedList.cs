@@ -6,7 +6,7 @@ using System;
 
 namespace LazinatorAvlCollections.Avl
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlSortedList)]
+    [Lazinator((int)LazinatorAvlCollectionUniqueIDs.IAvlSortedList)]
     interface IAvlSortedList<T> where T : ILazinator, IComparable<T>
     {
         [SetterAccessibility("protected")]

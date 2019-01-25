@@ -6,7 +6,7 @@ using System;
 
 namespace LazinatorAvlCollections.Avl
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlSortedDictionary)]
+    [Lazinator((int)LazinatorAvlCollectionUniqueIDs.IAvlSortedDictionary)]
     public interface IAvlSortedDictionary<TKey, TValue>
         where TKey : ILazinator, IComparable<TKey>
         where TValue : ILazinator

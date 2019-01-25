@@ -5,7 +5,7 @@ using LazinatorCollections.Interfaces;
 
 namespace LazinatorAvlCollections.Factories
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IContainerFactory)]
+    [Lazinator((int)LazinatorAvlCollectionUniqueIDs.IContainerFactory)]
     public interface IContainerFactory 
     {
         ContainerLevel ThisLevel { get; set; }

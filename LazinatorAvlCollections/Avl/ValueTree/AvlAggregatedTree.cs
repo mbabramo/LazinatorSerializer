@@ -5,6 +5,7 @@ using Lazinator.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using LazinatorCollections;
 
 namespace LazinatorAvlCollections.Avl.ValueTree
 {

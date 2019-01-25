@@ -4,7 +4,7 @@ using System;
 
 namespace LazinatorAvlCollections.Avl.ValueTree
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlAggregatedNode)]
+    [Lazinator((int)LazinatorAvlCollectionUniqueIDs.IAvlAggregatedNode)]
     public interface IAvlAggregatedNode<T> where T : ILazinator
     {
         long LeftAggregatedCount { get; set; }

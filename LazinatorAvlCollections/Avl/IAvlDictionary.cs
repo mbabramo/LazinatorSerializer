@@ -7,7 +7,7 @@ using System;
 
 namespace LazinatorAvlCollections.Avl
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlDictionary)]
+    [Lazinator((int)LazinatorAvlCollectionUniqueIDs.IAvlDictionary)]
     public interface IAvlDictionary<TKey, TValue>
         where TKey : ILazinator
         where TValue : ILazinator

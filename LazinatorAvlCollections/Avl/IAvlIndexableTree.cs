@@ -4,7 +4,7 @@ using System;
 
 namespace LazinatorAvlCollections.Avl
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlIndexableTree)]
+    [Lazinator((int)LazinatorAvlCollectionUniqueIDs.IAvlIndexableTree)]
     public interface IAvlIndexableTree<T> where T : ILazinator
     {
     }

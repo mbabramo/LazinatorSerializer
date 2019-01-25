@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Lazinator.Buffers;
-using LazinatorAvlCollections.Avl;
-using LazinatorAvlCollections.Avl.KeyValueTree;
-using LazinatorAvlCollections.Factories;
 using Lazinator.Core;
 using Lazinator.Wrappers;
+using LazinatorAvlCollections.Avl.KeyValueTree;
+using LazinatorAvlCollections.Factories;
 using Xunit;
 
 namespace LazinatorTests.AVL

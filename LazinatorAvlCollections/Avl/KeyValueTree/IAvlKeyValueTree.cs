@@ -8,7 +8,7 @@ using LazinatorCollections;
 
 namespace LazinatorAvlCollections.Avl.KeyValueTree
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlKeyValueTree)]
+    [Lazinator((int)LazinatorAvlCollectionUniqueIDs.IAvlKeyValueTree)]
     public interface IAvlKeyValueTree<TKey, TValue>
         where TKey : ILazinator
         where TValue : ILazinator

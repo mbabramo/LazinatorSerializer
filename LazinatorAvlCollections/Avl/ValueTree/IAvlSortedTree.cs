@@ -5,7 +5,7 @@ using LazinatorCollections.Interfaces;
 
 namespace LazinatorAvlCollections.Avl.ValueTree
 {
-    [Lazinator((int)LazinatorCollectionUniqueIDs.IAvlSortedTree)]
+    [Lazinator((int)LazinatorAvlCollectionUniqueIDs.IAvlSortedTree)]
     public interface IAvlSortedTree<T> : ISortedMultivalueContainer<T> where T : IComparable<T>, ILazinator
     {
     }
