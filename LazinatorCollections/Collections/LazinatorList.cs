@@ -17,7 +17,7 @@ using Lazinator.Collections.Location;
 namespace Lazinator.Collections
 {
     [Implements(new string[] { "PreSerialization", "EnumerateLazinatorDescendants", "OnFreeInMemoryObjects", "AssignCloneProperties", "OnUpdateDeserializedChildren", "OnPropertiesWritten", "OnForEachLazinator" })]
-    public partial class LazinatorList<T> : IList<T>, IEnumerable, ILazinatorList<T>, ILazinatorList, ILazinatorListable<T>, IIndexableMultivalueContainer<T> where T : ILazinator
+    public partial class LazinatorList<T> : IList, IList<T>, IEnumerable, ILazinatorList<T>, ILazinatorList, ILazinatorListable<T>, IIndexableMultivalueContainer<T> where T : ILazinator
     {
         #region Construction 
 
@@ -653,6 +653,56 @@ namespace Lazinator.Collections
         public void RemoveAt(long index)
         {
             RemoveAt((int)index);
+        }
+
+        #endregion
+
+        #region IList
+
+        public bool IsFixedSize => false;
+
+        public bool IsSynchronized => false;
+
+        public object SyncRoot => this;
+
+        object IList.this[int index] { get => this[index]; set => this[index] = (T) value; }
+
+        public int Add(object value)
+        {
+            Add((T)value);
+            return Count;
+        }
+
+        public bool Contains(object value)
+        {
+            if (value is T t)
+                return Contains(t);
+            return false;
+        }
+
+        public int IndexOf(object value)
+        {
+            if (value is T t)
+                return IndexOf(t);
+            return -1;
+        }
+
+        public void Insert(int index, object value)
+        {
+            if (value is T t)
+                Insert(index, t);
+        }
+
+        public void Remove(object value)
+        {
+            if (value is T t)
+                Remove(t);
+        }
+
+        public void CopyTo(Array array, int index)
+        {
+            for (int i = 0; i < Count; i++)
+                array.SetValue(this[i], index + i);
         }
 
         #endregion

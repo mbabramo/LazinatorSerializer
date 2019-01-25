@@ -337,9 +337,10 @@ public class MyOtherClass
             return new List<string>()
             {
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Attributes",
-                ReadCodeFile.GetCodeBasePath("Lazinator") + "/Collections",
-                ReadCodeFile.GetCodeBasePath("Lazinator") + "/Collections/Avl",
-                ReadCodeFile.GetCodeBasePath("Lazinator") + "/Spans",
+                ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/Collections",
+                ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/Collections/Avl",
+                ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/Collections/ByteSpan",
+                ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/Collections/BitArray",
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Wrappers",
                 ReadCodeFile.GetCodeBasePath("LazinatorTests") + "/Examples",
             };

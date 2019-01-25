@@ -32,9 +32,9 @@ namespace LazinatorTests.Support
         public static string GetCodeBasePath(string project = "")
         {
             string codeBaseLocation = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
-            string projectInOverallFolder = "LazinatorSerializer/" + project;
+            string projectInOverallFolder = "LazinatorSerializer/" ;
             string throughProject =
-                codeBaseLocation.Substring(0, codeBaseLocation.IndexOf(projectInOverallFolder) + projectInOverallFolder.Length);
+                codeBaseLocation.Substring(0, codeBaseLocation.IndexOf(projectInOverallFolder) + projectInOverallFolder.Length) + project;
             string removingPrefix = throughProject.Substring("file:///".Length);
             return removingPrefix;
         }

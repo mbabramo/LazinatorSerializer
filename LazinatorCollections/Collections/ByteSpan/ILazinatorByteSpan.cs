@@ -3,7 +3,7 @@
 namespace Lazinator.Collections.ByteSpan
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.IByteSpan)]
-    [UnofficiallyIncorporateInterface("Lazinator.Spans.ILazinatorByteSpanUnofficial", "internal")]
+    [UnofficiallyIncorporateInterface("Lazinator.Collections.ByteSpan.ILazinatorByteSpanUnofficial", "internal")]
     public interface ILazinatorByteSpan
     {
     }
