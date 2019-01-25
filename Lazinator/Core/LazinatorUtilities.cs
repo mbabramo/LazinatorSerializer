@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Buffers;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipelines;
 using System.Linq;
 using System.Text;
 using Lazinator.Buffers;
-using Lazinator.Collections;
 using Lazinator.Exceptions;
 using Lazinator.Support;
 
@@ -542,7 +542,7 @@ namespace Lazinator.Core
                 comparison = $"{(firstHierarchy == null ? "First was null; second was not" : "Second was null; first was not")}";
                 return false;
             }
-            if (firstHierarchy is ILazinatorList firstList && secondHierarchy is ILazinatorList secondList)
+            if (firstHierarchy is IList firstList && secondHierarchy is IList secondList)
             {
                 if (firstList.Count == secondList.Count)
                     return true;

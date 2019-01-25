@@ -1,6 +1,5 @@
 ﻿using System;
 using Lazinator.Attributes;
-using Lazinator.Collections;
 
 namespace Lazinator.Wrappers
 {

@@ -2,7 +2,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace Lazinator.Spans
+namespace Lazinator.Collections.ByteSpan
 {
     [Implements(new string[] { "PreSerialization", "PostDeserialization" })]
     public partial class LazinatorByteSpan : ILazinatorByteSpan

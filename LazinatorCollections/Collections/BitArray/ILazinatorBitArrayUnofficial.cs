@@ -1,8 +1,7 @@
 ﻿using Lazinator.Attributes;
-using Lazinator.Collections;
 using System;
 
-namespace Lazinator.Spans
+namespace Lazinator.Collections.BitArray
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorBitArrayUnofficial)]
     internal interface ILazinatorBitArrayUnofficial

@@ -281,12 +281,8 @@ namespace LazinatorTests.Tests
                         instruction = new InsertValueInstruction();
                     else
                         instruction = new RemoveInstruction();
-                    if (rep == 0 && i == 4)
-                    {
-                        var DEBUG = 0;
-                    }
                     instruction.Execute(this, container, list);
-                    VerifyEntireList(container, list); // DEBUG
+                    // VerifyEntireList(container, list); 
                 }
                 VerifyEntireList(container, list);
                 if (container is ISortedValueContainer<T>)

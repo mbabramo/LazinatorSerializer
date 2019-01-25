@@ -81,5 +81,7 @@
         IKeyAndValueEnumerators,
         IAggregatedMultivalueContainer,
         IAggregatedValueContainer,
+        IByteSpanUnofficial,
+        IByteSpan,
     }
 }

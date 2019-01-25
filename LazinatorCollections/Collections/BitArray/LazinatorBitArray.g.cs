@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Lazinator.Spans
+namespace Lazinator.Collections.BitArray
 {
     using Lazinator.Attributes;
     using Lazinator.Buffers;

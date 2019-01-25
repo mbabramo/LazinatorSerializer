@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using System;
 using System.Diagnostics.Contracts;
-using System.Runtime.InteropServices;
 
-namespace Lazinator.Spans
+namespace Lazinator.Collections.BitArray
 {
     // A vector of bits.  Use this to store bits efficiently, without having to do bit 
     // shifting yourself.

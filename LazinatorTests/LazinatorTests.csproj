@@ -30,6 +30,7 @@
   <ItemGroup>
     <AdditionalFiles Include="LazinatorConfig.json" />
     <ProjectReference Include="..\LazinatorAnalyzer\LazinatorAnalyzer.csproj" />
+    <ProjectReference Include="..\LazinatorCollections\LazinatorCollections.csproj" />
     <ProjectReference Include="..\Lazinator\Lazinator.csproj" />
   </ItemGroup>
   

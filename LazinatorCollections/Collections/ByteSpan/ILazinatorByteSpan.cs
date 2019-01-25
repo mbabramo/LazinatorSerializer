@@ -1,9 +1,8 @@
 ﻿using Lazinator.Attributes;
-using Lazinator.Collections;
 
-namespace Lazinator.Spans
+namespace Lazinator.Collections.ByteSpan
 {
-    [Lazinator((int)LazinatorCoreUniqueIDs.IByteSpan)]
+    [Lazinator((int)LazinatorCollectionUniqueIDs.IByteSpan)]
     [UnofficiallyIncorporateInterface("Lazinator.Spans.ILazinatorByteSpanUnofficial", "internal")]
     public interface ILazinatorByteSpan
     {

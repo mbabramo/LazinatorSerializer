@@ -26,65 +26,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Collections\Avl\AvlListNodeContents.cs" />
-    <Compile Remove="Collections\Avl\AvlListNodeContents.g.cs" />
-    <Compile Remove="Collections\Avl\AvlListNodeTree.cs" />
-    <Compile Remove="Collections\Avl\AvlListNodeTree.g.cs" />
-    <Compile Remove="Collections\Avl\AvlListNodeTreeEnumerator.cs" />
-    <Compile Remove="Collections\Avl\AvlOldNode.cs" />
-    <Compile Remove="Collections\Avl\AvlOldNode.g.cs" />
-    <Compile Remove="Collections\Avl\AvlOldTree.cs" />
-    <Compile Remove="Collections\Avl\AvlOldTree.g.cs" />
-    <Compile Remove="Collections\Avl\IAvlListNodeContents.cs" />
-    <Compile Remove="Collections\Avl\IAvlListNodeTree.cs" />
-    <Compile Remove="Collections\Avl\IAvlOldNode.cs" />
-    <Compile Remove="Collections\Avl\IAvlOldTree.cs" />
-    <Compile Remove="Collections\Factories\AvlDictionaryFactory.cs" />
-    <Compile Remove="Collections\Factories\AvlIndexableTreeFactory.cs" />
-    <Compile Remove="Collections\Factories\AvlIndexableTreeFactory.g.cs" />
-    <Compile Remove="Collections\Factories\AvlListFactory.cs" />
-    <Compile Remove="Collections\Factories\AvlListFactory.g.cs" />
-    <Compile Remove="Collections\Factories\AvlListNodeTreeFactory.cs" />
-    <Compile Remove="Collections\Factories\AvlListNodeTreeFactory.g.cs" />
-    <Compile Remove="Collections\Factories\AvlListTreeFactory.cs" />
-    <Compile Remove="Collections\Factories\AvlListTreeFactory.g.cs" />
-    <Compile Remove="Collections\Factories\AvlSortedDictionaryFactory.cs" />
-    <Compile Remove="Collections\Factories\AvlSortedDictionaryFactory.g.cs" />
-    <Compile Remove="Collections\Factories\AvlSortedIndexableTreeFactory.cs" />
-    <Compile Remove="Collections\Factories\AvlSortedIndexableTreeFactory.g.cs" />
-    <Compile Remove="Collections\Factories\AvlSortedKeyMultivalueTreeFactory.cs" />
-    <Compile Remove="Collections\Factories\AvlSortedKeyMultivalueTreeFactory.g.cs" />
-    <Compile Remove="Collections\Factories\AvlSortedListFactory.cs" />
-    <Compile Remove="Collections\Factories\AvlSortedListFactory.g.cs" />
-    <Compile Remove="Collections\Factories\IAvlDictionaryFactory.cs" />
-    <Compile Remove="Collections\Factories\IAvlIndexableTreeFactory.cs" />
-    <Compile Remove="Collections\Factories\IAvlListFactory.cs" />
-    <Compile Remove="Collections\Factories\IAvlListNodeTreeFactory.cs" />
-    <Compile Remove="Collections\Factories\IAvlListTreeFactory.cs" />
-    <Compile Remove="Collections\Factories\IAvlSortedDictionaryFactory.cs" />
-    <Compile Remove="Collections\Factories\IAvlSortedIndexableTreeFactory.cs" />
-    <Compile Remove="Collections\Factories\IAvlSortedKeyValueTreeFactory.cs" />
-    <Compile Remove="Collections\Factories\IAvlSortedListFactory.cs" />
-    <Compile Remove="Collections\Factories\IIndexableContainerFactory.cs" />
-    <Compile Remove="Collections\Factories\ILazinatorDictionaryableFactory.cs" />
-    <Compile Remove="Collections\Factories\ILazinatorLinkedListFactory.cs" />
-    <Compile Remove="Collections\Factories\ILazinatorListableFactory.cs" />
-    <Compile Remove="Collections\Factories\ILazinatorListFactory.cs" />
-    <Compile Remove="Collections\Factories\ILazinatorSortedFactory.cs" />
-    <Compile Remove="Collections\Factories\ILazinatorSortedLinkedListFactory.cs" />
-    <Compile Remove="Collections\Factories\ILazinatorSortedListFactory.cs" />
-    <Compile Remove="Collections\Factories\ISortedIndexableMultivalueContainerFactory.cs" />
-    <Compile Remove="Collections\Factories\LazinatorLinkedListFactory.cs" />
-    <Compile Remove="Collections\Factories\LazinatorLinkedListFactory.g.cs" />
-    <Compile Remove="Collections\Factories\LazinatorListFactory.cs" />
-    <Compile Remove="Collections\Factories\LazinatorListFactory.g.cs" />
-    <Compile Remove="Collections\Factories\LazinatorSortedLinkedListFactory.cs" />
-    <Compile Remove="Collections\Factories\LazinatorSortedLinkedListFactory.g.cs" />
-    <Compile Remove="Collections\Factories\LazinatorSortedListFactory.cs" />
-    <Compile Remove="Collections\Factories\LazinatorSortedListFactory.g.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis" Version="2.9.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.9.0" />
     <PackageReference Include="System.IO.Pipelines" Version="4.5.2" />

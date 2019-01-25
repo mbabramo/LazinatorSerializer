@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Lazinator
+﻿namespace Lazinator
 {
     public enum LazinatorCoreUniqueIDs
     {
@@ -48,7 +44,5 @@ namespace Lazinator
         IWIntArray,
         IWLongArray,
         IPlaceholder,
-        IByteSpan,
-        IByteSpanUnofficial,
     }
 }
