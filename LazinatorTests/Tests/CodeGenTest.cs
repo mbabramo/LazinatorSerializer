@@ -348,6 +348,8 @@ public class MyOtherClass
 
         private static async Task CompleteGenerateCode(Type existingType, string project, string mainFolder, string subfolder, AdhocWorkspace ws)
         {
+            if (mainFolder == "" && subfolder == "")
+                mainFolder = "/";
             if (existingType.IsInterface)
                 throw new Exception("Can complete generate code only on class implementing interface, not interface itself.");
             string projectPath = ReadCodeFile.GetCodeBasePath(project);
