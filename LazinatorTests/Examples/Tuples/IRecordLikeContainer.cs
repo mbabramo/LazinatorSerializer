@@ -1,4 +1,5 @@
 ﻿using Lazinator.Attributes;
+using System.Collections.Generic;
 
 namespace LazinatorTests.Examples.Tuples
 {

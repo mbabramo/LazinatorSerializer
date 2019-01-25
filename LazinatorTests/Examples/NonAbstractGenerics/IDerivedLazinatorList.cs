@@ -1,10 +1,10 @@
 ﻿using Lazinator.Attributes;
-using Lazinator.Core;
 using LazinatorCollections;
+using Lazinator.Core;
 
-namespace LazinatorCollectionsTests
+namespace LazinatorTests.Examples
 {
-    [Lazinator((int) CollectionsTestsObjectIDs.DerivedLazinatorList)]
+    [Lazinator((int) ExampleUniqueIDs.DerivedLazinatorList)]
     interface IDerivedLazinatorList<T> : ILazinatorList<T> where T : ILazinator
     {
         string MyListName { get; set; }

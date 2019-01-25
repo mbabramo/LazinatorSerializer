@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentAssertions;
+using LazinatorCollections;
 using LazinatorTests.Examples;
 using Lazinator.Support;
 using Lazinator.Core;

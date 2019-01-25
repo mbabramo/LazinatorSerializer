@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LazinatorCollections;
 using LazinatorTests.Examples;
 using Lazinator.Core;
 using Xunit;
@@ -10,6 +11,7 @@ using LazinatorTests.Examples.NonAbstractGenerics;
 using LazinatorTests.Examples.Collections;
 using LazinatorTests.Examples.Abstract;
 using LazinatorTests.Examples.Subclasses;
+using LazinatorCollections.Dictionary;
 using LazinatorTests.Examples.Tuples;
 
 namespace LazinatorTests.Tests
@@ -359,6 +361,44 @@ namespace LazinatorTests.Tests
             VerifyCloningEquivalence(() => GetWReadOnlySpanChar());
         }
 
+        [Fact]
+        public void CloneWithoutBuffer_LazinatorList_Example()
+        {
+            VerifyCloningEquivalence(() => new LazinatorList<Example>() { GetExample(1), GetExample(1) });
+        }
+
+        [Fact]
+        public void CloneWithoutBuffer_LazinatorList_WInt()
+        {
+            VerifyCloningEquivalence(() => new LazinatorList<WInt>() { 3 });
+        }
+
+        [Fact]
+        public void CloneWithoutBuffer_LazinatorArray_Example()
+        {
+            LazinatorArray<Example> GetArray()
+            {
+                LazinatorArray<Example> l = new LazinatorArray<Example>(3);
+                l[0] = GetExample(1);
+                l[1] = GetExample(1);
+                l[2] = null;
+                return l;
+            }
+            VerifyCloningEquivalence(() => GetArray());
+        }
+
+        [Fact]
+        public void CloneWithoutBuffer_LazinatorDictionary()
+        {
+            LazinatorDictionary<WInt, Example> GetDictionary()
+            {
+                LazinatorDictionary<WInt, Example> d = new LazinatorDictionary<WInt, Example>();
+                d[23] = GetExample(1);
+                d[0] = GetExample(2);
+                return d;
+            }
+            VerifyCloningEquivalence(() => GetDictionary());
+        }
 
         [Fact]
         public void CloneWithoutBuffer_StructTupleWithStructs()

@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
+using LazinatorCollections;
 using LazinatorTests.Examples;
+using LazinatorTests.Examples.Collections;
 using Lazinator.Core;
 using Xunit;
 using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
 using System.Dynamic;
+using System;
 using System.Text;
 
 namespace LazinatorTests.Tests
@@ -89,6 +92,28 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void LazinatorListDirtinessEnumerationWorks()
+        {
+            LazinatorListContainer nonGenericContainer = new LazinatorListContainer()
+            {
+            };
+            nonGenericContainer.MyList = new LazinatorList<ExampleChild>();
+
+            var v2 = nonGenericContainer.CloneLazinatorTyped();
+            v2.MyList.Add(GetExampleChild(1));
+            v2.MyList.Add(GetExampleChild(1));
+            v2.MyList.Add(GetExampleChild(1));
+
+            var results = v2.GetDirtyNodes(true);
+            results.Count().Should().Be(7);
+
+            var v5 = v2.CloneLazinatorTyped();
+            v5.MyList[1].MyLong = -98765;
+            results = v5.GetDirtyNodes(true);
+            results.Count().Should().Be(1);
+        }
+
+        [Fact]
         public void ViewLazinatorChildrenWorks()
         {
             int GetCount(ExpandoObject eo)
@@ -107,6 +132,47 @@ namespace LazinatorTests.Tests
             GetCount(deserializedOnly).Should().Be(2); // counting a struct that will always be included
             all = e.ViewLazinatorChildren();
             (GetCount(all) > 1).Should().BeTrue();
+        }
+
+        [Fact]
+        public void LazinatorListEnumerateNodesWorks()
+        {
+            LazinatorList<Example> l = new LazinatorList<Example>() { GetExample(1), GetExample(1) };
+            var c = l.CloneLazinatorTyped();
+            var results2 = c.EnumerateAllNodes().ToList();
+            results2[0].Should().Be(c);
+            results2[1].LazinatorParents.LastAdded.Should().Be(c);
+        }
+
+        [Fact]
+        public void LazinatorListForEachLazinatorWorks()
+        {
+            LazinatorList<WString> l = new LazinatorList<WString>() { "hello", "world" };
+            StringBuilder sb = new StringBuilder();
+            var c = l.ForEachLazinator(x =>
+            {
+                if (x is WString ws)
+                    sb.Append(ws.WrappedValue);
+                return x;
+            }, true, true);
+            sb.ToString().Should().Be("helloworld");
+            l = l.CloneLazinatorTyped();
+            sb = new StringBuilder();
+            c = l.ForEachLazinator(x =>
+            {
+                if (x is WString ws)
+                    sb.Append(ws.WrappedValue);
+                return x;
+            }, true, true);
+            sb.ToString().Should().Be("");
+            c = l.ForEachLazinator(x =>
+            {
+                if (x is WString ws)
+                    sb.Append(ws.WrappedValue);
+                return x;
+            }, false, true); // now deserialize
+            sb.ToString().Should().Be("helloworld");
+
         }
 
         [Fact]

@@ -8,7 +8,8 @@ using Lazinator.Core;
 using Xunit;
 using LazinatorTests.Examples.Structs;
 using Lazinator.Wrappers;
-using LazinatorTests.Examples.NonAbstractGenerics;
+using LazinatorCollections;
+using LazinatorCollections.Tuples;
 
 namespace LazinatorTests.Tests
 {
@@ -192,13 +193,13 @@ namespace LazinatorTests.Tests
         [Fact]
         public void DirtinessNotificationOccursWithStructAsGeneric_ChangingFromDefault()
         {
-            GenericTuple<ExampleStructContainingClasses, ExampleStructContainingClasses> e = new GenericTuple<ExampleStructContainingClasses, ExampleStructContainingClasses>();
+            LazinatorTuple<ExampleStructContainingClasses, ExampleStructContainingClasses> e = new LazinatorTuple<ExampleStructContainingClasses, ExampleStructContainingClasses>();
             var c = e.CloneLazinatorTyped();
             c.Item1 = new ExampleStructContainingClasses() { MyChar = 'A' }; // because Item1 is set, IsDirty notification occurs
             c.IsDirty.Should().BeTrue();
 
             // The following code is invalid and thus doesn't present a problem.
-            //e = new GenericTuple<ExampleStructContainingClasses, ExampleStructContainingClasses>();
+            //e = new LazinatorTuple<ExampleStructContainingClasses, ExampleStructContainingClasses>();
             //c = e.CloneLazinatorTyped();
             //c.Item1.MyChar = 'A' ; // INVALID -- can't change MyChar b/c Item1 is a struct. Instead, we would do c.Item1 = c.Item1 { MyChar = 'A' }, which works as above
             //c.IsDirty.Should().BeTrue();
@@ -207,7 +208,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void DirtinessNotificationOccursWithStructAsGeneric()
         {
-            GenericTuple<ExampleStructContainingClasses, ExampleStructContainingClasses> e = new GenericTuple<ExampleStructContainingClasses, ExampleStructContainingClasses>
+            LazinatorTuple<ExampleStructContainingClasses, ExampleStructContainingClasses> e = new LazinatorTuple<ExampleStructContainingClasses, ExampleStructContainingClasses>
             (
                 new ExampleStructContainingClasses() { MyChar = 'B' },
                 new ExampleStructContainingClasses() { MyChar = 'C' }
@@ -220,7 +221,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void DirtinessNotificationOccursWithClassAsGeneric()
         {
-            GenericTuple<ExampleChild, ExampleChild> e = new GenericTuple<ExampleChild, ExampleChild>
+            LazinatorTuple<ExampleChild, ExampleChild> e = new LazinatorTuple<ExampleChild, ExampleChild>
             (
                 new ExampleChild() { MyShort = 23 },
                 new ExampleChild() { MyShort = 24 }
@@ -229,7 +230,7 @@ namespace LazinatorTests.Tests
             c.Item1 = new ExampleChild() { MyShort = 25 };
             c.IsDirty.Should().BeTrue();
 
-            e = new GenericTuple<ExampleChild, ExampleChild>
+            e = new LazinatorTuple<ExampleChild, ExampleChild>
             (
                 new ExampleChild() { MyShort = 23 },
                 new ExampleChild() { MyShort = 24 }
@@ -237,7 +238,7 @@ namespace LazinatorTests.Tests
             c = e.CloneLazinatorTyped();
             c.IsDirty.Should().BeFalse();
 
-            e = new GenericTuple<ExampleChild, ExampleChild>
+            e = new LazinatorTuple<ExampleChild, ExampleChild>
             (
                 new ExampleChild() { MyShort = 23 },
                 new ExampleChild() { MyShort = 24 }
@@ -285,7 +286,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void DirtinessWithOpenGenericStructChild()
         {
-            GenericTuple<WInt, WInt> e = new GenericTuple<WInt, WInt>
+            LazinatorTuple<WInt, WInt> e = new LazinatorTuple<WInt, WInt>
             {
                 Item1 = 3, 
                 Item2 = 4

@@ -4,6 +4,8 @@ using FluentAssertions;
 using LazinatorTests.Examples.Collections;
 using Lazinator.Core;
 using Xunit;
+using LazinatorCollections.ByteSpan;
+using LazinatorCollections.BitArray;
 
 namespace LazinatorTests.Tests
 {
@@ -102,6 +104,55 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void LazinatorByteSpan()
+        {
+            byte[] originalBytes = new byte[] { 1, 2, 3 };
+            LazinatorByteSpan lazinatorBytes = new LazinatorByteSpan(originalBytes);
+            lazinatorBytes.GetIsReadOnlyMode().Should().BeFalse();
+            LazinatorByteSpan clone = lazinatorBytes.CloneLazinatorTyped();
+            byte[] bytesConverted = clone.GetSpanToReadOnly().ToArray();
+            clone.GetIsReadOnlyMode().Should().BeTrue();
+            bytesConverted.SequenceEqual(originalBytes).Should().BeTrue();
+            clone.GetSpanToReadOrWrite()[0] = 4;
+            clone.GetIsReadOnlyMode().Should().BeFalse();
+            LazinatorByteSpan clone2 = clone.CloneLazinatorTyped();
+            clone2.GetIsReadOnlyMode().Should().BeTrue();
+            byte[] bytesConverted2 = clone2.GetSpanToReadOnly().ToArray();
+            clone2.GetIsReadOnlyMode().Should().BeTrue();
+            byte[] expectedBytes = new byte[] { 4, 2, 3 };
+            bytesConverted2.SequenceEqual(expectedBytes).Should().BeTrue();
+
+            byte[] anotherSequence = new byte[] { 10, 11, 12, 13 };
+            clone2.SetMemory(anotherSequence);
+            clone2.GetIsReadOnlyMode().Should().BeFalse();
+            LazinatorByteSpan clone3 = clone2.CloneLazinatorTyped();
+            clone3.GetIsReadOnlyMode().Should().BeTrue();
+            byte[] bytesConverted3 = clone3.GetSpanToReadOnly().ToArray();
+            bytesConverted3.SequenceEqual(anotherSequence).Should().BeTrue();
+
+            byte[] lastSequence = new byte[] { 20, 21, 22, 23, 24, 25 };
+            clone3.SetReadOnlySpan(lastSequence);
+            clone3.GetIsReadOnlyMode().Should().BeTrue();
+            LazinatorByteSpan clone4 = clone3.CloneLazinatorTyped();
+            clone4.GetIsReadOnlyMode().Should().BeTrue();
+            byte[] bytesConverted4 = clone4.GetSpanToReadOnly().ToArray();
+            bytesConverted4.SequenceEqual(lastSequence).Should().BeTrue();
+        }
+
+        [Fact]
+        public void LazinatorByteSpan_EnsureUpToDate()
+        {
+            byte[] originalBytes = new byte[] { 1, 2, 3 };
+            LazinatorByteSpan lazinatorBytes = new LazinatorByteSpan(originalBytes);
+            lazinatorBytes.GetIsReadOnlyMode().Should().BeFalse();
+            LazinatorByteSpan clone = lazinatorBytes.CloneLazinatorTyped();
+            var byteSpan = clone.GetSpanToReadOrWrite();
+            clone.IsDirty = true;
+            clone.UpdateStoredBuffer();
+            var x = byteSpan[0];
+        }
+
+        [Fact]
         public void SpanAndMemory_EnsureUpToDate()
         {
             byte[] originalBytes = new byte[] { 1, 2, 3 };
@@ -114,6 +165,43 @@ namespace LazinatorTests.Tests
             clone.UpdateStoredBuffer();
             var x = byteSpan.Span[0];
             x.Should().Be(1);
+        }
+
+        [Fact]
+        public void LazinatorBitArrayWorks()
+        {
+            LazinatorBitArray reservedArray = new LazinatorBitArray(100);
+            reservedArray.Length.Should().Be(100);
+
+            bool[] values1 = new bool[]
+                {true, false, true, false, true, false, true, false, true};
+            bool[] values2 = new bool[]
+                {true, true, true, true, true, false, false, false, false};
+            LazinatorBitArray bits1 = new LazinatorBitArray(values1);
+            LazinatorBitArray bits2 = new LazinatorBitArray(values2);
+            bits1 = bits1.CloneLazinatorTyped();
+            bits2 = bits2.CloneLazinatorTyped();
+            bits1.Count.Should().Be(9);
+            bits2.Count.Should().Be(9);
+            var not = new LazinatorBitArray(bits1).Not();
+            for (int i = 0; i < values1.Length; i++)
+                not[i].Should().Be(!values1[i]);
+            var cleared = new LazinatorBitArray(bits1);
+            cleared.SetAll(false);
+            for (int i = 0; i < values1.Length; i++)
+                cleared[i].Should().Be(false);
+            cleared.SetAll(true);
+            for (int i = 0; i < values1.Length; i++)
+                cleared[i].Should().Be(true);
+            var and = new LazinatorBitArray(bits1).And(bits2);
+            for (int i = 0; i < values1.Length; i++)
+                and[i].Should().Be(values1[i] & values2[i]);
+            var or = new LazinatorBitArray(bits1).Or(bits2);
+            for (int i = 0; i < values1.Length; i++)
+                or[i].Should().Be(values1[i] | values2[i]);
+            var xor = new LazinatorBitArray(bits1).Xor(bits2);
+            for (int i = 0; i < values1.Length; i++)
+                xor[i].Should().Be(values1[i] ^ values2[i]);
         }
 
         [Fact]

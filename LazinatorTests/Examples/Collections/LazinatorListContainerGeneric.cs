@@ -1,6 +1,6 @@
 ﻿using Lazinator.Core;
 
-namespace LazinatorCollectionsTests
+namespace LazinatorTests.Examples.Collections
 {
     public partial class LazinatorListContainerGeneric<T> : ILazinatorListContainerGeneric<T> where T : ILazinator
     {

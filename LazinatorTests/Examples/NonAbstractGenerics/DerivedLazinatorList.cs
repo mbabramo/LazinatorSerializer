@@ -1,7 +1,7 @@
-﻿using Lazinator.Core;
-using LazinatorCollections;
+﻿using LazinatorCollections;
+using Lazinator.Core;
 
-namespace LazinatorCollectionsTests
+namespace LazinatorTests.Examples
 {
     public partial class DerivedLazinatorList<T> : LazinatorList<T>, IDerivedLazinatorList<T> where T : ILazinator
     {

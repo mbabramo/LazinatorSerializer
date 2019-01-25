@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentAssertions;
+using LazinatorCollections;
 using LazinatorTests.Examples;
 using Lazinator.Core;
 using Xunit;
@@ -109,6 +110,24 @@ namespace LazinatorTests.Tests
             c.WrappedNullableByte.HasValue.Should().BeFalse();
             c.WrappedNullableSByte.HasValue.Should().BeFalse();
             c.WrappedNullableChar.HasValue.Should().BeFalse();
+        }
+
+        [Fact]
+        public void ListOfWrapperWithFixedLengthWorks()
+        {
+            SmallWrappersContainer w = new SmallWrappersContainer()
+            {
+                ListWrappedBytes = new LazinatorList<WByte>()
+                {
+                    0, 1, 2, 3, 255
+                }
+            };
+            var c = w.CloneLazinatorTyped();
+            c.ListWrappedBytes[0].WrappedValue.Should().Be(0);
+            c.ListWrappedBytes[1].WrappedValue.Should().Be(1);
+            c.ListWrappedBytes[2].WrappedValue.Should().Be(2);
+            c.ListWrappedBytes[3].WrappedValue.Should().Be(3);
+            c.ListWrappedBytes[4].WrappedValue.Should().Be(255);
         }
 
         [Fact]

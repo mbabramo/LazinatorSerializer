@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
+using LazinatorCollections;
 using LazinatorTests.Examples;
 using Lazinator.Core;
 using Xunit;
@@ -9,6 +10,7 @@ using Lazinator.Wrappers;
 using LazinatorTests.Examples.Hierarchy;
 using LazinatorTests.Examples.Structs;
 using LazinatorTests.Examples.NonAbstractGenerics;
+using LazinatorCollections.Tuples;
 
 namespace LazinatorTests.Tests
 {
@@ -102,6 +104,19 @@ namespace LazinatorTests.Tests
             hierarchy.MyChild1.MyWrapperContainer.WrappedInt = 19;
             hierarchy = hierarchy.CloneLazinatorTyped();
             hierarchy.MyChild1.MyWrapperContainer.WrappedInt.Should().Be(19);
+        }
+
+        [Fact]
+        public void PropertiesWorkAfterConvertToBytes()
+        {
+            // Suppose we have two properties, property A and property B. After deserialization, the byte points are set. Suppose that property A is accessed, but property B is not. If we then convert to bytes but continue to use the old object, then the old byte points will be out of date. Property A will be good; since it has been accessed, it still has the object. But unless we update the byte points, property B will now be pointing to a spot on the old set of bytes.
+
+            LazinatorTriple<WString, WString, WString> x = new LazinatorTriple<WString, WString, WString>("one", "andtwo", "andthree");
+            var c3 = x.CloneLazinatorTyped(); // c3 has LazinatorObjectBytes set
+            c3.Item1 = "another";
+            var c4 = c3.CloneLazinatorTyped(); // LazinatorObjectBytes are now updated in C3
+            c3.Item1.Should().Be("another");
+            c3.Item2.Should().Be("andtwo"); // this will cause a problem if the byte indides are not set correctly
         }
 
 
