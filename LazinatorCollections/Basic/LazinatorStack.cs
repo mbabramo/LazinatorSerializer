@@ -1,7 +1,7 @@
 ﻿using Lazinator.Core;
 using System;
 
-namespace LazinatorCollections
+namespace LazinatorCollections.Basic.Basic
 {
     public partial class LazinatorStack<T> : LazinatorList<T>, ILazinatorStack<T> where T : ILazinator
     {

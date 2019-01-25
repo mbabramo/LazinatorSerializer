@@ -1,7 +1,7 @@
 ﻿using Lazinator.Core;
 using Lazinator.Attributes;
 
-namespace LazinatorCollections
+namespace LazinatorCollections.Basic.Basic
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorLinkedListNode)]
     public interface ILazinatorLinkedListNode<T> : ILazinator where T : ILazinator

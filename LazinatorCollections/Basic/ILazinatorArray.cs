@@ -1,7 +1,7 @@
 ﻿using Lazinator.Core;
 using Lazinator.Attributes;
 
-namespace LazinatorCollections
+namespace LazinatorCollections.Basic
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorArray)]
     public interface ILazinatorArray<T> where T : ILazinator

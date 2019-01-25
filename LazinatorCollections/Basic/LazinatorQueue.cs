@@ -1,11 +1,11 @@
-﻿using LazinatorCollections.Avl;
+﻿namespace LazinatorCollections.Basic.Avl;
 using Lazinator.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace LazinatorCollections
+namespace LazinatorCollections.Basic.Basic
 {
     public partial class LazinatorQueue<T> : IEnumerable<T>, ILazinatorQueue<T> where T : ILazinator
     {

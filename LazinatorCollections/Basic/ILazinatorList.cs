@@ -1,9 +1,9 @@
 ﻿using Lazinator.Attributes;
-using LazinatorCollections.OffsetList;
+using namespace LazinatorCollections.Basic.OffsetList;
 using Lazinator.Core;
 using System;
 
-namespace LazinatorCollections
+namespace LazinatorCollections.Basic.Basic
 {
     // include the non-generic properties in a separate non-Lazinator interface
     interface ILazinatorList
@@ -14,7 +14,7 @@ namespace LazinatorCollections
     }
 
     [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorList)]
-    [UnofficiallyIncorporateInterface("LazinatorCollections.ILazinatorListUnofficial", "protected")]
+    [UnofficiallyIncorporateInterface("namespace LazinatorCollections.Basic.ILazinatorListUnofficial", "protected")]
     public interface ILazinatorList<T> where T : ILazinator
     {
         [SetterAccessibility("protected")]
