@@ -1,10 +1,10 @@
 ﻿using Lazinator.Attributes;
-using LazinatorCollections;
 using Lazinator.Wrappers;
+using LazinatorCollections;
 
-namespace LazinatorTests.Examples.Collections
+namespace LazinatorCollectionsTests
 {
-    [Lazinator((int)ExampleUniqueIDs.ListContainer)]
+    [Lazinator((int)CollectionsTestsObjectIDs.ListContainer)]
     public interface ILazinatorListContainer
     {
         int MyInt { get; set; }

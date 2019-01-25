@@ -1,4 +1,4 @@
-﻿namespace LazinatorTests.Examples
+﻿namespace LazinatorCollectionsTests
 {
     // IMPORTANT: Even if a self-serializing class is deleted and is no longer represented in an data, it must keep its place in enums like this, because otherwise all other IDs will change. But you can rename it so that it's clear that it refers to a class that doesn't exist anymore.
 
@@ -7,5 +7,8 @@
         INonComparableWrapper = 2000,
         INonComparableWrapperString,
         IStructWithBadHashFunction,
+        DerivedLazinatorList,
+        ListContainerGeneric,
+        ListContainer,
     }
 }

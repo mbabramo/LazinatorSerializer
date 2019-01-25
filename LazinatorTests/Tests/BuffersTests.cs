@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using LazinatorCollections;
 using LazinatorTests.Examples;
 using Lazinator.Core;
 using Xunit;
 using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
-using LazinatorCollections.Dictionary;
 using Lazinator.Buffers;
 using LazinatorTests.Examples.NonAbstractGenerics;
 using LazinatorTests.Examples.Abstract;
@@ -192,74 +190,6 @@ namespace LazinatorTests.Tests
         const int dictsize = 5;
 
 
-        [Fact]
-        public void CanCloneListOfStructsAndThenEnsureUpToDate()
-        {
-            // Note: This works because of IsStruct parameter in ReplaceBuffer. Without that parameter, the last call would lead to disposal of memory still needed.
-            var l = new LazinatorList<WInt>() { 1 };
-            var l2 = l.CloneLazinatorTyped();
-            var l3 = l.CloneLazinatorTyped();
-            l.UpdateStoredBuffer();
-        }
-
-        [Fact]
-        public void CanCloneListOfLazinatorsAndThenEnsureUpToDate()
-        {
-            var l = new LazinatorList<Example>() { GetTypicalExample(), GetTypicalExample() };
-            var l2 = l.CloneLazinatorTyped();
-            var l3 = l.CloneLazinatorTyped();
-            l.UpdateStoredBuffer();
-        }
-
-        [Fact]
-        public void CanCloneDictionaryAndThenEnsureUpToDate()
-        {
-            // Note: This is a sequence that proved problematic in the next test
-            var d = GetDictionary();
-            var d2 = d.CloneLazinatorTyped();
-            var d3 = d.CloneLazinatorTyped();
-            d.UpdateStoredBuffer();
-        }
-
-        [Fact]
-        public void ObjectDisposedExceptionThrownOnItemRemovedFromHierarchy()
-        {
-            LazinatorDictionary<WInt, Example> d = GetDictionary();
-            //same effect if both of the following lines are included
-            //d.UpdateStoredBuffer();
-            //d[0].MyChar = 'q';
-            d[0].UpdateStoredBuffer(); // OwnedMemory has allocation ID of 0. 
-            d.UpdateStoredBuffer(); // OwnedMemory for this and d[0] share allocation ID of 1
-            Example e = d[0];
-            d[0] = GetTypicalExample();
-            d.LazinatorMemoryStorage.Dispose();
-            Action a = () => { var x = e.MyChild1.LazinatorMemoryStorage.OwnedMemory.Memory; }; // note that error occurs only when looking at underlying memory
-            a.Should().Throw<ObjectDisposedException>();
-        }
-
-        [Fact]
-        public void ObjectDisposedExceptionAvoidedByCloneToIndependentBuffer()
-        {
-            LazinatorDictionary<WInt, Example> d = GetDictionary();
-            d[0].UpdateStoredBuffer(); // OwnedMemory has allocation ID of 0. 
-            d.UpdateStoredBuffer(); // OwnedMemory for this and d[0] share allocation ID of 1
-            Example e = d[0].CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.IndependentBuffers);
-            d[0] = GetTypicalExample();
-            d.UpdateStoredBuffer(); // allocation ID 1 disposed.
-            Action a = () => { var x = e.MyChild1; };
-            a.Should().NotThrow<ObjectDisposedException>();
-        }
-
-        [Fact]
-        public void CanAccessCopiedItemAfterEnsureUpToDate()
-        {
-            LazinatorDictionary<WInt, Example> d = GetDictionary();
-            d.UpdateStoredBuffer(); // OwnedMemory for this and d[0] share allocation ID of 0. As the original source, this will not be automatically disposed. 
-            Example e = d[0];
-            d[0] = GetTypicalExample();
-            d.UpdateStoredBuffer(); // allocation ID 0 is not disposed.
-            var x = e.MyChild1;
-        }
 
         [Fact]
         public void RemoveBufferWorks_Example()
@@ -450,71 +380,6 @@ namespace LazinatorTests.Tests
         }
 
 
-        [Fact]
-        public void RemoveBufferWorks_LazinatorList()
-        {
-            // when we remove the buffer from a lazinatorlist, it completely deserializes.
-
-            LazinatorListContainer lazinator = new LazinatorListContainer()
-            {
-                MyStructList = new LazinatorList<WByte>()
-                {
-                    3,
-                    4,
-                    5
-                }
-            };
-            lazinator.UpdateStoredBuffer();
-            lazinator.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
-            var x = lazinator.MyStructList[0].WrappedValue;
-            lazinator.MyStructList[0] = 6;
-            lazinator.MyStructList[0].LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
-
-            lazinator.RemoveBufferInHierarchy();
-            lazinator.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
-            lazinator.MyStructList[0].LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
-            lazinator.MyStructList[0].WrappedValue.Should().Be(6);
-
-            lazinator.UpdateStoredBuffer();
-            lazinator.MyStructList[0].LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
-            lazinator.MyStructList[0].WrappedValue.Should().Be(6);
-
-            lazinator.UpdateStoredBuffer();
-            lazinator.MyStructList[0].LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
-            lazinator.MyStructList[0].WrappedValue.Should().Be(6);
-
-            lazinator.MyStructList[0] = 7;
-            lazinator.UpdateStoredBuffer();
-            lazinator.MyStructList[0].LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
-            lazinator.MyStructList[0].WrappedValue.Should().Be(7);
-
-            WByte w = new WByte(8).CloneLazinatorTyped(); // make 
-            lazinator.MyStructList[0] = w;
-            lazinator.MyStructList[0].LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
-            lazinator.RemoveBufferInHierarchy();
-            lazinator.MyStructList[0].LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
-
-            lazinator.MyStructList[1] = w;
-            lazinator.MyStructList[1].LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
-            lazinator.UpdateStoredBuffer();
-            lazinator.MyStructList[1].LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
-
-            lazinator = new LazinatorListContainer()
-            {
-                MyStructList = new LazinatorList<WByte>()
-                {
-                    3,
-                    4,
-                    5
-                }
-            };
-            lazinator = lazinator.CloneLazinatorTyped();
-            var list = lazinator.MyStructList;
-            lazinator.RemoveBufferInHierarchy();
-            lazinator.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
-            lazinator.MyStructList.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
-            lazinator.MyStructList[0].WrappedValue.Should().Be(3);
-        }
 
         [Fact]
         public void RemoveBufferWorks_SpanInDotNetList()
@@ -654,35 +519,6 @@ namespace LazinatorTests.Tests
             x.Should().Be(6);
         }
 
-        [Fact]
-        public void UpdateBufferForDeserialized_LazinatorList()
-        {
-            LazinatorListContainer c = GetLazinatorListContainer();
-            c.MyList[0].MyExampleGrandchild.MyInt = 200;
-            UpdateStoredBufferFromExisting(c);
-            var item = c.MyList[0].CloneLazinatorTyped();
-            var c2 = c.CloneLazinatorTyped();
-            c.MyList[0].MyExampleGrandchild.MyInt.Should().Be(200);
-        }
-
-
-        [Fact]
-        public void UpdateBufferForDeserialized_LazinatorList_Struct()
-        {
-            LazinatorListContainer c = new LazinatorListContainer() { MyStructList = new LazinatorList<WByte>() };
-            c.MyStructList.Add(3);
-            c.MyStructList.Add(4);
-            c = c.CloneLazinatorTyped();
-            var x = c.MyStructList[0];
-            c.MyInt = -234;
-            UpdateStoredBufferFromExisting(c);
-            var storageOverall = c.LazinatorMemoryStorage.OwnedMemory as ExpandableBytes;
-            var storageItem = c.MyStructList[0].LazinatorMemoryStorage.OwnedMemory as ExpandableBytes;
-            storageOverall.AllocationID.Should().Be(storageItem.AllocationID);
-            var item = c.MyStructList[0].CloneLazinatorTyped();
-            var c2 = c.CloneLazinatorTyped();
-            item.WrappedValue.Should().Be(3);
-        }
 
         private static void UpdateStoredBufferFromExisting(ILazinator e)
         {
@@ -749,27 +585,6 @@ namespace LazinatorTests.Tests
             ConfirmBuffersUpdateInTandem(e);
         }
 
-        [Fact]
-        public void BuffersUpdateInTandem_LazinatorList()
-        {
-            LazinatorListContainer e = GetLazinatorListContainer();
-            e.MyList[1].MyExampleGrandchild.MyInt = 6;
-            e.MyList[1].UpdateStoredBuffer(); // generate a new buffer in a list member
-            ConfirmBuffersUpdateInTandem(e);
-            e.MyInt = 17; // keep list clean while making container dirty
-            ConfirmBuffersUpdateInTandem(e);
-        }
-
-        [Fact]
-        public void BuffersUpdateInTandem_LazinatorList_Struct()
-        {
-            LazinatorListContainer e = GetLazinatorListContainer();
-            e.MyStructList[1] = 6;
-            e.MyStructList[1] = e.MyStructList[1].CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.IndependentBuffers); // generate a new buffer in a list member
-            ConfirmBuffersUpdateInTandem(e);
-            e.MyInt = 17; // keep list clean while making container dirty
-            ConfirmBuffersUpdateInTandem(e);
-        }
 
         [Fact]
         public void BuffersUpdateInTandem_List_Struct()
@@ -900,20 +715,6 @@ namespace LazinatorTests.Tests
             ConfirmBuffersUpdateInTandem(e);
         }
 
-        private LazinatorListContainer GetLazinatorListContainer()
-        {
-            LazinatorListContainer container = new LazinatorListContainer();
-            container.MyList = new LazinatorList<ExampleChild>();
-            container.MyList.Add(GetExampleChild(1));
-            container.MyList[0].MyExampleGrandchild = new ExampleGrandchild() { MyInt = 5 };
-            container.MyList.Add(GetExampleChild(1));
-            container.MyList[1].MyExampleGrandchild = new ExampleGrandchild() { MyInt = 5 };
-            container.MyStructList = new LazinatorList<WByte>();
-            container.MyStructList.Add(1);
-            container.MyStructList.Add(2);
-            container = container.CloneLazinatorTyped();
-            return container;
-        }
 
         private static void ConfirmBuffersUpdateInTandem(ILazinator itemToUpdate)
         {
@@ -929,16 +730,6 @@ namespace LazinatorTests.Tests
                 }
                 return x;
             }, true, true);
-        }
-
-        private LazinatorDictionary<WInt, Example> GetDictionary()
-        {
-            LazinatorDictionary<WInt, Example> d = new LazinatorDictionary<WInt, Example>();
-            for (int i = 0; i < dictsize; i++)
-            {
-                d[i] = GetTypicalExample();
-            }
-            return d;
         }
 
         [Fact]

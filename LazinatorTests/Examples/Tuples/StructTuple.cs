@@ -1,6 +1,4 @@
-﻿using Lazinator.Wrappers;
-
-namespace LazinatorTests.Examples.Tuples
+﻿namespace LazinatorTests.Examples.Tuples
 {
     public partial class StructTuple : IStructTuple
     {

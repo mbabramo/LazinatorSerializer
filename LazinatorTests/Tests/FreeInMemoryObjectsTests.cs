@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using LazinatorCollections;
 using LazinatorTests.Examples;
 using Xunit;
 
@@ -44,29 +43,6 @@ namespace LazinatorTests.Tests
             e.UpdateStoredBuffer();
             e.FreeInMemoryObjects();
             e.MyChild1.MyLong.Should().Be(revisedValue);
-        }
-
-        [Fact]
-        public void FreeInMemoryObjects_LazinatorList()
-        {
-            var typical1 = GetTypicalExample();
-            typical1.UpdateStoredBuffer();
-            var typical2 = GetTypicalExample();
-            var origValue = typical2.MyChild1.MyLong;
-            LazinatorList<Example> l = new LazinatorList<Example>() { typical1, typical2 };
-            l.UpdateStoredBuffer();
-            l.FreeInMemoryObjects();
-            typical2.MyChild1.MyLong = 46523496; // should not affect the list now
-            l[0].MyChild1.MyLong.Should().Be(origValue);
-            l[1].MyChild1.MyLong.Should().Be(origValue);
-
-            const long revisedValue = -123456789012345;
-            l[0].MyChild1.MyLong = revisedValue;
-            l.UpdateStoredBuffer();
-            l.FreeInMemoryObjects();
-            l[0].MyChild1.MyLong.Should().Be(revisedValue);
-            l[1].MyChild1.MyLong.Should().Be(origValue);
-
         }
     }
 }

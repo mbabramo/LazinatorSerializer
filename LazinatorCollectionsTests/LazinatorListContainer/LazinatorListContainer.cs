@@ -1,7 +1,4 @@
-﻿using LazinatorCollections;
-using Lazinator.Wrappers;
-
-namespace LazinatorTests.Examples.Collections
+﻿namespace LazinatorCollectionsTests
 {
     public partial class LazinatorListContainer : ILazinatorListContainer
     {

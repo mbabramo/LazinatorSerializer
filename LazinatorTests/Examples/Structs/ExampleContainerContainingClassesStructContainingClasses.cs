@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace LazinatorTests.Examples
+﻿namespace LazinatorTests.Examples
 {
     public partial class ExampleContainerContainingClassesStructContainingClasses : IExampleContainerStructContainingClasses
     {

@@ -2,7 +2,6 @@
 using LazinatorTests.Examples;
 using Lazinator.Core;
 using Xunit;
-using LazinatorCollections;
 
 namespace LazinatorTests.Tests
 {

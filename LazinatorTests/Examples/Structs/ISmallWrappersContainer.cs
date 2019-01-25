@@ -1,5 +1,4 @@
 ﻿using Lazinator.Attributes;
-using LazinatorCollections;
 using Lazinator.Wrappers;
 
 namespace LazinatorTests.Examples.Structs
@@ -15,6 +14,5 @@ namespace LazinatorTests.Examples.Structs
         WNullableByte WrappedNullableByte { get; set; }
         WNullableSByte WrappedNullableSByte { get; set; }
         WNullableChar WrappedNullableChar { get; set; }
-        LazinatorList<WByte> ListWrappedBytes { get; set; }
     }
 }

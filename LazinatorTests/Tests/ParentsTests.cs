@@ -1,19 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using LazinatorCollections;
 using LazinatorTests.Examples;
 using Lazinator.Core;
 using Xunit;
 using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
-using LazinatorCollections.Dictionary;
-using Lazinator.Buffers;
-using LazinatorTests.Examples.NonAbstractGenerics;
-using LazinatorTests.Examples.Abstract;
-using LazinatorTests.Examples.Collections;
-using LazinatorCollections.Tuples;
 
 namespace LazinatorTests.Tests
 {
@@ -97,7 +89,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void ParentsWorksWithGenericStruct()
         {
-            LazinatorTuple<WInt, WInt> e = new LazinatorTuple<WInt, WInt>()
+            GenericTuple<WInt, WInt> e = new GenericTuple<WInt, WInt>()
             {
                 Item1 = new WInt(1),
                 Item2 = new WInt(2)
@@ -120,7 +112,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void SameObjectCanAppearTwice()
         {
-            LazinatorTuple<ExampleChild, ExampleChild> e = new LazinatorTuple<ExampleChild, ExampleChild>()
+            GenericTuple<ExampleChild, ExampleChild> e = new GenericTuple<ExampleChild, ExampleChild>()
             {
                 Item1 = new ExampleChild(),
                 Item2 = new ExampleChild()
@@ -136,7 +128,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void ChangeToObjectAppearingTwiceAffectsBoth()
         {
-            LazinatorTuple<ExampleChild, ExampleChild> e = new LazinatorTuple<ExampleChild, ExampleChild>()
+            GenericTuple<ExampleChild, ExampleChild> e = new GenericTuple<ExampleChild, ExampleChild>()
             {
                 Item1 = new ExampleChild(),
                 Item2 = new ExampleChild() { MyLong = -123456 }
@@ -152,7 +144,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void ChangeToObjectInTwoHierarchiesAffectsBoth()
         {
-            LazinatorTuple<ExampleChild, ExampleChild> e = new LazinatorTuple<ExampleChild, ExampleChild>()
+            GenericTuple<ExampleChild, ExampleChild> e = new GenericTuple<ExampleChild, ExampleChild>()
             {
                 Item1 = new ExampleChild(),
                 Item2 = new ExampleChild() { MyLong = -123456 }
@@ -170,7 +162,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void ParentRemovedWhenObjectDetached()
         {
-            LazinatorTuple<ExampleChild, ExampleChild> e = new LazinatorTuple<ExampleChild, ExampleChild>()
+            GenericTuple<ExampleChild, ExampleChild> e = new GenericTuple<ExampleChild, ExampleChild>()
             {
                 Item1 = new ExampleChild(),
                 Item2 = new ExampleChild() { MyLong = -123456 }
@@ -182,12 +174,12 @@ namespace LazinatorTests.Tests
             item1Orig.LazinatorParents.Count.Should().Be(0);
 
             // same thing, but going from two parents to 1
-            e = new LazinatorTuple<ExampleChild, ExampleChild>()
+            e = new GenericTuple<ExampleChild, ExampleChild>()
             {
                 Item1 = new ExampleChild(),
                 Item2 = new ExampleChild() { MyLong = -123456 }
             };
-            var e2 = new LazinatorTuple<ExampleChild, ExampleChild>()
+            var e2 = new GenericTuple<ExampleChild, ExampleChild>()
             {
                 Item1 = new ExampleChild(),
                 Item2 = new ExampleChild() { MyLong = -123456 }
@@ -203,7 +195,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void ParentSetForDefaultItem()
         {
-            LazinatorTuple<WInt, WInt> e = new LazinatorTuple<WInt, WInt>()
+            GenericTuple<WInt, WInt> e = new GenericTuple<WInt, WInt>()
             {
                 Item1 = 0
             };
@@ -214,7 +206,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void ChangeAfterCopyingAffectsSource()
         {
-            LazinatorTuple<ExampleChild, ExampleChild> e = new LazinatorTuple<ExampleChild, ExampleChild>()
+            GenericTuple<ExampleChild, ExampleChild> e = new GenericTuple<ExampleChild, ExampleChild>()
             {
                 Item1 = new ExampleChild(),
                 Item2 = new ExampleChild() { MyLong = -123456 }
@@ -230,7 +222,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void GetRootsAndAncestors()
         {
-            LazinatorTuple<ExampleChild, ExampleChild> e1 = new LazinatorTuple<ExampleChild, ExampleChild>()
+            GenericTuple<ExampleChild, ExampleChild> e1 = new GenericTuple<ExampleChild, ExampleChild>()
             {
                 Item1 = new ExampleChild() { MyWrapperContainer = new WrapperContainer() { WrappedInt = 3 } },
                 Item2 = null
@@ -238,12 +230,12 @@ namespace LazinatorTests.Tests
             var startingPoint = e1.Item1.MyWrapperContainer.WrappedInt;
             startingPoint.GetSoleRoot().Should().Be(e1);
             startingPoint.GetPrincipalRoot().Should().Be(e1);
-            startingPoint.GetSoleClosestAncestorOfType<LazinatorTuple<ExampleChild, ExampleChild>>().Should().Be(e1);
-            var closestAncestors = startingPoint.GetAllClosestAncestorsOfType<LazinatorTuple<ExampleChild, ExampleChild>>().ToList();
+            startingPoint.GetSoleClosestAncestorOfType<GenericTuple<ExampleChild, ExampleChild>>().Should().Be(e1);
+            var closestAncestors = startingPoint.GetAllClosestAncestorsOfType<GenericTuple<ExampleChild, ExampleChild>>().ToList();
             closestAncestors.Count().Should().Be(1);
             closestAncestors[0].Should().Be(e1);
 
-            LazinatorTuple<ExampleChild, ExampleChild> e2 = new LazinatorTuple<ExampleChild, ExampleChild>()
+            GenericTuple<ExampleChild, ExampleChild> e2 = new GenericTuple<ExampleChild, ExampleChild>()
             {
                 Item1 = null,
                 Item2 = e1.Item1
@@ -253,15 +245,15 @@ namespace LazinatorTests.Tests
             roots.Count().Should().Be(2);
             roots[0].Should().Be(e2);
             roots[1].Should().Be(e1);
-            startingPoint.GetAllClosestAncestorsOfType<LazinatorTuple<ExampleChild, ExampleChild>>();
-            closestAncestors = startingPoint.GetAllClosestAncestorsOfType<LazinatorTuple<ExampleChild, ExampleChild>>().ToList();
+            startingPoint.GetAllClosestAncestorsOfType<GenericTuple<ExampleChild, ExampleChild>>();
+            closestAncestors = startingPoint.GetAllClosestAncestorsOfType<GenericTuple<ExampleChild, ExampleChild>>().ToList();
             closestAncestors.Count().Should().Be(2);
             closestAncestors[0].Should().Be(e2);
             closestAncestors[1].Should().Be(e1);
-            Action a = () => { var result = startingPoint.GetSoleClosestAncestorOfType<LazinatorTuple<ExampleChild, ExampleChild>>(); };
+            Action a = () => { var result = startingPoint.GetSoleClosestAncestorOfType<GenericTuple<ExampleChild, ExampleChild>>(); };
             a.Should().Throw<Exception>();
 
-            e1.GetSoleClosestAncestorOfType<LazinatorTuple<ExampleChild, ExampleChild>>().Should().Be(null); // don't count node itself
+            e1.GetSoleClosestAncestorOfType<GenericTuple<ExampleChild, ExampleChild>>().Should().Be(null); // don't count node itself
         }
 
         [Fact]
@@ -273,7 +265,7 @@ namespace LazinatorTests.Tests
             c2.MyShort = 5;
             LazinatorUtilities.TopNodesOfHierarchyEqual(c1, c2, out comparison).Should().BeFalse();
 
-            LazinatorTuple<ExampleChild, ExampleChild> e1 = new LazinatorTuple<ExampleChild, ExampleChild>()
+            GenericTuple<ExampleChild, ExampleChild> e1 = new GenericTuple<ExampleChild, ExampleChild>()
             {
                 Item1 = new ExampleChild() { MyWrapperContainer = new WrapperContainer() { WrappedInt = 3 } },
                 Item2 = null
