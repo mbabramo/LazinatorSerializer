@@ -487,8 +487,8 @@ namespace LazinatorCollections.Tree
                         node.Right = childNode;
 
                         if (allMovesRight)
-                            ConsiderCacheUpdateAfterChange(node);
-                        return (node, true);
+                            ConsiderCacheUpdateAfterChange(childNode);
+                        return (childNode, true);
                     }
                     else
                     {
