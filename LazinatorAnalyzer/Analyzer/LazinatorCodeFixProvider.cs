@@ -56,16 +56,17 @@ namespace LazinatorAnalyzer.Analyzer
             if (diagnostic.Id == LazinatorCodeAnalyzer.Lazin001 || diagnostic.Id == LazinatorCodeAnalyzer.Lazin002)
             {
                 var syntaxToken = root.FindToken(diagnosticSpan.Start);
-                var declaration = syntaxToken.Parent.AncestorsAndSelf().OfType<TypeDeclarationSyntax>().First();
+                var declaration = syntaxToken.Parent.AncestorsAndSelf().OfType<TypeDeclarationSyntax>().FirstOrDefault(); // DEBUG -- why is OrDefault needed
 
                 // Register a code action that will invoke the fix.
                 string title = diagnostic.Id == LazinatorCodeAnalyzer.Lazin001 ? Lazin001Title : Lazin002Title;
-                context.RegisterCodeFix(
-                    CodeAction.Create(
-                        title: title,
-                        createChangedSolution: c => FixGenerateLazinatorCodeBehind(context.Document, declaration, lazinatorPairInfo, c),
-                        equivalenceKey: title),
-                    diagnostic);
+                if (declaration != null)
+                    context.RegisterCodeFix(
+                        CodeAction.Create(
+                            title: title,
+                            createChangedSolution: c => FixGenerateLazinatorCodeBehind(context.Document, declaration, lazinatorPairInfo, c),
+                            equivalenceKey: title),
+                        diagnostic);
             }
 
             if (diagnostic.Id == LazinatorCodeAnalyzer.Lazin004)
@@ -137,10 +138,17 @@ namespace LazinatorAnalyzer.Analyzer
             string[] codeBehindFolders = null;
             bool useFullyQualifiedNames = (config?.UseFullyQualifiedNames ?? false) || generator.ImplementingTypeSymbol.ContainingType != null || generator.ImplementingTypeSymbol.IsGenericType;
             codeBehindName = RoslynHelpers.GetEncodableVersionOfIdentifier(generator.ImplementingTypeSymbol, useFullyQualifiedNames) + fileExtension;
+
+            string[] GetFolders(string fileName)
+            {
+                return fileName.Split('\\', '/').Where(x => !x.Contains(".cs") && !x.Contains(".csproj")).ToArray();
+            }
+
             if (config?.GeneratedCodePath == null)
             { // use short form of name in same location as original code
 
                 codeBehindFilePath = originalDocument.FilePath;
+                codeBehindFolders = GetFolders(codeBehindFilePath).Skip(GetFolders(originalDocument.Project.FilePath).Count()).ToArray();
             }
             else
             { // we have a config file specifying a common directory

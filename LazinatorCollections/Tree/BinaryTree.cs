@@ -56,7 +56,48 @@ namespace LazinatorCollections.Tree
             if (location.IsAfterContainer)
                 throw new ArgumentException();
             else
+            {
                 GetNodeFromLocation(location).Value = value;
+                ConsiderCacheUpdateAfterChange(location, value);
+            }
+        }
+
+        private void ConsiderCacheUpdateAfterChange(BinaryNode<T> node)
+        {
+            if (node == null)
+                return;
+            var location = new BinaryTreeLocation<T>(node);
+            ConsiderCacheUpdateAfterChange(location, node.Value);
+        }
+
+        private void ConsiderCacheUpdateAfterChange(IContainerLocation location, T value)
+        {
+            if (location.GetPreviousLocation().IsBeforeContainer)
+                CachedFirst = value;
+            if (location.GetNextLocation().IsAfterContainer)
+                CachedLast = value;
+        }
+
+        private void ConsiderCacheUpdateAfterRemoval(BinaryNode<T> node)
+        {
+            if (node == null)
+                return;
+            if (Any())
+            {
+                if (EqualityComparer<T>.Default.Equals(node.Value, CachedFirst))
+                    CachedFirst = FirstNode().Value;
+                if (EqualityComparer<T>.Default.Equals(node.Value, CachedLast))
+                    CachedLast = LastNode().Value;
+            }
+        }
+
+        private void SetCached()
+        {
+            if (Any())
+            {
+                CachedFirst = FirstNode().Value;
+                CachedLast = LastNode().Value;
+            }
         }
 
         #endregion
@@ -132,13 +173,13 @@ namespace LazinatorCollections.Tree
         {
             if (!Any())
                 throw new Exception("The tree is empty.");
-            return LastNode().Value;
+            return CachedLast;
         }
 
         public T LastOrDefault()
         {
             if (Any())
-                return LastNode().Value;
+                return CachedLast;
             return default(T);
         }
 
@@ -146,13 +187,13 @@ namespace LazinatorCollections.Tree
         {
             if (!Any())
                 throw new Exception("The tree is empty.");
-            return FirstNode().Value;
+            return CachedFirst;
         }
 
         public T FirstOrDefault()
         {
             if (Any())
-                return FirstNode().Value;
+                return CachedFirst;
             return default(T);
         }
 
@@ -349,12 +390,12 @@ namespace LazinatorCollections.Tree
 
         protected void InsertAtStart(T item)
         {
-            InsertOrReplaceReturningNode(item, n => -1);
+            var result = InsertOrReplaceReturningNode(item, n => -1);
         }
 
         protected void InsertAtEnd(T item)
         {
-            InsertOrReplaceReturningNode(item, n => 1);
+            var result = InsertOrReplaceReturningNode(item, n => 1);
         }
 
         public (IContainerLocation location, bool insertedNotReplaced) InsertOrReplace(T item, IComparer<T> comparer) => InsertOrReplace(item, MultivalueLocationOptions.Any, comparer);
@@ -411,6 +452,7 @@ namespace LazinatorCollections.Tree
                         var childNode = CreateNode(item, node);
                         node.Left = childNode;
 
+                        ConsiderCacheUpdateAfterChange(node);
                         return (node, true);
                     }
                     else
@@ -427,6 +469,7 @@ namespace LazinatorCollections.Tree
                         var childNode = CreateNode(item, node);
                         node.Right = childNode;
 
+                        ConsiderCacheUpdateAfterChange(node);
                         return (node, true);
                     }
                     else
@@ -438,12 +481,14 @@ namespace LazinatorCollections.Tree
                 {
                     node.Value = item;
 
+                    ConsiderCacheUpdateAfterChange(node);
                     return (node, false);
                 }
             }
 
             Root = CreateNode(item);
 
+            ConsiderCacheUpdateAfterChange(node);
             return (node, true);
         }
 
@@ -606,7 +651,7 @@ namespace LazinatorCollections.Tree
                             }
                         }
                     }
-
+                    ConsiderCacheUpdateAfterRemoval(node);
                     return node;
                 }
             }
@@ -669,6 +714,7 @@ namespace LazinatorCollections.Tree
             var newContainer = (BinaryTree<T>)CreateNewWithSameSettings();
             newContainer.Root = leftNode;
             newContainer.Root.Parent = null;
+            newContainer.SetCached();
             return newContainer;
         }
 
