@@ -18,10 +18,11 @@ namespace LazinatorCollections.Tree
     {
         #region Construction
 
-        public BinaryTree(bool allowDuplicates, bool unbalanced)
+        public BinaryTree(bool allowDuplicates, bool unbalanced, bool cacheEnds)
         {
             AllowDuplicates = allowDuplicates;
             Unbalanced = unbalanced;
+            CacheEnds = cacheEnds;
         }
 
         public virtual IValueContainer<T> CreateNewWithSameSettings()
@@ -62,37 +63,45 @@ namespace LazinatorCollections.Tree
             }
         }
 
-        private void ConsiderCacheUpdateAfterChange(BinaryNode<T> node)
+        protected void ConsiderCacheUpdateAfterChange(BinaryNode<T> node)
         {
+            if (!CacheEnds)
+                return;
             if (node == null)
                 return;
             var location = new BinaryTreeLocation<T>(node);
             ConsiderCacheUpdateAfterChange(location, node.Value);
         }
 
-        private void ConsiderCacheUpdateAfterChange(IContainerLocation location, T value)
+        protected void ConsiderCacheUpdateAfterChange(IContainerLocation location, T value)
         {
+            if (!CacheEnds)
+                return;
             if (location.GetPreviousLocation().IsBeforeContainer)
-                CachedFirst = value;
+                CachedFirst = value.CloneNoBuffer();
             if (location.GetNextLocation().IsAfterContainer)
-                CachedLast = value;
+                CachedLast = value.CloneNoBuffer();
         }
 
-        private void ConsiderCacheUpdateAfterRemoval(BinaryNode<T> node)
+        protected void ConsiderCacheUpdateAfterRemoval(BinaryNode<T> node)
         {
+            if (!CacheEnds)
+                return;
             if (node == null)
                 return;
             if (Any())
             {
                 if (EqualityComparer<T>.Default.Equals(node.Value, CachedFirst))
-                    CachedFirst = FirstNode().Value;
+                    CachedFirst = FirstNode().Value.CloneNoBuffer();
                 if (EqualityComparer<T>.Default.Equals(node.Value, CachedLast))
-                    CachedLast = LastNode().Value;
+                    CachedLast = LastNode().Value.CloneNoBuffer();
             }
         }
 
-        private void SetCached()
+        protected void SetCached()
         {
+            if (!CacheEnds)
+                return;
             if (Any())
             {
                 CachedFirst = FirstNode().Value;
@@ -173,13 +182,15 @@ namespace LazinatorCollections.Tree
         {
             if (!Any())
                 throw new Exception("The tree is empty.");
-            return CachedLast;
+            if (CacheEnds)
+                return CachedLast;
+            return ((BinaryTreeLocation<T>)LastLocation()).BinaryNode.Value;
         }
 
         public T LastOrDefault()
         {
             if (Any())
-                return CachedLast;
+                return Last();
             return default(T);
         }
 
@@ -187,13 +198,15 @@ namespace LazinatorCollections.Tree
         {
             if (!Any())
                 throw new Exception("The tree is empty.");
-            return CachedFirst;
+            if (CacheEnds)
+                return CachedFirst;
+            return ((BinaryTreeLocation<T>)FirstLocation()).BinaryNode.Value;
         }
 
         public T FirstOrDefault()
         {
             if (Any())
-                return CachedFirst;
+                return First();
             return default(T);
         }
 
@@ -428,6 +441,7 @@ namespace LazinatorCollections.Tree
         {
             BinaryNode<T> node = Root;
             bool alwaysInsertTargetFound = false;
+            bool allMovesLeft = true, allMovesRight = true;
             while (node != null)
             {
                 int compare = alwaysInsertTargetFound ? 0 : comparisonFunc(node);
@@ -446,13 +460,15 @@ namespace LazinatorCollections.Tree
                 if (compare < 0)
                 {
                     BinaryNode<T> left = node.Left;
+                    allMovesRight = false;
 
                     if (left == null)
                     {
                         var childNode = CreateNode(item, node);
                         node.Left = childNode;
 
-                        ConsiderCacheUpdateAfterChange(node);
+                        if (allMovesLeft)
+                            ConsiderCacheUpdateAfterChange(node);
                         return (node, true);
                     }
                     else
@@ -463,13 +479,15 @@ namespace LazinatorCollections.Tree
                 else if (compare > 0)
                 {
                     BinaryNode<T> right = node.Right;
+                    allMovesLeft = false;
 
                     if (right == null)
                     {
                         var childNode = CreateNode(item, node);
                         node.Right = childNode;
 
-                        ConsiderCacheUpdateAfterChange(node);
+                        if (allMovesRight)
+                            ConsiderCacheUpdateAfterChange(node);
                         return (node, true);
                     }
                     else
@@ -481,7 +499,8 @@ namespace LazinatorCollections.Tree
                 {
                     node.Value = item;
 
-                    ConsiderCacheUpdateAfterChange(node);
+                    if (allMovesLeft || allMovesRight)
+                        ConsiderCacheUpdateAfterChange(node);
                     return (node, false);
                 }
             }
@@ -528,16 +547,19 @@ namespace LazinatorCollections.Tree
         {
             BinaryNode<T> node = Root;
 
+            bool allMovesLeft = true, allMovesRight = true;
             while (node != null)
             {
                 int compare = comparisonFunc(node);
                 if (compare < 0)
                 {
                     node = node.Left;
+                    allMovesRight = false;
                 }
                 else if (compare > 0)
                 {
                     node = node.Right;
+                    allMovesLeft = false;
                 }
                 else
                 {
@@ -651,7 +673,8 @@ namespace LazinatorCollections.Tree
                             }
                         }
                     }
-                    ConsiderCacheUpdateAfterRemoval(node);
+                    if (allMovesLeft || allMovesRight)
+                        ConsiderCacheUpdateAfterRemoval(node);
                     return node;
                 }
             }
