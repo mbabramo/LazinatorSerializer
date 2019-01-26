@@ -425,12 +425,18 @@ namespace LazinatorCollections
 
         protected void ReportFirstChanged()
         {
-            MultilevelReporterParent?.EndItemChanged(true, First(), this);
+            if (Any())
+                MultilevelReporterParent?.EndItemChanged(true, First(), this);
+            else
+                MultilevelReporterParent?.EndItemRemoved(true, this);
         }
 
         protected void ReportLastChanged()
         {
-            MultilevelReporterParent?.EndItemChanged(false, Last(), this);
+            if (Any())
+                MultilevelReporterParent?.EndItemChanged(false, Last(), this);
+            else
+                MultilevelReporterParent?.EndItemRemoved(true, this);
         }
 
         #endregion

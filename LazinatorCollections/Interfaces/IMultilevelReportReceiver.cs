@@ -13,5 +13,6 @@ namespace LazinatorCollections
     public interface IMultilevelReportReceiver : IMultilevelReporter
     {
         void EndItemChanged(bool isFirstItem, ILazinator revisedValue, IMultilevelReporter reporter);
+        void EndItemRemoved(bool wasFirstItem, IMultilevelReporter reporter);
     }
 }
