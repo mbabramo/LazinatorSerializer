@@ -345,7 +345,7 @@ namespace LazinatorCollections.ByteSpan
         /* Conversion */
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public virtual int LazinatorUniqueID => 253;
+        public virtual int LazinatorUniqueID => 251;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected virtual bool ContainsOpenGenericParameters => false;
