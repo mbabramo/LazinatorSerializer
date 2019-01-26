@@ -73,7 +73,7 @@ namespace LazinatorAnalyzer.Settings
                     HideBackingFields = json.ContainsKey(HideBackingFieldsString) ? json[HideBackingFieldsString].AsBoolean : true;
                     HideMainProperties = json.ContainsKey(HideMainPropertiesString) ? json[HideMainPropertiesString].AsBoolean : false;
                     HideILazinatorProperties = json.ContainsKey(HideILazinatorPropertiesString) ? json[HideILazinatorPropertiesString].AsBoolean : true;
-                    ConfigFilePath = configPath.Replace("\\LazinatorConfig.json", "");
+                    ConfigFilePath = configPath?.Replace("\\LazinatorConfig.json", "");
                     if (ConfigFilePath != null)
                     {
                         RelativeGeneratedCodePath = json[RelativeGeneratedCodePathString];
