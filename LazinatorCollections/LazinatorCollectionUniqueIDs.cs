@@ -55,5 +55,7 @@
         IAggregatedValueContainer,
         IByteSpanUnofficial,
         IByteSpan,
+        IMultilevelReporter,
+        IMultilevelReportReceiver,
     }
 }

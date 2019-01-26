@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace LazinatorCollections
 {
-    public partial class LazinatorLinkedList<T> : ILazinatorLinkedList<T>, IList<T>, ILazinatorListable<T>, IIndexableMultivalueContainer<T> where T : ILazinator
+    public partial class LazinatorLinkedList<T> : ILazinatorLinkedList<T>, IList<T>, ILazinatorListable<T>, IIndexableMultivalueContainer<T>, IMultilevelReporter where T : ILazinator
     {
         LazinatorLinkedListNode<T> _lastAccessedNode = null;
         int? _lastAccessedIndex = null;
@@ -42,6 +42,7 @@ namespace LazinatorCollections
             {
                 LazinatorLinkedListNode<T> current = GetNodeAt(index);
                 current.Value = value;
+                ConsiderMultilevelReport(index);
             }
         }
 
@@ -133,6 +134,7 @@ namespace LazinatorCollections
             Count++;
             _lastAccessedNode = node;
             _lastAccessedIndex = index;
+            ConsiderMultilevelReport(index);
         }
 
         public bool Remove(T item)
@@ -164,6 +166,7 @@ namespace LazinatorCollections
                 _lastAccessedNode = previous;
             }
             Count--;
+            ConsiderMultilevelReport(index);
         }
 
         #region Enumeration
@@ -404,6 +407,30 @@ namespace LazinatorCollections
         public void RemoveAt(long index)
         {
             RemoveAt((int)index);
+        }
+
+        #endregion
+        
+        #region IMultilevelReporter
+
+        public IMultilevelReportReceiver MultilevelReporterParent { get; set; }
+
+        protected void ConsiderMultilevelReport(long index)
+        {
+            if (index == 0)
+                ReportFirstChanged();
+            if (index >= LongCount - 1)
+                ReportLastChanged();
+        }
+
+        protected void ReportFirstChanged()
+        {
+            MultilevelReporterParent.EndItemChanged(true, First(), this);
+        }
+
+        protected void ReportLastChanged()
+        {
+            MultilevelReporterParent.EndItemChanged(false, Last(), this);
         }
 
         #endregion

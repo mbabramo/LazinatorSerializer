@@ -17,7 +17,7 @@ using LazinatorCollections.Location;
 namespace LazinatorCollections
 {
     [Implements(new string[] { "PreSerialization", "EnumerateLazinatorDescendants", "OnFreeInMemoryObjects", "AssignCloneProperties", "OnUpdateDeserializedChildren", "OnPropertiesWritten", "OnForEachLazinator" })]
-    public partial class LazinatorList<T> : IList, IList<T>, IEnumerable, ILazinatorList<T>, ILazinatorList, ILazinatorListable<T>, IIndexableMultivalueContainer<T> where T : ILazinator
+    public partial class LazinatorList<T> : IList, IList<T>, IEnumerable, ILazinatorList<T>, ILazinatorList, ILazinatorListable<T>, IIndexableMultivalueContainer<T>, IMultilevelReporter where T : ILazinator
     {
         #region Construction 
 
@@ -182,6 +182,7 @@ namespace LazinatorCollections
                 if (value != null)
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 MarkDirty();
+                ConsiderMultilevelReport(currentIndex);
             }
         }
 
@@ -323,6 +324,7 @@ namespace LazinatorCollections
             _DeserializedItems.Add(item);
             _ItemsTracker.Insert(index, new ItemStatus(null, _DeserializedItems.Count - 1));
             MarkDirty();
+            ConsiderMultilevelReport(index);
         }
 
         #endregion
@@ -372,6 +374,7 @@ namespace LazinatorCollections
                 _DeserializedItems[status.DeserializedIndex] = default;
             }
             MarkDirty();
+            ConsiderMultilevelReport(currentIndex);
         }
 
         #endregion
@@ -703,6 +706,30 @@ namespace LazinatorCollections
         {
             for (int i = 0; i < Count; i++)
                 array.SetValue(this[i], index + i);
+        }
+
+        #endregion
+
+        #region IMultilevelReporter
+        
+        public IMultilevelReportReceiver MultilevelReporterParent { get; set; }
+
+        protected void ConsiderMultilevelReport(long index)
+        {
+            if (index == 0)
+                ReportFirstChanged();
+            if (index >= LongCount - 1)
+                ReportLastChanged();
+        }
+
+        protected void ReportFirstChanged()
+        {
+            MultilevelReporterParent.EndItemChanged(true, First(), this);
+        }
+
+        protected void ReportLastChanged()
+        {
+            MultilevelReporterParent.EndItemChanged(false, Last(), this);
         }
 
         #endregion
