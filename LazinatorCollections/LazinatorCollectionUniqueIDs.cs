@@ -37,8 +37,6 @@
         ISortedMultivalueContainer,
         ISortedIndexableContainer,
         ISortedIndexableKeyValueContainer,
-        IBinaryNode,
-        IBinaryTree,
         ILazinatorDictionaryable,
         ILazinatorComparableKeyValue,
         IValueContainer,
