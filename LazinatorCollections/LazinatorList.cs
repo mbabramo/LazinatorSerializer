@@ -735,7 +735,7 @@ namespace LazinatorCollections
             if (Any())
                 MultilevelReporterParent?.EndItemChanged(false, Last(), this);
             else
-                MultilevelReporterParent?.EndItemRemoved(true, this);
+                MultilevelReporterParent?.EndItemRemoved(false, this);
         }
 
         #endregion
