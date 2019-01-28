@@ -136,6 +136,7 @@ namespace Lazinator.CodeDescription
         private string WriteInclusionConditional { get; set; }
         private string CodeBeforeSet { get; set; }
         private string CodeAfterSet { get; set; }
+        private strict CodeOnDeserialized { get; set; }
         private bool IsGuaranteedFixedLength { get; set; }
         private int FixedLength { get; set; }
         private bool IsGuaranteedSmall { get; set; }
@@ -260,6 +261,9 @@ namespace Lazinator.CodeDescription
             CloneOnSetAttribute onSetAttribute = UserAttributes.OfType<CloneOnSetAttribute>().FirstOrDefault();
             CodeBeforeSet = onSetAttribute?.CodeBeforeSet ?? "";
             CodeAfterSet = onSetAttribute?.CodeAfterSet ?? "";
+
+            CloneOnDeserializedAttribute onDeserializedAttribute = UserAttributes.OfType<CloneOnDeserializedAttribute>().FirstOrDefault();
+            CodeOnDeserialized = onDeserializedAttribute?.CodeToInsert ?? "";
 
             CloneRelativeOrderAttribute relativeOrder = UserAttributes.OfType<CloneRelativeOrderAttribute>().FirstOrDefault();
             RelativeOrder = relativeOrder?.RelativeOrder ?? 0;
@@ -914,6 +918,9 @@ namespace Lazinator.CodeDescription
                 bool automaticallyMarkDirtyWhenContainedObjectIsCreated = TrackDirtinessNonSerialized && ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct; // (1) unless we're tracking dirtiness, there is no field to set when the descendant informs us that it is dirty; (2) with a struct, we can't use an anonymous lambda (and more fundamentally can't pass a delegate to the struct method. Thus, if a struct has a supported collection, we can't automatically set DescendantIsDirty for the struct based on a change in some contained entity.
                 assignment = $"_{PropertyName} = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);";
             }
+            if (CodeOnDeserialized != "")
+                assignment += $@"
+                        {CodeOnDeserialized}";
 
             string createDefault = $@"_{PropertyName} = default({AppropriatelyQualifiedTypeName});{IIF(IsNonLazinatorType && TrackDirtinessNonSerialized, $@"
                                         _{PropertyName}_Dirty = true; ")}";

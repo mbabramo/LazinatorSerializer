@@ -38,5 +38,10 @@ namespace LazinatorTests.Examples
         {
             _OnDescendantIsDirtyCalled = true;
         }
+
+        public void OnMyChild1Deserialized()
+        {
+            // just for demonstration of attribute
+        }
     }
 }

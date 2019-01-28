@@ -98,8 +98,14 @@ namespace LazinatorCollections
 
         public override string ToString()
         {
-            var firstSeven = this.Take(7).ToArray();
-            return $"[{String.Join(", ", firstSeven)}{(firstSeven.Length == 7 ? ", ..." : "")}]";
+            var firstTen = this.Take(11).ToArray();
+            bool moreThanTen = false;
+            if (firstTen.Length == 11)
+            {
+                moreThanTen = true;
+                firstTen = this.Take(10).ToArray();
+            }
+            return $"[{String.Join(", ", firstTen)}{(moreThanTen ? ", ..." : "")}]";
         }
 
         private T GetSerializedContents(int originalIndex)
