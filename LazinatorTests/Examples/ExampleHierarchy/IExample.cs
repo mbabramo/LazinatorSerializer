@@ -12,6 +12,7 @@ namespace LazinatorTests.Examples
         [IncludeRefProperty]
         char MyChar { get; set; }
         [OnDeserialized("OnMyChild1Deserialized(_MyChild1);")]
+        [OnPropertyAccessed("OnMyChild1Accessed(_MyChild1);")]
         ExampleChild MyChild1 { get; set; }
         ExampleChild MyChild2 { get; set; }
         [EliminatedWithVersion(3)] ExampleChild MyChild2Previous { get; set; }

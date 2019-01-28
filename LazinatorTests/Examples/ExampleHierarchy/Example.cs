@@ -43,5 +43,10 @@ namespace LazinatorTests.Examples
         {
             // just for demonstration of attribute
         }
+
+        public void OnMyChild1Accessed()
+        {
+            // just for demonstration of attribute
+        }
     }
 }

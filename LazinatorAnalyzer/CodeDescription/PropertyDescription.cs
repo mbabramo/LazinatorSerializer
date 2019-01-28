@@ -136,7 +136,8 @@ namespace Lazinator.CodeDescription
         private string WriteInclusionConditional { get; set; }
         private string CodeBeforeSet { get; set; }
         private string CodeAfterSet { get; set; }
-        private strict CodeOnDeserialized { get; set; }
+        private string CodeOnDeserialized { get; set; }
+        private string CodeOnAccessed { get; set; }
         private bool IsGuaranteedFixedLength { get; set; }
         private int FixedLength { get; set; }
         private bool IsGuaranteedSmall { get; set; }
@@ -264,6 +265,9 @@ namespace Lazinator.CodeDescription
 
             CloneOnDeserializedAttribute onDeserializedAttribute = UserAttributes.OfType<CloneOnDeserializedAttribute>().FirstOrDefault();
             CodeOnDeserialized = onDeserializedAttribute?.CodeToInsert ?? "";
+
+            CloneOnPropertyAccessedAttribute onAccessedAttribute = UserAttributes.OfType<CloneOnPropertyAccessedAttribute>().FirstOrDefault();
+            CodeOnAccessed = onAccessedAttribute?.CodeToInsert ?? "";
 
             CloneRelativeOrderAttribute relativeOrder = UserAttributes.OfType<CloneRelativeOrderAttribute>().FirstOrDefault();
             RelativeOrder = relativeOrder?.RelativeOrder ?? 0;
@@ -1023,7 +1027,8 @@ namespace Lazinator.CodeDescription
                     }}
                     _{PropertyName}_Accessed = true;
                 }}{IIF(IsNonLazinatorType && !TrackDirtinessNonSerialized && (!RoslynHelpers.IsReadOnlyStruct(Symbol) || ContainsLazinatorInnerProperty || ContainsOpenGenericInnerProperty), $@"
-                    IsDirty = true;")} 
+                    IsDirty = true;")} {IIF(CodeOnAccessed != "", $@"
+                {CodeOnAccessed}")}
                 return _{PropertyName};
             }}{StepThroughPropertiesString}
             set
