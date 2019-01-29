@@ -1318,8 +1318,12 @@ namespace Lazinator.CodeDescription
 
         private string GetConstructor()
         {
-            string constructor = "";
-            if (Compilation.ImplementingTypeRequiresParameterlessConstructor) constructor =
+            string constructor = $@"public {SimpleName}(LazinatorConstructorEnum constructorEnum)
+                        {{
+                        }}
+                        
+                        "; ;
+            if (Compilation.ImplementingTypeRequiresParameterlessConstructor) constructor +=
                     $@"public {SimpleName}(){IIF(ILazinatorTypeSymbol.BaseType != null, " : base()")}
                         {{
                         }}
