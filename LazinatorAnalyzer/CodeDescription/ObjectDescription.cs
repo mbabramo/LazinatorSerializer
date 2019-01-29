@@ -330,7 +330,7 @@ namespace Lazinator.CodeDescription
             sb.AppendLine($@"public {NameIncludingGenerics} FromRefStruct()
                 {{
                     UpdateStoredBuffer();
-                    var clone = new {NameIncludingGenerics}()
+                    var clone = new {NameIncludingGenerics}(LazinatorConstructorEnum.LazinatorConstructor)
                     {{
                         OriginalIncludeChildrenMode = OriginalIncludeChildrenMode,
                         LazinatorMemoryStorage = LazinatorMemoryStorage
@@ -628,7 +628,7 @@ namespace Lazinator.CodeDescription
                 return "";
             return $@"public {DerivationKeyword}ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
                         {{
-                            var clone = new {NameIncludingGenerics}()
+                            var clone = new {NameIncludingGenerics}(LazinatorConstructorEnum.LazinatorConstructor)
                             {{
                                 OriginalIncludeChildrenMode = includeChildrenMode
                             }};

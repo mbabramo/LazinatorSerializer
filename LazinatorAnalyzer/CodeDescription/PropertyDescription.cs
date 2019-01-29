@@ -1093,7 +1093,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 LazinatorParents = new LazinatorParentsCollection(this)
                             }}";
-            string doCreation = $@"_{PropertyName} = new {AppropriatelyQualifiedTypeName}(){lazinatorParentClassSet};
+            string doCreation = $@"_{PropertyName} = new {AppropriatelyQualifiedTypeName}({IIF(PropertyType != LazinatorPropertyType.LazinatorStruct, "LazinatorConstructorEnum.LazinatorConstructor")}){lazinatorParentClassSet};
                         _{PropertyName}.DeserializeLazinator(childData);";
             string creation = nullItemCheck == "" ? doCreation : $@"{nullItemCheck}
                     {{
@@ -2316,7 +2316,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 return default({AppropriatelyQualifiedTypeName});
                             }}
-                            {InterchangeTypeName} interchange = new {InterchangeTypeName}();
+                            {InterchangeTypeName} interchange = new {InterchangeTypeName}(LazinatorConstructorEnum.LazinatorConstructor);
                             interchange.DeserializeLazinator(storage);
                             return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}(false);
                         }}
