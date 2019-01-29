@@ -2,5 +2,8 @@
 {
     public partial class RecursiveExample : IRecursiveExample
     {
+        public RecursiveExample()
+        {
+        }
     }
 }

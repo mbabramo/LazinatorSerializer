@@ -2,5 +2,8 @@
 {
     public partial class Base : IBase
     {
+        public Base()
+        {
+        }
     }
 }

@@ -2,5 +2,9 @@
 {
     public partial class FromNonLazinatorBase : NonLazinatorBase, IFromNonLazinatorBase
     {
+        public FromNonLazinatorBase()
+        {
+
+        }
     }
 }

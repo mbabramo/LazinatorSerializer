@@ -2,5 +2,8 @@
 {
     public partial class RecordLikeCollections : IRecordLikeCollections
     {
+        public RecordLikeCollections()
+        {
+        }
     }
 }

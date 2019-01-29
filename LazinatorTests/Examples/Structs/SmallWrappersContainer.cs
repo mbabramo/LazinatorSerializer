@@ -2,5 +2,8 @@
 {
     public partial class SmallWrappersContainer : ISmallWrappersContainer
     {
+        public SmallWrappersContainer()
+        {
+        }
     }
 }

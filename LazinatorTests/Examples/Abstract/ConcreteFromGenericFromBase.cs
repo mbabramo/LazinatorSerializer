@@ -4,5 +4,8 @@ namespace LazinatorTests.Examples.Abstract
 {
     public partial class ConcreteFromGenericFromBase : GenericFromBase<WNullableDecimal>, IConcreteFromGenericFromBase
     {
+        public ConcreteFromGenericFromBase()
+        {
+        }
     }
 }

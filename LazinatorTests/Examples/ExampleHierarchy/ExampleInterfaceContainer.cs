@@ -2,5 +2,8 @@
 {
     public partial class ExampleInterfaceContainer : IExampleInterfaceContainer
     {
+        public ExampleInterfaceContainer()
+        {
+        }
     }
 }
