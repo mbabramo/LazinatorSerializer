@@ -39,6 +39,10 @@ namespace LazinatorTests.Examples.Abstract
         {
         }
         
+        public Base() : base()
+        {
+        }
+        
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

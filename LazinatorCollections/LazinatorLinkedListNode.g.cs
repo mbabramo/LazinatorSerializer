@@ -144,6 +144,10 @@ namespace LazinatorCollections
         {
         }
         
+        public LazinatorLinkedListNode() : base()
+        {
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         

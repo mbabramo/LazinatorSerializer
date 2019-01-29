@@ -36,6 +36,10 @@ namespace LazinatorCollections
         {
         }
         
+        public LazinatorSortedList() : base()
+        {
+        }
+        
         public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
             var clone = new LazinatorSortedList<T>()

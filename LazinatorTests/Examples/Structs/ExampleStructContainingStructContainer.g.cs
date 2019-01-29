@@ -107,6 +107,10 @@ namespace LazinatorTests.Examples.Structs
         {
         }
         
+        public ExampleStructContainingStructContainer() : base()
+        {
+        }
+        
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

@@ -87,6 +87,10 @@ namespace LazinatorCollections
         {
         }
         
+        public LazinatorArray() : base()
+        {
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         

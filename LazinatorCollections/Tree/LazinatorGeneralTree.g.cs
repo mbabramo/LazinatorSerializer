@@ -145,6 +145,10 @@ namespace LazinatorCollections.Tree
         {
         }
         
+        public LazinatorGeneralTree() : base()
+        {
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         

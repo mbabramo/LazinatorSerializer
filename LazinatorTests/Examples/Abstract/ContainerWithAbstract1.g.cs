@@ -83,6 +83,10 @@ namespace LazinatorTests.Examples.Abstract
         {
         }
         
+        public ContainerWithAbstract1() : base()
+        {
+        }
+        
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

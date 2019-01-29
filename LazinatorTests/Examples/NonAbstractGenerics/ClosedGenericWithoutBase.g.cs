@@ -98,6 +98,10 @@ namespace LazinatorTests.Examples
         {
         }
         
+        public ClosedGenericWithoutBase() : base()
+        {
+        }
+        
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

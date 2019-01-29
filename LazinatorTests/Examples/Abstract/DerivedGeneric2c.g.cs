@@ -135,6 +135,10 @@ namespace LazinatorTests.Examples.Abstract
         {
         }
         
+        public DerivedGeneric2c() : base()
+        {
+        }
+        
         public override LazinatorParentsCollection LazinatorParents { get; set; }
         
         public override IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

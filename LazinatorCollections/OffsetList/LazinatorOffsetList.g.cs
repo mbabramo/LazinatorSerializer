@@ -153,6 +153,10 @@ namespace LazinatorCollections.OffsetList
         {
         }
         
+        public LazinatorOffsetList() : base()
+        {
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public LazinatorParentsCollection LazinatorParents { get; set; }
         

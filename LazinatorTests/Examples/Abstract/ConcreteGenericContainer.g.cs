@@ -79,6 +79,10 @@ namespace LazinatorTests.Examples.Abstract
         {
         }
         
+        public ConcreteGenericContainer() : base()
+        {
+        }
+        
         public override LazinatorParentsCollection LazinatorParents { get; set; }
         
         public override IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

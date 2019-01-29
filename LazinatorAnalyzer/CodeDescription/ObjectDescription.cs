@@ -1325,12 +1325,12 @@ namespace Lazinator.CodeDescription
                         }}
 
                         ";
-            //if (Compilation.ImplementingTypeRequiresParameterlessConstructor) constructor +=
-            //        $@"public {SimpleName}(){IIF(ILazinatorTypeSymbol.BaseType != null, " : base()")}
-            //            {{
-            //            }}
+            if (Compilation.ImplementingTypeRequiresParameterlessConstructor) constructor +=
+                    $@"public {SimpleName}(){IIF(ILazinatorTypeSymbol.BaseType != null, " : base()")}
+                        {{
+                        }}
                         
-            //            ";
+                        ";
             return constructor;
         }
 

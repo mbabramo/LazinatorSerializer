@@ -2,9 +2,5 @@
 {
     public partial class SpanAndMemory : ISpanAndMemory
     {
-        public SpanAndMemory()
-        {
-
-        }
     }
 }

@@ -106,6 +106,10 @@ namespace LazinatorTests.Examples.Abstract
         {
         }
         
+        public GenericFromBase() : base()
+        {
+        }
+        
         public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
             var clone = new GenericFromBase<T>()

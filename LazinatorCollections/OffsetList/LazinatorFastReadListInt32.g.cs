@@ -36,6 +36,10 @@ namespace LazinatorCollections.OffsetList
         {
         }
         
+        public LazinatorFastReadListInt32() : base()
+        {
+        }
+        
         public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
             var clone = new LazinatorFastReadListInt32()

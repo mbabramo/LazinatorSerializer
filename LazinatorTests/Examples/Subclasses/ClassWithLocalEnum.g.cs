@@ -89,6 +89,10 @@ namespace LazinatorTests.Examples.Subclasses
         {
         }
         
+        public ClassWithLocalEnum() : base()
+        {
+        }
+        
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

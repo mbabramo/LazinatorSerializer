@@ -13,11 +13,6 @@ namespace LazinatorCollections.OffsetList
     [Implements(new string[] { "PreSerialization" })]
     public partial class LazinatorFastReadList<T> : ILazinatorFastReadList<T>, ILazinator where T : struct 
     {
-        public LazinatorFastReadList()
-        {
-
-        }
-
         public virtual ReadOnlySpan<T> ReadOnly
         {
             get => MemoryMarshal.Cast<byte, T>(ReadOnlyBytes);

@@ -128,6 +128,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
         }
         
+        public OpenGeneric() : base()
+        {
+        }
+        
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

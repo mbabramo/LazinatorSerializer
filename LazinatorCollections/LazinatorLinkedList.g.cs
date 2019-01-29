@@ -88,7 +88,7 @@ namespace LazinatorCollections
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _FirstNode_ByteIndex, _FirstNode_ByteLength, false, false, null);
                         
-                        _FirstNode = DeserializationFactory.Instance.CreateBaseOrDerivedType(224, () => new LazinatorLinkedListNode<T>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
+                        _FirstNode = DeserializationFactory.Instance.CreateBaseOrDerivedType(224, () => new LazinatorLinkedListNode<T>(), childData, this); 
                     }
                     _FirstNode_Accessed = true;
                 } 
@@ -118,6 +118,10 @@ namespace LazinatorCollections
         /* Serialization, deserialization, and object relationships */
         
         public LazinatorLinkedList(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
+        public LazinatorLinkedList() : base()
         {
         }
         
@@ -170,7 +174,7 @@ namespace LazinatorCollections
         
         public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
-            var clone = new LazinatorLinkedList<T>(LazinatorConstructorEnum.LazinatorConstructor)
+            var clone = new LazinatorLinkedList<T>()
             {
                 OriginalIncludeChildrenMode = includeChildrenMode
             };
