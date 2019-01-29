@@ -4,5 +4,9 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
 {
     public partial class OpenGeneric<T> : IOpenGeneric<T> where T : ILazinator
     {
+        public OpenGeneric()
+        {
+
+        }
     }
 }

@@ -381,10 +381,6 @@ namespace LazinatorTests.Examples.Collections
         {
         }
         
-        public SpanAndMemory() : base()
-        {
-        }
-        
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

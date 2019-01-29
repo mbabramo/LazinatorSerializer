@@ -183,10 +183,6 @@ namespace LazinatorTests.Examples.Abstract
         {
         }
         
-        public ConcreteGeneric2b() : base()
-        {
-        }
-        
         public override LazinatorParentsCollection LazinatorParents { get; set; }
         
         public override IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

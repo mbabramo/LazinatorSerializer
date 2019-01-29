@@ -75,10 +75,6 @@ namespace LazinatorTests.Examples.Collections
         {
         }
         
-        public DotNetQueue_Lazinator() : base()
-        {
-        }
-        
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

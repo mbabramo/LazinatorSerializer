@@ -2,6 +2,9 @@
 {
     public partial class ExampleGrandchild : IExampleGrandchild
     {
-        
+        public ExampleGrandchild()
+        {
+
+        }
     }
 }

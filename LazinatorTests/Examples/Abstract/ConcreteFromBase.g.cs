@@ -51,10 +51,6 @@ namespace LazinatorTests.Examples.Abstract
         {
         }
         
-        public ConcreteFromBase() : base()
-        {
-        }
-        
         public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
             var clone = new ConcreteFromBase()

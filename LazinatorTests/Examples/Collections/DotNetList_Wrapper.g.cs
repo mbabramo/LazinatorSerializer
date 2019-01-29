@@ -162,10 +162,6 @@ namespace LazinatorTests.Examples.Collections
         {
         }
         
-        public DotNetList_Wrapper() : base()
-        {
-        }
-        
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

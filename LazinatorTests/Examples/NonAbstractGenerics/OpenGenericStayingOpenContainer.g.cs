@@ -258,10 +258,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
         }
         
-        public OpenGenericStayingOpenContainer() : base()
-        {
-        }
-        
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

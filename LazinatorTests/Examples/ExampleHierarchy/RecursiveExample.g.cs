@@ -126,10 +126,6 @@ namespace LazinatorTests.Examples.Hierarchy
         {
         }
         
-        public RecursiveExample() : base()
-        {
-        }
-        
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

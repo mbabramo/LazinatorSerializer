@@ -52,10 +52,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
         }
         
-        public InheritingClosedGeneric() : base()
-        {
-        }
-        
         public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
             var clone = new InheritingClosedGeneric()

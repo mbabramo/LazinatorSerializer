@@ -14,7 +14,7 @@ namespace LazinatorCollections
 
         public override IValueContainer<T> CreateNewWithSameSettings()
         {
-            return new LazinatorSortedList<T>()
+            return new LazinatorSortedList<T>(LazinatorConstructorEnum.LazinatorConstructor)
             {
                 AllowDuplicates = AllowDuplicates
             };
