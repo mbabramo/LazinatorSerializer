@@ -11,5 +11,7 @@ namespace Lazinator.Exceptions
 
         public static void ThrowFormatException() =>
                                 throw new FormatException("Wrong Lazinator type initialized.");
+
+        public static void ThrowVersioningDisabledException(string nameIncludingGenerics) => throw new LazinatorSerializationException($"Lazinator versioning disabled for {nameIncludingGenerics}.");
     }
 }

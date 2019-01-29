@@ -431,7 +431,7 @@ namespace Lazinator.CodeDescription
                         readUniqueID = $@"{(UniqueIDCanBeSkipped ? "" : $@"int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
                             if (uniqueID != LazinatorUniqueID)
                             {{
-                                ThrowHelpers.ThrowFormatException()
+                                ThrowHelper.ThrowFormatException();
                             }}
 
                             ")}";
@@ -964,7 +964,7 @@ namespace Lazinator.CodeDescription
                 selfSerializationVersionString = $@"{HideILazinatorProperty}public {DerivationKeyword}int LazinatorObjectVersion
                 {{
                     get => -1;
-                    set => throw new LazinatorSerializationException(""Lazinator versioning disabled for {NameIncludingGenerics}."");
+                    set => ThrowHelper.ThrowVersioningDisabledException(""{NameIncludingGenerics}"");
                 }}";
             else if (ObjectType == LazinatorObjectType.Class && !GeneratingRefStruct)
                 selfSerializationVersionString = $@"{HideILazinatorProperty}public {DerivationKeyword}int LazinatorObjectVersion {{ get; set; }} = {Version};"; // even if versioning is disabled, we still need to implement the interface
@@ -1453,7 +1453,7 @@ namespace Lazinator.CodeDescription
                         AllGenericsAreNonlazinator = true;
                 }
                 else
-                    throw new LazinatorCodeGenException("Open generic parameter in non-abstract type must be constrained to type ILazinator. Add a clause like 'where T : ILazinator, new()' to both the main class and the interface definition");
+                    throw new LazinatorCodeGenException("Open generic parameter in non-abstract type must be constrained to type ILazinator. Add a clause like 'where T : ILazinator' to both the main class and the interface definition");
             }
             NameIncludingGenerics = iLazinatorType.GetMinimallyQualifiedName();
             GenericArgumentNames = genericArguments.Select(x => x.Name).ToList();
