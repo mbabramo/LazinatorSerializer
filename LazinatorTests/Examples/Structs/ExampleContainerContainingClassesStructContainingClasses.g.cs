@@ -271,6 +271,10 @@ namespace LazinatorTests.Examples
         
         /* Serialization, deserialization, and object relationships */
         
+        public ExampleContainerContainingClassesStructContainingClasses(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public ExampleContainerContainingClassesStructContainingClasses() : base()
         {
         }

@@ -137,6 +137,10 @@ namespace LazinatorTests.Examples.Subclasses
         
         /* Serialization, deserialization, and object relationships */
         
+        public ClassWithSubclass(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public ClassWithSubclass() : base()
         {
         }

@@ -124,6 +124,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         /* Serialization, deserialization, and object relationships */
         
+        public OpenGeneric(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public OpenGeneric() : base()
         {
         }

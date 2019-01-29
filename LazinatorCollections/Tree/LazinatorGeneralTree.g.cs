@@ -141,6 +141,10 @@ namespace LazinatorCollections.Tree
         
         /* Serialization, deserialization, and object relationships */
         
+        public LazinatorGeneralTree(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public LazinatorGeneralTree() : base()
         {
         }

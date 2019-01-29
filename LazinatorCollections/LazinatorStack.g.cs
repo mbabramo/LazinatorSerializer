@@ -83,6 +83,10 @@ namespace LazinatorCollections
         
         /* Serialization, deserialization, and object relationships */
         
+        public LazinatorStack(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         

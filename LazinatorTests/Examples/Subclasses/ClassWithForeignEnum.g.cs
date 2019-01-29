@@ -50,6 +50,10 @@ namespace LazinatorTests.Examples.Subclasses
         
         /* Serialization, deserialization, and object relationships */
         
+        public ClassWithForeignEnum(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public ClassWithForeignEnum() : base()
         {
         }

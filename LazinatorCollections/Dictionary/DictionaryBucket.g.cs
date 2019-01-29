@@ -147,6 +147,10 @@ namespace LazinatorCollections.Dictionary
         
         /* Serialization, deserialization, and object relationships */
         
+        public DictionaryBucket(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public DictionaryBucket() : base()
         {
         }

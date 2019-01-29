@@ -102,6 +102,10 @@ namespace LazinatorTests.Examples.Abstract
         protected bool _MyT_Accessed;
         /* Clone overrides */
         
+        public GenericFromBase(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public GenericFromBase() : base()
         {
         }

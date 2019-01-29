@@ -50,6 +50,10 @@ namespace LazinatorTests.Examples
         
         /* Serialization, deserialization, and object relationships */
         
+        public ExampleNonexclusiveInterfaceImplementer(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public ExampleNonexclusiveInterfaceImplementer() : base()
         {
         }

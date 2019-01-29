@@ -94,6 +94,10 @@ namespace LazinatorTests.Examples
         
         /* Serialization, deserialization, and object relationships */
         
+        public ClosedGenericWithoutBase(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public ClosedGenericWithoutBase() : base()
         {
         }

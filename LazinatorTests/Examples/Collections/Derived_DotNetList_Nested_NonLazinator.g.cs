@@ -83,6 +83,10 @@ namespace LazinatorTests.Examples.Collections
         protected bool _MyLevel2ListNestedNonLazinatorType_Accessed;
         /* Clone overrides */
         
+        public Derived_DotNetList_Nested_NonLazinator(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public Derived_DotNetList_Nested_NonLazinator() : base()
         {
         }

@@ -131,6 +131,10 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Serialization, deserialization, and object relationships */
         
+        public DerivedGeneric2c(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public DerivedGeneric2c() : base()
         {
         }

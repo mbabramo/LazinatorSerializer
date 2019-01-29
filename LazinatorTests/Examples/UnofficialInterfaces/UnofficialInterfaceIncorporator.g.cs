@@ -153,6 +153,10 @@ namespace LazinatorTests.Examples
         
         /* Serialization, deserialization, and object relationships */
         
+        public UnofficialInterfaceIncorporator(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public UnofficialInterfaceIncorporator() : base()
         {
         }

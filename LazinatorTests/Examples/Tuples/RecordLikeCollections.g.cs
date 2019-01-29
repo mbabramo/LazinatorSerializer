@@ -121,6 +121,10 @@ namespace LazinatorTests.Examples.Tuples
         
         /* Serialization, deserialization, and object relationships */
         
+        public RecordLikeCollections(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public RecordLikeCollections() : base()
         {
         }

@@ -377,6 +377,10 @@ namespace LazinatorTests.Examples.Collections
         
         /* Serialization, deserialization, and object relationships */
         
+        public SpanAndMemory(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public SpanAndMemory() : base()
         {
         }

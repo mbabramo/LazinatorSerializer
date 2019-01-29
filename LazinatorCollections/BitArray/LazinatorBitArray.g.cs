@@ -108,6 +108,10 @@ namespace LazinatorCollections.BitArray
         
         /* Serialization, deserialization, and object relationships */
         
+        public LazinatorBitArray(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public LazinatorParentsCollection LazinatorParents { get; set; }
         

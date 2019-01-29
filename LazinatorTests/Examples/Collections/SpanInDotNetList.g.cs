@@ -85,6 +85,10 @@ namespace LazinatorTests.Examples.Collections
         
         /* Serialization, deserialization, and object relationships */
         
+        public SpanInDotNetList(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public SpanInDotNetList() : base()
         {
         }

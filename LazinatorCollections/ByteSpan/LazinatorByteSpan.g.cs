@@ -99,6 +99,10 @@ namespace LazinatorCollections.ByteSpan
         
         /* Serialization, deserialization, and object relationships */
         
+        public LazinatorByteSpan(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         

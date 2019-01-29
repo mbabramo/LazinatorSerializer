@@ -140,6 +140,10 @@ namespace LazinatorCollections
         
         /* Serialization, deserialization, and object relationships */
         
+        public LazinatorLinkedListNode(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public LazinatorLinkedListNode() : base()
         {
         }

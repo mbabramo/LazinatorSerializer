@@ -298,6 +298,10 @@ namespace LazinatorTests.Examples
         
         /* Serialization, deserialization, and object relationships */
         
+        public Simplifiable(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public Simplifiable() : base()
         {
         }

@@ -67,6 +67,10 @@ namespace LazinatorTests.Examples.Abstract
         protected bool _IntList6_Accessed;
         /* Clone overrides */
         
+        public Concrete6(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public Concrete6() : base()
         {
         }

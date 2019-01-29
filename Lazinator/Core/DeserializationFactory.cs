@@ -74,7 +74,11 @@ namespace Lazinator.Core
 
         private static Func<ILazinator> GetCompiledFunctionForType(Type t)
         {
-            var exnew = Expression.New(t);
+            Expression exnew;
+            if (t.IsValueType)
+                exnew = Expression.New(t);
+            else
+                exnew = Expression.New(t.GetConstructors().Where(x => x.GetParameters().FirstOrDefault()?.ParameterType == typeof(LazinatorConstructorEnum)).FirstOrDefault(), Expression.Constant(LazinatorConstructorEnum.LazinatorConstructor));
             var exconv = Expression.Convert(exnew, typeof(ILazinator));
             var lambda = Expression.Lambda(exconv);
             Delegate compiled = lambda.Compile();

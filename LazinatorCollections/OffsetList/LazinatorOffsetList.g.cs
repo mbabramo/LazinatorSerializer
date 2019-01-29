@@ -149,6 +149,10 @@ namespace LazinatorCollections.OffsetList
         
         /* Serialization, deserialization, and object relationships */
         
+        public LazinatorOffsetList(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public LazinatorOffsetList() : base()
         {
         }

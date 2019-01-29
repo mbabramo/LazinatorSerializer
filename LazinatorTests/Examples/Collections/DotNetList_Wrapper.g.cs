@@ -158,6 +158,10 @@ namespace LazinatorTests.Examples.Collections
         
         /* Serialization, deserialization, and object relationships */
         
+        public DotNetList_Wrapper(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public DotNetList_Wrapper() : base()
         {
         }

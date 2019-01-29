@@ -122,6 +122,10 @@ namespace LazinatorTests.Examples.Hierarchy
         
         /* Serialization, deserialization, and object relationships */
         
+        public RecursiveExample(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public RecursiveExample() : base()
         {
         }

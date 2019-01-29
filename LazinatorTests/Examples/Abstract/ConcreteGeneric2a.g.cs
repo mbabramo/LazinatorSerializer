@@ -153,6 +153,10 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Serialization, deserialization, and object relationships */
         
+        public ConcreteGeneric2a(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public ConcreteGeneric2a() : base()
         {
         }

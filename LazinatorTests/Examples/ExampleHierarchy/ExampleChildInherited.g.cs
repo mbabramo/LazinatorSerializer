@@ -91,6 +91,10 @@ namespace LazinatorTests.Examples
         protected bool _MyGrandchildInInherited_Accessed;
         /* Clone overrides */
         
+        public ExampleChildInherited(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public ExampleChildInherited() : base()
         {
         }

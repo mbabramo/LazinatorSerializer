@@ -65,6 +65,10 @@ namespace LazinatorTests.Examples
         
         /* Serialization, deserialization, and object relationships */
         
+        public ExampleGrandchild(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public ExampleGrandchild() : base()
         {
         }

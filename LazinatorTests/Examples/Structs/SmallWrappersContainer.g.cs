@@ -609,6 +609,10 @@ namespace LazinatorTests.Examples.Structs
         
         /* Serialization, deserialization, and object relationships */
         
+        public SmallWrappersContainer(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public SmallWrappersContainer() : base()
         {
         }

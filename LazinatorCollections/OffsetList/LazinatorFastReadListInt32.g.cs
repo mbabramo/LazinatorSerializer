@@ -32,6 +32,10 @@ namespace LazinatorCollections.OffsetList
         
         /* Clone overrides */
         
+        public LazinatorFastReadListInt32(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public LazinatorFastReadListInt32() : base()
         {
         }

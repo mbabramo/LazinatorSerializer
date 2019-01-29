@@ -71,6 +71,10 @@ namespace LazinatorTests.Examples.Collections
         
         /* Serialization, deserialization, and object relationships */
         
+        public DotNetQueue_Lazinator(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public DotNetQueue_Lazinator() : base()
         {
         }

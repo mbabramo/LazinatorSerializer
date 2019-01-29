@@ -85,6 +85,10 @@ namespace LazinatorTests.Examples.Subclasses
         
         /* Serialization, deserialization, and object relationships */
         
+        public ClassWithLocalEnum(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public ClassWithLocalEnum() : base()
         {
         }

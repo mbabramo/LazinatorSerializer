@@ -62,6 +62,10 @@ namespace LazinatorCollections.OffsetList
         
         /* Serialization, deserialization, and object relationships */
         
+        public LazinatorFastReadList(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public LazinatorFastReadList() : base()
         {
         }

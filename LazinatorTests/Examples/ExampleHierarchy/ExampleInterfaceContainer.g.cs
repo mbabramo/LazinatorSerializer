@@ -114,6 +114,10 @@ namespace LazinatorTests.Examples.Hierarchy
         
         /* Serialization, deserialization, and object relationships */
         
+        public ExampleInterfaceContainer(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public ExampleInterfaceContainer() : base()
         {
         }

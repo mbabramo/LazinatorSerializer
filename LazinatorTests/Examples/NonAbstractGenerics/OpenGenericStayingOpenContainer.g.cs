@@ -254,6 +254,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         /* Serialization, deserialization, and object relationships */
         
+        public OpenGenericStayingOpenContainer(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public OpenGenericStayingOpenContainer() : base()
         {
         }

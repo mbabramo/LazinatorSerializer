@@ -82,6 +82,10 @@ namespace LazinatorCollections.Tree
         protected bool _Locations_Accessed;
         /* Clone overrides */
         
+        public LazinatorLocationAwareTree(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public LazinatorLocationAwareTree() : base()
         {
         }

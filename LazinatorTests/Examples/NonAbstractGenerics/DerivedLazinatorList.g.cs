@@ -48,6 +48,10 @@ namespace LazinatorTests.Examples
         }
         /* Clone overrides */
         
+        public DerivedLazinatorList(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public DerivedLazinatorList() : base()
         {
         }

@@ -83,6 +83,10 @@ namespace LazinatorCollections
         
         /* Serialization, deserialization, and object relationships */
         
+        public LazinatorArray(LazinatorConstructorEnum constructorEnum)
+        {
+        }
+        
         public LazinatorArray() : base()
         {
         }
