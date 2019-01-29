@@ -1091,7 +1091,7 @@ namespace Lazinator.CodeDescription
                     }}
                     else
                     {{
-                        throw new LazinatorSerializationException(""Cannot update stored buffer when serializing only some children."");
+                        ThrowHelper.ThrowCannotUpdateStoredBuffer();
                     }}");
         }
 
