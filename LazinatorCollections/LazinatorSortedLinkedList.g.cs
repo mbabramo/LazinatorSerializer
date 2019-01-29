@@ -32,11 +32,7 @@ namespace LazinatorCollections
         
         /* Clone overrides */
         
-        public LazinatorSortedLinkedList(LazinatorConstructorEnum constructorEnum)
-        {
-        }
-        
-        public LazinatorSortedLinkedList() : base()
+        public LazinatorSortedLinkedList(LazinatorConstructorEnum constructorEnum) : base(constructorEnum)
         {
         }
         

@@ -108,7 +108,7 @@ namespace LazinatorTests.Examples
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleGrandchild_ByteIndex, _MyExampleGrandchild_ByteLength, false, false, null);
                         
-                        _MyExampleGrandchild = DeserializationFactory.Instance.CreateBaseOrDerivedType(1079, () => new ExampleGrandchild(), childData, this); 
+                        _MyExampleGrandchild = DeserializationFactory.Instance.CreateBaseOrDerivedType(1079, () => new ExampleGrandchild(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
                     }
                     _MyExampleGrandchild_Accessed = true;
                 } 
@@ -149,7 +149,7 @@ namespace LazinatorTests.Examples
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyWrapperContainer_ByteIndex, _MyWrapperContainer_ByteLength, false, false, null);
                         
-                        _MyWrapperContainer = DeserializationFactory.Instance.CreateBaseOrDerivedType(1048, () => new WrapperContainer(), childData, this); 
+                        _MyWrapperContainer = DeserializationFactory.Instance.CreateBaseOrDerivedType(1048, () => new WrapperContainer(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
                     }
                     _MyWrapperContainer_Accessed = true;
                 } 

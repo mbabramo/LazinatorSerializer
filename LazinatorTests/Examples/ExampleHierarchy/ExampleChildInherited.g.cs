@@ -65,7 +65,7 @@ namespace LazinatorTests.Examples
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyGrandchildInInherited_ByteIndex, _MyGrandchildInInherited_ByteLength, false, false, null);
                         
-                        _MyGrandchildInInherited = DeserializationFactory.Instance.CreateBaseOrDerivedType(1079, () => new ExampleGrandchild(), childData, this); 
+                        _MyGrandchildInInherited = DeserializationFactory.Instance.CreateBaseOrDerivedType(1079, () => new ExampleGrandchild(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
                     }
                     _MyGrandchildInInherited_Accessed = true;
                 } 
@@ -91,11 +91,7 @@ namespace LazinatorTests.Examples
         protected bool _MyGrandchildInInherited_Accessed;
         /* Clone overrides */
         
-        public ExampleChildInherited(LazinatorConstructorEnum constructorEnum)
-        {
-        }
-        
-        public ExampleChildInherited() : base()
+        public ExampleChildInherited(LazinatorConstructorEnum constructorEnum) : base(constructorEnum)
         {
         }
         

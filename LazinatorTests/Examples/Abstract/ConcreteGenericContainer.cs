@@ -2,5 +2,8 @@
 {
     public partial class ConcreteGenericContainer : AbstractGenericContainer<int>, IConcreteGenericContainer
     {
+        public ConcreteGenericContainer()
+        {
+        }
     }
 }

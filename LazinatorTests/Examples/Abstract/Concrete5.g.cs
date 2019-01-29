@@ -129,11 +129,7 @@ namespace LazinatorTests.Examples.Abstract
         protected bool _IntList5_Accessed;
         /* Clone overrides */
         
-        public Concrete5(LazinatorConstructorEnum constructorEnum)
-        {
-        }
-        
-        public Concrete5() : base()
+        public Concrete5(LazinatorConstructorEnum constructorEnum) : base(constructorEnum)
         {
         }
         

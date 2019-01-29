@@ -54,7 +54,7 @@ namespace LazinatorCollections.Tree
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Locations_ByteIndex, _Locations_ByteLength, false, false, null);
                         
-                        _Locations = DeserializationFactory.Instance.CreateBaseOrDerivedType(211, () => new LazinatorDictionary<T, LazinatorList<WInt>>(), childData, this); 
+                        _Locations = DeserializationFactory.Instance.CreateBaseOrDerivedType(211, () => new LazinatorDictionary<T, LazinatorList<WInt>>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
                     }
                     _Locations_Accessed = true;
                 } 
@@ -82,11 +82,7 @@ namespace LazinatorCollections.Tree
         protected bool _Locations_Accessed;
         /* Clone overrides */
         
-        public LazinatorLocationAwareTree(LazinatorConstructorEnum constructorEnum)
-        {
-        }
-        
-        public LazinatorLocationAwareTree() : base()
+        public LazinatorLocationAwareTree(LazinatorConstructorEnum constructorEnum) : base(constructorEnum)
         {
         }
         

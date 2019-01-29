@@ -85,7 +85,7 @@ namespace LazinatorTests.Examples
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyOfficialObject_ByteIndex, _MyOfficialObject_ByteLength, false, false, null);
                         
-                        _MyOfficialObject = DeserializationFactory.Instance.CreateBaseOrDerivedType(1039, () => new Concrete5(), childData, this); 
+                        _MyOfficialObject = DeserializationFactory.Instance.CreateBaseOrDerivedType(1039, () => new Concrete5(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
                     }
                     _MyOfficialObject_Accessed = true;
                 } 
@@ -126,7 +126,7 @@ namespace LazinatorTests.Examples
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyUnofficialObject_ByteIndex, _MyUnofficialObject_ByteLength, false, false, null);
                         
-                        _MyUnofficialObject = DeserializationFactory.Instance.CreateBaseOrDerivedType(1037, () => new Concrete3(), childData, this); 
+                        _MyUnofficialObject = DeserializationFactory.Instance.CreateBaseOrDerivedType(1037, () => new Concrete3(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
                     }
                     _MyUnofficialObject_Accessed = true;
                 } 
@@ -154,10 +154,6 @@ namespace LazinatorTests.Examples
         /* Serialization, deserialization, and object relationships */
         
         public UnofficialInterfaceIncorporator(LazinatorConstructorEnum constructorEnum)
-        {
-        }
-        
-        public UnofficialInterfaceIncorporator() : base()
         {
         }
         

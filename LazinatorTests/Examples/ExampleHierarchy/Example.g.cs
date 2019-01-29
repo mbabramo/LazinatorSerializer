@@ -284,7 +284,7 @@ namespace LazinatorTests.Examples
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IncludableChild_ByteIndex, _IncludableChild_ByteLength, false, false, null);
                         
-                        _IncludableChild = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, () => new ExampleChild(), childData, this); 
+                        _IncludableChild = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, () => new ExampleChild(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
                     }
                     _IncludableChild_Accessed = true;
                 } 
@@ -325,7 +325,7 @@ namespace LazinatorTests.Examples
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild1_ByteIndex, _MyChild1_ByteLength, false, false, null);
                         
-                        _MyChild1 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, () => new ExampleChild(), childData, this); 
+                        _MyChild1 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, () => new ExampleChild(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
                         OnMyChild1Deserialized(_MyChild1);
                     }
                     _MyChild1_Accessed = true;
@@ -368,7 +368,7 @@ namespace LazinatorTests.Examples
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild2_ByteIndex, _MyChild2_ByteLength, false, false, null);
                         
-                        _MyChild2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, () => new ExampleChild(), childData, this); 
+                        _MyChild2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, () => new ExampleChild(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
                     }
                     _MyChild2_Accessed = true;
                 } 
@@ -409,7 +409,7 @@ namespace LazinatorTests.Examples
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild2Previous_ByteIndex, _MyChild2Previous_ByteLength, false, false, null);
                         
-                        _MyChild2Previous = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, () => new ExampleChild(), childData, this); 
+                        _MyChild2Previous = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, () => new ExampleChild(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
                     }
                     _MyChild2Previous_Accessed = true;
                 } 
@@ -606,7 +606,7 @@ namespace LazinatorTests.Examples
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExcludableChild_ByteIndex, _ExcludableChild_ByteLength, false, false, null);
                         
-                        _ExcludableChild = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, () => new ExampleChild(), childData, this); 
+                        _ExcludableChild = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, () => new ExampleChild(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
                     }
                     _ExcludableChild_Accessed = true;
                 } 

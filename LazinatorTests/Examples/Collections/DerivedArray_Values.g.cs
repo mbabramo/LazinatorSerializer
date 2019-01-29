@@ -86,11 +86,7 @@ namespace LazinatorTests.Examples.Collections
         }
         /* Clone overrides */
         
-        public DerivedArray_Values(LazinatorConstructorEnum constructorEnum)
-        {
-        }
-        
-        public DerivedArray_Values() : base()
+        public DerivedArray_Values(LazinatorConstructorEnum constructorEnum) : base(constructorEnum)
         {
         }
         

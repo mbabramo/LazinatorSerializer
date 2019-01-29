@@ -67,7 +67,7 @@ namespace LazinatorTests.Examples
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ItemU_ByteIndex, _ItemU_ByteLength, false, false, null);
                         
-                        _ItemU = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, () => new ExampleChild(), childData, this); 
+                        _ItemU = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, () => new ExampleChild(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
                     }
                     _ItemU_Accessed = true;
                 } 
@@ -95,10 +95,6 @@ namespace LazinatorTests.Examples
         /* Serialization, deserialization, and object relationships */
         
         public ClosedGenericWithoutBase(LazinatorConstructorEnum constructorEnum)
-        {
-        }
-        
-        public ClosedGenericWithoutBase() : base()
         {
         }
         

@@ -57,7 +57,7 @@ namespace LazinatorCollections.Tree
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Children_ByteIndex, _Children_ByteLength, false, false, null);
                         
-                        _Children = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, () => new LazinatorList<LazinatorGeneralTree<T>>(), childData, this); 
+                        _Children = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, () => new LazinatorList<LazinatorGeneralTree<T>>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
                     }
                     _Children_Accessed = true;
                 } 
@@ -142,10 +142,6 @@ namespace LazinatorCollections.Tree
         /* Serialization, deserialization, and object relationships */
         
         public LazinatorGeneralTree(LazinatorConstructorEnum constructorEnum)
-        {
-        }
-        
-        public LazinatorGeneralTree() : base()
         {
         }
         

@@ -87,7 +87,7 @@ namespace LazinatorTests.Examples.Collections
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyList_ByteIndex, _MyList_ByteLength, false, false, null);
                         
-                        _MyList = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, () => new LazinatorList<ExampleChild>(), childData, this); 
+                        _MyList = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, () => new LazinatorList<ExampleChild>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
                     }
                     _MyList_Accessed = true;
                 } 
@@ -128,7 +128,7 @@ namespace LazinatorTests.Examples.Collections
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyStructList_ByteIndex, _MyStructList_ByteLength, false, false, null);
                         
-                        _MyStructList = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, () => new LazinatorList<WByte>(), childData, this); 
+                        _MyStructList = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, () => new LazinatorList<WByte>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
                     }
                     _MyStructList_Accessed = true;
                 } 

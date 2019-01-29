@@ -52,7 +52,7 @@ namespace LazinatorTests.Examples
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Example_ByteIndex, _Example_ByteLength, false, false, null);
                         
-                        _Example = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, () => new Example(), childData, this); 
+                        _Example = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, () => new Example(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
                     }
                     _Example_Accessed = true;
                 } 

@@ -69,7 +69,7 @@ namespace LazinatorTests.Examples.Subclasses
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _SubclassInstance1_ByteIndex, _SubclassInstance1_ByteLength, false, false, null);
                         
-                        _SubclassInstance1 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1058, () => new global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass(), childData, this); 
+                        _SubclassInstance1 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1058, () => new global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
                     }
                     _SubclassInstance1_Accessed = true;
                 } 
@@ -110,7 +110,7 @@ namespace LazinatorTests.Examples.Subclasses
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _SubclassInstance2_ByteIndex, _SubclassInstance2_ByteLength, false, false, null);
                         
-                        _SubclassInstance2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1058, () => new global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass(), childData, this); 
+                        _SubclassInstance2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1058, () => new global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
                     }
                     _SubclassInstance2_Accessed = true;
                 } 
@@ -138,10 +138,6 @@ namespace LazinatorTests.Examples.Subclasses
         /* Serialization, deserialization, and object relationships */
         
         public ClassWithSubclass(LazinatorConstructorEnum constructorEnum)
-        {
-        }
-        
-        public ClassWithSubclass() : base()
         {
         }
         

@@ -74,7 +74,7 @@ namespace LazinatorCollections.Dictionary
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Keys_ByteIndex, _Keys_ByteLength, false, false, null);
                         
-                        _Keys = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, () => new LazinatorList<TKey>(), childData, this); 
+                        _Keys = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, () => new LazinatorList<TKey>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
                     }
                     _Keys_Accessed = true;
                 } 
@@ -118,7 +118,7 @@ namespace LazinatorCollections.Dictionary
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Values_ByteIndex, _Values_ByteLength, false, false, null);
                         
-                        _Values = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, () => new LazinatorList<TValue>(), childData, this); 
+                        _Values = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, () => new LazinatorList<TValue>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
                     }
                     _Values_Accessed = true;
                 } 
@@ -148,10 +148,6 @@ namespace LazinatorCollections.Dictionary
         /* Serialization, deserialization, and object relationships */
         
         public DictionaryBucket(LazinatorConstructorEnum constructorEnum)
-        {
-        }
-        
-        public DictionaryBucket() : base()
         {
         }
         

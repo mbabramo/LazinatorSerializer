@@ -191,10 +191,6 @@ namespace LazinatorTests.Examples.Tuples
         {
         }
         
-        public RecordLikeContainer() : base()
-        {
-        }
-        
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

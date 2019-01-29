@@ -70,7 +70,7 @@ namespace LazinatorTests.Examples.Structs
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ListWrappedBytes_ByteIndex, _ListWrappedBytes_ByteLength, false, false, null);
                         
-                        _ListWrappedBytes = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, () => new LazinatorList<WByte>(), childData, this); 
+                        _ListWrappedBytes = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, () => new LazinatorList<WByte>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
                     }
                     _ListWrappedBytes_Accessed = true;
                 } 
@@ -610,10 +610,6 @@ namespace LazinatorTests.Examples.Structs
         /* Serialization, deserialization, and object relationships */
         
         public SmallWrappersContainer(LazinatorConstructorEnum constructorEnum)
-        {
-        }
-        
-        public SmallWrappersContainer() : base()
         {
         }
         

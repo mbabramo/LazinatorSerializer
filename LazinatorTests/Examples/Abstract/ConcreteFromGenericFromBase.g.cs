@@ -33,11 +33,7 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Clone overrides */
         
-        public ConcreteFromGenericFromBase(LazinatorConstructorEnum constructorEnum)
-        {
-        }
-        
-        public ConcreteFromGenericFromBase() : base()
+        public ConcreteFromGenericFromBase(LazinatorConstructorEnum constructorEnum) : base(constructorEnum)
         {
         }
         

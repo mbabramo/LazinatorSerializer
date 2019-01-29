@@ -52,7 +52,7 @@ namespace LazinatorTests.Examples.Abstract
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyBase_ByteIndex, _MyBase_ByteLength, false, false, null);
                         
-                        _MyBase = DeserializationFactory.Instance.CreateBaseOrDerivedType(1066, () => new Base(), childData, this); 
+                        _MyBase = DeserializationFactory.Instance.CreateBaseOrDerivedType(1066, () => new Base(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
                     }
                     _MyBase_Accessed = true;
                 } 
@@ -80,10 +80,6 @@ namespace LazinatorTests.Examples.Abstract
         /* Serialization, deserialization, and object relationships */
         
         public BaseContainer(LazinatorConstructorEnum constructorEnum)
-        {
-        }
-        
-        public BaseContainer() : base()
         {
         }
         

@@ -48,11 +48,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         }
         /* Clone overrides */
         
-        public ClosedGeneric(LazinatorConstructorEnum constructorEnum)
-        {
-        }
-        
-        public ClosedGeneric() : base()
+        public ClosedGeneric(LazinatorConstructorEnum constructorEnum) : base(constructorEnum)
         {
         }
         
