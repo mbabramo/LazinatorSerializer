@@ -2,5 +2,8 @@
 {
     public partial class ClosedGeneric : OpenGeneric<ExampleChild>, IClosedGeneric
     {
+        public ClosedGeneric()
+        {
+        }
     }
 }

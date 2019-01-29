@@ -2,5 +2,8 @@
 {
     public partial class ContainerForExampleStructWithoutClass : IContainerForExampleStructWithoutClass
     {
+        public ContainerForExampleStructWithoutClass()
+        {
+        }
     }
 }

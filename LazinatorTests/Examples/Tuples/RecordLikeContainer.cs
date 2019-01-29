@@ -2,5 +2,8 @@
 {
     public partial class RecordLikeContainer : IRecordLikeContainer
     {
+        public RecordLikeContainer()
+        {
+        }
     }
 }

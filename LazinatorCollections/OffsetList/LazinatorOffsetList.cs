@@ -9,6 +9,10 @@ namespace LazinatorCollections.OffsetList
     /// </summary>
     public sealed partial class LazinatorOffsetList : ILazinator, ILazinatorOffsetList
     {
+        public LazinatorOffsetList()
+        {
+        }
+
         //For space efficiency, we store these in two lists, one containing two-byte values and one containing four-byte values. (Adding one- and three-byte values would contain extra overhead.) More importantly, we don't want to deserialize these lists unnecessarily (that is, if we're not changing them). Thus, we deserialize the two lists into ReadOnlyMemory where we can access the offsets directly. We then create in-memory lists only if necessary.
 
         private int NumTwoByteItems => TwoByteItems?.Length ?? 0;

@@ -12,6 +12,10 @@ namespace LazinatorCollections
         {
         }
 
+        public LazinatorSortedList()
+        {
+        }
+
         public override IValueContainer<T> CreateNewWithSameSettings()
         {
             return new LazinatorSortedList<T>()

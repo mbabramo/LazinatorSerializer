@@ -837,7 +837,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void BuffersUpdateInTandem_RecordLikeCollections()
         {
-            RecordLikeCollections e = new RecordLikeCollections
+            RecordLikeCollections e = new RecordLikeCollections()
             {
                 MyDictionaryWithRecordLikeTypeValues = new Dictionary<int, RecordLikeTypeWithLazinator>() { { 0, new RecordLikeTypeWithLazinator(12, "Sam", GetTypicalExample(), new ExampleStructWithoutClass() { MyInt = 18 }) } },
                 MyDictionaryWithRecordLikeContainers = new Dictionary<int, RecordLikeContainer>() { { 0, new RecordLikeContainer() { MyRecordLikeTypeWithLazinator = new RecordLikeTypeWithLazinator(12, "Sam", GetTypicalExample(), new ExampleStructWithoutClass() { MyInt = 18 } ) } } }

@@ -4,6 +4,10 @@ namespace LazinatorCollections.OffsetList
 {
     public partial class LazinatorFastReadListInt16 : LazinatorFastReadList<Int16>, ILazinatorFastReadListInt16
     {
+        public LazinatorFastReadListInt16()
+        {
+        }
+
         public override ReadOnlySpan<Int16> ReadOnly
         {
             get => Lazinator.Buffers.Spans.CastSpanToInt16(ReadOnlyBytes);

@@ -7,6 +7,10 @@ namespace LazinatorTests.Examples
     {
         public const string LongString = "The quick brown fox jumps over the lazy dog.";
 
+        public Simplifiable()
+        {
+        }
+
         public void PreSerialization(bool verifyCleanness, bool updateStoredBuffer)
         {
             MyIntsAre3 = MyInt == 3 && MyOtherInt == 3;

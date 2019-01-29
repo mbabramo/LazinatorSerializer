@@ -2,5 +2,8 @@
 {
     public partial class ExampleStructContainingStructContainer : IExampleStructContainingStructContainer
     {
+        public ExampleStructContainingStructContainer()
+        {
+        }
     }
 }

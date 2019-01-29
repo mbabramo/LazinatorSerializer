@@ -64,6 +64,10 @@ namespace LazinatorCollections.Dictionary
         private TKey _lastKeySearched;
         private int _lastResult;
 
+        public DictionaryBucket()
+        {
+        }
+
         private int GetKeyIndex(TKey key, uint? binaryHashOfKey)
         {
             if (!Initialized)
