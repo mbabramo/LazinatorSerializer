@@ -291,7 +291,7 @@ namespace Lazinator.Wrappers
         public int LazinatorObjectVersion
         {
             get => -1;
-            set => throw new LazinatorSerializationException("Lazinator versioning disabled for WNullableUshort.");
+            set => ThrowHelper.ThrowVersioningDisabledException("WNullableUshort");
         }
         
         

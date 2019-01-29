@@ -316,7 +316,7 @@ namespace LazinatorCollections.OffsetList
         public virtual int LazinatorObjectVersion
         {
             get => -1;
-            set => throw new LazinatorSerializationException("Lazinator versioning disabled for LazinatorFastReadList<T>.");
+            set => ThrowHelper.ThrowVersioningDisabledException("LazinatorFastReadList<T>");
         }
         
         

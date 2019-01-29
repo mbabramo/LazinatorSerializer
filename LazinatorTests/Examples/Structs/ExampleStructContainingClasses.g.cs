@@ -272,7 +272,7 @@ namespace LazinatorTests.Examples
             int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
             if (uniqueID != LazinatorUniqueID)
             {
-                throw new FormatException("Wrong Lazinator type initialized.");
+                ThrowHelper.ThrowFormatException();
             }
             
             int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);

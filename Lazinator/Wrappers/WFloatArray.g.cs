@@ -319,7 +319,7 @@ namespace Lazinator.Wrappers
         public int LazinatorObjectVersion
         {
             get => -1;
-            set => throw new LazinatorSerializationException("Lazinator versioning disabled for WFloatArray.");
+            set => ThrowHelper.ThrowVersioningDisabledException("WFloatArray");
         }
         
         

@@ -293,7 +293,7 @@ namespace Lazinator.Wrappers
         public int LazinatorObjectVersion
         {
             get => -1;
-            set => throw new LazinatorSerializationException("Lazinator versioning disabled for WString.");
+            set => ThrowHelper.ThrowVersioningDisabledException("WString");
         }
         
         
@@ -596,7 +596,7 @@ namespace Lazinator.Wrappers
             public int LazinatorObjectVersion
             {
                 get => -1;
-                set => throw new LazinatorSerializationException("Lazinator versioning disabled for WString.");
+                set => ThrowHelper.ThrowVersioningDisabledException("WString");
             }
             
             

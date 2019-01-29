@@ -112,7 +112,7 @@ namespace Lazinator.Core
             writer.Position = lengthPosition;
             int length = (afterPosition - lengthPosition - sizeof(byte));
             if (length > 250)
-                throw new LazinatorSerializationException("Writing with byte length prefix limited to items no more than 250 bytes.");
+                ThrowHelper.ThrowMoreThan250BytesException();
             writer.Write((byte)length);
             writer.Position = afterPosition;
         }
@@ -202,7 +202,7 @@ namespace Lazinator.Core
             if (childStorage.IsEmpty)
                 childStorage = getChildSliceFn(); // this is the storage holding the child, which has never been accessed
             if (childStorage.OwnedMemory == null)
-                throw new LazinatorSerializationException("Internal error. Child storage missing.");
+                ThrowHelper.ThrowChildStorageMissingException();
             if (skipLength)
                 writer.Write(childStorage.Span);
             else if (restrictLengthTo250Bytes)
@@ -258,7 +258,7 @@ namespace Lazinator.Core
                 List<int> lazinatorGenericID = ReadLazinatorGenericID(span, ref index).TypeAndInnerTypeIDs;
                 if (lazinatorGenericID[0] != uniqueID)
                 {
-                    throw new FormatException("Wrong Lazinator type initialized.");
+                    ThrowHelper.ThrowFormatException();
                 }
                 return new LazinatorGenericIDType(lazinatorGenericID);
             }
@@ -267,7 +267,7 @@ namespace Lazinator.Core
                 int readUniqueID = span.ToDecompressedInt(ref index);
                 if (readUniqueID != uniqueID)
                 {
-                    throw new FormatException("Wrong Lazinator type initialized.");
+                    ThrowHelper.ThrowFormatException();
                 }
                 return default;
             }

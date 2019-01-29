@@ -291,7 +291,7 @@ namespace Lazinator.Wrappers
         public int LazinatorObjectVersion
         {
             get => -1;
-            set => throw new LazinatorSerializationException("Lazinator versioning disabled for WChar.");
+            set => ThrowHelper.ThrowVersioningDisabledException("WChar");
         }
         
         

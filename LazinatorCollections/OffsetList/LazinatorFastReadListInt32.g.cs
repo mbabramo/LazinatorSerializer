@@ -110,7 +110,7 @@ namespace LazinatorCollections.OffsetList
         public override int LazinatorObjectVersion
         {
             get => -1;
-            set => throw new LazinatorSerializationException("Lazinator versioning disabled for LazinatorFastReadListInt32.");
+            set => ThrowHelper.ThrowVersioningDisabledException("LazinatorFastReadListInt32");
         }
         
         
