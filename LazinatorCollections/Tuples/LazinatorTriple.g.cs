@@ -625,7 +625,7 @@ namespace LazinatorCollections.Tuples
             }
             else
             {
-                throw new LazinatorSerializationException("Cannot update stored buffer when serializing only some children.");
+                ThrowHelper.ThrowCannotUpdateStoredBuffer();
             }
             
             var newBuffer = writer.Slice(startPosition, length);

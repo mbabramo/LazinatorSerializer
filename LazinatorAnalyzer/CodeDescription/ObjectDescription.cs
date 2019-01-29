@@ -431,7 +431,7 @@ namespace Lazinator.CodeDescription
                         readUniqueID = $@"{(UniqueIDCanBeSkipped ? "" : $@"int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
                             if (uniqueID != LazinatorUniqueID)
                             {{
-                                throw new FormatException(""Wrong Lazinator type initialized."");
+                                ThrowHelpers.ThrowFormatException()
                             }}
 
                             ")}";

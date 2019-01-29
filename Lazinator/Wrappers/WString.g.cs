@@ -331,7 +331,7 @@ namespace Lazinator.Wrappers
             }
             else
             {
-                throw new LazinatorSerializationException("Cannot update stored buffer when serializing only some children.");
+                ThrowHelper.ThrowCannotUpdateStoredBuffer();
             }
             
             var newBuffer = writer.Slice(startPosition, length);
@@ -634,7 +634,7 @@ namespace Lazinator.Wrappers
                 }
                 else
                 {
-                    throw new LazinatorSerializationException("Cannot update stored buffer when serializing only some children.");
+                    ThrowHelper.ThrowCannotUpdateStoredBuffer();
                 }
                 
                 var newBuffer = writer.Slice(startPosition, length);

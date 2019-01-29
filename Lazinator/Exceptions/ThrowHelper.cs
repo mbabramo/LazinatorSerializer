@@ -8,5 +8,8 @@ namespace Lazinator.Exceptions
     {
         public static void ThrowCannotUpdateStoredBuffer() =>
                 throw new LazinatorSerializationException("Cannot update stored buffer when serializing only some children.");
+
+        public static void ThrowFormatException() =>
+                                throw new FormatException("Wrong Lazinator type initialized.");
     }
 }
