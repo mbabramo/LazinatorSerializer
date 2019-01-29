@@ -39,12 +39,12 @@ namespace LazinatorTests.Examples
             _OnDescendantIsDirtyCalled = true;
         }
 
-        public void OnMyChild1Deserialized()
+        public void OnMyChild1Deserialized(ExampleChild myChild1)
         {
             // just for demonstration of attribute
         }
 
-        public void OnMyChild1Accessed()
+        public void OnMyChild1Accessed(ExampleChild myChild1)
         {
             // just for demonstration of attribute
         }
