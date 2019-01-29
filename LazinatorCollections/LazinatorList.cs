@@ -16,7 +16,7 @@ using LazinatorCollections.Location;
 
 namespace LazinatorCollections
 {
-    [Implements(new string[] { "PreSerialization", "EnumerateLazinatorDescendants", "OnFreeInMemoryObjects", "AssignCloneProperties", "OnUpdateDeserializedChildren", "OnPropertiesWritten", "OnForEachLazinator" })]
+    [Implements(new string[] { "PreSerialization", "PostDeserialization", "EnumerateLazinatorDescendants", "OnFreeInMemoryObjects", "AssignCloneProperties", "OnUpdateDeserializedChildren", "OnPropertiesWritten", "OnForEachLazinator" })]
     public partial class LazinatorList<T> : IList, IList<T>, IEnumerable, ILazinatorList<T>, ILazinatorList, ILazinatorListable<T>, IIndexableMultivalueContainer<T>, IMultilevelReporter where T : ILazinator
     {
         #region Construction 
@@ -33,8 +33,7 @@ namespace LazinatorCollections
         public LazinatorList(bool allowDuplicates)
         {
             AllowDuplicates = allowDuplicates;
-            _FixedID = DeserializationFactory.Instance.GetFixedUniqueID(typeof(T));
-            _TypeRequiresNonBinaryHashing = DeserializationFactory.Instance.HasNonBinaryHashAttribute(typeof(T));
+            PostDeserialization();
         }
 
         public LazinatorList(int numItems, bool allowDuplicates) : this(allowDuplicates)
@@ -47,6 +46,12 @@ namespace LazinatorCollections
         {
             foreach (T item in items)
                 Add(item);
+        }
+
+        public void PostDeserialization()
+        {
+            _FixedID = DeserializationFactory.Instance.GetFixedUniqueID(typeof(T));
+            _TypeRequiresNonBinaryHashing = DeserializationFactory.Instance.HasNonBinaryHashAttribute(typeof(T));
         }
 
         #endregion
