@@ -93,7 +93,7 @@ namespace LazinatorTests.Examples.Collections
         
         public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
-            var clone = new Derived_DotNetList_Nested_NonLazinator()
+            var clone = new Derived_DotNetList_Nested_NonLazinator(LazinatorConstructorEnum.LazinatorConstructor)
             {
                 OriginalIncludeChildrenMode = includeChildrenMode
             };

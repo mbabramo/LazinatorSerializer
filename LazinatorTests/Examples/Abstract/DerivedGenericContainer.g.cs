@@ -134,7 +134,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
-            var clone = new DerivedGenericContainer<T>()
+            var clone = new DerivedGenericContainer<T>(LazinatorConstructorEnum.LazinatorConstructor)
             {
                 OriginalIncludeChildrenMode = includeChildrenMode
             };

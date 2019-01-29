@@ -208,7 +208,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
-            var clone = new Array_Values()
+            var clone = new Array_Values(LazinatorConstructorEnum.LazinatorConstructor)
             {
                 OriginalIncludeChildrenMode = includeChildrenMode
             };

@@ -136,7 +136,7 @@ namespace LazinatorCollections
         
         public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
-            var clone = new LazinatorStack<T>()
+            var clone = new LazinatorStack<T>(LazinatorConstructorEnum.LazinatorConstructor)
             {
                 OriginalIncludeChildrenMode = includeChildrenMode
             };

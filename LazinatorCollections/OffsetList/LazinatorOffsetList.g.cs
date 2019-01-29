@@ -61,7 +61,7 @@ namespace LazinatorCollections.OffsetList
                         }
                         else 
                         {
-                            _FourByteItems = new LazinatorFastReadListInt32()
+                            _FourByteItems = new LazinatorFastReadListInt32(LazinatorConstructorEnum.LazinatorConstructor)
                             {
                                 LazinatorParents = new LazinatorParentsCollection(this)
                             };
@@ -115,7 +115,7 @@ namespace LazinatorCollections.OffsetList
                         }
                         else 
                         {
-                            _TwoByteItems = new LazinatorFastReadListInt16()
+                            _TwoByteItems = new LazinatorFastReadListInt16(LazinatorConstructorEnum.LazinatorConstructor)
                             {
                                 LazinatorParents = new LazinatorParentsCollection(this)
                             };
@@ -210,7 +210,7 @@ namespace LazinatorCollections.OffsetList
         
         public ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
-            var clone = new LazinatorOffsetList()
+            var clone = new LazinatorOffsetList(LazinatorConstructorEnum.LazinatorConstructor)
             {
                 OriginalIncludeChildrenMode = includeChildrenMode
             };

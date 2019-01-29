@@ -58,7 +58,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
-            var clone = new ClosedGenericWithGeneric()
+            var clone = new ClosedGenericWithGeneric(LazinatorConstructorEnum.LazinatorConstructor)
             {
                 OriginalIncludeChildrenMode = includeChildrenMode
             };

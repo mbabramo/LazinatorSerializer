@@ -204,7 +204,7 @@ namespace LazinatorCollections.Dictionary
         
         public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
-            var clone = new DictionaryBucket<TKey, TValue>()
+            var clone = new DictionaryBucket<TKey, TValue>(LazinatorConstructorEnum.LazinatorConstructor)
             {
                 OriginalIncludeChildrenMode = includeChildrenMode
             };

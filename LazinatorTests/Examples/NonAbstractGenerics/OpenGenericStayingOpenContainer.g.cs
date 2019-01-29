@@ -309,7 +309,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
-            var clone = new OpenGenericStayingOpenContainer()
+            var clone = new OpenGenericStayingOpenContainer(LazinatorConstructorEnum.LazinatorConstructor)
             {
                 OriginalIncludeChildrenMode = includeChildrenMode
             };
