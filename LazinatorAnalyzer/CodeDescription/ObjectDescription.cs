@@ -48,6 +48,7 @@ namespace Lazinator.CodeDescription
         public bool IsSealed { get; set; }
         public string SealedKeyword => IsSealed ? "sealed " : "";
         public bool IsClass => ObjectType == LazinatorObjectType.Class && !GeneratingRefStruct;
+        public bool IsStruct => !IsClass;
         public bool IsSealedOrStruct => IsSealed || ObjectType != LazinatorObjectType.Class || GeneratingRefStruct;
 
         /* Interfaces */
@@ -1318,11 +1319,12 @@ namespace Lazinator.CodeDescription
 
         private string GetConstructor()
         {
-            string constructor = $@"public {SimpleName}(LazinatorConstructorEnum constructorEnum)
+            // We have a special constructor with the LazinatorConstructorEnum for all classes. Our factory will call this constructor, so as not to trigger the default constructor. 
+            string constructor = IsStruct ? "" : $@"public {SimpleName}(LazinatorConstructorEnum constructorEnum)
                         {{
                         }}
-                        
-                        "; ;
+
+                        ";
             if (Compilation.ImplementingTypeRequiresParameterlessConstructor) constructor +=
                     $@"public {SimpleName}(){IIF(ILazinatorTypeSymbol.BaseType != null, " : base()")}
                         {{
