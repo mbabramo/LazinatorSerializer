@@ -726,7 +726,7 @@ namespace LazinatorTests.Tests
             s.Pop();
             s = s.CloneLazinatorTyped();
             s.Count.Should().Be(1);
-            s[0].WrappedValue.Should().Be(1);
+            s.UnderlyingList[0].WrappedValue.Should().Be(1);
             s.Push(2);
             s.Push(3);
             s.Pop();
