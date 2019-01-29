@@ -73,9 +73,10 @@ namespace Lazinator.CodeDescription
         internal bool IsNotPrimitiveOrOpenGeneric => PropertyType != LazinatorPropertyType.OpenGenericParameter && PropertyType != LazinatorPropertyType.PrimitiveType && PropertyType != LazinatorPropertyType.PrimitiveTypeNullable;
         internal bool IsNonLazinatorType => PropertyType == LazinatorPropertyType.NonLazinator || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
         internal bool IsNonLazinatorTypeWithoutInterchange => PropertyType == LazinatorPropertyType.NonLazinator && !HasInterchangeType;
+        internal string ConstructorInitialization => IIF(PropertyType != LazinatorPropertyType.LazinatorStruct && !NonSerializedIsStruct, "LazinatorConstructorEnum.LazinatorConstructor");
 
-        /* Names */
-        private bool UseFullyQualifiedNames => (Config?.UseFullyQualifiedNames ?? false) || HasFullyQualifyAttribute || Symbol.ContainingType != null;
+    /* Names */
+    private bool UseFullyQualifiedNames => (Config?.UseFullyQualifiedNames ?? false) || HasFullyQualifyAttribute || Symbol.ContainingType != null;
         private string ShortTypeName => RegularizeTypeName(Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat));
         private string ShortTypeNameWithoutNullableIndicator => WithoutNullableIndicator(ShortTypeName);
         internal string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
@@ -110,6 +111,7 @@ namespace Lazinator.CodeDescription
 
         /* Conversion */
         private string InterchangeTypeName { get; set; }
+        private bool NonSerializedIsStruct { get; set; }
         private string DirectConverterTypeName { get; set; }
         internal string DirectConverterTypeNamePrefix => DirectConverterTypeName == "" || DirectConverterTypeName == null ? "" : DirectConverterTypeName + ".";
         private bool HasInterchangeType => InterchangeTypeName != null;
@@ -413,6 +415,7 @@ namespace Lazinator.CodeDescription
         {
             Nullable = t.TypeKind == TypeKind.Class;
             PropertyType = LazinatorPropertyType.NonLazinator;
+            NonSerializedIsStruct = t.IsValueType;
             InterchangeTypeName = Config?.GetInterchangeConverterTypeName(t);
             DirectConverterTypeName = Config?.GetDirectConverterTypeName(t);
             string fullyQualifiedTypeName = t.GetFullyQualifiedNameWithoutGlobal();
@@ -1093,7 +1096,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 LazinatorParents = new LazinatorParentsCollection(this)
                             }}";
-            string doCreation = $@"_{PropertyName} = new {AppropriatelyQualifiedTypeName}({IIF(PropertyType != LazinatorPropertyType.LazinatorStruct, "LazinatorConstructorEnum.LazinatorConstructor")}){lazinatorParentClassSet};
+            string doCreation = $@"_{PropertyName} = new {AppropriatelyQualifiedTypeName}({ConstructorInitialization}){lazinatorParentClassSet};
                         _{PropertyName}.DeserializeLazinator(childData);";
             string creation = nullItemCheck == "" ? doCreation : $@"{nullItemCheck}
                     {{
@@ -2316,7 +2319,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 return default({AppropriatelyQualifiedTypeName});
                             }}
-                            {InterchangeTypeName} interchange = new {InterchangeTypeName}(LazinatorConstructorEnum.LazinatorConstructor);
+                            {InterchangeTypeName} interchange = new {InterchangeTypeName}({ConstructorInitialization});
                             interchange.DeserializeLazinator(storage);
                             return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}(false);
                         }}
