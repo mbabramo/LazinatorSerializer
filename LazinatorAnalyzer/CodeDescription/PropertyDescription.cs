@@ -418,6 +418,10 @@ namespace Lazinator.CodeDescription
             NonSerializedIsStruct = t.IsValueType;
             InterchangeTypeName = Config?.GetInterchangeConverterTypeName(t);
             DirectConverterTypeName = Config?.GetDirectConverterTypeName(t);
+            if (InterchangeTypeName == "NonLazinatorInterchangeClass")
+            {
+                var DEBUG = 0;
+            }
             string fullyQualifiedTypeName = t.GetFullyQualifiedNameWithoutGlobal();
             if (InterchangeTypeName != null && DirectConverterTypeName != null)
                 throw new LazinatorCodeGenException($"{fullyQualifiedTypeName} has both an interchange converter and a direct converter type listed. Only one should be used.");
@@ -2312,6 +2316,7 @@ namespace Lazinator.CodeDescription
                 return;
             alreadyGenerated.Add(AppropriatelyQualifiedTypeNameEncodable);
 
+            // Note: The interchange type must include a parameterless constructor. We can't use the LazinatorConstructorEnum approach here, because we can't determine whether the interchange type, which we know only by string, is a struct (in which case there would be no such constructor).
             sb.Append($@"
                    private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
                         {{
@@ -2319,7 +2324,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 return default({AppropriatelyQualifiedTypeName});
                             }}
-                            {InterchangeTypeName} interchange = new {InterchangeTypeName}({ConstructorInitialization});
+                            {InterchangeTypeName} interchange = new {InterchangeTypeName}();
                             interchange.DeserializeLazinator(storage);
                             return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}(false);
                         }}
