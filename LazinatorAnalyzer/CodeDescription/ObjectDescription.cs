@@ -1320,17 +1320,17 @@ namespace Lazinator.CodeDescription
         private string GetConstructor()
         {
             // We have a special constructor with the LazinatorConstructorEnum for all classes. Our factory will call this constructor, so as not to trigger the default constructor. 
-            string constructor = IsStruct ? "" : $@"public {SimpleName}(LazinatorConstructorEnum constructorEnum)
+            string constructor = IsStruct ? "" : $@"public {SimpleName}(LazinatorConstructorEnum constructorEnum){IIF(ILazinatorTypeSymbol.BaseType != null && IsDerivedFromNonAbstractLazinator, " : base(constructorEnum)")}
                         {{
                         }}
 
                         ";
-            if (Compilation.ImplementingTypeRequiresParameterlessConstructor) constructor +=
-                    $@"public {SimpleName}(){IIF(ILazinatorTypeSymbol.BaseType != null, " : base()")}
-                        {{
-                        }}
+            //if (Compilation.ImplementingTypeRequiresParameterlessConstructor) constructor +=
+            //        $@"public {SimpleName}(){IIF(ILazinatorTypeSymbol.BaseType != null, " : base()")}
+            //            {{
+            //            }}
                         
-                        ";
+            //            ";
             return constructor;
         }
 
