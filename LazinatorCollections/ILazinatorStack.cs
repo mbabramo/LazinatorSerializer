@@ -6,5 +6,6 @@ namespace LazinatorCollections
     [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorStack)]
     internal interface ILazinatorStack<T> where T : ILazinator
     {
+        ILazinatorListable<T> UnderlyingList { get; set; }
     }
 }

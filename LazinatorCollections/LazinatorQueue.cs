@@ -7,7 +7,6 @@ namespace LazinatorCollections
 {
     public partial class LazinatorQueue<T> : IEnumerable<T>, ILazinatorQueue<T> where T : ILazinator
     {
-
         public LazinatorQueue()
         {
             UnderlyingList = new LazinatorList<T>();
@@ -19,6 +18,8 @@ namespace LazinatorCollections
         }
 
         public int Count => UnderlyingList.Count;
+        
+        public ILazinatorListable<T> UnderlyingList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public T Dequeue()
         {

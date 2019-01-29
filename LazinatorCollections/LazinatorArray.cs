@@ -4,66 +4,41 @@ using System.Collections.Generic;
 
 namespace LazinatorCollections
 {
-    public partial class LazinatorArray<T> : LazinatorList<T>, ILazinatorArray<T> where T : ILazinator
+    public partial class LazinatorArray<T> : ILazinatorArray<T> where T : ILazinator
     {
-        // TODO: Consider an implementation in which LazinatorList is an underlying type, instead of throwing exceptions when a List method is used.
-        // Or implement LazinatorArray independently, using some LazinatorList functionality in a base class.
-
-        public LazinatorArray()
-        {
-
-        }
+        public ILazinatorListable<T> UnderlyingList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         public LazinatorArray(int numItems)
         {
+            UnderlyingList = new LazinatorList<T>();
             for (int i = 0; i < numItems; i++)
-                base.Add(default);
+                UnderlyingList.Add(default);
+        }
+
+        public LazinatorArray(ILazinatorListable<T> underlyingList, int numItems)
+        {
+            UnderlyingList = underlyingList;
+            for (int i = 0; i < numItems; i++)
+                UnderlyingList.Add(default);
         }
 
         public LazinatorArray(IEnumerable<T> items)
         {
+            UnderlyingList = new LazinatorList<T>();
             foreach (T item in items)
-                base.Add(item);
+                UnderlyingList.Add(item);
         }
 
-        public class NotSupportedInLazinatorArrayException : Exception
+        public int Length => UnderlyingList.Count;
+        public long LongLength => UnderlyingList.LongCount;
+
+        public T GetAtIndex(long index) => UnderlyingList.GetAtIndex(index);
+        public void SetAtIndex(long index, T value) => UnderlyingList.SetAtIndex(index, value);
+
+        public T this[int index]
         {
-            public NotSupportedInLazinatorArrayException() : base("Operation is not supported on LazinatorArray. Considering using LazinatorList instead")
-            {
-
-            }
+            get => GetAtIndex(index);
+            set => SetAtIndex(index, value);
         }
-
-
-        public int Length => Count;
-
-
-        public override ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
-        {
-            if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren || includeChildrenMode == IncludeChildrenMode.ExcludeOnlyExcludableChildren)
-            {
-                LazinatorArray<T> typedClone = (LazinatorArray<T>)clone;
-                foreach (T member in this)
-                {
-                    if (System.Collections.Generic.EqualityComparer<T>.Default.Equals(member, default(T)))
-                        typedClone.CompleteAdd(default(T));
-                    else
-                        typedClone.CompleteAdd(member.CloneLazinatorTyped(includeChildrenMode, CloneBufferOptions.NoBuffer));
-                }
-            }
-
-            return clone;
-        }
-
-        public override void Add(T item) => throw new NotSupportedInLazinatorArrayException();
-
-        public override void Clear() => throw new NotSupportedInLazinatorArrayException();
-
-        public override void Insert(int index, T item) => throw new NotSupportedInLazinatorArrayException();
-        public override bool Remove(T item) => throw new NotSupportedInLazinatorArrayException();
-
-        public override int RemoveAll(Predicate<T> match) => throw new NotSupportedInLazinatorArrayException();
-
-        public override void RemoveAt(int index) => throw new NotSupportedInLazinatorArrayException();
     }
 }
