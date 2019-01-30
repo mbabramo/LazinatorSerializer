@@ -1023,16 +1023,7 @@ namespace Lazinator.CodeDescription
             {{
                 if (!_{PropertyName}_Accessed)
                 {{
-                    if (LazinatorObjectBytes.Length == 0)
-                    {{
-                        {createDefault}
-                    }}
-                    else
-                    {{
-                        LazinatorMemory childData = {ChildSliceString};
-                        {recreation}
-                    }}
-                    _{PropertyName}_Accessed = true;
+                    Lazinate_{PropertyName}();
                 }}{IIF(IsNonLazinatorType && !TrackDirtinessNonSerialized && (!RoslynHelpers.IsReadOnlyStruct(Symbol) || ContainsLazinatorInnerProperty || ContainsOpenGenericInnerProperty), $@"
                     IsDirty = true;")} {IIF(CodeOnAccessed != "", $@"
                 {CodeOnAccessed}")}
@@ -1048,6 +1039,19 @@ namespace Lazinator.CodeDescription
             }}
         }}{(GetModifiedDerivationKeyword() == "override " ? "" : $@"
         {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed;")}
+        private void Lazinate_{PropertyName}()
+        {{
+            if (LazinatorObjectBytes.Length == 0)
+            {{
+                {createDefault}
+            }}
+            else
+            {{
+                LazinatorMemory childData = {ChildSliceString};
+                {recreation}
+            }}
+            _{PropertyName}_Accessed = true;
+        }}
 ");
 
             // Copy property
