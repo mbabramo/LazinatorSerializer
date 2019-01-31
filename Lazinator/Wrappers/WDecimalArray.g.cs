@@ -46,16 +46,7 @@ namespace Lazinator.Wrappers
             {
                 if (!_WrappedValue_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _WrappedValue = default(decimal[]);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedValue_ByteIndex, _WrappedValue_ByteLength, true, false, null);
-                        _WrappedValue = ConvertFromBytes_decimal_B_b(childData);
-                    }
-                    _WrappedValue_Accessed = true;
+                    Lazinate_WrappedValue();
                 }
                 IsDirty = true; 
                 return _WrappedValue;
@@ -71,6 +62,20 @@ namespace Lazinator.Wrappers
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool _WrappedValue_Accessed;
+        private void Lazinate_WrappedValue()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _WrappedValue = default(decimal[]);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedValue_ByteIndex, _WrappedValue_ByteLength, true, false, null);
+                _WrappedValue = ConvertFromBytes_decimal_B_b(childData);
+            }
+            _WrappedValue_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

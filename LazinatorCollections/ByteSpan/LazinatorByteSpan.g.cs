@@ -71,16 +71,7 @@ namespace LazinatorCollections.ByteSpan
             {
                 if (!_ReadOrWrite_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _ReadOrWrite = default(Memory<byte>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ReadOrWrite_ByteIndex, _ReadOrWrite_ByteLength, false, false, null);
-                        _ReadOrWrite = ConvertFromBytes_Memory_Gbyte_g(childData);
-                    }
-                    _ReadOrWrite_Accessed = true;
+                    Lazinate_ReadOrWrite();
                 }
                 IsDirty = true; 
                 return _ReadOrWrite;
@@ -96,6 +87,20 @@ namespace LazinatorCollections.ByteSpan
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _ReadOrWrite_Accessed;
+        private void Lazinate_ReadOrWrite()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _ReadOrWrite = default(Memory<byte>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ReadOrWrite_ByteIndex, _ReadOrWrite_ByteLength, false, false, null);
+                _ReadOrWrite = ConvertFromBytes_Memory_Gbyte_g(childData);
+            }
+            _ReadOrWrite_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

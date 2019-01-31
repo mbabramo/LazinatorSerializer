@@ -48,27 +48,7 @@ namespace LazinatorCollections.OffsetList
             {
                 if (!_FourByteItems_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _FourByteItems = default(LazinatorFastReadListInt32);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _FourByteItems_ByteIndex, _FourByteItems_ByteLength, false, false, null);
-                        if (childData.Length == 0)
-                        {
-                            _FourByteItems = default;
-                        }
-                        else 
-                        {
-                            _FourByteItems = new LazinatorFastReadListInt32(LazinatorConstructorEnum.LazinatorConstructor)
-                            {
-                                LazinatorParents = new LazinatorParentsCollection(this)
-                            };
-                            _FourByteItems.DeserializeLazinator(childData);
-                        }
-                    }
-                    _FourByteItems_Accessed = true;
+                    Lazinate_FourByteItems();
                 } 
                 return _FourByteItems;
             }
@@ -92,6 +72,31 @@ namespace LazinatorCollections.OffsetList
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool _FourByteItems_Accessed;
+        private void Lazinate_FourByteItems()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _FourByteItems = default(LazinatorFastReadListInt32);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _FourByteItems_ByteIndex, _FourByteItems_ByteLength, false, false, null);
+                if (childData.Length == 0)
+                {
+                    _FourByteItems = default;
+                }
+                else 
+                {
+                    _FourByteItems = new LazinatorFastReadListInt32(LazinatorConstructorEnum.LazinatorConstructor)
+                    {
+                        LazinatorParents = new LazinatorParentsCollection(this)
+                    };
+                    _FourByteItems.DeserializeLazinator(childData);
+                }
+            }
+            _FourByteItems_Accessed = true;
+        }
+        
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         LazinatorFastReadListInt16 _TwoByteItems;
@@ -102,27 +107,7 @@ namespace LazinatorCollections.OffsetList
             {
                 if (!_TwoByteItems_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _TwoByteItems = default(LazinatorFastReadListInt16);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _TwoByteItems_ByteIndex, _TwoByteItems_ByteLength, false, false, null);
-                        if (childData.Length == 0)
-                        {
-                            _TwoByteItems = default;
-                        }
-                        else 
-                        {
-                            _TwoByteItems = new LazinatorFastReadListInt16(LazinatorConstructorEnum.LazinatorConstructor)
-                            {
-                                LazinatorParents = new LazinatorParentsCollection(this)
-                            };
-                            _TwoByteItems.DeserializeLazinator(childData);
-                        }
-                    }
-                    _TwoByteItems_Accessed = true;
+                    Lazinate_TwoByteItems();
                 } 
                 return _TwoByteItems;
             }
@@ -146,6 +131,31 @@ namespace LazinatorCollections.OffsetList
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool _TwoByteItems_Accessed;
+        private void Lazinate_TwoByteItems()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _TwoByteItems = default(LazinatorFastReadListInt16);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _TwoByteItems_ByteIndex, _TwoByteItems_ByteLength, false, false, null);
+                if (childData.Length == 0)
+                {
+                    _TwoByteItems = default;
+                }
+                else 
+                {
+                    _TwoByteItems = new LazinatorFastReadListInt16(LazinatorConstructorEnum.LazinatorConstructor)
+                    {
+                        LazinatorParents = new LazinatorParentsCollection(this)
+                    };
+                    _TwoByteItems.DeserializeLazinator(childData);
+                }
+            }
+            _TwoByteItems_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

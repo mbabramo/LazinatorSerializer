@@ -46,17 +46,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (!_RecursiveClass_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _RecursiveClass = default(RecursiveExample);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _RecursiveClass_ByteIndex, _RecursiveClass_ByteLength, false, false, null);
-                        
-                        _RecursiveClass = DeserializationFactory.Instance.CreateBaseOrDerivedType(1047, () => new RecursiveExample(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
-                    }
-                    _RecursiveClass_Accessed = true;
+                    Lazinate_RecursiveClass();
                 } 
                 return _RecursiveClass;
             }
@@ -78,6 +68,21 @@ namespace LazinatorTests.Examples.Hierarchy
             }
         }
         protected bool _RecursiveClass_Accessed;
+        private void Lazinate_RecursiveClass()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _RecursiveClass = default(RecursiveExample);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _RecursiveClass_ByteIndex, _RecursiveClass_ByteLength, false, false, null);
+                
+                _RecursiveClass = DeserializationFactory.Instance.CreateBaseOrDerivedType(1047, () => new RecursiveExample(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
+            }
+            _RecursiveClass_Accessed = true;
+        }
+        
         
         protected IRecursiveExample _RecursiveInterface;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -87,17 +92,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (!_RecursiveInterface_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _RecursiveInterface = default(IRecursiveExample);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _RecursiveInterface_ByteIndex, _RecursiveInterface_ByteLength, false, false, null);
-                        
-                        _RecursiveInterface = DeserializationFactory.Instance.CreateBasedOnType<IRecursiveExample>(childData, this); 
-                    }
-                    _RecursiveInterface_Accessed = true;
+                    Lazinate_RecursiveInterface();
                 } 
                 return _RecursiveInterface;
             }
@@ -119,6 +114,21 @@ namespace LazinatorTests.Examples.Hierarchy
             }
         }
         protected bool _RecursiveInterface_Accessed;
+        private void Lazinate_RecursiveInterface()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _RecursiveInterface = default(IRecursiveExample);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _RecursiveInterface_ByteIndex, _RecursiveInterface_ByteLength, false, false, null);
+                
+                _RecursiveInterface = DeserializationFactory.Instance.CreateBasedOnType<IRecursiveExample>(childData, this); 
+            }
+            _RecursiveInterface_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

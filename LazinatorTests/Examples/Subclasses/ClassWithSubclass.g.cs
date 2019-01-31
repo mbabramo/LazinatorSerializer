@@ -61,17 +61,7 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 if (!_SubclassInstance1_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _SubclassInstance1 = default(global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _SubclassInstance1_ByteIndex, _SubclassInstance1_ByteLength, false, false, null);
-                        
-                        _SubclassInstance1 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1058, () => new global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
-                    }
-                    _SubclassInstance1_Accessed = true;
+                    Lazinate_SubclassInstance1();
                 } 
                 return _SubclassInstance1;
             }
@@ -93,6 +83,21 @@ namespace LazinatorTests.Examples.Subclasses
             }
         }
         protected bool _SubclassInstance1_Accessed;
+        private void Lazinate_SubclassInstance1()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _SubclassInstance1 = default(global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _SubclassInstance1_ByteIndex, _SubclassInstance1_ByteLength, false, false, null);
+                
+                _SubclassInstance1 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1058, () => new global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
+            }
+            _SubclassInstance1_Accessed = true;
+        }
+        
         
         protected global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass _SubclassInstance2;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -102,17 +107,7 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 if (!_SubclassInstance2_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _SubclassInstance2 = default(global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _SubclassInstance2_ByteIndex, _SubclassInstance2_ByteLength, false, false, null);
-                        
-                        _SubclassInstance2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1058, () => new global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
-                    }
-                    _SubclassInstance2_Accessed = true;
+                    Lazinate_SubclassInstance2();
                 } 
                 return _SubclassInstance2;
             }
@@ -134,6 +129,21 @@ namespace LazinatorTests.Examples.Subclasses
             }
         }
         protected bool _SubclassInstance2_Accessed;
+        private void Lazinate_SubclassInstance2()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _SubclassInstance2 = default(global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _SubclassInstance2_ByteIndex, _SubclassInstance2_ByteLength, false, false, null);
+                
+                _SubclassInstance2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1058, () => new global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
+            }
+            _SubclassInstance2_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

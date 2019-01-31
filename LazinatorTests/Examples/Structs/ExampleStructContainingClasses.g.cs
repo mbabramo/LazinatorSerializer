@@ -82,17 +82,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyChild1_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyChild1 = default(ExampleChild);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild1_ByteIndex, _MyChild1_ByteLength, false, false, null);
-                        
-                        _MyChild1 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, () => new ExampleChild(LazinatorConstructorEnum.LazinatorConstructor), childData); 
-                    }
-                    _MyChild1_Accessed = true;
+                    Lazinate_MyChild1();
                 } 
                 return _MyChild1;
             }
@@ -105,6 +95,21 @@ namespace LazinatorTests.Examples
             }
         }
         bool _MyChild1_Accessed;
+        private void Lazinate_MyChild1()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyChild1 = default(ExampleChild);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild1_ByteIndex, _MyChild1_ByteLength, false, false, null);
+                
+                _MyChild1 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, () => new ExampleChild(LazinatorConstructorEnum.LazinatorConstructor), childData); 
+            }
+            _MyChild1_Accessed = true;
+        }
+        
         
         ExampleChild _MyChild2;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -114,17 +119,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyChild2_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyChild2 = default(ExampleChild);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild2_ByteIndex, _MyChild2_ByteLength, false, false, null);
-                        
-                        _MyChild2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, () => new ExampleChild(LazinatorConstructorEnum.LazinatorConstructor), childData); 
-                    }
-                    _MyChild2_Accessed = true;
+                    Lazinate_MyChild2();
                 } 
                 return _MyChild2;
             }
@@ -137,6 +132,21 @@ namespace LazinatorTests.Examples
             }
         }
         bool _MyChild2_Accessed;
+        private void Lazinate_MyChild2()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyChild2 = default(ExampleChild);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild2_ByteIndex, _MyChild2_ByteLength, false, false, null);
+                
+                _MyChild2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, () => new ExampleChild(LazinatorConstructorEnum.LazinatorConstructor), childData); 
+            }
+            _MyChild2_Accessed = true;
+        }
+        
         
         List<Example> _MyLazinatorList;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -146,17 +156,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyLazinatorList_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyLazinatorList = default(List<Example>);
-                        _MyLazinatorList_Dirty = true; 
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyLazinatorList_ByteIndex, _MyLazinatorList_ByteLength, false, false, null);
-                        _MyLazinatorList = ConvertFromBytes_List_GExample_g(childData);
-                    }
-                    _MyLazinatorList_Accessed = true;
+                    Lazinate_MyLazinatorList();
                 } 
                 return _MyLazinatorList;
             }
@@ -170,6 +170,21 @@ namespace LazinatorTests.Examples
             }
         }
         bool _MyLazinatorList_Accessed;
+        private void Lazinate_MyLazinatorList()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyLazinatorList = default(List<Example>);
+                _MyLazinatorList_Dirty = true; 
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyLazinatorList_ByteIndex, _MyLazinatorList_ByteLength, false, false, null);
+                _MyLazinatorList = ConvertFromBytes_List_GExample_g(childData);
+            }
+            _MyLazinatorList_Accessed = true;
+        }
+        
         
         private bool _MyLazinatorList_Dirty;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -197,16 +212,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyListValues_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyListValues = default(List<int>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListValues_ByteIndex, _MyListValues_ByteLength, false, false, null);
-                        _MyListValues = ConvertFromBytes_List_Gint_g(childData);
-                    }
-                    _MyListValues_Accessed = true;
+                    Lazinate_MyListValues();
                 }
                 IsDirty = true; 
                 return _MyListValues;
@@ -220,6 +226,20 @@ namespace LazinatorTests.Examples
             }
         }
         bool _MyListValues_Accessed;
+        private void Lazinate_MyListValues()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyListValues = default(List<int>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListValues_ByteIndex, _MyListValues_ByteLength, false, false, null);
+                _MyListValues = ConvertFromBytes_List_Gint_g(childData);
+            }
+            _MyListValues_Accessed = true;
+        }
+        
         
         (NonLazinatorClass myitem1, int? myitem2) _MyTuple;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -229,16 +249,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyTuple_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyTuple = default((NonLazinatorClass myitem1, int? myitem2));
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTuple_ByteIndex, _MyTuple_ByteLength, false, false, null);
-                        _MyTuple = ConvertFromBytes__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(childData);
-                    }
-                    _MyTuple_Accessed = true;
+                    Lazinate_MyTuple();
                 }
                 IsDirty = true; 
                 return _MyTuple;
@@ -252,6 +263,20 @@ namespace LazinatorTests.Examples
             }
         }
         bool _MyTuple_Accessed;
+        private void Lazinate_MyTuple()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyTuple = default((NonLazinatorClass myitem1, int? myitem2));
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTuple_ByteIndex, _MyTuple_ByteLength, false, false, null);
+                _MyTuple = ConvertFromBytes__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(childData);
+            }
+            _MyTuple_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

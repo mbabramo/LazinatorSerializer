@@ -48,21 +48,7 @@ namespace LazinatorCollections.Tuples
             {
                 if (!_Item1_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _Item1 = default(T);
-                        if (_Item1 != null)
-                        { // Item1 is a struct
-                            _Item1.LazinatorParents = new LazinatorParentsCollection(this);
-                        }
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Item1_ByteIndex, _Item1_ByteLength, false, false, null);
-                        
-                        _Item1 = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
-                    }
-                    _Item1_Accessed = true;
+                    Lazinate_Item1();
                 } 
                 return _Item1;
             }
@@ -93,6 +79,25 @@ namespace LazinatorCollections.Tuples
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _Item1_Accessed;
+        private void Lazinate_Item1()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _Item1 = default(T);
+                if (_Item1 != null)
+                { // Item1 is a struct
+                    _Item1.LazinatorParents = new LazinatorParentsCollection(this);
+                }
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Item1_ByteIndex, _Item1_ByteLength, false, false, null);
+                
+                _Item1 = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
+            }
+            _Item1_Accessed = true;
+        }
+        
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected U _Item2;
@@ -103,21 +108,7 @@ namespace LazinatorCollections.Tuples
             {
                 if (!_Item2_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _Item2 = default(U);
-                        if (_Item2 != null)
-                        { // Item2 is a struct
-                            _Item2.LazinatorParents = new LazinatorParentsCollection(this);
-                        }
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Item2_ByteIndex, _Item2_ByteLength, false, false, null);
-                        
-                        _Item2 = DeserializationFactory.Instance.CreateBasedOnType<U>(childData, this); 
-                    }
-                    _Item2_Accessed = true;
+                    Lazinate_Item2();
                 } 
                 return _Item2;
             }
@@ -148,6 +139,25 @@ namespace LazinatorCollections.Tuples
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _Item2_Accessed;
+        private void Lazinate_Item2()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _Item2 = default(U);
+                if (_Item2 != null)
+                { // Item2 is a struct
+                    _Item2.LazinatorParents = new LazinatorParentsCollection(this);
+                }
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Item2_ByteIndex, _Item2_ByteLength, false, false, null);
+                
+                _Item2 = DeserializationFactory.Instance.CreateBasedOnType<U>(childData, this); 
+            }
+            _Item2_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

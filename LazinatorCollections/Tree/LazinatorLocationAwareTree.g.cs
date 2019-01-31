@@ -46,17 +46,7 @@ namespace LazinatorCollections.Tree
             {
                 if (!_Locations_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _Locations = default(LazinatorDictionary<T, LazinatorList<WInt>>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Locations_ByteIndex, _Locations_ByteLength, false, false, null);
-                        
-                        _Locations = DeserializationFactory.Instance.CreateBaseOrDerivedType(211, () => new LazinatorDictionary<T, LazinatorList<WInt>>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
-                    }
-                    _Locations_Accessed = true;
+                    Lazinate_Locations();
                 } 
                 return _Locations;
             }
@@ -80,6 +70,21 @@ namespace LazinatorCollections.Tree
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _Locations_Accessed;
+        private void Lazinate_Locations()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _Locations = default(LazinatorDictionary<T, LazinatorList<WInt>>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Locations_ByteIndex, _Locations_ByteLength, false, false, null);
+                
+                _Locations = DeserializationFactory.Instance.CreateBaseOrDerivedType(211, () => new LazinatorDictionary<T, LazinatorList<WInt>>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
+            }
+            _Locations_Accessed = true;
+        }
+        
         /* Clone overrides */
         
         public LazinatorLocationAwareTree(LazinatorConstructorEnum constructorEnum) : base(constructorEnum)

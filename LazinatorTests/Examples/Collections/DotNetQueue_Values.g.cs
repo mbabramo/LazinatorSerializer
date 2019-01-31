@@ -44,17 +44,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyQueueInt_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyQueueInt = default(Queue<int>);
-                        _MyQueueInt_Dirty = true; 
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyQueueInt_ByteIndex, _MyQueueInt_ByteLength, false, false, null);
-                        _MyQueueInt = ConvertFromBytes_Queue_Gint_g(childData);
-                    }
-                    _MyQueueInt_Accessed = true;
+                    Lazinate_MyQueueInt();
                 } 
                 return _MyQueueInt;
             }
@@ -68,6 +58,21 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyQueueInt_Accessed;
+        private void Lazinate_MyQueueInt()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyQueueInt = default(Queue<int>);
+                _MyQueueInt_Dirty = true; 
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyQueueInt_ByteIndex, _MyQueueInt_ByteLength, false, false, null);
+                _MyQueueInt = ConvertFromBytes_Queue_Gint_g(childData);
+            }
+            _MyQueueInt_Accessed = true;
+        }
+        
         
         private bool _MyQueueInt_Dirty;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

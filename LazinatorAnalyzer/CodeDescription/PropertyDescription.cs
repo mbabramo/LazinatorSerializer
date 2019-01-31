@@ -1052,6 +1052,7 @@ namespace Lazinator.CodeDescription
             }}
             _{PropertyName}_Accessed = true;
         }}
+
 ");
 
             // Copy property

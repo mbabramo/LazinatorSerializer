@@ -45,16 +45,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyKeyValuePairSerialized_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyKeyValuePairSerialized = default(KeyValuePair<uint, ExampleChild>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyKeyValuePairSerialized_ByteIndex, _MyKeyValuePairSerialized_ByteLength, false, false, null);
-                        _MyKeyValuePairSerialized = ConvertFromBytes_KeyValuePair_Guint_c_C32ExampleChild_g(childData);
-                    }
-                    _MyKeyValuePairSerialized_Accessed = true;
+                    Lazinate_MyKeyValuePairSerialized();
                 }
                 IsDirty = true; 
                 return _MyKeyValuePairSerialized;
@@ -68,6 +59,20 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyKeyValuePairSerialized_Accessed;
+        private void Lazinate_MyKeyValuePairSerialized()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyKeyValuePairSerialized = default(KeyValuePair<uint, ExampleChild>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyKeyValuePairSerialized_ByteIndex, _MyKeyValuePairSerialized_ByteLength, false, false, null);
+                _MyKeyValuePairSerialized = ConvertFromBytes_KeyValuePair_Guint_c_C32ExampleChild_g(childData);
+            }
+            _MyKeyValuePairSerialized_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

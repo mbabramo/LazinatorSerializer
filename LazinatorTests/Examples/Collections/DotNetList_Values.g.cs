@@ -50,17 +50,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyLinkedListInt_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyLinkedListInt = default(LinkedList<int>);
-                        _MyLinkedListInt_Dirty = true; 
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyLinkedListInt_ByteIndex, _MyLinkedListInt_ByteLength, false, false, null);
-                        _MyLinkedListInt = ConvertFromBytes_LinkedList_Gint_g(childData);
-                    }
-                    _MyLinkedListInt_Accessed = true;
+                    Lazinate_MyLinkedListInt();
                 } 
                 return _MyLinkedListInt;
             }
@@ -74,6 +64,21 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyLinkedListInt_Accessed;
+        private void Lazinate_MyLinkedListInt()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyLinkedListInt = default(LinkedList<int>);
+                _MyLinkedListInt_Dirty = true; 
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyLinkedListInt_ByteIndex, _MyLinkedListInt_ByteLength, false, false, null);
+                _MyLinkedListInt = ConvertFromBytes_LinkedList_Gint_g(childData);
+            }
+            _MyLinkedListInt_Accessed = true;
+        }
+        
         
         private bool _MyLinkedListInt_Dirty;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -101,17 +106,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListInt_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyListInt = default(List<int>);
-                        _MyListInt_Dirty = true; 
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListInt_ByteIndex, _MyListInt_ByteLength, false, false, null);
-                        _MyListInt = ConvertFromBytes_List_Gint_g(childData);
-                    }
-                    _MyListInt_Accessed = true;
+                    Lazinate_MyListInt();
                 } 
                 return _MyListInt;
             }
@@ -125,6 +120,21 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyListInt_Accessed;
+        private void Lazinate_MyListInt()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyListInt = default(List<int>);
+                _MyListInt_Dirty = true; 
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListInt_ByteIndex, _MyListInt_ByteLength, false, false, null);
+                _MyListInt = ConvertFromBytes_List_Gint_g(childData);
+            }
+            _MyListInt_Accessed = true;
+        }
+        
         
         private bool _MyListInt_Dirty;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -152,16 +162,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListInt2_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyListInt2 = default(List<int>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListInt2_ByteIndex, _MyListInt2_ByteLength, false, false, null);
-                        _MyListInt2 = ConvertFromBytes_List_Gint_g(childData);
-                    }
-                    _MyListInt2_Accessed = true;
+                    Lazinate_MyListInt2();
                 }
                 IsDirty = true; 
                 return _MyListInt2;
@@ -175,6 +176,20 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyListInt2_Accessed;
+        private void Lazinate_MyListInt2()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyListInt2 = default(List<int>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListInt2_ByteIndex, _MyListInt2_ByteLength, false, false, null);
+                _MyListInt2 = ConvertFromBytes_List_Gint_g(childData);
+            }
+            _MyListInt2_Accessed = true;
+        }
+        
         
         protected SortedSet<int> _MySortedSetInt;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -184,17 +199,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MySortedSetInt_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MySortedSetInt = default(SortedSet<int>);
-                        _MySortedSetInt_Dirty = true; 
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MySortedSetInt_ByteIndex, _MySortedSetInt_ByteLength, false, false, null);
-                        _MySortedSetInt = ConvertFromBytes_SortedSet_Gint_g(childData);
-                    }
-                    _MySortedSetInt_Accessed = true;
+                    Lazinate_MySortedSetInt();
                 } 
                 return _MySortedSetInt;
             }
@@ -208,6 +213,21 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MySortedSetInt_Accessed;
+        private void Lazinate_MySortedSetInt()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MySortedSetInt = default(SortedSet<int>);
+                _MySortedSetInt_Dirty = true; 
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MySortedSetInt_ByteIndex, _MySortedSetInt_ByteLength, false, false, null);
+                _MySortedSetInt = ConvertFromBytes_SortedSet_Gint_g(childData);
+            }
+            _MySortedSetInt_Accessed = true;
+        }
+        
         
         private bool _MySortedSetInt_Dirty;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

@@ -50,16 +50,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_NonLazinatorClass_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _NonLazinatorClass = default(NonLazinatorClass);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonLazinatorClass_ByteIndex, _NonLazinatorClass_ByteLength, false, false, null);
-                        _NonLazinatorClass = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData);
-                    }
-                    _NonLazinatorClass_Accessed = true;
+                    Lazinate_NonLazinatorClass();
                 }
                 IsDirty = true; 
                 return _NonLazinatorClass;
@@ -73,6 +64,20 @@ namespace LazinatorTests.Examples
             }
         }
         bool _NonLazinatorClass_Accessed;
+        private void Lazinate_NonLazinatorClass()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _NonLazinatorClass = default(NonLazinatorClass);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonLazinatorClass_ByteIndex, _NonLazinatorClass_ByteLength, false, false, null);
+                _NonLazinatorClass = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData);
+            }
+            _NonLazinatorClass_Accessed = true;
+        }
+        
         
         NonLazinatorInterchangeableClass _NonLazinatorInterchangeableClass;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -82,16 +87,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_NonLazinatorInterchangeableClass_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _NonLazinatorInterchangeableClass = default(NonLazinatorInterchangeableClass);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonLazinatorInterchangeableClass_ByteIndex, _NonLazinatorInterchangeableClass_ByteLength, false, false, null);
-                        _NonLazinatorInterchangeableClass = ConvertFromBytes_NonLazinatorInterchangeableClass(childData);
-                    }
-                    _NonLazinatorInterchangeableClass_Accessed = true;
+                    Lazinate_NonLazinatorInterchangeableClass();
                 }
                 IsDirty = true; 
                 return _NonLazinatorInterchangeableClass;
@@ -105,6 +101,20 @@ namespace LazinatorTests.Examples
             }
         }
         bool _NonLazinatorInterchangeableClass_Accessed;
+        private void Lazinate_NonLazinatorInterchangeableClass()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _NonLazinatorInterchangeableClass = default(NonLazinatorInterchangeableClass);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonLazinatorInterchangeableClass_ByteIndex, _NonLazinatorInterchangeableClass_ByteLength, false, false, null);
+                _NonLazinatorInterchangeableClass = ConvertFromBytes_NonLazinatorInterchangeableClass(childData);
+            }
+            _NonLazinatorInterchangeableClass_Accessed = true;
+        }
+        
         
         NonLazinatorInterchangeableStruct _NonLazinatorInterchangeableStruct;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -114,16 +124,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_NonLazinatorInterchangeableStruct_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _NonLazinatorInterchangeableStruct = default(NonLazinatorInterchangeableStruct);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonLazinatorInterchangeableStruct_ByteIndex, _NonLazinatorInterchangeableStruct_ByteLength, false, false, null);
-                        _NonLazinatorInterchangeableStruct = ConvertFromBytes_NonLazinatorInterchangeableStruct(childData);
-                    }
-                    _NonLazinatorInterchangeableStruct_Accessed = true;
+                    Lazinate_NonLazinatorInterchangeableStruct();
                 } 
                 return _NonLazinatorInterchangeableStruct;
             }
@@ -136,6 +137,20 @@ namespace LazinatorTests.Examples
             }
         }
         bool _NonLazinatorInterchangeableStruct_Accessed;
+        private void Lazinate_NonLazinatorInterchangeableStruct()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _NonLazinatorInterchangeableStruct = default(NonLazinatorInterchangeableStruct);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonLazinatorInterchangeableStruct_ByteIndex, _NonLazinatorInterchangeableStruct_ByteLength, false, false, null);
+                _NonLazinatorInterchangeableStruct = ConvertFromBytes_NonLazinatorInterchangeableStruct(childData);
+            }
+            _NonLazinatorInterchangeableStruct_Accessed = true;
+        }
+        
         
         NonLazinatorStruct _NonLazinatorStruct;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -145,16 +160,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_NonLazinatorStruct_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _NonLazinatorStruct = default(NonLazinatorStruct);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonLazinatorStruct_ByteIndex, _NonLazinatorStruct_ByteLength, false, false, null);
-                        _NonLazinatorStruct = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorStruct(childData);
-                    }
-                    _NonLazinatorStruct_Accessed = true;
+                    Lazinate_NonLazinatorStruct();
                 }
                 IsDirty = true; 
                 return _NonLazinatorStruct;
@@ -168,6 +174,20 @@ namespace LazinatorTests.Examples
             }
         }
         bool _NonLazinatorStruct_Accessed;
+        private void Lazinate_NonLazinatorStruct()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _NonLazinatorStruct = default(NonLazinatorStruct);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonLazinatorStruct_ByteIndex, _NonLazinatorStruct_ByteLength, false, false, null);
+                _NonLazinatorStruct = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorStruct(childData);
+            }
+            _NonLazinatorStruct_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

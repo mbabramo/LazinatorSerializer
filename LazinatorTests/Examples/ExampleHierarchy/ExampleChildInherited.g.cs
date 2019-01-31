@@ -57,17 +57,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyGrandchildInInherited_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyGrandchildInInherited = default(ExampleGrandchild);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyGrandchildInInherited_ByteIndex, _MyGrandchildInInherited_ByteLength, false, false, null);
-                        
-                        _MyGrandchildInInherited = DeserializationFactory.Instance.CreateBaseOrDerivedType(1079, () => new ExampleGrandchild(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
-                    }
-                    _MyGrandchildInInherited_Accessed = true;
+                    Lazinate_MyGrandchildInInherited();
                 } 
                 return _MyGrandchildInInherited;
             }
@@ -89,6 +79,21 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyGrandchildInInherited_Accessed;
+        private void Lazinate_MyGrandchildInInherited()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyGrandchildInInherited = default(ExampleGrandchild);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyGrandchildInInherited_ByteIndex, _MyGrandchildInInherited_ByteLength, false, false, null);
+                
+                _MyGrandchildInInherited = DeserializationFactory.Instance.CreateBaseOrDerivedType(1079, () => new ExampleGrandchild(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
+            }
+            _MyGrandchildInInherited_Accessed = true;
+        }
+        
         /* Clone overrides */
         
         public ExampleChildInherited(LazinatorConstructorEnum constructorEnum) : base(constructorEnum)

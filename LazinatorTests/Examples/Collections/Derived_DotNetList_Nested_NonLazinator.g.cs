@@ -58,16 +58,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyLevel2ListNestedNonLazinatorType_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyLevel2ListNestedNonLazinatorType = default(List<List<NonLazinatorClass>>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyLevel2ListNestedNonLazinatorType_ByteIndex, _MyLevel2ListNestedNonLazinatorType_ByteLength, false, false, null);
-                        _MyLevel2ListNestedNonLazinatorType = ConvertFromBytes_List_GList_GNonLazinatorClass_g_g(childData);
-                    }
-                    _MyLevel2ListNestedNonLazinatorType_Accessed = true;
+                    Lazinate_MyLevel2ListNestedNonLazinatorType();
                 }
                 IsDirty = true; 
                 return _MyLevel2ListNestedNonLazinatorType;
@@ -81,6 +72,20 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyLevel2ListNestedNonLazinatorType_Accessed;
+        private void Lazinate_MyLevel2ListNestedNonLazinatorType()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyLevel2ListNestedNonLazinatorType = default(List<List<NonLazinatorClass>>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyLevel2ListNestedNonLazinatorType_ByteIndex, _MyLevel2ListNestedNonLazinatorType_ByteLength, false, false, null);
+                _MyLevel2ListNestedNonLazinatorType = ConvertFromBytes_List_GList_GNonLazinatorClass_g_g(childData);
+            }
+            _MyLevel2ListNestedNonLazinatorType_Accessed = true;
+        }
+        
         /* Clone overrides */
         
         public Derived_DotNetList_Nested_NonLazinator(LazinatorConstructorEnum constructorEnum) : base(constructorEnum)

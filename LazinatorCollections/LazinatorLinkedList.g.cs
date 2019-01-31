@@ -80,17 +80,7 @@ namespace LazinatorCollections
             {
                 if (!_FirstNode_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _FirstNode = default(LazinatorLinkedListNode<T>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _FirstNode_ByteIndex, _FirstNode_ByteLength, false, false, null);
-                        
-                        _FirstNode = DeserializationFactory.Instance.CreateBaseOrDerivedType(224, () => new LazinatorLinkedListNode<T>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
-                    }
-                    _FirstNode_Accessed = true;
+                    Lazinate_FirstNode();
                 } 
                 return _FirstNode;
             }
@@ -114,6 +104,21 @@ namespace LazinatorCollections
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _FirstNode_Accessed;
+        private void Lazinate_FirstNode()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _FirstNode = default(LazinatorLinkedListNode<T>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _FirstNode_ByteIndex, _FirstNode_ByteLength, false, false, null);
+                
+                _FirstNode = DeserializationFactory.Instance.CreateBaseOrDerivedType(224, () => new LazinatorLinkedListNode<T>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
+            }
+            _FirstNode_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

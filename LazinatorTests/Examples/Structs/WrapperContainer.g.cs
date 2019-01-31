@@ -45,21 +45,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedInt_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _WrappedInt = default(WInt);
-                        _WrappedInt.LazinatorParents = new LazinatorParentsCollection(this);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, true, null);
-                        _WrappedInt = new WInt()
-                        {
-                            LazinatorParents = new LazinatorParentsCollection(this)
-                        };
-                        _WrappedInt.DeserializeLazinator(childData);
-                    }
-                    _WrappedInt_Accessed = true;
+                    Lazinate_WrappedInt();
                 } 
                 return _WrappedInt;
             }
@@ -74,6 +60,25 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         protected bool _WrappedInt_Accessed;
+        private void Lazinate_WrappedInt()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _WrappedInt = default(WInt);
+                _WrappedInt.LazinatorParents = new LazinatorParentsCollection(this);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, true, null);
+                _WrappedInt = new WInt()
+                {
+                    LazinatorParents = new LazinatorParentsCollection(this)
+                };
+                _WrappedInt.DeserializeLazinator(childData);
+            }
+            _WrappedInt_Accessed = true;
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public WInt WrappedInt_Copy
         {

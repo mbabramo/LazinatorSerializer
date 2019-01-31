@@ -44,17 +44,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_AbstractProperty_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _AbstractProperty = default(Abstract1);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _AbstractProperty_ByteIndex, _AbstractProperty_ByteLength, false, false, null);
-                        
-                        _AbstractProperty = DeserializationFactory.Instance.CreateAbstractType<Abstract1>(childData, this); 
-                    }
-                    _AbstractProperty_Accessed = true;
+                    Lazinate_AbstractProperty();
                 } 
                 return _AbstractProperty;
             }
@@ -76,6 +66,21 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         protected bool _AbstractProperty_Accessed;
+        private void Lazinate_AbstractProperty()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _AbstractProperty = default(Abstract1);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _AbstractProperty_ByteIndex, _AbstractProperty_ByteLength, false, false, null);
+                
+                _AbstractProperty = DeserializationFactory.Instance.CreateAbstractType<Abstract1>(childData, this); 
+            }
+            _AbstractProperty_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

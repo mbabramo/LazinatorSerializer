@@ -53,16 +53,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyListTuple_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyListTuple = default(List<Tuple<uint, ExampleChild, NonLazinatorClass>>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListTuple_ByteIndex, _MyListTuple_ByteLength, false, false, null);
-                        _MyListTuple = ConvertFromBytes_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(childData);
-                    }
-                    _MyListTuple_Accessed = true;
+                    Lazinate_MyListTuple();
                 }
                 IsDirty = true; 
                 return _MyListTuple;
@@ -76,6 +67,20 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyListTuple_Accessed;
+        private void Lazinate_MyListTuple()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyListTuple = default(List<Tuple<uint, ExampleChild, NonLazinatorClass>>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListTuple_ByteIndex, _MyListTuple_ByteLength, false, false, null);
+                _MyListTuple = ConvertFromBytes_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(childData);
+            }
+            _MyListTuple_Accessed = true;
+        }
+        
         
         protected Tuple<uint, ExampleChild, NonLazinatorClass> _MyTupleSerialized;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -85,16 +90,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyTupleSerialized_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyTupleSerialized = default(Tuple<uint, ExampleChild, NonLazinatorClass>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized_ByteIndex, _MyTupleSerialized_ByteLength, false, false, null);
-                        _MyTupleSerialized = ConvertFromBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData);
-                    }
-                    _MyTupleSerialized_Accessed = true;
+                    Lazinate_MyTupleSerialized();
                 }
                 IsDirty = true; 
                 return _MyTupleSerialized;
@@ -108,6 +104,20 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyTupleSerialized_Accessed;
+        private void Lazinate_MyTupleSerialized()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyTupleSerialized = default(Tuple<uint, ExampleChild, NonLazinatorClass>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized_ByteIndex, _MyTupleSerialized_ByteLength, false, false, null);
+                _MyTupleSerialized = ConvertFromBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData);
+            }
+            _MyTupleSerialized_Accessed = true;
+        }
+        
         
         protected Tuple<uint, ExampleChild, NonLazinatorClass> _MyTupleSerialized2;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -117,16 +127,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyTupleSerialized2_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyTupleSerialized2 = default(Tuple<uint, ExampleChild, NonLazinatorClass>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized2_ByteIndex, _MyTupleSerialized2_ByteLength, false, false, null);
-                        _MyTupleSerialized2 = ConvertFromBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData);
-                    }
-                    _MyTupleSerialized2_Accessed = true;
+                    Lazinate_MyTupleSerialized2();
                 }
                 IsDirty = true; 
                 return _MyTupleSerialized2;
@@ -140,6 +141,20 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyTupleSerialized2_Accessed;
+        private void Lazinate_MyTupleSerialized2()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyTupleSerialized2 = default(Tuple<uint, ExampleChild, NonLazinatorClass>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized2_ByteIndex, _MyTupleSerialized2_ByteLength, false, false, null);
+                _MyTupleSerialized2 = ConvertFromBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData);
+            }
+            _MyTupleSerialized2_Accessed = true;
+        }
+        
         
         protected Tuple<uint?, ExampleChild, NonLazinatorClass> _MyTupleSerialized3;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -149,16 +164,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyTupleSerialized3_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyTupleSerialized3 = default(Tuple<uint?, ExampleChild, NonLazinatorClass>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized3_ByteIndex, _MyTupleSerialized3_ByteLength, false, false, null);
-                        _MyTupleSerialized3 = ConvertFromBytes_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData);
-                    }
-                    _MyTupleSerialized3_Accessed = true;
+                    Lazinate_MyTupleSerialized3();
                 }
                 IsDirty = true; 
                 return _MyTupleSerialized3;
@@ -172,6 +178,20 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyTupleSerialized3_Accessed;
+        private void Lazinate_MyTupleSerialized3()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyTupleSerialized3 = default(Tuple<uint?, ExampleChild, NonLazinatorClass>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized3_ByteIndex, _MyTupleSerialized3_ByteLength, false, false, null);
+                _MyTupleSerialized3 = ConvertFromBytes_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData);
+            }
+            _MyTupleSerialized3_Accessed = true;
+        }
+        
         
         protected Tuple<int, ExampleStructContainingClasses> _MyTupleSerialized4;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -181,16 +201,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyTupleSerialized4_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyTupleSerialized4 = default(Tuple<int, ExampleStructContainingClasses>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized4_ByteIndex, _MyTupleSerialized4_ByteLength, false, false, null);
-                        _MyTupleSerialized4 = ConvertFromBytes_Tuple_Gint_c_C32ExampleStructContainingClasses_g(childData);
-                    }
-                    _MyTupleSerialized4_Accessed = true;
+                    Lazinate_MyTupleSerialized4();
                 }
                 IsDirty = true; 
                 return _MyTupleSerialized4;
@@ -204,6 +215,20 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyTupleSerialized4_Accessed;
+        private void Lazinate_MyTupleSerialized4()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyTupleSerialized4 = default(Tuple<int, ExampleStructContainingClasses>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized4_ByteIndex, _MyTupleSerialized4_ByteLength, false, false, null);
+                _MyTupleSerialized4 = ConvertFromBytes_Tuple_Gint_c_C32ExampleStructContainingClasses_g(childData);
+            }
+            _MyTupleSerialized4_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

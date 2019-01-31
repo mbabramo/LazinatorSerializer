@@ -47,17 +47,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (!_ExampleByInterface_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _ExampleByInterface = default(IExample);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength, false, false, null);
-                        
-                        _ExampleByInterface = DeserializationFactory.Instance.CreateBasedOnType<IExample>(childData, this); 
-                    }
-                    _ExampleByInterface_Accessed = true;
+                    Lazinate_ExampleByInterface();
                 } 
                 return _ExampleByInterface;
             }
@@ -79,6 +69,21 @@ namespace LazinatorTests.Examples.Hierarchy
             }
         }
         protected bool _ExampleByInterface_Accessed;
+        private void Lazinate_ExampleByInterface()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _ExampleByInterface = default(IExample);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength, false, false, null);
+                
+                _ExampleByInterface = DeserializationFactory.Instance.CreateBasedOnType<IExample>(childData, this); 
+            }
+            _ExampleByInterface_Accessed = true;
+        }
+        
         
         protected List<IExample> _ExampleListByInterface;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -88,16 +93,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (!_ExampleListByInterface_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _ExampleListByInterface = default(List<IExample>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleListByInterface_ByteIndex, _ExampleListByInterface_ByteLength, false, false, null);
-                        _ExampleListByInterface = ConvertFromBytes_List_GIExample_g(childData);
-                    }
-                    _ExampleListByInterface_Accessed = true;
+                    Lazinate_ExampleListByInterface();
                 }
                 IsDirty = true; 
                 return _ExampleListByInterface;
@@ -111,6 +107,20 @@ namespace LazinatorTests.Examples.Hierarchy
             }
         }
         protected bool _ExampleListByInterface_Accessed;
+        private void Lazinate_ExampleListByInterface()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _ExampleListByInterface = default(List<IExample>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleListByInterface_ByteIndex, _ExampleListByInterface_ByteLength, false, false, null);
+                _ExampleListByInterface = ConvertFromBytes_List_GIExample_g(childData);
+            }
+            _ExampleListByInterface_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

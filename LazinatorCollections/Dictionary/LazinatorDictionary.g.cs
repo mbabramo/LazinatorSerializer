@@ -64,17 +64,7 @@ namespace LazinatorCollections.Dictionary
             {
                 if (!_Buckets_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _Buckets = default(LazinatorList<DictionaryBucket<TKey, TValue>>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Buckets_ByteIndex, _Buckets_ByteLength, false, false, null);
-                        
-                        _Buckets = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, () => new LazinatorList<DictionaryBucket<TKey, TValue>>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
-                    }
-                    _Buckets_Accessed = true;
+                    Lazinate_Buckets();
                 } 
                 return _Buckets;
             }
@@ -98,6 +88,21 @@ namespace LazinatorCollections.Dictionary
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _Buckets_Accessed;
+        private void Lazinate_Buckets()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _Buckets = default(LazinatorList<DictionaryBucket<TKey, TValue>>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Buckets_ByteIndex, _Buckets_ByteLength, false, false, null);
+                
+                _Buckets = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, () => new LazinatorList<DictionaryBucket<TKey, TValue>>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
+            }
+            _Buckets_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

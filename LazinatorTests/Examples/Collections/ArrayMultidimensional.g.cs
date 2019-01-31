@@ -48,17 +48,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyArrayInt_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyArrayInt = default(int[,]);
-                        _MyArrayInt_Dirty = true; 
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyArrayInt_ByteIndex, _MyArrayInt_ByteLength, false, false, null);
-                        _MyArrayInt = ConvertFromBytes_int_B_c_b(childData);
-                    }
-                    _MyArrayInt_Accessed = true;
+                    Lazinate_MyArrayInt();
                 } 
                 return _MyArrayInt;
             }
@@ -72,6 +62,21 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyArrayInt_Accessed;
+        private void Lazinate_MyArrayInt()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyArrayInt = default(int[,]);
+                _MyArrayInt_Dirty = true; 
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyArrayInt_ByteIndex, _MyArrayInt_ByteLength, false, false, null);
+                _MyArrayInt = ConvertFromBytes_int_B_c_b(childData);
+            }
+            _MyArrayInt_Accessed = true;
+        }
+        
         
         private bool _MyArrayInt_Dirty;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -99,16 +104,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyCrazyJaggedArray_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyCrazyJaggedArray = default(int[][,,][,,,]);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyCrazyJaggedArray_ByteIndex, _MyCrazyJaggedArray_ByteLength, false, false, null);
-                        _MyCrazyJaggedArray = ConvertFromBytes_int_B_b_B_c_c_b_B_c_c_c_b(childData);
-                    }
-                    _MyCrazyJaggedArray_Accessed = true;
+                    Lazinate_MyCrazyJaggedArray();
                 }
                 IsDirty = true; 
                 return _MyCrazyJaggedArray;
@@ -122,6 +118,20 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyCrazyJaggedArray_Accessed;
+        private void Lazinate_MyCrazyJaggedArray()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyCrazyJaggedArray = default(int[][,,][,,,]);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyCrazyJaggedArray_ByteIndex, _MyCrazyJaggedArray_ByteLength, false, false, null);
+                _MyCrazyJaggedArray = ConvertFromBytes_int_B_b_B_c_c_b_B_c_c_c_b(childData);
+            }
+            _MyCrazyJaggedArray_Accessed = true;
+        }
+        
         
         protected int[,,] _MyThreeDimArrayInt;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -131,16 +141,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyThreeDimArrayInt_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyThreeDimArrayInt = default(int[,,]);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyThreeDimArrayInt_ByteIndex, _MyThreeDimArrayInt_ByteLength, false, false, null);
-                        _MyThreeDimArrayInt = ConvertFromBytes_int_B_c_c_b(childData);
-                    }
-                    _MyThreeDimArrayInt_Accessed = true;
+                    Lazinate_MyThreeDimArrayInt();
                 }
                 IsDirty = true; 
                 return _MyThreeDimArrayInt;
@@ -154,6 +155,20 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyThreeDimArrayInt_Accessed;
+        private void Lazinate_MyThreeDimArrayInt()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyThreeDimArrayInt = default(int[,,]);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyThreeDimArrayInt_ByteIndex, _MyThreeDimArrayInt_ByteLength, false, false, null);
+                _MyThreeDimArrayInt = ConvertFromBytes_int_B_c_c_b(childData);
+            }
+            _MyThreeDimArrayInt_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

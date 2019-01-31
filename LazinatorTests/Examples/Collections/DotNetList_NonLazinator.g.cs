@@ -47,17 +47,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListNonLazinatorType_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyListNonLazinatorType = default(List<NonLazinatorClass>);
-                        _MyListNonLazinatorType_Dirty = true; 
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType_ByteIndex, _MyListNonLazinatorType_ByteLength, false, false, null);
-                        _MyListNonLazinatorType = ConvertFromBytes_List_GNonLazinatorClass_g(childData);
-                    }
-                    _MyListNonLazinatorType_Accessed = true;
+                    Lazinate_MyListNonLazinatorType();
                 } 
                 return _MyListNonLazinatorType;
             }
@@ -71,6 +61,21 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyListNonLazinatorType_Accessed;
+        private void Lazinate_MyListNonLazinatorType()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyListNonLazinatorType = default(List<NonLazinatorClass>);
+                _MyListNonLazinatorType_Dirty = true; 
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType_ByteIndex, _MyListNonLazinatorType_ByteLength, false, false, null);
+                _MyListNonLazinatorType = ConvertFromBytes_List_GNonLazinatorClass_g(childData);
+            }
+            _MyListNonLazinatorType_Accessed = true;
+        }
+        
         
         private bool _MyListNonLazinatorType_Dirty;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -98,16 +103,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListNonLazinatorType2_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyListNonLazinatorType2 = default(List<NonLazinatorClass>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType2_ByteIndex, _MyListNonLazinatorType2_ByteLength, false, false, null);
-                        _MyListNonLazinatorType2 = ConvertFromBytes_List_GNonLazinatorClass_g(childData);
-                    }
-                    _MyListNonLazinatorType2_Accessed = true;
+                    Lazinate_MyListNonLazinatorType2();
                 }
                 IsDirty = true; 
                 return _MyListNonLazinatorType2;
@@ -121,6 +117,20 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyListNonLazinatorType2_Accessed;
+        private void Lazinate_MyListNonLazinatorType2()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyListNonLazinatorType2 = default(List<NonLazinatorClass>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType2_ByteIndex, _MyListNonLazinatorType2_ByteLength, false, false, null);
+                _MyListNonLazinatorType2 = ConvertFromBytes_List_GNonLazinatorClass_g(childData);
+            }
+            _MyListNonLazinatorType2_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

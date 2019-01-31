@@ -48,17 +48,7 @@ namespace LazinatorCollections.Tuples
             {
                 if (!_Key_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _Key = default(TKey);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Key_ByteIndex, _Key_ByteLength, false, false, null);
-                        
-                        _Key = DeserializationFactory.Instance.CreateBasedOnType<TKey>(childData); 
-                    }
-                    _Key_Accessed = true;
+                    Lazinate_Key();
                 } 
                 return _Key;
             }
@@ -73,6 +63,21 @@ namespace LazinatorCollections.Tuples
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool _Key_Accessed;
+        private void Lazinate_Key()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _Key = default(TKey);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Key_ByteIndex, _Key_ByteLength, false, false, null);
+                
+                _Key = DeserializationFactory.Instance.CreateBasedOnType<TKey>(childData); 
+            }
+            _Key_Accessed = true;
+        }
+        
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         TValue _Value;
@@ -83,17 +88,7 @@ namespace LazinatorCollections.Tuples
             {
                 if (!_Value_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _Value = default(TValue);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Value_ByteIndex, _Value_ByteLength, false, false, null);
-                        
-                        _Value = DeserializationFactory.Instance.CreateBasedOnType<TValue>(childData); 
-                    }
-                    _Value_Accessed = true;
+                    Lazinate_Value();
                 } 
                 return _Value;
             }
@@ -108,6 +103,21 @@ namespace LazinatorCollections.Tuples
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool _Value_Accessed;
+        private void Lazinate_Value()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _Value = default(TValue);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Value_ByteIndex, _Value_ByteLength, false, false, null);
+                
+                _Value = DeserializationFactory.Instance.CreateBasedOnType<TValue>(childData); 
+            }
+            _Value_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

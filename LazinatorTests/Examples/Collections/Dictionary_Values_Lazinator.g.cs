@@ -52,16 +52,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyDictionary_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyDictionary = default(Dictionary<int, ExampleChild>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionary_ByteIndex, _MyDictionary_ByteLength, false, false, null);
-                        _MyDictionary = ConvertFromBytes_Dictionary_Gint_c_C32ExampleChild_g(childData);
-                    }
-                    _MyDictionary_Accessed = true;
+                    Lazinate_MyDictionary();
                 }
                 IsDirty = true; 
                 return _MyDictionary;
@@ -75,6 +66,20 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyDictionary_Accessed;
+        private void Lazinate_MyDictionary()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyDictionary = default(Dictionary<int, ExampleChild>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionary_ByteIndex, _MyDictionary_ByteLength, false, false, null);
+                _MyDictionary = ConvertFromBytes_Dictionary_Gint_c_C32ExampleChild_g(childData);
+            }
+            _MyDictionary_Accessed = true;
+        }
+        
         
         protected Dictionary<WInt, WInt> _MyDictionaryStructs;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -84,16 +89,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyDictionaryStructs_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyDictionaryStructs = default(Dictionary<WInt, WInt>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionaryStructs_ByteIndex, _MyDictionaryStructs_ByteLength, false, false, null);
-                        _MyDictionaryStructs = ConvertFromBytes_Dictionary_GWInt_c_C32WInt_g(childData);
-                    }
-                    _MyDictionaryStructs_Accessed = true;
+                    Lazinate_MyDictionaryStructs();
                 }
                 IsDirty = true; 
                 return _MyDictionaryStructs;
@@ -107,6 +103,20 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyDictionaryStructs_Accessed;
+        private void Lazinate_MyDictionaryStructs()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyDictionaryStructs = default(Dictionary<WInt, WInt>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionaryStructs_ByteIndex, _MyDictionaryStructs_ByteLength, false, false, null);
+                _MyDictionaryStructs = ConvertFromBytes_Dictionary_GWInt_c_C32WInt_g(childData);
+            }
+            _MyDictionaryStructs_Accessed = true;
+        }
+        
         
         protected SortedDictionary<int, ExampleChild> _MySortedDictionary;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -116,16 +126,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MySortedDictionary_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MySortedDictionary = default(SortedDictionary<int, ExampleChild>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MySortedDictionary_ByteIndex, _MySortedDictionary_ByteLength, false, false, null);
-                        _MySortedDictionary = ConvertFromBytes_SortedDictionary_Gint_c_C32ExampleChild_g(childData);
-                    }
-                    _MySortedDictionary_Accessed = true;
+                    Lazinate_MySortedDictionary();
                 }
                 IsDirty = true; 
                 return _MySortedDictionary;
@@ -139,6 +140,20 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MySortedDictionary_Accessed;
+        private void Lazinate_MySortedDictionary()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MySortedDictionary = default(SortedDictionary<int, ExampleChild>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MySortedDictionary_ByteIndex, _MySortedDictionary_ByteLength, false, false, null);
+                _MySortedDictionary = ConvertFromBytes_SortedDictionary_Gint_c_C32ExampleChild_g(childData);
+            }
+            _MySortedDictionary_Accessed = true;
+        }
+        
         
         protected SortedList<int, ExampleChild> _MySortedList;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -148,16 +163,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MySortedList_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MySortedList = default(SortedList<int, ExampleChild>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MySortedList_ByteIndex, _MySortedList_ByteLength, false, false, null);
-                        _MySortedList = ConvertFromBytes_SortedList_Gint_c_C32ExampleChild_g(childData);
-                    }
-                    _MySortedList_Accessed = true;
+                    Lazinate_MySortedList();
                 }
                 IsDirty = true; 
                 return _MySortedList;
@@ -171,6 +177,20 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MySortedList_Accessed;
+        private void Lazinate_MySortedList()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MySortedList = default(SortedList<int, ExampleChild>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MySortedList_ByteIndex, _MySortedList_ByteLength, false, false, null);
+                _MySortedList = ConvertFromBytes_SortedList_Gint_c_C32ExampleChild_g(childData);
+            }
+            _MySortedList_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

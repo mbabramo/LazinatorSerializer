@@ -59,16 +59,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_SpanList_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _SpanList = default(List<SpanAndMemory>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _SpanList_ByteIndex, _SpanList_ByteLength, false, false, null);
-                        _SpanList = ConvertFromBytes_List_GSpanAndMemory_g(childData);
-                    }
-                    _SpanList_Accessed = true;
+                    Lazinate_SpanList();
                 }
                 IsDirty = true; 
                 return _SpanList;
@@ -82,6 +73,20 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _SpanList_Accessed;
+        private void Lazinate_SpanList()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _SpanList = default(List<SpanAndMemory>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _SpanList_ByteIndex, _SpanList_ByteLength, false, false, null);
+                _SpanList = ConvertFromBytes_List_GSpanAndMemory_g(childData);
+            }
+            _SpanList_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

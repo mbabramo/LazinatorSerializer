@@ -63,16 +63,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyDictionaryWithRecordLikeContainers_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyDictionaryWithRecordLikeContainers = default(Dictionary<int, RecordLikeContainer>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionaryWithRecordLikeContainers_ByteIndex, _MyDictionaryWithRecordLikeContainers_ByteLength, false, false, null);
-                        _MyDictionaryWithRecordLikeContainers = ConvertFromBytes_Dictionary_Gint_c_C32RecordLikeContainer_g(childData);
-                    }
-                    _MyDictionaryWithRecordLikeContainers_Accessed = true;
+                    Lazinate_MyDictionaryWithRecordLikeContainers();
                 }
                 IsDirty = true; 
                 return _MyDictionaryWithRecordLikeContainers;
@@ -86,6 +77,20 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyDictionaryWithRecordLikeContainers_Accessed;
+        private void Lazinate_MyDictionaryWithRecordLikeContainers()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyDictionaryWithRecordLikeContainers = default(Dictionary<int, RecordLikeContainer>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionaryWithRecordLikeContainers_ByteIndex, _MyDictionaryWithRecordLikeContainers_ByteLength, false, false, null);
+                _MyDictionaryWithRecordLikeContainers = ConvertFromBytes_Dictionary_Gint_c_C32RecordLikeContainer_g(childData);
+            }
+            _MyDictionaryWithRecordLikeContainers_Accessed = true;
+        }
+        
         
         protected Dictionary<int, RecordLikeTypeWithLazinator> _MyDictionaryWithRecordLikeTypeValues;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -95,16 +100,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyDictionaryWithRecordLikeTypeValues_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyDictionaryWithRecordLikeTypeValues = default(Dictionary<int, RecordLikeTypeWithLazinator>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionaryWithRecordLikeTypeValues_ByteIndex, _MyDictionaryWithRecordLikeTypeValues_ByteLength, false, false, null);
-                        _MyDictionaryWithRecordLikeTypeValues = ConvertFromBytes_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(childData);
-                    }
-                    _MyDictionaryWithRecordLikeTypeValues_Accessed = true;
+                    Lazinate_MyDictionaryWithRecordLikeTypeValues();
                 }
                 IsDirty = true; 
                 return _MyDictionaryWithRecordLikeTypeValues;
@@ -118,6 +114,20 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyDictionaryWithRecordLikeTypeValues_Accessed;
+        private void Lazinate_MyDictionaryWithRecordLikeTypeValues()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyDictionaryWithRecordLikeTypeValues = default(Dictionary<int, RecordLikeTypeWithLazinator>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionaryWithRecordLikeTypeValues_ByteIndex, _MyDictionaryWithRecordLikeTypeValues_ByteLength, false, false, null);
+                _MyDictionaryWithRecordLikeTypeValues = ConvertFromBytes_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(childData);
+            }
+            _MyDictionaryWithRecordLikeTypeValues_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

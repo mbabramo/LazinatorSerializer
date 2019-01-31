@@ -59,16 +59,7 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 if (!_MyEnumList_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyEnumList = default(List<EnumWithinClass>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyEnumList_ByteIndex, _MyEnumList_ByteLength, false, false, null);
-                        _MyEnumList = ConvertFromBytes_List_GEnumWithinClass_g(childData);
-                    }
-                    _MyEnumList_Accessed = true;
+                    Lazinate_MyEnumList();
                 }
                 IsDirty = true; 
                 return _MyEnumList;
@@ -82,6 +73,20 @@ namespace LazinatorTests.Examples.Subclasses
             }
         }
         protected bool _MyEnumList_Accessed;
+        private void Lazinate_MyEnumList()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyEnumList = default(List<EnumWithinClass>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyEnumList_ByteIndex, _MyEnumList_ByteLength, false, false, null);
+                _MyEnumList = ConvertFromBytes_List_GEnumWithinClass_g(childData);
+            }
+            _MyEnumList_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

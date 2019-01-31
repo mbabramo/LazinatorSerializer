@@ -49,17 +49,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListInt_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyListInt = default(List<WInt>);
-                        _MyListInt_Dirty = true; 
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListInt_ByteIndex, _MyListInt_ByteLength, false, false, null);
-                        _MyListInt = ConvertFromBytes_List_GWInt_g(childData);
-                    }
-                    _MyListInt_Accessed = true;
+                    Lazinate_MyListInt();
                 } 
                 return _MyListInt;
             }
@@ -73,6 +63,21 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyListInt_Accessed;
+        private void Lazinate_MyListInt()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyListInt = default(List<WInt>);
+                _MyListInt_Dirty = true; 
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListInt_ByteIndex, _MyListInt_ByteLength, false, false, null);
+                _MyListInt = ConvertFromBytes_List_GWInt_g(childData);
+            }
+            _MyListInt_Accessed = true;
+        }
+        
         
         private bool _MyListInt_Dirty;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -100,16 +105,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListNullableByte_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyListNullableByte = default(List<WNullableByte>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableByte_ByteIndex, _MyListNullableByte_ByteLength, false, false, null);
-                        _MyListNullableByte = ConvertFromBytes_List_GWNullableByte_g(childData);
-                    }
-                    _MyListNullableByte_Accessed = true;
+                    Lazinate_MyListNullableByte();
                 }
                 IsDirty = true; 
                 return _MyListNullableByte;
@@ -123,6 +119,20 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyListNullableByte_Accessed;
+        private void Lazinate_MyListNullableByte()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyListNullableByte = default(List<WNullableByte>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableByte_ByteIndex, _MyListNullableByte_ByteLength, false, false, null);
+                _MyListNullableByte = ConvertFromBytes_List_GWNullableByte_g(childData);
+            }
+            _MyListNullableByte_Accessed = true;
+        }
+        
         
         protected List<WNullableInt> _MyListNullableInt;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -132,16 +142,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListNullableInt_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyListNullableInt = default(List<WNullableInt>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableInt_ByteIndex, _MyListNullableInt_ByteLength, false, false, null);
-                        _MyListNullableInt = ConvertFromBytes_List_GWNullableInt_g(childData);
-                    }
-                    _MyListNullableInt_Accessed = true;
+                    Lazinate_MyListNullableInt();
                 }
                 IsDirty = true; 
                 return _MyListNullableInt;
@@ -155,6 +156,20 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyListNullableInt_Accessed;
+        private void Lazinate_MyListNullableInt()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyListNullableInt = default(List<WNullableInt>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableInt_ByteIndex, _MyListNullableInt_ByteLength, false, false, null);
+                _MyListNullableInt = ConvertFromBytes_List_GWNullableInt_g(childData);
+            }
+            _MyListNullableInt_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

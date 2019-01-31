@@ -118,17 +118,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_LazinatorExample_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _LazinatorExample = default(Example);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _LazinatorExample_ByteIndex, _LazinatorExample_ByteLength, false, false, null);
-                        
-                        _LazinatorExample = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, () => new Example(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
-                    }
-                    _LazinatorExample_Accessed = true;
+                    Lazinate_LazinatorExample();
                 } 
                 return _LazinatorExample;
             }
@@ -150,6 +140,21 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         protected bool _LazinatorExample_Accessed;
+        private void Lazinate_LazinatorExample()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _LazinatorExample = default(Example);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _LazinatorExample_ByteIndex, _LazinatorExample_ByteLength, false, false, null);
+                
+                _LazinatorExample = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, () => new Example(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
+            }
+            _LazinatorExample_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

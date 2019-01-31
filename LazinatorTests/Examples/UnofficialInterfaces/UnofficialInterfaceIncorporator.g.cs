@@ -77,17 +77,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyOfficialObject_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyOfficialObject = default(Concrete5);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyOfficialObject_ByteIndex, _MyOfficialObject_ByteLength, false, false, null);
-                        
-                        _MyOfficialObject = DeserializationFactory.Instance.CreateBaseOrDerivedType(1039, () => new Concrete5(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
-                    }
-                    _MyOfficialObject_Accessed = true;
+                    Lazinate_MyOfficialObject();
                 } 
                 return _MyOfficialObject;
             }
@@ -109,6 +99,21 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyOfficialObject_Accessed;
+        private void Lazinate_MyOfficialObject()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyOfficialObject = default(Concrete5);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyOfficialObject_ByteIndex, _MyOfficialObject_ByteLength, false, false, null);
+                
+                _MyOfficialObject = DeserializationFactory.Instance.CreateBaseOrDerivedType(1039, () => new Concrete5(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
+            }
+            _MyOfficialObject_Accessed = true;
+        }
+        
         
         protected Concrete3 _MyUnofficialObject;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -118,17 +123,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyUnofficialObject_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyUnofficialObject = default(Concrete3);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyUnofficialObject_ByteIndex, _MyUnofficialObject_ByteLength, false, false, null);
-                        
-                        _MyUnofficialObject = DeserializationFactory.Instance.CreateBaseOrDerivedType(1037, () => new Concrete3(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
-                    }
-                    _MyUnofficialObject_Accessed = true;
+                    Lazinate_MyUnofficialObject();
                 } 
                 return _MyUnofficialObject;
             }
@@ -150,6 +145,21 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyUnofficialObject_Accessed;
+        private void Lazinate_MyUnofficialObject()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyUnofficialObject = default(Concrete3);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyUnofficialObject_ByteIndex, _MyUnofficialObject_ByteLength, false, false, null);
+                
+                _MyUnofficialObject = DeserializationFactory.Instance.CreateBaseOrDerivedType(1037, () => new Concrete3(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
+            }
+            _MyUnofficialObject_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

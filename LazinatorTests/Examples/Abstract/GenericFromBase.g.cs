@@ -57,21 +57,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_MyT_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyT = default(T);
-                        if (_MyT != null)
-                        { // MyT is a struct
-                            _MyT.LazinatorParents = new LazinatorParentsCollection(this);
-                        }
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, false, false, null);
-                        
-                        _MyT = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
-                    }
-                    _MyT_Accessed = true;
+                    Lazinate_MyT();
                 } 
                 return _MyT;
             }
@@ -100,6 +86,25 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         protected bool _MyT_Accessed;
+        private void Lazinate_MyT()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyT = default(T);
+                if (_MyT != null)
+                { // MyT is a struct
+                    _MyT.LazinatorParents = new LazinatorParentsCollection(this);
+                }
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, false, false, null);
+                
+                _MyT = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
+            }
+            _MyT_Accessed = true;
+        }
+        
         /* Clone overrides */
         
         public GenericFromBase(LazinatorConstructorEnum constructorEnum) : base(constructorEnum)

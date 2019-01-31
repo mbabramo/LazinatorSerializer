@@ -59,17 +59,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_ItemU_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _ItemU = default(ExampleChild);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ItemU_ByteIndex, _ItemU_ByteLength, false, false, null);
-                        
-                        _ItemU = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, () => new ExampleChild(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
-                    }
-                    _ItemU_Accessed = true;
+                    Lazinate_ItemU();
                 } 
                 return _ItemU;
             }
@@ -91,6 +81,21 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _ItemU_Accessed;
+        private void Lazinate_ItemU()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _ItemU = default(ExampleChild);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ItemU_ByteIndex, _ItemU_ByteLength, false, false, null);
+                
+                _ItemU = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, () => new ExampleChild(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
+            }
+            _ItemU_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

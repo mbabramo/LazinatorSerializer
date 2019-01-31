@@ -42,16 +42,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_IntList6_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _IntList6 = default(List<int>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList6_ByteIndex, _IntList6_ByteLength, false, false, null);
-                        _IntList6 = ConvertFromBytes_List_Gint_g(childData);
-                    }
-                    _IntList6_Accessed = true;
+                    Lazinate_IntList6();
                 }
                 IsDirty = true; 
                 return _IntList6;
@@ -65,6 +56,20 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         protected bool _IntList6_Accessed;
+        private void Lazinate_IntList6()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _IntList6 = default(List<int>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList6_ByteIndex, _IntList6_ByteLength, false, false, null);
+                _IntList6 = ConvertFromBytes_List_Gint_g(childData);
+            }
+            _IntList6_Accessed = true;
+        }
+        
         /* Clone overrides */
         
         public Concrete6(LazinatorConstructorEnum constructorEnum) : base(constructorEnum)

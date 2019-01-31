@@ -44,17 +44,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyExampleStructContainingClasses_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyExampleStructContainingClasses = default(ExampleStructContainingClasses);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, false, false, null);
-                        _MyExampleStructContainingClasses = new ExampleStructContainingClasses();
-                        _MyExampleStructContainingClasses.DeserializeLazinator(childData);
-                    }
-                    _MyExampleStructContainingClasses_Accessed = true;
+                    Lazinate_MyExampleStructContainingClasses();
                 } 
                 return _MyExampleStructContainingClasses;
             }
@@ -68,6 +58,21 @@ namespace LazinatorTests.Examples
             }
         }
         bool _MyExampleStructContainingClasses_Accessed;
+        private void Lazinate_MyExampleStructContainingClasses()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyExampleStructContainingClasses = default(ExampleStructContainingClasses);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, false, false, null);
+                _MyExampleStructContainingClasses = new ExampleStructContainingClasses();
+                _MyExampleStructContainingClasses.DeserializeLazinator(childData);
+            }
+            _MyExampleStructContainingClasses_Accessed = true;
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ExampleStructContainingClasses MyExampleStructContainingClasses_Copy
         {

@@ -46,16 +46,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_MyListT_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyListT = default(List<T>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListT_ByteIndex, _MyListT_ByteLength, false, false, null);
-                        _MyListT = ConvertFromBytes_List_GT_g(childData);
-                    }
-                    _MyListT_Accessed = true;
+                    Lazinate_MyListT();
                 }
                 IsDirty = true; 
                 return _MyListT;
@@ -69,6 +60,20 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _MyListT_Accessed;
+        private void Lazinate_MyListT()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyListT = default(List<T>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListT_ByteIndex, _MyListT_ByteLength, false, false, null);
+                _MyListT = ConvertFromBytes_List_GT_g(childData);
+            }
+            _MyListT_Accessed = true;
+        }
+        
         
         protected T _MyT;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -78,21 +83,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_MyT_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyT = default(T);
-                        if (_MyT != null)
-                        { // MyT is a struct
-                            _MyT.LazinatorParents = new LazinatorParentsCollection(this);
-                        }
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, false, false, null);
-                        
-                        _MyT = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
-                    }
-                    _MyT_Accessed = true;
+                    Lazinate_MyT();
                 } 
                 return _MyT;
             }
@@ -121,6 +112,25 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _MyT_Accessed;
+        private void Lazinate_MyT()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyT = default(T);
+                if (_MyT != null)
+                { // MyT is a struct
+                    _MyT.LazinatorParents = new LazinatorParentsCollection(this);
+                }
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, false, false, null);
+                
+                _MyT = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
+            }
+            _MyT_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

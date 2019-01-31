@@ -63,17 +63,7 @@ namespace Lazinator.Wrappers
             {
                 if (!_NonNullValue_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _NonNullValue = default(T);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonNullValue_ByteIndex, _NonNullValue_ByteLength, true, false, null);
-                        
-                        _NonNullValue = DeserializationFactory.Instance.CreateBasedOnType<T>(childData); 
-                    }
-                    _NonNullValue_Accessed = true;
+                    Lazinate_NonNullValue();
                 } 
                 return _NonNullValue;
             }
@@ -89,6 +79,21 @@ namespace Lazinator.Wrappers
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool _NonNullValue_Accessed;
+        private void Lazinate_NonNullValue()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _NonNullValue = default(T);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonNullValue_ByteIndex, _NonNullValue_ByteLength, true, false, null);
+                
+                _NonNullValue = DeserializationFactory.Instance.CreateBasedOnType<T>(childData); 
+            }
+            _NonNullValue_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

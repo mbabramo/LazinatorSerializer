@@ -45,17 +45,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListSerialized_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyListSerialized = default(List<ExampleChild>);
-                        _MyListSerialized_Dirty = true; 
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListSerialized_ByteIndex, _MyListSerialized_ByteLength, false, false, null);
-                        _MyListSerialized = ConvertFromBytes_List_GExampleChild_g(childData);
-                    }
-                    _MyListSerialized_Accessed = true;
+                    Lazinate_MyListSerialized();
                 } 
                 return _MyListSerialized;
             }
@@ -69,6 +59,21 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyListSerialized_Accessed;
+        private void Lazinate_MyListSerialized()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyListSerialized = default(List<ExampleChild>);
+                _MyListSerialized_Dirty = true; 
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListSerialized_ByteIndex, _MyListSerialized_ByteLength, false, false, null);
+                _MyListSerialized = ConvertFromBytes_List_GExampleChild_g(childData);
+            }
+            _MyListSerialized_Accessed = true;
+        }
+        
         
         private bool _MyListSerialized_Dirty;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

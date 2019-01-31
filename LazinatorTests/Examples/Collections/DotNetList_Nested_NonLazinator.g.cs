@@ -45,16 +45,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListNestedNonLazinatorType_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyListNestedNonLazinatorType = default(List<List<NonLazinatorClass>>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNestedNonLazinatorType_ByteIndex, _MyListNestedNonLazinatorType_ByteLength, false, false, null);
-                        _MyListNestedNonLazinatorType = ConvertFromBytes_List_GList_GNonLazinatorClass_g_g(childData);
-                    }
-                    _MyListNestedNonLazinatorType_Accessed = true;
+                    Lazinate_MyListNestedNonLazinatorType();
                 }
                 IsDirty = true; 
                 return _MyListNestedNonLazinatorType;
@@ -68,6 +59,20 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyListNestedNonLazinatorType_Accessed;
+        private void Lazinate_MyListNestedNonLazinatorType()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyListNestedNonLazinatorType = default(List<List<NonLazinatorClass>>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNestedNonLazinatorType_ByteIndex, _MyListNestedNonLazinatorType_ByteLength, false, false, null);
+                _MyListNestedNonLazinatorType = ConvertFromBytes_List_GList_GNonLazinatorClass_g_g(childData);
+            }
+            _MyListNestedNonLazinatorType_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

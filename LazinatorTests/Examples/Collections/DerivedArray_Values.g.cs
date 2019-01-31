@@ -42,17 +42,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyArrayInt_DerivedLevel_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyArrayInt_DerivedLevel = default(int[]);
-                        _MyArrayInt_DerivedLevel_Dirty = true; 
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyArrayInt_DerivedLevel_ByteIndex, _MyArrayInt_DerivedLevel_ByteLength, false, false, null);
-                        _MyArrayInt_DerivedLevel = ConvertFromBytes_int_B_b(childData);
-                    }
-                    _MyArrayInt_DerivedLevel_Accessed = true;
+                    Lazinate_MyArrayInt_DerivedLevel();
                 } 
                 return _MyArrayInt_DerivedLevel;
             }
@@ -66,6 +56,21 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyArrayInt_DerivedLevel_Accessed;
+        private void Lazinate_MyArrayInt_DerivedLevel()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyArrayInt_DerivedLevel = default(int[]);
+                _MyArrayInt_DerivedLevel_Dirty = true; 
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyArrayInt_DerivedLevel_ByteIndex, _MyArrayInt_DerivedLevel_ByteLength, false, false, null);
+                _MyArrayInt_DerivedLevel = ConvertFromBytes_int_B_b(childData);
+            }
+            _MyArrayInt_DerivedLevel_Accessed = true;
+        }
+        
         
         private bool _MyArrayInt_DerivedLevel_Dirty;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

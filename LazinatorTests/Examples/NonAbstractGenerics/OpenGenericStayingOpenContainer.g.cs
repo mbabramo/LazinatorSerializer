@@ -55,17 +55,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_ClosedGenericBase_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _ClosedGenericBase = default(OpenGeneric<Base>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericBase_ByteIndex, _ClosedGenericBase_ByteLength, false, false, null);
-                        
-                        _ClosedGenericBase = DeserializationFactory.Instance.CreateBaseOrDerivedType(1033, () => new OpenGeneric<Base>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
-                    }
-                    _ClosedGenericBase_Accessed = true;
+                    Lazinate_ClosedGenericBase();
                 } 
                 return _ClosedGenericBase;
             }
@@ -87,6 +77,21 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _ClosedGenericBase_Accessed;
+        private void Lazinate_ClosedGenericBase()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _ClosedGenericBase = default(OpenGeneric<Base>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericBase_ByteIndex, _ClosedGenericBase_ByteLength, false, false, null);
+                
+                _ClosedGenericBase = DeserializationFactory.Instance.CreateBaseOrDerivedType(1033, () => new OpenGeneric<Base>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
+            }
+            _ClosedGenericBase_Accessed = true;
+        }
+        
         
         protected OpenGeneric<WFloat> _ClosedGenericFloat;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -96,17 +101,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_ClosedGenericFloat_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _ClosedGenericFloat = default(OpenGeneric<WFloat>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericFloat_ByteIndex, _ClosedGenericFloat_ByteLength, false, false, null);
-                        
-                        _ClosedGenericFloat = DeserializationFactory.Instance.CreateBaseOrDerivedType(1033, () => new OpenGeneric<WFloat>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
-                    }
-                    _ClosedGenericFloat_Accessed = true;
+                    Lazinate_ClosedGenericFloat();
                 } 
                 return _ClosedGenericFloat;
             }
@@ -128,6 +123,21 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _ClosedGenericFloat_Accessed;
+        private void Lazinate_ClosedGenericFloat()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _ClosedGenericFloat = default(OpenGeneric<WFloat>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericFloat_ByteIndex, _ClosedGenericFloat_ByteLength, false, false, null);
+                
+                _ClosedGenericFloat = DeserializationFactory.Instance.CreateBaseOrDerivedType(1033, () => new OpenGeneric<WFloat>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
+            }
+            _ClosedGenericFloat_Accessed = true;
+        }
+        
         
         protected GenericFromBase<Base> _ClosedGenericFromBaseWithBase;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -137,17 +147,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_ClosedGenericFromBaseWithBase_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _ClosedGenericFromBaseWithBase = default(GenericFromBase<Base>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericFromBaseWithBase_ByteIndex, _ClosedGenericFromBaseWithBase_ByteLength, false, false, null);
-                        
-                        _ClosedGenericFromBaseWithBase = DeserializationFactory.Instance.CreateBaseOrDerivedType(1067, () => new GenericFromBase<Base>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
-                    }
-                    _ClosedGenericFromBaseWithBase_Accessed = true;
+                    Lazinate_ClosedGenericFromBaseWithBase();
                 } 
                 return _ClosedGenericFromBaseWithBase;
             }
@@ -169,6 +169,21 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _ClosedGenericFromBaseWithBase_Accessed;
+        private void Lazinate_ClosedGenericFromBaseWithBase()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _ClosedGenericFromBaseWithBase = default(GenericFromBase<Base>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericFromBaseWithBase_ByteIndex, _ClosedGenericFromBaseWithBase_ByteLength, false, false, null);
+                
+                _ClosedGenericFromBaseWithBase = DeserializationFactory.Instance.CreateBaseOrDerivedType(1067, () => new GenericFromBase<Base>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
+            }
+            _ClosedGenericFromBaseWithBase_Accessed = true;
+        }
+        
         
         protected OpenGeneric<IExampleChild> _ClosedGenericInterface;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -178,17 +193,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_ClosedGenericInterface_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _ClosedGenericInterface = default(OpenGeneric<IExampleChild>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericInterface_ByteIndex, _ClosedGenericInterface_ByteLength, false, false, null);
-                        
-                        _ClosedGenericInterface = DeserializationFactory.Instance.CreateBaseOrDerivedType(1033, () => new OpenGeneric<IExampleChild>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
-                    }
-                    _ClosedGenericInterface_Accessed = true;
+                    Lazinate_ClosedGenericInterface();
                 } 
                 return _ClosedGenericInterface;
             }
@@ -210,6 +215,21 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _ClosedGenericInterface_Accessed;
+        private void Lazinate_ClosedGenericInterface()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _ClosedGenericInterface = default(OpenGeneric<IExampleChild>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericInterface_ByteIndex, _ClosedGenericInterface_ByteLength, false, false, null);
+                
+                _ClosedGenericInterface = DeserializationFactory.Instance.CreateBaseOrDerivedType(1033, () => new OpenGeneric<IExampleChild>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
+            }
+            _ClosedGenericInterface_Accessed = true;
+        }
+        
         
         protected OpenGeneric<IExampleNonexclusiveInterface> _ClosedGenericNonexclusiveInterface;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -219,17 +239,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_ClosedGenericNonexclusiveInterface_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _ClosedGenericNonexclusiveInterface = default(OpenGeneric<IExampleNonexclusiveInterface>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericNonexclusiveInterface_ByteIndex, _ClosedGenericNonexclusiveInterface_ByteLength, false, false, null);
-                        
-                        _ClosedGenericNonexclusiveInterface = DeserializationFactory.Instance.CreateBaseOrDerivedType(1033, () => new OpenGeneric<IExampleNonexclusiveInterface>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
-                    }
-                    _ClosedGenericNonexclusiveInterface_Accessed = true;
+                    Lazinate_ClosedGenericNonexclusiveInterface();
                 } 
                 return _ClosedGenericNonexclusiveInterface;
             }
@@ -251,6 +261,21 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _ClosedGenericNonexclusiveInterface_Accessed;
+        private void Lazinate_ClosedGenericNonexclusiveInterface()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _ClosedGenericNonexclusiveInterface = default(OpenGeneric<IExampleNonexclusiveInterface>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericNonexclusiveInterface_ByteIndex, _ClosedGenericNonexclusiveInterface_ByteLength, false, false, null);
+                
+                _ClosedGenericNonexclusiveInterface = DeserializationFactory.Instance.CreateBaseOrDerivedType(1033, () => new OpenGeneric<IExampleNonexclusiveInterface>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
+            }
+            _ClosedGenericNonexclusiveInterface_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

@@ -100,17 +100,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyExampleGrandchild_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyExampleGrandchild = default(ExampleGrandchild);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleGrandchild_ByteIndex, _MyExampleGrandchild_ByteLength, false, false, null);
-                        
-                        _MyExampleGrandchild = DeserializationFactory.Instance.CreateBaseOrDerivedType(1079, () => new ExampleGrandchild(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
-                    }
-                    _MyExampleGrandchild_Accessed = true;
+                    Lazinate_MyExampleGrandchild();
                 } 
                 return _MyExampleGrandchild;
             }
@@ -132,6 +122,21 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyExampleGrandchild_Accessed;
+        private void Lazinate_MyExampleGrandchild()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyExampleGrandchild = default(ExampleGrandchild);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleGrandchild_ByteIndex, _MyExampleGrandchild_ByteLength, false, false, null);
+                
+                _MyExampleGrandchild = DeserializationFactory.Instance.CreateBaseOrDerivedType(1079, () => new ExampleGrandchild(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
+            }
+            _MyExampleGrandchild_Accessed = true;
+        }
+        
         
         protected WrapperContainer _MyWrapperContainer;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -141,17 +146,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyWrapperContainer_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyWrapperContainer = default(WrapperContainer);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyWrapperContainer_ByteIndex, _MyWrapperContainer_ByteLength, false, false, null);
-                        
-                        _MyWrapperContainer = DeserializationFactory.Instance.CreateBaseOrDerivedType(1048, () => new WrapperContainer(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
-                    }
-                    _MyWrapperContainer_Accessed = true;
+                    Lazinate_MyWrapperContainer();
                 } 
                 return _MyWrapperContainer;
             }
@@ -173,6 +168,21 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyWrapperContainer_Accessed;
+        private void Lazinate_MyWrapperContainer()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyWrapperContainer = default(WrapperContainer);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyWrapperContainer_ByteIndex, _MyWrapperContainer_ByteLength, false, false, null);
+                
+                _MyWrapperContainer = DeserializationFactory.Instance.CreateBaseOrDerivedType(1048, () => new WrapperContainer(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
+            }
+            _MyWrapperContainer_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

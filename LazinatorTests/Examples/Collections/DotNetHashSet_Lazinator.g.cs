@@ -45,16 +45,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyHashSetSerialized_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyHashSetSerialized = default(HashSet<ExampleChild>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyHashSetSerialized_ByteIndex, _MyHashSetSerialized_ByteLength, false, false, null);
-                        _MyHashSetSerialized = ConvertFromBytes_HashSet_GExampleChild_g(childData);
-                    }
-                    _MyHashSetSerialized_Accessed = true;
+                    Lazinate_MyHashSetSerialized();
                 }
                 IsDirty = true; 
                 return _MyHashSetSerialized;
@@ -68,6 +59,20 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyHashSetSerialized_Accessed;
+        private void Lazinate_MyHashSetSerialized()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyHashSetSerialized = default(HashSet<ExampleChild>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyHashSetSerialized_ByteIndex, _MyHashSetSerialized_ByteLength, false, false, null);
+                _MyHashSetSerialized = ConvertFromBytes_HashSet_GExampleChild_g(childData);
+            }
+            _MyHashSetSerialized_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

@@ -44,17 +44,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyStackInt_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyStackInt = default(Stack<int>);
-                        _MyStackInt_Dirty = true; 
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyStackInt_ByteIndex, _MyStackInt_ByteLength, false, false, null);
-                        _MyStackInt = ConvertFromBytes_Stack_Gint_g(childData);
-                    }
-                    _MyStackInt_Accessed = true;
+                    Lazinate_MyStackInt();
                 } 
                 return _MyStackInt;
             }
@@ -68,6 +58,21 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyStackInt_Accessed;
+        private void Lazinate_MyStackInt()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyStackInt = default(Stack<int>);
+                _MyStackInt_Dirty = true; 
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyStackInt_ByteIndex, _MyStackInt_ByteLength, false, false, null);
+                _MyStackInt = ConvertFromBytes_Stack_Gint_g(childData);
+            }
+            _MyStackInt_Accessed = true;
+        }
+        
         
         private bool _MyStackInt_Dirty;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

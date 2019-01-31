@@ -45,16 +45,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyNestedTuple_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _MyNestedTuple = default(Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNestedTuple_ByteIndex, _MyNestedTuple_ByteLength, false, false, null);
-                        _MyNestedTuple = ConvertFromBytes_Tuple_Guint_C63_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(childData);
-                    }
-                    _MyNestedTuple_Accessed = true;
+                    Lazinate_MyNestedTuple();
                 }
                 IsDirty = true; 
                 return _MyNestedTuple;
@@ -68,6 +59,20 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyNestedTuple_Accessed;
+        private void Lazinate_MyNestedTuple()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyNestedTuple = default(Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNestedTuple_ByteIndex, _MyNestedTuple_ByteLength, false, false, null);
+                _MyNestedTuple = ConvertFromBytes_Tuple_Guint_C63_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(childData);
+            }
+            _MyNestedTuple_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

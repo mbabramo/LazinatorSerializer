@@ -45,21 +45,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_Subcontainer_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _Subcontainer = default(ExampleStructContainingStruct);
-                        _Subcontainer.LazinatorParents = new LazinatorParentsCollection(this);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, false, false, null);
-                        _Subcontainer = new ExampleStructContainingStruct()
-                        {
-                            LazinatorParents = new LazinatorParentsCollection(this)
-                        };
-                        _Subcontainer.DeserializeLazinator(childData);
-                    }
-                    _Subcontainer_Accessed = true;
+                    Lazinate_Subcontainer();
                 } 
                 return _Subcontainer;
             }
@@ -74,6 +60,25 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         protected bool _Subcontainer_Accessed;
+        private void Lazinate_Subcontainer()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _Subcontainer = default(ExampleStructContainingStruct);
+                _Subcontainer.LazinatorParents = new LazinatorParentsCollection(this);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, false, false, null);
+                _Subcontainer = new ExampleStructContainingStruct()
+                {
+                    LazinatorParents = new LazinatorParentsCollection(this)
+                };
+                _Subcontainer.DeserializeLazinator(childData);
+            }
+            _Subcontainer_Accessed = true;
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ExampleStructContainingStruct Subcontainer_Copy
         {

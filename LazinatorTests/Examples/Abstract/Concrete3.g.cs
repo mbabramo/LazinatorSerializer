@@ -92,17 +92,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_Example2_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _Example2 = default(Example);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Example2_ByteIndex, _Example2_ByteLength, false, false, null);
-                        
-                        _Example2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, () => new Example(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
-                    }
-                    _Example2_Accessed = true;
+                    Lazinate_Example2();
                 } 
                 return _Example2;
             }
@@ -123,6 +113,21 @@ namespace LazinatorTests.Examples.Abstract
                 _Example2_Accessed = true;
             }
         }
+        private void Lazinate_Example2()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _Example2 = default(Example);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Example2_ByteIndex, _Example2_ByteLength, false, false, null);
+                
+                _Example2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, () => new Example(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
+            }
+            _Example2_Accessed = true;
+        }
+        
         
         protected Example _Example3;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -132,17 +137,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_Example3_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _Example3 = default(Example);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Example3_ByteIndex, _Example3_ByteLength, false, false, null);
-                        
-                        _Example3 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, () => new Example(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
-                    }
-                    _Example3_Accessed = true;
+                    Lazinate_Example3();
                 } 
                 return _Example3;
             }
@@ -163,6 +158,21 @@ namespace LazinatorTests.Examples.Abstract
                 _Example3_Accessed = true;
             }
         }
+        private void Lazinate_Example3()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _Example3 = default(Example);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Example3_ByteIndex, _Example3_ByteLength, false, false, null);
+                
+                _Example3 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, () => new Example(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
+            }
+            _Example3_Accessed = true;
+        }
+        
         
         protected List<int> _IntList1;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -172,16 +182,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_IntList1_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _IntList1 = default(List<int>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList1_ByteIndex, _IntList1_ByteLength, false, false, null);
-                        _IntList1 = ConvertFromBytes_List_Gint_g(childData);
-                    }
-                    _IntList1_Accessed = true;
+                    Lazinate_IntList1();
                 }
                 IsDirty = true; 
                 return _IntList1;
@@ -194,6 +195,20 @@ namespace LazinatorTests.Examples.Abstract
                 _IntList1_Accessed = true;
             }
         }
+        private void Lazinate_IntList1()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _IntList1 = default(List<int>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList1_ByteIndex, _IntList1_ByteLength, false, false, null);
+                _IntList1 = ConvertFromBytes_List_Gint_g(childData);
+            }
+            _IntList1_Accessed = true;
+        }
+        
         
         protected List<int> _IntList2;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -203,16 +218,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_IntList2_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _IntList2 = default(List<int>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList2_ByteIndex, _IntList2_ByteLength, false, false, null);
-                        _IntList2 = ConvertFromBytes_List_Gint_g(childData);
-                    }
-                    _IntList2_Accessed = true;
+                    Lazinate_IntList2();
                 }
                 IsDirty = true; 
                 return _IntList2;
@@ -225,6 +231,20 @@ namespace LazinatorTests.Examples.Abstract
                 _IntList2_Accessed = true;
             }
         }
+        private void Lazinate_IntList2()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _IntList2 = default(List<int>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList2_ByteIndex, _IntList2_ByteLength, false, false, null);
+                _IntList2 = ConvertFromBytes_List_Gint_g(childData);
+            }
+            _IntList2_Accessed = true;
+        }
+        
         
         protected List<int> _IntList3;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -234,16 +254,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_IntList3_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _IntList3 = default(List<int>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList3_ByteIndex, _IntList3_ByteLength, false, false, null);
-                        _IntList3 = ConvertFromBytes_List_Gint_g(childData);
-                    }
-                    _IntList3_Accessed = true;
+                    Lazinate_IntList3();
                 }
                 IsDirty = true; 
                 return _IntList3;
@@ -257,6 +268,20 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         protected bool _IntList3_Accessed;
+        private void Lazinate_IntList3()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _IntList3 = default(List<int>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList3_ByteIndex, _IntList3_ByteLength, false, false, null);
+                _IntList3 = ConvertFromBytes_List_Gint_g(childData);
+            }
+            _IntList3_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

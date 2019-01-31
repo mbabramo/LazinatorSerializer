@@ -80,16 +80,7 @@ namespace LazinatorCollections.BitArray
             {
                 if (!_IntStorage_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _IntStorage = default(Memory<int>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntStorage_ByteIndex, _IntStorage_ByteLength, false, false, null);
-                        _IntStorage = ConvertFromBytes_Memory_Gint_g(childData);
-                    }
-                    _IntStorage_Accessed = true;
+                    Lazinate_IntStorage();
                 }
                 IsDirty = true; 
                 return _IntStorage;
@@ -105,6 +96,20 @@ namespace LazinatorCollections.BitArray
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool _IntStorage_Accessed;
+        private void Lazinate_IntStorage()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _IntStorage = default(Memory<int>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntStorage_ByteIndex, _IntStorage_ByteLength, false, false, null);
+                _IntStorage = ConvertFromBytes_Memory_Gint_g(childData);
+            }
+            _IntStorage_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

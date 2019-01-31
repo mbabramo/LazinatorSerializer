@@ -71,17 +71,7 @@ namespace LazinatorCollections
             {
                 if (!_Offsets_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _Offsets = default(LazinatorOffsetList);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Offsets_ByteIndex, _Offsets_ByteLength, false, false, null);
-                        
-                        _Offsets = DeserializationFactory.Instance.CreateBaseOrDerivedType(200, () => new LazinatorOffsetList(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
-                    }
-                    _Offsets_Accessed = true;
+                    Lazinate_Offsets();
                 } 
                 return _Offsets;
             }
@@ -105,6 +95,21 @@ namespace LazinatorCollections
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _Offsets_Accessed;
+        private void Lazinate_Offsets()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _Offsets = default(LazinatorOffsetList);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Offsets_ByteIndex, _Offsets_ByteLength, false, false, null);
+                
+                _Offsets = DeserializationFactory.Instance.CreateBaseOrDerivedType(200, () => new LazinatorOffsetList(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
+            }
+            _Offsets_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         

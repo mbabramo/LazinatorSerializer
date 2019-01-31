@@ -48,17 +48,7 @@ namespace LazinatorCollections
             {
                 if (!_NextNode_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _NextNode = default(LazinatorLinkedListNode<T>);
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NextNode_ByteIndex, _NextNode_ByteLength, false, false, null);
-                        
-                        _NextNode = DeserializationFactory.Instance.CreateBaseOrDerivedType(224, () => new LazinatorLinkedListNode<T>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
-                    }
-                    _NextNode_Accessed = true;
+                    Lazinate_NextNode();
                 } 
                 return _NextNode;
             }
@@ -82,6 +72,21 @@ namespace LazinatorCollections
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _NextNode_Accessed;
+        private void Lazinate_NextNode()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _NextNode = default(LazinatorLinkedListNode<T>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NextNode_ByteIndex, _NextNode_ByteLength, false, false, null);
+                
+                _NextNode = DeserializationFactory.Instance.CreateBaseOrDerivedType(224, () => new LazinatorLinkedListNode<T>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
+            }
+            _NextNode_Accessed = true;
+        }
+        
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected T _Value;
@@ -92,21 +97,7 @@ namespace LazinatorCollections
             {
                 if (!_Value_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
-                    {
-                        _Value = default(T);
-                        if (_Value != null)
-                        { // Value is a struct
-                            _Value.LazinatorParents = new LazinatorParentsCollection(this);
-                        }
-                    }
-                    else
-                    {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Value_ByteIndex, _Value_ByteLength, false, false, null);
-                        
-                        _Value = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
-                    }
-                    _Value_Accessed = true;
+                    Lazinate_Value();
                 } 
                 return _Value;
             }
@@ -137,6 +128,25 @@ namespace LazinatorCollections
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _Value_Accessed;
+        private void Lazinate_Value()
+        {
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _Value = default(T);
+                if (_Value != null)
+                { // Value is a struct
+                    _Value.LazinatorParents = new LazinatorParentsCollection(this);
+                }
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Value_ByteIndex, _Value_ByteLength, false, false, null);
+                
+                _Value = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
+            }
+            _Value_Accessed = true;
+        }
+        
         
         /* Serialization, deserialization, and object relationships */
         
