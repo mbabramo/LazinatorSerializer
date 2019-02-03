@@ -29,6 +29,8 @@ using LazinatorCollections.Tree;
 using LazinatorCollections.Tuples;
 using LazinatorCollections.BitArray;
 using LazinatorCollections.ByteSpan;
+using LazinatorCollections.Remote;
+using LazinatorTests.Examples.RemoteHierarchy;
 
 namespace LazinatorTests.Tests
 {
@@ -130,6 +132,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(LazinatorFastReadListInt16), project: "LazinatorCollections", mainFolder: "/OffsetList/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorFastReadListInt32), project: "LazinatorCollections", mainFolder: "/OffsetList/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorOffsetList), project: "LazinatorCollections", mainFolder: "/OffsetList/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(Remote<,>), project: "LazinatorCollections", mainFolder: "/Remote/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorLinkedListNode<>), project: "LazinatorCollections", mainFolder: "", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorLinkedList<>), project: "LazinatorCollections", mainFolder: "", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorSortedLinkedList<>), project: "LazinatorCollections", mainFolder: "", subfolder: "", ws);
@@ -226,6 +229,9 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(ExampleStructContainingStruct), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(ExampleStructContainingStructContainer), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(Simplifiable), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
+            await CompleteGenerateCode(typeof(RemoteHierarchy), "LazinatorTests", "/Examples/", "RemoteHierarchy/", ws);
+            await CompleteGenerateCode(typeof(RemoteLevel1), "LazinatorTests", "/Examples/", "RemoteHierarchy/", ws);
+            await CompleteGenerateCode(typeof(RemoteLevel2), "LazinatorTests", "/Examples/", "RemoteHierarchy/", ws);
             await CompleteGenerateCode(typeof(WrapperContainer), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(SmallWrappersContainer), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(RecursiveExample), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);

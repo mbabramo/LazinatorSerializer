@@ -57,5 +57,6 @@
         IByteSpan,
         IMultilevelReporter,
         IMultilevelReportReceiver,
+        IRemote,
     }
 }

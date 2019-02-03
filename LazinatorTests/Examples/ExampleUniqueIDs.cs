@@ -86,5 +86,8 @@
         ExampleGrandchild,
         SpanInDotNetList,
         RecordLikeCollections,
+        IRemoteHierarchy,
+        IRemoteLevel1,
+        IRemoteLevel2,
     }
 }
