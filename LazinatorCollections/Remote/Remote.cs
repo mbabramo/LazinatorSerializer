@@ -53,7 +53,16 @@ namespace LazinatorCollections.Remote
             {
                 Func<Remote<TKey, TValue>, bool> storeLocallyFunc = RemoteManager<TKey, TValue>.RemoteStoreLocally;
                 if (storeLocallyFunc != null)
-                    StoreLocally = storeLocallyFunc(this);
+                {
+                    try
+                    {
+                        StoreLocally = storeLocallyFunc(this);
+                    }
+                    catch
+                    {
+                        throw new LazinatorSerializationException($"Object of type {typeof(TValue)} with key type {typeof(TKey)} could not be set remotely, because RemoteStoreLocally was not set up.");
+                    }
+                }
                 if (!StoreLocally)
                 {
                     Func<TValue, TKey> keyGenerator = RemoteManager<TKey, TValue>.RemoteKeyGenerator;
