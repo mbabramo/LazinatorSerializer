@@ -23,7 +23,14 @@ namespace LazinatorCollections.Remote
 
         public static Func<TKey, Task<TValue>> RemoteGetter
         {
-            get => _RemoteGetter ?? (key => RemoteManager<TKey>.RemoteGetter(key).ContinueWith(t => t.Result as TValue));
+            get
+            {
+                if (_RemoteGetter != null)
+                    return _RemoteGetter;
+                if (RemoteManager<TKey>.RemoteGetter == null)
+                    return null;
+                return key => RemoteManager<TKey>.RemoteGetter(key).ContinueWith(t => t.Result as TValue);
+            }
             set => _RemoteGetter = value;
         }
         public static Func<Remote<TKey, TValue>, bool> RemoteStoreLocally

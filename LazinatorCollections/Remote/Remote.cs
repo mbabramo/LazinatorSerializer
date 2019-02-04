@@ -25,7 +25,15 @@ namespace LazinatorCollections.Remote
         {
             if (!ValueLoaded && !StoreLocally)
             {
-                Local = await RemoteManager<TKey, TValue>.RemoteGetter(Key);
+                var getter = RemoteManager<TKey, TValue>.RemoteGetter;
+                if (getter == null)
+                {
+                    // If the remote getter is not initialized, we must store locally. 
+                    StoreLocally = true;
+                    Local = default;
+                }
+                else
+                    Local = await getter(Key);
             }
             ValueLoaded = true;
             return Local;
