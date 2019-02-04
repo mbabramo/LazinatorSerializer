@@ -86,7 +86,6 @@ namespace LazinatorTests.Tests
         public async Task RemoteHierarchyWithLocalStorage()
         {
             ClearAllSetup();
-            RemoteManager<WGuid>.RemoteStoreLocally = r => true;
             await VerifyRemoteHierarchySaving(true);
         }
 

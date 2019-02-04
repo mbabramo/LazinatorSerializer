@@ -52,32 +52,29 @@ namespace LazinatorCollections.Remote
             if (ValueLoaded && (Local.IsDirty || Local.DescendantIsDirty || Local.HasChanged || Local.DescendantHasChanged))
             {
                 Func<Remote<TKey, TValue>, bool> storeLocallyFunc = RemoteManager<TKey, TValue>.RemoteStoreLocally;
-                if (storeLocallyFunc != null)
-                {
-                    try
-                    {
-                        StoreLocally = storeLocallyFunc(this);
-                    }
-                    catch
-                    {
-                        throw new LazinatorSerializationException($"Object of type {typeof(TValue)} with key type {typeof(TKey)} could not be set remotely, because RemoteStoreLocally was not set up.");
-                    }
-                }
+                StoreLocally = storeLocallyFunc == null ? true : storeLocallyFunc(this);
                 if (!StoreLocally)
                 {
-                    Func<TValue, TKey> keyGenerator = RemoteManager<TKey, TValue>.RemoteKeyGenerator;
-                    if (keyGenerator == null)
-                    {
-                        throw new LazinatorSerializationException($"Object of type {typeof(TValue)} with key type {typeof(TKey)} could not be set remotely, because no key generator was set up.");
-                    }
-                    else
-                        Key = keyGenerator(Local);
+                    Key = GetKey();
                     await RemoteManager<TKey, TValue>.RemoteSaver(Key, Local);
                     Local = default;
                 }
             }
             if (freeRemoteStorage)
                 FreeRemoteStorage();
+        }
+
+        private TKey GetKey()
+        {
+            TKey key;
+            Func<TValue, TKey> keyGenerator = RemoteManager<TKey, TValue>.RemoteKeyGenerator;
+            if (keyGenerator == null)
+            {
+                throw new LazinatorSerializationException($"Object of type {typeof(TValue)} with key type {typeof(TKey)} could not be set remotely, because no key generator was set up.");
+            }
+            else
+                key = keyGenerator(Local);
+            return key;
         }
     }
 }
