@@ -13,6 +13,15 @@ namespace LazinatorCollections.Remote
         [NonSerialized]
         private bool ValueLoaded = false;
 
+        public Remote()
+        {
+        }
+
+        public Remote(TValue value)
+        {
+            SetValue(value);
+        }
+
         public async Task<TValue> GetValue()
         {
             if (!ValueLoaded && !StoreLocally)
@@ -21,6 +30,13 @@ namespace LazinatorCollections.Remote
             }
             ValueLoaded = true;
             return Local;
+        }
+
+        public void SetValue(TValue value)
+        {
+            Local = value;
+            Local.IsDirty = true;
+            ValueLoaded = true;
         }
 
         private void FreeRemoteStorage()

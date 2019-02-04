@@ -10,6 +10,8 @@ namespace LazinatorTests.Examples.RemoteHierarchy
 {
     public partial class RemoteLevel1 : IRemoteLevel1
     {
-        
+        public RemoteLevel1()
+        {
+        }
     }
 }
