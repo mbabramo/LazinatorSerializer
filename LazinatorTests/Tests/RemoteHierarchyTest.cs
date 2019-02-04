@@ -45,7 +45,20 @@ namespace LazinatorTests.Tests
                     }
                 ),
             };
-            await RemoteSaving.SaveBottomUp(h, true, false);
+            await RemoteSaving.SaveRemotes(h, true, false);
+            await VerifyCanLoadRemoteItems(h);
+            // note that hierarchy itself is not saved
+        }
+
+        private static async Task VerifyCanLoadRemoteItems(RemoteHierarchy h)
+        {
+            h.TopOfHierarchyInt.Should().Be(-1);
+            h.RemoteLevel1Item.ValueLoaded.Should().BeFalse();
+            var level1Item = await h.RemoteLevel1Item.GetValue();
+            level1Item.RemoteLevel1Int.Should().Be(1);
+            level1Item.RemoteLevel2Item.ValueLoaded.Should().BeFalse();
+            var level2Item = await level1Item.RemoteLevel2Item.GetValue();
+            level2Item.RemoteLevel2Int.Should().Be(2);
         }
     }
 }

@@ -10,8 +10,7 @@ namespace LazinatorCollections.Remote
 {
     public partial class Remote<TKey, TValue> : IRemote<TKey, TValue> where TKey : ILazinator where TValue : class, ILazinator
     {
-        [NonSerialized]
-        private bool ValueLoaded = false;
+        public bool ValueLoaded { get; set; } = false;
 
         public Remote()
         {
