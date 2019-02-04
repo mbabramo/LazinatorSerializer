@@ -28,7 +28,7 @@ namespace LazinatorCollections.Remote
         }
         public static Func<Remote<TKey, TValue>, bool> RemoteStoreLocally
         {
-            get => _RemoteStoreLocally ?? (r => RemoteManager<TKey>.RemoteStoreLocally(r));
+            get => _RemoteStoreLocally ?? (r => RemoteManager<TKey>.RemoteStoreLocally == null ? true : RemoteManager<TKey>.RemoteStoreLocally(r));
             set => _RemoteStoreLocally = value;
         }
         public static Func<TValue, TKey> RemoteKeyGenerator
