@@ -44,10 +44,7 @@ namespace LazinatorCollections.Remote
                     Func<TValue, TKey> keyGenerator = RemoteManager<TKey, TValue>.RemoteKeyGenerator;
                     if (keyGenerator == null)
                     {
-                        var defaultKeyGenerator = RemoteDefaultKeyGenerator<TKey>.GetGenerator();
-                        if (defaultKeyGenerator == null)
-                            throw new LazinatorSerializationException($"Object of type {typeof(TValue)} could not be set remotely, because no Lazinator key generator or default key generator was set up.");
-                        Key = defaultKeyGenerator(Local);
+                        throw new LazinatorSerializationException($"Object of type {typeof(TValue)} with key type {typeof(TKey)} could not be set remotely, because no key generator was set up.");
                     }
                     else
                         Key = keyGenerator(Local);
