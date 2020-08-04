@@ -7,7 +7,7 @@ using System.Text;
 namespace Lazinator.Core
 {
     /// <summary>
-    /// A representation of a hierarchy of nodes, useful for modeling the structure of a Lazinator hierarchy.
+    /// A representation of a hierarchy of nodes, useful for creating a string representing the structure of a Lazinator hierarchy.
     /// </summary>
     public class HierarchyTree
     {

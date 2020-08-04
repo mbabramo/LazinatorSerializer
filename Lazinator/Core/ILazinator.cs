@@ -4,6 +4,9 @@ using Lazinator.Buffers;
 
 namespace Lazinator.Core
 {
+    /// <summary>
+    /// Every Lazinator object must implement this interface. The work of implementation is done in the code-behind. 
+    /// </summary>
     public interface ILazinator
     {
         /// <summary>
@@ -27,16 +30,16 @@ namespace Lazinator.Core
         ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers);
 
         /// <summary>
-        /// Indicates whether a Lazinator object has been dirty since it was last deserialized (or since this property was manually changed). This value does not change after a full or partial serialization, while IsDirty does change.
+        /// Indicates whether a Lazinator object has been dirty since it was last deserialized (or since this property was manually set to false). This value does not change after a full or partial serialization, while IsDirty does change.
         /// </summary>
         bool HasChanged { get; set; }
         /// <summary>
-        /// Indicates whether a child or other descendant of a Lazinator object has been dirty since the object was last deserialized (or since this property was manually changed).
+        /// Indicates whether a child or other descendant of a Lazinator object has been dirty since the object was last deserialized (or since this property was manually set to false).
         /// </summary>
         bool DescendantHasChanged { get; set; }
         /// <summary>
         /// Indicates that a Lazinator object is dirty, meaning that one of its properties has changed since it was last serialized. A Lazinator object is considered dirty when a non-Lazinator property is accessed, even if it is not changed, unless there is a boolean Dirty property for that non-Lazinator property. 
-        /// This may differ from HasChanged either if HasChanged is manually reset or if IsDirty is reset when the corresponding Lazinator object is serialized.
+        /// This may differ from HasChanged either if HasChanged is manually set to false or if IsDirty is reset when the corresponding Lazinator object is serialized.
         /// </summary>
         bool IsDirty { get; set; }
         /// <summary>

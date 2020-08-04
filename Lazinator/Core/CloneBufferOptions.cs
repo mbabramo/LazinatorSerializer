@@ -10,7 +10,7 @@
         /// </summary>
         IndependentBuffers,
         /// <summary>
-        /// Clone without using buffers. This requires a deep clone of all Lazinator objects and thus may be slower than other methods, but it is useful when a large number of small Lazinator objects must be cloned.
+        /// Clone without using buffers. That is, the cloned objection will not have a buffer until and if it is serialized. This requires a deep clone of all Lazinator objects and thus may be slower than other methods, but it is useful when a large number of small Lazinator objects must be cloned.
         /// </summary>
         NoBuffer
     }

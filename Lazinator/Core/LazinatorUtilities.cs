@@ -12,6 +12,9 @@ using Lazinator.Support;
 
 namespace Lazinator.Core
 {
+    /// <summary>
+    /// Offers a variety of utilities, many of which are used internally by Lazinator code-behind.
+    /// </summary>
     public static class LazinatorUtilities
     {
         #region Delegate types
@@ -63,7 +66,7 @@ namespace Lazinator.Core
             return writer.LazinatorMemory;
         }
 
-        public static LazinatorMemory EncodeToNewBinaryBufferWriter<T>(T lazinatorObject, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) where T : ILazinator
+        private static LazinatorMemory EncodeToNewBinaryBufferWriter<T>(T lazinatorObject, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) where T : ILazinator
         {
             int bufferSize = lazinatorObject.LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : lazinatorObject.LazinatorMemoryStorage.Length;
             BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
@@ -185,7 +188,7 @@ namespace Lazinator.Core
             AddParentToChildless(ref child, parent);
         }
 
-        public static void WriteNullChild(ref BinaryBufferWriter writer, bool restrictLengthTo250Bytes, bool skipLength)
+        private static void WriteNullChild(ref BinaryBufferWriter writer, bool restrictLengthTo250Bytes, bool skipLength)
         {
             if (!skipLength)
             {
@@ -196,9 +199,18 @@ namespace Lazinator.Core
             }
         }
 
+        /// <summary>
+        /// Writes a child to a binary buffer, where that child has not been previously accessed. This thus obtains the last version from storage (or stores a zer length if this
+        /// is the first time saving the child and it really is empty).
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="getChildSliceFn"></param>
+        /// <param name="restrictLengthTo250Bytes"></param>
+        /// <param name="skipLength"></param>
+        /// <param name="childStorage"></param>
+        /// <returns></returns>
         public static LazinatorMemory WriteExistingChildStorage(ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceFn, bool restrictLengthTo250Bytes, bool skipLength, LazinatorMemory childStorage)
         {
-            // The child is null, not because it was set to null, but because it was never accessed. Thus, we need to use the last version from storage (or just to store a zero-length if this is the first time saving it).
             if (childStorage.IsEmpty)
                 childStorage = getChildSliceFn(); // this is the storage holding the child, which has never been accessed
             if (childStorage.OwnedMemory == null)
@@ -219,7 +231,7 @@ namespace Lazinator.Core
         }
 
         /// <summary>
-        /// Initiates a binary write to a child of a Lazinator object, optionally including a length prefix, using the child's own storage if possible.
+        /// Initiates a binary write of a child of a Lazinator object, optionally including a length prefix, using the child's own storage if possible.
         /// </summary>
         /// <param name="writer">The binary writer</param>
         /// <param name="child">The child</param>
@@ -251,6 +263,16 @@ namespace Lazinator.Core
 
         #region Generic IDs
 
+        /// <summary>
+        /// Called in Lazinator code-behind.
+        /// Reads a generic ID from a span, if the type contains open generic parameters. Confirms that the outer type (or the only type, if nongeneric)
+        /// is the expected type.
+        /// </summary>
+        /// <param name="containsOpenGenericParameters">True if the Lazinator type contains open generic parameters.</param>
+        /// <param name="uniqueID">The expected unique ID for the outermost type</param>
+        /// <param name="span">The span to read from</param>
+        /// <param name="index">The current index within the span, which will be incremented after the information is read</param>
+        /// <returns>The generic ID type, or default for a nongeneric</returns>
         public static LazinatorGenericIDType ReadGenericIDIfApplicable(bool containsOpenGenericParameters, int uniqueID, ReadOnlySpan<byte> span, ref int index)
         {
             if (containsOpenGenericParameters)
@@ -273,6 +295,12 @@ namespace Lazinator.Core
             }
         }
 
+        /// <summary>
+        /// Called in Lazinator code-behind. 
+        /// Writes a Lazinator generic ID to a binary buffer.
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="lazinatorGenericID"></param>
         public static void WriteLazinatorGenericID(ref BinaryBufferWriter writer, LazinatorGenericIDType lazinatorGenericID)
         {
             // We write the first component before the total count to be consistent with non-generic items.
@@ -285,6 +313,12 @@ namespace Lazinator.Core
             }
         }
 
+        /// <summary>
+        /// Reads a Lazinator generic ID. This is called by Lazinator where Lazinator already knows that it is dealing with an open generic type.
+        /// </summary>
+        /// <param name="span"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public static LazinatorGenericIDType ReadLazinatorGenericID(ReadOnlySpan<byte> span, ref int index)
         {
             int mainID = span.ToDecompressedInt(ref index);
@@ -302,15 +336,15 @@ namespace Lazinator.Core
         #region Nonlazinators
 
         /// <summary>
-        /// Initiates the conversion to binary of a non-lazinator object. 
+        /// Initiates the conversion to binary of a non-lazinator object. Called in Lazinator code-behind.
         /// </summary>
         /// <param name="nonLazinatorObject">An object that does not implement ILazinator</param>
         /// <param name="isBelievedDirty">An indication of whether the object to be converted to bytes is believed to be dirty, e.g. has had its dirty flag set.</param>
         /// <param name="isAccessed">An indication of whether the object has been accessed.</param>
         /// <param name="writer">The binary writer</param>
-        /// <param name="getChildSliceForFieldFn"></param>
+        /// <param name="getChildSliceForFieldFn">A function to return the child slice of memory for the non-Lazinator object</param>
         /// <param name="verifyCleanness">If true, then the dirty-conversion will always be performed unless we are sure it is clean, and if the object is not believed to be dirty, the results will be compared to the clean version. This allows for errors from failure to serialize objects that have been changed to be caught during development.</param>
-        /// <param name="binaryWriterAction"></param>
+        /// <param name="binaryWriterAction">The action to complete the write to the binary buffer</param>
         public static void WriteNonLazinatorObject(object nonLazinatorObject,
             bool isBelievedDirty, bool isAccessed, ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceForFieldFn,
             bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction)
@@ -347,9 +381,9 @@ namespace Lazinator.Core
         /// <param name="isBelievedDirty">An indication of whether the object to be converted to bytes is believed to be dirty, e.g. has had its dirty flag set.</param>
         /// <param name="isAccessed">An indication of whether the object has been accessed.</param>
         /// <param name="writer">The binary writer</param>
-        /// <param name="getChildSliceForFieldFn"></param>
+        /// <param name="getChildSliceForFieldFn">A function to return the child slice of memory for the non-Lazinator object</param>
         /// <param name="verifyCleanness">If true, then the dirty-conversion will always be performed unless we are sure it is clean, and if the object is not believed to be dirty, the results will be compared to the clean version. This allows for errors from failure to serialize objects that have been changed to be caught during development.</param>
-        /// <param name="binaryWriterAction"></param>
+        /// <param name="binaryWriterAction">The action to complete the write to the binary buffer</param>
         public static void WriteNonLazinatorObject_WithoutLengthPrefix(object nonLazinatorObject,
             bool isBelievedDirty, bool isAccessed, ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceForFieldFn,
             bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction)
@@ -400,7 +434,7 @@ namespace Lazinator.Core
         }
 
         /// <summary>
-        /// Verifies that the original storage for a non-Lazinator object matches rewritten storage. (though it can be used for any storage) matches the storage generated by rewriting to bytes. Calls an Exception if that is not the case.
+        /// Verifies that the original storage for a non-Lazinator object matches rewritten storage (though it can be used for any storage). Matches the storage generated by rewriting to bytes. Calls an Exception if that is not the case.
         /// </summary>
         /// <param name="originalStorage">The original storage before any changes could have been made</param>
         /// <param name="rewrittenStorage">The rewritten storage after changes could have been made, but were not thought to have been.</param>
@@ -660,6 +694,12 @@ namespace Lazinator.Core
                     true, true);
         }
 
+        /// <summary>
+        /// Checks whether a hierarchy's descendant dirtiness is consistent. Where it is not, that may indicate a circular hierarchy.
+        /// A hierarchy is consistent where the ancestor of a dirty node has DescendantIsDirty = true.
+        /// </summary>
+        /// <param name="startPoint">The starting point in the Lazinator hierarchy.</param>
+        /// <returns></returns>
         public static bool DescendantDirtinessIsConsistent(this ILazinator startPoint)
         {
 
@@ -683,6 +723,11 @@ namespace Lazinator.Core
             return true;
         }
 
+        /// <summary>
+        /// Throws if a hierarchy's descendant dirtiness is not consistent.
+        /// A hierarchy is consistent where the ancestor of a dirty node has DescendantIsDirty = true.
+        /// </summary>
+        /// <param name="startPoint"></param>
         public static void ConfirmDescendantDirtinessConsistency(this ILazinator startPoint)
         {
             if (!DescendantDirtinessIsConsistent(startPoint))
@@ -699,10 +744,10 @@ namespace Lazinator.Core
         /// Used internally by CloneLazinator to perform the cloning process.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="clone"></param>
-        /// <param name="includeChildrenMode"></param>
-        /// <param name="cloneBufferOptions"></param>
+        /// <param name="source">The object to clone</param>
+        /// <param name="clone">The cloned object, already created</param>
+        /// <param name="includeChildrenMode">An indication of which children of the object to include in the clone</param>
+        /// <param name="cloneBufferOptions">Options to determine whether the clone will have independent buffers or no buffers</param>
         /// <returns></returns>
         public static T CompleteClone<T>(T source, T clone, IncludeChildrenMode includeChildrenMode, CloneBufferOptions cloneBufferOptions) where T : ILazinator
         {
@@ -737,7 +782,8 @@ namespace Lazinator.Core
             CloneLazinatorTyped(lazinator, includeChildrenMode, CloneBufferOptions.NoBuffer);
 
         /// <summary>
-        /// Clones a Lazinator object, returning the object as its own type.
+        /// Clones a Lazinator object, returning the object as the generic type. The type of the object will be inferred by C#,
+        /// so this is a useful method to clone a Lazinator object and return a Lazinator object of the same type.
         /// </summary>
         /// <typeparam name="T">The type of the Lazinator object</typeparam>
         /// <param name="lazinator">The lazinator object</param>
@@ -937,6 +983,11 @@ namespace Lazinator.Core
 
         #region Hashing
 
+        /// <summary>
+        /// Generates a 32-bit hash code from the binary storage of the object (unless NonBinaryHash32 is set).
+        /// </summary>
+        /// <param name="lazinator"></param>
+        /// <returns></returns>
         public static uint GetBinaryHashCode32(this ILazinator lazinator)
         {
             if (lazinator.NonBinaryHash32)
@@ -953,6 +1004,7 @@ namespace Lazinator.Core
             }
         }
 
+        /// Generates a 64-bit hash code from the binary storage of the object (unless NonBinaryHash32 is set).
         public static ulong GetBinaryHashCode64(this ILazinator lazinator)
         {
             if (!lazinator.IsDirty && !lazinator.DescendantIsDirty && lazinator.OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren && lazinator.LazinatorMemoryStorage.IsEmpty == false && lazinator.LazinatorMemoryStorage.Disposed == false)
@@ -967,6 +1019,7 @@ namespace Lazinator.Core
             }
         }
 
+        /// Generates a 128-bit hash code from the binary storage of the object (unless NonBinaryHash32 is set).
         public static Guid GetBinaryHashCode128(this ILazinator lazinator)
         {
             if (!lazinator.IsDirty && !lazinator.DescendantIsDirty && lazinator.OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren && lazinator.LazinatorMemoryStorage.IsEmpty == false && lazinator.LazinatorMemoryStorage.Disposed == false)

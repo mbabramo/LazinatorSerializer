@@ -4,6 +4,10 @@ using System.Linq;
 
 namespace Lazinator.Core
 {
+    /// <summary>
+    /// Contains information about generic Lazinator types, including inner generics. The code-behind will include a property returning the LazinatorGenericIDType for the Lazinator type, using a method that caches this information,
+    /// to minimize the need for reflection.
+    /// </summary>
     public readonly struct LazinatorGenericIDType
     {
         public LazinatorGenericIDType(List<int> typeAndInnerTypeIDs)

@@ -11,6 +11,9 @@ using static Lazinator.Core.LazinatorUtilities;
 
 namespace Lazinator.Core
 {
+    /// <summary>
+    /// Contains a singleton that can be used to deserialize Lazinator objects. It stores factories for different Lazinator types, compiling functions so that their constructors can be called efficiently. 
+    /// </summary>
     [Serializable]
     public class DeserializationFactory
     {
@@ -141,7 +144,6 @@ namespace Lazinator.Core
         /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
         public T CreateAbstractType<T>(LazinatorMemory storage, ILazinator parent = null) where T : ILazinator => (T)CreateFromBytesIncludingID(storage, parent);
 
-        static int DEBUG = 0;
         /// <summary>
         /// Create a Lazinator item from bytes and set a mechanism for informing its parent when the item has changed. This is generally used when the item is contained in a non-Lazinator collection, such as a .Net List. This assumes that the serialized bytes contain type information.
         /// </summary>
@@ -149,7 +151,6 @@ namespace Lazinator.Core
         /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
         public ILazinator CreateFromBytesIncludingID(LazinatorMemory storage, ILazinator parent = null)
         {
-            DEBUG++;
             if (storage.Memory.Length <= 1)
                 return null;
             int bytesSoFar = 0;
@@ -231,8 +232,6 @@ namespace Lazinator.Core
         #endregion
 
         #region Factory setup
-
-
 
         private void SetupAllTypesInAssemblies(Assembly[] assemblies)
         {

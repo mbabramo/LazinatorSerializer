@@ -1,7 +1,7 @@
 ﻿namespace Lazinator.Core
 {
     /// <summary>
-    /// Indication of which children should be serialized along with a parent Lazinator object. When a child is serialized, the mode will also apply to its children, recursively through the hierarchy.
+    /// Indication of which children should be serialized along with a parent Lazinator object. When a child is serialized, the mode will also apply to its children, recursively through the hierarchy. Children can be designated as excludable or includable with appropriate attributes.
     /// </summary>
     public enum IncludeChildrenMode : byte
     {

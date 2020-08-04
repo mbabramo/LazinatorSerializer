@@ -4,6 +4,9 @@ using System.Linq;
 
 namespace Lazinator.Core
 {
+    /// <summary>
+    /// Offers utility methods for finding the root or roots of a hierarchy. Multiple roots can exist where a Lazinator object has more than one parent.
+    /// </summary>
     public static class LazinatorGetRoot
     {
         /// <summary>
