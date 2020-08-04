@@ -69,7 +69,15 @@ namespace LazinatorAnalyzer.Analyzer
                 if (maxStagesAfterThisOne == 0)
                     revisedSolution = solutionAfterStage;
                 else
-                    revisedSolution = await GenerateRevisedSolution(GetNextStageFixAllContext(fixAllContext, solutionAfterStage), maxStagesAfterThisOne - 1, documentsAndDiagnosticsToFixMap.Count, removalOnly, true /* don't regenerate things after initial run through -- only worry about things that are stil errors */);
+                {
+                    FixAllContext nextFixAllContext = GetNextStageFixAllContext(fixAllContext, solutionAfterStage);
+                    if (nextFixAllContext == null)
+                    {
+                        revisedSolution = solutionAfterStage; // can't do multiple stages at once // DEBUG -- better solution?
+                    }
+                    else
+                        revisedSolution = await GenerateRevisedSolution(nextFixAllContext, maxStagesAfterThisOne - 1, documentsAndDiagnosticsToFixMap.Count, removalOnly, true /* don't regenerate things after initial run through -- only worry about things that are stil errors */);
+                }
             }
             else
                 revisedSolution = fixAllContext.Solution;
@@ -80,7 +88,7 @@ namespace LazinatorAnalyzer.Analyzer
         {
             FixAllContext.DiagnosticProvider diagnosticProvider = GetDiagnosticProvider(originalContext);
             if (diagnosticProvider == null)
-                return null; // Roslyn changed -- won't be able to do multi-stage work
+                return null; // DEBUG -- will that work? null; // Roslyn changed -- won't be able to do multi-stage work
             FixAllContext revisedContext;
             if (originalContext.Document != null)
             {
@@ -99,7 +107,7 @@ namespace LazinatorAnalyzer.Analyzer
 
         private FixAllContext.DiagnosticProvider GetDiagnosticProvider(FixAllContext context)
         {
-            // This is a hack to get the DiagnosticProvider. 
+            // This is a hack to get the DiagnosticProvider. But it's not working in newer versions of Roslyn.
             try
             {
                 object fixAllState = GetNonpublicProperty(context, "State"); // returns an internal type FixAllState

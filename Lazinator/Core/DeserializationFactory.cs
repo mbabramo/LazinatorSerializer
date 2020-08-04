@@ -299,10 +299,6 @@ namespace Lazinator.Core
                     if (attribute == null)
                         continue;
                     NonBinaryHashing[type] = LazinatorReflection.CorrespondingInterfaceHasUseNonbinaryHashAttribute(type);
-                    if (type.ToString().Contains("LazinatorLinkedListNode"))
-                    {
-                        var DEBUG = 0;
-                    }
                     uniqueID = attribute.UniqueID;
                 }
                 TypeToUniqueIDMap[type] = uniqueID;
