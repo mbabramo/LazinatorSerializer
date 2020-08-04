@@ -15,5 +15,9 @@ namespace Lazinator.Attributes
         {
             Implemented = implemented;
         }
+
+        // Note that it might seem that an alternative would be to use partial methods. That is, the code behind could
+        // create a partial method that the user code could override with a full method. The problem is that we want the 
+        // user code to override the code behind method. So, the code behind needs to know whether to implement its own method.
     }
 }

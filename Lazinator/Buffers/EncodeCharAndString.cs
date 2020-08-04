@@ -5,6 +5,9 @@ using Lazinator.Exceptions;
 
 namespace Lazinator.Buffers
 {
+    /// <summary>
+    /// Read and write to a buffer characters and strings.
+    /// </summary>
     public static class EncodeCharAndString
     {
         public static void WriteCharInTwoBytes(this ref BinaryBufferWriter writer, char c)

@@ -2,6 +2,9 @@
 
 namespace Lazinator.Buffers
 {
+    /// <summary>
+    /// Determines whether ReadOnlySpans match and if not where the match fails.
+    /// </summary>
     public static class ReadOnlySpanMatching
     {
 

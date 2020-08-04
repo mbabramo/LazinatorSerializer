@@ -2,6 +2,10 @@
 
 namespace Lazinator.Attributes
 {
+    /// <summary>
+    /// Identifies a class as a Lazinator class, supporting serialization and deserialization. The attribute
+    /// indicates that code-behind must be created for the class.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Interface, AllowMultiple = false)]
     public class LazinatorAttribute : Attribute
     {

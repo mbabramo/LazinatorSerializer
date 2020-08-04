@@ -4,7 +4,7 @@ namespace Lazinator.Wrappers
 {
     [Lazinator((int)LazinatorCoreUniqueIDs.IWString, -1)]
     [NonbinaryHash]
-    [GenerateRefStruct] // DEBUG
+    [GenerateRefStruct]
     interface IWString : IW<string>
     {
     }

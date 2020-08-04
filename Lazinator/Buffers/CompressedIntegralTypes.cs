@@ -2,7 +2,9 @@
 
 namespace Lazinator.Buffers
 {
-
+    /// <summary>
+    /// Read and write to a buffer integral types (including short and long, signed and unsigned, as well as dates and time spans), using compression.
+    /// </summary>
     public static class CompressedIntegralTypes
     {
         #region Compression of int/long

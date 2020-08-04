@@ -3,7 +3,7 @@
 namespace Lazinator.Attributes
 {
     /// <summary>
-    /// Provides code that should run before or after a property's value is set.
+    /// Provides code that should run whenever a property value is accessed.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class OnPropertyAccessedAttribute : Attribute

@@ -4,6 +4,9 @@ using System.Runtime.InteropServices;
 
 namespace Lazinator.Buffers
 {
+    /// <summary>
+    /// Used internally by Lazinator to write data into a binary buffer.
+    /// </summary>
     public ref struct BinaryBufferWriter
     {
         /// <summary>

@@ -2,6 +2,9 @@
 
 namespace Lazinator.Attributes
 {
+    /// <summary>
+    /// Can be used to specify an interface that Lazinator will "unofficially" implement in the code behind, with the specified accessibility. This is useful where you want to include a property in your Lazinator object, but you don't want its accessibility to be public. Because all implementations of an interface must have public properties corresponding to the property in the interface, in that situation you wish to exclude the property from your Lazinator object.
+    /// </summary>
     [AttributeUsage(AttributeTargets.Interface, AllowMultiple = true)]
     public class UnofficiallyIncorporateInterfaceAttribute : Attribute
     {

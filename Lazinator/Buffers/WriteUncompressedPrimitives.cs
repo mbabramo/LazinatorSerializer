@@ -2,6 +2,9 @@
 
 namespace Lazinator.Buffers
 {
+    /// <summary>
+    /// Write various primitives to a buffer without compression.
+    /// </summary>
     public static class WriteUncompressedPrimitives
     {
         public static byte WriteBool(ref BinaryBufferWriter writer, bool value)

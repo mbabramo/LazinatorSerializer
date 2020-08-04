@@ -3,6 +3,9 @@ using System.Runtime.InteropServices;
 
 namespace Lazinator.Buffers
 {
+    /// <summary>
+    /// Read and write to a buffer ReadOnlyMemory, using a prefix if necessary to indicate its length. 
+    /// </summary>
     public static class EncodeReadOnlyMemory
     {
         public static void WriteReadOnlyMemoryWithVarIntPrefix<T>(ref this BinaryBufferWriter writer, ReadOnlyMemory<T> readOnlyMemory) where T : struct

@@ -5,6 +5,9 @@ using Lazinator.Support;
 
 namespace Lazinator.Buffers
 {
+    /// <summary>
+    /// An immutable memory owner used by Lazinator to store unserialized Lazinator properties. 
+    /// </summary>
     public readonly struct LazinatorMemory : IMemoryOwner<byte>
     {
         public readonly IMemoryOwner<byte> OwnedMemory;

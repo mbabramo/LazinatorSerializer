@@ -5,6 +5,9 @@ using System.Runtime.InteropServices;
 
 namespace Lazinator.Buffers
 {
+    /// <summary>
+    /// Read and write to a buffer spans, including support for casting spans to be spans of various integral types.
+    /// </summary>
     public static class Spans
     {
         public static ReadOnlySpan<Int16> CastSpanToInt16(ReadOnlySpan<byte> s)

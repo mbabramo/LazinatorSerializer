@@ -3,6 +3,9 @@ using System.Buffers.Binary;
 
 namespace Lazinator.Buffers
 {
+    /// <summary>
+    /// Reads from a buffer without compression.
+    /// </summary>
     public static class ReadUncompressedPrimitives
     {
         #region Reading data types without compression

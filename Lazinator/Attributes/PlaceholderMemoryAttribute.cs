@@ -3,7 +3,7 @@
 namespace Lazinator.Attributes
 {
     /// <summary>
-    /// Specifies a method to call to read and/or write a span instead of the default methods.
+    /// Specifies a method to call to read and/or write a non-Lazinator object instead of the default methods. This is used internally by LazinatorList.
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
     public class PlaceholderMemoryAttribute : Attribute

@@ -3,6 +3,9 @@ using System.Runtime.InteropServices;
 
 namespace Lazinator.Buffers
 {
+    /// <summary>
+    /// Read and write to a buffer decimal numbers in a compressed format.
+    /// </summary>
     public static class CompressedDecimal
     {
         // The Decimal type contains private fields. To interpret the fields (without using Decimal.GetBits, which allocates an array), we can do the following:

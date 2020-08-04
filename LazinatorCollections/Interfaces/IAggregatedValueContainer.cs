@@ -4,6 +4,10 @@ using Lazinator.Core;
 
 namespace LazinatorCollections.Interfaces
 {
+    /// <summary>
+    /// A container for items accessible by index, where the number of copies of each item is recorded (so that the item does not need to be repeated).
+    /// </summary>
+    /// <typeparam name="T">The type of item stored in the container</typeparam>
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IAggregatedValueContainer)]
     public interface IAggregatedValueContainer<T> : IIndexableValueContainer<T>, ICountableContainer, ILazinator where T : ILazinator
     {
