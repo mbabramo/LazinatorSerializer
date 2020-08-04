@@ -2,6 +2,9 @@
 
 namespace Lazinator.Wrappers
 {
+    /// <summary>
+    /// A Lazinator wrapper for an unsigned long. A wrapper can be used as a generic type where the unwrapped object cannot be.
+    /// </summary>
     public partial struct WUlong : IWUlong, IComparable, IComparable<ulong>, IEquatable<ulong>, IComparable<WUlong>, IEquatable<WUlong>
     {
         public bool HasValue => true;

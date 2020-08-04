@@ -10,7 +10,7 @@ namespace Lazinator.Support
     using System.Runtime.InteropServices;
 
     /// <summary>
-    /// Class that can calculate 32bit and 64bit hashes for byte spans using Google's farmhash algorithm
+    /// Class that can calculate 32-, 64-, and 128-bit hashes for byte spans using Google's farmhash algorithm
     /// </summary>
     public static class FarmhashByteSpans
     {

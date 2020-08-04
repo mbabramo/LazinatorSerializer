@@ -2,6 +2,9 @@
 
 namespace Lazinator.Wrappers
 {
+    /// <summary>
+    /// A Lazinator wrapper for a double. A wrapper can be used as a generic type where the unwrapped object cannot be.
+    /// </summary>
     public partial struct WDouble : IWDouble, IComparable, IComparable<double>, IEquatable<double>, IComparable<WDouble>, IEquatable<WDouble>
     {
         public bool HasValue => true;

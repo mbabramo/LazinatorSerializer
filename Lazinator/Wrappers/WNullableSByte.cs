@@ -1,5 +1,8 @@
 ﻿namespace Lazinator.Wrappers
 {
+    /// <summary>
+    /// A Lazinator wrapper for a nullable signed byte. A wrapper can be used as a generic type where the unwrapped object cannot be.
+    /// </summary>
     public partial struct WNullableSByte : IWNullableSByte
     {
         public bool HasValue => WrappedValue != null;

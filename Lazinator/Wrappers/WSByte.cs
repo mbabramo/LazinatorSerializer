@@ -2,6 +2,9 @@
 
 namespace Lazinator.Wrappers
 {
+    /// <summary>
+    /// A Lazinator wrapper for a signed byte. A wrapper can be used as a generic type where the unwrapped object cannot be.
+    /// </summary>
     public partial struct WSByte : IWSByte, IComparable, IComparable<sbyte>, IEquatable<sbyte>, IComparable<WSByte>, IEquatable<WSByte>
     {
         public bool HasValue => true;

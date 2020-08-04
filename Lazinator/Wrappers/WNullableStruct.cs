@@ -2,6 +2,9 @@
 
 namespace Lazinator.Wrappers
 {
+    /// <summary>
+    /// A Lazinator wrapper for a nullable struct, where the struct type is specified generically. 
+    /// </summary>
     public partial struct WNullableStruct<T> : IWNullableStruct<T> where T : struct, ILazinator
     {
         public bool IsNull => !HasValue;

@@ -2,6 +2,9 @@
 
 namespace Lazinator.Wrappers
 {
+    /// <summary>
+    /// A Lazinator wrapper for a float. A wrapper can be used as a generic type where the unwrapped object cannot be.
+    /// </summary>
     public partial struct WFloat : IWFloat, IComparable, IComparable<float>, IEquatable<float>, IComparable<WFloat>, IEquatable<WFloat>
     {
         public bool HasValue => true;

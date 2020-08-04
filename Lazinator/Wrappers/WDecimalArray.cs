@@ -1,5 +1,8 @@
 ﻿namespace Lazinator.Wrappers
 {
+    /// <summary>
+    /// A Lazinator wrapper for an array of decimals. A wrapper can be used as a generic type where the unwrapped object cannot be.
+    /// </summary>
     public partial struct WDecimalArray : IWDecimalArray
     {
         public bool HasValue => WrappedValue != null;

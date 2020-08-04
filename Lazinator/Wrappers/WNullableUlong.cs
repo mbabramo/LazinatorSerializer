@@ -1,5 +1,8 @@
 ﻿namespace Lazinator.Wrappers
 {
+    /// <summary>
+    /// A Lazinator wrapper for a nullable unsigned long. A wrapper can be used as a generic type where the unwrapped object cannot be.
+    /// </summary>
     public partial struct WNullableUlong : IWNullableUlong
     {
         public bool HasValue => WrappedValue != null;

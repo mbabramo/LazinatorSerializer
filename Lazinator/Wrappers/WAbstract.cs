@@ -1,5 +1,9 @@
 ﻿namespace Lazinator.Wrappers
 {
+    /// <summary>
+    /// An abstract class for a Lazinator wrapper
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public abstract partial class WAbstract<T> : IWAbstract<T>
     {
         public override string ToString()

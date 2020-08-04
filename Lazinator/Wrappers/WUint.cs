@@ -2,6 +2,9 @@
 
 namespace Lazinator.Wrappers
 {
+    /// <summary>
+    /// A Lazinator wrapper for an unsigned integer. A wrapper can be used as a generic type where the unwrapped object cannot be.
+    /// </summary>
     public partial struct WUint : IWUint, IComparable, IComparable<uint>, IEquatable<uint>, IComparable<WUint>, IEquatable<WUint>
     {
         public bool HasValue => true;

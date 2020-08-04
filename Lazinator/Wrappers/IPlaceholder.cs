@@ -2,6 +2,9 @@
 
 namespace Lazinator.Wrappers
 {
+    /// <summary>
+    /// An empty Lazinator object that takes the minimum possible amount of space.
+    /// </summary>
     [SmallLazinator]
     [FixedLengthLazinator(0)]
     [ExcludeLazinatorVersionByte]

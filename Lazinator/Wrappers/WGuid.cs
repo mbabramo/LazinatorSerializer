@@ -2,6 +2,9 @@
 
 namespace Lazinator.Wrappers
 {
+    /// <summary>
+    /// A Lazinator wrapper for a Guid. A wrapper can be used as a generic type where the unwrapped object cannot be.
+    /// </summary>
     public partial struct WGuid : IWGuid, IComparable, IComparable<uint>, IEquatable<uint>, IComparable<WGuid>, IEquatable<WGuid>
     {
         public bool HasValue => true;

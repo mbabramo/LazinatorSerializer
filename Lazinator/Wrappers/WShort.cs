@@ -2,6 +2,9 @@
 
 namespace Lazinator.Wrappers
 {
+    /// <summary>
+    /// A Lazinator wrapper for a short. A wrapper can be used as a generic type where the unwrapped object cannot be.
+    /// </summary>
     public partial struct WShort : IWShort, IComparable, IComparable<short>, IEquatable<short>, IComparable<WShort>, IEquatable<WShort>
     {
         public bool HasValue => true;

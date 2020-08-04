@@ -1,5 +1,8 @@
 ﻿namespace Lazinator.Wrappers
 {
+    /// <summary>
+    /// A Lazinator wrapper for an array of ints. A wrapper can be used as a generic type where the unwrapped object cannot be.
+    /// </summary>
     public partial struct WIntArray : IWIntArray
     {
         public bool HasValue => WrappedValue != null;

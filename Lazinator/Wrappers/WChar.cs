@@ -2,6 +2,9 @@
 
 namespace Lazinator.Wrappers
 {
+    /// <summary>
+    /// A Lazinator wrapper for a char. A wrapper can be used as a generic type where the unwrapped object cannot be.
+    /// </summary>
     public partial struct WChar : IWChar, IComparable, IComparable<char>, IEquatable<char>, IComparable<WChar>, IEquatable<WChar>
     {
         public bool HasValue => true;

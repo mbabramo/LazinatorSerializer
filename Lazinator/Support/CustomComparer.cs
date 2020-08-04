@@ -3,6 +3,10 @@ using System.Collections.Generic;
 
 namespace Lazinator.Support
 {
+    /// <summary>
+    /// A comparer initialized by passing a function to the constructor.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     [Serializable]
     public struct CustomComparer<T> : IComparer<T>
     {

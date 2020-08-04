@@ -2,6 +2,9 @@
 
 namespace Lazinator.Wrappers
 {
+    /// <summary>
+    /// A Lazinator wrapper for a DateTime. A wrapper can be used as a generic type where the unwrapped object cannot be.
+    /// </summary>
     public partial struct WDateTime : IWDateTime, IComparable, IComparable<DateTime>, IEquatable<DateTime>, IComparable<WDateTime>, IEquatable<WDateTime>
     {
         public bool HasValue => true;

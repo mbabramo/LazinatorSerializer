@@ -2,6 +2,9 @@
 
 namespace Lazinator.Wrappers
 {
+    /// <summary>
+    /// A Lazinator wrapper for a byte. A wrapper can be used as a generic type where the unwrapped object cannot be.
+    /// </summary>
     public partial struct WByte : IWByte, IComparable, IComparable<byte>, IEquatable<byte>, IComparable<WByte>, IEquatable<WByte>
     {
         public bool HasValue => true;

@@ -1,5 +1,8 @@
 ﻿namespace Lazinator.Wrappers
 {
+    /// <summary>
+    /// A Lazinator wrapper for a bool. A wrapper can be used as a generic type where the unwrapped object cannot be.
+    /// </summary>
     public partial struct WBool : IWBool
     {
         public bool HasValue => true;

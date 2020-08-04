@@ -2,6 +2,9 @@
 
 namespace Lazinator.Wrappers
 {
+    /// <summary>
+    /// A Lazinator wrapper for a decimal. A wrapper can be used as a generic type where the unwrapped object cannot be.
+    /// </summary>
     public partial struct WDecimal : IWDecimal, IComparable, IComparable<decimal>, IEquatable<decimal>, IComparable<WDecimal>, IEquatable<WDecimal>
     {
         public bool HasValue => true;

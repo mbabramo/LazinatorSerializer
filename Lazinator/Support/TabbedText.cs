@@ -5,6 +5,9 @@ using System.Diagnostics;
 
 namespace Lazinator.Support
 {
+    /// <summary>
+    /// A utility class that allows incrementing and decrementing of tabs.
+    /// </summary>
     public static class TabbedText
     {
         public static StringBuilder AccumulatedText = new StringBuilder();

@@ -6,8 +6,16 @@ using Lazinator.Exceptions;
 
 namespace Lazinator.Support
 {
+    /// <summary>
+    /// Utility methods to perform reflection on Lazinator types and return information about them.
+    /// </summary>
     public static class LazinatorReflection
     {
+        /// <summary>
+        /// Gets the LazinatorAttribute for a type, or null if there is none.
+        /// </summary>
+        /// <param name="type">The Lazinator type</param>
+        /// <returns></returns>
         public static LazinatorAttribute GetLazinatorAttributeForLazinatorMainType(Type type)
         {
             var correspondingInterface = GetCorrespondingExclusiveInterface(type);
@@ -17,6 +25,11 @@ namespace Lazinator.Support
             return attribute;
         }
 
+        /// <summary>
+        /// Get the Lazinator attribute for the only type that implements a Lazinator interface.
+        /// </summary>
+        /// <param name="correspondingInterface">The Lazinator interface type</param>
+        /// <returns></returns>
         public static LazinatorAttribute GetLazinatorAttributeForInterface(Type correspondingInterface)
         {
             var selfSerializeAttributes = correspondingInterface.GetCustomAttributes(typeof(LazinatorAttribute), false)
@@ -28,12 +41,22 @@ namespace Lazinator.Support
             return attribute;
         }
 
+        /// <summary>
+        /// Returns whether the Lazinator interface type has NonbinaryHash set.
+        /// </summary>
+        /// <param name="correspondingInterface">The Lazinator interface type</param>
+        /// <returns></returns>
         public static bool InterfaceHasUseNonbinaryHashAttribute(Type correspondingInterface)
         {
             return correspondingInterface.GetCustomAttributes(typeof(NonbinaryHashAttribute), false)
                 .Select(x => (NonbinaryHashAttribute)x).Any();
         }
 
+        /// <summary>
+        /// Returns whether the Lazinator interface corresponding to the Lazinator type has NonbinaryHash set.
+        /// </summary>
+        /// <param name="mainType">The Lazinator type</param>
+        /// <returns></returns>
         public static bool CorrespondingInterfaceHasUseNonbinaryHashAttribute(Type mainType)
         {
             var correspondingInterface = GetCorrespondingExclusiveInterface(mainType);
@@ -43,7 +66,11 @@ namespace Lazinator.Support
                 .Select(x => (NonbinaryHashAttribute)x).Any();
         }
 
-
+        /// <summary>
+        /// Returns the single nonexclusive Lazinator attribute for a Lazinator interface type (or null if none).
+        /// </summary>
+        /// <param name="interface">The Lazinator interface type</param>
+        /// <returns></returns>
         public static NonexclusiveLazinatorAttribute GetNonexclusiveLazinatorAttributeForInterface(Type @interface)
         {
             var nonexclusiveAttributes = @interface.GetCustomAttributes(typeof(NonexclusiveLazinatorAttribute), false)
@@ -55,16 +82,31 @@ namespace Lazinator.Support
             return attribute;
         }
 
+        /// <summary>
+        /// Returns whether the type implements ILazinator.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static bool ImplementsILazinator(Type type)
         {
             return type.GetInterface("ILazinator") != null;
         }
 
+        /// <summary>
+        /// Returns whether the type has a Lazinator attribute.
+        /// </summary>
+        /// <param name="interfaceType"></param>
+        /// <returns></returns>
         public static bool HasLazinatorAttribute(Type interfaceType)
         {
             return interfaceType.GetCustomAttributes(typeof(LazinatorAttribute), false).Any();
         }
 
+        /// <summary>
+        /// Returns the base interface type that contains the Lazinator attribute
+        /// </summary>
+        /// <param name="interfaceType">The Lazinator interface type</param>
+        /// <returns></returns>
         public static Type GetBaseInterfaceType(Type interfaceType)
         {
             if (interfaceType == null)
@@ -80,6 +122,11 @@ namespace Lazinator.Support
 
         }
 
+        /// <summary>
+        /// Returns the base Lazinator type that implements ILazinator.
+        /// </summary>
+        /// <param name="objectType">The Lazinator type</param>
+        /// <returns></returns>
         public static Type GetBaseILazinatorType(Type objectType)
         {
             if (objectType == null)
@@ -93,6 +140,11 @@ namespace Lazinator.Support
                 return GetBaseILazinatorType(t.BaseType);
         }
 
+        /// <summary>
+        /// Gets the interface corresponding to a Lazinator type
+        /// </summary>
+        /// <param name="type">The Lazinator type</param>
+        /// <returns></returns>
         public static Type GetCorrespondingExclusiveInterface(Type type)
         {
             var allInterfaces = type.GetInterfaces();
@@ -112,6 +164,11 @@ namespace Lazinator.Support
             return correspondingInterface;
         }
 
+        /// <summary>
+        /// Returns all base types of a type.
+        /// </summary>
+        /// <param name="t">The type (which need not be a Lazinator type)</param>
+        /// <returns></returns>
         private static IEnumerable<Type> BaseTypes(Type t)
         {
             Type currentType = t.BaseType;
