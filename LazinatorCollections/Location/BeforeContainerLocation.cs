@@ -2,6 +2,9 @@
 
 namespace LazinatorCollections.Location
 {
+    /// <summary>
+    /// A container location specified to be before all items in the container
+    /// </summary>
     public struct BeforeContainerLocation : IContainerLocation
     {
         public bool IsBeforeContainer => true;

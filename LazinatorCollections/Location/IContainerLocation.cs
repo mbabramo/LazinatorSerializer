@@ -1,5 +1,9 @@
 ﻿namespace LazinatorCollections.Location
 {
+
+    /// <summary>
+    /// An interface for specifying the location of an item in the container and for getting the previous or next location.
+    /// </summary>
     public interface IContainerLocation
     {
         bool IsBeforeContainer { get; }

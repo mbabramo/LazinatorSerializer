@@ -8,7 +8,8 @@ using System.Linq;
 namespace LazinatorCollections.Tree
 {
     /// <summary>
-    /// A LazinatorGeneralTree with the ability to look up an element of the tree by location.
+    /// A LazinatorGeneralTree with the ability to look up an element of the tree by location. This class maintains a dictionary of
+    /// locations, each of which is a list of integers.
     /// </summary>
     /// <typeparam name="T">The type of each tree node</typeparam>
     public partial class LazinatorLocationAwareTree<T> : LazinatorGeneralTree<T>, ILazinatorLocationAwareTree<T> where T : ILazinator

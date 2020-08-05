@@ -4,6 +4,11 @@ using System.Collections.Generic;
 
 namespace LazinatorCollections.Interfaces
 {
+    /// <summary>
+    /// A nonexclusive Lazinator interface for multivalue dictionaries. 
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorMultivalueDictionaryable)]
     public interface ILazinatorMultivalueDictionaryable<TKey, TValue> : IDictionary<TKey, TValue>, ILazinator where TKey : ILazinator where TValue : ILazinator
     {

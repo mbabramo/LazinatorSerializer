@@ -6,6 +6,9 @@ using System.Collections.Generic;
 
 namespace LazinatorCollections.Extensions
 {
+    /// <summary>
+    /// Utility routines for finding, inserting, and removing items in Lazinator listables (lists of Lazinator objects).
+    /// </summary>
     public static class LazinatorListableMultivalueExtensions
     {
         public static (IContainerLocation location, bool found) MultivalueFindMatchOrNext<L, T>(this L list, bool allowDuplicates, T value, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator => MultivalueFindMatchOrNext(list, allowDuplicates, value, MultivalueLocationOptions.Any, comparer);

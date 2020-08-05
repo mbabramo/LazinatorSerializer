@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace LazinatorCollections
 {
     /// <summary>
-    /// An interface allowing insertion and removal of sorted items, using a custom comparer
+    /// A nonexclusive Lazinator interface allowing insertion and removal of sorted items, using a custom comparer
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorSortable)]

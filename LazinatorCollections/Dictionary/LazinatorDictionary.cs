@@ -8,6 +8,11 @@ using Lazinator.Core;
 
 namespace LazinatorCollections.Dictionary
 {
+    /// <summary>
+    /// A Lazinator dictionary class that stores its entries in hash buckets.
+    /// </summary>
+    /// <typeparam name="TKey">The dictionary key type</typeparam>
+    /// <typeparam name="TValue">The dictionary value type</typeparam>
     public partial class LazinatorDictionary<TKey, TValue> : ILazinatorDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ILazinatorDictionaryable<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
         private const int InitialNumBuckets = 1;

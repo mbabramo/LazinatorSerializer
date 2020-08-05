@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace LazinatorCollections.Remote
 {
+    /// <summary>
+    /// A manager for remote storage. The client can specify functions to be used to get items remotely, 
+    /// save items remotely, determine whether to store items locally, and generate keys (for example, by hashing the item).
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
     public static class RemoteManager<TKey> where TKey : ILazinator
     {
         public static Func<TKey, Task<ILazinator>> RemoteGetter;

@@ -5,6 +5,11 @@ using System.Collections.Generic;
 
 namespace LazinatorCollections.Interfaces
 {
+    /// <summary>
+    /// A nonexclusive Lazinator interface for sorted containers of key-multivalue pairs
+    /// </summary>
+    /// <typeparam name="TKey">The key type</typeparam>
+    /// <typeparam name="TValue">The value type</typeparam>
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ISortedKeyMultivalueContainer)]
     public interface ISortedKeyMultivalueContainer<TKey, TValue> : ISortedKeyValueContainer<TKey, TValue>, IKeyMultivalueContainer<TKey, TValue>, ILazinator where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {

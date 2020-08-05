@@ -2,6 +2,9 @@
 
 namespace LazinatorCollections.OffsetList
 {
+    /// <summary>
+    /// A Lazinator read-only list of integers
+    /// </summary>
     public partial class LazinatorFastReadListInt32 : LazinatorFastReadList<Int32>, ILazinatorFastReadListInt32
     {
         public LazinatorFastReadListInt32()

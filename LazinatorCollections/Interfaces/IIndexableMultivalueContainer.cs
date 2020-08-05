@@ -5,9 +5,9 @@ using System.Collections.Generic;
 namespace LazinatorCollections.Interfaces
 {
     /// <summary>
-    /// An interface for Lazinator containers supporting multiple values and indexing.
+    /// A nonexclusive Lazinator interface for Lazinator containers supporting multiple values and indexing.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The type of the item within the container</typeparam>
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IIndexableMultivalueContainer)]
     public interface IIndexableMultivalueContainer<T> : IIndexableValueContainer<T>, IMultivalueContainer<T>, ICountableContainer, ILazinator where T : ILazinator
     {

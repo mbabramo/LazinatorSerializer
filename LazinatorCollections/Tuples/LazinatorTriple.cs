@@ -3,6 +3,12 @@ using Lazinator.Core;
 
 namespace LazinatorCollections.Tuples
 {
+    /// <summary>
+    /// A Lazinator tuple with three items. 
+    /// </summary>
+    /// <typeparam name="T">The first item</typeparam>
+    /// <typeparam name="U">The second item</typeparam>
+    /// <typeparam name="V">The third item</typeparam>
     public partial class LazinatorTriple<T, U, V> : ILazinatorTriple<T, U, V>, IComparable<LazinatorTriple<T, U, V>> where T : ILazinator where U : ILazinator where V : ILazinator
     {
         public LazinatorTriple()

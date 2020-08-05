@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace LazinatorCollections.Remote
 {
+    /// <summary>
+    /// A utility method for saving all items in a hierarchy that must be saved remotely.
+    /// </summary>
     public static class RemoteSaving
     {
         public async static Task SaveRemotes(ILazinator hierarchy, bool freeRemoteStorage = true, bool excludeTopOfHierarchy = false)

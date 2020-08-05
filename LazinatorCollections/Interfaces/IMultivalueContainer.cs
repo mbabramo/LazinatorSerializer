@@ -5,6 +5,10 @@ using Lazinator.Core;
 
 namespace LazinatorCollections.Interfaces
 {
+    /// <summary>
+    /// A nonexclusive Lazinator interface for multivalue containers.
+    /// </summary>
+    /// <typeparam name="T">The item type</typeparam>
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IMultivalueContainer)]
     public interface IMultivalueContainer<T> : IValueContainer<T>, ILazinator where T : ILazinator
     {

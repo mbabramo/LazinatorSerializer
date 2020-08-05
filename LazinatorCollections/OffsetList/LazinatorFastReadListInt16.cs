@@ -2,6 +2,9 @@
 
 namespace LazinatorCollections.OffsetList
 {
+    /// <summary>
+    /// A Lazinator read-only list of shorts
+    /// </summary>
     public partial class LazinatorFastReadListInt16 : LazinatorFastReadList<Int16>, ILazinatorFastReadListInt16
     {
         public LazinatorFastReadListInt16()

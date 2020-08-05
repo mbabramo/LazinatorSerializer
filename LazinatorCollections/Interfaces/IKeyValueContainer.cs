@@ -4,6 +4,11 @@ using Lazinator.Core;
 
 namespace LazinatorCollections.Interfaces
 {
+    /// <summary>
+    /// A nonexclusive Lazinator interface for key-value containers.
+    /// </summary>
+    /// <typeparam name="TKey">The key type</typeparam>
+    /// <typeparam name="TValue">The value type</typeparam>
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IKeyValueContainer)]
     public interface IKeyValueContainer<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>, IKeyAndValueEnumerators<TKey, TValue>, ILazinator where TKey : ILazinator where TValue : ILazinator
     {

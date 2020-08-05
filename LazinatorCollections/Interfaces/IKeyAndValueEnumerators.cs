@@ -4,6 +4,11 @@ using Lazinator.Core;
 
 namespace LazinatorCollections.Interfaces
 {
+    /// <summary>
+    /// A nonexclusive interface that makes it possible to obtain keys, values, or key-value pairs as enumerables or enumerators.
+    /// </summary>
+    /// <typeparam name="TKey">The key type</typeparam>
+    /// <typeparam name="TValue">The value type</typeparam>
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IKeyAndValueEnumerators)]
     public interface IKeyAndValueEnumerators<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {

@@ -4,6 +4,10 @@ using System.Collections.Generic;
 
 namespace LazinatorCollections
 {
+    /// <summary>
+    /// A Lazinator interface for lists of Lazinator items. This is implemented by types including LazinatorLinkedList, LazinatorList, LazinatorSortedLinkedList, and LazinatorSortedList.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorListable)]
     public interface ILazinatorListable<T> : IList<T>, ICountableContainer, ILazinator where T : ILazinator
     {

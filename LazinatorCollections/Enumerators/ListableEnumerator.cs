@@ -5,6 +5,10 @@ using System.Collections.Generic;
 
 namespace LazinatorCollections.Enumerators
 {
+    /// <summary>
+    /// An enumerator of items for lists of Lazinator items. The enumerator can be set to start enumeration at any index and go forward or in reverse.
+    /// </summary>
+    /// <typeparam name="T">The type of the item in the Lazinator listable</typeparam>
     public struct ListableEnumerator<T> : IEnumerator<T> where T : ILazinator
     {
         ILazinatorListable<T> List;

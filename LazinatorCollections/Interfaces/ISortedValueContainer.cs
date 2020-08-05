@@ -6,6 +6,10 @@ using Lazinator.Core;
 
 namespace LazinatorCollections.Interfaces
 {
+    /// <summary>
+    /// A nonexclusive Lazinator interface for sorted containers of values
+    /// </summary>
+    /// <typeparam name="T">The item type</typeparam>
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ISortedValueContainer)]
     public interface ISortedValueContainer<T> : IValueContainer<T>, ILazinator where T : ILazinator, IComparable<T>
     {

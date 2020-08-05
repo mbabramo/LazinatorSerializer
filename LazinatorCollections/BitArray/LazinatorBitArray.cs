@@ -4,8 +4,9 @@ using System.Diagnostics.Contracts;
 
 namespace LazinatorCollections.BitArray
 {
-    // A vector of bits.  Use this to store bits efficiently, without having to do bit 
-    // shifting yourself.
+    /// <summary>
+    /// A modification of the standard BitArray class to work in Lazinator.
+    /// </summary>
     [System.Runtime.InteropServices.ComVisible(true)]
     [Serializable()]
     public sealed partial class LazinatorBitArray : ICollection, ICloneable, ILazinatorBitArray

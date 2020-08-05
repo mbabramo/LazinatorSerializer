@@ -8,6 +8,11 @@ using System.Threading.Tasks;
 
 namespace LazinatorCollections.Remote
 {
+    /// <summary>
+    /// A key-value pair that may or may not store the value locally. Where the item is stored remotely, the RemoteManager can get used to get the value of the item.
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
     public partial class Remote<TKey, TValue> : IRemote<TKey, TValue> where TKey : ILazinator where TValue : class, ILazinator
     {
         public bool ValueLoaded { get; set; } = false;
@@ -21,6 +26,10 @@ namespace LazinatorCollections.Remote
             SetValue(value);
         }
 
+        /// <summary>
+        /// Gets the item, using the remote manager if necessary. 
+        /// </summary>
+        /// <returns></returns>
         public async Task<TValue> GetValue()
         {
             if (!ValueLoaded && !StoreLocally)
@@ -38,6 +47,10 @@ namespace LazinatorCollections.Remote
             return Local;
         }
 
+        /// <summary>
+        /// Sets the locally stored value
+        /// </summary>
+        /// <param name="value"></param>
         public void SetValue(TValue value)
         {
             Local = value;
@@ -45,6 +58,9 @@ namespace LazinatorCollections.Remote
             ValueLoaded = true;
         }
 
+        /// <summary>
+        /// Frees the in memory storage of an item that is being stored remotely. If it is accessed again, it will be loaded from the remote source.
+        /// </summary>
         private void FreeRemoteStorage()
         {
             if (!StoreLocally)
@@ -54,6 +70,11 @@ namespace LazinatorCollections.Remote
             }
         }
 
+        /// <summary>
+        /// Saves a value, storing it remotely if necessary.
+        /// </summary>
+        /// <param name="freeRemoteStorage">True if the memory for an item being stored remotely should be cleared after storage is accomplished</param>
+        /// <returns></returns>
         public async Task SaveValue(bool freeRemoteStorage)
         {
             if (ValueLoaded && (Local.IsDirty || Local.DescendantIsDirty || Local.HasChanged || Local.DescendantHasChanged))
@@ -71,6 +92,10 @@ namespace LazinatorCollections.Remote
                 FreeRemoteStorage();
         }
 
+        /// <summary>
+        /// Obtains a key for an item using the RemoteManager's remote key generator.
+        /// </summary>
+        /// <returns>The key</returns>
         private TKey GetKey()
         {
             TKey key;

@@ -4,6 +4,9 @@ using System.Runtime.InteropServices;
 
 namespace LazinatorCollections.ByteSpan
 {
+    /// <summary>
+    /// A byte span. Includes both a read-only span and a read-write span.
+    /// </summary>
     [Implements(new string[] { "PreSerialization", "PostDeserialization" })]
     public partial class LazinatorByteSpan : ILazinatorByteSpan
     {

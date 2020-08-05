@@ -4,6 +4,11 @@ using Lazinator.Core;
 
 namespace LazinatorCollections.Dictionary
 {
+    /// <summary>
+    /// A bucket of key-value pairs for a Lazinator dictionary.
+    /// </summary>
+    /// <typeparam name="TKey">The key type</typeparam>
+    /// <typeparam name="TValue">The value type</typeparam>
     public partial class DictionaryBucket<TKey, TValue> : IDictionaryBucket<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
         private void Initialize()

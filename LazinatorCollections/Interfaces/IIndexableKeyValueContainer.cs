@@ -6,6 +6,11 @@ using System.Collections.Generic;
 
 namespace LazinatorCollections.Interfaces
 {
+    /// <summary>
+    /// A nonexclusive Lazinator interface for indexable key-value containers, allowing getting and setting keys and values and insertions and removals at a particular index.
+    /// </summary>
+    /// <typeparam name="TKey">The key type</typeparam>
+    /// <typeparam name="TValue">The value type</typeparam>
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IIndexableKeyValueTree)]
     public interface IIndexableKeyValueContainer<TKey, TValue> : IKeyValueContainer<TKey, TValue>, ICountableContainer where TKey : ILazinator where TValue : ILazinator
     {

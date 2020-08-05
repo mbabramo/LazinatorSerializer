@@ -6,6 +6,9 @@ using System.Collections.Generic;
 
 namespace LazinatorCollections
 {
+    /// <summary>
+    /// Utility routines for sorted insertions, replacements, or removals of Lazinator items in Lazinator listables (such as LazinatorSortedList).
+    /// </summary>
     public static class LazinatorListableSortedExtensions 
     {
         public static (IContainerLocation location, bool insertedNotReplaced) SortedInsertOrReplace<L, T>(this L list, bool allowDuplicates, T item, MultivalueLocationOptions whichOne, IComparer<T> comparer) where L : ILazinatorListable<T> where T : ILazinator

@@ -4,6 +4,11 @@ using Lazinator.Core;
 
 namespace LazinatorCollections.Tuples
 {
+    /// <summary>
+    /// A Lazinator tuple type with two items
+    /// </summary>
+    /// <typeparam name="T">The first item</typeparam>
+    /// <typeparam name="U">The second item</typeparam>
     public partial class LazinatorTuple<T, U> : ILazinatorTuple<T, U>, IComparable<LazinatorTuple<T,U>> where T : ILazinator where U : ILazinator
     {
         public LazinatorTuple()

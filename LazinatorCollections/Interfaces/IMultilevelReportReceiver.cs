@@ -7,7 +7,7 @@ using System;
 namespace LazinatorCollections
 {
     /// <summary>
-    /// An interface for a container that can receive changes from a child container and can also report them up to its own parent.
+    /// A nonexclusive Lazinator interface for a container that can receive changes from a child container and can also report them up to its own parent.
     /// </summary>
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IMultilevelReportReceiver)]
     public interface IMultilevelReportReceiver : IMultilevelReporter
