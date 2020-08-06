@@ -12,6 +12,7 @@ namespace Lazinator.Attributes
 
         public InsertCodeAttribute(string codeToInsert)
         {
+            throw new Exception("DEBUGQQQ");
             CodeToInsert = codeToInsert;
         }
     }
