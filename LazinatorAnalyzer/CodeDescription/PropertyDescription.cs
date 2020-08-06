@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -48,7 +49,7 @@ namespace Lazinator.CodeDescription
         private LazinatorSupportedTupleType? SupportedTupleType { get; set; }
         internal bool IsPrimitive => PropertyType == LazinatorPropertyType.PrimitiveType || PropertyType == LazinatorPropertyType.PrimitiveTypeNullable;
         private bool IsClassOrInterface => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (PropertyType == LazinatorPropertyType.OpenGenericParameter && GenericConstrainedToClass);
-        private bool IsLazinatorStruct => PropertyType == LazinatorPropertyType.LazinatorStruct || (PropertyType == LazinatorPropertyType.OpenGenericParameter && GenericConstrainedToStruct);
+        private bool IsLazinatorStruct => PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable || (PropertyType == LazinatorPropertyType.OpenGenericParameter && GenericConstrainedToStruct);
         internal bool IsDefinitelyStruct => IsLazinatorStruct ||
                                             (!Nullable && (
                                                 (PropertyType == LazinatorPropertyType.NonLazinator && Symbol.IsValueType) ||
@@ -67,13 +68,13 @@ namespace Lazinator.CodeDescription
                                         SupportedCollectionType ==
                                         LazinatorSupportedCollectionType.ReadOnlyMemory ||
                                         SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan);
-        internal bool IsLazinator => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter;
+        internal bool IsLazinator => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable || PropertyType == LazinatorPropertyType.OpenGenericParameter;
         internal bool IsSupportedCollectionOrTuple => PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
         internal bool IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType => IsSupportedCollectionOrTuple || (PropertyType == LazinatorPropertyType.NonLazinator && HasInterchangeType);
         internal bool IsNotPrimitiveOrOpenGeneric => PropertyType != LazinatorPropertyType.OpenGenericParameter && PropertyType != LazinatorPropertyType.PrimitiveType && PropertyType != LazinatorPropertyType.PrimitiveTypeNullable;
         internal bool IsNonLazinatorType => PropertyType == LazinatorPropertyType.NonLazinator || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
         internal bool IsNonLazinatorTypeWithoutInterchange => PropertyType == LazinatorPropertyType.NonLazinator && !HasInterchangeType;
-        internal string ConstructorInitialization => IIF(PropertyType != LazinatorPropertyType.LazinatorStruct && !NonSerializedIsStruct, "LazinatorConstructorEnum.LazinatorConstructor");
+        internal string ConstructorInitialization => IIF(PropertyType != LazinatorPropertyType.LazinatorStruct && PropertyType != LazinatorPropertyType.LazinatorStructNullable && !NonSerializedIsStruct, "LazinatorConstructorEnum.LazinatorConstructor");
 
     /* Names */
     private bool UseFullyQualifiedNames => (Config?.UseFullyQualifiedNames ?? false) || HasFullyQualifyAttribute || Symbol.ContainingType != null;
@@ -107,7 +108,7 @@ namespace Lazinator.CodeDescription
         private List<PropertyDescription> InnerProperties { get; set; }
         private bool ContainsOpenGenericInnerProperty => InnerProperties != null && InnerProperties.Any(x => x.PropertyType == LazinatorPropertyType.OpenGenericParameter || x.ContainsOpenGenericInnerProperty);
         private bool ContainsLazinatorInnerProperty => InnerProperties != null && InnerProperties.Any(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.ContainsLazinatorInnerProperty);
-        internal string NullableStructValueAccessor => IIF(PropertyType == LazinatorPropertyType.LazinatorStruct && Nullable, ".Value");
+        internal string NullableStructValueAccessor => IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, ".Value");
 
         /* Conversion */
         private string InterchangeTypeName { get; set; }
@@ -304,7 +305,7 @@ namespace Lazinator.CodeDescription
         {
             string versionNumberVariable = readVersion ? "serializedVersionNumber" : "LazinatorObjectVersion";
             List<string> conditions = new List<string>();
-            if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.OpenGenericParameter)
+            if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable || PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.OpenGenericParameter)
             {
                 conditions.Add("includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren");
                 if (!IncludableWhenExcludingMostChildren)
@@ -346,14 +347,17 @@ namespace Lazinator.CodeDescription
                 // handle a nullable type (which might be a nullable primitive type or a nullable struct / valuetuple
                 SetNullablePropertyType(namedTypeSymbol);
                 if (PropertyType == LazinatorPropertyType.LazinatorStruct)
-                    throw new LazinatorCodeGenException($"Type {typeSymbol} is a nullable Lazinator struct. This is not yet supported. Use WNullableStruct instead.");
+                    PropertyType = LazinatorPropertyType.LazinatorStructNullable;
+                //DEBUG -- delete following
+                //if (PropertyType == LazinatorPropertyType.LazinatorStruct)
+                //    throw new LazinatorCodeGenException($"Type {typeSymbol} is a nullable Lazinator struct. This is not yet supported. Use WNullableStruct instead.");
                 return;
             }
             else
             {
                 // look for primitive type
                 if (typeSymbol.Name == "string")
-                    Nullable = true;
+                    Nullable = true; // DEBUG
                 if (namedTypeSymbol?.EnumUnderlyingType != null)
                     SetEnumEquivalentType(namedTypeSymbol);
                 if (SupportedAsPrimitives.Contains(EnumEquivalentType ?? ShortTypeNameWithoutNullableIndicator))
@@ -413,15 +417,11 @@ namespace Lazinator.CodeDescription
 
         private void SetNonserializedTypeNameAndPropertyType(INamedTypeSymbol t)
         {
-            Nullable = t.TypeKind == TypeKind.Class;
+            Nullable = t.TypeKind == TypeKind.Class || IsNullableType(t);
             PropertyType = LazinatorPropertyType.NonLazinator;
             NonSerializedIsStruct = t.IsValueType;
             InterchangeTypeName = Config?.GetInterchangeConverterTypeName(t);
             DirectConverterTypeName = Config?.GetDirectConverterTypeName(t);
-            if (InterchangeTypeName == "NonLazinatorInterchangeClass")
-            {
-                var DEBUG = 0;
-            }
             string fullyQualifiedTypeName = t.GetFullyQualifiedNameWithoutGlobal();
             if (InterchangeTypeName != null && DirectConverterTypeName != null)
                 throw new LazinatorCodeGenException($"{fullyQualifiedTypeName} has both an interchange converter and a direct converter type listed. Only one should be used.");
@@ -523,7 +523,10 @@ namespace Lazinator.CodeDescription
                     PropertyType = LazinatorPropertyType.LazinatorClassOrInterface;
                 }
                 else
-                    PropertyType = LazinatorPropertyType.LazinatorStruct;
+                {
+                    Nullable = IsNullableType(t);
+                    PropertyType = Nullable ? LazinatorPropertyType.LazinatorStruct : LazinatorPropertyType.LazinatorStructNullable;
+                }
 
                 IsInterface = t.TypeKind == TypeKind.Interface;
                 if (!IsInterface)
@@ -903,7 +906,7 @@ namespace Lazinator.CodeDescription
 
             string assignment;
             string selfReference = IIF(ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct, ", this");
-            if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct)
+            if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable)
             {
                 if (IsInterface)
                     assignment =
@@ -933,6 +936,11 @@ namespace Lazinator.CodeDescription
                 assignment += $@"
                         {CodeOnDeserialized}";
 
+
+            // Prepare code needed for _Lazinate private method. This is used to instantiate a Lazinator when the get accessor is called and the 
+            // Lazinator has not previously been accessed. We need both code to create a default value (if there is no underlying memory) and 
+            // to recreate the value by deserializing, if there is underlying memory.
+            // Here's the create default code:
             string createDefault = $@"_{PropertyName} = default({AppropriatelyQualifiedTypeName});{IIF(IsNonLazinatorType && TrackDirtinessNonSerialized, $@"
                                         _{PropertyName}_Dirty = true; ")}";
             if (IsLazinatorStruct)
@@ -944,9 +952,9 @@ namespace Lazinator.CodeDescription
                                 {{ // {PropertyName} is a struct
                                     _{PropertyName}.LazinatorParents = new LazinatorParentsCollection(this);
                                 }}")}";
-
+            // And here's where we set the recreation code for when underlying memory exists.
             string recreation;
-            if (PropertyType == LazinatorPropertyType.LazinatorStruct
+            if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable
                 || (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface && ContainingObjectDescription.IsSealed))
             {
                 // we manually create the type and set the fields. Note that we don't want to call DeserializationFactory, because we would need to pass the field by ref (and we don't need to check for inherited types), and we would need to box a struct in conversion. We follow a similar pattern for sealed classes, because we don't have to worry about inheritance. 
@@ -965,11 +973,11 @@ namespace Lazinator.CodeDescription
             else
                 recreation = $@"{assignment}";
 
-
+            // Now we need to worry about the set accessor. 
             string propertyTypeDependentSet = "";
             if (IsClassOrInterface)
             {
-                if (ContainerIsClass)
+                if (ContainerIsClass) // change the parents collection so that it refers to the new value and not the old value. But other values in the parents collection will not be affected.
                     propertyTypeDependentSet = $@"
                         if (_{PropertyName} != null)
                         {{
@@ -985,10 +993,21 @@ namespace Lazinator.CodeDescription
 
             }
             else if (IsLazinatorStruct)
-            {
-                propertyTypeDependentSet = $@"{IIF(ContainerIsClass, $@"
-                    value.LazinatorParents = new LazinatorParentsCollection(this);")}
-                    ";
+            { // Because a struct is always copied, it can only have one parent. 
+                if (Nullable)
+                    propertyTypeDependentSet = $@"{IIF(ContainerIsClass, $@"
+                        if (value.HasValue)
+                        {{
+                            var copy = value.Value;
+                            copy.LazinatorParents = new LazinatorParentsCollection(this);
+                            value = copy;
+                        }}
+                    ")}
+                        ";
+                else
+                    propertyTypeDependentSet = $@"{IIF(ContainerIsClass, $@"
+                        value.LazinatorParents = new LazinatorParentsCollection(this);")}
+                        ";
             }
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
             {
@@ -996,7 +1015,12 @@ namespace Lazinator.CodeDescription
                     propertyTypeDependentSet = $@"
                         if (value != null && value.IsStruct)
                         {{{IIF(ContainerIsClass, $@"
-                            value.LazinatorParents = new LazinatorParentsCollection(this);")}
+                            if (value.HasValue)
+                            {{
+                                var copy = value.Value;
+                                copy.LazinatorParents = new LazinatorParentsCollection(this);
+                                value = copy;
+                            }}")}
                         }}
                         else
                         {{
@@ -1056,7 +1080,7 @@ namespace Lazinator.CodeDescription
 ");
 
             // Copy property
-            if (PropertyType == LazinatorPropertyType.LazinatorStruct && !ContainsOpenGenericInnerProperty)
+            if ((PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable) && !ContainsOpenGenericInnerProperty)
             { // append copy property so that we can create item on stack if it doesn't need to be edited and hasn't been allocated yet
 
                 sb.Append($@"{GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{AppropriatelyQualifiedTypeName} {PropertyName}_Copy
@@ -1094,7 +1118,7 @@ namespace Lazinator.CodeDescription
         private string GetManualObjectCreation()
         {
             // if the container object containing this property is a struct, then we can't set LazinatorParents. Meanwhile, if this object is a struct, then we don't need to worry about the case of a null item. 
-            string nullItemCheck = PropertyType == LazinatorPropertyType.LazinatorStruct
+            string nullItemCheck = PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable
                 ? ""
                 : $@"if (childData.Length == 0)
                         {{
@@ -1328,7 +1352,7 @@ namespace Lazinator.CodeDescription
             else
             {
                 // Finally, the main code for writing a serialized or non serialized object.
-                if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable || PropertyType == LazinatorPropertyType.OpenGenericParameter)
                     AppendPropertyWriteString_Lazinator(sb);
                 else
                     AppendPropertyWriteString_NonLazinator(sb);
@@ -2205,7 +2229,7 @@ namespace Lazinator.CodeDescription
             else
             {
                 CheckForLazinatorInNonLazinator(this);
-                if (PropertyType == LazinatorPropertyType.LazinatorStruct && !Nullable)
+                if (PropertyType == LazinatorPropertyType.LazinatorStruct)
                     return ($@"
                         {AppropriatelyQualifiedTypeName} {itemName} = default;
                         int lengthCollectionMember_{itemName} = {GetSpanReadLength()};
@@ -2254,7 +2278,7 @@ namespace Lazinator.CodeDescription
             }
             else
             {
-                if (PropertyType == LazinatorPropertyType.LazinatorStruct && !Nullable)
+                if (PropertyType == LazinatorPropertyType.LazinatorStruct)
                     return ($@"
                         void action{itemName}(ref BinaryBufferWriter w) => {itemToConvertItemName}.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                         WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(ref writer, action{itemName});");

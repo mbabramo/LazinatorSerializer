@@ -9,6 +9,7 @@
         NonLazinator,
         SupportedCollection,
         SupportedTuple,
-        OpenGenericParameter
+        OpenGenericParameter,
+        LazinatorStructNullable
     }
 }

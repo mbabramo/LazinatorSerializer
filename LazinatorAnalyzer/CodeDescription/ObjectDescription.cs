@@ -671,6 +671,7 @@ namespace Lazinator.CodeDescription
                 .Where(property =>
                     property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface ||
                     property.PropertyType == LazinatorPropertyType.LazinatorStruct ||
+                    property.PropertyType == LazinatorPropertyType.LazinatorStructNullable ||
                     property.PropertyType == LazinatorPropertyType.NonLazinator ||
                     property.PropertyType == LazinatorPropertyType.SupportedCollection ||
                     property.PropertyType == LazinatorPropertyType.SupportedTuple ||
@@ -1099,7 +1100,7 @@ namespace Lazinator.CodeDescription
         private string GetStructAndOpenGenericReset()
         {
             string reset = "";
-            foreach (var property in PropertiesIncludingInherited.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorStruct))
+            foreach (var property in PropertiesIncludingInherited.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorStruct || x.PropertyType == LazinatorPropertyType.LazinatorStructNullable))
             {
                 reset +=
                     $@"
@@ -1237,7 +1238,7 @@ namespace Lazinator.CodeDescription
             {
                 if (IncludeTracingCode)
                 {
-                    if (property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (property.PropertyType == LazinatorPropertyType.LazinatorStruct && property.Nullable))
+                    if (property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (property.PropertyType == LazinatorPropertyType.LazinatorStructNullable))
                     {
                         sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}}) (backing var null? {{_{property.PropertyName} == null}}) "");");
                     }
@@ -1362,7 +1363,7 @@ namespace Lazinator.CodeDescription
             string tense = usePastTense ? "HasChanged" : "IsDirty";
             foreach (var property in PropertiesIncludingInherited.Where(x => x.IsLazinator))
             {
-                if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
+                if (property.PropertyType == LazinatorPropertyType.LazinatorStruct || property.PropertyType == LazinatorPropertyType.LazinatorStructNullable)
                     manualDescendantDirtinessChecks += $" || (_{property.PropertyName}_Accessed && ({property.PropertyName}{property.NullableStructValueAccessor}.{tense} || {property.PropertyName}{property.NullableStructValueAccessor}.Descendant{tense}))";
                 else
                 {
