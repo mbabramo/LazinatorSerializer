@@ -6,6 +6,10 @@ using System.Collections.Generic;
 
 namespace LazinatorCollections
 {
+    /// <summary>
+    /// A queue of Lazinator objects
+    /// </summary>
+    /// <typeparam name="T">The type of the Lazinator objects</typeparam>
     public partial class LazinatorQueue<T> : IEnumerable<T>, ILazinatorQueue<T> where T : ILazinator
     {
         public LazinatorQueue()

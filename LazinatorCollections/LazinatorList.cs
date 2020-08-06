@@ -16,6 +16,10 @@ using LazinatorCollections.Location;
 
 namespace LazinatorCollections
 {
+    /// <summary>
+    /// A list of Lazinator objects. The list makes it possible to read or change some items without deserializing other previously serialized items.
+    /// </summary>
+    /// <typeparam name="T">The type of item stored</typeparam>
     [Implements(new string[] { "PreSerialization", "PostDeserialization", "EnumerateLazinatorDescendants", "OnFreeInMemoryObjects", "AssignCloneProperties", "OnUpdateDeserializedChildren", "OnPropertiesWritten", "OnForEachLazinator" })]
     public partial class LazinatorList<T> : IList, IList<T>, IEnumerable, ILazinatorList<T>, ILazinatorList, ILazinatorListable<T>, IIndexableMultivalueContainer<T>, IMultilevelReporter where T : ILazinator
     {
@@ -58,7 +62,7 @@ namespace LazinatorCollections
 
         #region Item access and status
 
-        // The status of an item currently in the list. To avoid unnecessary deserialization, we keep track of 
+        // The status of an item currently in the list. To avoid unnecessary deserialization, we keep track of this in memory. 
         struct ItemStatus
         {
             public int OriginalIndex;
@@ -93,7 +97,6 @@ namespace LazinatorCollections
                 }
             }
         }
-
         private bool ItemHasBeenAccessed(int currentIndex)
         {
             if (_ItemsTracker == null)
@@ -101,16 +104,26 @@ namespace LazinatorCollections
             return _ItemsTracker[currentIndex].IsDeserialized;
         }
 
+        /// <summary>
+        /// Returns a string containing the items in the list, but no more than 10 items.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
-            var firstTen = this.Take(11).ToArray();
-            bool moreThanTen = false;
-            if (firstTen.Length == 11)
+            int maxNumItems = 10;
+            return ToString(maxNumItems);
+        }
+
+        public string ToString(int maxNumItemsBeforeEllipsis)
+        {
+            var firstItems = this.Take(maxNumItemsBeforeEllipsis + 1).ToArray();
+            bool moreThanMax = false;
+            if (firstItems.Length == maxNumItemsBeforeEllipsis + 1)
             {
-                moreThanTen = true;
-                firstTen = this.Take(10).ToArray();
+                moreThanMax = true;
+                firstItems = this.Take(maxNumItemsBeforeEllipsis).ToArray();
             }
-            return $"[{String.Join(", ", firstTen)}{(moreThanTen ? ", ..." : "")}]";
+            return $"[{String.Join(", ", firstItems)}{(moreThanMax ? ", ..." : "")}]";
         }
 
         private T GetSerializedContents(int originalIndex)
@@ -262,6 +275,7 @@ namespace LazinatorCollections
         {
             return Count > 0;
         }
+
         #endregion
 
         #region Enumeration
@@ -440,6 +454,9 @@ namespace LazinatorCollections
             }
         }
 
+        /// <summary>
+        /// Writes the main list to a binary buffer, using serialized data where possible so that items do not need to be deserialized unnecessarily.
+        /// </summary>
         private void WriteMainList(ref BinaryBufferWriter writer, ReadOnlyMemory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             int originalStartingPosition = writer.Position;

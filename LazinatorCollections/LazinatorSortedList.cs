@@ -6,6 +6,10 @@ using System.Collections.Generic;
 
 namespace LazinatorCollections
 {
+    /// <summary>
+    /// A list of Lazinator items, sorted according to the default comparer for the Lazinator type
+    /// </summary>
+    /// <typeparam name="T">The type of object stored in the list, to be ordered by its default comparer</typeparam>
     public partial class LazinatorSortedList<T> : LazinatorList<T>, ILazinatorSortedList<T>, ILazinatorSorted<T>, ISortedIndexableMultivalueContainer<T> where T : ILazinator, IComparable<T>
     {
         public LazinatorSortedList(bool allowDuplicates) : base(allowDuplicates)

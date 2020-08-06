@@ -2,7 +2,7 @@
 
 namespace LazinatorTests.Examples
 {
-    [InsertCode(@"/* This is code added with an InsertCode attribute. It is useful to define fields in structs, since otherwise there would be no defined ordering between the fields in the two different partial struct files, producing an error. */ 
+    [InsertCode(@"/* This is code added with an InsertCode attribute. */ 
         ")]
     [Implements(new string[] { "LazinatorObjectVersionUpgrade", "OnDirty", "OnDescendantIsDirty", "OnCompleteClone" })]
     public partial class Example : IExample

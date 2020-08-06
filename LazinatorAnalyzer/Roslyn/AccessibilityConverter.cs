@@ -6,6 +6,9 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace LazinatorCodeGen.Roslyn
 {
+    /// <summary>
+    /// Determine string based on accessibility enum, or get accesibility enum from type declaration.
+    /// </summary>
     public static class AccessibilityConverter
     {
         public static string Convert(Accessibility accessibility)

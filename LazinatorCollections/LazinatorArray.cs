@@ -5,6 +5,10 @@ using System.Collections.Generic;
 
 namespace LazinatorCollections
 {
+    /// <summary>
+    /// A Lazinator object that functions like an array. 
+    /// </summary>
+    /// <typeparam name="T">The type of the array</typeparam>
     public partial class LazinatorArray<T> : ILazinatorArray<T> where T : ILazinator
     {
         public LazinatorArray(int numItems)

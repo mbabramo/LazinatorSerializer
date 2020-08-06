@@ -7,6 +7,11 @@ namespace LazinatorCodeGen.Roslyn
 {
     public static class AttributeConverter
     {
+        /// <summary>
+        /// Return a clone of a Lazinator attribute based on the AttributeData produced by Roslyn.
+        /// </summary>
+        /// <param name="attributeData"></param>
+        /// <returns></returns>
         public static Attribute ConvertAttribute(AttributeData attributeData)
         {
             switch (attributeData.AttributeClass.Name)

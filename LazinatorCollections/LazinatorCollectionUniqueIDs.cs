@@ -1,6 +1,8 @@
 ﻿namespace LazinatorCollections
 {
-
+    /// <summary>
+    /// Unique IDs for Lazinator collections. These must be unique across all Lazinator objects. They are encoded so that the object type can be recognized during deserialization.
+    /// </summary>
     public enum LazinatorCollectionUniqueIDs
     { 
         ILazinatorOffsetList = 200,

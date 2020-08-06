@@ -2,8 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace LazinatorCollections
+namespace LazinatorCollections.Enumerators
 {
+    /// <summary>
+    /// An enumerator that enumerates items from a source enumerator, but applies a transform function to each item before enumeration.
+    /// </summary>
+    /// <typeparam name="TSource">The type of the item in the source enumerator</typeparam>
+    /// <typeparam name="TTarget">The type of the item once transformed</typeparam>
     public struct TransformEnumerator<TSource, TTarget> : IEnumerator<TTarget>
     {
         IEnumerator<TSource> SourceEnumerator;

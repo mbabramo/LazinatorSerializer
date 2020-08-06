@@ -241,7 +241,7 @@ namespace LazinatorCodeGen.Roslyn
                 if (namedTypeSymbol.TypeKind == TypeKind.Interface && GetFirstAttributeOfType<CloneLazinatorAttribute>(namedTypeSymbol) == null && GetFirstAttributeOfType<CloneNonexclusiveLazinatorAttribute>(namedTypeSymbol) == null)
                     return; // don't worry about IEnumerable etc.
                 
-                List<INamedTypeSymbol> allInterfaces = namedTypeSymbol.AllInterfaces.Where(x => x != type && x.Name != "ILazinator")
+                List<INamedTypeSymbol> allInterfaces = namedTypeSymbol.AllInterfaces.Where(x => !SymbolEqualityComparer.Default.Equals(x, type) && x.Name != "ILazinator")
                     .OrderByDescending(x => namedTypeSymbol.Interfaces.Contains(x))
                     .ThenByDescending(x => x.AllInterfaces.Count())
                     .ToList();
@@ -316,7 +316,7 @@ namespace LazinatorCodeGen.Roslyn
                     yield return t;
                 }
             }
-            if (type != type.OriginalDefinition)
+            if (!SymbolEqualityComparer.Default.Equals(type, type.OriginalDefinition))
                 foreach (ITypeSymbol t in GetTypeAndRelatedTypes(type.OriginalDefinition))
                 {
                     alreadyProduced.Add(t);

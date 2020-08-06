@@ -214,7 +214,9 @@ namespace LazinatorAnalyzer.Analyzer
                 analyzer.DisableStartingFromInterface = true;
             }
             SyntaxNode root = await doc.GetSyntaxRootAsync(cancellationToken);
-            var model = compilation.GetSemanticModel(root.SyntaxTree);
+            var rootSyntaxTree = root.SyntaxTree;
+            var model = compilation.GetSemanticModel(rootSyntaxTree);
+
             var namedTypes = root.DescendantNodesAndSelf()
                 .OfType<TypeDeclarationSyntax>()
                 .Select(x => model.GetDeclaredSymbol(x))

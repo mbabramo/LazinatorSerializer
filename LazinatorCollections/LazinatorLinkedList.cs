@@ -10,6 +10,13 @@ using System.Linq;
 
 namespace LazinatorCollections
 {
+    /// <summary>
+    /// A linked list of Lazinator objects. Preferable to a regular LazinatorList only where the number of items is expected to be very small.
+    /// The linked list includes methods to insert items in a sorted way according to some comparer, but it does not enforce that the client
+    /// always do so. If enforcement of sorting is desired, using LazinatorSortedLinkedList.
+    /// There is an option to specify whether the linked list may contain duplicates, if the comparer methods are used.
+    /// </summary>
+    /// <typeparam name="T">The type of item stored</typeparam>
     public partial class LazinatorLinkedList<T> : ILazinatorLinkedList<T>, IList<T>, ILazinatorListable<T>, IIndexableMultivalueContainer<T>, IMultilevelReporter where T : ILazinator
     {
         LazinatorLinkedListNode<T> _lastAccessedNode = null;

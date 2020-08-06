@@ -5,6 +5,10 @@ using System.Collections.Generic;
 
 namespace LazinatorCollections
 {
+    /// <summary>
+    /// A LIFO stack of Lazinator objects
+    /// </summary>
+    /// <typeparam name="T">The type of the Lazinator objects</typeparam>
     public partial class LazinatorStack<T> : ILazinatorStack<T> where T : ILazinator
     {
         public LazinatorStack()

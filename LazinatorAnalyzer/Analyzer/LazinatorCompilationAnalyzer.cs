@@ -216,7 +216,7 @@ namespace LazinatorAnalyzer.Analyzer
                 var lastClassNode = location.SourceTree.GetRoot().DescendantNodes().Where(x => x is ClassDeclarationSyntax || x is StructDeclarationSyntax).Select(x => (TypeDeclarationSyntax)x).LastOrDefault();
                 SemanticModel semanticModel = compilation.GetSemanticModel(location.SourceTree);
                 INamedTypeSymbol mainClass = lastClassNode == null ? null : semanticModel.GetDeclaredSymbol(lastClassNode);
-                if (mainClass != lazinatorObjectType)
+                if (!SymbolEqualityComparer.Default.Equals(mainClass, lazinatorObjectType))
                 {
                     if (excludedCodeBehindLocations == null)
                         excludedCodeBehindLocations = new HashSet<Location>();

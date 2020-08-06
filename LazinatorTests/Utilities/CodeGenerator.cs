@@ -1,6 +1,0 @@
-﻿namespace LazinatorTestsShared
-{
-    class CodeGenerator
-    {
-    }
-}

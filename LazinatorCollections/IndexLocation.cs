@@ -2,6 +2,10 @@
 
 namespace LazinatorCollections
 {
+    /// <summary>
+    /// A location within a Lazinator container, recording the index and the overall size of the container. The object can therefore
+    /// report whether the location is after the container.
+    /// </summary>
     public readonly struct IndexLocation : IContainerLocation
     {
         public readonly long Index;
