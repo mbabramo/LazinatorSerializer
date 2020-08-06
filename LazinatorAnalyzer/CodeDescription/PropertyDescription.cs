@@ -341,6 +341,10 @@ namespace Lazinator.CodeDescription
                 return;
             }
 
+            if (ShortTypeName == "ExampleStructContainingClasses")
+            {
+                var DEBUG = 0;
+            }
             Nullable = IsNullableType(namedTypeSymbol);
             if (Nullable)
             {
@@ -1015,12 +1019,7 @@ namespace Lazinator.CodeDescription
                     propertyTypeDependentSet = $@"
                         if (value != null && value.IsStruct)
                         {{{IIF(ContainerIsClass, $@"
-                            if (value.HasValue)
-                            {{
-                                var copy = value.Value;
-                                copy.LazinatorParents = new LazinatorParentsCollection(this);
-                                value = copy;
-                            }}")}
+                            value.LazinatorParents = new LazinatorParentsCollection(this);")}
                         }}
                         else
                         {{
