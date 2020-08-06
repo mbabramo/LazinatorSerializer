@@ -529,7 +529,7 @@ namespace Lazinator.CodeDescription
                 else
                 {
                     Nullable = IsNullableType(t);
-                    PropertyType = Nullable ? LazinatorPropertyType.LazinatorStruct : LazinatorPropertyType.LazinatorStructNullable;
+                    PropertyType = Nullable ? LazinatorPropertyType.LazinatorStructNullable : LazinatorPropertyType.LazinatorStruct;
                 }
 
                 IsInterface = t.TypeKind == TypeKind.Interface;
