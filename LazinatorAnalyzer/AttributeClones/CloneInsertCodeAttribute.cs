@@ -14,7 +14,6 @@ namespace LazinatorAnalyzer.AttributeClones
 
         public CloneInsertCodeAttribute(string codeToInsert)
         {
-            throw new Exception("DEBUGQQQ");
             CodeToInsert = codeToInsert;
         }
     }
