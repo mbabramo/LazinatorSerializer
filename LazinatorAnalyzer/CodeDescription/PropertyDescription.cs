@@ -948,7 +948,7 @@ namespace Lazinator.CodeDescription
             string createDefault = $@"_{PropertyName} = default({AppropriatelyQualifiedTypeName});{IIF(IsNonLazinatorType && TrackDirtinessNonSerialized, $@"
                                         _{PropertyName}_Dirty = true; ")}";
             if (IsLazinatorStruct)
-                createDefault = $@"_{PropertyName} = default({ AppropriatelyQualifiedTypeName});{IIF(ContainerIsClass, $@"
+                createDefault = $@"_{PropertyName} = default({ AppropriatelyQualifiedTypeName});{IIF(ContainerIsClass && PropertyType != LazinatorPropertyType.LazinatorStructNullable, $@"
                                 _{PropertyName}.LazinatorParents = new LazinatorParentsCollection(this);")}";
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
                 createDefault = $@"_{PropertyName} = default({ AppropriatelyQualifiedTypeName});{IIF(ContainerIsClass, $@"
@@ -1128,7 +1128,8 @@ namespace Lazinator.CodeDescription
                             {{
                                 LazinatorParents = new LazinatorParentsCollection(this)
                             }}";
-            string doCreation = $@"_{PropertyName} = new {AppropriatelyQualifiedTypeName}({ConstructorInitialization}){lazinatorParentClassSet};
+            
+            string doCreation = $@"_{PropertyName} = new {AppropriatelyQualifiedNameWithoutNullableIndicator}({ConstructorInitialization}){lazinatorParentClassSet};
                         _{PropertyName}.DeserializeLazinator(childData);";
             string creation = nullItemCheck == "" ? doCreation : $@"{nullItemCheck}
                     {{
