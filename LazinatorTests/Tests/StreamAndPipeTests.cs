@@ -5,6 +5,9 @@ using Xunit;
 using System.IO;
 using System.IO.Pipelines;
 using System.Threading.Tasks;
+using static LazinatorTests.Utilities.PipelinesExtensions;
+using System.Buffers;
+using System;
 
 namespace LazinatorTests.Tests
 {

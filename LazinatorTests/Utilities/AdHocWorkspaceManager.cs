@@ -56,7 +56,7 @@ namespace LazinatorTests.Support
         public static AdhocWorkspace CreateAdHocWorkspaceWithFiles(List<(string filename, string code)> files)
         {
             var adhocWorkspace = new AdhocWorkspace();
-            ProjectInfo project = ProjectInfo.Create(ProjectId.CreateNewId("FakeProject"), VersionStamp.Create(DateTime.Now), "FakeProject", "FakeProject.dll", LanguageNames.CSharp);
+            ProjectInfo project = ProjectInfo.Create(ProjectId.CreateNewId("FakeProject"), VersionStamp.Create(DateTime.Now.ToUniversalTime()), "FakeProject", "FakeProject.dll", LanguageNames.CSharp);
 
             project = project.WithDocuments(files.Select(file => DocumentInfo.Create(DocumentId.CreateNewId(project.Id, file.filename), file.filename, loader: TextLoader.From(TextAndVersion.Create(SourceText.From(file.code), VersionStamp.Create())))));
             project = AddProjectReferences(project);
