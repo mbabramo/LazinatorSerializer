@@ -215,7 +215,8 @@ public class MyOtherClass
         public async Task CodeGenerationProducesActualCode_TestExamples()
         {
             AdhocWorkspace ws = GetAdhocWorkspace();
-            //await CompleteGenerateCode(typeof(ExampleStruct), "LazinatorTests", "/Examples/", "Structs/", ws); // DEBUG -- delete, repeated below
+            await CompleteGenerateCode(typeof(ExampleStructContainingStruct), "LazinatorTests", "/Examples/", "Structs/", ws); // DEBUG -- delete, repeated below
+            throw new Exception("DEBUG");
             await CompleteGenerateCode(typeof(Example), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(ContainerForExampleWithDefault), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(ExampleInterfaceContainer), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
