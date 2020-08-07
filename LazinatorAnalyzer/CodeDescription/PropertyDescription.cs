@@ -2116,7 +2116,7 @@ namespace Lazinator.CodeDescription
                 }
                 else
                     return ($@"
-                    void action(ref BinaryBufferWriter w) => {itemString}.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void action(ref BinaryBufferWriter w) => {itemString}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, "?")}.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(ref writer, action);");
             }
 
