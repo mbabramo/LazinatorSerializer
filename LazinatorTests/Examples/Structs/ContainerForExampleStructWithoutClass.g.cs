@@ -54,6 +54,7 @@ namespace LazinatorTests.Examples.Structs
         }
         
         protected ExampleStructWithoutClass? _ExampleNullableStruct;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ExampleStructWithoutClass? ExampleNullableStruct
         {
             get
@@ -92,9 +93,9 @@ namespace LazinatorTests.Examples.Structs
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleNullableStruct_ByteIndex, _ExampleNullableStruct_ByteLength, false, false, null);
                 if (childData.Length == 0)
                 {
-                    _ExampleNullableStruct = default(ExampleStructWithoutClass?);
+                    _ExampleNullableStruct = default;
                 }
-                else
+                else 
                 {
                     _ExampleNullableStruct = new ExampleStructWithoutClass()
                     {
