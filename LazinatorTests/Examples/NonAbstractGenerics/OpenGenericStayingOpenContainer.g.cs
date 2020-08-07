@@ -81,7 +81,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _ClosedGenericBase = default(OpenGeneric<Base>);
+                _ClosedGenericBase = null;
             }
             else
             {
@@ -127,7 +127,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _ClosedGenericFloat = default(OpenGeneric<WFloat>);
+                _ClosedGenericFloat = null;
             }
             else
             {
@@ -173,7 +173,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _ClosedGenericFromBaseWithBase = default(GenericFromBase<Base>);
+                _ClosedGenericFromBaseWithBase = null;
             }
             else
             {
@@ -219,7 +219,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _ClosedGenericInterface = default(OpenGeneric<IExampleChild>);
+                _ClosedGenericInterface = null;
             }
             else
             {
@@ -265,7 +265,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _ClosedGenericNonexclusiveInterface = default(OpenGeneric<IExampleNonexclusiveInterface>);
+                _ClosedGenericNonexclusiveInterface = null;
             }
             else
             {
@@ -346,7 +346,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (ClosedGenericBase == null)
                 {
-                    typedClone.ClosedGenericBase = default(OpenGeneric<Base>);
+                    typedClone.ClosedGenericBase = null;
                 }
                 else
                 {
@@ -357,7 +357,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (ClosedGenericFloat == null)
                 {
-                    typedClone.ClosedGenericFloat = default(OpenGeneric<WFloat>);
+                    typedClone.ClosedGenericFloat = null;
                 }
                 else
                 {
@@ -368,7 +368,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (ClosedGenericFromBaseWithBase == null)
                 {
-                    typedClone.ClosedGenericFromBaseWithBase = default(GenericFromBase<Base>);
+                    typedClone.ClosedGenericFromBaseWithBase = null;
                 }
                 else
                 {
@@ -379,7 +379,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (ClosedGenericInterface == null)
                 {
-                    typedClone.ClosedGenericInterface = default(OpenGeneric<IExampleChild>);
+                    typedClone.ClosedGenericInterface = null;
                 }
                 else
                 {
@@ -390,7 +390,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (ClosedGenericNonexclusiveInterface == null)
                 {
-                    typedClone.ClosedGenericNonexclusiveInterface = default(OpenGeneric<IExampleNonexclusiveInterface>);
+                    typedClone.ClosedGenericNonexclusiveInterface = null;
                 }
                 else
                 {

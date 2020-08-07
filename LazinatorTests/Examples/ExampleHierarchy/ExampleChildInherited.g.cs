@@ -83,7 +83,7 @@ namespace LazinatorTests.Examples
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _MyGrandchildInInherited = default(ExampleGrandchild);
+                _MyGrandchildInInherited = null;
             }
             else
             {
@@ -119,7 +119,7 @@ namespace LazinatorTests.Examples
             {
                 if (MyGrandchildInInherited == null)
                 {
-                    typedClone.MyGrandchildInInherited = default(ExampleGrandchild);
+                    typedClone.MyGrandchildInInherited = null;
                 }
                 else
                 {

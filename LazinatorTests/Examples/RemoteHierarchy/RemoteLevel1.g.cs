@@ -87,7 +87,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _RemoteLevel2Item = default(Remote<WGuid, RemoteLevel2>);
+                _RemoteLevel2Item = null;
             }
             else
             {
@@ -169,7 +169,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             {
                 if (RemoteLevel2Item == null)
                 {
-                    typedClone.RemoteLevel2Item = default(Remote<WGuid, RemoteLevel2>);
+                    typedClone.RemoteLevel2Item = null;
                 }
                 else
                 {

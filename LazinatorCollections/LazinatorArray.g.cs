@@ -74,7 +74,7 @@ namespace LazinatorCollections
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _UnderlyingList = default(ILazinatorListable<T>);
+                _UnderlyingList = null;
             }
             else
             {
@@ -157,7 +157,7 @@ namespace LazinatorCollections
             {
                 if (UnderlyingList == null)
                 {
-                    typedClone.UnderlyingList = default(ILazinatorListable<T>);
+                    typedClone.UnderlyingList = null;
                 }
                 else
                 {

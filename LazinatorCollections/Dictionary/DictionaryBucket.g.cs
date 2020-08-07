@@ -94,7 +94,7 @@ namespace LazinatorCollections.Dictionary
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _Keys = default(LazinatorList<TKey>);
+                _Keys = null;
             }
             else
             {
@@ -143,7 +143,7 @@ namespace LazinatorCollections.Dictionary
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _Values = default(LazinatorList<TValue>);
+                _Values = null;
             }
             else
             {
@@ -227,7 +227,7 @@ namespace LazinatorCollections.Dictionary
             {
                 if (Keys == null)
                 {
-                    typedClone.Keys = default(LazinatorList<TKey>);
+                    typedClone.Keys = null;
                 }
                 else
                 {
@@ -238,7 +238,7 @@ namespace LazinatorCollections.Dictionary
             {
                 if (Values == null)
                 {
-                    typedClone.Values = default(LazinatorList<TValue>);
+                    typedClone.Values = null;
                 }
                 else
                 {

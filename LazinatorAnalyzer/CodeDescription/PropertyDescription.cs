@@ -83,7 +83,7 @@ namespace Lazinator.CodeDescription
         internal string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
         private string FullyQualifiedNameWithoutNullableIndicator => WithoutNullableIndicator(FullyQualifiedTypeName);
         internal string AppropriatelyQualifiedTypeName => UseFullyQualifiedNames ? FullyQualifiedTypeName : ShortTypeName;
-        public string DefaultExpression => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? "null" : $"default({AppropriatelyQualifiedTypeName})"; // DEBUG -- can we just use null whenever nullable?
+        public string DefaultExpression => PropertyType == LazinatorPropertyType.LazinatorStructNullable || PropertyType == LazinatorPropertyType.LazinatorClassOrInterface ? "null" : $"default({AppropriatelyQualifiedTypeName})";
         private string AppropriatelyQualifiedTypeNameWithoutNullableIndicator => UseFullyQualifiedNames ? FullyQualifiedNameWithoutNullableIndicator : ShortTypeNameWithoutNullableIndicator;
 
         internal string ShortTypeNameEncodable => Symbol.GetEncodableVersionOfIdentifier(false);

@@ -105,7 +105,7 @@ namespace LazinatorTests.Examples.Collections
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _MyList = default(LazinatorList<ExampleChild>);
+                _MyList = null;
             }
             else
             {
@@ -151,7 +151,7 @@ namespace LazinatorTests.Examples.Collections
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _MyStructList = default(LazinatorList<WByte>);
+                _MyStructList = null;
             }
             else
             {
@@ -234,7 +234,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (MyList == null)
                 {
-                    typedClone.MyList = default(LazinatorList<ExampleChild>);
+                    typedClone.MyList = null;
                 }
                 else
                 {
@@ -245,7 +245,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (MyStructList == null)
                 {
-                    typedClone.MyStructList = default(LazinatorList<WByte>);
+                    typedClone.MyStructList = null;
                 }
                 else
                 {

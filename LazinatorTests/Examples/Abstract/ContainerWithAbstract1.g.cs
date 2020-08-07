@@ -70,7 +70,7 @@ namespace LazinatorTests.Examples.Abstract
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _AbstractProperty = default(Abstract1);
+                _AbstractProperty = null;
             }
             else
             {
@@ -151,7 +151,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (AbstractProperty == null)
                 {
-                    typedClone.AbstractProperty = default(Abstract1);
+                    typedClone.AbstractProperty = null;
                 }
                 else
                 {

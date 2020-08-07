@@ -425,7 +425,7 @@ namespace LazinatorTests.Examples.Collections
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
-                    collection.Add(default(ExampleChild));
+                    collection.Add(null);
                 }
                 else
                 {
@@ -448,7 +448,7 @@ namespace LazinatorTests.Examples.Collections
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Count);
             foreach (var item in itemToConvert)
             {
-                if (item == default(ExampleChild))
+                if (item == null)
                 {
                     writer.Write((uint)0);
                 }
@@ -474,7 +474,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (item == null)
                 {
-                    collection.Add(default(ExampleChild));
+                    collection.Add(null);
                 }
                 else
                 {

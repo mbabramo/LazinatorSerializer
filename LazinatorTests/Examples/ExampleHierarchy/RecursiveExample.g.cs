@@ -72,7 +72,7 @@ namespace LazinatorTests.Examples.Hierarchy
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _RecursiveClass = default(RecursiveExample);
+                _RecursiveClass = null;
             }
             else
             {
@@ -118,7 +118,7 @@ namespace LazinatorTests.Examples.Hierarchy
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _RecursiveInterface = default(IRecursiveExample);
+                _RecursiveInterface = null;
             }
             else
             {
@@ -199,7 +199,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (RecursiveClass == null)
                 {
-                    typedClone.RecursiveClass = default(RecursiveExample);
+                    typedClone.RecursiveClass = null;
                 }
                 else
                 {
@@ -210,7 +210,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (RecursiveInterface == null)
                 {
-                    typedClone.RecursiveInterface = default(IRecursiveExample);
+                    typedClone.RecursiveInterface = null;
                 }
                 else
                 {

@@ -88,7 +88,7 @@ namespace LazinatorTests.Examples.Structs
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _ListWrappedBytes = default(LazinatorList<WByte>);
+                _ListWrappedBytes = null;
             }
             else
             {
@@ -721,7 +721,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (ListWrappedBytes == null)
                 {
-                    typedClone.ListWrappedBytes = default(LazinatorList<WByte>);
+                    typedClone.ListWrappedBytes = null;
                 }
                 else
                 {

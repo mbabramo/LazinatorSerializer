@@ -99,7 +99,7 @@ namespace LazinatorCollections
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _Offsets = default(LazinatorOffsetList);
+                _Offsets = null;
             }
             else
             {

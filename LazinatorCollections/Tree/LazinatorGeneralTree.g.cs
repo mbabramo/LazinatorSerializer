@@ -77,7 +77,7 @@ namespace LazinatorCollections.Tree
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _Children = default(LazinatorList<LazinatorGeneralTree<T>>);
+                _Children = null;
             }
             else
             {
@@ -220,7 +220,7 @@ namespace LazinatorCollections.Tree
             {
                 if (Children == null)
                 {
-                    typedClone.Children = default(LazinatorList<LazinatorGeneralTree<T>>);
+                    typedClone.Children = null;
                 }
                 else
                 {

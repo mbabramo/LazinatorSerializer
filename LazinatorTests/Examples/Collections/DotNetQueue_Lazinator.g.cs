@@ -425,7 +425,7 @@ namespace LazinatorTests.Examples.Collections
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
-                    collection.Enqueue(default(ExampleChild));
+                    collection.Enqueue(null);
                 }
                 else
                 {
@@ -450,7 +450,7 @@ namespace LazinatorTests.Examples.Collections
             var q = System.Linq.Enumerable.ToList(itemToConvert);
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
-                if (q[itemIndex] == default(ExampleChild))
+                if (q[itemIndex] == null)
                 {
                     writer.Write((uint)0);
                 }
@@ -478,7 +478,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (q[itemIndex] == null)
                 {
-                    collection.Enqueue(default(ExampleChild));
+                    collection.Enqueue(null);
                 }
                 else
                 {

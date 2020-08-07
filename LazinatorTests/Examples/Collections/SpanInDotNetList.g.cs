@@ -443,7 +443,7 @@ namespace LazinatorTests.Examples.Collections
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
-                    collection.Add(default(SpanAndMemory));
+                    collection.Add(null);
                 }
                 else
                 {
@@ -467,7 +467,7 @@ namespace LazinatorTests.Examples.Collections
             int itemToConvertCount = itemToConvert.Count;
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
-                if (itemToConvert[itemIndex] == default(SpanAndMemory))
+                if (itemToConvert[itemIndex] == null)
                 {
                     writer.Write((uint)0);
                 }
@@ -502,7 +502,7 @@ namespace LazinatorTests.Examples.Collections
                 }
                 if (itemToClone[itemIndex] == null)
                 {
-                    collection.Add(default(SpanAndMemory));
+                    collection.Add(null);
                 }
                 else
                 {

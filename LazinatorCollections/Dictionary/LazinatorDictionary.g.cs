@@ -92,7 +92,7 @@ namespace LazinatorCollections.Dictionary
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _Buckets = default(LazinatorList<DictionaryBucket<TKey, TValue>>);
+                _Buckets = null;
             }
             else
             {
@@ -176,7 +176,7 @@ namespace LazinatorCollections.Dictionary
             {
                 if (Buckets == null)
                 {
-                    typedClone.Buckets = default(LazinatorList<DictionaryBucket<TKey, TValue>>);
+                    typedClone.Buckets = null;
                 }
                 else
                 {

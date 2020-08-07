@@ -166,7 +166,7 @@ namespace LazinatorTests.Examples
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _ANonSkippableEarlierExample = default(Example);
+                _ANonSkippableEarlierExample = null;
             }
             else
             {
@@ -212,7 +212,7 @@ namespace LazinatorTests.Examples
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _Example = default(Example);
+                _Example = null;
             }
             else
             {
@@ -258,7 +258,7 @@ namespace LazinatorTests.Examples
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _Example2 = default(Example);
+                _Example2 = null;
             }
             else
             {
@@ -304,7 +304,7 @@ namespace LazinatorTests.Examples
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _Example3 = default(Example);
+                _Example3 = null;
             }
             else
             {
@@ -391,7 +391,7 @@ namespace LazinatorTests.Examples
             {
                 if (ANonSkippableEarlierExample == null)
                 {
-                    typedClone.ANonSkippableEarlierExample = default(Example);
+                    typedClone.ANonSkippableEarlierExample = null;
                 }
                 else
                 {
@@ -402,7 +402,7 @@ namespace LazinatorTests.Examples
             {
                 if (Example == null)
                 {
-                    typedClone.Example = default(Example);
+                    typedClone.Example = null;
                 }
                 else
                 {
@@ -413,7 +413,7 @@ namespace LazinatorTests.Examples
             {
                 if (Example2 == null)
                 {
-                    typedClone.Example2 = default(Example);
+                    typedClone.Example2 = null;
                 }
                 else
                 {
@@ -424,7 +424,7 @@ namespace LazinatorTests.Examples
             {
                 if (Example3 == null)
                 {
-                    typedClone.Example3 = default(Example);
+                    typedClone.Example3 = null;
                 }
                 else
                 {

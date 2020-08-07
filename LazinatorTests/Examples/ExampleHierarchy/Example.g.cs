@@ -302,7 +302,7 @@ namespace LazinatorTests.Examples
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _IncludableChild = default(ExampleChild);
+                _IncludableChild = null;
             }
             else
             {
@@ -349,7 +349,7 @@ namespace LazinatorTests.Examples
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _MyChild1 = default(ExampleChild);
+                _MyChild1 = null;
             }
             else
             {
@@ -396,7 +396,7 @@ namespace LazinatorTests.Examples
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _MyChild2 = default(ExampleChild);
+                _MyChild2 = null;
             }
             else
             {
@@ -442,7 +442,7 @@ namespace LazinatorTests.Examples
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _MyChild2Previous = default(ExampleChild);
+                _MyChild2Previous = null;
             }
             else
             {
@@ -488,7 +488,7 @@ namespace LazinatorTests.Examples
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _MyInterfaceImplementer = default(IExampleNonexclusiveInterface);
+                _MyInterfaceImplementer = null;
             }
             else
             {
@@ -659,7 +659,7 @@ namespace LazinatorTests.Examples
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _ExcludableChild = default(ExampleChild);
+                _ExcludableChild = null;
             }
             else
             {
@@ -764,7 +764,7 @@ namespace LazinatorTests.Examples
             {
                 if (IncludableChild == null)
                 {
-                    typedClone.IncludableChild = default(ExampleChild);
+                    typedClone.IncludableChild = null;
                 }
                 else
                 {
@@ -775,7 +775,7 @@ namespace LazinatorTests.Examples
             {
                 if (MyChild1 == null)
                 {
-                    typedClone.MyChild1 = default(ExampleChild);
+                    typedClone.MyChild1 = null;
                 }
                 else
                 {
@@ -786,7 +786,7 @@ namespace LazinatorTests.Examples
             {
                 if (MyChild2 == null)
                 {
-                    typedClone.MyChild2 = default(ExampleChild);
+                    typedClone.MyChild2 = null;
                 }
                 else
                 {
@@ -797,7 +797,7 @@ namespace LazinatorTests.Examples
             {
                 if (MyChild2Previous == null)
                 {
-                    typedClone.MyChild2Previous = default(ExampleChild);
+                    typedClone.MyChild2Previous = null;
                 }
                 else
                 {
@@ -808,7 +808,7 @@ namespace LazinatorTests.Examples
             {
                 if (MyInterfaceImplementer == null)
                 {
-                    typedClone.MyInterfaceImplementer = default(IExampleNonexclusiveInterface);
+                    typedClone.MyInterfaceImplementer = null;
                 }
                 else
                 {
@@ -824,7 +824,7 @@ namespace LazinatorTests.Examples
             {
                 if (ExcludableChild == null)
                 {
-                    typedClone.ExcludableChild = default(ExampleChild);
+                    typedClone.ExcludableChild = null;
                 }
                 else
                 {

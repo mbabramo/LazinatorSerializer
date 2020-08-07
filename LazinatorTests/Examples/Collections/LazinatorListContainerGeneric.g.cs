@@ -71,7 +71,7 @@ namespace LazinatorTests.Examples.Collections
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _MyList = default(LazinatorList<T>);
+                _MyList = null;
             }
             else
             {
@@ -152,7 +152,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (MyList == null)
                 {
-                    typedClone.MyList = default(LazinatorList<T>);
+                    typedClone.MyList = null;
                 }
                 else
                 {

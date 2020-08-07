@@ -70,7 +70,7 @@ namespace LazinatorTests.Examples.Abstract
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _Item = default(AbstractGeneric1<T>);
+                _Item = null;
             }
             else
             {
@@ -151,7 +151,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (Item == null)
                 {
-                    typedClone.Item = default(AbstractGeneric1<T>);
+                    typedClone.Item = null;
                 }
                 else
                 {

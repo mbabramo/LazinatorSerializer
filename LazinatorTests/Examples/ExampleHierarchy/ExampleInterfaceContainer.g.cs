@@ -73,7 +73,7 @@ namespace LazinatorTests.Examples.Hierarchy
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _ExampleByInterface = default(IExample);
+                _ExampleByInterface = null;
             }
             else
             {
@@ -191,7 +191,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (ExampleByInterface == null)
                 {
-                    typedClone.ExampleByInterface = default(IExample);
+                    typedClone.ExampleByInterface = null;
                 }
                 else
                 {
@@ -534,7 +534,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
-                    collection.Add(default(IExample));
+                    collection.Add(null);
                 }
                 else
                 {
@@ -558,7 +558,7 @@ namespace LazinatorTests.Examples.Hierarchy
             int itemToConvertCount = itemToConvert.Count;
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
-                if (itemToConvert[itemIndex] == default(IExample))
+                if (itemToConvert[itemIndex] == null)
                 {
                     writer.Write((uint)0);
                 }
@@ -593,7 +593,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 }
                 if (itemToClone[itemIndex] == null)
                 {
-                    collection.Add(default(IExample));
+                    collection.Add(null);
                 }
                 else
                 {

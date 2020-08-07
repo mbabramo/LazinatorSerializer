@@ -76,7 +76,7 @@ namespace LazinatorCollections.OffsetList
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _FourByteItems = default(LazinatorFastReadListInt32);
+                _FourByteItems = null;
             }
             else
             {
@@ -135,7 +135,7 @@ namespace LazinatorCollections.OffsetList
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _TwoByteItems = default(LazinatorFastReadListInt16);
+                _TwoByteItems = null;
             }
             else
             {
@@ -232,7 +232,7 @@ namespace LazinatorCollections.OffsetList
             {
                 if (FourByteItems == null)
                 {
-                    typedClone.FourByteItems = default(LazinatorFastReadListInt32);
+                    typedClone.FourByteItems = null;
                 }
                 else
                 {
@@ -243,7 +243,7 @@ namespace LazinatorCollections.OffsetList
             {
                 if (TwoByteItems == null)
                 {
-                    typedClone.TwoByteItems = default(LazinatorFastReadListInt16);
+                    typedClone.TwoByteItems = null;
                 }
                 else
                 {

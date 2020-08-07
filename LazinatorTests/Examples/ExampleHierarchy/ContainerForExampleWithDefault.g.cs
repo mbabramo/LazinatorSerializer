@@ -70,7 +70,7 @@ namespace LazinatorTests.Examples
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _Example = default(Example);
+                _Example = null;
             }
             else
             {
@@ -151,7 +151,7 @@ namespace LazinatorTests.Examples
             {
                 if (Example == null)
                 {
-                    typedClone.Example = default(Example);
+                    typedClone.Example = null;
                 }
                 else
                 {

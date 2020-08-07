@@ -126,7 +126,7 @@ namespace LazinatorTests.Examples
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _MyExampleGrandchild = default(ExampleGrandchild);
+                _MyExampleGrandchild = null;
             }
             else
             {
@@ -172,7 +172,7 @@ namespace LazinatorTests.Examples
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _MyWrapperContainer = default(WrapperContainer);
+                _MyWrapperContainer = null;
             }
             else
             {
@@ -256,7 +256,7 @@ namespace LazinatorTests.Examples
             {
                 if (MyExampleGrandchild == null)
                 {
-                    typedClone.MyExampleGrandchild = default(ExampleGrandchild);
+                    typedClone.MyExampleGrandchild = null;
                 }
                 else
                 {
@@ -267,7 +267,7 @@ namespace LazinatorTests.Examples
             {
                 if (MyWrapperContainer == null)
                 {
-                    typedClone.MyWrapperContainer = default(WrapperContainer);
+                    typedClone.MyWrapperContainer = null;
                 }
                 else
                 {

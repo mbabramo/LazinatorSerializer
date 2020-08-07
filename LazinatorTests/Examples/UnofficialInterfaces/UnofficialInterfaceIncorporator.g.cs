@@ -103,7 +103,7 @@ namespace LazinatorTests.Examples
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _MyOfficialObject = default(Concrete5);
+                _MyOfficialObject = null;
             }
             else
             {
@@ -149,7 +149,7 @@ namespace LazinatorTests.Examples
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _MyUnofficialObject = default(Concrete3);
+                _MyUnofficialObject = null;
             }
             else
             {
@@ -232,7 +232,7 @@ namespace LazinatorTests.Examples
             {
                 if (MyOfficialObject == null)
                 {
-                    typedClone.MyOfficialObject = default(Concrete5);
+                    typedClone.MyOfficialObject = null;
                 }
                 else
                 {
@@ -243,7 +243,7 @@ namespace LazinatorTests.Examples
             {
                 if (MyUnofficialObject == null)
                 {
-                    typedClone.MyUnofficialObject = default(Concrete3);
+                    typedClone.MyUnofficialObject = null;
                 }
                 else
                 {

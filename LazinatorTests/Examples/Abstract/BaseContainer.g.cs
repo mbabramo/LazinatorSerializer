@@ -70,7 +70,7 @@ namespace LazinatorTests.Examples.Abstract
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _MyBase = default(Base);
+                _MyBase = null;
             }
             else
             {
@@ -151,7 +151,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (MyBase == null)
                 {
-                    typedClone.MyBase = default(Base);
+                    typedClone.MyBase = null;
                 }
                 else
                 {

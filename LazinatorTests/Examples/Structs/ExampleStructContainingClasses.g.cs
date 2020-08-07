@@ -99,7 +99,7 @@ namespace LazinatorTests.Examples
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _MyChild1 = default(ExampleChild);
+                _MyChild1 = null;
             }
             else
             {
@@ -136,7 +136,7 @@ namespace LazinatorTests.Examples
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _MyChild2 = default(ExampleChild);
+                _MyChild2 = null;
             }
             else
             {
@@ -349,7 +349,7 @@ namespace LazinatorTests.Examples
             {
                 if (MyChild1 == null)
                 {
-                    typedClone.MyChild1 = default(ExampleChild);
+                    typedClone.MyChild1 = null;
                 }
                 else
                 {
@@ -360,7 +360,7 @@ namespace LazinatorTests.Examples
             {
                 if (MyChild2 == null)
                 {
-                    typedClone.MyChild2 = default(ExampleChild);
+                    typedClone.MyChild2 = null;
                 }
                 else
                 {
@@ -840,7 +840,7 @@ namespace LazinatorTests.Examples
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
-                    collection.Add(default(Example));
+                    collection.Add(null);
                 }
                 else
                 {
@@ -864,7 +864,7 @@ namespace LazinatorTests.Examples
             int itemToConvertCount = itemToConvert.Count;
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
-                if (itemToConvert[itemIndex] == default(Example))
+                if (itemToConvert[itemIndex] == null)
                 {
                     writer.Write((uint)0);
                 }
@@ -899,7 +899,7 @@ namespace LazinatorTests.Examples
                 }
                 if (itemToClone[itemIndex] == null)
                 {
-                    collection.Add(default(Example));
+                    collection.Add(null);
                 }
                 else
                 {

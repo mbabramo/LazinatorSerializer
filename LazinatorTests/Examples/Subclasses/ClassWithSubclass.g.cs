@@ -87,7 +87,7 @@ namespace LazinatorTests.Examples.Subclasses
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _SubclassInstance1 = default(global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass);
+                _SubclassInstance1 = null;
             }
             else
             {
@@ -133,7 +133,7 @@ namespace LazinatorTests.Examples.Subclasses
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _SubclassInstance2 = default(global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass);
+                _SubclassInstance2 = null;
             }
             else
             {
@@ -215,7 +215,7 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 if (SubclassInstance1 == null)
                 {
-                    typedClone.SubclassInstance1 = default(global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass);
+                    typedClone.SubclassInstance1 = null;
                 }
                 else
                 {
@@ -226,7 +226,7 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 if (SubclassInstance2 == null)
                 {
-                    typedClone.SubclassInstance2 = default(global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass);
+                    typedClone.SubclassInstance2 = null;
                 }
                 else
                 {

@@ -76,7 +76,7 @@ namespace LazinatorCollections
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _NextNode = default(LazinatorLinkedListNode<T>);
+                _NextNode = null;
             }
             else
             {
@@ -219,7 +219,7 @@ namespace LazinatorCollections
             {
                 if (NextNode == null)
                 {
-                    typedClone.NextNode = default(LazinatorLinkedListNode<T>);
+                    typedClone.NextNode = null;
                 }
                 else
                 {

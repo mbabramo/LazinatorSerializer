@@ -74,7 +74,7 @@ namespace LazinatorCollections.Tree
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _Locations = default(LazinatorDictionary<T, LazinatorList<WInt>>);
+                _Locations = null;
             }
             else
             {
@@ -109,7 +109,7 @@ namespace LazinatorCollections.Tree
             {
                 if (Locations == null)
                 {
-                    typedClone.Locations = default(LazinatorDictionary<T, LazinatorList<WInt>>);
+                    typedClone.Locations = null;
                 }
                 else
                 {
