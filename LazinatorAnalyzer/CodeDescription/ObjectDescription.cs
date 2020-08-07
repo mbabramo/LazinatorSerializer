@@ -107,8 +107,6 @@ namespace Lazinator.CodeDescription
         internal string HideILazinatorProperty => (Config?.HideILazinatorProperties ?? true) ? $@"[DebuggerBrowsable(DebuggerBrowsableState.Never)]
                     " : "";
 
-
-        // DEBUG: ref struct: base properties without separate method on classes. ALSO, static conversion methods use superclass name.
         public ObjectDescription()
         {
 

@@ -56,7 +56,7 @@ namespace LazinatorAnalyzer.Analyzer
             if (diagnostic.Id == LazinatorCodeAnalyzer.Lazin001 || diagnostic.Id == LazinatorCodeAnalyzer.Lazin002)
             {
                 var syntaxToken = root.FindToken(diagnosticSpan.Start);
-                var declaration = syntaxToken.Parent.AncestorsAndSelf().OfType<TypeDeclarationSyntax>().FirstOrDefault(); // DEBUG -- why is OrDefault needed
+                var declaration = syntaxToken.Parent.AncestorsAndSelf().OfType<TypeDeclarationSyntax>().FirstOrDefault();
 
                 // Register a code action that will invoke the fix.
                 string title = diagnostic.Id == LazinatorCodeAnalyzer.Lazin001 ? Lazin001Title : Lazin002Title;

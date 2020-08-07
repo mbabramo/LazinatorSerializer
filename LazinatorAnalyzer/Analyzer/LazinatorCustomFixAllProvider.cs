@@ -73,7 +73,7 @@ namespace LazinatorAnalyzer.Analyzer
                     FixAllContext nextFixAllContext = GetNextStageFixAllContext(fixAllContext, solutionAfterStage);
                     if (nextFixAllContext == null)
                     {
-                        revisedSolution = solutionAfterStage; // can't do multiple stages at once // DEBUG -- better solution?
+                        revisedSolution = solutionAfterStage; // can't do multiple stages at once 
                     }
                     else
                         revisedSolution = await GenerateRevisedSolution(nextFixAllContext, maxStagesAfterThisOne - 1, documentsAndDiagnosticsToFixMap.Count, removalOnly, true /* don't regenerate things after initial run through -- only worry about things that are stil errors */);
@@ -88,7 +88,7 @@ namespace LazinatorAnalyzer.Analyzer
         {
             FixAllContext.DiagnosticProvider diagnosticProvider = GetDiagnosticProvider(originalContext);
             if (diagnosticProvider == null)
-                return null; // DEBUG -- will that work? null; // Roslyn changed -- won't be able to do multi-stage work
+                return null; // Roslyn changed -- won't be able to do multi-stage work, but analyzer should still be able to perform single stage
             FixAllContext revisedContext;
             if (originalContext.Document != null)
             {
