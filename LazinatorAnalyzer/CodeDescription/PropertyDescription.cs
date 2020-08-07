@@ -349,16 +349,13 @@ namespace Lazinator.CodeDescription
                 SetNullablePropertyType(namedTypeSymbol);
                 if (PropertyType == LazinatorPropertyType.LazinatorStruct)
                     PropertyType = LazinatorPropertyType.LazinatorStructNullable;
-                //DEBUG -- delete following
-                //if (PropertyType == LazinatorPropertyType.LazinatorStruct)
-                //    throw new LazinatorCodeGenException($"Type {typeSymbol} is a nullable Lazinator struct. This is not yet supported. Use WNullableStruct instead.");
                 return;
             }
             else
             {
                 // look for primitive type
                 if (typeSymbol.Name == "string")
-                    Nullable = true; // DEBUG
+                    Nullable = true;
                 if (namedTypeSymbol?.EnumUnderlyingType != null)
                     SetEnumEquivalentType(namedTypeSymbol);
                 if (SupportedAsPrimitives.Contains(EnumEquivalentType ?? ShortTypeNameWithoutNullableIndicator))

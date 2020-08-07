@@ -78,6 +78,8 @@ namespace LazinatorAnalyzer.Settings
                     {
                         RelativeGeneratedCodePath = json[RelativeGeneratedCodePathString];
                         if (RelativeGeneratedCodePath == null)
+                            RelativeGeneratedCodePath = "LazinatorCode"; // needed for test project
+                        if (RelativeGeneratedCodePath == null)
                             GeneratedCodePath = null;
                         else
                             GeneratedCodePath = ConfigFilePath + "\\" + RelativeGeneratedCodePath;
