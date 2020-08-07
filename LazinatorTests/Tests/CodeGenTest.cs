@@ -215,10 +215,10 @@ public class MyOtherClass
         public async Task CodeGenerationProducesActualCode_TestExamples()
         {
             AdhocWorkspace ws = GetAdhocWorkspace();
-            await CompleteGenerateCode(typeof(ExampleStructContainingStruct), "LazinatorTests", "/Examples/", "Structs/", ws); // DEBUG -- delete, repeated below
+            //await CompleteGenerateCode(typeof(ExampleStructContainingStruct), "LazinatorTests", "/Examples/", "Structs/", ws); // Can change this to do a particular example -- then uncomment throw new Exception below
             // NOTE: Debugger seems to be running the test before allowing debugging of the test, so it's producing code prematurely. Thus, 
             // uncommenting the following will stop the run, so that we only run the one file that we want to focus on above.
-            //throw new Exception(""); // DEBUG
+            //throw new Exception(""); 
             await CompleteGenerateCode(typeof(Example), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(ContainerForExampleWithDefault), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(ExampleInterfaceContainer), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);

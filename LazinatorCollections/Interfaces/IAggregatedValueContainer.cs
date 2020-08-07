@@ -16,7 +16,8 @@ namespace LazinatorCollections.Interfaces
         (long firstAggregatedIndex, long lastAggregatedIndex) GetAggregatedIndexRange(long aggregatedIndex);
         long GetNonaggregatedIndex(long aggregatedIndex);
         (long nonaggregatedIndex, long firstAggregatedIndex, long lastAggregatedIndex) GetAggregatedIndexInfo(long aggregatedIndex);
-        // DEBUG
+
+        // TODO
         //T GetAtAggregatedIndex(long aggregatedIndex);
         //void SetAtAggregatedIndex(long aggregatedIndex, T value);
         //void InsertAtAggregatedIndex(long aggregatedIndex, T value);
