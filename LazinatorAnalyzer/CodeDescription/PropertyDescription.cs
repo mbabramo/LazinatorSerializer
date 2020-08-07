@@ -448,7 +448,7 @@ namespace Lazinator.CodeDescription
             string nullCheck;
             if (IsMemoryOrSpan)
                 nullCheck = $"{propertyName}.Length == 0"; // use as equivalent of null
-            else if (IsDefinitelyStruct)
+            else if (IsDefinitelyStruct && PropertyType != LazinatorPropertyType.LazinatorStructNullable)
                 nullCheck = $"false";
             else // could be open generic or class -- either way, what we're interested in is whether this is dereferenceable
                 nullCheck = $"{propertyName} == null";
@@ -1101,7 +1101,11 @@ namespace Lazinator.CodeDescription
                                             return toReturn;
                                         }}
                                     }}
-                                    var cleanCopy = _{PropertyName};
+                                    {IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"if (_{PropertyName} == null)
+                                    {{
+                                        return null;
+                                    }}
+                                    ")}var cleanCopy = _{PropertyName}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@".Value")};
                                     cleanCopy.IsDirty = false;
                                     cleanCopy.DescendantIsDirty = false;
                                     return cleanCopy;
@@ -1128,9 +1132,15 @@ namespace Lazinator.CodeDescription
                             {{
                                 LazinatorParents = new LazinatorParentsCollection(this)
                             }}";
-            
+
             string doCreation = $@"_{PropertyName} = new {AppropriatelyQualifiedNameWithoutNullableIndicator}({ConstructorInitialization}){lazinatorParentClassSet};
-                        _{PropertyName}.DeserializeLazinator(childData);";
+                        ";
+            if (PropertyType == LazinatorPropertyType.LazinatorStructNullable)
+                doCreation += $@" var copy = _{PropertyName}.Value;
+                                copy.DeserializeLazinator(childData);
+                                _{PropertyName} = copy;";
+            else
+                doCreation += $@" _{PropertyName}.DeserializeLazinator(childData);";
             string creation = nullItemCheck == "" ? doCreation : $@"{nullItemCheck}
                     {{
                         {doCreation}
