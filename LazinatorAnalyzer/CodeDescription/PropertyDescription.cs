@@ -1121,7 +1121,7 @@ namespace Lazinator.CodeDescription
         private string GetManualObjectCreation()
         {
             // if the container object containing this property is a struct, then we can't set LazinatorParents. Meanwhile, if this object is a struct, then we don't need to worry about the case of a null item. 
-            string nullItemCheck = PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable
+            string nullItemCheck = PropertyType == LazinatorPropertyType.LazinatorStruct
                 ? ""
                 : $@"if (childData.Length == 0)
                         {{
