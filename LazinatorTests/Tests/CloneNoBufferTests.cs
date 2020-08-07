@@ -20,8 +20,7 @@ namespace LazinatorTests.Tests
     {
         private void VerifyCloningEquivalence(Func<ILazinator> lazinator)
         {
-            var DEBUG = lazinator();
-            VerifyCloningEquivalence(DEBUG, IncludeChildrenMode.ExcludeAllChildren);
+            VerifyCloningEquivalence(lazinator(), IncludeChildrenMode.ExcludeAllChildren);
             VerifyCloningEquivalence(lazinator(), IncludeChildrenMode.IncludeAllChildren);
             VerifyCloningEquivalence(lazinator(), IncludeChildrenMode.ExcludeOnlyExcludableChildren);
             VerifyCloningEquivalence(lazinator(), IncludeChildrenMode.IncludeOnlyIncludableChildren);
@@ -317,6 +316,16 @@ namespace LazinatorTests.Tests
             VerifyCloningEquivalence(() => new ContainerForExampleStructWithoutClass()
             {
                 ExampleStructWithoutClass = new ExampleStructWithoutClass() { MyInt = 3 }
+            });
+        }
+
+        [Fact]
+        public void CloneWithoutBuffer_ContainerForExampleStructWithoutClass_WithNullableStruct()
+        {
+            VerifyCloningEquivalence(() => new ContainerForExampleStructWithoutClass()
+            {
+                ExampleStructWithoutClass = new ExampleStructWithoutClass() { MyInt = 3 },
+                ExampleNullableStruct = new ExampleStructWithoutClass() { MyInt = 4 }
             });
         }
 

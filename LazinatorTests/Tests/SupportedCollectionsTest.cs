@@ -10,6 +10,7 @@ using LazinatorTests.Examples.Tuples;
 using Xunit;
 using Lazinator.Wrappers;
 using Lazinator.Buffers;
+using LazinatorTests.Examples.Structs;
 
 namespace LazinatorTests.Tests
 {
@@ -156,6 +157,31 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDotNetListLazinatorNullableStructs()
         {
+            ExampleContainerContainingClassesStructContainingClasses GetObject()
+            {
+                var returnObj = new ExampleContainerContainingClassesStructContainingClasses()
+                {
+                    MyListNullableExampleStruct = new List<WNullableStruct<ExampleStructContainingClasses>>()
+                    {
+                        new WNullableStruct<ExampleStructContainingClasses>() { AsNullableStruct = new ExampleStructContainingClasses() { MyChar = 'd' } },
+                        new WNullableStruct<ExampleStructContainingClasses>() { AsNullableStruct = null },
+                    },
+                };
+                return returnObj;
+            }
+
+            var original = GetObject();
+            var copy = GetObject();
+            var result = original.CloneLazinatorTyped();
+            result.MyListNullableExampleStruct.Count().Should().Be(2);
+            result.MyListNullableExampleStruct[0].AsNullableStruct.Value.MyChar.Should().Be('d');
+            result.MyListNullableExampleStruct[1].AsNullableStruct.Should().BeNull();
+        }
+
+        [Fact]
+        public void LazinatorDotNetListOrdinaryNullableStructs()
+        {
+            // DEBUG
             ExampleContainerContainingClassesStructContainingClasses GetObject()
             {
                 var returnObj = new ExampleContainerContainingClassesStructContainingClasses()

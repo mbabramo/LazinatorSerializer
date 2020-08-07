@@ -11,6 +11,7 @@ namespace LazinatorTests.Examples
         HashSet<ExampleStructContainingClasses> MyHashSetExampleStruct { get; set; }
         List<ExampleStructContainingClasses> MyListExampleStruct { get; set; }
         List<WNullableStruct<ExampleStructContainingClasses>> MyListNullableExampleStruct { get; set; }
+        List<ExampleStructContainingClasses?> MyListUnwrappedNullableExampleStruct { get; set; }
         WInt IntWrapper { get; set; }
     }
 }
