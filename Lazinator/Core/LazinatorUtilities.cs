@@ -188,7 +188,7 @@ namespace Lazinator.Core
             AddParentToChildless(ref child, parent);
         }
 
-        private static void WriteNullChild(ref BinaryBufferWriter writer, bool restrictLengthTo250Bytes, bool skipLength)
+        public static void WriteNullChild(ref BinaryBufferWriter writer, bool restrictLengthTo250Bytes, bool skipLength)
         {
             if (!skipLength)
             {
