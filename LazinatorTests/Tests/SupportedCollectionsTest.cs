@@ -244,6 +244,32 @@ namespace LazinatorTests.Tests
             result.MyListExampleStruct[1].MyChar.Should().Be('e');
         }
 
+        [Fact]
+        public void LazinatorDotNetListLazinatorNullableStructs()
+        {
+            ExampleContainerContainingClassesStructContainingClasses GetObject()
+            {
+                var returnObj = new ExampleContainerContainingClassesStructContainingClasses()
+                {
+                    MyListUnwrappedNullableExampleStruct = new List<ExampleStructContainingClasses?>()
+                    {
+                        new ExampleStructContainingClasses() { MyChar = 'd'},
+                        null,
+                        new ExampleStructContainingClasses() { MyChar = 'e'},
+                    },
+                };
+                return returnObj;
+            }
+
+            var original = GetObject();
+            var copy = GetObject();
+            var result = original.CloneLazinatorTyped();
+            result.MyListUnwrappedNullableExampleStruct.Count().Should().Be(3);
+            result.MyListUnwrappedNullableExampleStruct[0].Value.MyChar.Should().Be('d');
+            result.MyListUnwrappedNullableExampleStruct[1].HasValue.Should().BeFalse();
+            result.MyListUnwrappedNullableExampleStruct[2].Value.MyChar.Should().Be('e');
+        }
+        
 
         [Fact]
         public void LazinatorDotNetListLazinator_Null()
