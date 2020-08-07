@@ -209,7 +209,7 @@ namespace Lazinator.CodeDescription
                 if (found)
                     yield return o;
                 else
-                    found = o.ILazinatorTypeSymbol == belowThisLevel;
+                    found = SymbolEqualityComparer.Default.Equals(o.ILazinatorTypeSymbol, belowThisLevel);
             }
         }
 

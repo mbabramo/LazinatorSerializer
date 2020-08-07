@@ -342,10 +342,6 @@ namespace Lazinator.CodeDescription
                 return;
             }
 
-            if (ShortTypeName == "ExampleStructContainingClasses")
-            {
-                var DEBUG = 0;
-            }
             Nullable = IsNullableType(namedTypeSymbol);
             if (Nullable)
             {
@@ -376,7 +372,7 @@ namespace Lazinator.CodeDescription
             bool isRecursiveDefinition = false;
             if (namedTypeSymbol != null)
             {
-                if (namedTypeSymbol.Equals(ContainingObjectDescription?.InterfaceTypeSymbol))
+                if (SymbolEqualityComparer.Default.Equals(namedTypeSymbol, ContainingObjectDescription?.InterfaceTypeSymbol))
                 {
                     if (!isILazinator)
                         throw new LazinatorCodeGenException(
@@ -384,7 +380,7 @@ namespace Lazinator.CodeDescription
                     isRecursiveDefinition = true;
                 }
 
-                if (namedTypeSymbol.Equals(ContainingObjectDescription?.ILazinatorTypeSymbol))
+                if (SymbolEqualityComparer.Default.Equals(namedTypeSymbol, ContainingObjectDescription?.ILazinatorTypeSymbol))
                     isRecursiveDefinition = true;
             }
             if (!isILazinator && !isRecursiveDefinition && namedTypeSymbol != null)
@@ -674,7 +670,7 @@ namespace Lazinator.CodeDescription
         {
             // see if the property has already been defined (in case this is a recursive hierarchy)
             foreach (PropertyDescription pd in ContainingPropertyHierarchy())
-                if (pd.TypeSymbolIfNoProperty == typeSymbol)
+                if (SymbolEqualityComparer.Default.Equals(pd.TypeSymbolIfNoProperty, typeSymbol))
                     throw new LazinatorCodeGenException($"The type {typeSymbol} is recursively defined. Recursive record-like types are not supported.");
             return new PropertyDescription(typeSymbol, containingObjectDescription, containingPropertyDescription, propertyName);
         }
@@ -2116,10 +2112,6 @@ namespace Lazinator.CodeDescription
                 }
                 else
                 {
-                    if (itemString.Contains("Item2"))
-                    {
-                        var DEBUG = 0;
-                    }
                     return ($@"
                     void action(ref BinaryBufferWriter w) => {itemString}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, "?")}.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(ref writer, action);");

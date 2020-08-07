@@ -37,7 +37,7 @@ namespace LazinatorAnalyzer.Roslyn
             PropertyWithDefinitionInfo other = (PropertyWithDefinitionInfo) obj;
             if (other == null)
                 return false;
-            return Property.Equals(other.Property) && LevelInfo == other.LevelInfo &&
+            return SymbolEqualityComparer.Default.Equals(Property, other.Property) && LevelInfo == other.LevelInfo &&
                    DerivationKeyword == other.DerivationKeyword;
         }
 

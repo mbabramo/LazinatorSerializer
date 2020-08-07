@@ -480,7 +480,7 @@ namespace LazinatorCodeGen.Roslyn
                     if (parameters.All(x => properties.Any(y => y.Property.Name.ToUpper() == x.Name.ToUpper())))
                     {
                         List<(IParameterSymbol parameterSymbol, IPropertySymbol property)> parametersAndProperties = parameters.Select(x => (x, properties.FirstOrDefault(y => y.Property.Name.ToUpper() == x.Name.ToUpper()).Property)).ToList();
-                        if (parametersAndProperties.Any(x => !x.parameterSymbol.Type.Equals(x.property.Type)))
+                        if (parametersAndProperties.Any(x => !SymbolEqualityComparer.Default.Equals(x.parameterSymbol.Type, x.property.Type)))
                             continue;
                         // we have found the constructor for our record like type
                         PropertiesForType[typeName] = properties.ToList();
