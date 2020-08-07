@@ -83,6 +83,7 @@ namespace Lazinator.CodeDescription
         internal string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
         private string FullyQualifiedNameWithoutNullableIndicator => WithoutNullableIndicator(FullyQualifiedTypeName);
         internal string AppropriatelyQualifiedTypeName => UseFullyQualifiedNames ? FullyQualifiedTypeName : ShortTypeName;
+        public string DefaultExpression => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? "null" : $"default({AppropriatelyQualifiedTypeName})"; // DEBUG -- can we just use null whenever nullable?
         private string AppropriatelyQualifiedTypeNameWithoutNullableIndicator => UseFullyQualifiedNames ? FullyQualifiedNameWithoutNullableIndicator : ShortTypeNameWithoutNullableIndicator;
 
         internal string ShortTypeNameEncodable => Symbol.GetEncodableVersionOfIdentifier(false);
@@ -945,7 +946,7 @@ namespace Lazinator.CodeDescription
             // Lazinator has not previously been accessed. We need both code to create a default value (if there is no underlying memory) and 
             // to recreate the value by deserializing, if there is underlying memory.
             // Here's the create default code:
-            string createDefault = $@"_{PropertyName} = default({AppropriatelyQualifiedTypeName});{IIF(IsNonLazinatorType && TrackDirtinessNonSerialized, $@"
+            string createDefault = $@"_{PropertyName} = {DefaultExpression};{IIF(IsNonLazinatorType && TrackDirtinessNonSerialized, $@"
                                         _{PropertyName}_Dirty = true; ")}";
             if (IsLazinatorStruct)
                 createDefault = $@"_{PropertyName} = default({ AppropriatelyQualifiedTypeName});{IIF(ContainerIsClass && PropertyType != LazinatorPropertyType.LazinatorStructNullable, $@"
@@ -1090,7 +1091,7 @@ namespace Lazinator.CodeDescription
                                     {{
                                         if (LazinatorObjectBytes.Length == 0)
                                         {{
-                                            return default({AppropriatelyQualifiedTypeName});
+                                            return {DefaultExpression};
                                         }}
                                         else
                                         {{
@@ -1489,7 +1490,7 @@ namespace Lazinator.CodeDescription
             if (IsLazinator)
             {
                 copyInstruction = GetNullCheckIfThen("", PropertyName,
-                    $"{nameOfCloneVariable}.{PropertyName} = default({AppropriatelyQualifiedTypeName});",
+                    $"{nameOfCloneVariable}.{PropertyName} = {DefaultExpression};",
                     $@"{nameOfCloneVariable}.{PropertyName} = ({AppropriatelyQualifiedTypeName}) {PropertyName}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, ".Value")}.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);");
             }
             else if (IsPrimitive)
@@ -1643,7 +1644,7 @@ namespace Lazinator.CodeDescription
 
                     private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                     {{
-                        {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory ? "" : $@"if (itemToConvert == default({AppropriatelyQualifiedTypeName}))
+                        {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory ? "" : $@"if (itemToConvert == {DefaultExpression})
                         {{
                             return;
                         }}
@@ -1891,7 +1892,7 @@ namespace Lazinator.CodeDescription
                     {{
                         if (storage.Length == 0)
                         {{
-                            return default({AppropriatelyQualifiedTypeName});
+                            return {DefaultExpression};
                         }}
                         ReadOnlySpan<byte> span = storage.Span;
 
@@ -2045,20 +2046,20 @@ namespace Lazinator.CodeDescription
                 if (outerProperty.ArrayRank == 1)
                 {
                     collectionAddItem = "collection[itemIndex] = item;";
-                    collectionAddNull = $"collection[itemIndex] = default({AppropriatelyQualifiedTypeName});";
+                    collectionAddNull = $"collection[itemIndex] = {DefaultExpression};";
                 }
                 else
                 {
 
                     string innerArrayText = (String.Join(", ", Enumerable.Range(0, (int)outerProperty.ArrayRank).Select(j => $"itemIndex{j}")));
                     collectionAddItem = $"collection[{innerArrayText}] = item;";
-                    collectionAddNull = $"collection[{innerArrayText}] = default({AppropriatelyQualifiedTypeName});";
+                    collectionAddNull = $"collection[{innerArrayText}] = {DefaultExpression};";
                 }
             }
             else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Memory || outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory)
             {
                 collectionAddItem = "collectionAsSpan[itemIndex] = item;";
-                collectionAddNull = $"collectionAsSpan[itemIndex] = default({AppropriatelyQualifiedTypeName});";
+                collectionAddNull = $"collectionAsSpan[itemIndex] = {DefaultExpression};";
             }
             else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Dictionary || outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.SortedDictionary || outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.SortedList)
             {
@@ -2069,22 +2070,22 @@ namespace Lazinator.CodeDescription
             else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Queue)
             {
                 collectionAddItem = "collection.Enqueue(item);";
-                collectionAddNull = $"collection.Enqueue(default({AppropriatelyQualifiedTypeName}));";
+                collectionAddNull = $"collection.Enqueue({DefaultExpression});";
             }
             else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.Stack)
             {
                 collectionAddItem = "collection.Push(item);";
-                collectionAddNull = $"collection.Push(default({AppropriatelyQualifiedTypeName}));";
+                collectionAddNull = $"collection.Push({DefaultExpression});";
             }
             else if (outerProperty.SupportedCollectionType == LazinatorSupportedCollectionType.LinkedList)
             {
                 collectionAddItem = "collection.AddLast(item);";
-                collectionAddNull = $"collection.AddLast(default({AppropriatelyQualifiedTypeName}));";
+                collectionAddNull = $"collection.AddLast({DefaultExpression});";
             }
             else
             {
                 collectionAddItem = "collection.Add(item);";
-                collectionAddNull = $"collection.Add(default({AppropriatelyQualifiedTypeName}));";
+                collectionAddNull = $"collection.Add({DefaultExpression});";
             }
         }
 
@@ -2104,9 +2105,12 @@ namespace Lazinator.CodeDescription
                     return ($@"
                     void action(ref BinaryBufferWriter w) 
                     {{
-                        var copy = {itemString};
-                        copy.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                        {itemString} = copy;
+                        var copy = {itemString};{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
+                        if (copy != null)
+                        {{")}
+                        copy.{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, "Value.")}SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                        {itemString} = copy;{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
+                        }}")}
                     }}
                     WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(ref writer, action);");
                 }
@@ -2125,7 +2129,7 @@ namespace Lazinator.CodeDescription
                 else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
                     fullWriteCommands =
                         $@"
-                    if (System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({itemString}, default({AppropriatelyQualifiedTypeName})))
+                    if (System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({itemString}, {DefaultExpression}))
                     {{
                         writer.Write((uint)0);
                     }}
@@ -2137,7 +2141,7 @@ namespace Lazinator.CodeDescription
                 else
                     fullWriteCommands =
                         $@"
-                    if ({itemString} == default({AppropriatelyQualifiedTypeName}))
+                    if ({itemString} == {DefaultExpression})
                     {{
                         {WriteDefaultLengthString}
                     }}
@@ -2346,7 +2350,7 @@ namespace Lazinator.CodeDescription
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
                     {{
-                        {IIF(Nullable, GetNullCheckIfThen("", "itemToConvert", $@"return default({AppropriatelyQualifiedTypeName});", ""))}{IIF(Nullable,$@"
+                        {IIF(Nullable, GetNullCheckIfThen("", "itemToConvert", $@"return {DefaultExpression};", ""))}{IIF(Nullable,$@"
                             ")}return {creationText};
                     }}
             ");
@@ -2371,7 +2375,7 @@ namespace Lazinator.CodeDescription
                         {{
                             if (storage.Length == 0)
                             {{
-                                return default({AppropriatelyQualifiedTypeName});
+                                return {DefaultExpression};
                             }}
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}();
                             interchange.DeserializeLazinator(storage);
@@ -2390,7 +2394,7 @@ namespace Lazinator.CodeDescription
 
                         private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
                         {{
-                            {GetNullCheckIfThen("", "itemToClone", $"return default({AppropriatelyQualifiedTypeName});", "")}
+                            {GetNullCheckIfThen("", "itemToClone", $"return {DefaultExpression};", "")}
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}(itemToClone);
                             return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}(avoidCloningIfPossible ? false : true);
                         }}

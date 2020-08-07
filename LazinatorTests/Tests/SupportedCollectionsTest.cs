@@ -179,17 +179,16 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void LazinatorDotNetListOrdinaryNullableStructs()
+        public void LazinatorDotNetListUnwrappedNullableStructs()
         {
-            // DEBUG
             ExampleContainerContainingClassesStructContainingClasses GetObject()
             {
                 var returnObj = new ExampleContainerContainingClassesStructContainingClasses()
                 {
-                    MyListNullableExampleStruct = new List<WNullableStruct<ExampleStructContainingClasses>>()
+                    MyListUnwrappedNullableExampleStruct = new List<ExampleStructContainingClasses?>()
                     {
-                        new WNullableStruct<ExampleStructContainingClasses>() { AsNullableStruct = new ExampleStructContainingClasses() { MyChar = 'd' } },
-                        new WNullableStruct<ExampleStructContainingClasses>() { AsNullableStruct = null },
+                        new ExampleStructContainingClasses() { MyChar = 'd' },
+                        null
                     },
                 };
                 return returnObj;
@@ -198,9 +197,9 @@ namespace LazinatorTests.Tests
             var original = GetObject();
             var copy = GetObject();
             var result = original.CloneLazinatorTyped();
-            result.MyListNullableExampleStruct.Count().Should().Be(2);
-            result.MyListNullableExampleStruct[0].AsNullableStruct.Value.MyChar.Should().Be('d');
-            result.MyListNullableExampleStruct[1].AsNullableStruct.Should().BeNull();
+            result.MyListUnwrappedNullableExampleStruct.Count().Should().Be(2);
+            result.MyListUnwrappedNullableExampleStruct[0].Value.MyChar.Should().Be('d');
+            result.MyListUnwrappedNullableExampleStruct[1].Should().BeNull();
         }
 
         [Fact]

@@ -7,7 +7,5 @@ namespace LazinatorTests.Examples
         public ExampleContainerContainingClassesStructContainingClasses()
         {
         }
-
-        public List<ExampleStructContainingClasses?> MyListUnwrappedNullableExampleStruct { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
     }
 }
