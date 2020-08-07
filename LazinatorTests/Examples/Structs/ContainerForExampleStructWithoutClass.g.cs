@@ -54,7 +54,6 @@ namespace LazinatorTests.Examples.Structs
         }
         
         protected ExampleStructWithoutClass? _ExampleNullableStruct;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public ExampleStructWithoutClass? ExampleNullableStruct
         {
             get
@@ -91,13 +90,20 @@ namespace LazinatorTests.Examples.Structs
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleNullableStruct_ByteIndex, _ExampleNullableStruct_ByteLength, false, false, null);
-                _ExampleNullableStruct = new ExampleStructWithoutClass()
+                if (childData.Length == 0)
                 {
-                    LazinatorParents = new LazinatorParentsCollection(this)
-                };
-                var copy = _ExampleNullableStruct.Value;
-                copy.DeserializeLazinator(childData);
-                _ExampleNullableStruct = copy;
+                    _ExampleNullableStruct = default(ExampleStructWithoutClass?);
+                }
+                else
+                {
+                    _ExampleNullableStruct = new ExampleStructWithoutClass()
+                    {
+                        LazinatorParents = new LazinatorParentsCollection(this)
+                    };
+                    var copy = _ExampleNullableStruct.Value;
+                    copy.DeserializeLazinator(childData);
+                    _ExampleNullableStruct = copy;
+                }
             }
             _ExampleNullableStruct_Accessed = true;
         }

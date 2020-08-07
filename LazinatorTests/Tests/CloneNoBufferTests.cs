@@ -20,7 +20,8 @@ namespace LazinatorTests.Tests
     {
         private void VerifyCloningEquivalence(Func<ILazinator> lazinator)
         {
-            VerifyCloningEquivalence(lazinator(), IncludeChildrenMode.ExcludeAllChildren);
+            var DEBUG = lazinator();
+            VerifyCloningEquivalence(DEBUG, IncludeChildrenMode.ExcludeAllChildren);
             VerifyCloningEquivalence(lazinator(), IncludeChildrenMode.IncludeAllChildren);
             VerifyCloningEquivalence(lazinator(), IncludeChildrenMode.ExcludeOnlyExcludableChildren);
             VerifyCloningEquivalence(lazinator(), IncludeChildrenMode.IncludeOnlyIncludableChildren);
