@@ -11,6 +11,7 @@ namespace LazinatorTests.Examples.Tuples
         Tuple<uint, ExampleChild, NonLazinatorClass> MyTupleSerialized2 { get; set; }
         Tuple<uint?, ExampleChild, NonLazinatorClass> MyTupleSerialized3 { get; set; }
         Tuple<int, ExampleStructContainingClasses> MyTupleSerialized4 { get; set; }
+        Tuple<int, ExampleStructContainingClasses?> MyTupleSerialized5 { get; set; }
         List<Tuple<uint, ExampleChild, NonLazinatorClass>> MyListTuple { get; set; }
     }
 }

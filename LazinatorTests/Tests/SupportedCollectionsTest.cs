@@ -155,7 +155,7 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void LazinatorDotNetListLazinatorNullableStructs()
+        public void LazinatorDotNetListWrappedNullableStructs()
         {
             ExampleContainerContainingClassesStructContainingClasses GetObject()
             {
@@ -315,6 +315,25 @@ namespace LazinatorTests.Tests
             var copyWithGoal = GetObject();
             var result = original.CloneLazinatorTyped();
             result.MyTupleSerialized4.Item2.MyChar.Should().Be('5');
+        }
+
+        [Fact]
+        public void Lazinator_NullableRegularTuple_NullableStruct()
+        {
+            RegularTuple GetObject()
+            {
+                return new RegularTuple()
+                {
+                    MyTupleSerialized4 = new Tuple<int, ExampleStructContainingClasses>(3, new ExampleStructContainingClasses() { MyChar = '5' })
+                };
+            }
+
+            var original = GetObject();
+            var copy = GetObject();
+            var copyWithGoal = GetObject();
+            var result = original.CloneLazinatorTyped();
+            result.MyTupleSerialized4.Item2.MyChar.Should().Be('5');
+            throw new NotImplementedException("Change to Serialized5");
         }
 
         [Fact]

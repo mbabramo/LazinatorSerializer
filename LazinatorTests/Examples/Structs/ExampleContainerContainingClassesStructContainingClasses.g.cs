@@ -1071,7 +1071,7 @@ namespace LazinatorTests.Examples
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
-                    collection.Add(default(ExampleStructContainingClasses?));
+                    collection.Add(null);
                 }
                 else
                 {
@@ -1095,7 +1095,7 @@ namespace LazinatorTests.Examples
             int itemToConvertCount = itemToConvert.Count;
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
-                if (itemToConvert[itemIndex] == null) // DEBUG -- changed default(ExampleStructContainingClasses?) to null
+                if (itemToConvert[itemIndex] == null)
                 {
                     writer.Write((uint)0);
                 }
@@ -1138,7 +1138,7 @@ namespace LazinatorTests.Examples
                 }
                 if (itemToClone[itemIndex] == null)
                 {
-                    collection.Add(default(ExampleStructContainingClasses?));
+                    collection.Add(null);
                 }
                 else
                 {

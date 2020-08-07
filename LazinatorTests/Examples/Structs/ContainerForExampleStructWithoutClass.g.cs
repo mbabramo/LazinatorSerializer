@@ -118,7 +118,7 @@ namespace LazinatorTests.Examples.Structs
                 {
                     if (LazinatorObjectBytes.Length == 0)
                     {
-                        return default(ExampleStructWithoutClass?);
+                        return null;
                     }
                     else
                     {
@@ -279,7 +279,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (ExampleNullableStruct == null)
                 {
-                    typedClone.ExampleNullableStruct = default(ExampleStructWithoutClass?);
+                    typedClone.ExampleNullableStruct = null;
                 }
                 else
                 {
