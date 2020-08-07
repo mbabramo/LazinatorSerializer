@@ -898,7 +898,7 @@ namespace Lazinator.CodeDescription
                 sb.Append($@"if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
                         {{
                             {IIF(property.GetNonNullCheck(false) == "true", $@"var deserialized = {propertyName};
-                            ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) _{propertyName}.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
+                            ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) _{propertyName}{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable, ".Value")}.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
                         }}
 ");
             }
@@ -1145,7 +1145,7 @@ namespace Lazinator.CodeDescription
             {
                 sb.AppendLine($@"if ({property.GetNonNullCheck(true)})
                 {{
-                    _{property.PropertyName}.UpdateStoredBuffer(ref writer, startPosition + _{property.PropertyName}_ByteIndex{property.IncrementChildStartBySizeOfLength}, _{property.PropertyName}_ByteLength{property.DecrementTotalLengthBySizeOfLength}, IncludeChildrenMode.IncludeAllChildren, true);
+                    _{property.PropertyName}{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable, ".Value")}.UpdateStoredBuffer(ref writer, startPosition + _{property.PropertyName}_ByteIndex{property.IncrementChildStartBySizeOfLength}, _{property.PropertyName}_ByteLength{property.DecrementTotalLengthBySizeOfLength}, IncludeChildrenMode.IncludeAllChildren, true);
                 }}");
             }
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && x.PlaceholderMemoryWriteMethod == null))
