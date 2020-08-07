@@ -11,5 +11,6 @@ namespace LazinatorTests.Examples.Tuples
         (int MyFirstItem, double MySecondItem) MyNamedTuple { get; set; }
         (TestEnum firstEnum, TestEnum anotherEnum) EnumTuple { get; set; }
         (WInt, WInt) MyValueTupleStructs { get; set; }
+        (ExampleStructContainingClasses?, ExampleStructContainingClasses?, ExampleStructContainingClasses?) MyValueTupleNullableStructs { get; set; }
     }
 }

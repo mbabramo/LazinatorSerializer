@@ -2115,9 +2115,15 @@ namespace Lazinator.CodeDescription
                     WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(ref writer, action);");
                 }
                 else
+                {
+                    if (itemString.Contains("Item2"))
+                    {
+                        var DEBUG = 0;
+                    }
                     return ($@"
                     void action(ref BinaryBufferWriter w) => {itemString}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, "?")}.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(ref writer, action);");
+                }
             }
 
             string writeCommand = GetSupportedCollectionWriteCommandsHelper();
@@ -2302,9 +2308,9 @@ namespace Lazinator.CodeDescription
             }
             else
             {
-                if (PropertyType == LazinatorPropertyType.LazinatorStruct)
+                if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable)
                     return ($@"
-                        void action{itemName}(ref BinaryBufferWriter w) => {itemToConvertItemName}.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                        void action{itemName}(ref BinaryBufferWriter w) => {itemToConvertItemName}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, "?")}.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                         WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(ref writer, action{itemName});");
                 else
                     return ($@"

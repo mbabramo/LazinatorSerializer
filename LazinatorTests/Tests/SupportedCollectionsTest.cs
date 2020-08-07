@@ -324,7 +324,7 @@ namespace LazinatorTests.Tests
             {
                 return new RegularTuple()
                 {
-                    MyTupleSerialized4 = new Tuple<int, ExampleStructContainingClasses>(3, new ExampleStructContainingClasses() { MyChar = '5' })
+                    MyTupleSerialized5 = new Tuple<int, ExampleStructContainingClasses?>(3, new ExampleStructContainingClasses() { MyChar = '5' })
                 };
             }
 
@@ -332,8 +332,25 @@ namespace LazinatorTests.Tests
             var copy = GetObject();
             var copyWithGoal = GetObject();
             var result = original.CloneLazinatorTyped();
-            result.MyTupleSerialized4.Item2.MyChar.Should().Be('5');
-            throw new NotImplementedException("Change to Serialized5");
+            result.MyTupleSerialized5.Item2.Value.MyChar.Should().Be('5');
+        }
+
+        [Fact]
+        public void Lazinator_NullableRegularTuple_NullableStructIsNull()
+        {
+            RegularTuple GetObject()
+            {
+                return new RegularTuple()
+                {
+                    MyTupleSerialized5 = new Tuple<int, ExampleStructContainingClasses?>(3, null)
+                };
+            }
+
+            var original = GetObject();
+            var copy = GetObject();
+            var copyWithGoal = GetObject();
+            var result = original.CloneLazinatorTyped();
+            result.MyTupleSerialized5.Item2.HasValue.Should().BeFalse();
         }
 
         [Fact]
@@ -862,6 +879,24 @@ namespace LazinatorTests.Tests
             var result = original.CloneLazinatorTyped();
             result.MyValueTupleStructs.Item1.WrappedValue.Should().Be(3);
             result.MyValueTupleStructs.Item2.WrappedValue.Should().Be(4);
+        }
+
+        [Fact]
+        public void LazinatorValueTuple_LazinatorNullableStructs()
+        {
+            StructTuple GetObject()
+            {
+                return new StructTuple()
+                {
+                    MyValueTupleNullableStructs = (new ExampleStructContainingClasses() { MyChar = 'a' }, null, new ExampleStructContainingClasses() { MyChar = 'b' })
+                };
+            }
+
+            var original = GetObject();
+            var result = original.CloneLazinatorTyped();
+            result.MyValueTupleNullableStructs.Item1.Value.MyChar.Should().Be('a');
+            result.MyValueTupleNullableStructs.Item2.HasValue.Should().BeFalse();
+            result.MyValueTupleNullableStructs.Item3.Value.MyChar.Should().Be('b');
         }
 
         [Fact]

@@ -1072,15 +1072,8 @@ namespace LazinatorTests.Examples.Tuples
             
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Item1);
             
-            if (itemToConvert.Item2 == null)
-            {
-                writer.Write((uint)0);
-            }
-            else
-            {
-                void actionItem2(ref BinaryBufferWriter w) => itemToConvert.Item2?.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                WriteToBinaryWithIntLengthPrefix(ref writer, actionItem2);
-            };
+            void actionItem2(ref BinaryBufferWriter w) => itemToConvert.Item2?.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+            WriteToBinaryWithIntLengthPrefix(ref writer, actionItem2);
         }
         
         private static Tuple<int, ExampleStructContainingClasses?> CloneOrChange_Tuple_Gint_c_C32ExampleStructContainingClasses_C63_g(Tuple<int, ExampleStructContainingClasses?> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
