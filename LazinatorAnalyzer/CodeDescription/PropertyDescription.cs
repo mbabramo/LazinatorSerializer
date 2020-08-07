@@ -83,7 +83,7 @@ namespace Lazinator.CodeDescription
         internal string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
         private string FullyQualifiedNameWithoutNullableIndicator => WithoutNullableIndicator(FullyQualifiedTypeName);
         internal string AppropriatelyQualifiedTypeName => UseFullyQualifiedNames ? FullyQualifiedTypeName : ShortTypeName;
-        private string AppropriatelyQualifiedNameWithoutNullableIndicator => UseFullyQualifiedNames ? FullyQualifiedNameWithoutNullableIndicator : ShortTypeNameWithoutNullableIndicator;
+        private string AppropriatelyQualifiedTypeNameWithoutNullableIndicator => UseFullyQualifiedNames ? FullyQualifiedNameWithoutNullableIndicator : ShortTypeNameWithoutNullableIndicator;
 
         internal string ShortTypeNameEncodable => Symbol.GetEncodableVersionOfIdentifier(false);
         private string ShortTypeNameEncodableWithoutNullable => (Symbol as INamedTypeSymbol).TypeArguments[0].GetEncodableVersionOfIdentifier(false);
@@ -464,7 +464,7 @@ namespace Lazinator.CodeDescription
             {
                 if (IsMemoryOrSpan)
                     nonNullCheck = $"{propertyName}.Length != 0"; // use as equivalent of null
-                else if (IsDefinitelyStruct)
+                else if (IsDefinitelyStruct && PropertyType != LazinatorPropertyType.LazinatorStructNullable)
                     nonNullCheck = "true";
                 else
                     nonNullCheck = $"_{propertyName}_Accessed && _{propertyName} != null";
@@ -473,7 +473,7 @@ namespace Lazinator.CodeDescription
             {
                 if (IsMemoryOrSpan)
                     nonNullCheck = $"{propertyName}.Length != 0"; // use as equivalent of nullelse
-                else if (IsDefinitelyStruct)
+                else if (IsDefinitelyStruct && PropertyType != LazinatorPropertyType.LazinatorStructNullable)
                     nonNullCheck = "true";
                 else
                     nonNullCheck = $"{propertyName} != null";
@@ -1095,7 +1095,7 @@ namespace Lazinator.CodeDescription
                                         else
                                         {{
                                             LazinatorMemory childData = {ChildSliceString};
-                                            var toReturn = new {AppropriatelyQualifiedTypeName}();
+                                            var toReturn = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}();
                                             toReturn.DeserializeLazinator(childData);
                                             toReturn.IsDirty = false;
                                             return toReturn;
@@ -1133,7 +1133,7 @@ namespace Lazinator.CodeDescription
                                 LazinatorParents = new LazinatorParentsCollection(this)
                             }}";
 
-            string doCreation = $@"_{PropertyName} = new {AppropriatelyQualifiedNameWithoutNullableIndicator}({ConstructorInitialization}){lazinatorParentClassSet};
+            string doCreation = $@"_{PropertyName} = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}({ConstructorInitialization}){lazinatorParentClassSet};
                         ";
             if (PropertyType == LazinatorPropertyType.LazinatorStructNullable)
                 doCreation += $@" var copy = _{PropertyName}.Value;
@@ -1480,7 +1480,7 @@ namespace Lazinator.CodeDescription
             {
                 copyInstruction = GetNullCheckIfThen("", PropertyName,
                     $"{nameOfCloneVariable}.{PropertyName} = default({AppropriatelyQualifiedTypeName});",
-                    $@"{nameOfCloneVariable}.{PropertyName} = ({AppropriatelyQualifiedTypeName}) {PropertyName}.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);");
+                    $@"{nameOfCloneVariable}.{PropertyName} = ({AppropriatelyQualifiedTypeName}) {PropertyName}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, ".Value")}.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);");
             }
             else if (IsPrimitive)
                 copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {PropertyName};";
@@ -1917,7 +1917,7 @@ namespace Lazinator.CodeDescription
             else if (IsMemoryOrSpan)
             {
                 creationText =
-                    $@"{AppropriatelyQualifiedNameWithoutNullableIndicator} collection = new {AppropriatelyQualifiedNameWithoutNullableIndicator}(new {InnerProperties[0].AppropriatelyQualifiedTypeName}[collectionLength]);
+                    $@"{AppropriatelyQualifiedTypeNameWithoutNullableIndicator} collection = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}(new {InnerProperties[0].AppropriatelyQualifiedTypeName}[collectionLength]);
                             var collectionAsSpan = collection.Span;"; // for now, create array on the heap
                 if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory)
                     creationText = creationText.Replace("ReadOnlyMemory<", "Memory<"); // we must use Memory here so that it can be assigned to
@@ -2177,7 +2177,7 @@ namespace Lazinator.CodeDescription
             string itemnamesLowercase = String.Join(", ", Enumerable.Range(1, InnerProperties.Count).Select(x => "item" + x));
             sb.Append(
                     $@"
-                        var tupleType = {(SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? "" : $"new {AppropriatelyQualifiedNameWithoutNullableIndicator}")}({itemnamesLowercase});
+                        var tupleType = {(SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? "" : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}")}({itemnamesLowercase});
 
                         return tupleType;
                     }}
@@ -2332,7 +2332,7 @@ namespace Lazinator.CodeDescription
                         (x, y) => new { InnerProperty = x, ItemString = "(" + propertyAccess + y + (Nullable && !x.Nullable ? " ?? default" : "") + ")" })
                     .Select(z => z.InnerProperty.GetCloneStringWithinCloneMethod(z.ItemString))
                 );
-            string creationText = SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? $"({innerClones})" : $"new {AppropriatelyQualifiedNameWithoutNullableIndicator}({innerClones})";
+            string creationText = SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? $"({innerClones})" : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}({innerClones})";
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
                     {{
