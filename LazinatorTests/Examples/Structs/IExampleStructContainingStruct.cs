@@ -6,6 +6,6 @@ namespace LazinatorTests.Examples
     public interface IExampleStructContainingStruct
     {
         ExampleStructContainingClasses MyExampleStructContainingClasses { get; set; }
-        // ExampleStructContainingClasses? MyExampleNullableStruct { get; set; }
+        ExampleStructContainingClasses? MyExampleNullableStruct { get; set; }
     }
 }

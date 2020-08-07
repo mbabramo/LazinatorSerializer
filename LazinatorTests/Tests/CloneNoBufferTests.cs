@@ -330,11 +330,32 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void CloneWithoutBuffer_ContainerForExampleStructWithoutClass_WithNullableStruct_Null()
+        {
+            VerifyCloningEquivalence(() => new ContainerForExampleStructWithoutClass()
+            {
+                ExampleStructWithoutClass = new ExampleStructWithoutClass() { MyInt = 3 },
+                ExampleNullableStruct = null
+            });
+        }
+
+        [Fact]
         public void CloneWithoutBuffer_ExampleStructContainingStruct()
         {
             VerifyCloningEquivalence(() => new ExampleStructContainingStruct()
             {
-                MyExampleStructContainingClasses = new ExampleStructContainingClasses() { MyChar = 'z', MyLazinatorList = new List<Example>() }
+                MyExampleStructContainingClasses = new ExampleStructContainingClasses() { MyChar = 'z', MyLazinatorList = new List<Example>() },
+                MyExampleNullableStruct = new ExampleStructContainingClasses() { MyChar = 'a' }
+            });
+        }
+
+        [Fact]
+        public void CloneWithoutBuffer_ExampleStructContainingStruct_WithNullNullableStruct()
+        {
+            VerifyCloningEquivalence(() => new ExampleStructContainingStruct()
+            {
+                MyExampleStructContainingClasses = new ExampleStructContainingClasses() { MyChar = 'z', MyLazinatorList = new List<Example>() },
+                MyExampleNullableStruct = null
             });
         }
 
