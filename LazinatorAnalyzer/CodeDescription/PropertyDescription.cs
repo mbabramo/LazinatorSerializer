@@ -1445,31 +1445,33 @@ namespace Lazinator.CodeDescription
 
         private void AppendPropertyWriteString_Lazinator(CodeStringBuilder sb)
         {
-            string writeString = null;
+            string withInclusionConditional = null;
             string propertyNameOrCopy = PropertyType == LazinatorPropertyType.LazinatorStructNullable ? "copy" : $"_{PropertyName}";
+            Func<string, string> lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen("", $"_{PropertyName}", $"WriteNullChild(ref writer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")});", originalString) : originalString;
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct)
             {
-                writeString =
-                    CreateConditional(WriteInclusionConditional, $@"{EnsureDeserialized()}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"var copy = _{PropertyName}.Value;
+                string mainWriteString = $@"{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"var copy = _{PropertyName}.Value;
                             ")}WriteChild(ref writer, ref {propertyNameOrCopy}, includeChildrenMode, _{PropertyName}_Accessed, () => {ChildSliceString}, verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, this);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
-                                _{PropertyName} = copy;")}");
+                                _{PropertyName} = copy;")}";
+                withInclusionConditional =
+                    CreateConditional(WriteInclusionConditional, $@"{EnsureDeserialized()}{lazinatorNullableStructNullCheck(mainWriteString)}");
             }
             else
             {
                 // for structs, we can't pass local struct variables in the lambda, so we have to copy them over. We'll assume we have to do this with open generics too.
-                writeString =
-                    $@"{WriteInclusionConditional} 
-                        {{
-                            {EnsureDeserialized()}var serializedBytesCopy = LazinatorMemoryStorage;
+                string mainWriteString = $@"var serializedBytesCopy = LazinatorMemoryStorage;
                             var byteIndexCopy = _{PropertyName}_ByteIndex;
                             var byteLengthCopy = _{PropertyName}_ByteLength;
                             {IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"var copy = _{PropertyName}.Value;
                             ")}WriteChild(ref writer, ref {propertyNameOrCopy}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy{ChildSliceEndString}), verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, null);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
-                                _{PropertyName} = copy;")}
+                                _{PropertyName} = copy;")}";
+                withInclusionConditional =
+                    $@"{WriteInclusionConditional} 
+                        {{
+                            {EnsureDeserialized()}{lazinatorNullableStructNullCheck(mainWriteString)}
                         }}";
             }
-            string writeString2 = PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen("", $"_{PropertyName}", $"WriteNullChild(ref writer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}", writeString) : writeString;
-            sb.AppendLine(writeString2);
+            sb.AppendLine(withInclusionConditional);
         }
 
         private string EnsureDeserialized()
