@@ -170,7 +170,7 @@ namespace LazinatorAnalyzer.Analyzer
 
             Solution revisedSolution;
             if (lazinatorPairInformation.CodeBehindLocation == null)
-            { // the file does not already exist 
+            { // The file does not already exist 
               // codeBehindFilePath = System.IO.Path.GetDirectoryName(codeBehindFilePath); // omit file name
                 Document documentToAdd = project.AddDocument(codeBehindName, codeBehind, codeBehindFolders, codeBehindFilePath);
                 //if (config.GeneratedCodePath != null)
