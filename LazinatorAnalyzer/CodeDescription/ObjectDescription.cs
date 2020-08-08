@@ -23,8 +23,12 @@ namespace Lazinator.CodeDescription
         public LazinatorConfig Config { get; set; }
         public Guid Hash { get; set; }
         public string CodeToInsert { get; set; }
-        public bool NullableModeEnabled => SimpleName == "Example"; // DEBUG
-        public string NullableModeSettingString => NullableModeEnabled ? "#nullable enable" : "#nullable disable"; 
+        public NullableContext NullableContextSetting { get; set; }
+        public bool NullableModeEnabled => NullableContextSetting.WarningsEnabled(); // TODO && NullableContextSetting.AnnotationsEnabled();
+        public bool NullableModeInherited => NullableContextSetting.WarningsInherited(); // TODO annotations
+        public string NullableModeSettingString => NullableModeInherited ? "" : (NullableModeEnabled ? $@"
+            #nullable enable" : $@"
+            #nullable disable"); 
 
         /* Derivation */
         public ObjectDescription BaseLazinatorObject { get; set; }
@@ -171,14 +175,14 @@ namespace Lazinator.CodeDescription
                 [Compilation.TypeToExclusiveInterface[LazinatorCompilation.TypeSymbolToString(iLazinatorTypeSymbol.OriginalDefinition)]];
             InterfaceTypeSymbol = interfaceTypeSymbol;
             Hash = Compilation.InterfaceTextHash.ContainsKey(LazinatorCompilation.TypeSymbolToString(interfaceTypeSymbol)) ? Compilation.InterfaceTextHash[LazinatorCompilation.TypeSymbolToString(interfaceTypeSymbol)] : default;
-            NullableContext nullableContextSetting = interfaceTypeSymbol.GetNullableContextForSymbol(Compilation.Compilation);
-            ExclusiveInterface = new ExclusiveInterfaceDescription(interfaceTypeSymbol, nullableContextSetting, this);
+            NullableContextSetting = interfaceTypeSymbol.GetNullableContextForSymbol(Compilation.Compilation);
+            ExclusiveInterface = new ExclusiveInterfaceDescription(interfaceTypeSymbol, NullableContextSetting, this);
             if (ExclusiveInterface.GenericArgumentNames.Any())
                 HandleGenerics(iLazinatorTypeSymbol);
             var nonexclusiveInterfaces = iLazinatorTypeSymbol.AllInterfaces
                                 .Where(x => Compilation.ContainsAttributeOfType<CloneNonexclusiveLazinatorAttribute>(x));
             NonexclusiveInterfaces = nonexclusiveInterfaces
-                .Select(x => new NonexclusiveInterfaceDescription(Compilation, x, nullableContextSetting, this)).ToList();
+                .Select(x => new NonexclusiveInterfaceDescription(Compilation, x, NullableContextSetting, this)).ToList();
         }
 
         public IEnumerable<ObjectDescription> GetBaseObjectDescriptions()
@@ -1426,7 +1430,6 @@ namespace Lazinator.CodeDescription
                 //     the code is regenerated.
                 // </auto-generated>
                 //------------------------------------------------------------------------------
-
                 {NullableModeSettingString}
                 namespace { primaryNamespace }
                 {{");
