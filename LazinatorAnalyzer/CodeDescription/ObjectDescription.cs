@@ -171,13 +171,14 @@ namespace Lazinator.CodeDescription
                 [Compilation.TypeToExclusiveInterface[LazinatorCompilation.TypeSymbolToString(iLazinatorTypeSymbol.OriginalDefinition)]];
             InterfaceTypeSymbol = interfaceTypeSymbol;
             Hash = Compilation.InterfaceTextHash.ContainsKey(LazinatorCompilation.TypeSymbolToString(interfaceTypeSymbol)) ? Compilation.InterfaceTextHash[LazinatorCompilation.TypeSymbolToString(interfaceTypeSymbol)] : default;
-            ExclusiveInterface = new ExclusiveInterfaceDescription(interfaceTypeSymbol, this);
+            NullableContext nullableContextSetting = interfaceTypeSymbol.GetNullableContextForSymbol(Compilation.Compilation);
+            ExclusiveInterface = new ExclusiveInterfaceDescription(interfaceTypeSymbol, nullableContextSetting, this);
             if (ExclusiveInterface.GenericArgumentNames.Any())
                 HandleGenerics(iLazinatorTypeSymbol);
             var nonexclusiveInterfaces = iLazinatorTypeSymbol.AllInterfaces
                                 .Where(x => Compilation.ContainsAttributeOfType<CloneNonexclusiveLazinatorAttribute>(x));
             NonexclusiveInterfaces = nonexclusiveInterfaces
-                .Select(x => new NonexclusiveInterfaceDescription(Compilation, x, this)).ToList();
+                .Select(x => new NonexclusiveInterfaceDescription(Compilation, x, nullableContextSetting, this)).ToList();
         }
 
         public IEnumerable<ObjectDescription> GetBaseObjectDescriptions()

@@ -517,6 +517,21 @@ namespace LazinatorCodeGen.Roslyn
             }
         }
 
+        public static NullableContext GetNullableContextForSymbol(this INamedTypeSymbol namedTypeSymbol, Compilation compilation, bool verifyAllMatch = true)
+        {
+            var syntaxTree = namedTypeSymbol.DeclaringSyntaxReferences.First().SyntaxTree;
+            var nullableContext = compilation.GetSemanticModel(syntaxTree).GetNullableContext(namedTypeSymbol.Locations.First().SourceSpan.Start);
+            foreach (var declaringSyntaxReference in namedTypeSymbol.DeclaringSyntaxReferences)
+                foreach (var location in namedTypeSymbol.Locations)
+                {
+                    int spanStart = location.SourceSpan.Start;
+                    var nullableContext2 = compilation.GetSemanticModel(declaringSyntaxReference.SyntaxTree).GetNullableContext(spanStart);
+                    if (nullableContext != nullableContext2)
+                        throw new LazinatorCodeGenException("Lazinator requires that nullability context must be same for all instances of type symbol.");
+                }
+            return nullableContext;
+        }
+
         #endregion
     }
 }

@@ -77,7 +77,8 @@ namespace Lazinator.CodeDescription
         internal string ConstructorInitialization => IIF(PropertyType != LazinatorPropertyType.LazinatorStruct && PropertyType != LazinatorPropertyType.LazinatorStructNullable && !NonSerializedIsStruct, "LazinatorConstructorEnum.LazinatorConstructor");
 
         /* Names */
-        private bool NullableEnabledContext => false; // DEBUG
+        private NullableContext NullableContextSetting { get; set; }
+        private bool NullableEnabledContext => (NullableContextSetting & NullableContext.Enabled) != 0; // Note: For now we assume both the warnings setting and annotations setting are both set or both not set. 
         private bool UseFullyQualifiedNames => (Config?.UseFullyQualifiedNames ?? false) || HasFullyQualifyAttribute || Symbol.ContainingType != null;
         private string ShortTypeName => RegularizeTypeName(Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat), NullableEnabledContext && Nullable);
         private string ShortTypeNameWithoutNullableIndicator => WithoutNullableIndicator(ShortTypeName);

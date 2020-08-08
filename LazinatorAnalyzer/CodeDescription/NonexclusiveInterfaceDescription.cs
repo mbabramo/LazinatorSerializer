@@ -10,15 +10,17 @@ namespace Lazinator.CodeDescription
     {
         public List<PropertyDescription> Properties;
         ObjectDescription Container;
+        NullableContext NullableContextSetting;
 
         public NonexclusiveInterfaceDescription()
         {
 
         }
 
-        public NonexclusiveInterfaceDescription(LazinatorCompilation fileSet, INamedTypeSymbol t, ObjectDescription container)
+        public NonexclusiveInterfaceDescription(LazinatorCompilation fileSet, INamedTypeSymbol t, NullableContext nullableContextSetting, ObjectDescription container)
         {
             string typeName = LazinatorCompilation.TypeSymbolToString(t);
+            NullableContextSetting = nullableContextSetting;
             if (!fileSet.NonexclusiveInterfaces.Contains(typeName))
                 throw new LazinatorCodeGenException("NonexclusiveLazinator must be applied to a nonexclusive interface.");
             Container = container;

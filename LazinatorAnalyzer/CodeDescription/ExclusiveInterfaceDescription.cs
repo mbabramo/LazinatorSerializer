@@ -17,6 +17,7 @@ namespace Lazinator.CodeDescription
         public List<PropertyDescription> PropertiesIncludingInherited;
         public List<PropertyDescription> PropertiesToDefineThisLevel;
         public List<string> GenericArgumentNames;
+        public NullableContext NullableContextSetting;
         public int TotalNumProperties;
         public bool AutoChangeParentAll;
         public bool IsUnofficialInterface;
@@ -26,9 +27,10 @@ namespace Lazinator.CodeDescription
 
         }
 
-        public ExclusiveInterfaceDescription(INamedTypeSymbol t, ObjectDescription container, bool isUnofficialInterface = false)
+        public ExclusiveInterfaceDescription(INamedTypeSymbol t, NullableContext nullableContextSetting, ObjectDescription container, bool isUnofficialInterface = false)
         {
             NamedTypeSymbol = t;
+            NullableContextSetting = nullableContextSetting;
             IsUnofficialInterface = isUnofficialInterface;
             Container = container;
             var lazinatorAttribute = Container.Compilation.GetFirstAttributeOfType<CloneLazinatorAttribute>(t);
@@ -58,7 +60,7 @@ namespace Lazinator.CodeDescription
                     throw new LazinatorCodeGenException(
                         $"Unofficial type {a.OtherInterfaceFullyQualifiedTypeName} must exist and have a Lazinator attribute.");
                 var containerToUse = Container.GetBaseObjectDescriptions().LastOrDefault(x => x.InterfaceTypeSymbol != null && x.InterfaceTypeSymbol.GetKnownAttribute<CloneUnofficiallyIncorporateInterfaceAttribute>()?.OtherInterfaceFullyQualifiedTypeName == a.OtherInterfaceFullyQualifiedTypeName) ?? Container;
-                ExclusiveInterfaceDescription d = new ExclusiveInterfaceDescription(namedInterfaceType, containerToUse, true);
+                ExclusiveInterfaceDescription d = new ExclusiveInterfaceDescription(namedInterfaceType, NullableContextSetting, containerToUse, true);
                 foreach (var property in d.PropertiesToDefineThisLevel)
                 {
                     property.PropertyAccessibility = a.Accessibility;
