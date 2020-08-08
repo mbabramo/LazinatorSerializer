@@ -8,6 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+#nullable disable
 namespace LazinatorCollections.OffsetList
 {
     using Lazinator.Attributes;

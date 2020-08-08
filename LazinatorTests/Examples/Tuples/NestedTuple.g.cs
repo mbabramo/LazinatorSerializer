@@ -8,6 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+#nullable disable
 namespace LazinatorTests.Examples.Tuples
 {
     using Lazinator.Attributes;
