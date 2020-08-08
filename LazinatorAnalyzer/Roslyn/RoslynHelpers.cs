@@ -139,7 +139,7 @@ namespace LazinatorCodeGen.Roslyn
                 return TypeRegularization[typeName];
             var withoutNullableIndicator = WithoutNullableIndicator(typeName);
             if (isNullableReferenceTypeInEnabledContext || TypeRegularization.ContainsKey(withoutNullableIndicator))
-                return TypeRegularization[withoutNullableIndicator] + "?";
+                return withoutNullableIndicator + "?";
             return typeName;
         }
 
