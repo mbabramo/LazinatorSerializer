@@ -8,7 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-#nullable disable
 namespace LazinatorTests.Examples.NonLazinator
 {
     using Lazinator.Attributes;

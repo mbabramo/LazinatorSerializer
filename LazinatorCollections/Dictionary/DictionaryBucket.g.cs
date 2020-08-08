@@ -8,7 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-#nullable disable
 namespace LazinatorCollections.Dictionary
 {
     using Lazinator.Attributes;

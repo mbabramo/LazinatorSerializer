@@ -8,7 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-#nullable disable
 namespace LazinatorCollections.ByteSpan
 {
     using Lazinator.Attributes;

@@ -520,6 +520,13 @@ namespace LazinatorCodeGen.Roslyn
         public static NullableContext GetNullableContextForSymbol(this INamedTypeSymbol namedTypeSymbol, Compilation compilation, bool verifyAllMatch = true)
         {
             var syntaxTree = namedTypeSymbol.DeclaringSyntaxReferences.First().SyntaxTree;
+            if (!compilation.ContainsSyntaxTree(syntaxTree))
+            {
+                // This symbol is not in the compilation. (This may happen if we create Lazinator code for an object from some other assembly, for
+                // example for testing purposes.)
+                // In this case, we'll just assume for now that the nullable context on the original is disabled, unless it's not nullable.
+                return NullableContext.Disabled;
+            }
             var nullableContext = compilation.GetSemanticModel(syntaxTree).GetNullableContext(namedTypeSymbol.Locations.First().SourceSpan.Start);
             foreach (var declaringSyntaxReference in namedTypeSymbol.DeclaringSyntaxReferences)
                 foreach (var location in namedTypeSymbol.Locations)
