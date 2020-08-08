@@ -20,6 +20,7 @@ namespace Lazinator.CodeDescription
         public LazinatorConfig Config { get; set; }
         public Guid Hash { get; set; }
         public string CodeToInsert { get; set; }
+        public string NullableSetting { get; set; } = "#nullable disable"; // DEBUG -- generalize
 
         /* Derivation */
         public ObjectDescription BaseLazinatorObject { get; set; }
@@ -1421,6 +1422,7 @@ namespace Lazinator.CodeDescription
                 // </auto-generated>
                 //------------------------------------------------------------------------------
 
+                {NullableSetting}
                 namespace { primaryNamespace }
                 {{");
             foreach (string other in otherNamespaces)
