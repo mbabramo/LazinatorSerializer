@@ -136,9 +136,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         
-        protected Example? _NonNullableClass;
+        protected Example _NonNullableClass;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Example? NonNullableClass
+        public Example NonNullableClass
         {
             get
             {
@@ -150,14 +150,8 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             set
             {
-                if (_NonNullableClass != null)
-                {
                     _NonNullableClass.LazinatorParents = _NonNullableClass.LazinatorParents.WithRemoved(this);
-                }
-                if (value != null)
-                {
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
                 
                 IsDirty = true;
                 DescendantIsDirty = true;
@@ -168,16 +162,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NonNullableClass_Accessed;
         private void Lazinate_NonNullableClass()
         {
-            if (LazinatorObjectBytes.Length == 0)
-            {
-                _NonNullableClass = null;
-            }
-            else
-            {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableClass_ByteIndex, _NonNullableClass_ByteLength, false, false, null);
-                
-                _NonNullableClass = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, () => new Example(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
-            }
+            LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableClass_ByteIndex, _NonNullableClass_ByteLength, false, false, null);
+
+            _NonNullableClass = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, () => new Example(LazinatorConstructorEnum.LazinatorConstructor), childData, this);
             _NonNullableClass_Accessed = true;
         }
         
@@ -279,7 +266,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             return writer.LazinatorMemory;
         }
         
-        public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
+        public virtual ILazinator? CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
             var clone = new NullableEnabledContext(LazinatorConstructorEnum.LazinatorConstructor)
             {
@@ -289,7 +276,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             return clone;
         }
         
-        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public virtual ILazinator? AssignCloneProperties(ILazinator? clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             NullableEnabledContext typedClone = (NullableEnabledContext) clone;
@@ -565,7 +552,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             yield break;
         }
         
-        public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
+        public virtual ILazinator? ForEachLazinator(Func<ILazinator?, ILazinator?>? changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             if ((!exploreOnlyDeserializedChildren && ExplicitlyNullable != null) || (_ExplicitlyNullable_Accessed && _ExplicitlyNullable != null))
             {
