@@ -72,18 +72,18 @@ namespace LazinatorCodeGen.Roslyn
             return b.ToString();
         }
 
-        public static string PrettyTypeName(INamedTypeSymbol t)
+        public static string PrettyTypeName(INamedTypeSymbol t, bool isNullableReferenceInNullableEnabledContext)
         {
             if (t.IsGenericType)
             {
-                IEnumerable<string> innerTypeNames = t.TypeArguments.Select(x => x is INamedTypeSymbol namedx ? PrettyTypeName(namedx) : x.Name);
+                IEnumerable<string> innerTypeNames = t.TypeArguments.Select(x => x is INamedTypeSymbol namedx ? PrettyTypeName(namedx, isNullableReferenceInNullableEnabledContext) : x.Name);
                 return string.Format(
                     "{0}<{1}>",
                     t.Name,
                     string.Join(", ", innerTypeNames));
             }
 
-            return RegularizeTypeName(t.Name);
+            return RegularizeTypeName(t.Name, isNullableReferenceInNullableEnabledContext);
         }
         
         public static string EncodableTypeName(ITypeSymbol typeSymbol)
@@ -110,7 +110,7 @@ namespace LazinatorCodeGen.Roslyn
                     string.Join("_", typeArguments.Select(x => EncodableTypeName(x))));
             }
 
-            string regularized = RegularizeTypeName(name);
+            string regularized = RegularizeTypeName(name, false);
 
             return regularized;
         }
@@ -133,12 +133,12 @@ namespace LazinatorCodeGen.Roslyn
             { "String", "string" },
         };
 
-        public static string RegularizeTypeName(string typeName)
+        public static string RegularizeTypeName(string typeName, bool isNullableReferenceTypeInEnabledContext)
         {
             if (TypeRegularization.ContainsKey(typeName))
                 return TypeRegularization[typeName];
             var withoutNullableIndicator = WithoutNullableIndicator(typeName);
-            if (TypeRegularization.ContainsKey(withoutNullableIndicator))
+            if (isNullableReferenceTypeInEnabledContext || TypeRegularization.ContainsKey(withoutNullableIndicator))
                 return TypeRegularization[withoutNullableIndicator] + "?";
             return typeName;
         }

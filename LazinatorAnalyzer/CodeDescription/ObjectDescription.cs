@@ -10,6 +10,9 @@ using Microsoft.CodeAnalysis;
 
 namespace Lazinator.CodeDescription
 {
+    /// <summary>
+    /// A description of a Lazinator object, including information about the properties that it must contain based on its exclusive interface and any nonexclusive interfaces.
+    /// </summary>
     public class ObjectDescription
     {
         /* Main properties */

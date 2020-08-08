@@ -76,9 +76,10 @@ namespace Lazinator.CodeDescription
         internal bool IsNonLazinatorTypeWithoutInterchange => PropertyType == LazinatorPropertyType.NonLazinator && !HasInterchangeType;
         internal string ConstructorInitialization => IIF(PropertyType != LazinatorPropertyType.LazinatorStruct && PropertyType != LazinatorPropertyType.LazinatorStructNullable && !NonSerializedIsStruct, "LazinatorConstructorEnum.LazinatorConstructor");
 
-    /* Names */
-    private bool UseFullyQualifiedNames => (Config?.UseFullyQualifiedNames ?? false) || HasFullyQualifyAttribute || Symbol.ContainingType != null;
-        private string ShortTypeName => RegularizeTypeName(Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat));
+        /* Names */
+        private bool NullableEnabledContext => false; // DEBUG
+        private bool UseFullyQualifiedNames => (Config?.UseFullyQualifiedNames ?? false) || HasFullyQualifyAttribute || Symbol.ContainingType != null;
+        private string ShortTypeName => RegularizeTypeName(Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat), NullableEnabledContext && Nullable);
         private string ShortTypeNameWithoutNullableIndicator => WithoutNullableIndicator(ShortTypeName);
         internal string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
         private string FullyQualifiedNameWithoutNullableIndicator => WithoutNullableIndicator(FullyQualifiedTypeName);
@@ -1032,7 +1033,7 @@ namespace Lazinator.CodeDescription
 
             }
 
-            if (AppropriatelyQualifiedTypeName.Contains("IncludableChild"))
+            if (PropertyName.Contains("IncludableChild"))
             {
                 var DEBUG = 0;
             }
@@ -1235,7 +1236,7 @@ namespace Lazinator.CodeDescription
 
         private void SetEnumEquivalentType(INamedTypeSymbol t)
         {
-            EnumEquivalentType = RoslynHelpers.RegularizeTypeName(t.EnumUnderlyingType.Name);
+            EnumEquivalentType = RoslynHelpers.RegularizeTypeName(t.EnumUnderlyingType.Name, NullableEnabledContext && Nullable);
         }
 
         #endregion
