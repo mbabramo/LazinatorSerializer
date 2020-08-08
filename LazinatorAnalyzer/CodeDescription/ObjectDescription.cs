@@ -176,7 +176,7 @@ namespace Lazinator.CodeDescription
             InterfaceTypeSymbol = interfaceTypeSymbol;
             Hash = Compilation.InterfaceTextHash.ContainsKey(LazinatorCompilation.TypeSymbolToString(interfaceTypeSymbol)) ? Compilation.InterfaceTextHash[LazinatorCompilation.TypeSymbolToString(interfaceTypeSymbol)] : default;
             NullableContextSetting = interfaceTypeSymbol.GetNullableContextForSymbol(Compilation.Compilation);
-            ExclusiveInterface = new ExclusiveInterfaceDescription(interfaceTypeSymbol, NullableContextSetting, this);
+            ExclusiveInterface = new ExclusiveInterfaceDescription(compilation.Compilation, interfaceTypeSymbol, NullableContextSetting, this);
             if (ExclusiveInterface.GenericArgumentNames.Any())
                 HandleGenerics(iLazinatorTypeSymbol);
             var nonexclusiveInterfaces = iLazinatorTypeSymbol.AllInterfaces

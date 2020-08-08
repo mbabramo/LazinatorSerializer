@@ -21,14 +21,16 @@ namespace Lazinator.CodeDescription
         public int TotalNumProperties;
         public bool AutoChangeParentAll;
         public bool IsUnofficialInterface;
+        public Compilation Compilation;
 
         public ExclusiveInterfaceDescription()
         {
 
         }
 
-        public ExclusiveInterfaceDescription(INamedTypeSymbol t, NullableContext nullableContextSetting, ObjectDescription container, bool isUnofficialInterface = false)
+        public ExclusiveInterfaceDescription(Compilation compilation, INamedTypeSymbol t, NullableContext nullableContextSetting, ObjectDescription container, bool isUnofficialInterface = false)
         {
+            Compilation = compilation;
             NamedTypeSymbol = t;
             NullableContextSetting = nullableContextSetting;
             IsUnofficialInterface = isUnofficialInterface;
@@ -60,7 +62,7 @@ namespace Lazinator.CodeDescription
                     throw new LazinatorCodeGenException(
                         $"Unofficial type {a.OtherInterfaceFullyQualifiedTypeName} must exist and have a Lazinator attribute.");
                 var containerToUse = Container.GetBaseObjectDescriptions().LastOrDefault(x => x.InterfaceTypeSymbol != null && x.InterfaceTypeSymbol.GetKnownAttribute<CloneUnofficiallyIncorporateInterfaceAttribute>()?.OtherInterfaceFullyQualifiedTypeName == a.OtherInterfaceFullyQualifiedTypeName) ?? Container;
-                ExclusiveInterfaceDescription d = new ExclusiveInterfaceDescription(namedInterfaceType, NullableContextSetting, containerToUse, true);
+                ExclusiveInterfaceDescription d = new ExclusiveInterfaceDescription(Container.Compilation.Compilation, namedInterfaceType, NullableContextSetting, containerToUse, true);
                 foreach (var property in d.PropertiesToDefineThisLevel)
                 {
                     property.PropertyAccessibility = a.Accessibility;
@@ -73,7 +75,7 @@ namespace Lazinator.CodeDescription
 
         private void SetPropertiesIncludingInherited(INamedTypeSymbol interfaceSymbol)
         {
-            var propertiesWithLevel = Container.Compilation.PropertiesForType[LazinatorCompilation.TypeSymbolToString(interfaceSymbol)];
+            List<PropertyWithDefinitionInfo> propertiesWithLevel = Container.Compilation.PropertiesForType[LazinatorCompilation.TypeSymbolToString(interfaceSymbol)];
             foreach (var unofficialProperty in GetUnofficialProperties(interfaceSymbol))
             {
                 if (!propertiesWithLevel.Any(x => x.Property.MetadataName == unofficialProperty.PropertySymbol.MetadataName))
@@ -105,6 +107,9 @@ namespace Lazinator.CodeDescription
                         propertiesWithLevel.Add(new PropertyWithDefinitionInfo(unofficialProperty.PropertySymbol, PropertyWithDefinitionInfo.Level.IsDefinedLowerLevelButNotInInterface) { DerivationKeyword = "override ", PropertyAccessibility = unofficialProperty.PropertyAccessibility });
                 }
             }
+            if (propertiesWithLevel.Any(x => x.Property.GetNullableContextForSymbol(Compilation, true) != NullableContextSetting))
+                throw new LazinatorCodeGenException("Lazinator requires properties of an interface to have the same nullability context as the interface itself.");
+
             var orderedPropertiesWithLevel = propertiesWithLevel.Select(x => new { propertyWithLevel = x, description = new PropertyDescription(x.Property, Container, x.DerivationKeyword, x.PropertyAccessibility, false) })
                 .OrderByDescending(x => x.description.PropertyType == LazinatorPropertyType.PrimitiveType || x.description.PropertyType == LazinatorPropertyType.PrimitiveTypeNullable) // primitive properties are always first (but will only be redefined if defined abstractly below)
                 .ThenBy(x => x.propertyWithLevel.LevelInfo == PropertyWithDefinitionInfo.Level.IsDefinedThisLevel)
