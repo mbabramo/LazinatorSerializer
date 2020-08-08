@@ -31,6 +31,9 @@ namespace Lazinator.CodeDescription
         internal bool GenericConstrainedToStruct => Symbol is ITypeParameterSymbol typeParameterSymbol && typeParameterSymbol.HasValueTypeConstraint;
         internal string DerivationKeyword { get; set; }
         private bool IsAbstract { get; set; }
+        public NullableContext NullableContextSetting { get; set; }
+        public bool NullableModeEnabled => NullableContextSetting.WarningsEnabled(); // TODO && NullableContextSetting.AnnotationsEnabled();
+        public bool NullableModeInherited => NullableContextSetting.WarningsInherited(); // TODO annotations
         internal bool Nullable { get; set; }
         private bool HasParameterlessConstructor => PropertySymbol.Type is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.InstanceConstructors.Any(y => !y.IsImplicitlyDeclared && !y.Parameters.Any());
         private bool IsInterface { get; set; }
@@ -77,10 +80,8 @@ namespace Lazinator.CodeDescription
         internal string ConstructorInitialization => IIF(PropertyType != LazinatorPropertyType.LazinatorStruct && PropertyType != LazinatorPropertyType.LazinatorStructNullable && !NonSerializedIsStruct, "LazinatorConstructorEnum.LazinatorConstructor");
 
         /* Names */
-        private NullableContext NullableContextSetting { get; set; }
-        private bool NullableEnabledContext => (NullableContextSetting & NullableContext.Enabled) != 0; // Note: For now we assume both the warnings setting and annotations setting are both set or both not set. 
         private bool UseFullyQualifiedNames => (Config?.UseFullyQualifiedNames ?? false) || HasFullyQualifyAttribute || Symbol.ContainingType != null;
-        private string ShortTypeName => RegularizeTypeName(Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat), NullableEnabledContext && Nullable);
+        private string ShortTypeName => RegularizeTypeName(Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat), NullableModeEnabled && Nullable);
         private string ShortTypeNameWithoutNullableIndicator => WithoutNullableIndicator(ShortTypeName);
         internal string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
         private string FullyQualifiedNameWithoutNullableIndicator => WithoutNullableIndicator(FullyQualifiedTypeName);
@@ -181,11 +182,12 @@ namespace Lazinator.CodeDescription
 
         }
 
-        public PropertyDescription(IPropertySymbol propertySymbol, ObjectDescription container, string derivationKeyword, string propertyAccessibility, bool isLast)
+        public PropertyDescription(IPropertySymbol propertySymbol, ObjectDescription container, NullableContext nullableContextSetting, string derivationKeyword, string propertyAccessibility, bool isLast)
         {
             PropertySymbol = propertySymbol;
             IsAbstract = PropertySymbol.Type.IsAbstract;
             ContainingObjectDescription = container;
+            NullableContextSetting = nullableContextSetting;
             PropertyName = propertySymbol.Name;
             DerivationKeyword = derivationKeyword;
             PropertyAccessibility = propertyAccessibility;
@@ -1237,7 +1239,7 @@ namespace Lazinator.CodeDescription
 
         private void SetEnumEquivalentType(INamedTypeSymbol t)
         {
-            EnumEquivalentType = RoslynHelpers.RegularizeTypeName(t.EnumUnderlyingType.Name, NullableEnabledContext && Nullable);
+            EnumEquivalentType = RoslynHelpers.RegularizeTypeName(t.EnumUnderlyingType.Name, NullableModeEnabled && Nullable);
         }
 
         #endregion

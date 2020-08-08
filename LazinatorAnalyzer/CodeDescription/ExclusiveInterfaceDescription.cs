@@ -110,7 +110,7 @@ namespace Lazinator.CodeDescription
             if (propertiesWithLevel.Any(x => x.Property.GetNullableContextForSymbol(Compilation, true) != NullableContextSetting))
                 throw new LazinatorCodeGenException("Lazinator requires properties of an interface to have the same nullability context as the interface itself.");
 
-            var orderedPropertiesWithLevel = propertiesWithLevel.Select(x => new { propertyWithLevel = x, description = new PropertyDescription(x.Property, Container, x.DerivationKeyword, x.PropertyAccessibility, false) })
+            var orderedPropertiesWithLevel = propertiesWithLevel.Select(x => new { propertyWithLevel = x, description = new PropertyDescription(x.Property, Container, NullableContextSetting, x.DerivationKeyword, x.PropertyAccessibility, false) })
                 .OrderByDescending(x => x.description.PropertyType == LazinatorPropertyType.PrimitiveType || x.description.PropertyType == LazinatorPropertyType.PrimitiveTypeNullable) // primitive properties are always first (but will only be redefined if defined abstractly below)
                 .ThenBy(x => x.propertyWithLevel.LevelInfo == PropertyWithDefinitionInfo.Level.IsDefinedThisLevel)
                 .ThenBy(x => x.description.RelativeOrder)

@@ -23,6 +23,8 @@ namespace Lazinator.CodeDescription
         public LazinatorConfig Config { get; set; }
         public Guid Hash { get; set; }
         public string CodeToInsert { get; set; }
+
+        /* Nullable context */
         public NullableContext NullableContextSetting { get; set; }
         public bool NullableModeEnabled => NullableContextSetting.WarningsEnabled(); // TODO && NullableContextSetting.AnnotationsEnabled();
         public bool NullableModeInherited => NullableContextSetting.WarningsInherited(); // TODO annotations
