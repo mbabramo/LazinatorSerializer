@@ -445,7 +445,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         public virtual bool NonBinaryHash32 => false;
         
         
-        public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
+        public IEnumerable<ILazinator?> EnumerateLazinatorNodes(Func<ILazinator?, bool>? matchCriterion, bool stopExploringBelowMatch, Func<ILazinator?, bool>? exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
             bool match = (matchCriterion == null) ? true : matchCriterion(this);
             bool explore = (!match || !stopExploringBelowMatch) && ((exploreCriterion == null) ? true : exploreCriterion(this));
@@ -462,7 +462,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         
-        public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
+        public virtual IEnumerable<(string propertyName, ILazinator? descendant)> EnumerateLazinatorDescendants(Func<ILazinator?, bool>? matchCriterion, bool stopExploringBelowMatch, Func<ILazinator?, bool>? exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ExplicitlyNullable_Accessed) && ExplicitlyNullable == null)
             {

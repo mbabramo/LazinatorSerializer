@@ -921,7 +921,7 @@ namespace Lazinator.CodeDescription
                 else
                     assignment =
                         $@"
-                        _{PropertyName} = DeserializationFactory.Instance.CreateBaseOrDerivedType({UniqueIDForLazinatorType}, () => new {AppropriatelyQualifiedTypeName}(LazinatorConstructorEnum.LazinatorConstructor), childData{selfReference}); ";
+                        _{PropertyName} = DeserializationFactory.Instance.CreateBaseOrDerivedType({UniqueIDForLazinatorType}, () => new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}(LazinatorConstructorEnum.LazinatorConstructor), childData{selfReference}); ";
             }
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
             {
