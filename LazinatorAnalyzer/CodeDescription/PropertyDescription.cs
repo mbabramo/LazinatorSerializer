@@ -34,6 +34,8 @@ namespace Lazinator.CodeDescription
         public NullableContext NullableContextSetting { get; set; }
         public bool NullableModeEnabled => NullableContextSetting.WarningsEnabled(); // TODO && NullableContextSetting.AnnotationsEnabled();
         public bool NullableModeInherited => NullableContextSetting.WarningsInherited(); // TODO annotations
+        public string QuestionMarkIfNullableModeEnabled => NullableModeEnabled ? "?" : "";
+        public string ILazinatorString => "ILazinator" + QuestionMarkIfNullableModeEnabled;
         internal bool Nullable { get; set; }
         private bool HasParameterlessConstructor => PropertySymbol.Type is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.InstanceConstructors.Any(y => !y.IsImplicitlyDeclared && !y.Parameters.Any());
         private bool IsInterface { get; set; }
@@ -369,7 +371,7 @@ namespace Lazinator.CodeDescription
                 }
             }
 
-            bool isILazinator = typeSymbol.Interfaces.Any(x => x.Name == "ILazinator");
+            bool isILazinator = typeSymbol.Interfaces.Any(x => x.Name == "ILazinator" || x.Name == "ILazinator?");
             bool isRecursiveDefinition = false;
             if (namedTypeSymbol != null)
             {
@@ -392,7 +394,7 @@ namespace Lazinator.CodeDescription
                     (namedTypeSymbol.TypeKind == TypeKind.Interface && namedTypeSymbol.HasAttributeOfType<CloneLazinatorAttribute>())
                     )
                 {
-                    if (namedTypeSymbol.TypeKind == TypeKind.Interface && !namedTypeSymbol.AllInterfaces.Any(x => x.Name == "ILazinator"))
+                    if (namedTypeSymbol.TypeKind == TypeKind.Interface && !namedTypeSymbol.AllInterfaces.Any(x => x.Name == "ILazinator" || x.Name == "ILazinator?"))
                         throw new LazinatorCodeGenException($"To use {namedTypeSymbol} as a type in {ContainingObjectDescription.FullyQualifiedObjectName}, you must make {namedTypeSymbol} inherit directly from ILazinator.");
                     isILazinator = true; // code behind isn't implemented yet but it will be
                 }
@@ -429,7 +431,7 @@ namespace Lazinator.CodeDescription
                 throw new LazinatorCodeGenException($"{fullyQualifiedTypeName} has both an interchange converter and a direct converter type listed. Only one should be used.");
             if (InterchangeTypeName == null && DirectConverterTypeName == null)
             {
-                if (fullyQualifiedTypeName == "Lazinator.Core.ILazinator")
+                if (fullyQualifiedTypeName == "Lazinator.Core.ILazinator" || fullyQualifiedTypeName == "Lazinator.Core.ILazinator?")
                     throw new LazinatorCodeGenException($"You cannot include ILazinator as a type to be serialized or as a type argument in a Lazinator interface. (The reason for this is that some Lazinator types do not serialize their ID.) To define a property that can deserialize a large number of Lazinator types, create a nonexclusive interface (possibly implementing no properties) and then define your Lazinator types as implementing that interface. This nonexclusive interface can then be used as the type for a Lazinator property.");
                 else
                     throw new LazinatorCodeGenException($"{fullyQualifiedTypeName} is a non-Lazinator type or interface. To use it as a type for a Lazinator property, you must either make it a Lazinator type or use a Lazinator.config file to specify either an interchange converter (i.e., a Lazinator object accept the non-Lazinator type as a parameter in its constructor) or a direct converter for it. Alternatively, if there is a constructor whose parameters match public properties (not fields) of the type, it can be handled automatically. If this is an interface, then define the NonexclusiveLazinator attribute and make sure that the interface inherits from ILazinator.");
@@ -1535,7 +1537,7 @@ namespace Lazinator.CodeDescription
             string source = (innerFullType == "byte") ? "itemToClone" : $"{GetSpanCast(innerFullType, true)}(itemToClone)";
             string toReturn = (innerFullType == "byte") ? "clone" : $"{GetSpanCast(innerFullType, false)}(clone)";
 
-            sb.AppendLine($@"private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+            sb.AppendLine($@"private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<{ILazinatorString}, {ILazinatorString}>{QuestionMarkIfNullableModeEnabled} cloneOrChangeFunc, bool avoidCloningIfPossible)
             {{
                 var clone = new {memoryOrSpanWord}<byte>(new byte[itemToClone.Length * sizeof({innerFullTypeSizeEquivalent})]);
                 {source}.CopyTo(clone);
@@ -1672,7 +1674,7 @@ namespace Lazinator.CodeDescription
                 forStatement = DeleteLines(forStatement, (int)ArrayRank); // we will define collectionLengths for each dimension in creation statement and don't need to redefine
 
             sb.Append($@"
-                    private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                    private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<{ILazinatorString}, {ILazinatorString}>{QuestionMarkIfNullableModeEnabled} cloneOrChangeFunc, bool avoidCloningIfPossible)
                     {{
                         {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory ? "" : GetNullCheckIfThen("", "itemToClone", "return default;", ""))}
                         int collectionLength = itemToClone.{lengthWord};{IIF(ArrayRank > 1, () => "\n" + String.Join("\n", Enumerable.Range(0, ArrayRank.Value).Select(x => $"int collectionLength{x} = itemToClone.GetLength({x});")))}
@@ -2347,7 +2349,7 @@ namespace Lazinator.CodeDescription
                 );
             string creationText = SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? $"({innerClones})" : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}({innerClones})";
             sb.Append($@"
-                    private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                    private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToConvert, Func<{ILazinatorString}, {ILazinatorString}>{QuestionMarkIfNullableModeEnabled} cloneOrChangeFunc, bool avoidCloningIfPossible)
                     {{
                         {IIF(Nullable, GetNullCheckIfThen("", "itemToConvert", $@"return {DefaultExpression};", ""))}{IIF(Nullable,$@"
                             ")}return {creationText};
@@ -2391,7 +2393,7 @@ namespace Lazinator.CodeDescription
                         }}
 
 
-                        private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                        private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<{ILazinatorString}, {ILazinatorString}>{QuestionMarkIfNullableModeEnabled} cloneOrChangeFunc, bool avoidCloningIfPossible)
                         {{
                             {GetNullCheckIfThen("", "itemToClone", $"return {DefaultExpression};", "")}
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}(itemToClone);
