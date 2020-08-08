@@ -4,6 +4,7 @@
     {
         PrimitiveType,
         PrimitiveTypeNullable,
+        LazinatorNonnullableClassOrInterface,
         LazinatorClassOrInterface,
         LazinatorStruct,
         NonLazinator,

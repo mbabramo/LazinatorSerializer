@@ -1032,6 +1032,11 @@ namespace Lazinator.CodeDescription
 
             }
 
+            if (AppropriatelyQualifiedTypeName.Contains("IncludableChild"))
+            {
+                var DEBUG = 0;
+            }
+
             sb.Append($@"
                 {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName} _{PropertyName};
         {GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}

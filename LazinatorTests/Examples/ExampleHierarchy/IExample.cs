@@ -19,6 +19,7 @@ namespace LazinatorTests.Examples
         [InsertAttribute("Newtonsoft.Json.JsonProperty(\"MyDT\")")] DateTime MyDateTime { get; set; }
         IExampleNonexclusiveInterface MyInterfaceImplementer { get; set; }
         [IntroducedWithVersion(3)] string MyNewString { get; set; }
+
         NonLazinatorClass MyNonLazinatorChild { get; set; }
         bool MyNonLazinatorChild_Dirty { get; set; }
         [SetterAccessibility("internal")] decimal? MyNullableDecimal { get; }
