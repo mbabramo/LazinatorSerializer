@@ -539,6 +539,8 @@ namespace LazinatorCodeGen.Roslyn
             return nullableContext;
         }
 
+        public static bool ParentAndChildShareNullabilityContext(NullableContext parentContext, NullableContext childContext) => parentContext == childContext || childContext == NullableContext.ContextInherited;
+
         #endregion
     }
 }

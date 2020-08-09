@@ -107,8 +107,11 @@ namespace Lazinator.CodeDescription
                         propertiesWithLevel.Add(new PropertyWithDefinitionInfo(unofficialProperty.PropertySymbol, PropertyWithDefinitionInfo.Level.IsDefinedLowerLevelButNotInInterface) { DerivationKeyword = "override ", PropertyAccessibility = unofficialProperty.PropertyAccessibility });
                 }
             }
-            if (propertiesWithLevel.Any(x => x.Property.GetNullableContextForSymbol(Compilation, true) != NullableContextSetting))
-                throw new LazinatorCodeGenException("Lazinator requires properties of an interface to have the same nullability context as the interface itself.");
+            var firstProblem = propertiesWithLevel.FirstOrDefault(x => !RoslynHelpers.ParentAndChildShareNullabilityContext(NullableContextSetting, x.Property.GetNullableContextForSymbol(Compilation, true)));
+            if (firstProblem != null)
+            {
+                throw new LazinatorCodeGenException($"Lazinator requires properties of an interface to have the same nullability context as the interface itself. {NamedTypeSymbol} has nullability context {NullableContextSetting} while {firstProblem.Property} has nullability context {firstProblem.Property.GetNullableContextForSymbol(Compilation, true)}");
+            }
 
             var orderedPropertiesWithLevel = propertiesWithLevel.Select(x => new { propertyWithLevel = x, description = new PropertyDescription(x.Property, Container, NullableContextSetting, x.DerivationKeyword, x.PropertyAccessibility, false) })
                 .OrderByDescending(x => x.description.PropertyType == LazinatorPropertyType.PrimitiveType || x.description.PropertyType == LazinatorPropertyType.PrimitiveTypeNullable) // primitive properties are always first (but will only be redefined if defined abstractly below)
