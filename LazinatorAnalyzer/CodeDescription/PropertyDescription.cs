@@ -534,7 +534,7 @@ namespace Lazinator.CodeDescription
             {
                 if (t.TypeKind == TypeKind.Class || t.TypeKind == TypeKind.Interface || t.TypeKind == TypeKind.Array)
                 {
-                    if (Symbol.ToString().EndsWith("?"))
+                    if (NullableModeEnabled && !Symbol.ToString().EndsWith("?"))
                         PropertyType = LazinatorPropertyType.LazinatorNonnullableClassOrInterface;
                     else
                         PropertyType = LazinatorPropertyType.LazinatorClassOrInterface;
@@ -1898,6 +1898,10 @@ namespace Lazinator.CodeDescription
 
             PropertyDescription innerProperty = InnerProperties[0];
             CheckForLazinatorInNonLazinator(innerProperty);
+            if (AppropriatelyQualifiedTypeName.Contains("List<ExampleChild>"))
+            {
+                var DEBUG = 0;
+            }
             string readCommand = innerProperty.GetSupportedCollectionReadCommands(this);
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
@@ -1984,6 +1988,11 @@ namespace Lazinator.CodeDescription
         {
             string collectionAddItem, collectionAddNull;
             GetSupportedCollectionAddCommands(outerProperty, out collectionAddItem, out collectionAddNull);
+
+            if (AppropriatelyQualifiedTypeName.Contains("List<ExampleChild>"))
+            {
+                var DEBUG = 0;
+            }
             if (IsPrimitive)
                 return ($@"
                         {AppropriatelyQualifiedTypeName} item = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref bytesSoFar);
@@ -2005,12 +2014,14 @@ namespace Lazinator.CodeDescription
                         }}
                         bytesSoFar += lengthCollectionMember;");
                 else
+                {
                     return ($@"
                         int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                         LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                         var item = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);
                             {collectionAddItem}
                         bytesSoFar += lengthCollectionMember;");
+                }
             }
             else // Lazinator type
             {
@@ -2383,6 +2394,10 @@ namespace Lazinator.CodeDescription
                 return;
             alreadyGenerated.Add(AppropriatelyQualifiedTypeNameEncodable);
 
+            if (AppropriatelyQualifiedTypeName.Contains("List<ExampleChild>"))
+            {
+                var DEBUG = 0;
+            }
             // Note: The interchange type must include a parameterless constructor. We can't use the LazinatorConstructorEnum approach here, because we can't determine whether the interchange type, which we know only by string, is a struct (in which case there would be no such constructor).
             sb.Append($@"
                    private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
