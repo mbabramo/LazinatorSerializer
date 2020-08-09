@@ -684,6 +684,7 @@ namespace Lazinator.CodeDescription
             var withRecordedIndices = thisLevel
                 .Where(property =>
                     property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface ||
+                    property.PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface ||
                     property.PropertyType == LazinatorPropertyType.LazinatorStruct ||
                     property.PropertyType == LazinatorPropertyType.LazinatorStructNullable ||
                     property.PropertyType == LazinatorPropertyType.NonLazinator ||
@@ -1252,7 +1253,7 @@ namespace Lazinator.CodeDescription
             {
                 if (IncludeTracingCode)
                 {
-                    if (property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (property.PropertyType == LazinatorPropertyType.LazinatorStructNullable))
+                    if (property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (property.PropertyType == LazinatorPropertyType.LazinatorStructNullable) || (property.PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface) )
                     {
                         sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {{_{property.PropertyName}_Accessed}}) (backing var null? {{_{property.PropertyName} == null}}) "");");
                     }
@@ -1357,7 +1358,7 @@ namespace Lazinator.CodeDescription
             string classContainingStructContainingClassError = "";
             if (ObjectType == LazinatorObjectType.Struct || GeneratingRefStruct)
             {
-                if (PropertiesToDefineThisLevel.Any(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface))
+                if (PropertiesToDefineThisLevel.Any(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface))
                     classContainingStructContainingClassError = $@"
 
                         if (LazinatorParents.Any())

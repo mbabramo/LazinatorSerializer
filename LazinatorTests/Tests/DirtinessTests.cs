@@ -261,6 +261,14 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void ConstructorSetsProperty()
+        {
+            ContainerForExampleWithDefault o = new ContainerForExampleWithDefault();
+            o.IsDirty.Should().BeTrue();
+            o.Example.MyChar.Should().Be('D');
+        }
+
+        [Fact]
         public void DirtinessWithStructChild()
         {
             WrapperContainer e = new WrapperContainer()
