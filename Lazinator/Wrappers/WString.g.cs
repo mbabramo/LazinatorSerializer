@@ -8,6 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+#nullable disable
 namespace Lazinator.Wrappers
 {
     using Lazinator.Attributes;

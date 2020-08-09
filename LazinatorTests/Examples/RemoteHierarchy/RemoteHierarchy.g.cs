@@ -8,6 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+#nullable disable
 namespace LazinatorTests.Examples.RemoteHierarchy
 {
     using Lazinator.Attributes;

@@ -8,6 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+#nullable disable
 namespace LazinatorCollections.BitArray
 {
     using Lazinator.Attributes;

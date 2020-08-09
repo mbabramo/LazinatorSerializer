@@ -527,7 +527,11 @@ namespace LazinatorCodeGen.Roslyn
                 // In this case, we'll just assume for now that the nullable context on the original is disabled, unless it's not nullable.
                 return NullableContext.Disabled;
             }
-            var nullableContext = compilation.GetSemanticModel(syntaxTree).GetNullableContext(symbol.Locations.First().SourceSpan.Start);
+
+            Location firstLocation = symbol.Locations.FirstOrDefault();
+            if (firstLocation == null)
+                return NullableContext.ContextInherited;
+            var nullableContext = compilation.GetSemanticModel(syntaxTree).GetNullableContext(firstLocation.SourceSpan.Start);
             foreach (var declaringSyntaxReference in symbol.DeclaringSyntaxReferences)
                 foreach (var location in symbol.Locations)
                 {
