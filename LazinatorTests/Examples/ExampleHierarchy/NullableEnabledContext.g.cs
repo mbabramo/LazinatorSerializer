@@ -136,9 +136,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         
-        protected Example _NonNullableClass;
+        protected Example? _NonNullableClass;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Example NonNullableClass
+        public Example? NonNullableClass
         {
             get
             {
@@ -150,8 +150,14 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             set
             {
+                if (_NonNullableClass != null)
+                {
                     _NonNullableClass.LazinatorParents = _NonNullableClass.LazinatorParents.WithRemoved(this);
+                }
+                if (value != null)
+                {
                     value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                }
                 
                 IsDirty = true;
                 DescendantIsDirty = true;
@@ -162,9 +168,16 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NonNullableClass_Accessed;
         private void Lazinate_NonNullableClass()
         {
-            LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableClass_ByteIndex, _NonNullableClass_ByteLength, false, false, null);
-
-            _NonNullableClass = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, () => new Example(LazinatorConstructorEnum.LazinatorConstructor), childData, this);
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _NonNullableClass = null;
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableClass_ByteIndex, _NonNullableClass_ByteLength, false, false, null);
+                
+                _NonNullableClass = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, () => new Example(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
+            }
             _NonNullableClass_Accessed = true;
         }
         

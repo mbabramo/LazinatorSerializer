@@ -371,6 +371,11 @@ namespace Lazinator.CodeDescription
                 }
             }
 
+            if (typeSymbol.ToString().Contains("NonNullable"))
+            {
+                var DEBUG = 0;
+            }
+
             bool isILazinator = typeSymbol.Interfaces.Any(x => x.Name == "ILazinator" || x.Name == "ILazinator?");
             bool isRecursiveDefinition = false;
             if (namedTypeSymbol != null)
