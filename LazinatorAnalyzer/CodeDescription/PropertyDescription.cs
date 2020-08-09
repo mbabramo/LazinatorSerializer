@@ -359,7 +359,7 @@ namespace Lazinator.CodeDescription
                 return;
             }
 
-            Nullable = IsNullableType(namedTypeSymbol);
+            Nullable = IsNullableGeneric(namedTypeSymbol);
             if (Nullable)
             {
                 // handle a nullable type (which might be a nullable primitive type or a nullable struct / valuetuple
@@ -432,7 +432,7 @@ namespace Lazinator.CodeDescription
 
         private void SetNonserializedTypeNameAndPropertyType(INamedTypeSymbol t)
         {
-            Nullable = t.TypeKind == TypeKind.Class || IsNullableType(t);
+            Nullable = t.TypeKind == TypeKind.Class || IsNullableGeneric(t);
             PropertyType = LazinatorPropertyType.NonLazinator;
             NonSerializedIsStruct = t.IsValueType;
             InterchangeTypeName = Config?.GetInterchangeConverterTypeName(t);
@@ -534,11 +534,14 @@ namespace Lazinator.CodeDescription
             {
                 if (t.TypeKind == TypeKind.Class || t.TypeKind == TypeKind.Interface || t.TypeKind == TypeKind.Array)
                 {
-                     PropertyType = LazinatorPropertyType.LazinatorClassOrInterface;
+                    if (Symbol.ToString().EndsWith("?"))
+                        PropertyType = LazinatorPropertyType.LazinatorNonnullableClassOrInterface;
+                    else
+                        PropertyType = LazinatorPropertyType.LazinatorClassOrInterface;
                 }
                 else
                 {
-                    Nullable = IsNullableType(t);
+                    Nullable = IsNullableGeneric(t);
                     PropertyType = Nullable ? LazinatorPropertyType.LazinatorStructNullable : LazinatorPropertyType.LazinatorStruct;
                 }
 
@@ -818,7 +821,7 @@ namespace Lazinator.CodeDescription
             }
         }
 
-        private static bool IsNullableType(INamedTypeSymbol t)
+        private static bool IsNullableGeneric(INamedTypeSymbol t)
         {
             if (t == null)
                 return false;
