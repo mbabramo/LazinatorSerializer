@@ -196,7 +196,10 @@ namespace Lazinator.CodeDescription
             DerivationKeyword = derivationKeyword;
             PropertyAccessibility = propertyAccessibility;
             IsLast = isLast;
-
+            if (PropertyName.Contains("NonNullableClass") || PropertyName.Contains("ExplicitlyNullable"))
+            {
+                var DEBUG = 0;
+            }
             ParseAccessibilityAttribute();
             if (propertySymbol.GetMethod == null)
                 throw new LazinatorCodeGenException($"ILazinator interface property {PropertyName} in {ContainingObjectDescription?.NameIncludingGenerics} must include a get method.");
