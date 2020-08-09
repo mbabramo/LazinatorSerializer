@@ -342,6 +342,12 @@ namespace Lazinator.CodeDescription
         {
             INamedTypeSymbol namedTypeSymbol = typeSymbol as INamedTypeSymbol;
 
+
+            if (typeSymbol.ToString().Contains("NonNullableClass"))
+            {
+                var DEBUG = 0;
+            }
+
             if (namedTypeSymbol == null && typeSymbol.TypeKind == TypeKind.TypeParameter)
             {
                 Nullable = true;
@@ -371,11 +377,6 @@ namespace Lazinator.CodeDescription
                     PropertyType = LazinatorPropertyType.PrimitiveType;
                     return;
                 }
-            }
-
-            if (typeSymbol.ToString().Contains("NonNullable"))
-            {
-                var DEBUG = 0;
             }
 
             bool isILazinator = typeSymbol.Interfaces.Any(x => x.Name == "ILazinator" || x.Name == "ILazinator?");
@@ -528,16 +529,13 @@ namespace Lazinator.CodeDescription
         {
             try
             {
-                Nullable = IsNullableType(t);
                 if (t.TypeKind == TypeKind.Class || t.TypeKind == TypeKind.Interface || t.TypeKind == TypeKind.Array)
                 {
-                    if (Nullable)
-                        PropertyType = LazinatorPropertyType.LazinatorClassOrInterface;
-                    else
-                        PropertyType = LazinatorPropertyType.LazinatorNonnullableClassOrInterface;
+                     PropertyType = LazinatorPropertyType.LazinatorClassOrInterface;
                 }
                 else
                 {
+                    Nullable = IsNullableType(t);
                     PropertyType = Nullable ? LazinatorPropertyType.LazinatorStructNullable : LazinatorPropertyType.LazinatorStruct;
                 }
 
