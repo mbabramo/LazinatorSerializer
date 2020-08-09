@@ -519,7 +519,10 @@ namespace LazinatorCodeGen.Roslyn
 
         public static NullableContext GetNullableContextForSymbol(this ISymbol symbol, Compilation compilation, bool verifyAllMatch = true)
         {
-            var syntaxTree = symbol.DeclaringSyntaxReferences.First().SyntaxTree;
+            SyntaxReference syntaxReference = symbol.DeclaringSyntaxReferences.FirstOrDefault();
+            if (syntaxReference == null)
+                return NullableContext.ContextInherited;
+            var syntaxTree = syntaxReference.SyntaxTree;
             if (!compilation.ContainsSyntaxTree(syntaxTree))
             {
                 // This symbol is not in the compilation. (This may happen if we create Lazinator code for an object from some other assembly, for
