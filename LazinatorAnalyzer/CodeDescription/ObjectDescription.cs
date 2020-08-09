@@ -28,7 +28,8 @@ namespace Lazinator.CodeDescription
         public NullableContext NullableContextSetting { get; set; }
         public bool NullableModeEnabled => NullableContextSetting.WarningsEnabled(); // TODO && NullableContextSetting.AnnotationsEnabled();
         public bool NullableModeInherited => NullableContextSetting.WarningsInherited(); // TODO annotations
-        public string NullableModeSettingString => NullableModeInherited ? "" : (NullableModeEnabled ? $@"
+        public bool AlwaysSpecifyNullableMode => true; // the WarningsInherited() setting seems not always to be correct
+        public string NullableModeSettingString => NullableModeInherited && !AlwaysSpecifyNullableMode ? "" : (NullableModeEnabled ? $@"
             #nullable enable" : $@"
             #nullable disable"); 
         public string QuestionMarkIfNullableModeEnabled => NullableModeEnabled ? "?" : "";
