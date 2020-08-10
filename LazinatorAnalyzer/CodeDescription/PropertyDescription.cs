@@ -346,7 +346,7 @@ namespace Lazinator.CodeDescription
             INamedTypeSymbol namedTypeSymbol = typeSymbol as INamedTypeSymbol;
 
 
-            if (typeSymbol.ToString().Contains("NonNullableClass"))
+            if (typeSymbol.ToString().Contains("ExampleChild"))
             {
                 var DEBUG = 0;
             }
@@ -535,9 +535,15 @@ namespace Lazinator.CodeDescription
                 if (t.TypeKind == TypeKind.Class || t.TypeKind == TypeKind.Interface || t.TypeKind == TypeKind.Array)
                 {
                     if (NullableModeEnabled && !Symbol.ToString().EndsWith("?"))
+                    {
+                        Nullable = false;
                         PropertyType = LazinatorPropertyType.LazinatorNonnullableClassOrInterface;
+                    }
                     else
+                    {
+                        Nullable = true;
                         PropertyType = LazinatorPropertyType.LazinatorClassOrInterface;
+                    }
                 }
                 else
                 {
