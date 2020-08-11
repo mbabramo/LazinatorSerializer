@@ -439,11 +439,11 @@ namespace LazinatorCollections
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && NextNode != null) || ((_NextNode_Accessed && _NextNode != null)))
+            if ((!exploreOnlyDeserializedChildren && NextNode != null) || (_NextNode_Accessed && _NextNode != null))
             {
                 _NextNode = (LazinatorLinkedListNode<T>) _NextNode.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && Value != null) || ((_Value_Accessed && _Value != null)))
+            if ((!exploreOnlyDeserializedChildren && Value != null) || (_Value_Accessed && _Value != null))
             {
                 _Value = (T) _Value.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }

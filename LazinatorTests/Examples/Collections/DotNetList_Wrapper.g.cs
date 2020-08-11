@@ -381,15 +381,15 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && MyListInt != null) || ((_MyListInt_Accessed && _MyListInt != null)))
+            if ((!exploreOnlyDeserializedChildren && MyListInt != null) || (_MyListInt_Accessed && _MyListInt != null))
             {
                 _MyListInt = (List<WInt>) CloneOrChange_List_GWInt_g(_MyListInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            if ((!exploreOnlyDeserializedChildren && MyListNullableByte != null) || ((_MyListNullableByte_Accessed && _MyListNullableByte != null)))
+            if ((!exploreOnlyDeserializedChildren && MyListNullableByte != null) || (_MyListNullableByte_Accessed && _MyListNullableByte != null))
             {
                 _MyListNullableByte = (List<WNullableByte>) CloneOrChange_List_GWNullableByte_g(_MyListNullableByte, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            if ((!exploreOnlyDeserializedChildren && MyListNullableInt != null) || ((_MyListNullableInt_Accessed && _MyListNullableInt != null)))
+            if ((!exploreOnlyDeserializedChildren && MyListNullableInt != null) || (_MyListNullableInt_Accessed && _MyListNullableInt != null))
             {
                 _MyListNullableInt = (List<WNullableInt>) CloneOrChange_List_GWNullableInt_g(_MyListNullableInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }

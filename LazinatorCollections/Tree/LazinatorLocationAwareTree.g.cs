@@ -172,7 +172,7 @@ namespace LazinatorCollections.Tree
         public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, false);
-            if ((!exploreOnlyDeserializedChildren && Locations != null) || ((_Locations_Accessed && _Locations != null)))
+            if ((!exploreOnlyDeserializedChildren && Locations != null) || (_Locations_Accessed && _Locations != null))
             {
                 _Locations = (LazinatorDictionary<T, LazinatorList<WInt>>) _Locations.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }

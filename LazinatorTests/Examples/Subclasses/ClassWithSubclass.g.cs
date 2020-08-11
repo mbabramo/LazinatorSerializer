@@ -427,11 +427,11 @@ namespace LazinatorTests.Examples.Subclasses
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && SubclassInstance1 != null) || ((_SubclassInstance1_Accessed && _SubclassInstance1 != null)))
+            if ((!exploreOnlyDeserializedChildren && SubclassInstance1 != null) || (_SubclassInstance1_Accessed && _SubclassInstance1 != null))
             {
                 _SubclassInstance1 = (global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass) _SubclassInstance1.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && SubclassInstance2 != null) || ((_SubclassInstance2_Accessed && _SubclassInstance2 != null)))
+            if ((!exploreOnlyDeserializedChildren && SubclassInstance2 != null) || (_SubclassInstance2_Accessed && _SubclassInstance2 != null))
             {
                 _SubclassInstance2 = (global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass) _SubclassInstance2.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }

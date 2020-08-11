@@ -376,11 +376,11 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && MyT != null) || ((_MyT_Accessed && _MyT != null)))
+            if ((!exploreOnlyDeserializedChildren && MyT != null) || (_MyT_Accessed && _MyT != null))
             {
                 _MyT = (T) _MyT.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && MyListT != null) || ((_MyListT_Accessed && _MyListT != null)))
+            if ((!exploreOnlyDeserializedChildren && MyListT != null) || (_MyListT_Accessed && _MyListT != null))
             {
                 _MyListT = (List<T>) CloneOrChange_List_GT_g(_MyListT, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }

@@ -324,15 +324,15 @@ namespace LazinatorCollections.ByteSpan
         {
             if (!exploreOnlyDeserializedChildren)
             {
-                var deserialized = ReadOnly;
+                var deserialized_ReadOnly = ReadOnly;
                 if (!_ReadOnly_Accessed)
                 {
-                    ReadOnly = deserialized;
+                    ReadOnly = deserialized_ReadOnly;
                 }
             }
             if (!exploreOnlyDeserializedChildren)
             {
-                var deserialized = ReadOrWrite;
+                var deserialized_ReadOrWrite = ReadOrWrite;
             }
             if (changeThisLevel)
             {

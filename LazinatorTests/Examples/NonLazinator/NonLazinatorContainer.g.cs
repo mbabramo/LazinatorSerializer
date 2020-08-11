@@ -402,25 +402,17 @@ namespace LazinatorTests.Examples
         
         public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && NonLazinatorInterchangeableClass != null) || ((_NonLazinatorInterchangeableClass_Accessed && _NonLazinatorInterchangeableClass != null)))
+            if ((!exploreOnlyDeserializedChildren && NonLazinatorInterchangeableClass != null) || (_NonLazinatorInterchangeableClass_Accessed && _NonLazinatorInterchangeableClass != null))
             {
                 _NonLazinatorInterchangeableClass = (NonLazinatorInterchangeableClass) CloneOrChange_NonLazinatorInterchangeableClass(_NonLazinatorInterchangeableClass, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
-            {
-                var deserialized = NonLazinatorInterchangeableStruct;
-                _NonLazinatorInterchangeableStruct = (NonLazinatorInterchangeableStruct) CloneOrChange_NonLazinatorInterchangeableStruct(_NonLazinatorInterchangeableStruct, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
-            }
-            if ((!exploreOnlyDeserializedChildren && NonLazinatorClass != null) || ((_NonLazinatorClass_Accessed && _NonLazinatorClass != null)))
+            var deserialized_NonLazinatorInterchangeableStruct = NonLazinatorInterchangeableStruct;
+            _NonLazinatorInterchangeableStruct = (NonLazinatorInterchangeableStruct) CloneOrChange_NonLazinatorInterchangeableStruct(_NonLazinatorInterchangeableStruct, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);if ((!exploreOnlyDeserializedChildren && NonLazinatorClass != null) || (_NonLazinatorClass_Accessed && _NonLazinatorClass != null))
             {
                 _NonLazinatorClass = NonLazinatorDirectConverter.CloneOrChange_NonLazinatorClass(_NonLazinatorClass, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
-            {
-                var deserialized = NonLazinatorStruct;
-                _NonLazinatorStruct = NonLazinatorDirectConverter.CloneOrChange_NonLazinatorStruct(_NonLazinatorStruct, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
-            }
-            if (changeThisLevel)
+            var deserialized_NonLazinatorStruct = NonLazinatorStruct;
+            _NonLazinatorStruct = NonLazinatorDirectConverter.CloneOrChange_NonLazinatorStruct(_NonLazinatorStruct, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);if (changeThisLevel)
             {
                 return changeFunc(this);
             }

@@ -279,10 +279,10 @@ namespace LazinatorCollections.OffsetList
         {
             if (!exploreOnlyDeserializedChildren)
             {
-                var deserialized = ReadOnlyBytes;
+                var deserialized_ReadOnlyBytes = ReadOnlyBytes;
                 if (!_ReadOnlyBytes_Accessed)
                 {
-                    ReadOnlyBytes = deserialized;
+                    ReadOnlyBytes = deserialized_ReadOnlyBytes;
                 }
             }
             if (changeThisLevel)

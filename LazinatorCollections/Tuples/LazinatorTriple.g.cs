@@ -550,15 +550,15 @@ namespace LazinatorCollections.Tuples
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && Item1 != null) || ((_Item1_Accessed && _Item1 != null)))
+            if ((!exploreOnlyDeserializedChildren && Item1 != null) || (_Item1_Accessed && _Item1 != null))
             {
                 _Item1 = (T) _Item1.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && Item2 != null) || ((_Item2_Accessed && _Item2 != null)))
+            if ((!exploreOnlyDeserializedChildren && Item2 != null) || (_Item2_Accessed && _Item2 != null))
             {
                 _Item2 = (U) _Item2.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && Item3 != null) || ((_Item3_Accessed && _Item3 != null)))
+            if ((!exploreOnlyDeserializedChildren && Item3 != null) || (_Item3_Accessed && _Item3 != null))
             {
                 _Item3 = (V) _Item3.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }

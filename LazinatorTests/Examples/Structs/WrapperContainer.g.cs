@@ -328,12 +328,8 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
-            {
-                var deserialized = WrappedInt;
-                _WrappedInt = (WInt) _WrappedInt.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
-            }
-            if (changeThisLevel)
+            var deserialized_WrappedInt = WrappedInt;
+            _WrappedInt = (WInt) _WrappedInt.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);if (changeThisLevel)
             {
                 return changeFunc(this);
             }

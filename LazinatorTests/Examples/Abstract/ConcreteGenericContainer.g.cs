@@ -320,7 +320,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && Item != null) || ((_Item_Accessed && _Item != null)))
+            if ((!exploreOnlyDeserializedChildren && Item != null) || (_Item_Accessed && _Item != null))
             {
                 _Item = (IAbstractGeneric1<int>) _Item.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }

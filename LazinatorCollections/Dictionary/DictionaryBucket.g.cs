@@ -448,11 +448,11 @@ namespace LazinatorCollections.Dictionary
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && Keys != null) || ((_Keys_Accessed && _Keys != null)))
+            if ((!exploreOnlyDeserializedChildren && Keys != null) || (_Keys_Accessed && _Keys != null))
             {
                 _Keys = (LazinatorList<TKey>) _Keys.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && Values != null) || ((_Values_Accessed && _Values != null)))
+            if ((!exploreOnlyDeserializedChildren && Values != null) || (_Values_Accessed && _Values != null))
             {
                 _Values = (LazinatorList<TValue>) _Values.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }

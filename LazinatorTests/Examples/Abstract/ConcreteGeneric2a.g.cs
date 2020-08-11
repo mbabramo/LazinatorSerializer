@@ -408,7 +408,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && LazinatorExample != null) || ((_LazinatorExample_Accessed && _LazinatorExample != null)))
+            if ((!exploreOnlyDeserializedChildren && LazinatorExample != null) || (_LazinatorExample_Accessed && _LazinatorExample != null))
             {
                 _LazinatorExample = (Example) _LazinatorExample.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }

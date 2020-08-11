@@ -316,7 +316,7 @@ namespace LazinatorCollections
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && Offsets != null) || ((_Offsets_Accessed && _Offsets != null)))
+            if ((!exploreOnlyDeserializedChildren && Offsets != null) || (_Offsets_Accessed && _Offsets != null))
             {
                 _Offsets = (LazinatorOffsetList) _Offsets.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }

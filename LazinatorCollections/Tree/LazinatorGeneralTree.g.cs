@@ -440,11 +440,11 @@ namespace LazinatorCollections.Tree
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && Children != null) || ((_Children_Accessed && _Children != null)))
+            if ((!exploreOnlyDeserializedChildren && Children != null) || (_Children_Accessed && _Children != null))
             {
                 _Children = (LazinatorList<LazinatorGeneralTree<T>>) _Children.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && Item != null) || ((_Item_Accessed && _Item != null)))
+            if ((!exploreOnlyDeserializedChildren && Item != null) || (_Item_Accessed && _Item != null))
             {
                 _Item = (T) _Item.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }

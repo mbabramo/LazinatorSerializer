@@ -338,7 +338,7 @@ namespace LazinatorCollections.BitArray
         {
             if (!exploreOnlyDeserializedChildren)
             {
-                var deserialized = IntStorage;
+                var deserialized_IntStorage = IntStorage;
             }
             if (changeThisLevel)
             {

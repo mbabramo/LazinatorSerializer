@@ -471,16 +471,12 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && ExampleNullableStruct != null) || ((_ExampleNullableStruct_Accessed && _ExampleNullableStruct != null)))
+            if ((!exploreOnlyDeserializedChildren && ExampleNullableStruct != null) || (_ExampleNullableStruct_Accessed && _ExampleNullableStruct != null))
             {
                 _ExampleNullableStruct = (ExampleStructWithoutClass?) _ExampleNullableStruct.Value.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
-            {
-                var deserialized = ExampleStructWithoutClass;
-                _ExampleStructWithoutClass = (ExampleStructWithoutClass) _ExampleStructWithoutClass.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
-            }
-            if (changeThisLevel)
+            var deserialized_ExampleStructWithoutClass = ExampleStructWithoutClass;
+            _ExampleStructWithoutClass = (ExampleStructWithoutClass) _ExampleStructWithoutClass.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);if (changeThisLevel)
             {
                 return changeFunc(this);
             }

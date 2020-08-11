@@ -339,11 +339,11 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && MyDictionaryWithRecordLikeContainers != null) || ((_MyDictionaryWithRecordLikeContainers_Accessed && _MyDictionaryWithRecordLikeContainers != null)))
+            if ((!exploreOnlyDeserializedChildren && MyDictionaryWithRecordLikeContainers != null) || (_MyDictionaryWithRecordLikeContainers_Accessed && _MyDictionaryWithRecordLikeContainers != null))
             {
                 _MyDictionaryWithRecordLikeContainers = (Dictionary<int, RecordLikeContainer>) CloneOrChange_Dictionary_Gint_c_C32RecordLikeContainer_g(_MyDictionaryWithRecordLikeContainers, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            if ((!exploreOnlyDeserializedChildren && MyDictionaryWithRecordLikeTypeValues != null) || ((_MyDictionaryWithRecordLikeTypeValues_Accessed && _MyDictionaryWithRecordLikeTypeValues != null)))
+            if ((!exploreOnlyDeserializedChildren && MyDictionaryWithRecordLikeTypeValues != null) || (_MyDictionaryWithRecordLikeTypeValues_Accessed && _MyDictionaryWithRecordLikeTypeValues != null))
             {
                 _MyDictionaryWithRecordLikeTypeValues = (Dictionary<int, RecordLikeTypeWithLazinator>) CloneOrChange_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(_MyDictionaryWithRecordLikeTypeValues, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }

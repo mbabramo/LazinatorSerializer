@@ -407,11 +407,11 @@ namespace LazinatorCollections.Tuples
         
         public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && Key != null) || ((_Key_Accessed && _Key != null)))
+            if ((!exploreOnlyDeserializedChildren && Key != null) || (_Key_Accessed && _Key != null))
             {
                 _Key = (TKey) _Key.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && Value != null) || ((_Value_Accessed && _Value != null)))
+            if ((!exploreOnlyDeserializedChildren && Value != null) || (_Value_Accessed && _Value != null))
             {
                 _Value = (TValue) _Value.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }

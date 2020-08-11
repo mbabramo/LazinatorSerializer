@@ -470,20 +470,20 @@ namespace LazinatorTests.Examples
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && MyExampleGrandchild != null) || ((_MyExampleGrandchild_Accessed && _MyExampleGrandchild != null)))
+            if ((!exploreOnlyDeserializedChildren && MyExampleGrandchild != null) || (_MyExampleGrandchild_Accessed && _MyExampleGrandchild != null))
             {
                 _MyExampleGrandchild = (ExampleGrandchild) _MyExampleGrandchild.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && MyWrapperContainer != null) || ((_MyWrapperContainer_Accessed && _MyWrapperContainer != null)))
+            if ((!exploreOnlyDeserializedChildren && MyWrapperContainer != null) || (_MyWrapperContainer_Accessed && _MyWrapperContainer != null))
             {
                 _MyWrapperContainer = (WrapperContainer) _MyWrapperContainer.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if (!exploreOnlyDeserializedChildren)
             {
-                var deserialized = ByteSpan;
+                var deserialized_ByteSpan = ByteSpan;
                 if (!_ByteSpan_Accessed)
                 {
-                    ByteSpan = deserialized;
+                    ByteSpan = deserialized_ByteSpan;
                 }
             }
             if (changeThisLevel)

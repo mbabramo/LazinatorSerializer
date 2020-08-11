@@ -280,12 +280,8 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
-            {
-                var deserialized = MyKeyValuePairSerialized;
-                _MyKeyValuePairSerialized = (KeyValuePair<uint, ExampleChild>) CloneOrChange_KeyValuePair_Guint_c_C32ExampleChild_g(_MyKeyValuePairSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
-            }
-            if (changeThisLevel)
+            var deserialized_MyKeyValuePairSerialized = MyKeyValuePairSerialized;
+            _MyKeyValuePairSerialized = (KeyValuePair<uint, ExampleChild>) CloneOrChange_KeyValuePair_Guint_c_C32ExampleChild_g(_MyKeyValuePairSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);if (changeThisLevel)
             {
                 return changeFunc(this);
             }

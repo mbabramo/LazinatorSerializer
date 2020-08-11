@@ -194,11 +194,11 @@ namespace LazinatorTests.Examples.Abstract
         public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, false);
-            if ((!exploreOnlyDeserializedChildren && IntList4 != null) || ((_IntList4_Accessed && _IntList4 != null)))
+            if ((!exploreOnlyDeserializedChildren && IntList4 != null) || (_IntList4_Accessed && _IntList4 != null))
             {
                 _IntList4 = (List<int>) CloneOrChange_List_Gint_g(_IntList4, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            if ((!exploreOnlyDeserializedChildren && IntList5 != null) || ((_IntList5_Accessed && _IntList5 != null)))
+            if ((!exploreOnlyDeserializedChildren && IntList5 != null) || (_IntList5_Accessed && _IntList5 != null))
             {
                 _IntList5 = (List<int>) CloneOrChange_List_Gint_g(_IntList5, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }

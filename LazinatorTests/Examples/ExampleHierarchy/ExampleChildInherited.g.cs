@@ -183,7 +183,7 @@ namespace LazinatorTests.Examples
         public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, false);
-            if ((!exploreOnlyDeserializedChildren && MyGrandchildInInherited != null) || ((_MyGrandchildInInherited_Accessed && _MyGrandchildInInherited != null)))
+            if ((!exploreOnlyDeserializedChildren && MyGrandchildInInherited != null) || (_MyGrandchildInInherited_Accessed && _MyGrandchildInInherited != null))
             {
                 _MyGrandchildInInherited = (ExampleGrandchild) _MyGrandchildInInherited.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }

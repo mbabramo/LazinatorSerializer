@@ -1038,51 +1038,19 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && ListWrappedBytes != null) || ((_ListWrappedBytes_Accessed && _ListWrappedBytes != null)))
+            if ((!exploreOnlyDeserializedChildren && ListWrappedBytes != null) || (_ListWrappedBytes_Accessed && _ListWrappedBytes != null))
             {
                 _ListWrappedBytes = (LazinatorList<WByte>) _ListWrappedBytes.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
-            {
-                var deserialized = WrappedBool;
-                _WrappedBool = (WBool) _WrappedBool.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
-            }
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
-            {
-                var deserialized = WrappedByte;
-                _WrappedByte = (WByte) _WrappedByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
-            }
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
-            {
-                var deserialized = WrappedChar;
-                _WrappedChar = (WChar) _WrappedChar.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
-            }
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
-            {
-                var deserialized = WrappedNullableBool;
-                _WrappedNullableBool = (WNullableBool) _WrappedNullableBool.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
-            }
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
-            {
-                var deserialized = WrappedNullableByte;
-                _WrappedNullableByte = (WNullableByte) _WrappedNullableByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
-            }
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
-            {
-                var deserialized = WrappedNullableChar;
-                _WrappedNullableChar = (WNullableChar) _WrappedNullableChar.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
-            }
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
-            {
-                var deserialized = WrappedNullableSByte;
-                _WrappedNullableSByte = (WNullableSByte) _WrappedNullableSByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
-            }
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
-            {
-                var deserialized = WrappedSByte;
-                _WrappedSByte = (WSByte) _WrappedSByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
-            }
-            if (changeThisLevel)
+            var deserialized_WrappedBool = WrappedBool;
+            _WrappedBool = (WBool) _WrappedBool.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);var deserialized_WrappedByte = WrappedByte;
+            _WrappedByte = (WByte) _WrappedByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);var deserialized_WrappedChar = WrappedChar;
+            _WrappedChar = (WChar) _WrappedChar.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);var deserialized_WrappedNullableBool = WrappedNullableBool;
+            _WrappedNullableBool = (WNullableBool) _WrappedNullableBool.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);var deserialized_WrappedNullableByte = WrappedNullableByte;
+            _WrappedNullableByte = (WNullableByte) _WrappedNullableByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);var deserialized_WrappedNullableChar = WrappedNullableChar;
+            _WrappedNullableChar = (WNullableChar) _WrappedNullableChar.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);var deserialized_WrappedNullableSByte = WrappedNullableSByte;
+            _WrappedNullableSByte = (WNullableSByte) _WrappedNullableSByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);var deserialized_WrappedSByte = WrappedSByte;
+            _WrappedSByte = (WSByte) _WrappedSByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);if (changeThisLevel)
             {
                 return changeFunc(this);
             }

@@ -327,12 +327,8 @@ namespace Lazinator.Wrappers
         
         public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
-            {
-                var deserialized = NonNullValue;
-                _NonNullValue = (T) _NonNullValue.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
-            }
-            if (changeThisLevel)
+            var deserialized_NonNullValue = NonNullValue;
+            _NonNullValue = (T) _NonNullValue.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);if (changeThisLevel)
             {
                 return changeFunc(this);
             }

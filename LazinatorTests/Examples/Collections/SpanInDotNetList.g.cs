@@ -296,7 +296,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && SpanList != null) || ((_SpanList_Accessed && _SpanList != null)))
+            if ((!exploreOnlyDeserializedChildren && SpanList != null) || (_SpanList_Accessed && _SpanList != null))
             {
                 _SpanList = (List<SpanAndMemory>) CloneOrChange_List_GSpanAndMemory_g(_SpanList, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }

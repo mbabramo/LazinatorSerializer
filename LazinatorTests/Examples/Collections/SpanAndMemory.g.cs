@@ -643,58 +643,58 @@ namespace LazinatorTests.Examples.Collections
         {
             if (!exploreOnlyDeserializedChildren)
             {
-                var deserialized = MyMemoryByte;
+                var deserialized_MyMemoryByte = MyMemoryByte;
             }
             if (!exploreOnlyDeserializedChildren)
             {
-                var deserialized = MyMemoryInt;
+                var deserialized_MyMemoryInt = MyMemoryInt;
             }
             if (!exploreOnlyDeserializedChildren)
             {
-                var deserialized = MyNullableMemoryByte;
+                var deserialized_MyNullableMemoryByte = MyNullableMemoryByte;
             }
             if (!exploreOnlyDeserializedChildren)
             {
-                var deserialized = MyNullableMemoryInt;
+                var deserialized_MyNullableMemoryInt = MyNullableMemoryInt;
             }
             if (!exploreOnlyDeserializedChildren)
             {
-                var deserialized = MyNullableReadOnlyMemoryInt;
+                var deserialized_MyNullableReadOnlyMemoryInt = MyNullableReadOnlyMemoryInt;
             }
             if (!exploreOnlyDeserializedChildren)
             {
-                var deserialized = MyReadOnlyMemoryByte;
+                var deserialized_MyReadOnlyMemoryByte = MyReadOnlyMemoryByte;
             }
             if (!exploreOnlyDeserializedChildren)
             {
-                var deserialized = MyReadOnlyMemoryChar;
+                var deserialized_MyReadOnlyMemoryChar = MyReadOnlyMemoryChar;
             }
             if (!exploreOnlyDeserializedChildren)
             {
-                var deserialized = MyReadOnlyMemoryInt;
+                var deserialized_MyReadOnlyMemoryInt = MyReadOnlyMemoryInt;
             }
             if (!exploreOnlyDeserializedChildren)
             {
-                var deserialized = MyReadOnlySpanByte;
+                var deserialized_MyReadOnlySpanByte = MyReadOnlySpanByte;
                 if (!_MyReadOnlySpanByte_Accessed)
                 {
-                    MyReadOnlySpanByte = deserialized;
+                    MyReadOnlySpanByte = deserialized_MyReadOnlySpanByte;
                 }
             }
             if (!exploreOnlyDeserializedChildren)
             {
-                var deserialized = MyReadOnlySpanChar;
+                var deserialized_MyReadOnlySpanChar = MyReadOnlySpanChar;
                 if (!_MyReadOnlySpanChar_Accessed)
                 {
-                    MyReadOnlySpanChar = deserialized;
+                    MyReadOnlySpanChar = deserialized_MyReadOnlySpanChar;
                 }
             }
             if (!exploreOnlyDeserializedChildren)
             {
-                var deserialized = MyReadOnlySpanLong;
+                var deserialized_MyReadOnlySpanLong = MyReadOnlySpanLong;
                 if (!_MyReadOnlySpanLong_Accessed)
                 {
-                    MyReadOnlySpanLong = deserialized;
+                    MyReadOnlySpanLong = deserialized_MyReadOnlySpanLong;
                 }
             }
             if (changeThisLevel)

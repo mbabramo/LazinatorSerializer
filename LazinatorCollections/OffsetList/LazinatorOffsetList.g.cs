@@ -452,11 +452,11 @@ namespace LazinatorCollections.OffsetList
         
         public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && FourByteItems != null) || ((_FourByteItems_Accessed && _FourByteItems != null)))
+            if ((!exploreOnlyDeserializedChildren && FourByteItems != null) || (_FourByteItems_Accessed && _FourByteItems != null))
             {
                 _FourByteItems = (LazinatorFastReadListInt32) _FourByteItems.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && TwoByteItems != null) || ((_TwoByteItems_Accessed && _TwoByteItems != null)))
+            if ((!exploreOnlyDeserializedChildren && TwoByteItems != null) || (_TwoByteItems_Accessed && _TwoByteItems != null))
             {
                 _TwoByteItems = (LazinatorFastReadListInt16) _TwoByteItems.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }

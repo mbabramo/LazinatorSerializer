@@ -324,7 +324,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && Item != null) || ((_Item_Accessed && _Item != null)))
+            if ((!exploreOnlyDeserializedChildren && Item != null) || (_Item_Accessed && _Item != null))
             {
                 _Item = (AbstractGeneric1<T>) _Item.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }

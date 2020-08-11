@@ -366,11 +366,11 @@ namespace LazinatorTests.Examples.Hierarchy
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && ExampleByInterface != null) || ((_ExampleByInterface_Accessed && _ExampleByInterface != null)))
+            if ((!exploreOnlyDeserializedChildren && ExampleByInterface != null) || (_ExampleByInterface_Accessed && _ExampleByInterface != null))
             {
                 _ExampleByInterface = (IExample) _ExampleByInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && ExampleListByInterface != null) || ((_ExampleListByInterface_Accessed && _ExampleListByInterface != null)))
+            if ((!exploreOnlyDeserializedChildren && ExampleListByInterface != null) || (_ExampleListByInterface_Accessed && _ExampleListByInterface != null))
             {
                 _ExampleListByInterface = (List<IExample>) CloneOrChange_List_GIExample_g(_ExampleListByInterface, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }

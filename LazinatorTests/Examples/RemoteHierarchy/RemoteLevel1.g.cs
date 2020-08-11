@@ -343,7 +343,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && RemoteLevel2Item != null) || ((_RemoteLevel2Item_Accessed && _RemoteLevel2Item != null)))
+            if ((!exploreOnlyDeserializedChildren && RemoteLevel2Item != null) || (_RemoteLevel2Item_Accessed && _RemoteLevel2Item != null))
             {
                 _RemoteLevel2Item = (Remote<WGuid, RemoteLevel2>) _RemoteLevel2Item.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }

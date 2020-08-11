@@ -445,11 +445,11 @@ namespace LazinatorTests.Examples
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && MyOfficialObject != null) || ((_MyOfficialObject_Accessed && _MyOfficialObject != null)))
+            if ((!exploreOnlyDeserializedChildren && MyOfficialObject != null) || (_MyOfficialObject_Accessed && _MyOfficialObject != null))
             {
                 _MyOfficialObject = (Concrete5) _MyOfficialObject.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && MyUnofficialObject != null) || ((_MyUnofficialObject_Accessed && _MyUnofficialObject != null)))
+            if ((!exploreOnlyDeserializedChildren && MyUnofficialObject != null) || (_MyUnofficialObject_Accessed && _MyUnofficialObject != null))
             {
                 _MyUnofficialObject = (Concrete3) _MyUnofficialObject.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }

@@ -280,7 +280,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && MyHashSetSerialized != null) || ((_MyHashSetSerialized_Accessed && _MyHashSetSerialized != null)))
+            if ((!exploreOnlyDeserializedChildren && MyHashSetSerialized != null) || (_MyHashSetSerialized_Accessed && _MyHashSetSerialized != null))
             {
                 _MyHashSetSerialized = (HashSet<ExampleChild>) CloneOrChange_HashSet_GExampleChild_g(_MyHashSetSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }

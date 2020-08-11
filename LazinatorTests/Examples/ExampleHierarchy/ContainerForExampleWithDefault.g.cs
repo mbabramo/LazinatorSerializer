@@ -324,7 +324,7 @@ namespace LazinatorTests.Examples
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && Example != null) || ((_Example_Accessed && _Example != null)))
+            if ((!exploreOnlyDeserializedChildren && Example != null) || (_Example_Accessed && _Example != null))
             {
                 _Example = (Example) _Example.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }

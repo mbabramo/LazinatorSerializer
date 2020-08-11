@@ -359,7 +359,7 @@ namespace LazinatorCollections.Dictionary
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && Buckets != null) || ((_Buckets_Accessed && _Buckets != null)))
+            if ((!exploreOnlyDeserializedChildren && Buckets != null) || (_Buckets_Accessed && _Buckets != null))
             {
                 _Buckets = (LazinatorList<DictionaryBucket<TKey, TValue>>) _Buckets.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }

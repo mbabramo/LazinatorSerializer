@@ -339,7 +339,7 @@ namespace LazinatorCollections
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && UnderlyingList != null) || ((_UnderlyingList_Accessed && _UnderlyingList != null)))
+            if ((!exploreOnlyDeserializedChildren && UnderlyingList != null) || (_UnderlyingList_Accessed && _UnderlyingList != null))
             {
                 _UnderlyingList = (ILazinatorListable<T>) _UnderlyingList.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }

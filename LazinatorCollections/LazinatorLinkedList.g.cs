@@ -377,7 +377,7 @@ namespace LazinatorCollections
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && FirstNode != null) || ((_FirstNode_Accessed && _FirstNode != null)))
+            if ((!exploreOnlyDeserializedChildren && FirstNode != null) || (_FirstNode_Accessed && _FirstNode != null))
             {
                 _FirstNode = (LazinatorLinkedListNode<T>) _FirstNode.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }

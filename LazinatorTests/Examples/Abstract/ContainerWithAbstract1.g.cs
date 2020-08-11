@@ -324,7 +324,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && AbstractProperty != null) || ((_AbstractProperty_Accessed && _AbstractProperty != null)))
+            if ((!exploreOnlyDeserializedChildren && AbstractProperty != null) || (_AbstractProperty_Accessed && _AbstractProperty != null))
             {
                 _AbstractProperty = (Abstract1) _AbstractProperty.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }

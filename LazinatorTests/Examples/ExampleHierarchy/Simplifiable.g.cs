@@ -684,19 +684,19 @@ namespace LazinatorTests.Examples
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && ANonSkippableEarlierExample != null) || ((_ANonSkippableEarlierExample_Accessed && _ANonSkippableEarlierExample != null)))
+            if ((!exploreOnlyDeserializedChildren && ANonSkippableEarlierExample != null) || (_ANonSkippableEarlierExample_Accessed && _ANonSkippableEarlierExample != null))
             {
                 _ANonSkippableEarlierExample = (Example) _ANonSkippableEarlierExample.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && Example != null) || ((_Example_Accessed && _Example != null)))
+            if ((!exploreOnlyDeserializedChildren && Example != null) || (_Example_Accessed && _Example != null))
             {
                 _Example = (Example) _Example.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && Example2 != null) || ((_Example2_Accessed && _Example2 != null)))
+            if ((!exploreOnlyDeserializedChildren && Example2 != null) || (_Example2_Accessed && _Example2 != null))
             {
                 _Example2 = (Example) _Example2.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && Example3 != null) || ((_Example3_Accessed && _Example3 != null)))
+            if ((!exploreOnlyDeserializedChildren && Example3 != null) || (_Example3_Accessed && _Example3 != null))
             {
                 _Example3 = (Example) _Example3.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }

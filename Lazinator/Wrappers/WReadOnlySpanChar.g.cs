@@ -274,10 +274,10 @@ namespace Lazinator.Wrappers
         {
             if (!exploreOnlyDeserializedChildren)
             {
-                var deserialized = Value;
+                var deserialized_Value = Value;
                 if (!_Value_Accessed)
                 {
-                    Value = deserialized;
+                    Value = deserialized_Value;
                 }
             }
             if (changeThisLevel)

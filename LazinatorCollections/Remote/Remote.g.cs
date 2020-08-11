@@ -462,11 +462,11 @@ namespace LazinatorCollections.Remote
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && Key != null) || ((_Key_Accessed && _Key != null)))
+            if ((!exploreOnlyDeserializedChildren && Key != null) || (_Key_Accessed && _Key != null))
             {
                 _Key = (TKey) _Key.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && Local != null) || ((_Local_Accessed && _Local != null)))
+            if ((!exploreOnlyDeserializedChildren && Local != null) || (_Local_Accessed && _Local != null))
             {
                 _Local = (TValue) _Local.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }

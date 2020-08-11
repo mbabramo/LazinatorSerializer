@@ -583,19 +583,19 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         public virtual ILazinator? ForEachLazinator(Func<ILazinator?, ILazinator?>? changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && ExplicitlyNullable != null) || ((_ExplicitlyNullable_Accessed && _ExplicitlyNullable != null)))
+            if ((!exploreOnlyDeserializedChildren && ExplicitlyNullable != null) || (_ExplicitlyNullable_Accessed && _ExplicitlyNullable != null))
             {
                 _ExplicitlyNullable = (Example?) _ExplicitlyNullable.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && ExplicitlyNullableInterface != null) || ((_ExplicitlyNullableInterface_Accessed && _ExplicitlyNullableInterface != null)))
+            if ((!exploreOnlyDeserializedChildren && ExplicitlyNullableInterface != null) || (_ExplicitlyNullableInterface_Accessed && _ExplicitlyNullableInterface != null))
             {
                 _ExplicitlyNullableInterface = (IExample?) _ExplicitlyNullableInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && NonNullableClass != null) || ((_NonNullableClass_Accessed && _NonNullableClass != null)))
+            if ((!exploreOnlyDeserializedChildren && NonNullableClass != null) || (_NonNullableClass_Accessed && _NonNullableClass != null))
             {
                 _NonNullableClass = (Example) _NonNullableClass.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && NonNullableInterface != null) || ((_NonNullableInterface_Accessed && _NonNullableInterface != null)))
+            if ((!exploreOnlyDeserializedChildren && NonNullableInterface != null) || (_NonNullableInterface_Accessed && _NonNullableInterface != null))
             {
                 _NonNullableInterface = (IExample) _NonNullableInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
