@@ -425,10 +425,11 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if ((_RemoteLevel2Item_Accessed && _RemoteLevel2Item != null))
+            if (_RemoteLevel2Item_Accessed && _RemoteLevel2Item != null)
             {
-                _RemoteLevel2Item.UpdateStoredBuffer(ref writer, startPosition + _RemoteLevel2Item_ByteIndex + sizeof(int), _RemoteLevel2Item_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                RemoteLevel2Item.UpdateStoredBuffer(ref writer, startPosition + _RemoteLevel2Item_ByteIndex + sizeof(int), _RemoteLevel2Item_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
+            
         }
         
         

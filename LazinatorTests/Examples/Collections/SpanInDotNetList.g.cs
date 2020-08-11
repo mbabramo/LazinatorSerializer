@@ -374,7 +374,7 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if ((_SpanList_Accessed && _SpanList != null))
+            if (_SpanList_Accessed && _SpanList != null)
             {
                 _SpanList = (List<SpanAndMemory>) CloneOrChange_List_GSpanAndMemory_g(_SpanList, l => l.RemoveBufferInHierarchy(), true);
             }

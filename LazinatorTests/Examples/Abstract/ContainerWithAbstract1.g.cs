@@ -405,10 +405,11 @@ namespace LazinatorTests.Examples.Abstract
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if ((_AbstractProperty_Accessed && _AbstractProperty != null))
+            if (_AbstractProperty_Accessed && _AbstractProperty != null)
             {
-                _AbstractProperty.UpdateStoredBuffer(ref writer, startPosition + _AbstractProperty_ByteIndex + sizeof(int), _AbstractProperty_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                AbstractProperty.UpdateStoredBuffer(ref writer, startPosition + _AbstractProperty_ByteIndex + sizeof(int), _AbstractProperty_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
+            
         }
         
         

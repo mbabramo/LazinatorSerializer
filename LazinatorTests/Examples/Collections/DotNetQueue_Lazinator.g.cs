@@ -357,7 +357,7 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if ((_MyQueueSerialized_Accessed && _MyQueueSerialized != null))
+            if (_MyQueueSerialized_Accessed && _MyQueueSerialized != null)
             {
                 _MyQueueSerialized = (Queue<ExampleChild>) CloneOrChange_Queue_GExampleChild_g(_MyQueueSerialized, l => l.RemoveBufferInHierarchy(), true);
             }

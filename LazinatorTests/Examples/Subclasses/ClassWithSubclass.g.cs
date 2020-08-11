@@ -520,14 +520,16 @@ namespace LazinatorTests.Examples.Subclasses
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if ((_SubclassInstance1_Accessed && _SubclassInstance1 != null))
+            if (_SubclassInstance1_Accessed && _SubclassInstance1 != null)
             {
-                _SubclassInstance1.UpdateStoredBuffer(ref writer, startPosition + _SubclassInstance1_ByteIndex + sizeof(int), _SubclassInstance1_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                SubclassInstance1.UpdateStoredBuffer(ref writer, startPosition + _SubclassInstance1_ByteIndex + sizeof(int), _SubclassInstance1_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if ((_SubclassInstance2_Accessed && _SubclassInstance2 != null))
+            
+            if (_SubclassInstance2_Accessed && _SubclassInstance2 != null)
             {
-                _SubclassInstance2.UpdateStoredBuffer(ref writer, startPosition + _SubclassInstance2_ByteIndex + sizeof(int), _SubclassInstance2_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                SubclassInstance2.UpdateStoredBuffer(ref writer, startPosition + _SubclassInstance2_ByteIndex + sizeof(int), _SubclassInstance2_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
+            
         }
         
         

@@ -454,11 +454,12 @@ namespace LazinatorTests.Examples.Hierarchy
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if ((_ExampleByInterface_Accessed && _ExampleByInterface != null))
+            if (_ExampleByInterface_Accessed && _ExampleByInterface != null)
             {
-                _ExampleByInterface.UpdateStoredBuffer(ref writer, startPosition + _ExampleByInterface_ByteIndex + sizeof(int), _ExampleByInterface_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                ExampleByInterface.UpdateStoredBuffer(ref writer, startPosition + _ExampleByInterface_ByteIndex + sizeof(int), _ExampleByInterface_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if ((_ExampleListByInterface_Accessed && _ExampleListByInterface != null))
+            
+            if (_ExampleListByInterface_Accessed && _ExampleListByInterface != null)
             {
                 _ExampleListByInterface = (List<IExample>) CloneOrChange_List_GIExample_g(_ExampleListByInterface, l => l.RemoveBufferInHierarchy(), true);
             }

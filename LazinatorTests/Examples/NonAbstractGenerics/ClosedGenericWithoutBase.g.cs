@@ -423,10 +423,11 @@ namespace LazinatorTests.Examples
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if ((_ItemU_Accessed && _ItemU != null))
+            if (_ItemU_Accessed && _ItemU != null)
             {
-                _ItemU.UpdateStoredBuffer(ref writer, startPosition + _ItemU_ByteIndex + sizeof(int), _ItemU_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                ItemU.UpdateStoredBuffer(ref writer, startPosition + _ItemU_ByteIndex + sizeof(int), _ItemU_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
+            
         }
         
         

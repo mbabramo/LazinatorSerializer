@@ -357,7 +357,7 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if ((_MyHashSetSerialized_Accessed && _MyHashSetSerialized != null))
+            if (_MyHashSetSerialized_Accessed && _MyHashSetSerialized != null)
             {
                 _MyHashSetSerialized = (HashSet<ExampleChild>) CloneOrChange_HashSet_GExampleChild_g(_MyHashSetSerialized, l => l.RemoveBufferInHierarchy(), true);
             }

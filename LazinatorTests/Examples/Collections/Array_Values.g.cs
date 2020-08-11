@@ -471,15 +471,15 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if ((_MyArrayInt_Accessed && _MyArrayInt != null))
+            if (_MyArrayInt_Accessed && _MyArrayInt != null)
             {
                 _MyArrayInt = (int[]) CloneOrChange_int_B_b(_MyArrayInt, l => l.RemoveBufferInHierarchy(), true);
             }
-            if ((_MyArrayNullableInt_Accessed && _MyArrayNullableInt != null))
+            if (_MyArrayNullableInt_Accessed && _MyArrayNullableInt != null)
             {
                 _MyArrayNullableInt = (int?[]) CloneOrChange_int_C63_B_b(_MyArrayNullableInt, l => l.RemoveBufferInHierarchy(), true);
             }
-            if ((_MyJaggedArrayInt_Accessed && _MyJaggedArrayInt != null))
+            if (_MyJaggedArrayInt_Accessed && _MyJaggedArrayInt != null)
             {
                 _MyJaggedArrayInt = (int[][]) CloneOrChange_int_B_b_B_b(_MyJaggedArrayInt, l => l.RemoveBufferInHierarchy(), true);
             }

@@ -374,7 +374,7 @@ namespace Lazinator.Wrappers
         
         void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if ((_WrappedValue_Accessed && _WrappedValue != null))
+            if (_WrappedValue_Accessed && _WrappedValue != null)
             {
                 _WrappedValue = (decimal[]) CloneOrChange_decimal_B_b(_WrappedValue, l => l.RemoveBufferInHierarchy(), true);
             }

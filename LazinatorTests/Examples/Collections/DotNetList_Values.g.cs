@@ -557,19 +557,19 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if ((_MyLinkedListInt_Accessed && _MyLinkedListInt != null))
+            if (_MyLinkedListInt_Accessed && _MyLinkedListInt != null)
             {
                 _MyLinkedListInt = (LinkedList<int>) CloneOrChange_LinkedList_Gint_g(_MyLinkedListInt, l => l.RemoveBufferInHierarchy(), true);
             }
-            if ((_MyListInt_Accessed && _MyListInt != null))
+            if (_MyListInt_Accessed && _MyListInt != null)
             {
                 _MyListInt = (List<int>) CloneOrChange_List_Gint_g(_MyListInt, l => l.RemoveBufferInHierarchy(), true);
             }
-            if ((_MyListInt2_Accessed && _MyListInt2 != null))
+            if (_MyListInt2_Accessed && _MyListInt2 != null)
             {
                 _MyListInt2 = (List<int>) CloneOrChange_List_Gint_g(_MyListInt2, l => l.RemoveBufferInHierarchy(), true);
             }
-            if ((_MySortedSetInt_Accessed && _MySortedSetInt != null))
+            if (_MySortedSetInt_Accessed && _MySortedSetInt != null)
             {
                 _MySortedSetInt = (SortedSet<int>) CloneOrChange_SortedSet_Gint_g(_MySortedSetInt, l => l.RemoveBufferInHierarchy(), true);
             }

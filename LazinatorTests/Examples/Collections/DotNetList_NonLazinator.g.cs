@@ -424,11 +424,11 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if ((_MyListNonLazinatorType_Accessed && _MyListNonLazinatorType != null))
+            if (_MyListNonLazinatorType_Accessed && _MyListNonLazinatorType != null)
             {
                 _MyListNonLazinatorType = (List<NonLazinatorClass>) CloneOrChange_List_GNonLazinatorClass_g(_MyListNonLazinatorType, l => l.RemoveBufferInHierarchy(), true);
             }
-            if ((_MyListNonLazinatorType2_Accessed && _MyListNonLazinatorType2 != null))
+            if (_MyListNonLazinatorType2_Accessed && _MyListNonLazinatorType2 != null)
             {
                 _MyListNonLazinatorType2 = (List<NonLazinatorClass>) CloneOrChange_List_GNonLazinatorClass_g(_MyListNonLazinatorType2, l => l.RemoveBufferInHierarchy(), true);
             }

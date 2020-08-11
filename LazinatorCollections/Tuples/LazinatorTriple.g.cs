@@ -669,18 +669,21 @@ namespace LazinatorCollections.Tuples
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if ((_Item1_Accessed && _Item1 != null))
+            if (_Item1_Accessed && _Item1 != null)
             {
-                _Item1.UpdateStoredBuffer(ref writer, startPosition + _Item1_ByteIndex + sizeof(int), _Item1_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                Item1.UpdateStoredBuffer(ref writer, startPosition + _Item1_ByteIndex + sizeof(int), _Item1_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if ((_Item2_Accessed && _Item2 != null))
+            
+            if (_Item2_Accessed && _Item2 != null)
             {
-                _Item2.UpdateStoredBuffer(ref writer, startPosition + _Item2_ByteIndex + sizeof(int), _Item2_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                Item2.UpdateStoredBuffer(ref writer, startPosition + _Item2_ByteIndex + sizeof(int), _Item2_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if ((_Item3_Accessed && _Item3 != null))
+            
+            if (_Item3_Accessed && _Item3 != null)
             {
-                _Item3.UpdateStoredBuffer(ref writer, startPosition + _Item3_ByteIndex + sizeof(int), _Item3_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                Item3.UpdateStoredBuffer(ref writer, startPosition + _Item3_ByteIndex + sizeof(int), _Item3_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
+            
         }
         
         

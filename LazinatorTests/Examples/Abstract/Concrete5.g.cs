@@ -283,11 +283,11 @@ namespace LazinatorTests.Examples.Abstract
         protected override void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
             base.UpdateDeserializedChildren(ref writer, startPosition);
-            if ((_IntList4_Accessed && _IntList4 != null))
+            if (_IntList4_Accessed && _IntList4 != null)
             {
                 _IntList4 = (List<int>) CloneOrChange_List_Gint_g(_IntList4, l => l.RemoveBufferInHierarchy(), true);
             }
-            if ((_IntList5_Accessed && _IntList5 != null))
+            if (_IntList5_Accessed && _IntList5 != null)
             {
                 _IntList5 = (List<int>) CloneOrChange_List_Gint_g(_IntList5, l => l.RemoveBufferInHierarchy(), true);
             }

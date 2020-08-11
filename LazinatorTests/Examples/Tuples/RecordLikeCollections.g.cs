@@ -424,11 +424,11 @@ namespace LazinatorTests.Examples.Tuples
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if ((_MyDictionaryWithRecordLikeContainers_Accessed && _MyDictionaryWithRecordLikeContainers != null))
+            if (_MyDictionaryWithRecordLikeContainers_Accessed && _MyDictionaryWithRecordLikeContainers != null)
             {
                 _MyDictionaryWithRecordLikeContainers = (Dictionary<int, RecordLikeContainer>) CloneOrChange_Dictionary_Gint_c_C32RecordLikeContainer_g(_MyDictionaryWithRecordLikeContainers, l => l.RemoveBufferInHierarchy(), true);
             }
-            if ((_MyDictionaryWithRecordLikeTypeValues_Accessed && _MyDictionaryWithRecordLikeTypeValues != null))
+            if (_MyDictionaryWithRecordLikeTypeValues_Accessed && _MyDictionaryWithRecordLikeTypeValues != null)
             {
                 _MyDictionaryWithRecordLikeTypeValues = (Dictionary<int, RecordLikeTypeWithLazinator>) CloneOrChange_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(_MyDictionaryWithRecordLikeTypeValues, l => l.RemoveBufferInHierarchy(), true);
             }
@@ -471,11 +471,11 @@ namespace LazinatorTests.Examples.Tuples
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
-                _MyDictionaryWithRecordLikeContainers_ByteIndex = startOfObjectPosition - startPosition;
-                if ((_MyDictionaryWithRecordLikeContainers_Accessed && _MyDictionaryWithRecordLikeContainers != null))
+                _MyDictionaryWithRecordLikeContainers_ByteIndex = startOfObjectPosition - startPosition;if (_MyDictionaryWithRecordLikeContainers_Accessed && _MyDictionaryWithRecordLikeContainers != null)
                 {
                     _MyDictionaryWithRecordLikeContainers = (Dictionary<int, RecordLikeContainer>) CloneOrChange_Dictionary_Gint_c_C32RecordLikeContainer_g(_MyDictionaryWithRecordLikeContainers, l => l.RemoveBufferInHierarchy(), true);
                 }
+                
             }
             startOfObjectPosition = writer.Position;
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyDictionaryWithRecordLikeTypeValues_Accessed)
@@ -492,11 +492,11 @@ namespace LazinatorTests.Examples.Tuples
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
-                _MyDictionaryWithRecordLikeTypeValues_ByteIndex = startOfObjectPosition - startPosition;
-                if ((_MyDictionaryWithRecordLikeTypeValues_Accessed && _MyDictionaryWithRecordLikeTypeValues != null))
+                _MyDictionaryWithRecordLikeTypeValues_ByteIndex = startOfObjectPosition - startPosition;if (_MyDictionaryWithRecordLikeTypeValues_Accessed && _MyDictionaryWithRecordLikeTypeValues != null)
                 {
                     _MyDictionaryWithRecordLikeTypeValues = (Dictionary<int, RecordLikeTypeWithLazinator>) CloneOrChange_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(_MyDictionaryWithRecordLikeTypeValues, l => l.RemoveBufferInHierarchy(), true);
                 }
+                
             }
             if (updateStoredBuffer)
             {

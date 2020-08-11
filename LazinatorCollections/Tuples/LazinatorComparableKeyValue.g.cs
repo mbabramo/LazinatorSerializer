@@ -245,7 +245,7 @@ namespace LazinatorCollections.Tuples
         public bool DescendantHasChanged
         {
             [DebuggerStepThrough]
-            get => _DescendantHasChanged || ((_Key_Accessed && _Key != null) && (Key.HasChanged || Key.DescendantHasChanged)) || ((_Value_Accessed && _Value != null) && (Value.HasChanged || Value.DescendantHasChanged));
+            get => _DescendantHasChanged || (_Key_Accessed && _Key != null && (Key.HasChanged || Key.DescendantHasChanged)) || (_Value_Accessed && _Value != null && (Value.HasChanged || Value.DescendantHasChanged));
             [DebuggerStepThrough]
             set
             {
@@ -259,7 +259,7 @@ namespace LazinatorCollections.Tuples
         public bool DescendantIsDirty
         {
             [DebuggerStepThrough]
-            get => _DescendantIsDirty || ((_Key_Accessed && _Key != null) && (Key.IsDirty || Key.DescendantIsDirty)) || ((_Value_Accessed && _Value != null) && (Value.IsDirty || Value.DescendantIsDirty));
+            get => _DescendantIsDirty || (_Key_Accessed && _Key != null && (Key.IsDirty || Key.DescendantIsDirty)) || (_Value_Accessed && _Value != null && (Value.IsDirty || Value.DescendantIsDirty));
             [DebuggerStepThrough]
             set
             {
@@ -523,14 +523,16 @@ namespace LazinatorCollections.Tuples
         
         void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if ((_Key_Accessed && _Key != null))
+            if (_Key_Accessed && _Key != null)
             {
-                _Key.UpdateStoredBuffer(ref writer, startPosition + _Key_ByteIndex + sizeof(int), _Key_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                Key.UpdateStoredBuffer(ref writer, startPosition + _Key_ByteIndex + sizeof(int), _Key_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if ((_Value_Accessed && _Value != null))
+            
+            if (_Value_Accessed && _Value != null)
             {
-                _Value.UpdateStoredBuffer(ref writer, startPosition + _Value_ByteIndex + sizeof(int), _Value_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                Value.UpdateStoredBuffer(ref writer, startPosition + _Value_ByteIndex + sizeof(int), _Value_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
+            
         }
         
         

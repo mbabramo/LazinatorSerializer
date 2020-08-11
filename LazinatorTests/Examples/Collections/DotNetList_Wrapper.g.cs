@@ -472,15 +472,15 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if ((_MyListInt_Accessed && _MyListInt != null))
+            if (_MyListInt_Accessed && _MyListInt != null)
             {
                 _MyListInt = (List<WInt>) CloneOrChange_List_GWInt_g(_MyListInt, l => l.RemoveBufferInHierarchy(), true);
             }
-            if ((_MyListNullableByte_Accessed && _MyListNullableByte != null))
+            if (_MyListNullableByte_Accessed && _MyListNullableByte != null)
             {
                 _MyListNullableByte = (List<WNullableByte>) CloneOrChange_List_GWNullableByte_g(_MyListNullableByte, l => l.RemoveBufferInHierarchy(), true);
             }
-            if ((_MyListNullableInt_Accessed && _MyListNullableInt != null))
+            if (_MyListNullableInt_Accessed && _MyListNullableInt != null)
             {
                 _MyListNullableInt = (List<WNullableInt>) CloneOrChange_List_GWNullableInt_g(_MyListNullableInt, l => l.RemoveBufferInHierarchy(), true);
             }

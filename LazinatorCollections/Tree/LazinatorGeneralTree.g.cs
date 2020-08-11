@@ -540,14 +540,16 @@ namespace LazinatorCollections.Tree
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if ((_Children_Accessed && _Children != null))
+            if (_Children_Accessed && _Children != null)
             {
-                _Children.UpdateStoredBuffer(ref writer, startPosition + _Children_ByteIndex + sizeof(int), _Children_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                Children.UpdateStoredBuffer(ref writer, startPosition + _Children_ByteIndex + sizeof(int), _Children_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if ((_Item_Accessed && _Item != null))
+            
+            if (_Item_Accessed && _Item != null)
             {
-                _Item.UpdateStoredBuffer(ref writer, startPosition + _Item_ByteIndex + sizeof(int), _Item_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                Item.UpdateStoredBuffer(ref writer, startPosition + _Item_ByteIndex + sizeof(int), _Item_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
+            
         }
         
         

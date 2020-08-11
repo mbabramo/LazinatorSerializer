@@ -354,104 +354,100 @@ namespace LazinatorTests.Examples.Tuples
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (true)
+            _MyKeyValuePairSerialized = (KeyValuePair<uint, ExampleChild>) CloneOrChange_KeyValuePair_Guint_c_C32ExampleChild_g(_MyKeyValuePairSerialized, l => l.RemoveBufferInHierarchy(), true);}
+            
+            
+            protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
             {
-                _MyKeyValuePairSerialized = (KeyValuePair<uint, ExampleChild>) CloneOrChange_KeyValuePair_Guint_c_C32ExampleChild_g(_MyKeyValuePairSerialized, l => l.RemoveBufferInHierarchy(), true);
-            }
-        }
-        
-        
-        protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
-        {
-            int startPosition = writer.Position;
-            int startOfObjectPosition = 0;
-            // header information
-            if (includeUniqueID)
-            {
-                if (!ContainsOpenGenericParameters)
+                int startPosition = writer.Position;
+                int startOfObjectPosition = 0;
+                // header information
+                if (includeUniqueID)
                 {
-                    CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
+                    if (!ContainsOpenGenericParameters)
+                    {
+                        CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
+                    }
+                    else
+                    {
+                        WriteLazinatorGenericID(ref writer, LazinatorGenericID);
+                    }
+                }
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
+                writer.Write((byte)includeChildrenMode);
+                // write properties
+                startOfObjectPosition = writer.Position;
+                if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyKeyValuePairSerialized_Accessed)
+                {
+                    var deserialized = MyKeyValuePairSerialized;
+                }
+                WriteNonLazinatorObject(
+                nonLazinatorObject: _MyKeyValuePairSerialized, isBelievedDirty: _MyKeyValuePairSerialized_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
+                isAccessed: _MyKeyValuePairSerialized_Accessed, writer: ref writer,
+                getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyKeyValuePairSerialized_ByteIndex, _MyKeyValuePairSerialized_ByteLength, false, false, null),
+                verifyCleanness: false,
+                binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+                ConvertToBytes_KeyValuePair_Guint_c_C32ExampleChild_g(ref w, _MyKeyValuePairSerialized,
+                includeChildrenMode, v, updateStoredBuffer));
+                if (updateStoredBuffer)
+                {
+                    _MyKeyValuePairSerialized_ByteIndex = startOfObjectPosition - startPosition;
+                }
+                if (updateStoredBuffer)
+                {
+                    _KeyValuePairTuple_EndByteIndex = writer.Position - startPosition;
+                }
+            }
+            
+            /* Conversion of supported collections and tuples */
+            
+            private static KeyValuePair<uint, ExampleChild> ConvertFromBytes_KeyValuePair_Guint_c_C32ExampleChild_g(LazinatorMemory storage)
+            {
+                if (storage.Length == 0)
+                {
+                    return default;
+                }
+                ReadOnlySpan<byte> span = storage.ReadOnlySpan;
+                
+                int bytesSoFar = 0;
+                
+                uint item1 = span.ToDecompressedUint(ref bytesSoFar);
+                
+                ExampleChild item2 = default;
+                int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
+                if (lengthCollectionMember_item2 != 0)
+                {
+                    LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
+                    item2 = DeserializationFactory.Instance.CreateBasedOnType<ExampleChild>(childData);
+                }
+                bytesSoFar += lengthCollectionMember_item2;
+                
+                var tupleType = new KeyValuePair<uint, ExampleChild>(item1, item2);
+                
+                return tupleType;
+            }
+            
+            private static void ConvertToBytes_KeyValuePair_Guint_c_C32ExampleChild_g(ref BinaryBufferWriter writer, KeyValuePair<uint, ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+            {
+                
+                CompressedIntegralTypes.WriteCompressedUint(ref writer, itemToConvert.Key);
+                
+                if (itemToConvert.Value == null)
+                {
+                    writer.Write((uint)0);
                 }
                 else
                 {
-                    WriteLazinatorGenericID(ref writer, LazinatorGenericID);
-                }
+                    void actionValue(ref BinaryBufferWriter w) => itemToConvert.Value.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    WriteToBinaryWithIntLengthPrefix(ref writer, actionValue);
+                };
             }
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
-            writer.Write((byte)includeChildrenMode);
-            // write properties
-            startOfObjectPosition = writer.Position;
-            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyKeyValuePairSerialized_Accessed)
+            
+            private static KeyValuePair<uint, ExampleChild> CloneOrChange_KeyValuePair_Guint_c_C32ExampleChild_g(KeyValuePair<uint, ExampleChild> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
             {
-                var deserialized = MyKeyValuePairSerialized;
+                return new KeyValuePair<uint, ExampleChild>((uint) (itemToConvert.Key),(ExampleChild) cloneOrChangeFunc((itemToConvert.Value)));
             }
-            WriteNonLazinatorObject(
-            nonLazinatorObject: _MyKeyValuePairSerialized, isBelievedDirty: _MyKeyValuePairSerialized_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
-            isAccessed: _MyKeyValuePairSerialized_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyKeyValuePairSerialized_ByteIndex, _MyKeyValuePairSerialized_ByteLength, false, false, null),
-            verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_KeyValuePair_Guint_c_C32ExampleChild_g(ref w, _MyKeyValuePairSerialized,
-            includeChildrenMode, v, updateStoredBuffer));
-            if (updateStoredBuffer)
-            {
-                _MyKeyValuePairSerialized_ByteIndex = startOfObjectPosition - startPosition;
-            }
-            if (updateStoredBuffer)
-            {
-                _KeyValuePairTuple_EndByteIndex = writer.Position - startPosition;
-            }
+            
         }
-        
-        /* Conversion of supported collections and tuples */
-        
-        private static KeyValuePair<uint, ExampleChild> ConvertFromBytes_KeyValuePair_Guint_c_C32ExampleChild_g(LazinatorMemory storage)
-        {
-            if (storage.Length == 0)
-            {
-                return default;
-            }
-            ReadOnlySpan<byte> span = storage.ReadOnlySpan;
-            
-            int bytesSoFar = 0;
-            
-            uint item1 = span.ToDecompressedUint(ref bytesSoFar);
-            
-            ExampleChild item2 = default;
-            int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
-            if (lengthCollectionMember_item2 != 0)
-            {
-                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
-                item2 = DeserializationFactory.Instance.CreateBasedOnType<ExampleChild>(childData);
-            }
-            bytesSoFar += lengthCollectionMember_item2;
-            
-            var tupleType = new KeyValuePair<uint, ExampleChild>(item1, item2);
-            
-            return tupleType;
-        }
-        
-        private static void ConvertToBytes_KeyValuePair_Guint_c_C32ExampleChild_g(ref BinaryBufferWriter writer, KeyValuePair<uint, ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-        {
-            
-            CompressedIntegralTypes.WriteCompressedUint(ref writer, itemToConvert.Key);
-            
-            if (itemToConvert.Value == null)
-            {
-                writer.Write((uint)0);
-            }
-            else
-            {
-                void actionValue(ref BinaryBufferWriter w) => itemToConvert.Value.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                WriteToBinaryWithIntLengthPrefix(ref writer, actionValue);
-            };
-        }
-        
-        private static KeyValuePair<uint, ExampleChild> CloneOrChange_KeyValuePair_Guint_c_C32ExampleChild_g(KeyValuePair<uint, ExampleChild> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
-        {
-            return new KeyValuePair<uint, ExampleChild>((uint) (itemToConvert.Key),(ExampleChild) cloneOrChangeFunc((itemToConvert.Value)));
-        }
-        
     }
-}

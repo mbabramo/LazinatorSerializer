@@ -375,7 +375,7 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if ((_MyStackInt_Accessed && _MyStackInt != null))
+            if (_MyStackInt_Accessed && _MyStackInt != null)
             {
                 _MyStackInt = (Stack<int>) CloneOrChange_Stack_Gint_g(_MyStackInt, l => l.RemoveBufferInHierarchy(), true);
             }

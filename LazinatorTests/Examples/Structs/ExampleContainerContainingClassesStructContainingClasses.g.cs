@@ -697,27 +697,21 @@ namespace LazinatorTests.Examples
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (true)
-            {
-                _IntWrapper.UpdateStoredBuffer(ref writer, startPosition + _IntWrapper_ByteIndex + sizeof(byte), _IntWrapper_ByteLength - sizeof(byte), IncludeChildrenMode.IncludeAllChildren, true);
-            }
-            if (true)
-            {
-                _MyExampleStructContainingClasses.UpdateStoredBuffer(ref writer, startPosition + _MyExampleStructContainingClasses_ByteIndex + sizeof(int), _MyExampleStructContainingClasses_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-            }
-            if ((_MyHashSetExampleStruct_Accessed && _MyHashSetExampleStruct != null))
+            IntWrapper.UpdateStoredBuffer(ref writer, startPosition + _IntWrapper_ByteIndex + sizeof(byte), _IntWrapper_ByteLength - sizeof(byte), IncludeChildrenMode.IncludeAllChildren, true);
+            MyExampleStructContainingClasses.UpdateStoredBuffer(ref writer, startPosition + _MyExampleStructContainingClasses_ByteIndex + sizeof(int), _MyExampleStructContainingClasses_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+            if (_MyHashSetExampleStruct_Accessed && _MyHashSetExampleStruct != null)
             {
                 _MyHashSetExampleStruct = (HashSet<ExampleStructContainingClasses>) CloneOrChange_HashSet_GExampleStructContainingClasses_g(_MyHashSetExampleStruct, l => l.RemoveBufferInHierarchy(), true);
             }
-            if ((_MyListExampleStruct_Accessed && _MyListExampleStruct != null))
+            if (_MyListExampleStruct_Accessed && _MyListExampleStruct != null)
             {
                 _MyListExampleStruct = (List<ExampleStructContainingClasses>) CloneOrChange_List_GExampleStructContainingClasses_g(_MyListExampleStruct, l => l.RemoveBufferInHierarchy(), true);
             }
-            if ((_MyListNullableExampleStruct_Accessed && _MyListNullableExampleStruct != null))
+            if (_MyListNullableExampleStruct_Accessed && _MyListNullableExampleStruct != null)
             {
                 _MyListNullableExampleStruct = (List<WNullableStruct<ExampleStructContainingClasses>>) CloneOrChange_List_GWNullableStruct_GExampleStructContainingClasses_g_g(_MyListNullableExampleStruct, l => l.RemoveBufferInHierarchy(), true);
             }
-            if ((_MyListUnwrappedNullableExampleStruct_Accessed && _MyListUnwrappedNullableExampleStruct != null))
+            if (_MyListUnwrappedNullableExampleStruct_Accessed && _MyListUnwrappedNullableExampleStruct != null)
             {
                 _MyListUnwrappedNullableExampleStruct = (List<ExampleStructContainingClasses?>) CloneOrChange_List_GExampleStructContainingClasses_C63_g(_MyListUnwrappedNullableExampleStruct, l => l.RemoveBufferInHierarchy(), true);
             }
@@ -787,11 +781,11 @@ namespace LazinatorTests.Examples
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
-                _MyHashSetExampleStruct_ByteIndex = startOfObjectPosition - startPosition;
-                if ((_MyHashSetExampleStruct_Accessed && _MyHashSetExampleStruct != null))
+                _MyHashSetExampleStruct_ByteIndex = startOfObjectPosition - startPosition;if (_MyHashSetExampleStruct_Accessed && _MyHashSetExampleStruct != null)
                 {
                     _MyHashSetExampleStruct = (HashSet<ExampleStructContainingClasses>) CloneOrChange_HashSet_GExampleStructContainingClasses_g(_MyHashSetExampleStruct, l => l.RemoveBufferInHierarchy(), true);
                 }
+                
             }
             startOfObjectPosition = writer.Position;
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyListExampleStruct_Accessed)

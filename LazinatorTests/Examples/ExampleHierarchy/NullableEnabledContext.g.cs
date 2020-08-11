@@ -697,22 +697,26 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if ((_ExplicitlyNullable_Accessed && _ExplicitlyNullable != null))
+            if (_ExplicitlyNullable_Accessed && _ExplicitlyNullable != null)
             {
-                _ExplicitlyNullable.UpdateStoredBuffer(ref writer, startPosition + _ExplicitlyNullable_ByteIndex + sizeof(int), _ExplicitlyNullable_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                ExplicitlyNullable.UpdateStoredBuffer(ref writer, startPosition + _ExplicitlyNullable_ByteIndex + sizeof(int), _ExplicitlyNullable_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if ((_ExplicitlyNullableInterface_Accessed && _ExplicitlyNullableInterface != null))
+            
+            if (_ExplicitlyNullableInterface_Accessed && _ExplicitlyNullableInterface != null)
             {
-                _ExplicitlyNullableInterface.UpdateStoredBuffer(ref writer, startPosition + _ExplicitlyNullableInterface_ByteIndex + sizeof(int), _ExplicitlyNullableInterface_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                ExplicitlyNullableInterface.UpdateStoredBuffer(ref writer, startPosition + _ExplicitlyNullableInterface_ByteIndex + sizeof(int), _ExplicitlyNullableInterface_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if ((_NonNullableClass_Accessed && _NonNullableClass != null))
+            
+            if (_NonNullableClass_Accessed && _NonNullableClass != null)
             {
-                _NonNullableClass.UpdateStoredBuffer(ref writer, startPosition + _NonNullableClass_ByteIndex + sizeof(int), _NonNullableClass_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                NonNullableClass.UpdateStoredBuffer(ref writer, startPosition + _NonNullableClass_ByteIndex + sizeof(int), _NonNullableClass_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if ((_NonNullableInterface_Accessed && _NonNullableInterface != null))
+            
+            if (_NonNullableInterface_Accessed && _NonNullableInterface != null)
             {
-                _NonNullableInterface.UpdateStoredBuffer(ref writer, startPosition + _NonNullableInterface_ByteIndex + sizeof(int), _NonNullableInterface_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                NonNullableInterface.UpdateStoredBuffer(ref writer, startPosition + _NonNullableInterface_ByteIndex + sizeof(int), _NonNullableInterface_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
+            
         }
         
         

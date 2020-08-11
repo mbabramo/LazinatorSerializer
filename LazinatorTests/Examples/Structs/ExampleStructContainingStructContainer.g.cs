@@ -407,10 +407,7 @@ namespace LazinatorTests.Examples.Structs
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (true)
-            {
-                _Subcontainer.UpdateStoredBuffer(ref writer, startPosition + _Subcontainer_ByteIndex + sizeof(int), _Subcontainer_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-            }
+            Subcontainer.UpdateStoredBuffer(ref writer, startPosition + _Subcontainer_ByteIndex + sizeof(int), _Subcontainer_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
         }
         
         
