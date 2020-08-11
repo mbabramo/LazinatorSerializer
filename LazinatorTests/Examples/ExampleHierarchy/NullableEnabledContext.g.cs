@@ -136,9 +136,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         
-        protected Example? _NonNullableClass;
+        protected Example _NonNullableClass;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Example? NonNullableClass
+        public Example NonNullableClass
         {
             get
             {
@@ -170,7 +170,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _NonNullableClass = null;
             }
             else
             {
@@ -182,9 +181,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         
-        protected IExample? _NonNullableInterface;
+        protected IExample _NonNullableInterface;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public IExample? NonNullableInterface
+        public IExample NonNullableInterface
         {
             get
             {
@@ -207,7 +206,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 
                 IsDirty = true;
                 DescendantIsDirty = true;
-                _NonNullableInterface = value;
                 _NonNullableInterface_Accessed = true;
             }
         }
@@ -216,13 +214,12 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _NonNullableInterface = null;
             }
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableInterface_ByteIndex, _NonNullableInterface_ByteLength, false, false, null);
                 
-                _NonNullableInterface = DeserializationFactory.Instance.CreateBasedOnType<IExample?>(childData, this); 
+                _NonNullableInterface = DeserializationFactory.Instance.CreateBasedOnType<IExample>(childData, this); 
             }
             _NonNullableInterface_Accessed = true;
         }
@@ -319,22 +316,20 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (NonNullableClass == null)
                 {
-                    typedClone.NonNullableClass = null;
                 }
                 else
                 {
-                    typedClone.NonNullableClass = (Example?) NonNullableClass.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.NonNullableClass = (Example) NonNullableClass.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
             {
                 if (NonNullableInterface == null)
                 {
-                    typedClone.NonNullableInterface = null;
                 }
                 else
                 {
-                    typedClone.NonNullableInterface = (IExample?) NonNullableInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.NonNullableInterface = (IExample) NonNullableInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
             }
             
@@ -577,11 +572,11 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             if ((!exploreOnlyDeserializedChildren && NonNullableClass != null) || (_NonNullableClass_Accessed && _NonNullableClass != null))
             {
-                _NonNullableClass = (Example?) _NonNullableClass.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
+                _NonNullableClass = (Example) _NonNullableClass.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if ((!exploreOnlyDeserializedChildren && NonNullableInterface != null) || (_NonNullableInterface_Accessed && _NonNullableInterface != null))
             {
-                _NonNullableInterface = (IExample?) _NonNullableInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
+                _NonNullableInterface = (IExample) _NonNullableInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             if (changeThisLevel)
             {
