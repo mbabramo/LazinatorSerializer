@@ -17,5 +17,7 @@ namespace Lazinator.Exceptions
         public static void ThrowMoreThan250BytesException() => throw new LazinatorSerializationException("Writing with byte length prefix limited to items no more than 250 bytes.");
 
         internal static void ThrowChildStorageMissingException() => throw new LazinatorSerializationException("Internal error. Child storage missing.");
+
+        public static void ThrowUnsetNonnullableLazinatorException() => throw new UnsetNonnullableLazinatorException();
     }
 }

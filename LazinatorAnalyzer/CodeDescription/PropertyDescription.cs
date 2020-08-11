@@ -1087,7 +1087,7 @@ namespace Lazinator.CodeDescription
                 }}{IIF(IsNonLazinatorType && !TrackDirtinessNonSerialized && (!RoslynHelpers.IsReadOnlyStruct(Symbol) || ContainsLazinatorInnerProperty || ContainsOpenGenericInnerProperty), $@"
                     IsDirty = true;")} {IIF(CodeOnAccessed != "", $@"
                 {CodeOnAccessed}")}
-                return _{PropertyName}{IIF(PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface, $"throw new LazinatorException(\"Nonnullable Lazinator property must be set before it is accessed.\");")};
+                return _{PropertyName}{IIF(PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface, $" ?? ThrowHelper.ThrowUnsetNonnullableLazinatorException()")};
             }}{StepThroughPropertiesString}
             set
             {{{propertyTypeDependentSet}{RepeatedCodeExecution}
