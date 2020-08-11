@@ -10,10 +10,10 @@ namespace LazinatorAnalyzer.Support
         public bool CombineWithOr => !CombineWithAnd;
         string Connector => CombineWithAnd ? " && " : " || ";
 
-        public ConditionsCodeGenerator(List<ConditionCodeGenerator> items, bool and) : base(null)
+        public ConditionsCodeGenerator(List<ConditionCodeGenerator> items, bool combineWithAnd) : base(null)
         {
             Items = items;
-            CombineWithAnd = and;
+            CombineWithAnd = combineWithAnd;
         }
 
         public static ConditionsCodeGenerator AndCombine(ConditionCodeGenerator condition1, ConditionCodeGenerator condition2) => new ConditionsCodeGenerator(new List<ConditionCodeGenerator>() { condition1, condition2 }, true);

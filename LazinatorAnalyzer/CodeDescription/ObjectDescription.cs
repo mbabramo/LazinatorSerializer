@@ -825,9 +825,23 @@ namespace Lazinator.CodeDescription
                     foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator))
                     {
                         string propertyName = property.PropertyName;
-                        string ifThenStatement = property.GetNullCheckPlusPrecedingConditionIfThen(ConditionsCodeGenerator.AndCombine("enumerateNulls", ConditionsCodeGenerator.OrCombine("!exploreOnlyDeserializedChildren", $"_{propertyName}_Accessed")), propertyName, $@"yield return (""{propertyName}"", default);", $@"if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
-                                {{
-                                    bool isMatch = matchCriterion == null || matchCriterion({propertyName});
+                        string ifThenStatement = property.GetNullCheckPlusPrecedingConditionIfThen(
+                                ConditionsCodeGenerator.AndCombine(
+                                    "enumerateNulls", 
+                                    ConditionsCodeGenerator.OrCombine(
+                                        "!exploreOnlyDeserializedChildren", 
+                                        $"_{propertyName}_Accessed"))
+                                , propertyName, 
+                                // CONSEQUENT
+                                $@"yield return (""{propertyName}"", default);", 
+                                // ELSE CONSEQUENT -- another conditional
+                                new ConditionalCodeGenerator(
+                                    ConditionsCodeGenerator.OrCombine(
+                                        ConditionsCodeGenerator.AndCombine(
+                                            $"!exploreOnlyDeserializedChildren",  
+                                            property.GetNonNullCheck(false)), 
+                                        property.GetNonNullCheck(true)), 
+                                   $@"bool isMatch = matchCriterion == null || matchCriterion({propertyName});
                                     bool shouldExplore = exploreCriterion == null || exploreCriterion({propertyName});
                                     if (isMatch)
                                     {{
@@ -839,8 +853,7 @@ namespace Lazinator.CodeDescription
                                         {{
                                             yield return (""{propertyName}"" + ""."" + toYield.propertyName, toYield.descendant);
                                         }}
-                                    }}
-                                }}");
+                                    }}").ToString());
                         sb.AppendLine(ifThenStatement);
                     }
                     sb.Append($@"yield break;
