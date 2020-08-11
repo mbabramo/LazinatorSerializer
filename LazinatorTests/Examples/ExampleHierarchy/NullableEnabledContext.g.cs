@@ -136,7 +136,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         
-        protected Example _NonNullableClass;
+        protected Example? _NonNullableClass;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public Example NonNullableClass
         {
@@ -146,7 +146,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     Lazinate_NonNullableClass();
                 } 
-                return _NonNullableClass;
+                return _NonNullableClass ?? throw new Exception();
             }
             set
             {
@@ -154,10 +154,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     _NonNullableClass.LazinatorParents = _NonNullableClass.LazinatorParents.WithRemoved(this);
                 }
-                if (value != null)
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
+                value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 
                 IsDirty = true;
                 DescendantIsDirty = true;
@@ -196,14 +193,8 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             set
             {
-                if (_NonNullableInterface != null)
-                {
-                    _NonNullableInterface.LazinatorParents = _NonNullableInterface.LazinatorParents.WithRemoved(this);
-                }
-                if (value != null)
-                {
-                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                }
+                _NonNullableInterface.LazinatorParents = _NonNullableInterface.LazinatorParents.WithRemoved(this);
+                value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 
                 IsDirty = true;
                 DescendantIsDirty = true;

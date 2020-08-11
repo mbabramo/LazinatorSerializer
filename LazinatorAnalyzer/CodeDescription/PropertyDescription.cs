@@ -1022,7 +1022,10 @@ namespace Lazinator.CodeDescription
                             ";
                     else
                         propertyTypeDependentSet = $@"
-                            _{PropertyName}.LazinatorParents = _{PropertyName}.LazinatorParents.WithRemoved(this);
+                            if (_{PropertyName} != null)
+                            {{
+                                _{PropertyName}.LazinatorParents = _{PropertyName}.LazinatorParents.WithRemoved(this);
+                            }}
                             value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                             ";
                 }
@@ -1074,7 +1077,7 @@ namespace Lazinator.CodeDescription
 
             sb.Append($@"
                 {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName} _{PropertyName};
-        {GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeNameWithoutNullableIndicatorIfNonnullableReferenceType} {PropertyName}
+        {GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
         {{{StepThroughPropertiesString}
             get
             {{
@@ -1084,7 +1087,7 @@ namespace Lazinator.CodeDescription
                 }}{IIF(IsNonLazinatorType && !TrackDirtinessNonSerialized && (!RoslynHelpers.IsReadOnlyStruct(Symbol) || ContainsLazinatorInnerProperty || ContainsOpenGenericInnerProperty), $@"
                     IsDirty = true;")} {IIF(CodeOnAccessed != "", $@"
                 {CodeOnAccessed}")}
-                return _{PropertyName};
+                return _{PropertyName}{IIF(PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface, $"throw new LazinatorException(\"Nonnullable Lazinator property must be set before it is accessed.\");")};
             }}{StepThroughPropertiesString}
             set
             {{{propertyTypeDependentSet}{RepeatedCodeExecution}
