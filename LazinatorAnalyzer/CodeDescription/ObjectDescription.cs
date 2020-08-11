@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using LazinatorAnalyzer.AttributeClones;
 using LazinatorAnalyzer.Settings;
+using LazinatorAnalyzer.Support;
 using LazinatorCodeGen.Roslyn;
 using Microsoft.CodeAnalysis;
 
@@ -824,7 +825,7 @@ namespace Lazinator.CodeDescription
                     foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator))
                     {
                         string propertyName = property.PropertyName;
-                        string ifThenStatement = property.GetNullCheckIfThen($"enumerateNulls && (!exploreOnlyDeserializedChildren || _{propertyName}_Accessed) && ", propertyName, $@"yield return (""{propertyName}"", default);", $@"if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
+                        string ifThenStatement = property.GetNullCheckPlusPrecedingConditionIfThen(ConditionsCodeGenerator.AndCombine("enumerateNulls", ConditionsCodeGenerator.OrCombine("!exploreOnlyDeserializedChildren", $"_{propertyName}_Accessed")), propertyName, $@"yield return (""{propertyName}"", default);", $@"if ((!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)}))
                                 {{
                                     bool isMatch = matchCriterion == null || matchCriterion({propertyName});
                                     bool shouldExplore = exploreCriterion == null || exploreCriterion({propertyName});

@@ -450,10 +450,15 @@ namespace Lazinator.CodeDescription
             }
         }
 
-        // DEBUG
-        public string GetNullCheckIfThen(string precedingNullCheckInIf, string propertyName, string consequent, string elseConsequent)
+        public string GetNullCheckPlusPrecedingConditionIfThen(ConditionCodeGenerator precedingNullCheckCondition, string propertyName, string consequent, string elseConsequent)
         {
-            return new ConditionalCodeGenerator($"{precedingNullCheckInIf}{GetNullCheck(propertyName)}", consequent, elseConsequent).ToString();
+
+            return new ConditionalCodeGenerator(new ConditionsCodeGenerator(new List<ConditionCodeGenerator>() { precedingNullCheckCondition, new ConditionCodeGenerator(GetNullCheck(propertyName)) }, true), consequent, elseConsequent).ToString();
+        }
+
+        public string GetNullCheckIfThen(string propertyName, string consequent, string elseConsequent)
+        {
+            return new ConditionalCodeGenerator(GetNullCheck(propertyName), consequent, elseConsequent).ToString();
         }
 
         public string GetNullCheck(string propertyName)
@@ -1449,7 +1454,7 @@ namespace Lazinator.CodeDescription
         {
             string withInclusionConditional = null;
             string propertyNameOrCopy = PropertyType == LazinatorPropertyType.LazinatorStructNullable ? "copy" : $"_{PropertyName}";
-            Func<string, string> lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen("", $"_{PropertyName}", $"WriteNullChild(ref writer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")});", originalString) : originalString;
+            Func<string, string> lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen($"_{PropertyName}", $"WriteNullChild(ref writer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")});", originalString) : originalString;
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct)
             {
                 string mainWriteString = $@"{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"var copy = _{PropertyName}.Value;
@@ -1483,7 +1488,7 @@ namespace Lazinator.CodeDescription
             string copyInstruction = "";
             if (IsLazinator)
             {
-                copyInstruction = GetNullCheckIfThen("", PropertyName,
+                copyInstruction = GetNullCheckIfThen(PropertyName,
                     $"{nameOfCloneVariable}.{PropertyName} = {DefaultExpression};",
                     $@"{nameOfCloneVariable}.{PropertyName} = ({AppropriatelyQualifiedTypeName}) {PropertyName}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, ".Value")}.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);");
             }
@@ -1671,7 +1676,7 @@ namespace Lazinator.CodeDescription
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<{ILazinatorString}, {ILazinatorString}>{QuestionMarkIfNullableModeEnabled} cloneOrChangeFunc, bool avoidCloningIfPossible)
                     {{
-                        {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory ? "" : GetNullCheckIfThen("", "itemToClone", "return default;", ""))}
+                        {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory ? "" : GetNullCheckIfThen("itemToClone", "return default;", ""))}
                         int collectionLength = itemToClone.{lengthWord};{IIF(ArrayRank > 1, () => "\n" + String.Join("\n", Enumerable.Range(0, ArrayRank.Value).Select(x => $"int collectionLength{x} = itemToClone.GetLength({x});")))}
                         {creationText}
                         {forStatement}
@@ -1684,7 +1689,7 @@ namespace Lazinator.CodeDescription
                                 }}
                                 continue;
                             }}
-                            ")}{IIF(innerProperty.Nullable, innerProperty.GetNullCheckIfThen("", itemString, $@"{collectionAddNull}", $@"var itemCopied = {cloneString};
+                            ")}{IIF(innerProperty.Nullable, innerProperty.GetNullCheckIfThen(itemString, $@"{collectionAddNull}", $@"var itemCopied = {cloneString};
                                 {collectionAddItem}"))}{IIF(!innerProperty.Nullable, $@"var itemCopied = {cloneString};
                                 {collectionAddItem}")}
                         }}
@@ -2357,7 +2362,7 @@ namespace Lazinator.CodeDescription
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToConvert, Func<{ILazinatorString}, {ILazinatorString}>{QuestionMarkIfNullableModeEnabled} cloneOrChangeFunc, bool avoidCloningIfPossible)
                     {{
-                        {IIF(Nullable, GetNullCheckIfThen("", "itemToConvert", $@"return {DefaultExpression};", ""))}{IIF(Nullable,$@"
+                        {IIF(Nullable, GetNullCheckIfThen("itemToConvert", $@"return {DefaultExpression};", ""))}{IIF(Nullable,$@"
                             ")}return {creationText};
                     }}
             ");
@@ -2397,7 +2402,7 @@ namespace Lazinator.CodeDescription
                             {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode,
                             bool verifyCleanness, bool updateStoredBuffer)
                         {{
-                            {GetNullCheckIfThen("", "itemToConvert", $@"return;", "")}
+                            {GetNullCheckIfThen("itemToConvert", $@"return;", "")}
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}(itemToConvert);
                             interchange.SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                         }}
@@ -2405,7 +2410,7 @@ namespace Lazinator.CodeDescription
 
                         private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<{ILazinatorString}, {ILazinatorString}>{QuestionMarkIfNullableModeEnabled} cloneOrChangeFunc, bool avoidCloningIfPossible)
                         {{
-                            {GetNullCheckIfThen("", "itemToClone", $"return {DefaultExpression};", "")}
+                            {GetNullCheckIfThen("itemToClone", $"return {DefaultExpression};", "")}
                             {InterchangeTypeName} interchange = new {InterchangeTypeName}(itemToClone);
                             return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}(avoidCloningIfPossible ? false : true);
                         }}

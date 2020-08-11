@@ -13,7 +13,7 @@ namespace LazinatorAnalyzer.Support
         }
 
         public static implicit operator string(ConditionCodeGenerator c) => c.ToString();
-        public static explicit operator ConditionCodeGenerator(string a) => new ConditionCodeGenerator(a);
+        public static implicit operator ConditionCodeGenerator(string a) => new ConditionCodeGenerator(a);
 
         public override string ToString()
         {

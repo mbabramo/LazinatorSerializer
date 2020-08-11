@@ -15,6 +15,9 @@ namespace LazinatorAnalyzer.Support
             And = and;
         }
 
+        public static ConditionsCodeGenerator AndCombine(ConditionCodeGenerator condition1, ConditionCodeGenerator condition2) => new ConditionsCodeGenerator(new List<ConditionCodeGenerator>() { condition1, condition2 }, true);
+        public static ConditionsCodeGenerator OrCombine(ConditionCodeGenerator condition1, ConditionCodeGenerator condition2) => new ConditionsCodeGenerator(new List<ConditionCodeGenerator>() { condition1, condition2 }, false);
+
         public override string ToString()
         {
             List<string> itemsAsStrings = Items.Select(x =>
