@@ -144,8 +144,8 @@ namespace Lazinator.CodeDescription
         public string SkipCondition { get; set; }
         public string InitializeWhenSkipped { get; set; }
         internal bool TrackDirtinessNonSerialized { get; set; }
-        private string ReadInclusionConditional { get; set; }
-        private string WriteInclusionConditional { get; set; }
+        private ConditionsCodeGenerator ReadInclusionConditional { get; set; }
+        private ConditionsCodeGenerator WriteInclusionConditional { get; set; }
         private string CodeBeforeSet { get; set; }
         private string CodeAfterSet { get; set; }
         private string CodeOnDeserialized { get; set; }
@@ -314,7 +314,7 @@ namespace Lazinator.CodeDescription
             WriteInclusionConditional = InclusionConditionalHelper(false);
         }
 
-        private string InclusionConditionalHelper(bool readVersion)
+        private ConditionsCodeGenerator InclusionConditionalHelper(bool readVersion)
         {
             string versionNumberVariable = readVersion ? "serializedVersionNumber" : "LazinatorObjectVersion";
             List<string> conditions = new List<string>();
@@ -331,8 +331,8 @@ namespace Lazinator.CodeDescription
             if (EliminatedWithVersion != null)
                 conditions.Add($"{versionNumberVariable} < {EliminatedWithVersion}");
             if (!conditions.Any())
-                return "";
-            return $@"if ({String.Join(" && ", conditions)}) ";
+                return new ConditionsCodeGenerator(new List<ConditionCodeGenerator>(), true);
+            return new ConditionsCodeGenerator(conditions.Select(x => new ConditionCodeGenerator(x)).ToList(), true);
         }
 
         #endregion
@@ -453,7 +453,7 @@ namespace Lazinator.CodeDescription
         // DEBUG
         public string GetNullCheckIfThen(string precedingNullCheckInIf, string propertyName, string consequent, string elseConsequent)
         {
-            return new ConditionalCodeGenerator($"if ({precedingNullCheckInIf}{GetNullCheck(propertyName)})", consequent, elseConsequent).ToString();
+            return new ConditionalCodeGenerator($"{precedingNullCheckInIf}{GetNullCheck(propertyName)}", consequent, elseConsequent).ToString();
         }
 
         public string GetNullCheck(string propertyName)
