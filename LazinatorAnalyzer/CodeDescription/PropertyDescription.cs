@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using LazinatorAnalyzer.AttributeClones;
 using LazinatorAnalyzer.Settings;
+using LazinatorAnalyzer.Support;
 using LazinatorCodeGen.Roslyn;
 using Microsoft.CodeAnalysis;
 using static LazinatorCodeGen.Roslyn.RoslynHelpers;
@@ -449,9 +450,10 @@ namespace Lazinator.CodeDescription
             }
         }
 
+        // DEBUG
         public string GetNullCheckIfThen(string precedingNullCheckInIf, string propertyName, string consequent, string elseConsequent)
         {
-            return CreateConditional($"if ({precedingNullCheckInIf}{GetNullCheck(propertyName)})", consequent, elseConsequent);
+            return new ConditionalCodeGenerator($"if ({precedingNullCheckInIf}{GetNullCheck(propertyName)})", consequent, elseConsequent).ToString();
         }
 
         public string GetNullCheck(string propertyName)
@@ -1308,7 +1310,7 @@ namespace Lazinator.CodeDescription
                 if (SkipCondition != null)
                     sb.AppendLine(skipCheckString);
                 sb.AppendLine(
-                        CreateConditional(ReadInclusionConditional, $@"_{PropertyName} = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref bytesSoFar);"));
+                        new ConditionalCodeGenerator(ReadInclusionConditional, $@"_{PropertyName} = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref bytesSoFar);").ToString());
             }
             else
             {
@@ -1329,37 +1331,18 @@ namespace Lazinator.CodeDescription
                 else if (IsGuaranteedSmall)
                     sb.AppendLine(
                         $@"_{PropertyName}_ByteIndex = bytesSoFar;{skipCheckString}
-                            " + CreateConditional(ReadInclusionConditional,
+                            " + new ConditionalCodeGenerator(ReadInclusionConditional,
                             "bytesSoFar = span.ToByte(ref bytesSoFar) + bytesSoFar;"));
                 else
                     sb.AppendLine(
                         $@"_{PropertyName}_ByteIndex = bytesSoFar;{skipCheckString}
-                            " + CreateConditional(ReadInclusionConditional,
+                            " + new ConditionalCodeGenerator(ReadInclusionConditional,
                             "bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;"));
             }
             if (SkipCondition != null)
             {
                 sb.AppendLine($@"}}");
             }
-        }
-
-        public static string CreateConditional(string conditional, string consequent, string elseConsequent = null)
-        {
-            if (conditional.Trim() == "" || conditional.Trim() == "if (true)")
-                return consequent;
-            else if (conditional.Trim() == "if (false)" || (conditional.EndsWith("&& false)")))
-                return elseConsequent;
-            var conditionalString = $@"{conditional}
-                        {{
-                            {consequent}
-                        }}";
-            if (elseConsequent != null && elseConsequent != "")
-                conditionalString += $@"
-                        else
-                        {{
-                            {elseConsequent}
-                        }}";
-            return conditionalString;
         }
 
         public void AppendPropertyWriteString(CodeStringBuilder sb)
@@ -1377,7 +1360,7 @@ namespace Lazinator.CodeDescription
             // Now, we consider versioning information.
             if (IsPrimitive)
                 sb.AppendLine(
-                        CreateConditional(WriteInclusionConditional, $"{WriteMethodName}(ref writer, {EnumEquivalentCastToEquivalentType}_{PropertyName});"));
+                        new ConditionalCodeGenerator(WriteInclusionConditional, $"{WriteMethodName}(ref writer, {EnumEquivalentCastToEquivalentType}_{PropertyName});").ToString());
             else
             {
                 // Finally, the main code for writing a serialized or non serialized object.
@@ -1473,7 +1456,7 @@ namespace Lazinator.CodeDescription
                             ")}WriteChild(ref writer, ref {propertyNameOrCopy}, includeChildrenMode, _{PropertyName}_Accessed, () => {ChildSliceString}, verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, this);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
                                 _{PropertyName} = copy;")}";
                 withInclusionConditional =
-                    CreateConditional(WriteInclusionConditional, $@"{EnsureDeserialized()}{lazinatorNullableStructNullCheck(mainWriteString)}");
+                    new ConditionalCodeGenerator(WriteInclusionConditional, $@"{EnsureDeserialized()}{lazinatorNullableStructNullCheck(mainWriteString)}").ToString();
             }
             else
             {
@@ -1517,7 +1500,7 @@ namespace Lazinator.CodeDescription
                 copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({PropertyName}, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);";
             else if (PropertyType == LazinatorPropertyType.NonLazinator)
                 copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {DirectConverterTypeNamePrefix}CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({PropertyName}, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);";
-            sb.AppendLine(CreateConditional(WriteInclusionConditional, copyInstruction));
+            sb.AppendLine(new ConditionalCodeGenerator(WriteInclusionConditional, copyInstruction).ToString());
         }
 
         #endregion
