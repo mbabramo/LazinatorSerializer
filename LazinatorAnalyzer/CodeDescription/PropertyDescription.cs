@@ -1087,7 +1087,7 @@ namespace Lazinator.CodeDescription
                 _{PropertyName}_Accessed = true;{RepeatedCodeExecution}
             }}
         }}{(GetModifiedDerivationKeyword() == "override " ? "" : $@"
-        {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed;")}
+        {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed;")} // DEBUG Nullable: {Nullable}
         private void Lazinate_{PropertyName}()
         {{
             if (LazinatorObjectBytes.Length == 0)
