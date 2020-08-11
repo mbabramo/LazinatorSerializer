@@ -697,7 +697,7 @@ namespace LazinatorTests.Examples.Collections
                     MyReadOnlySpanLong = deserialized_MyReadOnlySpanLong;
                 }
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

@@ -447,7 +447,7 @@ namespace LazinatorCollections
             {
                 _Value = (T) _Value.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

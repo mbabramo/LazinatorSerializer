@@ -303,7 +303,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyListSerialized = (List<ExampleChild>) CloneOrChange_List_GExampleChild_g(_MyListSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

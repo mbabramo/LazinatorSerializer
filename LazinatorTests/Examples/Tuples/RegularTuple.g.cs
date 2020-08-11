@@ -509,7 +509,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 _MyTupleSerialized5 = (Tuple<int, ExampleStructContainingClasses?>) CloneOrChange_Tuple_Gint_c_C32ExampleStructContainingClasses_C63_g(_MyTupleSerialized5, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

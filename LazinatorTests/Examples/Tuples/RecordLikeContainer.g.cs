@@ -426,7 +426,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             var deserialized_MyRecordLikeType = MyRecordLikeType;
             _MyRecordLikeType = (RecordLikeType) CloneOrChange_RecordLikeType(_MyRecordLikeType, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);var deserialized_MyRecordLikeTypeWithLazinator = MyRecordLikeTypeWithLazinator;
-            _MyRecordLikeTypeWithLazinator = (RecordLikeTypeWithLazinator) CloneOrChange_RecordLikeTypeWithLazinator(_MyRecordLikeTypeWithLazinator, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);if (changeThisLevel)
+            _MyRecordLikeTypeWithLazinator = (RecordLikeTypeWithLazinator) CloneOrChange_RecordLikeTypeWithLazinator(_MyRecordLikeTypeWithLazinator, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

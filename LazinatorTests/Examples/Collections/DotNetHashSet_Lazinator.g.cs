@@ -284,7 +284,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyHashSetSerialized = (HashSet<ExampleChild>) CloneOrChange_HashSet_GExampleChild_g(_MyHashSetSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

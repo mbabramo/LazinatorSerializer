@@ -562,7 +562,7 @@ namespace LazinatorCollections.Tuples
             {
                 _Item3 = (V) _Item3.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

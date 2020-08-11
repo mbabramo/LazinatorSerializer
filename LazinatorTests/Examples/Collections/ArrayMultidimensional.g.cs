@@ -392,7 +392,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyThreeDimArrayInt = (int[,,]) CloneOrChange_int_B_c_c_b(_MyThreeDimArrayInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

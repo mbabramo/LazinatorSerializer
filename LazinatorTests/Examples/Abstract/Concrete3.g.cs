@@ -595,7 +595,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 _IntList3 = (List<int>) CloneOrChange_List_Gint_g(_IntList3, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

@@ -363,7 +363,7 @@ namespace LazinatorCollections.Dictionary
             {
                 _Buckets = (LazinatorList<DictionaryBucket<TKey, TValue>>) _Buckets.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

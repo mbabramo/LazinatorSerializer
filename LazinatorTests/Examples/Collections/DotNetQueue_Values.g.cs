@@ -302,7 +302,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyQueueInt = (Queue<int>) CloneOrChange_Queue_Gint_g(_MyQueueInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

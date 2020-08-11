@@ -256,7 +256,7 @@ namespace LazinatorTests.Examples.Subclasses
             
             public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
             {
-                if (changeThisLevel)
+                if (changeThisLevel && changeFunc != null)
                 {
                     return changeFunc(this);
                 }

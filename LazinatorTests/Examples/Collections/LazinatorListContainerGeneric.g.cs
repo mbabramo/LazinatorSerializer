@@ -329,7 +329,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyList = (LazinatorList<T>) _MyList.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

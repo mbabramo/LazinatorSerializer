@@ -334,7 +334,7 @@ namespace LazinatorCollections.ByteSpan
             {
                 var deserialized_ReadOrWrite = ReadOrWrite;
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

@@ -476,7 +476,7 @@ namespace LazinatorTests.Examples.Structs
                 _ExampleNullableStruct = (ExampleStructWithoutClass?) _ExampleNullableStruct.Value.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             var deserialized_ExampleStructWithoutClass = ExampleStructWithoutClass;
-            _ExampleStructWithoutClass = (ExampleStructWithoutClass) _ExampleStructWithoutClass.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);if (changeThisLevel)
+            _ExampleStructWithoutClass = (ExampleStructWithoutClass) _ExampleStructWithoutClass.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

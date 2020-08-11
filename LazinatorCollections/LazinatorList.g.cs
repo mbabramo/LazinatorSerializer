@@ -321,7 +321,7 @@ namespace LazinatorCollections
                 _Offsets = (LazinatorOffsetList) _Offsets.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             OnForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, changeThisLevel);
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

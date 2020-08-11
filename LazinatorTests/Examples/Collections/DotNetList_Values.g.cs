@@ -475,7 +475,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MySortedSetInt = (SortedSet<int>) CloneOrChange_SortedSet_Gint_g(_MySortedSetInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

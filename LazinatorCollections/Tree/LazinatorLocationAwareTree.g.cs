@@ -176,7 +176,7 @@ namespace LazinatorCollections.Tree
             {
                 _Locations = (LazinatorDictionary<T, LazinatorList<WInt>>) _Locations.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

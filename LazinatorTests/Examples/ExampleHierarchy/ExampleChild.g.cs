@@ -486,7 +486,7 @@ namespace LazinatorTests.Examples
                     ByteSpan = deserialized_ByteSpan;
                 }
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

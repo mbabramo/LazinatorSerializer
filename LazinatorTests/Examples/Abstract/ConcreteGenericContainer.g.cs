@@ -324,7 +324,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 _Item = (IAbstractGeneric1<int>) _Item.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

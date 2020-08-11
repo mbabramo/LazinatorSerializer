@@ -285,7 +285,7 @@ namespace LazinatorCollections.OffsetList
                     ReadOnlyBytes = deserialized_ReadOnlyBytes;
                 }
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

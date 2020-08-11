@@ -1193,7 +1193,7 @@ namespace LazinatorTests.Examples
             {
                 _MyNonLazinatorChild = NonLazinatorDirectConverter.CloneOrChange_NonLazinatorClass(_MyNonLazinatorChild, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

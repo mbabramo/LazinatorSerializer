@@ -381,7 +381,7 @@ namespace LazinatorCollections
             {
                 _FirstNode = (LazinatorLinkedListNode<T>) _FirstNode.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

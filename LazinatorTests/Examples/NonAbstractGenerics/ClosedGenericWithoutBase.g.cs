@@ -345,7 +345,7 @@ namespace LazinatorTests.Examples
             {
                 _ItemU = (ExampleChild) _ItemU.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

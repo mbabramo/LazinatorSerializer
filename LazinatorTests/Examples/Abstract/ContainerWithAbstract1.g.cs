@@ -328,7 +328,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 _AbstractProperty = (Abstract1) _AbstractProperty.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

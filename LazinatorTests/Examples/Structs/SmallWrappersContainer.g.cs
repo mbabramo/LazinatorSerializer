@@ -1050,7 +1050,7 @@ namespace LazinatorTests.Examples.Structs
             _WrappedNullableByte = (WNullableByte) _WrappedNullableByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);var deserialized_WrappedNullableChar = WrappedNullableChar;
             _WrappedNullableChar = (WNullableChar) _WrappedNullableChar.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);var deserialized_WrappedNullableSByte = WrappedNullableSByte;
             _WrappedNullableSByte = (WNullableSByte) _WrappedNullableSByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);var deserialized_WrappedSByte = WrappedSByte;
-            _WrappedSByte = (WSByte) _WrappedSByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);if (changeThisLevel)
+            _WrappedSByte = (WSByte) _WrappedSByte.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

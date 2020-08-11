@@ -280,7 +280,7 @@ namespace Lazinator.Wrappers
                     Value = deserialized_Value;
                 }
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

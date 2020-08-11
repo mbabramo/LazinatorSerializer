@@ -302,7 +302,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyStackInt = (Stack<int>) CloneOrChange_Stack_Gint_g(_MyStackInt, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

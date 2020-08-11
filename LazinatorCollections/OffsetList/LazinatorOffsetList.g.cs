@@ -460,7 +460,7 @@ namespace LazinatorCollections.OffsetList
             {
                 _TwoByteItems = (LazinatorFastReadListInt16) _TwoByteItems.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

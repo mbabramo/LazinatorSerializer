@@ -328,7 +328,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 _MyBase = (Base) _MyBase.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

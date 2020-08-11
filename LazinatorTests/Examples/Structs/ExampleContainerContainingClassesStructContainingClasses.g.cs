@@ -599,7 +599,7 @@ namespace LazinatorTests.Examples
             {
                 _MyListUnwrappedNullableExampleStruct = (List<ExampleStructContainingClasses?>) CloneOrChange_List_GExampleStructContainingClasses_C63_g(_MyListUnwrappedNullableExampleStruct, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

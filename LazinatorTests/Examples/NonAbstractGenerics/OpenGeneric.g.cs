@@ -384,7 +384,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 _MyListT = (List<T>) CloneOrChange_List_GT_g(_MyListT, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

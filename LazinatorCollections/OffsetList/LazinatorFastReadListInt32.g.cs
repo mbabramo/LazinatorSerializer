@@ -79,7 +79,7 @@ namespace LazinatorCollections.OffsetList
         public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, false);
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

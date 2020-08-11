@@ -284,7 +284,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyQueueSerialized = (Queue<ExampleChild>) CloneOrChange_Queue_GExampleChild_g(_MyQueueSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

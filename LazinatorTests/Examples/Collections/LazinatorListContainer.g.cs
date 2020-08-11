@@ -455,7 +455,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyStructList = (LazinatorList<WByte>) _MyStructList.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

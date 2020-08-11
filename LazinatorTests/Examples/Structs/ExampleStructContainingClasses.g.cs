@@ -586,7 +586,7 @@ namespace LazinatorTests.Examples
                 _MyListValues = (List<int>) CloneOrChange_List_Gint_g(_MyListValues, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             var deserialized_MyTuple = MyTuple;
-            _MyTuple = ((NonLazinatorClass myitem1, int? myitem2)) CloneOrChange__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(_MyTuple, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);if (changeThisLevel)
+            _MyTuple = ((NonLazinatorClass myitem1, int? myitem2)) CloneOrChange__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(_MyTuple, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

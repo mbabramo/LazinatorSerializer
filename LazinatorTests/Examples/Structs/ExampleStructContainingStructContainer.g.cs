@@ -329,7 +329,7 @@ namespace LazinatorTests.Examples.Structs
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             var deserialized_Subcontainer = Subcontainer;
-            _Subcontainer = (ExampleStructContainingStruct) _Subcontainer.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);if (changeThisLevel)
+            _Subcontainer = (ExampleStructContainingStruct) _Subcontainer.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

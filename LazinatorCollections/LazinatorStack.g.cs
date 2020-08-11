@@ -343,7 +343,7 @@ namespace LazinatorCollections
             {
                 _UnderlyingList = (ILazinatorListable<T>) _UnderlyingList.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }

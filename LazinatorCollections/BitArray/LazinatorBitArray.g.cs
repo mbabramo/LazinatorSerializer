@@ -340,7 +340,7 @@ namespace LazinatorCollections.BitArray
             {
                 var deserialized_IntStorage = IntStorage;
             }
-            if (changeThisLevel)
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }
