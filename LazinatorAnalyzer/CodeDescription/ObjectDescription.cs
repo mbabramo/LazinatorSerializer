@@ -841,13 +841,13 @@ namespace Lazinator.CodeDescription
                                             $"!exploreOnlyDeserializedChildren",  
                                             property.GetNonNullCheck(false)), 
                                         property.GetNonNullCheck(true)), 
-                                   $@"bool isMatch = matchCriterion == null || matchCriterion({propertyName});
-                                    bool shouldExplore = exploreCriterion == null || exploreCriterion({propertyName});
-                                    if (isMatch)
+                                   $@"bool isMatch_{propertyName} = matchCriterion == null || matchCriterion({propertyName});
+                                    bool shouldExplore_{propertyName} = exploreCriterion == null || exploreCriterion({propertyName});
+                                    if (isMatch_{propertyName})
                                     {{
                                         yield return (""{propertyName}"", {propertyName});
                                     }}
-                                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                                    if ((!stopExploringBelowMatch || !isMatch_{propertyName}) && shouldExplore_{propertyName})
                                     {{
                                         foreach (var toYield in {propertyName}.{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable, "Value.")}EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                                         {{

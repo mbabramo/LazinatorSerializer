@@ -485,7 +485,7 @@ namespace Lazinator.CodeDescription
                 else if (IsDefinitelyStruct && PropertyType != LazinatorPropertyType.LazinatorStructNullable)
                     nonNullCheck = "true";
                 else
-                    nonNullCheck = $"_{propertyName}_Accessed && _{propertyName} != null";
+                    nonNullCheck = $"(_{propertyName}_Accessed && _{propertyName} != null)";
             }
             else
             {
