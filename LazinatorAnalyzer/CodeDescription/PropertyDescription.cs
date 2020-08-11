@@ -1008,16 +1008,24 @@ namespace Lazinator.CodeDescription
             if (IsClassOrInterface)
             {
                 if (ContainerIsClass) // change the parents collection so that it refers to the new value and not the old value. But other values in the parents collection will not be affected.
-                    propertyTypeDependentSet = $@"
-                        if (_{PropertyName} != null)
-                        {{
+                {
+                    if (Nullable)
+                        propertyTypeDependentSet = $@"
+                            if (_{PropertyName} != null)
+                            {{
+                                _{PropertyName}.LazinatorParents = _{PropertyName}.LazinatorParents.WithRemoved(this);
+                            }}
+                            if (value != null)
+                            {{
+                                value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                            }}
+                            ";
+                    else
+                        propertyTypeDependentSet = $@"
                             _{PropertyName}.LazinatorParents = _{PropertyName}.LazinatorParents.WithRemoved(this);
-                        }}
-                        if (value != null)
-                        {{
                             value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                        }}
-                        ";
+                            ";
+                }
                 else
                     propertyTypeDependentSet = $@"";
 
@@ -1087,7 +1095,7 @@ namespace Lazinator.CodeDescription
                 _{PropertyName}_Accessed = true;{RepeatedCodeExecution}
             }}
         }}{(GetModifiedDerivationKeyword() == "override " ? "" : $@"
-        {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed;")} // DEBUG Nullable: {Nullable}
+        {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed;")}
         private void Lazinate_{PropertyName}()
         {{
             if (LazinatorObjectBytes.Length == 0)
