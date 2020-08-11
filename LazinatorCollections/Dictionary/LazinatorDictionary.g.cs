@@ -173,7 +173,7 @@ namespace LazinatorCollections.Dictionary
             clone.FreeInMemoryObjects();
             LazinatorDictionary<TKey, TValue> typedClone = (LazinatorDictionary<TKey, TValue>) clone;
             typedClone.Count = Count;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (Buckets == null)
                 {
@@ -183,7 +183,9 @@ namespace LazinatorCollections.Dictionary
                 {
                     typedClone.Buckets = (LazinatorList<DictionaryBucket<TKey, TValue>>) Buckets.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
+            
             
             return typedClone;
         }
@@ -343,6 +345,7 @@ namespace LazinatorCollections.Dictionary
                     }
                 }
             }
+            
             yield break;
         }
         
@@ -396,10 +399,11 @@ namespace LazinatorCollections.Dictionary
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _Count = span.ToDecompressedInt(ref bytesSoFar);
             _Buckets_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _LazinatorDictionary_TKey_TValue_EndByteIndex = bytesSoFar;
         }
         
@@ -469,7 +473,7 @@ namespace LazinatorCollections.Dictionary
             // write properties
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _Count);
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_Buckets_Accessed)
                 {
@@ -477,6 +481,7 @@ namespace LazinatorCollections.Dictionary
                 }
                 WriteChild(ref writer, ref _Buckets, includeChildrenMode, _Buckets_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Buckets_ByteIndex, _Buckets_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _Buckets_ByteIndex = startOfObjectPosition - startPosition;

@@ -469,6 +469,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Count;
             HashSet<ExampleChild> collection = new HashSet<ExampleChild>(collectionLength);
             foreach (var item in itemToClone)
@@ -482,6 +483,7 @@ namespace LazinatorTests.Examples.Collections
                     var itemCopied = (ExampleChild) cloneOrChangeFunc(item);
                     collection.Add(itemCopied);
                 }
+                
             }
             return collection;
         }

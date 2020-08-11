@@ -217,7 +217,7 @@ namespace LazinatorCollections.Tree
         {
             clone.FreeInMemoryObjects();
             LazinatorGeneralTree<T> typedClone = (LazinatorGeneralTree<T>) clone;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (Children == null)
                 {
@@ -227,8 +227,10 @@ namespace LazinatorCollections.Tree
                 {
                     typedClone.Children = (LazinatorList<LazinatorGeneralTree<T>>) Children.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (Item == null)
                 {
@@ -238,7 +240,9 @@ namespace LazinatorCollections.Tree
                 {
                     typedClone.Item = (T) Item.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
+            
             
             return typedClone;
         }
@@ -398,6 +402,7 @@ namespace LazinatorCollections.Tree
                     }
                 }
             }
+            
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Item_Accessed) && Item == null)
             {
                 yield return ("Item", default);
@@ -421,6 +426,7 @@ namespace LazinatorCollections.Tree
                     }
                 }
             }
+            
             yield break;
         }
         
@@ -477,15 +483,17 @@ namespace LazinatorCollections.Tree
         {
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _Children_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _Item_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _LazinatorGeneralTree_T_EndByteIndex = bytesSoFar;
         }
         
@@ -562,7 +570,7 @@ namespace LazinatorCollections.Tree
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_Children_Accessed)
                 {
@@ -570,12 +578,13 @@ namespace LazinatorCollections.Tree
                 }
                 WriteChild(ref writer, ref _Children, includeChildrenMode, _Children_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Children_ByteIndex, _Children_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _Children_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_Item_Accessed)
                 {
@@ -583,6 +592,7 @@ namespace LazinatorCollections.Tree
                 }
                 WriteChild(ref writer, ref _Item, includeChildrenMode, _Item_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Item_ByteIndex, _Item_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _Item_ByteIndex = startOfObjectPosition - startPosition;

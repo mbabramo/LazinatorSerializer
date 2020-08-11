@@ -617,6 +617,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Count;
             List<WInt> collection = avoidCloningIfPossible ? itemToClone : new List<WInt>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
@@ -687,6 +688,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Count;
             List<WNullableByte> collection = avoidCloningIfPossible ? itemToClone : new List<WNullableByte>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
@@ -757,6 +759,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Count;
             List<WNullableInt> collection = avoidCloningIfPossible ? itemToClone : new List<WNullableInt>(collectionLength);
             int itemToCloneCount = itemToClone.Count;

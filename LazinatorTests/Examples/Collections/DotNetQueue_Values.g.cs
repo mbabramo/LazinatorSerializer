@@ -469,6 +469,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Count;
             Queue<int> collection = new Queue<int>(collectionLength);
             int itemToCloneCount = itemToClone.Count;

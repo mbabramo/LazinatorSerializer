@@ -183,7 +183,7 @@ namespace LazinatorCollections.Tuples
         {
             clone.FreeInMemoryObjects();
             LazinatorComparableKeyValue<TKey, TValue> typedClone = (LazinatorComparableKeyValue<TKey, TValue>) clone;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (Key == null)
                 {
@@ -193,8 +193,10 @@ namespace LazinatorCollections.Tuples
                 {
                     typedClone.Key = (TKey) Key.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (Value == null)
                 {
@@ -204,7 +206,9 @@ namespace LazinatorCollections.Tuples
                 {
                     typedClone.Value = (TValue) Value.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
+            
             
             typedClone.IsDirty = false;
             return typedClone;
@@ -365,6 +369,7 @@ namespace LazinatorCollections.Tuples
                     }
                 }
             }
+            
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Value_Accessed) && Value == null)
             {
                 yield return ("Value", default);
@@ -388,6 +393,7 @@ namespace LazinatorCollections.Tuples
                     }
                 }
             }
+            
             yield break;
         }
         
@@ -456,15 +462,17 @@ namespace LazinatorCollections.Tuples
         {
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _Key_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _Value_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _LazinatorComparableKeyValue_TKey_TValue_EndByteIndex = bytesSoFar;
         }
         

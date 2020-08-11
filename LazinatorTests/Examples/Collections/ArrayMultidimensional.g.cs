@@ -611,6 +611,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Length;
             int collectionLength0 = itemToClone.GetLength(0);
             int collectionLength1 = itemToClone.GetLength(1);
@@ -685,6 +686,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Length;
             int[][,,][,,,] collection = new int[collectionLength][,,][,,,];
             int itemToCloneCount = itemToClone.Length;
@@ -699,6 +701,7 @@ namespace LazinatorTests.Examples.Collections
                     var itemCopied = (int[,,][,,,]) CloneOrChange_int_B_c_c_b_B_c_c_c_b(itemToClone[itemIndex], cloneOrChangeFunc, avoidCloningIfPossible);
                     collection[itemIndex] = itemCopied;
                 }
+                
             }
             return collection;
         }
@@ -774,6 +777,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Length;
             int collectionLength0 = itemToClone.GetLength(0);
             int collectionLength1 = itemToClone.GetLength(1);
@@ -792,6 +796,7 @@ namespace LazinatorTests.Examples.Collections
                     var itemCopied = (int[,,,]) CloneOrChange_int_B_c_c_c_b(itemToClone[itemIndex0, itemIndex1, itemIndex2], cloneOrChangeFunc, avoidCloningIfPossible);
                     collection[itemIndex0, itemIndex1, itemIndex2] = itemCopied;
                 }
+                
             }
             return collection;
         }
@@ -852,6 +857,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Length;
             int collectionLength0 = itemToClone.GetLength(0);
             int collectionLength1 = itemToClone.GetLength(1);
@@ -920,6 +926,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Length;
             int collectionLength0 = itemToClone.GetLength(0);
             int collectionLength1 = itemToClone.GetLength(1);

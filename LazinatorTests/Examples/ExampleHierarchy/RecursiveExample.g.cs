@@ -196,7 +196,7 @@ namespace LazinatorTests.Examples.Hierarchy
         {
             clone.FreeInMemoryObjects();
             RecursiveExample typedClone = (RecursiveExample) clone;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (RecursiveClass == null)
                 {
@@ -206,8 +206,10 @@ namespace LazinatorTests.Examples.Hierarchy
                 {
                     typedClone.RecursiveClass = (RecursiveExample) RecursiveClass.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (RecursiveInterface == null)
                 {
@@ -217,7 +219,9 @@ namespace LazinatorTests.Examples.Hierarchy
                 {
                     typedClone.RecursiveInterface = (IRecursiveExample) RecursiveInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
+            
             
             return typedClone;
         }
@@ -368,6 +372,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     }
                 }
             }
+            
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _RecursiveInterface_Accessed) && RecursiveInterface == null)
             {
                 yield return ("RecursiveInterface", default);
@@ -391,6 +396,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     }
                 }
             }
+            
             yield break;
         }
         
@@ -443,15 +449,17 @@ namespace LazinatorTests.Examples.Hierarchy
         {
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _RecursiveClass_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _RecursiveInterface_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _RecursiveExample_EndByteIndex = bytesSoFar;
         }
         
@@ -524,7 +532,7 @@ namespace LazinatorTests.Examples.Hierarchy
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_RecursiveClass_Accessed)
                 {
@@ -532,12 +540,13 @@ namespace LazinatorTests.Examples.Hierarchy
                 }
                 WriteChild(ref writer, ref _RecursiveClass, includeChildrenMode, _RecursiveClass_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _RecursiveClass_ByteIndex, _RecursiveClass_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _RecursiveClass_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_RecursiveInterface_Accessed)
                 {
@@ -545,6 +554,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 }
                 WriteChild(ref writer, ref _RecursiveInterface, includeChildrenMode, _RecursiveInterface_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _RecursiveInterface_ByteIndex, _RecursiveInterface_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _RecursiveInterface_ByteIndex = startOfObjectPosition - startPosition;

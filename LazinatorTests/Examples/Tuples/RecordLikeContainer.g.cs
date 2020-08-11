@@ -725,6 +725,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 return default(RecordLikeClass);
             }
+            
             return new RecordLikeClass((int) (itemToConvert?.Age ?? default),(Example) cloneOrChangeFunc((itemToConvert?.Example)));
         }
         

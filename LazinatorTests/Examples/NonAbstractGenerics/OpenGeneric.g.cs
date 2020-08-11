@@ -199,7 +199,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             clone.FreeInMemoryObjects();
             OpenGeneric<T> typedClone = (OpenGeneric<T>) clone;
             typedClone.MyListT = CloneOrChange_List_GT_g(MyListT, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (MyT == null)
                 {
@@ -209,7 +209,9 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 {
                     typedClone.MyT = (T) MyT.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
+            
             
             return typedClone;
         }
@@ -360,6 +362,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     }
                 }
             }
+            
             yield break;
         }
         
@@ -415,10 +418,11 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             _MyListT_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyT_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _OpenGeneric_T_EndByteIndex = bytesSoFar;
         }
         
@@ -512,7 +516,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 _MyListT_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyT_Accessed)
                 {
@@ -520,6 +524,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 }
                 WriteChild(ref writer, ref _MyT, includeChildrenMode, _MyT_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _MyT_ByteIndex = startOfObjectPosition - startPosition;
@@ -598,6 +603,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Count;
             List<T> collection = avoidCloningIfPossible ? itemToClone : new List<T>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
@@ -620,6 +626,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     var itemCopied = (T) cloneOrChangeFunc(itemToClone[itemIndex]);
                     collection.Add(itemCopied);
                 }
+                
             }
             return collection;
         }

@@ -642,6 +642,7 @@ namespace LazinatorTests.Examples
             {
                 return;
             }
+            
             NonLazinatorInterchangeClass interchange = new NonLazinatorInterchangeClass(itemToConvert);
             interchange.SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
         }
@@ -653,6 +654,7 @@ namespace LazinatorTests.Examples
             {
                 return default(NonLazinatorInterchangeableClass);
             }
+            
             NonLazinatorInterchangeClass interchange = new NonLazinatorInterchangeClass(itemToClone);
             return interchange.Interchange_NonLazinatorInterchangeableClass(avoidCloningIfPossible ? false : true);
         }

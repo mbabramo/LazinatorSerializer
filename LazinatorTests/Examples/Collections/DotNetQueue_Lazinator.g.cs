@@ -471,6 +471,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Count;
             Queue<ExampleChild> collection = new Queue<ExampleChild>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
@@ -486,6 +487,7 @@ namespace LazinatorTests.Examples.Collections
                     var itemCopied = (ExampleChild) cloneOrChangeFunc(q[itemIndex]);
                     collection.Enqueue(itemCopied);
                 }
+                
             }
             return collection;
         }

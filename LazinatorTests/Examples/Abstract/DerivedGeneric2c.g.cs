@@ -203,7 +203,7 @@ namespace LazinatorTests.Examples.Abstract
             typedClone.MyEnumWithinAbstractGeneric = MyEnumWithinAbstractGeneric;
             typedClone.MyEnumWithinAbstractGeneric2 = MyEnumWithinAbstractGeneric2;
             typedClone.MyUnofficialInt = MyUnofficialInt;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (MyT == null)
                 {
@@ -213,7 +213,9 @@ namespace LazinatorTests.Examples.Abstract
                 {
                     typedClone.MyT = (T) MyT.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
+            
             
             return typedClone;
         }
@@ -364,6 +366,7 @@ namespace LazinatorTests.Examples.Abstract
                     }
                 }
             }
+            
             yield break;
         }
         
@@ -417,10 +420,11 @@ namespace LazinatorTests.Examples.Abstract
             _MyEnumWithinAbstractGeneric2 = (global::LazinatorTests.Examples.Abstract.AbstractGeneric1<int>.EnumWithinAbstractGeneric)span.ToDecompressedInt(ref bytesSoFar);
             _MyUnofficialInt = span.ToDecompressedInt(ref bytesSoFar);
             _MyT_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _DerivedGeneric2c_T_EndByteIndex = bytesSoFar;
         }
         
@@ -496,7 +500,7 @@ namespace LazinatorTests.Examples.Abstract
             CompressedIntegralTypes.WriteCompressedInt(ref writer, (int) _MyEnumWithinAbstractGeneric2);
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyUnofficialInt);
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyT_Accessed)
                 {
@@ -504,6 +508,7 @@ namespace LazinatorTests.Examples.Abstract
                 }
                 WriteChild(ref writer, ref _MyT, includeChildrenMode, _MyT_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _MyT_ByteIndex = startOfObjectPosition - startPosition;

@@ -224,7 +224,7 @@ namespace LazinatorCollections.Dictionary
             clone.FreeInMemoryObjects();
             DictionaryBucket<TKey, TValue> typedClone = (DictionaryBucket<TKey, TValue>) clone;
             typedClone.Initialized = Initialized;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (Keys == null)
                 {
@@ -234,8 +234,10 @@ namespace LazinatorCollections.Dictionary
                 {
                     typedClone.Keys = (LazinatorList<TKey>) Keys.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (Values == null)
                 {
@@ -245,7 +247,9 @@ namespace LazinatorCollections.Dictionary
                 {
                     typedClone.Values = (LazinatorList<TValue>) Values.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
+            
             
             return typedClone;
         }
@@ -405,6 +409,7 @@ namespace LazinatorCollections.Dictionary
                     }
                 }
             }
+            
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Values_Accessed) && Values == null)
             {
                 yield return ("Values", default);
@@ -428,6 +433,7 @@ namespace LazinatorCollections.Dictionary
                     }
                 }
             }
+            
             yield break;
         }
         
@@ -486,15 +492,17 @@ namespace LazinatorCollections.Dictionary
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _Initialized = span.ToBoolean(ref bytesSoFar);
             _Keys_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _Values_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _DictionaryBucket_TKey_TValue_EndByteIndex = bytesSoFar;
         }
         
@@ -568,7 +576,7 @@ namespace LazinatorCollections.Dictionary
             // write properties
             WriteUncompressedPrimitives.WriteBool(ref writer, _Initialized);
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_Keys_Accessed)
                 {
@@ -576,12 +584,13 @@ namespace LazinatorCollections.Dictionary
                 }
                 WriteChild(ref writer, ref _Keys, includeChildrenMode, _Keys_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Keys_ByteIndex, _Keys_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _Keys_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_Values_Accessed)
                 {
@@ -589,6 +598,7 @@ namespace LazinatorCollections.Dictionary
                 }
                 WriteChild(ref writer, ref _Values, includeChildrenMode, _Values_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Values_ByteIndex, _Values_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _Values_ByteIndex = startOfObjectPosition - startPosition;

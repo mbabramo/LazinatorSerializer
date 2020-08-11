@@ -106,7 +106,7 @@ namespace LazinatorCollections.Tree
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
             LazinatorLocationAwareTree<T> typedClone = (LazinatorLocationAwareTree<T>) clone;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (Locations == null)
                 {
@@ -116,7 +116,9 @@ namespace LazinatorCollections.Tree
                 {
                     typedClone.Locations = (LazinatorDictionary<T, LazinatorList<WInt>>) Locations.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
+            
             
             return typedClone;
         }
@@ -152,6 +154,7 @@ namespace LazinatorCollections.Tree
                     }
                 }
             }
+            
             yield break;
         }
         
@@ -210,10 +213,11 @@ namespace LazinatorCollections.Tree
             base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _Locations_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _LazinatorLocationAwareTree_T_EndByteIndex = bytesSoFar;
         }
         
@@ -273,7 +277,7 @@ namespace LazinatorCollections.Tree
             base.WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_Locations_Accessed)
                 {
@@ -281,6 +285,7 @@ namespace LazinatorCollections.Tree
                 }
                 WriteChild(ref writer, ref _Locations, includeChildrenMode, _Locations_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Locations_ByteIndex, _Locations_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _Locations_ByteIndex = startOfObjectPosition - startPosition;

@@ -293,7 +293,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             clone.FreeInMemoryObjects();
             NullableEnabledContext typedClone = (NullableEnabledContext) clone;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (ExplicitlyNullable == null)
                 {
@@ -303,8 +303,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     typedClone.ExplicitlyNullable = (Example?) ExplicitlyNullable.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (ExplicitlyNullableInterface == null)
                 {
@@ -314,8 +316,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     typedClone.ExplicitlyNullableInterface = (IExample?) ExplicitlyNullableInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (NonNullableClass == null)
                 {
@@ -325,8 +329,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     typedClone.NonNullableClass = (Example) NonNullableClass.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (NonNullableInterface == null)
                 {
@@ -336,7 +342,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     typedClone.NonNullableInterface = (IExample) NonNullableInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
+            
             
             return typedClone;
         }
@@ -487,6 +495,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     }
                 }
             }
+            
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ExplicitlyNullableInterface_Accessed) && ExplicitlyNullableInterface == null)
             {
                 yield return ("ExplicitlyNullableInterface", default);
@@ -510,6 +519,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     }
                 }
             }
+            
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _NonNullableClass_Accessed) && NonNullableClass == null)
             {
                 yield return ("NonNullableClass", default);
@@ -533,6 +543,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     }
                 }
             }
+            
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _NonNullableInterface_Accessed) && NonNullableInterface == null)
             {
                 yield return ("NonNullableInterface", default);
@@ -556,6 +567,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     }
                 }
             }
+            
             yield break;
         }
         
@@ -618,25 +630,29 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _ExplicitlyNullable_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _ExplicitlyNullableInterface_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _NonNullableClass_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _NonNullableInterface_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _NullableEnabledContext_EndByteIndex = bytesSoFar;
         }
         
@@ -717,7 +733,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ExplicitlyNullable_Accessed)
                 {
@@ -725,12 +741,13 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 WriteChild(ref writer, ref _ExplicitlyNullable, includeChildrenMode, _ExplicitlyNullable_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ExplicitlyNullable_ByteIndex, _ExplicitlyNullable_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _ExplicitlyNullable_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ExplicitlyNullableInterface_Accessed)
                 {
@@ -738,12 +755,13 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 WriteChild(ref writer, ref _ExplicitlyNullableInterface, includeChildrenMode, _ExplicitlyNullableInterface_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ExplicitlyNullableInterface_ByteIndex, _ExplicitlyNullableInterface_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _ExplicitlyNullableInterface_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_NonNullableClass_Accessed)
                 {
@@ -751,12 +769,13 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 WriteChild(ref writer, ref _NonNullableClass, includeChildrenMode, _NonNullableClass_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableClass_ByteIndex, _NonNullableClass_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _NonNullableClass_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_NonNullableInterface_Accessed)
                 {
@@ -764,6 +783,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 WriteChild(ref writer, ref _NonNullableInterface, includeChildrenMode, _NonNullableInterface_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableInterface_ByteIndex, _NonNullableInterface_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _NonNullableInterface_ByteIndex = startOfObjectPosition - startPosition;

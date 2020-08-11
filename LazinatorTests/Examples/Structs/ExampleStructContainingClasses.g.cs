@@ -346,7 +346,7 @@ namespace LazinatorTests.Examples
             ExampleStructContainingClasses typedClone = (ExampleStructContainingClasses) clone;
             typedClone.MyBool = MyBool;
             typedClone.MyChar = MyChar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (MyChild1 == null)
                 {
@@ -356,8 +356,10 @@ namespace LazinatorTests.Examples
                 {
                     typedClone.MyChild1 = (ExampleChild) MyChild1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (MyChild2 == null)
                 {
@@ -367,7 +369,9 @@ namespace LazinatorTests.Examples
                 {
                     typedClone.MyChild2 = (ExampleChild) MyChild2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
+            
             typedClone.MyLazinatorList = CloneOrChange_List_GExample_g(MyLazinatorList, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.MyListValues = CloneOrChange_List_Gint_g(MyListValues, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.MyTuple = CloneOrChange__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(MyTuple, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
@@ -522,6 +526,7 @@ namespace LazinatorTests.Examples
                     }
                 }
             }
+            
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyChild2_Accessed) && MyChild2 == null)
             {
                 yield return ("MyChild2", default);
@@ -545,6 +550,7 @@ namespace LazinatorTests.Examples
                     }
                 }
             }
+            
             yield break;
         }
         
@@ -630,15 +636,17 @@ namespace LazinatorTests.Examples
             _MyBool = span.ToBoolean(ref bytesSoFar);
             _MyChar = span.ToChar(ref bytesSoFar);
             _MyChild1_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _MyChild2_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _MyLazinatorList_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyListValues_ByteIndex = bytesSoFar;
@@ -885,6 +893,7 @@ namespace LazinatorTests.Examples
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Count;
             List<Example> collection = avoidCloningIfPossible ? itemToClone : new List<Example>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
@@ -907,6 +916,7 @@ namespace LazinatorTests.Examples
                     var itemCopied = (Example) cloneOrChangeFunc(itemToClone[itemIndex]);
                     collection.Add(itemCopied);
                 }
+                
             }
             return collection;
         }
@@ -952,6 +962,7 @@ namespace LazinatorTests.Examples
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Count;
             List<int> collection = new List<int>(collectionLength);
             int itemToCloneCount = itemToClone.Count;

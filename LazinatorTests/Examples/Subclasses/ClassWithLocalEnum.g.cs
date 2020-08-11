@@ -468,6 +468,7 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Count;
             List<EnumWithinClass> collection = new List<EnumWithinClass>(collectionLength);
             int itemToCloneCount = itemToClone.Count;

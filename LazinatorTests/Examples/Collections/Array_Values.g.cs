@@ -606,6 +606,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Length;
             int[] collection = new int[collectionLength];
             int itemToCloneCount = itemToClone.Length;
@@ -658,6 +659,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Length;
             int?[] collection = new int?[collectionLength];
             int itemToCloneCount = itemToClone.Length;
@@ -672,6 +674,7 @@ namespace LazinatorTests.Examples.Collections
                     var itemCopied = (int?) itemToClone[itemIndex];
                     collection[itemIndex] = itemCopied;
                 }
+                
             }
             return collection;
         }
@@ -737,6 +740,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Length;
             int[][] collection = new int[collectionLength][];
             int itemToCloneCount = itemToClone.Length;
@@ -751,6 +755,7 @@ namespace LazinatorTests.Examples.Collections
                     var itemCopied = (int[]) CloneOrChange_int_B_b(itemToClone[itemIndex], cloneOrChangeFunc, avoidCloningIfPossible);
                     collection[itemIndex] = itemCopied;
                 }
+                
             }
             return collection;
         }

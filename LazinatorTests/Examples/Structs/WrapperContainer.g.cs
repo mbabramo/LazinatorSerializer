@@ -172,10 +172,11 @@ namespace LazinatorTests.Examples.Structs
         {
             clone.FreeInMemoryObjects();
             WrapperContainer typedClone = (WrapperContainer) clone;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 typedClone.WrappedInt = (WInt) WrappedInt.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
+            
             
             return typedClone;
         }
@@ -303,22 +304,30 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedInt_Accessed) && false)
             {
-                bool isMatch = matchCriterion == null || matchCriterion(WrappedInt);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedInt);
-                if (isMatch)
+                yield return ("WrappedInt", default);
+            }
+            else
+            {
+                if ((!exploreOnlyDeserializedChildren && true) || (true))
                 {
-                    yield return ("WrappedInt", WrappedInt);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in WrappedInt.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    bool isMatch = matchCriterion == null || matchCriterion(WrappedInt);
+                    bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedInt);
+                    if (isMatch)
                     {
-                        yield return ("WrappedInt" + "." + toYield.propertyName, toYield.descendant);
+                        yield return ("WrappedInt", WrappedInt);
+                    }
+                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    {
+                        foreach (var toYield in WrappedInt.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                        {
+                            yield return ("WrappedInt" + "." + toYield.propertyName, toYield.descendant);
+                        }
                     }
                 }
             }
+            
             yield break;
         }
         
@@ -367,10 +376,11 @@ namespace LazinatorTests.Examples.Structs
         {
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _WrappedInt_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToByte(ref bytesSoFar) + bytesSoFar;
             }
+            
             _WrapperContainer_EndByteIndex = bytesSoFar;
         }
         
@@ -440,7 +450,7 @@ namespace LazinatorTests.Examples.Structs
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_WrappedInt_Accessed)
                 {
@@ -448,6 +458,7 @@ namespace LazinatorTests.Examples.Structs
                 }
                 WriteChild(ref writer, ref _WrappedInt, includeChildrenMode, _WrappedInt_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, true, null), verifyCleanness, updateStoredBuffer, true, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _WrappedInt_ByteIndex = startOfObjectPosition - startPosition;

@@ -166,7 +166,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             clone.FreeInMemoryObjects();
             RemoteHierarchy typedClone = (RemoteHierarchy) clone;
             typedClone.TopOfHierarchyInt = TopOfHierarchyInt;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (RemoteLevel1Item == null)
                 {
@@ -176,7 +176,9 @@ namespace LazinatorTests.Examples.RemoteHierarchy
                 {
                     typedClone.RemoteLevel1Item = (Remote<WGuid, RemoteLevel1>) RemoteLevel1Item.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
+            
             
             return typedClone;
         }
@@ -327,6 +329,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
                     }
                 }
             }
+            
             yield break;
         }
         
@@ -376,10 +379,11 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _TopOfHierarchyInt = span.ToDecompressedInt(ref bytesSoFar);
             _RemoteLevel1Item_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _RemoteHierarchy_EndByteIndex = bytesSoFar;
         }
         
@@ -449,7 +453,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             // write properties
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _TopOfHierarchyInt);
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_RemoteLevel1Item_Accessed)
                 {
@@ -457,6 +461,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
                 }
                 WriteChild(ref writer, ref _RemoteLevel1Item, includeChildrenMode, _RemoteLevel1Item_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _RemoteLevel1Item_ByteIndex, _RemoteLevel1Item_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _RemoteLevel1Item_ByteIndex = startOfObjectPosition - startPosition;

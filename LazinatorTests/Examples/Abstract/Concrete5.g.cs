@@ -385,6 +385,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Count;
             List<int> collection = new List<int>(collectionLength);
             int itemToCloneCount = itemToClone.Count;

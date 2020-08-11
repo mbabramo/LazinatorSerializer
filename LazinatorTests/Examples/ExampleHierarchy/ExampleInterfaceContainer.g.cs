@@ -188,7 +188,7 @@ namespace LazinatorTests.Examples.Hierarchy
         {
             clone.FreeInMemoryObjects();
             ExampleInterfaceContainer typedClone = (ExampleInterfaceContainer) clone;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
             {
                 if (ExampleByInterface == null)
                 {
@@ -198,7 +198,9 @@ namespace LazinatorTests.Examples.Hierarchy
                 {
                     typedClone.ExampleByInterface = (IExample) ExampleByInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
+            
             typedClone.ExampleListByInterface = CloneOrChange_List_GIExample_g(ExampleListByInterface, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
@@ -350,6 +352,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     }
                 }
             }
+            
             yield break;
         }
         
@@ -403,10 +406,11 @@ namespace LazinatorTests.Examples.Hierarchy
         {
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _ExampleByInterface_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _ExampleListByInterface_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _ExampleInterfaceContainer_EndByteIndex = bytesSoFar;
@@ -481,7 +485,7 @@ namespace LazinatorTests.Examples.Hierarchy
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ExampleByInterface_Accessed)
                 {
@@ -489,6 +493,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 }
                 WriteChild(ref writer, ref _ExampleByInterface, includeChildrenMode, _ExampleByInterface_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _ExampleByInterface_ByteIndex = startOfObjectPosition - startPosition;
@@ -579,6 +584,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Count;
             List<IExample> collection = avoidCloningIfPossible ? itemToClone : new List<IExample>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
@@ -601,6 +607,7 @@ namespace LazinatorTests.Examples.Hierarchy
                     var itemCopied = (IExample) cloneOrChangeFunc(itemToClone[itemIndex]);
                     collection.Add(itemCopied);
                 }
+                
             }
             return collection;
         }

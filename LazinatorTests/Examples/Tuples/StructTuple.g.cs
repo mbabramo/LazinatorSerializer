@@ -869,6 +869,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 return default((int, double)?);
             }
+            
             return ((int) (itemToConvert?.Item1 ?? default),(double) (itemToConvert?.Item2 ?? default));
         }
         

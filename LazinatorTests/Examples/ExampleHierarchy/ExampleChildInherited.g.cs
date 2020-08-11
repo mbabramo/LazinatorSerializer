@@ -116,7 +116,7 @@ namespace LazinatorTests.Examples
             base.AssignCloneProperties(clone, includeChildrenMode);
             ExampleChildInherited typedClone = (ExampleChildInherited) clone;
             typedClone.MyInt = MyInt;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (MyGrandchildInInherited == null)
                 {
@@ -126,7 +126,9 @@ namespace LazinatorTests.Examples
                 {
                     typedClone.MyGrandchildInInherited = (ExampleGrandchild) MyGrandchildInInherited.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
+            
             
             return typedClone;
         }
@@ -162,6 +164,7 @@ namespace LazinatorTests.Examples
                     }
                 }
             }
+            
             yield break;
         }
         
@@ -218,10 +221,11 @@ namespace LazinatorTests.Examples
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _MyInt = span.ToDecompressedInt(ref bytesSoFar);
             _MyGrandchildInInherited_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _ExampleChildInherited_EndByteIndex = bytesSoFar;
         }
         
@@ -278,7 +282,7 @@ namespace LazinatorTests.Examples
             // write properties
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyInt);
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyGrandchildInInherited_Accessed)
                 {
@@ -286,6 +290,7 @@ namespace LazinatorTests.Examples
                 }
                 WriteChild(ref writer, ref _MyGrandchildInInherited, includeChildrenMode, _MyGrandchildInInherited_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyGrandchildInInherited_ByteIndex, _MyGrandchildInInherited_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _MyGrandchildInInherited_ByteIndex = startOfObjectPosition - startPosition;

@@ -212,7 +212,7 @@ namespace LazinatorTests.Examples.Subclasses
             clone.FreeInMemoryObjects();
             ClassWithSubclass typedClone = (ClassWithSubclass) clone;
             typedClone.IntWithinSuperclass = IntWithinSuperclass;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (SubclassInstance1 == null)
                 {
@@ -222,8 +222,10 @@ namespace LazinatorTests.Examples.Subclasses
                 {
                     typedClone.SubclassInstance1 = (global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass) SubclassInstance1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (SubclassInstance2 == null)
                 {
@@ -233,7 +235,9 @@ namespace LazinatorTests.Examples.Subclasses
                 {
                     typedClone.SubclassInstance2 = (global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass) SubclassInstance2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
+            
             
             return typedClone;
         }
@@ -384,6 +388,7 @@ namespace LazinatorTests.Examples.Subclasses
                     }
                 }
             }
+            
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _SubclassInstance2_Accessed) && SubclassInstance2 == null)
             {
                 yield return ("SubclassInstance2", default);
@@ -407,6 +412,7 @@ namespace LazinatorTests.Examples.Subclasses
                     }
                 }
             }
+            
             yield break;
         }
         
@@ -461,15 +467,17 @@ namespace LazinatorTests.Examples.Subclasses
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _IntWithinSuperclass = span.ToDecompressedInt(ref bytesSoFar);
             _SubclassInstance1_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _SubclassInstance2_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _ClassWithSubclass_EndByteIndex = bytesSoFar;
         }
         
@@ -543,7 +551,7 @@ namespace LazinatorTests.Examples.Subclasses
             // write properties
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _IntWithinSuperclass);
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_SubclassInstance1_Accessed)
                 {
@@ -551,12 +559,13 @@ namespace LazinatorTests.Examples.Subclasses
                 }
                 WriteChild(ref writer, ref _SubclassInstance1, includeChildrenMode, _SubclassInstance1_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _SubclassInstance1_ByteIndex, _SubclassInstance1_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _SubclassInstance1_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_SubclassInstance2_Accessed)
                 {
@@ -564,6 +573,7 @@ namespace LazinatorTests.Examples.Subclasses
                 }
                 WriteChild(ref writer, ref _SubclassInstance2, includeChildrenMode, _SubclassInstance2_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _SubclassInstance2_ByteIndex, _SubclassInstance2_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _SubclassInstance2_ByteIndex = startOfObjectPosition - startPosition;

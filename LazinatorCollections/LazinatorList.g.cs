@@ -361,10 +361,11 @@ namespace LazinatorCollections
             _MainListSerialized_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _Offsets_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _LazinatorList_T_EndByteIndex = bytesSoFar;
         }
         
@@ -449,7 +450,7 @@ namespace LazinatorCollections
                 _MainListSerialized_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_Offsets_Accessed)
                 {
@@ -457,6 +458,7 @@ namespace LazinatorCollections
                 }
                 WriteChild(ref writer, ref _Offsets, includeChildrenMode, _Offsets_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Offsets_ByteIndex, _Offsets_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _Offsets_ByteIndex = startOfObjectPosition - startPosition;

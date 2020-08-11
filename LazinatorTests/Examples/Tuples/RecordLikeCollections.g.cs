@@ -550,6 +550,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Count;
             Dictionary<int, RecordLikeContainer> collection = new Dictionary<int, RecordLikeContainer>(collectionLength);
             foreach (var item in itemToClone)
@@ -651,6 +652,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Count;
             Dictionary<int, RecordLikeTypeWithLazinator> collection = new Dictionary<int, RecordLikeTypeWithLazinator>(collectionLength);
             foreach (var item in itemToClone)

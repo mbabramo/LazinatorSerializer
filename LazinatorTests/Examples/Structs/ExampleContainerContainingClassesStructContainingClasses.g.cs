@@ -399,14 +399,16 @@ namespace LazinatorTests.Examples
         {
             clone.FreeInMemoryObjects();
             ExampleContainerContainingClassesStructContainingClasses typedClone = (ExampleContainerContainingClassesStructContainingClasses) clone;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 typedClone.IntWrapper = (WInt) IntWrapper.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 typedClone.MyExampleStructContainingClasses = (ExampleStructContainingClasses) MyExampleStructContainingClasses.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
+            
             typedClone.MyHashSetExampleStruct = CloneOrChange_HashSet_GExampleStructContainingClasses_g(MyHashSetExampleStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.MyListExampleStruct = CloneOrChange_List_GExampleStructContainingClasses_g(MyListExampleStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.MyListNullableExampleStruct = CloneOrChange_List_GWNullableStruct_GExampleStructContainingClasses_g_g(MyListNullableExampleStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
@@ -538,38 +540,54 @@ namespace LazinatorTests.Examples
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _IntWrapper_Accessed) && false)
             {
-                bool isMatch = matchCriterion == null || matchCriterion(IntWrapper);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(IntWrapper);
-                if (isMatch)
+                yield return ("IntWrapper", default);
+            }
+            else
+            {
+                if ((!exploreOnlyDeserializedChildren && true) || (true))
                 {
-                    yield return ("IntWrapper", IntWrapper);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in IntWrapper.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    bool isMatch = matchCriterion == null || matchCriterion(IntWrapper);
+                    bool shouldExplore = exploreCriterion == null || exploreCriterion(IntWrapper);
+                    if (isMatch)
                     {
-                        yield return ("IntWrapper" + "." + toYield.propertyName, toYield.descendant);
+                        yield return ("IntWrapper", IntWrapper);
+                    }
+                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    {
+                        foreach (var toYield in IntWrapper.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                        {
+                            yield return ("IntWrapper" + "." + toYield.propertyName, toYield.descendant);
+                        }
                     }
                 }
             }
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
+            
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyExampleStructContainingClasses_Accessed) && false)
             {
-                bool isMatch = matchCriterion == null || matchCriterion(MyExampleStructContainingClasses);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(MyExampleStructContainingClasses);
-                if (isMatch)
+                yield return ("MyExampleStructContainingClasses", default);
+            }
+            else
+            {
+                if ((!exploreOnlyDeserializedChildren && true) || (true))
                 {
-                    yield return ("MyExampleStructContainingClasses", MyExampleStructContainingClasses);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in MyExampleStructContainingClasses.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    bool isMatch = matchCriterion == null || matchCriterion(MyExampleStructContainingClasses);
+                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyExampleStructContainingClasses);
+                    if (isMatch)
                     {
-                        yield return ("MyExampleStructContainingClasses" + "." + toYield.propertyName, toYield.descendant);
+                        yield return ("MyExampleStructContainingClasses", MyExampleStructContainingClasses);
+                    }
+                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    {
+                        foreach (var toYield in MyExampleStructContainingClasses.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                        {
+                            yield return ("MyExampleStructContainingClasses" + "." + toYield.propertyName, toYield.descendant);
+                        }
                     }
                 }
             }
+            
             yield break;
         }
         
@@ -648,15 +666,17 @@ namespace LazinatorTests.Examples
         {
             ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
             _IntWrapper_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToByte(ref bytesSoFar) + bytesSoFar;
             }
+            
             _MyExampleStructContainingClasses_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _MyHashSetExampleStruct_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyListExampleStruct_ByteIndex = bytesSoFar;
@@ -755,7 +775,7 @@ namespace LazinatorTests.Examples
             writer.Write((byte)includeChildrenMode);
             // write properties
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_IntWrapper_Accessed)
                 {
@@ -763,12 +783,13 @@ namespace LazinatorTests.Examples
                 }
                 WriteChild(ref writer, ref _IntWrapper, includeChildrenMode, _IntWrapper_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _IntWrapper_ByteIndex, _IntWrapper_ByteLength, false, true, null), verifyCleanness, updateStoredBuffer, true, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _IntWrapper_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyExampleStructContainingClasses_Accessed)
                 {
@@ -776,6 +797,7 @@ namespace LazinatorTests.Examples
                 }
                 WriteChild(ref writer, ref _MyExampleStructContainingClasses, includeChildrenMode, _MyExampleStructContainingClasses_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _MyExampleStructContainingClasses_ByteIndex = startOfObjectPosition - startPosition;
@@ -905,6 +927,7 @@ namespace LazinatorTests.Examples
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Count;
             HashSet<ExampleStructContainingClasses> collection = new HashSet<ExampleStructContainingClasses>(collectionLength);
             foreach (var item in itemToClone)
@@ -966,6 +989,7 @@ namespace LazinatorTests.Examples
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Count;
             List<ExampleStructContainingClasses> collection = avoidCloningIfPossible ? itemToClone : new List<ExampleStructContainingClasses>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
@@ -1036,6 +1060,7 @@ namespace LazinatorTests.Examples
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Count;
             List<WNullableStruct<ExampleStructContainingClasses>> collection = avoidCloningIfPossible ? itemToClone : new List<WNullableStruct<ExampleStructContainingClasses>>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
@@ -1124,6 +1149,7 @@ namespace LazinatorTests.Examples
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Count;
             List<ExampleStructContainingClasses?> collection = avoidCloningIfPossible ? itemToClone : new List<ExampleStructContainingClasses?>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
@@ -1146,6 +1172,7 @@ namespace LazinatorTests.Examples
                     var itemCopied = (ExampleStructContainingClasses?) cloneOrChangeFunc(itemToClone[itemIndex]);
                     collection.Add(itemCopied);
                 }
+                
             }
             return collection;
         }

@@ -320,6 +320,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Count;
             List<List<NonLazinatorClass>> collection = new List<List<NonLazinatorClass>>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
@@ -334,6 +335,7 @@ namespace LazinatorTests.Examples.Collections
                     var itemCopied = (List<NonLazinatorClass>) CloneOrChange_List_GNonLazinatorClass_g(itemToClone[itemIndex], cloneOrChangeFunc, avoidCloningIfPossible);
                     collection.Add(itemCopied);
                 }
+                
             }
             return collection;
         }
@@ -399,6 +401,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Count;
             List<NonLazinatorClass> collection = new List<NonLazinatorClass>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
@@ -413,6 +416,7 @@ namespace LazinatorTests.Examples.Collections
                     var itemCopied = (NonLazinatorClass) itemToClone[itemIndex];
                     collection.Add(itemCopied);
                 }
+                
             }
             return collection;
         }

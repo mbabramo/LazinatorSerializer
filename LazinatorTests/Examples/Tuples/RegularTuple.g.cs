@@ -823,6 +823,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Count;
             List<Tuple<uint, ExampleChild, NonLazinatorClass>> collection = new List<Tuple<uint, ExampleChild, NonLazinatorClass>>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
@@ -837,6 +838,7 @@ namespace LazinatorTests.Examples.Tuples
                     var itemCopied = (Tuple<uint, ExampleChild, NonLazinatorClass>) CloneOrChange_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(itemToClone[itemIndex], cloneOrChangeFunc, avoidCloningIfPossible);
                     collection.Add(itemCopied);
                 }
+                
             }
             return collection;
         }
@@ -912,6 +914,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 return default(Tuple<uint, ExampleChild, NonLazinatorClass>);
             }
+            
             return new Tuple<uint, ExampleChild, NonLazinatorClass>((uint) (itemToConvert?.Item1 ?? default),(ExampleChild) cloneOrChangeFunc((itemToConvert?.Item2)),(NonLazinatorClass) (itemToConvert?.Item3));
         }
         
@@ -986,6 +989,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 return default(Tuple<uint?, ExampleChild, NonLazinatorClass>);
             }
+            
             return new Tuple<uint?, ExampleChild, NonLazinatorClass>((uint?) (itemToConvert?.Item1),(ExampleChild) cloneOrChangeFunc((itemToConvert?.Item2)),(NonLazinatorClass) (itemToConvert?.Item3));
         }
         
@@ -1035,6 +1039,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 return default(Tuple<int, ExampleStructContainingClasses>);
             }
+            
             return new Tuple<int, ExampleStructContainingClasses>((int) (itemToConvert?.Item1 ?? default),(ExampleStructContainingClasses) cloneOrChangeFunc((itemToConvert?.Item2 ?? default)));
         }
         
@@ -1083,6 +1088,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 return default(Tuple<int, ExampleStructContainingClasses?>);
             }
+            
             return new Tuple<int, ExampleStructContainingClasses?>((int) (itemToConvert?.Item1 ?? default),(ExampleStructContainingClasses?) cloneOrChangeFunc((itemToConvert?.Item2)));
         }
         

@@ -488,6 +488,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Count;
             List<SpanAndMemory> collection = avoidCloningIfPossible ? itemToClone : new List<SpanAndMemory>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
@@ -510,6 +511,7 @@ namespace LazinatorTests.Examples.Collections
                     var itemCopied = (SpanAndMemory) cloneOrChangeFunc(itemToClone[itemIndex]);
                     collection.Add(itemCopied);
                 }
+                
             }
             return collection;
         }

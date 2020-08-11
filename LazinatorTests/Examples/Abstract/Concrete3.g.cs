@@ -352,7 +352,7 @@ namespace LazinatorTests.Examples.Abstract
             typedClone.String1 = String1;
             typedClone.String2 = String2;
             typedClone.String3 = String3;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (Example2 == null)
                 {
@@ -362,8 +362,10 @@ namespace LazinatorTests.Examples.Abstract
                 {
                     typedClone.Example2 = (Example) Example2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (Example3 == null)
                 {
@@ -373,7 +375,9 @@ namespace LazinatorTests.Examples.Abstract
                 {
                     typedClone.Example3 = (Example) Example3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
+            
             typedClone.IntList1 = CloneOrChange_List_Gint_g(IntList1, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.IntList2 = CloneOrChange_List_Gint_g(IntList2, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.IntList3 = CloneOrChange_List_Gint_g(IntList3, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
@@ -527,6 +531,7 @@ namespace LazinatorTests.Examples.Abstract
                     }
                 }
             }
+            
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Example3_Accessed) && Example3 == null)
             {
                 yield return ("Example3", default);
@@ -550,6 +555,7 @@ namespace LazinatorTests.Examples.Abstract
                     }
                 }
             }
+            
             yield break;
         }
         
@@ -626,15 +632,17 @@ namespace LazinatorTests.Examples.Abstract
             _String2 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
             _String3 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
             _Example2_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _Example3_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _IntList1_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _IntList2_ByteIndex = bytesSoFar;
@@ -728,7 +736,7 @@ namespace LazinatorTests.Examples.Abstract
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _String2);
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _String3);
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_Example2_Accessed)
                 {
@@ -736,12 +744,13 @@ namespace LazinatorTests.Examples.Abstract
                 }
                 WriteChild(ref writer, ref _Example2, includeChildrenMode, _Example2_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Example2_ByteIndex, _Example2_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _Example2_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_Example3_Accessed)
                 {
@@ -749,6 +758,7 @@ namespace LazinatorTests.Examples.Abstract
                 }
                 WriteChild(ref writer, ref _Example3, includeChildrenMode, _Example3_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Example3_ByteIndex, _Example3_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _Example3_ByteIndex = startOfObjectPosition - startPosition;
@@ -853,6 +863,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 return default;
             }
+            
             int collectionLength = itemToClone.Count;
             List<int> collection = new List<int>(collectionLength);
             int itemToCloneCount = itemToClone.Count;

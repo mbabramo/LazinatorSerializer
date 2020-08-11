@@ -477,6 +477,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 return default(Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass>);
             }
+            
             return new Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass>((uint?) (itemToConvert?.Item1),((ExampleChild, (uint, (int a, string b)?, Tuple<short, long>))) CloneOrChange__PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p((itemToConvert?.Item2 ?? default), cloneOrChangeFunc, avoidCloningIfPossible),(NonLazinatorClass) (itemToConvert?.Item3));
         }
         
@@ -638,6 +639,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 return default((int a, string b)?);
             }
+            
             return ((int) (itemToConvert?.Item1 ?? default),(string) (itemToConvert?.Item2 ?? default));
         }
         
@@ -678,6 +680,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 return default(Tuple<short, long>);
             }
+            
             return new Tuple<short, long>((short) (itemToConvert?.Item1 ?? default),(long) (itemToConvert?.Item2 ?? default));
         }
         

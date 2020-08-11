@@ -746,22 +746,24 @@ namespace LazinatorTests.Examples
             typedClone.MyBool = MyBool;
             typedClone.MyChar = MyChar;
             typedClone.MyDateTime = MyDateTime;
-            if (LazinatorObjectVersion >= 3) 
+            if (LazinatorObjectVersion >= 3)
             {
                 typedClone.MyNewString = MyNewString;
             }
+            
             typedClone.MyNullableDecimal = MyNullableDecimal;
             typedClone.MyNullableTimeSpan = MyNullableTimeSpan;
-            if (LazinatorObjectVersion < 3) 
+            if (LazinatorObjectVersion < 3)
             {
                 typedClone.MyOldString = MyOldString;
             }
+            
             typedClone.MyString = MyString;
             typedClone.MyStringBrotli = MyStringBrotli;
             typedClone.MyTestEnum = MyTestEnum;
             typedClone.MyTestEnumByteNullable = MyTestEnumByteNullable;
             typedClone.MyUint = MyUint;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
             {
                 if (IncludableChild == null)
                 {
@@ -771,8 +773,10 @@ namespace LazinatorTests.Examples
                 {
                     typedClone.IncludableChild = (ExampleChild) IncludableChild.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (MyChild1 == null)
                 {
@@ -782,8 +786,10 @@ namespace LazinatorTests.Examples
                 {
                     typedClone.MyChild1 = (ExampleChild) MyChild1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (MyChild2 == null)
                 {
@@ -793,8 +799,10 @@ namespace LazinatorTests.Examples
                 {
                     typedClone.MyChild2 = (ExampleChild) MyChild2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && LazinatorObjectVersion < 3) 
+            
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && LazinatorObjectVersion < 3)
             {
                 if (MyChild2Previous == null)
                 {
@@ -804,8 +812,10 @@ namespace LazinatorTests.Examples
                 {
                     typedClone.MyChild2Previous = (ExampleChild) MyChild2Previous.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (MyInterfaceImplementer == null)
                 {
@@ -815,13 +825,16 @@ namespace LazinatorTests.Examples
                 {
                     typedClone.MyInterfaceImplementer = (IExampleNonexclusiveInterface) MyInterfaceImplementer.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
+            
             typedClone.MyNonLazinatorChild = NonLazinatorDirectConverter.CloneOrChange_NonLazinatorClass(MyNonLazinatorChild, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 typedClone.WrappedInt = (WInt) WrappedInt.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren) 
+            
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren)
             {
                 if (ExcludableChild == null)
                 {
@@ -831,7 +844,9 @@ namespace LazinatorTests.Examples
                 {
                     typedClone.ExcludableChild = (ExampleChild) ExcludableChild.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
+                
             }
+            
             
             return typedClone;
         }
@@ -984,6 +999,7 @@ namespace LazinatorTests.Examples
                     }
                 }
             }
+            
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyChild1_Accessed) && MyChild1 == null)
             {
                 yield return ("MyChild1", default);
@@ -1007,6 +1023,7 @@ namespace LazinatorTests.Examples
                     }
                 }
             }
+            
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyChild2_Accessed) && MyChild2 == null)
             {
                 yield return ("MyChild2", default);
@@ -1030,6 +1047,7 @@ namespace LazinatorTests.Examples
                     }
                 }
             }
+            
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyChild2Previous_Accessed) && MyChild2Previous == null)
             {
                 yield return ("MyChild2Previous", default);
@@ -1053,6 +1071,7 @@ namespace LazinatorTests.Examples
                     }
                 }
             }
+            
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyInterfaceImplementer_Accessed) && MyInterfaceImplementer == null)
             {
                 yield return ("MyInterfaceImplementer", default);
@@ -1076,22 +1095,31 @@ namespace LazinatorTests.Examples
                     }
                 }
             }
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
+            
+            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedInt_Accessed) && false)
             {
-                bool isMatch = matchCriterion == null || matchCriterion(WrappedInt);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedInt);
-                if (isMatch)
+                yield return ("WrappedInt", default);
+            }
+            else
+            {
+                if ((!exploreOnlyDeserializedChildren && true) || (true))
                 {
-                    yield return ("WrappedInt", WrappedInt);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in WrappedInt.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                    bool isMatch = matchCriterion == null || matchCriterion(WrappedInt);
+                    bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedInt);
+                    if (isMatch)
                     {
-                        yield return ("WrappedInt" + "." + toYield.propertyName, toYield.descendant);
+                        yield return ("WrappedInt", WrappedInt);
+                    }
+                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    {
+                        foreach (var toYield in WrappedInt.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                        {
+                            yield return ("WrappedInt" + "." + toYield.propertyName, toYield.descendant);
+                        }
                     }
                 }
             }
+            
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ExcludableChild_Accessed) && ExcludableChild == null)
             {
                 yield return ("ExcludableChild", default);
@@ -1115,6 +1143,7 @@ namespace LazinatorTests.Examples
                     }
                 }
             }
+            
             yield break;
         }
         
@@ -1215,58 +1244,67 @@ namespace LazinatorTests.Examples
             _MyBool = span.ToBoolean(ref bytesSoFar);
             _MyChar = span.ToChar(ref bytesSoFar);
             _MyDateTime = span.ToDecompressedDateTime(ref bytesSoFar);
-            if (serializedVersionNumber >= 3) 
+            if (serializedVersionNumber >= 3)
             {
                 _MyNewString = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
             }
+            
             _MyNullableDecimal = span.ToDecompressedNullableDecimal(ref bytesSoFar);
             _MyNullableTimeSpan = span.ToDecompressedNullableTimeSpan(ref bytesSoFar);
-            if (serializedVersionNumber < 3) 
+            if (serializedVersionNumber < 3)
             {
                 _MyOldString = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
             }
+            
             _MyString = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
             _MyStringBrotli = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _MyTestEnum = (TestEnum)span.ToDecompressedInt(ref bytesSoFar);
             _MyTestEnumByteNullable = (TestEnumByte?)span.ToDecompressedNullableByte(ref bytesSoFar);
             _MyUint = span.ToDecompressedUint(ref bytesSoFar);
             _IncludableChild_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _MyChild1_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _MyChild2_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _MyChild2Previous_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && serializedVersionNumber < 3) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && serializedVersionNumber < 3)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _MyInterfaceImplementer_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _MyNonLazinatorChild_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _WrappedInt_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 bytesSoFar = span.ToByte(ref bytesSoFar) + bytesSoFar;
             }
+            
             _ExcludableChild_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren)
             {
                 bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
+            
             _Example_EndByteIndex = bytesSoFar;
         }
         
@@ -1363,23 +1401,25 @@ namespace LazinatorTests.Examples
             WriteUncompressedPrimitives.WriteBool(ref writer, _MyBool);
             EncodeCharAndString.WriteCharInTwoBytes(ref writer, _MyChar);
             CompressedIntegralTypes.WriteCompressedDateTime(ref writer, _MyDateTime);
-            if (LazinatorObjectVersion >= 3) 
+            if (LazinatorObjectVersion >= 3)
             {
                 EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _MyNewString);
             }
+            
             CompressedDecimal.WriteCompressedNullableDecimal(ref writer, _MyNullableDecimal);
             CompressedIntegralTypes.WriteCompressedNullableTimeSpan(ref writer, _MyNullableTimeSpan);
-            if (LazinatorObjectVersion < 3) 
+            if (LazinatorObjectVersion < 3)
             {
                 EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _MyOldString);
             }
+            
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _MyString);
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _MyStringBrotli);
             CompressedIntegralTypes.WriteCompressedInt(ref writer, (int) _MyTestEnum);
             CompressedIntegralTypes.WriteCompressedNullableByte(ref writer, (byte?) _MyTestEnumByteNullable);
             CompressedIntegralTypes.WriteCompressedUint(ref writer, _MyUint);
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_IncludableChild_Accessed)
                 {
@@ -1387,12 +1427,13 @@ namespace LazinatorTests.Examples
                 }
                 WriteChild(ref writer, ref _IncludableChild, includeChildrenMode, _IncludableChild_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _IncludableChild_ByteIndex, _IncludableChild_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _IncludableChild_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyChild1_Accessed)
                 {
@@ -1400,12 +1441,13 @@ namespace LazinatorTests.Examples
                 }
                 WriteChild(ref writer, ref _MyChild1, includeChildrenMode, _MyChild1_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyChild1_ByteIndex, _MyChild1_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _MyChild1_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyChild2_Accessed)
                 {
@@ -1413,12 +1455,13 @@ namespace LazinatorTests.Examples
                 }
                 WriteChild(ref writer, ref _MyChild2, includeChildrenMode, _MyChild2_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyChild2_ByteIndex, _MyChild2_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _MyChild2_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && LazinatorObjectVersion < 3) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && LazinatorObjectVersion < 3)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyChild2Previous_Accessed)
                 {
@@ -1426,12 +1469,13 @@ namespace LazinatorTests.Examples
                 }
                 WriteChild(ref writer, ref _MyChild2Previous, includeChildrenMode, _MyChild2Previous_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyChild2Previous_ByteIndex, _MyChild2Previous_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _MyChild2Previous_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyInterfaceImplementer_Accessed)
                 {
@@ -1439,6 +1483,7 @@ namespace LazinatorTests.Examples
                 }
                 WriteChild(ref writer, ref _MyInterfaceImplementer, includeChildrenMode, _MyInterfaceImplementer_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyInterfaceImplementer_ByteIndex, _MyInterfaceImplementer_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _MyInterfaceImplementer_ByteIndex = startOfObjectPosition - startPosition;
@@ -1461,7 +1506,7 @@ namespace LazinatorTests.Examples
                 _MyNonLazinatorChild_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_WrappedInt_Accessed)
                 {
@@ -1469,12 +1514,13 @@ namespace LazinatorTests.Examples
                 }
                 WriteChild(ref writer, ref _WrappedInt, includeChildrenMode, _WrappedInt_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, true, null), verifyCleanness, updateStoredBuffer, true, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _WrappedInt_ByteIndex = startOfObjectPosition - startPosition;
             }
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren) 
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ExcludableChild_Accessed)
                 {
@@ -1482,6 +1528,7 @@ namespace LazinatorTests.Examples
                 }
                 WriteChild(ref writer, ref _ExcludableChild, includeChildrenMode, _ExcludableChild_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ExcludableChild_ByteIndex, _ExcludableChild_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
+            
             if (updateStoredBuffer)
             {
                 _ExcludableChild_ByteIndex = startOfObjectPosition - startPosition;
