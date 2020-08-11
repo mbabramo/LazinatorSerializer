@@ -24,13 +24,15 @@ namespace LazinatorAnalyzer.Support
 
         public override string ToString()
         {
-            string antecedentString = Antecedent?.ToString() ?? "";
+            string antecedentString = (Antecedent?.ToString() ?? "").Trim();
             if (antecedentString.StartsWith("if (") && antecedentString.EndsWith(")"))
             {
                 antecedentString = antecedentString.Substring(4, antecedentString.Length - 5);
             }
             if (antecedentString == null || antecedentString == "" || antecedentString == "true" || antecedentString == "(true)")
                 return Consequent;
+            if (antecedentString == "false" || antecedentString == "(false)")
+                return ElseConsequent;
             string mainString = $@"if ({antecedentString})
                     {{
                         {Consequent}
