@@ -1495,9 +1495,13 @@ namespace Lazinator.CodeDescription
             string copyInstruction = "";
             if (IsLazinator)
             {
-                copyInstruction = GetNullCheckIfThen(PropertyName,
-                    $"{nameOfCloneVariable}.{PropertyName} = {DefaultExpression};",
-                    $@"{nameOfCloneVariable}.{PropertyName} = ({AppropriatelyQualifiedTypeName}) {PropertyName}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, ".Value")}.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);");
+                string nonNullStatement = $@"{nameOfCloneVariable}.{PropertyName} = ({AppropriatelyQualifiedTypeName}) {PropertyName}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, ".Value")}.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);";
+                if (!Nullable)
+                    copyInstruction = nonNullStatement;
+                else
+                    copyInstruction = GetNullCheckIfThen(PropertyName,
+                        $"{nameOfCloneVariable}.{PropertyName} = {DefaultExpression};",
+                        nonNullStatement);
             }
             else if (IsPrimitive)
                 copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {PropertyName};";

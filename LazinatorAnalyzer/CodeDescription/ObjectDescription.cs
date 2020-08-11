@@ -381,7 +381,7 @@ namespace Lazinator.CodeDescription
                         
                         public abstract {ILazinatorString} CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers);
 
-                        {IIF(!ImplementsAssignCloneProperties, $@"public abstract {ILazinatorString} AssignCloneProperties({ILazinatorString} clone, IncludeChildrenMode includeChildrenMode);
+                        {IIF(!ImplementsAssignCloneProperties, $@"public abstract {ILazinatorString} AssignCloneProperties({ILazinatorStringWithoutQuestionMark} clone, IncludeChildrenMode includeChildrenMode);
 
                         ")}{HideILazinatorProperty}public abstract bool HasChanged
                         {{

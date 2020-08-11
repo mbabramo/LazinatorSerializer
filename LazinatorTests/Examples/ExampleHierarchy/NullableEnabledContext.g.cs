@@ -146,7 +146,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     Lazinate_NonNullableClass();
                 } 
-                return _NonNullableClass ?? throw new Exception();
+                return _NonNullableClass ?? throw new UnsetNonnullableLazinatorException();
             }
             set
             {
@@ -179,7 +179,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         
-        protected IExample _NonNullableInterface;
+        protected IExample? _NonNullableInterface;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public IExample NonNullableInterface
         {
@@ -189,11 +189,14 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     Lazinate_NonNullableInterface();
                 } 
-                return _NonNullableInterface;
+                return _NonNullableInterface ?? throw new UnsetNonnullableLazinatorException();
             }
             set
             {
-                _NonNullableInterface.LazinatorParents = _NonNullableInterface.LazinatorParents.WithRemoved(this);
+                if (_NonNullableInterface != null)
+                {
+                    _NonNullableInterface.LazinatorParents = _NonNullableInterface.LazinatorParents.WithRemoved(this);
+                }
                 value.LazinatorParents = value.LazinatorParents.WithAdded(this);
                 
                 IsDirty = true;
@@ -280,7 +283,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             return clone;
         }
         
-        public virtual ILazinator? AssignCloneProperties(ILazinator? clone, IncludeChildrenMode includeChildrenMode)
+        public virtual ILazinator? AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             NullableEnabledContext typedClone = (NullableEnabledContext) clone;
