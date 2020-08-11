@@ -289,7 +289,7 @@ namespace Lazinator.Wrappers
         
         public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && WrappedValue != null) || (_WrappedValue_Accessed && _WrappedValue != null))
+            if ((!exploreOnlyDeserializedChildren && WrappedValue != null) || ((_WrappedValue_Accessed && _WrappedValue != null)))
             {
                 _WrappedValue = (double[]) CloneOrChange_double_B_b(_WrappedValue, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
@@ -374,7 +374,7 @@ namespace Lazinator.Wrappers
         
         void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_WrappedValue_Accessed && _WrappedValue != null)
+            if ((_WrappedValue_Accessed && _WrappedValue != null))
             {
                 _WrappedValue = (double[]) CloneOrChange_double_B_b(_WrappedValue, l => l.RemoveBufferInHierarchy(), true);
             }

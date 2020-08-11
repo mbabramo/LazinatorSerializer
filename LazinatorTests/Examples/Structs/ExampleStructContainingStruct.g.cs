@@ -399,13 +399,13 @@ namespace LazinatorTests.Examples
             {
                 if ((!exploreOnlyDeserializedChildren && MyExampleNullableStruct != null) || (_MyExampleNullableStruct_Accessed && _MyExampleNullableStruct != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(MyExampleNullableStruct);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyExampleNullableStruct);
-                    if (isMatch)
+                    bool isMatch_MyExampleNullableStruct = matchCriterion == null || matchCriterion(MyExampleNullableStruct);
+                    bool shouldExplore_MyExampleNullableStruct = exploreCriterion == null || exploreCriterion(MyExampleNullableStruct);
+                    if (isMatch_MyExampleNullableStruct)
                     {
                         yield return ("MyExampleNullableStruct", MyExampleNullableStruct);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_MyExampleNullableStruct) && shouldExplore_MyExampleNullableStruct)
                     {
                         foreach (var toYield in MyExampleNullableStruct.Value.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -413,22 +413,20 @@ namespace LazinatorTests.Examples
                         }
                     }
                 }
+                
             }
             
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
+            bool isMatch_MyExampleStructContainingClasses = matchCriterion == null || matchCriterion(MyExampleStructContainingClasses);
+            bool shouldExplore_MyExampleStructContainingClasses = exploreCriterion == null || exploreCriterion(MyExampleStructContainingClasses);
+            if (isMatch_MyExampleStructContainingClasses)
             {
-                bool isMatch = matchCriterion == null || matchCriterion(MyExampleStructContainingClasses);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(MyExampleStructContainingClasses);
-                if (isMatch)
+                yield return ("MyExampleStructContainingClasses", MyExampleStructContainingClasses);
+            }
+            if ((!stopExploringBelowMatch || !isMatch_MyExampleStructContainingClasses) && shouldExplore_MyExampleStructContainingClasses)
+            {
+                foreach (var toYield in MyExampleStructContainingClasses.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                 {
-                    yield return ("MyExampleStructContainingClasses", MyExampleStructContainingClasses);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in MyExampleStructContainingClasses.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                    {
-                        yield return ("MyExampleStructContainingClasses" + "." + toYield.propertyName, toYield.descendant);
-                    }
+                    yield return ("MyExampleStructContainingClasses" + "." + toYield.propertyName, toYield.descendant);
                 }
             }
             yield break;
@@ -442,7 +440,7 @@ namespace LazinatorTests.Examples
         
         public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && MyExampleNullableStruct != null) || (_MyExampleNullableStruct_Accessed && _MyExampleNullableStruct != null))
+            if ((!exploreOnlyDeserializedChildren && MyExampleNullableStruct != null) || ((_MyExampleNullableStruct_Accessed && _MyExampleNullableStruct != null)))
             {
                 _MyExampleNullableStruct = (ExampleStructContainingClasses?) _MyExampleNullableStruct.Value.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -547,7 +545,7 @@ namespace LazinatorTests.Examples
         
         void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_MyExampleNullableStruct_Accessed && _MyExampleNullableStruct != null)
+            if ((_MyExampleNullableStruct_Accessed && _MyExampleNullableStruct != null))
             {
                 _MyExampleNullableStruct.Value.UpdateStoredBuffer(ref writer, startPosition + _MyExampleNullableStruct_ByteIndex + sizeof(int), _MyExampleNullableStruct_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

@@ -906,13 +906,13 @@ namespace LazinatorTests.Examples.Structs
             {
                 if ((!exploreOnlyDeserializedChildren && ListWrappedBytes != null) || (_ListWrappedBytes_Accessed && _ListWrappedBytes != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(ListWrappedBytes);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(ListWrappedBytes);
-                    if (isMatch)
+                    bool isMatch_ListWrappedBytes = matchCriterion == null || matchCriterion(ListWrappedBytes);
+                    bool shouldExplore_ListWrappedBytes = exploreCriterion == null || exploreCriterion(ListWrappedBytes);
+                    if (isMatch_ListWrappedBytes)
                     {
                         yield return ("ListWrappedBytes", ListWrappedBytes);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_ListWrappedBytes) && shouldExplore_ListWrappedBytes)
                     {
                         foreach (var toYield in ListWrappedBytes.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -920,134 +920,111 @@ namespace LazinatorTests.Examples.Structs
                         }
                     }
                 }
+                
             }
             
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
+            bool isMatch_WrappedBool = matchCriterion == null || matchCriterion(WrappedBool);
+            bool shouldExplore_WrappedBool = exploreCriterion == null || exploreCriterion(WrappedBool);
+            if (isMatch_WrappedBool)
             {
-                bool isMatch = matchCriterion == null || matchCriterion(WrappedBool);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedBool);
-                if (isMatch)
+                yield return ("WrappedBool", WrappedBool);
+            }
+            if ((!stopExploringBelowMatch || !isMatch_WrappedBool) && shouldExplore_WrappedBool)
+            {
+                foreach (var toYield in WrappedBool.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                 {
-                    yield return ("WrappedBool", WrappedBool);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in WrappedBool.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                    {
-                        yield return ("WrappedBool" + "." + toYield.propertyName, toYield.descendant);
-                    }
+                    yield return ("WrappedBool" + "." + toYield.propertyName, toYield.descendant);
                 }
             }
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
+            bool isMatch_WrappedByte = matchCriterion == null || matchCriterion(WrappedByte);
+            bool shouldExplore_WrappedByte = exploreCriterion == null || exploreCriterion(WrappedByte);
+            if (isMatch_WrappedByte)
             {
-                bool isMatch = matchCriterion == null || matchCriterion(WrappedByte);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedByte);
-                if (isMatch)
+                yield return ("WrappedByte", WrappedByte);
+            }
+            if ((!stopExploringBelowMatch || !isMatch_WrappedByte) && shouldExplore_WrappedByte)
+            {
+                foreach (var toYield in WrappedByte.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                 {
-                    yield return ("WrappedByte", WrappedByte);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in WrappedByte.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                    {
-                        yield return ("WrappedByte" + "." + toYield.propertyName, toYield.descendant);
-                    }
+                    yield return ("WrappedByte" + "." + toYield.propertyName, toYield.descendant);
                 }
             }
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
+            bool isMatch_WrappedChar = matchCriterion == null || matchCriterion(WrappedChar);
+            bool shouldExplore_WrappedChar = exploreCriterion == null || exploreCriterion(WrappedChar);
+            if (isMatch_WrappedChar)
             {
-                bool isMatch = matchCriterion == null || matchCriterion(WrappedChar);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedChar);
-                if (isMatch)
+                yield return ("WrappedChar", WrappedChar);
+            }
+            if ((!stopExploringBelowMatch || !isMatch_WrappedChar) && shouldExplore_WrappedChar)
+            {
+                foreach (var toYield in WrappedChar.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                 {
-                    yield return ("WrappedChar", WrappedChar);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in WrappedChar.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                    {
-                        yield return ("WrappedChar" + "." + toYield.propertyName, toYield.descendant);
-                    }
+                    yield return ("WrappedChar" + "." + toYield.propertyName, toYield.descendant);
                 }
             }
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
+            bool isMatch_WrappedNullableBool = matchCriterion == null || matchCriterion(WrappedNullableBool);
+            bool shouldExplore_WrappedNullableBool = exploreCriterion == null || exploreCriterion(WrappedNullableBool);
+            if (isMatch_WrappedNullableBool)
             {
-                bool isMatch = matchCriterion == null || matchCriterion(WrappedNullableBool);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedNullableBool);
-                if (isMatch)
+                yield return ("WrappedNullableBool", WrappedNullableBool);
+            }
+            if ((!stopExploringBelowMatch || !isMatch_WrappedNullableBool) && shouldExplore_WrappedNullableBool)
+            {
+                foreach (var toYield in WrappedNullableBool.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                 {
-                    yield return ("WrappedNullableBool", WrappedNullableBool);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in WrappedNullableBool.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                    {
-                        yield return ("WrappedNullableBool" + "." + toYield.propertyName, toYield.descendant);
-                    }
+                    yield return ("WrappedNullableBool" + "." + toYield.propertyName, toYield.descendant);
                 }
             }
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
+            bool isMatch_WrappedNullableByte = matchCriterion == null || matchCriterion(WrappedNullableByte);
+            bool shouldExplore_WrappedNullableByte = exploreCriterion == null || exploreCriterion(WrappedNullableByte);
+            if (isMatch_WrappedNullableByte)
             {
-                bool isMatch = matchCriterion == null || matchCriterion(WrappedNullableByte);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedNullableByte);
-                if (isMatch)
+                yield return ("WrappedNullableByte", WrappedNullableByte);
+            }
+            if ((!stopExploringBelowMatch || !isMatch_WrappedNullableByte) && shouldExplore_WrappedNullableByte)
+            {
+                foreach (var toYield in WrappedNullableByte.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                 {
-                    yield return ("WrappedNullableByte", WrappedNullableByte);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in WrappedNullableByte.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                    {
-                        yield return ("WrappedNullableByte" + "." + toYield.propertyName, toYield.descendant);
-                    }
+                    yield return ("WrappedNullableByte" + "." + toYield.propertyName, toYield.descendant);
                 }
             }
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
+            bool isMatch_WrappedNullableChar = matchCriterion == null || matchCriterion(WrappedNullableChar);
+            bool shouldExplore_WrappedNullableChar = exploreCriterion == null || exploreCriterion(WrappedNullableChar);
+            if (isMatch_WrappedNullableChar)
             {
-                bool isMatch = matchCriterion == null || matchCriterion(WrappedNullableChar);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedNullableChar);
-                if (isMatch)
+                yield return ("WrappedNullableChar", WrappedNullableChar);
+            }
+            if ((!stopExploringBelowMatch || !isMatch_WrappedNullableChar) && shouldExplore_WrappedNullableChar)
+            {
+                foreach (var toYield in WrappedNullableChar.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                 {
-                    yield return ("WrappedNullableChar", WrappedNullableChar);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in WrappedNullableChar.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                    {
-                        yield return ("WrappedNullableChar" + "." + toYield.propertyName, toYield.descendant);
-                    }
+                    yield return ("WrappedNullableChar" + "." + toYield.propertyName, toYield.descendant);
                 }
             }
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
+            bool isMatch_WrappedNullableSByte = matchCriterion == null || matchCriterion(WrappedNullableSByte);
+            bool shouldExplore_WrappedNullableSByte = exploreCriterion == null || exploreCriterion(WrappedNullableSByte);
+            if (isMatch_WrappedNullableSByte)
             {
-                bool isMatch = matchCriterion == null || matchCriterion(WrappedNullableSByte);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedNullableSByte);
-                if (isMatch)
+                yield return ("WrappedNullableSByte", WrappedNullableSByte);
+            }
+            if ((!stopExploringBelowMatch || !isMatch_WrappedNullableSByte) && shouldExplore_WrappedNullableSByte)
+            {
+                foreach (var toYield in WrappedNullableSByte.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                 {
-                    yield return ("WrappedNullableSByte", WrappedNullableSByte);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in WrappedNullableSByte.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                    {
-                        yield return ("WrappedNullableSByte" + "." + toYield.propertyName, toYield.descendant);
-                    }
+                    yield return ("WrappedNullableSByte" + "." + toYield.propertyName, toYield.descendant);
                 }
             }
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
+            bool isMatch_WrappedSByte = matchCriterion == null || matchCriterion(WrappedSByte);
+            bool shouldExplore_WrappedSByte = exploreCriterion == null || exploreCriterion(WrappedSByte);
+            if (isMatch_WrappedSByte)
             {
-                bool isMatch = matchCriterion == null || matchCriterion(WrappedSByte);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedSByte);
-                if (isMatch)
+                yield return ("WrappedSByte", WrappedSByte);
+            }
+            if ((!stopExploringBelowMatch || !isMatch_WrappedSByte) && shouldExplore_WrappedSByte)
+            {
+                foreach (var toYield in WrappedSByte.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                 {
-                    yield return ("WrappedSByte", WrappedSByte);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in WrappedSByte.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                    {
-                        yield return ("WrappedSByte" + "." + toYield.propertyName, toYield.descendant);
-                    }
+                    yield return ("WrappedSByte" + "." + toYield.propertyName, toYield.descendant);
                 }
             }
             yield break;
@@ -1061,7 +1038,7 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && ListWrappedBytes != null) || (_ListWrappedBytes_Accessed && _ListWrappedBytes != null))
+            if ((!exploreOnlyDeserializedChildren && ListWrappedBytes != null) || ((_ListWrappedBytes_Accessed && _ListWrappedBytes != null)))
             {
                 _ListWrappedBytes = (LazinatorList<WByte>) _ListWrappedBytes.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -1226,7 +1203,7 @@ namespace LazinatorTests.Examples.Structs
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_ListWrappedBytes_Accessed && _ListWrappedBytes != null)
+            if ((_ListWrappedBytes_Accessed && _ListWrappedBytes != null))
             {
                 _ListWrappedBytes.UpdateStoredBuffer(ref writer, startPosition + _ListWrappedBytes_ByteIndex + sizeof(int), _ListWrappedBytes_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

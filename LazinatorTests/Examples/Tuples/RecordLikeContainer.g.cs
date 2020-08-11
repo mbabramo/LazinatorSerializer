@@ -424,7 +424,7 @@ namespace LazinatorTests.Examples.Tuples
                 var deserialized = MyMismatchedRecordLikeType;
                 _MyMismatchedRecordLikeType = (MismatchedRecordLikeType) CloneOrChange_MismatchedRecordLikeType(_MyMismatchedRecordLikeType, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            if ((!exploreOnlyDeserializedChildren && MyRecordLikeClass != null) || (_MyRecordLikeClass_Accessed && _MyRecordLikeClass != null))
+            if ((!exploreOnlyDeserializedChildren && MyRecordLikeClass != null) || ((_MyRecordLikeClass_Accessed && _MyRecordLikeClass != null)))
             {
                 _MyRecordLikeClass = (RecordLikeClass) CloneOrChange_RecordLikeClass(_MyRecordLikeClass, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
@@ -525,7 +525,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 _MyMismatchedRecordLikeType = (MismatchedRecordLikeType) CloneOrChange_MismatchedRecordLikeType(_MyMismatchedRecordLikeType, l => l.RemoveBufferInHierarchy(), true);
             }
-            if (_MyRecordLikeClass_Accessed && _MyRecordLikeClass != null)
+            if ((_MyRecordLikeClass_Accessed && _MyRecordLikeClass != null))
             {
                 _MyRecordLikeClass = (RecordLikeClass) CloneOrChange_RecordLikeClass(_MyRecordLikeClass, l => l.RemoveBufferInHierarchy(), true);
             }

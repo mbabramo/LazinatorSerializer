@@ -296,13 +296,13 @@ namespace LazinatorTests.Examples
             {
                 if ((!exploreOnlyDeserializedChildren && Example != null) || (_Example_Accessed && _Example != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(Example);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(Example);
-                    if (isMatch)
+                    bool isMatch_Example = matchCriterion == null || matchCriterion(Example);
+                    bool shouldExplore_Example = exploreCriterion == null || exploreCriterion(Example);
+                    if (isMatch_Example)
                     {
                         yield return ("Example", Example);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_Example) && shouldExplore_Example)
                     {
                         foreach (var toYield in Example.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -310,6 +310,7 @@ namespace LazinatorTests.Examples
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -323,7 +324,7 @@ namespace LazinatorTests.Examples
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && Example != null) || (_Example_Accessed && _Example != null))
+            if ((!exploreOnlyDeserializedChildren && Example != null) || ((_Example_Accessed && _Example != null)))
             {
                 _Example = (Example) _Example.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -404,7 +405,7 @@ namespace LazinatorTests.Examples
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_Example_Accessed && _Example != null)
+            if ((_Example_Accessed && _Example != null))
             {
                 _Example.UpdateStoredBuffer(ref writer, startPosition + _Example_ByteIndex + sizeof(int), _Example_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

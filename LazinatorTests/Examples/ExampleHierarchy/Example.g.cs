@@ -984,13 +984,13 @@ namespace LazinatorTests.Examples
             {
                 if ((!exploreOnlyDeserializedChildren && IncludableChild != null) || (_IncludableChild_Accessed && _IncludableChild != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(IncludableChild);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(IncludableChild);
-                    if (isMatch)
+                    bool isMatch_IncludableChild = matchCriterion == null || matchCriterion(IncludableChild);
+                    bool shouldExplore_IncludableChild = exploreCriterion == null || exploreCriterion(IncludableChild);
+                    if (isMatch_IncludableChild)
                     {
                         yield return ("IncludableChild", IncludableChild);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_IncludableChild) && shouldExplore_IncludableChild)
                     {
                         foreach (var toYield in IncludableChild.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -998,6 +998,7 @@ namespace LazinatorTests.Examples
                         }
                     }
                 }
+                
             }
             
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyChild1_Accessed) && MyChild1 == null)
@@ -1008,13 +1009,13 @@ namespace LazinatorTests.Examples
             {
                 if ((!exploreOnlyDeserializedChildren && MyChild1 != null) || (_MyChild1_Accessed && _MyChild1 != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(MyChild1);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyChild1);
-                    if (isMatch)
+                    bool isMatch_MyChild1 = matchCriterion == null || matchCriterion(MyChild1);
+                    bool shouldExplore_MyChild1 = exploreCriterion == null || exploreCriterion(MyChild1);
+                    if (isMatch_MyChild1)
                     {
                         yield return ("MyChild1", MyChild1);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_MyChild1) && shouldExplore_MyChild1)
                     {
                         foreach (var toYield in MyChild1.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -1022,6 +1023,7 @@ namespace LazinatorTests.Examples
                         }
                     }
                 }
+                
             }
             
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyChild2_Accessed) && MyChild2 == null)
@@ -1032,13 +1034,13 @@ namespace LazinatorTests.Examples
             {
                 if ((!exploreOnlyDeserializedChildren && MyChild2 != null) || (_MyChild2_Accessed && _MyChild2 != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(MyChild2);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyChild2);
-                    if (isMatch)
+                    bool isMatch_MyChild2 = matchCriterion == null || matchCriterion(MyChild2);
+                    bool shouldExplore_MyChild2 = exploreCriterion == null || exploreCriterion(MyChild2);
+                    if (isMatch_MyChild2)
                     {
                         yield return ("MyChild2", MyChild2);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_MyChild2) && shouldExplore_MyChild2)
                     {
                         foreach (var toYield in MyChild2.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -1046,6 +1048,7 @@ namespace LazinatorTests.Examples
                         }
                     }
                 }
+                
             }
             
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyChild2Previous_Accessed) && MyChild2Previous == null)
@@ -1056,13 +1059,13 @@ namespace LazinatorTests.Examples
             {
                 if ((!exploreOnlyDeserializedChildren && MyChild2Previous != null) || (_MyChild2Previous_Accessed && _MyChild2Previous != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(MyChild2Previous);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyChild2Previous);
-                    if (isMatch)
+                    bool isMatch_MyChild2Previous = matchCriterion == null || matchCriterion(MyChild2Previous);
+                    bool shouldExplore_MyChild2Previous = exploreCriterion == null || exploreCriterion(MyChild2Previous);
+                    if (isMatch_MyChild2Previous)
                     {
                         yield return ("MyChild2Previous", MyChild2Previous);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_MyChild2Previous) && shouldExplore_MyChild2Previous)
                     {
                         foreach (var toYield in MyChild2Previous.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -1070,6 +1073,7 @@ namespace LazinatorTests.Examples
                         }
                     }
                 }
+                
             }
             
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyInterfaceImplementer_Accessed) && MyInterfaceImplementer == null)
@@ -1080,13 +1084,13 @@ namespace LazinatorTests.Examples
             {
                 if ((!exploreOnlyDeserializedChildren && MyInterfaceImplementer != null) || (_MyInterfaceImplementer_Accessed && _MyInterfaceImplementer != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(MyInterfaceImplementer);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyInterfaceImplementer);
-                    if (isMatch)
+                    bool isMatch_MyInterfaceImplementer = matchCriterion == null || matchCriterion(MyInterfaceImplementer);
+                    bool shouldExplore_MyInterfaceImplementer = exploreCriterion == null || exploreCriterion(MyInterfaceImplementer);
+                    if (isMatch_MyInterfaceImplementer)
                     {
                         yield return ("MyInterfaceImplementer", MyInterfaceImplementer);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_MyInterfaceImplementer) && shouldExplore_MyInterfaceImplementer)
                     {
                         foreach (var toYield in MyInterfaceImplementer.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -1094,22 +1098,20 @@ namespace LazinatorTests.Examples
                         }
                     }
                 }
+                
             }
             
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
+            bool isMatch_WrappedInt = matchCriterion == null || matchCriterion(WrappedInt);
+            bool shouldExplore_WrappedInt = exploreCriterion == null || exploreCriterion(WrappedInt);
+            if (isMatch_WrappedInt)
             {
-                bool isMatch = matchCriterion == null || matchCriterion(WrappedInt);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedInt);
-                if (isMatch)
+                yield return ("WrappedInt", WrappedInt);
+            }
+            if ((!stopExploringBelowMatch || !isMatch_WrappedInt) && shouldExplore_WrappedInt)
+            {
+                foreach (var toYield in WrappedInt.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                 {
-                    yield return ("WrappedInt", WrappedInt);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in WrappedInt.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                    {
-                        yield return ("WrappedInt" + "." + toYield.propertyName, toYield.descendant);
-                    }
+                    yield return ("WrappedInt" + "." + toYield.propertyName, toYield.descendant);
                 }
             }
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ExcludableChild_Accessed) && ExcludableChild == null)
@@ -1120,13 +1122,13 @@ namespace LazinatorTests.Examples
             {
                 if ((!exploreOnlyDeserializedChildren && ExcludableChild != null) || (_ExcludableChild_Accessed && _ExcludableChild != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(ExcludableChild);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(ExcludableChild);
-                    if (isMatch)
+                    bool isMatch_ExcludableChild = matchCriterion == null || matchCriterion(ExcludableChild);
+                    bool shouldExplore_ExcludableChild = exploreCriterion == null || exploreCriterion(ExcludableChild);
+                    if (isMatch_ExcludableChild)
                     {
                         yield return ("ExcludableChild", ExcludableChild);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_ExcludableChild) && shouldExplore_ExcludableChild)
                     {
                         foreach (var toYield in ExcludableChild.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -1134,6 +1136,7 @@ namespace LazinatorTests.Examples
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -1161,23 +1164,23 @@ namespace LazinatorTests.Examples
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && IncludableChild != null) || (_IncludableChild_Accessed && _IncludableChild != null))
+            if ((!exploreOnlyDeserializedChildren && IncludableChild != null) || ((_IncludableChild_Accessed && _IncludableChild != null)))
             {
                 _IncludableChild = (ExampleChild) _IncludableChild.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && MyChild1 != null) || (_MyChild1_Accessed && _MyChild1 != null))
+            if ((!exploreOnlyDeserializedChildren && MyChild1 != null) || ((_MyChild1_Accessed && _MyChild1 != null)))
             {
                 _MyChild1 = (ExampleChild) _MyChild1.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && MyChild2 != null) || (_MyChild2_Accessed && _MyChild2 != null))
+            if ((!exploreOnlyDeserializedChildren && MyChild2 != null) || ((_MyChild2_Accessed && _MyChild2 != null)))
             {
                 _MyChild2 = (ExampleChild) _MyChild2.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && MyChild2Previous != null) || (_MyChild2Previous_Accessed && _MyChild2Previous != null))
+            if ((!exploreOnlyDeserializedChildren && MyChild2Previous != null) || ((_MyChild2Previous_Accessed && _MyChild2Previous != null)))
             {
                 _MyChild2Previous = (ExampleChild) _MyChild2Previous.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && MyInterfaceImplementer != null) || (_MyInterfaceImplementer_Accessed && _MyInterfaceImplementer != null))
+            if ((!exploreOnlyDeserializedChildren && MyInterfaceImplementer != null) || ((_MyInterfaceImplementer_Accessed && _MyInterfaceImplementer != null)))
             {
                 _MyInterfaceImplementer = (IExampleNonexclusiveInterface) _MyInterfaceImplementer.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -1186,11 +1189,11 @@ namespace LazinatorTests.Examples
                 var deserialized = WrappedInt;
                 _WrappedInt = (WInt) _WrappedInt.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && ExcludableChild != null) || (_ExcludableChild_Accessed && _ExcludableChild != null))
+            if ((!exploreOnlyDeserializedChildren && ExcludableChild != null) || ((_ExcludableChild_Accessed && _ExcludableChild != null)))
             {
                 _ExcludableChild = (ExampleChild) _ExcludableChild.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && MyNonLazinatorChild != null) || (_MyNonLazinatorChild_Accessed && _MyNonLazinatorChild != null))
+            if ((!exploreOnlyDeserializedChildren && MyNonLazinatorChild != null) || ((_MyNonLazinatorChild_Accessed && _MyNonLazinatorChild != null)))
             {
                 _MyNonLazinatorChild = NonLazinatorDirectConverter.CloneOrChange_NonLazinatorClass(_MyNonLazinatorChild, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
@@ -1338,23 +1341,23 @@ namespace LazinatorTests.Examples
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_IncludableChild_Accessed && _IncludableChild != null)
+            if ((_IncludableChild_Accessed && _IncludableChild != null))
             {
                 _IncludableChild.UpdateStoredBuffer(ref writer, startPosition + _IncludableChild_ByteIndex + sizeof(int), _IncludableChild_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if (_MyChild1_Accessed && _MyChild1 != null)
+            if ((_MyChild1_Accessed && _MyChild1 != null))
             {
                 _MyChild1.UpdateStoredBuffer(ref writer, startPosition + _MyChild1_ByteIndex + sizeof(int), _MyChild1_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if (_MyChild2_Accessed && _MyChild2 != null)
+            if ((_MyChild2_Accessed && _MyChild2 != null))
             {
                 _MyChild2.UpdateStoredBuffer(ref writer, startPosition + _MyChild2_ByteIndex + sizeof(int), _MyChild2_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if (_MyChild2Previous_Accessed && _MyChild2Previous != null)
+            if ((_MyChild2Previous_Accessed && _MyChild2Previous != null))
             {
                 _MyChild2Previous.UpdateStoredBuffer(ref writer, startPosition + _MyChild2Previous_ByteIndex + sizeof(int), _MyChild2Previous_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if (_MyInterfaceImplementer_Accessed && _MyInterfaceImplementer != null)
+            if ((_MyInterfaceImplementer_Accessed && _MyInterfaceImplementer != null))
             {
                 _MyInterfaceImplementer.UpdateStoredBuffer(ref writer, startPosition + _MyInterfaceImplementer_ByteIndex + sizeof(int), _MyInterfaceImplementer_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
@@ -1362,7 +1365,7 @@ namespace LazinatorTests.Examples
             {
                 _WrappedInt.UpdateStoredBuffer(ref writer, startPosition + _WrappedInt_ByteIndex + sizeof(byte), _WrappedInt_ByteLength - sizeof(byte), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if (_ExcludableChild_Accessed && _ExcludableChild != null)
+            if ((_ExcludableChild_Accessed && _ExcludableChild != null))
             {
                 _ExcludableChild.UpdateStoredBuffer(ref writer, startPosition + _ExcludableChild_ByteIndex + sizeof(int), _ExcludableChild_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

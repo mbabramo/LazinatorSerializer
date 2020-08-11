@@ -390,13 +390,13 @@ namespace LazinatorTests.Examples
             {
                 if ((!exploreOnlyDeserializedChildren && MyOfficialObject != null) || (_MyOfficialObject_Accessed && _MyOfficialObject != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(MyOfficialObject);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyOfficialObject);
-                    if (isMatch)
+                    bool isMatch_MyOfficialObject = matchCriterion == null || matchCriterion(MyOfficialObject);
+                    bool shouldExplore_MyOfficialObject = exploreCriterion == null || exploreCriterion(MyOfficialObject);
+                    if (isMatch_MyOfficialObject)
                     {
                         yield return ("MyOfficialObject", MyOfficialObject);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_MyOfficialObject) && shouldExplore_MyOfficialObject)
                     {
                         foreach (var toYield in MyOfficialObject.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -404,6 +404,7 @@ namespace LazinatorTests.Examples
                         }
                     }
                 }
+                
             }
             
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyUnofficialObject_Accessed) && MyUnofficialObject == null)
@@ -414,13 +415,13 @@ namespace LazinatorTests.Examples
             {
                 if ((!exploreOnlyDeserializedChildren && MyUnofficialObject != null) || (_MyUnofficialObject_Accessed && _MyUnofficialObject != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(MyUnofficialObject);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyUnofficialObject);
-                    if (isMatch)
+                    bool isMatch_MyUnofficialObject = matchCriterion == null || matchCriterion(MyUnofficialObject);
+                    bool shouldExplore_MyUnofficialObject = exploreCriterion == null || exploreCriterion(MyUnofficialObject);
+                    if (isMatch_MyUnofficialObject)
                     {
                         yield return ("MyUnofficialObject", MyUnofficialObject);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_MyUnofficialObject) && shouldExplore_MyUnofficialObject)
                     {
                         foreach (var toYield in MyUnofficialObject.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -428,6 +429,7 @@ namespace LazinatorTests.Examples
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -443,11 +445,11 @@ namespace LazinatorTests.Examples
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && MyOfficialObject != null) || (_MyOfficialObject_Accessed && _MyOfficialObject != null))
+            if ((!exploreOnlyDeserializedChildren && MyOfficialObject != null) || ((_MyOfficialObject_Accessed && _MyOfficialObject != null)))
             {
                 _MyOfficialObject = (Concrete5) _MyOfficialObject.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && MyUnofficialObject != null) || (_MyUnofficialObject_Accessed && _MyUnofficialObject != null))
+            if ((!exploreOnlyDeserializedChildren && MyUnofficialObject != null) || ((_MyUnofficialObject_Accessed && _MyUnofficialObject != null)))
             {
                 _MyUnofficialObject = (Concrete3) _MyUnofficialObject.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -537,11 +539,11 @@ namespace LazinatorTests.Examples
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_MyOfficialObject_Accessed && _MyOfficialObject != null)
+            if ((_MyOfficialObject_Accessed && _MyOfficialObject != null))
             {
                 _MyOfficialObject.UpdateStoredBuffer(ref writer, startPosition + _MyOfficialObject_ByteIndex + sizeof(int), _MyOfficialObject_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if (_MyUnofficialObject_Accessed && _MyUnofficialObject != null)
+            if ((_MyUnofficialObject_Accessed && _MyUnofficialObject != null))
             {
                 _MyUnofficialObject.UpdateStoredBuffer(ref writer, startPosition + _MyUnofficialObject_ByteIndex + sizeof(int), _MyUnofficialObject_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

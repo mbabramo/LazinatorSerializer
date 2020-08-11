@@ -418,13 +418,13 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if ((!exploreOnlyDeserializedChildren && MyT != null) || (_MyT_Accessed && _MyT != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(MyT);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyT);
-                    if (isMatch)
+                    bool isMatch_MyT = matchCriterion == null || matchCriterion(MyT);
+                    bool shouldExplore_MyT = exploreCriterion == null || exploreCriterion(MyT);
+                    if (isMatch_MyT)
                     {
                         yield return ("MyT", MyT);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_MyT) && shouldExplore_MyT)
                     {
                         foreach (var toYield in MyT.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -432,6 +432,7 @@ namespace LazinatorTests.Examples.Abstract
                         }
                     }
                 }
+                
             }
             
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _LazinatorExample_Accessed) && LazinatorExample == null)
@@ -442,13 +443,13 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if ((!exploreOnlyDeserializedChildren && LazinatorExample != null) || (_LazinatorExample_Accessed && _LazinatorExample != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(LazinatorExample);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(LazinatorExample);
-                    if (isMatch)
+                    bool isMatch_LazinatorExample = matchCriterion == null || matchCriterion(LazinatorExample);
+                    bool shouldExplore_LazinatorExample = exploreCriterion == null || exploreCriterion(LazinatorExample);
+                    if (isMatch_LazinatorExample)
                     {
                         yield return ("LazinatorExample", LazinatorExample);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_LazinatorExample) && shouldExplore_LazinatorExample)
                     {
                         foreach (var toYield in LazinatorExample.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -456,6 +457,7 @@ namespace LazinatorTests.Examples.Abstract
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -473,11 +475,11 @@ namespace LazinatorTests.Examples.Abstract
         
         public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && MyT != null) || (_MyT_Accessed && _MyT != null))
+            if ((!exploreOnlyDeserializedChildren && MyT != null) || ((_MyT_Accessed && _MyT != null)))
             {
                 _MyT = (Example) _MyT.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && LazinatorExample != null) || (_LazinatorExample_Accessed && _LazinatorExample != null))
+            if ((!exploreOnlyDeserializedChildren && LazinatorExample != null) || ((_LazinatorExample_Accessed && _LazinatorExample != null)))
             {
                 _LazinatorExample = (Example) _LazinatorExample.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -569,11 +571,11 @@ namespace LazinatorTests.Examples.Abstract
         
         protected override void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_MyT_Accessed && _MyT != null)
+            if ((_MyT_Accessed && _MyT != null))
             {
                 _MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex + sizeof(int), _MyT_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if (_LazinatorExample_Accessed && _LazinatorExample != null)
+            if ((_LazinatorExample_Accessed && _LazinatorExample != null))
             {
                 _LazinatorExample.UpdateStoredBuffer(ref writer, startPosition + _LazinatorExample_ByteIndex + sizeof(int), _LazinatorExample_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

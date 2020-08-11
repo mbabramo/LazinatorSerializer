@@ -297,13 +297,13 @@ namespace LazinatorTests.Examples.Collections
             {
                 if ((!exploreOnlyDeserializedChildren && MyList != null) || (_MyList_Accessed && _MyList != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(MyList);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyList);
-                    if (isMatch)
+                    bool isMatch_MyList = matchCriterion == null || matchCriterion(MyList);
+                    bool shouldExplore_MyList = exploreCriterion == null || exploreCriterion(MyList);
+                    if (isMatch_MyList)
                     {
                         yield return ("MyList", MyList);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_MyList) && shouldExplore_MyList)
                     {
                         foreach (var toYield in MyList.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -311,6 +311,7 @@ namespace LazinatorTests.Examples.Collections
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -324,7 +325,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && MyList != null) || (_MyList_Accessed && _MyList != null))
+            if ((!exploreOnlyDeserializedChildren && MyList != null) || ((_MyList_Accessed && _MyList != null)))
             {
                 _MyList = (LazinatorList<T>) _MyList.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -405,7 +406,7 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_MyList_Accessed && _MyList != null)
+            if ((_MyList_Accessed && _MyList != null))
             {
                 _MyList.UpdateStoredBuffer(ref writer, startPosition + _MyList_ByteIndex + sizeof(int), _MyList_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

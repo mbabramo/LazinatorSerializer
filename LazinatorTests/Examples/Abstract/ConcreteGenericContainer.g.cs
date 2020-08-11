@@ -292,13 +292,13 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if ((!exploreOnlyDeserializedChildren && Item != null) || (_Item_Accessed && _Item != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(Item);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(Item);
-                    if (isMatch)
+                    bool isMatch_Item = matchCriterion == null || matchCriterion(Item);
+                    bool shouldExplore_Item = exploreCriterion == null || exploreCriterion(Item);
+                    if (isMatch_Item)
                     {
                         yield return ("Item", Item);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_Item) && shouldExplore_Item)
                     {
                         foreach (var toYield in Item.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -306,6 +306,7 @@ namespace LazinatorTests.Examples.Abstract
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -319,7 +320,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && Item != null) || (_Item_Accessed && _Item != null))
+            if ((!exploreOnlyDeserializedChildren && Item != null) || ((_Item_Accessed && _Item != null)))
             {
                 _Item = (IAbstractGeneric1<int>) _Item.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -400,7 +401,7 @@ namespace LazinatorTests.Examples.Abstract
         
         protected override void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_Item_Accessed && _Item != null)
+            if ((_Item_Accessed && _Item != null))
             {
                 _Item.UpdateStoredBuffer(ref writer, startPosition + _Item_ByteIndex + sizeof(int), _Item_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

@@ -296,13 +296,13 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if ((!exploreOnlyDeserializedChildren && AbstractProperty != null) || (_AbstractProperty_Accessed && _AbstractProperty != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(AbstractProperty);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(AbstractProperty);
-                    if (isMatch)
+                    bool isMatch_AbstractProperty = matchCriterion == null || matchCriterion(AbstractProperty);
+                    bool shouldExplore_AbstractProperty = exploreCriterion == null || exploreCriterion(AbstractProperty);
+                    if (isMatch_AbstractProperty)
                     {
                         yield return ("AbstractProperty", AbstractProperty);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_AbstractProperty) && shouldExplore_AbstractProperty)
                     {
                         foreach (var toYield in AbstractProperty.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -310,6 +310,7 @@ namespace LazinatorTests.Examples.Abstract
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -323,7 +324,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && AbstractProperty != null) || (_AbstractProperty_Accessed && _AbstractProperty != null))
+            if ((!exploreOnlyDeserializedChildren && AbstractProperty != null) || ((_AbstractProperty_Accessed && _AbstractProperty != null)))
             {
                 _AbstractProperty = (Abstract1) _AbstractProperty.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -404,7 +405,7 @@ namespace LazinatorTests.Examples.Abstract
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_AbstractProperty_Accessed && _AbstractProperty != null)
+            if ((_AbstractProperty_Accessed && _AbstractProperty != null))
             {
                 _AbstractProperty.UpdateStoredBuffer(ref writer, startPosition + _AbstractProperty_ByteIndex + sizeof(int), _AbstractProperty_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

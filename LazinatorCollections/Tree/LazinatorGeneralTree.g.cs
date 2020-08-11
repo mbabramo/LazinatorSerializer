@@ -387,13 +387,13 @@ namespace LazinatorCollections.Tree
             {
                 if ((!exploreOnlyDeserializedChildren && Children != null) || (_Children_Accessed && _Children != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(Children);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(Children);
-                    if (isMatch)
+                    bool isMatch_Children = matchCriterion == null || matchCriterion(Children);
+                    bool shouldExplore_Children = exploreCriterion == null || exploreCriterion(Children);
+                    if (isMatch_Children)
                     {
                         yield return ("Children", Children);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_Children) && shouldExplore_Children)
                     {
                         foreach (var toYield in Children.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -401,6 +401,7 @@ namespace LazinatorCollections.Tree
                         }
                     }
                 }
+                
             }
             
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Item_Accessed) && Item == null)
@@ -411,13 +412,13 @@ namespace LazinatorCollections.Tree
             {
                 if ((!exploreOnlyDeserializedChildren && Item != null) || (_Item_Accessed && _Item != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(Item);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(Item);
-                    if (isMatch)
+                    bool isMatch_Item = matchCriterion == null || matchCriterion(Item);
+                    bool shouldExplore_Item = exploreCriterion == null || exploreCriterion(Item);
+                    if (isMatch_Item)
                     {
                         yield return ("Item", Item);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_Item) && shouldExplore_Item)
                     {
                         foreach (var toYield in Item.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -425,6 +426,7 @@ namespace LazinatorCollections.Tree
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -438,11 +440,11 @@ namespace LazinatorCollections.Tree
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && Children != null) || (_Children_Accessed && _Children != null))
+            if ((!exploreOnlyDeserializedChildren && Children != null) || ((_Children_Accessed && _Children != null)))
             {
                 _Children = (LazinatorList<LazinatorGeneralTree<T>>) _Children.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && Item != null) || (_Item_Accessed && _Item != null))
+            if ((!exploreOnlyDeserializedChildren && Item != null) || ((_Item_Accessed && _Item != null)))
             {
                 _Item = (T) _Item.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -538,11 +540,11 @@ namespace LazinatorCollections.Tree
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_Children_Accessed && _Children != null)
+            if ((_Children_Accessed && _Children != null))
             {
                 _Children.UpdateStoredBuffer(ref writer, startPosition + _Children_ByteIndex + sizeof(int), _Children_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if (_Item_Accessed && _Item != null)
+            if ((_Item_Accessed && _Item != null))
             {
                 _Item.UpdateStoredBuffer(ref writer, startPosition + _Item_ByteIndex + sizeof(int), _Item_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

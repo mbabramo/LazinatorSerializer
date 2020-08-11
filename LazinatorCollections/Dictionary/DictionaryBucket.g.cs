@@ -394,13 +394,13 @@ namespace LazinatorCollections.Dictionary
             {
                 if ((!exploreOnlyDeserializedChildren && Keys != null) || (_Keys_Accessed && _Keys != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(Keys);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(Keys);
-                    if (isMatch)
+                    bool isMatch_Keys = matchCriterion == null || matchCriterion(Keys);
+                    bool shouldExplore_Keys = exploreCriterion == null || exploreCriterion(Keys);
+                    if (isMatch_Keys)
                     {
                         yield return ("Keys", Keys);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_Keys) && shouldExplore_Keys)
                     {
                         foreach (var toYield in Keys.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -408,6 +408,7 @@ namespace LazinatorCollections.Dictionary
                         }
                     }
                 }
+                
             }
             
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Values_Accessed) && Values == null)
@@ -418,13 +419,13 @@ namespace LazinatorCollections.Dictionary
             {
                 if ((!exploreOnlyDeserializedChildren && Values != null) || (_Values_Accessed && _Values != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(Values);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(Values);
-                    if (isMatch)
+                    bool isMatch_Values = matchCriterion == null || matchCriterion(Values);
+                    bool shouldExplore_Values = exploreCriterion == null || exploreCriterion(Values);
+                    if (isMatch_Values)
                     {
                         yield return ("Values", Values);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_Values) && shouldExplore_Values)
                     {
                         foreach (var toYield in Values.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -432,6 +433,7 @@ namespace LazinatorCollections.Dictionary
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -446,11 +448,11 @@ namespace LazinatorCollections.Dictionary
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && Keys != null) || (_Keys_Accessed && _Keys != null))
+            if ((!exploreOnlyDeserializedChildren && Keys != null) || ((_Keys_Accessed && _Keys != null)))
             {
                 _Keys = (LazinatorList<TKey>) _Keys.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && Values != null) || (_Values_Accessed && _Values != null))
+            if ((!exploreOnlyDeserializedChildren && Values != null) || ((_Values_Accessed && _Values != null)))
             {
                 _Values = (LazinatorList<TValue>) _Values.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -543,11 +545,11 @@ namespace LazinatorCollections.Dictionary
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_Keys_Accessed && _Keys != null)
+            if ((_Keys_Accessed && _Keys != null))
             {
                 _Keys.UpdateStoredBuffer(ref writer, startPosition + _Keys_ByteIndex + sizeof(int), _Keys_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if (_Values_Accessed && _Values != null)
+            if ((_Values_Accessed && _Values != null))
             {
                 _Values.UpdateStoredBuffer(ref writer, startPosition + _Values_ByteIndex + sizeof(int), _Values_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

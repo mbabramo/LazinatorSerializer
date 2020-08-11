@@ -140,7 +140,7 @@ namespace LazinatorTests.Examples.Collections
         public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, false);
-            if ((!exploreOnlyDeserializedChildren && MyArrayInt_DerivedLevel != null) || (_MyArrayInt_DerivedLevel_Accessed && _MyArrayInt_DerivedLevel != null))
+            if ((!exploreOnlyDeserializedChildren && MyArrayInt_DerivedLevel != null) || ((_MyArrayInt_DerivedLevel_Accessed && _MyArrayInt_DerivedLevel != null)))
             {
                 _MyArrayInt_DerivedLevel = (int[]) CloneOrChange_int_B_b(_MyArrayInt_DerivedLevel, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
@@ -220,7 +220,7 @@ namespace LazinatorTests.Examples.Collections
         protected override void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
             base.UpdateDeserializedChildren(ref writer, startPosition);
-            if (_MyArrayInt_DerivedLevel_Accessed && _MyArrayInt_DerivedLevel != null)
+            if ((_MyArrayInt_DerivedLevel_Accessed && _MyArrayInt_DerivedLevel != null))
             {
                 _MyArrayInt_DerivedLevel = (int[]) CloneOrChange_int_B_b(_MyArrayInt_DerivedLevel, l => l.RemoveBufferInHierarchy(), true);
             }

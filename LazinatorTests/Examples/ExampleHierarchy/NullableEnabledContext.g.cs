@@ -480,13 +480,13 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if ((!exploreOnlyDeserializedChildren && ExplicitlyNullable != null) || (_ExplicitlyNullable_Accessed && _ExplicitlyNullable != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(ExplicitlyNullable);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(ExplicitlyNullable);
-                    if (isMatch)
+                    bool isMatch_ExplicitlyNullable = matchCriterion == null || matchCriterion(ExplicitlyNullable);
+                    bool shouldExplore_ExplicitlyNullable = exploreCriterion == null || exploreCriterion(ExplicitlyNullable);
+                    if (isMatch_ExplicitlyNullable)
                     {
                         yield return ("ExplicitlyNullable", ExplicitlyNullable);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_ExplicitlyNullable) && shouldExplore_ExplicitlyNullable)
                     {
                         foreach (var toYield in ExplicitlyNullable.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -494,6 +494,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                         }
                     }
                 }
+                
             }
             
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ExplicitlyNullableInterface_Accessed) && ExplicitlyNullableInterface == null)
@@ -504,13 +505,13 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if ((!exploreOnlyDeserializedChildren && ExplicitlyNullableInterface != null) || (_ExplicitlyNullableInterface_Accessed && _ExplicitlyNullableInterface != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(ExplicitlyNullableInterface);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(ExplicitlyNullableInterface);
-                    if (isMatch)
+                    bool isMatch_ExplicitlyNullableInterface = matchCriterion == null || matchCriterion(ExplicitlyNullableInterface);
+                    bool shouldExplore_ExplicitlyNullableInterface = exploreCriterion == null || exploreCriterion(ExplicitlyNullableInterface);
+                    if (isMatch_ExplicitlyNullableInterface)
                     {
                         yield return ("ExplicitlyNullableInterface", ExplicitlyNullableInterface);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_ExplicitlyNullableInterface) && shouldExplore_ExplicitlyNullableInterface)
                     {
                         foreach (var toYield in ExplicitlyNullableInterface.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -518,6 +519,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                         }
                     }
                 }
+                
             }
             
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _NonNullableClass_Accessed) && NonNullableClass == null)
@@ -528,13 +530,13 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if ((!exploreOnlyDeserializedChildren && NonNullableClass != null) || (_NonNullableClass_Accessed && _NonNullableClass != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(NonNullableClass);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(NonNullableClass);
-                    if (isMatch)
+                    bool isMatch_NonNullableClass = matchCriterion == null || matchCriterion(NonNullableClass);
+                    bool shouldExplore_NonNullableClass = exploreCriterion == null || exploreCriterion(NonNullableClass);
+                    if (isMatch_NonNullableClass)
                     {
                         yield return ("NonNullableClass", NonNullableClass);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_NonNullableClass) && shouldExplore_NonNullableClass)
                     {
                         foreach (var toYield in NonNullableClass.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -542,6 +544,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                         }
                     }
                 }
+                
             }
             
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _NonNullableInterface_Accessed) && NonNullableInterface == null)
@@ -552,13 +555,13 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if ((!exploreOnlyDeserializedChildren && NonNullableInterface != null) || (_NonNullableInterface_Accessed && _NonNullableInterface != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(NonNullableInterface);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(NonNullableInterface);
-                    if (isMatch)
+                    bool isMatch_NonNullableInterface = matchCriterion == null || matchCriterion(NonNullableInterface);
+                    bool shouldExplore_NonNullableInterface = exploreCriterion == null || exploreCriterion(NonNullableInterface);
+                    if (isMatch_NonNullableInterface)
                     {
                         yield return ("NonNullableInterface", NonNullableInterface);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_NonNullableInterface) && shouldExplore_NonNullableInterface)
                     {
                         foreach (var toYield in NonNullableInterface.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -566,6 +569,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -579,19 +583,19 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         public virtual ILazinator? ForEachLazinator(Func<ILazinator?, ILazinator?>? changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && ExplicitlyNullable != null) || (_ExplicitlyNullable_Accessed && _ExplicitlyNullable != null))
+            if ((!exploreOnlyDeserializedChildren && ExplicitlyNullable != null) || ((_ExplicitlyNullable_Accessed && _ExplicitlyNullable != null)))
             {
                 _ExplicitlyNullable = (Example?) _ExplicitlyNullable.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && ExplicitlyNullableInterface != null) || (_ExplicitlyNullableInterface_Accessed && _ExplicitlyNullableInterface != null))
+            if ((!exploreOnlyDeserializedChildren && ExplicitlyNullableInterface != null) || ((_ExplicitlyNullableInterface_Accessed && _ExplicitlyNullableInterface != null)))
             {
                 _ExplicitlyNullableInterface = (IExample?) _ExplicitlyNullableInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && NonNullableClass != null) || (_NonNullableClass_Accessed && _NonNullableClass != null))
+            if ((!exploreOnlyDeserializedChildren && NonNullableClass != null) || ((_NonNullableClass_Accessed && _NonNullableClass != null)))
             {
                 _NonNullableClass = (Example) _NonNullableClass.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && NonNullableInterface != null) || (_NonNullableInterface_Accessed && _NonNullableInterface != null))
+            if ((!exploreOnlyDeserializedChildren && NonNullableInterface != null) || ((_NonNullableInterface_Accessed && _NonNullableInterface != null)))
             {
                 _NonNullableInterface = (IExample) _NonNullableInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -693,19 +697,19 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_ExplicitlyNullable_Accessed && _ExplicitlyNullable != null)
+            if ((_ExplicitlyNullable_Accessed && _ExplicitlyNullable != null))
             {
                 _ExplicitlyNullable.UpdateStoredBuffer(ref writer, startPosition + _ExplicitlyNullable_ByteIndex + sizeof(int), _ExplicitlyNullable_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if (_ExplicitlyNullableInterface_Accessed && _ExplicitlyNullableInterface != null)
+            if ((_ExplicitlyNullableInterface_Accessed && _ExplicitlyNullableInterface != null))
             {
                 _ExplicitlyNullableInterface.UpdateStoredBuffer(ref writer, startPosition + _ExplicitlyNullableInterface_ByteIndex + sizeof(int), _ExplicitlyNullableInterface_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if (_NonNullableClass_Accessed && _NonNullableClass != null)
+            if ((_NonNullableClass_Accessed && _NonNullableClass != null))
             {
                 _NonNullableClass.UpdateStoredBuffer(ref writer, startPosition + _NonNullableClass_ByteIndex + sizeof(int), _NonNullableClass_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if (_NonNullableInterface_Accessed && _NonNullableInterface != null)
+            if ((_NonNullableInterface_Accessed && _NonNullableInterface != null))
             {
                 _NonNullableInterface.UpdateStoredBuffer(ref writer, startPosition + _NonNullableInterface_ByteIndex + sizeof(int), _NonNullableInterface_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

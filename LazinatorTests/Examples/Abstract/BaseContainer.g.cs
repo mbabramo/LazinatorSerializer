@@ -296,13 +296,13 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if ((!exploreOnlyDeserializedChildren && MyBase != null) || (_MyBase_Accessed && _MyBase != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(MyBase);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyBase);
-                    if (isMatch)
+                    bool isMatch_MyBase = matchCriterion == null || matchCriterion(MyBase);
+                    bool shouldExplore_MyBase = exploreCriterion == null || exploreCriterion(MyBase);
+                    if (isMatch_MyBase)
                     {
                         yield return ("MyBase", MyBase);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_MyBase) && shouldExplore_MyBase)
                     {
                         foreach (var toYield in MyBase.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -310,6 +310,7 @@ namespace LazinatorTests.Examples.Abstract
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -323,7 +324,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && MyBase != null) || (_MyBase_Accessed && _MyBase != null))
+            if ((!exploreOnlyDeserializedChildren && MyBase != null) || ((_MyBase_Accessed && _MyBase != null)))
             {
                 _MyBase = (Base) _MyBase.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -404,7 +405,7 @@ namespace LazinatorTests.Examples.Abstract
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_MyBase_Accessed && _MyBase != null)
+            if ((_MyBase_Accessed && _MyBase != null))
             {
                 _MyBase.UpdateStoredBuffer(ref writer, startPosition + _MyBase_ByteIndex + sizeof(int), _MyBase_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

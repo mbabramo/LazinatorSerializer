@@ -299,7 +299,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && MyListSerialized != null) || (_MyListSerialized_Accessed && _MyListSerialized != null))
+            if ((!exploreOnlyDeserializedChildren && MyListSerialized != null) || ((_MyListSerialized_Accessed && _MyListSerialized != null)))
             {
                 _MyListSerialized = (List<ExampleChild>) CloneOrChange_List_GExampleChild_g(_MyListSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
@@ -376,7 +376,7 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_MyListSerialized_Accessed && _MyListSerialized != null)
+            if ((_MyListSerialized_Accessed && _MyListSerialized != null))
             {
                 _MyListSerialized = (List<ExampleChild>) CloneOrChange_List_GExampleChild_g(_MyListSerialized, l => l.RemoveBufferInHierarchy(), true);
             }

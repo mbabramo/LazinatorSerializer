@@ -496,7 +496,7 @@ namespace LazinatorTests.Examples.Tuples
                 var deserialized = MyNamedTuple;
                 _MyNamedTuple = ((int MyFirstItem, double MySecondItem)) CloneOrChange__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(_MyNamedTuple, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            if ((!exploreOnlyDeserializedChildren && MyNullableTuple != null) || (_MyNullableTuple_Accessed && _MyNullableTuple != null))
+            if ((!exploreOnlyDeserializedChildren && MyNullableTuple != null) || ((_MyNullableTuple_Accessed && _MyNullableTuple != null)))
             {
                 _MyNullableTuple = ((int, double)?) CloneOrChange__Pint_c_C32double_p_C63(_MyNullableTuple, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
@@ -611,7 +611,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 _MyNamedTuple = ((int MyFirstItem, double MySecondItem)) CloneOrChange__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(_MyNamedTuple, l => l.RemoveBufferInHierarchy(), true);
             }
-            if (_MyNullableTuple_Accessed && _MyNullableTuple != null)
+            if ((_MyNullableTuple_Accessed && _MyNullableTuple != null))
             {
                 _MyNullableTuple = ((int, double)?) CloneOrChange__Pint_c_C32double_p_C63(_MyNullableTuple, l => l.RemoveBufferInHierarchy(), true);
             }

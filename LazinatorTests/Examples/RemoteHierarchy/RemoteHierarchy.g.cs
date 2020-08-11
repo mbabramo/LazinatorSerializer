@@ -314,13 +314,13 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             {
                 if ((!exploreOnlyDeserializedChildren && RemoteLevel1Item != null) || (_RemoteLevel1Item_Accessed && _RemoteLevel1Item != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(RemoteLevel1Item);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(RemoteLevel1Item);
-                    if (isMatch)
+                    bool isMatch_RemoteLevel1Item = matchCriterion == null || matchCriterion(RemoteLevel1Item);
+                    bool shouldExplore_RemoteLevel1Item = exploreCriterion == null || exploreCriterion(RemoteLevel1Item);
+                    if (isMatch_RemoteLevel1Item)
                     {
                         yield return ("RemoteLevel1Item", RemoteLevel1Item);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_RemoteLevel1Item) && shouldExplore_RemoteLevel1Item)
                     {
                         foreach (var toYield in RemoteLevel1Item.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -328,6 +328,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -342,7 +343,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && RemoteLevel1Item != null) || (_RemoteLevel1Item_Accessed && _RemoteLevel1Item != null))
+            if ((!exploreOnlyDeserializedChildren && RemoteLevel1Item != null) || ((_RemoteLevel1Item_Accessed && _RemoteLevel1Item != null)))
             {
                 _RemoteLevel1Item = (Remote<WGuid, RemoteLevel1>) _RemoteLevel1Item.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -424,7 +425,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_RemoteLevel1Item_Accessed && _RemoteLevel1Item != null)
+            if ((_RemoteLevel1Item_Accessed && _RemoteLevel1Item != null))
             {
                 _RemoteLevel1Item.UpdateStoredBuffer(ref writer, startPosition + _RemoteLevel1Item_ByteIndex + sizeof(int), _RemoteLevel1Item_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

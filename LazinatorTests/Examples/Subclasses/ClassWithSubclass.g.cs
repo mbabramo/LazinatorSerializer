@@ -373,13 +373,13 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 if ((!exploreOnlyDeserializedChildren && SubclassInstance1 != null) || (_SubclassInstance1_Accessed && _SubclassInstance1 != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(SubclassInstance1);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(SubclassInstance1);
-                    if (isMatch)
+                    bool isMatch_SubclassInstance1 = matchCriterion == null || matchCriterion(SubclassInstance1);
+                    bool shouldExplore_SubclassInstance1 = exploreCriterion == null || exploreCriterion(SubclassInstance1);
+                    if (isMatch_SubclassInstance1)
                     {
                         yield return ("SubclassInstance1", SubclassInstance1);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_SubclassInstance1) && shouldExplore_SubclassInstance1)
                     {
                         foreach (var toYield in SubclassInstance1.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -387,6 +387,7 @@ namespace LazinatorTests.Examples.Subclasses
                         }
                     }
                 }
+                
             }
             
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _SubclassInstance2_Accessed) && SubclassInstance2 == null)
@@ -397,13 +398,13 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 if ((!exploreOnlyDeserializedChildren && SubclassInstance2 != null) || (_SubclassInstance2_Accessed && _SubclassInstance2 != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(SubclassInstance2);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(SubclassInstance2);
-                    if (isMatch)
+                    bool isMatch_SubclassInstance2 = matchCriterion == null || matchCriterion(SubclassInstance2);
+                    bool shouldExplore_SubclassInstance2 = exploreCriterion == null || exploreCriterion(SubclassInstance2);
+                    if (isMatch_SubclassInstance2)
                     {
                         yield return ("SubclassInstance2", SubclassInstance2);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_SubclassInstance2) && shouldExplore_SubclassInstance2)
                     {
                         foreach (var toYield in SubclassInstance2.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -411,6 +412,7 @@ namespace LazinatorTests.Examples.Subclasses
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -425,11 +427,11 @@ namespace LazinatorTests.Examples.Subclasses
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && SubclassInstance1 != null) || (_SubclassInstance1_Accessed && _SubclassInstance1 != null))
+            if ((!exploreOnlyDeserializedChildren && SubclassInstance1 != null) || ((_SubclassInstance1_Accessed && _SubclassInstance1 != null)))
             {
                 _SubclassInstance1 = (global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass) _SubclassInstance1.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && SubclassInstance2 != null) || (_SubclassInstance2_Accessed && _SubclassInstance2 != null))
+            if ((!exploreOnlyDeserializedChildren && SubclassInstance2 != null) || ((_SubclassInstance2_Accessed && _SubclassInstance2 != null)))
             {
                 _SubclassInstance2 = (global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass) _SubclassInstance2.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -518,11 +520,11 @@ namespace LazinatorTests.Examples.Subclasses
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_SubclassInstance1_Accessed && _SubclassInstance1 != null)
+            if ((_SubclassInstance1_Accessed && _SubclassInstance1 != null))
             {
                 _SubclassInstance1.UpdateStoredBuffer(ref writer, startPosition + _SubclassInstance1_ByteIndex + sizeof(int), _SubclassInstance1_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if (_SubclassInstance2_Accessed && _SubclassInstance2 != null)
+            if ((_SubclassInstance2_Accessed && _SubclassInstance2 != null))
             {
                 _SubclassInstance2.UpdateStoredBuffer(ref writer, startPosition + _SubclassInstance2_ByteIndex + sizeof(int), _SubclassInstance2_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

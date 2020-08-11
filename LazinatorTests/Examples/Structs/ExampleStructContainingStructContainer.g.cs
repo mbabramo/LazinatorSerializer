@@ -304,20 +304,17 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
+            bool isMatch_Subcontainer = matchCriterion == null || matchCriterion(Subcontainer);
+            bool shouldExplore_Subcontainer = exploreCriterion == null || exploreCriterion(Subcontainer);
+            if (isMatch_Subcontainer)
             {
-                bool isMatch = matchCriterion == null || matchCriterion(Subcontainer);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(Subcontainer);
-                if (isMatch)
+                yield return ("Subcontainer", Subcontainer);
+            }
+            if ((!stopExploringBelowMatch || !isMatch_Subcontainer) && shouldExplore_Subcontainer)
+            {
+                foreach (var toYield in Subcontainer.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                 {
-                    yield return ("Subcontainer", Subcontainer);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in Subcontainer.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                    {
-                        yield return ("Subcontainer" + "." + toYield.propertyName, toYield.descendant);
-                    }
+                    yield return ("Subcontainer" + "." + toYield.propertyName, toYield.descendant);
                 }
             }
             yield break;

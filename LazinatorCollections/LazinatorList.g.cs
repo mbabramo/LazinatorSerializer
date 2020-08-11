@@ -316,7 +316,7 @@ namespace LazinatorCollections
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && Offsets != null) || (_Offsets_Accessed && _Offsets != null))
+            if ((!exploreOnlyDeserializedChildren && Offsets != null) || ((_Offsets_Accessed && _Offsets != null)))
             {
                 _Offsets = (LazinatorOffsetList) _Offsets.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -408,7 +408,7 @@ namespace LazinatorCollections
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_Offsets_Accessed && _Offsets != null)
+            if ((_Offsets_Accessed && _Offsets != null))
             {
                 _Offsets.UpdateStoredBuffer(ref writer, startPosition + _Offsets_ByteIndex + sizeof(int), _Offsets_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

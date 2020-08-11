@@ -399,13 +399,13 @@ namespace LazinatorCollections.OffsetList
             {
                 if ((!exploreOnlyDeserializedChildren && FourByteItems != null) || (_FourByteItems_Accessed && _FourByteItems != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(FourByteItems);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(FourByteItems);
-                    if (isMatch)
+                    bool isMatch_FourByteItems = matchCriterion == null || matchCriterion(FourByteItems);
+                    bool shouldExplore_FourByteItems = exploreCriterion == null || exploreCriterion(FourByteItems);
+                    if (isMatch_FourByteItems)
                     {
                         yield return ("FourByteItems", FourByteItems);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_FourByteItems) && shouldExplore_FourByteItems)
                     {
                         foreach (var toYield in FourByteItems.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -413,6 +413,7 @@ namespace LazinatorCollections.OffsetList
                         }
                     }
                 }
+                
             }
             
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _TwoByteItems_Accessed) && TwoByteItems == null)
@@ -423,13 +424,13 @@ namespace LazinatorCollections.OffsetList
             {
                 if ((!exploreOnlyDeserializedChildren && TwoByteItems != null) || (_TwoByteItems_Accessed && _TwoByteItems != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(TwoByteItems);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(TwoByteItems);
-                    if (isMatch)
+                    bool isMatch_TwoByteItems = matchCriterion == null || matchCriterion(TwoByteItems);
+                    bool shouldExplore_TwoByteItems = exploreCriterion == null || exploreCriterion(TwoByteItems);
+                    if (isMatch_TwoByteItems)
                     {
                         yield return ("TwoByteItems", TwoByteItems);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_TwoByteItems) && shouldExplore_TwoByteItems)
                     {
                         foreach (var toYield in TwoByteItems.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -437,6 +438,7 @@ namespace LazinatorCollections.OffsetList
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -450,11 +452,11 @@ namespace LazinatorCollections.OffsetList
         
         public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && FourByteItems != null) || (_FourByteItems_Accessed && _FourByteItems != null))
+            if ((!exploreOnlyDeserializedChildren && FourByteItems != null) || ((_FourByteItems_Accessed && _FourByteItems != null)))
             {
                 _FourByteItems = (LazinatorFastReadListInt32) _FourByteItems.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && TwoByteItems != null) || (_TwoByteItems_Accessed && _TwoByteItems != null))
+            if ((!exploreOnlyDeserializedChildren && TwoByteItems != null) || ((_TwoByteItems_Accessed && _TwoByteItems != null)))
             {
                 _TwoByteItems = (LazinatorFastReadListInt16) _TwoByteItems.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -546,11 +548,11 @@ namespace LazinatorCollections.OffsetList
         
         void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_FourByteItems_Accessed && _FourByteItems != null)
+            if ((_FourByteItems_Accessed && _FourByteItems != null))
             {
                 _FourByteItems.UpdateStoredBuffer(ref writer, startPosition + _FourByteItems_ByteIndex + sizeof(int), _FourByteItems_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if (_TwoByteItems_Accessed && _TwoByteItems != null)
+            if ((_TwoByteItems_Accessed && _TwoByteItems != null))
             {
                 _TwoByteItems.UpdateStoredBuffer(ref writer, startPosition + _TwoByteItems_ByteIndex + sizeof(int), _TwoByteItems_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

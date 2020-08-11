@@ -347,13 +347,13 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if ((!exploreOnlyDeserializedChildren && MyT != null) || (_MyT_Accessed && _MyT != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(MyT);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyT);
-                    if (isMatch)
+                    bool isMatch_MyT = matchCriterion == null || matchCriterion(MyT);
+                    bool shouldExplore_MyT = exploreCriterion == null || exploreCriterion(MyT);
+                    if (isMatch_MyT)
                     {
                         yield return ("MyT", MyT);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_MyT) && shouldExplore_MyT)
                     {
                         foreach (var toYield in MyT.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -361,6 +361,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -375,11 +376,11 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && MyT != null) || (_MyT_Accessed && _MyT != null))
+            if ((!exploreOnlyDeserializedChildren && MyT != null) || ((_MyT_Accessed && _MyT != null)))
             {
                 _MyT = (T) _MyT.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && MyListT != null) || (_MyListT_Accessed && _MyListT != null))
+            if ((!exploreOnlyDeserializedChildren && MyListT != null) || ((_MyListT_Accessed && _MyListT != null)))
             {
                 _MyListT = (List<T>) CloneOrChange_List_GT_g(_MyListT, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
@@ -467,11 +468,11 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_MyT_Accessed && _MyT != null)
+            if ((_MyT_Accessed && _MyT != null))
             {
                 _MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex + sizeof(int), _MyT_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if (_MyListT_Accessed && _MyListT != null)
+            if ((_MyListT_Accessed && _MyListT != null))
             {
                 _MyListT = (List<T>) CloneOrChange_List_GT_g(_MyListT, l => l.RemoveBufferInHierarchy(), true);
             }

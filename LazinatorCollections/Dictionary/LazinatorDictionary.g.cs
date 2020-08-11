@@ -330,13 +330,13 @@ namespace LazinatorCollections.Dictionary
             {
                 if ((!exploreOnlyDeserializedChildren && Buckets != null) || (_Buckets_Accessed && _Buckets != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(Buckets);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(Buckets);
-                    if (isMatch)
+                    bool isMatch_Buckets = matchCriterion == null || matchCriterion(Buckets);
+                    bool shouldExplore_Buckets = exploreCriterion == null || exploreCriterion(Buckets);
+                    if (isMatch_Buckets)
                     {
                         yield return ("Buckets", Buckets);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_Buckets) && shouldExplore_Buckets)
                     {
                         foreach (var toYield in Buckets.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -344,6 +344,7 @@ namespace LazinatorCollections.Dictionary
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -358,7 +359,7 @@ namespace LazinatorCollections.Dictionary
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && Buckets != null) || (_Buckets_Accessed && _Buckets != null))
+            if ((!exploreOnlyDeserializedChildren && Buckets != null) || ((_Buckets_Accessed && _Buckets != null)))
             {
                 _Buckets = (LazinatorList<DictionaryBucket<TKey, TValue>>) _Buckets.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -444,7 +445,7 @@ namespace LazinatorCollections.Dictionary
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_Buckets_Accessed && _Buckets != null)
+            if ((_Buckets_Accessed && _Buckets != null))
             {
                 _Buckets.UpdateStoredBuffer(ref writer, startPosition + _Buckets_ByteIndex + sizeof(int), _Buckets_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

@@ -347,13 +347,13 @@ namespace LazinatorCollections
             {
                 if ((!exploreOnlyDeserializedChildren && FirstNode != null) || (_FirstNode_Accessed && _FirstNode != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(FirstNode);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(FirstNode);
-                    if (isMatch)
+                    bool isMatch_FirstNode = matchCriterion == null || matchCriterion(FirstNode);
+                    bool shouldExplore_FirstNode = exploreCriterion == null || exploreCriterion(FirstNode);
+                    if (isMatch_FirstNode)
                     {
                         yield return ("FirstNode", FirstNode);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_FirstNode) && shouldExplore_FirstNode)
                     {
                         foreach (var toYield in FirstNode.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -361,6 +361,7 @@ namespace LazinatorCollections
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -376,7 +377,7 @@ namespace LazinatorCollections
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && FirstNode != null) || (_FirstNode_Accessed && _FirstNode != null))
+            if ((!exploreOnlyDeserializedChildren && FirstNode != null) || ((_FirstNode_Accessed && _FirstNode != null)))
             {
                 _FirstNode = (LazinatorLinkedListNode<T>) _FirstNode.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -463,7 +464,7 @@ namespace LazinatorCollections
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_FirstNode_Accessed && _FirstNode != null)
+            if ((_FirstNode_Accessed && _FirstNode != null))
             {
                 _FirstNode.UpdateStoredBuffer(ref writer, startPosition + _FirstNode_ByteIndex + sizeof(int), _FirstNode_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

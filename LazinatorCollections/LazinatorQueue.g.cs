@@ -311,13 +311,13 @@ namespace LazinatorCollections
             {
                 if ((!exploreOnlyDeserializedChildren && UnderlyingList != null) || (_UnderlyingList_Accessed && _UnderlyingList != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(UnderlyingList);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(UnderlyingList);
-                    if (isMatch)
+                    bool isMatch_UnderlyingList = matchCriterion == null || matchCriterion(UnderlyingList);
+                    bool shouldExplore_UnderlyingList = exploreCriterion == null || exploreCriterion(UnderlyingList);
+                    if (isMatch_UnderlyingList)
                     {
                         yield return ("UnderlyingList", UnderlyingList);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_UnderlyingList) && shouldExplore_UnderlyingList)
                     {
                         foreach (var toYield in UnderlyingList.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -325,6 +325,7 @@ namespace LazinatorCollections
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -338,7 +339,7 @@ namespace LazinatorCollections
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && UnderlyingList != null) || (_UnderlyingList_Accessed && _UnderlyingList != null))
+            if ((!exploreOnlyDeserializedChildren && UnderlyingList != null) || ((_UnderlyingList_Accessed && _UnderlyingList != null)))
             {
                 _UnderlyingList = (ILazinatorListable<T>) _UnderlyingList.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -423,7 +424,7 @@ namespace LazinatorCollections
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_UnderlyingList_Accessed && _UnderlyingList != null)
+            if ((_UnderlyingList_Accessed && _UnderlyingList != null))
             {
                 _UnderlyingList.UpdateStoredBuffer(ref writer, startPosition + _UnderlyingList_ByteIndex + sizeof(int), _UnderlyingList_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

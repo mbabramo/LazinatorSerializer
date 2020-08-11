@@ -302,20 +302,17 @@ namespace Lazinator.Wrappers
         
         public IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
+            bool isMatch_NonNullValue = matchCriterion == null || matchCriterion(NonNullValue);
+            bool shouldExplore_NonNullValue = exploreCriterion == null || exploreCriterion(NonNullValue);
+            if (isMatch_NonNullValue)
             {
-                bool isMatch = matchCriterion == null || matchCriterion(NonNullValue);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(NonNullValue);
-                if (isMatch)
+                yield return ("NonNullValue", NonNullValue);
+            }
+            if ((!stopExploringBelowMatch || !isMatch_NonNullValue) && shouldExplore_NonNullValue)
+            {
+                foreach (var toYield in NonNullValue.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                 {
-                    yield return ("NonNullValue", NonNullValue);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in NonNullValue.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                    {
-                        yield return ("NonNullValue" + "." + toYield.propertyName, toYield.descendant);
-                    }
+                    yield return ("NonNullValue" + "." + toYield.propertyName, toYield.descendant);
                 }
             }
             yield break;

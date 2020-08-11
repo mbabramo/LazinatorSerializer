@@ -337,13 +337,13 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if ((!exploreOnlyDeserializedChildren && ExampleByInterface != null) || (_ExampleByInterface_Accessed && _ExampleByInterface != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(ExampleByInterface);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(ExampleByInterface);
-                    if (isMatch)
+                    bool isMatch_ExampleByInterface = matchCriterion == null || matchCriterion(ExampleByInterface);
+                    bool shouldExplore_ExampleByInterface = exploreCriterion == null || exploreCriterion(ExampleByInterface);
+                    if (isMatch_ExampleByInterface)
                     {
                         yield return ("ExampleByInterface", ExampleByInterface);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_ExampleByInterface) && shouldExplore_ExampleByInterface)
                     {
                         foreach (var toYield in ExampleByInterface.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -351,6 +351,7 @@ namespace LazinatorTests.Examples.Hierarchy
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -365,11 +366,11 @@ namespace LazinatorTests.Examples.Hierarchy
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && ExampleByInterface != null) || (_ExampleByInterface_Accessed && _ExampleByInterface != null))
+            if ((!exploreOnlyDeserializedChildren && ExampleByInterface != null) || ((_ExampleByInterface_Accessed && _ExampleByInterface != null)))
             {
                 _ExampleByInterface = (IExample) _ExampleByInterface.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && ExampleListByInterface != null) || (_ExampleListByInterface_Accessed && _ExampleListByInterface != null))
+            if ((!exploreOnlyDeserializedChildren && ExampleListByInterface != null) || ((_ExampleListByInterface_Accessed && _ExampleListByInterface != null)))
             {
                 _ExampleListByInterface = (List<IExample>) CloneOrChange_List_GIExample_g(_ExampleListByInterface, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
@@ -453,11 +454,11 @@ namespace LazinatorTests.Examples.Hierarchy
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_ExampleByInterface_Accessed && _ExampleByInterface != null)
+            if ((_ExampleByInterface_Accessed && _ExampleByInterface != null))
             {
                 _ExampleByInterface.UpdateStoredBuffer(ref writer, startPosition + _ExampleByInterface_ByteIndex + sizeof(int), _ExampleByInterface_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if (_ExampleListByInterface_Accessed && _ExampleListByInterface != null)
+            if ((_ExampleListByInterface_Accessed && _ExampleListByInterface != null))
             {
                 _ExampleListByInterface = (List<IExample>) CloneOrChange_List_GIExample_g(_ExampleListByInterface, l => l.RemoveBufferInHierarchy(), true);
             }

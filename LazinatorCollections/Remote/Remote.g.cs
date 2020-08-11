@@ -408,13 +408,13 @@ namespace LazinatorCollections.Remote
             {
                 if ((!exploreOnlyDeserializedChildren && Key != null) || (_Key_Accessed && _Key != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(Key);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(Key);
-                    if (isMatch)
+                    bool isMatch_Key = matchCriterion == null || matchCriterion(Key);
+                    bool shouldExplore_Key = exploreCriterion == null || exploreCriterion(Key);
+                    if (isMatch_Key)
                     {
                         yield return ("Key", Key);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_Key) && shouldExplore_Key)
                     {
                         foreach (var toYield in Key.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -422,6 +422,7 @@ namespace LazinatorCollections.Remote
                         }
                     }
                 }
+                
             }
             
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Local_Accessed) && Local == null)
@@ -432,13 +433,13 @@ namespace LazinatorCollections.Remote
             {
                 if ((!exploreOnlyDeserializedChildren && Local != null) || (_Local_Accessed && _Local != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(Local);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(Local);
-                    if (isMatch)
+                    bool isMatch_Local = matchCriterion == null || matchCriterion(Local);
+                    bool shouldExplore_Local = exploreCriterion == null || exploreCriterion(Local);
+                    if (isMatch_Local)
                     {
                         yield return ("Local", Local);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_Local) && shouldExplore_Local)
                     {
                         foreach (var toYield in Local.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -446,6 +447,7 @@ namespace LazinatorCollections.Remote
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -460,11 +462,11 @@ namespace LazinatorCollections.Remote
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && Key != null) || (_Key_Accessed && _Key != null))
+            if ((!exploreOnlyDeserializedChildren && Key != null) || ((_Key_Accessed && _Key != null)))
             {
                 _Key = (TKey) _Key.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && Local != null) || (_Local_Accessed && _Local != null))
+            if ((!exploreOnlyDeserializedChildren && Local != null) || ((_Local_Accessed && _Local != null)))
             {
                 _Local = (TValue) _Local.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -565,11 +567,11 @@ namespace LazinatorCollections.Remote
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_Key_Accessed && _Key != null)
+            if ((_Key_Accessed && _Key != null))
             {
                 _Key.UpdateStoredBuffer(ref writer, startPosition + _Key_ByteIndex + sizeof(int), _Key_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if (_Local_Accessed && _Local != null)
+            if ((_Local_Accessed && _Local != null))
             {
                 _Local.UpdateStoredBuffer(ref writer, startPosition + _Local_ByteIndex + sizeof(int), _Local_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

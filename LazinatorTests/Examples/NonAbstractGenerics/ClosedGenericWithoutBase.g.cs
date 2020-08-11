@@ -312,13 +312,13 @@ namespace LazinatorTests.Examples
             {
                 if ((!exploreOnlyDeserializedChildren && ItemU != null) || (_ItemU_Accessed && _ItemU != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(ItemU);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(ItemU);
-                    if (isMatch)
+                    bool isMatch_ItemU = matchCriterion == null || matchCriterion(ItemU);
+                    bool shouldExplore_ItemU = exploreCriterion == null || exploreCriterion(ItemU);
+                    if (isMatch_ItemU)
                     {
                         yield return ("ItemU", ItemU);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_ItemU) && shouldExplore_ItemU)
                     {
                         foreach (var toYield in ItemU.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -326,6 +326,7 @@ namespace LazinatorTests.Examples
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -340,7 +341,7 @@ namespace LazinatorTests.Examples
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && ItemU != null) || (_ItemU_Accessed && _ItemU != null))
+            if ((!exploreOnlyDeserializedChildren && ItemU != null) || ((_ItemU_Accessed && _ItemU != null)))
             {
                 _ItemU = (ExampleChild) _ItemU.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -422,7 +423,7 @@ namespace LazinatorTests.Examples
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_ItemU_Accessed && _ItemU != null)
+            if ((_ItemU_Accessed && _ItemU != null))
             {
                 _ItemU.UpdateStoredBuffer(ref writer, startPosition + _ItemU_ByteIndex + sizeof(int), _ItemU_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

@@ -139,13 +139,13 @@ namespace LazinatorCollections.Tree
             {
                 if ((!exploreOnlyDeserializedChildren && Locations != null) || (_Locations_Accessed && _Locations != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(Locations);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(Locations);
-                    if (isMatch)
+                    bool isMatch_Locations = matchCriterion == null || matchCriterion(Locations);
+                    bool shouldExplore_Locations = exploreCriterion == null || exploreCriterion(Locations);
+                    if (isMatch_Locations)
                     {
                         yield return ("Locations", Locations);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_Locations) && shouldExplore_Locations)
                     {
                         foreach (var toYield in Locations.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -153,6 +153,7 @@ namespace LazinatorCollections.Tree
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -171,7 +172,7 @@ namespace LazinatorCollections.Tree
         public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, false);
-            if ((!exploreOnlyDeserializedChildren && Locations != null) || (_Locations_Accessed && _Locations != null))
+            if ((!exploreOnlyDeserializedChildren && Locations != null) || ((_Locations_Accessed && _Locations != null)))
             {
                 _Locations = (LazinatorDictionary<T, LazinatorList<WInt>>) _Locations.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -263,7 +264,7 @@ namespace LazinatorCollections.Tree
         protected override void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
             base.UpdateDeserializedChildren(ref writer, startPosition);
-            if (_Locations_Accessed && _Locations != null)
+            if ((_Locations_Accessed && _Locations != null))
             {
                 _Locations.UpdateStoredBuffer(ref writer, startPosition + _Locations_ByteIndex + sizeof(int), _Locations_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

@@ -392,13 +392,13 @@ namespace LazinatorTests.Examples.Collections
             {
                 if ((!exploreOnlyDeserializedChildren && MyList != null) || (_MyList_Accessed && _MyList != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(MyList);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyList);
-                    if (isMatch)
+                    bool isMatch_MyList = matchCriterion == null || matchCriterion(MyList);
+                    bool shouldExplore_MyList = exploreCriterion == null || exploreCriterion(MyList);
+                    if (isMatch_MyList)
                     {
                         yield return ("MyList", MyList);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_MyList) && shouldExplore_MyList)
                     {
                         foreach (var toYield in MyList.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -406,6 +406,7 @@ namespace LazinatorTests.Examples.Collections
                         }
                     }
                 }
+                
             }
             
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyStructList_Accessed) && MyStructList == null)
@@ -416,13 +417,13 @@ namespace LazinatorTests.Examples.Collections
             {
                 if ((!exploreOnlyDeserializedChildren && MyStructList != null) || (_MyStructList_Accessed && _MyStructList != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(MyStructList);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyStructList);
-                    if (isMatch)
+                    bool isMatch_MyStructList = matchCriterion == null || matchCriterion(MyStructList);
+                    bool shouldExplore_MyStructList = exploreCriterion == null || exploreCriterion(MyStructList);
+                    if (isMatch_MyStructList)
                     {
                         yield return ("MyStructList", MyStructList);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_MyStructList) && shouldExplore_MyStructList)
                     {
                         foreach (var toYield in MyStructList.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -430,6 +431,7 @@ namespace LazinatorTests.Examples.Collections
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -445,11 +447,11 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && MyList != null) || (_MyList_Accessed && _MyList != null))
+            if ((!exploreOnlyDeserializedChildren && MyList != null) || ((_MyList_Accessed && _MyList != null)))
             {
                 _MyList = (LazinatorList<ExampleChild>) _MyList.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && MyStructList != null) || (_MyStructList_Accessed && _MyStructList != null))
+            if ((!exploreOnlyDeserializedChildren && MyStructList != null) || ((_MyStructList_Accessed && _MyStructList != null)))
             {
                 _MyStructList = (LazinatorList<WByte>) _MyStructList.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -539,11 +541,11 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_MyList_Accessed && _MyList != null)
+            if ((_MyList_Accessed && _MyList != null))
             {
                 _MyList.UpdateStoredBuffer(ref writer, startPosition + _MyList_ByteIndex + sizeof(int), _MyList_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if (_MyStructList_Accessed && _MyStructList != null)
+            if ((_MyStructList_Accessed && _MyStructList != null))
             {
                 _MyStructList.UpdateStoredBuffer(ref writer, startPosition + _MyStructList_ByteIndex + sizeof(int), _MyStructList_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

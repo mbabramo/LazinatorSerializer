@@ -406,7 +406,7 @@ namespace LazinatorTests.Examples
         public bool DescendantHasChanged
         {
             [DebuggerStepThrough]
-            get => _DescendantHasChanged || (_MyChild1_Accessed && _MyChild1 != null && (MyChild1.HasChanged || MyChild1.DescendantHasChanged)) || (_MyChild2_Accessed && _MyChild2 != null && (MyChild2.HasChanged || MyChild2.DescendantHasChanged));
+            get => _DescendantHasChanged || ((_MyChild1_Accessed && _MyChild1 != null) && (MyChild1.HasChanged || MyChild1.DescendantHasChanged)) || ((_MyChild2_Accessed && _MyChild2 != null) && (MyChild2.HasChanged || MyChild2.DescendantHasChanged));
             [DebuggerStepThrough]
             set
             {
@@ -418,7 +418,7 @@ namespace LazinatorTests.Examples
         public bool DescendantIsDirty
         {
             [DebuggerStepThrough]
-            get => _DescendantIsDirty || (_MyChild1_Accessed && _MyChild1 != null && (MyChild1.IsDirty || MyChild1.DescendantIsDirty)) || (_MyChild2_Accessed && _MyChild2 != null && (MyChild2.IsDirty || MyChild2.DescendantIsDirty));
+            get => _DescendantIsDirty || ((_MyChild1_Accessed && _MyChild1 != null) && (MyChild1.IsDirty || MyChild1.DescendantIsDirty)) || ((_MyChild2_Accessed && _MyChild2 != null) && (MyChild2.IsDirty || MyChild2.DescendantIsDirty));
             [DebuggerStepThrough]
             set
             {
@@ -511,13 +511,13 @@ namespace LazinatorTests.Examples
             {
                 if ((!exploreOnlyDeserializedChildren && MyChild1 != null) || (_MyChild1_Accessed && _MyChild1 != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(MyChild1);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyChild1);
-                    if (isMatch)
+                    bool isMatch_MyChild1 = matchCriterion == null || matchCriterion(MyChild1);
+                    bool shouldExplore_MyChild1 = exploreCriterion == null || exploreCriterion(MyChild1);
+                    if (isMatch_MyChild1)
                     {
                         yield return ("MyChild1", MyChild1);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_MyChild1) && shouldExplore_MyChild1)
                     {
                         foreach (var toYield in MyChild1.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -525,6 +525,7 @@ namespace LazinatorTests.Examples
                         }
                     }
                 }
+                
             }
             
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyChild2_Accessed) && MyChild2 == null)
@@ -535,13 +536,13 @@ namespace LazinatorTests.Examples
             {
                 if ((!exploreOnlyDeserializedChildren && MyChild2 != null) || (_MyChild2_Accessed && _MyChild2 != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(MyChild2);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyChild2);
-                    if (isMatch)
+                    bool isMatch_MyChild2 = matchCriterion == null || matchCriterion(MyChild2);
+                    bool shouldExplore_MyChild2 = exploreCriterion == null || exploreCriterion(MyChild2);
+                    if (isMatch_MyChild2)
                     {
                         yield return ("MyChild2", MyChild2);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_MyChild2) && shouldExplore_MyChild2)
                     {
                         foreach (var toYield in MyChild2.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -549,6 +550,7 @@ namespace LazinatorTests.Examples
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -567,19 +569,19 @@ namespace LazinatorTests.Examples
         
         public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && MyChild1 != null) || (_MyChild1_Accessed && _MyChild1 != null))
+            if ((!exploreOnlyDeserializedChildren && MyChild1 != null) || ((_MyChild1_Accessed && _MyChild1 != null)))
             {
                 _MyChild1 = (ExampleChild) _MyChild1.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && MyChild2 != null) || (_MyChild2_Accessed && _MyChild2 != null))
+            if ((!exploreOnlyDeserializedChildren && MyChild2 != null) || ((_MyChild2_Accessed && _MyChild2 != null)))
             {
                 _MyChild2 = (ExampleChild) _MyChild2.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && MyLazinatorList != null) || (_MyLazinatorList_Accessed && _MyLazinatorList != null))
+            if ((!exploreOnlyDeserializedChildren && MyLazinatorList != null) || ((_MyLazinatorList_Accessed && _MyLazinatorList != null)))
             {
                 _MyLazinatorList = (List<Example>) CloneOrChange_List_GExample_g(_MyLazinatorList, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
-            if ((!exploreOnlyDeserializedChildren && MyListValues != null) || (_MyListValues_Accessed && _MyListValues != null))
+            if ((!exploreOnlyDeserializedChildren && MyListValues != null) || ((_MyListValues_Accessed && _MyListValues != null)))
             {
                 _MyListValues = (List<int>) CloneOrChange_List_Gint_g(_MyListValues, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
@@ -693,19 +695,19 @@ namespace LazinatorTests.Examples
         
         void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_MyChild1_Accessed && _MyChild1 != null)
+            if ((_MyChild1_Accessed && _MyChild1 != null))
             {
                 _MyChild1.UpdateStoredBuffer(ref writer, startPosition + _MyChild1_ByteIndex + sizeof(int), _MyChild1_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if (_MyChild2_Accessed && _MyChild2 != null)
+            if ((_MyChild2_Accessed && _MyChild2 != null))
             {
                 _MyChild2.UpdateStoredBuffer(ref writer, startPosition + _MyChild2_ByteIndex + sizeof(int), _MyChild2_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if (_MyLazinatorList_Accessed && _MyLazinatorList != null)
+            if ((_MyLazinatorList_Accessed && _MyLazinatorList != null))
             {
                 _MyLazinatorList = (List<Example>) CloneOrChange_List_GExample_g(_MyLazinatorList, l => l.RemoveBufferInHierarchy(), true);
             }
-            if (_MyListValues_Accessed && _MyListValues != null)
+            if ((_MyListValues_Accessed && _MyListValues != null))
             {
                 _MyListValues = (List<int>) CloneOrChange_List_Gint_g(_MyListValues, l => l.RemoveBufferInHierarchy(), true);
             }

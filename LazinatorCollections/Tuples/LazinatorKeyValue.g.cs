@@ -245,7 +245,7 @@ namespace LazinatorCollections.Tuples
         public bool DescendantHasChanged
         {
             [DebuggerStepThrough]
-            get => _DescendantHasChanged || (_Key_Accessed && _Key != null && (Key.HasChanged || Key.DescendantHasChanged)) || (_Value_Accessed && _Value != null && (Value.HasChanged || Value.DescendantHasChanged));
+            get => _DescendantHasChanged || ((_Key_Accessed && _Key != null) && (Key.HasChanged || Key.DescendantHasChanged)) || ((_Value_Accessed && _Value != null) && (Value.HasChanged || Value.DescendantHasChanged));
             [DebuggerStepThrough]
             set
             {
@@ -259,7 +259,7 @@ namespace LazinatorCollections.Tuples
         public bool DescendantIsDirty
         {
             [DebuggerStepThrough]
-            get => _DescendantIsDirty || (_Key_Accessed && _Key != null && (Key.IsDirty || Key.DescendantIsDirty)) || (_Value_Accessed && _Value != null && (Value.IsDirty || Value.DescendantIsDirty));
+            get => _DescendantIsDirty || ((_Key_Accessed && _Key != null) && (Key.IsDirty || Key.DescendantIsDirty)) || ((_Value_Accessed && _Value != null) && (Value.IsDirty || Value.DescendantIsDirty));
             [DebuggerStepThrough]
             set
             {
@@ -354,13 +354,13 @@ namespace LazinatorCollections.Tuples
             {
                 if ((!exploreOnlyDeserializedChildren && Key != null) || (_Key_Accessed && _Key != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(Key);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(Key);
-                    if (isMatch)
+                    bool isMatch_Key = matchCriterion == null || matchCriterion(Key);
+                    bool shouldExplore_Key = exploreCriterion == null || exploreCriterion(Key);
+                    if (isMatch_Key)
                     {
                         yield return ("Key", Key);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_Key) && shouldExplore_Key)
                     {
                         foreach (var toYield in Key.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -368,6 +368,7 @@ namespace LazinatorCollections.Tuples
                         }
                     }
                 }
+                
             }
             
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Value_Accessed) && Value == null)
@@ -378,13 +379,13 @@ namespace LazinatorCollections.Tuples
             {
                 if ((!exploreOnlyDeserializedChildren && Value != null) || (_Value_Accessed && _Value != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(Value);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(Value);
-                    if (isMatch)
+                    bool isMatch_Value = matchCriterion == null || matchCriterion(Value);
+                    bool shouldExplore_Value = exploreCriterion == null || exploreCriterion(Value);
+                    if (isMatch_Value)
                     {
                         yield return ("Value", Value);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_Value) && shouldExplore_Value)
                     {
                         foreach (var toYield in Value.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -392,6 +393,7 @@ namespace LazinatorCollections.Tuples
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -405,11 +407,11 @@ namespace LazinatorCollections.Tuples
         
         public ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && Key != null) || (_Key_Accessed && _Key != null))
+            if ((!exploreOnlyDeserializedChildren && Key != null) || ((_Key_Accessed && _Key != null)))
             {
                 _Key = (TKey) _Key.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            if ((!exploreOnlyDeserializedChildren && Value != null) || (_Value_Accessed && _Value != null))
+            if ((!exploreOnlyDeserializedChildren && Value != null) || ((_Value_Accessed && _Value != null)))
             {
                 _Value = (TValue) _Value.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -521,11 +523,11 @@ namespace LazinatorCollections.Tuples
         
         void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            if (_Key_Accessed && _Key != null)
+            if ((_Key_Accessed && _Key != null))
             {
                 _Key.UpdateStoredBuffer(ref writer, startPosition + _Key_ByteIndex + sizeof(int), _Key_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            if (_Value_Accessed && _Value != null)
+            if ((_Value_Accessed && _Value != null))
             {
                 _Value.UpdateStoredBuffer(ref writer, startPosition + _Value_ByteIndex + sizeof(int), _Value_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

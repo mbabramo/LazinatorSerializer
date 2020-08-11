@@ -149,13 +149,13 @@ namespace LazinatorTests.Examples
             {
                 if ((!exploreOnlyDeserializedChildren && MyGrandchildInInherited != null) || (_MyGrandchildInInherited_Accessed && _MyGrandchildInInherited != null))
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(MyGrandchildInInherited);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyGrandchildInInherited);
-                    if (isMatch)
+                    bool isMatch_MyGrandchildInInherited = matchCriterion == null || matchCriterion(MyGrandchildInInherited);
+                    bool shouldExplore_MyGrandchildInInherited = exploreCriterion == null || exploreCriterion(MyGrandchildInInherited);
+                    if (isMatch_MyGrandchildInInherited)
                     {
                         yield return ("MyGrandchildInInherited", MyGrandchildInInherited);
                     }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                    if ((!stopExploringBelowMatch || !isMatch_MyGrandchildInInherited) && shouldExplore_MyGrandchildInInherited)
                     {
                         foreach (var toYield in MyGrandchildInInherited.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                         {
@@ -163,6 +163,7 @@ namespace LazinatorTests.Examples
                         }
                     }
                 }
+                
             }
             
             yield break;
@@ -182,7 +183,7 @@ namespace LazinatorTests.Examples
         public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, false);
-            if ((!exploreOnlyDeserializedChildren && MyGrandchildInInherited != null) || (_MyGrandchildInInherited_Accessed && _MyGrandchildInInherited != null))
+            if ((!exploreOnlyDeserializedChildren && MyGrandchildInInherited != null) || ((_MyGrandchildInInherited_Accessed && _MyGrandchildInInherited != null)))
             {
                 _MyGrandchildInInherited = (ExampleGrandchild) _MyGrandchildInInherited.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -267,7 +268,7 @@ namespace LazinatorTests.Examples
         protected override void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
             base.UpdateDeserializedChildren(ref writer, startPosition);
-            if (_MyGrandchildInInherited_Accessed && _MyGrandchildInInherited != null)
+            if ((_MyGrandchildInInherited_Accessed && _MyGrandchildInInherited != null))
             {
                 _MyGrandchildInInherited.UpdateStoredBuffer(ref writer, startPosition + _MyGrandchildInInherited_ByteIndex + sizeof(int), _MyGrandchildInInherited_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }

@@ -304,20 +304,17 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if ((!exploreOnlyDeserializedChildren && true) || (true))
+            bool isMatch_WrappedInt = matchCriterion == null || matchCriterion(WrappedInt);
+            bool shouldExplore_WrappedInt = exploreCriterion == null || exploreCriterion(WrappedInt);
+            if (isMatch_WrappedInt)
             {
-                bool isMatch = matchCriterion == null || matchCriterion(WrappedInt);
-                bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedInt);
-                if (isMatch)
+                yield return ("WrappedInt", WrappedInt);
+            }
+            if ((!stopExploringBelowMatch || !isMatch_WrappedInt) && shouldExplore_WrappedInt)
+            {
+                foreach (var toYield in WrappedInt.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                 {
-                    yield return ("WrappedInt", WrappedInt);
-                }
-                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                {
-                    foreach (var toYield in WrappedInt.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                    {
-                        yield return ("WrappedInt" + "." + toYield.propertyName, toYield.descendant);
-                    }
+                    yield return ("WrappedInt" + "." + toYield.propertyName, toYield.descendant);
                 }
             }
             yield break;
