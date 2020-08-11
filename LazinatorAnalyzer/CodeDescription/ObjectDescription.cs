@@ -653,7 +653,7 @@ namespace Lazinator.CodeDescription
                             return clone;
                         }}{IIF(!ImplementsAssignCloneProperties, $@"
 
-                        public {DerivationKeyword}{ILazinatorString} AssignCloneProperties({ILazinatorString} clone, IncludeChildrenMode includeChildrenMode)
+                        public {DerivationKeyword}{ILazinatorString} AssignCloneProperties({ILazinatorStringWithoutQuestionMark} clone, IncludeChildrenMode includeChildrenMode)
                         {{
                             {(IsDerivedFromNonAbstractLazinator ? $"base.AssignCloneProperties(clone, includeChildrenMode);" : $"clone.FreeInMemoryObjects();")}
                             {NameIncludingGenerics} typedClone = ({NameIncludingGenerics}) clone;

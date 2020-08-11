@@ -283,7 +283,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             return clone;
         }
         
-        public virtual ILazinator? AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        public virtual ILazinator? AssignCloneProperties(ILazinator? clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             NullableEnabledContext typedClone = (NullableEnabledContext) clone;
@@ -315,28 +315,12 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                if (NonNullableClass == null)
-                {
-                    typedClone.NonNullableClass = null;
-                }
-                else
-                {
-                    typedClone.NonNullableClass = (Example) NonNullableClass.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
-                }
-                
+                typedClone.NonNullableClass = (Example) NonNullableClass.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                if (NonNullableInterface == null)
-                {
-                    typedClone.NonNullableInterface = null;
-                }
-                else
-                {
-                    typedClone.NonNullableInterface = (IExample) NonNullableInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
-                }
-                
+                typedClone.NonNullableInterface = (IExample) NonNullableInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             
             
