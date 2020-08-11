@@ -850,7 +850,7 @@ namespace Lazinator.CodeDescription
                                     }}
                                     if ((!stopExploringBelowMatch || !isMatch_{propertyName}) && shouldExplore_{propertyName})
                                     {{
-                                        foreach (var toYield in {propertyName}.{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable, "Value.")}EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                                        foreach (var toYield in {propertyName}{property.NullForgiveness}.{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable, "Value.")}EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                                         {{
                                             yield return (""{propertyName}"" + ""."" + toYield.propertyName, toYield.descendant);
                                         }}
@@ -934,7 +934,7 @@ namespace Lazinator.CodeDescription
                 string propertyName = property.PropertyName;
                 sb.Append(new ConditionalCodeGenerator(getAntecedent(property),
                         $@"{IIF(nonNullCheckDefinitelyTrue(property), $@"var deserialized_{propertyName} = {propertyName};
-                            ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) _{propertyName}{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable, ".Value")}.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);").ToString());
+                            ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) _{propertyName}{property.NullForgiveness}{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable, ".Value")}.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);").ToString());
             }
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && !x.IsMemoryOrSpan))
             {

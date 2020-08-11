@@ -38,6 +38,7 @@ namespace Lazinator.CodeDescription
         public string QuestionMarkIfNullableModeEnabled => NullableModeEnabled ? "?" : "";
         public string ILazinatorString => "ILazinator" + QuestionMarkIfNullableModeEnabled;
         internal bool Nullable { get; set; }
+        internal string NullForgiveness => NullableModeEnabled ? "!" : "";
         private bool HasParameterlessConstructor => PropertySymbol.Type is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.InstanceConstructors.Any(y => !y.IsImplicitlyDeclared && !y.Parameters.Any());
         private bool IsInterface { get; set; }
         private int? ArrayRank { get; set; }
