@@ -922,198 +922,134 @@ namespace LazinatorTests.Examples.Structs
                 }
             }
             
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedBool_Accessed) && false)
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
-                yield return ("WrappedBool", default);
-            }
-            else
-            {
-                if ((!exploreOnlyDeserializedChildren && true) || (true))
+                bool isMatch = matchCriterion == null || matchCriterion(WrappedBool);
+                bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedBool);
+                if (isMatch)
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(WrappedBool);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedBool);
-                    if (isMatch)
+                    yield return ("WrappedBool", WrappedBool);
+                }
+                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                {
+                    foreach (var toYield in WrappedBool.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
-                        yield return ("WrappedBool", WrappedBool);
-                    }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                    {
-                        foreach (var toYield in WrappedBool.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                        {
-                            yield return ("WrappedBool" + "." + toYield.propertyName, toYield.descendant);
-                        }
+                        yield return ("WrappedBool" + "." + toYield.propertyName, toYield.descendant);
                     }
                 }
             }
-            
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedByte_Accessed) && false)
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
-                yield return ("WrappedByte", default);
-            }
-            else
-            {
-                if ((!exploreOnlyDeserializedChildren && true) || (true))
+                bool isMatch = matchCriterion == null || matchCriterion(WrappedByte);
+                bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedByte);
+                if (isMatch)
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(WrappedByte);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedByte);
-                    if (isMatch)
+                    yield return ("WrappedByte", WrappedByte);
+                }
+                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                {
+                    foreach (var toYield in WrappedByte.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
-                        yield return ("WrappedByte", WrappedByte);
-                    }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                    {
-                        foreach (var toYield in WrappedByte.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                        {
-                            yield return ("WrappedByte" + "." + toYield.propertyName, toYield.descendant);
-                        }
+                        yield return ("WrappedByte" + "." + toYield.propertyName, toYield.descendant);
                     }
                 }
             }
-            
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedChar_Accessed) && false)
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
-                yield return ("WrappedChar", default);
-            }
-            else
-            {
-                if ((!exploreOnlyDeserializedChildren && true) || (true))
+                bool isMatch = matchCriterion == null || matchCriterion(WrappedChar);
+                bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedChar);
+                if (isMatch)
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(WrappedChar);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedChar);
-                    if (isMatch)
+                    yield return ("WrappedChar", WrappedChar);
+                }
+                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                {
+                    foreach (var toYield in WrappedChar.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
-                        yield return ("WrappedChar", WrappedChar);
-                    }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                    {
-                        foreach (var toYield in WrappedChar.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                        {
-                            yield return ("WrappedChar" + "." + toYield.propertyName, toYield.descendant);
-                        }
+                        yield return ("WrappedChar" + "." + toYield.propertyName, toYield.descendant);
                     }
                 }
             }
-            
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedNullableBool_Accessed) && false)
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
-                yield return ("WrappedNullableBool", default);
-            }
-            else
-            {
-                if ((!exploreOnlyDeserializedChildren && true) || (true))
+                bool isMatch = matchCriterion == null || matchCriterion(WrappedNullableBool);
+                bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedNullableBool);
+                if (isMatch)
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(WrappedNullableBool);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedNullableBool);
-                    if (isMatch)
+                    yield return ("WrappedNullableBool", WrappedNullableBool);
+                }
+                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                {
+                    foreach (var toYield in WrappedNullableBool.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
-                        yield return ("WrappedNullableBool", WrappedNullableBool);
-                    }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                    {
-                        foreach (var toYield in WrappedNullableBool.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                        {
-                            yield return ("WrappedNullableBool" + "." + toYield.propertyName, toYield.descendant);
-                        }
+                        yield return ("WrappedNullableBool" + "." + toYield.propertyName, toYield.descendant);
                     }
                 }
             }
-            
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedNullableByte_Accessed) && false)
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
-                yield return ("WrappedNullableByte", default);
-            }
-            else
-            {
-                if ((!exploreOnlyDeserializedChildren && true) || (true))
+                bool isMatch = matchCriterion == null || matchCriterion(WrappedNullableByte);
+                bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedNullableByte);
+                if (isMatch)
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(WrappedNullableByte);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedNullableByte);
-                    if (isMatch)
+                    yield return ("WrappedNullableByte", WrappedNullableByte);
+                }
+                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                {
+                    foreach (var toYield in WrappedNullableByte.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
-                        yield return ("WrappedNullableByte", WrappedNullableByte);
-                    }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                    {
-                        foreach (var toYield in WrappedNullableByte.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                        {
-                            yield return ("WrappedNullableByte" + "." + toYield.propertyName, toYield.descendant);
-                        }
+                        yield return ("WrappedNullableByte" + "." + toYield.propertyName, toYield.descendant);
                     }
                 }
             }
-            
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedNullableChar_Accessed) && false)
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
-                yield return ("WrappedNullableChar", default);
-            }
-            else
-            {
-                if ((!exploreOnlyDeserializedChildren && true) || (true))
+                bool isMatch = matchCriterion == null || matchCriterion(WrappedNullableChar);
+                bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedNullableChar);
+                if (isMatch)
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(WrappedNullableChar);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedNullableChar);
-                    if (isMatch)
+                    yield return ("WrappedNullableChar", WrappedNullableChar);
+                }
+                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                {
+                    foreach (var toYield in WrappedNullableChar.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
-                        yield return ("WrappedNullableChar", WrappedNullableChar);
-                    }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                    {
-                        foreach (var toYield in WrappedNullableChar.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                        {
-                            yield return ("WrappedNullableChar" + "." + toYield.propertyName, toYield.descendant);
-                        }
+                        yield return ("WrappedNullableChar" + "." + toYield.propertyName, toYield.descendant);
                     }
                 }
             }
-            
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedNullableSByte_Accessed) && false)
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
-                yield return ("WrappedNullableSByte", default);
-            }
-            else
-            {
-                if ((!exploreOnlyDeserializedChildren && true) || (true))
+                bool isMatch = matchCriterion == null || matchCriterion(WrappedNullableSByte);
+                bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedNullableSByte);
+                if (isMatch)
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(WrappedNullableSByte);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedNullableSByte);
-                    if (isMatch)
+                    yield return ("WrappedNullableSByte", WrappedNullableSByte);
+                }
+                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                {
+                    foreach (var toYield in WrappedNullableSByte.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
-                        yield return ("WrappedNullableSByte", WrappedNullableSByte);
-                    }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                    {
-                        foreach (var toYield in WrappedNullableSByte.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                        {
-                            yield return ("WrappedNullableSByte" + "." + toYield.propertyName, toYield.descendant);
-                        }
+                        yield return ("WrappedNullableSByte" + "." + toYield.propertyName, toYield.descendant);
                     }
                 }
             }
-            
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedSByte_Accessed) && false)
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
-                yield return ("WrappedSByte", default);
-            }
-            else
-            {
-                if ((!exploreOnlyDeserializedChildren && true) || (true))
+                bool isMatch = matchCriterion == null || matchCriterion(WrappedSByte);
+                bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedSByte);
+                if (isMatch)
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(WrappedSByte);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedSByte);
-                    if (isMatch)
+                    yield return ("WrappedSByte", WrappedSByte);
+                }
+                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                {
+                    foreach (var toYield in WrappedSByte.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
-                        yield return ("WrappedSByte", WrappedSByte);
-                    }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                    {
-                        foreach (var toYield in WrappedSByte.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                        {
-                            yield return ("WrappedSByte" + "." + toYield.propertyName, toYield.descendant);
-                        }
+                        yield return ("WrappedSByte" + "." + toYield.propertyName, toYield.descendant);
                     }
                 }
             }
-            
             yield break;
         }
         

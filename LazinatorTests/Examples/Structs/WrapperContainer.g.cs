@@ -304,30 +304,22 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedInt_Accessed) && false)
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
-                yield return ("WrappedInt", default);
-            }
-            else
-            {
-                if ((!exploreOnlyDeserializedChildren && true) || (true))
+                bool isMatch = matchCriterion == null || matchCriterion(WrappedInt);
+                bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedInt);
+                if (isMatch)
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(WrappedInt);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedInt);
-                    if (isMatch)
+                    yield return ("WrappedInt", WrappedInt);
+                }
+                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                {
+                    foreach (var toYield in WrappedInt.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
-                        yield return ("WrappedInt", WrappedInt);
-                    }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                    {
-                        foreach (var toYield in WrappedInt.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                        {
-                            yield return ("WrappedInt" + "." + toYield.propertyName, toYield.descendant);
-                        }
+                        yield return ("WrappedInt" + "." + toYield.propertyName, toYield.descendant);
                     }
                 }
             }
-            
             yield break;
         }
         

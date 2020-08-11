@@ -1096,30 +1096,22 @@ namespace LazinatorTests.Examples
                 }
             }
             
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _WrappedInt_Accessed) && false)
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
-                yield return ("WrappedInt", default);
-            }
-            else
-            {
-                if ((!exploreOnlyDeserializedChildren && true) || (true))
+                bool isMatch = matchCriterion == null || matchCriterion(WrappedInt);
+                bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedInt);
+                if (isMatch)
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(WrappedInt);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(WrappedInt);
-                    if (isMatch)
+                    yield return ("WrappedInt", WrappedInt);
+                }
+                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                {
+                    foreach (var toYield in WrappedInt.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
-                        yield return ("WrappedInt", WrappedInt);
-                    }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                    {
-                        foreach (var toYield in WrappedInt.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                        {
-                            yield return ("WrappedInt" + "." + toYield.propertyName, toYield.descendant);
-                        }
+                        yield return ("WrappedInt" + "." + toYield.propertyName, toYield.descendant);
                     }
                 }
             }
-            
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ExcludableChild_Accessed) && ExcludableChild == null)
             {
                 yield return ("ExcludableChild", default);

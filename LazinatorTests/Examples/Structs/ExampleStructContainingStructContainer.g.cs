@@ -304,30 +304,22 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Subcontainer_Accessed) && false)
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
-                yield return ("Subcontainer", default);
-            }
-            else
-            {
-                if ((!exploreOnlyDeserializedChildren && true) || (true))
+                bool isMatch = matchCriterion == null || matchCriterion(Subcontainer);
+                bool shouldExplore = exploreCriterion == null || exploreCriterion(Subcontainer);
+                if (isMatch)
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(Subcontainer);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(Subcontainer);
-                    if (isMatch)
+                    yield return ("Subcontainer", Subcontainer);
+                }
+                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                {
+                    foreach (var toYield in Subcontainer.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
-                        yield return ("Subcontainer", Subcontainer);
-                    }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                    {
-                        foreach (var toYield in Subcontainer.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                        {
-                            yield return ("Subcontainer" + "." + toYield.propertyName, toYield.descendant);
-                        }
+                        yield return ("Subcontainer" + "." + toYield.propertyName, toYield.descendant);
                     }
                 }
             }
-            
             yield break;
         }
         

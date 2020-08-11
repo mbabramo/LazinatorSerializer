@@ -415,30 +415,22 @@ namespace LazinatorTests.Examples
                 }
             }
             
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyExampleStructContainingClasses_Accessed) && false)
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
-                yield return ("MyExampleStructContainingClasses", default);
-            }
-            else
-            {
-                if ((!exploreOnlyDeserializedChildren && true) || (true))
+                bool isMatch = matchCriterion == null || matchCriterion(MyExampleStructContainingClasses);
+                bool shouldExplore = exploreCriterion == null || exploreCriterion(MyExampleStructContainingClasses);
+                if (isMatch)
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(MyExampleStructContainingClasses);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyExampleStructContainingClasses);
-                    if (isMatch)
+                    yield return ("MyExampleStructContainingClasses", MyExampleStructContainingClasses);
+                }
+                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                {
+                    foreach (var toYield in MyExampleStructContainingClasses.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
-                        yield return ("MyExampleStructContainingClasses", MyExampleStructContainingClasses);
-                    }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                    {
-                        foreach (var toYield in MyExampleStructContainingClasses.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                        {
-                            yield return ("MyExampleStructContainingClasses" + "." + toYield.propertyName, toYield.descendant);
-                        }
+                        yield return ("MyExampleStructContainingClasses" + "." + toYield.propertyName, toYield.descendant);
                     }
                 }
             }
-            
             yield break;
         }
         

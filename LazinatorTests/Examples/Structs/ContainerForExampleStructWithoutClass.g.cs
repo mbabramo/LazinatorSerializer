@@ -445,30 +445,22 @@ namespace LazinatorTests.Examples.Structs
                 }
             }
             
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ExampleStructWithoutClass_Accessed) && false)
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
-                yield return ("ExampleStructWithoutClass", default);
-            }
-            else
-            {
-                if ((!exploreOnlyDeserializedChildren && true) || (true))
+                bool isMatch = matchCriterion == null || matchCriterion(ExampleStructWithoutClass);
+                bool shouldExplore = exploreCriterion == null || exploreCriterion(ExampleStructWithoutClass);
+                if (isMatch)
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(ExampleStructWithoutClass);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(ExampleStructWithoutClass);
-                    if (isMatch)
+                    yield return ("ExampleStructWithoutClass", ExampleStructWithoutClass);
+                }
+                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                {
+                    foreach (var toYield in ExampleStructWithoutClass.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
-                        yield return ("ExampleStructWithoutClass", ExampleStructWithoutClass);
-                    }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                    {
-                        foreach (var toYield in ExampleStructWithoutClass.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                        {
-                            yield return ("ExampleStructWithoutClass" + "." + toYield.propertyName, toYield.descendant);
-                        }
+                        yield return ("ExampleStructWithoutClass" + "." + toYield.propertyName, toYield.descendant);
                     }
                 }
             }
-            
             yield break;
         }
         

@@ -540,54 +540,38 @@ namespace LazinatorTests.Examples
         
         public virtual IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
         {
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _IntWrapper_Accessed) && false)
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
-                yield return ("IntWrapper", default);
-            }
-            else
-            {
-                if ((!exploreOnlyDeserializedChildren && true) || (true))
+                bool isMatch = matchCriterion == null || matchCriterion(IntWrapper);
+                bool shouldExplore = exploreCriterion == null || exploreCriterion(IntWrapper);
+                if (isMatch)
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(IntWrapper);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(IntWrapper);
-                    if (isMatch)
+                    yield return ("IntWrapper", IntWrapper);
+                }
+                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                {
+                    foreach (var toYield in IntWrapper.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
-                        yield return ("IntWrapper", IntWrapper);
-                    }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                    {
-                        foreach (var toYield in IntWrapper.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                        {
-                            yield return ("IntWrapper" + "." + toYield.propertyName, toYield.descendant);
-                        }
+                        yield return ("IntWrapper" + "." + toYield.propertyName, toYield.descendant);
                     }
                 }
             }
-            
-            if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyExampleStructContainingClasses_Accessed) && false)
+            if ((!exploreOnlyDeserializedChildren && true) || (true))
             {
-                yield return ("MyExampleStructContainingClasses", default);
-            }
-            else
-            {
-                if ((!exploreOnlyDeserializedChildren && true) || (true))
+                bool isMatch = matchCriterion == null || matchCriterion(MyExampleStructContainingClasses);
+                bool shouldExplore = exploreCriterion == null || exploreCriterion(MyExampleStructContainingClasses);
+                if (isMatch)
                 {
-                    bool isMatch = matchCriterion == null || matchCriterion(MyExampleStructContainingClasses);
-                    bool shouldExplore = exploreCriterion == null || exploreCriterion(MyExampleStructContainingClasses);
-                    if (isMatch)
+                    yield return ("MyExampleStructContainingClasses", MyExampleStructContainingClasses);
+                }
+                if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
+                {
+                    foreach (var toYield in MyExampleStructContainingClasses.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                     {
-                        yield return ("MyExampleStructContainingClasses", MyExampleStructContainingClasses);
-                    }
-                    if ((!stopExploringBelowMatch || !isMatch) && shouldExplore)
-                    {
-                        foreach (var toYield in MyExampleStructContainingClasses.EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
-                        {
-                            yield return ("MyExampleStructContainingClasses" + "." + toYield.propertyName, toYield.descendant);
-                        }
+                        yield return ("MyExampleStructContainingClasses" + "." + toYield.propertyName, toYield.descendant);
                     }
                 }
             }
-            
             yield break;
         }
         
