@@ -17,7 +17,7 @@ namespace LazinatorAnalyzer.Support
             ElseConsequent = elseConsequent;
         }
 
-        public ConditionalCodeGenerator(string antecedent, string consequent, string elseConsequent = null) => new ConditionalCodeGenerator(new ConditionCodeGenerator(antecedent), consequent, elseConsequent);
+        public ConditionalCodeGenerator(string antecedent, string consequent, string elseConsequent = null) : this(new ConditionCodeGenerator(antecedent), consequent, elseConsequent);
 
         public override string ToString()
         {
