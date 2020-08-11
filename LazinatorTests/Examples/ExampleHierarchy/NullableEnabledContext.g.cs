@@ -170,6 +170,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             if (LazinatorObjectBytes.Length == 0)
             {
+                _NonNullableClass = null;
             }
             else
             {
@@ -206,6 +207,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 
                 IsDirty = true;
                 DescendantIsDirty = true;
+                _NonNullableInterface = value;
                 _NonNullableInterface_Accessed = true;
             }
         }
@@ -214,6 +216,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             if (LazinatorObjectBytes.Length == 0)
             {
+                _NonNullableInterface = null;
             }
             else
             {
@@ -316,6 +319,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (NonNullableClass == null)
                 {
+                    typedClone.NonNullableClass = null;
                 }
                 else
                 {
@@ -326,6 +330,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (NonNullableInterface == null)
                 {
+                    typedClone.NonNullableInterface = null;
                 }
                 else
                 {
