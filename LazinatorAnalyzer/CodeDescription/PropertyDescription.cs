@@ -1076,7 +1076,7 @@ namespace Lazinator.CodeDescription
             }
 
             sb.Append($@"
-                {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName} _{PropertyName};
+                {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName}{IIF(PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface, $"?")} _{PropertyName};
         {GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
         {{{StepThroughPropertiesString}
             get
@@ -1087,7 +1087,7 @@ namespace Lazinator.CodeDescription
                 }}{IIF(IsNonLazinatorType && !TrackDirtinessNonSerialized && (!RoslynHelpers.IsReadOnlyStruct(Symbol) || ContainsLazinatorInnerProperty || ContainsOpenGenericInnerProperty), $@"
                     IsDirty = true;")} {IIF(CodeOnAccessed != "", $@"
                 {CodeOnAccessed}")}
-                return _{PropertyName}{IIF(PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface, $" ?? ThrowHelper.ThrowUnsetNonnullableLazinatorException()")};
+                return _{PropertyName}{IIF(PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface, $" ?? throw new UnsetNonnullableLazinatorException()")};
             }}{StepThroughPropertiesString}
             set
             {{{propertyTypeDependentSet}{RepeatedCodeExecution}
