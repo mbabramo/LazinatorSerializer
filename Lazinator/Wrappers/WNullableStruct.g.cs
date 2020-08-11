@@ -457,7 +457,7 @@ namespace Lazinator.Wrappers
             // write properties
             WriteUncompressedPrimitives.WriteBool(ref writer, _HasValue);
             startOfObjectPosition = writer.Position;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)  
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_NonNullValue_Accessed)
                 {
@@ -468,6 +468,7 @@ namespace Lazinator.Wrappers
                 var byteLengthCopy = _NonNullValue_ByteLength;
                 WriteChild(ref writer, ref _NonNullValue, includeChildrenMode, _NonNullValue_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, true, false, null), verifyCleanness, updateStoredBuffer, false, true, null);
             }
+            
             if (updateStoredBuffer)
             {
                 _NonNullValue_ByteIndex = startOfObjectPosition - startPosition;
