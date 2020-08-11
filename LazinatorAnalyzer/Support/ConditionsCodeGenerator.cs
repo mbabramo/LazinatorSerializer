@@ -6,13 +6,14 @@ namespace LazinatorAnalyzer.Support
     public class ConditionsCodeGenerator : ConditionCodeGenerator
     {
         public List<ConditionCodeGenerator> Items;
-        public bool And;
-        string Connector => And ? " && " : " || ";
+        public bool CombineWithAnd;
+        public bool CombineWithOr => !CombineWithAnd;
+        string Connector => CombineWithAnd ? " && " : " || ";
 
         public ConditionsCodeGenerator(List<ConditionCodeGenerator> items, bool and) : base(null)
         {
             Items = items;
-            And = and;
+            CombineWithAnd = and;
         }
 
         public static ConditionsCodeGenerator AndCombine(ConditionCodeGenerator condition1, ConditionCodeGenerator condition2) => new ConditionsCodeGenerator(new List<ConditionCodeGenerator>() { condition1, condition2 }, true);
@@ -23,13 +24,18 @@ namespace LazinatorAnalyzer.Support
             List<string> itemsAsStrings = Items.Select(x =>
             {
                 string itemString = x.ToString();
-                if (x is ConditionsCodeGenerator y && y.And != And)
+                if (x is ConditionsCodeGenerator y && y.CombineWithAnd != CombineWithAnd)
                     itemString = $"({itemString})"; // for example, if this is A && B && C but B is D || E, then we have A && (D || E) && C
                 return itemString;
-            }).ToList();
-            if (And && itemsAsStrings.Any(x => (x == "false" || x == "(false)")))
+            })
+                .Where(x => !(CombineWithAnd && (x == "true" || x == "(true)")))
+                .Where(x => !(CombineWithOr && (x == "false" || x == "(false)")))
+                .ToList();
+            if (!itemsAsStrings.Any())
+                return "true";
+            if (CombineWithAnd && itemsAsStrings.Any(x => (x == "false" || x == "(false)")))
                 return "false";
-            if (!And /* i.e., OR */ && itemsAsStrings.Any(x => (x == "true" || x == "(true)")))
+            if (CombineWithOr && itemsAsStrings.Any(x => (x == "true" || x == "(true)")))
                 return "true";
             return string.Join(Connector, itemsAsStrings);
         }
