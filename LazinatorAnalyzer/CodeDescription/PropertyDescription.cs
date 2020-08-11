@@ -1475,11 +1475,7 @@ namespace Lazinator.CodeDescription
 
         private string EnsureDeserialized()
         {
-            return $@"if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_{PropertyName}_Accessed)
-                                {{
-                                   var deserialized = {PropertyName};
-                                }}
-                    ";
+            return $@"{new ConditionalCodeGenerator($"(includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_{PropertyName}_Accessed", $"var deserialized = {PropertyName};")}";
         }
 
         public void AppendCopyPropertyToClone(CodeStringBuilder sb, string nameOfCloneVariable)
