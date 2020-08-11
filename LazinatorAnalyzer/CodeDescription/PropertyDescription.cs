@@ -1468,10 +1468,7 @@ namespace Lazinator.CodeDescription
                             ")}WriteChild(ref writer, ref {propertyNameOrCopy}, includeChildrenMode, _{PropertyName}_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy{ChildSliceEndString}), verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, null);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
                                 _{PropertyName} = copy;")}";
                 withInclusionConditional =
-                    $@"{WriteInclusionConditional} 
-                        {{
-                            {EnsureDeserialized()}{lazinatorNullableStructNullCheck(mainWriteString)}
-                        }}";
+                    $@"{new ConditionalCodeGenerator(WriteInclusionConditional, $"{EnsureDeserialized()}{lazinatorNullableStructNullCheck(mainWriteString)}")}";
             }
             sb.AppendLine(withInclusionConditional);
         }
