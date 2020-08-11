@@ -926,32 +926,23 @@ namespace Lazinator.CodeDescription
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator && x.PlaceholderMemoryWriteMethod == null))
             {
                 string propertyName = property.PropertyName;
-                sb.Append($@"if ({getAntecedent(property)})
-                        {{
-                            {IIF(property.GetNonNullCheck(false) == "true", $@"var deserialized = {propertyName};
-                            ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) _{propertyName}{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable, ".Value")}.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
-                        }}
-");
+                sb.Append(new ConditionalCodeGenerator(getAntecedent(property),
+                        $@"{IIF(property.GetNonNullCheck(false) == "true", $@"var deserialized = {propertyName};
+                            ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) _{propertyName}{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable, ".Value")}.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);").ToString());
             }
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && !x.IsMemoryOrSpan))
             {
                 string propertyName = property.PropertyName;
-                sb.Append($@"if ({getAntecedent(property)})
-                        {{
-                            {IIF(property.GetNonNullCheck(false) == "true", $@"var deserialized = {propertyName};
-                            ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
-                        }}
-");
+                sb.Append(new ConditionalCodeGenerator(getAntecedent(property),
+                        $@"{IIF(property.GetNonNullCheck(false) == "true", $@"var deserialized = {propertyName};
+                            ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);").ToString());
             }
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsNonLazinatorTypeWithoutInterchange && x.PlaceholderMemoryWriteMethod == null))
             {
                 string propertyName = property.PropertyName;
-                sb.Append($@"if ({getAntecedent(property)})
-                        {{
-                            {IIF(property.GetNonNullCheck(false) == "true", $@"var deserialized = {propertyName};
-                            ")}_{propertyName} = {property.DirectConverterTypeNamePrefix}CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
-                        }}
-");
+                sb.Append(new ConditionalCodeGenerator(getAntecedent(property),
+                        $@"{IIF(property.GetNonNullCheck(false) == "true", $@"var deserialized = {propertyName};
+                            ")}_{propertyName} = {property.DirectConverterTypeNamePrefix}CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);").ToString());
             }
 
             foreach (var property in PropertiesToDefineThisLevel.Where(x => ((!x.IsPrimitive && !x.IsLazinator && !x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && !x.IsNonLazinatorTypeWithoutInterchange) || x.IsMemoryOrSpan) && x.PlaceholderMemoryWriteMethod == null))
