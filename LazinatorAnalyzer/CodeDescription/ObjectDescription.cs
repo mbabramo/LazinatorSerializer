@@ -928,25 +928,26 @@ namespace Lazinator.CodeDescription
                         "!exploreOnlyDeserializedChildren",
                         property.GetNonNullCheck(false)), 
                     property.GetNonNullCheck(true));
+            bool nonNullCheckDefinitelyTrue(PropertyDescription property) => property.GetNonNullCheck(false).ToString() == "true";
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator && x.PlaceholderMemoryWriteMethod == null))
             {
                 string propertyName = property.PropertyName;
                 sb.Append(new ConditionalCodeGenerator(getAntecedent(property),
-                        $@"{IIF(property.GetNonNullCheck(false) == "true", $@"var deserialized_{propertyName} = {propertyName};
+                        $@"{IIF(nonNullCheckDefinitelyTrue(property), $@"var deserialized_{propertyName} = {propertyName};
                             ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) _{propertyName}{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable, ".Value")}.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);").ToString());
             }
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && !x.IsMemoryOrSpan))
             {
                 string propertyName = property.PropertyName;
                 sb.Append(new ConditionalCodeGenerator(getAntecedent(property),
-                        $@"{IIF(property.GetNonNullCheck(false) == "true", $@"var deserialized_{propertyName} = {propertyName};
+                        $@"{IIF(nonNullCheckDefinitelyTrue(property), $@"var deserialized_{propertyName} = {propertyName};
                             ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);").ToString());
             }
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsNonLazinatorTypeWithoutInterchange && x.PlaceholderMemoryWriteMethod == null))
             {
                 string propertyName = property.PropertyName;
                 sb.Append(new ConditionalCodeGenerator(getAntecedent(property),
-                        $@"{IIF(property.GetNonNullCheck(false) == "true", $@"var deserialized_{propertyName} = {propertyName};
+                        $@"{IIF(nonNullCheckDefinitelyTrue(property), $@"var deserialized_{propertyName} = {propertyName};
                             ")}_{propertyName} = {property.DirectConverterTypeNamePrefix}CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);").ToString());
             }
 
@@ -1170,10 +1171,8 @@ namespace Lazinator.CodeDescription
                         {{");
             foreach (var property in PropertiesToDefineThisLevel.Where(x => !x.IsPrimitive && !x.IsNonLazinatorType && x.PlaceholderMemoryWriteMethod == null))
             {
-                sb.AppendLine($@"if ({property.GetNonNullCheck(true)})
-                {{
-                    _{property.PropertyName}{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable, ".Value")}.UpdateStoredBuffer(ref writer, startPosition + _{property.PropertyName}_ByteIndex{property.IncrementChildStartBySizeOfLength}, _{property.PropertyName}_ByteLength{property.DecrementTotalLengthBySizeOfLength}, IncludeChildrenMode.IncludeAllChildren, true);
-                }}");
+                sb.AppendLine(new ConditionalCodeGenerator(property.GetNonNullCheck(true),
+$@"{property.PropertyName}{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable, ".Value")}.UpdateStoredBuffer(ref writer, startPosition + _{property.PropertyName}_ByteIndex{property.IncrementChildStartBySizeOfLength}, _{property.PropertyName}_ByteLength{property.DecrementTotalLengthBySizeOfLength}, IncludeChildrenMode.IncludeAllChildren, true);").ToString());
             }
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && x.PlaceholderMemoryWriteMethod == null))
             {
@@ -1183,11 +1182,8 @@ namespace Lazinator.CodeDescription
                 else
                 {
                     string propertyName = property.PropertyName;
-                    sb.Append($@"if ({property.GetNonNullCheck(true)})
-                        {{
-                            _{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l.RemoveBufferInHierarchy(), true);
-                        }}
-");
+                    sb.Append(new ConditionalCodeGenerator(property.GetNonNullCheck(true),
+$@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l.RemoveBufferInHierarchy(), true);").ToString());
                 }
             }
             sb.AppendLine($@"}}

@@ -473,11 +473,11 @@ namespace Lazinator.CodeDescription
             return nullCheck;
         }
 
-        public string GetNonNullCheck(bool includeAccessedCheck, string propertyName = null)
+        public ConditionCodeGenerator GetNonNullCheck(bool includeAccessedCheck, string propertyName = null)
         {
             if (propertyName == null)
                 propertyName = PropertyName;
-            string nonNullCheck;
+            ConditionCodeGenerator nonNullCheck;
             if (includeAccessedCheck)
             {
                 if (IsMemoryOrSpan)
@@ -485,7 +485,7 @@ namespace Lazinator.CodeDescription
                 else if (IsDefinitelyStruct && PropertyType != LazinatorPropertyType.LazinatorStructNullable)
                     nonNullCheck = "true";
                 else
-                    nonNullCheck = $"(_{propertyName}_Accessed && _{propertyName} != null)";
+                    nonNullCheck = ConditionsCodeGenerator.AndCombine($"_{propertyName}_Accessed", $"_{propertyName} != null");
             }
             else
             {
@@ -1382,11 +1382,7 @@ namespace Lazinator.CodeDescription
                 string removeBuffers = "";
                 if (IsSupportedCollectionOrTuple && !IsSimpleListOrArray &&
                     InnerProperties.Any(x => x.IsPossiblyStruct))
-                    removeBuffers = $@"
-                        if ({GetNonNullCheck(true)})
-                        {{
-                            _{PropertyName} = ({AppropriatelyQualifiedTypeName}) CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}(_{PropertyName}, l => l.RemoveBufferInHierarchy(), true);
-                        }}";
+                    removeBuffers = new ConditionalCodeGenerator(GetNonNullCheck(true), $" _{PropertyName} = ({AppropriatelyQualifiedTypeName}) CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}(_{PropertyName}, l => l.RemoveBufferInHierarchy(), true);").ToString();
                 sb.AppendLine($@"if (updateStoredBuffer)
                                 {{
                                     _{PropertyName}_ByteIndex = startOfObjectPosition - startPosition;{removeBuffers}
