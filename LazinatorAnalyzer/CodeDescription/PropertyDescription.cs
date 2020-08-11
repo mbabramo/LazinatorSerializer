@@ -198,10 +198,7 @@ namespace Lazinator.CodeDescription
             DerivationKeyword = derivationKeyword;
             PropertyAccessibility = propertyAccessibility;
             IsLast = isLast;
-            if (PropertyName.Contains("NonNullableClass") || PropertyName.Contains("ExplicitlyNullable"))
-            {
-                var DEBUG = 0;
-            }
+
             ParseAccessibilityAttribute();
             if (propertySymbol.GetMethod == null)
                 throw new LazinatorCodeGenException($"ILazinator interface property {PropertyName} in {ContainingObjectDescription?.NameIncludingGenerics} must include a get method.");
@@ -346,12 +343,6 @@ namespace Lazinator.CodeDescription
         private void SetPropertyType(ITypeSymbol typeSymbol)
         {
             INamedTypeSymbol namedTypeSymbol = typeSymbol as INamedTypeSymbol;
-
-
-            if (typeSymbol.ToString().Contains("ExampleChild"))
-            {
-                var DEBUG = 0;
-            }
 
             if (namedTypeSymbol == null && typeSymbol.TypeKind == TypeKind.TypeParameter)
             {
@@ -1897,10 +1888,6 @@ namespace Lazinator.CodeDescription
 
             PropertyDescription innerProperty = InnerProperties[0];
             CheckForLazinatorInNonLazinator(innerProperty);
-            if (AppropriatelyQualifiedTypeName.Contains("List<ExampleChild>"))
-            {
-                var DEBUG = 0;
-            }
             string readCommand = innerProperty.GetSupportedCollectionReadCommands(this);
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
@@ -1988,10 +1975,6 @@ namespace Lazinator.CodeDescription
             string collectionAddItem, collectionAddNull;
             GetSupportedCollectionAddCommands(outerProperty, out collectionAddItem, out collectionAddNull);
 
-            if (AppropriatelyQualifiedTypeName.Contains("List<ExampleChild>"))
-            {
-                var DEBUG = 0;
-            }
             if (IsPrimitive)
                 return ($@"
                         {AppropriatelyQualifiedTypeName} item = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref bytesSoFar);
@@ -2393,10 +2376,6 @@ namespace Lazinator.CodeDescription
                 return;
             alreadyGenerated.Add(AppropriatelyQualifiedTypeNameEncodable);
 
-            if (AppropriatelyQualifiedTypeName.Contains("List<ExampleChild>"))
-            {
-                var DEBUG = 0;
-            }
             // Note: The interchange type must include a parameterless constructor. We can't use the LazinatorConstructorEnum approach here, because we can't determine whether the interchange type, which we know only by string, is a struct (in which case there would be no such constructor).
             sb.Append($@"
                    private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
