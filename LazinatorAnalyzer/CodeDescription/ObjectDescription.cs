@@ -922,7 +922,12 @@ namespace Lazinator.CodeDescription
                     {{
                         {IIF(IsDerivedFromNonAbstractLazinator, $@"base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, false);
                         ")}");
-            string getAntecedent(PropertyDescription property) => $"(!exploreOnlyDeserializedChildren && {property.GetNonNullCheck(false)}) || ({property.GetNonNullCheck(true)})";
+            ConditionCodeGenerator getAntecedent(PropertyDescription property) => 
+                ConditionsCodeGenerator.OrCombine(
+                    ConditionsCodeGenerator.AndCombine(
+                        "!exploreOnlyDeserializedChildren",
+                        property.GetNonNullCheck(false)), 
+                    property.GetNonNullCheck(true));
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator && x.PlaceholderMemoryWriteMethod == null))
             {
                 string propertyName = property.PropertyName;
