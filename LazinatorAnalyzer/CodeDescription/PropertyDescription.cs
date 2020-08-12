@@ -1095,7 +1095,7 @@ namespace Lazinator.CodeDescription
                 var DEBUG = 0;
             }
             sb.Append($@"
-                {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName}{IIF(PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface, $"?")} _{PropertyName};
+                {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName}{IIF(PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface || (IsSupportedCollectionOrTuple && !Nullable && NullableModeEnabled), $"?")} _{PropertyName};
         {GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
         {{{StepThroughPropertiesString}
             get
