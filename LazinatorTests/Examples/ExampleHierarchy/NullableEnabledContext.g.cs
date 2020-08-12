@@ -721,7 +721,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             if ((!exploreOnlyDeserializedChildren && NonNullableListOfNonNullables != null) || (_NonNullableListOfNonNullables_Accessed && _NonNullableListOfNonNullables != null))
             {
-                _NonNullableListOfNonNullables = (List<Example>) CloneOrChange_List_GExample_g(_NonNullableListOfNonNullables, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
+                _NonNullableListOfNonNullables = (List<Example>) CloneOrChange_List_GExample_g(_NonNullableListOfNonNullables, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             if ((!exploreOnlyDeserializedChildren && NonNullableListOfNullables != null) || (_NonNullableListOfNullables_Accessed && _NonNullableListOfNullables != null))
             {
@@ -729,7 +729,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             if ((!exploreOnlyDeserializedChildren && NullableListOfNonNullables != null) || (_NullableListOfNonNullables_Accessed && _NullableListOfNonNullables != null))
             {
-                _NullableListOfNonNullables = (List<Example>?) CloneOrChange_List_GExample_g_C63(_NullableListOfNonNullables, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
+                _NullableListOfNonNullables = (List<Example>?) CloneOrChange_List_GExample_g_C63(_NullableListOfNonNullables, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             if ((!exploreOnlyDeserializedChildren && NullableListOfNullables != null) || (_NullableListOfNullables_Accessed && _NullableListOfNullables != null))
             {

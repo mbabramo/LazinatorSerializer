@@ -939,9 +939,13 @@ namespace Lazinator.CodeDescription
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && !x.IsMemoryOrSpan))
             {
                 string propertyName = property.PropertyName;
+
+                string qIfAppropriate = "?";
+                if (NullableModeEnabled && property.InnerProperties?[0] is PropertyDescription innerProperty && innerProperty.Nullable == false)
+                    qIfAppropriate = "";
                 sb.Append(new ConditionalCodeGenerator(getAntecedent(property),
                         $@"{IIF(nonNullCheckDefinitelyTrue(property), $@"var deserialized_{propertyName} = {propertyName};
-                            ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);").ToString());
+                            ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l{qIfAppropriate}.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);").ToString());
             }
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsNonLazinatorTypeWithoutInterchange && x.PlaceholderMemoryWriteMethod == null))
             {
