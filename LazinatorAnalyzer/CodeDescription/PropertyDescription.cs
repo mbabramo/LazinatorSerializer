@@ -466,7 +466,9 @@ namespace Lazinator.CodeDescription
         {
             string nullCheck;
             if (IsMemoryOrSpan)
-                nullCheck = $"{propertyName}.Length == 0"; // use as equivalent of null
+            {
+                nullCheck = $"{propertyName}{IIF(Nullable, ".Value")}.Length == 0"; // use as equivalent of null
+            }
             else if (IsDefinitelyStruct && PropertyType != LazinatorPropertyType.LazinatorStructNullable)
                 nullCheck = $"false";
             else // could be open generic or class -- either way, what we're interested in is whether this is dereferenceable
