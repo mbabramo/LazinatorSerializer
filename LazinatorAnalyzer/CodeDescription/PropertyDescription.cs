@@ -1099,7 +1099,7 @@ namespace Lazinator.CodeDescription
                 var DEBUG = 0;
             }
             sb.Append($@"
-                {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName}{IIF(PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface || (IsSupportedCollectionOrTuple && !Nullable && NullableModeEnabled), $"?")} _{PropertyName};
+                {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName}{IIF(PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface || (IsSupportedCollectionOrTuple && !Nullable && NullableModeEnabled), $"?")} _{PropertyName}; // DEBUG NULLABLE: {Nullable}
         {GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
         {{{StepThroughPropertiesString}
             get
