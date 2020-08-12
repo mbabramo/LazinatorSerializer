@@ -1429,7 +1429,7 @@ namespace Lazinator.CodeDescription
                     getChildSliceForFieldFn: () => {ChildSliceString},
                     verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                     binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-                        {DirectConverterTypeNamePrefix}{writeMethodName}(ref w, {BackingFieldString},
+                        {DirectConverterTypeNamePrefix}{writeMethodName}(ref w, {BackingFieldString}{IIF(NullableModeEnabled && !Nullable, "?? throw new Exception() /* DEBUG */")},
                             includeChildrenMode, v, updateStoredBuffer));");
 
                 }

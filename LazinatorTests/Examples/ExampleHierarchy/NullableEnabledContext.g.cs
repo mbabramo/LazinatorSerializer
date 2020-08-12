@@ -220,7 +220,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         
-        protected List<Example> _NonNullableListOfNonNullables;
+        protected List<Example>? _NonNullableListOfNonNullables;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public List<Example> NonNullableListOfNonNullables
         {
@@ -250,7 +250,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         
-        protected List<Example?> _NonNullableListOfNullables;
+        protected List<Example?>? _NonNullableListOfNullables;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public List<Example?> NonNullableListOfNullables
         {
@@ -971,7 +971,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _NonNullableListOfNonNullables_ByteIndex, _NonNullableListOfNonNullables_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_List_GExample_g(ref w, _NonNullableListOfNonNullables,
+            ConvertToBytes_List_GExample_g(ref w, _NonNullableListOfNonNullables ?? throw new Exception(),
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
