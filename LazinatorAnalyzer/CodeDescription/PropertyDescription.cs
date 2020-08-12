@@ -2174,16 +2174,14 @@ namespace Lazinator.CodeDescription
                 return;
             alreadyGenerated.Add(AppropriatelyQualifiedTypeNameEncodable);
 
-            Debug;
-
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
                     {{
-                        if (storage.Length == 0)
+                        {IIF(Nullable, $@"if (storage.Length == 0)
                         {{
                             return default;
                         }}
-                        ReadOnlySpan<byte> span = storage.ReadOnlySpan;
+                        ")}ReadOnlySpan<byte> span = storage.ReadOnlySpan;
 
                         int bytesSoFar = 0;
                         ");
@@ -2375,19 +2373,12 @@ namespace Lazinator.CodeDescription
                 return;
             alreadyGenerated.Add(AppropriatelyQualifiedTypeNameEncodable);
 
-            Debug;
-
             // Note: The interchange type must include a parameterless constructor. We can't use the LazinatorConstructorEnum approach here, because we can't determine whether the interchange type, which we know only by string, is a struct (in which case there would be no such constructor).
             sb.Append($@"
                    private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
                         {{
-                            if (storage.Length == 0)
-                            {{
-                                return {DefaultExpression};
-                            }}
-                            {InterchangeTypeName} interchange = new {InterchangeTypeNameWithoutNullabilityIndicator}();
-                            interchange.DeserializeLazinator(storage);
-                            return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}(false);
+                            {ConditionalCodeGenerator.ConsequentPossiblyOnlyIf(Nullable, "storage.Length == 0", $"return {DefaultExpression};", $@"{InterchangeTypeName} interchange = new {InterchangeTypeNameWithoutNullabilityIndicator}();
+                            interchange.DeserializeLazinator(storage);")}return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}(false);
                         }}
 
                         private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer,
