@@ -1078,6 +1078,10 @@ namespace Lazinator.CodeDescription
 
             }
 
+            if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory)
+            {
+                var DEBUG = 0;
+            }
             sb.Append($@"
                 {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName}{IIF(PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface, $"?")} _{PropertyName};
         {GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
@@ -1104,7 +1108,7 @@ namespace Lazinator.CodeDescription
         {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed;")}
         private void Lazinate_{PropertyName}()
         {{
-            {ConditionalCodeGenerator.ConsequentPossiblyOnlyIf(Nullable, "LazinatorObjectBytes.Length == 0", createDefault, $@"LazinatorMemory childData = {ChildSliceString};
+            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable, "LazinatorObjectBytes.Length == 0", createDefault, $@"LazinatorMemory childData = {ChildSliceString};
                 {recreation}")}
             _{PropertyName}_Accessed = true;
         }}
@@ -1992,7 +1996,7 @@ namespace Lazinator.CodeDescription
                     if (Nullable)
                         return ($@"
                             int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
-                            {ConditionalCodeGenerator.ConsequentPossiblyOnlyIf(addNullPossible, "lengthCollectionMember == 0", collectionAddNull, $@"LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
+                            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(addNullPossible, "lengthCollectionMember == 0", collectionAddNull, $@"LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                                 var item = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);
                                 {collectionAddItem}")}bytesSoFar += lengthCollectionMember;");
                     else
@@ -2015,7 +2019,7 @@ namespace Lazinator.CodeDescription
                     if (Nullable)
                         return ($@"
                             {lengthCollectionMemberString}
-                            {ConditionalCodeGenerator.ConsequentPossiblyOnlyIf(addNullPossible, "lengthCollectionMember == 0", collectionAddNull, $@"LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
+                            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(addNullPossible, "lengthCollectionMember == 0", collectionAddNull, $@"LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                                 var item = DeserializationFactory.Instance.CreateBasedOnType<{AppropriatelyQualifiedTypeName}>(childData);
                                 {collectionAddItem}")}bytesSoFar += lengthCollectionMember;");
                     else
@@ -2377,7 +2381,7 @@ namespace Lazinator.CodeDescription
             sb.Append($@"
                    private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
                         {{
-                            {ConditionalCodeGenerator.ConsequentPossiblyOnlyIf(Nullable, "storage.Length == 0", $"return {DefaultExpression};", $@"{InterchangeTypeName} interchange = new {InterchangeTypeNameWithoutNullabilityIndicator}();
+                            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable, "storage.Length == 0", $"return {DefaultExpression};", $@"{InterchangeTypeName} interchange = new {InterchangeTypeNameWithoutNullabilityIndicator}();
                             interchange.DeserializeLazinator(storage);")}return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}(false);
                         }}
 
