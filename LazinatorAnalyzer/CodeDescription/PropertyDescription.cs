@@ -1941,13 +1941,13 @@ namespace Lazinator.CodeDescription
             {
                 if (ArrayRank == 1)
                 {
-                    string newExpression = ReverseBracketOrder($"{InnerProperties[0].AppropriatelyQualifiedTypeNameWithoutNullableIndicator}[collectionLength]");
+                    string newExpression = ReverseBracketOrder($"{InnerProperties[0].AppropriatelyQualifiedTypeName}[collectionLength]");
                     creationText = $"{AppropriatelyQualifiedTypeName} collection = {IIF(avoidCloningIfPossibleOption, $"avoidCloningIfPossible ? itemToClone : ")}new {newExpression};";
                 }
                 else
                 {
                     string innerArrayText = (String.Join(", ", Enumerable.Range(0, (int)ArrayRank).Select(j => $"collectionLength{j}")));
-                    string newExpression = ReverseBracketOrder($"{InnerProperties[0].AppropriatelyQualifiedTypeNameWithoutNullableIndicator}[{innerArrayText}]");
+                    string newExpression = ReverseBracketOrder($"{InnerProperties[0].AppropriatelyQualifiedTypeName}[{innerArrayText}]");
                     creationText = $"{AppropriatelyQualifiedTypeName} collection = new {newExpression};";
                 }
             }
