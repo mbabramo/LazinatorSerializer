@@ -1553,7 +1553,7 @@ namespace Lazinator.CodeDescription
             string source = (innerFullType == "byte") ? "itemToClone" : $"{GetSpanCast(innerFullType, true)}(itemToClone)";
             string toReturn = (innerFullType == "byte") ? "clone" : $"{GetSpanCast(innerFullType, false)}(clone)";
 
-            sb.AppendLine($@"private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<{ILazinatorString}, {ILazinatorString}>{QuestionMarkIfNullableModeEnabled} cloneOrChangeFunc, bool avoidCloningIfPossible)
+            sb.AppendLine($@"private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<{ILazinatorString}, {ILazinatorString}> cloneOrChangeFunc, bool avoidCloningIfPossible)
             {{
                 var clone = new {memoryOrSpanWord}<byte>(new byte[itemToClone.Length * sizeof({innerFullTypeSizeEquivalent})]);
                 {source}.CopyTo(clone);
@@ -1690,7 +1690,7 @@ namespace Lazinator.CodeDescription
                 forStatement = DeleteLines(forStatement, (int)ArrayRank); // we will define collectionLengths for each dimension in creation statement and don't need to redefine
 
             sb.Append($@"
-                    private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<{innerProperty.ILazinatorStringWithItemSpecificNullability}, {innerProperty.ILazinatorStringWithItemSpecificNullability}>{QuestionMarkIfNullableModeEnabled} cloneOrChangeFunc, bool avoidCloningIfPossible)
+                    private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<{innerProperty.ILazinatorStringWithItemSpecificNullability}, {innerProperty.ILazinatorStringWithItemSpecificNullability}> cloneOrChangeFunc, bool avoidCloningIfPossible)
                     {{
                         {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory ? "" : GetNullCheckIfThen("itemToClone", "return default;", ""))}
                         int collectionLength = itemToClone.{lengthWord};{IIF(ArrayRank > 1, () => "\n" + String.Join("\n", Enumerable.Range(0, ArrayRank.Value).Select(x => $"int collectionLength{x} = itemToClone.GetLength({x});")))}
@@ -2361,7 +2361,7 @@ namespace Lazinator.CodeDescription
                 );
             string creationText = SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? $"({innerClones})" : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}({innerClones})";
             sb.Append($@"
-                    private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToConvert, Func<{ILazinatorStringWithItemSpecificNullability}, {ILazinatorStringWithItemSpecificNullability}>{QuestionMarkIfNullableModeEnabled} cloneOrChangeFunc, bool avoidCloningIfPossible)
+                    private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToConvert, Func<{ILazinatorStringWithItemSpecificNullability}, {ILazinatorStringWithItemSpecificNullability}> cloneOrChangeFunc, bool avoidCloningIfPossible)
                     {{
                         {IIF(Nullable, GetNullCheckIfThen("itemToConvert", $@"return {DefaultExpression};", ""))}{IIF(Nullable,$@"
                             ")}return {creationText};
@@ -2401,7 +2401,7 @@ namespace Lazinator.CodeDescription
                         }}
 
 
-                        private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<{ILazinatorString}, {ILazinatorString}>{QuestionMarkIfNullableModeEnabled} cloneOrChangeFunc, bool avoidCloningIfPossible)
+                        private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<{ILazinatorString}, {ILazinatorString}> cloneOrChangeFunc, bool avoidCloningIfPossible)
                         {{
                             {GetNullCheckIfThen("itemToClone", $"return {DefaultExpression};", "")}
                             {InterchangeTypeName} interchange = new {InterchangeTypeNameWithoutNullabilityIndicator}(itemToClone);
