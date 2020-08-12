@@ -1694,7 +1694,7 @@ namespace Lazinator.CodeDescription
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<{innerProperty.ILazinatorStringWithItemSpecificNullability}, {innerProperty.ILazinatorStringWithItemSpecificNullability}> cloneOrChangeFunc, bool avoidCloningIfPossible)
                     {{
-                        {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory ? "" : GetNullCheckIfThen("itemToClone", "return default;", ""))}
+                        {(GetNullCheckIfThenButOnlyIfNullable(Nullable, "itemToClone", "return default;", ""))}
                         int collectionLength = itemToClone.{lengthWord};{IIF(ArrayRank > 1, () => "\n" + String.Join("\n", Enumerable.Range(0, ArrayRank.Value).Select(x => $"int collectionLength{x} = itemToClone.GetLength({x});")))}
                         {creationText}
                         {forStatement}

@@ -654,7 +654,6 @@ namespace LazinatorTests.Examples
             
             private static NonLazinatorInterchangeableStruct CloneOrChange_NonLazinatorInterchangeableStruct(NonLazinatorInterchangeableStruct itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
             {
-                
                 NonLazinatorInterchangeStruct interchange = new NonLazinatorInterchangeStruct(itemToClone);
                 return interchange.Interchange_NonLazinatorInterchangeableStruct(avoidCloningIfPossible ? false : true);
             }
