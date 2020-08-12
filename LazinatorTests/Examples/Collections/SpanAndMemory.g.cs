@@ -998,7 +998,6 @@ namespace LazinatorTests.Examples.Collections
         
         private static Memory<byte> CloneOrChange_Memory_Gbyte_g(Memory<byte> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            
             int collectionLength = itemToClone.Length;
             Memory<byte> collection = new Memory<byte>(new byte[collectionLength]);
             var collectionAsSpan = collection.Span;
@@ -1043,7 +1042,6 @@ namespace LazinatorTests.Examples.Collections
         
         private static Memory<int> CloneOrChange_Memory_Gint_g(Memory<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            
             int collectionLength = itemToClone.Length;
             Memory<int> collection = new Memory<int>(new int[collectionLength]);
             var collectionAsSpan = collection.Span;
@@ -1081,6 +1079,10 @@ namespace LazinatorTests.Examples.Collections
         
         private static Memory<byte>? CloneOrChange_Memory_Gbyte_g_C63(Memory<byte>? itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
+            if (itemToClone.Length == 0)
+            {
+                return default;
+            }
             
             int collectionLength = itemToClone.Value.Length;
             Memory<byte> collection = new Memory<byte>(new byte[collectionLength]);
@@ -1128,6 +1130,10 @@ namespace LazinatorTests.Examples.Collections
         
         private static Memory<int>? CloneOrChange_Memory_Gint_g_C63(Memory<int>? itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
+            if (itemToClone.Length == 0)
+            {
+                return default;
+            }
             
             int collectionLength = itemToClone.Value.Length;
             Memory<int> collection = new Memory<int>(new int[collectionLength]);
@@ -1175,6 +1181,10 @@ namespace LazinatorTests.Examples.Collections
         
         private static ReadOnlyMemory<int>? CloneOrChange_ReadOnlyMemory_Gint_g_C63(ReadOnlyMemory<int>? itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
+            if (itemToClone.Length == 0)
+            {
+                return default;
+            }
             
             int collectionLength = itemToClone.Value.Length;
             Memory<int> collection = new Memory<int>(new int[collectionLength]);
@@ -1201,7 +1211,6 @@ namespace LazinatorTests.Examples.Collections
         
         private static ReadOnlyMemory<byte> CloneOrChange_ReadOnlyMemory_Gbyte_g(ReadOnlyMemory<byte> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            
             int collectionLength = itemToClone.Length;
             Memory<byte> collection = new Memory<byte>(new byte[collectionLength]);
             var collectionAsSpan = collection.Span;
@@ -1246,7 +1255,6 @@ namespace LazinatorTests.Examples.Collections
         
         private static ReadOnlyMemory<char> CloneOrChange_ReadOnlyMemory_Gchar_g(ReadOnlyMemory<char> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            
             int collectionLength = itemToClone.Length;
             Memory<char> collection = new Memory<char>(new char[collectionLength]);
             var collectionAsSpan = collection.Span;
@@ -1291,7 +1299,6 @@ namespace LazinatorTests.Examples.Collections
         
         private static ReadOnlyMemory<int> CloneOrChange_ReadOnlyMemory_Gint_g(ReadOnlyMemory<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            
             int collectionLength = itemToClone.Length;
             Memory<int> collection = new Memory<int>(new int[collectionLength]);
             var collectionAsSpan = collection.Span;

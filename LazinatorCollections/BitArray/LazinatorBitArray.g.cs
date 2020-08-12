@@ -487,7 +487,6 @@ namespace LazinatorCollections.BitArray
         
         private static Memory<int> CloneOrChange_Memory_Gint_g(Memory<int> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            
             int collectionLength = itemToClone.Length;
             Memory<int> collection = new Memory<int>(new int[collectionLength]);
             var collectionAsSpan = collection.Span;

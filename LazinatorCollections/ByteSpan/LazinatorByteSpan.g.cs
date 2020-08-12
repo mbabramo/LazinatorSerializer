@@ -500,7 +500,6 @@ namespace LazinatorCollections.ByteSpan
         
         private static Memory<byte> CloneOrChange_Memory_Gbyte_g(Memory<byte> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            
             int collectionLength = itemToClone.Length;
             Memory<byte> collection = new Memory<byte>(new byte[collectionLength]);
             var collectionAsSpan = collection.Span;

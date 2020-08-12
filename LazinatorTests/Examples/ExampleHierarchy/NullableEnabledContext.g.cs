@@ -1074,11 +1074,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         private static List<Example> CloneOrChange_List_GExample_g(List<Example> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            if (itemToClone == null)
-            {
-                return default;
-            }
-            
             int collectionLength = itemToClone.Count;
             List<Example> collection = avoidCloningIfPossible ? itemToClone : new List<Example>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
@@ -1151,11 +1146,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         private static List<Example?> CloneOrChange_List_GExample_C63_g(List<Example?> itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            if (itemToClone == null)
-            {
-                return default;
-            }
-            
             int collectionLength = itemToClone.Count;
             List<Example?> collection = avoidCloningIfPossible ? itemToClone : new List<Example?>(collectionLength);
             int itemToCloneCount = itemToClone.Count;

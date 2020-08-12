@@ -486,7 +486,6 @@ namespace LazinatorCollections
         
         private static ReadOnlyMemory<byte> CloneOrChange_ReadOnlyMemory_Gbyte_g(ReadOnlyMemory<byte> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            
             int collectionLength = itemToClone.Length;
             Memory<byte> collection = new Memory<byte>(new byte[collectionLength]);
             var collectionAsSpan = collection.Span;
