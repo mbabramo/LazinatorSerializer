@@ -874,7 +874,7 @@ namespace Lazinator.CodeDescription
                 {
                     sb.Append($@"
 
-                        public override IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+                        public override IEnumerable<(string propertyName, object{QuestionMarkIfNullableModeEnabled} descendant)> EnumerateNonLazinatorProperties()
                         {{
                                 foreach (var inheritedYield in base.EnumerateNonLazinatorProperties())
                                 {{
@@ -888,7 +888,7 @@ namespace Lazinator.CodeDescription
                     sb.AppendLine(
                         $@"
 
-                        public {DerivationKeyword}IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+                        public {DerivationKeyword}IEnumerable<(string propertyName, object{QuestionMarkIfNullableModeEnabled} descendant)> EnumerateNonLazinatorProperties()
                         {{");
                 }
 
@@ -899,11 +899,11 @@ namespace Lazinator.CodeDescription
                         if (property.PropertyType == LazinatorPropertyType.SupportedCollection && property.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
                         {
                             // because ReadOnlySpan is a ref struct, we can't enumerate it.
-                            sb.Append($@"yield return (""{property.PropertyName}"", (object){property.PropertyName}.ToString());
+                            sb.Append($@"yield return (""{property.PropertyName}"", (object{QuestionMarkIfNullableModeEnabled}){property.PropertyName}.ToString());
                                     ");
                         }
                         else
-                            sb.Append($@"yield return (""{property.PropertyName}"", (object){property.PropertyName});
+                            sb.Append($@"yield return (""{property.PropertyName}"", (object{QuestionMarkIfNullableModeEnabled}){property.PropertyName});
                                     ");
                     }
                 }

@@ -692,12 +692,12 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         
-        public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
+        public virtual IEnumerable<(string propertyName, object? descendant)> EnumerateNonLazinatorProperties()
         {
-            yield return ("NonNullableListOfNonNullables", (object)NonNullableListOfNonNullables);
-            yield return ("NonNullableListOfNullables", (object)NonNullableListOfNullables);
-            yield return ("NullableListOfNonNullables", (object)NullableListOfNonNullables);
-            yield return ("NullableListOfNullables", (object)NullableListOfNullables);
+            yield return ("NonNullableListOfNonNullables", (object?)NonNullableListOfNonNullables);
+            yield return ("NonNullableListOfNullables", (object?)NonNullableListOfNullables);
+            yield return ("NullableListOfNonNullables", (object?)NullableListOfNonNullables);
+            yield return ("NullableListOfNullables", (object?)NullableListOfNullables);
             yield break;
         }
         

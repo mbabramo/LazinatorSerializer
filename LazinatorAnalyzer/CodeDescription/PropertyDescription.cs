@@ -447,7 +447,6 @@ namespace Lazinator.CodeDescription
 
         public string GetNullCheckPlusPrecedingConditionIfThen(ConditionCodeGenerator precedingNullCheckCondition, string propertyName, string consequent, string elseConsequent)
         {
-
             return new ConditionalCodeGenerator(new ConditionsCodeGenerator(new List<ConditionCodeGenerator>() { precedingNullCheckCondition, new ConditionCodeGenerator(GetNullCheck(propertyName)) }, true), consequent, elseConsequent).ToString();
         }
 
