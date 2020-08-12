@@ -1902,7 +1902,7 @@ namespace Lazinator.CodeDescription
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
                     {{
-                        {IIF(Nullable && !IsSupportedTupleType, $@"if (storage.Length == 0)
+                        {IIF(Nullable || IsSupportedTupleType, $@"if (storage.Length == 0)
                         {{
                             return {DefaultExpression};
                         }}
@@ -2183,7 +2183,7 @@ namespace Lazinator.CodeDescription
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
                     {{
-                        {IIF(Nullable, $@"if (storage.Length == 0)
+                        {IIF(Nullable || IsSupportedTupleType, $@"if (storage.Length == 0)
                         {{
                             return default;
                         }}
