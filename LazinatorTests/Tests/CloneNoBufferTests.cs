@@ -526,7 +526,7 @@ namespace LazinatorTests.Tests
         }
 
 
-        NullableEnabledContext GetNullableEnabledContext()
+        public static NullableEnabledContext GetNullableEnabledContext()
         {
             return new NullableEnabledContext()
             {

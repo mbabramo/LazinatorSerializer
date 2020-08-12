@@ -257,6 +257,12 @@ namespace LazinatorTests.Tests
             e.MyString.Should().Be("changed string");
         }
 
+        [Fact]
+        public void CloneLazinatorTyped_NullEnabledContext()
+        {
+            var nec = CloneNoBufferTests.GetNullableEnabledContext();
+            var result = nec.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren);
+        }
 
     }
 }
