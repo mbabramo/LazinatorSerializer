@@ -971,7 +971,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _NonNullableListOfNonNullables_ByteIndex, _NonNullableListOfNonNullables_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_List_GExample_g(ref w, _NonNullableListOfNonNullables?? throw new Exception() /* DEBUG */,
+            ConvertToBytes_List_GExample_g(ref w, _NonNullableListOfNonNullables ?? throw new UnsetNonnullableLazinatorException(),
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -988,7 +988,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _NonNullableListOfNullables_ByteIndex, _NonNullableListOfNullables_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_List_GExample_C63_g(ref w, _NonNullableListOfNullables?? throw new Exception() /* DEBUG */,
+            ConvertToBytes_List_GExample_C63_g(ref w, _NonNullableListOfNullables ?? throw new UnsetNonnullableLazinatorException(),
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
