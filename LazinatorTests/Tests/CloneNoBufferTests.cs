@@ -525,43 +525,39 @@ namespace LazinatorTests.Tests
             VerifyCloningEquivalence(() => GetObject());
         }
 
+
+        NullableEnabledContext GetNullableEnabledContext()
+        {
+            return new NullableEnabledContext()
+            {
+                ExplicitlyNullable = new Example(),
+                ExplicitlyNullableInterface = new Example(),
+                NonNullableClass = new Example(),
+                NonNullableInterface = new Example(),
+                NonNullableListOfNonNullables = new List<Example>() { new Example() },
+                NullableListOfNonNullables = new List<Example>() { new Example(), new Example() },
+                NonNullableListOfNullables = new List<Example>() { new Example(), new Example() },
+                NullableListOfNullables = new List<Example>() { new Example(), new Example() },
+            };
+        }
+
         [Fact]
         public void CloneWithoutBuffer_NullableEnabledContext()
         {
-            NullableEnabledContext GetObject()
-            {
-                return new NullableEnabledContext()
-                {
-                    ExplicitlyNullable = new Example(),
-                    ExplicitlyNullableInterface = new Example(),
-                    NonNullableClass = new Example(),
-                    NonNullableInterface = new Example()
-                };
-            }
 
-            VerifyCloningEquivalence(GetObject(), IncludeChildrenMode.IncludeAllChildren);
-            VerifyCloningEquivalence(GetObject(), IncludeChildrenMode.ExcludeOnlyExcludableChildren);
+            VerifyCloningEquivalence(GetNullableEnabledContext(), IncludeChildrenMode.IncludeAllChildren);
+            VerifyCloningEquivalence(GetNullableEnabledContext(), IncludeChildrenMode.ExcludeOnlyExcludableChildren);
         }
 
         [Fact]
         public void CloneWithoutBuffer_LazinatorList_NullableEnabledContext()
         {
-            NullableEnabledContext GetObject()
-            {
-                return new NullableEnabledContext()
-                {
-                    ExplicitlyNullable = new Example(),
-                    ExplicitlyNullableInterface = new Example(),
-                    NonNullableClass = new Example(),
-                    NonNullableInterface = new Example()
-                };
-            }
 
-            VerifyCloningEquivalence(() => new LazinatorList<NullableEnabledContext>() { GetObject(), null, GetObject() });
+            VerifyCloningEquivalence(() => new LazinatorList<NullableEnabledContext>() { GetNullableEnabledContext(), null, GetNullableEnabledContext() });
 
 #nullable enable
-            VerifyCloningEquivalence(() => new LazinatorList<NullableEnabledContext>() { GetObject(), GetObject() });
-            var list = new LazinatorList<NullableEnabledContext>() { GetObject(), GetObject() };
+            VerifyCloningEquivalence(() => new LazinatorList<NullableEnabledContext>() { GetNullableEnabledContext(), GetNullableEnabledContext() });
+            var list = new LazinatorList<NullableEnabledContext>() { GetNullableEnabledContext(), GetNullableEnabledContext() };
             NullableEnabledContext item = list.First(); // Note that we are guaranteed that this will produce a nonnullable item.
 #nullable disable
         }
@@ -569,20 +565,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void CloneWithoutBuffer_NullableEnabledContext_ThrowsAfterExcludingThenAccessingNonNullable()
         {
-            NullableEnabledContext GetObject()
-            {
-                return new NullableEnabledContext()
-                {
-                    ExplicitlyNullable = new Example(),
-                    ExplicitlyNullableInterface = new Example(),
-                    NonNullableClass = new Example(),
-                    NonNullableInterface = new Example()
-                };
-            }
-
-            Action a = () => { VerifyCloningEquivalence(GetObject(), IncludeChildrenMode.ExcludeAllChildren); };
+            Action a = () => { VerifyCloningEquivalence(GetNullableEnabledContext(), IncludeChildrenMode.ExcludeAllChildren); };
             a.Should().Throw<UnsetNonnullableLazinatorException>();
-            a = () => { VerifyCloningEquivalence(GetObject(), IncludeChildrenMode.IncludeOnlyIncludableChildren); };
+            a = () => { VerifyCloningEquivalence(GetNullableEnabledContext(), IncludeChildrenMode.IncludeOnlyIncludableChildren); };
             a.Should().Throw<UnsetNonnullableLazinatorException>();
         }
 
@@ -596,7 +581,11 @@ namespace LazinatorTests.Tests
                     ExplicitlyNullable = null,
                     ExplicitlyNullableInterface = null,
                     NonNullableClass = new Example(),
-                    NonNullableInterface = new Example()
+                    NonNullableInterface = new Example(),
+                    NonNullableListOfNonNullables = new List<Example>() { new Example() },
+                    NullableListOfNonNullables = null,
+                    NonNullableListOfNullables = new List<Example>() { new Example(), new Example() },
+                    NullableListOfNullables = null,
                 };
             }
 
@@ -640,22 +629,11 @@ namespace LazinatorTests.Tests
         [Fact]
         public void CloneWithoutBuffer_DotNetListNullableEnabledContext()
         {
-            NullableEnabledContext GetObject()
-            {
-                return new NullableEnabledContext()
-                {
-                    ExplicitlyNullable = new Example(),
-                    ExplicitlyNullableInterface = new Example(),
-                    NonNullableClass = new Example(),
-                    NonNullableInterface = new Example()
-                };
-            }
-
             DotNetList_Values GetList()
             {
                 return new DotNetList_Values()
                 {
-                    MyListNullableEnabledContext = new List<NullableEnabledContext>() { GetObject(), null, GetObject() }
+                    MyListNullableEnabledContext = new List<NullableEnabledContext>() { GetNullableEnabledContext(), null, GetNullableEnabledContext() }
                 };
             };
 
