@@ -712,6 +712,10 @@ namespace Lazinator.CodeDescription
 
         private void CheckSupportedTuples(string nameWithoutArity)
         {
+            if (PropertyName?.Contains("ValueTupleWithNonNullable") ?? false)
+            {
+                var DEBUG = 0;
+            }
             if (nameWithoutArity == "ValueTuple")
             {
                 PropertyType = LazinatorPropertyType.SupportedTuple;
