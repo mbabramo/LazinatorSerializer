@@ -1923,16 +1923,16 @@ namespace Lazinator.CodeDescription
                 SupportedCollectionType == LazinatorSupportedCollectionType.Queue ||
                 SupportedCollectionType == LazinatorSupportedCollectionType.Stack)
             {
-                creationText = $@"{AppropriatelyQualifiedTypeName} collection = {IIF(avoidCloningIfPossibleOption, $"avoidCloningIfPossible ? itemToClone : ")}new {AppropriatelyQualifiedTypeName}(collectionLength);";
+                creationText = $@"{AppropriatelyQualifiedTypeName} collection = {IIF(avoidCloningIfPossibleOption, $"avoidCloningIfPossible ? itemToClone : ")}new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}(collectionLength);";
             }
             else if (SupportedCollectionType == LazinatorSupportedCollectionType.SortedDictionary || SupportedCollectionType == LazinatorSupportedCollectionType.SortedSet || SupportedCollectionType == LazinatorSupportedCollectionType.LinkedList)
             {
-                creationText = $"{AppropriatelyQualifiedTypeName} collection = {IIF(avoidCloningIfPossibleOption, $"avoidCloningIfPossible ? itemToClone : ")}new {AppropriatelyQualifiedTypeName}();"; // can't initialize collection length
+                creationText = $"{AppropriatelyQualifiedTypeName} collection = {IIF(avoidCloningIfPossibleOption, $"avoidCloningIfPossible ? itemToClone : ")}new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}();"; // can't initialize collection length
             }
             else if (IsMemoryOrSpan)
             {
                 creationText =
-                    $@"{AppropriatelyQualifiedTypeNameWithoutNullableIndicator} collection = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}(new {InnerProperties[0].AppropriatelyQualifiedTypeName}[collectionLength]);
+                    $@"{AppropriatelyQualifiedTypeNameWithoutNullableIndicator} collection = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}(new {InnerProperties[0].AppropriatelyQualifiedTypeNameWithoutNullableIndicator}[collectionLength]);
                             var collectionAsSpan = collection.Span;"; // for now, create array on the heap
                 if (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory)
                     creationText = creationText.Replace("ReadOnlyMemory<", "Memory<"); // we must use Memory here so that it can be assigned to
@@ -1941,7 +1941,7 @@ namespace Lazinator.CodeDescription
             {
                 if (ArrayRank == 1)
                 {
-                    string newExpression = ReverseBracketOrder($"{InnerProperties[0].AppropriatelyQualifiedTypeName}[collectionLength]");
+                    string newExpression = ReverseBracketOrder($"{InnerProperties[0].AppropriatelyQualifiedTypeNameWithoutNullableIndicator}[collectionLength]");
                     creationText = $"{AppropriatelyQualifiedTypeName} collection = {IIF(avoidCloningIfPossibleOption, $"avoidCloningIfPossible ? itemToClone : ")}new {newExpression};";
                 }
                 else
@@ -2269,7 +2269,7 @@ namespace Lazinator.CodeDescription
                         if (lengthCollectionMember_{itemName} != 0)
                         {{
                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_{itemName});
-                            {itemName} = new {AppropriatelyQualifiedTypeName}();
+                            {itemName} = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}();
                             {itemName}.DeserializeLazinator(childData);;
                         }}
                         bytesSoFar += lengthCollectionMember_{itemName};");
