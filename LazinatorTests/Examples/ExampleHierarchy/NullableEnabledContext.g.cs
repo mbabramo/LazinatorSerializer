@@ -1047,16 +1047,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
-                if (lengthCollectionMember == 0)
-                {
-                    collection.Add(null);
-                }
-                else
-                {
-                    LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                    var item = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
-                    collection.Add(item);
-                }
+                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
+                var item = new Example();
+                item.DeserializeLazinator(childData);
+                collection.Add(item);
                 bytesSoFar += lengthCollectionMember;
             }
             
@@ -1073,21 +1067,12 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             int itemToConvertCount = itemToConvert.Count;
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
-                if (itemToConvert[itemIndex] == null)
-                {
-                    writer.Write((uint)0);
-                }
-                else 
-                {
-                    
-                    void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex].SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                    WriteToBinaryWithIntLengthPrefix(ref writer, action);
-                }
-                
+                void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex].SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                WriteToBinaryWithIntLengthPrefix(ref writer, action);
             }
         }
         
-        private static List<Example> CloneOrChange_List_GExample_g(List<Example> itemToClone, Func<ILazinator?, ILazinator?>? cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static List<Example> CloneOrChange_List_GExample_g(List<Example> itemToClone, Func<ILazinator, ILazinator>? cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
@@ -1107,16 +1092,8 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     }
                     continue;
                 }
-                if (itemToClone[itemIndex] == null)
-                {
-                    collection.Add(null);
-                }
-                else
-                {
-                    var itemCopied = (Example) cloneOrChangeFunc(itemToClone[itemIndex]);
-                    collection.Add(itemCopied);
-                }
-                
+                var itemCopied = (Example) cloneOrChangeFunc(itemToClone[itemIndex]);
+                collection.Add(itemCopied);
             }
             return collection;
         }
@@ -1221,16 +1198,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
-                if (lengthCollectionMember == 0)
-                {
-                    collection.Add(null);
-                }
-                else
-                {
-                    LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                    var item = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
-                    collection.Add(item);
-                }
+                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
+                var item = new Example();
+                item.DeserializeLazinator(childData);
+                collection.Add(item);
                 bytesSoFar += lengthCollectionMember;
             }
             
@@ -1247,21 +1218,12 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             int itemToConvertCount = itemToConvert.Count;
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
-                if (itemToConvert[itemIndex] == null)
-                {
-                    writer.Write((uint)0);
-                }
-                else 
-                {
-                    
-                    void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex].SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                    WriteToBinaryWithIntLengthPrefix(ref writer, action);
-                }
-                
+                void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex].SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                WriteToBinaryWithIntLengthPrefix(ref writer, action);
             }
         }
         
-        private static List<Example>? CloneOrChange_List_GExample_g_C63(List<Example>? itemToClone, Func<ILazinator?, ILazinator?>? cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static List<Example>? CloneOrChange_List_GExample_g_C63(List<Example>? itemToClone, Func<ILazinator, ILazinator>? cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
@@ -1281,16 +1243,8 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     }
                     continue;
                 }
-                if (itemToClone[itemIndex] == null)
-                {
-                    collection.Add(null);
-                }
-                else
-                {
-                    var itemCopied = (Example) cloneOrChangeFunc(itemToClone[itemIndex]);
-                    collection.Add(itemCopied);
-                }
-                
+                var itemCopied = (Example) cloneOrChangeFunc(itemToClone[itemIndex]);
+                collection.Add(itemCopied);
             }
             return collection;
         }

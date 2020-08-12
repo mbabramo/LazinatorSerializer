@@ -36,7 +36,9 @@ namespace Lazinator.CodeDescription
         public bool NullableModeEnabled => NullableContextSetting.WarningsEnabled(); // TODO && NullableContextSetting.AnnotationsEnabled();
         public bool NullableModeInherited => NullableContextSetting.WarningsInherited(); // TODO annotations
         public string QuestionMarkIfNullableModeEnabled => NullableModeEnabled ? "?" : "";
+        public string QuestionMarkIfNullAndNullableModeEnabled => Nullable && NullableModeEnabled ? "?" : "";
         public string ILazinatorString => "ILazinator" + QuestionMarkIfNullableModeEnabled;
+        public string ILazinatorStringWithItemSpecificNullability => "ILazinator" + QuestionMarkIfNullAndNullableModeEnabled;
         internal bool Nullable { get; set; }
         internal string NullForgiveness => NullableModeEnabled ? "!" : "";
         private bool HasParameterlessConstructor => PropertySymbol.Type is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.InstanceConstructors.Any(y => !y.IsImplicitlyDeclared && !y.Parameters.Any());
@@ -1688,7 +1690,7 @@ namespace Lazinator.CodeDescription
                 forStatement = DeleteLines(forStatement, (int)ArrayRank); // we will define collectionLengths for each dimension in creation statement and don't need to redefine
 
             sb.Append($@"
-                    private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<{ILazinatorString}, {ILazinatorString}>{QuestionMarkIfNullableModeEnabled} cloneOrChangeFunc, bool avoidCloningIfPossible)
+                    private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<{innerProperty.ILazinatorStringWithItemSpecificNullability}, {innerProperty.ILazinatorStringWithItemSpecificNullability}>{QuestionMarkIfNullableModeEnabled} cloneOrChangeFunc, bool avoidCloningIfPossible)
                     {{
                         {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory ? "" : GetNullCheckIfThen("itemToClone", "return default;", ""))}
                         int collectionLength = itemToClone.{lengthWord};{IIF(ArrayRank > 1, () => "\n" + String.Join("\n", Enumerable.Range(0, ArrayRank.Value).Select(x => $"int collectionLength{x} = itemToClone.GetLength({x});")))}
@@ -2359,7 +2361,7 @@ namespace Lazinator.CodeDescription
                 );
             string creationText = SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? $"({innerClones})" : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}({innerClones})";
             sb.Append($@"
-                    private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToConvert, Func<{ILazinatorString}, {ILazinatorString}>{QuestionMarkIfNullableModeEnabled} cloneOrChangeFunc, bool avoidCloningIfPossible)
+                    private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToConvert, Func<{ILazinatorStringWithItemSpecificNullability}, {ILazinatorStringWithItemSpecificNullability}>{QuestionMarkIfNullableModeEnabled} cloneOrChangeFunc, bool avoidCloningIfPossible)
                     {{
                         {IIF(Nullable, GetNullCheckIfThen("itemToConvert", $@"return {DefaultExpression};", ""))}{IIF(Nullable,$@"
                             ")}return {creationText};
