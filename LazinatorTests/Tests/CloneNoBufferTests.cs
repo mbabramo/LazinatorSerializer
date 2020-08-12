@@ -533,6 +533,12 @@ namespace LazinatorTests.Tests
             }
 
             VerifyCloningEquivalence(() => new LazinatorList<NullableEnabledContext>() { GetObject(), null, GetObject() });
+
+#nullable enable
+            VerifyCloningEquivalence(() => new LazinatorList<NullableEnabledContext>() { GetObject(), GetObject() });
+            var list = new LazinatorList<NullableEnabledContext>() { GetObject(), GetObject() };
+            NullableEnabledContext item = list.First(); // Note that we are guaranteed that this will produce a nonnullable item.
+#nullable disable
         }
 
         [Fact]

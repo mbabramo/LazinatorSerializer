@@ -12,6 +12,5 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         Example NonNullableClass { get; set; }
         IExample? ExplicitlyNullableInterface { get; set; }
         IExample NonNullableInterface {get; set;}
-        List<Example> ListNonNullables { get; set; }
     }
 }
