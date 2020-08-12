@@ -36,9 +36,9 @@ namespace Lazinator.CodeDescription
         public bool NullableModeEnabled => NullableContextSetting.WarningsEnabled(); // TODO && NullableContextSetting.AnnotationsEnabled();
         public bool NullableModeInherited => NullableContextSetting.WarningsInherited(); // TODO annotations
         public string QuestionMarkIfNullableModeEnabled => NullableModeEnabled ? "?" : "";
-        public string QuestionMarkIfNullAndNullableModeEnabled => Nullable && NullableModeEnabled ? "?" : "";
+        public string QuestionMarkIfNullableAndNullableModeEnabled => Nullable && NullableModeEnabled ? "?" : "";
         public string ILazinatorString => "ILazinator" + QuestionMarkIfNullableModeEnabled;
-        public string ILazinatorStringWithItemSpecificNullability => "ILazinator" + QuestionMarkIfNullAndNullableModeEnabled;
+        public string ILazinatorStringWithItemSpecificNullability => "ILazinator" + QuestionMarkIfNullableAndNullableModeEnabled;
         internal bool Nullable { get; set; }
         internal string NullForgiveness => NullableModeEnabled ? "!" : "";
         private bool HasParameterlessConstructor => PropertySymbol.Type is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.InstanceConstructors.Any(y => !y.IsImplicitlyDeclared && !y.Parameters.Any());
@@ -1518,7 +1518,12 @@ namespace Lazinator.CodeDescription
             else if (IsPrimitive)
                 copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {PropertyName};";
             else if ((PropertyType == LazinatorPropertyType.NonLazinator && HasInterchangeType) || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple)
-                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({PropertyName}, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);";
+            {
+                string qIfAppropriate = "?";
+                if (NullableModeEnabled && InnerProperties?[0] is PropertyDescription innerProperty && innerProperty.Nullable == false)
+                        qIfAppropriate = "";
+                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({PropertyName}, l => l{qIfAppropriate}.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);";
+            }
             else if (PropertyType == LazinatorPropertyType.NonLazinator)
                 copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {DirectConverterTypeNamePrefix}CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({PropertyName}, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);";
             sb.AppendLine(new ConditionalCodeGenerator(WriteInclusionConditional, copyInstruction).ToString());

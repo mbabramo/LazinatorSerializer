@@ -457,9 +457,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 typedClone.NonNullableInterface = (IExample) NonNullableInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             
-            typedClone.NonNullableListOfNonNullables = CloneOrChange_List_GExample_g(NonNullableListOfNonNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.NonNullableListOfNonNullables = CloneOrChange_List_GExample_g(NonNullableListOfNonNullables, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.NonNullableListOfNullables = CloneOrChange_List_GExample_C63_g(NonNullableListOfNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.NullableListOfNonNullables = CloneOrChange_List_GExample_g_C63(NullableListOfNonNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.NullableListOfNonNullables = CloneOrChange_List_GExample_g_C63(NullableListOfNonNullables, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.NullableListOfNullables = CloneOrChange_List_GExample_C63_g_C63(NullableListOfNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
