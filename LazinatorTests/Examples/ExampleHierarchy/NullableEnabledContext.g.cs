@@ -1071,7 +1071,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            List<Example>? collection = new List<Example>?(collectionLength);
+            List<Example>? collection = new List<Example>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
@@ -1123,7 +1123,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             
             int collectionLength = itemToClone.Count;
-            List<Example>? collection = avoidCloningIfPossible ? itemToClone : new List<Example>?(collectionLength);
+            List<Example>? collection = avoidCloningIfPossible ? itemToClone : new List<Example>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
@@ -1160,7 +1160,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            List<Example?>? collection = new List<Example?>?(collectionLength);
+            List<Example?>? collection = new List<Example?>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
@@ -1212,7 +1212,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             
             int collectionLength = itemToClone.Count;
-            List<Example?>? collection = avoidCloningIfPossible ? itemToClone : new List<Example?>?(collectionLength);
+            List<Example?>? collection = avoidCloningIfPossible ? itemToClone : new List<Example?>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
@@ -1249,7 +1249,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            List<Example>? collection = new List<Example>?(collectionLength);
+            List<Example>? collection = new List<Example>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
@@ -1301,7 +1301,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             
             int collectionLength = itemToClone.Count;
-            List<Example>? collection = avoidCloningIfPossible ? itemToClone : new List<Example>?(collectionLength);
+            List<Example>? collection = avoidCloningIfPossible ? itemToClone : new List<Example>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
@@ -1338,7 +1338,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
-            List<Example?>? collection = new List<Example?>?(collectionLength);
+            List<Example?>? collection = new List<Example?>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
@@ -1390,7 +1390,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             
             int collectionLength = itemToClone.Count;
-            List<Example?>? collection = avoidCloningIfPossible ? itemToClone : new List<Example?>?(collectionLength);
+            List<Example?>? collection = avoidCloningIfPossible ? itemToClone : new List<Example?>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
