@@ -605,5 +605,31 @@ namespace LazinatorTests.Tests
             a = () => { _ = GetObject_DiffOrder(); };
             a.Should().Throw<ArgumentNullException>();
         }
+
+        [Fact]
+        public void CloneWithoutBuffer_DotNetListNullableEnabledContext()
+        {
+            NullableEnabledContext GetObject()
+            {
+                return new NullableEnabledContext()
+                {
+                    ExplicitlyNullable = new Example(),
+                    ExplicitlyNullableInterface = new Example(),
+                    NonNullableClass = new Example(),
+                    NonNullableInterface = new Example()
+                };
+            }
+
+            DotNetList_Values GetList()
+            {
+                return new DotNetList_Values()
+                {
+                    MyListNullableEnabledContext = new List<NullableEnabledContext>() { GetObject(), null, GetObject() }
+                };
+            };
+
+            VerifyCloningEquivalence(GetList(), IncludeChildrenMode.IncludeAllChildren);
+            VerifyCloningEquivalence(GetList(), IncludeChildrenMode.ExcludeOnlyExcludableChildren);
+        }
     }
 }
