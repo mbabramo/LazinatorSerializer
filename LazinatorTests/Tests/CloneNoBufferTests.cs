@@ -13,6 +13,9 @@ using LazinatorTests.Examples.Abstract;
 using LazinatorTests.Examples.Subclasses;
 using LazinatorCollections.Dictionary;
 using LazinatorTests.Examples.Tuples;
+using LazinatorTests.Examples.ExampleHierarchy;
+using FluentAssertions;
+using Lazinator.Exceptions;
 
 namespace LazinatorTests.Tests
 {
@@ -20,8 +23,8 @@ namespace LazinatorTests.Tests
     {
         private void VerifyCloningEquivalence(Func<ILazinator> lazinator)
         {
-            VerifyCloningEquivalence(lazinator(), IncludeChildrenMode.ExcludeAllChildren);
             VerifyCloningEquivalence(lazinator(), IncludeChildrenMode.IncludeAllChildren);
+            VerifyCloningEquivalence(lazinator(), IncludeChildrenMode.ExcludeAllChildren);
             VerifyCloningEquivalence(lazinator(), IncludeChildrenMode.ExcludeOnlyExcludableChildren);
             VerifyCloningEquivalence(lazinator(), IncludeChildrenMode.IncludeOnlyIncludableChildren);
         }
@@ -495,6 +498,95 @@ namespace LazinatorTests.Tests
                 };
             }
             VerifyCloningEquivalence(() => GetObject());
+        }
+
+        [Fact]
+        public void CloneWithoutBuffer_NullableEnabledContext()
+        {
+            NullableEnabledContext GetObject()
+            {
+                return new NullableEnabledContext()
+                {
+                    ExplicitlyNullable = new Example(),
+                    ExplicitlyNullableInterface = new Example(),
+                    NonNullableClass = new Example(),
+                    NonNullableInterface = new Example()
+                };
+            }
+
+            VerifyCloningEquivalence(GetObject(), IncludeChildrenMode.IncludeAllChildren);
+            VerifyCloningEquivalence(GetObject(), IncludeChildrenMode.ExcludeOnlyExcludableChildren);
+        }
+
+        [Fact]
+        public void CloneWithoutBuffer_NullableEnabledContext_ThrowsAfterExcludingThenAccessingNonNullable()
+        {
+            NullableEnabledContext GetObject()
+            {
+                return new NullableEnabledContext()
+                {
+                    ExplicitlyNullable = new Example(),
+                    ExplicitlyNullableInterface = new Example(),
+                    NonNullableClass = new Example(),
+                    NonNullableInterface = new Example()
+                };
+            }
+
+            Action a = () => { VerifyCloningEquivalence(GetObject(), IncludeChildrenMode.ExcludeAllChildren); };
+            a.Should().Throw<UnsetNonnullableLazinatorException>();
+            a = () => { VerifyCloningEquivalence(GetObject(), IncludeChildrenMode.IncludeOnlyIncludableChildren); };
+            a.Should().Throw<UnsetNonnullableLazinatorException>();
+        }
+
+        [Fact]
+        public void CloneWithoutBuffer_NullableEnabledContext_NullablesNull()
+        {
+            NullableEnabledContext GetObject()
+            {
+                return new NullableEnabledContext()
+                {
+                    ExplicitlyNullable = null,
+                    ExplicitlyNullableInterface = null,
+                    NonNullableClass = new Example(),
+                    NonNullableInterface = new Example()
+                };
+            }
+
+            VerifyCloningEquivalence(GetObject(), IncludeChildrenMode.IncludeAllChildren);
+            VerifyCloningEquivalence(GetObject(), IncludeChildrenMode.ExcludeOnlyExcludableChildren);
+        }
+
+        [Fact]
+        public void CloneWithoutBuffer_NullableEnabledContext_SetNonNullablesToNullThrows()
+        {
+            NullableEnabledContext GetObject()
+            {
+                return new NullableEnabledContext()
+                {
+                    ExplicitlyNullable = null,
+                    ExplicitlyNullableInterface = null,
+                    // we can set these to null because nullable-aware context is disabled in this test file -- but an error should occur
+                    NonNullableClass = null, 
+                    NonNullableInterface = new Example()
+                };
+            }
+
+            NullableEnabledContext GetObject_DiffOrder()
+            {
+                return new NullableEnabledContext()
+                {
+                    ExplicitlyNullable = null,
+                    ExplicitlyNullableInterface = null,
+                    // we can set these to null because nullable-aware context is disabled in this test file -- but an error should occur
+                    NonNullableInterface = null,
+                    NonNullableClass = new Example(),
+                };
+            }
+
+            Action a = () => { _ = GetObject(); };
+            a.Should().Throw<ArgumentNullException>();
+            a = () => { _ = GetObject_DiffOrder(); };
+            a.Should().Throw<ArgumentNullException>();
         }
     }
 }

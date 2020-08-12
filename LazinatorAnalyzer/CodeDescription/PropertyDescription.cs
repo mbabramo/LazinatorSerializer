@@ -1014,6 +1014,7 @@ namespace Lazinator.CodeDescription
                             ";
                     else
                         propertyTypeDependentSet = $@"
+                            _ = value ?? throw new ArgumentNullException(nameof(value));
                             if (_{PropertyName} != null)
                             {{
                                 _{PropertyName}.LazinatorParents = _{PropertyName}.LazinatorParents.WithRemoved(this);

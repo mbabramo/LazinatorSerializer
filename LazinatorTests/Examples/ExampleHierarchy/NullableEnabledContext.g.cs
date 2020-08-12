@@ -150,6 +150,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             set
             {
+                _ = value ?? throw new ArgumentNullException(nameof(value));
                 if (_NonNullableClass != null)
                 {
                     _NonNullableClass.LazinatorParents = _NonNullableClass.LazinatorParents.WithRemoved(this);
@@ -193,6 +194,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             set
             {
+                _ = value ?? throw new ArgumentNullException(nameof(value));
                 if (_NonNullableInterface != null)
                 {
                     _NonNullableInterface.LazinatorParents = _NonNullableInterface.LazinatorParents.WithRemoved(this);
