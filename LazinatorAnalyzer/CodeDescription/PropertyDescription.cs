@@ -820,7 +820,7 @@ namespace Lazinator.CodeDescription
 
             if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
             {
-                Nullable = SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory;
+                Nullable = false;
                 if (InnerProperties[0].Nullable)
                     throw new LazinatorCodeGenException("Cannot use Lazinator to serialize Memory/Span with nullable generic arguments."); // this is because we can't cast easily in this context
             }
@@ -1078,7 +1078,7 @@ namespace Lazinator.CodeDescription
 
             }
 
-            if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory)
+            if (PropertyName == "IntStorage")
             {
                 var DEBUG = 0;
             }
