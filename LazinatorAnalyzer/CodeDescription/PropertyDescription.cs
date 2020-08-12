@@ -64,6 +64,8 @@ namespace Lazinator.CodeDescription
                                                 (PropertyType == LazinatorPropertyType.SupportedTuple && SupportedTupleType == LazinatorSupportedTupleType.RecordLikeType && Symbol.IsValueType) ||
                                                 (IsMemoryOrSpan)
                                              ));
+        internal bool IsSupportedTupleType => (PropertyType == LazinatorPropertyType.SupportedTuple && (SupportedTupleType == LazinatorSupportedTupleType.ValueTuple || SupportedTupleType == LazinatorSupportedTupleType.KeyValuePair)) ||
+                                                (PropertyType == LazinatorPropertyType.SupportedTuple && SupportedTupleType == LazinatorSupportedTupleType.RecordLikeType && Symbol.IsValueType);
         internal bool IsPossiblyStruct => IsDefinitelyStruct ||
                                           PropertyType == LazinatorPropertyType.OpenGenericParameter;
         internal bool IsSimpleListOrArray => PropertyType == LazinatorPropertyType.SupportedCollection &&
@@ -1900,7 +1902,7 @@ namespace Lazinator.CodeDescription
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
                     {{
-                        {IIF(Nullable, $@"if (storage.Length == 0)
+                        {IIF(Nullable && !IsSupportedTupleType, $@"if (storage.Length == 0)
                         {{
                             return {DefaultExpression};
                         }}
@@ -2381,7 +2383,7 @@ namespace Lazinator.CodeDescription
             sb.Append($@"
                    private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
                         {{
-                            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || IsMemoryOrSpan, "storage.Length == 0", $"return {DefaultExpression};")}{InterchangeTypeName} interchange = new {InterchangeTypeNameWithoutNullabilityIndicator}();
+                            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || IsMemoryOrSpan || IsSupportedTupleType, "storage.Length == 0", $"return {DefaultExpression};")}{InterchangeTypeName} interchange = new {InterchangeTypeNameWithoutNullabilityIndicator}();
                             interchange.DeserializeLazinator(storage);
                             return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}(false);
                         }}
