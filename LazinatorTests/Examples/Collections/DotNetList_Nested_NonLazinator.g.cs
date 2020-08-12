@@ -71,6 +71,7 @@ namespace LazinatorTests.Examples.Collections
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNestedNonLazinatorType_ByteIndex, _MyListNestedNonLazinatorType_ByteLength, false, false, null);
                 _MyListNestedNonLazinatorType = ConvertFromBytes_List_GList_GNonLazinatorClass_g_g(childData);
             }
+            
             _MyListNestedNonLazinatorType_Accessed = true;
         }
         

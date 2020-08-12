@@ -76,6 +76,7 @@ namespace LazinatorTests.Examples
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonLazinatorClass_ByteIndex, _NonLazinatorClass_ByteLength, false, false, null);
                 _NonLazinatorClass = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData);
             }
+            
             _NonLazinatorClass_Accessed = true;
         }
         
@@ -113,6 +114,7 @@ namespace LazinatorTests.Examples
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonLazinatorInterchangeableClass_ByteIndex, _NonLazinatorInterchangeableClass_ByteLength, false, false, null);
                 _NonLazinatorInterchangeableClass = ConvertFromBytes_NonLazinatorInterchangeableClass(childData);
             }
+            
             _NonLazinatorInterchangeableClass_Accessed = true;
         }
         
@@ -140,15 +142,8 @@ namespace LazinatorTests.Examples
         bool _NonLazinatorInterchangeableStruct_Accessed;
         private void Lazinate_NonLazinatorInterchangeableStruct()
         {
-            if (LazinatorObjectBytes.Length == 0)
-            {
-                _NonLazinatorInterchangeableStruct = default(NonLazinatorInterchangeableStruct);
-            }
-            else
-            {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonLazinatorInterchangeableStruct_ByteIndex, _NonLazinatorInterchangeableStruct_ByteLength, false, false, null);
-                _NonLazinatorInterchangeableStruct = ConvertFromBytes_NonLazinatorInterchangeableStruct(childData);
-            }
+            LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonLazinatorInterchangeableStruct_ByteIndex, _NonLazinatorInterchangeableStruct_ByteLength, false, false, null);
+            _NonLazinatorInterchangeableStruct = ConvertFromBytes_NonLazinatorInterchangeableStruct(childData);
             _NonLazinatorInterchangeableStruct_Accessed = true;
         }
         
@@ -177,15 +172,8 @@ namespace LazinatorTests.Examples
         bool _NonLazinatorStruct_Accessed;
         private void Lazinate_NonLazinatorStruct()
         {
-            if (LazinatorObjectBytes.Length == 0)
-            {
-                _NonLazinatorStruct = default(NonLazinatorStruct);
-            }
-            else
-            {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonLazinatorStruct_ByteIndex, _NonLazinatorStruct_ByteLength, false, false, null);
-                _NonLazinatorStruct = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorStruct(childData);
-            }
+            LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonLazinatorStruct_ByteIndex, _NonLazinatorStruct_ByteLength, false, false, null);
+            _NonLazinatorStruct = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorStruct(childData);
             _NonLazinatorStruct_Accessed = true;
         }
         

@@ -71,6 +71,7 @@ namespace LazinatorTests.Examples.Collections
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyHashSetSerialized_ByteIndex, _MyHashSetSerialized_ByteLength, false, false, null);
                 _MyHashSetSerialized = ConvertFromBytes_HashSet_GExampleChild_g(childData);
             }
+            
             _MyHashSetSerialized_Accessed = true;
         }
         

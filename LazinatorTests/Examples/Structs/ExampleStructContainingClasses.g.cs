@@ -108,6 +108,7 @@ namespace LazinatorTests.Examples
                 
                 _MyChild1 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, () => new ExampleChild(LazinatorConstructorEnum.LazinatorConstructor), childData); 
             }
+            
             _MyChild1_Accessed = true;
         }
         
@@ -145,6 +146,7 @@ namespace LazinatorTests.Examples
                 
                 _MyChild2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, () => new ExampleChild(LazinatorConstructorEnum.LazinatorConstructor), childData); 
             }
+            
             _MyChild2_Accessed = true;
         }
         
@@ -183,6 +185,7 @@ namespace LazinatorTests.Examples
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyLazinatorList_ByteIndex, _MyLazinatorList_ByteLength, false, false, null);
                 _MyLazinatorList = ConvertFromBytes_List_GExample_g(childData);
             }
+            
             _MyLazinatorList_Accessed = true;
         }
         
@@ -238,6 +241,7 @@ namespace LazinatorTests.Examples
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListValues_ByteIndex, _MyListValues_ByteLength, false, false, null);
                 _MyListValues = ConvertFromBytes_List_Gint_g(childData);
             }
+            
             _MyListValues_Accessed = true;
         }
         
@@ -266,15 +270,8 @@ namespace LazinatorTests.Examples
         bool _MyTuple_Accessed;
         private void Lazinate_MyTuple()
         {
-            if (LazinatorObjectBytes.Length == 0)
-            {
-                _MyTuple = default((NonLazinatorClass myitem1, int? myitem2));
-            }
-            else
-            {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTuple_ByteIndex, _MyTuple_ByteLength, false, false, null);
-                _MyTuple = ConvertFromBytes__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(childData);
-            }
+            LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTuple_ByteIndex, _MyTuple_ByteLength, false, false, null);
+            _MyTuple = ConvertFromBytes__PNonLazinatorClass_C32myitem1_c_C32int_C63_C32myitem2_p(childData);
             _MyTuple_Accessed = true;
         }
         

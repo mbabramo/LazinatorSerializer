@@ -82,6 +82,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 
                 _ExampleByInterface = DeserializationFactory.Instance.CreateBasedOnType<IExample>(childData, this); 
             }
+            
             _ExampleByInterface_Accessed = true;
         }
         
@@ -119,6 +120,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleListByInterface_ByteIndex, _ExampleListByInterface_ByteLength, false, false, null);
                 _ExampleListByInterface = ConvertFromBytes_List_GIExample_g(childData);
             }
+            
             _ExampleListByInterface_Accessed = true;
         }
         

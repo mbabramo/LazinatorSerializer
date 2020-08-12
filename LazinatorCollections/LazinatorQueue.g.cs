@@ -83,6 +83,7 @@ namespace LazinatorCollections
                 
                 _UnderlyingList = DeserializationFactory.Instance.CreateBasedOnType<ILazinatorListable<T>>(childData, this); 
             }
+            
             _UnderlyingList_Accessed = true;
         }
         

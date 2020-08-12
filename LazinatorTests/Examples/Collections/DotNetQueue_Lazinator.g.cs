@@ -71,6 +71,7 @@ namespace LazinatorTests.Examples.Collections
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyQueueSerialized_ByteIndex, _MyQueueSerialized_ByteLength, false, false, null);
                 _MyQueueSerialized = ConvertFromBytes_Queue_GExampleChild_g(childData);
             }
+            
             _MyQueueSerialized_Accessed = true;
         }
         

@@ -85,6 +85,7 @@ namespace LazinatorCollections
                 
                 _NextNode = DeserializationFactory.Instance.CreateBaseOrDerivedType(224, () => new LazinatorLinkedListNode<T>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _NextNode_Accessed = true;
         }
         
@@ -145,6 +146,7 @@ namespace LazinatorCollections
                 
                 _Value = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
             }
+            
             _Value_Accessed = true;
         }
         

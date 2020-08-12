@@ -117,6 +117,7 @@ namespace LazinatorCollections
                 
                 _FirstNode = DeserializationFactory.Instance.CreateBaseOrDerivedType(224, () => new LazinatorLinkedListNode<T>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _FirstNode_Accessed = true;
         }
         

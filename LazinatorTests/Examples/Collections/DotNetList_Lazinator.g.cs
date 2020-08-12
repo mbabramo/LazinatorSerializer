@@ -72,6 +72,7 @@ namespace LazinatorTests.Examples.Collections
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListSerialized_ByteIndex, _MyListSerialized_ByteLength, false, false, null);
                 _MyListSerialized = ConvertFromBytes_List_GExampleChild_g(childData);
             }
+            
             _MyListSerialized_Accessed = true;
         }
         

@@ -103,6 +103,7 @@ namespace LazinatorTests.Examples.Abstract
                 
                 _MyT = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
             }
+            
             _MyT_Accessed = true;
         }
         

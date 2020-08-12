@@ -114,6 +114,7 @@ namespace LazinatorTests.Examples.Collections
                 
                 _MyList = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, () => new LazinatorList<ExampleChild>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _MyList_Accessed = true;
         }
         
@@ -160,6 +161,7 @@ namespace LazinatorTests.Examples.Collections
                 
                 _MyStructList = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, () => new LazinatorList<WByte>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _MyStructList_Accessed = true;
         }
         

@@ -75,6 +75,7 @@ namespace LazinatorTests.Examples.Abstract
                 
                 _Item = DeserializationFactory.Instance.CreateBasedOnType<IAbstractGeneric1<int>>(childData, this); 
             }
+            
             _Item_Accessed = true;
         }
         

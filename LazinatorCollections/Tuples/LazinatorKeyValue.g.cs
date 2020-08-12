@@ -76,6 +76,7 @@ namespace LazinatorCollections.Tuples
                 
                 _Key = DeserializationFactory.Instance.CreateBasedOnType<TKey>(childData); 
             }
+            
             _Key_Accessed = true;
         }
         
@@ -116,6 +117,7 @@ namespace LazinatorCollections.Tuples
                 
                 _Value = DeserializationFactory.Instance.CreateBasedOnType<TValue>(childData); 
             }
+            
             _Value_Accessed = true;
         }
         

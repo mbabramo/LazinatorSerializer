@@ -74,6 +74,7 @@ namespace Lazinator.Wrappers
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedValue_ByteIndex, _WrappedValue_ByteLength, true, false, null);
                 _WrappedValue = ConvertFromBytes_double_B_b(childData);
             }
+            
             _WrappedValue_Accessed = true;
         }
         

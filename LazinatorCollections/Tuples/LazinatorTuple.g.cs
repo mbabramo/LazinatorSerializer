@@ -96,6 +96,7 @@ namespace LazinatorCollections.Tuples
                 
                 _Item1 = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
             }
+            
             _Item1_Accessed = true;
         }
         
@@ -156,6 +157,7 @@ namespace LazinatorCollections.Tuples
                 
                 _Item2 = DeserializationFactory.Instance.CreateBasedOnType<U>(childData, this); 
             }
+            
             _Item2_Accessed = true;
         }
         

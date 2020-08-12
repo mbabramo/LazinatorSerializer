@@ -75,6 +75,7 @@ namespace LazinatorTests.Examples.Collections
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyArrayInt_ByteIndex, _MyArrayInt_ByteLength, false, false, null);
                 _MyArrayInt = ConvertFromBytes_int_B_c_b(childData);
             }
+            
             _MyArrayInt_Accessed = true;
         }
         
@@ -130,6 +131,7 @@ namespace LazinatorTests.Examples.Collections
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyCrazyJaggedArray_ByteIndex, _MyCrazyJaggedArray_ByteLength, false, false, null);
                 _MyCrazyJaggedArray = ConvertFromBytes_int_B_b_B_c_c_b_B_c_c_c_b(childData);
             }
+            
             _MyCrazyJaggedArray_Accessed = true;
         }
         
@@ -167,6 +169,7 @@ namespace LazinatorTests.Examples.Collections
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyThreeDimArrayInt_ByteIndex, _MyThreeDimArrayInt_ByteLength, false, false, null);
                 _MyThreeDimArrayInt = ConvertFromBytes_int_B_c_c_b(childData);
             }
+            
             _MyThreeDimArrayInt_Accessed = true;
         }
         

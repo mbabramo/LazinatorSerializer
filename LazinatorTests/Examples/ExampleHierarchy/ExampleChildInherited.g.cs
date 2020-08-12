@@ -92,6 +92,7 @@ namespace LazinatorTests.Examples
                 
                 _MyGrandchildInInherited = DeserializationFactory.Instance.CreateBaseOrDerivedType(1079, () => new ExampleGrandchild(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _MyGrandchildInInherited_Accessed = true;
         }
         

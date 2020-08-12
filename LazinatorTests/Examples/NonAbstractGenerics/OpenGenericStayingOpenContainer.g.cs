@@ -90,6 +90,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 
                 _ClosedGenericBase = DeserializationFactory.Instance.CreateBaseOrDerivedType(1033, () => new OpenGeneric<Base>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _ClosedGenericBase_Accessed = true;
         }
         
@@ -136,6 +137,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 
                 _ClosedGenericFloat = DeserializationFactory.Instance.CreateBaseOrDerivedType(1033, () => new OpenGeneric<WFloat>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _ClosedGenericFloat_Accessed = true;
         }
         
@@ -182,6 +184,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 
                 _ClosedGenericFromBaseWithBase = DeserializationFactory.Instance.CreateBaseOrDerivedType(1067, () => new GenericFromBase<Base>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _ClosedGenericFromBaseWithBase_Accessed = true;
         }
         
@@ -228,6 +231,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 
                 _ClosedGenericInterface = DeserializationFactory.Instance.CreateBaseOrDerivedType(1033, () => new OpenGeneric<IExampleChild>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _ClosedGenericInterface_Accessed = true;
         }
         
@@ -274,6 +278,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 
                 _ClosedGenericNonexclusiveInterface = DeserializationFactory.Instance.CreateBaseOrDerivedType(1033, () => new OpenGeneric<IExampleNonexclusiveInterface>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _ClosedGenericNonexclusiveInterface_Accessed = true;
         }
         

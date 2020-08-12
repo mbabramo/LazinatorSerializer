@@ -96,6 +96,7 @@ namespace LazinatorTests.Examples.Subclasses
                 
                 _SubclassInstance1 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1058, () => new global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _SubclassInstance1_Accessed = true;
         }
         
@@ -142,6 +143,7 @@ namespace LazinatorTests.Examples.Subclasses
                 
                 _SubclassInstance2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1058, () => new global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _SubclassInstance2_Accessed = true;
         }
         

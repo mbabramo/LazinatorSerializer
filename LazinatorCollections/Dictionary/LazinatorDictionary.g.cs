@@ -101,6 +101,7 @@ namespace LazinatorCollections.Dictionary
                 
                 _Buckets = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, () => new LazinatorList<DictionaryBucket<TKey, TValue>>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _Buckets_Accessed = true;
         }
         

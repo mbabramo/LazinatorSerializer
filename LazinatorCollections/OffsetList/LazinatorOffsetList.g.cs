@@ -95,6 +95,7 @@ namespace LazinatorCollections.OffsetList
                     _FourByteItems.DeserializeLazinator(childData);
                 }
             }
+            
             _FourByteItems_Accessed = true;
         }
         
@@ -154,6 +155,7 @@ namespace LazinatorCollections.OffsetList
                     _TwoByteItems.DeserializeLazinator(childData);
                 }
             }
+            
             _TwoByteItems_Accessed = true;
         }
         

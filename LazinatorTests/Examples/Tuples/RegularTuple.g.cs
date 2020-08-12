@@ -81,6 +81,7 @@ namespace LazinatorTests.Examples.Tuples
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListTuple_ByteIndex, _MyListTuple_ByteLength, false, false, null);
                 _MyListTuple = ConvertFromBytes_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(childData);
             }
+            
             _MyListTuple_Accessed = true;
         }
         
@@ -118,6 +119,7 @@ namespace LazinatorTests.Examples.Tuples
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized_ByteIndex, _MyTupleSerialized_ByteLength, false, false, null);
                 _MyTupleSerialized = ConvertFromBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData);
             }
+            
             _MyTupleSerialized_Accessed = true;
         }
         
@@ -155,6 +157,7 @@ namespace LazinatorTests.Examples.Tuples
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized2_ByteIndex, _MyTupleSerialized2_ByteLength, false, false, null);
                 _MyTupleSerialized2 = ConvertFromBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData);
             }
+            
             _MyTupleSerialized2_Accessed = true;
         }
         
@@ -192,6 +195,7 @@ namespace LazinatorTests.Examples.Tuples
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized3_ByteIndex, _MyTupleSerialized3_ByteLength, false, false, null);
                 _MyTupleSerialized3 = ConvertFromBytes_Tuple_Guint_C63_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData);
             }
+            
             _MyTupleSerialized3_Accessed = true;
         }
         
@@ -229,6 +233,7 @@ namespace LazinatorTests.Examples.Tuples
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized4_ByteIndex, _MyTupleSerialized4_ByteLength, false, false, null);
                 _MyTupleSerialized4 = ConvertFromBytes_Tuple_Gint_c_C32ExampleStructContainingClasses_g(childData);
             }
+            
             _MyTupleSerialized4_Accessed = true;
         }
         
@@ -266,6 +271,7 @@ namespace LazinatorTests.Examples.Tuples
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized5_ByteIndex, _MyTupleSerialized5_ByteLength, false, false, null);
                 _MyTupleSerialized5 = ConvertFromBytes_Tuple_Gint_c_C32ExampleStructContainingClasses_C63_g(childData);
             }
+            
             _MyTupleSerialized5_Accessed = true;
         }
         

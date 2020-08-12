@@ -82,6 +82,7 @@ namespace LazinatorTests.Examples
                     _MyExampleNullableStruct = copy;
                 }
             }
+            
             _MyExampleNullableStruct_Accessed = true;
         }
         
@@ -140,16 +141,9 @@ namespace LazinatorTests.Examples
         bool _MyExampleStructContainingClasses_Accessed;
         private void Lazinate_MyExampleStructContainingClasses()
         {
-            if (LazinatorObjectBytes.Length == 0)
-            {
-                _MyExampleStructContainingClasses = default(ExampleStructContainingClasses);
-            }
-            else
-            {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, false, false, null);
-                _MyExampleStructContainingClasses = new ExampleStructContainingClasses();
-                _MyExampleStructContainingClasses.DeserializeLazinator(childData);
-            }
+            LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, false, false, null);
+            _MyExampleStructContainingClasses = new ExampleStructContainingClasses();
+            _MyExampleStructContainingClasses.DeserializeLazinator(childData);
             _MyExampleStructContainingClasses_Accessed = true;
         }
         

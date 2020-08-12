@@ -92,6 +92,7 @@ namespace Lazinator.Wrappers
                 
                 _NonNullValue = DeserializationFactory.Instance.CreateBasedOnType<T>(childData); 
             }
+            
             _NonNullValue_Accessed = true;
         }
         

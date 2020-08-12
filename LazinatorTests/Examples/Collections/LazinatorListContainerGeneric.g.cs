@@ -80,6 +80,7 @@ namespace LazinatorTests.Examples.Collections
                 
                 _MyList = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, () => new LazinatorList<T>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _MyList_Accessed = true;
         }
         

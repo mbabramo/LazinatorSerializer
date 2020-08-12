@@ -71,6 +71,7 @@ namespace LazinatorTests.Examples.Collections
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyStackInt_ByteIndex, _MyStackInt_ByteLength, false, false, null);
                 _MyStackInt = ConvertFromBytes_Stack_Gint_g(childData);
             }
+            
             _MyStackInt_Accessed = true;
         }
         

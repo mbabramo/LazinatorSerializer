@@ -79,6 +79,7 @@ namespace LazinatorTests.Examples.Abstract
                 
                 _MyBase = DeserializationFactory.Instance.CreateBaseOrDerivedType(1066, () => new Base(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _MyBase_Accessed = true;
         }
         

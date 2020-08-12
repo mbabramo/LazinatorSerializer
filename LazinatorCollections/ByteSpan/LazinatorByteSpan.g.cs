@@ -90,15 +90,8 @@ namespace LazinatorCollections.ByteSpan
         protected bool _ReadOrWrite_Accessed;
         private void Lazinate_ReadOrWrite()
         {
-            if (LazinatorObjectBytes.Length == 0)
-            {
-                _ReadOrWrite = default(Memory<byte>);
-            }
-            else
-            {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ReadOrWrite_ByteIndex, _ReadOrWrite_ByteLength, false, false, null);
-                _ReadOrWrite = ConvertFromBytes_Memory_Gbyte_g(childData);
-            }
+            LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ReadOrWrite_ByteIndex, _ReadOrWrite_ByteLength, false, false, null);
+            _ReadOrWrite = ConvertFromBytes_Memory_Gbyte_g(childData);
             _ReadOrWrite_Accessed = true;
         }
         

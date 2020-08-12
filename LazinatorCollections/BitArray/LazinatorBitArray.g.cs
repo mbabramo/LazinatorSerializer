@@ -99,15 +99,8 @@ namespace LazinatorCollections.BitArray
         bool _IntStorage_Accessed;
         private void Lazinate_IntStorage()
         {
-            if (LazinatorObjectBytes.Length == 0)
-            {
-                _IntStorage = default(Memory<int>);
-            }
-            else
-            {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntStorage_ByteIndex, _IntStorage_ByteLength, false, false, null);
-                _IntStorage = ConvertFromBytes_Memory_Gint_g(childData);
-            }
+            LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntStorage_ByteIndex, _IntStorage_ByteLength, false, false, null);
+            _IntStorage = ConvertFromBytes_Memory_Gint_g(childData);
             _IntStorage_Accessed = true;
         }
         

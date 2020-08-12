@@ -73,20 +73,12 @@ namespace LazinatorTests.Examples
         protected bool _IntWrapper_Accessed;
         private void Lazinate_IntWrapper()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntWrapper_ByteIndex, _IntWrapper_ByteLength, false, true, null);
+            _IntWrapper = new WInt()
             {
-                _IntWrapper = default(WInt);
-                _IntWrapper.LazinatorParents = new LazinatorParentsCollection(this);
-            }
-            else
-            {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntWrapper_ByteIndex, _IntWrapper_ByteLength, false, true, null);
-                _IntWrapper = new WInt()
-                {
-                    LazinatorParents = new LazinatorParentsCollection(this)
-                };
-                _IntWrapper.DeserializeLazinator(childData);
-            }
+                LazinatorParents = new LazinatorParentsCollection(this)
+            };
+            _IntWrapper.DeserializeLazinator(childData);
             _IntWrapper_Accessed = true;
         }
         
@@ -142,20 +134,12 @@ namespace LazinatorTests.Examples
         protected bool _MyExampleStructContainingClasses_Accessed;
         private void Lazinate_MyExampleStructContainingClasses()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, false, false, null);
+            _MyExampleStructContainingClasses = new ExampleStructContainingClasses()
             {
-                _MyExampleStructContainingClasses = default(ExampleStructContainingClasses);
-                _MyExampleStructContainingClasses.LazinatorParents = new LazinatorParentsCollection(this);
-            }
-            else
-            {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, false, false, null);
-                _MyExampleStructContainingClasses = new ExampleStructContainingClasses()
-                {
-                    LazinatorParents = new LazinatorParentsCollection(this)
-                };
-                _MyExampleStructContainingClasses.DeserializeLazinator(childData);
-            }
+                LazinatorParents = new LazinatorParentsCollection(this)
+            };
+            _MyExampleStructContainingClasses.DeserializeLazinator(childData);
             _MyExampleStructContainingClasses_Accessed = true;
         }
         
@@ -219,6 +203,7 @@ namespace LazinatorTests.Examples
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyHashSetExampleStruct_ByteIndex, _MyHashSetExampleStruct_ByteLength, false, false, null);
                 _MyHashSetExampleStruct = ConvertFromBytes_HashSet_GExampleStructContainingClasses_g(childData);
             }
+            
             _MyHashSetExampleStruct_Accessed = true;
         }
         
@@ -256,6 +241,7 @@ namespace LazinatorTests.Examples
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListExampleStruct_ByteIndex, _MyListExampleStruct_ByteLength, false, false, null);
                 _MyListExampleStruct = ConvertFromBytes_List_GExampleStructContainingClasses_g(childData);
             }
+            
             _MyListExampleStruct_Accessed = true;
         }
         
@@ -293,6 +279,7 @@ namespace LazinatorTests.Examples
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableExampleStruct_ByteIndex, _MyListNullableExampleStruct_ByteLength, false, false, null);
                 _MyListNullableExampleStruct = ConvertFromBytes_List_GWNullableStruct_GExampleStructContainingClasses_g_g(childData);
             }
+            
             _MyListNullableExampleStruct_Accessed = true;
         }
         
@@ -330,6 +317,7 @@ namespace LazinatorTests.Examples
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListUnwrappedNullableExampleStruct_ByteIndex, _MyListUnwrappedNullableExampleStruct_ByteLength, false, false, null);
                 _MyListUnwrappedNullableExampleStruct = ConvertFromBytes_List_GExampleStructContainingClasses_C63_g(childData);
             }
+            
             _MyListUnwrappedNullableExampleStruct_Accessed = true;
         }
         

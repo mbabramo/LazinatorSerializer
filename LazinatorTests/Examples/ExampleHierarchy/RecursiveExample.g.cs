@@ -81,6 +81,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 
                 _RecursiveClass = DeserializationFactory.Instance.CreateBaseOrDerivedType(1047, () => new RecursiveExample(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _RecursiveClass_Accessed = true;
         }
         
@@ -127,6 +128,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 
                 _RecursiveInterface = DeserializationFactory.Instance.CreateBasedOnType<IRecursiveExample>(childData, this); 
             }
+            
             _RecursiveInterface_Accessed = true;
         }
         

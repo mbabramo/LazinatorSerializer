@@ -63,20 +63,12 @@ namespace LazinatorTests.Examples.Structs
         protected bool _Subcontainer_Accessed;
         private void Lazinate_Subcontainer()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, false, false, null);
+            _Subcontainer = new ExampleStructContainingStruct()
             {
-                _Subcontainer = default(ExampleStructContainingStruct);
-                _Subcontainer.LazinatorParents = new LazinatorParentsCollection(this);
-            }
-            else
-            {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, false, false, null);
-                _Subcontainer = new ExampleStructContainingStruct()
-                {
-                    LazinatorParents = new LazinatorParentsCollection(this)
-                };
-                _Subcontainer.DeserializeLazinator(childData);
-            }
+                LazinatorParents = new LazinatorParentsCollection(this)
+            };
+            _Subcontainer.DeserializeLazinator(childData);
             _Subcontainer_Accessed = true;
         }
         

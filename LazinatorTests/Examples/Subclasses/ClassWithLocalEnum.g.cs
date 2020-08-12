@@ -85,6 +85,7 @@ namespace LazinatorTests.Examples.Subclasses
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyEnumList_ByteIndex, _MyEnumList_ByteLength, false, false, null);
                 _MyEnumList = ConvertFromBytes_List_GEnumWithinClass_g(childData);
             }
+            
             _MyEnumList_Accessed = true;
         }
         

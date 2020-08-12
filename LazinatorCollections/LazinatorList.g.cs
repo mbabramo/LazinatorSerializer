@@ -108,6 +108,7 @@ namespace LazinatorCollections
                 
                 _Offsets = DeserializationFactory.Instance.CreateBaseOrDerivedType(200, () => new LazinatorOffsetList(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _Offsets_Accessed = true;
         }
         

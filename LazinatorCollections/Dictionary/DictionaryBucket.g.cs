@@ -103,6 +103,7 @@ namespace LazinatorCollections.Dictionary
                 
                 _Keys = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, () => new LazinatorList<TKey>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _Keys_Accessed = true;
         }
         
@@ -152,6 +153,7 @@ namespace LazinatorCollections.Dictionary
                 
                 _Values = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, () => new LazinatorList<TValue>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _Values_Accessed = true;
         }
         

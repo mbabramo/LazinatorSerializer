@@ -113,6 +113,7 @@ namespace LazinatorCollections.Remote
                 
                 _Key = DeserializationFactory.Instance.CreateBasedOnType<TKey>(childData, this); 
             }
+            
             _Key_Accessed = true;
         }
         
@@ -166,6 +167,7 @@ namespace LazinatorCollections.Remote
                 
                 _Local = DeserializationFactory.Instance.CreateBasedOnType<TValue>(childData, this); 
             }
+            
             _Local_Accessed = true;
         }
         

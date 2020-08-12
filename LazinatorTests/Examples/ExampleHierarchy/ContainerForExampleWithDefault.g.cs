@@ -79,6 +79,7 @@ namespace LazinatorTests.Examples
                 
                 _Example = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, () => new Example(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _Example_Accessed = true;
         }
         

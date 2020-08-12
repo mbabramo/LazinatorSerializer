@@ -96,6 +96,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
                 
                 _RemoteLevel1Item = DeserializationFactory.Instance.CreateBaseOrDerivedType(254, () => new Remote<WGuid, RemoteLevel1>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _RemoteLevel1Item_Accessed = true;
         }
         

@@ -83,6 +83,7 @@ namespace LazinatorCollections.Tree
                 
                 _Locations = DeserializationFactory.Instance.CreateBaseOrDerivedType(211, () => new LazinatorDictionary<T, LazinatorList<WInt>>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _Locations_Accessed = true;
         }
         

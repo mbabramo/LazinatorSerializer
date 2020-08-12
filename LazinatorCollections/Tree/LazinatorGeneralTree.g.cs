@@ -86,6 +86,7 @@ namespace LazinatorCollections.Tree
                 
                 _Children = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, () => new LazinatorList<LazinatorGeneralTree<T>>(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _Children_Accessed = true;
         }
         
@@ -146,6 +147,7 @@ namespace LazinatorCollections.Tree
                 
                 _Item = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
             }
+            
             _Item_Accessed = true;
         }
         

@@ -112,6 +112,7 @@ namespace LazinatorTests.Examples
                 
                 _MyOfficialObject = DeserializationFactory.Instance.CreateBaseOrDerivedType(1039, () => new Concrete5(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _MyOfficialObject_Accessed = true;
         }
         
@@ -158,6 +159,7 @@ namespace LazinatorTests.Examples
                 
                 _MyUnofficialObject = DeserializationFactory.Instance.CreateBaseOrDerivedType(1037, () => new Concrete3(LazinatorConstructorEnum.LazinatorConstructor), childData, this); 
             }
+            
             _MyUnofficialObject_Accessed = true;
         }
         
