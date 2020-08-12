@@ -81,7 +81,7 @@ namespace Lazinator.CodeDescription
                                         SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan);
         internal bool IsLazinator => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable || PropertyType == LazinatorPropertyType.OpenGenericParameter;
         internal bool IsSupportedCollectionOrTuple => PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
-        internal bool IsSupportedStructTuple => IsSupportedCollectionOrTuple && (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan || SupportedTupleType == LazinatorSupportedTupleType.KeyValuePair || SupportedTupleType == LazinatorSupportedTupleType.ValueTuple);
+        internal bool OmitQuestionMarkInBackingField => PropertyType != LazinatorPropertyType.LazinatorNonnullableClassOrInterface || (IsSupportedCollectionOrTuple && !Nullable && NullableModeEnabled && (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan || SupportedTupleType == LazinatorSupportedTupleType.KeyValuePair || SupportedTupleType == LazinatorSupportedTupleType.ValueTuple));
         internal bool IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType => IsSupportedCollectionOrTuple || (PropertyType == LazinatorPropertyType.NonLazinator && HasInterchangeType);
         internal bool IsNotPrimitiveOrOpenGeneric => PropertyType != LazinatorPropertyType.OpenGenericParameter && PropertyType != LazinatorPropertyType.PrimitiveType && PropertyType != LazinatorPropertyType.PrimitiveTypeNullable;
         internal bool IsNonLazinatorType => PropertyType == LazinatorPropertyType.NonLazinator || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
@@ -1095,12 +1095,12 @@ namespace Lazinator.CodeDescription
 
             }
 
-            if (PropertyName == "IntStorage")
+            if (AppropriatelyQualifiedTypeName.Contains("Dictionary<"))
             {
                 var DEBUG = 0;
             }
             sb.Append($@"
-                {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName}{IIF(PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface || (IsSupportedCollectionOrTuple && !Nullable && !IsSupportedStructTuple && NullableModeEnabled), $"?")} _{PropertyName};
+                {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName}{IIF(!OmitQuestionMarkInBackingField, "?")} _{PropertyName};
         {GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
         {{{StepThroughPropertiesString}
             get
@@ -1111,7 +1111,7 @@ namespace Lazinator.CodeDescription
                 }}{IIF(IsNonLazinatorType && !TrackDirtinessNonSerialized && (!RoslynHelpers.IsReadOnlyStruct(Symbol) || ContainsLazinatorInnerProperty || ContainsOpenGenericInnerProperty), $@"
                     IsDirty = true;")} {IIF(CodeOnAccessed != "", $@"
                 {CodeOnAccessed}")}
-                return _{PropertyName}{IIF(PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface, $" ?? throw new UnsetNonnullableLazinatorException()")};
+                return _{PropertyName}{IIF(!OmitQuestionMarkInBackingField, $" ?? throw new UnsetNonnullableLazinatorException()")};
             }}{StepThroughPropertiesString}
             set
             {{{propertyTypeDependentSet}{RepeatedCodeExecution}
@@ -1434,7 +1434,7 @@ namespace Lazinator.CodeDescription
                     getChildSliceForFieldFn: () => {ChildSliceString},
                     verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                     binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-                        {DirectConverterTypeNamePrefix}{writeMethodName}(ref w, {BackingFieldString}{IIF(NullableModeEnabled && !Nullable && !IsSupportedStructTuple, " ?? throw new UnsetNonnullableLazinatorException()")},
+                        {DirectConverterTypeNamePrefix}{writeMethodName}(ref w, {BackingFieldString}{IIF(NullableModeEnabled && !Nullable && !OmitQuestionMarkInBackingField, " ?? throw new UnsetNonnullableLazinatorException()")},
                             includeChildrenMode, v, updateStoredBuffer));");
 
                 }

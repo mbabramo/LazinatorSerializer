@@ -600,9 +600,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         
-        protected Example[] _NonNullableArray;
+        protected Example[]? _NonNullableArray;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Example[] NonNullableArray
+        public Example[]? NonNullableArray
         {
             get
             {
