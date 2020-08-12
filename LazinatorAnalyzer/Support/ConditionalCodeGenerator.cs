@@ -17,6 +17,9 @@ namespace LazinatorAnalyzer.Support
             ElseConsequent = elseConsequent;
         }
 
+        public static string ConsequentPossiblyOnlyIf(bool onlyIfCondition, ConditionCodeGenerator antecedent, string consequent, string elseConsequent = null) => onlyIfCondition ? new ConditionalCodeGenerator(antecedent, consequent, elseConsequent).ToString() : elseConsequent;
+        public static string ElseConsequentPossiblyOnlyIf(bool onlyIfCondition, ConditionCodeGenerator antecedent, string consequent, string elseConsequent = null) => onlyIfCondition ? new ConditionalCodeGenerator(antecedent, consequent, elseConsequent).ToString() : consequent;
+
         public override string ToString()
         {
             string antecedentString = (Antecedent?.ToString() ?? "").Trim();

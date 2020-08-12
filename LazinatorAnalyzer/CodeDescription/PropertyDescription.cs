@@ -1102,15 +1102,8 @@ namespace Lazinator.CodeDescription
         {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed;")}
         private void Lazinate_{PropertyName}()
         {{
-            if (LazinatorObjectBytes.Length == 0)
-            {{
-                {createDefault}
-            }}
-            else
-            {{
-                LazinatorMemory childData = {ChildSliceString};
-                {recreation}
-            }}
+            {ConditionalCodeGenerator.ConsequentPossiblyOnlyIf(Nullable, "LazinatorObjectBytes.Length == 0", createDefault, $@"LazinatorMemory childData = {ChildSliceString};
+                {recreation}")}
             _{PropertyName}_Accessed = true;
         }}
 
