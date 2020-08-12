@@ -1983,12 +1983,13 @@ namespace Lazinator.CodeDescription
             else
             {
                 bool innerTypeIsNullable = outerProperty.InnerProperties[0].Nullable;
+                bool addNullPossible = innerTypeIsNullable || (SupportedCollectionType == LazinatorSupportedCollectionType.Memory);
                 if (IsNonLazinatorType)
                 {
                     if (Nullable)
                         return ($@"
                             int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
-                            {ConditionalCodeGenerator.ConsequentPossiblyOnlyIf(innerTypeIsNullable, "lengthCollectionMember == 0", collectionAddNull, $@"LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
+                            {ConditionalCodeGenerator.ConsequentPossiblyOnlyIf(addNullPossible, "lengthCollectionMember == 0", collectionAddNull, $@"LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                                 var item = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);
                                 {collectionAddItem}")}bytesSoFar += lengthCollectionMember;");
                     else
@@ -2011,7 +2012,7 @@ namespace Lazinator.CodeDescription
                     if (Nullable)
                         return ($@"
                             {lengthCollectionMemberString}
-                            {ConditionalCodeGenerator.ConsequentPossiblyOnlyIf(innerTypeIsNullable, "lengthCollectionMember == 0", collectionAddNull, $@"LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
+                            {ConditionalCodeGenerator.ConsequentPossiblyOnlyIf(addNullPossible, "lengthCollectionMember == 0", collectionAddNull, $@"LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                                 var item = DeserializationFactory.Instance.CreateBasedOnType<{AppropriatelyQualifiedTypeName}>(childData);
                                 {collectionAddItem}")}bytesSoFar += lengthCollectionMember;");
                     else
