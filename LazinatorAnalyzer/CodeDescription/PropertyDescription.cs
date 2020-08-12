@@ -2381,8 +2381,9 @@ namespace Lazinator.CodeDescription
             sb.Append($@"
                    private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
                         {{
-                            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable, "storage.Length == 0", $"return {DefaultExpression};", $@"{InterchangeTypeName} interchange = new {InterchangeTypeNameWithoutNullabilityIndicator}();
-                            interchange.DeserializeLazinator(storage);")}return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}(false);
+                            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable, "storage.Length == 0", $"return {DefaultExpression};")}{InterchangeTypeName} interchange = new {InterchangeTypeNameWithoutNullabilityIndicator}();
+                            interchange.DeserializeLazinator(storage);
+                            return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}(false);
                         }}
 
                         private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer,
