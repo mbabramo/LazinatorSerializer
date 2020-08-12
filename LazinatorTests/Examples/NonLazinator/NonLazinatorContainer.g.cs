@@ -637,10 +637,6 @@ namespace LazinatorTests.Examples
             
             private static NonLazinatorInterchangeableStruct ConvertFromBytes_NonLazinatorInterchangeableStruct(LazinatorMemory storage)
             {
-                if (storage.Length == 0)
-                {
-                    return default(NonLazinatorInterchangeableStruct);
-                }
                 NonLazinatorInterchangeStruct interchange = new NonLazinatorInterchangeStruct();
                 interchange.DeserializeLazinator(storage);
                 return interchange.Interchange_NonLazinatorInterchangeableStruct(false);

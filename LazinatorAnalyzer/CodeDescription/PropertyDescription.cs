@@ -221,11 +221,12 @@ namespace Lazinator.CodeDescription
             SetInclusionConditionals();
         }
 
-        public PropertyDescription(ITypeSymbol typeSymbol, ObjectDescription containingObjectDescription, PropertyDescription containingPropertyDescription, string propertyName = null)
+        public PropertyDescription(ITypeSymbol typeSymbol, ObjectDescription containingObjectDescription, NullableContext nullableContextSetting, PropertyDescription containingPropertyDescription, string propertyName = null)
         {
             // This is only used for defining the type on the inside of the generics, plus underlying type for arrays.
             TypeSymbolIfNoProperty = typeSymbol;
             ContainingObjectDescription = containingObjectDescription;
+            NullableContextSetting = nullableContextSetting;
             ContainingPropertyDescription = containingPropertyDescription;
             PropertyName = propertyName;
             IsAbstract = typeSymbol.IsAbstract;
@@ -598,7 +599,7 @@ namespace Lazinator.CodeDescription
             PropertyType = LazinatorPropertyType.SupportedCollection;
             InnerProperties = new List<PropertyDescription>()
             {
-                new PropertyDescription(t.ElementType, ContainingObjectDescription, this)
+                new PropertyDescription(t.ElementType, ContainingObjectDescription, NullableContextSetting, this)
             };
         }
 
@@ -697,7 +698,7 @@ namespace Lazinator.CodeDescription
             foreach (PropertyDescription pd in ContainingPropertyHierarchy())
                 if (SymbolEqualityComparer.Default.Equals(pd.TypeSymbolIfNoProperty, typeSymbol))
                     throw new LazinatorCodeGenException($"The type {typeSymbol} is recursively defined. Recursive record-like types are not supported.");
-            return new PropertyDescription(typeSymbol, containingObjectDescription, containingPropertyDescription, propertyName);
+            return new PropertyDescription(typeSymbol, containingObjectDescription, NullableContextSetting, containingPropertyDescription, propertyName);
         }
 
         private void CheckSupportedTuples(string nameWithoutArity)
@@ -737,7 +738,7 @@ namespace Lazinator.CodeDescription
         private void SetInnerProperties(ImmutableArray<ITypeSymbol> typeArguments)
         {
             InnerProperties = typeArguments
-                            .Select(x => new PropertyDescription(x, ContainingObjectDescription, this)).ToList();
+                            .Select(x => new PropertyDescription(x, ContainingObjectDescription, NullableContextSetting, this)).ToList();
         }
 
         public IEnumerable<PropertyDescription> PropertyAndInnerProperties()
@@ -818,7 +819,7 @@ namespace Lazinator.CodeDescription
             }
 
             InnerProperties = t.TypeArguments
-                .Select(x => new PropertyDescription(x, ContainingObjectDescription, this)).ToList();
+                .Select(x => new PropertyDescription(x, ContainingObjectDescription, NullableContextSetting, this)).ToList();
 
             if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
             {
@@ -833,7 +834,7 @@ namespace Lazinator.CodeDescription
                 if (keyValuePairType == null)
                     keyValuePairType = ContainingObjectDescription.Compilation.Compilation.GetTypeByMetadataName(typeof(KeyValuePair<,>).FullName);
                 INamedTypeSymbol constructed = keyValuePairType.Construct(t.TypeArguments.ToArray());
-                var replacementInnerProperty = new PropertyDescription(constructed, ContainingObjectDescription, this); // new PropertyDescription("System.Collections.Generic", "KeyValuePair", t.TypeArguments, ContainingObjectDescription);
+                var replacementInnerProperty = new PropertyDescription(constructed, ContainingObjectDescription, NullableContextSetting, this); // new PropertyDescription("System.Collections.Generic", "KeyValuePair", t.TypeArguments, ContainingObjectDescription);
                 InnerProperties = new List<PropertyDescription>() { replacementInnerProperty };
             }
         }
