@@ -519,6 +519,23 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void CloneWithoutBuffer_LazinatorList_NullableEnabledContext()
+        {
+            NullableEnabledContext GetObject()
+            {
+                return new NullableEnabledContext()
+                {
+                    ExplicitlyNullable = new Example(),
+                    ExplicitlyNullableInterface = new Example(),
+                    NonNullableClass = new Example(),
+                    NonNullableInterface = new Example()
+                };
+            }
+
+            VerifyCloningEquivalence(() => new LazinatorList<NullableEnabledContext>() { GetObject(), null, GetObject() });
+        }
+
+        [Fact]
         public void CloneWithoutBuffer_NullableEnabledContext_ThrowsAfterExcludingThenAccessingNonNullable()
         {
             NullableEnabledContext GetObject()
