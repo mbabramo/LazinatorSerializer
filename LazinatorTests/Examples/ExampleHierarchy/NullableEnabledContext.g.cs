@@ -195,7 +195,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     Lazinate_ByteMemoryNullable();
                 }
                 IsDirty = true; 
-                return _ByteMemoryNullable;
+                return _ByteMemoryNullable ?? throw new UnsetNonnullableLazinatorException();
             }
             set
             {
@@ -263,7 +263,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     Lazinate_ByteReadOnlyMemoryNullable();
                 }
                 IsDirty = true; 
-                return _ByteReadOnlyMemoryNullable;
+                return _ByteReadOnlyMemoryNullable ?? throw new UnsetNonnullableLazinatorException();
             }
             set
             {
@@ -322,7 +322,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     Lazinate_DictionaryWithNonNullable();
                 }
                 IsDirty = true; 
-                return _DictionaryWithNonNullable;
+                return _DictionaryWithNonNullable ?? throw new UnsetNonnullableLazinatorException();
             }
             set
             {
@@ -352,7 +352,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     Lazinate_DictionaryWithNullable();
                 }
                 IsDirty = true; 
-                return _DictionaryWithNullable;
+                return _DictionaryWithNullable ?? throw new UnsetNonnullableLazinatorException();
             }
             set
             {
@@ -611,7 +611,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     Lazinate_NonNullableArray();
                 }
                 IsDirty = true; 
-                return _NonNullableArray;
+                return _NonNullableArray ?? throw new UnsetNonnullableLazinatorException();
             }
             set
             {
@@ -723,7 +723,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     Lazinate_NonNullableListOfNonNullables();
                 }
                 IsDirty = true; 
-                return _NonNullableListOfNonNullables;
+                return _NonNullableListOfNonNullables ?? throw new UnsetNonnullableLazinatorException();
             }
             set
             {
@@ -753,7 +753,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     Lazinate_NonNullableListOfNullables();
                 }
                 IsDirty = true; 
-                return _NonNullableListOfNullables;
+                return _NonNullableListOfNullables ?? throw new UnsetNonnullableLazinatorException();
             }
             set
             {
@@ -783,7 +783,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     Lazinate_NonNullableQueue();
                 }
                 IsDirty = true; 
-                return _NonNullableQueue;
+                return _NonNullableQueue ?? throw new UnsetNonnullableLazinatorException();
             }
             set
             {
@@ -813,7 +813,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     Lazinate_NonNullableStack();
                 }
                 IsDirty = true; 
-                return _NonNullableStack;
+                return _NonNullableStack ?? throw new UnsetNonnullableLazinatorException();
             }
             set
             {
@@ -843,7 +843,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     Lazinate_NullableArray();
                 }
                 IsDirty = true; 
-                return _NullableArray;
+                return _NullableArray ?? throw new UnsetNonnullableLazinatorException();
             }
             set
             {
@@ -881,7 +881,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     Lazinate_NullableListOfNonNullables();
                 }
                 IsDirty = true; 
-                return _NullableListOfNonNullables;
+                return _NullableListOfNonNullables ?? throw new UnsetNonnullableLazinatorException();
             }
             set
             {
@@ -919,7 +919,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     Lazinate_NullableListOfNullables();
                 }
                 IsDirty = true; 
-                return _NullableListOfNullables;
+                return _NullableListOfNullables ?? throw new UnsetNonnullableLazinatorException();
             }
             set
             {
@@ -957,7 +957,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     Lazinate_NullableQueue();
                 }
                 IsDirty = true; 
-                return _NullableQueue;
+                return _NullableQueue ?? throw new UnsetNonnullableLazinatorException();
             }
             set
             {
@@ -987,7 +987,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     Lazinate_NullableStack();
                 }
                 IsDirty = true; 
-                return _NullableStack;
+                return _NullableStack ?? throw new UnsetNonnullableLazinatorException();
             }
             set
             {
@@ -1017,7 +1017,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     Lazinate_RegularTupleWithNonNullable();
                 }
                 IsDirty = true; 
-                return _RegularTupleWithNonNullable;
+                return _RegularTupleWithNonNullable ?? throw new UnsetNonnullableLazinatorException();
             }
             set
             {
@@ -1055,7 +1055,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     Lazinate_RegularTupleWithNullable();
                 }
                 IsDirty = true; 
-                return _RegularTupleWithNullable;
+                return _RegularTupleWithNullable ?? throw new UnsetNonnullableLazinatorException();
             }
             set
             {
