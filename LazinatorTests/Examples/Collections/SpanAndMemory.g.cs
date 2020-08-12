@@ -1014,10 +1014,6 @@ namespace LazinatorTests.Examples.Collections
         
         private static Memory<int> ConvertFromBytes_Memory_Gint_g(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
-            {
-                return default(Memory<int>);
-            }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
@@ -1221,10 +1217,6 @@ namespace LazinatorTests.Examples.Collections
         
         private static ReadOnlyMemory<char> ConvertFromBytes_ReadOnlyMemory_Gchar_g(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
-            {
-                return default(ReadOnlyMemory<char>);
-            }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
@@ -1270,10 +1262,6 @@ namespace LazinatorTests.Examples.Collections
         
         private static ReadOnlyMemory<int> ConvertFromBytes_ReadOnlyMemory_Gint_g(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
-            {
-                return default(ReadOnlyMemory<int>);
-            }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;

@@ -1893,11 +1893,11 @@ namespace Lazinator.CodeDescription
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
                     {{
-                        if (storage.Length == 0)
+                        {IIF(Nullable, $@"if (storage.Length == 0)
                         {{
                             return {DefaultExpression};
                         }}
-                        ReadOnlySpan<byte> span = storage.Span;
+                        ")}ReadOnlySpan<byte> span = storage.Span;
 
                         int bytesSoFar = 0;
                         {readCollectionLengthCommand}
@@ -1980,62 +1980,50 @@ namespace Lazinator.CodeDescription
                 return ($@"
                         {AppropriatelyQualifiedTypeName} item = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref bytesSoFar);
                         {collectionAddItem}");
-            else if (IsNonLazinatorType)
+            else
             {
-                if (Nullable)
-                    return ($@"
-                        int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
-                        if (lengthCollectionMember == 0)
-                        {{
-                            {collectionAddNull}
-                        }}
-                        else
-                        {{
+                bool innerTypeIsNullable = outerProperty.InnerProperties[0].Nullable;
+                if (IsNonLazinatorType)
+                {
+                    if (Nullable)
+                        return ($@"
+                            int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
+                            {ConditionalCodeGenerator.ConsequentPossiblyOnlyIf(innerTypeIsNullable, "lengthCollectionMember == 0", collectionAddNull, $@"LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
+                                var item = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);
+                                {collectionAddItem}")}bytesSoFar += lengthCollectionMember;");
+                    else
+                    {
+                        return ($@"
+                            int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                             var item = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);
-                            {collectionAddItem}
-                        }}
-                        bytesSoFar += lengthCollectionMember;");
-                else
-                {
-                    return ($@"
-                        int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
-                        LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                        var item = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);
-                            {collectionAddItem}
-                        bytesSoFar += lengthCollectionMember;");
+                                {collectionAddItem}
+                            bytesSoFar += lengthCollectionMember;");
+                    }
                 }
-            }
-            else // Lazinator type
-            {
-                if (AppropriatelyQualifiedTypeName == "Example")
+                else // Lazinator type
                 {
-                    var DEBUG = 0;
-                }
-                string lengthCollectionMemberString = $"int lengthCollectionMember = {GetSpanReadLength()};";
-                if (Nullable)
-                    return ($@"
-                        {lengthCollectionMemberString}
-                        if (lengthCollectionMember == 0)
-                        {{
-                            {collectionAddNull}
-                        }}
-                        else
-                        {{
+                    if (AppropriatelyQualifiedTypeName == "Example")
+                    {
+                        var DEBUG = 0;
+                    }
+                    string lengthCollectionMemberString = $"int lengthCollectionMember = {GetSpanReadLength()};";
+                    if (Nullable)
+                        return ($@"
+                            {lengthCollectionMemberString}
+                            {ConditionalCodeGenerator.ConsequentPossiblyOnlyIf(innerTypeIsNullable, "lengthCollectionMember == 0", collectionAddNull, $@"LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
+                                var item = DeserializationFactory.Instance.CreateBasedOnType<{AppropriatelyQualifiedTypeName}>(childData);
+                                {collectionAddItem}")}bytesSoFar += lengthCollectionMember;");
+                    else
+                        return (
+                            $@"
+                            {lengthCollectionMemberString}
                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                            var item = DeserializationFactory.Instance.CreateBasedOnType<{AppropriatelyQualifiedTypeName}>(childData);
+                            var item = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}();
+                            item.DeserializeLazinator(childData);
                             {collectionAddItem}
-                        }}
-                        bytesSoFar += lengthCollectionMember;");
-                else
-                    return (
-                        $@"
-                        {lengthCollectionMemberString}
-                        LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                        var item = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}();
-                        item.DeserializeLazinator(childData);
-                        {collectionAddItem}
-                        bytesSoFar += lengthCollectionMember;");
+                            bytesSoFar += lengthCollectionMember;");
+                }
             }
         }
 

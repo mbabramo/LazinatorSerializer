@@ -1038,10 +1038,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         private static List<Example> ConvertFromBytes_List_GExample_g(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
-            {
-                return default(List<Example>);
-            }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
@@ -1127,10 +1123,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         private static List<Example?> ConvertFromBytes_List_GExample_C63_g(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
-            {
-                return default(List<Example?>);
-            }
             ReadOnlySpan<byte> span = storage.Span;
             
             int bytesSoFar = 0;
