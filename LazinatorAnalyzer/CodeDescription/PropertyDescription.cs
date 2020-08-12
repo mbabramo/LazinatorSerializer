@@ -365,8 +365,10 @@ namespace Lazinator.CodeDescription
             else
             {
                 // look for primitive type
-                if (typeSymbol.Name == "string")
+                if (typeSymbol.Name == "string?")
                     Nullable = true;
+                else if (typeSymbol.Name == "string")
+                    Nullable = !NullableModeEnabled;
                 if (namedTypeSymbol?.EnumUnderlyingType != null)
                     SetEnumEquivalentType(namedTypeSymbol);
                 if (SupportedAsPrimitives.Contains(EnumEquivalentType ?? ShortTypeNameWithoutNullableIndicator))
@@ -807,7 +809,12 @@ namespace Lazinator.CodeDescription
         private void SetSupportedCollectionTypeNameAndPropertyType(INamedTypeSymbol t, string nameWithoutArity)
         {
             if (SupportedCollectionType != LazinatorSupportedCollectionType.Memory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlyMemory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlySpan)
-                Nullable = true;
+            {
+                if (NullableModeEnabled)
+                    Nullable = Symbol.ToString().EndsWith("?");
+                else
+                    Nullable = true;
+            }
 
             InnerProperties = t.TypeArguments
                 .Select(x => new PropertyDescription(x, ContainingObjectDescription, this)).ToList();
@@ -2009,6 +2016,10 @@ namespace Lazinator.CodeDescription
             }
             else // Lazinator type
             {
+                if (AppropriatelyQualifiedTypeName == "Example")
+                {
+                    var DEBUG = 0;
+                }
                 string lengthCollectionMemberString = $"int lengthCollectionMember = {GetSpanReadLength()};";
                 if (Nullable)
                     return ($@"
