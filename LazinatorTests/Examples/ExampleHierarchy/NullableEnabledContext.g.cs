@@ -1072,7 +1072,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         
-        private static List<Example> CloneOrChange_List_GExample_g(List<Example> itemToClone, Func<ILazinator, ILazinator>? cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static List<Example> CloneOrChange_List_GExample_g(List<Example> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
@@ -1149,7 +1149,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         
-        private static List<Example?> CloneOrChange_List_GExample_C63_g(List<Example?> itemToClone, Func<ILazinator?, ILazinator?>? cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static List<Example?> CloneOrChange_List_GExample_C63_g(List<Example?> itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
@@ -1223,7 +1223,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         
-        private static List<Example>? CloneOrChange_List_GExample_g_C63(List<Example>? itemToClone, Func<ILazinator, ILazinator>? cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static List<Example>? CloneOrChange_List_GExample_g_C63(List<Example>? itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
@@ -1304,7 +1304,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         
-        private static List<Example?>? CloneOrChange_List_GExample_C63_g_C63(List<Example?>? itemToClone, Func<ILazinator?, ILazinator?>? cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static List<Example?>? CloneOrChange_List_GExample_C63_g_C63(List<Example?>? itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {

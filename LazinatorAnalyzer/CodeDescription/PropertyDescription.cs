@@ -460,6 +460,8 @@ namespace Lazinator.CodeDescription
             return new ConditionalCodeGenerator(GetNullCheck(propertyName), consequent, elseConsequent).ToString();
         }
 
+        public string GetNullCheckIfThenButOnlyIfNullable(bool nullable, string propertyName, string consequent, string elseConsequent) => nullable ? GetNullCheckIfThen(propertyName, consequent, elseConsequent) + "\r\n" : "";
+
         public string GetNullCheck(string propertyName)
         {
             string nullCheck;
@@ -2403,8 +2405,7 @@ namespace Lazinator.CodeDescription
 
                         private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<{ILazinatorString}, {ILazinatorString}> cloneOrChangeFunc, bool avoidCloningIfPossible)
                         {{
-                            {GetNullCheckIfThen("itemToClone", $"return {DefaultExpression};", "")}
-                            {InterchangeTypeName} interchange = new {InterchangeTypeNameWithoutNullabilityIndicator}(itemToClone);
+                            {GetNullCheckIfThenButOnlyIfNullable(Nullable, "itemToClone", $"return {DefaultExpression};", "")}{InterchangeTypeName} interchange = new {InterchangeTypeNameWithoutNullabilityIndicator}(itemToClone);
                             return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}(avoidCloningIfPossible ? false : true);
                         }}
                         ");
