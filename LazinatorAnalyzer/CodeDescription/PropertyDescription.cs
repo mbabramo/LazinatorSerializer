@@ -122,6 +122,7 @@ namespace Lazinator.CodeDescription
 
         /* Conversion */
         private string InterchangeTypeName { get; set; }
+        private string InterchangeTypeNameWithoutNullabilityIndicator => WithoutNullableIndicator(InterchangeTypeName);
         private bool NonSerializedIsStruct { get; set; }
         private string DirectConverterTypeName { get; set; }
         internal string DirectConverterTypeNamePrefix => DirectConverterTypeName == "" || DirectConverterTypeName == null ? "" : DirectConverterTypeName + ".";
@@ -1946,7 +1947,7 @@ namespace Lazinator.CodeDescription
                 else
                 {
                     string innerArrayText = (String.Join(", ", Enumerable.Range(0, (int)ArrayRank).Select(j => $"collectionLength{j}")));
-                    string newExpression = ReverseBracketOrder($"{InnerProperties[0].AppropriatelyQualifiedTypeName}[{innerArrayText}]");
+                    string newExpression = ReverseBracketOrder($"{InnerProperties[0].AppropriatelyQualifiedTypeNameWithoutNullableIndicator}[{innerArrayText}]");
                     creationText = $"{AppropriatelyQualifiedTypeName} collection = new {newExpression};";
                 }
             }
@@ -2028,7 +2029,7 @@ namespace Lazinator.CodeDescription
                         $@"
                         {lengthCollectionMemberString}
                         LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                        var item = new {AppropriatelyQualifiedTypeName}();
+                        var item = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}();
                         item.DeserializeLazinator(childData);
                         {collectionAddItem}
                         bytesSoFar += lengthCollectionMember;");
@@ -2385,7 +2386,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 return {DefaultExpression};
                             }}
-                            {InterchangeTypeName} interchange = new {InterchangeTypeName}();
+                            {InterchangeTypeName} interchange = new {InterchangeTypeNameWithoutNullabilityIndicator}();
                             interchange.DeserializeLazinator(storage);
                             return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}(false);
                         }}
@@ -2395,7 +2396,7 @@ namespace Lazinator.CodeDescription
                             bool verifyCleanness, bool updateStoredBuffer)
                         {{
                             {GetNullCheckIfThen("itemToConvert", $@"return;", "")}
-                            {InterchangeTypeName} interchange = new {InterchangeTypeName}(itemToConvert);
+                            {InterchangeTypeName} interchange = new {InterchangeTypeNameWithoutNullabilityIndicator}(itemToConvert);
                             interchange.SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                         }}
 
@@ -2403,7 +2404,7 @@ namespace Lazinator.CodeDescription
                         private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<{ILazinatorString}, {ILazinatorString}>{QuestionMarkIfNullableModeEnabled} cloneOrChangeFunc, bool avoidCloningIfPossible)
                         {{
                             {GetNullCheckIfThen("itemToClone", $"return {DefaultExpression};", "")}
-                            {InterchangeTypeName} interchange = new {InterchangeTypeName}(itemToClone);
+                            {InterchangeTypeName} interchange = new {InterchangeTypeNameWithoutNullabilityIndicator}(itemToClone);
                             return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}(avoidCloningIfPossible ? false : true);
                         }}
                         ");
