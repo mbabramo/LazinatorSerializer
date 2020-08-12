@@ -819,8 +819,11 @@ namespace Lazinator.CodeDescription
                 .Select(x => new PropertyDescription(x, ContainingObjectDescription, this)).ToList();
 
             if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
+            {
+                Nullable = SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory;
                 if (InnerProperties[0].Nullable)
                     throw new LazinatorCodeGenException("Cannot use Lazinator to serialize Memory/Span with nullable generic arguments."); // this is because we can't cast easily in this context
+            }
 
             if (SupportedCollectionType == LazinatorSupportedCollectionType.Dictionary || SupportedCollectionType == LazinatorSupportedCollectionType.SortedDictionary || SupportedCollectionType == LazinatorSupportedCollectionType.SortedList)
             {
@@ -1983,7 +1986,7 @@ namespace Lazinator.CodeDescription
             else
             {
                 bool innerTypeIsNullable = outerProperty.InnerProperties[0].Nullable;
-                bool addNullPossible = innerTypeIsNullable || (SupportedCollectionType == LazinatorSupportedCollectionType.Memory);
+                bool addNullPossible = innerTypeIsNullable;
                 if (IsNonLazinatorType)
                 {
                     if (Nullable)
@@ -2170,6 +2173,8 @@ namespace Lazinator.CodeDescription
             if (alreadyGenerated.Contains(AppropriatelyQualifiedTypeNameEncodable))
                 return;
             alreadyGenerated.Add(AppropriatelyQualifiedTypeNameEncodable);
+
+            Debug;
 
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
@@ -2369,6 +2374,8 @@ namespace Lazinator.CodeDescription
             if (alreadyGenerated.Contains(AppropriatelyQualifiedTypeNameEncodable))
                 return;
             alreadyGenerated.Add(AppropriatelyQualifiedTypeNameEncodable);
+
+            Debug;
 
             // Note: The interchange type must include a parameterless constructor. We can't use the LazinatorConstructorEnum approach here, because we can't determine whether the interchange type, which we know only by string, is a struct (in which case there would be no such constructor).
             sb.Append($@"
