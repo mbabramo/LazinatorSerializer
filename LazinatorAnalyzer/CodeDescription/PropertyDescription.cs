@@ -467,7 +467,10 @@ namespace Lazinator.CodeDescription
             string nullCheck;
             if (IsMemoryOrSpan)
             {
-                nullCheck = $"{propertyName}{IIF(Nullable, ".Value")}.Length == 0"; // use as equivalent of null
+                if (Nullable)
+                    nullCheck = $"{propertyName} == null";
+                else
+                    nullCheck = $"{propertyName}.Length == 0"; // use as equivalent of null
             }
             else if (IsDefinitelyStruct && PropertyType != LazinatorPropertyType.LazinatorStructNullable)
                 nullCheck = $"false";

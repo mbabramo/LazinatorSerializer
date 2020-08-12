@@ -12,7 +12,7 @@ namespace LazinatorTests.Tests
     public class LazinatorSpanTests
     {
 
-        static char[] chars = "Hello, world".ToCharArray();
+        public static char[] chars = "Hello, world".ToCharArray();
 
         public static SpanAndMemory GetSpanAndMemory(bool emptySpans)
         {

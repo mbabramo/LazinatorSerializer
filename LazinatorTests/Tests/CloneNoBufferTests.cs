@@ -71,6 +71,31 @@ namespace LazinatorTests.Tests
             VerifyCloningEquivalence(() => LazinatorSpanTests.GetSpanAndMemory(true));
         }
 
+        public static SpanAndMemory GetSpanAndMemoryNullSpans()
+        {
+
+            return new SpanAndMemory
+            {
+                MyReadOnlyMemoryByte = new Memory<byte>(new byte[] { 3, 4, 5 }),
+                MyReadOnlyMemoryChar = new ReadOnlyMemory<char>(LazinatorSpanTests.chars),
+                MyReadOnlyMemoryInt = new ReadOnlyMemory<int>(new int[] { 3, 4, 5 }),
+                MyReadOnlySpanByte = new Span<byte>(new byte[] { 3, 4, 5 }),
+                MyReadOnlySpanChar = new ReadOnlySpan<char>(LazinatorSpanTests.chars),
+                MyReadOnlySpanLong = new Span<long>(new long[] { -234234, long.MaxValue }),
+                MyMemoryByte = new Memory<byte>(new byte[] { 3, 4, 5 }),
+                MyMemoryInt = new Memory<int>(new int[] { 3, 4, 5 }),
+                MyNullableMemoryByte = null,
+                MyNullableMemoryInt = null,
+                MyNullableReadOnlyMemoryInt = null
+            };
+        }
+
+        [Fact]
+        public void CloneWithoutBuffer_SpanAndMemory_NullSpans()
+        {
+            VerifyCloningEquivalence(() => GetSpanAndMemoryNullSpans());
+        }
+
         [Fact]
         public void CloneWithoutBuffer_DotNetListValues()
         {

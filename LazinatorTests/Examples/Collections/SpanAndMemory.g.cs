@@ -1079,7 +1079,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static Memory<byte>? CloneOrChange_Memory_Gbyte_g_C63(Memory<byte>? itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            if (itemToClone.Value.Length == 0)
+            if (itemToClone == null)
             {
                 return default;
             }
@@ -1130,7 +1130,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static Memory<int>? CloneOrChange_Memory_Gint_g_C63(Memory<int>? itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            if (itemToClone.Value.Length == 0)
+            if (itemToClone == null)
             {
                 return default;
             }
@@ -1181,7 +1181,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static ReadOnlyMemory<int>? CloneOrChange_ReadOnlyMemory_Gint_g_C63(ReadOnlyMemory<int>? itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            if (itemToClone.Value.Length == 0)
+            if (itemToClone == null)
             {
                 return default;
             }
