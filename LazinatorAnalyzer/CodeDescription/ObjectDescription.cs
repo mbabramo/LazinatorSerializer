@@ -943,6 +943,10 @@ namespace Lazinator.CodeDescription
                 string qIfAppropriate = "?";
                 if (NullableModeEnabled && property.InnerProperties?[0] is PropertyDescription innerProperty && innerProperty.Nullable == false)
                     qIfAppropriate = "";
+                if ("Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g" == property.AppropriatelyQualifiedTypeNameEncodable)
+                {
+                    var DEBUG = 0;
+                }
                 sb.Append(new ConditionalCodeGenerator(getAntecedent(property),
                         $@"{IIF(nonNullCheckDefinitelyTrue(property), $@"var deserialized_{propertyName} = {propertyName};
                             ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l{qIfAppropriate}.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);").ToString());

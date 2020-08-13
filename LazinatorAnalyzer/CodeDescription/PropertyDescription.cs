@@ -1731,6 +1731,10 @@ namespace Lazinator.CodeDescription
             if (ArrayRank > 1)
                 forStatement = DeleteLines(forStatement, (int)ArrayRank); // we will define collectionLengths for each dimension in creation statement and don't need to redefine
 
+            if ("Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g" == AppropriatelyQualifiedTypeNameEncodable)
+            {
+                var DEBUG = 0;
+            }
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<{innerProperty.ILazinatorStringWithItemSpecificNullability}, {innerProperty.ILazinatorStringWithItemSpecificNullability}> cloneOrChangeFunc, bool avoidCloningIfPossible)
                     {{
@@ -2401,6 +2405,11 @@ namespace Lazinator.CodeDescription
                     .Select(z => z.InnerProperty.GetCloneStringWithinCloneMethod(z.ItemString))
                 );
             string creationText = SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? $"({innerClones})" : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}({innerClones})";
+
+            if ("Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g" == AppropriatelyQualifiedTypeNameEncodable)
+            {
+                var DEBUG = 0;
+            }
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToConvert, Func<{ILazinatorStringWithItemSpecificNullability}, {ILazinatorStringWithItemSpecificNullability}> cloneOrChangeFunc, bool avoidCloningIfPossible)
                     {{
