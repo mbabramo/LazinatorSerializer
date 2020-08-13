@@ -37,6 +37,7 @@ namespace Lazinator.CodeDescription
         public string QuestionMarkIfNullableModeEnabled => NullableModeEnabled ? "?" : "";
         public string ILazinatorStringWithoutQuestionMark => "ILazinator";
         public string ILazinatorString => "ILazinator" + QuestionMarkIfNullableModeEnabled;
+        public string ILazinatorStringNonNullableIfPropertyNonNullable(bool nonnullable) => nonnullable ? "ILazinator" : ILazinatorString;
 
         /* Derivation */
         public ObjectDescription BaseLazinatorObject { get; set; }
