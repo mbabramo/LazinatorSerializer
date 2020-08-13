@@ -2177,6 +2177,10 @@ namespace Lazinator.CodeDescription
 
         private string GetSupportedCollectionWriteCommands(string itemString, bool outerPropertyIsSimpleListOrArray)
         {
+            if (itemString.Contains("MyReadOnlySpanByte"))
+            {
+                var DEBUG = 0;
+            }
             string GetSupportedCollectionWriteCommandsHelper()
             {
                 if (IsPrimitive)
@@ -2208,6 +2212,10 @@ namespace Lazinator.CodeDescription
                 }
             }
 
+            if (PropertyName == "ReadOnly" || AppropriatelyQualifiedTypeName == "ReadOnlySpan<byte>")
+            {
+                var DEBUG = 0;
+            }
             string writeCommand = GetSupportedCollectionWriteCommandsHelper();
             string fullWriteCommands;
             if (Nullable)
@@ -2366,6 +2374,10 @@ namespace Lazinator.CodeDescription
 
         private string GetSupportedTupleWriteCommand(string itemName, LazinatorSupportedTupleType outerTupleType, bool outerTypeIsNullable)
         {
+            if (itemName.Contains("MyReadOnlySpanByte"))
+            {
+                var DEBUG = 0;
+            }
             string itemToConvertItemName =
                 $"itemToConvert{IIF((outerTupleType == LazinatorSupportedTupleType.ValueTuple || outerTupleType == LazinatorSupportedTupleType.KeyValuePair) && outerTypeIsNullable, ".Value")}.{itemName}";
             if (IsPrimitive)
