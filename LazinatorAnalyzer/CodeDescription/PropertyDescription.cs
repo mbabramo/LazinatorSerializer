@@ -40,6 +40,7 @@ namespace Lazinator.CodeDescription
         public string ILazinatorString => "ILazinator" + QuestionMarkIfNullableModeEnabled;
         public string ILazinatorStringWithItemSpecificNullability => "ILazinator" + QuestionMarkIfNullableAndNullableModeEnabled;
         internal bool Nullable { get; set; }
+        internal bool SymbolEndsWithQuestionMark => Symbol.ToString().EndsWith("?");
         internal string NullForgiveness => NullableModeEnabled ? "!" : "";
         private bool HasParameterlessConstructor => PropertySymbol.Type is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.InstanceConstructors.Any(y => !y.IsImplicitlyDeclared && !y.Parameters.Any());
         private bool IsInterface { get; set; }
@@ -349,6 +350,10 @@ namespace Lazinator.CodeDescription
 
         private void SetPropertyType(ITypeSymbol typeSymbol)
         {
+            if (Symbol.ToString().Contains("Example[]"))
+            {
+                var DEBUG = 0;
+            }
             INamedTypeSymbol namedTypeSymbol = typeSymbol as INamedTypeSymbol;
 
             if (namedTypeSymbol == null && typeSymbol.TypeKind == TypeKind.TypeParameter)
@@ -548,7 +553,11 @@ namespace Lazinator.CodeDescription
             {
                 if (t.TypeKind == TypeKind.Class || t.TypeKind == TypeKind.Interface || t.TypeKind == TypeKind.Array)
                 {
-                    if (NullableModeEnabled && !Symbol.ToString().EndsWith("?"))
+                    if (t.TypeKind == TypeKind.Array)
+                    {
+                        var DEBUG = 0;
+                    }
+                    if (NullableModeEnabled && !SymbolEndsWithQuestionMark)
                     {
                         Nullable = false;
                         PropertyType = LazinatorPropertyType.LazinatorNonnullableClassOrInterface;
@@ -605,7 +614,7 @@ namespace Lazinator.CodeDescription
         {
             ArrayRank = t.Rank;
             SupportedCollectionType = LazinatorSupportedCollectionType.Array;
-            Nullable = true;
+            Nullable = SymbolEndsWithQuestionMark;
             PropertyType = LazinatorPropertyType.SupportedCollection;
             InnerProperties = new List<PropertyDescription>()
             {
@@ -827,7 +836,7 @@ namespace Lazinator.CodeDescription
             if (SupportedCollectionType != LazinatorSupportedCollectionType.Memory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlyMemory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlySpan)
             {
                 if (NullableModeEnabled)
-                    Nullable = Symbol.ToString().EndsWith("?");
+                    Nullable = SymbolEndsWithQuestionMark;
                 else
                     Nullable = true;
             }
@@ -1095,7 +1104,7 @@ namespace Lazinator.CodeDescription
 
             }
 
-            if (AppropriatelyQualifiedTypeName.Contains("Dictionary<"))
+            if (PropertyName.Contains("NonNullableArray"))
             {
                 var DEBUG = 0;
             }
