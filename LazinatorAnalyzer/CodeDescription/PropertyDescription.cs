@@ -128,8 +128,9 @@ namespace Lazinator.CodeDescription
         private string WriteMethodName { get; set; }
         private string ReadMethodName { get; set; }
         internal string PropertyName { get; set; }
-        internal string BackingFieldString => (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan) ?
-                    GetReadOnlySpanBackingFieldCast() : $"_{PropertyName}";
+        internal string BackingFieldString => $"_{PropertyName}";
+        internal string BackingFieldStringOrContainedSpan => (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan) ?
+                    GetReadOnlySpanBackingFieldCast() : BackingFieldString;
         internal string BackingFieldAccessWithPossibleException => $"{BackingFieldString}{IIF(AddQuestionMarkInBackingFieldForNonNullable, $" ?? throw new UnsetNonnullableLazinatorException()")}";
         internal string BackingFieldWithPossibleValueDereference => $"{BackingFieldString}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@".Value")}";
 
