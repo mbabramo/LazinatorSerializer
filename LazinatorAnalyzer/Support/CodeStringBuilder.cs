@@ -36,7 +36,7 @@ namespace Lazinator.CodeDescription
         {
             if (AddLocationIndexComments)
             {
-                if (LocationIndex == -1) // DEBUG
+                if (LocationIndex == 283) // DEBUG
                 {
                     Debugger.Break();
                 }
