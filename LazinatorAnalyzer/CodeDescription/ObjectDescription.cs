@@ -1191,7 +1191,7 @@ $@"{property.PropertyName}{property.NullForgiveness}{IIF(property.PropertyType =
                 {
                     string propertyName = property.PropertyName;
                     sb.Append(new ConditionalCodeGenerator(property.GetNonNullCheck(true),
-$@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}({property.BackingFieldWithPossibleValueDereference}, l => l.RemoveBufferInHierarchy(), true);").ToString());
+$@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}({property.BackingFieldWithPossibleValueDereferenceWithPossibleException}, l => l.RemoveBufferInHierarchy(), true);").ToString());
                 }
             }
             sb.AppendLine($@"}}

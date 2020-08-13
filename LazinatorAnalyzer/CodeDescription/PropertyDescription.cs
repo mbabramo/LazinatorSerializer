@@ -105,6 +105,7 @@ namespace Lazinator.CodeDescription
         internal string BackingFieldAccessWithPossibleException => $"{BackingFieldString}{PossibleUnsetException}";
         internal string BackingFieldStringOrContainedSpanWithPossibleException(string propertyName) => $"{BackingFieldStringOrContainedSpan(propertyName)}{PossibleUnsetException}";
         internal string BackingFieldWithPossibleValueDereference => $"{BackingFieldString}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@".Value")}";
+        internal string BackingFieldWithPossibleValueDereferenceWithPossibleException => $"{BackingFieldString}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@".Value")}{PossibleUnsetException}";
         internal bool IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType => IsSupportedCollectionOrTuple || (PropertyType == LazinatorPropertyType.NonLazinator && HasInterchangeType);
         internal bool IsNotPrimitiveOrOpenGeneric => PropertyType != LazinatorPropertyType.OpenGenericParameter && PropertyType != LazinatorPropertyType.PrimitiveType && PropertyType != LazinatorPropertyType.PrimitiveTypeNullable;
         internal bool IsNonLazinatorType => PropertyType == LazinatorPropertyType.NonLazinator || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
