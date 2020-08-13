@@ -129,8 +129,8 @@ namespace Lazinator.CodeDescription
         private string ReadMethodName { get; set; }
         internal string PropertyName { get; set; }
         internal string BackingFieldString => $"_{PropertyName}";
-        internal string BackingFieldStringOrContainedSpan => (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan) ?
-                    GetReadOnlySpanBackingFieldCast() : BackingFieldString;
+        internal string BackingFieldStringOrContainedSpan(string propertyName) => (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan) ?
+                    GetReadOnlySpanBackingFieldCast(propertyName) : propertyName;
         internal string BackingFieldAccessWithPossibleException => $"{BackingFieldString}{IIF(AddQuestionMarkInBackingFieldForNonNullable, $" ?? throw new UnsetNonnullableLazinatorException()")}";
         internal string BackingFieldWithPossibleValueDereference => $"{BackingFieldString}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@".Value")}";
 
@@ -2184,7 +2184,7 @@ namespace Lazinator.CodeDescription
                     {WriteMethodName}(ref writer, {EnumEquivalentCastToEquivalentType}{itemString});");
                 else if (IsNonLazinatorType)
                     return ($@"
-                    void action(ref BinaryBufferWriter w) => {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref w, {itemString}, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void action(ref BinaryBufferWriter w) => {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref w, {BackingFieldStringOrContainedSpan(itemString)}, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(ref writer, action);");
                 else if (IsPossiblyStruct && outerPropertyIsSimpleListOrArray)
                 {
