@@ -82,7 +82,22 @@ namespace Lazinator.CodeDescription
                                         SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan);
         internal bool IsLazinator => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable || PropertyType == LazinatorPropertyType.OpenGenericParameter;
         internal bool IsSupportedCollectionOrTuple => PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
-        internal bool OmitQuestionMarkInBackingField => !NullableModeEnabled || (!IsSupportedCollectionOrTuple && PropertyType != LazinatorPropertyType.LazinatorNonnullableClassOrInterface) || (IsSupportedCollectionOrTuple && !Nullable && (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan || SupportedCollectionType == LazinatorSupportedCollectionType.Array || SupportedTupleType == LazinatorSupportedTupleType.KeyValuePair || SupportedTupleType == LazinatorSupportedTupleType.ValueTuple));
+        // DEBUG internal bool OmitQuestionMarkInBackingField => !NullableModeEnabled || (!IsSupportedCollectionOrTuple && PropertyType != LazinatorPropertyType.LazinatorNonnullableClassOrInterface) || (IsSupportedCollectionOrTuple && !Nullable && (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan || SupportedCollectionType == LazinatorSupportedCollectionType.Array || SupportedTupleType == LazinatorSupportedTupleType.KeyValuePair || SupportedTupleType == LazinatorSupportedTupleType.ValueTuple));
+        
+        internal bool IsSupportedCollectionReferenceType => PropertyType == LazinatorPropertyType.SupportedCollection && SupportedCollectionType != LazinatorSupportedCollectionType.Memory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlyMemory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlySpan;
+        internal bool IsSupportedTupleReferenceType => PropertyType == LazinatorPropertyType.SupportedTuple && SupportedTupleType != LazinatorSupportedTupleType.KeyValuePair && SupportedTupleType != LazinatorSupportedTupleType.ValueTuple;
+
+        internal bool IsSupportedReferenceType => IsSupportedCollectionReferenceType || IsSupportedTupleReferenceType;
+        internal bool IsSupportedValueType => IsSupportedCollectionOrTuple && !IsSupportedReferenceType;
+
+        // DEBUG -- important: We must separate RecordLikeType into RecordLikeClass and RecordLikeStruct and update above accordingly.
+        internal bool IsNonNullableReferenceType => !Nullable && (
+            PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface
+            || IsSupportedReferenceType);
+        internal bool IsNonNullableValueTypeWithNonNullableReferenceType => !Nullable && !IsNonNullableReferenceType && InnerProperties != null && InnerProperties.Any(x => x.IsNonNullableReferenceType);
+        internal bool NonNullableThatRequiresInitialization => IsNonNullableReferenceType || IsNonNullableValueTypeWithNonNullableReferenceType;
+        internal bool NonNullableThatCanBeUninitialized => !Nullable && !NonNullableThatRequiresInitialization;
+        internal bool AddQuestionMarkInBackingFieldForNonNullable => NullableModeEnabled && NonNullableThatRequiresInitialization;
         internal bool IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType => IsSupportedCollectionOrTuple || (PropertyType == LazinatorPropertyType.NonLazinator && HasInterchangeType);
         internal bool IsNotPrimitiveOrOpenGeneric => PropertyType != LazinatorPropertyType.OpenGenericParameter && PropertyType != LazinatorPropertyType.PrimitiveType && PropertyType != LazinatorPropertyType.PrimitiveTypeNullable;
         internal bool IsNonLazinatorType => PropertyType == LazinatorPropertyType.NonLazinator || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
@@ -99,7 +114,7 @@ namespace Lazinator.CodeDescription
         public string DefaultExpression => PropertyType switch { LazinatorPropertyType.LazinatorStructNullable => "null", LazinatorPropertyType.LazinatorClassOrInterface => "null", LazinatorPropertyType.LazinatorNonnullableClassOrInterface => "null" /* won't actually use this -- DEBUG change to error*/, _ => $"default({AppropriatelyQualifiedTypeName})" };
         private string AppropriatelyQualifiedTypeNameWithoutNullableIndicator => UseFullyQualifiedNames ? FullyQualifiedNameWithoutNullableIndicator : ShortTypeNameWithoutNullableIndicator;
 
-        private string AppropriatelyQualifiedTypeNameWithoutNullableIndicatorIfNonnullableReferenceType => PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface ? AppropriatelyQualifiedTypeNameWithoutNullableIndicator : AppropriatelyQualifiedTypeName; 
+        private string AppropriatelyQualifiedTypeNameWithoutNullableIndicatorIfNonnullableReferenceType => PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface ? AppropriatelyQualifiedTypeNameWithoutNullableIndicator : AppropriatelyQualifiedTypeName;
 
         internal string ShortTypeNameEncodable => Symbol.GetEncodableVersionOfIdentifier(false);
         private string ShortTypeNameEncodableWithoutNullable => (Symbol as INamedTypeSymbol).TypeArguments[0].GetEncodableVersionOfIdentifier(false);
@@ -368,7 +383,7 @@ namespace Lazinator.CodeDescription
             if (Nullable)
             {
                 // handle a nullable type (which might be a nullable primitive type or a nullable struct / valuetuple
-                SetNullablePropertyType(namedTypeSymbol);
+                SetEnumOrPrimitivePropertyType(namedTypeSymbol);
                 if (PropertyType == LazinatorPropertyType.LazinatorStruct)
                     PropertyType = LazinatorPropertyType.LazinatorStructNullable;
                 return;
@@ -430,7 +445,7 @@ namespace Lazinator.CodeDescription
                     return;
                 }
 
-                if (HandleSupportedTuplesAndCollections(namedTypeSymbol))
+                if (SetSupportedTupleAndCollectionsPropertyType(namedTypeSymbol))
                     return;
 
                 SetNonserializedTypeNameAndPropertyType(namedTypeSymbol);
@@ -511,7 +526,7 @@ namespace Lazinator.CodeDescription
             return nonNullCheck;
         }
 
-        private bool HandleSupportedTuplesAndCollections(INamedTypeSymbol t)
+        private bool SetSupportedTupleAndCollectionsPropertyType(INamedTypeSymbol t)
         {
             if (t.TupleUnderlyingType != null)
                 t = t.TupleUnderlyingType;
@@ -537,7 +552,7 @@ namespace Lazinator.CodeDescription
             return (HandleRecordLikeType(t));
         }
 
-        private void SetNullablePropertyType(INamedTypeSymbol namedTypeSymbol)
+        private void SetEnumOrPrimitivePropertyType(INamedTypeSymbol namedTypeSymbol)
         {
             SetPropertyType(namedTypeSymbol.TypeArguments[0] as INamedTypeSymbol);
             Nullable = true;
@@ -614,7 +629,7 @@ namespace Lazinator.CodeDescription
         {
             ArrayRank = t.Rank;
             SupportedCollectionType = LazinatorSupportedCollectionType.Array;
-            Nullable = SymbolEndsWithQuestionMark;
+            Nullable = NullableModeEnabled ? SymbolEndsWithQuestionMark : true;
             PropertyType = LazinatorPropertyType.SupportedCollection;
             InnerProperties = new List<PropertyDescription>()
             {
@@ -749,6 +764,7 @@ namespace Lazinator.CodeDescription
         private void SetSupportedTuplePropertyType(INamedTypeSymbol t, string nameWithoutArity)
         {
             SetInnerProperties(t, nameWithoutArity);
+            Nullable = SymbolEndsWithQuestionMark;
         }
 
         private void SetInnerProperties(INamedTypeSymbol t, string name = null)
@@ -1104,12 +1120,12 @@ namespace Lazinator.CodeDescription
 
             }
 
-            if (PropertyName.Contains("NonNullableArray"))
+            if (PropertyName.Contains("RegularTupleWithNonNullable"))
             {
                 var DEBUG = 0;
             }
             sb.Append($@"
-                {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName}{IIF(!OmitQuestionMarkInBackingField && !AppropriatelyQualifiedTypeName.EndsWith("?"), "?")} _{PropertyName};
+                {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName}{IIF(AddQuestionMarkInBackingFieldForNonNullable && !AppropriatelyQualifiedTypeName.EndsWith("?"), "?")} _{PropertyName};
         {GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
         {{{StepThroughPropertiesString}
             get
@@ -1120,7 +1136,7 @@ namespace Lazinator.CodeDescription
                 }}{IIF(IsNonLazinatorType && !TrackDirtinessNonSerialized && (!RoslynHelpers.IsReadOnlyStruct(Symbol) || ContainsLazinatorInnerProperty || ContainsOpenGenericInnerProperty), $@"
                     IsDirty = true;")} {IIF(CodeOnAccessed != "", $@"
                 {CodeOnAccessed}")}
-                return _{PropertyName}{IIF(!OmitQuestionMarkInBackingField, $" ?? throw new UnsetNonnullableLazinatorException()")};
+                return _{PropertyName}{IIF(AddQuestionMarkInBackingFieldForNonNullable, $" ?? throw new UnsetNonnullableLazinatorException()")};
             }}{StepThroughPropertiesString}
             set
             {{{propertyTypeDependentSet}{RepeatedCodeExecution}
@@ -1134,7 +1150,7 @@ namespace Lazinator.CodeDescription
         {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}bool _{PropertyName}_Accessed;")}
         private void Lazinate_{PropertyName}()
         {{
-            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable, "LazinatorObjectBytes.Length == 0", createDefault, $@"LazinatorMemory childData = {ChildSliceString};
+            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || NonNullableThatCanBeUninitialized, "LazinatorObjectBytes.Length == 0", createDefault, $@"LazinatorMemory childData = {ChildSliceString};
                 {recreation}")}
             _{PropertyName}_Accessed = true;
         }}
@@ -1443,7 +1459,7 @@ namespace Lazinator.CodeDescription
                     getChildSliceForFieldFn: () => {ChildSliceString},
                     verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                     binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-                        {DirectConverterTypeNamePrefix}{writeMethodName}(ref w, {BackingFieldString}{IIF(NullableModeEnabled && !Nullable && !OmitQuestionMarkInBackingField, " ?? throw new UnsetNonnullableLazinatorException()")},
+                        {DirectConverterTypeNamePrefix}{writeMethodName}(ref w, {BackingFieldString}{IIF(AddQuestionMarkInBackingFieldForNonNullable, " ?? throw new UnsetNonnullableLazinatorException()")},
                             includeChildrenMode, v, updateStoredBuffer));");
 
                 }
@@ -1535,7 +1551,7 @@ namespace Lazinator.CodeDescription
             {
                 string qIfAppropriate = "?";
                 if (NullableModeEnabled && InnerProperties?[0] is PropertyDescription innerProperty && innerProperty.Nullable == false)
-                        qIfAppropriate = "";
+                    qIfAppropriate = "";
                 copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({PropertyName}, l => l{qIfAppropriate}.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);";
             }
             else if (PropertyType == LazinatorPropertyType.NonLazinator)
@@ -2388,7 +2404,7 @@ namespace Lazinator.CodeDescription
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToConvert, Func<{ILazinatorStringWithItemSpecificNullability}, {ILazinatorStringWithItemSpecificNullability}> cloneOrChangeFunc, bool avoidCloningIfPossible)
                     {{
-                        {IIF(Nullable, GetNullCheckIfThen("itemToConvert", $@"return {DefaultExpression};", ""))}{IIF(Nullable,$@"
+                        {IIF(Nullable, GetNullCheckIfThen("itemToConvert", $@"return {DefaultExpression};", ""))}{IIF(Nullable, $@"
                             ")}return {creationText};
                     }}
             ");
