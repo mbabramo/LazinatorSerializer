@@ -41,6 +41,7 @@ namespace Lazinator.CodeDescription
         public string ILazinatorStringWithItemSpecificNullability => "ILazinator" + QuestionMarkIfNullableAndNullableModeEnabled;
         internal bool Nullable { get; set; }
         internal bool SymbolEndsWithQuestionMark => Symbol.ToString().EndsWith("?");
+        internal bool ReferenceTypeIsNullable => NullableModeEnabled ? SymbolEndsWithQuestionMark : true;
         internal string NullForgiveness => NullableModeEnabled ? "!" : "";
         private bool HasParameterlessConstructor => PropertySymbol.Type is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.InstanceConstructors.Any(y => !y.IsImplicitlyDeclared && !y.Parameters.Any());
         private bool IsInterface { get; set; }
@@ -536,7 +537,7 @@ namespace Lazinator.CodeDescription
                 CheckSupportedTuples(name);
                 if (PropertyType == LazinatorPropertyType.SupportedTuple)
                 {
-                    SetSupportedTuplePropertyType(t, name);
+                    SetSupportedTupleNullabilityAndInnerProperties(t, name);
                     return true;
                 }
 
@@ -544,7 +545,8 @@ namespace Lazinator.CodeDescription
                 CheckSupportedCollections(name);
                 if (PropertyType == LazinatorPropertyType.SupportedCollection)
                 {
-                    SetSupportedCollectionTypeNameAndPropertyType(t, name);
+                    SetSupportedCollectionNullability(t, name);
+                    SetSupportedCollectionInnerProperties(t);
                     return true;
                 }
             }
@@ -761,10 +763,17 @@ namespace Lazinator.CodeDescription
             }
         }
 
-        private void SetSupportedTuplePropertyType(INamedTypeSymbol t, string nameWithoutArity)
+        private void SetSupportedTupleNullabilityAndInnerProperties(INamedTypeSymbol t, string nameWithoutArity)
         {
             SetInnerProperties(t, nameWithoutArity);
-            Nullable = SymbolEndsWithQuestionMark;
+            Nullable = SupportedTupleType switch
+            {
+                LazinatorSupportedTupleType.KeyValuePair => SymbolEndsWithQuestionMark,
+                LazinatorSupportedTupleType.ValueTuple => SymbolEndsWithQuestionMark,
+                LazinatorSupportedTupleType.RecordLikeType => SymbolEndsWithQuestionMark, // DEBUG -- must differentiate class and struct
+                LazinatorSupportedTupleType.Tuple => NullableModeEnabled ? SymbolEndsWithQuestionMark : true,
+                _ => throw new NotImplementedException(),
+            };
         }
 
         private void SetInnerProperties(INamedTypeSymbol t, string name = null)
@@ -847,22 +856,34 @@ namespace Lazinator.CodeDescription
         }
 
         static INamedTypeSymbol keyValuePairType = null;
-        private void SetSupportedCollectionTypeNameAndPropertyType(INamedTypeSymbol t, string nameWithoutArity)
+        private void SetSupportedCollectionNullability(INamedTypeSymbol t, string nameWithoutArity)
         {
-            if (SupportedCollectionType != LazinatorSupportedCollectionType.Memory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlyMemory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlySpan)
+            Nullable = SupportedCollectionType switch
             {
-                if (NullableModeEnabled)
-                    Nullable = SymbolEndsWithQuestionMark;
-                else
-                    Nullable = true;
-            }
+                LazinatorSupportedCollectionType.Array => ReferenceTypeIsNullable,
+                LazinatorSupportedCollectionType.List => ReferenceTypeIsNullable,
+                LazinatorSupportedCollectionType.HashSet => ReferenceTypeIsNullable,
+                LazinatorSupportedCollectionType.Dictionary => ReferenceTypeIsNullable,
+                LazinatorSupportedCollectionType.Queue => ReferenceTypeIsNullable,
+                LazinatorSupportedCollectionType.Stack => ReferenceTypeIsNullable,
+                LazinatorSupportedCollectionType.SortedDictionary => ReferenceTypeIsNullable,
+                LazinatorSupportedCollectionType.SortedList => ReferenceTypeIsNullable,
+                LazinatorSupportedCollectionType.LinkedList => ReferenceTypeIsNullable,
+                LazinatorSupportedCollectionType.SortedSet => ReferenceTypeIsNullable,
+                LazinatorSupportedCollectionType.Memory => SymbolEndsWithQuestionMark,
+                LazinatorSupportedCollectionType.ReadOnlySpan => SymbolEndsWithQuestionMark,
+                LazinatorSupportedCollectionType.ReadOnlyMemory => SymbolEndsWithQuestionMark,
+                _ => throw new NotImplementedException(),
+            };
+        }
 
+        private void SetSupportedCollectionInnerProperties(INamedTypeSymbol t)
+        {
             InnerProperties = t.TypeArguments
-                .Select(x => new PropertyDescription(x, ContainingObjectDescription, NullableContextSetting, this)).ToList();
+                            .Select(x => new PropertyDescription(x, ContainingObjectDescription, NullableContextSetting, this)).ToList();
 
             if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
             {
-                Nullable = false;
                 if (InnerProperties[0].Nullable)
                     throw new LazinatorCodeGenException("Cannot use Lazinator to serialize Memory/Span with nullable generic arguments."); // this is because we can't cast easily in this context
             }
