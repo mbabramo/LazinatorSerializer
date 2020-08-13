@@ -99,6 +99,12 @@ namespace Lazinator.CodeDescription
         internal bool NonNullableThatRequiresInitialization => IsNonNullableReferenceType || IsNonNullableValueTypeWithNonNullableReferenceType;
         internal bool NonNullableThatCanBeUninitialized => !Nullable && !NonNullableThatRequiresInitialization;
         internal bool AddQuestionMarkInBackingFieldForNonNullable => NullableModeEnabled && NonNullableThatRequiresInitialization;
+        internal string BackingFieldStringOrContainedSpan(string propertyName) => (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan) ?
+                    GetReadOnlySpanBackingFieldCast(propertyName) : (propertyName ?? BackingFieldString);
+        internal string PossibleUnsetException => $"{IIF(AddQuestionMarkInBackingFieldForNonNullable, $" ?? throw new UnsetNonnullableLazinatorException()")}";
+        internal string BackingFieldAccessWithPossibleException => $"{BackingFieldString}{PossibleUnsetException}";
+        internal string BackingFieldStringOrContainedSpanWithPossibleException(string propertyName) => $"{BackingFieldStringOrContainedSpan(propertyName)}{PossibleUnsetException}";
+        internal string BackingFieldWithPossibleValueDereference => $"{BackingFieldString}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@".Value")}";
         internal bool IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType => IsSupportedCollectionOrTuple || (PropertyType == LazinatorPropertyType.NonLazinator && HasInterchangeType);
         internal bool IsNotPrimitiveOrOpenGeneric => PropertyType != LazinatorPropertyType.OpenGenericParameter && PropertyType != LazinatorPropertyType.PrimitiveType && PropertyType != LazinatorPropertyType.PrimitiveTypeNullable;
         internal bool IsNonLazinatorType => PropertyType == LazinatorPropertyType.NonLazinator || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
@@ -129,12 +135,6 @@ namespace Lazinator.CodeDescription
         private string ReadMethodName { get; set; }
         internal string PropertyName { get; set; }
         internal string BackingFieldString => $"_{PropertyName}";
-        internal string BackingFieldStringOrContainedSpan(string propertyName) => (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan) ?
-                    GetReadOnlySpanBackingFieldCast(propertyName) : (propertyName ?? BackingFieldString);
-        internal string PossibleUnsetException => $"{IIF(AddQuestionMarkInBackingFieldForNonNullable, $" ?? throw new UnsetNonnullableLazinatorException()")}";
-        internal string BackingFieldAccessWithPossibleException => $"{BackingFieldString}{PossibleUnsetException}";
-        internal string BackingFieldStringOrContainedSpanWithPossibleException(string propertyName) => $"{BackingFieldStringOrContainedSpan(propertyName)}{PossibleUnsetException}";
-        internal string BackingFieldWithPossibleValueDereference => $"{BackingFieldString}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@".Value")}";
 
     internal string BackingAccessFieldString => $"_{PropertyName}_Accessed";
         internal string BackingDirtyFieldString => $"_{PropertyName}_Dirty";
