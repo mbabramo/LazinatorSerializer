@@ -1637,7 +1637,7 @@ asdf")}";
             string source = (innerFullType == "byte") ? "itemToClone" : $"{GetSpanCast(innerFullType, true)}(itemToClone)";
             string toReturn = (innerFullType == "byte") ? "clone" : $"{GetSpanCast(innerFullType, false)}(clone)";
 
-            sb.AppendLine($@"private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<{ILazinatorString}, {ILazinatorString}> cloneOrChangeFunc, bool avoidCloningIfPossible)
+            sb.AppendLine($@"private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<{ILazinatorStringWithItemSpecificNullability}, {ILazinatorStringWithItemSpecificNullability}> cloneOrChangeFunc, bool avoidCloningIfPossible)
             {{
                 var clone = new {memoryOrSpanWord}<byte>(new byte[itemToClone.Length * sizeof({innerFullTypeSizeEquivalent})]);
                 {source}.CopyTo(clone);
@@ -2505,7 +2505,7 @@ asdf")}";
                         }}
 
 
-                        private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<{ILazinatorString}, {ILazinatorString}> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                        private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<{ILazinatorStringWithItemSpecificNullability}, {ILazinatorStringWithItemSpecificNullability}> cloneOrChangeFunc, bool avoidCloningIfPossible)
                         {{
                             {GetNullCheckIfThenButOnlyIfNullable(Nullable, "itemToClone", $"return {DefaultExpression};", "")}{InterchangeTypeName} interchange = new {InterchangeTypeNameWithoutNullabilityIndicator}(itemToClone);
                             return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}(avoidCloningIfPossible ? false : true);
