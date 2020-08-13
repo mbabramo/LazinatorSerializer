@@ -62,8 +62,16 @@ namespace LazinatorTests.Examples.Tuples
         protected bool _MyNestedTuple_Accessed;
         private void Lazinate_MyNestedTuple()
         {
-            LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNestedTuple_ByteIndex, _MyNestedTuple_ByteLength, false, false, null);
-            _MyNestedTuple = ConvertFromBytes_Tuple_Guint_C63_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(childData);
+            if (LazinatorObjectBytes.Length == 0)
+            {
+                _MyNestedTuple = default(Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass>);
+            }
+            else
+            {
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNestedTuple_ByteIndex, _MyNestedTuple_ByteLength, false, false, null);
+                _MyNestedTuple = ConvertFromBytes_Tuple_Guint_C63_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(childData);
+            }
+            
             _MyNestedTuple_Accessed = true;
         }
         
@@ -408,6 +416,10 @@ namespace LazinatorTests.Examples.Tuples
         
         private static Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass> ConvertFromBytes_Tuple_Guint_C63_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(LazinatorMemory storage)
         {
+            if (storage.Length == 0)
+            {
+                return default;
+            }
             ReadOnlySpan<byte> span = storage.ReadOnlySpan;
             
             int bytesSoFar = 0;
@@ -439,6 +451,10 @@ namespace LazinatorTests.Examples.Tuples
         
         private static void ConvertToBytes_Tuple_Guint_C63_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(ref BinaryBufferWriter writer, Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
+            if (itemToConvert == null)
+            {
+                return;
+            }
             
             CompressedIntegralTypes.WriteCompressedNullableUint(ref writer, itemToConvert.Item1);
             
@@ -458,7 +474,12 @@ namespace LazinatorTests.Examples.Tuples
         
         private static Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass> CloneOrChange_Tuple_Guint_C63_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            return new Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass>((uint?) (itemToConvert.Item1),((ExampleChild, (uint, (int a, string b)?, Tuple<short, long>))) CloneOrChange__PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p((itemToConvert.Item2), cloneOrChangeFunc, avoidCloningIfPossible),(NonLazinatorClass) (itemToConvert.Item3));
+            if (itemToConvert == null)
+            {
+                return default(Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass>);
+            }
+            
+            return new Tuple<uint?, (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)), NonLazinatorClass>((uint?) (itemToConvert?.Item1),((ExampleChild, (uint, (int a, string b)?, Tuple<short, long>))) CloneOrChange__PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p((itemToConvert?.Item2 ?? default), cloneOrChangeFunc, avoidCloningIfPossible),(NonLazinatorClass) (itemToConvert?.Item3));
         }
         
         private static (ExampleChild, (uint, (int a, string b)?, Tuple<short, long>)) ConvertFromBytes__PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p_p(LazinatorMemory storage)
@@ -566,8 +587,15 @@ namespace LazinatorTests.Examples.Tuples
                 WriteToBinaryWithIntLengthPrefix(ref writer, actionItem2);
             }
             
-            void actionItem3(ref BinaryBufferWriter w) => ConvertToBytes_Tuple_Gshort_c_C32long_g(ref w, itemToConvert.Item3, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-            WriteToBinaryWithIntLengthPrefix(ref writer, actionItem3);
+            if (itemToConvert.Item3 == null)
+            {
+                writer.Write((uint)0);
+            }
+            else
+            {
+                void actionItem3(ref BinaryBufferWriter w) => ConvertToBytes_Tuple_Gshort_c_C32long_g(ref w, itemToConvert.Item3, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                WriteToBinaryWithIntLengthPrefix(ref writer, actionItem3);
+            }
         }
         
         private static (uint, (int a, string b)?, Tuple<short, long>) CloneOrChange__Puint_c_C32_Pint_C32a_c_C32string_C32b_p_C63_c_C32Tuple_Gshort_c_C32long_g_p((uint, (int a, string b)?, Tuple<short, long>) itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
@@ -618,6 +646,10 @@ namespace LazinatorTests.Examples.Tuples
         
         private static Tuple<short, long> ConvertFromBytes_Tuple_Gshort_c_C32long_g(LazinatorMemory storage)
         {
+            if (storage.Length == 0)
+            {
+                return default;
+            }
             ReadOnlySpan<byte> span = storage.ReadOnlySpan;
             
             int bytesSoFar = 0;
@@ -633,6 +665,10 @@ namespace LazinatorTests.Examples.Tuples
         
         private static void ConvertToBytes_Tuple_Gshort_c_C32long_g(ref BinaryBufferWriter writer, Tuple<short, long> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
+            if (itemToConvert == null)
+            {
+                return;
+            }
             
             CompressedIntegralTypes.WriteCompressedShort(ref writer, itemToConvert.Item1);
             
@@ -641,7 +677,12 @@ namespace LazinatorTests.Examples.Tuples
         
         private static Tuple<short, long> CloneOrChange_Tuple_Gshort_c_C32long_g(Tuple<short, long> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            return new Tuple<short, long>((short) (itemToConvert.Item1),(long) (itemToConvert.Item2));
+            if (itemToConvert == null)
+            {
+                return default(Tuple<short, long>);
+            }
+            
+            return new Tuple<short, long>((short) (itemToConvert?.Item1 ?? default),(long) (itemToConvert?.Item2 ?? default));
         }
         
     }
