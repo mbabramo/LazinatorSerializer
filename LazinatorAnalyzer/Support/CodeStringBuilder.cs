@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Diagnostics;
+using System.Text;
 
 namespace Lazinator.CodeDescription
 {
@@ -9,7 +10,7 @@ namespace Lazinator.CodeDescription
         public int IndentLevel = 0;
         public bool IsBeginningOfLine = true;
         public static bool AddLocationIndexComments = true; // DEBUG
-        public int LocationIndex = 0;
+        public static int LocationIndex = 0;
 
         public override string ToString()
         {
@@ -34,7 +35,13 @@ namespace Lazinator.CodeDescription
         public void Append(string s)
         {
             if (AddLocationIndexComments)
+            {
+                if (LocationIndex == 5637) // DEBUG
+                {
+                    Debugger.Break();
+                }
                 AppendHelper($"/*Location{LocationIndex++}*/");
+            }
             AppendHelper(s);
         }
 
