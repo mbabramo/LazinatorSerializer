@@ -130,7 +130,7 @@ namespace Lazinator.CodeDescription
         internal string PropertyName { get; set; }
         internal string BackingFieldString => $"_{PropertyName}";
         internal string BackingFieldStringOrContainedSpan(string propertyName) => (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan) ?
-                    GetReadOnlySpanBackingFieldCast(propertyName) : propertyName;
+                    GetReadOnlySpanBackingFieldCast(propertyName) : (propertyName ?? BackingFieldString);
         internal string BackingFieldAccessWithPossibleException => $"{BackingFieldString}{IIF(AddQuestionMarkInBackingFieldForNonNullable, $" ?? throw new UnsetNonnullableLazinatorException()")}";
         internal string BackingFieldWithPossibleValueDereference => $"{BackingFieldString}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@".Value")}";
 
@@ -1489,7 +1489,7 @@ namespace Lazinator.CodeDescription
                     getChildSliceForFieldFn: () => {ChildSliceString},
                     verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                     binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-                        {DirectConverterTypeNamePrefix}{writeMethodName}(ref w, {BackingFieldString}{IIF(AddQuestionMarkInBackingFieldForNonNullable, " ?? throw new UnsetNonnullableLazinatorException()")},
+                        {DirectConverterTypeNamePrefix}{writeMethodName}(ref w, {BackingFieldStringOrContainedSpan(null)}{IIF(AddQuestionMarkInBackingFieldForNonNullable, " ?? throw new UnsetNonnullableLazinatorException()")},
                             includeChildrenMode, v, updateStoredBuffer));");
 
                 }
