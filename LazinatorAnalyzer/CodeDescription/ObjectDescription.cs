@@ -752,7 +752,8 @@ namespace Lazinator.CodeDescription
             string resetAccessed = "", resetStorage = "";
             foreach (var property in PropertiesToDefineThisLevel.Where(x => !x.IsPrimitive && x.PlaceholderMemoryWriteMethod == null)) // Note that we will free in memory objects even for non-nullables. We can do this because we have nullable backing properties for them. 
             {
-                resetStorage += $@"_{property.PropertyName} = default;
+                if (!property.NonNullableThatRequiresInitialization)
+                    resetStorage += $@"_{property.PropertyName} = default;
                         ";
                 resetAccessed += $"_{property.PropertyName}_Accessed = ";
             }

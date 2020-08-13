@@ -84,7 +84,7 @@ namespace Lazinator.CodeDescription
         internal bool IsLazinator => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable || PropertyType == LazinatorPropertyType.OpenGenericParameter;
         internal bool IsSupportedCollectionOrTuple => PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
         // DEBUG internal bool OmitQuestionMarkInBackingField => !NullableModeEnabled || (!IsSupportedCollectionOrTuple && PropertyType != LazinatorPropertyType.LazinatorNonnullableClassOrInterface) || (IsSupportedCollectionOrTuple && !Nullable && (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan || SupportedCollectionType == LazinatorSupportedCollectionType.Array || SupportedTupleType == LazinatorSupportedTupleType.KeyValuePair || SupportedTupleType == LazinatorSupportedTupleType.ValueTuple));
-        
+
         internal bool IsSupportedCollectionReferenceType => PropertyType == LazinatorPropertyType.SupportedCollection && SupportedCollectionType != LazinatorSupportedCollectionType.Memory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlyMemory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlySpan;
         internal bool IsSupportedTupleReferenceType => PropertyType == LazinatorPropertyType.SupportedTuple && SupportedTupleType != LazinatorSupportedTupleType.KeyValuePair && SupportedTupleType != LazinatorSupportedTupleType.ValueTuple;
 
@@ -96,12 +96,21 @@ namespace Lazinator.CodeDescription
             PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface
             || IsSupportedReferenceType);
         internal bool IsNonNullableValueTypeWithNonNullableReferenceType => !Nullable && !IsNonNullableReferenceType && InnerProperties != null && InnerProperties.Any(x => x.IsNonNullableReferenceType);
+        internal string XXXX => $@"{IIF(true, @"asdf 
+asdf")}";
         internal bool NonNullableThatRequiresInitialization => IsNonNullableReferenceType || IsNonNullableValueTypeWithNonNullableReferenceType;
         internal bool NonNullableThatCanBeUninitialized => !Nullable && !NonNullableThatRequiresInitialization;
         internal bool AddQuestionMarkInBackingFieldForNonNullable => NullableModeEnabled && NonNullableThatRequiresInitialization;
         internal string BackingFieldStringOrContainedSpan(string propertyName) => (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan) ?
                     GetReadOnlySpanBackingFieldCast(propertyName) : (propertyName ?? BackingFieldString);
         internal string PossibleUnsetException => $"{IIF(AddQuestionMarkInBackingFieldForNonNullable, $" ?? throw new UnsetNonnullableLazinatorException()")}";
+        internal string DefaultInitializationIfPossible(string defaultType) => $"{IIF(!AddQuestionMarkInBackingFieldForNonNullable, $" = default{IIF(defaultType != null, $"({defaultType})")}")}";
+        string elseThrowString = $@"
+                else 
+                {{ 
+                    throw new UnsetNonnullableLazinatorException(); 
+                }}";
+        internal string IfInitializationRequiredAddElseThrow => $"{IIF(AddQuestionMarkInBackingFieldForNonNullable, elseThrowString)}";
         internal string BackingFieldAccessWithPossibleException => $"{BackingFieldString}{PossibleUnsetException}";
         internal string BackingFieldStringOrContainedSpanWithPossibleException(string propertyName) => $"{BackingFieldStringOrContainedSpan(propertyName)}{PossibleUnsetException}";
         internal string BackingFieldWithPossibleValueDereference => $"{BackingFieldString}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@".Value")}";
@@ -1051,14 +1060,14 @@ namespace Lazinator.CodeDescription
             string createDefault = $@"{BackingFieldString} = {DefaultExpression};{IIF(IsNonLazinatorType && TrackDirtinessNonSerialized, $@"
                                         {BackingDirtyFieldString} = true; ")}";
             if (IsLazinatorStruct)
-                createDefault = $@"{BackingFieldString} = default({ AppropriatelyQualifiedTypeName});{IIF(ContainerIsClass && PropertyType != LazinatorPropertyType.LazinatorStructNullable, $@"
+                createDefault = $@"{BackingFieldString}{DefaultInitializationIfPossible(AppropriatelyQualifiedTypeName)};{IIF(ContainerIsClass && PropertyType != LazinatorPropertyType.LazinatorStructNullable, $@"
                                 {BackingFieldString}.LazinatorParents = new LazinatorParentsCollection(this);")}";
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
-                createDefault = $@"{BackingFieldString} = default({ AppropriatelyQualifiedTypeName});{IIF(ContainerIsClass, $@"
+                createDefault = $@"{BackingFieldString}{DefaultInitializationIfPossible(AppropriatelyQualifiedTypeName)};{IIF(ContainerIsClass, $@"
                                 if ({BackingFieldString} != null)
                                 {{ // {PropertyName} is a struct
                                     {BackingFieldString}.LazinatorParents = new LazinatorParentsCollection(this);
-                                }}")}";
+                                }}{IfInitializationRequiredAddElseThrow}")}";
             // And here's where we set the recreation code for when underlying memory exists.
             string recreation;
             if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable
@@ -1233,7 +1242,7 @@ namespace Lazinator.CodeDescription
         private string GetManualObjectCreation()
         {
             // if the container object containing this property is a struct, then we can't set LazinatorParents. Meanwhile, if this object is a struct, then we don't need to worry about the case of a null item. 
-            string nullItemCheck = PropertyType == LazinatorPropertyType.LazinatorStruct
+            string nullItemCheck = PropertyType == LazinatorPropertyType.LazinatorStruct || NonNullableThatRequiresInitialization
                 ? ""
                 : $@"if (childData.Length == 0)
                         {{
@@ -2341,36 +2350,36 @@ namespace Lazinator.CodeDescription
                         {AppropriatelyQualifiedTypeName} {itemName} = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref bytesSoFar);");
             else if (IsNonLazinatorType)
                 return ($@"
-                        {AppropriatelyQualifiedTypeName} {itemName} = default;
+                        {AppropriatelyQualifiedTypeName} {itemName}{DefaultInitializationIfPossible(AppropriatelyQualifiedTypeName)};
                         int lengthCollectionMember_{itemName} = span.ToInt32(ref bytesSoFar);
                         if (lengthCollectionMember_{itemName} != 0)
                         {{
                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_{itemName});
                             {itemName} = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);
-                        }}
+                        }}{IfInitializationRequiredAddElseThrow}
                         bytesSoFar += lengthCollectionMember_{itemName};");
             else
             {
                 CheckForLazinatorInNonLazinator(this);
                 if (PropertyType == LazinatorPropertyType.LazinatorStruct)
                     return ($@"
-                        {AppropriatelyQualifiedTypeName} {itemName} = default;
+                        {AppropriatelyQualifiedTypeName} {itemName}{DefaultInitializationIfPossible(AppropriatelyQualifiedTypeName)};
                         int lengthCollectionMember_{itemName} = {GetSpanReadLength()};
                         if (lengthCollectionMember_{itemName} != 0)
                         {{
                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_{itemName});
                             {itemName} = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}();
                             {itemName}.DeserializeLazinator(childData);;
-                        }}
+                        }}{IfInitializationRequiredAddElseThrow}
                         bytesSoFar += lengthCollectionMember_{itemName};");
                 else return ($@"
-                        {AppropriatelyQualifiedTypeName} {itemName} = default;
+                        {AppropriatelyQualifiedTypeName} {itemName}{DefaultInitializationIfPossible(AppropriatelyQualifiedTypeName)};
                         int lengthCollectionMember_{itemName} = {GetSpanReadLength()};
                         if (lengthCollectionMember_{itemName} != 0)
                         {{
                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_{itemName});
                             {itemName} = DeserializationFactory.Instance.CreateBasedOnType<{AppropriatelyQualifiedTypeName}>(childData);
-                        }}
+                        }}{IfInitializationRequiredAddElseThrow}
                         bytesSoFar += lengthCollectionMember_{itemName};");
             }
         }
