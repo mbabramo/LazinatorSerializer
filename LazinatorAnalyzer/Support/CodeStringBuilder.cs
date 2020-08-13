@@ -8,6 +8,8 @@ namespace Lazinator.CodeDescription
         public int SpacesPerTab = 4;
         public int IndentLevel = 0;
         public bool IsBeginningOfLine = true;
+        public static bool AddLocationIndexComments = true; // DEBUG
+        public int LocationIndex = 0;
 
         public override string ToString()
         {
@@ -30,6 +32,13 @@ namespace Lazinator.CodeDescription
         }
 
         public void Append(string s)
+        {
+            if (AddLocationIndexComments)
+                AppendHelper($"/*Location{LocationIndex++}*/");
+            AppendHelper(s);
+        }
+
+        private void AppendHelper(string s)
         {
             for (int i = 0; i < s.Length; i++)
             {
