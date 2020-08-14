@@ -101,6 +101,11 @@ namespace LazinatorTests.Examples.Collections
         {
         }
         
+        public DotNetList_Lazinator(LazinatorMemory serializedBytes)
+        {
+            DeserializeLazinator(serializedBytes);
+        }
+        
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

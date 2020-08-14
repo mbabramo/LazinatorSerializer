@@ -37,6 +37,11 @@ namespace LazinatorCollections.OffsetList
         {
         }
         
+        public LazinatorFastReadListInt32(LazinatorMemory serializedBytes) : base(LazinatorConstructorEnum.LazinatorConstructor)
+        {
+            DeserializeLazinator(serializedBytes);
+        }
+        
         public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
             var clone = new LazinatorFastReadListInt32(LazinatorConstructorEnum.LazinatorConstructor)

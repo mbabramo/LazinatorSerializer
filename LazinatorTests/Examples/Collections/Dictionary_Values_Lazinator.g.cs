@@ -203,6 +203,11 @@ namespace LazinatorTests.Examples.Collections
         {
         }
         
+        public Dictionary_Values_Lazinator(LazinatorMemory serializedBytes)
+        {
+            DeserializeLazinator(serializedBytes);
+        }
+        
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

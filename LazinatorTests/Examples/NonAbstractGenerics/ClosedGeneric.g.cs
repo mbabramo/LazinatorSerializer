@@ -53,6 +53,11 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
         }
         
+        public ClosedGeneric(LazinatorMemory serializedBytes) : base(LazinatorConstructorEnum.LazinatorConstructor)
+        {
+            DeserializeLazinator(serializedBytes);
+        }
+        
         public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
             var clone = new ClosedGeneric(LazinatorConstructorEnum.LazinatorConstructor)

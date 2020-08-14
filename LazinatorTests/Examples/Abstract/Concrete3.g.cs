@@ -295,6 +295,11 @@ namespace LazinatorTests.Examples.Abstract
         {
         }
         
+        public Concrete3(LazinatorMemory serializedBytes)
+        {
+            DeserializeLazinator(serializedBytes);
+        }
+        
         public override LazinatorParentsCollection LazinatorParents { get; set; }
         
         public override IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

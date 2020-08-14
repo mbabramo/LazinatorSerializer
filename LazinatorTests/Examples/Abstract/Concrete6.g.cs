@@ -78,6 +78,11 @@ namespace LazinatorTests.Examples.Abstract
         {
         }
         
+        public Concrete6(LazinatorMemory serializedBytes) : base(LazinatorConstructorEnum.LazinatorConstructor)
+        {
+            DeserializeLazinator(serializedBytes);
+        }
+        
         public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
             var clone = new Concrete6(LazinatorConstructorEnum.LazinatorConstructor)

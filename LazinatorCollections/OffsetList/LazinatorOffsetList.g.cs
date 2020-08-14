@@ -166,6 +166,11 @@ namespace LazinatorCollections.OffsetList
         {
         }
         
+        public LazinatorOffsetList(LazinatorMemory serializedBytes)
+        {
+            DeserializeLazinator(serializedBytes);
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public LazinatorParentsCollection LazinatorParents { get; set; }
         

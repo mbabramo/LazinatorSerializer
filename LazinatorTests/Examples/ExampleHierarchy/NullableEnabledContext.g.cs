@@ -1817,6 +1817,11 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
         }
         
+        public NullableEnabledContext(LazinatorMemory serializedBytes)
+        {
+            DeserializeLazinator(serializedBytes);
+        }
+        
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

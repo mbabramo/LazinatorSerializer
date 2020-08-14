@@ -196,6 +196,11 @@ namespace LazinatorTests.Examples.Abstract
         {
         }
         
+        public ConcreteGeneric2b(LazinatorMemory serializedBytes)
+        {
+            DeserializeLazinator(serializedBytes);
+        }
+        
         public override LazinatorParentsCollection LazinatorParents { get; set; }
         
         public override IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

@@ -102,6 +102,11 @@ namespace LazinatorTests.Examples
         {
         }
         
+        public ExampleChildInherited(LazinatorMemory serializedBytes) : base(LazinatorConstructorEnum.LazinatorConstructor)
+        {
+            DeserializeLazinator(serializedBytes);
+        }
+        
         public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
             var clone = new ExampleChildInherited(LazinatorConstructorEnum.LazinatorConstructor)

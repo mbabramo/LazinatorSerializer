@@ -107,6 +107,11 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         {
         }
         
+        public RemoteHierarchy(LazinatorMemory serializedBytes)
+        {
+            DeserializeLazinator(serializedBytes);
+        }
+        
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

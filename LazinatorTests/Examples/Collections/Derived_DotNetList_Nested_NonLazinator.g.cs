@@ -94,6 +94,11 @@ namespace LazinatorTests.Examples.Collections
         {
         }
         
+        public Derived_DotNetList_Nested_NonLazinator(LazinatorMemory serializedBytes) : base(LazinatorConstructorEnum.LazinatorConstructor)
+        {
+            DeserializeLazinator(serializedBytes);
+        }
+        
         public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
             var clone = new Derived_DotNetList_Nested_NonLazinator(LazinatorConstructorEnum.LazinatorConstructor)

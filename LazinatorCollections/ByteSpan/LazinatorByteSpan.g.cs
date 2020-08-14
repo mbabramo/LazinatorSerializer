@@ -110,6 +110,11 @@ namespace LazinatorCollections.ByteSpan
         {
         }
         
+        public LazinatorByteSpan(LazinatorMemory serializedBytes)
+        {
+            DeserializeLazinator(serializedBytes);
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         

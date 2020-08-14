@@ -97,6 +97,11 @@ namespace LazinatorTests.Examples.Collections
         {
         }
         
+        public DerivedArray_Values(LazinatorMemory serializedBytes) : base(LazinatorConstructorEnum.LazinatorConstructor)
+        {
+            DeserializeLazinator(serializedBytes);
+        }
+        
         public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
             var clone = new DerivedArray_Values(LazinatorConstructorEnum.LazinatorConstructor)

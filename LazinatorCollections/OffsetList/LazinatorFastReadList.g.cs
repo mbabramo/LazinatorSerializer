@@ -67,6 +67,11 @@ namespace LazinatorCollections.OffsetList
         {
         }
         
+        public LazinatorFastReadList(LazinatorMemory serializedBytes)
+        {
+            DeserializeLazinator(serializedBytes);
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         

@@ -168,6 +168,11 @@ namespace LazinatorCollections.Tuples
         {
         }
         
+        public LazinatorTuple(LazinatorMemory serializedBytes)
+        {
+            DeserializeLazinator(serializedBytes);
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         

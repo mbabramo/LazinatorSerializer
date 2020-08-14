@@ -55,6 +55,11 @@ namespace LazinatorTests.Examples.NonLazinator
         {
         }
         
+        public FromNonLazinatorBase(LazinatorMemory serializedBytes)
+        {
+            DeserializeLazinator(serializedBytes);
+        }
+        
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

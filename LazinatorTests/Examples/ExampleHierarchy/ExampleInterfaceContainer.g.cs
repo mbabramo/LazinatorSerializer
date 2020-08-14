@@ -131,6 +131,11 @@ namespace LazinatorTests.Examples.Hierarchy
         {
         }
         
+        public ExampleInterfaceContainer(LazinatorMemory serializedBytes)
+        {
+            DeserializeLazinator(serializedBytes);
+        }
+        
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

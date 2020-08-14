@@ -283,6 +283,11 @@ namespace LazinatorTests.Examples.Tuples
         {
         }
         
+        public StructTuple(LazinatorMemory serializedBytes)
+        {
+            DeserializeLazinator(serializedBytes);
+        }
+        
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

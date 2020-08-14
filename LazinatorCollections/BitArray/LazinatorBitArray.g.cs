@@ -119,6 +119,11 @@ namespace LazinatorCollections.BitArray
         {
         }
         
+        public LazinatorBitArray(LazinatorMemory serializedBytes)
+        {
+            DeserializeLazinator(serializedBytes);
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public LazinatorParentsCollection LazinatorParents { get; set; }
         

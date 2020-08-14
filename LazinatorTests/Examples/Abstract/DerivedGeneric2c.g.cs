@@ -142,6 +142,11 @@ namespace LazinatorTests.Examples.Abstract
         {
         }
         
+        public DerivedGeneric2c(LazinatorMemory serializedBytes)
+        {
+            DeserializeLazinator(serializedBytes);
+        }
+        
         public override LazinatorParentsCollection LazinatorParents { get; set; }
         
         public override IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

@@ -70,6 +70,11 @@ namespace LazinatorTests.Examples
         {
         }
         
+        public ExampleGrandchild(LazinatorMemory serializedBytes)
+        {
+            DeserializeLazinator(serializedBytes);
+        }
+        
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }
         
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }
