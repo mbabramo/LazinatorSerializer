@@ -531,7 +531,16 @@ namespace Lazinator.Core
 
             if (firstHash != secondHash)
             {
-                if (TopNodesOfHierarchyEqual(firstHierarchy, secondHierarchy, out string comparison))
+                bool topNodesEqual;
+                try
+                {
+                    topNodesEqual = TopNodesOfHierarchyEqual(firstHierarchy, secondHierarchy, out string comparison);
+                }
+                catch (UnsetNonnullableLazinatorException unsetException)
+                {
+                    throw new Exception($"Hashes were expected to be same, but differed. Difference cannot be traced because of unset nonnullable Lazinator.", unsetException);
+                }
+                if (topNodesEqual)
                 {
                     // Difference must be in a child. Find the children with the match failure.
                     var firstHierarchyNodes = EnumerateLazinatorChildren(firstHierarchy).ToList();
@@ -550,9 +559,9 @@ namespace Lazinator.Core
                             throw;
                         }
                     }
+                    string errorMessage = comparison;
+                    throw new Exception($"Hashes were expected to be same, but differed. Difference traced to {propertyNameSequence}:" + Environment.NewLine + errorMessage);
                 }
-                string errorMessage = comparison;
-                throw new Exception($"Hashes were expected to be same, but differed. Difference traced to {propertyNameSequence}:" + Environment.NewLine + errorMessage);
             }
         }
 
