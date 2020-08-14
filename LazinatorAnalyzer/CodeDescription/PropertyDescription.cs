@@ -979,7 +979,7 @@ asdf")}";
         private void AppendPrimitivePropertyDefinitionString(CodeStringBuilder sb)
         {
             string propertyString = $@"
-                {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName} {BackingFieldString};
+                {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName} {BackingFieldString}{IIF(AppropriatelyQualifiedTypeName == "string" && NullableModeEnabled, " = \"\"")};
         {IIF(IncludeRefProperty, $@"{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}ref {AppropriatelyQualifiedTypeName} {PropertyName}_Ref
                 {{
                     get
