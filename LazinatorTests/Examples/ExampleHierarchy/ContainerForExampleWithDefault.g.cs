@@ -90,9 +90,12 @@ namespace LazinatorTests.Examples
         {
         }
         
-        public ContainerForExampleWithDefault(LazinatorMemory serializedBytes)
+        public ContainerForExampleWithDefault(LazinatorMemory serializedBytes, ILazinator parent = null)
         {
+            LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }

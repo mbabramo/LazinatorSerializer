@@ -138,9 +138,12 @@ namespace LazinatorTests.Examples.Tuples
         {
         }
         
-        public RecordLikeCollections(LazinatorMemory serializedBytes)
+        public RecordLikeCollections(LazinatorMemory serializedBytes, ILazinator parent = null)
         {
+            LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }

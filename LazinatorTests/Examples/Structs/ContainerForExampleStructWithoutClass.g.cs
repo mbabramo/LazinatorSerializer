@@ -218,9 +218,12 @@ namespace LazinatorTests.Examples.Structs
         {
         }
         
-        public ContainerForExampleStructWithoutClass(LazinatorMemory serializedBytes)
+        public ContainerForExampleStructWithoutClass(LazinatorMemory serializedBytes, ILazinator parent = null)
         {
+            LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }

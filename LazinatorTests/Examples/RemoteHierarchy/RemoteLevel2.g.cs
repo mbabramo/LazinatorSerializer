@@ -55,9 +55,12 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         {
         }
         
-        public RemoteLevel2(LazinatorMemory serializedBytes)
+        public RemoteLevel2(LazinatorMemory serializedBytes, ILazinator parent = null)
         {
+            LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }

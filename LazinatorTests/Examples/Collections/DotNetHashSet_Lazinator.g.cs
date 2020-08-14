@@ -82,9 +82,12 @@ namespace LazinatorTests.Examples.Collections
         {
         }
         
-        public DotNetHashSet_Lazinator(LazinatorMemory serializedBytes)
+        public DotNetHashSet_Lazinator(LazinatorMemory serializedBytes, ILazinator parent = null)
         {
+            LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }

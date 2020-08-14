@@ -38,9 +38,12 @@ namespace LazinatorTests.Examples.Abstract
         {
         }
         
-        public ConcreteFromGenericFromBase(LazinatorMemory serializedBytes) : base(LazinatorConstructorEnum.LazinatorConstructor)
+        public ConcreteFromGenericFromBase(LazinatorMemory serializedBytes, ILazinator parent = null) : base(LazinatorConstructorEnum.LazinatorConstructor)
         {
+            LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)

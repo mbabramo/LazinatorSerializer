@@ -180,9 +180,12 @@ namespace LazinatorTests.Examples.Collections
         {
         }
         
-        public ArrayMultidimensional(LazinatorMemory serializedBytes)
+        public ArrayMultidimensional(LazinatorMemory serializedBytes, ILazinator parent = null)
         {
+            LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }

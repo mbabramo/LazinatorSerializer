@@ -141,9 +141,12 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
         }
         
-        public OpenGeneric(LazinatorMemory serializedBytes)
+        public OpenGeneric(LazinatorMemory serializedBytes, ILazinator parent = null)
         {
+            LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }

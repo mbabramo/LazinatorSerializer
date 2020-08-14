@@ -100,9 +100,12 @@ namespace LazinatorTests.Examples.Collections
         {
         }
         
-        public DotNetQueue_Values(LazinatorMemory serializedBytes)
+        public DotNetQueue_Values(LazinatorMemory serializedBytes, ILazinator parent = null)
         {
+            LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }

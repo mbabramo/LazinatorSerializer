@@ -142,9 +142,12 @@ namespace LazinatorTests.Examples.Abstract
         {
         }
         
-        public DerivedGeneric2c(LazinatorMemory serializedBytes)
+        public DerivedGeneric2c(LazinatorMemory serializedBytes, ILazinator parent = null)
         {
+            LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         public override LazinatorParentsCollection LazinatorParents { get; set; }

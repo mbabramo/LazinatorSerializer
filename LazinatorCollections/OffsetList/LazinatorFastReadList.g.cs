@@ -67,9 +67,12 @@ namespace LazinatorCollections.OffsetList
         {
         }
         
-        public LazinatorFastReadList(LazinatorMemory serializedBytes)
+        public LazinatorFastReadList(LazinatorMemory serializedBytes, ILazinator parent = null)
         {
+            LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

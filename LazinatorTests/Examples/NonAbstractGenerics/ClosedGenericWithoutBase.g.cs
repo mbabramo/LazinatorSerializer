@@ -105,9 +105,12 @@ namespace LazinatorTests.Examples
         {
         }
         
-        public ClosedGenericWithoutBase(LazinatorMemory serializedBytes)
+        public ClosedGenericWithoutBase(LazinatorMemory serializedBytes, ILazinator parent = null)
         {
+            LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }

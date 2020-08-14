@@ -231,9 +231,12 @@ namespace LazinatorCollections.Tuples
         {
         }
         
-        public LazinatorTriple(LazinatorMemory serializedBytes)
+        public LazinatorTriple(LazinatorMemory serializedBytes, ILazinator parent = null)
         {
+            LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

@@ -96,9 +96,12 @@ namespace LazinatorTests.Examples.Collections
         {
         }
         
-        public SpanInDotNetList(LazinatorMemory serializedBytes)
+        public SpanInDotNetList(LazinatorMemory serializedBytes, ILazinator parent = null)
         {
+            LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }

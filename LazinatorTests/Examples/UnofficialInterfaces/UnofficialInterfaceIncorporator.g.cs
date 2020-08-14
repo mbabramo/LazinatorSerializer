@@ -170,9 +170,12 @@ namespace LazinatorTests.Examples
         {
         }
         
-        public UnofficialInterfaceIncorporator(LazinatorMemory serializedBytes)
+        public UnofficialInterfaceIncorporator(LazinatorMemory serializedBytes, ILazinator parent = null)
         {
+            LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }

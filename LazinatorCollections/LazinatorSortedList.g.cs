@@ -37,9 +37,12 @@ namespace LazinatorCollections
         {
         }
         
-        public LazinatorSortedList(LazinatorMemory serializedBytes) : base(LazinatorConstructorEnum.LazinatorConstructor)
+        public LazinatorSortedList(LazinatorMemory serializedBytes, ILazinator parent = null) : base(LazinatorConstructorEnum.LazinatorConstructor)
         {
+            LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)

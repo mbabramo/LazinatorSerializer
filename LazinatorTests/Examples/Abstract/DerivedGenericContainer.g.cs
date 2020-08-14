@@ -90,9 +90,12 @@ namespace LazinatorTests.Examples.Abstract
         {
         }
         
-        public DerivedGenericContainer(LazinatorMemory serializedBytes)
+        public DerivedGenericContainer(LazinatorMemory serializedBytes, ILazinator parent = null)
         {
+            LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }

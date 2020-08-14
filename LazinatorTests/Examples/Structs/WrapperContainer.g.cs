@@ -114,9 +114,12 @@ namespace LazinatorTests.Examples.Structs
         {
         }
         
-        public WrapperContainer(LazinatorMemory serializedBytes)
+        public WrapperContainer(LazinatorMemory serializedBytes, ILazinator parent = null)
         {
+            LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }

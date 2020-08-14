@@ -203,9 +203,12 @@ namespace LazinatorTests.Examples.Collections
         {
         }
         
-        public Dictionary_Values_Lazinator(LazinatorMemory serializedBytes)
+        public Dictionary_Values_Lazinator(LazinatorMemory serializedBytes, ILazinator parent = null)
         {
+            LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }

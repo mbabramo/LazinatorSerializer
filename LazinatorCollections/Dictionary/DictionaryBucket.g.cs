@@ -164,9 +164,12 @@ namespace LazinatorCollections.Dictionary
         {
         }
         
-        public DictionaryBucket(LazinatorMemory serializedBytes)
+        public DictionaryBucket(LazinatorMemory serializedBytes, ILazinator parent = null)
         {
+            LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

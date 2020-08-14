@@ -86,9 +86,12 @@ namespace LazinatorTests.Examples.Abstract
         {
         }
         
-        public ConcreteGenericContainer(LazinatorMemory serializedBytes)
+        public ConcreteGenericContainer(LazinatorMemory serializedBytes, ILazinator parent = null)
         {
+            LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         public override LazinatorParentsCollection LazinatorParents { get; set; }

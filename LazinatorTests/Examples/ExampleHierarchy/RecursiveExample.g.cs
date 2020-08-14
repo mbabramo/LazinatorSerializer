@@ -139,9 +139,12 @@ namespace LazinatorTests.Examples.Hierarchy
         {
         }
         
-        public RecursiveExample(LazinatorMemory serializedBytes)
+        public RecursiveExample(LazinatorMemory serializedBytes, ILazinator parent = null)
         {
+            LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }

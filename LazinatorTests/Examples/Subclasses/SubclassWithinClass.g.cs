@@ -57,9 +57,12 @@ namespace LazinatorTests.Examples.Subclasses
             {
             }
             
-            public SubclassWithinClass(LazinatorMemory serializedBytes)
+            public SubclassWithinClass(LazinatorMemory serializedBytes, ILazinator parent = null)
             {
+                LazinatorParents = new LazinatorParentsCollection(parent);
                 DeserializeLazinator(serializedBytes);
+                HasChanged = false;
+                DescendantHasChanged = false;
             }
             
             public virtual LazinatorParentsCollection LazinatorParents { get; set; }

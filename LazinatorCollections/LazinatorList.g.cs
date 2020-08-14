@@ -119,9 +119,12 @@ namespace LazinatorCollections
         {
         }
         
-        public LazinatorList(LazinatorMemory serializedBytes)
+        public LazinatorList(LazinatorMemory serializedBytes, ILazinator parent = null)
         {
+            LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

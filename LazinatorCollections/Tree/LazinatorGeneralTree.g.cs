@@ -158,9 +158,12 @@ namespace LazinatorCollections.Tree
         {
         }
         
-        public LazinatorGeneralTree(LazinatorMemory serializedBytes)
+        public LazinatorGeneralTree(LazinatorMemory serializedBytes, ILazinator parent = null)
         {
+            LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
