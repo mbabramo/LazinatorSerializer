@@ -1786,7 +1786,7 @@ asdf")}";
                             {{
                                 if ({innerProperty.GetNonNullCheck(false, "itemToClone[itemIndex]")})
                                 {{
-                                    itemToClone[itemIndex] = ({innerProperty.AppropriatelyQualifiedTypeName}) (cloneOrChangeFunc(itemToClone[itemIndex]){PossibleUnsetException});
+                                    itemToClone[itemIndex] = ({innerProperty.AppropriatelyQualifiedTypeName}) (cloneOrChangeFunc(itemToClone[itemIndex]){innerProperty.PossibleUnsetException});
                                 }}
                                 continue;
                             }}
