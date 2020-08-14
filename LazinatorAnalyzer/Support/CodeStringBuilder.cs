@@ -9,7 +9,7 @@ namespace Lazinator.CodeDescription
         public int SpacesPerTab = 4;
         public int IndentLevel = 0;
         public bool IsBeginningOfLine = true;
-        public static bool AddLocationIndexComments = true; // DEBUG
+        public static bool AddLocationIndexComments = false; 
         public static int LocationIndex = 0;
 
         public override string ToString()
@@ -36,7 +36,7 @@ namespace Lazinator.CodeDescription
         {
             if (AddLocationIndexComments)
             {
-                if (LocationIndex == 467) // DEBUG
+                if (LocationIndex == -1)
                 {
                     Debugger.Break();
                 }
