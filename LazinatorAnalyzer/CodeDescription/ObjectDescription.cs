@@ -364,7 +364,7 @@ namespace Lazinator.CodeDescription
             string additionalDescendantDirtinessChecks = GetDescendantDirtinessChecks(false);
             string additionalDescendantHasChangedChecks = GetDescendantDirtinessChecks(true);
             string classContainingStructContainingClassError = GetClassContainingStructContainingClassError();
-            string constructor = GetConstructor();
+            string constructor = GetConstructors();
             string cloneMethod = GetCloneMethod();
 
             if (!IsDerivedFromNonAbstractLazinator)
@@ -1344,11 +1344,16 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             }
         }
 
-        private string GetConstructor()
+        private string GetConstructors()
         {
             // We have a special constructor with the LazinatorConstructorEnum for all classes. Our factory will call this constructor, so as not to trigger the default constructor. 
-            string constructor = IsStruct ? "" : $@"public {SimpleName}(LazinatorConstructorEnum constructorEnum){IIF(ILazinatorTypeSymbol.BaseType != null && !ILazinatorTypeSymbol.BaseType.IsAbstract && IsDerivedFromNonAbstractLazinator, " : base(constructorEnum)")}
+            string constructors = IsStruct ? "" : $@"public {SimpleName}(LazinatorConstructorEnum constructorEnum){IIF(ILazinatorTypeSymbol.BaseType != null && !ILazinatorTypeSymbol.BaseType.IsAbstract && IsDerivedFromNonAbstractLazinator, " : base(constructorEnum)")}
                         {{
+                        }}
+
+                        public {SimpleName}(LazinatorMemory serializedBytes)
+                        {{
+                            DeserializeLazinator(serializedBytes);
                         }}
 
                         ";
@@ -1358,7 +1363,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             //            }}
                         
             //            ";
-            return constructor;
+            return constructors;
         }
 
         public static bool AllowClassContainingStructContainingClass = true; // for now, let's allow this scenario
