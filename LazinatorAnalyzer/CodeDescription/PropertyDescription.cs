@@ -1673,8 +1673,10 @@ asdf")}";
                     {{
                         if (itemToConvert == null)
                         {{
+                            writer.Write((bool)true);
                             return;
                         }}
+                        writer.Write((bool)false);
                         {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodableWithoutNullable}(ref writer, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     }}
 ");
