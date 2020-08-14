@@ -358,11 +358,11 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetList_Values typedClone = (DotNetList_Values) clone;
-            typedClone.MyLinkedListInt = CloneOrChange_LinkedList_Gint_g(MyLinkedListInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyListInt = CloneOrChange_List_Gint_g(MyListInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyListInt2 = CloneOrChange_List_Gint_g(MyListInt2, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyListNullableEnabledContext = CloneOrChange_List_GNullableEnabledContext_g(MyListNullableEnabledContext, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MySortedSetInt = CloneOrChange_SortedSet_Gint_g(MySortedSetInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyLinkedListInt = CloneOrChange_LinkedList_Gint_g(MyLinkedListInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyListInt = CloneOrChange_List_Gint_g(MyListInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyListInt2 = CloneOrChange_List_Gint_g(MyListInt2, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyListNullableEnabledContext = CloneOrChange_List_GNullableEnabledContext_g(MyListNullableEnabledContext, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MySortedSetInt = CloneOrChange_SortedSet_Gint_g(MySortedSetInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }

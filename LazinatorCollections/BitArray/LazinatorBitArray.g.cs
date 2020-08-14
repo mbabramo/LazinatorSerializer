@@ -186,7 +186,7 @@ namespace LazinatorCollections.BitArray
             LazinatorBitArray typedClone = (LazinatorBitArray) clone;
             typedClone._version = _version;
             typedClone.m_length = m_length;
-            typedClone.IntStorage = CloneOrChange_Memory_Gint_g(IntStorage, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.IntStorage = CloneOrChange_Memory_Gint_g(IntStorage, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }

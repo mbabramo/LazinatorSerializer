@@ -200,7 +200,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
             clone.FreeInMemoryObjects();
             OpenGeneric<T> typedClone = (OpenGeneric<T>) clone;
-            typedClone.MyListT = CloneOrChange_List_GT_g(MyListT, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyListT = CloneOrChange_List_GT_g(MyListT, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (MyT == null)

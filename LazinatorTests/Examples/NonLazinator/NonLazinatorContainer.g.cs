@@ -260,8 +260,8 @@ namespace LazinatorTests.Examples
             clone.FreeInMemoryObjects();
             NonLazinatorContainer typedClone = (NonLazinatorContainer) clone;
             typedClone.NonLazinatorClass = NonLazinatorDirectConverter.CloneOrChange_NonLazinatorClass(NonLazinatorClass, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.NonLazinatorInterchangeableClass = CloneOrChange_NonLazinatorInterchangeableClass(NonLazinatorInterchangeableClass, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.NonLazinatorInterchangeableStruct = CloneOrChange_NonLazinatorInterchangeableStruct(NonLazinatorInterchangeableStruct, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.NonLazinatorInterchangeableClass = CloneOrChange_NonLazinatorInterchangeableClass(NonLazinatorInterchangeableClass, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.NonLazinatorInterchangeableStruct = CloneOrChange_NonLazinatorInterchangeableStruct(NonLazinatorInterchangeableStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.NonLazinatorStruct = NonLazinatorDirectConverter.CloneOrChange_NonLazinatorStruct(NonLazinatorStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             typedClone.IsDirty = false;

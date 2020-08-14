@@ -141,7 +141,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetList_Nested_NonLazinator typedClone = (DotNetList_Nested_NonLazinator) clone;
-            typedClone.MyListNestedNonLazinatorType = CloneOrChange_List_GList_GNonLazinatorClass_g_g(MyListNestedNonLazinatorType, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyListNestedNonLazinatorType = CloneOrChange_List_GList_GNonLazinatorClass_g_g(MyListNestedNonLazinatorType, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }

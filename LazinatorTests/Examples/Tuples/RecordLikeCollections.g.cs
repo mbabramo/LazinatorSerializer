@@ -198,8 +198,8 @@ namespace LazinatorTests.Examples.Tuples
             clone.FreeInMemoryObjects();
             RecordLikeCollections typedClone = (RecordLikeCollections) clone;
             typedClone.MyInt = MyInt;
-            typedClone.MyDictionaryWithRecordLikeContainers = CloneOrChange_Dictionary_Gint_c_C32RecordLikeContainer_g(MyDictionaryWithRecordLikeContainers, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyDictionaryWithRecordLikeTypeValues = CloneOrChange_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(MyDictionaryWithRecordLikeTypeValues, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyDictionaryWithRecordLikeContainers = CloneOrChange_Dictionary_Gint_c_C32RecordLikeContainer_g(MyDictionaryWithRecordLikeContainers, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyDictionaryWithRecordLikeTypeValues = CloneOrChange_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(MyDictionaryWithRecordLikeTypeValues, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }

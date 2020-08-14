@@ -342,12 +342,12 @@ namespace LazinatorTests.Examples.Tuples
         {
             clone.FreeInMemoryObjects();
             StructTuple typedClone = (StructTuple) clone;
-            typedClone.EnumTuple = CloneOrChange__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p(EnumTuple, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyNamedTuple = CloneOrChange__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(MyNamedTuple, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyNullableTuple = CloneOrChange__Pint_c_C32double_p_C63(MyNullableTuple, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyValueTupleNullableStructs = CloneOrChange__PExampleStructContainingClasses_C63_c_C32ExampleStructContainingClasses_C63_c_C32ExampleStructContainingClasses_C63_p(MyValueTupleNullableStructs, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyValueTupleSerialized = CloneOrChange__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(MyValueTupleSerialized, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyValueTupleStructs = CloneOrChange__PWInt_c_C32WInt_p(MyValueTupleStructs, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.EnumTuple = CloneOrChange__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p(EnumTuple, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyNamedTuple = CloneOrChange__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(MyNamedTuple, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyNullableTuple = CloneOrChange__Pint_c_C32double_p_C63(MyNullableTuple, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyValueTupleNullableStructs = CloneOrChange__PExampleStructContainingClasses_C63_c_C32ExampleStructContainingClasses_C63_c_C32ExampleStructContainingClasses_C63_p(MyValueTupleNullableStructs, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyValueTupleSerialized = CloneOrChange__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(MyValueTupleSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyValueTupleStructs = CloneOrChange__PWInt_c_C32WInt_p(MyValueTupleStructs, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }

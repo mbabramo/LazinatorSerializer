@@ -156,7 +156,7 @@ namespace LazinatorTests.Examples.Collections
             clone.FreeInMemoryObjects();
             SpanInDotNetList typedClone = (SpanInDotNetList) clone;
             typedClone.SomeInt = SomeInt;
-            typedClone.SpanList = CloneOrChange_List_GSpanAndMemory_g(SpanList, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.SpanList = CloneOrChange_List_GSpanAndMemory_g(SpanList, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }

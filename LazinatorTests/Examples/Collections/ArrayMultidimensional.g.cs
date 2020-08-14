@@ -239,9 +239,9 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             ArrayMultidimensional typedClone = (ArrayMultidimensional) clone;
-            typedClone.MyArrayInt = CloneOrChange_int_B_c_b(MyArrayInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyCrazyJaggedArray = CloneOrChange_int_B_b_B_c_c_b_B_c_c_c_b(MyCrazyJaggedArray, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyThreeDimArrayInt = CloneOrChange_int_B_c_c_b(MyThreeDimArrayInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyArrayInt = CloneOrChange_int_B_c_b(MyArrayInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyCrazyJaggedArray = CloneOrChange_int_B_b_B_c_c_b_B_c_c_c_b(MyCrazyJaggedArray, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyThreeDimArrayInt = CloneOrChange_int_B_c_c_b(MyThreeDimArrayInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }

@@ -159,7 +159,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetQueue_Values typedClone = (DotNetQueue_Values) clone;
-            typedClone.MyQueueInt = CloneOrChange_Queue_Gint_g(MyQueueInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyQueueInt = CloneOrChange_Queue_Gint_g(MyQueueInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }

@@ -262,10 +262,10 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             Dictionary_Values_Lazinator typedClone = (Dictionary_Values_Lazinator) clone;
-            typedClone.MyDictionary = CloneOrChange_Dictionary_Gint_c_C32ExampleChild_g(MyDictionary, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyDictionaryStructs = CloneOrChange_Dictionary_GWInt_c_C32WInt_g(MyDictionaryStructs, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MySortedDictionary = CloneOrChange_SortedDictionary_Gint_c_C32ExampleChild_g(MySortedDictionary, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MySortedList = CloneOrChange_SortedList_Gint_c_C32ExampleChild_g(MySortedList, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyDictionary = CloneOrChange_Dictionary_Gint_c_C32ExampleChild_g(MyDictionary, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyDictionaryStructs = CloneOrChange_Dictionary_GWInt_c_C32WInt_g(MyDictionaryStructs, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MySortedDictionary = CloneOrChange_SortedDictionary_Gint_c_C32ExampleChild_g(MySortedDictionary, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MySortedList = CloneOrChange_SortedList_Gint_c_C32ExampleChild_g(MySortedList, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }

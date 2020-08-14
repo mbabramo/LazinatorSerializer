@@ -141,7 +141,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetQueue_Lazinator typedClone = (DotNetQueue_Lazinator) clone;
-            typedClone.MyQueueSerialized = CloneOrChange_Queue_GExampleChild_g(MyQueueSerialized, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyQueueSerialized = CloneOrChange_Queue_GExampleChild_g(MyQueueSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }

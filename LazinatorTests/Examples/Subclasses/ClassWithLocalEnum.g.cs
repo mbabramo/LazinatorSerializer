@@ -156,7 +156,7 @@ namespace LazinatorTests.Examples.Subclasses
             clone.FreeInMemoryObjects();
             ClassWithLocalEnum typedClone = (ClassWithLocalEnum) clone;
             typedClone.MyEnum = MyEnum;
-            typedClone.MyEnumList = CloneOrChange_List_GEnumWithinClass_g(MyEnumList, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyEnumList = CloneOrChange_List_GEnumWithinClass_g(MyEnumList, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }

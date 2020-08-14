@@ -160,7 +160,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetList_Lazinator typedClone = (DotNetList_Lazinator) clone;
-            typedClone.MyListSerialized = CloneOrChange_List_GExampleChild_g(MyListSerialized, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyListSerialized = CloneOrChange_List_GExampleChild_g(MyListSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }

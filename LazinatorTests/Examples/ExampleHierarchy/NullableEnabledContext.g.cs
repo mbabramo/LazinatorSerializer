@@ -1907,14 +1907,14 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 
             }
             
-            typedClone.NonNullableArrayOfNonNullables = CloneOrChange_Example_B_b(NonNullableArrayOfNonNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer) ?? throw new UnsetNonnullableLazinatorException(), false);
+            typedClone.NonNullableArrayOfNonNullables = CloneOrChange_Example_B_b(NonNullableArrayOfNonNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.NonNullableArrayOfNullables = CloneOrChange_Example_C63_B_b(NonNullableArrayOfNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 typedClone.NonNullableClass = (Example) NonNullableClass.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             
-            typedClone.NonNullableDictionaryWithNonNullable = CloneOrChange_Dictionary_Gint_c_C32Example_g(NonNullableDictionaryWithNonNullable, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer) ?? throw new UnsetNonnullableLazinatorException(), false);
+            typedClone.NonNullableDictionaryWithNonNullable = CloneOrChange_Dictionary_Gint_c_C32Example_g(NonNullableDictionaryWithNonNullable, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.NonNullableDictionaryWithNullable = CloneOrChange_Dictionary_Gint_c_C32Example_C63_g(NonNullableDictionaryWithNullable, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -1931,24 +1931,24 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 typedClone.NonNullableLazinatorListNullable = (LazinatorList<Example?>) NonNullableLazinatorListNullable.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             
-            typedClone.NonNullableListOfNonNullables = CloneOrChange_List_GExample_g(NonNullableListOfNonNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer) ?? throw new UnsetNonnullableLazinatorException(), false);
+            typedClone.NonNullableListOfNonNullables = CloneOrChange_List_GExample_g(NonNullableListOfNonNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.NonNullableListOfNullables = CloneOrChange_List_GExample_C63_g(NonNullableListOfNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.NonNullableMemoryOfBytes = CloneOrChange_Memory_Gbyte_g(NonNullableMemoryOfBytes, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.NonNullableQueueOfNonNullables = CloneOrChange_Queue_GExample_g(NonNullableQueueOfNonNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer) ?? throw new UnsetNonnullableLazinatorException(), false);
+            typedClone.NonNullableQueueOfNonNullables = CloneOrChange_Queue_GExample_g(NonNullableQueueOfNonNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.NonNullableQueueOfNullables = CloneOrChange_Queue_GExample_C63_g(NonNullableQueueOfNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.NonNullableReadOnlyMemoryOfBytes = CloneOrChange_ReadOnlyMemory_Gbyte_g(NonNullableReadOnlyMemoryOfBytes, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.NonNullableRegularTupleWithNonNullable = CloneOrChange_Tuple_GExample_c_C32int_g(NonNullableRegularTupleWithNonNullable, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer) ?? throw new UnsetNonnullableLazinatorException(), false);
+            typedClone.NonNullableRegularTupleWithNonNullable = CloneOrChange_Tuple_GExample_c_C32int_g(NonNullableRegularTupleWithNonNullable, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.NonNullableRegularTupleWithNullable = CloneOrChange_Tuple_GExample_C63_c_C32int_g(NonNullableRegularTupleWithNullable, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.NonNullableStackOfNonNullables = CloneOrChange_Stack_GExample_g(NonNullableStackOfNonNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer) ?? throw new UnsetNonnullableLazinatorException(), false);
+            typedClone.NonNullableStackOfNonNullables = CloneOrChange_Stack_GExample_g(NonNullableStackOfNonNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.NonNullableStackOfNullables = CloneOrChange_Stack_GExample_C63_g(NonNullableStackOfNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 typedClone.NonNullableStruct = (ExampleStructWithoutClass) NonNullableStruct.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             
-            typedClone.NullableArrayOfNonNullables = CloneOrChange_Example_B_b_C63(NullableArrayOfNonNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer) ?? throw new UnsetNonnullableLazinatorException(), false);
+            typedClone.NullableArrayOfNonNullables = CloneOrChange_Example_B_b_C63(NullableArrayOfNonNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.NullableArrayOfNullables = CloneOrChange_Example_C63_B_b_C63(NullableArrayOfNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.NullableDictionaryWithNonNullable = CloneOrChange_Dictionary_Gint_c_C32Example_g_C63(NullableDictionaryWithNonNullable, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer) ?? throw new UnsetNonnullableLazinatorException(), false);
+            typedClone.NullableDictionaryWithNonNullable = CloneOrChange_Dictionary_Gint_c_C32Example_g_C63(NullableDictionaryWithNonNullable, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.NullableDictionaryWithNullable = CloneOrChange_Dictionary_Gint_c_C32Example_C63_g_C63(NullableDictionaryWithNullable, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -1976,15 +1976,15 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 
             }
             
-            typedClone.NullableListOfNonNullables = CloneOrChange_List_GExample_g_C63(NullableListOfNonNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer) ?? throw new UnsetNonnullableLazinatorException(), false);
+            typedClone.NullableListOfNonNullables = CloneOrChange_List_GExample_g_C63(NullableListOfNonNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.NullableListOfNullables = CloneOrChange_List_GExample_C63_g_C63(NullableListOfNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.NullableMemoryOfBytes = CloneOrChange_Memory_Gbyte_g_C63(NullableMemoryOfBytes, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.NullableQueueOfNonNullables = CloneOrChange_Queue_GExample_g_C63(NullableQueueOfNonNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer) ?? throw new UnsetNonnullableLazinatorException(), false);
+            typedClone.NullableQueueOfNonNullables = CloneOrChange_Queue_GExample_g_C63(NullableQueueOfNonNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.NullableQueueOfNullables = CloneOrChange_Queue_GExample_C63_g_C63(NullableQueueOfNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.NullableReadOnlyMemoryOfBytes = CloneOrChange_ReadOnlyMemory_Gbyte_g_C63(NullableReadOnlyMemoryOfBytes, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.NullableRegularTupleWithNonNullable = CloneOrChange_Tuple_GExample_c_C32int_g_C63(NullableRegularTupleWithNonNullable, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer) ?? throw new UnsetNonnullableLazinatorException(), false);
+            typedClone.NullableRegularTupleWithNonNullable = CloneOrChange_Tuple_GExample_c_C32int_g_C63(NullableRegularTupleWithNonNullable, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.NullableRegularTupleWithNullable = CloneOrChange_Tuple_GExample_C63_c_C32int_g_C63(NullableRegularTupleWithNullable, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.NullableStackOfNonNullables = CloneOrChange_Stack_GExample_g_C63(NullableStackOfNonNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer) ?? throw new UnsetNonnullableLazinatorException(), false);
+            typedClone.NullableStackOfNonNullables = CloneOrChange_Stack_GExample_g_C63(NullableStackOfNonNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.NullableStackOfNullables = CloneOrChange_Stack_GExample_C63_g_C63(NullableStackOfNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -1999,9 +1999,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 
             }
             
-            typedClone.NullableValueTupleWithNonNullable = CloneOrChange__PExample_c_C32int_p_C63(NullableValueTupleWithNonNullable, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer) ?? throw new UnsetNonnullableLazinatorException(), false);
+            typedClone.NullableValueTupleWithNonNullable = CloneOrChange__PExample_c_C32int_p_C63(NullableValueTupleWithNonNullable, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.NullableValueTupleWithNullable = CloneOrChange__PExample_C63_c_C32int_p_C63(NullableValueTupleWithNullable, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.ValueTupleWithNonNullable = CloneOrChange__PExample_c_C32int_p(ValueTupleWithNonNullable, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer) ?? throw new UnsetNonnullableLazinatorException(), false);
+            typedClone.ValueTupleWithNonNullable = CloneOrChange__PExample_c_C32int_p(ValueTupleWithNonNullable, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.ValueTupleWithNullable = CloneOrChange__PExample_C63_c_C32int_p(ValueTupleWithNullable, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;

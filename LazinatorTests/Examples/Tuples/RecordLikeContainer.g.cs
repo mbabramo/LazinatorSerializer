@@ -252,10 +252,10 @@ namespace LazinatorTests.Examples.Tuples
             clone.FreeInMemoryObjects();
             RecordLikeContainer typedClone = (RecordLikeContainer) clone;
             typedClone.MyInt = MyInt;
-            typedClone.MyMismatchedRecordLikeType = CloneOrChange_MismatchedRecordLikeType(MyMismatchedRecordLikeType, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyRecordLikeClass = CloneOrChange_RecordLikeClass(MyRecordLikeClass, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyRecordLikeType = CloneOrChange_RecordLikeType(MyRecordLikeType, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyRecordLikeTypeWithLazinator = CloneOrChange_RecordLikeTypeWithLazinator(MyRecordLikeTypeWithLazinator, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyMismatchedRecordLikeType = CloneOrChange_MismatchedRecordLikeType(MyMismatchedRecordLikeType, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyRecordLikeClass = CloneOrChange_RecordLikeClass(MyRecordLikeClass, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyRecordLikeType = CloneOrChange_RecordLikeType(MyRecordLikeType, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyRecordLikeTypeWithLazinator = CloneOrChange_RecordLikeTypeWithLazinator(MyRecordLikeTypeWithLazinator, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }

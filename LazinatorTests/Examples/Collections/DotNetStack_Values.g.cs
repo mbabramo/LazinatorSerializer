@@ -159,7 +159,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetStack_Values typedClone = (DotNetStack_Values) clone;
-            typedClone.MyStackInt = CloneOrChange_Stack_Gint_g(MyStackInt, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyStackInt = CloneOrChange_Stack_Gint_g(MyStackInt, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }

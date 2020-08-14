@@ -140,7 +140,7 @@ namespace Lazinator.Wrappers
         {
             clone.FreeInMemoryObjects();
             WLongArray typedClone = (WLongArray) clone;
-            typedClone.WrappedValue = CloneOrChange_long_B_b(WrappedValue, l => l.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.WrappedValue = CloneOrChange_long_B_b(WrappedValue, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             typedClone.IsDirty = false;
             return typedClone;
