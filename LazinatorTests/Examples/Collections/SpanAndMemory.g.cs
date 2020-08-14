@@ -1103,7 +1103,8 @@ namespace LazinatorTests.Examples.Collections
             {
                 return null;
             }
-            return storage.Memory.Slice(1).ToArray();
+            ReadOnlySpan<byte> span = storage.Span.Slice(1);
+            return span.ToArray();
         }
         
         private static void ConvertToBytes_Memory_Gbyte_g_C63(ref BinaryBufferWriter writer, Memory<byte>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -1139,11 +1140,13 @@ namespace LazinatorTests.Examples.Collections
         
         private static Memory<int>? ConvertFromBytes_Memory_Gint_g_C63(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
+            int index = 0;
+            bool isNull = storage.ReadOnlySpan.ToBoolean(ref index);
+            if (isNull)
             {
-                return default(Memory<int>?);
+                return null;
             }
-            ReadOnlySpan<byte> span = storage.Span;
+            ReadOnlySpan<byte> span = storage.Span.Slice(1);
             
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
