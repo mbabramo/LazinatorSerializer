@@ -1351,9 +1351,12 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                         {{
                         }}
 
-                        public {SimpleName}(LazinatorMemory serializedBytes){IIF(ILazinatorTypeSymbol.BaseType != null && !ILazinatorTypeSymbol.BaseType.IsAbstract && IsDerivedFromNonAbstractLazinator, " : base(LazinatorConstructorEnum.LazinatorConstructor)")}
+                        public {SimpleName}(LazinatorMemory serializedBytes, ILazinator{IIF(NullableModeEnabled, "?")} parent = null){IIF(ILazinatorTypeSymbol.BaseType != null && !ILazinatorTypeSymbol.BaseType.IsAbstract && IsDerivedFromNonAbstractLazinator, " : base(LazinatorConstructorEnum.LazinatorConstructor)")}
                         {{
+                            LazinatorParents = new LazinatorParentsCollection(parent);
                             DeserializeLazinator(serializedBytes);
+                            HasChanged = false;
+                            DescendantHasChanged = false;
                         }}
 
                         ";
