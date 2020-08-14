@@ -859,7 +859,6 @@ namespace LazinatorTests.Examples
                 return default(HashSet<ExampleStructContainingClasses>);
             }
             ReadOnlySpan<byte> span = storage.Span;
-            
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
@@ -915,7 +914,6 @@ namespace LazinatorTests.Examples
                 return default(List<ExampleStructContainingClasses>);
             }
             ReadOnlySpan<byte> span = storage.Span;
-            
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
@@ -986,7 +984,6 @@ namespace LazinatorTests.Examples
                 return default(List<WNullableStruct<ExampleStructContainingClasses>>);
             }
             ReadOnlySpan<byte> span = storage.Span;
-            
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
@@ -1057,7 +1054,6 @@ namespace LazinatorTests.Examples
                 return default(List<ExampleStructContainingClasses?>);
             }
             ReadOnlySpan<byte> span = storage.Span;
-            
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             

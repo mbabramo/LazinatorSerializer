@@ -775,7 +775,6 @@ namespace LazinatorTests.Examples.Tuples
                 return default(List<Tuple<uint, ExampleChild, NonLazinatorClass>>);
             }
             ReadOnlySpan<byte> span = storage.Span;
-            
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             

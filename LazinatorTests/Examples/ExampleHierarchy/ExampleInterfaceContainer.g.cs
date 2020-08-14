@@ -534,7 +534,6 @@ namespace LazinatorTests.Examples.Hierarchy
                 return default(List<IExample>);
             }
             ReadOnlySpan<byte> span = storage.Span;
-            
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             

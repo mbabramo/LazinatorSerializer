@@ -467,7 +467,6 @@ namespace LazinatorCollections.BitArray
         private static Memory<int> ConvertFromBytes_Memory_Gint_g(LazinatorMemory storage)
         {
             ReadOnlySpan<byte> span = storage.Span;
-            
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             

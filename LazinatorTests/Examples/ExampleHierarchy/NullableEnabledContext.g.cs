@@ -3741,7 +3741,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             private static Example[] ConvertFromBytes_Example_B_b(LazinatorMemory storage)
             {
                 ReadOnlySpan<byte> span = storage.Span;
-                
                 int bytesSoFar = 0;
                 int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                 
@@ -3798,7 +3797,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             private static Example?[] ConvertFromBytes_Example_C63_B_b(LazinatorMemory storage)
             {
                 ReadOnlySpan<byte> span = storage.Span;
-                
                 int bytesSoFar = 0;
                 int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                 
@@ -3878,7 +3876,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             private static Dictionary<int, Example> ConvertFromBytes_Dictionary_Gint_c_C32Example_g(LazinatorMemory storage)
             {
                 ReadOnlySpan<byte> span = storage.Span;
-                
                 int bytesSoFar = 0;
                 int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                 
@@ -3975,7 +3972,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             private static Dictionary<int, Example?> ConvertFromBytes_Dictionary_Gint_c_C32Example_C63_g(LazinatorMemory storage)
             {
                 ReadOnlySpan<byte> span = storage.Span;
-                
                 int bytesSoFar = 0;
                 int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                 
@@ -4068,7 +4064,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             private static List<Example> ConvertFromBytes_List_GExample_g(LazinatorMemory storage)
             {
                 ReadOnlySpan<byte> span = storage.Span;
-                
                 int bytesSoFar = 0;
                 int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                 
@@ -4125,7 +4120,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             private static List<Example?> ConvertFromBytes_List_GExample_C63_g(LazinatorMemory storage)
             {
                 ReadOnlySpan<byte> span = storage.Span;
-                
                 int bytesSoFar = 0;
                 int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                 
@@ -4230,7 +4224,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             private static Queue<Example> ConvertFromBytes_Queue_GExample_g(LazinatorMemory storage)
             {
                 ReadOnlySpan<byte> span = storage.Span;
-                
                 int bytesSoFar = 0;
                 int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                 
@@ -4281,7 +4274,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             private static Queue<Example?> ConvertFromBytes_Queue_GExample_C63_g(LazinatorMemory storage)
             {
                 ReadOnlySpan<byte> span = storage.Span;
-                
                 int bytesSoFar = 0;
                 int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                 
@@ -4380,7 +4372,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             private static Stack<Example> ConvertFromBytes_Stack_GExample_g(LazinatorMemory storage)
             {
                 ReadOnlySpan<byte> span = storage.Span;
-                
                 int bytesSoFar = 0;
                 int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                 
@@ -4433,7 +4424,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             private static Stack<Example?> ConvertFromBytes_Stack_GExample_C63_g(LazinatorMemory storage)
             {
                 ReadOnlySpan<byte> span = storage.Span;
-                
                 int bytesSoFar = 0;
                 int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                 
@@ -4513,7 +4503,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     return default(Example[]?);
                 }
                 ReadOnlySpan<byte> span = storage.Span;
-                
                 int bytesSoFar = 0;
                 int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                 
@@ -4579,7 +4568,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     return default(Example?[]?);
                 }
                 ReadOnlySpan<byte> span = storage.Span;
-                
                 int bytesSoFar = 0;
                 int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                 
@@ -4668,7 +4656,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     return default(Dictionary<int, Example>?);
                 }
                 ReadOnlySpan<byte> span = storage.Span;
-                
                 int bytesSoFar = 0;
                 int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                 
@@ -4723,7 +4710,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     return default(Dictionary<int, Example?>?);
                 }
                 ReadOnlySpan<byte> span = storage.Span;
-                
                 int bytesSoFar = 0;
                 int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                 
@@ -4778,7 +4764,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     return default(List<Example>?);
                 }
                 ReadOnlySpan<byte> span = storage.Span;
-                
                 int bytesSoFar = 0;
                 int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                 
@@ -4844,7 +4829,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     return default(List<Example?>?);
                 }
                 ReadOnlySpan<byte> span = storage.Span;
-                
                 int bytesSoFar = 0;
                 int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                 
@@ -4934,7 +4918,8 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     return null;
                 }
-                return storage.Memory.Slice(1).ToArray();
+                ReadOnlySpan<byte> span = storage.Span.Slice(1);
+                return span.ToArray();
             }
             
             private static void ConvertToBytes_Memory_Gbyte_g_C63(ref BinaryBufferWriter writer, Memory<byte>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -4975,7 +4960,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     return default(Queue<Example>?);
                 }
                 ReadOnlySpan<byte> span = storage.Span;
-                
                 int bytesSoFar = 0;
                 int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                 
@@ -5035,7 +5019,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     return default(Queue<Example?>?);
                 }
                 ReadOnlySpan<byte> span = storage.Span;
-                
                 int bytesSoFar = 0;
                 int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                 
@@ -5119,7 +5102,8 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     return null;
                 }
-                return storage.Memory.Slice(1).ToArray();
+                ReadOnlySpan<byte> span = storage.Span.Slice(1);
+                return span.ToArray();
             }
             
             private static void ConvertToBytes_ReadOnlyMemory_Gbyte_g_C63(ref BinaryBufferWriter writer, ReadOnlyMemory<byte>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -5160,7 +5144,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     return default(Stack<Example>?);
                 }
                 ReadOnlySpan<byte> span = storage.Span;
-                
                 int bytesSoFar = 0;
                 int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                 
@@ -5222,7 +5205,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     return default(Stack<Example?>?);
                 }
                 ReadOnlySpan<byte> span = storage.Span;
-                
                 int bytesSoFar = 0;
                 int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                 

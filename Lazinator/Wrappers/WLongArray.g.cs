@@ -430,7 +430,6 @@ namespace Lazinator.Wrappers
                 return default(long[]);
             }
             ReadOnlySpan<byte> span = storage.Span;
-            
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             

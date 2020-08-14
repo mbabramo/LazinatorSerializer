@@ -576,7 +576,6 @@ namespace LazinatorTests.Examples.Collections
                 return default(List<WInt>);
             }
             ReadOnlySpan<byte> span = storage.Span;
-            
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
@@ -647,7 +646,6 @@ namespace LazinatorTests.Examples.Collections
                 return default(List<WNullableByte>);
             }
             ReadOnlySpan<byte> span = storage.Span;
-            
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
@@ -718,7 +716,6 @@ namespace LazinatorTests.Examples.Collections
                 return default(List<WNullableInt>);
             }
             ReadOnlySpan<byte> span = storage.Span;
-            
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             

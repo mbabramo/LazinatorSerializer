@@ -435,7 +435,6 @@ namespace LazinatorTests.Examples.Subclasses
                 return default(List<EnumWithinClass>);
             }
             ReadOnlySpan<byte> span = storage.Span;
-            
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             

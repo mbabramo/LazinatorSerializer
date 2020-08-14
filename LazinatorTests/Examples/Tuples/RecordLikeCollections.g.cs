@@ -515,7 +515,6 @@ namespace LazinatorTests.Examples.Tuples
                 return default(Dictionary<int, RecordLikeContainer>);
             }
             ReadOnlySpan<byte> span = storage.Span;
-            
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
@@ -617,7 +616,6 @@ namespace LazinatorTests.Examples.Tuples
                 return default(Dictionary<int, RecordLikeTypeWithLazinator>);
             }
             ReadOnlySpan<byte> span = storage.Span;
-            
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             

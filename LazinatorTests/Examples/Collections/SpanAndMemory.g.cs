@@ -1054,7 +1054,6 @@ namespace LazinatorTests.Examples.Collections
         private static Memory<int> ConvertFromBytes_Memory_Gint_g(LazinatorMemory storage)
         {
             ReadOnlySpan<byte> span = storage.Span;
-            
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
@@ -1147,7 +1146,6 @@ namespace LazinatorTests.Examples.Collections
                 return null;
             }
             ReadOnlySpan<byte> span = storage.Span.Slice(1);
-            
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
@@ -1195,12 +1193,13 @@ namespace LazinatorTests.Examples.Collections
         
         private static ReadOnlyMemory<int>? ConvertFromBytes_ReadOnlyMemory_Gint_g_C63(LazinatorMemory storage)
         {
-            if (storage.Length == 0)
+            int index = 0;
+            bool isNull = storage.ReadOnlySpan.ToBoolean(ref index);
+            if (isNull)
             {
-                return default(ReadOnlyMemory<int>?);
+                return null;
             }
-            ReadOnlySpan<byte> span = storage.Span;
-            
+            ReadOnlySpan<byte> span = storage.Span.Slice(1);
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
@@ -1274,7 +1273,6 @@ namespace LazinatorTests.Examples.Collections
         private static ReadOnlyMemory<char> ConvertFromBytes_ReadOnlyMemory_Gchar_g(LazinatorMemory storage)
         {
             ReadOnlySpan<byte> span = storage.Span;
-            
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
@@ -1318,7 +1316,6 @@ namespace LazinatorTests.Examples.Collections
         private static ReadOnlyMemory<int> ConvertFromBytes_ReadOnlyMemory_Gint_g(LazinatorMemory storage)
         {
             ReadOnlySpan<byte> span = storage.Span;
-            
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
