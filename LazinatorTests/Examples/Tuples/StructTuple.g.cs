@@ -499,9 +499,9 @@ namespace LazinatorTests.Examples.Tuples
                 _MyNullableTuple = ((int, double)?) CloneOrChange__Pint_c_C32double_p_C63(_MyNullableTuple, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             var deserialized_MyValueTupleNullableStructs = MyValueTupleNullableStructs;
-            _MyValueTupleNullableStructs = ((ExampleStructContainingClasses?, ExampleStructContainingClasses?, ExampleStructContainingClasses?)) CloneOrChange__PExampleStructContainingClasses_C63_c_C32ExampleStructContainingClasses_C63_c_C32ExampleStructContainingClasses_C63_p(_MyValueTupleNullableStructs, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);var deserialized_MyValueTupleSerialized = MyValueTupleSerialized;
-            _MyValueTupleSerialized = ((uint, ExampleChild, NonLazinatorClass)) CloneOrChange__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(_MyValueTupleSerialized, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);var deserialized_MyValueTupleStructs = MyValueTupleStructs;
-            _MyValueTupleStructs = ((WInt, WInt)) CloneOrChange__PWInt_c_C32WInt_p(_MyValueTupleStructs, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);if (changeThisLevel && changeFunc != null)
+            _MyValueTupleNullableStructs = ((ExampleStructContainingClasses?, ExampleStructContainingClasses?, ExampleStructContainingClasses?)) CloneOrChange__PExampleStructContainingClasses_C63_c_C32ExampleStructContainingClasses_C63_c_C32ExampleStructContainingClasses_C63_p(_MyValueTupleNullableStructs, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);var deserialized_MyValueTupleSerialized = MyValueTupleSerialized;
+            _MyValueTupleSerialized = ((uint, ExampleChild, NonLazinatorClass)) CloneOrChange__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(_MyValueTupleSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);var deserialized_MyValueTupleStructs = MyValueTupleStructs;
+            _MyValueTupleStructs = ((WInt, WInt)) CloneOrChange__PWInt_c_C32WInt_p(_MyValueTupleStructs, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }
