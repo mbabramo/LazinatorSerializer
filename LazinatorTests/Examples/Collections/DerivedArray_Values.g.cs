@@ -143,7 +143,7 @@ namespace LazinatorTests.Examples.Collections
             base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, false);
             if ((!exploreOnlyDeserializedChildren && MyArrayInt_DerivedLevel != null) || (_MyArrayInt_DerivedLevel_Accessed && _MyArrayInt_DerivedLevel != null))
             {
-                _MyArrayInt_DerivedLevel = (int[]) CloneOrChange_int_B_b(_MyArrayInt_DerivedLevel, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
+                _MyArrayInt_DerivedLevel = (int[]) CloneOrChange_int_B_b(_MyArrayInt_DerivedLevel, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             if (changeThisLevel && changeFunc != null)
             {

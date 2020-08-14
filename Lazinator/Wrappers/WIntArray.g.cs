@@ -292,7 +292,7 @@ namespace Lazinator.Wrappers
         {
             if ((!exploreOnlyDeserializedChildren && WrappedValue != null) || (_WrappedValue_Accessed && _WrappedValue != null))
             {
-                _WrappedValue = (int[]) CloneOrChange_int_B_b(_WrappedValue, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
+                _WrappedValue = (int[]) CloneOrChange_int_B_b(_WrappedValue, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             if (changeThisLevel && changeFunc != null)
             {

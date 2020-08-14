@@ -292,7 +292,7 @@ namespace Lazinator.Wrappers
         {
             if ((!exploreOnlyDeserializedChildren && WrappedValue != null) || (_WrappedValue_Accessed && _WrappedValue != null))
             {
-                _WrappedValue = (decimal[]) CloneOrChange_decimal_B_b(_WrappedValue, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
+                _WrappedValue = (decimal[]) CloneOrChange_decimal_B_b(_WrappedValue, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             if (changeThisLevel && changeFunc != null)
             {

@@ -493,10 +493,10 @@ namespace LazinatorTests.Examples.Tuples
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             var deserialized_EnumTuple = EnumTuple;
-            _EnumTuple = ((TestEnum firstEnum, TestEnum anotherEnum)) CloneOrChange__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p(_EnumTuple, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);var deserialized_MyNamedTuple = MyNamedTuple;
-            _MyNamedTuple = ((int MyFirstItem, double MySecondItem)) CloneOrChange__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(_MyNamedTuple, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);if ((!exploreOnlyDeserializedChildren && MyNullableTuple != null) || (_MyNullableTuple_Accessed && _MyNullableTuple != null))
+            _EnumTuple = ((TestEnum firstEnum, TestEnum anotherEnum)) CloneOrChange__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p(_EnumTuple, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);var deserialized_MyNamedTuple = MyNamedTuple;
+            _MyNamedTuple = ((int MyFirstItem, double MySecondItem)) CloneOrChange__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(_MyNamedTuple, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);if ((!exploreOnlyDeserializedChildren && MyNullableTuple != null) || (_MyNullableTuple_Accessed && _MyNullableTuple != null))
             {
-                _MyNullableTuple = ((int, double)?) CloneOrChange__Pint_c_C32double_p_C63(_MyNullableTuple, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
+                _MyNullableTuple = ((int, double)?) CloneOrChange__Pint_c_C32double_p_C63(_MyNullableTuple, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             var deserialized_MyValueTupleNullableStructs = MyValueTupleNullableStructs;
             _MyValueTupleNullableStructs = ((ExampleStructContainingClasses?, ExampleStructContainingClasses?, ExampleStructContainingClasses?)) CloneOrChange__PExampleStructContainingClasses_C63_c_C32ExampleStructContainingClasses_C63_c_C32ExampleStructContainingClasses_C63_p(_MyValueTupleNullableStructs, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);var deserialized_MyValueTupleSerialized = MyValueTupleSerialized;

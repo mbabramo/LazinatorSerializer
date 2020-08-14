@@ -283,7 +283,7 @@ namespace LazinatorTests.Examples.Collections
         {
             if ((!exploreOnlyDeserializedChildren && MyHashSetSerialized != null) || (_MyHashSetSerialized_Accessed && _MyHashSetSerialized != null))
             {
-                _MyHashSetSerialized = (HashSet<ExampleChild>) CloneOrChange_HashSet_GExampleChild_g(_MyHashSetSerialized, l => l.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
+                _MyHashSetSerialized = (HashSet<ExampleChild>) CloneOrChange_HashSet_GExampleChild_g(_MyHashSetSerialized, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             if (changeThisLevel && changeFunc != null)
             {

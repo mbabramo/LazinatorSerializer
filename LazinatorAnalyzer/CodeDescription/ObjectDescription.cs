@@ -942,10 +942,9 @@ namespace Lazinator.CodeDescription
             {
                 string propertyName = property.PropertyName;
 
-                string qIfAppropriate = NullableModeEnabled ? "?" : "";
                 sb.Append(new ConditionalCodeGenerator(getAntecedent(property),
                         $@"{IIF(nonNullCheckDefinitelyTrue(property), $@"var deserialized_{propertyName} = {propertyName};
-                            ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}({property.BackingFieldAccessWithPossibleException}, l => l{qIfAppropriate}.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true){property.InnerProperties?[0].PossibleUnsetException}, true);").ToString());
+                            ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}({property.BackingFieldAccessWithPossibleException}, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true){property.InnerProperties?[0].PossibleUnsetException}, true);").ToString());
             }
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsNonLazinatorTypeWithoutInterchange && x.PlaceholderMemoryWriteMethod == null))
             {
