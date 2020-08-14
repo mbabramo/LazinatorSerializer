@@ -693,8 +693,6 @@ namespace LazinatorTests.Tests
         [Fact]
         public void CloneWithoutBuffer_NullableEnabledContext_NullablesNull()
         {
-            var DEBUG = GetNullableEnabledContext(true);
-            var DEBUG2 = DEBUG._NonNullableListOfNonNullables;
             VerifyCloningEquivalence(GetNullableEnabledContext(true), IncludeChildrenMode.IncludeAllChildren);
             VerifyCloningEquivalence(GetNullableEnabledContext(true), IncludeChildrenMode.ExcludeOnlyExcludableChildren);
         }
