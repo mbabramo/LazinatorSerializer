@@ -567,8 +567,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         
-        protected List<Example>? _NonNullableListOfNonNullables;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public List<Example>? _NonNullableListOfNonNullables;
         public List<Example> NonNullableListOfNonNullables
         {
             get

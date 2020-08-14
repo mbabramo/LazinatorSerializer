@@ -606,10 +606,10 @@ namespace LazinatorTests.Tests
                     NonNullableArrayOfNonNullables = new Example[] { new Example(), new Example() },
                     NonNullableArrayOfNullables = new Example[] { null, new Example() },
 
-                    NonNullableListOfNonNullables = null,
+                    NonNullableListOfNonNullables = new List<Example>() { new Example(), new Example() },
                     NullableListOfNonNullables = null,
-                    NonNullableListOfNullables = new List<Example>() { new Example(), new Example() },
-                    NullableListOfNullables = new List<Example>() { null, new Example() },
+                    NonNullableListOfNullables = new List<Example>() { new Example(), null },
+                    NullableListOfNullables = null,
 
                     ValueTupleWithNonNullable = (new Example(), 5),
                     ValueTupleWithNullable = (null, 5),
@@ -693,7 +693,8 @@ namespace LazinatorTests.Tests
         [Fact]
         public void CloneWithoutBuffer_NullableEnabledContext_NullablesNull()
         {
-
+            var DEBUG = GetNullableEnabledContext(true);
+            var DEBUG2 = DEBUG._NonNullableListOfNonNullables;
             VerifyCloningEquivalence(GetNullableEnabledContext(true), IncludeChildrenMode.IncludeAllChildren);
             VerifyCloningEquivalence(GetNullableEnabledContext(true), IncludeChildrenMode.ExcludeOnlyExcludableChildren);
         }
