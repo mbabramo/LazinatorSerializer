@@ -1267,16 +1267,16 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 {
                     if (property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (property.PropertyType == LazinatorPropertyType.LazinatorStructNullable) || (property.PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface) )
                     {
-                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"_{property.PropertyName}_Accessed")}) (backing var null? {{_{property.PropertyName} == null}}) "");");
+                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{_{property.PropertyName}_Accessed}}")}) (backing var null? {{_{property.PropertyName} == null}}) "");");
                     }
                     else if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
                     {
-                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"_{property.PropertyName}_Accessed")}) "");");
+                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{_{property.PropertyName}_Accessed}}")}) "");");
                     }
                     else if (property.TrackDirtinessNonSerialized)
-                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"_{property.PropertyName}_Accessed")}) (dirty? {{_{property.PropertyName}_Dirty}})"");");
+                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{_{property.PropertyName}_Accessed}}")}) (dirty? {{_{property.PropertyName}_Dirty}})"");");
                     else if (property.PropertyType == LazinatorPropertyType.NonLazinator || property.PropertyType == LazinatorPropertyType.SupportedCollection || property.PropertyType == LazinatorPropertyType.SupportedTuple)
-                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"_{property.PropertyName}_Accessed")})"");");
+                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{_{property.PropertyName}_Accessed}}")})"");");
                     else
                         sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} value {{_{property.PropertyName}}}"");");
                     sb.AppendLine($@"TabbedText.Tabs++;");
