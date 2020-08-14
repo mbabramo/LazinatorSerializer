@@ -10,6 +10,7 @@ using LazinatorTests.Examples.Hierarchy;
 using LazinatorTests.Examples.Structs;
 using LazinatorTests.Examples.NonAbstractGenerics;
 using LazinatorCollections.Tuples;
+using Lazinator.Buffers;
 
 namespace LazinatorTests.Tests
 {
@@ -20,6 +21,25 @@ namespace LazinatorTests.Tests
         {
             var original = GetTypicalExample();
             var copy = GetTypicalExample();
+            var result = original.CloneLazinatorTyped();
+            ExampleEqual(copy, result).Should().BeTrue();
+        }
+
+        private static LazinatorMemory GetLazinatorMemoryCopy(ILazinator e)
+        {
+            e.UpdateStoredBuffer();
+            var buffer = new Memory<byte>(e.LazinatorMemoryStorage.Memory.Span.ToArray());
+            BinaryBufferWriter b = new BinaryBufferWriter();
+            b.Write(buffer.Span);
+            return b.LazinatorMemory;
+        }
+
+        [Fact]
+        public void ManualDeserializationWorks()
+        {
+            Example original = GetTypicalExample();
+            LazinatorMemory serializedBytes = GetLazinatorMemoryCopy(original);
+            Example copy = new Example(serializedBytes);
             var result = original.CloneLazinatorTyped();
             ExampleEqual(copy, result).Should().BeTrue();
         }
