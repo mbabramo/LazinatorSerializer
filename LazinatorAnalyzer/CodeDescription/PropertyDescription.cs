@@ -1924,7 +1924,8 @@ asdf")}";
                             {{
                                 return null;
                             }}
-                            return storage.Memory.Slice(1).ToArray();
+                            ReadOnlySpan<byte> span = storage.Span.Slice(1);
+                            return span.ToArray();
                         }}");
                 else
                     sb.Append($@"return storage.Memory.ToArray();
@@ -1968,15 +1969,29 @@ asdf")}";
             PropertyDescription innerProperty = InnerProperties[0];
             CheckForLazinatorInNonLazinator(innerProperty);
             string readCommand = innerProperty.GetSupportedCollectionReadCommands(this);
-            sb.Append($@"
-                    private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
-                    {{
-                        {IIF(Nullable || IsSupportedTupleType, $@"if (storage.Length == 0)
+            string preliminaryNullCheck;
+            if (Nullable && (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory))
+            {
+                preliminaryNullCheck = $@"int index = 0;
+                        bool isNull = storage.ReadOnlySpan.ToBoolean(ref index);
+                        if (isNull)
+                        {{
+                            return null;
+                        }}
+                        ReadOnlySpan<byte> span = storage.Span.Slice(1);";
+            }
+            else
+            {
+                preliminaryNullCheck = $@"{IIF(Nullable || IsSupportedTupleType, $@"if (storage.Length == 0)
                         {{
                             return {DefaultExpression};
                         }}
-                        ")}ReadOnlySpan<byte> span = storage.Span;
-
+                        ")}ReadOnlySpan<byte> span = storage.Span;";
+            }
+            sb.Append($@"
+                    private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
+                    {{
+                        {preliminaryNullCheck}
                         int bytesSoFar = 0;
                         {readCollectionLengthCommand}
 
