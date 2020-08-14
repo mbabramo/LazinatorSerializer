@@ -146,7 +146,8 @@ asdf")}";
         internal string PropertyName { get; set; }
         internal string BackingFieldString => $"_{PropertyName}";
 
-    internal string BackingAccessFieldString => $"_{PropertyName}_Accessed";
+        internal bool BackingAccessFieldIncluded => PlaceholderMemoryWriteMethod == null;
+        internal string BackingAccessFieldString => $"_{PropertyName}_Accessed";
         internal string BackingDirtyFieldString => $"_{PropertyName}_Dirty";
 
         internal string BackingFieldByteIndex => $"_{PropertyName}_ByteIndex";
@@ -1254,7 +1255,7 @@ asdf")}";
 
         private void AppendPlaceholderMemoryProperty(CodeStringBuilder sb)
         {
-            sb.AppendLine($@"public ReadOnlyMemory<byte> MainListSerialized
+            sb.AppendLine($@"public ReadOnlyMemory<byte> {PropertyName}
                 {{
                     get => throw new NotImplementedException(); // placeholder only
                     set => throw new NotImplementedException(); // placeholder only
