@@ -1018,12 +1018,20 @@ namespace Lazinator.Core
 
         static int DEBUGC = 0;
 
+        public static void DEBUGWriteSPan(ReadOnlySpan<byte> s)
+        {
+            for (int i = 0; i < s.Length; i++)
+                Debug.Write($"{i}:{s[i]},");
+            Debug.WriteLine("");
+        }
+
         /// Generates a 64-bit hash code from the binary storage of the object (unless NonBinaryHash32 is set).
         public static ulong GetBinaryHashCode64(this ILazinator lazinator)
         {
             if (!lazinator.IsDirty && !lazinator.DescendantIsDirty && lazinator.OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren && lazinator.LazinatorMemoryStorage.IsEmpty == false && lazinator.LazinatorMemoryStorage.Disposed == false)
             {
                 var result = FarmhashByteSpans.Hash64(lazinator.LazinatorMemoryStorage.Memory.Span);
+                DEBUGWriteSPan(lazinator.LazinatorMemoryStorage.Memory.Span);
                 Debug.WriteLine($"{DEBUGC++} {result})");
                 return result;
             }
@@ -1031,6 +1039,7 @@ namespace Lazinator.Core
             {
                 LazinatorMemory serialized =
                     lazinator.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+                DEBUGWriteSPan(serialized.ReadOnlySpan);
                 var result = FarmhashByteSpans.Hash64(serialized.ReadOnlySpan);
                 Debug.WriteLine($"{DEBUGC++} {result})");
                 serialized.Dispose();
