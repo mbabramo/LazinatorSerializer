@@ -4929,7 +4929,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             private static Memory<byte>? ConvertFromBytes_Memory_Gbyte_g_C63(LazinatorMemory storage)
             {
                 int index = 0;
-                bool isNull = storage.ReadOnlySpan.Length == 0 || storage.ReadOnlySpan.ToBoolean(ref index);
+                bool isNull = storage.ReadOnlySpan.ToBoolean(ref index);
                 if (isNull)
                 {
                     return null;
@@ -5114,7 +5114,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             private static ReadOnlyMemory<byte>? ConvertFromBytes_ReadOnlyMemory_Gbyte_g_C63(LazinatorMemory storage)
             {
                 int index = 0;
-                bool isNull = storage.ReadOnlySpan.Length == 0 || storage.ReadOnlySpan.ToBoolean(ref index);
+                bool isNull = storage.ReadOnlySpan.ToBoolean(ref index);
                 if (isNull)
                 {
                     return null;
