@@ -1351,7 +1351,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                         {{
                         }}
 
-                        public {SimpleName}(LazinatorMemory serializedBytes)
+                        public {SimpleName}(LazinatorMemory serializedBytes){IIF(ILazinatorTypeSymbol.BaseType != null && !ILazinatorTypeSymbol.BaseType.IsAbstract && IsDerivedFromNonAbstractLazinator, " : base(LazinatorConstructorEnum.LazinatorConstructor)")}
                         {{
                             DeserializeLazinator(serializedBytes);
                         }}
