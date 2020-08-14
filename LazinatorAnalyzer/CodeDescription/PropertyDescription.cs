@@ -387,10 +387,6 @@ asdf")}";
 
         private void SetPropertyType(ITypeSymbol typeSymbol)
         {
-            if (Symbol.ToString().Contains("Example[]"))
-            {
-                var DEBUG = 0;
-            }
             INamedTypeSymbol namedTypeSymbol = typeSymbol as INamedTypeSymbol;
 
             if (namedTypeSymbol == null && typeSymbol.TypeKind == TypeKind.TypeParameter)
@@ -591,10 +587,6 @@ asdf")}";
             {
                 if (t.TypeKind == TypeKind.Class || t.TypeKind == TypeKind.Interface || t.TypeKind == TypeKind.Array)
                 {
-                    if (t.TypeKind == TypeKind.Array)
-                    {
-                        var DEBUG = 0;
-                    }
                     if (NullableModeEnabled && !SymbolEndsWithQuestionMark)
                     {
                         Nullable = false;
@@ -760,10 +752,6 @@ asdf")}";
 
         private void CheckSupportedTuples(string nameWithoutArity)
         {
-            if (PropertyName?.Contains("ValueTupleWithNonNullable") ?? false)
-            {
-                var DEBUG = 0;
-            }
             if (nameWithoutArity == "ValueTuple")
             {
                 PropertyType = LazinatorPropertyType.SupportedTuple;
@@ -1162,10 +1150,6 @@ asdf")}";
 
             }
 
-            if (PropertyName.Contains("RegularTupleWithNonNullable"))
-            {
-                var DEBUG = 0;
-            }
             sb.Append($@"
                 {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName}{IIF(AddQuestionMarkInBackingFieldForNonNullable && !AppropriatelyQualifiedTypeName.EndsWith("?"), "?")} {BackingFieldString};
         {GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
@@ -1771,10 +1755,6 @@ asdf")}";
             if (ArrayRank > 1)
                 forStatement = DeleteLines(forStatement, (int)ArrayRank); // we will define collectionLengths for each dimension in creation statement and don't need to redefine
 
-            if ("Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g" == AppropriatelyQualifiedTypeNameEncodable)
-            {
-                var DEBUG = 0;
-            }
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<{innerProperty.ILazinatorString}, {innerProperty.ILazinatorString}> cloneOrChangeFunc, bool avoidCloningIfPossible)
                     {{
@@ -2101,10 +2081,6 @@ asdf")}";
                 }
                 else // Lazinator type
                 {
-                    if (AppropriatelyQualifiedTypeName == "Example")
-                    {
-                        var DEBUG = 0;
-                    }
                     string lengthCollectionMemberString = $"int lengthCollectionMember = {GetSpanReadLength()};";
                     if (Nullable)
                         return ($@"
@@ -2187,10 +2163,6 @@ asdf")}";
 
         private string GetSupportedCollectionWriteCommands(string itemString, bool outerPropertyIsSimpleListOrArray)
         {
-            if (itemString.Contains("MyReadOnlySpanByte"))
-            {
-                var DEBUG = 0;
-            }
             string GetSupportedCollectionWriteCommandsHelper()
             {
                 if (IsPrimitive)
@@ -2222,10 +2194,6 @@ asdf")}";
                 }
             }
 
-            if (PropertyName == "ReadOnly" || AppropriatelyQualifiedTypeName == "ReadOnlySpan<byte>")
-            {
-                var DEBUG = 0;
-            }
             string writeCommand = GetSupportedCollectionWriteCommandsHelper();
             string fullWriteCommands;
             if (Nullable)
@@ -2384,10 +2352,6 @@ asdf")}";
 
         private string GetSupportedTupleWriteCommand(string itemName, LazinatorSupportedTupleType outerTupleType, bool outerTypeIsNullable)
         {
-            if (itemName.Contains("MyReadOnlySpanByte"))
-            {
-                var DEBUG = 0;
-            }
             string itemToConvertItemName =
                 $"itemToConvert{IIF((outerTupleType == LazinatorSupportedTupleType.ValueTuple || outerTupleType == LazinatorSupportedTupleType.KeyValuePair) && outerTypeIsNullable, ".Value")}.{itemName}";
             if (IsPrimitive)
@@ -2458,10 +2422,6 @@ asdf")}";
                 );
             string creationText = SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? $"({innerClones})" : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}({innerClones})";
 
-            if ("Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g" == AppropriatelyQualifiedTypeNameEncodable)
-            {
-                var DEBUG = 0;
-            }
             // because we have a single cloneOrChangeFunc for the ILazinator, we don't make the nullability item specific
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToConvert, Func<{ILazinatorString}, {ILazinatorString}> cloneOrChangeFunc, bool avoidCloningIfPossible)
