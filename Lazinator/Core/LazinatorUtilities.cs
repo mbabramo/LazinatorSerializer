@@ -532,9 +532,10 @@ namespace Lazinator.Core
             if (firstHash != secondHash)
             {
                 bool topNodesEqual;
+                string comparison;
                 try
                 {
-                    topNodesEqual = TopNodesOfHierarchyEqual(firstHierarchy, secondHierarchy, out string comparison);
+                    topNodesEqual = TopNodesOfHierarchyEqual(firstHierarchy, secondHierarchy, out comparison);
                 }
                 catch (UnsetNonnullableLazinatorException unsetException)
                 {
@@ -559,9 +560,9 @@ namespace Lazinator.Core
                             throw;
                         }
                     }
-                    string errorMessage = comparison;
-                    throw new Exception($"Hashes were expected to be same, but differed. Difference traced to {propertyNameSequence}:" + Environment.NewLine + errorMessage);
                 }
+                string errorMessage = comparison;
+                throw new Exception($"Hashes were expected to be same, but differed. Difference traced to {propertyNameSequence}:" + Environment.NewLine + errorMessage);
             }
         }
 
