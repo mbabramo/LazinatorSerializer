@@ -16,6 +16,7 @@ using LazinatorTests.Examples.Tuples;
 using LazinatorTests.Examples.ExampleHierarchy;
 using FluentAssertions;
 using Lazinator.Exceptions;
+using System.Threading;
 
 namespace LazinatorTests.Tests
 {
@@ -526,19 +527,137 @@ namespace LazinatorTests.Tests
         }
 
 
-        public static NullableEnabledContext GetNullableEnabledContext()
+        public static NullableEnabledContext GetNullableEnabledContext(bool setNullsWherePossible = false)
         {
+            if (!setNullsWherePossible)
             return new NullableEnabledContext()
             {
                 ExplicitlyNullable = new Example(),
-                ExplicitlyNullableInterface = new Example(),
                 NonNullableClass = new Example(),
+                ExplicitlyNullableInterface = new Example(),
                 NonNullableInterface = new Example(),
+
+                NullableArrayOfNonNullables = new Example[] { new Example(), new Example() },
+                NullableArrayOfNullables = new Example[] { new Example(), new Example() },
+                NonNullableArrayOfNonNullables = new Example[] { new Example(), new Example() },
+                NonNullableArrayOfNullables = new Example[] { new Example(), new Example() },
+
                 NonNullableListOfNonNullables = new List<Example>() { new Example() },
                 NullableListOfNonNullables = new List<Example>() { new Example(), new Example() },
                 NonNullableListOfNullables = new List<Example>() { new Example(), new Example() },
                 NullableListOfNullables = new List<Example>() { new Example(), new Example() },
+
+                ValueTupleWithNonNullable = (new Example(), 5),
+                ValueTupleWithNullable = (new Example(), 5),
+                NullableValueTupleWithNonNullable = (new Example(), 5),
+                NullableValueTupleWithNullable = (new Example(), 5),
+
+                NonNullableRegularTupleWithNonNullable = new Tuple<Example, int>(new Example(), 6),
+                NonNullableRegularTupleWithNullable = new Tuple<Example, int>(new Example(), 6),
+                NullableRegularTupleWithNonNullable = new Tuple<Example, int>(new Example(), 6),
+                NullableRegularTupleWithNullable = new Tuple<Example, int>(new Example(), 6),
+
+                NonNullableDictionaryWithNonNullable = new Dictionary<int, Example>() { { 4, new Example() } },
+                NonNullableDictionaryWithNullable = new Dictionary<int, Example>() { { 4, new Example() } },
+                NullableDictionaryWithNonNullable = new Dictionary<int, Example>() { { 4, new Example() } },
+                NullableDictionaryWithNullable = new Dictionary<int, Example>() { { 4, new Example() } },
+
+                NonNullableLazinatorListNonNullable = new LazinatorList<Example>() { new Example() },
+                NonNullableLazinatorListNullable = new LazinatorList<Example>() { new Example() },
+                NullableLazinatorListNonNullable = new LazinatorList<Example>() { new Example() },
+                NullableLazinatorListNullable = new LazinatorList<Example>() { new Example() },
+
+                NullableString = "hello",
+                NonNullableString = "world",
+
+                ByteReadOnlySpan = new byte[] { 3, 4 },
+                NonNullableMemoryOfBytes = new byte[] { 3, 4 },
+                NonNullableReadOnlyMemoryOfBytes = new byte[] { 3, 4 },
+                NullableMemoryOfBytes = new byte[] { 3, 4 },
+                NullableReadOnlyMemoryOfBytes = new byte[] { 3, 4 },
+
+                NonNullableQueueOfNonNullables = new Queue<Example>(),
+                NonNullableQueueOfNullables = new Queue<Example>(),
+                NullableQueueOfNonNullables = new Queue<Example>(),
+                NullableQueueOfNullables = new Queue<Example>(),
+
+                NonNullableStackOfNonNullables = new Stack<Example>(),
+                NonNullableStackOfNullables = new Stack<Example>(),
+                NullableStackOfNonNullables = new Stack<Example>(),
+                NullableStackOfNullables = new Stack<Example>(),
+
+                MyInt = 3, 
+                MyNullableInt = 5,
+
+                NonNullableStruct = default,
+                NullableStruct = null
+
             };
+            else
+                return new NullableEnabledContext()
+                {
+                    ExplicitlyNullable = null,
+                    NonNullableClass = new Example(),
+                    ExplicitlyNullableInterface = null,
+                    NonNullableInterface = new Example(),
+
+                    NullableArrayOfNonNullables = null,
+                    NullableArrayOfNullables = null,
+                    NonNullableArrayOfNonNullables = new Example[] { new Example(), new Example() },
+                    NonNullableArrayOfNullables = new Example[] { null, new Example() },
+
+                    NonNullableListOfNonNullables = null,
+                    NullableListOfNonNullables = null,
+                    NonNullableListOfNullables = new List<Example>() { new Example(), new Example() },
+                    NullableListOfNullables = new List<Example>() { null, new Example() },
+
+                    ValueTupleWithNonNullable = (new Example(), 5),
+                    ValueTupleWithNullable = (null, 5),
+                    NullableValueTupleWithNonNullable = null,
+                    NullableValueTupleWithNullable = null,
+
+                    NonNullableRegularTupleWithNonNullable = new Tuple<Example, int>(new Example(), 6),
+                    NonNullableRegularTupleWithNullable = new Tuple<Example, int>(null, 6),
+                    NullableRegularTupleWithNonNullable = null,
+                    NullableRegularTupleWithNullable = null,
+
+                    NonNullableDictionaryWithNonNullable = new Dictionary<int, Example>() { { 4, new Example() } },
+                    NonNullableDictionaryWithNullable = new Dictionary<int, Example>() { { 4, null } },
+                    NullableDictionaryWithNonNullable = null,
+                    NullableDictionaryWithNullable = null,
+
+                    NonNullableLazinatorListNonNullable = new LazinatorList<Example>() { new Example() },
+                    NonNullableLazinatorListNullable = new LazinatorList<Example>() { null },
+                    NullableLazinatorListNonNullable = null,
+                    NullableLazinatorListNullable = null,
+
+                    NullableString = null,
+                    NonNullableString = "world",
+
+                    ByteReadOnlySpan = new byte[] { 3, 4 },
+                    NonNullableMemoryOfBytes = new byte[] { 3, 4 },
+                    NonNullableReadOnlyMemoryOfBytes = new byte[] { 3, 4 },
+                    NullableMemoryOfBytes = null,
+                    NullableReadOnlyMemoryOfBytes = null,
+
+                    NonNullableQueueOfNonNullables = new Queue<Example>(),
+                    NonNullableQueueOfNullables = new Queue<Example>(),
+                    NullableQueueOfNonNullables = null,
+                    NullableQueueOfNullables = null,
+
+                    NonNullableStackOfNonNullables = new Stack<Example>(),
+                    NonNullableStackOfNullables = new Stack<Example>(),
+                    NullableStackOfNonNullables = null,
+                    NullableStackOfNullables = null,
+
+                    MyInt = 3,
+                    MyNullableInt = null,
+
+                    NonNullableStruct = default,
+                    NullableStruct = null
+
+                };
+
         }
 
         [Fact]
@@ -574,23 +693,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void CloneWithoutBuffer_NullableEnabledContext_NullablesNull()
         {
-            NullableEnabledContext GetObject()
-            {
-                return new NullableEnabledContext()
-                {
-                    ExplicitlyNullable = null,
-                    ExplicitlyNullableInterface = null,
-                    NonNullableClass = new Example(),
-                    NonNullableInterface = new Example(),
-                    NonNullableListOfNonNullables = new List<Example>() { new Example() },
-                    NullableListOfNonNullables = null,
-                    NonNullableListOfNullables = new List<Example>() { new Example(), new Example() },
-                    NullableListOfNullables = null,
-                };
-            }
 
-            VerifyCloningEquivalence(GetObject(), IncludeChildrenMode.IncludeAllChildren);
-            VerifyCloningEquivalence(GetObject(), IncludeChildrenMode.ExcludeOnlyExcludableChildren);
+            VerifyCloningEquivalence(GetNullableEnabledContext(true), IncludeChildrenMode.IncludeAllChildren);
+            VerifyCloningEquivalence(GetNullableEnabledContext(true), IncludeChildrenMode.ExcludeOnlyExcludableChildren);
         }
 
         [Fact]
