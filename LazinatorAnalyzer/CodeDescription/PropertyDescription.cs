@@ -1575,10 +1575,10 @@ asdf")}";
                 copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {PropertyName};";
             else if ((PropertyType == LazinatorPropertyType.NonLazinator && HasInterchangeType) || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple)
             {
-                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({PropertyName}, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer){InnerProperties?[0].PossibleUnsetException}, false) ?? null;";
+                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({PropertyName}, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);";
             }
             else if (PropertyType == LazinatorPropertyType.NonLazinator)
-                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {DirectConverterTypeNamePrefix}CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({PropertyName}, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer) ?? null, false);";
+                copyInstruction = $"{nameOfCloneVariable}.{PropertyName} = {DirectConverterTypeNamePrefix}CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({PropertyName}, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);";
             sb.AppendLine(new ConditionalCodeGenerator(WriteInclusionConditional, copyInstruction).ToString());
         }
 
