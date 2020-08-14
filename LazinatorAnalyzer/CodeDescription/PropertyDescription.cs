@@ -214,7 +214,6 @@ asdf")}";
 
         /* Output customization */
         public LazinatorConfig Config => ContainingObjectDescription.Config;
-        private bool Tracing => Config?.IncludeTracingCode ?? false;
         private string StepThroughPropertiesString => IIF(ContainingObjectDescription.StepThroughProperties, $@"
                         [DebuggerStepThrough]");
         private string ConfirmDirtinessConsistencyCheck => $@"
