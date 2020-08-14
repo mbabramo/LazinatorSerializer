@@ -5126,8 +5126,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (itemToConvert == null)
                 {
+                    writer.Write((bool)true);
                     return;
                 }
+                writer.Write((bool)false);
                 ConvertToBytes_ReadOnlyMemory_Gbyte_g(ref writer, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
             }
             

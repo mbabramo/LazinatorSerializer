@@ -1163,8 +1163,10 @@ namespace LazinatorTests.Examples.Collections
         {
             if (itemToConvert == null)
             {
+                writer.Write((bool)true);
                 return;
             }
+            writer.Write((bool)false);
             ConvertToBytes_Memory_Gint_g(ref writer, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
         }
         
@@ -1214,8 +1216,10 @@ namespace LazinatorTests.Examples.Collections
         {
             if (itemToConvert == null)
             {
+                writer.Write((bool)true);
                 return;
             }
+            writer.Write((bool)false);
             ConvertToBytes_ReadOnlyMemory_Gint_g(ref writer, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
         }
         
