@@ -2,6 +2,7 @@
 using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Pipelines;
 using System.Linq;
@@ -527,6 +528,7 @@ namespace Lazinator.Core
         public static void ConfirmHierarchiesEqual(ILazinator firstHierarchy, ILazinator secondHierarchy, string propertyNameSequence = "")
         {
             ulong firstHash = firstHierarchy?.GetBinaryHashCode64() ?? 0;
+            DEBUGC = 0;
             ulong secondHash = secondHierarchy?.GetBinaryHashCode64() ?? 0;
 
             if (firstHash != secondHash)
@@ -1014,16 +1016,23 @@ namespace Lazinator.Core
             }
         }
 
+        static int DEBUGC = 0;
+
         /// Generates a 64-bit hash code from the binary storage of the object (unless NonBinaryHash32 is set).
         public static ulong GetBinaryHashCode64(this ILazinator lazinator)
         {
             if (!lazinator.IsDirty && !lazinator.DescendantIsDirty && lazinator.OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren && lazinator.LazinatorMemoryStorage.IsEmpty == false && lazinator.LazinatorMemoryStorage.Disposed == false)
-                return FarmhashByteSpans.Hash64(lazinator.LazinatorMemoryStorage.Memory.Span);
+            {
+                var result = FarmhashByteSpans.Hash64(lazinator.LazinatorMemoryStorage.Memory.Span);
+                Debug.WriteLine($"{DEBUGC++} {result})");
+                return result;
+            }
             else
             {
                 LazinatorMemory serialized =
                     lazinator.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
                 var result = FarmhashByteSpans.Hash64(serialized.ReadOnlySpan);
+                Debug.WriteLine($"{DEBUGC++} {result})");
                 serialized.Dispose();
                 return result;
             }
