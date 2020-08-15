@@ -1347,16 +1347,17 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
         private string GetConstructors()
         {
             // We have a special constructor with the LazinatorConstructorEnum for all classes. Our factory will call this constructor, so as not to trigger the default constructor. 
-            string constructors = IsStruct ? "" : $@"public {SimpleName}(LazinatorConstructorEnum constructorEnum){IIF(ILazinatorTypeSymbol.BaseType != null && !ILazinatorTypeSymbol.BaseType.IsAbstract && IsDerivedFromNonAbstractLazinator, " : base(constructorEnum)")}
+            bool inheritFromBaseType = ILazinatorTypeSymbol.BaseType != null && !ILazinatorTypeSymbol.BaseType.IsAbstract && IsDerivedFromNonAbstractLazinator;
+            string constructors = IsStruct ? "" : $@"public {SimpleName}(LazinatorConstructorEnum constructorEnum){IIF(inheritFromBaseType, " : base(constructorEnum)")}
                         {{
                         }}
 
-                        public {SimpleName}(LazinatorMemory serializedBytes, ILazinator{IIF(NullableModeEnabled, "?")} parent = null){IIF(ILazinatorTypeSymbol.BaseType != null && !ILazinatorTypeSymbol.BaseType.IsAbstract && IsDerivedFromNonAbstractLazinator, " : base(LazinatorConstructorEnum.LazinatorConstructor)")}
-                        {{
+                        public {SimpleName}(LazinatorMemory serializedBytes, ILazinator{IIF(NullableModeEnabled, "?")} parent = null){IIF(inheritFromBaseType, " : base(serializedBytes, parent)")}
+                        {{{IIF(!inheritFromBaseType, $@"
                             LazinatorParents = new LazinatorParentsCollection(parent);
                             DeserializeLazinator(serializedBytes);
                             HasChanged = false;
-                            DescendantHasChanged = false;
+                            DescendantHasChanged = false;")}
                         }}
 
                         ";
