@@ -1023,7 +1023,7 @@ asdf")}";
                 else
                     assignment =
                         $@"
-                        {BackingFieldString} = DeserializationFactory.Instance.CreateBaseOrDerivedType({UniqueIDForLazinatorType}, () => new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}(LazinatorConstructorEnum.LazinatorConstructor), childData{selfReference}); ";
+                        {BackingFieldString} = DeserializationFactory.Instance.CreateBaseOrDerivedType({UniqueIDForLazinatorType}, (c, p) => new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}(c, p), childData{selfReference}); ";
             }
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
             {
