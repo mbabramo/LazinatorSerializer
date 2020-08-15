@@ -645,11 +645,25 @@ namespace Lazinator.CodeDescription
                 return "";
             return $@"public {DerivationKeyword}{ILazinatorString} CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
                         {{
-                            var clone = new {NameIncludingGenerics}({IIF(!IsStruct, "LazinatorConstructorEnum.LazinatorConstructor")})
+                            {NameIncludingGenerics} clone;
+                            if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
                             {{
-                                OriginalIncludeChildrenMode = includeChildrenMode
-                            }};
-                            clone = CompleteClone(this, clone, includeChildrenMode, cloneBufferOptions);{IIF(ImplementsOnClone, $@"
+                                clone = new {NameIncludingGenerics}(LazinatorConstructorEnum.LazinatorConstructor)
+                                {{
+                                    OriginalIncludeChildrenMode = includeChildrenMode
+                                }};
+                                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
+                                {{
+                                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
+                                }}
+                                clone = ({NameIncludingGenerics})AssignCloneProperties(clone, includeChildrenMode);
+                            }}
+                            else
+                            {{
+                                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, false, this);
+                                clone = new {NameIncludingGenerics}(bytes);
+                            }}
+                            clone.LazinatorParents = default; // DEBUG -- necessary?{IIF(ImplementsOnClone, $@"
             clone.OnCompleteClone(this);")}
                             return clone;
                         }}{IIF(!ImplementsAssignCloneProperties, $@"
