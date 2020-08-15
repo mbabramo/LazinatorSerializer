@@ -364,7 +364,7 @@ namespace Lazinator.CodeDescription
             string additionalDescendantDirtinessChecks = GetDescendantDirtinessChecks(false);
             string additionalDescendantHasChangedChecks = GetDescendantDirtinessChecks(true);
             string classContainingStructContainingClassError = GetClassContainingStructContainingClassError();
-            string constructor = GetConstructors();
+            string constructors = GetConstructors();
             string cloneMethod = GetCloneMethod();
 
             if (!IsDerivedFromNonAbstractLazinator)
@@ -461,7 +461,7 @@ namespace Lazinator.CodeDescription
                     boilerplate = $@"
                         /* Serialization, deserialization, and object relationships */
 
-                        {constructor}{HideILazinatorProperty}public {DerivationKeyword}LazinatorParentsCollection LazinatorParents {{ get; set; }}
+                        {constructors}{HideILazinatorProperty}public {DerivationKeyword}LazinatorParentsCollection LazinatorParents {{ get; set; }}
 
                         {HideILazinatorProperty}public {DerivationKeyword}IncludeChildrenMode OriginalIncludeChildrenMode {{ get; set; }}
 
@@ -632,7 +632,7 @@ namespace Lazinator.CodeDescription
             {
                 sb.Append($@"        /* Clone overrides */
 
-                        {constructor}{cloneMethod}
+                        {constructors}{cloneMethod}
 
                         /* Properties */
 ");
