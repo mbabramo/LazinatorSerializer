@@ -50,10 +50,7 @@ namespace LazinatorCollections
                 {
                     OriginalIncludeChildrenMode = includeChildrenMode
                 };
-                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-                {
-                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
-                }
+                clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (LazinatorSortedLinkedList<T>)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

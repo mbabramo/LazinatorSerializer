@@ -176,10 +176,7 @@ namespace LazinatorTests.Examples.Structs
                 {
                     OriginalIncludeChildrenMode = includeChildrenMode
                 };
-                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-                {
-                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
-                }
+                clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (ExampleStructContainingStructContainer)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

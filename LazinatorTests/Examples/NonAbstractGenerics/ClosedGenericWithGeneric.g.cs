@@ -66,10 +66,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 {
                     OriginalIncludeChildrenMode = includeChildrenMode
                 };
-                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-                {
-                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
-                }
+                clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (ClosedGenericWithGeneric)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

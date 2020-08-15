@@ -234,10 +234,7 @@ namespace LazinatorCollections.OffsetList
                 {
                     OriginalIncludeChildrenMode = includeChildrenMode
                 };
-                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-                {
-                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
-                }
+                clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (LazinatorOffsetList)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

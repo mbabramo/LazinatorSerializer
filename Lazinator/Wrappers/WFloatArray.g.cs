@@ -147,10 +147,6 @@ namespace Lazinator.Wrappers
                 {
                     OriginalIncludeChildrenMode = includeChildrenMode
                 };
-                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-                {
-                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
-                }
                 clone = (WFloatArray)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

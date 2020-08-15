@@ -216,10 +216,7 @@ namespace LazinatorTests.Examples.Subclasses
                 {
                     OriginalIncludeChildrenMode = includeChildrenMode
                 };
-                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-                {
-                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
-                }
+                clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (ClassWithSubclass)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

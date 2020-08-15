@@ -169,10 +169,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
                 {
                     OriginalIncludeChildrenMode = includeChildrenMode
                 };
-                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-                {
-                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
-                }
+                clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (RemoteLevel1)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

@@ -175,10 +175,7 @@ namespace LazinatorCollections.ByteSpan
                 {
                     OriginalIncludeChildrenMode = includeChildrenMode
                 };
-                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-                {
-                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
-                }
+                clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (LazinatorByteSpan)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

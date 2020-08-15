@@ -203,10 +203,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 {
                     OriginalIncludeChildrenMode = includeChildrenMode
                 };
-                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-                {
-                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
-                }
+                clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (OpenGeneric<T>)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

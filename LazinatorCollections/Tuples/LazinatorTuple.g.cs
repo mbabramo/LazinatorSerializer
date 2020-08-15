@@ -232,10 +232,7 @@ namespace LazinatorCollections.Tuples
                 {
                     OriginalIncludeChildrenMode = includeChildrenMode
                 };
-                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-                {
-                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
-                }
+                clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (LazinatorTuple<T, U>)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

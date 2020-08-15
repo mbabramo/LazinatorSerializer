@@ -187,10 +187,7 @@ namespace LazinatorCollections.BitArray
                 {
                     OriginalIncludeChildrenMode = includeChildrenMode
                 };
-                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-                {
-                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
-                }
+                clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (LazinatorBitArray)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

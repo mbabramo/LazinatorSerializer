@@ -242,10 +242,7 @@ namespace LazinatorCollections.Remote
                 {
                     OriginalIncludeChildrenMode = includeChildrenMode
                 };
-                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-                {
-                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
-                }
+                clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (Remote<TKey, TValue>)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

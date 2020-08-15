@@ -193,10 +193,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 {
                     OriginalIncludeChildrenMode = includeChildrenMode
                 };
-                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-                {
-                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
-                }
+                clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (ExampleInterfaceContainer)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

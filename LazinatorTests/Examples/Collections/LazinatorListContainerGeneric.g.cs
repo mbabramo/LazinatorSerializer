@@ -153,10 +153,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     OriginalIncludeChildrenMode = includeChildrenMode
                 };
-                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-                {
-                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
-                }
+                clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (LazinatorListContainerGeneric<T>)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

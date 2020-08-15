@@ -192,10 +192,7 @@ namespace LazinatorCollections.Tuples
                 {
                     OriginalIncludeChildrenMode = includeChildrenMode
                 };
-                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-                {
-                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
-                }
+                clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (LazinatorComparableKeyValue<TKey, TValue>)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

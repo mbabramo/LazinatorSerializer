@@ -131,10 +131,6 @@ namespace LazinatorCollections.OffsetList
                 {
                     OriginalIncludeChildrenMode = includeChildrenMode
                 };
-                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-                {
-                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
-                }
                 clone = (LazinatorFastReadList<T>)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

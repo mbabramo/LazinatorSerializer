@@ -254,10 +254,7 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     OriginalIncludeChildrenMode = includeChildrenMode
                 };
-                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-                {
-                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
-                }
+                clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (RecordLikeContainer)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

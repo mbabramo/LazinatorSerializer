@@ -144,10 +144,7 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     OriginalIncludeChildrenMode = includeChildrenMode
                 };
-                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-                {
-                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
-                }
+                clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (NestedTuple)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

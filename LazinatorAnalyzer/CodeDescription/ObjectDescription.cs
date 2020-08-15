@@ -651,11 +651,8 @@ namespace Lazinator.CodeDescription
                                 clone = new {NameIncludingGenerics}(LazinatorConstructorEnum.LazinatorConstructor)
                                 {{
                                     OriginalIncludeChildrenMode = includeChildrenMode
-                                }};
-                                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-                                {{
-                                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
-                                }}
+                                }};{IIF(Version != -1,$@"
+                                clone.LazinatorObjectVersion = LazinatorObjectVersion;")}
                                 clone = ({NameIncludingGenerics})AssignCloneProperties(clone, includeChildrenMode){IIF(NullableModeEnabled, "!")};
                             }}
                             else

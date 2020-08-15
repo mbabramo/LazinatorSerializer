@@ -228,10 +228,7 @@ namespace LazinatorCollections.Dictionary
                 {
                     OriginalIncludeChildrenMode = includeChildrenMode
                 };
-                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-                {
-                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
-                }
+                clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (DictionaryBucket<TKey, TValue>)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

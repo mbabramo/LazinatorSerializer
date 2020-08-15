@@ -222,10 +222,7 @@ namespace LazinatorCollections.Tree
                 {
                     OriginalIncludeChildrenMode = includeChildrenMode
                 };
-                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-                {
-                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
-                }
+                clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (LazinatorGeneralTree<T>)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

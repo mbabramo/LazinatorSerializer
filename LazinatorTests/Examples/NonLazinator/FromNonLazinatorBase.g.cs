@@ -117,10 +117,7 @@ namespace LazinatorTests.Examples.NonLazinator
                 {
                     OriginalIncludeChildrenMode = includeChildrenMode
                 };
-                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-                {
-                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
-                }
+                clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (FromNonLazinatorBase)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

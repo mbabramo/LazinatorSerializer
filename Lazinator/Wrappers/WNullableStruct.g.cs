@@ -167,10 +167,6 @@ namespace Lazinator.Wrappers
                 {
                     OriginalIncludeChildrenMode = includeChildrenMode
                 };
-                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
-                {
-                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
-                }
                 clone = (WNullableStruct<T>)AssignCloneProperties(clone, includeChildrenMode);
             }
             else
