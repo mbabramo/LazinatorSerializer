@@ -39,12 +39,12 @@ namespace Lazinator.Core
         }
 
         /// <summary>
-        /// A dictionary with a key equal to a unique ID and the value equal to a factory that creates the object with that unique ID. This can be used only for types that have no open generic parameters. Types with properties that contain closed generic parameters can be included.
+        /// A dictionary with a key equal to a unique ID and the value equal to a factory that creates the object with that unique ID, given the LazinatorMemory and the parent. This can be used only for types that have no open generic parameters. Types with properties that contain closed generic parameters can be included.
         /// </summary>
-        private Dictionary<int, Func<ILazinator>> FactoriesByID =
-            new Dictionary<int, Func<ILazinator>>();
+        private Dictionary<int, Func<LazinatorMemory, ILazinator, ILazinator>> FactoriesByID =
+            new Dictionary<int, Func<LazinatorMemory, ILazinator, ILazinator>>();
 
-        private ConcurrentDictionary<LazinatorGenericIDType, Func<ILazinator>> GenericFactories = new ConcurrentDictionary<LazinatorGenericIDType, Func<ILazinator>>();
+        private ConcurrentDictionary<LazinatorGenericIDType, Func<LazinatorMemory, ILazinator, ILazinator>> GenericFactories = new ConcurrentDictionary<LazinatorGenericIDType, Func<LazinatorMemory, ILazinator, ILazinator>>();
 
         /// <summary>
         /// A dictionary with a key equal to a unique ID of a Lazinator type and a value recording the type and the number of generic parameters.
@@ -75,17 +75,27 @@ namespace Lazinator.Core
 
         #region Factory creation
 
-        private static Func<ILazinator> GetCompiledFunctionForType(Type t)
+        private static Func<LazinatorMemory, ILazinator, ILazinator> GetCompiledFunctionForType(Type t)
         {
             Expression exnew;
-            if (t.IsValueType)
-                exnew = Expression.New(t);
-            else
-                exnew = Expression.New(t.GetConstructors().Where(x => x.GetParameters().FirstOrDefault()?.ParameterType == typeof(LazinatorConstructorEnum)).FirstOrDefault(), Expression.Constant(LazinatorConstructorEnum.LazinatorConstructor));
+            //bool useParametersWithValueType = true;
+            //if (t.IsValueType && !useParametersWithValueType)
+            //    exnew = Expression.New(t);
+            //else
+            var lazinatorMemoryParam = Expression.Parameter(typeof(LazinatorMemory), "lazinatorMemory");
+            var iLazinatorParam = Expression.Parameter(typeof(ILazinator), "ilazinator");
+            ConstructorInfo constructorInfo = t.GetConstructors().FirstOrDefault(x =>
+            {
+                var parameters = x?.GetParameters();
+                if (parameters == null || parameters.Count() != 2)
+                    return false;
+                return (parameters[0].ParameterType == typeof(LazinatorMemory) && parameters[1].ParameterType == typeof(ILazinator));
+            });
+            exnew = Expression.New(constructorInfo, lazinatorMemoryParam, iLazinatorParam);
             var exconv = Expression.Convert(exnew, typeof(ILazinator));
-            var lambda = Expression.Lambda(exconv);
+            var lambda = Expression.Lambda(exconv, lazinatorMemoryParam, iLazinatorParam);
             Delegate compiled = lambda.Compile();
-            var result = (Func<ILazinator>)compiled;
+            var result = (Func<LazinatorMemory, ILazinator, ILazinator>)compiled;
             return result;
         }
 
@@ -94,11 +104,11 @@ namespace Lazinator.Core
         /// </summary>
         /// <typeparam name="T">The type of the object to be created</typeparam>
         /// <param name="mostLikelyUniqueID">The expected Lazinator ID of the object. </param>
-        /// <param name="funcToCreateBaseType">A function to create an uninitialized object of the expected type, typically a function that simply calls the parameterless constructor and returns the result. Use of this function can help avoid the need for the factory creation methods and boxing of structs.</param>
+        /// <param name="funcToCreateBaseType">A function to create an uninitialized object of the expected type, typically a function that calls the appropriate constructor (using the parameters for LazinatorMemroy and the parent) and returns the result. Use of this function can help avoid the need for the factory creation methods and boxing of structs.</param>
         /// <param name="storage">The serialized bytes</param>
         /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
         /// <returns></returns>
-        public T CreateBaseOrDerivedType<T>(int mostLikelyUniqueID, Func<T> funcToCreateBaseType, LazinatorMemory storage, ILazinator parent = null) where T : ILazinator
+        public T CreateBaseOrDerivedType<T>(int mostLikelyUniqueID, Func<LazinatorMemory, ILazinator, T> funcToCreateBaseType, LazinatorMemory storage, ILazinator parent = null) where T : ILazinator
         {
             // Note: It's important that CreateBaseOrDerivedType be generic, because that often allows us to avoid boxing if the object being created is a struct and the uniqueID matches the mostLikelyUniqueID. 
             if (storage.IsEmpty || storage.Length == 1)
@@ -114,25 +124,24 @@ namespace Lazinator.Core
             {
                 bytesSoFar = 0;
                 LazinatorGenericIDType genericID = ReadLazinatorGenericID(span, ref bytesSoFar);
-                itemToReturn = (T)CreateGenericKnownID(genericID);
+                itemToReturn = (T)CreateGenericKnownID(genericID, storage, parent);
             }
             else
             {
                 if (uniqueID == mostLikelyUniqueID)
                 {
-                    itemToReturn = funcToCreateBaseType();
+                    itemToReturn = funcToCreateBaseType(storage, parent);
                 }
                 else
                 {
                     if (FactoriesByID.ContainsKey(uniqueID))
                     {
-                        itemToReturn = (T)FactoriesByID[uniqueID]();
+                        itemToReturn = (T)FactoriesByID[uniqueID](storage, parent);
                     }
                     else
                         throw new UnknownSerializedTypeException(uniqueID);
                 }
             }
-            InitializeDeserialized(itemToReturn, storage, parent);
             return itemToReturn;
         }
 
@@ -171,12 +180,12 @@ namespace Lazinator.Core
         {
             ILazinator lazinatorObject = null;
             if (FactoriesByID.ContainsKey(uniqueID))
-                lazinatorObject = FactoriesByID[uniqueID]();
+                lazinatorObject = FactoriesByID[uniqueID](storage, parent);
             else
             {
                 (Type t, int numGenericParameters) = UniqueIDToTypeMap[uniqueID];
                 if (numGenericParameters > 0)
-                    lazinatorObject = CreateGenericFromBytesIncludingID(storage.Memory.Span);
+                    lazinatorObject = CreateGenericFromBytesIncludingID(storage.Memory.Span, storage, parent);
             }
             if (lazinatorObject == null)
                 throw new UnknownSerializedTypeException(uniqueID);
@@ -302,7 +311,7 @@ namespace Lazinator.Core
                 }
                 TypeToUniqueIDMap[type] = uniqueID;
                 if (FactoriesByID.ContainsKey(uniqueID))
-                    throw new LazinatorDeserializationException($"The type {type} has self-serialization UniqueID of {uniqueID}, but that {uniqueID} is already used by {FactoriesByID[uniqueID]().GetType()}.");
+                    throw new LazinatorDeserializationException($"The type {type} has self-serialization UniqueID of {uniqueID}, but that {uniqueID} is already used by {FactoriesByID[uniqueID](new LazinatorMemory(), null).GetType()}.");
                 if (type.ContainsGenericParameters)
                 {
                     var genericArguments = type.GetGenericArguments().ToList();
@@ -385,20 +394,18 @@ namespace Lazinator.Core
 
         #region Generic composition
 
-        private ILazinator CreateGenericFromBytesIncludingID(ReadOnlySpan<byte> span)
+        private ILazinator CreateGenericFromBytesIncludingID(ReadOnlySpan<byte> span, LazinatorMemory storage, ILazinator parent = null)
         {
             int index = 0;
             LazinatorGenericIDType id = ReadLazinatorGenericID(span, ref index);
-            return CreateGenericKnownID(id);
+            return CreateGenericKnownID(id, storage, parent);
         }
 
-        private ILazinator CreateGenericKnownID(LazinatorGenericIDType typeAndGenericTypeArgumentIDs)
+        private ILazinator CreateGenericKnownID(LazinatorGenericIDType typeAndGenericTypeArgumentIDs, LazinatorMemory storage, ILazinator parent = null)
         {
-            Func<ILazinator> func = GetGenericFactoryBasedOnGenericIDType(typeAndGenericTypeArgumentIDs);
-            return func();
+            Func<LazinatorMemory, ILazinator, ILazinator> func = GetGenericFactoryBasedOnGenericIDType(typeAndGenericTypeArgumentIDs);
+            return func(storage, parent);
         }
-
-
 
         public LazinatorGenericIDType GetUniqueIDListForGenericType(int outerTypeUniqueID, IEnumerable<Type> innerTypes)
         {
@@ -434,7 +441,7 @@ namespace Lazinator.Core
                 l.Add(TypeToUniqueIDMap[t]);
         }
 
-        public Func<ILazinator> GetGenericFactoryBasedOnGenericIDType(LazinatorGenericIDType typeAndGenericTypeArgumentIDs)
+        public Func<LazinatorMemory, ILazinator, ILazinator> GetGenericFactoryBasedOnGenericIDType(LazinatorGenericIDType typeAndGenericTypeArgumentIDs)
         {
             // NOTE: If this code causes a stack overflow error, it is likely because a property is being accessed in the constructor
             // before deserialization.
