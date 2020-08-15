@@ -78,24 +78,33 @@ namespace Lazinator.Core
         private static Func<LazinatorMemory, ILazinator, ILazinator> GetCompiledFunctionForType(Type t)
         {
             Expression exnew;
-            //bool useParametersWithValueType = true;
-            //if (t.IsValueType && !useParametersWithValueType)
-            //    exnew = Expression.New(t);
-            //else
-            var lazinatorMemoryParam = Expression.Parameter(typeof(LazinatorMemory), "lazinatorMemory");
-            var iLazinatorParam = Expression.Parameter(typeof(ILazinator), "ilazinator");
-            ConstructorInfo constructorInfo = t.GetConstructors().FirstOrDefault(x =>
+            LambdaExpression lambda;
+            Func<LazinatorMemory, ILazinator, ILazinator> result;
+            if (t.IsValueType)
             {
-                var parameters = x?.GetParameters();
-                if (parameters == null || parameters.Count() != 2)
-                    return false;
-                return (parameters[0].ParameterType == typeof(LazinatorMemory) && parameters[1].ParameterType == typeof(ILazinator));
-            });
-            exnew = Expression.New(constructorInfo, lazinatorMemoryParam, iLazinatorParam);
-            var exconv = Expression.Convert(exnew, typeof(ILazinator));
-            var lambda = Expression.Lambda(exconv, lazinatorMemoryParam, iLazinatorParam);
-            Delegate compiled = lambda.Compile();
-            var result = (Func<LazinatorMemory, ILazinator, ILazinator>)compiled;
+                exnew = Expression.New(t);
+                var exconv = Expression.Convert(exnew, typeof(ILazinator));
+                lambda = Expression.Lambda(exconv);
+                Delegate compiled = lambda.Compile();
+                result = (lazinatorMemory, iLazinator) => ((Func<ILazinator>)compiled)();
+            }
+            else
+            {
+                var lazinatorMemoryParam = Expression.Parameter(typeof(LazinatorMemory), "lazinatorMemory");
+                var iLazinatorParam = Expression.Parameter(typeof(ILazinator), "ilazinator");
+                ConstructorInfo constructorInfo = t.GetConstructors().FirstOrDefault(x =>
+                {
+                    var parameters = x?.GetParameters();
+                    if (parameters == null || parameters.Count() != 2)
+                        return false;
+                    return (parameters[0].ParameterType == typeof(LazinatorMemory) && parameters[1].ParameterType == typeof(ILazinator));
+                });
+                exnew = Expression.New(constructorInfo, lazinatorMemoryParam, iLazinatorParam);
+                var exconv = Expression.Convert(exnew, typeof(ILazinator));
+                lambda = Expression.Lambda(exconv, lazinatorMemoryParam, iLazinatorParam);
+                Delegate compiled = lambda.Compile();
+                result = (Func<LazinatorMemory, ILazinator, ILazinator>)compiled;
+            }
             return result;
         }
 
