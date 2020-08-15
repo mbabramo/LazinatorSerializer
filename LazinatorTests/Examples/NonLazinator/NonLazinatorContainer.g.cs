@@ -196,6 +196,18 @@ namespace LazinatorTests.Examples
         
         /* Serialization, deserialization, and object relationships */
         
+        public NonLazinatorContainer(LazinatorConstructorEnum constructorEnum) : this()
+        {
+        }
+        
+        public NonLazinatorContainer(LazinatorMemory serializedBytes, ILazinator parent = null) : this()
+        {
+            LazinatorParents = new LazinatorParentsCollection(parent);
+            DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
+        }
+        
         public LazinatorParentsCollection LazinatorParents { get; set; }
         
         public IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

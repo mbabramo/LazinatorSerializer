@@ -124,6 +124,18 @@ namespace LazinatorCollections.Tuples
         
         /* Serialization, deserialization, and object relationships */
         
+        public LazinatorComparableKeyValue(LazinatorConstructorEnum constructorEnum) : this()
+        {
+        }
+        
+        public LazinatorComparableKeyValue(LazinatorMemory serializedBytes, ILazinator parent = null) : this()
+        {
+            LazinatorParents = new LazinatorParentsCollection(parent);
+            DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public LazinatorParentsCollection LazinatorParents { get; set; }
         

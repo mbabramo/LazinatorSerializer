@@ -51,6 +51,18 @@ namespace LazinatorTests.Examples.Structs
         
         /* Serialization, deserialization, and object relationships */
         
+        public ExampleStructWithoutClass(LazinatorConstructorEnum constructorEnum) : this()
+        {
+        }
+        
+        public ExampleStructWithoutClass(LazinatorMemory serializedBytes, ILazinator parent = null) : this()
+        {
+            LazinatorParents = new LazinatorParentsCollection(parent);
+            DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
+        }
+        
         public LazinatorParentsCollection LazinatorParents { get; set; }
         
         public IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }

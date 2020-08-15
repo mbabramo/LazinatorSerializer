@@ -54,6 +54,18 @@ namespace Lazinator.Wrappers
         
         /* Serialization, deserialization, and object relationships */
         
+        public WUlong(LazinatorConstructorEnum constructorEnum) : this()
+        {
+        }
+        
+        public WUlong(LazinatorMemory serializedBytes, ILazinator parent = null) : this()
+        {
+            LazinatorParents = new LazinatorParentsCollection(parent);
+            DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public LazinatorParentsCollection LazinatorParents { get; set; }
         

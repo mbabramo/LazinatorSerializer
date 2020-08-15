@@ -54,6 +54,18 @@ namespace Lazinator.Wrappers
         
         /* Serialization, deserialization, and object relationships */
         
+        public WFloat(LazinatorConstructorEnum constructorEnum) : this()
+        {
+        }
+        
+        public WFloat(LazinatorMemory serializedBytes, ILazinator parent = null) : this()
+        {
+            LazinatorParents = new LazinatorParentsCollection(parent);
+            DeserializeLazinator(serializedBytes);
+            HasChanged = false;
+            DescendantHasChanged = false;
+        }
+        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public LazinatorParentsCollection LazinatorParents { get; set; }
         
