@@ -151,11 +151,24 @@ namespace LazinatorCollections
         
         public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
-            var clone = new LazinatorArray<T>(LazinatorConstructorEnum.LazinatorConstructor)
+            LazinatorArray<T> clone;
+            if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                OriginalIncludeChildrenMode = includeChildrenMode
-            };
-            clone = CompleteClone(this, clone, includeChildrenMode, cloneBufferOptions);
+                clone = new LazinatorArray<T>(LazinatorConstructorEnum.LazinatorConstructor)
+                {
+                    OriginalIncludeChildrenMode = includeChildrenMode
+                };
+                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
+                {
+                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
+                }
+                clone = (LazinatorArray<T>)AssignCloneProperties(clone, includeChildrenMode);
+            }
+            else
+            {
+                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, false, this);
+                clone = new LazinatorArray<T>(bytes);
+            }
             return clone;
         }
         

@@ -146,11 +146,24 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
-            var clone = new LazinatorListContainerGeneric<T>(LazinatorConstructorEnum.LazinatorConstructor)
+            LazinatorListContainerGeneric<T> clone;
+            if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                OriginalIncludeChildrenMode = includeChildrenMode
-            };
-            clone = CompleteClone(this, clone, includeChildrenMode, cloneBufferOptions);
+                clone = new LazinatorListContainerGeneric<T>(LazinatorConstructorEnum.LazinatorConstructor)
+                {
+                    OriginalIncludeChildrenMode = includeChildrenMode
+                };
+                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
+                {
+                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
+                }
+                clone = (LazinatorListContainerGeneric<T>)AssignCloneProperties(clone, includeChildrenMode);
+            }
+            else
+            {
+                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, false, this);
+                clone = new LazinatorListContainerGeneric<T>(bytes);
+            }
             return clone;
         }
         

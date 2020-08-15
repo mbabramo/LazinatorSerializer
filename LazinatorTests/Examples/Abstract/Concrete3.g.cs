@@ -350,11 +350,24 @@ namespace LazinatorTests.Examples.Abstract
         
         public override ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
-            var clone = new Concrete3(LazinatorConstructorEnum.LazinatorConstructor)
+            Concrete3 clone;
+            if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                OriginalIncludeChildrenMode = includeChildrenMode
-            };
-            clone = CompleteClone(this, clone, includeChildrenMode, cloneBufferOptions);
+                clone = new Concrete3(LazinatorConstructorEnum.LazinatorConstructor)
+                {
+                    OriginalIncludeChildrenMode = includeChildrenMode
+                };
+                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
+                {
+                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
+                }
+                clone = (Concrete3)AssignCloneProperties(clone, includeChildrenMode);
+            }
+            else
+            {
+                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, false, this);
+                clone = new Concrete3(bytes);
+            }
             return clone;
         }
         

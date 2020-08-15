@@ -196,11 +196,24 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
-            var clone = new OpenGeneric<T>(LazinatorConstructorEnum.LazinatorConstructor)
+            OpenGeneric<T> clone;
+            if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                OriginalIncludeChildrenMode = includeChildrenMode
-            };
-            clone = CompleteClone(this, clone, includeChildrenMode, cloneBufferOptions);
+                clone = new OpenGeneric<T>(LazinatorConstructorEnum.LazinatorConstructor)
+                {
+                    OriginalIncludeChildrenMode = includeChildrenMode
+                };
+                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
+                {
+                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
+                }
+                clone = (OpenGeneric<T>)AssignCloneProperties(clone, includeChildrenMode);
+            }
+            else
+            {
+                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, false, this);
+                clone = new OpenGeneric<T>(bytes);
+            }
             return clone;
         }
         

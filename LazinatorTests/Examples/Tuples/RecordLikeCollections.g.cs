@@ -193,11 +193,24 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
         {
-            var clone = new RecordLikeCollections(LazinatorConstructorEnum.LazinatorConstructor)
+            RecordLikeCollections clone;
+            if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                OriginalIncludeChildrenMode = includeChildrenMode
-            };
-            clone = CompleteClone(this, clone, includeChildrenMode, cloneBufferOptions);
+                clone = new RecordLikeCollections(LazinatorConstructorEnum.LazinatorConstructor)
+                {
+                    OriginalIncludeChildrenMode = includeChildrenMode
+                };
+                if (clone.LazinatorObjectVersion != LazinatorObjectVersion)
+                {
+                    clone.LazinatorObjectVersion = LazinatorObjectVersion;
+                }
+                clone = (RecordLikeCollections)AssignCloneProperties(clone, includeChildrenMode);
+            }
+            else
+            {
+                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, false, this);
+                clone = new RecordLikeCollections(bytes);
+            }
             return clone;
         }
         

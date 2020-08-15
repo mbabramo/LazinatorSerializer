@@ -753,36 +753,6 @@ namespace Lazinator.Core
         #region Cloning
 
         /// <summary>
-        /// Used internally by CloneLazinator to perform the cloning process.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source">The object to clone</param>
-        /// <param name="clone">The cloned object, already created</param>
-        /// <param name="includeChildrenMode">An indication of which children of the object to include in the clone</param>
-        /// <param name="cloneBufferOptions">Options to determine whether the clone will have independent buffers or no buffers</param>
-        /// <returns></returns>
-        public static T CompleteClone<T>(T source, T clone, IncludeChildrenMode includeChildrenMode, CloneBufferOptions cloneBufferOptions) where T : ILazinator
-        {
-
-            if (clone.LazinatorObjectVersion != source.LazinatorObjectVersion)
-            {
-                clone.LazinatorObjectVersion = source.LazinatorObjectVersion;
-            }
-
-            if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
-            {
-                clone = (T) source.AssignCloneProperties(clone, includeChildrenMode);
-            }
-            else
-            {
-                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, source.OriginalIncludeChildrenMode, false, source.IsDirty, source.DescendantIsDirty, false, source.LazinatorMemoryStorage, false, source);
-                clone.DeserializeLazinator(bytes);
-            }
-            clone.LazinatorParents = default;
-            return clone;
-        }
-
-        /// <summary>
         /// Clones a Lazinator object into an object that contains no buffer.
         /// </summary>
         /// <typeparam name="T">The type of the Lazinator object</typeparam>

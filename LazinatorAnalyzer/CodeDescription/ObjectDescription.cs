@@ -656,14 +656,13 @@ namespace Lazinator.CodeDescription
                                 {{
                                     clone.LazinatorObjectVersion = LazinatorObjectVersion;
                                 }}
-                                clone = ({NameIncludingGenerics})AssignCloneProperties(clone, includeChildrenMode);
+                                clone = ({NameIncludingGenerics})AssignCloneProperties(clone, includeChildrenMode){IIF(NullableModeEnabled, "!")};
                             }}
                             else
                             {{
                                 LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, false, this);
                                 clone = new {NameIncludingGenerics}(bytes);
-                            }}
-                            clone.LazinatorParents = default; // DEBUG -- necessary?{IIF(ImplementsOnClone, $@"
+                            }}{IIF(ImplementsOnClone, $@"
             clone.OnCompleteClone(this);")}
                             return clone;
                         }}{IIF(!ImplementsAssignCloneProperties, $@"
