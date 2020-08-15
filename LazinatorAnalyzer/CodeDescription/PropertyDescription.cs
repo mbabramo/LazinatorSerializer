@@ -100,9 +100,10 @@ namespace Lazinator.CodeDescription
         internal bool NonNullableThatCanBeUninitialized => !Nullable && !NonNullableThatRequiresInitialization;
         internal bool UseNullableBackingFieldsForNonNullableReferenceTypes => false; // if TRUE, then we use a null backing field and add checks for PossibleUnsetException. If FALSE, then we don't do that, and instead we set the backing field in every constructor.
         internal bool AddQuestionMarkInBackingFieldForNonNullable => NullableModeEnabled && UseNullableBackingFieldsForNonNullableReferenceTypes && NonNullableThatRequiresInitialization;
+        internal bool NullForgivenessInsteadOfPossibleUnsetException => NullableModeEnabled && !UseNullableBackingFieldsForNonNullableReferenceTypes && NonNullableThatRequiresInitialization;
         internal string BackingFieldStringOrContainedSpan(string propertyName) => (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan) ?
                     GetReadOnlySpanBackingFieldCast(propertyName) : (propertyName ?? BackingFieldString);
-        internal string PossibleUnsetException => $"{IIF(AddQuestionMarkInBackingFieldForNonNullable, $" ?? throw new UnsetNonnullableLazinatorException()")}";
+        internal string PossibleUnsetException => $"{IIF(AddQuestionMarkInBackingFieldForNonNullable, $" ?? throw new UnsetNonnullableLazinatorException()")}{IIF(NullForgivenessInsteadOfPossibleUnsetException, "!")}";
         internal string DefaultInitializationIfPossible(string defaultType) => $"{IIF(!AddQuestionMarkInBackingFieldForNonNullable, $" = default{IIF(defaultType != null, $"({defaultType})")}")}";
         string elseThrowString = $@"
                 else 
@@ -1894,7 +1895,7 @@ namespace Lazinator.CodeDescription
             string cloneString;
             if (IsLazinator)
             {
-                cloneString = $"(cloneOrChangeFunc({itemString}){PossibleUnsetException})"; 
+                cloneString = $"(cloneOrChangeFunc({itemString}){PossibleUnsetException})";
                 //if (IsLazinatorStruct)
                 //    cloneString = $"cloneOrChangeFunc({itemString}).CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer)";
                 //else
@@ -1906,7 +1907,7 @@ namespace Lazinator.CodeDescription
                 cloneString = itemString;
             else
                 throw new NotImplementedException();
-            return $"({AppropriatelyQualifiedTypeName}) " + cloneString; 
+            return $"({AppropriatelyQualifiedTypeName}) " + cloneString;
         }
 
         private void AppendSupportedCollection_ConvertFromBytes(CodeStringBuilder sb)
