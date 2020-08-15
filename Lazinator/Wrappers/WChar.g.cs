@@ -103,6 +103,7 @@ namespace Lazinator.Wrappers
             {
                 OriginalIncludeChildrenMode = includeChildrenMode
             };
+            var DEBUG = this;
             clone = CompleteClone(this, clone, includeChildrenMode, cloneBufferOptions);
             return clone;
         }
