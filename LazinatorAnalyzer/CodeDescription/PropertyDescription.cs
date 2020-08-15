@@ -95,10 +95,8 @@ namespace Lazinator.CodeDescription
         internal bool IsNonNullableReferenceType => !Nullable && (
             PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface
             || IsSupportedReferenceType);
-        internal bool IsNonNullableValueTypeWithNonNullableReferenceType => !Nullable && !IsNonNullableReferenceType && InnerProperties != null && InnerProperties.Any(x => x.IsNonNullableReferenceType);
-        internal string XXXX => $@"{IIF(true, @"asdf 
-asdf")}";
-        internal bool NonNullableThatRequiresInitialization => IsNonNullableReferenceType || IsNonNullableValueTypeWithNonNullableReferenceType;
+        internal bool IsNonNullableValueTypeWithNonNullableReferenceType => !Nullable && !IsNonNullableReferenceType && InnerProperties != null && InnerProperties.Any(x => x.IsNonNullableReferenceType); // note: this may actually not matter, since a value type can always be initialized with "default" without generating a compiler error, even if it contains a nonnullable type. In principle, we could still try to catch these in some circumstances and throw UnsetLazinator errors. But if the compiler doesn't give a warning, perhaps we ought not as well. Thus, we omit using this as a basis for NonNullableThatRequiresInitialization.
+        internal bool NonNullableThatRequiresInitialization => IsNonNullableReferenceType; // || IsNonNullableValueTypeWithNonNullableReferenceType; (see above for explanation for why this is commented out.)
         internal bool NonNullableThatCanBeUninitialized => !Nullable && !NonNullableThatRequiresInitialization;
         internal bool AddQuestionMarkInBackingFieldForNonNullable => NullableModeEnabled && NonNullableThatRequiresInitialization;
         internal string BackingFieldStringOrContainedSpan(string propertyName) => (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan) ?
