@@ -1374,8 +1374,8 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 var parametersString = String.Join(", ", allPropertiesRequiringInitialization.Select(x => x.PropertyNameWithTypeNameForConstructorParameter));
                 var parametersForBaseClassString = String.Join(", ", propertiesRequiringInitializationInBaseClass.Select(x => x.VersionOfPropertyNameForConstructorParameter));
                 var initializationString = String.Join("", allPropertiesRequiringInitialization.Select(x => x.AssignParameterToBackingField));
-                lazinateInSecondConstructor = $@"
-                            " + String.Join("", allPropertiesRequiringInitialization.Select(x => x.GetLazinateContents()));
+                lazinateInSecondConstructor = $@"LazinatorMemory childData;
+                            " + String.Join("", allPropertiesRequiringInitialization.Select(x => x.GetLazinateContentsForConstructor()));
                 firstConstructor = $@"public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}(LazinatorConstructorEnum constructorEnum, {parametersString}){IIF(inheritFromBaseType, " : base(constructorEnum, {parametersForBaseClassString})")}{IIF(IsStruct, " : this()")}
                         {{
                             {initializationString}

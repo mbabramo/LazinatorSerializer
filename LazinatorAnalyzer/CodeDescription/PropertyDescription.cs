@@ -1255,11 +1255,11 @@ namespace Lazinator.CodeDescription
             return recreation;
         }
 
-        public string GetLazinateContents() => GetLazinateContents(GetCreateDefaultString(), GetRecreationString(GetAssignmentString()));
-        private string GetLazinateContents(string createDefault, string recreation)
+        public string GetLazinateContentsForConstructor() => GetLazinateContents(GetCreateDefaultString(), GetRecreationString(GetAssignmentString()), false);
+        private string GetLazinateContents(string createDefault, string recreation, bool defineChildData = true)
         {
             return $@"
-            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || NonNullableThatCanBeUninitialized, "LazinatorObjectBytes.Length == 0", createDefault, $@"LazinatorMemory childData = {ChildSliceString};
+            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || NonNullableThatCanBeUninitialized, "LazinatorObjectBytes.Length == 0", createDefault, $@"{IIF(defineChildData, "LazinatorMemory ")}childData = {ChildSliceString};
                 {recreation}")}{IIF(BackingAccessFieldIncluded, $@"
             {BackingFieldAccessedString} = true;")}";
         }
