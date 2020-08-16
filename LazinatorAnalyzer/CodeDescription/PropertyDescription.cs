@@ -86,7 +86,7 @@ namespace Lazinator.CodeDescription
         // DEBUG internal bool OmitQuestionMarkInBackingField => !NullableModeEnabled || (!IsSupportedCollectionOrTuple && PropertyType != LazinatorPropertyType.LazinatorNonnullableClassOrInterface) || (IsSupportedCollectionOrTuple && !Nullable && (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan || SupportedCollectionType == LazinatorSupportedCollectionType.Array || SupportedTupleType == LazinatorSupportedTupleType.KeyValuePair || SupportedTupleType == LazinatorSupportedTupleType.ValueTuple));
 
         internal bool IsSupportedCollectionReferenceType => PropertyType == LazinatorPropertyType.SupportedCollection && SupportedCollectionType != LazinatorSupportedCollectionType.Memory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlyMemory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlySpan;
-        internal bool IsSupportedTupleReferenceType => PropertyType == LazinatorPropertyType.SupportedTuple && SupportedTupleType != LazinatorSupportedTupleType.KeyValuePair && SupportedTupleType != LazinatorSupportedTupleType.ValueTuple;
+        internal bool IsSupportedTupleReferenceType => PropertyType == LazinatorPropertyType.SupportedTuple && SupportedTupleType == LazinatorSupportedTupleType.Tuple;
 
         internal bool IsSupportedReferenceType => IsSupportedCollectionReferenceType || IsSupportedTupleReferenceType;
         internal bool IsSupportedValueType => IsSupportedCollectionOrTuple && !IsSupportedReferenceType;
