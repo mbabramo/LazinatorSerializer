@@ -2327,6 +2327,7 @@ namespace Lazinator.CodeDescription
 
         private string GetSupportedTupleReadCommand(string itemName)
         {
+            // DEBUG: Implemented IF we are NOT using nullable backing fields for nonnullable reference types and the type in the tuple is a nonnullable reference type, then we need to not do the default initialization, and then we need to assume that the length of the collection member is not 0 so that we can initialize it. So this really only applies to the last of these. options, so we should be able to special case it.
             if (IsPrimitive)
                 return ($@"
                         {AppropriatelyQualifiedTypeName} {itemName} = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref bytesSoFar);");
@@ -2354,7 +2355,16 @@ namespace Lazinator.CodeDescription
                             {itemName}.DeserializeLazinator(childData);;
                         }}{IfInitializationRequiredAddElseThrow}
                         bytesSoFar += lengthCollectionMember_{itemName};");
-                else return ($@"
+                else
+                {
+                    if (NonNullableThatRequiresInitialization && !UseNullableBackingFieldsForNonNullableReferenceTypes)
+                        return ($@"
+                            int lengthCollectionMember_{itemName} = {GetSpanReadLength()};
+                            LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_{itemName});
+                            {AppropriatelyQualifiedTypeName} {itemName} = DeserializationFactory.Instance.CreateBasedOnType<{AppropriatelyQualifiedTypeName}>(childData);
+                            bytesSoFar += lengthCollectionMember_{itemName};");
+
+                    return ($@"
                         {AppropriatelyQualifiedTypeName} {itemName}{DefaultInitializationIfPossible(AppropriatelyQualifiedTypeName)};
                         int lengthCollectionMember_{itemName} = {GetSpanReadLength()};
                         if (lengthCollectionMember_{itemName} != 0)
@@ -2363,6 +2373,7 @@ namespace Lazinator.CodeDescription
                             {itemName} = DeserializationFactory.Instance.CreateBasedOnType<{AppropriatelyQualifiedTypeName}>(childData);
                         }}{IfInitializationRequiredAddElseThrow}
                         bytesSoFar += lengthCollectionMember_{itemName};");
+                }
             }
         }
 
