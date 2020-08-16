@@ -768,10 +768,13 @@ namespace Lazinator.CodeDescription
             string resetAccessed = "", resetStorage = "";
             foreach (var property in PropertiesToDefineThisLevel.Where(x => !x.IsPrimitive && x.PlaceholderMemoryWriteMethod == null)) // Note that we will free in memory objects even for non-nullables. We can do this because we have nullable backing properties for them. 
             {
-                if (!property.NonNullableThatRequiresInitialization)
-                    resetStorage += $@"_{property.PropertyName} = default;
-                        ";
-                resetAccessed += $"_{property.PropertyName}_Accessed = ";
+                if (property.BackingAccessFieldIncluded)
+                {
+                    if (!property.NonNullableThatRequiresInitialization)
+                        resetStorage += $@"{property.BackingFieldAccessedString} = default;
+                            ";
+                    resetAccessed += $"{property.BackingFieldAccessedString} = ";
+                }
             }
             if (resetAccessed != "")
                 resetAccessed += $@"false;";
@@ -847,8 +850,8 @@ namespace Lazinator.CodeDescription
                                 ConditionsCodeGenerator.AndCombine(
                                     "enumerateNulls", 
                                     ConditionsCodeGenerator.OrCombine(
-                                        "!exploreOnlyDeserializedChildren", 
-                                        $"_{propertyName}_Accessed"))
+                                        "!exploreOnlyDeserializedChildren",
+                                        property.BackingFieldAccessedString))
                                 , propertyName, 
                                 // CONSEQUENT
                                 $@"yield return (""{propertyName}"", default);", 
@@ -975,7 +978,7 @@ namespace Lazinator.CodeDescription
                 sb.Append($@"if (!exploreOnlyDeserializedChildren)
                     {{
                         var deserialized_{property.PropertyName} = {property.PropertyName};{IIF(property.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan, $@"
-                        if (!_{property.PropertyName}_Accessed)
+                        if ({property.BackingFieldNotAccessedString})
                         {{
                             {property.PropertyName} = deserialized_{property.PropertyName};
                         }}")}
@@ -1146,29 +1149,32 @@ namespace Lazinator.CodeDescription
         private string GetStructAndOpenGenericReset()
         {
             string reset = "";
-            foreach (var property in PropertiesIncludingInherited.Where(x => x.PropertyType == LazinatorPropertyType.LazinatorStruct || x.PropertyType == LazinatorPropertyType.LazinatorStructNullable))
+            foreach (var property in PropertiesIncludingInherited.Where(x => x.BackingAccessFieldIncluded && (x.PropertyType == LazinatorPropertyType.LazinatorStruct || x.PropertyType == LazinatorPropertyType.LazinatorStructNullable)))
             {
                 reset +=
                     $@"
-                    _{property.PropertyName}_Accessed = false;"; // force deserialization to make the struct clean
+                    {property.BackingFieldAccessedString} = false;"; // force deserialization to make the struct clean
             }
             foreach (var property in PropertiesIncludingInherited
                 .Where(x => x.PropertyType == LazinatorPropertyType.OpenGenericParameter))
             {
-                if (!property.GenericConstrainedToStruct)
-                    reset +=
-                        $@"
-                        if (_{property.PropertyName}_Accessed && _{property.PropertyName} != null && _{property.PropertyName}.IsStruct && (_{property.PropertyName}.IsDirty || _{property.PropertyName}.DescendantIsDirty))
-                        {{
-                            _{property.PropertyName}_Accessed = false;
-                        }}";
-                else
-                    reset +=
-                        $@"
-                        if (_{property.PropertyName}_Accessed && _{property.PropertyName}.IsStruct && (_{property.PropertyName}.IsDirty || _{property.PropertyName}.DescendantIsDirty))
-                        {{
-                            _{property.PropertyName}_Accessed = false;
-                        }}";
+                if (property.BackingAccessFieldIncluded)
+                {
+                    if (!property.GenericConstrainedToStruct)
+                        reset +=
+                            $@"
+                            if ({property.BackingFieldAccessedString} && _{property.PropertyName} != null && _{property.PropertyName}.IsStruct && (_{property.PropertyName}.IsDirty || _{property.PropertyName}.DescendantIsDirty))
+                            {{
+                                {property.BackingFieldAccessedString} = false;
+                            }}";
+                    else
+                        reset +=
+                            $@"
+                            if ({property.BackingFieldAccessedString} && _{property.PropertyName}.IsStruct && (_{property.PropertyName}.IsDirty || _{property.PropertyName}.DescendantIsDirty))
+                            {{
+                                {property.BackingFieldAccessedString} = false;
+                            }}";
+                }
             }
 
             return reset;
@@ -1281,16 +1287,16 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 {
                     if (property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (property.PropertyType == LazinatorPropertyType.LazinatorStructNullable) || (property.PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface) )
                     {
-                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{_{property.PropertyName}_Accessed}}")}) (backing var null? {{_{property.PropertyName} == null}}) "");");
+                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) (backing var null? {{_{property.PropertyName} == null}}) "");");
                     }
                     else if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
                     {
-                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{_{property.PropertyName}_Accessed}}")}) "");");
+                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) "");");
                     }
                     else if (property.TrackDirtinessNonSerialized)
-                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{_{property.PropertyName}_Accessed}}")}) (dirty? {{_{property.PropertyName}_Dirty}})"");");
+                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) (dirty? {{_{property.PropertyName}_Dirty}})"");");
                     else if (property.PropertyType == LazinatorPropertyType.NonLazinator || property.PropertyType == LazinatorPropertyType.SupportedCollection || property.PropertyType == LazinatorPropertyType.SupportedTuple)
-                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{_{property.PropertyName}_Accessed}}")})"");");
+                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")})"");");
                     else
                         sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} value {{_{property.PropertyName}}}"");");
                     sb.AppendLine($@"TabbedText.Tabs++;");
@@ -1437,7 +1443,9 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             foreach (var property in PropertiesIncludingInherited.Where(x => x.IsLazinator))
             {
                 if (property.PropertyType == LazinatorPropertyType.LazinatorStruct || property.PropertyType == LazinatorPropertyType.LazinatorStructNullable)
-                    manualDescendantDirtinessChecks += $" || (_{property.PropertyName}_Accessed && ({property.PropertyName}{property.NullableStructValueAccessor}.{tense} || {property.PropertyName}{property.NullableStructValueAccessor}.Descendant{tense}))";
+                {
+                    manualDescendantDirtinessChecks += $" || ({IIF(property.BackingAccessFieldIncluded, $"{property.BackingFieldAccessedString} && ")}({property.PropertyName}{property.NullableStructValueAccessor}.{tense} || {property.PropertyName}{property.NullableStructValueAccessor}.Descendant{tense}))";
+                }
                 else
                 {
                     string nonNullCheck = property.GetNonNullCheck(true);
@@ -1446,7 +1454,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             }
             // The following is not necessary, because manual _Dirty properties automatically lead to _IsDirty being set to true. Because non-Lazinators are not considered "children," nothing needs to happen to DescendantIsDirty; this also means that when encoding, non-Lazinators are encoded if dirty regardless of the include child setting.
             //foreach (var property in PropertiesToDefineThisLevel.Where(x => x.TrackDirtinessNonSerialized))
-            //    additionalDirtinessChecks += $" || (_{property.PropertyName}_Accessed && {property.PropertyName}_Dirty)";
+            //    additionalDirtinessChecks += $" || ({property.BackingFieldAccessedString} && {property.PropertyName}_Dirty)";
 
             // For a class, we don't need to use the manual descendant dirtiness checks routinely, since DescendantIsDirty will automatically be sent.
             // But a struct's descendants (whether classes or structs) have no way of informing the struct that they are dirty. A struct cannot pass to the descendant a delegate so that the descendant can inform the struct that it is dirty. (When a struct passes a delegate, the delegate actually operates on a copy of the struct, not the original.) Thus, the only way to check for descendant dirtiness is to check each child Lazinator property.

@@ -1038,7 +1038,7 @@ namespace Lazinator.CodeDescription
         {{{StepThroughPropertiesString}
             get
             {{
-                {IIF(BackingAccessFieldIncluded, $@"if (!{BackingFieldAccessedString})
+                {IIF(BackingAccessFieldIncluded, $@"if ({BackingFieldNotAccessedString})
                 {{
                     Lazinate_{PropertyName}();
                 }}")}{IIF(IsNonLazinatorType && !TrackDirtinessNonSerialized && (!RoslynHelpers.IsReadOnlyStruct(Symbol) || ContainsLazinatorInnerProperty || ContainsOpenGenericInnerProperty), $@"
@@ -1070,9 +1070,7 @@ namespace Lazinator.CodeDescription
                             {{{StepThroughPropertiesString}
                                 get
                                 {{
-                                    if (!{BackingFieldAccessedString})
-                                    {{
-                                        if (LazinatorObjectBytes.Length == 0)
+                                    {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(BackingAccessFieldIncluded, BackingFieldNotAccessedString, $@"if (LazinatorObjectBytes.Length == 0)
                                         {{
                                             return {DefaultExpression};
                                         }}
@@ -1083,8 +1081,7 @@ namespace Lazinator.CodeDescription
                                             toReturn.DeserializeLazinator(childData);
                                             toReturn.IsDirty = false;
                                             return toReturn;
-                                        }}
-                                    }}
+                                        }}")}
                                     {IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"if ({BackingFieldString} == null)
                                     {{
                                         return null;
