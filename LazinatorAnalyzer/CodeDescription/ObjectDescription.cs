@@ -644,12 +644,16 @@ namespace Lazinator.CodeDescription
         {
             if (GeneratingRefStruct)
                 return "";
+            string parametersToFirstConstructor = "";
+            var allPropertiesRequiringInitialization = ExclusiveInterface.PropertiesIncludingInherited.Where(x => x.NonNullableThatRequiresInitialization).ToList();
+            if (allPropertiesRequiringInitialization.Any())
+                parametersToFirstConstructor = ", " + String.Join(", ", allPropertiesRequiringInitialization.Select(x => x.PropertyName));
             return $@"public {DerivationKeyword}{ILazinatorString} CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
                         {{
                             {NameIncludingGenerics} clone;
                             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
                             {{
-                                clone = new {NameIncludingGenerics}(LazinatorConstructorEnum.LazinatorConstructor)
+                                clone = new {NameIncludingGenerics}(LazinatorConstructorEnum.LazinatorConstructor{parametersToFirstConstructor})
                                 {{
                                     OriginalIncludeChildrenMode = includeChildrenMode
                                 }};{IIF(Version != -1,$@"
