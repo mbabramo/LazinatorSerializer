@@ -16,6 +16,7 @@ namespace Lazinator.CodeDescription
         public INamedTypeSymbol NamedTypeSymbol;
         public List<PropertyDescription> PropertiesIncludingInherited;
         public List<PropertyDescription> PropertiesToDefineThisLevel;
+        public List<PropertyDescription> PropertiesInherited;
         public List<string> GenericArgumentNames;
         public NullableContext NullableContextSetting;
         public int TotalNumProperties;
@@ -128,6 +129,7 @@ namespace Lazinator.CodeDescription
                 throw new LazinatorCodeGenException($"Property ending with _Dirty must be of type bool.");
             PropertiesIncludingInherited = new List<PropertyDescription>();
             PropertiesToDefineThisLevel = new List<PropertyDescription>();
+            PropertiesInherited = new List<PropertyDescription>();
 
             foreach (var orderedProperty in orderedPropertiesWithLevel)
             {
@@ -149,6 +151,10 @@ namespace Lazinator.CodeDescription
                         )
                     {
                         PropertiesToDefineThisLevel.Add(orderedProperty.description);
+                    }
+                    else
+                    {
+                        PropertiesInherited.Add(orderedProperty.description);
                     }
                 }
             }

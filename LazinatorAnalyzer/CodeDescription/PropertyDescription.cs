@@ -91,7 +91,7 @@ namespace Lazinator.CodeDescription
         internal bool IsSupportedReferenceType => IsSupportedCollectionReferenceType || IsSupportedTupleReferenceType;
         internal bool IsSupportedValueType => IsSupportedCollectionOrTuple && !IsSupportedReferenceType;
 
-        // DEBUG -- important: We must separate RecordLikeType into RecordLikeClass and RecordLikeStruct and update above accordingly.
+        // DEBUG -- important: We must separate RecordLikeType into RecordLikeClass and RecordLikeStruct and update above accordingly (or maybe not).
         internal bool IsNonNullableReferenceType => !Nullable && (
             PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface
             || IsSupportedReferenceType);
@@ -128,6 +128,7 @@ namespace Lazinator.CodeDescription
         internal string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
         private string FullyQualifiedNameWithoutNullableIndicator => WithoutNullableIndicator(FullyQualifiedTypeName);
         internal string AppropriatelyQualifiedTypeName => UseFullyQualifiedNames ? FullyQualifiedTypeName : ShortTypeName;
+
         public string DefaultExpression => PropertyType switch { LazinatorPropertyType.LazinatorStructNullable => "null", LazinatorPropertyType.LazinatorClassOrInterface => "null", LazinatorPropertyType.LazinatorNonnullableClassOrInterface => "null" /* won't actually use this -- DEBUG change to error*/, _ => $"default({AppropriatelyQualifiedTypeName})" };
         private string AppropriatelyQualifiedTypeNameWithoutNullableIndicator => UseFullyQualifiedNames ? FullyQualifiedNameWithoutNullableIndicator : ShortTypeNameWithoutNullableIndicator;
 
@@ -144,6 +145,11 @@ namespace Lazinator.CodeDescription
         private string WriteMethodName { get; set; }
         private string ReadMethodName { get; set; }
         internal string PropertyName { get; set; }
+        internal string VersionOfPropertyNameForConstructorParameter => char.ToLower(PropertyName[0]) + PropertyName.Substring(1);
+        internal string PropertyNameWithTypeNameForConstructorParameter => $"{AppropriatelyQualifiedTypeName} {VersionOfPropertyNameForConstructorParameter}";
+        internal string AssignParameterToBackingField => $@"{BackingFieldString} = {VersionOfPropertyNameForConstructorParameter};
+                            ";
+
         internal string BackingFieldString => $"_{PropertyName}";
 
         internal bool BackingAccessFieldIncluded => PlaceholderMemoryWriteMethod == null;
@@ -2327,7 +2333,6 @@ namespace Lazinator.CodeDescription
 
         private string GetSupportedTupleReadCommand(string itemName)
         {
-            // DEBUG: Implemented IF we are NOT using nullable backing fields for nonnullable reference types and the type in the tuple is a nonnullable reference type, then we need to not do the default initialization, and then we need to assume that the length of the collection member is not 0 so that we can initialize it. So this really only applies to the last of these. options, so we should be able to special case it.
             if (IsPrimitive)
                 return ($@"
                         {AppropriatelyQualifiedTypeName} {itemName} = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref bytesSoFar);");

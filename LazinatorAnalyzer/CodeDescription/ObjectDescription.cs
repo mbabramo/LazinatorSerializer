@@ -104,6 +104,7 @@ namespace Lazinator.CodeDescription
         public bool ContainsOpenGenericParameters => IsGeneric && !AllGenericsAreNonlazinator;
         public List<PropertyDescription> PropertiesToDefineThisLevel => ExclusiveInterface?.PropertiesToDefineThisLevel;
         public List<PropertyDescription> PropertiesIncludingInherited => ExclusiveInterface?.PropertiesIncludingInherited;
+        public List<PropertyDescription> PropertiesInherited => ExclusiveInterface?.PropertiesInherited;
         public bool CanNeverHaveChildren => Version == -1 && IsSealedOrStruct && !ExclusiveInterface.PropertiesIncludingInherited.Any(x => x.PropertyType != LazinatorPropertyType.PrimitiveType && x.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable) && !IsGeneric;
         public bool UniqueIDCanBeSkipped => Version == -1 && IsSealedOrStruct && BaseLazinatorObject == null && !HasNonexclusiveInterfaces && !ContainsOpenGenericParameters;
         public bool SuppressDate { get; set; }
@@ -1357,10 +1358,30 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
         private string GetConstructors()
         {
             // We have a special constructor with the LazinatorConstructorEnum for all classes. Our factory will call this constructor, so as not to trigger the default constructor. 
+            // This constructor accepts as parameters all the properties whose backing fields must be initialized (because they are non-nullable reference types)
             bool inheritFromBaseType = ILazinatorTypeSymbol.BaseType != null && !ILazinatorTypeSymbol.BaseType.IsAbstract && IsDerivedFromNonAbstractLazinator;
-            string constructors = $@"public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}(LazinatorConstructorEnum constructorEnum){IIF(inheritFromBaseType, " : base(constructorEnum)")}{IIF(IsStruct, " : this()")}
+            var allPropertiesRequiringInitialization = ExclusiveInterface.PropertiesIncludingInherited.Where(x => x.NonNullableThatRequiresInitialization).ToList();
+
+            string firstConstructor;
+            if (allPropertiesRequiringInitialization.Any())
+            {
+                var propertiesRequiringInitializationInBaseClass = ExclusiveInterface.PropertiesInherited.Where(x => x.NonNullableThatRequiresInitialization).ToList();
+                var parametersString = String.Join(", ", allPropertiesRequiringInitialization.Select(x => x.PropertyNameWithTypeNameForConstructorParameter));
+                var parametersForBaseClassString = String.Join(", ", propertiesRequiringInitializationInBaseClass.Select(x => x.VersionOfPropertyNameForConstructorParameter));
+                var initializationString = String.Join("", allPropertiesRequiringInitialization.Select(x => x.AssignParameterToBackingField));
+                firstConstructor = $@"public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}(LazinatorConstructorEnum constructorEnum, {parametersString}){IIF(inheritFromBaseType, " : base(constructorEnum, {parametersForBaseClassString})")}{IIF(IsStruct, " : this()")}
                         {{
-                        }}
+                            {initializationString}
+                        }}";
+            }
+            else
+            {
+                firstConstructor = firstConstructor = $@"public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}(LazinatorConstructorEnum constructorEnum){IIF(inheritFromBaseType, " : base(constructorEnum)")}{IIF(IsStruct, " : this()")}
+                        {{
+                        }}";
+            }
+            string constructors = 
+                        $@"{firstConstructor}
 
                         public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}(LazinatorMemory serializedBytes, ILazinator{IIF(NullableModeEnabled, "?")} parent = null){IIF(inheritFromBaseType, " : base(serializedBytes, parent)")}{IIF(IsStruct, " : this()")}
                         {{{IIF(!inheritFromBaseType, $@"
