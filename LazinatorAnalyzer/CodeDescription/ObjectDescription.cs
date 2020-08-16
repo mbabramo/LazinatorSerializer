@@ -771,7 +771,7 @@ namespace Lazinator.CodeDescription
                 if (property.BackingAccessFieldIncluded)
                 {
                     if (!property.NonNullableThatRequiresInitialization)
-                        resetStorage += $@"{property.BackingFieldAccessedString} = default;
+                        resetStorage += $@"_{property.PropertyName} = default;
                             ";
                     resetAccessed += $"{property.BackingFieldAccessedString} = ";
                 }
