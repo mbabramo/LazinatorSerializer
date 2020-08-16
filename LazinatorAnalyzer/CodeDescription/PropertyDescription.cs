@@ -83,7 +83,6 @@ namespace Lazinator.CodeDescription
                                         SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan);
         internal bool IsLazinator => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable || PropertyType == LazinatorPropertyType.OpenGenericParameter;
         internal bool IsSupportedCollectionOrTuple => PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
-        // DEBUG internal bool OmitQuestionMarkInBackingField => !NullableModeEnabled || (!IsSupportedCollectionOrTuple && PropertyType != LazinatorPropertyType.LazinatorNonnullableClassOrInterface) || (IsSupportedCollectionOrTuple && !Nullable && (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan || SupportedCollectionType == LazinatorSupportedCollectionType.Array || SupportedTupleType == LazinatorSupportedTupleType.KeyValuePair || SupportedTupleType == LazinatorSupportedTupleType.ValueTuple));
 
         internal bool IsSupportedCollectionReferenceType => PropertyType == LazinatorPropertyType.SupportedCollection && SupportedCollectionType != LazinatorSupportedCollectionType.Memory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlyMemory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlySpan;
         internal bool IsSupportedTupleReferenceType => PropertyType == LazinatorPropertyType.SupportedTuple && SupportedTupleType == LazinatorSupportedTupleType.Tuple;
@@ -100,6 +99,7 @@ namespace Lazinator.CodeDescription
         internal bool NonNullableThatCanBeUninitialized => !Nullable && !NonNullableThatRequiresInitialization;
         internal bool UseNullableBackingFieldsForNonNullableReferenceTypes => false; // if TRUE, then we use a null backing field and add checks for PossibleUnsetException. If FALSE, then we don't do that, and instead we set the backing field in every constructor.
         internal bool AddQuestionMarkInBackingFieldForNonNullable => NullableModeEnabled && UseNullableBackingFieldsForNonNullableReferenceTypes && NonNullableThatRequiresInitialization;
+        internal bool AccessedFieldOmitted => NullableModeEnabled && !UseNullableBackingFieldsForNonNullableReferenceTypes && NonNullableThatRequiresInitialization;
         internal bool NullForgivenessInsteadOfPossibleUnsetException => NullableModeEnabled && !UseNullableBackingFieldsForNonNullableReferenceTypes && NonNullableThatRequiresInitialization;
         internal string BackingFieldStringOrContainedSpan(string propertyName) => (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan) ?
                     GetReadOnlySpanBackingFieldCast(propertyName) : (propertyName ?? BackingFieldString);
@@ -152,8 +152,10 @@ namespace Lazinator.CodeDescription
 
         internal string BackingFieldString => $"_{PropertyName}";
 
-        internal bool BackingAccessFieldIncluded => PlaceholderMemoryWriteMethod == null;
-        internal string BackingAccessFieldString => $"_{PropertyName}_Accessed";
+        internal bool BackingAccessFieldIncluded => PlaceholderMemoryWriteMethod == null && !AccessedFieldOmitted;
+        internal string BackingAccessFieldName => $"_{PropertyName}_Accessed";
+        internal string BackingFieldAccessedString => BackingAccessFieldIncluded ? BackingAccessFieldName : "true";
+        internal string BackingFieldNotAccessedString => BackingAccessFieldIncluded ? $"!{BackingAccessFieldName}" : "false";
         internal string BackingDirtyFieldString => $"_{PropertyName}_Dirty";
 
         internal string BackingFieldByteIndex => $"_{PropertyName}_ByteIndex";
@@ -940,7 +942,7 @@ namespace Lazinator.CodeDescription
         {
             string abstractDerivationKeyword = GetModifiedDerivationKeyword();
             string propertyString = $@"
-                    {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}bool {BackingAccessFieldString}{IIF(ContainingObjectDescription.ObjectType != LazinatorObjectType.Struct && !ContainingObjectDescription.GeneratingRefStruct, " = false")};
+                    {IIF(BackingAccessFieldIncluded, $@"{ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}bool {BackingFieldAccessedString}{IIF(ContainingObjectDescription.ObjectType != LazinatorObjectType.Struct && !ContainingObjectDescription.GeneratingRefStruct, " = false")};")}
                 {IIF(IncludeRefProperty, $@"{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{abstractDerivationKeyword}ref {AppropriatelyQualifiedTypeName} {PropertyName}_Ref
                 {{
                     get;
@@ -1014,76 +1016,94 @@ namespace Lazinator.CodeDescription
                 return;
             }
 
-            string assignment;
-            string selfReference = IIF(ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct, ", this");
-            if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable)
-            {
-                if (IsInterface)
-                    assignment =
-                    $@"
-                        {BackingFieldString} = DeserializationFactory.Instance.CreateBasedOnType<{AppropriatelyQualifiedTypeName}>(childData{selfReference}); ";
-                else if (IsAbstract)
-                    assignment =
-                    $@"
-                        {BackingFieldString} = DeserializationFactory.Instance.CreateAbstractType<{AppropriatelyQualifiedTypeName}>(childData{selfReference}); ";
-                else
-                    assignment =
-                        $@"
-                        {BackingFieldString} = DeserializationFactory.Instance.CreateBaseOrDerivedType({UniqueIDForLazinatorType}, (c, p) => new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}(c, p), childData{selfReference}); ";
-            }
-            else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
-            {
-                assignment =
-                    $@"
-                        {BackingFieldString} = DeserializationFactory.Instance.CreateBasedOnType<{AppropriatelyQualifiedTypeName}>(childData{selfReference}); ";
-            }
-            else
-            {
-                bool automaticallyMarkDirtyWhenContainedObjectIsCreated = TrackDirtinessNonSerialized && ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct; // (1) unless we're tracking dirtiness, there is no field to set when the descendant informs us that it is dirty; (2) with a struct, we can't use an anonymous lambda (and more fundamentally can't pass a delegate to the struct method. Thus, if a struct has a supported collection, we can't automatically set DescendantIsDirty for the struct based on a change in some contained entity.
-                assignment = $"{BackingFieldString} = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);";
-            }
-            if (CodeOnDeserialized != "")
-                assignment += $@"
-                        {CodeOnDeserialized}";
+            string assignment = GetAssignmentString();
 
 
             // Prepare code needed for _Lazinate private method. This is used to instantiate a Lazinator when the get accessor is called and the 
             // Lazinator has not previously been accessed. We need both code to create a default value (if there is no underlying memory) and 
             // to recreate the value by deserializing, if there is underlying memory.
             // Here's the create default code:
-            string createDefault = $@"{BackingFieldString} = {DefaultExpression};{IIF(IsNonLazinatorType && TrackDirtinessNonSerialized, $@"
-                                        {BackingDirtyFieldString} = true; ")}";
-            if (IsLazinatorStruct)
-                createDefault = $@"{BackingFieldString}{DefaultInitializationIfPossible(AppropriatelyQualifiedTypeName)};{IIF(ContainerIsClass && PropertyType != LazinatorPropertyType.LazinatorStructNullable, $@"
-                                {BackingFieldString}.LazinatorParents = new LazinatorParentsCollection(this);")}";
-            else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
-                createDefault = $@"{BackingFieldString}{DefaultInitializationIfPossible(AppropriatelyQualifiedTypeName)};{IIF(ContainerIsClass, $@"
-                                if ({BackingFieldString} != null)
-                                {{ // {PropertyName} is a struct
-                                    {BackingFieldString}.LazinatorParents = new LazinatorParentsCollection(this);
-                                }}{IfInitializationRequiredAddElseThrow}")}";
+            string createDefault = GetCreateDefaultString();
             // And here's where we set the recreation code for when underlying memory exists.
-            string recreation;
-            if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable
-                || ((PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface) && ContainingObjectDescription.IsSealed))
-            {
-                // we manually create the type and set the fields. Note that we don't want to call DeserializationFactory, because we would need to pass the field by ref (and we don't need to check for inherited types), and we would need to box a struct in conversion. We follow a similar pattern for sealed classes, because we don't have to worry about inheritance. 
-                recreation = GetManualObjectCreation();
-            }
-            else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
-            {
-                // NOTE: If we new for sure that the open generic type would not be a derived type, we could use GetManualObjectCreation.
-                // But if we have code that says _MyT = new T() { ... }, then that won't work if this property is instantiated with an
-                // open generic type of U : T.
-                //if (Symbol is ITypeParameterSymbol typeParameterSymbol && typeParameterSymbol.HasConstructorConstraint)
-                //    creation = GetManualObjectCreation();
-                //else
-                recreation = $@"{assignment}";
-            }
-            else
-                recreation = $@"{assignment}";
+            string recreation = GetRecreationString(assignment);
 
             // Now we need to worry about the set accessor. 
+            string propertyTypeDependentSet = GetPropertyTypeDependentSetString();
+
+            string lazinateContents = GetLazinateContents(createDefault, recreation); 
+
+            sb.Append($@"
+                {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName}{IIF(AddQuestionMarkInBackingFieldForNonNullable && !AppropriatelyQualifiedTypeName.EndsWith("?"), "?")} {BackingFieldString};
+        {GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
+        {{{StepThroughPropertiesString}
+            get
+            {{
+                {IIF(BackingAccessFieldIncluded, $@"if (!{BackingFieldAccessedString})
+                {{
+                    Lazinate_{PropertyName}();
+                }}")}{IIF(IsNonLazinatorType && !TrackDirtinessNonSerialized && (!RoslynHelpers.IsReadOnlyStruct(Symbol) || ContainsLazinatorInnerProperty || ContainsOpenGenericInnerProperty), $@"
+                    IsDirty = true;")} {IIF(CodeOnAccessed != "", $@"
+                {CodeOnAccessed}")}
+                return {BackingFieldAccessWithPossibleException};
+            }}{StepThroughPropertiesString}
+            set
+            {{{propertyTypeDependentSet}{RepeatedCodeExecution}
+                IsDirty = true;
+                DescendantIsDirty = true;
+                {CodeBeforeSet}{BackingFieldString} = value;{CodeAfterSet}{IIF(IsNonLazinatorType && TrackDirtinessNonSerialized, $@"
+                {BackingDirtyFieldString} = true;")}{IIF(BackingAccessFieldIncluded, $@"
+                {BackingFieldAccessedString} = true;")}{RepeatedCodeExecution}
+            }}
+        }}{(GetModifiedDerivationKeyword() == "override " || !BackingAccessFieldIncluded ? "" : $@"
+        {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}bool {BackingFieldAccessedString};")}{IIF(BackingAccessFieldIncluded, $@"
+        private void Lazinate_{PropertyName}()
+        {{{lazinateContents}
+        }}")}
+
+");
+
+            // Copy property
+            if ((PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable) && !ContainsOpenGenericInnerProperty)
+            { // append copy property so that we can create item on stack if it doesn't need to be edited and hasn't been allocated yet
+
+                sb.Append($@"{GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{AppropriatelyQualifiedTypeName} {PropertyName}_Copy
+                            {{{StepThroughPropertiesString}
+                                get
+                                {{
+                                    if (!{BackingFieldAccessedString})
+                                    {{
+                                        if (LazinatorObjectBytes.Length == 0)
+                                        {{
+                                            return {DefaultExpression};
+                                        }}
+                                        else
+                                        {{
+                                            LazinatorMemory childData = {ChildSliceString};
+                                            var toReturn = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}();
+                                            toReturn.DeserializeLazinator(childData);
+                                            toReturn.IsDirty = false;
+                                            return toReturn;
+                                        }}
+                                    }}
+                                    {IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"if ({BackingFieldString} == null)
+                                    {{
+                                        return null;
+                                    }}
+                                    ")}var cleanCopy = {BackingFieldWithPossibleValueDereference};
+                                    cleanCopy.IsDirty = false;
+                                    cleanCopy.DescendantIsDirty = false;
+                                    return cleanCopy;
+                                }}
+                            }}
+");
+            }
+
+            if (TrackDirtinessNonSerialized)
+                AppendDirtinessTracking(sb);
+        }
+
+        private string GetPropertyTypeDependentSetString()
+        {
             string propertyTypeDependentSet = "";
             if (IsClassOrInterface)
             {
@@ -1156,77 +1176,92 @@ namespace Lazinator.CodeDescription
 
             }
 
-            sb.Append($@"
-                {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName}{IIF(AddQuestionMarkInBackingFieldForNonNullable && !AppropriatelyQualifiedTypeName.EndsWith("?"), "?")} {BackingFieldString};
-        {GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
-        {{{StepThroughPropertiesString}
-            get
-            {{
-                if (!{BackingAccessFieldString})
-                {{
-                    Lazinate_{PropertyName}();
-                }}{IIF(IsNonLazinatorType && !TrackDirtinessNonSerialized && (!RoslynHelpers.IsReadOnlyStruct(Symbol) || ContainsLazinatorInnerProperty || ContainsOpenGenericInnerProperty), $@"
-                    IsDirty = true;")} {IIF(CodeOnAccessed != "", $@"
-                {CodeOnAccessed}")}
-                return {BackingFieldAccessWithPossibleException};
-            }}{StepThroughPropertiesString}
-            set
-            {{{propertyTypeDependentSet}{RepeatedCodeExecution}
-                IsDirty = true;
-                DescendantIsDirty = true;
-                {CodeBeforeSet}{BackingFieldString} = value;{CodeAfterSet}{IIF(IsNonLazinatorType && TrackDirtinessNonSerialized, $@"
-                {BackingDirtyFieldString} = true;")}
-                {BackingAccessFieldString} = true;{RepeatedCodeExecution}
-            }}
-        }}{(GetModifiedDerivationKeyword() == "override " ? "" : $@"
-        {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}bool {BackingAccessFieldString};")}
-        private void Lazinate_{PropertyName}()
-        {{
-            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || NonNullableThatCanBeUninitialized, "LazinatorObjectBytes.Length == 0", createDefault, $@"LazinatorMemory childData = {ChildSliceString};
-                {recreation}")}
-            {BackingAccessFieldString} = true;
-        }}
+            return propertyTypeDependentSet;
+        }
 
-");
+        private string GetCreateDefaultString()
+        {
+            string createDefault = $@"{BackingFieldString} = {DefaultExpression};{IIF(IsNonLazinatorType && TrackDirtinessNonSerialized, $@"
+                                        {BackingDirtyFieldString} = true; ")}";
+            if (IsLazinatorStruct)
+                createDefault = $@"{BackingFieldString}{DefaultInitializationIfPossible(AppropriatelyQualifiedTypeName)};{IIF(ContainerIsClass && PropertyType != LazinatorPropertyType.LazinatorStructNullable, $@"
+                                {BackingFieldString}.LazinatorParents = new LazinatorParentsCollection(this);")}";
+            else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                createDefault = $@"{BackingFieldString}{DefaultInitializationIfPossible(AppropriatelyQualifiedTypeName)};{IIF(ContainerIsClass, $@"
+                                if ({BackingFieldString} != null)
+                                {{ // {PropertyName} is a struct
+                                    {BackingFieldString}.LazinatorParents = new LazinatorParentsCollection(this);
+                                }}{IfInitializationRequiredAddElseThrow}")}";
+            return createDefault;
+        }
 
-            // Copy property
-            if ((PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable) && !ContainsOpenGenericInnerProperty)
-            { // append copy property so that we can create item on stack if it doesn't need to be edited and hasn't been allocated yet
-
-                sb.Append($@"{GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{AppropriatelyQualifiedTypeName} {PropertyName}_Copy
-                            {{{StepThroughPropertiesString}
-                                get
-                                {{
-                                    if (!{BackingAccessFieldString})
-                                    {{
-                                        if (LazinatorObjectBytes.Length == 0)
-                                        {{
-                                            return {DefaultExpression};
-                                        }}
-                                        else
-                                        {{
-                                            LazinatorMemory childData = {ChildSliceString};
-                                            var toReturn = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}();
-                                            toReturn.DeserializeLazinator(childData);
-                                            toReturn.IsDirty = false;
-                                            return toReturn;
-                                        }}
-                                    }}
-                                    {IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"if ({BackingFieldString} == null)
-                                    {{
-                                        return null;
-                                    }}
-                                    ")}var cleanCopy = {BackingFieldWithPossibleValueDereference};
-                                    cleanCopy.IsDirty = false;
-                                    cleanCopy.DescendantIsDirty = false;
-                                    return cleanCopy;
-                                }}
-                            }}
-");
+        private string GetAssignmentString()
+        {
+            string assignment;
+            string selfReference = IIF(ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct, ", this");
+            if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable)
+            {
+                if (IsInterface)
+                    assignment =
+                    $@"
+                        {BackingFieldString} = DeserializationFactory.Instance.CreateBasedOnType<{AppropriatelyQualifiedTypeName}>(childData{selfReference}); ";
+                else if (IsAbstract)
+                    assignment =
+                    $@"
+                        {BackingFieldString} = DeserializationFactory.Instance.CreateAbstractType<{AppropriatelyQualifiedTypeName}>(childData{selfReference}); ";
+                else
+                    assignment =
+                        $@"
+                        {BackingFieldString} = DeserializationFactory.Instance.CreateBaseOrDerivedType({UniqueIDForLazinatorType}, (c, p) => new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}(c, p), childData{selfReference}); ";
             }
+            else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
+            {
+                assignment =
+                    $@"
+                        {BackingFieldString} = DeserializationFactory.Instance.CreateBasedOnType<{AppropriatelyQualifiedTypeName}>(childData{selfReference}); ";
+            }
+            else
+            {
+                bool automaticallyMarkDirtyWhenContainedObjectIsCreated = TrackDirtinessNonSerialized && ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct; // (1) unless we're tracking dirtiness, there is no field to set when the descendant informs us that it is dirty; (2) with a struct, we can't use an anonymous lambda (and more fundamentally can't pass a delegate to the struct method. Thus, if a struct has a supported collection, we can't automatically set DescendantIsDirty for the struct based on a change in some contained entity.
+                assignment = $"{BackingFieldString} = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);";
+            }
+            if (CodeOnDeserialized != "")
+                assignment += $@"
+                        {CodeOnDeserialized}";
+            return assignment;
+        }
 
-            if (TrackDirtinessNonSerialized)
-                AppendDirtinessTracking(sb);
+        private string GetRecreationString(string assignment)
+        {
+            string recreation;
+            if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable
+           || ((PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface) && ContainingObjectDescription.IsSealed))
+            {
+                // we manually create the type and set the fields. Note that we don't want to call DeserializationFactory, because we would need to pass the field by ref (and we don't need to check for inherited types), and we would need to box a struct in conversion. We follow a similar pattern for sealed classes, because we don't have to worry about inheritance. 
+                recreation = GetManualObjectCreation();
+            }
+            else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
+            {
+                // NOTE: If we new for sure that the open generic type would not be a derived type, we could use GetManualObjectCreation.
+                // But if we have code that says _MyT = new T() { ... }, then that won't work if this property is instantiated with an
+                // open generic type of U : T.
+                //if (Symbol is ITypeParameterSymbol typeParameterSymbol && typeParameterSymbol.HasConstructorConstraint)
+                //    creation = GetManualObjectCreation();
+                //else
+                recreation = $@"{assignment}";
+            }
+            else
+                recreation = $@"{assignment}";
+            return recreation;
+        }
+
+        public string GetLazinateContents() => GetLazinateContents(GetCreateDefaultString(), GetRecreationString(GetAssignmentString()));
+        private string GetLazinateContents(string createDefault, string recreation)
+        {
+            return $@"
+            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || NonNullableThatCanBeUninitialized, "LazinatorObjectBytes.Length == 0", createDefault, $@"LazinatorMemory childData = {ChildSliceString};
+                {recreation}")}{IIF(BackingAccessFieldIncluded, $@"
+            {BackingFieldAccessedString} = true;")}";
         }
 
         private string GetManualObjectCreation()
@@ -1276,28 +1311,25 @@ namespace Lazinator.CodeDescription
             string castToSpanOfCorrectType;
             castToSpanOfCorrectType = GetReadOnlySpanBackingFieldCast();
             string coreOfGet = SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan ? $@"return {GetReadOnlySpanBackingFieldCast("childData")};" : $@"{BackingFieldString} = childData.ReadOnlyMemory;
-                    {BackingAccessFieldString} = true;"; // for a read-only span, we directly return the lazinator, and don't update accessed, where the property hasn't been accessed
+                    {BackingFieldAccessedString} = true;"; // for a read-only span, we directly return the lazinator, and don't update accessed, where the property hasn't been accessed
             sb.Append($@"{ContainingObjectDescription.HideBackingField}private ReadOnlyMemory<byte> {BackingFieldString};
         {GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
         {{{StepThroughPropertiesString}
             get
             {{
-                if (!{BackingAccessFieldString})
-                {{
-                    LazinatorMemory childData = {ChildSliceString};
-                    {coreOfGet}
-                }}
+                {ConditionalCodeGenerator.ElseConsequentPossibleOnlyIf(BackingAccessFieldIncluded, new ConditionCodeGenerator(BackingFieldNotAccessedString), $@"LazinatorMemory childData = {ChildSliceString};
+                    {coreOfGet}")}
                 return {castToSpanOfCorrectType};
             }}{StepThroughPropertiesString}
             set
             {{
                 {RepeatedCodeExecution}IsDirty = true;
                 {BackingFieldString} = new ReadOnlyMemory<byte>({GetSpanCast(innerFullType, true)}(value).ToArray());
-                {BackingAccessFieldString} = true;{RepeatedCodeExecution}
+                {IIF(BackingAccessFieldIncluded, $@"{BackingFieldAccessedString} = true;
+                ")}{RepeatedCodeExecution}
             }}
-        }}
-        {ContainingObjectDescription.ProtectedIfApplicable}bool {BackingAccessFieldString};
-");
+        }}{IIF(BackingAccessFieldIncluded, $@"{ContainingObjectDescription.ProtectedIfApplicable}bool {BackingFieldAccessedString};
+")}");
         }
 
         private string GetSpanCast(string type, bool toByte)
@@ -1484,10 +1516,13 @@ namespace Lazinator.CodeDescription
                 sb.Append($"{EnsureDeserialized()}");
                 if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct)
                 {
+                    string isBelievedDirtyString = ConditionsCodeGenerator.OrCombine(
+                        TrackDirtinessNonSerialized ? $"{PropertyName}_Dirty" : $"{BackingFieldAccessedString}",
+                        $"(includeChildrenMode != OriginalIncludeChildrenMode)");
                     sb.AppendLine(
                         $@"WriteNonLazinatorObject{omitLengthSuffix}(
-                    nonLazinatorObject: {BackingFieldString}, isBelievedDirty: {(TrackDirtinessNonSerialized ? $"{PropertyName}_Dirty" : $"{BackingAccessFieldString}")} || (includeChildrenMode != OriginalIncludeChildrenMode),
-                    isAccessed: {BackingAccessFieldString}, writer: ref writer,
+                    nonLazinatorObject: {BackingFieldString}, isBelievedDirty: {isBelievedDirtyString},
+                    isAccessed: {BackingFieldAccessedString}, writer: ref writer,
                     getChildSliceForFieldFn: () => {ChildSliceString},
                     verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                     binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
@@ -1505,14 +1540,17 @@ namespace Lazinator.CodeDescription
                     else
                         binaryWriterAction =
                             $"{DirectConverterTypeNamePrefix}{writeMethodName}(ref w, copy_{PropertyName}, includeChildrenMode, v, updateStoredBuffer)";
+                    string isBelievedDirtyString = ConditionsCodeGenerator.OrCombine(
+                        TrackDirtinessNonSerialized ? $"{PropertyName}_Dirty" : $"{BackingFieldAccessedString}",
+                        $"(includeChildrenMode != OriginalIncludeChildrenMode)");
                     sb.AppendLine(
                         $@"var serializedBytesCopy_{PropertyName} = LazinatorMemoryStorage;
                         var byteIndexCopy_{PropertyName} = {BackingFieldByteIndex};
                         var byteLengthCopy_{PropertyName} = {BackingFieldByteLength};
                         var copy_{PropertyName} = {BackingFieldString};
                         WriteNonLazinatorObject{omitLengthSuffix}(
-                        nonLazinatorObject: {BackingFieldString}, isBelievedDirty: {(TrackDirtinessNonSerialized ? $"{PropertyName}_Dirty" : $"{BackingAccessFieldString}")} || (includeChildrenMode != OriginalIncludeChildrenMode),
-                        isAccessed: {BackingAccessFieldString}, writer: ref writer,
+                        nonLazinatorObject: {BackingFieldString}, isBelievedDirty: {isBelievedDirtyString},
+                        isAccessed: {BackingFieldAccessedString}, writer: ref writer,
                         getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_{PropertyName}, byteIndexCopy_{PropertyName}, byteLengthCopy_{PropertyName}{ChildSliceEndString}),
                         verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                         binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
@@ -1539,7 +1577,7 @@ namespace Lazinator.CodeDescription
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct)
             {
                 string mainWriteString = $@"{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"var copy = {BackingFieldString}.Value;
-                            ")}WriteChild(ref writer, ref {propertyNameOrCopy}, includeChildrenMode, {BackingAccessFieldString}, () => {ChildSliceString}, verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, this);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
+                            ")}WriteChild(ref writer, ref {propertyNameOrCopy}, includeChildrenMode, {BackingFieldAccessedString}, () => {ChildSliceString}, verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, this);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
                                 {BackingFieldString} = copy;")}";
                 withInclusionConditional =
                     new ConditionalCodeGenerator(WriteInclusionConditional, $@"{EnsureDeserialized()}{lazinatorNullableStructNullCheck(mainWriteString)}").ToString();
@@ -1551,7 +1589,7 @@ namespace Lazinator.CodeDescription
                             var byteIndexCopy = {BackingFieldByteIndex};
                             var byteLengthCopy = {BackingFieldByteLength};
                             {IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"var copy = {BackingFieldString}.Value;
-                            ")}WriteChild(ref writer, ref {propertyNameOrCopy}, includeChildrenMode, {BackingAccessFieldString}, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy{ChildSliceEndString}), verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, null);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
+                            ")}WriteChild(ref writer, ref {propertyNameOrCopy}, includeChildrenMode, {BackingFieldAccessedString}, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy{ChildSliceEndString}), verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, null);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
                                 {BackingFieldString} = copy;")}";
                 withInclusionConditional =
                     $@"{new ConditionalCodeGenerator(WriteInclusionConditional, $"{EnsureDeserialized()}{lazinatorNullableStructNullCheck(mainWriteString)}")}";
@@ -1561,7 +1599,11 @@ namespace Lazinator.CodeDescription
 
         private string EnsureDeserialized()
         {
-            return $@"{new ConditionalCodeGenerator($"(includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !{BackingAccessFieldString}", $"var deserialized = {PropertyName};")}";
+            return $@"{new ConditionalCodeGenerator(
+                ConditionsCodeGenerator.AndCombine(
+                    $"(includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode)",
+                    $"{BackingFieldNotAccessedString}"), 
+                $"var deserialized = {PropertyName};")}";
         }
 
         public void AppendCopyPropertyToClone(CodeStringBuilder sb, string nameOfCloneVariable)

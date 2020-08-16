@@ -1367,12 +1367,15 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             var allPropertiesRequiringInitialization = ExclusiveInterface.PropertiesIncludingInherited.Where(x => x.NonNullableThatRequiresInitialization).ToList();
 
             string firstConstructor;
+            string lazinateInSecondConstructor = "";
             if (allPropertiesRequiringInitialization.Any())
             {
                 var propertiesRequiringInitializationInBaseClass = ExclusiveInterface.PropertiesInherited.Where(x => x.NonNullableThatRequiresInitialization).ToList();
                 var parametersString = String.Join(", ", allPropertiesRequiringInitialization.Select(x => x.PropertyNameWithTypeNameForConstructorParameter));
                 var parametersForBaseClassString = String.Join(", ", propertiesRequiringInitializationInBaseClass.Select(x => x.VersionOfPropertyNameForConstructorParameter));
                 var initializationString = String.Join("", allPropertiesRequiringInitialization.Select(x => x.AssignParameterToBackingField));
+                lazinateInSecondConstructor = $@"
+                            " + String.Join("", allPropertiesRequiringInitialization.Select(x => x.GetLazinateContents()));
                 firstConstructor = $@"public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}(LazinatorConstructorEnum constructorEnum, {parametersString}){IIF(inheritFromBaseType, " : base(constructorEnum, {parametersForBaseClassString})")}{IIF(IsStruct, " : this()")}
                         {{
                             {initializationString}
@@ -1392,7 +1395,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                             LazinatorParents = new LazinatorParentsCollection(parent);
                             DeserializeLazinator(serializedBytes);
                             HasChanged = false;
-                            DescendantHasChanged = false;")}
+                            DescendantHasChanged = false;")}{lazinateInSecondConstructor}
                         }}
 
                         ";
