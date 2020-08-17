@@ -12,10 +12,5 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
 
         }
-
-        public RecordLikeStruct NonNullableRecordLikeStruct { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public RecordLikeStruct? NullableRecordLikeStruct { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public RecordLikeClass NonNullableRecordLikeClass { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public RecordLikeClass NullableRecordLikeClass { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 }

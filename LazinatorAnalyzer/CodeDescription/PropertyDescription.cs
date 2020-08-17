@@ -1514,6 +1514,10 @@ namespace Lazinator.CodeDescription
 
         private void AppendPropertyWriteString_NonLazinator(CodeStringBuilder sb)
         {
+            if (AppropriatelyQualifiedTypeName == "RecordLikeStruct_C63")
+            {
+                var DEBUG = 0;
+            }
             string omitLengthSuffix = IIF(OmitLengthBecauseDefinitelyLast, "_WithoutLengthPrefix");
             string writeMethodName = PlaceholderMemoryWriteMethod == null ? $"ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}" : PlaceholderMemoryWriteMethod;
             if (PlaceholderMemoryWriteMethod == null)
@@ -1708,6 +1712,11 @@ namespace Lazinator.CodeDescription
         {
             string lengthWord, itemString, itemStringSetup, forStatement, cloneString;
             GetItemAccessStrings(out lengthWord, out itemString, out itemStringSetup, out forStatement, out cloneString);
+
+            if (AppropriatelyQualifiedTypeName == "RecordLikeStruct_C63")
+            {
+                var DEBUG = 0;
+            }
 
             if (
                 (
@@ -2232,6 +2241,10 @@ namespace Lazinator.CodeDescription
 
         private string GetSupportedCollectionWriteCommands(string itemString, bool outerPropertyIsSimpleListOrArray)
         {
+            if (AppropriatelyQualifiedTypeName == "RecordLikeStruct_C63")
+            {
+                var DEBUG = 0;
+            }
             string GetSupportedCollectionWriteCommandsHelper()
             {
                 if (IsPrimitive)
@@ -2431,6 +2444,10 @@ namespace Lazinator.CodeDescription
 
         private string GetSupportedTupleWriteCommand(string itemName, LazinatorSupportedTupleType outerTupleType, bool outerTypeIsNullable)
         {
+            if (AppropriatelyQualifiedTypeName == "RecordLikeStruct_C63")
+            {
+                var DEBUG = 0;
+            }
             string itemToConvertItemName =
                 $"itemToConvert{IIF((outerTupleType == LazinatorSupportedTupleType.ValueTuple || outerTupleType == LazinatorSupportedTupleType.KeyValuePair) && outerTypeIsNullable, ".Value")}.{itemName}";
             if (IsPrimitive)
