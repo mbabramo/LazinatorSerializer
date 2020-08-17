@@ -2,33 +2,33 @@
 
 namespace LazinatorTests.Examples
 {
-    public readonly struct RecordLikeType
+    public readonly struct RecordLikeStruct
     {
         public int Age { get; }
         public string Name { get; }
 
-        public RecordLikeType(int age, string name)
+        public RecordLikeStruct(int age, string name)
         {
             this.Age = age;
             this.Name = name;
         }
 
-        public RecordLikeType(int age, string name, string address)
+        public RecordLikeStruct(int age, string name, string address)
         {
             throw new NotImplementedException(); // this constructor should not be called
         }
 
-        public RecordLikeType(string age, string name)
+        public RecordLikeStruct(string age, string name)
         {
             throw new NotImplementedException(); // this constructor should not be called
         }
 
-        public RecordLikeType(int age) : this(age, "NoName")
+        public RecordLikeStruct(int age) : this(age, "NoName")
         {
 
         }
 
-        public RecordLikeType(RecordLikeType other)
+        public RecordLikeStruct(RecordLikeStruct other)
         {
             this = other;
         }

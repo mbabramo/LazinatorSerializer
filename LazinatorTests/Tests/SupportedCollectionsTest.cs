@@ -1153,7 +1153,7 @@ namespace LazinatorTests.Tests
             RecordLikeContainer original = new RecordLikeContainer()
             {
                 MyRecordLikeClass = new RecordLikeClass(23, new Example() { MyChar = 'q' }),
-                MyRecordLikeType = new RecordLikeType(12, "Sam")
+                MyRecordLikeType = new RecordLikeStruct(12, "Sam")
             };
             LazinatorMemory serialized = original.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
             RecordLikeContainer s2 = new RecordLikeContainer()
