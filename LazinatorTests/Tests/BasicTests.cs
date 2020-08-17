@@ -11,6 +11,7 @@ using LazinatorTests.Examples.Structs;
 using LazinatorTests.Examples.NonAbstractGenerics;
 using LazinatorCollections.Tuples;
 using Lazinator.Buffers;
+using LazinatorTests.Examples.ExampleHierarchy;
 
 namespace LazinatorTests.Tests
 {
@@ -42,6 +43,16 @@ namespace LazinatorTests.Tests
             Example copy = new Example(serializedBytes);
             var result = original.CloneLazinatorTyped();
             ExampleEqual(copy, result).Should().BeTrue();
+        }
+
+        [Fact]
+        public void ManualDeserializationWorks_NullableEnabledContext()
+        {
+            NullableEnabledContext original = CloneNoBufferTests.GetNullableEnabledContext();
+            LazinatorMemory serializedBytes = GetLazinatorMemoryCopy(original);
+            NullableEnabledContext copy = new NullableEnabledContext(serializedBytes);
+            LazinatorMemory serializedBytesCopy = GetLazinatorMemoryCopy(original);
+            serializedBytes.ReadOnlySpan.Matches(serializedBytesCopy.ReadOnlySpan).Should().BeTrue();
         }
 
         [Fact]
