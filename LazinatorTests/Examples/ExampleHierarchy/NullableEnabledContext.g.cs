@@ -1813,28 +1813,12 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             typedClone.NonNullableArrayOfNonNullables = CloneOrChange_Example_B_b(NonNullableArrayOfNonNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.NonNullableArrayOfNullables = CloneOrChange_Example_C63_B_b(NonNullableArrayOfNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
-            {
-                typedClone.NonNullableClass = (Example) NonNullableClass.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
-            }
-            
+            typedClone.NonNullableClass = (Example) NonNullableClass.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             typedClone.NonNullableDictionaryWithNonNullable = CloneOrChange_Dictionary_Gint_c_C32Example_g(NonNullableDictionaryWithNonNullable, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.NonNullableDictionaryWithNullable = CloneOrChange_Dictionary_Gint_c_C32Example_C63_g(NonNullableDictionaryWithNullable, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
-            {
-                typedClone.NonNullableInterface = (IExample) NonNullableInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
-            }
-            
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
-            {
-                typedClone.NonNullableLazinatorListNonNullable = (LazinatorList<Example>) NonNullableLazinatorListNonNullable.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
-            }
-            
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
-            {
-                typedClone.NonNullableLazinatorListNullable = (LazinatorList<Example?>) NonNullableLazinatorListNullable.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
-            }
-            
+            typedClone.NonNullableInterface = (IExample) NonNullableInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            typedClone.NonNullableLazinatorListNonNullable = (LazinatorList<Example>) NonNullableLazinatorListNonNullable.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+            typedClone.NonNullableLazinatorListNullable = (LazinatorList<Example?>) NonNullableLazinatorListNullable.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             typedClone.NonNullableListOfNonNullables = CloneOrChange_List_GExample_g(NonNullableListOfNonNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.NonNullableListOfNullables = CloneOrChange_List_GExample_C63_g(NonNullableListOfNullables, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.NonNullableMemoryOfBytes = CloneOrChange_Memory_Gbyte_g(NonNullableMemoryOfBytes, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
@@ -2487,33 +2471,17 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             _NonNullableArrayOfNullables_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _NonNullableClass_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
-            {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            }
-            
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _NonNullableDictionaryWithNonNullable_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _NonNullableDictionaryWithNullable_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _NonNullableInterface_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
-            {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            }
-            
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _NonNullableLazinatorListNonNullable_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
-            {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            }
-            
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _NonNullableLazinatorListNullable_ByteIndex = bytesSoFar;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
-            {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
-            }
-            
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _NonNullableListOfNonNullables_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _NonNullableListOfNullables_ByteIndex = bytesSoFar;
@@ -2821,11 +2789,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     _NonNullableArrayOfNullables_ByteIndex = startOfObjectPosition - startPosition;
                 }
                 startOfObjectPosition = writer.Position;
-                if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
-                {
-                    WriteChild(ref writer, ref _NonNullableClass, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableClass_ByteIndex, _NonNullableClass_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
-                }
-                
+                WriteChild(ref writer, ref _NonNullableClass, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableClass_ByteIndex, _NonNullableClass_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
                 if (updateStoredBuffer)
                 {
                     _NonNullableClass_ByteIndex = startOfObjectPosition - startPosition;
@@ -2857,31 +2821,19 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     _NonNullableDictionaryWithNullable_ByteIndex = startOfObjectPosition - startPosition; _NonNullableDictionaryWithNullable = (Dictionary<int, Example?>) CloneOrChange_Dictionary_Gint_c_C32Example_C63_g(_NonNullableDictionaryWithNullable!, l => l.RemoveBufferInHierarchy(), true);
                 }
                 startOfObjectPosition = writer.Position;
-                if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
-                {
-                    WriteChild(ref writer, ref _NonNullableInterface, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableInterface_ByteIndex, _NonNullableInterface_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
-                }
-                
+                WriteChild(ref writer, ref _NonNullableInterface, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableInterface_ByteIndex, _NonNullableInterface_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
                 if (updateStoredBuffer)
                 {
                     _NonNullableInterface_ByteIndex = startOfObjectPosition - startPosition;
                 }
                 startOfObjectPosition = writer.Position;
-                if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
-                {
-                    WriteChild(ref writer, ref _NonNullableLazinatorListNonNullable, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableLazinatorListNonNullable_ByteIndex, _NonNullableLazinatorListNonNullable_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
-                }
-                
+                WriteChild(ref writer, ref _NonNullableLazinatorListNonNullable, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableLazinatorListNonNullable_ByteIndex, _NonNullableLazinatorListNonNullable_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
                 if (updateStoredBuffer)
                 {
                     _NonNullableLazinatorListNonNullable_ByteIndex = startOfObjectPosition - startPosition;
                 }
                 startOfObjectPosition = writer.Position;
-                if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
-                {
-                    WriteChild(ref writer, ref _NonNullableLazinatorListNullable, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableLazinatorListNullable_ByteIndex, _NonNullableLazinatorListNullable_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
-                }
-                
+                WriteChild(ref writer, ref _NonNullableLazinatorListNullable, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableLazinatorListNullable_ByteIndex, _NonNullableLazinatorListNullable_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
                 if (updateStoredBuffer)
                 {
                     _NonNullableLazinatorListNullable_ByteIndex = startOfObjectPosition - startPosition;
