@@ -2449,7 +2449,7 @@ namespace Lazinator.CodeDescription
                 var DEBUG = 0;
             }
             string itemToConvertItemName =
-                $"itemToConvert{IIF((outerTupleType == LazinatorSupportedTupleType.ValueTuple || outerTupleType == LazinatorSupportedTupleType.KeyValuePair) && outerTypeIsNullable, ".Value")}.{itemName}";
+                $"itemToConvert{IIF((outerTupleType == LazinatorSupportedTupleType.ValueTuple || outerTupleType == LazinatorSupportedTupleType.KeyValuePair || (outerTupleType == LazinatorSupportedTupleType.RecordLikeType && IsDefinitelyStruct) && outerTypeIsNullable), ".Value")}.{itemName}";
             if (IsPrimitive)
                 return ($@"
                         {WriteMethodName}(ref writer, {EnumEquivalentCastToEquivalentType}{itemToConvertItemName});");
