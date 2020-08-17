@@ -5389,7 +5389,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     return default(RecordLikeStruct?);
                 }
                 
-                return new RecordLikeStruct((int) (itemToConvert?.Age ?? default),(string?) (itemToConvert?.Name ?? default));
+                return new RecordLikeStruct((int) (itemToConvert?.Age ?? default),(string) (itemToConvert?.Name ?? default));
             }
             
             private static Tuple<Example, int>? ConvertFromBytes_Tuple_GExample_c_C32int_g_C63(LazinatorMemory storage)

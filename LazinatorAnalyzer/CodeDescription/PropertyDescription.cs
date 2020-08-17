@@ -123,7 +123,7 @@ namespace Lazinator.CodeDescription
 
         /* Names */
         private bool UseFullyQualifiedNames => (Config?.UseFullyQualifiedNames ?? false) || HasFullyQualifyAttribute || Symbol.ContainingType != null;
-        private string ShortTypeName => RegularizeTypeName(Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat), NullableModeEnabled && Nullable);
+        private string ShortTypeName => RegularizeTypeName(Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat), Nullable, NullableModeEnabled);
         private string ShortTypeNameWithoutNullableIndicator => WithoutNullableIndicator(ShortTypeName);
         internal string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
         private string FullyQualifiedNameWithoutNullableIndicator => WithoutNullableIndicator(FullyQualifiedTypeName);
@@ -1384,7 +1384,7 @@ namespace Lazinator.CodeDescription
 
         private void SetEnumEquivalentType(INamedTypeSymbol t)
         {
-            EnumEquivalentType = RoslynHelpers.RegularizeTypeName(t.EnumUnderlyingType.Name, NullableModeEnabled && Nullable);
+            EnumEquivalentType = RoslynHelpers.RegularizeTypeName(t.EnumUnderlyingType.Name, Nullable, NullableModeEnabled);
         }
 
         #endregion
@@ -2448,7 +2448,7 @@ namespace Lazinator.CodeDescription
             {
                 var DEBUG = 0;
             }
-            if (outerTupleType == LazinatorSupportedTupleType.RecordLikeType)
+            if (outerTupleType == LazinatorSupportedTupleType.RecordLikeType && outerTypeIsNullable && outerTypeIsValueType)
             {
                 var DEBUG = 0;
             }

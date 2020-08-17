@@ -72,18 +72,18 @@ namespace LazinatorCodeGen.Roslyn
             return b.ToString();
         }
 
-        public static string PrettyTypeName(INamedTypeSymbol t, bool isNullableReferenceInNullableEnabledContext)
+        public static string PrettyTypeName(INamedTypeSymbol t, bool nullable, bool nullableEnabledContext)
         {
             if (t.IsGenericType)
             {
-                IEnumerable<string> innerTypeNames = t.TypeArguments.Select(x => x is INamedTypeSymbol namedx ? PrettyTypeName(namedx, isNullableReferenceInNullableEnabledContext) : x.Name);
+                IEnumerable<string> innerTypeNames = t.TypeArguments.Select(x => x is INamedTypeSymbol namedx ? PrettyTypeName(namedx, nullable, nullableEnabledContext) : x.Name);
                 return string.Format(
                     "{0}<{1}>",
                     t.Name,
                     string.Join(", ", innerTypeNames));
             }
 
-            return RegularizeTypeName(t.Name, isNullableReferenceInNullableEnabledContext);
+            return RegularizeTypeName(t.Name, nullable, nullableEnabledContext);
         }
         
         public static string EncodableTypeName(ITypeSymbol typeSymbol)
@@ -110,7 +110,7 @@ namespace LazinatorCodeGen.Roslyn
                     string.Join("_", typeArguments.Select(x => EncodableTypeName(x))));
             }
 
-            string regularized = RegularizeTypeName(name, false);
+            string regularized = RegularizeTypeName(name, false, false);
 
             return regularized;
         }
@@ -133,7 +133,14 @@ namespace LazinatorCodeGen.Roslyn
             { "String", "string" },
         };
 
-        public static string RegularizeTypeName(string typeName, bool isNullableReferenceTypeInEnabledContext)
+        public static string RegularizeTypeName(string typeName, bool isNullable, bool nullableModeEnabled)
+        {
+            bool isNullableReferenceTypeInEnabledContext = isNullable && nullableModeEnabled;
+            string result = RegularizeTypeNameHelper(typeName, isNullableReferenceTypeInEnabledContext);
+            return result;
+        }
+
+        private static string RegularizeTypeNameHelper(string typeName, bool isNullableReferenceTypeInEnabledContext)
         {
             if (TypeRegularization.ContainsKey(typeName))
                 return TypeRegularization[typeName];
