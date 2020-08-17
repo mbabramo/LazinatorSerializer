@@ -17,6 +17,7 @@ using LazinatorTests.Examples.ExampleHierarchy;
 using FluentAssertions;
 using Lazinator.Exceptions;
 using System.Threading;
+using Lazinator.CodeDescription;
 
 namespace LazinatorTests.Tests
 {
@@ -684,10 +685,19 @@ namespace LazinatorTests.Tests
         [Fact]
         public void CloneWithoutBuffer_NullableEnabledContext_ThrowsAfterExcludingThenAccessingNonNullable()
         {
-            Action a = () => { VerifyCloningEquivalence(GetNullableEnabledContext(), IncludeChildrenMode.ExcludeAllChildren); };
-            a.Should().Throw<UnsetNonnullableLazinatorException>();
-            a = () => { VerifyCloningEquivalence(GetNullableEnabledContext(), IncludeChildrenMode.IncludeOnlyIncludableChildren); };
-            a.Should().Throw<UnsetNonnullableLazinatorException>();
+            if (PropertyDescription.UseNullableBackingFieldsForNonNullableReferenceTypes)
+            {
+                Action a = () => { VerifyCloningEquivalence(GetNullableEnabledContext(), IncludeChildrenMode.ExcludeAllChildren); };
+                a.Should().Throw<UnsetNonnullableLazinatorException>();
+                a = () => { VerifyCloningEquivalence(GetNullableEnabledContext(), IncludeChildrenMode.IncludeOnlyIncludableChildren); };
+                a.Should().Throw<UnsetNonnullableLazinatorException>();
+            }
+            else
+            {
+                // should not throw
+                VerifyCloningEquivalence(GetNullableEnabledContext(), IncludeChildrenMode.ExcludeAllChildren); 
+                VerifyCloningEquivalence(GetNullableEnabledContext(), IncludeChildrenMode.IncludeOnlyIncludableChildren);
+            }
         }
 
         [Fact]
