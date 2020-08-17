@@ -153,8 +153,9 @@ namespace LazinatorCollections
         
         /* Serialization, deserialization, and object relationships */
         
-        public LazinatorLinkedListNode(LazinatorConstructorEnum constructorEnum)
+        public LazinatorLinkedListNode(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public LazinatorLinkedListNode(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -217,10 +218,7 @@ namespace LazinatorCollections
             LazinatorLinkedListNode<T> clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new LazinatorLinkedListNode<T>(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new LazinatorLinkedListNode<T>(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (LazinatorLinkedListNode<T>)AssignCloneProperties(clone, includeChildrenMode);
             }

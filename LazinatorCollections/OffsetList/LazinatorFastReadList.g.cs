@@ -65,8 +65,9 @@ namespace LazinatorCollections.OffsetList
         
         /* Serialization, deserialization, and object relationships */
         
-        public LazinatorFastReadList(LazinatorConstructorEnum constructorEnum)
+        public LazinatorFastReadList(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public LazinatorFastReadList(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -129,10 +130,7 @@ namespace LazinatorCollections.OffsetList
             LazinatorFastReadList<T> clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new LazinatorFastReadList<T>(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new LazinatorFastReadList<T>(includeChildrenMode);
                 clone = (LazinatorFastReadList<T>)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

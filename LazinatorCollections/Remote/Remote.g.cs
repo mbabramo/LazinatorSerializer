@@ -174,8 +174,9 @@ namespace LazinatorCollections.Remote
         
         /* Serialization, deserialization, and object relationships */
         
-        public Remote(LazinatorConstructorEnum constructorEnum)
+        public Remote(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public Remote(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -238,10 +239,7 @@ namespace LazinatorCollections.Remote
             Remote<TKey, TValue> clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new Remote<TKey, TValue>(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new Remote<TKey, TValue>(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (Remote<TKey, TValue>)AssignCloneProperties(clone, includeChildrenMode);
             }

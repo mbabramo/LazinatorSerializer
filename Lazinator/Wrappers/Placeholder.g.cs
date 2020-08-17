@@ -37,8 +37,9 @@ namespace Lazinator.Wrappers
         
         /* Serialization, deserialization, and object relationships */
         
-        public Placeholder(LazinatorConstructorEnum constructorEnum) : this()
+        public Placeholder(IncludeChildrenMode originalIncludeChildrenMode) : this()
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public Placeholder(LazinatorMemory serializedBytes, ILazinator parent = null) : this()
@@ -97,10 +98,7 @@ namespace Lazinator.Wrappers
             Placeholder clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new Placeholder(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new Placeholder(includeChildrenMode);
                 clone = (Placeholder)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

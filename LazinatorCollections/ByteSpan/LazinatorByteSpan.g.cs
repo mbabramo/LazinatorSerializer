@@ -108,8 +108,9 @@ namespace LazinatorCollections.ByteSpan
         
         /* Serialization, deserialization, and object relationships */
         
-        public LazinatorByteSpan(LazinatorConstructorEnum constructorEnum)
+        public LazinatorByteSpan(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public LazinatorByteSpan(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -173,10 +174,7 @@ namespace LazinatorCollections.ByteSpan
             LazinatorByteSpan clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new LazinatorByteSpan(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new LazinatorByteSpan(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (LazinatorByteSpan)AssignCloneProperties(clone, includeChildrenMode);
             }

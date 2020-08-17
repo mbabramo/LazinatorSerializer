@@ -227,8 +227,9 @@ namespace LazinatorCollections.Tuples
         
         /* Serialization, deserialization, and object relationships */
         
-        public LazinatorTriple(LazinatorConstructorEnum constructorEnum)
+        public LazinatorTriple(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public LazinatorTriple(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -291,10 +292,7 @@ namespace LazinatorCollections.Tuples
             LazinatorTriple<T, U, V> clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new LazinatorTriple<T, U, V>(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new LazinatorTriple<T, U, V>(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (LazinatorTriple<T, U, V>)AssignCloneProperties(clone, includeChildrenMode);
             }

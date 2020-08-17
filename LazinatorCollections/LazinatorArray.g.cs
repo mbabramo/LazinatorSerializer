@@ -90,8 +90,9 @@ namespace LazinatorCollections
         
         /* Serialization, deserialization, and object relationships */
         
-        public LazinatorArray(LazinatorConstructorEnum constructorEnum)
+        public LazinatorArray(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public LazinatorArray(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -154,10 +155,7 @@ namespace LazinatorCollections
             LazinatorArray<T> clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new LazinatorArray<T>(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new LazinatorArray<T>(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (LazinatorArray<T>)AssignCloneProperties(clone, includeChildrenMode);
             }

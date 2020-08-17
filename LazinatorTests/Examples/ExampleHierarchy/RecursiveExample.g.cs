@@ -135,8 +135,9 @@ namespace LazinatorTests.Examples.Hierarchy
         
         /* Serialization, deserialization, and object relationships */
         
-        public RecursiveExample(LazinatorConstructorEnum constructorEnum)
+        public RecursiveExample(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public RecursiveExample(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -197,10 +198,7 @@ namespace LazinatorTests.Examples.Hierarchy
             RecursiveExample clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new RecursiveExample(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new RecursiveExample(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (RecursiveExample)AssignCloneProperties(clone, includeChildrenMode);
             }

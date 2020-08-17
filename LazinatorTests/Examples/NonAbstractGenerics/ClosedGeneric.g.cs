@@ -49,7 +49,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         }
         /* Clone overrides */
         
-        public ClosedGeneric(LazinatorConstructorEnum constructorEnum) : base(constructorEnum)
+        public ClosedGeneric(IncludeChildrenMode originalIncludeChildrenMode) : base(originalIncludeChildrenMode)
         {
         }
         
@@ -62,10 +62,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             ClosedGeneric clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new ClosedGeneric(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new ClosedGeneric(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (ClosedGeneric)AssignCloneProperties(clone, includeChildrenMode);
             }

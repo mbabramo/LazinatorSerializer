@@ -49,7 +49,7 @@ namespace LazinatorTests.Examples
         }
         /* Clone overrides */
         
-        public DerivedLazinatorList(LazinatorConstructorEnum constructorEnum) : base(constructorEnum)
+        public DerivedLazinatorList(IncludeChildrenMode originalIncludeChildrenMode) : base(originalIncludeChildrenMode)
         {
         }
         
@@ -62,10 +62,7 @@ namespace LazinatorTests.Examples
             DerivedLazinatorList<T> clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new DerivedLazinatorList<T>(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new DerivedLazinatorList<T>(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (DerivedLazinatorList<T>)AssignCloneProperties(clone, includeChildrenMode);
             }

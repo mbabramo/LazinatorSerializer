@@ -90,7 +90,7 @@ namespace LazinatorTests.Examples.Collections
         
         /* Clone overrides */
         
-        public Derived_DotNetList_Nested_NonLazinator(LazinatorConstructorEnum constructorEnum) : base(constructorEnum)
+        public Derived_DotNetList_Nested_NonLazinator(IncludeChildrenMode originalIncludeChildrenMode) : base(originalIncludeChildrenMode)
         {
         }
         
@@ -103,10 +103,7 @@ namespace LazinatorTests.Examples.Collections
             Derived_DotNetList_Nested_NonLazinator clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new Derived_DotNetList_Nested_NonLazinator(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new Derived_DotNetList_Nested_NonLazinator(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (Derived_DotNetList_Nested_NonLazinator)AssignCloneProperties(clone, includeChildrenMode);
             }

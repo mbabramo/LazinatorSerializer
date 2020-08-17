@@ -66,8 +66,9 @@ namespace LazinatorTests.Examples
         
         /* Serialization, deserialization, and object relationships */
         
-        public NonLazinatorInterchangeStruct(LazinatorConstructorEnum constructorEnum) : this()
+        public NonLazinatorInterchangeStruct(IncludeChildrenMode originalIncludeChildrenMode) : this()
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public NonLazinatorInterchangeStruct(LazinatorMemory serializedBytes, ILazinator parent = null) : this()
@@ -132,10 +133,7 @@ namespace LazinatorTests.Examples
             NonLazinatorInterchangeStruct clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new NonLazinatorInterchangeStruct(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new NonLazinatorInterchangeStruct(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (NonLazinatorInterchangeStruct)AssignCloneProperties(clone, includeChildrenMode);
             }

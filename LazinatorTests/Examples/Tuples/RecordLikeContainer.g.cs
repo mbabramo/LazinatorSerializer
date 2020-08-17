@@ -212,8 +212,9 @@ namespace LazinatorTests.Examples.Tuples
         
         /* Serialization, deserialization, and object relationships */
         
-        public RecordLikeContainer(LazinatorConstructorEnum constructorEnum)
+        public RecordLikeContainer(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public RecordLikeContainer(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -274,10 +275,7 @@ namespace LazinatorTests.Examples.Tuples
             RecordLikeContainer clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new RecordLikeContainer(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new RecordLikeContainer(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (RecordLikeContainer)AssignCloneProperties(clone, includeChildrenMode);
             }

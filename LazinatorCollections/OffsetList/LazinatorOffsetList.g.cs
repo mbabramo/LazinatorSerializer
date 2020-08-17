@@ -88,7 +88,7 @@ namespace LazinatorCollections.OffsetList
                 }
                 else 
                 {
-                    _FourByteItems = new LazinatorFastReadListInt32(LazinatorConstructorEnum.LazinatorConstructor)
+                    _FourByteItems = new LazinatorFastReadListInt32(IncludeChildrenMode.IncludeAllChildren)
                     {
                         LazinatorParents = new LazinatorParentsCollection(this)
                     };
@@ -148,7 +148,7 @@ namespace LazinatorCollections.OffsetList
                 }
                 else 
                 {
-                    _TwoByteItems = new LazinatorFastReadListInt16(LazinatorConstructorEnum.LazinatorConstructor)
+                    _TwoByteItems = new LazinatorFastReadListInt16(IncludeChildrenMode.IncludeAllChildren)
                     {
                         LazinatorParents = new LazinatorParentsCollection(this)
                     };
@@ -162,8 +162,9 @@ namespace LazinatorCollections.OffsetList
         
         /* Serialization, deserialization, and object relationships */
         
-        public LazinatorOffsetList(LazinatorConstructorEnum constructorEnum)
+        public LazinatorOffsetList(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public LazinatorOffsetList(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -230,10 +231,7 @@ namespace LazinatorCollections.OffsetList
             LazinatorOffsetList clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new LazinatorOffsetList(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new LazinatorOffsetList(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (LazinatorOffsetList)AssignCloneProperties(clone, includeChildrenMode);
             }

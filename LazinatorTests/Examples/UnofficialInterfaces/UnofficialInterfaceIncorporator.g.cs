@@ -166,8 +166,9 @@ namespace LazinatorTests.Examples
         
         /* Serialization, deserialization, and object relationships */
         
-        public UnofficialInterfaceIncorporator(LazinatorConstructorEnum constructorEnum)
+        public UnofficialInterfaceIncorporator(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public UnofficialInterfaceIncorporator(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -228,10 +229,7 @@ namespace LazinatorTests.Examples
             UnofficialInterfaceIncorporator clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new UnofficialInterfaceIncorporator(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new UnofficialInterfaceIncorporator(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (UnofficialInterfaceIncorporator)AssignCloneProperties(clone, includeChildrenMode);
             }

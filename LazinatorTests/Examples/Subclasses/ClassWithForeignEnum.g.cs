@@ -51,8 +51,9 @@ namespace LazinatorTests.Examples.Subclasses
         
         /* Serialization, deserialization, and object relationships */
         
-        public ClassWithForeignEnum(LazinatorConstructorEnum constructorEnum)
+        public ClassWithForeignEnum(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public ClassWithForeignEnum(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -113,10 +114,7 @@ namespace LazinatorTests.Examples.Subclasses
             ClassWithForeignEnum clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new ClassWithForeignEnum(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new ClassWithForeignEnum(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (ClassWithForeignEnum)AssignCloneProperties(clone, includeChildrenMode);
             }

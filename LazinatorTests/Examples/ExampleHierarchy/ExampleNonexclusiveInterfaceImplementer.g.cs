@@ -51,8 +51,9 @@ namespace LazinatorTests.Examples
         
         /* Serialization, deserialization, and object relationships */
         
-        public ExampleNonexclusiveInterfaceImplementer(LazinatorConstructorEnum constructorEnum)
+        public ExampleNonexclusiveInterfaceImplementer(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public ExampleNonexclusiveInterfaceImplementer(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -113,10 +114,7 @@ namespace LazinatorTests.Examples
             ExampleNonexclusiveInterfaceImplementer clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new ExampleNonexclusiveInterfaceImplementer(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new ExampleNonexclusiveInterfaceImplementer(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (ExampleNonexclusiveInterfaceImplementer)AssignCloneProperties(clone, includeChildrenMode);
             }

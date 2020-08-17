@@ -54,8 +54,9 @@ namespace Lazinator.Wrappers
         
         /* Serialization, deserialization, and object relationships */
         
-        public WDecimal(LazinatorConstructorEnum constructorEnum) : this()
+        public WDecimal(IncludeChildrenMode originalIncludeChildrenMode) : this()
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public WDecimal(LazinatorMemory serializedBytes, ILazinator parent = null) : this()
@@ -116,10 +117,7 @@ namespace Lazinator.Wrappers
             WDecimal clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new WDecimal(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new WDecimal(includeChildrenMode);
                 clone = (WDecimal)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

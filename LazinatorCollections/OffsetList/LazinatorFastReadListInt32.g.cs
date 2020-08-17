@@ -33,7 +33,7 @@ namespace LazinatorCollections.OffsetList
         
         /* Clone overrides */
         
-        public LazinatorFastReadListInt32(LazinatorConstructorEnum constructorEnum) : base(constructorEnum)
+        public LazinatorFastReadListInt32(IncludeChildrenMode originalIncludeChildrenMode) : base(originalIncludeChildrenMode)
         {
         }
         
@@ -46,10 +46,7 @@ namespace LazinatorCollections.OffsetList
             LazinatorFastReadListInt32 clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new LazinatorFastReadListInt32(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new LazinatorFastReadListInt32(includeChildrenMode);
                 clone = (LazinatorFastReadListInt32)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

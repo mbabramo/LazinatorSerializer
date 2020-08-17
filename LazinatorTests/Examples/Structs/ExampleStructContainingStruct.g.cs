@@ -186,8 +186,9 @@ namespace LazinatorTests.Examples
         
         /* Serialization, deserialization, and object relationships */
         
-        public ExampleStructContainingStruct(LazinatorConstructorEnum constructorEnum) : this()
+        public ExampleStructContainingStruct(IncludeChildrenMode originalIncludeChildrenMode) : this()
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public ExampleStructContainingStruct(LazinatorMemory serializedBytes, ILazinator parent = null) : this()
@@ -252,10 +253,7 @@ namespace LazinatorTests.Examples
             ExampleStructContainingStruct clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new ExampleStructContainingStruct(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new ExampleStructContainingStruct(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (ExampleStructContainingStruct)AssignCloneProperties(clone, includeChildrenMode);
             }

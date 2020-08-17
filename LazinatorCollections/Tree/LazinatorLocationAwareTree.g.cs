@@ -89,7 +89,7 @@ namespace LazinatorCollections.Tree
         
         /* Clone overrides */
         
-        public LazinatorLocationAwareTree(LazinatorConstructorEnum constructorEnum) : base(constructorEnum)
+        public LazinatorLocationAwareTree(IncludeChildrenMode originalIncludeChildrenMode) : base(originalIncludeChildrenMode)
         {
         }
         
@@ -102,10 +102,7 @@ namespace LazinatorCollections.Tree
             LazinatorLocationAwareTree<T> clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new LazinatorLocationAwareTree<T>(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new LazinatorLocationAwareTree<T>(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (LazinatorLocationAwareTree<T>)AssignCloneProperties(clone, includeChildrenMode);
             }

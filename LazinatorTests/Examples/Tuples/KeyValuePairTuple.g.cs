@@ -78,8 +78,9 @@ namespace LazinatorTests.Examples.Tuples
         
         /* Serialization, deserialization, and object relationships */
         
-        public KeyValuePairTuple(LazinatorConstructorEnum constructorEnum)
+        public KeyValuePairTuple(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public KeyValuePairTuple(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -140,10 +141,7 @@ namespace LazinatorTests.Examples.Tuples
             KeyValuePairTuple clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new KeyValuePairTuple(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new KeyValuePairTuple(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (KeyValuePairTuple)AssignCloneProperties(clone, includeChildrenMode);
             }

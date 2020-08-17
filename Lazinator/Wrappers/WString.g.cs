@@ -54,8 +54,9 @@ namespace Lazinator.Wrappers
         
         /* Serialization, deserialization, and object relationships */
         
-        public WString(LazinatorConstructorEnum constructorEnum) : this()
+        public WString(IncludeChildrenMode originalIncludeChildrenMode) : this()
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public WString(LazinatorMemory serializedBytes, ILazinator parent = null) : this()
@@ -116,10 +117,7 @@ namespace Lazinator.Wrappers
             WString clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new WString(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new WString(includeChildrenMode);
                 clone = (WString)AssignCloneProperties(clone, includeChildrenMode);
             }
             else
@@ -402,12 +400,7 @@ namespace Lazinator.Wrappers
             public WString FromRefStruct()
             {
                 UpdateStoredBuffer();
-                var clone = new WString()
-                {
-                    OriginalIncludeChildrenMode = OriginalIncludeChildrenMode,
-                    LazinatorMemoryStorage = LazinatorMemoryStorage
-                };
-                clone.Deserialize();
+                var clone = new WString(LazinatorMemoryStorage);
                 return clone;
             }
             
@@ -434,8 +427,9 @@ namespace Lazinator.Wrappers
             
             /* Serialization, deserialization, and object relationships */
             
-            public WString_RefStruct(LazinatorConstructorEnum constructorEnum) : this()
+            public WString_RefStruct(IncludeChildrenMode originalIncludeChildrenMode) : this()
             {
+                OriginalIncludeChildrenMode = originalIncludeChildrenMode;
             }
             
             public WString_RefStruct(LazinatorMemory serializedBytes, ILazinator parent = null) : this()

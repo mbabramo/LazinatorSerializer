@@ -86,8 +86,9 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Serialization, deserialization, and object relationships */
         
-        public ContainerWithAbstract1(LazinatorConstructorEnum constructorEnum)
+        public ContainerWithAbstract1(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public ContainerWithAbstract1(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -148,10 +149,7 @@ namespace LazinatorTests.Examples.Abstract
             ContainerWithAbstract1 clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new ContainerWithAbstract1(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new ContainerWithAbstract1(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (ContainerWithAbstract1)AssignCloneProperties(clone, includeChildrenMode);
             }

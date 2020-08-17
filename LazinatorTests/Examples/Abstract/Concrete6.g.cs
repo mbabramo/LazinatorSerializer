@@ -74,7 +74,7 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Clone overrides */
         
-        public Concrete6(LazinatorConstructorEnum constructorEnum) : base(constructorEnum)
+        public Concrete6(IncludeChildrenMode originalIncludeChildrenMode) : base(originalIncludeChildrenMode)
         {
         }
         
@@ -87,10 +87,7 @@ namespace LazinatorTests.Examples.Abstract
             Concrete6 clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new Concrete6(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new Concrete6(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (Concrete6)AssignCloneProperties(clone, includeChildrenMode);
             }

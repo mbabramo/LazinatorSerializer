@@ -323,8 +323,9 @@ namespace LazinatorTests.Examples
         
         /* Serialization, deserialization, and object relationships */
         
-        public Simplifiable(LazinatorConstructorEnum constructorEnum)
+        public Simplifiable(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public Simplifiable(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -385,10 +386,7 @@ namespace LazinatorTests.Examples
             Simplifiable clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new Simplifiable(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new Simplifiable(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (Simplifiable)AssignCloneProperties(clone, includeChildrenMode);
             }

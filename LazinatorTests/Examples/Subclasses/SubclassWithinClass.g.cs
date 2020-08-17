@@ -53,8 +53,9 @@ namespace LazinatorTests.Examples.Subclasses
             
             /* Serialization, deserialization, and object relationships */
             
-            public SubclassWithinClass(LazinatorConstructorEnum constructorEnum)
+            public SubclassWithinClass(IncludeChildrenMode originalIncludeChildrenMode)
             {
+                OriginalIncludeChildrenMode = originalIncludeChildrenMode;
             }
             
             public SubclassWithinClass(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -115,10 +116,7 @@ namespace LazinatorTests.Examples.Subclasses
                 SubclassWithinClass clone;
                 if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
                 {
-                    clone = new SubclassWithinClass(LazinatorConstructorEnum.LazinatorConstructor)
-                    {
-                        OriginalIncludeChildrenMode = includeChildrenMode
-                    };
+                    clone = new SubclassWithinClass(includeChildrenMode);
                     clone.LazinatorObjectVersion = LazinatorObjectVersion;
                     clone = (SubclassWithinClass)AssignCloneProperties(clone, includeChildrenMode);
                 }

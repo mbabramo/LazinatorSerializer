@@ -154,8 +154,9 @@ namespace LazinatorCollections.Tree
         
         /* Serialization, deserialization, and object relationships */
         
-        public LazinatorGeneralTree(LazinatorConstructorEnum constructorEnum)
+        public LazinatorGeneralTree(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public LazinatorGeneralTree(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -218,10 +219,7 @@ namespace LazinatorCollections.Tree
             LazinatorGeneralTree<T> clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new LazinatorGeneralTree<T>(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new LazinatorGeneralTree<T>(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (LazinatorGeneralTree<T>)AssignCloneProperties(clone, includeChildrenMode);
             }

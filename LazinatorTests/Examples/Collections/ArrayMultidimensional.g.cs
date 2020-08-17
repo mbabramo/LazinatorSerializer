@@ -176,8 +176,9 @@ namespace LazinatorTests.Examples.Collections
         
         /* Serialization, deserialization, and object relationships */
         
-        public ArrayMultidimensional(LazinatorConstructorEnum constructorEnum)
+        public ArrayMultidimensional(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public ArrayMultidimensional(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -238,10 +239,7 @@ namespace LazinatorTests.Examples.Collections
             ArrayMultidimensional clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new ArrayMultidimensional(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new ArrayMultidimensional(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (ArrayMultidimensional)AssignCloneProperties(clone, includeChildrenMode);
             }

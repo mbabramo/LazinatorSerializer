@@ -196,8 +196,9 @@ namespace LazinatorTests.Examples
         
         /* Serialization, deserialization, and object relationships */
         
-        public NonLazinatorContainer(LazinatorConstructorEnum constructorEnum) : this()
+        public NonLazinatorContainer(IncludeChildrenMode originalIncludeChildrenMode) : this()
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public NonLazinatorContainer(LazinatorMemory serializedBytes, ILazinator parent = null) : this()
@@ -262,10 +263,7 @@ namespace LazinatorTests.Examples
             NonLazinatorContainer clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new NonLazinatorContainer(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new NonLazinatorContainer(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (NonLazinatorContainer)AssignCloneProperties(clone, includeChildrenMode);
             }
@@ -643,8 +641,7 @@ namespace LazinatorTests.Examples
                 {
                     return default(NonLazinatorInterchangeableClass);
                 }
-                NonLazinatorInterchangeClass interchange = new NonLazinatorInterchangeClass();
-                interchange.DeserializeLazinator(storage);
+                NonLazinatorInterchangeClass interchange = new NonLazinatorInterchangeClass(storage);
                 return interchange.Interchange_NonLazinatorInterchangeableClass(false);
             }
             
@@ -675,8 +672,7 @@ namespace LazinatorTests.Examples
             
             private static NonLazinatorInterchangeableStruct ConvertFromBytes_NonLazinatorInterchangeableStruct(LazinatorMemory storage)
             {
-                NonLazinatorInterchangeStruct interchange = new NonLazinatorInterchangeStruct();
-                interchange.DeserializeLazinator(storage);
+                NonLazinatorInterchangeStruct interchange = new NonLazinatorInterchangeStruct(storage);
                 return interchange.Interchange_NonLazinatorInterchangeableStruct(false);
             }
             

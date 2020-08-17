@@ -127,8 +127,9 @@ namespace LazinatorTests.Examples.Hierarchy
         
         /* Serialization, deserialization, and object relationships */
         
-        public ExampleInterfaceContainer(LazinatorConstructorEnum constructorEnum)
+        public ExampleInterfaceContainer(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public ExampleInterfaceContainer(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -189,10 +190,7 @@ namespace LazinatorTests.Examples.Hierarchy
             ExampleInterfaceContainer clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new ExampleInterfaceContainer(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new ExampleInterfaceContainer(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (ExampleInterfaceContainer)AssignCloneProperties(clone, includeChildrenMode);
             }

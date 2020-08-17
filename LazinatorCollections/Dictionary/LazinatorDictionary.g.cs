@@ -108,8 +108,9 @@ namespace LazinatorCollections.Dictionary
         
         /* Serialization, deserialization, and object relationships */
         
-        public LazinatorDictionary(LazinatorConstructorEnum constructorEnum)
+        public LazinatorDictionary(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public LazinatorDictionary(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -172,10 +173,7 @@ namespace LazinatorCollections.Dictionary
             LazinatorDictionary<TKey, TValue> clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new LazinatorDictionary<TKey, TValue>(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new LazinatorDictionary<TKey, TValue>(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (LazinatorDictionary<TKey, TValue>)AssignCloneProperties(clone, includeChildrenMode);
             }

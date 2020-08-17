@@ -78,8 +78,9 @@ namespace LazinatorTests.Examples.Collections
         
         /* Serialization, deserialization, and object relationships */
         
-        public DotNetHashSet_Lazinator(LazinatorConstructorEnum constructorEnum)
+        public DotNetHashSet_Lazinator(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public DotNetHashSet_Lazinator(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -140,10 +141,7 @@ namespace LazinatorTests.Examples.Collections
             DotNetHashSet_Lazinator clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new DotNetHashSet_Lazinator(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new DotNetHashSet_Lazinator(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (DotNetHashSet_Lazinator)AssignCloneProperties(clone, includeChildrenMode);
             }

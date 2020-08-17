@@ -160,8 +160,9 @@ namespace LazinatorCollections.Dictionary
         
         /* Serialization, deserialization, and object relationships */
         
-        public DictionaryBucket(LazinatorConstructorEnum constructorEnum)
+        public DictionaryBucket(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public DictionaryBucket(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -224,10 +225,7 @@ namespace LazinatorCollections.Dictionary
             DictionaryBucket<TKey, TValue> clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new DictionaryBucket<TKey, TValue>(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new DictionaryBucket<TKey, TValue>(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (DictionaryBucket<TKey, TValue>)AssignCloneProperties(clone, includeChildrenMode);
             }

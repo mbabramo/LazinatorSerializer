@@ -137,8 +137,9 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         /* Serialization, deserialization, and object relationships */
         
-        public OpenGeneric(LazinatorConstructorEnum constructorEnum)
+        public OpenGeneric(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public OpenGeneric(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -199,10 +200,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             OpenGeneric<T> clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new OpenGeneric<T>(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new OpenGeneric<T>(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (OpenGeneric<T>)AssignCloneProperties(clone, includeChildrenMode);
             }

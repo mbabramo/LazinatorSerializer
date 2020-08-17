@@ -93,7 +93,7 @@ namespace LazinatorTests.Examples.Collections
         }
         /* Clone overrides */
         
-        public DerivedArray_Values(LazinatorConstructorEnum constructorEnum) : base(constructorEnum)
+        public DerivedArray_Values(IncludeChildrenMode originalIncludeChildrenMode) : base(originalIncludeChildrenMode)
         {
         }
         
@@ -106,10 +106,7 @@ namespace LazinatorTests.Examples.Collections
             DerivedArray_Values clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new DerivedArray_Values(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new DerivedArray_Values(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (DerivedArray_Values)AssignCloneProperties(clone, includeChildrenMode);
             }

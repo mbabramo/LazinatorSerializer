@@ -86,8 +86,9 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Serialization, deserialization, and object relationships */
         
-        public DerivedGenericContainer(LazinatorConstructorEnum constructorEnum)
+        public DerivedGenericContainer(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public DerivedGenericContainer(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -148,10 +149,7 @@ namespace LazinatorTests.Examples.Abstract
             DerivedGenericContainer<T> clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new DerivedGenericContainer<T>(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new DerivedGenericContainer<T>(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (DerivedGenericContainer<T>)AssignCloneProperties(clone, includeChildrenMode);
             }

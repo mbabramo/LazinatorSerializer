@@ -92,8 +92,9 @@ namespace LazinatorTests.Examples.Subclasses
         
         /* Serialization, deserialization, and object relationships */
         
-        public ClassWithLocalEnum(LazinatorConstructorEnum constructorEnum)
+        public ClassWithLocalEnum(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public ClassWithLocalEnum(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -154,10 +155,7 @@ namespace LazinatorTests.Examples.Subclasses
             ClassWithLocalEnum clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new ClassWithLocalEnum(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new ClassWithLocalEnum(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (ClassWithLocalEnum)AssignCloneProperties(clone, includeChildrenMode);
             }

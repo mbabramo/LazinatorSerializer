@@ -672,8 +672,9 @@ namespace LazinatorTests.Examples.Structs
         
         /* Serialization, deserialization, and object relationships */
         
-        public SmallWrappersContainer(LazinatorConstructorEnum constructorEnum)
+        public SmallWrappersContainer(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public SmallWrappersContainer(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -734,10 +735,7 @@ namespace LazinatorTests.Examples.Structs
             SmallWrappersContainer clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new SmallWrappersContainer(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new SmallWrappersContainer(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (SmallWrappersContainer)AssignCloneProperties(clone, includeChildrenMode);
             }

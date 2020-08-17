@@ -124,8 +124,9 @@ namespace LazinatorCollections.Tuples
         
         /* Serialization, deserialization, and object relationships */
         
-        public LazinatorKeyValue(LazinatorConstructorEnum constructorEnum) : this()
+        public LazinatorKeyValue(IncludeChildrenMode originalIncludeChildrenMode) : this()
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public LazinatorKeyValue(LazinatorMemory serializedBytes, ILazinator parent = null) : this()
@@ -188,10 +189,7 @@ namespace LazinatorCollections.Tuples
             LazinatorKeyValue<TKey, TValue> clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new LazinatorKeyValue<TKey, TValue>(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new LazinatorKeyValue<TKey, TValue>(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (LazinatorKeyValue<TKey, TValue>)AssignCloneProperties(clone, includeChildrenMode);
             }

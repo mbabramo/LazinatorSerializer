@@ -92,8 +92,9 @@ namespace LazinatorTests.Examples.Collections
         
         /* Serialization, deserialization, and object relationships */
         
-        public SpanInDotNetList(LazinatorConstructorEnum constructorEnum)
+        public SpanInDotNetList(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public SpanInDotNetList(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -154,10 +155,7 @@ namespace LazinatorTests.Examples.Collections
             SpanInDotNetList clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new SpanInDotNetList(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new SpanInDotNetList(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (SpanInDotNetList)AssignCloneProperties(clone, includeChildrenMode);
             }

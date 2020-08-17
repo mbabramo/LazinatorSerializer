@@ -279,8 +279,9 @@ namespace LazinatorTests.Examples.Tuples
         
         /* Serialization, deserialization, and object relationships */
         
-        public StructTuple(LazinatorConstructorEnum constructorEnum)
+        public StructTuple(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public StructTuple(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -341,10 +342,7 @@ namespace LazinatorTests.Examples.Tuples
             StructTuple clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new StructTuple(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new StructTuple(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (StructTuple)AssignCloneProperties(clone, includeChildrenMode);
             }

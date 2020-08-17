@@ -1645,7 +1645,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         /* Serialization, deserialization, and object relationships */
         
-        public NullableEnabledContext(LazinatorConstructorEnum constructorEnum, Example[] nonNullableArrayOfNonNullables, Example?[] nonNullableArrayOfNullables, Example nonNullableClass, Dictionary<int, Example> nonNullableDictionaryWithNonNullable, Dictionary<int, Example?> nonNullableDictionaryWithNullable, IExample nonNullableInterface, LazinatorList<Example> nonNullableLazinatorListNonNullable, LazinatorList<Example?> nonNullableLazinatorListNullable, List<Example> nonNullableListOfNonNullables, List<Example?> nonNullableListOfNullables, Queue<Example> nonNullableQueueOfNonNullables, Queue<Example?> nonNullableQueueOfNullables, Tuple<Example, int> nonNullableRegularTupleWithNonNullable, Tuple<Example?, int> nonNullableRegularTupleWithNullable, Stack<Example> nonNullableStackOfNonNullables, Stack<Example?> nonNullableStackOfNullables)
+        public NullableEnabledContext(IncludeChildrenMode originalIncludeChildrenMode, Example[] nonNullableArrayOfNonNullables, Example?[] nonNullableArrayOfNullables, Example nonNullableClass, Dictionary<int, Example> nonNullableDictionaryWithNonNullable, Dictionary<int, Example?> nonNullableDictionaryWithNullable, IExample nonNullableInterface, LazinatorList<Example> nonNullableLazinatorListNonNullable, LazinatorList<Example?> nonNullableLazinatorListNullable, List<Example> nonNullableListOfNonNullables, List<Example?> nonNullableListOfNullables, Queue<Example> nonNullableQueueOfNonNullables, Queue<Example?> nonNullableQueueOfNullables, Tuple<Example, int> nonNullableRegularTupleWithNonNullable, Tuple<Example?, int> nonNullableRegularTupleWithNullable, Stack<Example> nonNullableStackOfNonNullables, Stack<Example?> nonNullableStackOfNullables)
         {
             _NonNullableArrayOfNonNullables = nonNullableArrayOfNonNullables;
             _NonNullableArrayOfNullables = nonNullableArrayOfNullables;
@@ -1664,6 +1664,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             _NonNullableStackOfNonNullables = nonNullableStackOfNonNullables;
             _NonNullableStackOfNullables = nonNullableStackOfNullables;
             
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public NullableEnabledContext(LazinatorMemory serializedBytes, ILazinator? parent = null)
@@ -1761,10 +1762,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             NullableEnabledContext clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new NullableEnabledContext(LazinatorConstructorEnum.LazinatorConstructor, NonNullableArrayOfNonNullables, NonNullableArrayOfNullables, NonNullableClass, NonNullableDictionaryWithNonNullable, NonNullableDictionaryWithNullable, NonNullableInterface, NonNullableLazinatorListNonNullable, NonNullableLazinatorListNullable, NonNullableListOfNonNullables, NonNullableListOfNullables, NonNullableQueueOfNonNullables, NonNullableQueueOfNullables, NonNullableRegularTupleWithNonNullable, NonNullableRegularTupleWithNullable, NonNullableStackOfNonNullables, NonNullableStackOfNullables)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new NullableEnabledContext(includeChildrenMode, NonNullableArrayOfNonNullables, NonNullableArrayOfNullables, NonNullableClass, NonNullableDictionaryWithNonNullable, NonNullableDictionaryWithNullable, NonNullableInterface, NonNullableLazinatorListNonNullable, NonNullableLazinatorListNullable, NonNullableListOfNonNullables, NonNullableListOfNullables, NonNullableQueueOfNonNullables, NonNullableQueueOfNullables, NonNullableRegularTupleWithNonNullable, NonNullableRegularTupleWithNullable, NonNullableStackOfNonNullables, NonNullableStackOfNullables);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (NullableEnabledContext)AssignCloneProperties(clone, includeChildrenMode)!;
             }

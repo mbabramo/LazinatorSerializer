@@ -78,8 +78,9 @@ namespace LazinatorTests.Examples.Tuples
         
         /* Serialization, deserialization, and object relationships */
         
-        public NestedTuple(LazinatorConstructorEnum constructorEnum)
+        public NestedTuple(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public NestedTuple(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -140,10 +141,7 @@ namespace LazinatorTests.Examples.Tuples
             NestedTuple clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new NestedTuple(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new NestedTuple(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (NestedTuple)AssignCloneProperties(clone, includeChildrenMode);
             }

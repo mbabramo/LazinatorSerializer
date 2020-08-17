@@ -78,8 +78,9 @@ namespace LazinatorTests.Examples.Collections
         
         /* Serialization, deserialization, and object relationships */
         
-        public DotNetQueue_Lazinator(LazinatorConstructorEnum constructorEnum)
+        public DotNetQueue_Lazinator(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public DotNetQueue_Lazinator(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -140,10 +141,7 @@ namespace LazinatorTests.Examples.Collections
             DotNetQueue_Lazinator clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new DotNetQueue_Lazinator(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new DotNetQueue_Lazinator(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (DotNetQueue_Lazinator)AssignCloneProperties(clone, includeChildrenMode);
             }

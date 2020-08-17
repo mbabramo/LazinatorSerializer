@@ -33,7 +33,7 @@ namespace LazinatorCollections
         
         /* Clone overrides */
         
-        public LazinatorSortedLinkedList(LazinatorConstructorEnum constructorEnum) : base(constructorEnum)
+        public LazinatorSortedLinkedList(IncludeChildrenMode originalIncludeChildrenMode) : base(originalIncludeChildrenMode)
         {
         }
         
@@ -46,10 +46,7 @@ namespace LazinatorCollections
             LazinatorSortedLinkedList<T> clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new LazinatorSortedLinkedList<T>(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new LazinatorSortedLinkedList<T>(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (LazinatorSortedLinkedList<T>)AssignCloneProperties(clone, includeChildrenMode);
             }

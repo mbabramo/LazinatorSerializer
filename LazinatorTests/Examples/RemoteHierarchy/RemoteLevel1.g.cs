@@ -103,8 +103,9 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         
         /* Serialization, deserialization, and object relationships */
         
-        public RemoteLevel1(LazinatorConstructorEnum constructorEnum)
+        public RemoteLevel1(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public RemoteLevel1(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -165,10 +166,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             RemoteLevel1 clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new RemoteLevel1(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new RemoteLevel1(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (RemoteLevel1)AssignCloneProperties(clone, includeChildrenMode);
             }

@@ -160,8 +160,9 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Serialization, deserialization, and object relationships */
         
-        public ConcreteGeneric2a(LazinatorConstructorEnum constructorEnum)
+        public ConcreteGeneric2a(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public ConcreteGeneric2a(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -222,10 +223,7 @@ namespace LazinatorTests.Examples.Abstract
             ConcreteGeneric2a clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new ConcreteGeneric2a(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new ConcreteGeneric2a(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (ConcreteGeneric2a)AssignCloneProperties(clone, includeChildrenMode);
             }

@@ -81,8 +81,9 @@ namespace Lazinator.Wrappers
         
         /* Serialization, deserialization, and object relationships */
         
-        public WLongArray(LazinatorConstructorEnum constructorEnum) : this()
+        public WLongArray(IncludeChildrenMode originalIncludeChildrenMode) : this()
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public WLongArray(LazinatorMemory serializedBytes, ILazinator parent = null) : this()
@@ -143,10 +144,7 @@ namespace Lazinator.Wrappers
             WLongArray clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new WLongArray(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new WLongArray(includeChildrenMode);
                 clone = (WLongArray)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

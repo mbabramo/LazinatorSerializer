@@ -101,8 +101,9 @@ namespace LazinatorTests.Examples
         
         /* Serialization, deserialization, and object relationships */
         
-        public ClosedGenericWithoutBase(LazinatorConstructorEnum constructorEnum)
+        public ClosedGenericWithoutBase(IncludeChildrenMode originalIncludeChildrenMode)
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public ClosedGenericWithoutBase(LazinatorMemory serializedBytes, ILazinator parent = null)
@@ -163,10 +164,7 @@ namespace LazinatorTests.Examples
             ClosedGenericWithoutBase clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new ClosedGenericWithoutBase(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new ClosedGenericWithoutBase(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (ClosedGenericWithoutBase)AssignCloneProperties(clone, includeChildrenMode);
             }

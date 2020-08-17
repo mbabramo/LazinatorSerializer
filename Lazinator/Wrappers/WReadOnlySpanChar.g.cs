@@ -65,8 +65,9 @@ namespace Lazinator.Wrappers
         
         /* Serialization, deserialization, and object relationships */
         
-        public WReadOnlySpanChar(LazinatorConstructorEnum constructorEnum) : this()
+        public WReadOnlySpanChar(IncludeChildrenMode originalIncludeChildrenMode) : this()
         {
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
         public WReadOnlySpanChar(LazinatorMemory serializedBytes, ILazinator parent = null) : this()
@@ -127,10 +128,7 @@ namespace Lazinator.Wrappers
             WReadOnlySpanChar clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new WReadOnlySpanChar(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new WReadOnlySpanChar(includeChildrenMode);
                 clone = (WReadOnlySpanChar)AssignCloneProperties(clone, includeChildrenMode);
             }
             else

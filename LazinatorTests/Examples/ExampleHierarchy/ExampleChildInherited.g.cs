@@ -98,7 +98,7 @@ namespace LazinatorTests.Examples
         
         /* Clone overrides */
         
-        public ExampleChildInherited(LazinatorConstructorEnum constructorEnum) : base(constructorEnum)
+        public ExampleChildInherited(IncludeChildrenMode originalIncludeChildrenMode) : base(originalIncludeChildrenMode)
         {
         }
         
@@ -111,10 +111,7 @@ namespace LazinatorTests.Examples
             ExampleChildInherited clone;
             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
             {
-                clone = new ExampleChildInherited(LazinatorConstructorEnum.LazinatorConstructor)
-                {
-                    OriginalIncludeChildrenMode = includeChildrenMode
-                };
+                clone = new ExampleChildInherited(includeChildrenMode);
                 clone.LazinatorObjectVersion = LazinatorObjectVersion;
                 clone = (ExampleChildInherited)AssignCloneProperties(clone, includeChildrenMode);
             }
