@@ -1325,7 +1325,8 @@ namespace Lazinator.CodeDescription
                 {IIF(BackingAccessFieldIncluded, $@"{BackingFieldAccessedString} = true;
                 ")}{RepeatedCodeExecution}
             }}
-        }}{IIF(BackingAccessFieldIncluded, $@"{ContainingObjectDescription.ProtectedIfApplicable}bool {BackingFieldAccessedString};
+        }}
+        {IIF(BackingAccessFieldIncluded, $@"{ContainingObjectDescription.ProtectedIfApplicable}bool {BackingFieldAccessedString};
 ")}");
         }
 
