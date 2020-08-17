@@ -369,18 +369,21 @@ namespace Lazinator.CodeDescription
         {
             string versionNumberVariable = readVersion ? "serializedVersionNumber" : "LazinatorObjectVersion";
             List<string> conditions = new List<string>();
-            if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable || PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface || PropertyType == LazinatorPropertyType.OpenGenericParameter)
+            if (BackingAccessFieldIncluded)
             {
-                conditions.Add("includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren");
-                if (!IncludableWhenExcludingMostChildren)
-                    conditions.Add("includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren");
-                if (ExcludableWhenIncludingMostChildren)
-                    conditions.Add("includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren");
+                if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable || PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface || PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                {
+                    conditions.Add("includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren");
+                    if (!IncludableWhenExcludingMostChildren)
+                        conditions.Add("includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren");
+                    if (ExcludableWhenIncludingMostChildren)
+                        conditions.Add("includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren");
+                }
+                if (IntroducedWithVersion != null)
+                    conditions.Add($"{versionNumberVariable} >= {IntroducedWithVersion}");
+                if (EliminatedWithVersion != null)
+                    conditions.Add($"{versionNumberVariable} < {EliminatedWithVersion}");
             }
-            if (IntroducedWithVersion != null)
-                conditions.Add($"{versionNumberVariable} >= {IntroducedWithVersion}");
-            if (EliminatedWithVersion != null)
-                conditions.Add($"{versionNumberVariable} < {EliminatedWithVersion}");
             if (!conditions.Any())
                 return new ConditionsCodeGenerator(new List<ConditionCodeGenerator>(), true);
             return new ConditionsCodeGenerator(conditions.Select(x => new ConditionCodeGenerator(x)).ToList(), true);
