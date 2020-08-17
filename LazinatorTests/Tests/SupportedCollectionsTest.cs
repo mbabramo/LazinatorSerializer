@@ -1144,7 +1144,7 @@ namespace LazinatorTests.Tests
             };
             var clone = original.CloneLazinatorTyped();
             clone.MyRecordLikeClass.Should().BeNull();
-            clone.MyRecordLikeType.Age.Should().Be(0); // default value in struct
+            clone.MyRecordLikeStruct.Age.Should().Be(0); // default value in struct
         }
 
         [Fact]
@@ -1153,7 +1153,7 @@ namespace LazinatorTests.Tests
             RecordLikeContainer original = new RecordLikeContainer()
             {
                 MyRecordLikeClass = new RecordLikeClass(23, new Example() { MyChar = 'q' }),
-                MyRecordLikeType = new RecordLikeStruct(12, "Sam")
+                MyRecordLikeStruct = new RecordLikeStruct(12, "Sam")
             };
             LazinatorMemory serialized = original.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
             RecordLikeContainer s2 = new RecordLikeContainer()
@@ -1162,8 +1162,8 @@ namespace LazinatorTests.Tests
             s2.DeserializeLazinator(serialized);
             s2.MyRecordLikeClass.Age.Should().Be(23);
             s2.MyRecordLikeClass.Example.MyChar.Should().Be('q');
-            s2.MyRecordLikeType.Age.Should().Be(12);
-            s2.MyRecordLikeType.Name.Should().Be("Sam");
+            s2.MyRecordLikeStruct.Age.Should().Be(12);
+            s2.MyRecordLikeStruct.Name.Should().Be("Sam");
             s2.DescendantIsDirty.Should().BeFalse(); // no automatic dirtiness tracking
             s2.IsDirty.Should().BeTrue(); // since no automatic dirtiness tracking, assumed dirty on first access
         }
