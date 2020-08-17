@@ -99,7 +99,7 @@ namespace Lazinator.CodeDescription
         internal bool NonNullableThatCanBeUninitialized => !Nullable && !NonNullableThatRequiresInitialization;
         internal bool UseNullableBackingFieldsForNonNullableReferenceTypes => false; // if TRUE, then we use a null backing field and add checks for PossibleUnsetException. If FALSE, then we don't do that, and instead we set the backing field in every constructor.
         internal bool AddQuestionMarkInBackingFieldForNonNullable => NullableModeEnabled && UseNullableBackingFieldsForNonNullableReferenceTypes && NonNullableThatRequiresInitialization;
-        internal bool AccessedFieldOmitted => NullableModeEnabled && !UseNullableBackingFieldsForNonNullableReferenceTypes && NonNullableThatRequiresInitialization;
+        internal bool IsNonNullableWithNonNullableBackingField => NullableModeEnabled && !UseNullableBackingFieldsForNonNullableReferenceTypes && NonNullableThatRequiresInitialization;
         internal bool NullForgivenessInsteadOfPossibleUnsetException => NullableModeEnabled && !UseNullableBackingFieldsForNonNullableReferenceTypes && NonNullableThatRequiresInitialization;
         internal string BackingFieldStringOrContainedSpan(string propertyName) => (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan) ?
                     GetReadOnlySpanBackingFieldCast(propertyName) : (propertyName ?? BackingFieldString);
@@ -152,7 +152,7 @@ namespace Lazinator.CodeDescription
 
         internal string BackingFieldString => $"_{PropertyName}";
 
-        internal bool BackingAccessFieldIncluded => PlaceholderMemoryWriteMethod == null && !AccessedFieldOmitted;
+        internal bool BackingAccessFieldIncluded => PlaceholderMemoryWriteMethod == null && !IsNonNullableWithNonNullableBackingField;
         internal string BackingAccessFieldName => $"_{PropertyName}_Accessed";
         internal string BackingFieldAccessedString => BackingAccessFieldIncluded ? BackingAccessFieldName : "true";
         internal string BackingFieldNotAccessedString => BackingAccessFieldIncluded ? $"!{BackingAccessFieldName}" : "false";
@@ -538,7 +538,7 @@ namespace Lazinator.CodeDescription
                 else if (IsDefinitelyStruct && PropertyType != LazinatorPropertyType.LazinatorStructNullable)
                     nonNullCheck = "true";
                 else
-                    nonNullCheck = ConditionsCodeGenerator.AndCombine($"_{propertyName}_Accessed", $"_{propertyName} != null");
+                    nonNullCheck = ConditionsCodeGenerator.AndCombine($"{BackingFieldAccessedString}", IsNonNullableWithNonNullableBackingField ? "true" : $"_{propertyName} != null");
             }
             else
             {

@@ -846,22 +846,12 @@ namespace Lazinator.CodeDescription
                     foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator))
                     {
                         string propertyName = property.PropertyName;
-                        string ifThenStatement = property.GetNullCheckPlusPrecedingConditionIfThen(
-                                ConditionsCodeGenerator.AndCombine(
-                                    "enumerateNulls", 
-                                    ConditionsCodeGenerator.OrCombine(
-                                        "!exploreOnlyDeserializedChildren",
-                                        property.BackingFieldAccessedString))
-                                , propertyName, 
-                                // CONSEQUENT
-                                $@"yield return (""{propertyName}"", default);", 
-                                // ELSE CONSEQUENT -- another conditional
-                                new ConditionalCodeGenerator(
+                        string elseConsequent = new ConditionalCodeGenerator(
                                     ConditionsCodeGenerator.OrCombine(
                                         ConditionsCodeGenerator.AndCombine(
-                                            $"!exploreOnlyDeserializedChildren",  
-                                            property.GetNonNullCheck(false)), 
-                                        property.GetNonNullCheck(true)), 
+                                            $"!exploreOnlyDeserializedChildren",
+                                            property.GetNonNullCheck(false)),
+                                        property.GetNonNullCheck(true)),
                                    $@"bool isMatch_{propertyName} = matchCriterion == null || matchCriterion({propertyName});
                                     bool shouldExplore_{propertyName} = exploreCriterion == null || exploreCriterion({propertyName});
                                     if (isMatch_{propertyName})
@@ -874,7 +864,18 @@ namespace Lazinator.CodeDescription
                                         {{
                                             yield return (""{propertyName}"" + ""."" + toYield.propertyName, toYield.descendant);
                                         }}
-                                    }}").ToString());
+                                    }}").ToString();
+                        string ifThenStatement = property.GetNullCheckPlusPrecedingConditionIfThen(
+                                ConditionsCodeGenerator.AndCombine(
+                                    "enumerateNulls", 
+                                    ConditionsCodeGenerator.OrCombine(
+                                        "!exploreOnlyDeserializedChildren",
+                                        property.BackingFieldAccessedString))
+                                , propertyName, 
+                                // CONSEQUENT
+                                $@"yield return (""{propertyName}"", default);", 
+                                // ELSE CONSEQUENT -- another conditional
+                                elseConsequent);
                         sb.AppendLine(ifThenStatement);
                     }
                     sb.Append($@"yield break;
