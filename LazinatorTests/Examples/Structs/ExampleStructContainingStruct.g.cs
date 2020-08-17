@@ -106,6 +106,7 @@ namespace LazinatorTests.Examples
                         return toReturn;
                     }
                 }
+                
                 if (_MyExampleNullableStruct == null)
                 {
                     return null;
@@ -175,6 +176,7 @@ namespace LazinatorTests.Examples
                         return toReturn;
                     }
                 }
+                
                 var cleanCopy = _MyExampleStructContainingClasses;
                 cleanCopy.IsDirty = false;
                 cleanCopy.DescendantIsDirty = false;

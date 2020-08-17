@@ -51,6 +51,7 @@ namespace LazinatorCollections.ByteSpan
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ReadOnly_ByteIndex, _ReadOnly_ByteLength, false, false, null);
                     return childData.Span;
                 }
+                
                 return _ReadOnly.Span;
             }
             [DebuggerStepThrough]
@@ -59,6 +60,7 @@ namespace LazinatorCollections.ByteSpan
                 IsDirty = true;
                 _ReadOnly = new ReadOnlyMemory<byte>((value).ToArray());
                 _ReadOnly_Accessed = true;
+                
             }
         }
         protected bool _ReadOnly_Accessed;

@@ -49,6 +49,7 @@ namespace Lazinator.Wrappers
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Value_ByteIndex, _Value_ByteLength, true, false, null);
                     return MemoryMarshal.Cast<byte, char>(childData.Span);
                 }
+                
                 return MemoryMarshal.Cast<byte, char>(_Value.Span);
             }
             [DebuggerStepThrough]
@@ -57,6 +58,7 @@ namespace Lazinator.Wrappers
                 IsDirty = true;
                 _Value = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<char, byte>(value).ToArray());
                 _Value_Accessed = true;
+                
             }
         }
         bool _Value_Accessed;

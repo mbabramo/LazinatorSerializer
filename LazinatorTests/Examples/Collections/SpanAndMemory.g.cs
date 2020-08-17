@@ -371,6 +371,7 @@ namespace LazinatorTests.Examples.Collections
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanByte_ByteIndex, _MyReadOnlySpanByte_ByteLength, false, false, null);
                     return childData.Span;
                 }
+                
                 return _MyReadOnlySpanByte.Span;
             }
             set
@@ -378,6 +379,7 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 _MyReadOnlySpanByte = new ReadOnlyMemory<byte>((value).ToArray());
                 _MyReadOnlySpanByte_Accessed = true;
+                
             }
         }
         protected bool _MyReadOnlySpanByte_Accessed;
@@ -392,6 +394,7 @@ namespace LazinatorTests.Examples.Collections
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanChar_ByteIndex, _MyReadOnlySpanChar_ByteLength, false, false, null);
                     return MemoryMarshal.Cast<byte, char>(childData.Span);
                 }
+                
                 return MemoryMarshal.Cast<byte, char>(_MyReadOnlySpanChar.Span);
             }
             set
@@ -399,6 +402,7 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 _MyReadOnlySpanChar = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<char, byte>(value).ToArray());
                 _MyReadOnlySpanChar_Accessed = true;
+                
             }
         }
         protected bool _MyReadOnlySpanChar_Accessed;
@@ -413,6 +417,7 @@ namespace LazinatorTests.Examples.Collections
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanLong_ByteIndex, _MyReadOnlySpanLong_ByteLength, false, false, null);
                     return MemoryMarshal.Cast<byte, long>(childData.Span);
                 }
+                
                 return MemoryMarshal.Cast<byte, long>(_MyReadOnlySpanLong.Span);
             }
             set
@@ -420,6 +425,7 @@ namespace LazinatorTests.Examples.Collections
                 IsDirty = true;
                 _MyReadOnlySpanLong = new ReadOnlyMemory<byte>(MemoryMarshal.Cast<long, byte>(value).ToArray());
                 _MyReadOnlySpanLong_Accessed = true;
+                
             }
         }
         protected bool _MyReadOnlySpanLong_Accessed;

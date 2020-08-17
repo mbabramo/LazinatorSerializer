@@ -49,6 +49,7 @@ namespace LazinatorCollections.OffsetList
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ReadOnlyBytes_ByteIndex, _ReadOnlyBytes_ByteLength, false, false, null);
                     return childData.Span;
                 }
+                
                 return _ReadOnlyBytes.Span;
             }
             [DebuggerStepThrough]
@@ -57,6 +58,7 @@ namespace LazinatorCollections.OffsetList
                 IsDirty = true;
                 _ReadOnlyBytes = new ReadOnlyMemory<byte>((value).ToArray());
                 _ReadOnlyBytes_Accessed = true;
+                
             }
         }
         protected bool _ReadOnlyBytes_Accessed;

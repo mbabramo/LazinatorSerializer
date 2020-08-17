@@ -82,6 +82,7 @@ namespace LazinatorTests.Examples
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ByteSpan_ByteIndex, _ByteSpan_ByteLength, false, false, null);
                     return childData.Span;
                 }
+                
                 return _ByteSpan.Span;
             }
             set
@@ -89,6 +90,7 @@ namespace LazinatorTests.Examples
                 IsDirty = true;
                 _ByteSpan = new ReadOnlyMemory<byte>((value).ToArray());
                 _ByteSpan_Accessed = true;
+                
             }
         }
         protected bool _ByteSpan_Accessed;

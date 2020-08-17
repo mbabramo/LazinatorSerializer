@@ -165,6 +165,7 @@ namespace LazinatorTests.Examples.Structs
                         return toReturn;
                     }
                 }
+                
                 var cleanCopy = _WrappedBool;
                 cleanCopy.IsDirty = false;
                 cleanCopy.DescendantIsDirty = false;
@@ -235,6 +236,7 @@ namespace LazinatorTests.Examples.Structs
                         return toReturn;
                     }
                 }
+                
                 var cleanCopy = _WrappedByte;
                 cleanCopy.IsDirty = false;
                 cleanCopy.DescendantIsDirty = false;
@@ -305,6 +307,7 @@ namespace LazinatorTests.Examples.Structs
                         return toReturn;
                     }
                 }
+                
                 var cleanCopy = _WrappedChar;
                 cleanCopy.IsDirty = false;
                 cleanCopy.DescendantIsDirty = false;
@@ -375,6 +378,7 @@ namespace LazinatorTests.Examples.Structs
                         return toReturn;
                     }
                 }
+                
                 var cleanCopy = _WrappedNullableBool;
                 cleanCopy.IsDirty = false;
                 cleanCopy.DescendantIsDirty = false;
@@ -445,6 +449,7 @@ namespace LazinatorTests.Examples.Structs
                         return toReturn;
                     }
                 }
+                
                 var cleanCopy = _WrappedNullableByte;
                 cleanCopy.IsDirty = false;
                 cleanCopy.DescendantIsDirty = false;
@@ -515,6 +520,7 @@ namespace LazinatorTests.Examples.Structs
                         return toReturn;
                     }
                 }
+                
                 var cleanCopy = _WrappedNullableChar;
                 cleanCopy.IsDirty = false;
                 cleanCopy.DescendantIsDirty = false;
@@ -585,6 +591,7 @@ namespace LazinatorTests.Examples.Structs
                         return toReturn;
                     }
                 }
+                
                 var cleanCopy = _WrappedNullableSByte;
                 cleanCopy.IsDirty = false;
                 cleanCopy.DescendantIsDirty = false;
@@ -655,6 +662,7 @@ namespace LazinatorTests.Examples.Structs
                         return toReturn;
                     }
                 }
+                
                 var cleanCopy = _WrappedSByte;
                 cleanCopy.IsDirty = false;
                 cleanCopy.DescendantIsDirty = false;
