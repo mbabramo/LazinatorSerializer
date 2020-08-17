@@ -348,12 +348,7 @@ namespace Lazinator.CodeDescription
             sb.AppendLine($@"public {NameIncludingGenerics} FromRefStruct()
                 {{
                     UpdateStoredBuffer();
-                    var clone = new {NameIncludingGenerics}({IIF(!IsStruct, "LazinatorConstructorEnum.LazinatorConstructor")})
-                    {{
-                        OriginalIncludeChildrenMode = OriginalIncludeChildrenMode,
-                        LazinatorMemoryStorage = LazinatorMemoryStorage
-                    }};
-                    clone.Deserialize();
+                    var clone = new {NameIncludingGenerics}(LazinatorMemoryStorage);
                     return clone;
                 }}
             ");
@@ -653,10 +648,7 @@ namespace Lazinator.CodeDescription
                             {NameIncludingGenerics} clone;
                             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
                             {{
-                                clone = new {NameIncludingGenerics}(LazinatorConstructorEnum.LazinatorConstructor{parametersToFirstConstructor})
-                                {{
-                                    OriginalIncludeChildrenMode = includeChildrenMode
-                                }};{IIF(Version != -1,$@"
+                                clone = new {NameIncludingGenerics}(includeChildrenMode{parametersToFirstConstructor});{IIF(Version != -1,$@"
                                 clone.LazinatorObjectVersion = LazinatorObjectVersion;")}
                                 clone = ({NameIncludingGenerics})AssignCloneProperties(clone, includeChildrenMode){IIF(NullableModeEnabled, "!")};
                             }}
@@ -1368,8 +1360,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 
         private string GetConstructors()
         {
-            // We have a special constructor with the LazinatorConstructorEnum for all classes. Our factory will call this constructor, so as not to trigger the default constructor. 
-            // This constructor accepts as parameters all the properties whose backing fields must be initialized (because they are non-nullable reference types)
+            // Our constructor accepts as parameters the original include children mode plus all the properties whose backing fields must be initialized (because they are non-nullable reference types)
             bool inheritFromBaseType = ILazinatorTypeSymbol.BaseType != null && !ILazinatorTypeSymbol.BaseType.IsAbstract && IsDerivedFromNonAbstractLazinator;
             var allPropertiesRequiringInitialization = ExclusiveInterface.PropertiesIncludingInherited.Where(x => x.NonNullableThatRequiresInitialization).ToList();
 
@@ -1383,15 +1374,17 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 var initializationString = String.Join("", allPropertiesRequiringInitialization.Select(x => x.AssignParameterToBackingField));
                 lazinateInSecondConstructor = $@"LazinatorMemory childData;
                             " + String.Join("", allPropertiesRequiringInitialization.Select(x => x.GetLazinateContentsForConstructor()));
-                firstConstructor = $@"public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}(LazinatorConstructorEnum constructorEnum, {parametersString}){IIF(inheritFromBaseType, " : base(constructorEnum, {parametersForBaseClassString})")}{IIF(IsStruct, " : this()")}
+                firstConstructor = $@"public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}(IncludeChildrenMode originalIncludeChildrenMode, {parametersString}){IIF(inheritFromBaseType, " : base(originalIncludeChildrenMode, {parametersForBaseClassString})")}{IIF(IsStruct, " : this()")}
                         {{
-                            {initializationString}
+                            {initializationString}{IIF(!inheritFromBaseType, $@"
+                            OriginalIncludeChildrenMode = originalIncludeChildrenMode;")}
                         }}";
             }
             else
             {
-                firstConstructor = firstConstructor = $@"public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}(LazinatorConstructorEnum constructorEnum){IIF(inheritFromBaseType, " : base(constructorEnum)")}{IIF(IsStruct, " : this()")}
-                        {{
+                firstConstructor = firstConstructor = $@"public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}(IncludeChildrenMode originalIncludeChildrenMode){IIF(inheritFromBaseType, " : base(originalIncludeChildrenMode)")}{IIF(IsStruct, " : this()")}
+                        {{{IIF(!inheritFromBaseType, $@"
+                            OriginalIncludeChildrenMode = originalIncludeChildrenMode;")}
                         }}";
             }
             string constructors = 

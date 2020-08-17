@@ -119,7 +119,7 @@ namespace Lazinator.CodeDescription
         internal bool IsNotPrimitiveOrOpenGeneric => PropertyType != LazinatorPropertyType.OpenGenericParameter && PropertyType != LazinatorPropertyType.PrimitiveType && PropertyType != LazinatorPropertyType.PrimitiveTypeNullable;
         internal bool IsNonLazinatorType => PropertyType == LazinatorPropertyType.NonLazinator || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
         internal bool IsNonLazinatorTypeWithoutInterchange => PropertyType == LazinatorPropertyType.NonLazinator && !HasInterchangeType;
-        internal string ConstructorInitialization => IIF(PropertyType != LazinatorPropertyType.LazinatorStruct && PropertyType != LazinatorPropertyType.LazinatorStructNullable && !NonSerializedIsStruct, "LazinatorConstructorEnum.LazinatorConstructor");
+        internal string ConstructorInitialization => IIF(PropertyType != LazinatorPropertyType.LazinatorStruct && PropertyType != LazinatorPropertyType.LazinatorStructNullable && !NonSerializedIsStruct, "IncludeChildrenMode.IncludeAllChildren");
 
         /* Names */
         private bool UseFullyQualifiedNames => (Config?.UseFullyQualifiedNames ?? false) || HasFullyQualifyAttribute || Symbol.ContainingType != null;
@@ -2520,12 +2520,10 @@ namespace Lazinator.CodeDescription
                 return;
             alreadyGenerated.Add(AppropriatelyQualifiedTypeNameEncodable);
 
-            // Note: The interchange type must include a parameterless constructor. We can't use the LazinatorConstructorEnum approach here, because we can't determine whether the interchange type, which we know only by string, is a struct (in which case there would be no such constructor).
             sb.Append($@"
                    private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)
                         {{
-                            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || IsMemoryOrSpan || IsSupportedTupleType, "storage.Length == 0", $"return {DefaultExpression};")}{InterchangeTypeName} interchange = new {InterchangeTypeNameWithoutNullabilityIndicator}();
-                            interchange.DeserializeLazinator(storage);
+                            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || IsMemoryOrSpan || IsSupportedTupleType, "storage.Length == 0", $"return {DefaultExpression};")}{InterchangeTypeName} interchange = new {InterchangeTypeNameWithoutNullabilityIndicator}(storage);
                             return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}(false);
                         }}
 
