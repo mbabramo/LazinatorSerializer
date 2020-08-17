@@ -220,7 +220,6 @@ public class MyOtherClass
             // NOTE: Debugger seems to be running the test before allowing debugging of the test, so it's producing code prematurely. Thus, 
             // uncommenting the following will stop the run, so that we only run the one file that we want to focus on above.
             //throw new Exception(""); 
-            await CompleteGenerateCode(typeof(NullableEnabledContext), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws); // DEBUG -- move lower
             await CompleteGenerateCode(typeof(Example), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(ContainerForExampleWithDefault), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(ExampleInterfaceContainer), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
@@ -234,6 +233,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(ContainerForExampleStructWithoutClass), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(ExampleStructContainingStruct), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(ExampleStructContainingStructContainer), "LazinatorTests", "/Examples/", "Structs/", ws);
+            await CompleteGenerateCode(typeof(NullableEnabledContext), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(Simplifiable), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(RemoteHierarchy), "LazinatorTests", "/Examples/", "RemoteHierarchy/", ws);
             await CompleteGenerateCode(typeof(RemoteLevel1), "LazinatorTests", "/Examples/", "RemoteHierarchy/", ws);

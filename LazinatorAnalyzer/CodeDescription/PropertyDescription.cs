@@ -129,7 +129,7 @@ namespace Lazinator.CodeDescription
         private string FullyQualifiedNameWithoutNullableIndicator => WithoutNullableIndicator(FullyQualifiedTypeName);
         internal string AppropriatelyQualifiedTypeName => UseFullyQualifiedNames ? FullyQualifiedTypeName : ShortTypeName;
 
-        public string DefaultExpression => PropertyType switch { LazinatorPropertyType.LazinatorStructNullable => "null", LazinatorPropertyType.LazinatorClassOrInterface => "null", LazinatorPropertyType.LazinatorNonnullableClassOrInterface => "null" /* won't actually use this -- DEBUG change to error*/, _ => $"default({AppropriatelyQualifiedTypeName})" };
+        public string DefaultExpression => PropertyType switch { LazinatorPropertyType.LazinatorStructNullable => "null", LazinatorPropertyType.LazinatorClassOrInterface => "null", LazinatorPropertyType.LazinatorNonnullableClassOrInterface => throw new NotImplementedException(), _ => $"default({AppropriatelyQualifiedTypeName})" };
         private string AppropriatelyQualifiedTypeNameWithoutNullableIndicator => UseFullyQualifiedNames ? FullyQualifiedNameWithoutNullableIndicator : ShortTypeNameWithoutNullableIndicator;
 
         private string AppropriatelyQualifiedTypeNameWithoutNullableIndicatorIfNonnullableReferenceType => PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface ? AppropriatelyQualifiedTypeNameWithoutNullableIndicator : AppropriatelyQualifiedTypeName;
@@ -790,7 +790,7 @@ namespace Lazinator.CodeDescription
             {
                 LazinatorSupportedTupleType.KeyValuePair => SymbolEndsWithQuestionMark,
                 LazinatorSupportedTupleType.ValueTuple => SymbolEndsWithQuestionMark,
-                LazinatorSupportedTupleType.RecordLikeType => SymbolEndsWithQuestionMark, // DEBUG -- must differentiate class and struct
+                LazinatorSupportedTupleType.RecordLikeType => SymbolEndsWithQuestionMark, // DEBUG -- must differentiate class and struct? try using record like class and struct within non-nullable context
                 LazinatorSupportedTupleType.Tuple => NullableModeEnabled ? SymbolEndsWithQuestionMark : true,
                 _ => throw new NotImplementedException(),
             };
