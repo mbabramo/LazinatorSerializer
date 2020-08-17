@@ -221,9 +221,16 @@ namespace LazinatorCodeGen.Roslyn
             return attribute.Choice + " ";
         }
 
+        static int DEBUG = 0;
         private void RecordInformationAboutTypeAndRelatedTypes(ITypeSymbol type)
         {
-            foreach (ITypeSymbol t in GetTypeAndRelatedTypes(type))
+            if (DEBUG == 129 || DEBUG == 131)
+            {
+                var DEBUG2 = 0;
+            }
+            System.Diagnostics.Debug.WriteLine($"{type} {DEBUG++}");
+            var typesAndRelatedTypes = GetTypeAndRelatedTypes(type).ToList();
+            foreach (ITypeSymbol t in typesAndRelatedTypes)
                 RecordInformationAboutType(t);
         }
         

@@ -220,6 +220,7 @@ public class MyOtherClass
             // NOTE: Debugger seems to be running the test before allowing debugging of the test, so it's producing code prematurely. Thus, 
             // uncommenting the following will stop the run, so that we only run the one file that we want to focus on above.
             //throw new Exception(""); 
+            await CompleteGenerateCode(typeof(NullableEnabledContext), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws); // DEBUG
             await CompleteGenerateCode(typeof(Example), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(ContainerForExampleWithDefault), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(ExampleInterfaceContainer), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);

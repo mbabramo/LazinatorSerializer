@@ -483,7 +483,7 @@ namespace Lazinator.CodeDescription
 
         private void SetNonserializedTypeNameAndPropertyType(INamedTypeSymbol t)
         {
-            Nullable = t.TypeKind == TypeKind.Class || IsNullableGeneric(t);
+            Nullable = NullableModeEnabled ? SymbolEndsWithQuestionMark : t.TypeKind == TypeKind.Class || IsNullableGeneric(t);
             PropertyType = LazinatorPropertyType.NonLazinator;
             NonSerializedIsStruct = t.IsValueType;
             InterchangeTypeName = Config?.GetInterchangeConverterTypeName(t);
@@ -717,6 +717,10 @@ namespace Lazinator.CodeDescription
 
         private bool HandleRecordLikeType(INamedTypeSymbol t)
         {
+            if (LazinatorCompilation.TypeSymbolToString(t).Contains("RecordLikeClass"))
+            {
+                var DEBUG = 0;
+            }
             // We look for a record-like type only after we have determined that the type does not implement ILazinator and we don't have the other supported tuple types (e.g., ValueTuples, KeyValuePair). We need to make sure that for each parameter in the constructor with the most parameters, there is a unique property with the same name (case insensitive as to first letter). If so, we assume that this property corresponds to the parameter, though there is no inherent guarantee that this is true. 
             var recordLikeTypes = ContainingObjectDescription.Compilation.RecordLikeTypes;
             if (!recordLikeTypes.ContainsKey(LazinatorCompilation.TypeSymbolToString(t)) || (Config?.IgnoreRecordLikeTypes.Any(x => x.ToUpper() == (UseFullyQualifiedNames ? t.GetFullyQualifiedNameWithoutGlobal().ToUpper() : t.GetMinimallyQualifiedName())) ?? false))

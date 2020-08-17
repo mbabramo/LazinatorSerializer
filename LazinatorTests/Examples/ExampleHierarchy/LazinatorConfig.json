@@ -1,0 +1,24 @@
+﻿{
+  "GeneratedCodeFileExtension": ".g.cs",
+  "DirectConverters": {
+    "NonLazinatorClass": "NonLazinatorDirectConverter",
+    "NonLazinatorStruct": "NonLazinatorDirectConverter"
+  },
+  "InterchangeConverters": {
+    "LazinatorTests.Examples.NonLazinatorInterchangeableClass": "NonLazinatorInterchangeClass"
+  },
+  "IgnoreRecordLikeTypes": [
+    "NonLazinatorStruct"
+  ],
+  "IncludeRecordLikeTypes": [
+    "RecordLikeClass"
+  ],
+  "DefaultAllowRecordLikeClasses": false,
+  "DefaultAllowRecordLikeRegularStructs": true,
+  "DefaultAllowRecordLikeReadOnlyStructs": true,
+  "IncludeTracingCode": false,
+  "HideBackingFields": false,
+  "HideMainProperties": true,
+  "HideILazinatorProperties": false,
+  "StepThroughProperties": false
+}
