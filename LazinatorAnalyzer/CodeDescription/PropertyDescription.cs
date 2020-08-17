@@ -2365,22 +2365,22 @@ namespace Lazinator.CodeDescription
 
             if (SupportedTupleType == LazinatorSupportedTupleType.KeyValuePair)
             {
-                sb.Append(InnerProperties[0].GetSupportedTupleWriteCommand("Key", SupportedTupleType.Value, Nullable));
+                sb.Append(InnerProperties[0].GetSupportedTupleWriteCommand("Key", SupportedTupleType.Value, Nullable, Symbol.IsValueType));
                 sb.AppendLine();
-                sb.Append(InnerProperties[1].GetSupportedTupleWriteCommand("Value", SupportedTupleType.Value, Nullable));
+                sb.Append(InnerProperties[1].GetSupportedTupleWriteCommand("Value", SupportedTupleType.Value, Nullable, Symbol.IsValueType));
                 sb.AppendLine();
             }
             else if (SupportedTupleType == LazinatorSupportedTupleType.RecordLikeType)
             {
                 for (int i = 0; i < InnerProperties.Count; i++)
                 {
-                    sb.Append(InnerProperties[i].GetSupportedTupleWriteCommand(InnerProperties[i].PropertyName, SupportedTupleType.Value, Nullable));
+                    sb.Append(InnerProperties[i].GetSupportedTupleWriteCommand(InnerProperties[i].PropertyName, SupportedTupleType.Value, Nullable, Symbol.IsValueType));
                     sb.AppendLine();
                 }
             }
             else for (int i = 0; i < InnerProperties.Count; i++)
                 {
-                    sb.Append(InnerProperties[i].GetSupportedTupleWriteCommand("Item" + (i + 1), SupportedTupleType.Value, Nullable));
+                    sb.Append(InnerProperties[i].GetSupportedTupleWriteCommand("Item" + (i + 1), SupportedTupleType.Value, Nullable, Symbol.IsValueType));
                     sb.AppendLine();
                 }
 
@@ -2442,14 +2442,18 @@ namespace Lazinator.CodeDescription
             }
         }
 
-        private string GetSupportedTupleWriteCommand(string itemName, LazinatorSupportedTupleType outerTupleType, bool outerTypeIsNullable)
+        private string GetSupportedTupleWriteCommand(string itemName, LazinatorSupportedTupleType outerTupleType, bool outerTypeIsNullable, bool outerTypeIsValueType)
         {
             if (AppropriatelyQualifiedTypeName == "RecordLikeStruct_C63")
             {
                 var DEBUG = 0;
             }
+            if (outerTupleType == LazinatorSupportedTupleType.RecordLikeType)
+            {
+                var DEBUG = 0;
+            }
             string itemToConvertItemName =
-                $"itemToConvert{IIF((outerTupleType == LazinatorSupportedTupleType.ValueTuple || outerTupleType == LazinatorSupportedTupleType.KeyValuePair) && outerTypeIsNullable, ".Value")}.{itemName}";
+                $"itemToConvert{IIF((outerTupleType == LazinatorSupportedTupleType.ValueTuple || outerTupleType == LazinatorSupportedTupleType.KeyValuePair || (outerTupleType == LazinatorSupportedTupleType.RecordLikeType && outerTypeIsNullable && outerTypeIsValueType)) && outerTypeIsNullable, ".Value")}.{itemName}";
             if (IsPrimitive)
                 return ($@"
                         {WriteMethodName}(ref writer, {EnumEquivalentCastToEquivalentType}{itemToConvertItemName});");
