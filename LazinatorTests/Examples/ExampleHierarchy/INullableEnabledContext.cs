@@ -58,5 +58,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         int? MyNullableInt { get; set; }
         ExampleStructWithoutClass NonNullableStruct { get; set; }
         ExampleStructWithoutClass? NullableStruct { get; set; }
+        RecordLikeStruct NonNullableRecordLikeStruct { get; set; }
+        RecordLikeStruct? NullableRecordLikeStruct { get; set; }
+        RecordLikeClass NonNullableRecordLikeClass { get; set; }
+        RecordLikeClass NullableRecordLikeClass { get; set; }
     }
 }
