@@ -650,14 +650,14 @@ namespace LazinatorTests.Examples.Tuples
                                                         EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, itemToConvert.Value.Item2);
                                                         /*Location7896*/}
                                                         /*Location7897*/
-                                                        private static (int a, string b)? CloneOrChange__Pint_C32a_c_C32string_C32b_p_n((int a, string b)? itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                                        private static (int a, string b)? CloneOrChange__Pint_C32a_c_C32string_C32b_p_n((int a, string b)? itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                                         {
                                                             if (itemToConvert == null)
                                                             {
                                                                 return default((int a, string b)?);
                                                             }
                                                             
-                                                            return ((int) (itemToConvert?.Item1 ?? default),(string) (itemToConvert?.Item2));
+                                                            return ((int) (itemToConvert?.Item1 ?? default),(string?) (itemToConvert?.Item2));
                                                         }
                                                         /*Location7898*/
                                                         private static Tuple<short, long> ConvertFromBytes_Tuple_Gshort_c_C32long_g(LazinatorMemory storage)

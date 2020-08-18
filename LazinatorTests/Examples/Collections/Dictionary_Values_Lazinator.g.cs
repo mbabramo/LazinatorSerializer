@@ -690,7 +690,7 @@ namespace LazinatorTests.Examples.Collections
                                             }
                                         }
                                         /*Location5756*/
-                                        private static Dictionary<int, ExampleChild> CloneOrChange_Dictionary_Gint_c_C32ExampleChild_g(Dictionary<int, ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                        private static Dictionary<int, ExampleChild> CloneOrChange_Dictionary_Gint_c_C32ExampleChild_g(Dictionary<int, ExampleChild> itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                         {
                                             if (itemToClone == null)
                                             {
@@ -749,9 +749,9 @@ namespace LazinatorTests.Examples.Collections
                                             };
                                             /*Location5763*/}
                                             /*Location5764*/
-                                            private static KeyValuePair<int, ExampleChild> CloneOrChange_KeyValuePair_Gint_c_C32ExampleChild_g(KeyValuePair<int, ExampleChild> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                            private static KeyValuePair<int, ExampleChild> CloneOrChange_KeyValuePair_Gint_c_C32ExampleChild_g(KeyValuePair<int, ExampleChild> itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                             {
-                                                return new KeyValuePair<int, ExampleChild>((int) (itemToConvert.Key),(ExampleChild) (cloneOrChangeFunc((itemToConvert.Value))));
+                                                return new KeyValuePair<int, ExampleChild>((int) (itemToConvert.Key),(ExampleChild?) (cloneOrChangeFunc((itemToConvert.Value))));
                                             }
                                             /*Location5765*/
                                             private static Dictionary<WInt, WInt> ConvertFromBytes_Dictionary_GWInt_c_C32WInt_g(LazinatorMemory storage)
@@ -791,7 +791,7 @@ namespace LazinatorTests.Examples.Collections
                                                 }
                                             }
                                             /*Location5767*/
-                                            private static Dictionary<WInt, WInt> CloneOrChange_Dictionary_GWInt_c_C32WInt_g(Dictionary<WInt, WInt> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                            private static Dictionary<WInt, WInt> CloneOrChange_Dictionary_GWInt_c_C32WInt_g(Dictionary<WInt, WInt> itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                             {
                                                 if (itemToClone == null)
                                                 {
@@ -853,7 +853,7 @@ namespace LazinatorTests.Examples.Collections
                                                 WriteToBinaryWithByteLengthPrefix(ref writer, actionValue);
                                                 /*Location5774*/}
                                                 /*Location5775*/
-                                                private static KeyValuePair<WInt, WInt> CloneOrChange_KeyValuePair_GWInt_c_C32WInt_g(KeyValuePair<WInt, WInt> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                                private static KeyValuePair<WInt, WInt> CloneOrChange_KeyValuePair_GWInt_c_C32WInt_g(KeyValuePair<WInt, WInt> itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                                 {
                                                     return new KeyValuePair<WInt, WInt>((WInt) (cloneOrChangeFunc((itemToConvert.Key))),(WInt) (cloneOrChangeFunc((itemToConvert.Value))));
                                                 }
@@ -895,7 +895,7 @@ namespace LazinatorTests.Examples.Collections
                                                     }
                                                 }
                                                 /*Location5778*/
-                                                private static SortedDictionary<int, ExampleChild> CloneOrChange_SortedDictionary_Gint_c_C32ExampleChild_g(SortedDictionary<int, ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                                private static SortedDictionary<int, ExampleChild> CloneOrChange_SortedDictionary_Gint_c_C32ExampleChild_g(SortedDictionary<int, ExampleChild> itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                                 {
                                                     if (itemToClone == null)
                                                     {
@@ -949,7 +949,7 @@ namespace LazinatorTests.Examples.Collections
                                                     }
                                                 }
                                                 /*Location5781*/
-                                                private static SortedList<int, ExampleChild> CloneOrChange_SortedList_Gint_c_C32ExampleChild_g(SortedList<int, ExampleChild> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                                private static SortedList<int, ExampleChild> CloneOrChange_SortedList_Gint_c_C32ExampleChild_g(SortedList<int, ExampleChild> itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                                 {
                                                     if (itemToClone == null)
                                                     {

@@ -536,7 +536,7 @@ namespace LazinatorTests.Examples.Collections
             }
             /*Location6226*/if ((!exploreOnlyDeserializedChildren && MyListNullableEnabledContext != null) || (_MyListNullableEnabledContext_Accessed && _MyListNullableEnabledContext != null))
             {
-                _MyListNullableEnabledContext = (List<NullableEnabledContext>) CloneOrChange_List_GNullableEnabledContext_g(_MyListNullableEnabledContext, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
+                _MyListNullableEnabledContext = (List<NullableEnabledContext>) CloneOrChange_List_GNullableEnabledContext_g(_MyListNullableEnabledContext, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true)!, true);
             }
             /*Location6227*/if ((!exploreOnlyDeserializedChildren && MySortedSetInt != null) || (_MySortedSetInt_Accessed && _MySortedSetInt != null))
             {
@@ -881,16 +881,10 @@ namespace LazinatorTests.Examples.Collections
                                             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
                                             {
                                                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
-                                                if (lengthCollectionMember == 0)
-                                                {
-                                                    collection.Add(null);
-                                                }
-                                                else
-                                                {
-                                                    LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                                                    var item = DeserializationFactory.Instance.CreateBasedOnType<NullableEnabledContext>(childData);
-                                                    collection.Add(item);
-                                                }
+                                                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
+                                                var item = new NullableEnabledContext();
+                                                item.DeserializeLazinator(childData);
+                                                collection.Add(item);
                                                 bytesSoFar += lengthCollectionMember;
                                             }
                                             
@@ -907,21 +901,12 @@ namespace LazinatorTests.Examples.Collections
                                             int itemToConvertCount = itemToConvert.Count;
                                             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
                                             {
-                                                if (itemToConvert[itemIndex] == null)
-                                                {
-                                                    writer.Write((uint)0);
-                                                }
-                                                else 
-                                                {
-                                                    
-                                                    void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex].SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                                                    WriteToBinaryWithIntLengthPrefix(ref writer, action);
-                                                }
-                                                
+                                                void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex]!.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                                                WriteToBinaryWithIntLengthPrefix(ref writer, action);
                                             }
                                         }
                                         /*Location6297*/
-                                        private static List<NullableEnabledContext> CloneOrChange_List_GNullableEnabledContext_g(List<NullableEnabledContext> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                        private static List<NullableEnabledContext> CloneOrChange_List_GNullableEnabledContext_g(List<NullableEnabledContext> itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                         {
                                             if (itemToClone == null)
                                             {
@@ -937,20 +922,12 @@ namespace LazinatorTests.Examples.Collections
                                                 {
                                                     if (itemToClone[itemIndex] != null)
                                                     {
-                                                        itemToClone[itemIndex] = (NullableEnabledContext) (cloneOrChangeFunc(itemToClone[itemIndex]));
+                                                        itemToClone[itemIndex] = (NullableEnabledContext) (cloneOrChangeFunc(itemToClone[itemIndex])!);
                                                     }
                                                     continue;
                                                 }
-                                                if (itemToClone[itemIndex] == null)
-                                                {
-                                                    collection.Add(null);
-                                                }
-                                                else
-                                                {
-                                                    var itemCopied = (NullableEnabledContext) (cloneOrChangeFunc(itemToClone[itemIndex]));
-                                                    collection.Add(itemCopied);
-                                                }
-                                                
+                                                var itemCopied = (NullableEnabledContext) (cloneOrChangeFunc(itemToClone[itemIndex])!);
+                                                collection.Add(itemCopied);
                                             }
                                             return collection;
                                         }

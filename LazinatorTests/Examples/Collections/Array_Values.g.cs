@@ -670,7 +670,7 @@ namespace LazinatorTests.Examples.Collections
                                             }
                                         }
                                         /*Location7014*/
-                                        private static int?[] CloneOrChange_int_n_B_b(int?[] itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                        private static int?[] CloneOrChange_int_n_B_b(int?[] itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                         {
                                             if (itemToClone == null)
                                             {

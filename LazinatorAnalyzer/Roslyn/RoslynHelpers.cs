@@ -552,7 +552,7 @@ namespace LazinatorCodeGen.Roslyn
                 {
                     int spanStart = location.SourceSpan.Start;
                     var nullableContext2 = compilation.GetSemanticModel(declaringSyntaxReference.SyntaxTree).GetNullableContext(spanStart);
-                    if (nullableContext != nullableContext2)
+                    if (nullableContext.WarningsEnabled() != nullableContext2.WarningsEnabled())
                         throw new LazinatorCodeGenException("Lazinator requires that nullability context must be same for all instances of type symbol.");
                 }
             return nullableContext;

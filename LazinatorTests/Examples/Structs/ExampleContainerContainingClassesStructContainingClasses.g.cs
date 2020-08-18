@@ -1127,7 +1127,7 @@ namespace LazinatorTests.Examples
                                             }
                                         }
                                         /*Location1763*/
-                                        private static List<ExampleStructContainingClasses?> CloneOrChange_List_GExampleStructContainingClasses_n_g(List<ExampleStructContainingClasses?> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                        private static List<ExampleStructContainingClasses?> CloneOrChange_List_GExampleStructContainingClasses_n_g(List<ExampleStructContainingClasses?> itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                         {
                                             if (itemToClone == null)
                                             {

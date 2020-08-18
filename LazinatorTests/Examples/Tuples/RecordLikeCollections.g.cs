@@ -561,7 +561,7 @@ namespace LazinatorTests.Examples.Tuples
                                             }
                                         }
                                         /*Location8146*/
-                                        private static Dictionary<int, RecordLikeContainer> CloneOrChange_Dictionary_Gint_c_C32RecordLikeContainer_g(Dictionary<int, RecordLikeContainer> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                        private static Dictionary<int, RecordLikeContainer> CloneOrChange_Dictionary_Gint_c_C32RecordLikeContainer_g(Dictionary<int, RecordLikeContainer> itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                         {
                                             if (itemToClone == null)
                                             {
@@ -620,9 +620,9 @@ namespace LazinatorTests.Examples.Tuples
                                             };
                                             /*Location8153*/}
                                             /*Location8154*/
-                                            private static KeyValuePair<int, RecordLikeContainer> CloneOrChange_KeyValuePair_Gint_c_C32RecordLikeContainer_g(KeyValuePair<int, RecordLikeContainer> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                            private static KeyValuePair<int, RecordLikeContainer> CloneOrChange_KeyValuePair_Gint_c_C32RecordLikeContainer_g(KeyValuePair<int, RecordLikeContainer> itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                             {
-                                                return new KeyValuePair<int, RecordLikeContainer>((int) (itemToConvert.Key),(RecordLikeContainer) (cloneOrChangeFunc((itemToConvert.Value))));
+                                                return new KeyValuePair<int, RecordLikeContainer>((int) (itemToConvert.Key),(RecordLikeContainer?) (cloneOrChangeFunc((itemToConvert.Value))));
                                             }
                                             /*Location8155*/
                                             private static Dictionary<int, RecordLikeTypeWithLazinator> ConvertFromBytes_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(LazinatorMemory storage)
@@ -662,7 +662,7 @@ namespace LazinatorTests.Examples.Tuples
                                                 }
                                             }
                                             /*Location8157*/
-                                            private static Dictionary<int, RecordLikeTypeWithLazinator> CloneOrChange_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(Dictionary<int, RecordLikeTypeWithLazinator> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                            private static Dictionary<int, RecordLikeTypeWithLazinator> CloneOrChange_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(Dictionary<int, RecordLikeTypeWithLazinator> itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                             {
                                                 if (itemToClone == null)
                                                 {
@@ -714,7 +714,7 @@ namespace LazinatorTests.Examples.Tuples
                                                 WriteToBinaryWithIntLengthPrefix(ref writer, actionValue);
                                                 /*Location8164*/}
                                                 /*Location8165*/
-                                                private static KeyValuePair<int, RecordLikeTypeWithLazinator> CloneOrChange_KeyValuePair_Gint_c_C32RecordLikeTypeWithLazinator_g(KeyValuePair<int, RecordLikeTypeWithLazinator> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                                private static KeyValuePair<int, RecordLikeTypeWithLazinator> CloneOrChange_KeyValuePair_Gint_c_C32RecordLikeTypeWithLazinator_g(KeyValuePair<int, RecordLikeTypeWithLazinator> itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                                 {
                                                     return new KeyValuePair<int, RecordLikeTypeWithLazinator>((int) (itemToConvert.Key),(RecordLikeTypeWithLazinator) CloneOrChange_RecordLikeTypeWithLazinator((itemToConvert.Value), cloneOrChangeFunc, avoidCloningIfPossible));
                                                 }

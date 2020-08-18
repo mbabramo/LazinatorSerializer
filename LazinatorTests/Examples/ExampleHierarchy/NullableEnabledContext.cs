@@ -1,4 +1,6 @@
-﻿using LazinatorCollections;
+﻿#nullable enable
+
+using LazinatorCollections;
 using LazinatorTests.Examples.Structs;
 using System;
 using System.Collections.Generic;
