@@ -20,6 +20,7 @@ namespace Lazinator.CodeDescription
 
         /* Type and object information */
         private ObjectDescription ContainingObjectDescription { get; set; }
+        private Compilation Compilation => ContainingObjectDescription.Compilation.Compilation;
         private bool ContainerIsClass => ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct;
         private bool ContainerIsStruct => ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct || ContainingObjectDescription.GeneratingRefStruct;
         private PropertyDescription ContainingPropertyDescription { get; set; }
@@ -36,7 +37,13 @@ namespace Lazinator.CodeDescription
         public bool NullableModeEnabled => NullableContextSetting.WarningsEnabled(); // TODO && NullableContextSetting.AnnotationsEnabled();
         public bool NullableModeInherited => NullableContextSetting.WarningsInherited(); // TODO annotations
         public string QuestionMarkIfNullableModeEnabled => NullableModeEnabled ? "?" : "";
-        public string QuestionMarkIfNullableAndNullableModeEnabled => Nullable && NullableModeEnabled ? "?" : "";
+        public string QuestionMarkIfNullableAndNullableModeEnabled => Nullable && NullableModeEnabled ? "?" : "";        
+        public NullableContext OutputNullableContextSetting { get; set; }
+        public bool OutputNullableModeEnabled => OutputNullableContextSetting.WarningsEnabled(); // TODO && NullableContextSetting.AnnotationsEnabled();
+        public bool OutputNullableModeInherited => OutputNullableContextSetting.WarningsInherited(); // TODO annotations
+        public string OutputQuestionMarkIfNullableModeEnabled => OutputNullableModeEnabled ? "?" : "";
+        public string OutputQuestionMarkIfNullableAndNullableModeEnabled => Nullable && OutputNullableModeEnabled ? "?" : "";
+
         public string ILazinatorString => "ILazinator" + QuestionMarkIfNullableModeEnabled;
         public string ILazinatorStringWithItemSpecificNullability => "ILazinator" + QuestionMarkIfNullableAndNullableModeEnabled;
         internal bool Nullable { get; set; }
@@ -126,12 +133,11 @@ namespace Lazinator.CodeDescription
 
         /* Names */
         private bool UseFullyQualifiedNames => (Config?.UseFullyQualifiedNames ?? false) || HasFullyQualifyAttribute || Symbol.ContainingType != null;
-        private string ShortTypeName => RegularizeTypeName(Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat), Nullable, NullableModeEnabled);
-        Debug; // must separate out nullablemodeenabled in input and output container. Then change RegularizeTypeName accordingly.
-        private string ShortTypeNameWithoutNullableIndicator => WithoutNullableIndicator(ShortTypeName);
+        private string ShortTypeName(bool? outputNullableModeEnabled = null) => RegularizeTypeName(Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat), Nullable, outputNullableModeEnabled ?? OutputNullableModeEnabled);
+        private string ShortTypeNameWithoutNullableIndicator => WithoutNullableIndicator(ShortTypeName());
         internal string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
         private string FullyQualifiedNameWithoutNullableIndicator => WithoutNullableIndicator(FullyQualifiedTypeName);
-        internal string AppropriatelyQualifiedTypeName => UseFullyQualifiedNames ? FullyQualifiedTypeName : ShortTypeName;
+        internal string AppropriatelyQualifiedTypeName => UseFullyQualifiedNames ? FullyQualifiedTypeName : ShortTypeName();
 
         public string DefaultExpression => PropertyType switch { LazinatorPropertyType.LazinatorStructNullable => "null", LazinatorPropertyType.LazinatorClassOrInterface => "null", LazinatorPropertyType.LazinatorNonnullableClassOrInterface => "irrelevant /* won't end up in code */", _ => $"default({AppropriatelyQualifiedTypeName})" };
         private string AppropriatelyQualifiedTypeNameWithoutNullableIndicator => UseFullyQualifiedNames ? FullyQualifiedNameWithoutNullableIndicator : ShortTypeNameWithoutNullableIndicator;
@@ -249,7 +255,7 @@ namespace Lazinator.CodeDescription
             PropertySymbol = propertySymbol;
             IsAbstract = PropertySymbol.Type.IsAbstract;
             ContainingObjectDescription = container;
-            NullableContextSetting = nullableContextSetting;
+            NullableContextSetting = OutputNullableContextSetting = nullableContextSetting;
             PropertyName = propertySymbol.Name;
             DerivationKeyword = derivationKeyword;
             PropertyAccessibility = propertyAccessibility;
@@ -274,7 +280,7 @@ namespace Lazinator.CodeDescription
             SetInclusionConditionals();
         }
 
-        public PropertyDescription(ITypeSymbol typeSymbol, ObjectDescription containingObjectDescription, NullableContext nullableContextSetting, PropertyDescription containingPropertyDescription, string propertyName = null)
+        public PropertyDescription(ITypeSymbol typeSymbol, ObjectDescription containingObjectDescription, NullableContext nullableContextSetting, NullableContext outputNullableContextSetting, PropertyDescription containingPropertyDescription, string propertyName = null)
         {
             // This is only used for defining the type on the inside of the generics, plus underlying type for arrays.
             TypeSymbolIfNoProperty = typeSymbol;
@@ -668,7 +674,7 @@ namespace Lazinator.CodeDescription
             PropertyType = LazinatorPropertyType.SupportedCollection;
             InnerProperties = new List<PropertyDescription>()
             {
-                new PropertyDescription(t.ElementType, ContainingObjectDescription, NullableContextSetting, this)
+                new PropertyDescription(t.ElementType, ContainingObjectDescription, t.ElementType.GetNullableContextForSymbol(Compilation), NullableContextSetting, this)
             };
         }
 
@@ -747,7 +753,7 @@ namespace Lazinator.CodeDescription
             Nullable = TypeReportedAsNullable;
 
             InnerProperties = recordLikeTypes[LazinatorCompilation.TypeSymbolToString(t)]
-                .Select(x => GetNewPropertyDescriptionAvoidingRecursion(x.property.Type, ContainingObjectDescription, this, x.property.Name, x.parameterSymbol.GetNullableContextForSymbol(ContainingObjectDescription.Compilation.Compilation))).ToList();
+                .Select(x => GetNewPropertyDescriptionAvoidingRecursion(x.property.Type, ContainingObjectDescription, this, x.property.Name, x.parameterSymbol.GetNullableContextForSymbol(Compilation), OutputNullableContextSetting)).ToList();
             return true;
         }
 
@@ -769,14 +775,14 @@ namespace Lazinator.CodeDescription
             }
         }
 
-        public PropertyDescription GetNewPropertyDescriptionAvoidingRecursion(ITypeSymbol typeSymbol, ObjectDescription containingObjectDescription, PropertyDescription containingPropertyDescription, string propertyName, NullableContext nullableContextSetting)
+        public PropertyDescription GetNewPropertyDescriptionAvoidingRecursion(ITypeSymbol typeSymbol, ObjectDescription containingObjectDescription, PropertyDescription containingPropertyDescription, string propertyName, NullableContext nullableContextSetting, NullableContext outputNullableContextSetting)
         {
             // see if the property has already been defined (in case this is a recursive hierarchy)
             foreach (PropertyDescription pd in ContainingPropertyHierarchy())
                 if (SymbolEqualityComparer.Default.Equals(pd.TypeSymbolIfNoProperty, typeSymbol))
                     throw new LazinatorCodeGenException($"The type {typeSymbol} is recursively defined. Recursive record-like types are not supported.");
             // If the typeSymbol is "string" and the nullable context is disabled, then it should actually be nullable. 
-            return new PropertyDescription(typeSymbol, containingObjectDescription, nullableContextSetting, containingPropertyDescription, propertyName);
+            return new PropertyDescription(typeSymbol, containingObjectDescription, nullableContextSetting, outputNullableContextSetting, containingPropertyDescription, propertyName);
         }
 
         private void CheckSupportedTuples(string nameWithoutArity)
@@ -824,7 +830,7 @@ namespace Lazinator.CodeDescription
         private void SetInnerProperties(ImmutableArray<ITypeSymbol> typeArguments)
         {
             InnerProperties = typeArguments
-                            .Select(x => new PropertyDescription(x, ContainingObjectDescription, NullableContextSetting, this)).ToList();
+                            .Select(x => new PropertyDescription(x, ContainingObjectDescription, x.GetNullableContextForSymbol(Compilation), NullableContextSetting, this)).ToList();
         }
 
         public IEnumerable<PropertyDescription> PropertyAndInnerProperties()
@@ -918,7 +924,7 @@ namespace Lazinator.CodeDescription
         private void SetSupportedCollectionInnerProperties(INamedTypeSymbol t)
         {
             InnerProperties = t.TypeArguments
-                            .Select(x => new PropertyDescription(x, ContainingObjectDescription, NullableContextSetting, this)).ToList();
+                            .Select(x => new PropertyDescription(x, ContainingObjectDescription, x.GetNullableContextForSymbol(Compilation), NullableContextSetting, this)).ToList();
 
             if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
             {
@@ -930,9 +936,9 @@ namespace Lazinator.CodeDescription
             {
                 // We process a Dictionary by treating it as a collection with KeyValuePairs. Thus, we must change to a single inner property of type KeyValuePair, which in turn has two inner properties equal to the properties of the type in our actual dictionary.
                 if (keyValuePairType == null)
-                    keyValuePairType = ContainingObjectDescription.Compilation.Compilation.GetTypeByMetadataName(typeof(KeyValuePair<,>).FullName);
+                    keyValuePairType = Compilation.GetTypeByMetadataName(typeof(KeyValuePair<,>).FullName);
                 INamedTypeSymbol constructed = keyValuePairType.Construct(t.TypeArguments.ToArray());
-                var replacementInnerProperty = new PropertyDescription(constructed, ContainingObjectDescription, NullableContextSetting, this); // new PropertyDescription("System.Collections.Generic", "KeyValuePair", t.TypeArguments, ContainingObjectDescription);
+                var replacementInnerProperty = new PropertyDescription(constructed, ContainingObjectDescription, NullableContext.Enabled, NullableContextSetting, this); // new PropertyDescription("System.Collections.Generic", "KeyValuePair", t.TypeArguments, ContainingObjectDescription);
                 InnerProperties = new List<PropertyDescription>() { replacementInnerProperty };
             }
         }
@@ -1410,7 +1416,7 @@ namespace Lazinator.CodeDescription
             if (PropertyType == LazinatorPropertyType.PrimitiveType ||
                 PropertyType == LazinatorPropertyType.PrimitiveTypeNullable)
             {
-                string name = EnumEquivalentType ?? ShortTypeName;
+                string name = EnumEquivalentType ?? ShortTypeName();
                 if (name == "string" && BrotliCompress)
                     name += "_brotli";
                 ReadMethodName = PrimitiveReadWriteMethodNames.ReadNames[name];
