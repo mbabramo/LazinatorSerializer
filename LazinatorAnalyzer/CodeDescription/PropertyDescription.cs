@@ -41,7 +41,9 @@ namespace Lazinator.CodeDescription
         public string ILazinatorStringWithItemSpecificNullability => "ILazinator" + QuestionMarkIfNullableAndNullableModeEnabled;
         internal bool Nullable { get; set; }
         internal bool SymbolEndsWithQuestionMark => Symbol.ToString().EndsWith("?");
-        internal bool ReferenceTypeIsNullable => NullableModeEnabled ? SymbolEndsWithQuestionMark : true;
+        internal bool ReferenceTypeReportedAsNullable => NullableModeEnabled ? SymbolEndsWithQuestionMark : true;
+        internal bool ValueTypeReportedAsNullable => SymbolEndsWithQuestionMark;
+        internal bool TypeReportedAsNullable => Symbol.IsValueType ? ValueTypeReportedAsNullable : ReferenceTypeReportedAsNullable;
         internal string NullForgiveness => NullableModeEnabled ? "!" : "";
         private bool HasParameterlessConstructor => PropertySymbol.Type is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.InstanceConstructors.Any(y => !y.IsImplicitlyDeclared && !y.Parameters.Any());
         private bool IsInterface { get; set; }
@@ -400,6 +402,11 @@ namespace Lazinator.CodeDescription
         {
             INamedTypeSymbol namedTypeSymbol = typeSymbol as INamedTypeSymbol;
 
+            if (PropertyName?.Contains("NonNullableRecordLikeClass") ?? false)
+            {
+                var DEBUG = 0;
+            }
+
             if (namedTypeSymbol == null && typeSymbol.TypeKind == TypeKind.TypeParameter)
             {
                 Nullable = true;
@@ -731,7 +738,7 @@ namespace Lazinator.CodeDescription
             TypeSymbolIfNoProperty = t;
             PropertyType = LazinatorPropertyType.SupportedTuple;
             SupportedTupleType = LazinatorSupportedTupleType.RecordLikeType;
-            Nullable = !t.IsValueType;
+            Nullable = TypeReportedAsNullable;
 
             InnerProperties = recordLikeTypes[LazinatorCompilation.TypeSymbolToString(t)]
                 .Select(x => GetNewPropertyDescriptionAvoidingRecursion(x.property.Type, ContainingObjectDescription, this, x.property.Name, x.parameterSymbol.GetNullableContextForSymbol(ContainingObjectDescription.Compilation.Compilation))).ToList();
@@ -885,16 +892,16 @@ namespace Lazinator.CodeDescription
         {
             Nullable = SupportedCollectionType switch
             {
-                LazinatorSupportedCollectionType.Array => ReferenceTypeIsNullable,
-                LazinatorSupportedCollectionType.List => ReferenceTypeIsNullable,
-                LazinatorSupportedCollectionType.HashSet => ReferenceTypeIsNullable,
-                LazinatorSupportedCollectionType.Dictionary => ReferenceTypeIsNullable,
-                LazinatorSupportedCollectionType.Queue => ReferenceTypeIsNullable,
-                LazinatorSupportedCollectionType.Stack => ReferenceTypeIsNullable,
-                LazinatorSupportedCollectionType.SortedDictionary => ReferenceTypeIsNullable,
-                LazinatorSupportedCollectionType.SortedList => ReferenceTypeIsNullable,
-                LazinatorSupportedCollectionType.LinkedList => ReferenceTypeIsNullable,
-                LazinatorSupportedCollectionType.SortedSet => ReferenceTypeIsNullable,
+                LazinatorSupportedCollectionType.Array => ReferenceTypeReportedAsNullable,
+                LazinatorSupportedCollectionType.List => ReferenceTypeReportedAsNullable,
+                LazinatorSupportedCollectionType.HashSet => ReferenceTypeReportedAsNullable,
+                LazinatorSupportedCollectionType.Dictionary => ReferenceTypeReportedAsNullable,
+                LazinatorSupportedCollectionType.Queue => ReferenceTypeReportedAsNullable,
+                LazinatorSupportedCollectionType.Stack => ReferenceTypeReportedAsNullable,
+                LazinatorSupportedCollectionType.SortedDictionary => ReferenceTypeReportedAsNullable,
+                LazinatorSupportedCollectionType.SortedList => ReferenceTypeReportedAsNullable,
+                LazinatorSupportedCollectionType.LinkedList => ReferenceTypeReportedAsNullable,
+                LazinatorSupportedCollectionType.SortedSet => ReferenceTypeReportedAsNullable,
                 LazinatorSupportedCollectionType.Memory => SymbolEndsWithQuestionMark,
                 LazinatorSupportedCollectionType.ReadOnlySpan => SymbolEndsWithQuestionMark,
                 LazinatorSupportedCollectionType.ReadOnlyMemory => SymbolEndsWithQuestionMark,
