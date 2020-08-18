@@ -97,7 +97,8 @@ namespace Lazinator.CodeDescription
             PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface
             || IsSupportedReferenceType);
         internal bool IsNonNullableValueTypeWithNonNullableReferenceType => !Nullable && !IsNonNullableReferenceType && InnerProperties != null && InnerProperties.Any(x => x.IsNonNullableReferenceType); // note: this may actually not matter, since a value type can always be initialized with "default" without generating a compiler error, even if it contains a nonnullable type. In principle, we could still try to catch these in some circumstances and throw UnsetLazinator errors. But if the compiler doesn't give a warning, perhaps we ought not as well. Thus, we omit using this as a basis for NonNullableThatRequiresInitialization.
-        internal bool NonNullableThatRequiresInitialization => IsNonNullableReferenceType; // || IsNonNullableValueTypeWithNonNullableReferenceType; (see above for explanation for why this is commented out.)
+        internal bool IsNonNullableRecordLikeType => !Nullable && PropertyType == LazinatorPropertyType.SupportedTuple && SupportedTupleType == LazinatorSupportedTupleType.RecordLikeType;
+        internal bool NonNullableThatRequiresInitialization => IsNonNullableReferenceType || IsNonNullableRecordLikeType; // || IsNonNullableValueTypeWithNonNullableReferenceType; (see above for explanation for why this is commented out.)
         internal bool NonNullableThatCanBeUninitialized => !Nullable && !NonNullableThatRequiresInitialization;
         public static bool UseNullableBackingFieldsForNonNullableReferenceTypes => false; // if TRUE, then we use a null backing field and add checks for PossibleUnsetException. If FALSE, then we don't do that, and instead we set the backing field in every constructor.
         internal bool AddQuestionMarkInBackingFieldForNonNullable => NullableModeEnabled && UseNullableBackingFieldsForNonNullableReferenceTypes && NonNullableThatRequiresInitialization;
@@ -126,6 +127,7 @@ namespace Lazinator.CodeDescription
         /* Names */
         private bool UseFullyQualifiedNames => (Config?.UseFullyQualifiedNames ?? false) || HasFullyQualifyAttribute || Symbol.ContainingType != null;
         private string ShortTypeName => RegularizeTypeName(Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat), Nullable, NullableModeEnabled);
+        Debug; // must separate out nullablemodeenabled in input and output container. Then change RegularizeTypeName accordingly.
         private string ShortTypeNameWithoutNullableIndicator => WithoutNullableIndicator(ShortTypeName);
         internal string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
         private string FullyQualifiedNameWithoutNullableIndicator => WithoutNullableIndicator(FullyQualifiedTypeName);
@@ -154,7 +156,7 @@ namespace Lazinator.CodeDescription
 
         internal string BackingFieldString => $"_{PropertyName}";
 
-        internal bool BackingAccessFieldIncluded => PlaceholderMemoryWriteMethod == null && !IsNonNullableWithNonNullableBackingField;
+        internal bool BackingAccessFieldIncluded => PlaceholderMemoryWriteMethod == null && !IsNonNullableWithNonNullableBackingField && !IsNonNullableRecordLikeType;
         internal string BackingAccessFieldName => $"_{PropertyName}_Accessed";
         internal string BackingFieldAccessedString => BackingAccessFieldIncluded ? BackingAccessFieldName : "true";
         internal string BackingFieldNotAccessedString => BackingAccessFieldIncluded ? $"!{BackingAccessFieldName}" : "false";
