@@ -63,6 +63,9 @@ namespace LazinatorCodeGen.Roslyn
                         case '`':
                             b.Append("_q");
                             break;
+                        case '?':
+                            b.Append("_n");
+                            break;
                         default:
                             b.Append("_C" + ((short)c).ToString());
                             break;

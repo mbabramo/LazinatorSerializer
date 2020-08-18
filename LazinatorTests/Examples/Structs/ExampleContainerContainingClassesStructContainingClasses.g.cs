@@ -335,7 +335,7 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListUnwrappedNullableExampleStruct_ByteIndex, _MyListUnwrappedNullableExampleStruct_ByteLength, false, false, null);
-                _MyListUnwrappedNullableExampleStruct = ConvertFromBytes_List_GExampleStructContainingClasses_C63_g(childData);
+                _MyListUnwrappedNullableExampleStruct = ConvertFromBytes_List_GExampleStructContainingClasses_n_g(childData);
             }
             
             _MyListUnwrappedNullableExampleStruct_Accessed = true;
@@ -436,7 +436,7 @@ namespace LazinatorTests.Examples
             typedClone.MyHashSetExampleStruct = CloneOrChange_HashSet_GExampleStructContainingClasses_g(MyHashSetExampleStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.MyListExampleStruct = CloneOrChange_List_GExampleStructContainingClasses_g(MyListExampleStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.MyListNullableExampleStruct = CloneOrChange_List_GWNullableStruct_GExampleStructContainingClasses_g_g(MyListNullableExampleStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyListUnwrappedNullableExampleStruct = CloneOrChange_List_GExampleStructContainingClasses_C63_g(MyListUnwrappedNullableExampleStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyListUnwrappedNullableExampleStruct = CloneOrChange_List_GExampleStructContainingClasses_n_g(MyListUnwrappedNullableExampleStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }
@@ -621,7 +621,7 @@ namespace LazinatorTests.Examples
             }
             if ((!exploreOnlyDeserializedChildren && MyListUnwrappedNullableExampleStruct != null) || (_MyListUnwrappedNullableExampleStruct_Accessed && _MyListUnwrappedNullableExampleStruct != null))
             {
-                _MyListUnwrappedNullableExampleStruct = (List<ExampleStructContainingClasses?>) CloneOrChange_List_GExampleStructContainingClasses_C63_g(_MyListUnwrappedNullableExampleStruct, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
+                _MyListUnwrappedNullableExampleStruct = (List<ExampleStructContainingClasses?>) CloneOrChange_List_GExampleStructContainingClasses_n_g(_MyListUnwrappedNullableExampleStruct, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             if (changeThisLevel && changeFunc != null)
             {
@@ -737,7 +737,7 @@ namespace LazinatorTests.Examples
             }
             if (_MyListUnwrappedNullableExampleStruct_Accessed && _MyListUnwrappedNullableExampleStruct != null)
             {
-                _MyListUnwrappedNullableExampleStruct = (List<ExampleStructContainingClasses?>) CloneOrChange_List_GExampleStructContainingClasses_C63_g(_MyListUnwrappedNullableExampleStruct, l => l.RemoveBufferInHierarchy(), true);
+                _MyListUnwrappedNullableExampleStruct = (List<ExampleStructContainingClasses?>) CloneOrChange_List_GExampleStructContainingClasses_n_g(_MyListUnwrappedNullableExampleStruct, l => l.RemoveBufferInHierarchy(), true);
             }
         }
         
@@ -856,7 +856,7 @@ namespace LazinatorTests.Examples
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListUnwrappedNullableExampleStruct_ByteIndex, _MyListUnwrappedNullableExampleStruct_ByteLength, false, false, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_List_GExampleStructContainingClasses_C63_g(ref w, _MyListUnwrappedNullableExampleStruct,
+            ConvertToBytes_List_GExampleStructContainingClasses_n_g(ref w, _MyListUnwrappedNullableExampleStruct,
             includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
@@ -1065,7 +1065,7 @@ namespace LazinatorTests.Examples
             return collection;
         }
         
-        private static List<ExampleStructContainingClasses?> ConvertFromBytes_List_GExampleStructContainingClasses_C63_g(LazinatorMemory storage)
+        private static List<ExampleStructContainingClasses?> ConvertFromBytes_List_GExampleStructContainingClasses_n_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -1095,7 +1095,7 @@ namespace LazinatorTests.Examples
             return collection;
         }
         
-        private static void ConvertToBytes_List_GExampleStructContainingClasses_C63_g(ref BinaryBufferWriter writer, List<ExampleStructContainingClasses?> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        private static void ConvertToBytes_List_GExampleStructContainingClasses_n_g(ref BinaryBufferWriter writer, List<ExampleStructContainingClasses?> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (itemToConvert == default(List<ExampleStructContainingClasses?>))
             {
@@ -1127,7 +1127,7 @@ namespace LazinatorTests.Examples
             }
         }
         
-        private static List<ExampleStructContainingClasses?> CloneOrChange_List_GExampleStructContainingClasses_C63_g(List<ExampleStructContainingClasses?> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static List<ExampleStructContainingClasses?> CloneOrChange_List_GExampleStructContainingClasses_n_g(List<ExampleStructContainingClasses?> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
