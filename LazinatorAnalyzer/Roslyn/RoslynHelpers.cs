@@ -524,11 +524,13 @@ namespace LazinatorCodeGen.Roslyn
             }
         }
 
+
         public static NullableContext GetNullableContextForSymbol(this ISymbol symbol, Compilation compilation, bool verifyAllMatch = true)
         {
+            bool definitelyNullableEnabled = symbol.ToString().EndsWith("?");
             SyntaxReference syntaxReference = symbol.DeclaringSyntaxReferences.FirstOrDefault();
             if (syntaxReference == null)
-                return NullableContext.ContextInherited;
+                return definitelyNullableEnabled ? NullableContext.Enabled : NullableContext.ContextInherited;
             var syntaxTree = syntaxReference.SyntaxTree;
             if (!compilation.ContainsSyntaxTree(syntaxTree))
             {
@@ -540,7 +542,7 @@ namespace LazinatorCodeGen.Roslyn
 
             Location firstLocation = symbol.Locations.FirstOrDefault();
             if (firstLocation == null)
-                return NullableContext.ContextInherited;
+                return definitelyNullableEnabled ? NullableContext.Enabled : NullableContext.ContextInherited;
             var nullableContext = compilation.GetSemanticModel(syntaxTree).GetNullableContext(firstLocation.SourceSpan.Start);
             foreach (var declaringSyntaxReference in symbol.DeclaringSyntaxReferences)
                 foreach (var location in symbol.Locations)

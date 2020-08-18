@@ -5197,9 +5197,13 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 
                 int item1 = span.ToDecompressedInt(ref bytesSoFar);
                 
+                Example item2 = default(Example);
                 int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
-                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
-                Example item2 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+                if (lengthCollectionMember_item2 != 0)
+                {
+                    LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
+                    item2 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+                }
                 bytesSoFar += lengthCollectionMember_item2;
                 
                 var tupleType = new RecordLikeClass(item1, item2);
@@ -5234,7 +5238,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     return default(RecordLikeClass?);
                 }
                 
-                return new RecordLikeClass((int) (itemToConvert?.Age ?? default),(Example) (cloneOrChangeFunc((itemToConvert?.Example ?? default))!));
+                return new RecordLikeClass((int) (itemToConvert?.Age ?? default),(Example?) (cloneOrChangeFunc((itemToConvert?.Example))));
             }
             
             private static RecordLikeStruct ConvertFromBytes_RecordLikeStruct(LazinatorMemory storage)
@@ -5266,7 +5270,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             private static RecordLikeStruct CloneOrChange_RecordLikeStruct(RecordLikeStruct itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
             {
-                return new RecordLikeStruct((int) (itemToConvert.Age),(string) (itemToConvert.Name));
+                return new RecordLikeStruct((int) (itemToConvert.Age),(string?) (itemToConvert.Name));
             }
             
             private static Tuple<Example, int> ConvertFromBytes_Tuple_GExample_c_C32int_g(LazinatorMemory storage)
@@ -5389,7 +5393,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     return default(RecordLikeStruct?);
                 }
                 
-                return new RecordLikeStruct((int) (itemToConvert?.Age ?? default),(string) (itemToConvert?.Name ?? default));
+                return new RecordLikeStruct((int) (itemToConvert?.Age ?? default),(string?) (itemToConvert?.Name));
             }
             
             private static Tuple<Example, int>? ConvertFromBytes_Tuple_GExample_c_C32int_g_C63(LazinatorMemory storage)

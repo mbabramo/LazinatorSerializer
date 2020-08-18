@@ -420,9 +420,9 @@ namespace Lazinator.CodeDescription
             else
             {
                 // look for primitive type
-                if (typeSymbol.Name == "string?")
+                if (typeSymbol.Name == "string?" || typeSymbol.Name == "String?")
                     Nullable = true;
-                else if (typeSymbol.Name == "string")
+                else if (typeSymbol.Name == "string" || typeSymbol.Name == "String")
                     Nullable = !NullableModeEnabled;
                 if (namedTypeSymbol?.EnumUnderlyingType != null)
                     SetEnumEquivalentType(namedTypeSymbol);
@@ -762,6 +762,7 @@ namespace Lazinator.CodeDescription
             foreach (PropertyDescription pd in ContainingPropertyHierarchy())
                 if (SymbolEqualityComparer.Default.Equals(pd.TypeSymbolIfNoProperty, typeSymbol))
                     throw new LazinatorCodeGenException($"The type {typeSymbol} is recursively defined. Recursive record-like types are not supported.");
+            // If the typeSymbol is "string" and the nullable context is disabled, then it should actually be nullable. 
             return new PropertyDescription(typeSymbol, containingObjectDescription, nullableContextSetting, containingPropertyDescription, propertyName);
         }
 
@@ -1037,7 +1038,7 @@ namespace Lazinator.CodeDescription
             // Now we need to worry about the set accessor. 
             string propertyTypeDependentSet = GetPropertyTypeDependentSetString();
 
-            string lazinateContents = GetLazinateContents(createDefault, recreation); 
+            string lazinateContents = GetLazinateContents(createDefault, recreation);
 
             sb.Append($@"
                 {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName}{IIF(AddQuestionMarkInBackingFieldForNonNullable && !AppropriatelyQualifiedTypeName.EndsWith("?"), "?")} {BackingFieldString};
@@ -1611,7 +1612,7 @@ namespace Lazinator.CodeDescription
             return $@"{new ConditionalCodeGenerator(
                 ConditionsCodeGenerator.AndCombine(
                     $"(includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode)",
-                    $"{BackingFieldNotAccessedString}"), 
+                    $"{BackingFieldNotAccessedString}"),
                 $"var deserialized = {PropertyName};")}";
         }
 
@@ -1949,10 +1950,21 @@ namespace Lazinator.CodeDescription
                     $"{itemAccessName}[itemIndex]"; // this is needed for Memory<T>, since we don't have a foreach method defined, and is likely slightly more performant anyway
             }
 
-            cloneString = InnerProperties[0].GetCloneStringWithinCloneMethod(itemString);
+            cloneString = InnerProperties[0].GetCloneStringWithinCloneMethod(itemString, GetTypeNameOfInnerProperty(InnerProperties[0]));
         }
 
-        private string GetCloneStringWithinCloneMethod(string itemString)
+        private string GetTypeNameOfInnerProperty(PropertyDescription innerProperty)
+        {
+            // the inner property might be from a different nullability context and therefore might omit a "?" when one is necessary
+            // (e.g., if the type is "string")
+            string typeName = innerProperty.AppropriatelyQualifiedTypeName;
+            if (NullableModeEnabled && !typeName.EndsWith("?") && innerProperty.Nullable)
+                typeName += "?";
+            return typeName;
+        }
+
+
+        private string GetCloneStringWithinCloneMethod(string itemString, string typeName)
         {
             string cloneString;
             if (IsLazinator)
@@ -1970,7 +1982,7 @@ namespace Lazinator.CodeDescription
             else
                 throw new NotImplementedException();
             DEBUGQQW++;
-            return $"({AppropriatelyQualifiedTypeName}) " + cloneString;
+            return $"({typeName}) " + cloneString;
         }
 
         static int DEBUGQQW = 0;
@@ -2522,7 +2534,7 @@ namespace Lazinator.CodeDescription
                     .Zip(
                         itemStrings,
                         (x, y) => new { InnerProperty = x, ItemString = "(" + propertyAccess + y + (Nullable && !x.Nullable ? " ?? default" : "") + ")" })
-                    .Select(z => z.InnerProperty.GetCloneStringWithinCloneMethod(z.ItemString))
+                    .Select(z => z.InnerProperty.GetCloneStringWithinCloneMethod(z.ItemString, GetTypeNameOfInnerProperty(z.InnerProperty)))
                 );
             string creationText = SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? $"({innerClones})" : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}({innerClones})";
 

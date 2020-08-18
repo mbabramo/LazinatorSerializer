@@ -657,7 +657,7 @@ namespace LazinatorTests.Examples.Tuples
                 return default((int a, string b)?);
             }
             
-            return ((int) (itemToConvert?.Item1 ?? default),(string) (itemToConvert?.Item2 ?? default));
+            return ((int) (itemToConvert?.Item1 ?? default),(string) (itemToConvert?.Item2));
         }
         
         private static Tuple<short, long> ConvertFromBytes_Tuple_Gshort_c_C32long_g(LazinatorMemory storage)
