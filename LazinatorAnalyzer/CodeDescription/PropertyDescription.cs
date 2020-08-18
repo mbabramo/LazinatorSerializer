@@ -734,7 +734,7 @@ namespace Lazinator.CodeDescription
             Nullable = !t.IsValueType;
 
             InnerProperties = recordLikeTypes[LazinatorCompilation.TypeSymbolToString(t)]
-                .Select(x => GetNewPropertyDescriptionAvoidingRecursion(x.property.Type, ContainingObjectDescription, this, x.property.Name)).ToList();
+                .Select(x => GetNewPropertyDescriptionAvoidingRecursion(x.property.Type, ContainingObjectDescription, this, x.property.Name, x.parameterSymbol.GetNullableContextForSymbol(ContainingObjectDescription.Compilation.Compilation))).ToList();
             return true;
         }
 
@@ -756,13 +756,13 @@ namespace Lazinator.CodeDescription
             }
         }
 
-        public PropertyDescription GetNewPropertyDescriptionAvoidingRecursion(ITypeSymbol typeSymbol, ObjectDescription containingObjectDescription, PropertyDescription containingPropertyDescription, string propertyName)
+        public PropertyDescription GetNewPropertyDescriptionAvoidingRecursion(ITypeSymbol typeSymbol, ObjectDescription containingObjectDescription, PropertyDescription containingPropertyDescription, string propertyName, NullableContext nullableContextSetting)
         {
             // see if the property has already been defined (in case this is a recursive hierarchy)
             foreach (PropertyDescription pd in ContainingPropertyHierarchy())
                 if (SymbolEqualityComparer.Default.Equals(pd.TypeSymbolIfNoProperty, typeSymbol))
                     throw new LazinatorCodeGenException($"The type {typeSymbol} is recursively defined. Recursive record-like types are not supported.");
-            return new PropertyDescription(typeSymbol, containingObjectDescription, NullableContextSetting, containingPropertyDescription, propertyName);
+            return new PropertyDescription(typeSymbol, containingObjectDescription, nullableContextSetting, containingPropertyDescription, propertyName);
         }
 
         private void CheckSupportedTuples(string nameWithoutArity)
@@ -1969,8 +1969,12 @@ namespace Lazinator.CodeDescription
                 cloneString = itemString;
             else
                 throw new NotImplementedException();
+            DEBUGQQW++;
             return $"({AppropriatelyQualifiedTypeName}) " + cloneString;
         }
+
+        static int DEBUGQQW = 0;
+        int DEBUGQQE = DEBUGQQW++;
 
         private void AppendSupportedCollection_ConvertFromBytes(CodeStringBuilder sb)
         {
