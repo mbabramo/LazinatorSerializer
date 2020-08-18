@@ -61,6 +61,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         RecordLikeStruct NonNullableRecordLikeStruct { get; set; }
         RecordLikeStruct? NullableRecordLikeStruct { get; set; }
         RecordLikeClass NonNullableRecordLikeClass { get; set; }
-        RecordLikeClass NullableRecordLikeClass { get; set; }
+        RecordLikeClass? NullableRecordLikeClass { get; set; }
     }
 }

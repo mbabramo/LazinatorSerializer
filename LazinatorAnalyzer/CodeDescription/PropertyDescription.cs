@@ -402,7 +402,7 @@ namespace Lazinator.CodeDescription
         {
             INamedTypeSymbol namedTypeSymbol = typeSymbol as INamedTypeSymbol;
 
-            if (PropertyName?.Contains("NonNullableRecordLikeClass") ?? false)
+            if (PropertyName?.Contains("NullableRecordLikeClass") ?? false)
             {
                 var DEBUG = 0;
             }
@@ -724,6 +724,10 @@ namespace Lazinator.CodeDescription
 
         private bool HandleRecordLikeType(INamedTypeSymbol t)
         {
+            if (PropertyName?.Contains("NullableRecordLikeClass") ?? false)
+            {
+                var DEBUG = 0;
+            }
             if (LazinatorCompilation.TypeSymbolToString(t).Contains("RecordLikeClass"))
             {
                 var DEBUG = 0;
