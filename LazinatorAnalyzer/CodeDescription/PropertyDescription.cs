@@ -34,8 +34,8 @@ namespace Lazinator.CodeDescription
         internal string DerivationKeyword { get; set; }
         private bool IsAbstract { get; set; }
         public NullableContext NullableContextSetting { get; set; }
-        public bool NullableModeEnabled => NullableContextSetting.WarningsEnabled(); // TODO && NullableContextSetting.AnnotationsEnabled();
-        public bool NullableModeInherited => NullableContextSetting.WarningsInherited(); // TODO annotations
+        public bool NullableModeEnabled => NullableContextSetting.AnnotationsEnabled(); // we care about whether we are annotating our code (and should then strive to avoid warnings)
+        public bool NullableModeInherited => NullableContextSetting.AnnotationsInherited();
         public string QuestionMarkIfNullableModeEnabled => NullableModeEnabled ? "?" : "";
         public string QuestionMarkIfNullableAndNullableModeEnabled => Nullable && NullableModeEnabled ? "?" : "";        
         public NullableContext OutputNullableContextSetting { get; set; }
