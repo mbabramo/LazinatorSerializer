@@ -1054,6 +1054,7 @@ namespace Lazinator.CodeDescription
                 sb.Append($@"
                             }}
                         }}
+                        #nullable restore
                         ");
         }
 
