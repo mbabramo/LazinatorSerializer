@@ -542,19 +542,18 @@ namespace LazinatorCodeGen.Roslyn
                 // In this case, we'll just assume for now that the nullable context on the original is disabled, unless it's not nullable.
                 return NullableContext.Disabled;
             }
-
-            Location firstLocation = symbol.Locations.FirstOrDefault();
-            if (firstLocation == null)
-                return definitelyNullableEnabled ? NullableContext.Enabled : NullableContext.ContextInherited;
-            var nullableContext = compilation.GetSemanticModel(syntaxTree).GetNullableContext(firstLocation.SourceSpan.Start);
-            foreach (var declaringSyntaxReference in symbol.DeclaringSyntaxReferences)
-                foreach (var location in symbol.Locations)
+            var nullableContext = compilation.GetSemanticModel(syntaxTree).GetNullableContext(syntaxReference.Span.Start);
+            for (int i = 0; i < symbol.DeclaringSyntaxReferences.Length; i++)
+            {
+                SyntaxReference declaringSyntaxReference = symbol.DeclaringSyntaxReferences[i];
+                int spanStart = declaringSyntaxReference.Span.Start;
+                var nullableContext2 = compilation.GetSemanticModel(declaringSyntaxReference.SyntaxTree).GetNullableContext(spanStart);
+                if (nullableContext.WarningsEnabled() != nullableContext2.WarningsEnabled())
                 {
-                    int spanStart = location.SourceSpan.Start;
-                    var nullableContext2 = compilation.GetSemanticModel(declaringSyntaxReference.SyntaxTree).GetNullableContext(spanStart);
-                    if (nullableContext.WarningsEnabled() != nullableContext2.WarningsEnabled())
-                        throw new LazinatorCodeGenException("Lazinator requires that nullability context must be same for all instances of type symbol.");
+                    throw new LazinatorCodeGenException("Lazinator requires that nullability context must be same for all instances of type symbol.");
                 }
+            }
+
             return nullableContext;
         }
 
