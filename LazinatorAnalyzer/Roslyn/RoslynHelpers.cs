@@ -138,18 +138,20 @@ namespace LazinatorCodeGen.Roslyn
 
         public static string RegularizeTypeName(string typeName, bool isNullable, bool nullableModeEnabled)
         {
+            string regularized = RegularizeTypeNameHelper(typeName);
             bool isNullableReferenceTypeInEnabledContext = isNullable && nullableModeEnabled;
-            string result = RegularizeTypeNameHelper(typeName, isNullableReferenceTypeInEnabledContext);
-            return result;
+            if (isNullableReferenceTypeInEnabledContext && !regularized.EndsWith("?"))
+                regularized = regularized + "?";
+            return regularized;
         }
 
-        private static string RegularizeTypeNameHelper(string typeName, bool isNullableReferenceTypeInEnabledContext)
+        private static string RegularizeTypeNameHelper(string typeName)
         {
             if (TypeRegularization.ContainsKey(typeName))
                 return TypeRegularization[typeName];
             var withoutNullableIndicator = WithoutNullableIndicator(typeName);
-            if (isNullableReferenceTypeInEnabledContext || TypeRegularization.ContainsKey(withoutNullableIndicator))
-                return withoutNullableIndicator + "?";
+            if (TypeRegularization.ContainsKey(withoutNullableIndicator))
+                return withoutNullableIndicator + "?"; // restore ?
             return typeName;
         }
 

@@ -133,9 +133,13 @@ namespace Lazinator.CodeDescription
 
         /* Names */
         private bool UseFullyQualifiedNames => (Config?.UseFullyQualifiedNames ?? false) || HasFullyQualifyAttribute || Symbol.ContainingType != null;
-        private string ShortTypeName(bool? outputNullableModeEnabled = null) => RegularizeTypeName(Symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat), Nullable, outputNullableModeEnabled ?? OutputNullableModeEnabled);
+
+        private SymbolDisplayFormat MinimallyQualifiedFormat => OutputNullableModeEnabled ? SymbolDisplayFormat.MinimallyQualifiedFormat.AddMiscellaneousOptions(SymbolDisplayMiscellaneousOptions.IncludeNullableReferenceTypeModifier) : SymbolDisplayFormat.MinimallyQualifiedFormat;
+        private SymbolDisplayFormat FullyQualifiedFormat => OutputNullableModeEnabled ? SymbolDisplayFormat.FullyQualifiedFormat.AddMiscellaneousOptions(SymbolDisplayMiscellaneousOptions.IncludeNullableReferenceTypeModifier) : SymbolDisplayFormat.FullyQualifiedFormat;
+
+        private string ShortTypeName() => RegularizeTypeName(Symbol.ToDisplayString(MinimallyQualifiedFormat), Nullable, OutputNullableModeEnabled);
         private string ShortTypeNameWithoutNullableIndicator => WithoutNullableIndicator(ShortTypeName());
-        internal string FullyQualifiedTypeName => Symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+        internal string FullyQualifiedTypeName => RegularizeTypeName(Symbol.ToDisplayString(FullyQualifiedFormat), Nullable, OutputNullableModeEnabled);
         private string FullyQualifiedNameWithoutNullableIndicator => WithoutNullableIndicator(FullyQualifiedTypeName);
         internal string AppropriatelyQualifiedTypeName => UseFullyQualifiedNames ? FullyQualifiedTypeName : ShortTypeName();
 
@@ -250,6 +254,8 @@ namespace Lazinator.CodeDescription
 
         }
 
+        int DEBUG = 0;
+
         public PropertyDescription(IPropertySymbol propertySymbol, ObjectDescription container, NullableContext nullableContextSetting, string derivationKeyword, string propertyAccessibility, bool isLast)
         {
             PropertySymbol = propertySymbol;
@@ -295,6 +301,7 @@ namespace Lazinator.CodeDescription
             IsAbstract = typeSymbol.IsAbstract;
             SetPropertyType(typeSymbol);
             SetReadAndWriteMethodNames();
+            Debug.WriteLine($"{DEBUG++} {AppropriatelyQualifiedTypeName} {PropertyName} Containing object {containingObjectDescription.NameIncludingGenerics} Containing property {containingPropertyDescription?.PropertyName} Nullable contexts: {nullableContextSetting}, {outputNullableContextSetting}");
         }
 
         public override string ToString()

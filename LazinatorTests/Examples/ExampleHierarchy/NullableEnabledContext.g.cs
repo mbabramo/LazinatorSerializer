@@ -5143,7 +5143,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                     /*Location728*/
                                                     int item1 = span.ToDecompressedInt(ref bytesSoFar);
                                                     /*Location729*/
-                                                    Example? item2 = default(Example?);
+                                                    Example item2 = default(Example);
                                                     int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
                                                     if (lengthCollectionMember_item2 != 0)
                                                     {
@@ -5304,7 +5304,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                                     /*Location760*/
                                                                     int item1 = span.ToDecompressedInt(ref bytesSoFar);
                                                                     /*Location761*/
-                                                                    Example? item2 = default(Example?);
+                                                                    Example item2 = default(Example);
                                                                     int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
                                                                     if (lengthCollectionMember_item2 != 0)
                                                                     {
