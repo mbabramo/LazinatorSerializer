@@ -757,7 +757,7 @@ namespace Lazinator.CodeDescription
             Nullable = TypeReportedAsNullable;
 
             InnerProperties = recordLikeTypes[LazinatorCompilation.TypeSymbolToString(t)]
-                .Select(x => GetNewPropertyDescriptionAvoidingRecursion(x.property.Type, ContainingObjectDescription, this, x.property.Name, x.parameterSymbol.GetNullableContextForSymbol(Compilation), OutputNullableContextSetting)).ToList();
+                .Select(x => GetPropertyDescriptionForPropertyDefinedElsewhere(x.property.Type, ContainingObjectDescription, this, x.property.Name, x.parameterSymbol.GetNullableContextForSymbol(Compilation), OutputNullableContextSetting)).ToList();
             return true;
         }
 
@@ -779,7 +779,7 @@ namespace Lazinator.CodeDescription
             }
         }
 
-        public PropertyDescription GetNewPropertyDescriptionAvoidingRecursion(ITypeSymbol typeSymbol, ObjectDescription containingObjectDescription, PropertyDescription containingPropertyDescription, string propertyName, NullableContext nullableContextSetting, NullableContext outputNullableContextSetting)
+        public PropertyDescription GetPropertyDescriptionForPropertyDefinedElsewhere(ITypeSymbol typeSymbol, ObjectDescription containingObjectDescription, PropertyDescription containingPropertyDescription, string propertyName, NullableContext nullableContextSetting, NullableContext outputNullableContextSetting)
         {
             // see if the property has already been defined (in case this is a recursive hierarchy)
             foreach (PropertyDescription pd in ContainingPropertyHierarchy())
@@ -834,7 +834,7 @@ namespace Lazinator.CodeDescription
         private void SetInnerProperties(ImmutableArray<ITypeSymbol> typeArguments)
         {
             InnerProperties = typeArguments
-                            .Select(x => new PropertyDescription(x, ContainingObjectDescription, x.GetNullableContextForSymbol(Compilation), NullableContextSetting, this)).ToList();
+                            .Select(x => new PropertyDescription(x, ContainingObjectDescription, NullableContextSetting, NullableContextSetting, this)).ToList();
         }
 
         public IEnumerable<PropertyDescription> PropertyAndInnerProperties()
@@ -928,7 +928,7 @@ namespace Lazinator.CodeDescription
         private void SetSupportedCollectionInnerProperties(INamedTypeSymbol t)
         {
             InnerProperties = t.TypeArguments
-                            .Select(x => new PropertyDescription(x, ContainingObjectDescription, x.GetNullableContextForSymbol(Compilation), NullableContextSetting, this)).ToList();
+                            .Select(x => new PropertyDescription(x, ContainingObjectDescription, NullableContextSetting, NullableContextSetting, this)).ToList();
 
             if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
             {
@@ -942,7 +942,7 @@ namespace Lazinator.CodeDescription
                 if (keyValuePairType == null)
                     keyValuePairType = Compilation.GetTypeByMetadataName(typeof(KeyValuePair<,>).FullName);
                 INamedTypeSymbol constructed = keyValuePairType.Construct(t.TypeArguments.ToArray());
-                var replacementInnerProperty = new PropertyDescription(constructed, ContainingObjectDescription, NullableContext.Enabled, NullableContextSetting, this); // new PropertyDescription("System.Collections.Generic", "KeyValuePair", t.TypeArguments, ContainingObjectDescription);
+                var replacementInnerProperty = new PropertyDescription(constructed, ContainingObjectDescription, NullableContextSetting, NullableContextSetting, this); // new PropertyDescription("System.Collections.Generic", "KeyValuePair", t.TypeArguments, ContainingObjectDescription);
                 InnerProperties = new List<PropertyDescription>() { replacementInnerProperty };
             }
         }
