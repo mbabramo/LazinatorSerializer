@@ -119,7 +119,7 @@ namespace LazinatorAnalyzer.Settings
 
         public string GetInterchangeConverterTypeName(INamedTypeSymbol type)
         {
-            string name = UseFullyQualifiedNames ? type.GetFullNamespacePlusSimpleName() : type.GetMinimallyQualifiedName();
+            string name = UseFullyQualifiedNames ? type.GetFullNamespacePlusSimpleName() : type.GetMinimallyQualifiedName(false);
             if (InterchangeConverters.ContainsKey(name))
                 return InterchangeConverters[name];
             return null;
@@ -127,7 +127,7 @@ namespace LazinatorAnalyzer.Settings
 
         public string GetDirectConverterTypeName(INamedTypeSymbol type)
         {
-            string name = UseFullyQualifiedNames ? type.GetFullNamespacePlusSimpleName() : type.GetMinimallyQualifiedName();
+            string name = UseFullyQualifiedNames ? type.GetFullNamespacePlusSimpleName() : type.GetMinimallyQualifiedName(false);
             if (DirectConverters.ContainsKey(name))
                 return DirectConverters[name];
             return null;

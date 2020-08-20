@@ -144,7 +144,7 @@ namespace Lazinator.CodeDescription
             SuppressDate = suppressDate;
             Accessibility = compilation.ImplementingTypeAccessibility;
             Namespace = iLazinatorTypeSymbol.GetFullNamespace();
-            FullyQualifiedObjectName = iLazinatorTypeSymbol.GetFullyQualifiedNameWithoutGlobal();
+            FullyQualifiedObjectName = iLazinatorTypeSymbol.GetFullyQualifiedNameWithoutGlobal(NullableModeEnabled);
             NameIncludingGenerics = iLazinatorTypeSymbol.Name; // possibly updated later
             SimpleName = iLazinatorTypeSymbol.Name;
             if (iLazinatorTypeSymbol.TypeKind == TypeKind.Class)
@@ -1537,9 +1537,9 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 else
                     throw new LazinatorCodeGenException("Open generic parameter in non-abstract type must be constrained to type ILazinator. Add a clause like 'where T : ILazinator' to both the main class and the interface definition");
             }
-            NameIncludingGenerics = iLazinatorType.GetMinimallyQualifiedName();
+            NameIncludingGenerics = iLazinatorType.GetMinimallyQualifiedName(NullableModeEnabled);
             GenericArgumentNames = genericArguments.Select(x => x.Name).ToList();
-            FullyQualifiedObjectName = iLazinatorType.GetFullyQualifiedNameWithoutGlobal();
+            FullyQualifiedObjectName = iLazinatorType.GetFullyQualifiedNameWithoutGlobal(NullableModeEnabled);
         }
 
         private bool IsNonlazinatorGeneric(ITypeSymbol typeSymbol)

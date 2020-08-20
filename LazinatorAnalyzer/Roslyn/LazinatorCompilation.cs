@@ -133,7 +133,7 @@ namespace LazinatorCodeGen.Roslyn
         private void RecordILazinatorProperties()
         {
             INamedTypeSymbol iLazinatorSymbol = Compilation.GetTypeByMetadataName("Lazinator.Core.ILazinator");
-            ILazinatorProperties = new HashSet<string>(iLazinatorSymbol.GetPropertySymbols().Select(x => x.GetFullyQualifiedName()));
+            ILazinatorProperties = new HashSet<string>(iLazinatorSymbol.GetPropertySymbols().Select(x => x.GetFullyQualifiedName(true)));
         }
         
         private void RecordPropertiesForInterface(INamedTypeSymbol @interface)
@@ -144,7 +144,7 @@ namespace LazinatorCodeGen.Roslyn
             foreach (var propertyWithLevelInfo in GetPropertyWithDefinitionInfo(@interface))
             {
                 IPropertySymbol property1 = propertyWithLevelInfo.Property;
-                string property1Name = property1.GetFullyQualifiedName();
+                string property1Name = property1.GetFullyQualifiedName(true);
                 if (!ILazinatorProperties.Contains(property1Name))
                 { // ignore a property that is actually an ILazinator property rather than a property we are looking for
                     propertiesInInterfaceWithLevel.Add(propertyWithLevelInfo);
@@ -238,7 +238,7 @@ namespace LazinatorCodeGen.Roslyn
         {
             if (type.ContainingNamespace != null &&  type.ContainingNamespace.Name == "System" && type.ContainingNamespace.ContainingNamespace.Name == "")
                 return;
-            string typeName = type.GetFullyQualifiedName();
+            string typeName = type.GetFullyQualifiedName(true);
             if (RelevantSymbols.ContainsKey(typeName))
                 return;
             RelevantSymbols.Add(typeName, type);
@@ -506,7 +506,7 @@ namespace LazinatorCodeGen.Roslyn
             bool defaultAllowRecordLikeClasses = false, defaultAllowRecordLikeRegularStructs = false, defaultAllowRecordLikeReadOnlyStructs = true;
             if (DefaultConfig != null)
             {
-                string appropriatelyQualifiedName = DefaultConfig.UseFullyQualifiedNames ? type.GetFullyQualifiedNameWithoutGlobal() : type.GetMinimallyQualifiedName();
+                string appropriatelyQualifiedName = DefaultConfig.UseFullyQualifiedNames ? type.GetFullyQualifiedNameWithoutGlobal(false) : type.GetMinimallyQualifiedName(false);
                 if (DefaultConfig.IncludeRecordLikeTypes.Contains(appropriatelyQualifiedName))
                     return true;
                 if (DefaultConfig.IgnoreRecordLikeTypes.Contains(appropriatelyQualifiedName))
@@ -526,8 +526,9 @@ namespace LazinatorCodeGen.Roslyn
         {
             if (DefaultConfig != null)
             {
-                string appropriatelyQualifiedName = DefaultConfig.UseFullyQualifiedNames ? type.GetFullyQualifiedNameWithoutGlobal() : type.GetMinimallyQualifiedName();
-                if (DefaultConfig.IncludeRecordLikeTypes.Contains(appropriatelyQualifiedName))
+                string appropriatelyQualifiedName = DefaultConfig.UseFullyQualifiedNames ? type.GetFullyQualifiedNameWithoutGlobal(false) : type.GetMinimallyQualifiedName(false);
+                string appropriatelyQualifiedNameWithNullableIndicators = DefaultConfig.UseFullyQualifiedNames ? type.GetFullyQualifiedNameWithoutGlobal(true) : type.GetMinimallyQualifiedName(true);
+                if (DefaultConfig.IncludeRecordLikeTypes.Contains(appropriatelyQualifiedName) || DefaultConfig.IncludeRecordLikeTypes.Contains(appropriatelyQualifiedNameWithNullableIndicators))
                     return true;
             }
             return false;
@@ -563,7 +564,7 @@ namespace LazinatorCodeGen.Roslyn
 
         public IEnumerable<Attribute> GetAttributes(ISymbol symbol)
         {
-            string symbolName = symbol?.GetFullyQualifiedName();
+            string symbolName = symbol?.GetFullyQualifiedName(true);
             if (symbol == null || !KnownAttributes.ContainsKey(symbolName))
                 yield break;
             foreach (var attribute in KnownAttributes[symbolName])
@@ -587,7 +588,7 @@ namespace LazinatorCodeGen.Roslyn
 
         private void AddKnownAttributesForSymbol(ISymbol symbol)
         {
-            string symbolName = symbol.GetFullyQualifiedName();
+            string symbolName = symbol.GetFullyQualifiedName(true);
             if (KnownAttributes.ContainsKey(symbolName))
                 return;
             AddKnownAttributesForSymbol(symbol, RoslynHelpers.GetKnownAttributes(symbol));
@@ -595,7 +596,7 @@ namespace LazinatorCodeGen.Roslyn
 
         private void AddKnownAttributesForSymbol(ISymbol symbol, IEnumerable<Attribute> newlyKnownAttributes)
         {
-            string symbolName = symbol.GetFullyQualifiedName();
+            string symbolName = symbol.GetFullyQualifiedName(true);
             HashSet<Attribute> alreadyKnownAttributes;
             if (KnownAttributes.ContainsKey(symbolName))
                 alreadyKnownAttributes = KnownAttributes[symbolName];
@@ -612,7 +613,7 @@ namespace LazinatorCodeGen.Roslyn
             {
                 if (keyValuePair.Value is INamedTypeSymbol namedSymbol)
                 {
-                    string fullyQualifiedName = RoslynHelpers.GetFullyQualifiedNameWithoutGlobal(namedSymbol);
+                    string fullyQualifiedName = RoslynHelpers.GetFullyQualifiedNameWithoutGlobal(namedSymbol, true);
                     string fullyQualifiedMetadataName = RoslynHelpers.GetFullyQualifiedMetadataName(namedSymbol);
                     if (namedSymbol.Name == name || fullyQualifiedName == name || fullyQualifiedName == RoslynHelpers.GetNameWithoutGenericArity(name) || namedSymbol.MetadataName == name || fullyQualifiedMetadataName == name)
                         return namedSymbol;
@@ -644,12 +645,12 @@ namespace LazinatorCodeGen.Roslyn
             }
             foreach (string methodName in _methodNamesToLookFor)
                 if (methodDeclarations.Any(x => x.Identifier.Text == methodName))
-                    typeImplementsMethod.Add((typeSymbol.GetFullyQualifiedName(), methodName));
+                    typeImplementsMethod.Add((typeSymbol.GetFullyQualifiedName(true), methodName));
         }
 
         public static string TypeSymbolToString(INamedTypeSymbol typeSymbol)
         {
-            string name = typeSymbol.GetFullyQualifiedName();
+            string name = typeSymbol.GetFullyQualifiedName(true);
             if (!NameTypedSymbolFromString.ContainsKey(name))
                 NameTypedSymbolFromString[name] = typeSymbol;
             return name;

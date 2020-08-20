@@ -86,7 +86,7 @@ namespace LazinatorCodeGen.Roslyn
                     string.Join(", ", innerTypeNames));
             }
 
-            return RegularizeTypeName(t.Name, nullable, nullableEnabledContext);
+            return RegularizeTypeName(t.Name);
         }
         
         public static string EncodableTypeName(ITypeSymbol typeSymbol)
@@ -113,7 +113,7 @@ namespace LazinatorCodeGen.Roslyn
                     string.Join("_", typeArguments.Select(x => EncodableTypeName(x))));
             }
 
-            string regularized = RegularizeTypeName(name, false, false);
+            string regularized = RegularizeTypeName(name);
 
             return regularized;
         }
@@ -136,16 +136,7 @@ namespace LazinatorCodeGen.Roslyn
             { "String", "string" },
         };
 
-        public static string RegularizeTypeName(string typeName, bool isNullable, bool nullableModeEnabled)
-        {
-            string regularized = RegularizeTypeNameHelper(typeName);
-            bool isNullableReferenceTypeInEnabledContext = isNullable && nullableModeEnabled;
-            if (isNullableReferenceTypeInEnabledContext && !regularized.EndsWith("?"))
-                regularized = regularized + "?";
-            return regularized;
-        }
-
-        private static string RegularizeTypeNameHelper(string typeName)
+        public static string RegularizeTypeName(string typeName)
         {
             if (TypeRegularization.ContainsKey(typeName))
                 return TypeRegularization[typeName];
@@ -162,20 +153,24 @@ namespace LazinatorCodeGen.Roslyn
             else
                 return typeName;
         }
-        
-        public static string GetMinimallyQualifiedName(this ISymbol symbol)
+
+
+        private static SymbolDisplayFormat MinimallyQualifiedFormat(bool outputNullableModeEnabled) => outputNullableModeEnabled ? SymbolDisplayFormat.MinimallyQualifiedFormat.AddMiscellaneousOptions(SymbolDisplayMiscellaneousOptions.IncludeNullableReferenceTypeModifier) : SymbolDisplayFormat.MinimallyQualifiedFormat;
+        private static SymbolDisplayFormat FullyQualifiedFormat(bool outputNullableModeEnabled) => outputNullableModeEnabled ? SymbolDisplayFormat.FullyQualifiedFormat.WithMemberOptions(SymbolDisplayMemberOptions.IncludeContainingType).AddMiscellaneousOptions(SymbolDisplayMiscellaneousOptions.IncludeNullableReferenceTypeModifier) : SymbolDisplayFormat.FullyQualifiedFormat.WithMemberOptions(SymbolDisplayMemberOptions.IncludeContainingType);
+
+        public static string GetMinimallyQualifiedName(this ISymbol symbol, bool outputNullableModeEnabled)
         {
-            return symbol.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
+            return symbol.ToDisplayString(MinimallyQualifiedFormat(outputNullableModeEnabled));
         }
 
-        public static string GetFullyQualifiedName(this ISymbol symbol)
+        public static string GetFullyQualifiedName(this ISymbol symbol, bool outputNullableModeEnabled)
         {
-            return symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.WithMemberOptions(SymbolDisplayMemberOptions.IncludeContainingType));
+            return symbol.ToDisplayString(FullyQualifiedFormat(outputNullableModeEnabled));
         }
 
-        public static string GetFullyQualifiedNameWithoutGlobal(this ISymbol symbol)
+        public static string GetFullyQualifiedNameWithoutGlobal(this ISymbol symbol, bool outputNullableModeEnabled)
         {
-            return symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat.WithMemberOptions(SymbolDisplayMemberOptions.IncludeContainingType).WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.Omitted));
+            return symbol.ToDisplayString(FullyQualifiedFormat(outputNullableModeEnabled).WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.Omitted));
         }
 
         public static string GetFullyQualifiedMetadataName(this ISymbol symbol)
