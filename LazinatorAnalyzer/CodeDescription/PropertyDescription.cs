@@ -39,8 +39,8 @@ namespace Lazinator.CodeDescription
         public string QuestionMarkIfNullableModeEnabled => NullableModeEnabled ? "?" : "";
         public string QuestionMarkIfNullableAndNullableModeEnabled => Nullable && NullableModeEnabled ? "?" : "";        
         public NullableContext OutputNullableContextSetting { get; set; }
-        public bool OutputNullableModeEnabled => OutputNullableContextSetting.WarningsEnabled(); // TODO && NullableContextSetting.AnnotationsEnabled();
-        public bool OutputNullableModeInherited => OutputNullableContextSetting.WarningsInherited(); // TODO annotations
+        public bool OutputNullableModeEnabled => OutputNullableContextSetting.AnnotationsEnabled(); // TODO && NullableContextSetting.AnnotationsEnabled();
+        public bool OutputNullableModeInherited => OutputNullableContextSetting.AnnotationsInherited(); // TODO annotations
         public string OutputQuestionMarkIfNullableModeEnabled => OutputNullableModeEnabled ? "?" : "";
         public string OutputQuestionMarkIfNullableAndNullableModeEnabled => Nullable && OutputNullableModeEnabled ? "?" : "";
 
@@ -256,6 +256,10 @@ namespace Lazinator.CodeDescription
             IsAbstract = PropertySymbol.Type.IsAbstract;
             ContainingObjectDescription = container;
             NullableContextSetting = OutputNullableContextSetting = nullableContextSetting;
+            if (propertySymbol.Name == "NonNullableArrayOfNonNullables")
+            {
+                var DEBUG = 0;
+            }
             PropertyName = propertySymbol.Name;
             DerivationKeyword = derivationKeyword;
             PropertyAccessibility = propertyAccessibility;
@@ -674,7 +678,7 @@ namespace Lazinator.CodeDescription
             PropertyType = LazinatorPropertyType.SupportedCollection;
             InnerProperties = new List<PropertyDescription>()
             {
-                new PropertyDescription(t.ElementType, ContainingObjectDescription, t.ElementType.GetNullableContextForSymbol(Compilation), NullableContextSetting, this)
+                new PropertyDescription(t.ElementType, ContainingObjectDescription, NullableContextSetting /* whether this is nullable depends on the declaring property */, NullableContextSetting, this)
             };
         }
 
