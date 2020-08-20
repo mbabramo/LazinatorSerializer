@@ -114,6 +114,7 @@ namespace Lazinator.CodeDescription
         internal string BackingFieldStringOrContainedSpan(string propertyName) => (SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan) ?
                     GetReadOnlySpanBackingFieldCast(propertyName) : (propertyName ?? BackingFieldString);
         internal string PossibleUnsetException => $"{IIF(AddQuestionMarkInBackingFieldForNonNullable, $" ?? throw new UnsetNonnullableLazinatorException()")}{IIF(NullForgivenessInsteadOfPossibleUnsetException, "!")}";
+        internal string PossibleUnsetExceptionWithForgivenessWithinNotNull => $"{IIF(AddQuestionMarkInBackingFieldForNonNullable, $" ?? throw new UnsetNonnullableLazinatorException()")}{IIF(NullableModeEnabled && !AddQuestionMarkInBackingFieldForNonNullable, "!")}";
         internal string DefaultInitializationIfPossible(string defaultType) => $"{IIF(!AddQuestionMarkInBackingFieldForNonNullable, $" = default{IIF(defaultType != null, $"({defaultType})")}")}";
         string elseThrowString = $@"
                 else 
@@ -747,9 +748,10 @@ namespace Lazinator.CodeDescription
             {
                 var DEBUG = 0;
             }
+            var originalDefinition = t.OriginalDefinition; // if defined as MyClass?, then we want just MyClass
             // We look for a record-like type only after we have determined that the type does not implement ILazinator and we don't have the other supported tuple types (e.g., ValueTuples, KeyValuePair). We need to make sure that for each parameter in the constructor with the most parameters, there is a unique property with the same name (case insensitive as to first letter). If so, we assume that this property corresponds to the parameter, though there is no inherent guarantee that this is true. 
             var recordLikeTypes = ContainingObjectDescription.Compilation.RecordLikeTypes;
-            if (!recordLikeTypes.ContainsKey(LazinatorCompilation.TypeSymbolToString(t)) || (Config?.IgnoreRecordLikeTypes.Any(x => x.ToUpper() == (UseFullyQualifiedNames ? t.GetFullyQualifiedNameWithoutGlobal(NullableModeEnabled).ToUpper() : t.GetMinimallyQualifiedName(NullableModeEnabled))) ?? false))
+            if (!recordLikeTypes.ContainsKey(LazinatorCompilation.TypeSymbolToString(originalDefinition)) || (Config?.IgnoreRecordLikeTypes.Any(x => x.ToUpper() == (UseFullyQualifiedNames ? t.GetFullyQualifiedNameWithoutGlobal(NullableModeEnabled).ToUpper() : originalDefinition.GetMinimallyQualifiedName(NullableModeEnabled))) ?? false))
             {
                 return false;
             }
@@ -759,7 +761,7 @@ namespace Lazinator.CodeDescription
             SupportedTupleType = LazinatorSupportedTupleType.RecordLikeType;
             Nullable = TypeReportedAsNullable;
 
-            InnerProperties = recordLikeTypes[LazinatorCompilation.TypeSymbolToString(t)]
+            InnerProperties = recordLikeTypes[LazinatorCompilation.TypeSymbolToString(originalDefinition)]
                 .Select(x => GetPropertyDescriptionForPropertyDefinedElsewhere(x.property.Type, ContainingObjectDescription, this, x.property.Name, x.parameterSymbol.GetNullableContextForSymbol(Compilation), OutputNullableContextSetting)).ToList();
             return true;
         }
@@ -1856,7 +1858,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 if ({innerProperty.GetNonNullCheck(false, "itemToClone[itemIndex]")})
                                 {{
-                                    itemToClone[itemIndex] = ({innerProperty.AppropriatelyQualifiedTypeName}) (cloneOrChangeFunc(itemToClone[itemIndex]){innerProperty.PossibleUnsetException});
+                                    itemToClone[itemIndex] = ({innerProperty.AppropriatelyQualifiedTypeName}) (cloneOrChangeFunc(itemToClone[itemIndex]){innerProperty.PossibleUnsetExceptionWithForgivenessWithinNotNull});
                                 }}
                                 continue;
                             }}

@@ -193,7 +193,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         /*Location119*/private ReadOnlyMemory<byte> _ByteReadOnlySpan;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ReadOnlySpan<byte> ByteReadOnlySpan
+        public ReadOnlySpan<Byte> ByteReadOnlySpan
         {
             get
             {
@@ -372,9 +372,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         /*Location125*/
-        protected Dictionary<int, Example> _NonNullableDictionaryWithNonNullable;
+        protected Dictionary<Int32, Example> _NonNullableDictionaryWithNonNullable;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Dictionary<int, Example> NonNullableDictionaryWithNonNullable
+        public Dictionary<Int32, Example> NonNullableDictionaryWithNonNullable
         {
             get
             {
@@ -391,9 +391,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         /*Location126*/
-        protected Dictionary<int, Example?> _NonNullableDictionaryWithNullable;
+        protected Dictionary<Int32, Example?> _NonNullableDictionaryWithNullable;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Dictionary<int, Example?> NonNullableDictionaryWithNullable
+        public Dictionary<Int32, Example?> NonNullableDictionaryWithNullable
         {
             get
             {
@@ -523,9 +523,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         /*Location132*/
-        protected Memory<byte> _NonNullableMemoryOfBytes;
+        protected Memory<Byte> _NonNullableMemoryOfBytes;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Memory<byte> NonNullableMemoryOfBytes
+        public Memory<Byte> NonNullableMemoryOfBytes
         {
             get
             {
@@ -549,7 +549,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _NonNullableMemoryOfBytes = default(Memory<byte>);
+                _NonNullableMemoryOfBytes = default(Memory<Byte>);
             }
             else
             {
@@ -599,9 +599,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         /*Location135*/
-        protected ReadOnlyMemory<byte> _NonNullableReadOnlyMemoryOfBytes;
+        protected ReadOnlyMemory<Byte> _NonNullableReadOnlyMemoryOfBytes;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ReadOnlyMemory<byte> NonNullableReadOnlyMemoryOfBytes
+        public ReadOnlyMemory<Byte> NonNullableReadOnlyMemoryOfBytes
         {
             get
             {
@@ -625,7 +625,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _NonNullableReadOnlyMemoryOfBytes = default(ReadOnlyMemory<byte>);
+                _NonNullableReadOnlyMemoryOfBytes = default(ReadOnlyMemory<Byte>);
             }
             else
             {
@@ -674,9 +674,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         /*Location138*/
-        protected Tuple<Example, int> _NonNullableRegularTupleWithNonNullable;
+        protected Tuple<Example, Int32> _NonNullableRegularTupleWithNonNullable;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Tuple<Example, int> NonNullableRegularTupleWithNonNullable
+        public Tuple<Example, Int32> NonNullableRegularTupleWithNonNullable
         {
             get
             {
@@ -693,9 +693,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         /*Location139*/
-        protected Tuple<Example?, int> _NonNullableRegularTupleWithNullable;
+        protected Tuple<Example?, Int32> _NonNullableRegularTupleWithNullable;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Tuple<Example?, int> NonNullableRegularTupleWithNullable
+        public Tuple<Example?, Int32> NonNullableRegularTupleWithNullable
         {
             get
             {
@@ -897,9 +897,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         /*Location146*/
-        protected Dictionary<int, Example>? _NullableDictionaryWithNonNullable;
+        protected Dictionary<Int32, Example>? _NullableDictionaryWithNonNullable;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Dictionary<int, Example>? NullableDictionaryWithNonNullable
+        public Dictionary<Int32, Example>? NullableDictionaryWithNonNullable
         {
             get
             {
@@ -923,7 +923,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _NullableDictionaryWithNonNullable = default(Dictionary<int, Example>?);
+                _NullableDictionaryWithNonNullable = default(Dictionary<Int32, Example>?);
             }
             else
             {
@@ -935,9 +935,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         /*Location147*/
-        protected Dictionary<int, Example?>? _NullableDictionaryWithNullable;
+        protected Dictionary<Int32, Example?>? _NullableDictionaryWithNullable;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Dictionary<int, Example?>? NullableDictionaryWithNullable
+        public Dictionary<Int32, Example?>? NullableDictionaryWithNullable
         {
             get
             {
@@ -961,7 +961,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _NullableDictionaryWithNullable = default(Dictionary<int, Example?>?);
+                _NullableDictionaryWithNullable = default(Dictionary<Int32, Example?>?);
             }
             else
             {
@@ -1143,9 +1143,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         /*Location152*/
-        protected Memory<byte>? _NullableMemoryOfBytes;
+        protected Memory<Byte>? _NullableMemoryOfBytes;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Memory<byte>? NullableMemoryOfBytes
+        public Memory<Byte>? NullableMemoryOfBytes
         {
             get
             {
@@ -1169,7 +1169,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _NullableMemoryOfBytes = default(Memory<byte>?);
+                _NullableMemoryOfBytes = default(Memory<Byte>?);
             }
             else
             {
@@ -1257,9 +1257,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         /*Location155*/
-        protected ReadOnlyMemory<byte>? _NullableReadOnlyMemoryOfBytes;
+        protected ReadOnlyMemory<Byte>? _NullableReadOnlyMemoryOfBytes;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public ReadOnlyMemory<byte>? NullableReadOnlyMemoryOfBytes
+        public ReadOnlyMemory<Byte>? NullableReadOnlyMemoryOfBytes
         {
             get
             {
@@ -1283,7 +1283,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _NullableReadOnlyMemoryOfBytes = default(ReadOnlyMemory<byte>?);
+                _NullableReadOnlyMemoryOfBytes = default(ReadOnlyMemory<Byte>?);
             }
             else
             {
@@ -1371,9 +1371,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         /*Location158*/
-        protected Tuple<Example, int>? _NullableRegularTupleWithNonNullable;
+        protected Tuple<Example, Int32>? _NullableRegularTupleWithNonNullable;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Tuple<Example, int>? NullableRegularTupleWithNonNullable
+        public Tuple<Example, Int32>? NullableRegularTupleWithNonNullable
         {
             get
             {
@@ -1397,7 +1397,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _NullableRegularTupleWithNonNullable = default(Tuple<Example, int>?);
+                _NullableRegularTupleWithNonNullable = default(Tuple<Example, Int32>?);
             }
             else
             {
@@ -1409,9 +1409,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         /*Location159*/
-        protected Tuple<Example?, int>? _NullableRegularTupleWithNullable;
+        protected Tuple<Example?, Int32>? _NullableRegularTupleWithNullable;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public Tuple<Example?, int>? NullableRegularTupleWithNullable
+        public Tuple<Example?, Int32>? NullableRegularTupleWithNullable
         {
             get
             {
@@ -1435,7 +1435,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _NullableRegularTupleWithNullable = default(Tuple<Example?, int>?);
+                _NullableRegularTupleWithNullable = default(Tuple<Example?, Int32>?);
             }
             else
             {
@@ -1612,9 +1612,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         /*Location164*/
-        protected (Example, int)? _NullableValueTupleWithNonNullable;
+        protected (Example, Int32)? _NullableValueTupleWithNonNullable;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public (Example, int)? NullableValueTupleWithNonNullable
+        public (Example, Int32)? NullableValueTupleWithNonNullable
         {
             get
             {
@@ -1638,7 +1638,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _NullableValueTupleWithNonNullable = default((Example, int)?);
+                _NullableValueTupleWithNonNullable = default((Example, Int32)?);
             }
             else
             {
@@ -1650,9 +1650,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         /*Location165*/
-        protected (Example?, int)? _NullableValueTupleWithNullable;
+        protected (Example?, Int32)? _NullableValueTupleWithNullable;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public (Example?, int)? NullableValueTupleWithNullable
+        public (Example?, Int32)? NullableValueTupleWithNullable
         {
             get
             {
@@ -1676,7 +1676,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _NullableValueTupleWithNullable = default((Example?, int)?);
+                _NullableValueTupleWithNullable = default((Example?, Int32)?);
             }
             else
             {
@@ -1688,9 +1688,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         /*Location166*/
-        protected (Example, int) _ValueTupleWithNonNullable;
+        protected (Example, Int32) _ValueTupleWithNonNullable;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public (Example, int) ValueTupleWithNonNullable
+        public (Example, Int32) ValueTupleWithNonNullable
         {
             get
             {
@@ -1714,7 +1714,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _ValueTupleWithNonNullable = default((Example, int));
+                _ValueTupleWithNonNullable = default((Example, Int32));
             }
             else
             {
@@ -1726,9 +1726,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         }
         
         /*Location167*/
-        protected (Example?, int) _ValueTupleWithNullable;
+        protected (Example?, Int32) _ValueTupleWithNullable;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public (Example?, int) ValueTupleWithNullable
+        public (Example?, Int32) ValueTupleWithNullable
         {
             get
             {
@@ -1752,7 +1752,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _ValueTupleWithNullable = default((Example?, int));
+                _ValueTupleWithNullable = default((Example?, Int32));
             }
             else
             {
@@ -1766,7 +1766,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         /*Location219*/
         /* Serialization, deserialization, and object relationships */
         
-        public NullableEnabledContext(IncludeChildrenMode originalIncludeChildrenMode, Example[] nonNullableArrayOfNonNullables, Example?[] nonNullableArrayOfNullables, Example nonNullableClass, Dictionary<int, Example> nonNullableDictionaryWithNonNullable, Dictionary<int, Example?> nonNullableDictionaryWithNullable, IExample nonNullableInterface, LazinatorList<Example> nonNullableLazinatorListNonNullable, LazinatorList<Example?> nonNullableLazinatorListNullable, List<Example> nonNullableListOfNonNullables, List<Example?> nonNullableListOfNullables, Queue<Example> nonNullableQueueOfNonNullables, Queue<Example?> nonNullableQueueOfNullables, RecordLikeClass nonNullableRecordLikeClass, RecordLikeStruct nonNullableRecordLikeStruct, Tuple<Example, int> nonNullableRegularTupleWithNonNullable, Tuple<Example?, int> nonNullableRegularTupleWithNullable, Stack<Example> nonNullableStackOfNonNullables, Stack<Example?> nonNullableStackOfNullables)
+        public NullableEnabledContext(IncludeChildrenMode originalIncludeChildrenMode, Example[] nonNullableArrayOfNonNullables, Example?[] nonNullableArrayOfNullables, Example nonNullableClass, Dictionary<Int32, Example> nonNullableDictionaryWithNonNullable, Dictionary<Int32, Example?> nonNullableDictionaryWithNullable, IExample nonNullableInterface, LazinatorList<Example> nonNullableLazinatorListNonNullable, LazinatorList<Example?> nonNullableLazinatorListNullable, List<Example> nonNullableListOfNonNullables, List<Example?> nonNullableListOfNullables, Queue<Example> nonNullableQueueOfNonNullables, Queue<Example?> nonNullableQueueOfNullables, RecordLikeClass nonNullableRecordLikeClass, RecordLikeStruct nonNullableRecordLikeStruct, Tuple<Example, Int32> nonNullableRegularTupleWithNonNullable, Tuple<Example?, Int32> nonNullableRegularTupleWithNullable, Stack<Example> nonNullableStackOfNonNullables, Stack<Example?> nonNullableStackOfNullables)
         {
             _NonNullableArrayOfNonNullables = nonNullableArrayOfNonNullables;
             _NonNullableArrayOfNullables = nonNullableArrayOfNullables;
@@ -2442,8 +2442,8 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 _NullableStruct = (ExampleStructWithoutClass?) _NullableStruct!.Value.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
-            /*Location287*/_NonNullableArrayOfNonNullables = (Example[]) CloneOrChange_Example_B_b(_NonNullableArrayOfNonNullables!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true)!, true);/*Location288*/_NonNullableArrayOfNullables = (Example?[]) CloneOrChange_Example_n_B_b(_NonNullableArrayOfNullables!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);/*Location289*/_NonNullableDictionaryWithNonNullable = (Dictionary<int, Example>) CloneOrChange_Dictionary_Gint_c_C32Example_g(_NonNullableDictionaryWithNonNullable!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);/*Location290*/_NonNullableDictionaryWithNullable = (Dictionary<int, Example?>) CloneOrChange_Dictionary_Gint_c_C32Example_n_g(_NonNullableDictionaryWithNullable!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);/*Location291*/_NonNullableListOfNonNullables = (List<Example>) CloneOrChange_List_GExample_g(_NonNullableListOfNonNullables!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true)!, true);/*Location292*/_NonNullableListOfNullables = (List<Example?>) CloneOrChange_List_GExample_n_g(_NonNullableListOfNullables!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);/*Location293*/_NonNullableQueueOfNonNullables = (Queue<Example>) CloneOrChange_Queue_GExample_g(_NonNullableQueueOfNonNullables!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true)!, true);/*Location294*/_NonNullableQueueOfNullables = (Queue<Example?>) CloneOrChange_Queue_GExample_n_g(_NonNullableQueueOfNullables!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);/*Location295*/_NonNullableRecordLikeClass = (RecordLikeClass) CloneOrChange_RecordLikeClass(_NonNullableRecordLikeClass!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);/*Location296*/var deserialized_NonNullableRecordLikeStruct = NonNullableRecordLikeStruct;
-            _NonNullableRecordLikeStruct = (RecordLikeStruct) CloneOrChange_RecordLikeStruct(_NonNullableRecordLikeStruct!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);/*Location297*/_NonNullableRegularTupleWithNonNullable = (Tuple<Example, int>) CloneOrChange_Tuple_GExample_c_C32int_g(_NonNullableRegularTupleWithNonNullable!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true)!, true);/*Location298*/_NonNullableRegularTupleWithNullable = (Tuple<Example?, int>) CloneOrChange_Tuple_GExample_n_c_C32int_g(_NonNullableRegularTupleWithNullable!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);/*Location299*/_NonNullableStackOfNonNullables = (Stack<Example>) CloneOrChange_Stack_GExample_g(_NonNullableStackOfNonNullables!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true)!, true);/*Location300*/_NonNullableStackOfNullables = (Stack<Example?>) CloneOrChange_Stack_GExample_n_g(_NonNullableStackOfNullables!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);/*Location301*/if ((!exploreOnlyDeserializedChildren && NullableArrayOfNonNullables != null) || (_NullableArrayOfNonNullables_Accessed && _NullableArrayOfNonNullables != null))
+            /*Location287*/_NonNullableArrayOfNonNullables = (Example[]) CloneOrChange_Example_B_b(_NonNullableArrayOfNonNullables!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true)!, true);/*Location288*/_NonNullableArrayOfNullables = (Example?[]) CloneOrChange_Example_n_B_b(_NonNullableArrayOfNullables!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);/*Location289*/_NonNullableDictionaryWithNonNullable = (Dictionary<Int32, Example>) CloneOrChange_Dictionary_Gint_c_C32Example_g(_NonNullableDictionaryWithNonNullable!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);/*Location290*/_NonNullableDictionaryWithNullable = (Dictionary<Int32, Example?>) CloneOrChange_Dictionary_Gint_c_C32Example_n_g(_NonNullableDictionaryWithNullable!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);/*Location291*/_NonNullableListOfNonNullables = (List<Example>) CloneOrChange_List_GExample_g(_NonNullableListOfNonNullables!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true)!, true);/*Location292*/_NonNullableListOfNullables = (List<Example?>) CloneOrChange_List_GExample_n_g(_NonNullableListOfNullables!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);/*Location293*/_NonNullableQueueOfNonNullables = (Queue<Example>) CloneOrChange_Queue_GExample_g(_NonNullableQueueOfNonNullables!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true)!, true);/*Location294*/_NonNullableQueueOfNullables = (Queue<Example?>) CloneOrChange_Queue_GExample_n_g(_NonNullableQueueOfNullables!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);/*Location295*/_NonNullableRecordLikeClass = (RecordLikeClass) CloneOrChange_RecordLikeClass(_NonNullableRecordLikeClass!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);/*Location296*/var deserialized_NonNullableRecordLikeStruct = NonNullableRecordLikeStruct;
+            _NonNullableRecordLikeStruct = (RecordLikeStruct) CloneOrChange_RecordLikeStruct(_NonNullableRecordLikeStruct!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);/*Location297*/_NonNullableRegularTupleWithNonNullable = (Tuple<Example, Int32>) CloneOrChange_Tuple_GExample_c_C32int_g(_NonNullableRegularTupleWithNonNullable!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true)!, true);/*Location298*/_NonNullableRegularTupleWithNullable = (Tuple<Example?, Int32>) CloneOrChange_Tuple_GExample_n_c_C32int_g(_NonNullableRegularTupleWithNullable!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);/*Location299*/_NonNullableStackOfNonNullables = (Stack<Example>) CloneOrChange_Stack_GExample_g(_NonNullableStackOfNonNullables!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true)!, true);/*Location300*/_NonNullableStackOfNullables = (Stack<Example?>) CloneOrChange_Stack_GExample_n_g(_NonNullableStackOfNullables!, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);/*Location301*/if ((!exploreOnlyDeserializedChildren && NullableArrayOfNonNullables != null) || (_NullableArrayOfNonNullables_Accessed && _NullableArrayOfNonNullables != null))
             {
                 _NullableArrayOfNonNullables = (Example[]?) CloneOrChange_Example_B_b_n(_NullableArrayOfNonNullables, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true)!, true);
             }
@@ -2453,11 +2453,11 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             /*Location303*/if ((!exploreOnlyDeserializedChildren && NullableDictionaryWithNonNullable != null) || (_NullableDictionaryWithNonNullable_Accessed && _NullableDictionaryWithNonNullable != null))
             {
-                _NullableDictionaryWithNonNullable = (Dictionary<int, Example>?) CloneOrChange_Dictionary_Gint_c_C32Example_g_n(_NullableDictionaryWithNonNullable, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
+                _NullableDictionaryWithNonNullable = (Dictionary<Int32, Example>?) CloneOrChange_Dictionary_Gint_c_C32Example_g_n(_NullableDictionaryWithNonNullable, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             /*Location304*/if ((!exploreOnlyDeserializedChildren && NullableDictionaryWithNullable != null) || (_NullableDictionaryWithNullable_Accessed && _NullableDictionaryWithNullable != null))
             {
-                _NullableDictionaryWithNullable = (Dictionary<int, Example?>?) CloneOrChange_Dictionary_Gint_c_C32Example_n_g_n(_NullableDictionaryWithNullable, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
+                _NullableDictionaryWithNullable = (Dictionary<Int32, Example?>?) CloneOrChange_Dictionary_Gint_c_C32Example_n_g_n(_NullableDictionaryWithNullable, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             /*Location305*/if ((!exploreOnlyDeserializedChildren && NullableListOfNonNullables != null) || (_NullableListOfNonNullables_Accessed && _NullableListOfNonNullables != null))
             {
@@ -2485,11 +2485,11 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             /*Location311*/if ((!exploreOnlyDeserializedChildren && NullableRegularTupleWithNonNullable != null) || (_NullableRegularTupleWithNonNullable_Accessed && _NullableRegularTupleWithNonNullable != null))
             {
-                _NullableRegularTupleWithNonNullable = (Tuple<Example, int>?) CloneOrChange_Tuple_GExample_c_C32int_g_n(_NullableRegularTupleWithNonNullable, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true)!, true);
+                _NullableRegularTupleWithNonNullable = (Tuple<Example, Int32>?) CloneOrChange_Tuple_GExample_c_C32int_g_n(_NullableRegularTupleWithNonNullable, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true)!, true);
             }
             /*Location312*/if ((!exploreOnlyDeserializedChildren && NullableRegularTupleWithNullable != null) || (_NullableRegularTupleWithNullable_Accessed && _NullableRegularTupleWithNullable != null))
             {
-                _NullableRegularTupleWithNullable = (Tuple<Example?, int>?) CloneOrChange_Tuple_GExample_n_c_C32int_g_n(_NullableRegularTupleWithNullable, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
+                _NullableRegularTupleWithNullable = (Tuple<Example?, Int32>?) CloneOrChange_Tuple_GExample_n_c_C32int_g_n(_NullableRegularTupleWithNullable, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             /*Location313*/if ((!exploreOnlyDeserializedChildren && NullableStackOfNonNullables != null) || (_NullableStackOfNonNullables_Accessed && _NullableStackOfNonNullables != null))
             {
@@ -2501,15 +2501,15 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             /*Location315*/if ((!exploreOnlyDeserializedChildren && NullableValueTupleWithNonNullable != null) || (_NullableValueTupleWithNonNullable_Accessed && _NullableValueTupleWithNonNullable != null))
             {
-                _NullableValueTupleWithNonNullable = ((Example, int)?) CloneOrChange__PExample_c_C32int_p_n(_NullableValueTupleWithNonNullable, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true)!, true);
+                _NullableValueTupleWithNonNullable = ((Example, Int32)?) CloneOrChange__PExample_c_C32int_p_n(_NullableValueTupleWithNonNullable, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true)!, true);
             }
             /*Location316*/if ((!exploreOnlyDeserializedChildren && NullableValueTupleWithNullable != null) || (_NullableValueTupleWithNullable_Accessed && _NullableValueTupleWithNullable != null))
             {
-                _NullableValueTupleWithNullable = ((Example?, int)?) CloneOrChange__PExample_n_c_C32int_p_n(_NullableValueTupleWithNullable, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
+                _NullableValueTupleWithNullable = ((Example?, Int32)?) CloneOrChange__PExample_n_c_C32int_p_n(_NullableValueTupleWithNullable, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             /*Location317*/var deserialized_ValueTupleWithNonNullable = ValueTupleWithNonNullable;
-            _ValueTupleWithNonNullable = ((Example, int)) CloneOrChange__PExample_c_C32int_p(_ValueTupleWithNonNullable, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true)!, true);/*Location318*/var deserialized_ValueTupleWithNullable = ValueTupleWithNullable;
-            _ValueTupleWithNullable = ((Example?, int)) CloneOrChange__PExample_n_c_C32int_p(_ValueTupleWithNullable, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);/*Location319*/if (!exploreOnlyDeserializedChildren)
+            _ValueTupleWithNonNullable = ((Example, Int32)) CloneOrChange__PExample_c_C32int_p(_ValueTupleWithNonNullable, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true)!, true);/*Location318*/var deserialized_ValueTupleWithNullable = ValueTupleWithNullable;
+            _ValueTupleWithNullable = ((Example?, Int32)) CloneOrChange__PExample_n_c_C32int_p(_ValueTupleWithNullable, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);/*Location319*/if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized_ByteReadOnlySpan = ByteReadOnlySpan;
                 if (!_ByteReadOnlySpan_Accessed)
@@ -2786,7 +2786,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                     NullableStruct!.Value.UpdateStoredBuffer(ref writer, startPosition + _NullableStruct_ByteIndex + sizeof(int), _NullableStruct_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
                                 }
                                 
-                                /*Location406*/_NonNullableArrayOfNonNullables = (Example[]) CloneOrChange_Example_B_b(_NonNullableArrayOfNonNullables!, l => l.RemoveBufferInHierarchy(), true);/*Location407*/_NonNullableArrayOfNullables = (Example?[]) CloneOrChange_Example_n_B_b(_NonNullableArrayOfNullables!, l => l.RemoveBufferInHierarchy(), true);/*Location408*/_NonNullableDictionaryWithNonNullable = (Dictionary<int, Example>) CloneOrChange_Dictionary_Gint_c_C32Example_g(_NonNullableDictionaryWithNonNullable!, l => l.RemoveBufferInHierarchy(), true);/*Location409*/_NonNullableDictionaryWithNullable = (Dictionary<int, Example?>) CloneOrChange_Dictionary_Gint_c_C32Example_n_g(_NonNullableDictionaryWithNullable!, l => l.RemoveBufferInHierarchy(), true);/*Location410*/_NonNullableListOfNonNullables = (List<Example>) CloneOrChange_List_GExample_g(_NonNullableListOfNonNullables!, l => l.RemoveBufferInHierarchy(), true);/*Location411*/_NonNullableListOfNullables = (List<Example?>) CloneOrChange_List_GExample_n_g(_NonNullableListOfNullables!, l => l.RemoveBufferInHierarchy(), true);/*Location412*/_NonNullableQueueOfNonNullables = (Queue<Example>) CloneOrChange_Queue_GExample_g(_NonNullableQueueOfNonNullables!, l => l.RemoveBufferInHierarchy(), true);/*Location413*/_NonNullableQueueOfNullables = (Queue<Example?>) CloneOrChange_Queue_GExample_n_g(_NonNullableQueueOfNullables!, l => l.RemoveBufferInHierarchy(), true);/*Location414*/_NonNullableRecordLikeClass = (RecordLikeClass) CloneOrChange_RecordLikeClass(_NonNullableRecordLikeClass!, l => l.RemoveBufferInHierarchy(), true);/*Location415*/_NonNullableRecordLikeStruct = (RecordLikeStruct) CloneOrChange_RecordLikeStruct(_NonNullableRecordLikeStruct!, l => l.RemoveBufferInHierarchy(), true);/*Location416*/_NonNullableRegularTupleWithNonNullable = (Tuple<Example, int>) CloneOrChange_Tuple_GExample_c_C32int_g(_NonNullableRegularTupleWithNonNullable!, l => l.RemoveBufferInHierarchy(), true);/*Location417*/_NonNullableRegularTupleWithNullable = (Tuple<Example?, int>) CloneOrChange_Tuple_GExample_n_c_C32int_g(_NonNullableRegularTupleWithNullable!, l => l.RemoveBufferInHierarchy(), true);/*Location418*/_NonNullableStackOfNonNullables = (Stack<Example>) CloneOrChange_Stack_GExample_g(_NonNullableStackOfNonNullables!, l => l.RemoveBufferInHierarchy(), true);/*Location419*/_NonNullableStackOfNullables = (Stack<Example?>) CloneOrChange_Stack_GExample_n_g(_NonNullableStackOfNullables!, l => l.RemoveBufferInHierarchy(), true);/*Location420*/if (_NullableArrayOfNonNullables_Accessed && _NullableArrayOfNonNullables != null)
+                                /*Location406*/_NonNullableArrayOfNonNullables = (Example[]) CloneOrChange_Example_B_b(_NonNullableArrayOfNonNullables!, l => l.RemoveBufferInHierarchy(), true);/*Location407*/_NonNullableArrayOfNullables = (Example?[]) CloneOrChange_Example_n_B_b(_NonNullableArrayOfNullables!, l => l.RemoveBufferInHierarchy(), true);/*Location408*/_NonNullableDictionaryWithNonNullable = (Dictionary<Int32, Example>) CloneOrChange_Dictionary_Gint_c_C32Example_g(_NonNullableDictionaryWithNonNullable!, l => l.RemoveBufferInHierarchy(), true);/*Location409*/_NonNullableDictionaryWithNullable = (Dictionary<Int32, Example?>) CloneOrChange_Dictionary_Gint_c_C32Example_n_g(_NonNullableDictionaryWithNullable!, l => l.RemoveBufferInHierarchy(), true);/*Location410*/_NonNullableListOfNonNullables = (List<Example>) CloneOrChange_List_GExample_g(_NonNullableListOfNonNullables!, l => l.RemoveBufferInHierarchy(), true);/*Location411*/_NonNullableListOfNullables = (List<Example?>) CloneOrChange_List_GExample_n_g(_NonNullableListOfNullables!, l => l.RemoveBufferInHierarchy(), true);/*Location412*/_NonNullableQueueOfNonNullables = (Queue<Example>) CloneOrChange_Queue_GExample_g(_NonNullableQueueOfNonNullables!, l => l.RemoveBufferInHierarchy(), true);/*Location413*/_NonNullableQueueOfNullables = (Queue<Example?>) CloneOrChange_Queue_GExample_n_g(_NonNullableQueueOfNullables!, l => l.RemoveBufferInHierarchy(), true);/*Location414*/_NonNullableRecordLikeClass = (RecordLikeClass) CloneOrChange_RecordLikeClass(_NonNullableRecordLikeClass!, l => l.RemoveBufferInHierarchy(), true);/*Location415*/_NonNullableRecordLikeStruct = (RecordLikeStruct) CloneOrChange_RecordLikeStruct(_NonNullableRecordLikeStruct!, l => l.RemoveBufferInHierarchy(), true);/*Location416*/_NonNullableRegularTupleWithNonNullable = (Tuple<Example, Int32>) CloneOrChange_Tuple_GExample_c_C32int_g(_NonNullableRegularTupleWithNonNullable!, l => l.RemoveBufferInHierarchy(), true);/*Location417*/_NonNullableRegularTupleWithNullable = (Tuple<Example?, Int32>) CloneOrChange_Tuple_GExample_n_c_C32int_g(_NonNullableRegularTupleWithNullable!, l => l.RemoveBufferInHierarchy(), true);/*Location418*/_NonNullableStackOfNonNullables = (Stack<Example>) CloneOrChange_Stack_GExample_g(_NonNullableStackOfNonNullables!, l => l.RemoveBufferInHierarchy(), true);/*Location419*/_NonNullableStackOfNullables = (Stack<Example?>) CloneOrChange_Stack_GExample_n_g(_NonNullableStackOfNullables!, l => l.RemoveBufferInHierarchy(), true);/*Location420*/if (_NullableArrayOfNonNullables_Accessed && _NullableArrayOfNonNullables != null)
                                 {
                                     _NullableArrayOfNonNullables = (Example[]?) CloneOrChange_Example_B_b_n(_NullableArrayOfNonNullables, l => l.RemoveBufferInHierarchy(), true);
                                 }
@@ -2796,11 +2796,11 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                 }
                                 /*Location422*/if (_NullableDictionaryWithNonNullable_Accessed && _NullableDictionaryWithNonNullable != null)
                                 {
-                                    _NullableDictionaryWithNonNullable = (Dictionary<int, Example>?) CloneOrChange_Dictionary_Gint_c_C32Example_g_n(_NullableDictionaryWithNonNullable, l => l.RemoveBufferInHierarchy(), true);
+                                    _NullableDictionaryWithNonNullable = (Dictionary<Int32, Example>?) CloneOrChange_Dictionary_Gint_c_C32Example_g_n(_NullableDictionaryWithNonNullable, l => l.RemoveBufferInHierarchy(), true);
                                 }
                                 /*Location423*/if (_NullableDictionaryWithNullable_Accessed && _NullableDictionaryWithNullable != null)
                                 {
-                                    _NullableDictionaryWithNullable = (Dictionary<int, Example?>?) CloneOrChange_Dictionary_Gint_c_C32Example_n_g_n(_NullableDictionaryWithNullable, l => l.RemoveBufferInHierarchy(), true);
+                                    _NullableDictionaryWithNullable = (Dictionary<Int32, Example?>?) CloneOrChange_Dictionary_Gint_c_C32Example_n_g_n(_NullableDictionaryWithNullable, l => l.RemoveBufferInHierarchy(), true);
                                 }
                                 /*Location424*/if (_NullableListOfNonNullables_Accessed && _NullableListOfNonNullables != null)
                                 {
@@ -2828,11 +2828,11 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                 }
                                 /*Location430*/if (_NullableRegularTupleWithNonNullable_Accessed && _NullableRegularTupleWithNonNullable != null)
                                 {
-                                    _NullableRegularTupleWithNonNullable = (Tuple<Example, int>?) CloneOrChange_Tuple_GExample_c_C32int_g_n(_NullableRegularTupleWithNonNullable, l => l.RemoveBufferInHierarchy(), true);
+                                    _NullableRegularTupleWithNonNullable = (Tuple<Example, Int32>?) CloneOrChange_Tuple_GExample_c_C32int_g_n(_NullableRegularTupleWithNonNullable, l => l.RemoveBufferInHierarchy(), true);
                                 }
                                 /*Location431*/if (_NullableRegularTupleWithNullable_Accessed && _NullableRegularTupleWithNullable != null)
                                 {
-                                    _NullableRegularTupleWithNullable = (Tuple<Example?, int>?) CloneOrChange_Tuple_GExample_n_c_C32int_g_n(_NullableRegularTupleWithNullable, l => l.RemoveBufferInHierarchy(), true);
+                                    _NullableRegularTupleWithNullable = (Tuple<Example?, Int32>?) CloneOrChange_Tuple_GExample_n_c_C32int_g_n(_NullableRegularTupleWithNullable, l => l.RemoveBufferInHierarchy(), true);
                                 }
                                 /*Location432*/if (_NullableStackOfNonNullables_Accessed && _NullableStackOfNonNullables != null)
                                 {
@@ -2844,13 +2844,13 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                 }
                                 /*Location434*/if (_NullableValueTupleWithNonNullable_Accessed && _NullableValueTupleWithNonNullable != null)
                                 {
-                                    _NullableValueTupleWithNonNullable = ((Example, int)?) CloneOrChange__PExample_c_C32int_p_n(_NullableValueTupleWithNonNullable, l => l.RemoveBufferInHierarchy(), true);
+                                    _NullableValueTupleWithNonNullable = ((Example, Int32)?) CloneOrChange__PExample_c_C32int_p_n(_NullableValueTupleWithNonNullable, l => l.RemoveBufferInHierarchy(), true);
                                 }
                                 /*Location435*/if (_NullableValueTupleWithNullable_Accessed && _NullableValueTupleWithNullable != null)
                                 {
-                                    _NullableValueTupleWithNullable = ((Example?, int)?) CloneOrChange__PExample_n_c_C32int_p_n(_NullableValueTupleWithNullable, l => l.RemoveBufferInHierarchy(), true);
+                                    _NullableValueTupleWithNullable = ((Example?, Int32)?) CloneOrChange__PExample_n_c_C32int_p_n(_NullableValueTupleWithNullable, l => l.RemoveBufferInHierarchy(), true);
                                 }
-                                /*Location436*/_ValueTupleWithNonNullable = ((Example, int)) CloneOrChange__PExample_c_C32int_p(_ValueTupleWithNonNullable, l => l.RemoveBufferInHierarchy(), true);/*Location437*/_ValueTupleWithNullable = ((Example?, int)) CloneOrChange__PExample_n_c_C32int_p(_ValueTupleWithNullable, l => l.RemoveBufferInHierarchy(), true);/*Location438*/}
+                                /*Location436*/_ValueTupleWithNonNullable = ((Example, Int32)) CloneOrChange__PExample_c_C32int_p(_ValueTupleWithNonNullable, l => l.RemoveBufferInHierarchy(), true);/*Location437*/_ValueTupleWithNullable = ((Example?, Int32)) CloneOrChange__PExample_n_c_C32int_p(_ValueTupleWithNullable, l => l.RemoveBufferInHierarchy(), true);/*Location438*/}
                                 
                                 /*Location439*/
                                 protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
@@ -2965,7 +2965,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                     includeChildrenMode, v, updateStoredBuffer));
                                     /*Location471*/if (updateStoredBuffer)
                                     {
-                                        _NonNullableDictionaryWithNonNullable_ByteIndex = startOfObjectPosition - startPosition; _NonNullableDictionaryWithNonNullable = (Dictionary<int, Example>) CloneOrChange_Dictionary_Gint_c_C32Example_g(_NonNullableDictionaryWithNonNullable!, l => l.RemoveBufferInHierarchy(), true);
+                                        _NonNullableDictionaryWithNonNullable_ByteIndex = startOfObjectPosition - startPosition; _NonNullableDictionaryWithNonNullable = (Dictionary<Int32, Example>) CloneOrChange_Dictionary_Gint_c_C32Example_g(_NonNullableDictionaryWithNonNullable!, l => l.RemoveBufferInHierarchy(), true);
                                     }
                                     /*Location472*/startOfObjectPosition = writer.Position;
                                     /*Location473*//*Location474*/WriteNonLazinatorObject(
@@ -2978,7 +2978,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                     includeChildrenMode, v, updateStoredBuffer));
                                     /*Location475*/if (updateStoredBuffer)
                                     {
-                                        _NonNullableDictionaryWithNullable_ByteIndex = startOfObjectPosition - startPosition; _NonNullableDictionaryWithNullable = (Dictionary<int, Example?>) CloneOrChange_Dictionary_Gint_c_C32Example_n_g(_NonNullableDictionaryWithNullable!, l => l.RemoveBufferInHierarchy(), true);
+                                        _NonNullableDictionaryWithNullable_ByteIndex = startOfObjectPosition - startPosition; _NonNullableDictionaryWithNullable = (Dictionary<Int32, Example?>) CloneOrChange_Dictionary_Gint_c_C32Example_n_g(_NonNullableDictionaryWithNullable!, l => l.RemoveBufferInHierarchy(), true);
                                     }
                                     /*Location476*/startOfObjectPosition = writer.Position;
                                     /*Location477*/WriteChild(ref writer, ref _NonNullableInterface, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableInterface_ByteIndex, _NonNullableInterface_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
@@ -3227,7 +3227,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                     {
                                         _NullableDictionaryWithNonNullable_ByteIndex = startOfObjectPosition - startPosition;if (_NullableDictionaryWithNonNullable_Accessed && _NullableDictionaryWithNonNullable != null)
                                         {
-                                            _NullableDictionaryWithNonNullable = (Dictionary<int, Example>?) CloneOrChange_Dictionary_Gint_c_C32Example_g_n(_NullableDictionaryWithNonNullable, l => l.RemoveBufferInHierarchy(), true);
+                                            _NullableDictionaryWithNonNullable = (Dictionary<Int32, Example>?) CloneOrChange_Dictionary_Gint_c_C32Example_g_n(_NullableDictionaryWithNonNullable, l => l.RemoveBufferInHierarchy(), true);
                                         }
                                         
                                     }
@@ -3248,7 +3248,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                     {
                                         _NullableDictionaryWithNullable_ByteIndex = startOfObjectPosition - startPosition;if (_NullableDictionaryWithNullable_Accessed && _NullableDictionaryWithNullable != null)
                                         {
-                                            _NullableDictionaryWithNullable = (Dictionary<int, Example?>?) CloneOrChange_Dictionary_Gint_c_C32Example_n_g_n(_NullableDictionaryWithNullable, l => l.RemoveBufferInHierarchy(), true);
+                                            _NullableDictionaryWithNullable = (Dictionary<Int32, Example?>?) CloneOrChange_Dictionary_Gint_c_C32Example_n_g_n(_NullableDictionaryWithNullable, l => l.RemoveBufferInHierarchy(), true);
                                         }
                                         
                                     }
@@ -3584,7 +3584,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                         /*Location629*/
                                         /* Conversion of supported collections and tuples */
                                         /*Location630*/
-                                        private static void ConvertToBytes_ReadOnlySpan_Gbyte_g(ref BinaryBufferWriter writer, ReadOnlySpan<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                                        private static void ConvertToBytes_ReadOnlySpan_Gbyte_g(ref BinaryBufferWriter writer, ReadOnlySpan<Byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                                         {
                                             ReadOnlySpan<byte> toConvert = (itemToConvert);
                                             for (int i = 0; i < toConvert.Length; i++)
@@ -3592,7 +3592,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                 writer.Write(toConvert[i]);
                                             }
                                         }
-                                        /*Location631*/private static ReadOnlySpan<byte> CloneOrChange_ReadOnlySpan_Gbyte_g(ReadOnlySpan<byte> itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                        /*Location631*/private static ReadOnlySpan<Byte> CloneOrChange_ReadOnlySpan_Gbyte_g(ReadOnlySpan<Byte> itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                         {
                                             var clone = new Span<byte>(new byte[itemToClone.Length * sizeof(byte)]);
                                             itemToClone.CopyTo(clone);
@@ -3661,7 +3661,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                             int bytesSoFar = 0;
                                             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                                             
-                                            Example?[] collection = new Example?[collectionLength];
+                                            Example?[] collection = new Example[collectionLength];
                                             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
                                             {
                                                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
@@ -3672,7 +3672,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                 else
                                                 {
                                                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                                                    var item = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
+                                                    var item = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
                                                     collection[itemIndex] = item;
                                                 }
                                                 bytesSoFar += lengthCollectionMember;
@@ -3708,7 +3708,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                         private static Example?[] CloneOrChange_Example_n_B_b(Example?[] itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                         {
                                             int collectionLength = itemToClone.Length;
-                                            Example?[] collection = avoidCloningIfPossible ? itemToClone : new Example?[collectionLength];
+                                            Example?[] collection = avoidCloningIfPossible ? itemToClone : new Example[collectionLength];
                                             int itemToCloneCount = itemToClone.Length;
                                             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
                                             {
@@ -3716,7 +3716,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                 {
                                                     if (itemToClone[itemIndex] != null)
                                                     {
-                                                        itemToClone[itemIndex] = (Example?) (cloneOrChangeFunc(itemToClone[itemIndex]));
+                                                        itemToClone[itemIndex] = (Example) (cloneOrChangeFunc(itemToClone[itemIndex])!);
                                                     }
                                                     continue;
                                                 }
@@ -3734,13 +3734,13 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                             return collection;
                                         }
                                         /*Location638*/
-                                        private static Dictionary<int, Example> ConvertFromBytes_Dictionary_Gint_c_C32Example_g(LazinatorMemory storage)
+                                        private static Dictionary<Int32, Example> ConvertFromBytes_Dictionary_Gint_c_C32Example_g(LazinatorMemory storage)
                                         {
                                             ReadOnlySpan<byte> span = storage.Span;
                                             int bytesSoFar = 0;
                                             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                                             
-                                            Dictionary<int, Example> collection = new Dictionary<int, Example>(collectionLength);
+                                            Dictionary<Int32, Example> collection = new Dictionary<Int32, Example>(collectionLength);
                                             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
                                             {
                                                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
@@ -3753,9 +3753,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                             return collection;
                                         }/*Location639*/
                                         
-                                        private static void ConvertToBytes_Dictionary_Gint_c_C32Example_g(ref BinaryBufferWriter writer, Dictionary<int, Example> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                                        private static void ConvertToBytes_Dictionary_Gint_c_C32Example_g(ref BinaryBufferWriter writer, Dictionary<Int32, Example> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                                         {
-                                            if (itemToConvert == default(Dictionary<int, Example>))
+                                            if (itemToConvert == default(Dictionary<Int32, Example>))
                                             {
                                                 return;
                                             }
@@ -3767,19 +3767,19 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                             }
                                         }
                                         /*Location640*/
-                                        private static Dictionary<int, Example> CloneOrChange_Dictionary_Gint_c_C32Example_g(Dictionary<int, Example> itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                        private static Dictionary<Int32, Example> CloneOrChange_Dictionary_Gint_c_C32Example_g(Dictionary<Int32, Example> itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                         {
                                             int collectionLength = itemToClone.Count;
-                                            Dictionary<int, Example> collection = new Dictionary<int, Example>(collectionLength);
+                                            Dictionary<Int32, Example> collection = new Dictionary<Int32, Example>(collectionLength);
                                             foreach (var item in itemToClone)
                                             {
-                                                var itemCopied = (KeyValuePair<int, Example>) CloneOrChange_KeyValuePair_Gint_c_C32Example_g(item, cloneOrChangeFunc, avoidCloningIfPossible);
+                                                var itemCopied = (KeyValuePair<Int32, Example>) CloneOrChange_KeyValuePair_Gint_c_C32Example_g(item, cloneOrChangeFunc, avoidCloningIfPossible);
                                                 collection.Add(itemCopied.Key, itemCopied.Value);
                                             }
                                             return collection;
                                         }
                                         /*Location641*/
-                                        private static KeyValuePair<int, Example> ConvertFromBytes_KeyValuePair_Gint_c_C32Example_g(LazinatorMemory storage)
+                                        private static KeyValuePair<Int32, Example> ConvertFromBytes_KeyValuePair_Gint_c_C32Example_g(LazinatorMemory storage)
                                         {
                                             if (storage.Length == 0)
                                             {
@@ -3796,12 +3796,12 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                             Example item2 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
                                             bytesSoFar += lengthCollectionMember_item2;
                                             /*Location644*/
-                                            var tupleType = new KeyValuePair<int, Example>(item1, item2);
+                                            var tupleType = new KeyValuePair<Int32, Example>(item1, item2);
                                             
                                             return tupleType;
                                         }
                                         
-                                        private static void ConvertToBytes_KeyValuePair_Gint_c_C32Example_g(ref BinaryBufferWriter writer, KeyValuePair<int, Example> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                                        private static void ConvertToBytes_KeyValuePair_Gint_c_C32Example_g(ref BinaryBufferWriter writer, KeyValuePair<Int32, Example> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                                         {
                                             /*Location645*/
                                             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Key);
@@ -3817,18 +3817,18 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                             };
                                             /*Location647*/}
                                             /*Location648*/
-                                            private static KeyValuePair<int, Example> CloneOrChange_KeyValuePair_Gint_c_C32Example_g(KeyValuePair<int, Example> itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                            private static KeyValuePair<Int32, Example> CloneOrChange_KeyValuePair_Gint_c_C32Example_g(KeyValuePair<Int32, Example> itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                             {
-                                                return new KeyValuePair<int, Example>((int) (itemToConvert.Key),(Example) (cloneOrChangeFunc((itemToConvert.Value))!));
+                                                return new KeyValuePair<Int32, Example>((int) (itemToConvert.Key),(Example) (cloneOrChangeFunc((itemToConvert.Value))!));
                                             }
                                             /*Location649*/
-                                            private static Dictionary<int, Example?> ConvertFromBytes_Dictionary_Gint_c_C32Example_n_g(LazinatorMemory storage)
+                                            private static Dictionary<Int32, Example?> ConvertFromBytes_Dictionary_Gint_c_C32Example_n_g(LazinatorMemory storage)
                                             {
                                                 ReadOnlySpan<byte> span = storage.Span;
                                                 int bytesSoFar = 0;
                                                 int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                                                 
-                                                Dictionary<int, Example?> collection = new Dictionary<int, Example?>(collectionLength);
+                                                Dictionary<Int32, Example?> collection = new Dictionary<Int32, Example?>(collectionLength);
                                                 for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
                                                 {
                                                     int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
@@ -3841,9 +3841,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                 return collection;
                                             }/*Location650*/
                                             
-                                            private static void ConvertToBytes_Dictionary_Gint_c_C32Example_n_g(ref BinaryBufferWriter writer, Dictionary<int, Example?> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                                            private static void ConvertToBytes_Dictionary_Gint_c_C32Example_n_g(ref BinaryBufferWriter writer, Dictionary<Int32, Example?> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                                             {
-                                                if (itemToConvert == default(Dictionary<int, Example?>))
+                                                if (itemToConvert == default(Dictionary<Int32, Example?>))
                                                 {
                                                     return;
                                                 }
@@ -3855,19 +3855,19 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                 }
                                             }
                                             /*Location651*/
-                                            private static Dictionary<int, Example?> CloneOrChange_Dictionary_Gint_c_C32Example_n_g(Dictionary<int, Example?> itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                            private static Dictionary<Int32, Example?> CloneOrChange_Dictionary_Gint_c_C32Example_n_g(Dictionary<Int32, Example?> itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                             {
                                                 int collectionLength = itemToClone.Count;
-                                                Dictionary<int, Example?> collection = new Dictionary<int, Example?>(collectionLength);
+                                                Dictionary<Int32, Example?> collection = new Dictionary<Int32, Example?>(collectionLength);
                                                 foreach (var item in itemToClone)
                                                 {
-                                                    var itemCopied = (KeyValuePair<int, Example?>) CloneOrChange_KeyValuePair_Gint_c_C32Example_n_g(item, cloneOrChangeFunc, avoidCloningIfPossible);
+                                                    var itemCopied = (KeyValuePair<Int32, Example>) CloneOrChange_KeyValuePair_Gint_c_C32Example_n_g(item, cloneOrChangeFunc, avoidCloningIfPossible);
                                                     collection.Add(itemCopied.Key, itemCopied.Value);
                                                 }
                                                 return collection;
                                             }
                                             /*Location652*/
-                                            private static KeyValuePair<int, Example?> ConvertFromBytes_KeyValuePair_Gint_c_C32Example_n_g(LazinatorMemory storage)
+                                            private static KeyValuePair<Int32, Example> ConvertFromBytes_KeyValuePair_Gint_c_C32Example_n_g(LazinatorMemory storage)
                                             {
                                                 if (storage.Length == 0)
                                                 {
@@ -3879,21 +3879,21 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                 /*Location653*/
                                                 int item1 = span.ToDecompressedInt(ref bytesSoFar);
                                                 /*Location654*/
-                                                Example? item2 = default(Example?);
+                                                Example item2 = default(Example);
                                                 int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
                                                 if (lengthCollectionMember_item2 != 0)
                                                 {
                                                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
-                                                    item2 = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
+                                                    item2 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
                                                 }
                                                 bytesSoFar += lengthCollectionMember_item2;
                                                 /*Location655*/
-                                                var tupleType = new KeyValuePair<int, Example?>(item1, item2);
+                                                var tupleType = new KeyValuePair<Int32, Example>(item1, item2);
                                                 
                                                 return tupleType;
                                             }
                                             
-                                            private static void ConvertToBytes_KeyValuePair_Gint_c_C32Example_n_g(ref BinaryBufferWriter writer, KeyValuePair<int, Example?> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                                            private static void ConvertToBytes_KeyValuePair_Gint_c_C32Example_n_g(ref BinaryBufferWriter writer, KeyValuePair<Int32, Example> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                                             {
                                                 /*Location656*/
                                                 CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Key);
@@ -3909,9 +3909,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                 };
                                                 /*Location658*/}
                                                 /*Location659*/
-                                                private static KeyValuePair<int, Example?> CloneOrChange_KeyValuePair_Gint_c_C32Example_n_g(KeyValuePair<int, Example?> itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                                private static KeyValuePair<Int32, Example> CloneOrChange_KeyValuePair_Gint_c_C32Example_n_g(KeyValuePair<Int32, Example> itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                                 {
-                                                    return new KeyValuePair<int, Example?>((int) (itemToConvert.Key),(Example?) (cloneOrChangeFunc((itemToConvert.Value))));
+                                                    return new KeyValuePair<Int32, Example>((int) (itemToConvert.Key),(Example?) (cloneOrChangeFunc((itemToConvert.Value))));
                                                 }
                                                 /*Location660*/
                                                 private static List<Example> ConvertFromBytes_List_GExample_g(LazinatorMemory storage)
@@ -3987,7 +3987,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                         else
                                                         {
                                                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
+                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
                                                             collection.Add(item);
                                                         }
                                                         bytesSoFar += lengthCollectionMember;
@@ -4031,7 +4031,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                         {
                                                             if (itemToClone[itemIndex] != null)
                                                             {
-                                                                itemToClone[itemIndex] = (Example?) (cloneOrChangeFunc(itemToClone[itemIndex]));
+                                                                itemToClone[itemIndex] = (Example) (cloneOrChangeFunc(itemToClone[itemIndex])!);
                                                             }
                                                             continue;
                                                         }
@@ -4049,20 +4049,20 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                     return collection;
                                                 }
                                                 /*Location666*/
-                                                private static Memory<byte> ConvertFromBytes_Memory_Gbyte_g(LazinatorMemory storage)
+                                                private static Memory<Byte> ConvertFromBytes_Memory_Gbyte_g(LazinatorMemory storage)
                                                 {
                                                     /*Location667*/return storage.Memory.ToArray();
                                                 }/*Location668*/
                                                 
-                                                private static void ConvertToBytes_Memory_Gbyte_g(ref BinaryBufferWriter writer, Memory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                                                private static void ConvertToBytes_Memory_Gbyte_g(ref BinaryBufferWriter writer, Memory<Byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                                                 {
                                                     /*Location669*/writer.Write(itemToConvert.Span);
                                                 }
                                                 /*Location670*/
-                                                private static Memory<byte> CloneOrChange_Memory_Gbyte_g(Memory<byte> itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                                private static Memory<Byte> CloneOrChange_Memory_Gbyte_g(Memory<Byte> itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                                 {
                                                     int collectionLength = itemToClone.Length;
-                                                    Memory<byte> collection = new Memory<byte>(new byte[collectionLength]);
+                                                    Memory<Byte> collection = new Memory<Byte>(new byte[collectionLength]);
                                                     var collectionAsSpan = collection.Span;
                                                     var itemToCloneSpan = itemToClone.Span;
                                                     int itemToCloneCount = itemToCloneSpan.Length;
@@ -4141,7 +4141,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                         else
                                                         {
                                                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
+                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
                                                             collection.Enqueue(item);
                                                         }
                                                         bytesSoFar += lengthCollectionMember;
@@ -4197,20 +4197,20 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                     return collection;
                                                 }
                                                 /*Location677*/
-                                                private static ReadOnlyMemory<byte> ConvertFromBytes_ReadOnlyMemory_Gbyte_g(LazinatorMemory storage)
+                                                private static ReadOnlyMemory<Byte> ConvertFromBytes_ReadOnlyMemory_Gbyte_g(LazinatorMemory storage)
                                                 {
                                                     /*Location678*/return storage.Memory.ToArray();
                                                 }/*Location679*/
                                                 
-                                                private static void ConvertToBytes_ReadOnlyMemory_Gbyte_g(ref BinaryBufferWriter writer, ReadOnlyMemory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                                                private static void ConvertToBytes_ReadOnlyMemory_Gbyte_g(ref BinaryBufferWriter writer, ReadOnlyMemory<Byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                                                 {
                                                     /*Location680*/writer.Write(itemToConvert.Span);
                                                 }
                                                 /*Location681*/
-                                                private static ReadOnlyMemory<byte> CloneOrChange_ReadOnlyMemory_Gbyte_g(ReadOnlyMemory<byte> itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                                private static ReadOnlyMemory<Byte> CloneOrChange_ReadOnlyMemory_Gbyte_g(ReadOnlyMemory<Byte> itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                                 {
                                                     int collectionLength = itemToClone.Length;
-                                                    Memory<byte> collection = new Memory<byte>(new byte[collectionLength]);
+                                                    Memory<Byte> collection = new Memory<Byte>(new byte[collectionLength]);
                                                     var collectionAsSpan = collection.Span;
                                                     var itemToCloneSpan = itemToClone.Span;
                                                     int itemToCloneCount = itemToCloneSpan.Length;
@@ -4291,7 +4291,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                         else
                                                         {
                                                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
+                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
                                                             collection.Push(item);
                                                         }
                                                         bytesSoFar += lengthCollectionMember;
@@ -4424,7 +4424,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                     int bytesSoFar = 0;
                                                     int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                                                     
-                                                    Example?[]? collection = new Example?[collectionLength];
+                                                    Example?[]? collection = new Example[collectionLength];
                                                     for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
                                                     {
                                                         int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
@@ -4435,7 +4435,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                         else
                                                         {
                                                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
+                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
                                                             collection[itemIndex] = item;
                                                         }
                                                         bytesSoFar += lengthCollectionMember;
@@ -4476,7 +4476,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                     }
                                                     
                                                     int collectionLength = itemToClone.Length;
-                                                    Example?[]? collection = avoidCloningIfPossible ? itemToClone : new Example?[collectionLength];
+                                                    Example?[]? collection = avoidCloningIfPossible ? itemToClone : new Example[collectionLength];
                                                     int itemToCloneCount = itemToClone.Length;
                                                     for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
                                                     {
@@ -4484,7 +4484,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                         {
                                                             if (itemToClone[itemIndex] != null)
                                                             {
-                                                                itemToClone[itemIndex] = (Example?) (cloneOrChangeFunc(itemToClone[itemIndex]));
+                                                                itemToClone[itemIndex] = (Example) (cloneOrChangeFunc(itemToClone[itemIndex])!);
                                                             }
                                                             continue;
                                                         }
@@ -4502,17 +4502,17 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                     return collection;
                                                 }
                                                 /*Location694*/
-                                                private static Dictionary<int, Example>? ConvertFromBytes_Dictionary_Gint_c_C32Example_g_n(LazinatorMemory storage)
+                                                private static Dictionary<Int32, Example>? ConvertFromBytes_Dictionary_Gint_c_C32Example_g_n(LazinatorMemory storage)
                                                 {
                                                     if (storage.Length == 0)
                                                     {
-                                                        return default(Dictionary<int, Example>?);
+                                                        return default(Dictionary<Int32, Example>?);
                                                     }
                                                     ReadOnlySpan<byte> span = storage.Span;
                                                     int bytesSoFar = 0;
                                                     int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                                                     
-                                                    Dictionary<int, Example>? collection = new Dictionary<int, Example>(collectionLength);
+                                                    Dictionary<Int32, Example>? collection = new Dictionary<Int32, Example>(collectionLength);
                                                     for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
                                                     {
                                                         int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
@@ -4525,9 +4525,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                     return collection;
                                                 }/*Location695*/
                                                 
-                                                private static void ConvertToBytes_Dictionary_Gint_c_C32Example_g_n(ref BinaryBufferWriter writer, Dictionary<int, Example>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                                                private static void ConvertToBytes_Dictionary_Gint_c_C32Example_g_n(ref BinaryBufferWriter writer, Dictionary<Int32, Example>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                                                 {
-                                                    if (itemToConvert == default(Dictionary<int, Example>?))
+                                                    if (itemToConvert == default(Dictionary<Int32, Example>?))
                                                     {
                                                         return;
                                                     }
@@ -4539,7 +4539,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                     }
                                                 }
                                                 /*Location696*/
-                                                private static Dictionary<int, Example>? CloneOrChange_Dictionary_Gint_c_C32Example_g_n(Dictionary<int, Example>? itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                                private static Dictionary<Int32, Example>? CloneOrChange_Dictionary_Gint_c_C32Example_g_n(Dictionary<Int32, Example>? itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                                 {
                                                     if (itemToClone == null)
                                                     {
@@ -4547,26 +4547,26 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                     }
                                                     
                                                     int collectionLength = itemToClone.Count;
-                                                    Dictionary<int, Example>? collection = new Dictionary<int, Example>(collectionLength);
+                                                    Dictionary<Int32, Example>? collection = new Dictionary<Int32, Example>(collectionLength);
                                                     foreach (var item in itemToClone)
                                                     {
-                                                        var itemCopied = (KeyValuePair<int, Example>) CloneOrChange_KeyValuePair_Gint_c_C32Example_g(item, cloneOrChangeFunc, avoidCloningIfPossible);
+                                                        var itemCopied = (KeyValuePair<Int32, Example>) CloneOrChange_KeyValuePair_Gint_c_C32Example_g(item, cloneOrChangeFunc, avoidCloningIfPossible);
                                                         collection.Add(itemCopied.Key, itemCopied.Value);
                                                     }
                                                     return collection;
                                                 }
                                                 /*Location697*/
-                                                private static Dictionary<int, Example?>? ConvertFromBytes_Dictionary_Gint_c_C32Example_n_g_n(LazinatorMemory storage)
+                                                private static Dictionary<Int32, Example?>? ConvertFromBytes_Dictionary_Gint_c_C32Example_n_g_n(LazinatorMemory storage)
                                                 {
                                                     if (storage.Length == 0)
                                                     {
-                                                        return default(Dictionary<int, Example?>?);
+                                                        return default(Dictionary<Int32, Example?>?);
                                                     }
                                                     ReadOnlySpan<byte> span = storage.Span;
                                                     int bytesSoFar = 0;
                                                     int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                                                     
-                                                    Dictionary<int, Example?>? collection = new Dictionary<int, Example?>(collectionLength);
+                                                    Dictionary<Int32, Example?>? collection = new Dictionary<Int32, Example?>(collectionLength);
                                                     for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
                                                     {
                                                         int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
@@ -4579,9 +4579,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                     return collection;
                                                 }/*Location698*/
                                                 
-                                                private static void ConvertToBytes_Dictionary_Gint_c_C32Example_n_g_n(ref BinaryBufferWriter writer, Dictionary<int, Example?>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                                                private static void ConvertToBytes_Dictionary_Gint_c_C32Example_n_g_n(ref BinaryBufferWriter writer, Dictionary<Int32, Example?>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                                                 {
-                                                    if (itemToConvert == default(Dictionary<int, Example?>?))
+                                                    if (itemToConvert == default(Dictionary<Int32, Example?>?))
                                                     {
                                                         return;
                                                     }
@@ -4593,7 +4593,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                     }
                                                 }
                                                 /*Location699*/
-                                                private static Dictionary<int, Example?>? CloneOrChange_Dictionary_Gint_c_C32Example_n_g_n(Dictionary<int, Example?>? itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                                private static Dictionary<Int32, Example?>? CloneOrChange_Dictionary_Gint_c_C32Example_n_g_n(Dictionary<Int32, Example?>? itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                                 {
                                                     if (itemToClone == null)
                                                     {
@@ -4601,10 +4601,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                     }
                                                     
                                                     int collectionLength = itemToClone.Count;
-                                                    Dictionary<int, Example?>? collection = new Dictionary<int, Example?>(collectionLength);
+                                                    Dictionary<Int32, Example?>? collection = new Dictionary<Int32, Example?>(collectionLength);
                                                     foreach (var item in itemToClone)
                                                     {
-                                                        var itemCopied = (KeyValuePair<int, Example?>) CloneOrChange_KeyValuePair_Gint_c_C32Example_n_g(item, cloneOrChangeFunc, avoidCloningIfPossible);
+                                                        var itemCopied = (KeyValuePair<Int32, Example>) CloneOrChange_KeyValuePair_Gint_c_C32Example_n_g(item, cloneOrChangeFunc, avoidCloningIfPossible);
                                                         collection.Add(itemCopied.Key, itemCopied.Value);
                                                     }
                                                     return collection;
@@ -4696,7 +4696,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                         else
                                                         {
                                                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
+                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
                                                             collection.Add(item);
                                                         }
                                                         bytesSoFar += lengthCollectionMember;
@@ -4745,7 +4745,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                         {
                                                             if (itemToClone[itemIndex] != null)
                                                             {
-                                                                itemToClone[itemIndex] = (Example?) (cloneOrChangeFunc(itemToClone[itemIndex]));
+                                                                itemToClone[itemIndex] = (Example) (cloneOrChangeFunc(itemToClone[itemIndex])!);
                                                             }
                                                             continue;
                                                         }
@@ -4763,7 +4763,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                     return collection;
                                                 }
                                                 /*Location706*/
-                                                private static Memory<byte>? ConvertFromBytes_Memory_Gbyte_g_n(LazinatorMemory storage)
+                                                private static Memory<Byte>? ConvertFromBytes_Memory_Gbyte_g_n(LazinatorMemory storage)
                                                 {
                                                     /*Location707*/int index = 0;
                                                     bool isNull = storage.ReadOnlySpan.ToBoolean(ref index);
@@ -4775,7 +4775,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                     return span.ToArray();
                                                 }/*Location708*/
                                                 
-                                                private static void ConvertToBytes_Memory_Gbyte_g_n(ref BinaryBufferWriter writer, Memory<byte>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                                                private static void ConvertToBytes_Memory_Gbyte_g_n(ref BinaryBufferWriter writer, Memory<Byte>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                                                 {
                                                     /*Location709*/if (itemToConvert == null)
                                                     {
@@ -4786,7 +4786,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                     writer.Write(itemToConvert.Value.Span);
                                                 }
                                                 /*Location710*/
-                                                private static Memory<byte>? CloneOrChange_Memory_Gbyte_g_n(Memory<byte>? itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                                private static Memory<Byte>? CloneOrChange_Memory_Gbyte_g_n(Memory<Byte>? itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                                 {
                                                     if (itemToClone == null)
                                                     {
@@ -4794,7 +4794,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                     }
                                                     
                                                     int collectionLength = itemToClone.Value.Length;
-                                                    Memory<byte> collection = new Memory<byte>(new byte[collectionLength]);
+                                                    Memory<Byte> collection = new Memory<Byte>(new byte[collectionLength]);
                                                     var collectionAsSpan = collection.Span;
                                                     var itemToCloneSpan = itemToClone.Value.Span;
                                                     int itemToCloneCount = itemToCloneSpan.Length;
@@ -4886,7 +4886,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                         else
                                                         {
                                                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
+                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
                                                             collection.Enqueue(item);
                                                         }
                                                         bytesSoFar += lengthCollectionMember;
@@ -4947,7 +4947,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                     return collection;
                                                 }
                                                 /*Location717*/
-                                                private static ReadOnlyMemory<byte>? ConvertFromBytes_ReadOnlyMemory_Gbyte_g_n(LazinatorMemory storage)
+                                                private static ReadOnlyMemory<Byte>? ConvertFromBytes_ReadOnlyMemory_Gbyte_g_n(LazinatorMemory storage)
                                                 {
                                                     /*Location718*/int index = 0;
                                                     bool isNull = storage.ReadOnlySpan.ToBoolean(ref index);
@@ -4959,7 +4959,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                     return span.ToArray();
                                                 }/*Location719*/
                                                 
-                                                private static void ConvertToBytes_ReadOnlyMemory_Gbyte_g_n(ref BinaryBufferWriter writer, ReadOnlyMemory<byte>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                                                private static void ConvertToBytes_ReadOnlyMemory_Gbyte_g_n(ref BinaryBufferWriter writer, ReadOnlyMemory<Byte>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                                                 {
                                                     if (itemToConvert == null)
                                                     {
@@ -4970,7 +4970,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                     ConvertToBytes_ReadOnlyMemory_Gbyte_g(ref writer, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                                                 }
                                                 /*Location720*/
-                                                private static ReadOnlyMemory<byte>? CloneOrChange_ReadOnlyMemory_Gbyte_g_n(ReadOnlyMemory<byte>? itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                                private static ReadOnlyMemory<Byte>? CloneOrChange_ReadOnlyMemory_Gbyte_g_n(ReadOnlyMemory<Byte>? itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                                 {
                                                     if (itemToClone == null)
                                                     {
@@ -4978,7 +4978,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                     }
                                                     
                                                     int collectionLength = itemToClone.Value.Length;
-                                                    Memory<byte> collection = new Memory<byte>(new byte[collectionLength]);
+                                                    Memory<Byte> collection = new Memory<Byte>(new byte[collectionLength]);
                                                     var collectionAsSpan = collection.Span;
                                                     var itemToCloneSpan = itemToClone.Value.Span;
                                                     int itemToCloneCount = itemToCloneSpan.Length;
@@ -5072,7 +5072,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                         else
                                                         {
                                                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
+                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
                                                             collection.Push(item);
                                                         }
                                                         bytesSoFar += lengthCollectionMember;
@@ -5210,7 +5210,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                             return new RecordLikeStruct((int) (itemToConvert.Age),(string?) (itemToConvert.Name));
                                                         }
                                                         /*Location743*/
-                                                        private static Tuple<Example, int> ConvertFromBytes_Tuple_GExample_c_C32int_g(LazinatorMemory storage)
+                                                        private static Tuple<Example, Int32> ConvertFromBytes_Tuple_GExample_c_C32int_g(LazinatorMemory storage)
                                                         {
                                                             ReadOnlySpan<byte> span = storage.ReadOnlySpan;
                                                             
@@ -5223,12 +5223,12 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                             /*Location745*/
                                                             int item2 = span.ToDecompressedInt(ref bytesSoFar);
                                                             /*Location746*/
-                                                            var tupleType = new Tuple<Example, int>(item1, item2);
+                                                            var tupleType = new Tuple<Example, Int32>(item1, item2);
                                                             
                                                             return tupleType;
                                                         }
                                                         
-                                                        private static void ConvertToBytes_Tuple_GExample_c_C32int_g(ref BinaryBufferWriter writer, Tuple<Example, int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                                                        private static void ConvertToBytes_Tuple_GExample_c_C32int_g(ref BinaryBufferWriter writer, Tuple<Example, Int32> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                                                         {
                                                             /*Location747*/
                                                             if (itemToConvert.Item1 == null)
@@ -5244,34 +5244,34 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Item2);
                                                             /*Location749*/}
                                                             /*Location750*/
-                                                            private static Tuple<Example, int> CloneOrChange_Tuple_GExample_c_C32int_g(Tuple<Example, int> itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                                            private static Tuple<Example, Int32> CloneOrChange_Tuple_GExample_c_C32int_g(Tuple<Example, Int32> itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                                             {
-                                                                return new Tuple<Example, int>((Example) (cloneOrChangeFunc((itemToConvert.Item1))!),(int) (itemToConvert.Item2));
+                                                                return new Tuple<Example, Int32>((Example) (cloneOrChangeFunc((itemToConvert.Item1))!),(int) (itemToConvert.Item2));
                                                             }
                                                             /*Location751*/
-                                                            private static Tuple<Example?, int> ConvertFromBytes_Tuple_GExample_n_c_C32int_g(LazinatorMemory storage)
+                                                            private static Tuple<Example?, Int32> ConvertFromBytes_Tuple_GExample_n_c_C32int_g(LazinatorMemory storage)
                                                             {
                                                                 ReadOnlySpan<byte> span = storage.ReadOnlySpan;
                                                                 
                                                                 int bytesSoFar = 0;
                                                                 /*Location752*/
-                                                                Example? item1 = default(Example?);
+                                                                Example item1 = default(Example);
                                                                 int lengthCollectionMember_item1 = span.ToInt32(ref bytesSoFar);
                                                                 if (lengthCollectionMember_item1 != 0)
                                                                 {
                                                                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item1);
-                                                                    item1 = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
+                                                                    item1 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
                                                                 }
                                                                 bytesSoFar += lengthCollectionMember_item1;
                                                                 /*Location753*/
                                                                 int item2 = span.ToDecompressedInt(ref bytesSoFar);
                                                                 /*Location754*/
-                                                                var tupleType = new Tuple<Example?, int>(item1, item2);
+                                                                var tupleType = new Tuple<Example?, Int32>(item1, item2);
                                                                 
                                                                 return tupleType;
                                                             }
                                                             
-                                                            private static void ConvertToBytes_Tuple_GExample_n_c_C32int_g(ref BinaryBufferWriter writer, Tuple<Example?, int> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                                                            private static void ConvertToBytes_Tuple_GExample_n_c_C32int_g(ref BinaryBufferWriter writer, Tuple<Example?, Int32> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                                                             {
                                                                 /*Location755*/
                                                                 if (itemToConvert.Item1 == null)
@@ -5287,9 +5287,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                                 CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Item2);
                                                                 /*Location757*/}
                                                                 /*Location758*/
-                                                                private static Tuple<Example?, int> CloneOrChange_Tuple_GExample_n_c_C32int_g(Tuple<Example?, int> itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                                                private static Tuple<Example?, Int32> CloneOrChange_Tuple_GExample_n_c_C32int_g(Tuple<Example?, Int32> itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                                                 {
-                                                                    return new Tuple<Example?, int>((Example?) (cloneOrChangeFunc((itemToConvert.Item1))),(int) (itemToConvert.Item2));
+                                                                    return new Tuple<Example?, Int32>((Example?) (cloneOrChangeFunc((itemToConvert.Item1))),(int) (itemToConvert.Item2));
                                                                 }
                                                                 /*Location759*/
                                                                 private static RecordLikeClass? ConvertFromBytes_RecordLikeClass_n(LazinatorMemory storage)
@@ -5389,7 +5389,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                                             return new RecordLikeStruct((int) (itemToConvert?.Age ?? default),(string?) (itemToConvert?.Name));
                                                                         }
                                                                         /*Location777*/
-                                                                        private static Tuple<Example, int>? ConvertFromBytes_Tuple_GExample_c_C32int_g_n(LazinatorMemory storage)
+                                                                        private static Tuple<Example, Int32>? ConvertFromBytes_Tuple_GExample_c_C32int_g_n(LazinatorMemory storage)
                                                                         {
                                                                             if (storage.Length == 0)
                                                                             {
@@ -5406,12 +5406,12 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                                             /*Location779*/
                                                                             int item2 = span.ToDecompressedInt(ref bytesSoFar);
                                                                             /*Location780*/
-                                                                            var tupleType = new Tuple<Example, int>(item1, item2);
+                                                                            var tupleType = new Tuple<Example, Int32>(item1, item2);
                                                                             
                                                                             return tupleType;
                                                                         }
                                                                         
-                                                                        private static void ConvertToBytes_Tuple_GExample_c_C32int_g_n(ref BinaryBufferWriter writer, Tuple<Example, int>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                                                                        private static void ConvertToBytes_Tuple_GExample_c_C32int_g_n(ref BinaryBufferWriter writer, Tuple<Example, Int32>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                                                                         {
                                                                             /*Location781*/if (itemToConvert == null)
                                                                             {
@@ -5431,17 +5431,17 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                                             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Item2);
                                                                             /*Location784*/}
                                                                             /*Location785*/
-                                                                            private static Tuple<Example, int>? CloneOrChange_Tuple_GExample_c_C32int_g_n(Tuple<Example, int>? itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                                                            private static Tuple<Example, Int32>? CloneOrChange_Tuple_GExample_c_C32int_g_n(Tuple<Example, Int32>? itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                                                             {
                                                                                 if (itemToConvert == null)
                                                                                 {
-                                                                                    return default(Tuple<Example, int>?);
+                                                                                    return default(Tuple<Example, Int32>?);
                                                                                 }
                                                                                 
-                                                                                return new Tuple<Example, int>((Example) (cloneOrChangeFunc((itemToConvert?.Item1 ?? default))!),(int) (itemToConvert?.Item2 ?? default));
+                                                                                return new Tuple<Example, Int32>((Example) (cloneOrChangeFunc((itemToConvert?.Item1 ?? default))!),(int) (itemToConvert?.Item2 ?? default));
                                                                             }
                                                                             /*Location786*/
-                                                                            private static Tuple<Example?, int>? ConvertFromBytes_Tuple_GExample_n_c_C32int_g_n(LazinatorMemory storage)
+                                                                            private static Tuple<Example?, Int32>? ConvertFromBytes_Tuple_GExample_n_c_C32int_g_n(LazinatorMemory storage)
                                                                             {
                                                                                 if (storage.Length == 0)
                                                                                 {
@@ -5451,23 +5451,23 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                                                 
                                                                                 int bytesSoFar = 0;
                                                                                 /*Location787*/
-                                                                                Example? item1 = default(Example?);
+                                                                                Example item1 = default(Example);
                                                                                 int lengthCollectionMember_item1 = span.ToInt32(ref bytesSoFar);
                                                                                 if (lengthCollectionMember_item1 != 0)
                                                                                 {
                                                                                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item1);
-                                                                                    item1 = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
+                                                                                    item1 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
                                                                                 }
                                                                                 bytesSoFar += lengthCollectionMember_item1;
                                                                                 /*Location788*/
                                                                                 int item2 = span.ToDecompressedInt(ref bytesSoFar);
                                                                                 /*Location789*/
-                                                                                var tupleType = new Tuple<Example?, int>(item1, item2);
+                                                                                var tupleType = new Tuple<Example?, Int32>(item1, item2);
                                                                                 
                                                                                 return tupleType;
                                                                             }
                                                                             
-                                                                            private static void ConvertToBytes_Tuple_GExample_n_c_C32int_g_n(ref BinaryBufferWriter writer, Tuple<Example?, int>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                                                                            private static void ConvertToBytes_Tuple_GExample_n_c_C32int_g_n(ref BinaryBufferWriter writer, Tuple<Example?, Int32>? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                                                                             {
                                                                                 /*Location790*/if (itemToConvert == null)
                                                                                 {
@@ -5487,17 +5487,17 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                                                 CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Item2);
                                                                                 /*Location793*/}
                                                                                 /*Location794*/
-                                                                                private static Tuple<Example?, int>? CloneOrChange_Tuple_GExample_n_c_C32int_g_n(Tuple<Example?, int>? itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                                                                private static Tuple<Example?, Int32>? CloneOrChange_Tuple_GExample_n_c_C32int_g_n(Tuple<Example?, Int32>? itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                                                                 {
                                                                                     if (itemToConvert == null)
                                                                                     {
-                                                                                        return default(Tuple<Example?, int>?);
+                                                                                        return default(Tuple<Example?, Int32>?);
                                                                                     }
                                                                                     
-                                                                                    return new Tuple<Example?, int>((Example?) (cloneOrChangeFunc((itemToConvert?.Item1))),(int) (itemToConvert?.Item2 ?? default));
+                                                                                    return new Tuple<Example?, Int32>((Example?) (cloneOrChangeFunc((itemToConvert?.Item1))),(int) (itemToConvert?.Item2 ?? default));
                                                                                 }
                                                                                 /*Location795*/
-                                                                                private static (Example, int)? ConvertFromBytes__PExample_c_C32int_p_n(LazinatorMemory storage)
+                                                                                private static (Example, Int32)? ConvertFromBytes__PExample_c_C32int_p_n(LazinatorMemory storage)
                                                                                 {
                                                                                     if (storage.Length == 0)
                                                                                     {
@@ -5519,7 +5519,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                                                     return tupleType;
                                                                                 }
                                                                                 
-                                                                                private static void ConvertToBytes__PExample_c_C32int_p_n(ref BinaryBufferWriter writer, (Example, int)? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                                                                                private static void ConvertToBytes__PExample_c_C32int_p_n(ref BinaryBufferWriter writer, (Example, Int32)? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                                                                                 {
                                                                                     /*Location799*/if (itemToConvert == null)
                                                                                     {
@@ -5539,17 +5539,17 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                                                     CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Value.Item2);
                                                                                     /*Location802*/}
                                                                                     /*Location803*/
-                                                                                    private static (Example, int)? CloneOrChange__PExample_c_C32int_p_n((Example, int)? itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                                                                    private static (Example, Int32)? CloneOrChange__PExample_c_C32int_p_n((Example, Int32)? itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                                                                     {
                                                                                         if (itemToConvert == null)
                                                                                         {
-                                                                                            return default((Example, int)?);
+                                                                                            return default((Example, Int32)?);
                                                                                         }
                                                                                         
                                                                                         return ((Example) (cloneOrChangeFunc((itemToConvert?.Item1 ?? default))!),(int) (itemToConvert?.Item2 ?? default));
                                                                                     }
                                                                                     /*Location804*/
-                                                                                    private static (Example?, int)? ConvertFromBytes__PExample_n_c_C32int_p_n(LazinatorMemory storage)
+                                                                                    private static (Example?, Int32)? ConvertFromBytes__PExample_n_c_C32int_p_n(LazinatorMemory storage)
                                                                                     {
                                                                                         if (storage.Length == 0)
                                                                                         {
@@ -5559,12 +5559,12 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                                                         
                                                                                         int bytesSoFar = 0;
                                                                                         /*Location805*/
-                                                                                        Example? item1 = default(Example?);
+                                                                                        Example item1 = default(Example);
                                                                                         int lengthCollectionMember_item1 = span.ToInt32(ref bytesSoFar);
                                                                                         if (lengthCollectionMember_item1 != 0)
                                                                                         {
                                                                                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item1);
-                                                                                            item1 = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
+                                                                                            item1 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
                                                                                         }
                                                                                         bytesSoFar += lengthCollectionMember_item1;
                                                                                         /*Location806*/
@@ -5575,7 +5575,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                                                         return tupleType;
                                                                                     }
                                                                                     
-                                                                                    private static void ConvertToBytes__PExample_n_c_C32int_p_n(ref BinaryBufferWriter writer, (Example?, int)? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                                                                                    private static void ConvertToBytes__PExample_n_c_C32int_p_n(ref BinaryBufferWriter writer, (Example?, Int32)? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                                                                                     {
                                                                                         /*Location808*/if (itemToConvert == null)
                                                                                         {
@@ -5595,17 +5595,17 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                                                         CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Value.Item2);
                                                                                         /*Location811*/}
                                                                                         /*Location812*/
-                                                                                        private static (Example?, int)? CloneOrChange__PExample_n_c_C32int_p_n((Example?, int)? itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                                                                        private static (Example?, Int32)? CloneOrChange__PExample_n_c_C32int_p_n((Example?, Int32)? itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                                                                         {
                                                                                             if (itemToConvert == null)
                                                                                             {
-                                                                                                return default((Example?, int)?);
+                                                                                                return default((Example?, Int32)?);
                                                                                             }
                                                                                             
                                                                                             return ((Example?) (cloneOrChangeFunc((itemToConvert?.Item1))),(int) (itemToConvert?.Item2 ?? default));
                                                                                         }
                                                                                         /*Location813*/
-                                                                                        private static (Example, int) ConvertFromBytes__PExample_c_C32int_p(LazinatorMemory storage)
+                                                                                        private static (Example, Int32) ConvertFromBytes__PExample_c_C32int_p(LazinatorMemory storage)
                                                                                         {
                                                                                             if (storage.Length == 0)
                                                                                             {
@@ -5627,7 +5627,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                                                             return tupleType;
                                                                                         }
                                                                                         
-                                                                                        private static void ConvertToBytes__PExample_c_C32int_p(ref BinaryBufferWriter writer, (Example, int) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                                                                                        private static void ConvertToBytes__PExample_c_C32int_p(ref BinaryBufferWriter writer, (Example, Int32) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                                                                                         {
                                                                                             /*Location817*/
                                                                                             if (itemToConvert.Item1 == null)
@@ -5643,12 +5643,12 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                                                             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Item2);
                                                                                             /*Location819*/}
                                                                                             /*Location820*/
-                                                                                            private static (Example, int) CloneOrChange__PExample_c_C32int_p((Example, int) itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                                                                            private static (Example, Int32) CloneOrChange__PExample_c_C32int_p((Example, Int32) itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                                                                             {
                                                                                                 return ((Example) (cloneOrChangeFunc((itemToConvert.Item1))!),(int) (itemToConvert.Item2));
                                                                                             }
                                                                                             /*Location821*/
-                                                                                            private static (Example?, int) ConvertFromBytes__PExample_n_c_C32int_p(LazinatorMemory storage)
+                                                                                            private static (Example?, Int32) ConvertFromBytes__PExample_n_c_C32int_p(LazinatorMemory storage)
                                                                                             {
                                                                                                 if (storage.Length == 0)
                                                                                                 {
@@ -5658,12 +5658,12 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                                                                 
                                                                                                 int bytesSoFar = 0;
                                                                                                 /*Location822*/
-                                                                                                Example? item1 = default(Example?);
+                                                                                                Example item1 = default(Example);
                                                                                                 int lengthCollectionMember_item1 = span.ToInt32(ref bytesSoFar);
                                                                                                 if (lengthCollectionMember_item1 != 0)
                                                                                                 {
                                                                                                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item1);
-                                                                                                    item1 = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
+                                                                                                    item1 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
                                                                                                 }
                                                                                                 bytesSoFar += lengthCollectionMember_item1;
                                                                                                 /*Location823*/
@@ -5674,7 +5674,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                                                                 return tupleType;
                                                                                             }
                                                                                             
-                                                                                            private static void ConvertToBytes__PExample_n_c_C32int_p(ref BinaryBufferWriter writer, (Example?, int) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                                                                                            private static void ConvertToBytes__PExample_n_c_C32int_p(ref BinaryBufferWriter writer, (Example?, Int32) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                                                                                             {
                                                                                                 /*Location825*/
                                                                                                 if (itemToConvert.Item1 == null)
@@ -5690,7 +5690,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                                                                 CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Item2);
                                                                                                 /*Location827*/}
                                                                                                 /*Location828*/
-                                                                                                private static (Example?, int) CloneOrChange__PExample_n_c_C32int_p((Example?, int) itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                                                                                private static (Example?, Int32) CloneOrChange__PExample_n_c_C32int_p((Example?, Int32) itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                                                                                 {
                                                                                                     return ((Example?) (cloneOrChangeFunc((itemToConvert.Item1))),(int) (itemToConvert.Item2));
                                                                                                 }

@@ -142,7 +142,7 @@ namespace LazinatorCodeGen.Roslyn
                 return TypeRegularization[typeName];
             var withoutNullableIndicator = WithoutNullableIndicator(typeName);
             if (TypeRegularization.ContainsKey(withoutNullableIndicator))
-                return withoutNullableIndicator + "?"; // restore ?
+                return TypeRegularization[withoutNullableIndicator] + "?"; // restore ?
             return typeName;
         }
 
@@ -155,8 +155,8 @@ namespace LazinatorCodeGen.Roslyn
         }
 
 
-        private static SymbolDisplayFormat MinimallyQualifiedFormat(bool outputNullableModeEnabled) => outputNullableModeEnabled ? SymbolDisplayFormat.MinimallyQualifiedFormat.AddMiscellaneousOptions(SymbolDisplayMiscellaneousOptions.IncludeNullableReferenceTypeModifier) : SymbolDisplayFormat.MinimallyQualifiedFormat;
-        private static SymbolDisplayFormat FullyQualifiedFormat(bool outputNullableModeEnabled) => outputNullableModeEnabled ? SymbolDisplayFormat.FullyQualifiedFormat.WithMemberOptions(SymbolDisplayMemberOptions.IncludeContainingType).AddMiscellaneousOptions(SymbolDisplayMiscellaneousOptions.IncludeNullableReferenceTypeModifier) : SymbolDisplayFormat.FullyQualifiedFormat.WithMemberOptions(SymbolDisplayMemberOptions.IncludeContainingType);
+        private static SymbolDisplayFormat MinimallyQualifiedFormat(bool outputNullableModeEnabled) => outputNullableModeEnabled ? SymbolDisplayFormat.MinimallyQualifiedFormat.WithMiscellaneousOptions(SymbolDisplayMiscellaneousOptions.IncludeNullableReferenceTypeModifier) : SymbolDisplayFormat.MinimallyQualifiedFormat.WithMiscellaneousOptions(SymbolDisplayMiscellaneousOptions.None);
+        private static SymbolDisplayFormat FullyQualifiedFormat(bool outputNullableModeEnabled) => outputNullableModeEnabled ? SymbolDisplayFormat.FullyQualifiedFormat.WithMemberOptions(SymbolDisplayMemberOptions.IncludeContainingType).WithMiscellaneousOptions(SymbolDisplayMiscellaneousOptions.IncludeNullableReferenceTypeModifier) : SymbolDisplayFormat.FullyQualifiedFormat.WithMemberOptions(SymbolDisplayMemberOptions.IncludeContainingType).WithMiscellaneousOptions(SymbolDisplayMiscellaneousOptions.None);
 
         public static string GetMinimallyQualifiedName(this ISymbol symbol, bool outputNullableModeEnabled)
         {
