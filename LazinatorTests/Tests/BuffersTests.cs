@@ -352,35 +352,35 @@ namespace LazinatorTests.Tests
         [Fact]
         public void RemoveBufferWorks_RecordLikeContainer()
         {
-            RecordLikeContainer e = new RecordLikeContainer
+            RecordLikeContainer recordLikeContainer = new RecordLikeContainer
             {
                 MyRecordLikeTypeWithLazinator = new RecordLikeTypeWithLazinator(5, "May", GetTypicalExample(), new ExampleStructWithoutClass() { MyInt = 17 })
             };
 
-            e = e.CloneLazinatorTyped();
-            e.MyRecordLikeClass = new RecordLikeClass(3, GetTypicalExample()); // make outer class dirty
-            e.RemoveBufferInHierarchy();
-            e.MyRecordLikeTypeWithLazinator.Example.MyDateTime.Should().Be(new DateTime(1972, 10, 22, 17, 36, 0));
-            e.MyRecordLikeTypeWithLazinator.ExampleStruct.MyInt.Should().Be(17);
-            e.MyRecordLikeTypeWithLazinator.Example.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
-            e.MyRecordLikeTypeWithLazinator.ExampleStruct.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
-            var x = e.MyRecordLikeTypeWithLazinator.Example.MyChar;
-            e.UpdateStoredBuffer(); // should remove the buffer within the struct
-            e.MyRecordLikeTypeWithLazinator.Example.MyDateTime.Should().Be(new DateTime(1972, 10, 22, 17, 36, 0));
-            e.MyRecordLikeTypeWithLazinator.ExampleStruct.MyInt.Should().Be(17);
-            e.LazinatorMemoryStorage.IsEmpty.Should().BeFalse(); 
-            e.MyRecordLikeTypeWithLazinator.Example.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
-            e.MyRecordLikeTypeWithLazinator.ExampleStruct.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
-            e = e.CloneLazinatorTyped();
-            e.MyRecordLikeClass = new RecordLikeClass(3, GetTypicalExample()); // make outer class dirty
-            e.UpdateStoredBuffer();
-            e.MyRecordLikeTypeWithLazinator.Example.MyDateTime.Should().Be(new DateTime(1972, 10, 22, 17, 36, 0));
-            e.MyRecordLikeTypeWithLazinator.ExampleStruct.MyInt.Should().Be(17);
-            e.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
-            e.MyRecordLikeTypeWithLazinator.Example.LazinatorMemoryStorage.IsEmpty.Should().BeFalse(); // this will be first access to MyRecordLikeTypeWithLazinator, so that will lead to the memory allocation
-            e.MyRecordLikeTypeWithLazinator.ExampleStruct.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
-            e.MyRecordLikeTypeWithLazinator.Example.LazinatorMemoryStorage.AllocationID.Should().Be(
-                e.LazinatorMemoryStorage.AllocationID);
+            recordLikeContainer = recordLikeContainer.CloneLazinatorTyped();
+            recordLikeContainer.MyRecordLikeClass = new RecordLikeClass(3, GetTypicalExample()); // make outer class dirty
+            recordLikeContainer.RemoveBufferInHierarchy();
+            recordLikeContainer.MyRecordLikeTypeWithLazinator.Example.MyDateTime.Should().Be(new DateTime(1972, 10, 22, 17, 36, 0));
+            recordLikeContainer.MyRecordLikeTypeWithLazinator.ExampleStruct.MyInt.Should().Be(17);
+            recordLikeContainer.MyRecordLikeTypeWithLazinator.Example.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+            recordLikeContainer.MyRecordLikeTypeWithLazinator.ExampleStruct.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+            var x = recordLikeContainer.MyRecordLikeTypeWithLazinator.Example.MyChar;
+            recordLikeContainer.UpdateStoredBuffer(); // should remove the buffer within the struct
+            recordLikeContainer.MyRecordLikeTypeWithLazinator.Example.MyDateTime.Should().Be(new DateTime(1972, 10, 22, 17, 36, 0));
+            recordLikeContainer.MyRecordLikeTypeWithLazinator.ExampleStruct.MyInt.Should().Be(17);
+            recordLikeContainer.LazinatorMemoryStorage.IsEmpty.Should().BeFalse(); 
+            recordLikeContainer.MyRecordLikeTypeWithLazinator.Example.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+            recordLikeContainer.MyRecordLikeTypeWithLazinator.ExampleStruct.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
+            recordLikeContainer = recordLikeContainer.CloneLazinatorTyped();
+            recordLikeContainer.MyRecordLikeClass = new RecordLikeClass(3, GetTypicalExample()); // make outer class dirty
+            recordLikeContainer.UpdateStoredBuffer();
+            recordLikeContainer.MyRecordLikeTypeWithLazinator.Example.MyDateTime.Should().Be(new DateTime(1972, 10, 22, 17, 36, 0));
+            recordLikeContainer.MyRecordLikeTypeWithLazinator.ExampleStruct.MyInt.Should().Be(17);
+            recordLikeContainer.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
+            recordLikeContainer.MyRecordLikeTypeWithLazinator.Example.LazinatorMemoryStorage.IsEmpty.Should().BeFalse(); // this will be first access to MyRecordLikeTypeWithLazinator.Example, so that will lead to the memory allocation
+            recordLikeContainer.MyRecordLikeTypeWithLazinator.ExampleStruct.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
+            recordLikeContainer.MyRecordLikeTypeWithLazinator.Example.LazinatorMemoryStorage.AllocationID.Should().Be(
+                recordLikeContainer.LazinatorMemoryStorage.AllocationID);
         }
 
         [Fact]

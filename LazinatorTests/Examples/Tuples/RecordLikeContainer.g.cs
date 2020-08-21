@@ -135,7 +135,6 @@ namespace LazinatorTests.Examples.Tuples
         
         
         protected RecordLikeTypeWithLazinator _MyRecordLikeTypeWithLazinator;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public RecordLikeTypeWithLazinator MyRecordLikeTypeWithLazinator
         {
             get
