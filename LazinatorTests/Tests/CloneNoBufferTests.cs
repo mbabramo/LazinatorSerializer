@@ -531,59 +531,38 @@ namespace LazinatorTests.Tests
         public static NullableEnabledContext GetNullableEnabledContext(bool setNullsWherePossible = false)
         {
             if (!setNullsWherePossible)
-            return new NullableEnabledContext()
+            return new NullableEnabledContext(IncludeChildrenMode.IncludeAllChildren,
+                 new Example[] { new Example(), new Example() },
+                 new Example[] { new Example(), new Example() }, new Example(), new Dictionary<int, Example>() { { 4, new Example() } }, new Dictionary<int, Example>() { { 4, new Example() } }, new Example(), new LazinatorList<Example>() { new Example() }, new LazinatorList<Example>() { new Example() }, new List<Example>() { new Example() }, new List<Example>() { new Example(), new Example() }, new Queue<Example>(), new Queue<Example>(), new RecordLikeClass(3, new Example()), new RecordLikeStruct(4, "hello"), new Tuple<Example, int>(new Example(), 6), new Tuple<Example, int>(new Example(), 6), new Stack<Example>(), new Stack<Example>())
             {
                 ExplicitlyNullable = new Example(),
-                NonNullableClass = new Example(),
                 ExplicitlyNullableInterface = new Example(),
-                NonNullableInterface = new Example(),
 
                 NullableArrayOfNonNullables = new Example[] { new Example(), new Example() },
                 NullableArrayOfNullables = new Example[] { new Example(), new Example() },
-                NonNullableArrayOfNonNullables = new Example[] { new Example(), new Example() },
-                NonNullableArrayOfNullables = new Example[] { new Example(), new Example() },
-
-                NonNullableListOfNonNullables = new List<Example>() { new Example() },
                 NullableListOfNonNullables = new List<Example>() { new Example(), new Example() },
-                NonNullableListOfNullables = new List<Example>() { new Example(), new Example() },
                 NullableListOfNullables = new List<Example>() { new Example(), new Example() },
 
                 ValueTupleWithNonNullable = (new Example(), 5),
                 ValueTupleWithNullable = (new Example(), 5),
                 NullableValueTupleWithNonNullable = (new Example(), 5),
                 NullableValueTupleWithNullable = (new Example(), 5),
-
-                NonNullableRegularTupleWithNonNullable = new Tuple<Example, int>(new Example(), 6),
-                NonNullableRegularTupleWithNullable = new Tuple<Example, int>(new Example(), 6),
                 NullableRegularTupleWithNonNullable = new Tuple<Example, int>(new Example(), 6),
-                NullableRegularTupleWithNullable = new Tuple<Example, int>(new Example(), 6),
+                NullableRegularTupleWithNullable = new Tuple<Example, int>(null, 6),
 
-                NonNullableDictionaryWithNonNullable = new Dictionary<int, Example>() { { 4, new Example() } },
-                NonNullableDictionaryWithNullable = new Dictionary<int, Example>() { { 4, new Example() } },
                 NullableDictionaryWithNonNullable = new Dictionary<int, Example>() { { 4, new Example() } },
                 NullableDictionaryWithNullable = new Dictionary<int, Example>() { { 4, new Example() } },
-
-                NonNullableLazinatorListNonNullable = new LazinatorList<Example>() { new Example() },
-                NonNullableLazinatorListNullable = new LazinatorList<Example>() { new Example() },
                 NullableLazinatorListNonNullable = new LazinatorList<Example>() { new Example() },
                 NullableLazinatorListNullable = new LazinatorList<Example>() { new Example() },
-
                 NullableString = "hello",
                 NonNullableString = "world",
-
                 ByteReadOnlySpan = new byte[] { 3, 4 },
                 NonNullableMemoryOfBytes = new byte[] { 3, 4 },
                 NonNullableReadOnlyMemoryOfBytes = new byte[] { 3, 4 },
                 NullableMemoryOfBytes = new byte[] { 3, 4 },
                 NullableReadOnlyMemoryOfBytes = new byte[] { 3, 4 },
-
-                NonNullableQueueOfNonNullables = new Queue<Example>(),
-                NonNullableQueueOfNullables = new Queue<Example>(),
                 NullableQueueOfNonNullables = new Queue<Example>(),
                 NullableQueueOfNullables = new Queue<Example>(),
-
-                NonNullableStackOfNonNullables = new Stack<Example>(),
-                NonNullableStackOfNullables = new Stack<Example>(),
                 NullableStackOfNonNullables = new Stack<Example>(),
                 NullableStackOfNullables = new Stack<Example>(),
 
@@ -595,64 +574,43 @@ namespace LazinatorTests.Tests
 
             };
             else
-                return new NullableEnabledContext()
+                return new NullableEnabledContext(IncludeChildrenMode.IncludeAllChildren,
+                 new Example[] { new Example(), new Example() },
+                 new Example[] { new Example(), new Example() }, new Example(), new Dictionary<int, Example>() { { 4, new Example() } }, new Dictionary<int, Example>() { { 4, new Example() } }, new Example(), new LazinatorList<Example>() { new Example() }, new LazinatorList<Example>() { new Example() }, new List<Example>() { new Example() }, new List<Example>() { new Example(), new Example() }, new Queue<Example>(), new Queue<Example>(), new RecordLikeClass(3, new Example()), new RecordLikeStruct(4, "hello"), new Tuple<Example, int>(new Example(), 6), new Tuple<Example, int>(new Example(), 6), new Stack<Example>(), new Stack<Example>())
                 {
                     ExplicitlyNullable = null,
-                    NonNullableClass = new Example(),
                     ExplicitlyNullableInterface = null,
-                    NonNullableInterface = new Example(),
 
                     NullableArrayOfNonNullables = null,
                     NullableArrayOfNullables = null,
-                    NonNullableArrayOfNonNullables = new Example[] { new Example(), new Example() },
-                    NonNullableArrayOfNullables = new Example[] { null, new Example() },
-
-                    NonNullableListOfNonNullables = new List<Example>() { new Example(), new Example() },
                     NullableListOfNonNullables = null,
-                    NonNullableListOfNullables = new List<Example>() { new Example(), null },
                     NullableListOfNullables = null,
 
                     ValueTupleWithNonNullable = (new Example(), 5),
                     ValueTupleWithNullable = (null, 5),
                     NullableValueTupleWithNonNullable = null,
                     NullableValueTupleWithNullable = null,
-
-                    NonNullableRegularTupleWithNonNullable = new Tuple<Example, int>(new Example(), 6),
-                    NonNullableRegularTupleWithNullable = new Tuple<Example, int>(null, 6),
                     NullableRegularTupleWithNonNullable = null,
                     NullableRegularTupleWithNullable = null,
 
-                    NonNullableDictionaryWithNonNullable = new Dictionary<int, Example>() { { 4, new Example() } },
-                    NonNullableDictionaryWithNullable = new Dictionary<int, Example>() { { 4, null } },
                     NullableDictionaryWithNonNullable = null,
                     NullableDictionaryWithNullable = null,
-
-                    NonNullableLazinatorListNonNullable = new LazinatorList<Example>() { new Example() },
-                    NonNullableLazinatorListNullable = new LazinatorList<Example>() { null },
                     NullableLazinatorListNonNullable = null,
                     NullableLazinatorListNullable = null,
-
                     NullableString = null,
                     NonNullableString = "world",
-
                     ByteReadOnlySpan = new byte[] { 3, 4 },
                     NonNullableMemoryOfBytes = new byte[] { 3, 4 },
                     NonNullableReadOnlyMemoryOfBytes = new byte[] { 3, 4 },
                     NullableMemoryOfBytes = null,
                     NullableReadOnlyMemoryOfBytes = null,
-
-                    NonNullableQueueOfNonNullables = new Queue<Example>(),
-                    NonNullableQueueOfNullables = new Queue<Example>(),
                     NullableQueueOfNonNullables = null,
                     NullableQueueOfNullables = null,
-
-                    NonNullableStackOfNonNullables = new Stack<Example>(),
-                    NonNullableStackOfNullables = new Stack<Example>(),
                     NullableStackOfNonNullables = null,
                     NullableStackOfNullables = null,
 
                     MyInt = 3,
-                    MyNullableInt = null,
+                    MyNullableInt = 5,
 
                     NonNullableStruct = default,
                     NullableStruct = null
@@ -712,31 +670,13 @@ namespace LazinatorTests.Tests
         {
             NullableEnabledContext GetObject()
             {
-                return new NullableEnabledContext()
-                {
-                    ExplicitlyNullable = null,
-                    ExplicitlyNullableInterface = null,
-                    // we can set these to null because nullable-aware context is disabled in this test file -- but an error should occur
-                    NonNullableClass = null, 
-                    NonNullableInterface = new Example()
-                };
+                return new NullableEnabledContext(IncludeChildrenMode.IncludeAllChildren,
+                 null,
+                 new Example[] { new Example(), new Example() }, new Example(), new Dictionary<int, Example>() { { 4, new Example() } }, new Dictionary<int, Example>() { { 4, new Example() } }, new Example(), new LazinatorList<Example>() { new Example() }, new LazinatorList<Example>() { new Example() }, new List<Example>() { new Example() }, new List<Example>() { new Example(), new Example() }, new Queue<Example>(), new Queue<Example>(), new RecordLikeClass(3, new Example()), new RecordLikeStruct(4, "hello"), new Tuple<Example, int>(new Example(), 6), new Tuple<Example, int>(new Example(), 6), new Stack<Example>(), new Stack<Example>());
             }
 
-            NullableEnabledContext GetObject_DiffOrder()
-            {
-                return new NullableEnabledContext()
-                {
-                    ExplicitlyNullable = null,
-                    ExplicitlyNullableInterface = null,
-                    // we can set these to null because nullable-aware context is disabled in this test file -- but an error should occur
-                    NonNullableInterface = null,
-                    NonNullableClass = new Example(),
-                };
-            }
 
             Action a = () => { _ = GetObject(); };
-            a.Should().Throw<ArgumentNullException>();
-            a = () => { _ = GetObject_DiffOrder(); };
             a.Should().Throw<ArgumentNullException>();
         }
 
