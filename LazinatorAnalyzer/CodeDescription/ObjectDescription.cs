@@ -1372,11 +1372,16 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 var parametersString = String.Join(", ", allPropertiesRequiringInitialization.Select(x => x.PropertyNameWithTypeNameForConstructorParameter));
                 var parametersForBaseClassString = String.Join(", ", propertiesRequiringInitializationInBaseClass.Select(x => x.VersionOfPropertyNameForConstructorParameter));
                 var initializationString = String.Join("", allPropertiesRequiringInitialization.Select(x => x.AssignParameterToBackingField));
+                var throwIfNullString = String.Join("", allPropertiesRequiringInitialization.Select(x => $@"
+                    if ({x.PropertyNameWithTypeNameForConstructorParameter} == null)
+                    {{
+                        throw new ArgumentNullException({x.PropertyNameWithTypeNameForConstructorParameter});
+                    }}"));
                 lazinateInSecondConstructor = $@"LazinatorMemory childData;
                             " + String.Join("", allPropertiesRequiringInitialization.Select(x => x.GetLazinateContentsForConstructor()));
                 firstConstructor = $@"public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}({parametersString}, IncludeChildrenMode originalIncludeChildrenMode){IIF(inheritFromBaseType, " : base({parametersForBaseClassString}), originalIncludeChildrenMode")}{IIF(IsStruct, " : this()")}
                         {{
-                            {initializationString}{IIF(!inheritFromBaseType, $@"
+                            {initializationString}{throwIfNullString}{IIF(!inheritFromBaseType, $@"
                             OriginalIncludeChildrenMode = originalIncludeChildrenMode;")}
                         }}";
             }
