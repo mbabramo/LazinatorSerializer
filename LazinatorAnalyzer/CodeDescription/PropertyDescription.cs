@@ -36,7 +36,7 @@ namespace Lazinator.CodeDescription
         public NullableContext NullableContextSetting { get; set; }
         public bool NullableModeEnabled => NullableContextSetting.AnnotationsEnabled(); // we care about whether we are annotating our code (and should then strive to avoid warnings)
         public bool NullableModeInherited => NullableContextSetting.AnnotationsInherited();
-        public string QuestionMarkIfNullableModeEnabled => NullableModeEnabled ? "?" : "";
+        public string QuestionMarkIfOutputNullableModeEnabled => OutputNullableModeEnabled ? "?" : "";
         public string QuestionMarkIfNullableAndNullableModeEnabled => Nullable && NullableModeEnabled ? "?" : "";
         public NullableContext OutputNullableContextSetting { get; set; }
         public bool OutputNullableModeEnabled => OutputNullableContextSetting.AnnotationsEnabled(); // TODO && NullableContextSetting.AnnotationsEnabled();
@@ -44,7 +44,7 @@ namespace Lazinator.CodeDescription
         public string OutputQuestionMarkIfNullableModeEnabled => OutputNullableModeEnabled ? "?" : "";
         public string OutputQuestionMarkIfNullableAndNullableModeEnabled => Nullable && OutputNullableModeEnabled ? "?" : "";
 
-        public string ILazinatorString => "ILazinator" + QuestionMarkIfNullableModeEnabled;
+        public string ILazinatorString => "ILazinator" + QuestionMarkIfOutputNullableModeEnabled;
         public string ILazinatorStringWithItemSpecificNullability => "ILazinator" + QuestionMarkIfNullableAndNullableModeEnabled;
         internal bool Nullable { get; set; }
         internal bool SymbolEndsWithQuestionMark => Symbol.ToString().EndsWith("?");
@@ -138,7 +138,7 @@ namespace Lazinator.CodeDescription
         private string ShortTypeNameWithoutNullableIndicator => WithoutNullableIndicator(ShortTypeName());
         internal string FullyQualifiedTypeName => RegularizeTypeName(Symbol.GetFullyQualifiedName(OutputNullableModeEnabled));
         private string FullyQualifiedNameWithoutNullableIndicator => WithoutNullableIndicator(FullyQualifiedTypeName);
-        internal string AppropriattelyQualifiedTypeNameHelper()
+        internal string AppropriatelyQualifiedTypeNameHelper()
         {
             string typeName = UseFullyQualifiedNames ? FullyQualifiedTypeName : ShortTypeName();
             if (typeName.EndsWith("?"))
@@ -147,7 +147,7 @@ namespace Lazinator.CodeDescription
                 return typeName + "?";
             return typeName;
         }
-        internal string AppropriatelyQualifiedTypeName => AppropriattelyQualifiedTypeNameHelper();
+        internal string AppropriatelyQualifiedTypeName => AppropriatelyQualifiedTypeNameHelper();
 
         public string DefaultExpression => PropertyType switch { LazinatorPropertyType.LazinatorStructNullable => "null", LazinatorPropertyType.LazinatorClassOrInterface => "null", LazinatorPropertyType.LazinatorNonnullableClassOrInterface => "irrelevant /* won't end up in code */", _ => $"default({AppropriatelyQualifiedTypeName})" };
         private string AppropriatelyQualifiedTypeNameWithoutNullableIndicator => UseFullyQualifiedNames ? FullyQualifiedNameWithoutNullableIndicator : ShortTypeNameWithoutNullableIndicator;
