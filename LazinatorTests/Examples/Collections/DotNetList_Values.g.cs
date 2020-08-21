@@ -882,8 +882,7 @@ namespace LazinatorTests.Examples.Collections
                                             {
                                                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                                                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                                                var item = new NullableEnabledContext();
-                                                item.DeserializeLazinator(childData);
+                                                var item = new NullableEnabledContext(childData);
                                                 collection.Add(item);
                                                 bytesSoFar += lengthCollectionMember;
                                             }

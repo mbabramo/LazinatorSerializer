@@ -1130,8 +1130,7 @@ namespace Lazinator.CodeDescription
                                         else
                                         {{
                                             LazinatorMemory childData = {ChildSliceString};
-                                            var toReturn = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}();
-                                            toReturn.DeserializeLazinator(childData);
+                                            var toReturn = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}(childData);
                                             toReturn.IsDirty = false;
                                             return toReturn;
                                         }}")}
