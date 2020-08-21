@@ -32,6 +32,7 @@ using LazinatorCollections.ByteSpan;
 using LazinatorCollections.Remote;
 using LazinatorTests.Examples.RemoteHierarchy;
 using LazinatorTests.Examples.ExampleHierarchy;
+using System.Security.Cryptography.X509Certificates;
 
 namespace LazinatorTests.Tests
 {
@@ -218,6 +219,10 @@ public class MyOtherClass
             AdhocWorkspace ws = GetAdhocWorkspace();
             // can put a single CompleteGenerateCode here if having trouble with that file
             // await CompleteGenerateCode(typeof(NullableEnabledContext), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
+
+            // include some code so that we won't get a warning if not awaiting anything elsewhere
+            Task GetT() { return Task.CompletedTask; };
+            await GetT();
         }
 
         [Fact]

@@ -531,9 +531,9 @@ namespace LazinatorTests.Tests
         public static NullableEnabledContext GetNullableEnabledContext(bool setNullsWherePossible = false)
         {
             if (!setNullsWherePossible)
-            return new NullableEnabledContext(IncludeChildrenMode.IncludeAllChildren,
+            return new NullableEnabledContext(
                  new Example[] { new Example(), new Example() },
-                 new Example[] { new Example(), new Example() }, new Example(), new Dictionary<int, Example>() { { 4, new Example() } }, new Dictionary<int, Example>() { { 4, new Example() } }, new Example(), new LazinatorList<Example>() { new Example() }, new LazinatorList<Example>() { new Example() }, new List<Example>() { new Example() }, new List<Example>() { new Example(), new Example() }, new Queue<Example>(), new Queue<Example>(), new RecordLikeClass(3, new Example()), new RecordLikeStruct(4, "hello"), new Tuple<Example, int>(new Example(), 6), new Tuple<Example, int>(new Example(), 6), new Stack<Example>(), new Stack<Example>())
+                 new Example[] { new Example(), new Example() }, new Example(), new Dictionary<int, Example>() { { 4, new Example() } }, new Dictionary<int, Example>() { { 4, new Example() } }, new Example(), new LazinatorList<Example>() { new Example() }, new LazinatorList<Example>() { new Example() }, new List<Example>() { new Example() }, new List<Example>() { new Example(), new Example() }, new Queue<Example>(), new Queue<Example>(), new RecordLikeClass(3, new Example()), new RecordLikeStruct(4, "hello"), new Tuple<Example, int>(new Example(), 6), new Tuple<Example, int>(new Example(), 6), new Stack<Example>(), new Stack<Example>(), IncludeChildrenMode.IncludeAllChildren)
             {
                 ExplicitlyNullable = new Example(),
                 ExplicitlyNullableInterface = new Example(),
@@ -574,9 +574,9 @@ namespace LazinatorTests.Tests
 
             };
             else
-                return new NullableEnabledContext(IncludeChildrenMode.IncludeAllChildren,
+                return new NullableEnabledContext(
                  new Example[] { new Example(), new Example() },
-                 new Example[] { new Example(), new Example() }, new Example(), new Dictionary<int, Example>() { { 4, new Example() } }, new Dictionary<int, Example>() { { 4, new Example() } }, new Example(), new LazinatorList<Example>() { new Example() }, new LazinatorList<Example>() { new Example() }, new List<Example>() { new Example() }, new List<Example>() { new Example(), new Example() }, new Queue<Example>(), new Queue<Example>(), new RecordLikeClass(3, new Example()), new RecordLikeStruct(4, "hello"), new Tuple<Example, int>(new Example(), 6), new Tuple<Example, int>(new Example(), 6), new Stack<Example>(), new Stack<Example>())
+                 new Example[] { new Example(), new Example() }, new Example(), new Dictionary<int, Example>() { { 4, new Example() } }, new Dictionary<int, Example>() { { 4, new Example() } }, new Example(), new LazinatorList<Example>() { new Example() }, new LazinatorList<Example>() { new Example() }, new List<Example>() { new Example() }, new List<Example>() { new Example(), new Example() }, new Queue<Example>(), new Queue<Example>(), new RecordLikeClass(3, new Example()), new RecordLikeStruct(4, "hello"), new Tuple<Example, int>(new Example(), 6), new Tuple<Example, int>(new Example(), 6), new Stack<Example>(), new Stack<Example>(), IncludeChildrenMode.IncludeAllChildren)
                 {
                     ExplicitlyNullable = null,
                     ExplicitlyNullableInterface = null,
@@ -670,9 +670,9 @@ namespace LazinatorTests.Tests
         {
             NullableEnabledContext GetObject()
             {
-                return new NullableEnabledContext(IncludeChildrenMode.IncludeAllChildren,
+                return new NullableEnabledContext(
                  null,
-                 new Example[] { new Example(), new Example() }, new Example(), new Dictionary<int, Example>() { { 4, new Example() } }, new Dictionary<int, Example>() { { 4, new Example() } }, new Example(), new LazinatorList<Example>() { new Example() }, new LazinatorList<Example>() { new Example() }, new List<Example>() { new Example() }, new List<Example>() { new Example(), new Example() }, new Queue<Example>(), new Queue<Example>(), new RecordLikeClass(3, new Example()), new RecordLikeStruct(4, "hello"), new Tuple<Example, int>(new Example(), 6), new Tuple<Example, int>(new Example(), 6), new Stack<Example>(), new Stack<Example>());
+                 new Example[] { new Example(), new Example() }, new Example(), new Dictionary<int, Example>() { { 4, new Example() } }, new Dictionary<int, Example>() { { 4, new Example() } }, new Example(), new LazinatorList<Example>() { new Example() }, new LazinatorList<Example>() { new Example() }, new List<Example>() { new Example() }, new List<Example>() { new Example(), new Example() }, new Queue<Example>(), new Queue<Example>(), new RecordLikeClass(3, new Example()), new RecordLikeStruct(4, "hello"), new Tuple<Example, int>(new Example(), 6), new Tuple<Example, int>(new Example(), 6), new Stack<Example>(), new Stack<Example>(), IncludeChildrenMode.IncludeAllChildren);
             }
 
             Action a = () => { _ = GetObject(); };
