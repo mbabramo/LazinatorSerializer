@@ -213,10 +213,11 @@ public class MyOtherClass
         //}
 
         [Fact]
-        public async Task DEBUGCodeGeneration()
+        public async Task CodeGenerationSingle()
         {
             AdhocWorkspace ws = GetAdhocWorkspace();
-            await CompleteGenerateCode(typeof(NullableEnabledContext), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws); // DEBUG
+            // can put a single CompleteGenerateCode here if having trouble with that file
+            // await CompleteGenerateCode(typeof(NullableEnabledContext), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
         }
 
         [Fact]
