@@ -3661,7 +3661,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                             int bytesSoFar = 0;
                                             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                                             
-                                            Example?[] collection = new Example[collectionLength];
+                                            Example?[] collection = new Example?[collectionLength];
                                             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
                                             {
                                                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
@@ -3672,7 +3672,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                 else
                                                 {
                                                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                                                    var item = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+                                                    var item = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
                                                     collection[itemIndex] = item;
                                                 }
                                                 bytesSoFar += lengthCollectionMember;
@@ -3708,7 +3708,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                         private static Example?[] CloneOrChange_Example_n_B_b(Example?[] itemToClone, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                         {
                                             int collectionLength = itemToClone.Length;
-                                            Example?[] collection = avoidCloningIfPossible ? itemToClone : new Example[collectionLength];
+                                            Example?[] collection = avoidCloningIfPossible ? itemToClone : new Example?[collectionLength];
                                             int itemToCloneCount = itemToClone.Length;
                                             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
                                             {
@@ -3716,7 +3716,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                 {
                                                     if (itemToClone[itemIndex] != null)
                                                     {
-                                                        itemToClone[itemIndex] = (Example) (cloneOrChangeFunc(itemToClone[itemIndex])!);
+                                                        itemToClone[itemIndex] = (Example?) (cloneOrChangeFunc(itemToClone[itemIndex])!);
                                                     }
                                                     continue;
                                                 }
@@ -3861,13 +3861,13 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                 Dictionary<Int32, Example?> collection = new Dictionary<Int32, Example?>(collectionLength);
                                                 foreach (var item in itemToClone)
                                                 {
-                                                    var itemCopied = (KeyValuePair<Int32, Example>) CloneOrChange_KeyValuePair_Gint_c_C32Example_n_g(item, cloneOrChangeFunc, avoidCloningIfPossible);
+                                                    var itemCopied = (KeyValuePair<Int32, Example?>) CloneOrChange_KeyValuePair_Gint_c_C32Example_n_g(item, cloneOrChangeFunc, avoidCloningIfPossible);
                                                     collection.Add(itemCopied.Key, itemCopied.Value);
                                                 }
                                                 return collection;
                                             }
                                             /*Location652*/
-                                            private static KeyValuePair<Int32, Example> ConvertFromBytes_KeyValuePair_Gint_c_C32Example_n_g(LazinatorMemory storage)
+                                            private static KeyValuePair<Int32, Example?> ConvertFromBytes_KeyValuePair_Gint_c_C32Example_n_g(LazinatorMemory storage)
                                             {
                                                 if (storage.Length == 0)
                                                 {
@@ -3879,21 +3879,21 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                 /*Location653*/
                                                 int item1 = span.ToDecompressedInt(ref bytesSoFar);
                                                 /*Location654*/
-                                                Example item2 = default(Example);
+                                                Example? item2 = default(Example?);
                                                 int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
                                                 if (lengthCollectionMember_item2 != 0)
                                                 {
                                                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
-                                                    item2 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+                                                    item2 = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
                                                 }
                                                 bytesSoFar += lengthCollectionMember_item2;
                                                 /*Location655*/
-                                                var tupleType = new KeyValuePair<Int32, Example>(item1, item2);
+                                                var tupleType = new KeyValuePair<Int32, Example?>(item1, item2);
                                                 
                                                 return tupleType;
                                             }
                                             
-                                            private static void ConvertToBytes_KeyValuePair_Gint_c_C32Example_n_g(ref BinaryBufferWriter writer, KeyValuePair<Int32, Example> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                                            private static void ConvertToBytes_KeyValuePair_Gint_c_C32Example_n_g(ref BinaryBufferWriter writer, KeyValuePair<Int32, Example?> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                                             {
                                                 /*Location656*/
                                                 CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Key);
@@ -3909,9 +3909,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                 };
                                                 /*Location658*/}
                                                 /*Location659*/
-                                                private static KeyValuePair<Int32, Example> CloneOrChange_KeyValuePair_Gint_c_C32Example_n_g(KeyValuePair<Int32, Example> itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
+                                                private static KeyValuePair<Int32, Example?> CloneOrChange_KeyValuePair_Gint_c_C32Example_n_g(KeyValuePair<Int32, Example?> itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
                                                 {
-                                                    return new KeyValuePair<Int32, Example>((int) (itemToConvert.Key),(Example?) (cloneOrChangeFunc((itemToConvert.Value))));
+                                                    return new KeyValuePair<Int32, Example?>((int) (itemToConvert.Key),(Example?) (cloneOrChangeFunc((itemToConvert.Value))));
                                                 }
                                                 /*Location660*/
                                                 private static List<Example> ConvertFromBytes_List_GExample_g(LazinatorMemory storage)
@@ -3987,7 +3987,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                         else
                                                         {
                                                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
                                                             collection.Add(item);
                                                         }
                                                         bytesSoFar += lengthCollectionMember;
@@ -4031,7 +4031,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                         {
                                                             if (itemToClone[itemIndex] != null)
                                                             {
-                                                                itemToClone[itemIndex] = (Example) (cloneOrChangeFunc(itemToClone[itemIndex])!);
+                                                                itemToClone[itemIndex] = (Example?) (cloneOrChangeFunc(itemToClone[itemIndex])!);
                                                             }
                                                             continue;
                                                         }
@@ -4141,7 +4141,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                         else
                                                         {
                                                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
                                                             collection.Enqueue(item);
                                                         }
                                                         bytesSoFar += lengthCollectionMember;
@@ -4291,7 +4291,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                         else
                                                         {
                                                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
                                                             collection.Push(item);
                                                         }
                                                         bytesSoFar += lengthCollectionMember;
@@ -4424,7 +4424,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                     int bytesSoFar = 0;
                                                     int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
                                                     
-                                                    Example?[]? collection = new Example[collectionLength];
+                                                    Example?[]? collection = new Example?[collectionLength];
                                                     for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
                                                     {
                                                         int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
@@ -4435,7 +4435,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                         else
                                                         {
                                                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
                                                             collection[itemIndex] = item;
                                                         }
                                                         bytesSoFar += lengthCollectionMember;
@@ -4476,7 +4476,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                     }
                                                     
                                                     int collectionLength = itemToClone.Length;
-                                                    Example?[]? collection = avoidCloningIfPossible ? itemToClone : new Example[collectionLength];
+                                                    Example?[]? collection = avoidCloningIfPossible ? itemToClone : new Example?[collectionLength];
                                                     int itemToCloneCount = itemToClone.Length;
                                                     for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
                                                     {
@@ -4484,7 +4484,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                         {
                                                             if (itemToClone[itemIndex] != null)
                                                             {
-                                                                itemToClone[itemIndex] = (Example) (cloneOrChangeFunc(itemToClone[itemIndex])!);
+                                                                itemToClone[itemIndex] = (Example?) (cloneOrChangeFunc(itemToClone[itemIndex])!);
                                                             }
                                                             continue;
                                                         }
@@ -4604,7 +4604,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                     Dictionary<Int32, Example?>? collection = new Dictionary<Int32, Example?>(collectionLength);
                                                     foreach (var item in itemToClone)
                                                     {
-                                                        var itemCopied = (KeyValuePair<Int32, Example>) CloneOrChange_KeyValuePair_Gint_c_C32Example_n_g(item, cloneOrChangeFunc, avoidCloningIfPossible);
+                                                        var itemCopied = (KeyValuePair<Int32, Example?>) CloneOrChange_KeyValuePair_Gint_c_C32Example_n_g(item, cloneOrChangeFunc, avoidCloningIfPossible);
                                                         collection.Add(itemCopied.Key, itemCopied.Value);
                                                     }
                                                     return collection;
@@ -4696,7 +4696,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                         else
                                                         {
                                                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
                                                             collection.Add(item);
                                                         }
                                                         bytesSoFar += lengthCollectionMember;
@@ -4745,7 +4745,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                         {
                                                             if (itemToClone[itemIndex] != null)
                                                             {
-                                                                itemToClone[itemIndex] = (Example) (cloneOrChangeFunc(itemToClone[itemIndex])!);
+                                                                itemToClone[itemIndex] = (Example?) (cloneOrChangeFunc(itemToClone[itemIndex])!);
                                                             }
                                                             continue;
                                                         }
@@ -4886,7 +4886,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                         else
                                                         {
                                                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
                                                             collection.Enqueue(item);
                                                         }
                                                         bytesSoFar += lengthCollectionMember;
@@ -5072,7 +5072,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                         else
                                                         {
                                                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+                                                            var item = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
                                                             collection.Push(item);
                                                         }
                                                         bytesSoFar += lengthCollectionMember;
@@ -5143,12 +5143,12 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                     /*Location728*/
                                                     int item1 = span.ToDecompressedInt(ref bytesSoFar);
                                                     /*Location729*/
-                                                    Example item2 = default(Example);
+                                                    Example? item2 = default(Example?);
                                                     int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
                                                     if (lengthCollectionMember_item2 != 0)
                                                     {
                                                         LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
-                                                        item2 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+                                                        item2 = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
                                                     }
                                                     bytesSoFar += lengthCollectionMember_item2;
                                                     /*Location730*/
@@ -5190,7 +5190,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                         /*Location736*/
                                                         int item1 = span.ToDecompressedInt(ref bytesSoFar);
                                                         /*Location737*/
-                                                        string item2 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+                                                        string? item2 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
                                                         /*Location738*/
                                                         var tupleType = new RecordLikeStruct(item1, item2);
                                                         
@@ -5255,12 +5255,12 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                                 
                                                                 int bytesSoFar = 0;
                                                                 /*Location752*/
-                                                                Example item1 = default(Example);
+                                                                Example? item1 = default(Example?);
                                                                 int lengthCollectionMember_item1 = span.ToInt32(ref bytesSoFar);
                                                                 if (lengthCollectionMember_item1 != 0)
                                                                 {
                                                                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item1);
-                                                                    item1 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+                                                                    item1 = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
                                                                 }
                                                                 bytesSoFar += lengthCollectionMember_item1;
                                                                 /*Location753*/
@@ -5304,12 +5304,12 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                                     /*Location760*/
                                                                     int item1 = span.ToDecompressedInt(ref bytesSoFar);
                                                                     /*Location761*/
-                                                                    Example item2 = default(Example);
+                                                                    Example? item2 = default(Example?);
                                                                     int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
                                                                     if (lengthCollectionMember_item2 != 0)
                                                                     {
                                                                         LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
-                                                                        item2 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+                                                                        item2 = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
                                                                     }
                                                                     bytesSoFar += lengthCollectionMember_item2;
                                                                     /*Location762*/
@@ -5360,7 +5360,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                                         /*Location769*/
                                                                         int item1 = span.ToDecompressedInt(ref bytesSoFar);
                                                                         /*Location770*/
-                                                                        string item2 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+                                                                        string? item2 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
                                                                         /*Location771*/
                                                                         var tupleType = new RecordLikeStruct(item1, item2);
                                                                         
@@ -5451,12 +5451,12 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                                                 
                                                                                 int bytesSoFar = 0;
                                                                                 /*Location787*/
-                                                                                Example item1 = default(Example);
+                                                                                Example? item1 = default(Example?);
                                                                                 int lengthCollectionMember_item1 = span.ToInt32(ref bytesSoFar);
                                                                                 if (lengthCollectionMember_item1 != 0)
                                                                                 {
                                                                                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item1);
-                                                                                    item1 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+                                                                                    item1 = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
                                                                                 }
                                                                                 bytesSoFar += lengthCollectionMember_item1;
                                                                                 /*Location788*/
@@ -5559,12 +5559,12 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                                                         
                                                                                         int bytesSoFar = 0;
                                                                                         /*Location805*/
-                                                                                        Example item1 = default(Example);
+                                                                                        Example? item1 = default(Example?);
                                                                                         int lengthCollectionMember_item1 = span.ToInt32(ref bytesSoFar);
                                                                                         if (lengthCollectionMember_item1 != 0)
                                                                                         {
                                                                                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item1);
-                                                                                            item1 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+                                                                                            item1 = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
                                                                                         }
                                                                                         bytesSoFar += lengthCollectionMember_item1;
                                                                                         /*Location806*/
@@ -5658,12 +5658,12 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                                                                                                 
                                                                                                 int bytesSoFar = 0;
                                                                                                 /*Location822*/
-                                                                                                Example item1 = default(Example);
+                                                                                                Example? item1 = default(Example?);
                                                                                                 int lengthCollectionMember_item1 = span.ToInt32(ref bytesSoFar);
                                                                                                 if (lengthCollectionMember_item1 != 0)
                                                                                                 {
                                                                                                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item1);
-                                                                                                    item1 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+                                                                                                    item1 = DeserializationFactory.Instance.CreateBasedOnType<Example?>(childData);
                                                                                                 }
                                                                                                 bytesSoFar += lengthCollectionMember_item1;
                                                                                                 /*Location823*/

@@ -37,7 +37,7 @@ namespace Lazinator.CodeDescription
         public bool NullableModeEnabled => NullableContextSetting.AnnotationsEnabled(); // we care about whether we are annotating our code (and should then strive to avoid warnings)
         public bool NullableModeInherited => NullableContextSetting.AnnotationsInherited();
         public string QuestionMarkIfNullableModeEnabled => NullableModeEnabled ? "?" : "";
-        public string QuestionMarkIfNullableAndNullableModeEnabled => Nullable && NullableModeEnabled ? "?" : "";        
+        public string QuestionMarkIfNullableAndNullableModeEnabled => Nullable && NullableModeEnabled ? "?" : "";
         public NullableContext OutputNullableContextSetting { get; set; }
         public bool OutputNullableModeEnabled => OutputNullableContextSetting.AnnotationsEnabled(); // TODO && NullableContextSetting.AnnotationsEnabled();
         public bool OutputNullableModeInherited => OutputNullableContextSetting.AnnotationsInherited(); // TODO annotations
@@ -138,7 +138,16 @@ namespace Lazinator.CodeDescription
         private string ShortTypeNameWithoutNullableIndicator => WithoutNullableIndicator(ShortTypeName());
         internal string FullyQualifiedTypeName => RegularizeTypeName(Symbol.GetFullyQualifiedName(OutputNullableModeEnabled));
         private string FullyQualifiedNameWithoutNullableIndicator => WithoutNullableIndicator(FullyQualifiedTypeName);
-        internal string AppropriatelyQualifiedTypeName => UseFullyQualifiedNames ? FullyQualifiedTypeName : ShortTypeName();
+        internal string AppropriattelyQualifiedTypeNameHelper()
+        {
+            string typeName = UseFullyQualifiedNames ? FullyQualifiedTypeName : ShortTypeName();
+            if (typeName.EndsWith("?"))
+                return typeName;
+            if (OutputNullableModeEnabled && Nullable)
+                return typeName + "?";
+            return typeName;
+        }
+        internal string AppropriatelyQualifiedTypeName => AppropriattelyQualifiedTypeNameHelper();
 
         public string DefaultExpression => PropertyType switch { LazinatorPropertyType.LazinatorStructNullable => "null", LazinatorPropertyType.LazinatorClassOrInterface => "null", LazinatorPropertyType.LazinatorNonnullableClassOrInterface => "irrelevant /* won't end up in code */", _ => $"default({AppropriatelyQualifiedTypeName})" };
         private string AppropriatelyQualifiedTypeNameWithoutNullableIndicator => UseFullyQualifiedNames ? FullyQualifiedNameWithoutNullableIndicator : ShortTypeNameWithoutNullableIndicator;
@@ -285,20 +294,28 @@ namespace Lazinator.CodeDescription
             SetReadAndWriteMethodNames();
 
             SetInclusionConditionals();
+            Debug.WriteLine($"{DEBUGEWQRW++} {AppropriatelyQualifiedTypeName} {PropertyName} Nullable contexts: {nullableContextSetting}");
         }
 
+
+        static int DEBUGEWQRW = 0;
         public PropertyDescription(ITypeSymbol typeSymbol, ObjectDescription containingObjectDescription, NullableContext nullableContextSetting, NullableContext outputNullableContextSetting, PropertyDescription containingPropertyDescription, string propertyName = null)
         {
             // This is only used for defining the type on the inside of the generics, plus underlying type for arrays.
             TypeSymbolIfNoProperty = typeSymbol;
             ContainingObjectDescription = containingObjectDescription;
             NullableContextSetting = nullableContextSetting;
+            OutputNullableContextSetting = outputNullableContextSetting;
             ContainingPropertyDescription = containingPropertyDescription;
             PropertyName = propertyName;
             IsAbstract = typeSymbol.IsAbstract;
             SetPropertyType(typeSymbol);
             SetReadAndWriteMethodNames();
-            Debug.WriteLine($"{DEBUG++} {AppropriatelyQualifiedTypeName} {PropertyName} Containing object {containingObjectDescription.NameIncludingGenerics} Containing property {containingPropertyDescription?.PropertyName} Nullable contexts: {nullableContextSetting}, {outputNullableContextSetting}");
+            if (DEBUGEWQRW == 41)
+            {
+                var DEBUG = 0;
+            }
+            Debug.WriteLine($"{DEBUGEWQRW++} {AppropriatelyQualifiedTypeName} {PropertyName} Containing object {containingObjectDescription.NameIncludingGenerics} Containing property {containingPropertyDescription?.PropertyName} Nullable contexts: {nullableContextSetting}, {outputNullableContextSetting}");
         }
 
         public override string ToString()
