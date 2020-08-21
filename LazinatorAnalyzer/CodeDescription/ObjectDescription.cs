@@ -642,13 +642,13 @@ namespace Lazinator.CodeDescription
             string parametersToFirstConstructor = "";
             var allPropertiesRequiringInitialization = ExclusiveInterface.PropertiesIncludingInherited.Where(x => x.NonNullableThatRequiresInitialization).ToList();
             if (allPropertiesRequiringInitialization.Any())
-                parametersToFirstConstructor = ", " + String.Join(", ", allPropertiesRequiringInitialization.Select(x => x.PropertyName));
+                parametersToFirstConstructor = String.Join(", ", allPropertiesRequiringInitialization.Select(x => x.PropertyName)) + ", ";
             return $@"public {DerivationKeyword}{ILazinatorString} CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
                         {{
                             {NameIncludingGenerics} clone;
                             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
                             {{
-                                clone = new {NameIncludingGenerics}(includeChildrenMode{parametersToFirstConstructor});{IIF(Version != -1,$@"
+                                clone = new {NameIncludingGenerics}({parametersToFirstConstructor}includeChildrenMode);{IIF(Version != -1,$@"
                                 clone.LazinatorObjectVersion = LazinatorObjectVersion;")}
                                 clone = ({NameIncludingGenerics})AssignCloneProperties(clone, includeChildrenMode){IIF(NullableModeEnabled, "!")};
                             }}
