@@ -1785,6 +1785,70 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             _NonNullableStackOfNonNullables = nonNullableStackOfNonNullables;
             _NonNullableStackOfNullables = nonNullableStackOfNullables;
             
+            if (nonNullableArrayOfNonNullables == null)
+            {
+                throw new ArgumentNullException("nonNullableArrayOfNonNullables");
+            }
+            if (nonNullableArrayOfNullables == null)
+            {
+                throw new ArgumentNullException("nonNullableArrayOfNullables");
+            }
+            if (nonNullableClass == null)
+            {
+                throw new ArgumentNullException("nonNullableClass");
+            }
+            if (nonNullableDictionaryWithNonNullable == null)
+            {
+                throw new ArgumentNullException("nonNullableDictionaryWithNonNullable");
+            }
+            if (nonNullableDictionaryWithNullable == null)
+            {
+                throw new ArgumentNullException("nonNullableDictionaryWithNullable");
+            }
+            if (nonNullableInterface == null)
+            {
+                throw new ArgumentNullException("nonNullableInterface");
+            }
+            if (nonNullableLazinatorListNonNullable == null)
+            {
+                throw new ArgumentNullException("nonNullableLazinatorListNonNullable");
+            }
+            if (nonNullableLazinatorListNullable == null)
+            {
+                throw new ArgumentNullException("nonNullableLazinatorListNullable");
+            }
+            if (nonNullableListOfNonNullables == null)
+            {
+                throw new ArgumentNullException("nonNullableListOfNonNullables");
+            }
+            if (nonNullableListOfNullables == null)
+            {
+                throw new ArgumentNullException("nonNullableListOfNullables");
+            }
+            if (nonNullableQueueOfNonNullables == null)
+            {
+                throw new ArgumentNullException("nonNullableQueueOfNonNullables");
+            }
+            if (nonNullableQueueOfNullables == null)
+            {
+                throw new ArgumentNullException("nonNullableQueueOfNullables");
+            }
+            if (nonNullableRegularTupleWithNonNullable == null)
+            {
+                throw new ArgumentNullException("nonNullableRegularTupleWithNonNullable");
+            }
+            if (nonNullableRegularTupleWithNullable == null)
+            {
+                throw new ArgumentNullException("nonNullableRegularTupleWithNullable");
+            }
+            if (nonNullableStackOfNonNullables == null)
+            {
+                throw new ArgumentNullException("nonNullableStackOfNonNullables");
+            }
+            if (nonNullableStackOfNullables == null)
+            {
+                throw new ArgumentNullException("nonNullableStackOfNullables");
+            }
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         

@@ -1369,14 +1369,20 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             if (allPropertiesRequiringInitialization.Any())
             {
                 var propertiesRequiringInitializationInBaseClass = ExclusiveInterface.PropertiesInherited.Where(x => x.NonNullableThatRequiresInitialization).ToList();
+                var propertiesRequiringInitializationHere = ExclusiveInterface.PropertiesToDefineThisLevel.Where(x => x.NonNullableThatRequiresInitialization).ToList();
                 var parametersString = String.Join(", ", allPropertiesRequiringInitialization.Select(x => x.PropertyNameWithTypeNameForConstructorParameter));
-                var parametersForBaseClassString = String.Join(", ", propertiesRequiringInitializationInBaseClass.Select(x => x.VersionOfPropertyNameForConstructorParameter));
-                var initializationString = String.Join("", allPropertiesRequiringInitialization.Select(x => x.AssignParameterToBackingField));
+                var parametersForBaseClassString = String.Join(", ", propertiesRequiringInitializationInBaseClass.Select(x => x.PropertyNameForConstructorParameter));
+                var initializationString = String.Join("", propertiesRequiringInitializationHere.Select(x => x.AssignParameterToBackingField));
+                var throwIfNullString = String.Join("", propertiesRequiringInitializationHere.Where(x => !x.IsNonNullableRecordLikeTypeInNullableEnabledContext).Select(x => $@"
+                    if ({x.PropertyNameForConstructorParameter} == null)
+                    {{
+                        throw new ArgumentNullException(""{x.PropertyNameForConstructorParameter}"");
+                    }}"));
                 lazinateInSecondConstructor = $@"LazinatorMemory childData;
                             " + String.Join("", allPropertiesRequiringInitialization.Select(x => x.GetLazinateContentsForConstructor()));
                 firstConstructor = $@"public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}({parametersString}, IncludeChildrenMode originalIncludeChildrenMode){IIF(inheritFromBaseType, " : base({parametersForBaseClassString}), originalIncludeChildrenMode")}{IIF(IsStruct, " : this()")}
                         {{
-                            {initializationString}{IIF(!inheritFromBaseType, $@"
+                            {initializationString}{throwIfNullString}{IIF(!inheritFromBaseType, $@"
                             OriginalIncludeChildrenMode = originalIncludeChildrenMode;")}
                         }}";
             }

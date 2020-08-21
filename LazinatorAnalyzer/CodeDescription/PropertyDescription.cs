@@ -165,9 +165,9 @@ namespace Lazinator.CodeDescription
         private string WriteMethodName { get; set; }
         private string ReadMethodName { get; set; }
         internal string PropertyName { get; set; }
-        internal string VersionOfPropertyNameForConstructorParameter => char.ToLower(PropertyName[0]) + PropertyName.Substring(1);
-        internal string PropertyNameWithTypeNameForConstructorParameter => $"{AppropriatelyQualifiedTypeName} {VersionOfPropertyNameForConstructorParameter}";
-        internal string AssignParameterToBackingField => $@"{BackingFieldString} = {VersionOfPropertyNameForConstructorParameter};
+        internal string PropertyNameForConstructorParameter => char.ToLower(PropertyName[0]) + PropertyName.Substring(1);
+        internal string PropertyNameWithTypeNameForConstructorParameter => $"{AppropriatelyQualifiedTypeName} {PropertyNameForConstructorParameter}";
+        internal string AssignParameterToBackingField => $@"{BackingFieldString} = {PropertyNameForConstructorParameter};
                             ";
 
         internal string BackingFieldString => $"_{PropertyName}";
