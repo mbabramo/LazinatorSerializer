@@ -675,7 +675,6 @@ namespace LazinatorTests.Tests
                  new Example[] { new Example(), new Example() }, new Example(), new Dictionary<int, Example>() { { 4, new Example() } }, new Dictionary<int, Example>() { { 4, new Example() } }, new Example(), new LazinatorList<Example>() { new Example() }, new LazinatorList<Example>() { new Example() }, new List<Example>() { new Example() }, new List<Example>() { new Example(), new Example() }, new Queue<Example>(), new Queue<Example>(), new RecordLikeClass(3, new Example()), new RecordLikeStruct(4, "hello"), new Tuple<Example, int>(new Example(), 6), new Tuple<Example, int>(new Example(), 6), new Stack<Example>(), new Stack<Example>());
             }
 
-
             Action a = () => { _ = GetObject(); };
             a.Should().Throw<ArgumentNullException>();
         }
