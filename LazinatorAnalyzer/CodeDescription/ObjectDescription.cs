@@ -484,6 +484,8 @@ namespace Lazinator.CodeDescription
                             {{
                                 LazinatorObjectVersionUpgrade(serializedVersionNumber);
                             }}")
+                        }{  String.Join("", ExclusiveInterface.PropertiesToDefineThisLevel.Where(x => x.HasEagerAttribute && !x.NonNullableThatRequiresInitialization).Select(x => $@"
+                                _ = {x.PropertyName};"))
                         }{
                             IIF(ImplementsPostDeserialization,
                                 $@"

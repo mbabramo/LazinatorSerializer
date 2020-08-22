@@ -1,4 +1,5 @@
-﻿using LazinatorAnalyzer.AttributeClones;
+﻿using Lazinator.Attributes;
+using LazinatorAnalyzer.AttributeClones;
 using Microsoft.CodeAnalysis;
 using System;
 using System.Linq;
@@ -138,6 +139,8 @@ namespace LazinatorCodeGen.Roslyn
                     return new CloneDoNotAutogenerateAttribute();
                 case "ExcludableChildAttribute":
                     return new CloneExcludableChildAttribute();
+                case "EagerAttribute":
+                    return new CloneEagerAttribute();
                 case "FullyQualifyAttribute":
                     return new CloneFullyQualifyAttribute();
                 case "GenerateRefStructAttribute":

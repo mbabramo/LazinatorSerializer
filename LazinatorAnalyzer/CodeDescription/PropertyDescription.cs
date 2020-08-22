@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Lazinator.Attributes;
 using LazinatorAnalyzer.AttributeClones;
 using LazinatorAnalyzer.Settings;
 using LazinatorAnalyzer.Support;
@@ -203,7 +204,8 @@ namespace Lazinator.CodeDescription
         /* Attributes */
         private IEnumerable<Attribute> UserAttributes => ContainingObjectDescription.Compilation.GetAttributes(PropertySymbol);
         internal int RelativeOrder { get; set; }
-        private bool HasFullyQualifyAttribute => UserAttributes.OfType<CloneFullyQualifyAttribute>().Any();
+        internal bool HasFullyQualifyAttribute => UserAttributes.OfType<CloneFullyQualifyAttribute>().Any();
+        internal bool HasEagerAttribute => UserAttributes.OfType<CloneEagerAttribute>().Any();
         private IEnumerable<CloneInsertAttributeAttribute> InsertAttributes => UserAttributes.OfType<CloneInsertAttributeAttribute>();
         internal string PropertyAccessibility { get; set; }
         private string PropertyAccessibilityString => PropertyAccessibility == null ? "public " : PropertyAccessibility + " ";

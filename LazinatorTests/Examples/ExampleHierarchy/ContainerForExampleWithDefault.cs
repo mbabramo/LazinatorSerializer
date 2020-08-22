@@ -7,8 +7,7 @@
             Example = new Example()
             {
                 MyChar = 'D'
-            };
+            }; 
         }
-
     }
 }

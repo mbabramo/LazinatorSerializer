@@ -9,6 +9,8 @@ using Xunit;
 using LazinatorTests.Examples.Structs;
 using Lazinator.Wrappers;
 using LazinatorCollections.Tuples;
+using LazinatorTests.Examples.ExampleHierarchy;
+using System.Reflection;
 
 namespace LazinatorTests.Tests
 {
@@ -258,6 +260,21 @@ namespace LazinatorTests.Tests
             c.HasChanged.Should().BeFalse();
             c.DescendantHasChanged.Should().BeFalse();
             c.Example.MyChar.Should().Be('D');
+        }
+
+        [Fact]
+        public void DirtinessWithEager()
+        {
+            ContainerForEagerExample o = new ContainerForEagerExample() { EagerExample = new Example() { MyChar = 'J' } };
+            var c = o.CloneLazinatorTyped();
+            c.IsDirty.Should().BeFalse(); // even though accessed, should not be dirty
+            c.DescendantIsDirty.Should().BeFalse();
+            c.HasChanged.Should().BeFalse();
+            c.DescendantHasChanged.Should().BeFalse();
+            FieldInfo privateFieldInfoForEagerChild = typeof(ContainerForEagerExample).GetField("_EagerExample_Accessed", BindingFlags.NonPublic | BindingFlags.Instance);
+            bool accessed = (bool) privateFieldInfoForEagerChild.GetValue(c);
+            accessed.Should().BeTrue();
+            c.EagerExample.MyChar.Should().Be('J');
         }
 
         [Fact]
