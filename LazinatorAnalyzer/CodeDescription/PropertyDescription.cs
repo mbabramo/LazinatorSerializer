@@ -99,8 +99,6 @@ namespace Lazinator.CodeDescription
 
         internal bool IsSupportedReferenceType => IsSupportedCollectionReferenceType || IsSupportedTupleReferenceType;
         internal bool IsSupportedValueType => IsSupportedCollectionOrTuple && !IsSupportedReferenceType;
-
-        // DEBUG -- important: We must separate RecordLikeType into RecordLikeClass and RecordLikeStruct and update above accordingly (or maybe not).
         internal bool IsNonNullableReferenceType => !Nullable && (
             PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface
             || IsSupportedReferenceType);
@@ -262,18 +260,12 @@ namespace Lazinator.CodeDescription
 
         }
 
-        int DEBUG = 0;
-
         public PropertyDescription(IPropertySymbol propertySymbol, ObjectDescription container, NullableContext nullableContextSetting, string derivationKeyword, string propertyAccessibility, bool isLast)
         {
             PropertySymbol = propertySymbol;
             IsAbstract = PropertySymbol.Type.IsAbstract;
             ContainingObjectDescription = container;
             NullableContextSetting = OutputNullableContextSetting = nullableContextSetting;
-            if (propertySymbol.Name == "NonNullableArrayOfNonNullables")
-            {
-                var DEBUG = 0;
-            }
             PropertyName = propertySymbol.Name;
             DerivationKeyword = derivationKeyword;
             PropertyAccessibility = propertyAccessibility;
@@ -296,11 +288,9 @@ namespace Lazinator.CodeDescription
             SetReadAndWriteMethodNames();
 
             SetInclusionConditionals();
-            Debug.WriteLine($"{DEBUGEWQRW++} {AppropriatelyQualifiedTypeName} {PropertyName} Nullable contexts: {nullableContextSetting}");
         }
 
 
-        static int DEBUGEWQRW = 0;
         public PropertyDescription(ITypeSymbol typeSymbol, ObjectDescription containingObjectDescription, NullableContext nullableContextSetting, NullableContext outputNullableContextSetting, PropertyDescription containingPropertyDescription, string propertyName = null)
         {
             // This is only used for defining the type on the inside of the generics, plus underlying type for arrays.
@@ -313,11 +303,7 @@ namespace Lazinator.CodeDescription
             IsAbstract = typeSymbol.IsAbstract;
             SetPropertyType(typeSymbol);
             SetReadAndWriteMethodNames();
-            if (DEBUGEWQRW == 41)
-            {
-                var DEBUG = 0;
-            }
-            Debug.WriteLine($"{DEBUGEWQRW++} {AppropriatelyQualifiedTypeName} {PropertyName} Containing object {containingObjectDescription.NameIncludingGenerics} Containing property {containingPropertyDescription?.PropertyName} Nullable contexts: {nullableContextSetting}, {outputNullableContextSetting}");
+            //Debug.WriteLine($"{AppropriatelyQualifiedTypeName} {PropertyName} Containing object {containingObjectDescription.NameIncludingGenerics} Containing property {containingPropertyDescription?.PropertyName} Nullable contexts: {nullableContextSetting}, {outputNullableContextSetting}");
         }
 
         public override string ToString()
@@ -436,11 +422,6 @@ namespace Lazinator.CodeDescription
         private void SetPropertyType(ITypeSymbol typeSymbol)
         {
             INamedTypeSymbol namedTypeSymbol = typeSymbol as INamedTypeSymbol;
-
-            if (PropertyName?.Contains("NullableRecordLikeClass") ?? false)
-            {
-                var DEBUG = 0;
-            }
 
             if (namedTypeSymbol == null && typeSymbol.TypeKind == TypeKind.TypeParameter)
             {
@@ -759,14 +740,6 @@ namespace Lazinator.CodeDescription
 
         private bool HandleRecordLikeType(INamedTypeSymbol t)
         {
-            if (PropertyName?.Contains("NullableRecordLikeClass") ?? false)
-            {
-                var DEBUG = 0;
-            }
-            if (LazinatorCompilation.TypeSymbolToString(t).Contains("RecordLikeClass"))
-            {
-                var DEBUG = 0;
-            }
             var originalDefinition = t.OriginalDefinition; // if defined as MyClass?, then we want just MyClass
             // We look for a record-like type only after we have determined that the type does not implement ILazinator and we don't have the other supported tuple types (e.g., ValueTuples, KeyValuePair). We need to make sure that for each parameter in the constructor with the most parameters, there is a unique property with the same name (case insensitive as to first letter). If so, we assume that this property corresponds to the parameter, though there is no inherent guarantee that this is true. 
             var recordLikeTypes = ContainingObjectDescription.Compilation.RecordLikeTypes;
@@ -842,7 +815,7 @@ namespace Lazinator.CodeDescription
             {
                 LazinatorSupportedTupleType.KeyValuePair => SymbolEndsWithQuestionMark,
                 LazinatorSupportedTupleType.ValueTuple => SymbolEndsWithQuestionMark,
-                LazinatorSupportedTupleType.RecordLikeType => SymbolEndsWithQuestionMark, // DEBUG -- must differentiate class and struct? try using record like class and struct within non-nullable context
+                LazinatorSupportedTupleType.RecordLikeType => SymbolEndsWithQuestionMark,
                 LazinatorSupportedTupleType.Tuple => NullableModeEnabled ? SymbolEndsWithQuestionMark : true,
                 _ => throw new NotImplementedException(),
             };
@@ -1561,10 +1534,6 @@ namespace Lazinator.CodeDescription
 
         private void AppendPropertyWriteString_NonLazinator(CodeStringBuilder sb)
         {
-            if (AppropriatelyQualifiedTypeName == "RecordLikeStruct_C63")
-            {
-                var DEBUG = 0;
-            }
             string omitLengthSuffix = IIF(OmitLengthBecauseDefinitelyLast, "_WithoutLengthPrefix");
             string writeMethodName = PlaceholderMemoryWriteMethod == null ? $"ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}" : PlaceholderMemoryWriteMethod;
             if (PlaceholderMemoryWriteMethod == null)
@@ -1759,11 +1728,6 @@ namespace Lazinator.CodeDescription
         {
             string lengthWord, itemString, itemStringSetup, forStatement, cloneString;
             GetItemAccessStrings(out lengthWord, out itemString, out itemStringSetup, out forStatement, out cloneString);
-
-            if (AppropriatelyQualifiedTypeName == "RecordLikeStruct_C63")
-            {
-                var DEBUG = 0;
-            }
 
             if (
                 (
@@ -2027,12 +1991,8 @@ namespace Lazinator.CodeDescription
                 cloneString = itemString;
             else
                 throw new NotImplementedException();
-            DEBUGQQW++;
             return $"({typeName}) " + cloneString;
         }
-
-        static int DEBUGQQW = 0;
-        int DEBUGQQE = DEBUGQQW++;
 
         private void AppendSupportedCollection_ConvertFromBytes(CodeStringBuilder sb)
         {
@@ -2303,10 +2263,6 @@ namespace Lazinator.CodeDescription
 
         private string GetSupportedCollectionWriteCommands(string itemString, bool outerPropertyIsSimpleListOrArray)
         {
-            if (AppropriatelyQualifiedTypeName == "RecordLikeStruct_C63")
-            {
-                var DEBUG = 0;
-            }
             string GetSupportedCollectionWriteCommandsHelper()
             {
                 if (IsPrimitive)
@@ -2506,14 +2462,6 @@ namespace Lazinator.CodeDescription
 
         private string GetSupportedTupleWriteCommand(string itemName, LazinatorSupportedTupleType outerTupleType, bool outerTypeIsNullable, bool outerTypeIsValueType)
         {
-            if (AppropriatelyQualifiedTypeName == "RecordLikeStruct_C63")
-            {
-                var DEBUG = 0;
-            }
-            if (outerTupleType == LazinatorSupportedTupleType.RecordLikeType && outerTypeIsNullable && outerTypeIsValueType)
-            {
-                var DEBUG = 0;
-            }
             string itemToConvertItemName =
                 $"itemToConvert{IIF((outerTupleType == LazinatorSupportedTupleType.ValueTuple || outerTupleType == LazinatorSupportedTupleType.KeyValuePair || (outerTupleType == LazinatorSupportedTupleType.RecordLikeType && outerTypeIsNullable && outerTypeIsValueType)) && outerTypeIsNullable, ".Value")}.{itemName}";
             if (IsPrimitive)

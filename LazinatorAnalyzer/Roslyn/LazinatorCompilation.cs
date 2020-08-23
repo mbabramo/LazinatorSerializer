@@ -221,14 +221,8 @@ namespace LazinatorCodeGen.Roslyn
             return attribute.Choice + " ";
         }
 
-        static int DEBUG = 0;
         private void RecordInformationAboutTypeAndRelatedTypes(ITypeSymbol type)
         {
-            System.Diagnostics.Debug.WriteLine($"{type} {DEBUG++}");
-            if (DEBUG == 129 || DEBUG == 131)
-            {
-                var DEBUG2 = 0;
-            }
             var typesAndRelatedTypes = GetTypeAndRelatedTypes(type); // NOTE: It's important that we not enumerate here. Otherwise, we may prematurely process a type and run into an error in ExclusiveInterfaceDescription.
             foreach (ITypeSymbol t in typesAndRelatedTypes)
                 RecordInformationAboutType(t);
