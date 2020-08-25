@@ -425,7 +425,7 @@ namespace Lazinator.CodeDescription
 
             if (namedTypeSymbol == null && typeSymbol.TypeKind == TypeKind.TypeParameter)
             {
-                Nullable = true;
+                Nullable = !GenericConstrainedToStruct;
                 PropertyType = LazinatorPropertyType.OpenGenericParameter;
                 DerivationKeyword = "virtual ";
                 return;

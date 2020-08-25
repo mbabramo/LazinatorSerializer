@@ -53,7 +53,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             set
             {
-                
+                value.LazinatorParents = new LazinatorParentsCollection(this);
                 
                 IsDirty = true;
                 DescendantIsDirty = true;
