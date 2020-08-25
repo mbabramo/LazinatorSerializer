@@ -5,7 +5,7 @@ using LazinatorCollections.Remote;
 
 namespace LazinatorTests.Examples.RemoteHierarchy
 {
-    [Lazinator((int)ExampleUniqueIDs.IRemoteLevel1)]
+    [Lazinator((int)ExampleUniqueIDs.RemoteLevel1)]
     public interface IRemoteLevel1 : ILazinator
     {
         int RemoteLevel1Int { get; set; }

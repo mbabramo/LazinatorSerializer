@@ -86,9 +86,11 @@
         ExampleGrandchild,
         SpanInDotNetList,
         RecordLikeCollections,
-        IRemoteHierarchy,
-        IRemoteLevel1,
-        IRemoteLevel2,
+        RemoteHierarchy,
+        RemoteLevel1,
+        RemoteLevel2,
         ConstrainedGeneric,
+        NullableEnabledContext,
+        ContainerForEagerExample,
     }
 }

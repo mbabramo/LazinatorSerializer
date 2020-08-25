@@ -5,7 +5,7 @@ using Lazinator.Wrappers;
 
 namespace LazinatorTests.Examples.RemoteHierarchy
 {
-    [Lazinator((int)ExampleUniqueIDs.IRemoteHierarchy)]
+    [Lazinator((int)ExampleUniqueIDs.RemoteHierarchy)]
     public interface IRemoteHierarchy
     {
         int TopOfHierarchyInt { get; set; }
