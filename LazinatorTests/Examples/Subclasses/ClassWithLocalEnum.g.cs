@@ -92,7 +92,7 @@ namespace LazinatorTests.Examples.Subclasses
         
         /* Serialization, deserialization, and object relationships */
         
-        public ClassWithLocalEnum(IncludeChildrenMode originalIncludeChildrenMode)
+        public ClassWithLocalEnum(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

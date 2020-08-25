@@ -135,7 +135,7 @@ namespace LazinatorTests.Examples.Hierarchy
         
         /* Serialization, deserialization, and object relationships */
         
-        public RecursiveExample(IncludeChildrenMode originalIncludeChildrenMode)
+        public RecursiveExample(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

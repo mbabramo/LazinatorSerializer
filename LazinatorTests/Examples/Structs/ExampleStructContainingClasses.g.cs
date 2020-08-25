@@ -286,7 +286,7 @@ namespace LazinatorTests.Examples
         
         /* Serialization, deserialization, and object relationships */
         
-        public ExampleStructContainingClasses(IncludeChildrenMode originalIncludeChildrenMode) : this()
+        public ExampleStructContainingClasses(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren) : this()
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

@@ -37,7 +37,7 @@ namespace Lazinator.Wrappers
         
         /* Serialization, deserialization, and object relationships */
         
-        public Placeholder(IncludeChildrenMode originalIncludeChildrenMode) : this()
+        public Placeholder(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren) : this()
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

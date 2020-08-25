@@ -51,7 +51,7 @@ namespace LazinatorTests.Examples.NonLazinator
         
         /* Serialization, deserialization, and object relationships */
         
-        public FromNonLazinatorBase(IncludeChildrenMode originalIncludeChildrenMode)
+        public FromNonLazinatorBase(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

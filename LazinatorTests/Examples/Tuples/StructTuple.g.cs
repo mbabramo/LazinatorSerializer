@@ -279,7 +279,7 @@ namespace LazinatorTests.Examples.Tuples
         
         /* Serialization, deserialization, and object relationships */
         
-        public StructTuple(IncludeChildrenMode originalIncludeChildrenMode)
+        public StructTuple(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

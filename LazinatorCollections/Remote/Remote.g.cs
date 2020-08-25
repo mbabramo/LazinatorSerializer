@@ -174,7 +174,7 @@ namespace LazinatorCollections.Remote
         
         /* Serialization, deserialization, and object relationships */
         
-        public Remote(IncludeChildrenMode originalIncludeChildrenMode)
+        public Remote(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

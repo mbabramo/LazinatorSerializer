@@ -160,7 +160,7 @@ namespace LazinatorCollections.Dictionary
         
         /* Serialization, deserialization, and object relationships */
         
-        public DictionaryBucket(IncludeChildrenMode originalIncludeChildrenMode)
+        public DictionaryBucket(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

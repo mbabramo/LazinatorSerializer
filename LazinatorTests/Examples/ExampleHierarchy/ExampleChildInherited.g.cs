@@ -98,7 +98,7 @@ namespace LazinatorTests.Examples
         
         /* Clone overrides */
         
-        public ExampleChildInherited(IncludeChildrenMode originalIncludeChildrenMode) : base(originalIncludeChildrenMode)
+        public ExampleChildInherited(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren) : base(originalIncludeChildrenMode)
         {
         }
         

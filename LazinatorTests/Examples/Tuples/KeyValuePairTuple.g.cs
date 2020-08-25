@@ -78,7 +78,7 @@ namespace LazinatorTests.Examples.Tuples
         
         /* Serialization, deserialization, and object relationships */
         
-        public KeyValuePairTuple(IncludeChildrenMode originalIncludeChildrenMode)
+        public KeyValuePairTuple(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

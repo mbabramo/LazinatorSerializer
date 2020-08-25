@@ -54,7 +54,7 @@ namespace Lazinator.Wrappers
         
         /* Serialization, deserialization, and object relationships */
         
-        public WInt(IncludeChildrenMode originalIncludeChildrenMode) : this()
+        public WInt(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren) : this()
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

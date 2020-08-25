@@ -153,7 +153,7 @@ namespace LazinatorCollections
         
         /* Serialization, deserialization, and object relationships */
         
-        public LazinatorLinkedListNode(IncludeChildrenMode originalIncludeChildrenMode)
+        public LazinatorLinkedListNode(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

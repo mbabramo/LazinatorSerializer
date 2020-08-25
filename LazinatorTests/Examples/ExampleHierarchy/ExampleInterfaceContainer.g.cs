@@ -127,7 +127,7 @@ namespace LazinatorTests.Examples.Hierarchy
         
         /* Serialization, deserialization, and object relationships */
         
-        public ExampleInterfaceContainer(IncludeChildrenMode originalIncludeChildrenMode)
+        public ExampleInterfaceContainer(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

@@ -164,7 +164,7 @@ namespace LazinatorCollections.Tuples
         
         /* Serialization, deserialization, and object relationships */
         
-        public LazinatorTuple(IncludeChildrenMode originalIncludeChildrenMode)
+        public LazinatorTuple(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

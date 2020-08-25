@@ -138,7 +138,7 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Serialization, deserialization, and object relationships */
         
-        public DerivedGeneric2c(IncludeChildrenMode originalIncludeChildrenMode)
+        public DerivedGeneric2c(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

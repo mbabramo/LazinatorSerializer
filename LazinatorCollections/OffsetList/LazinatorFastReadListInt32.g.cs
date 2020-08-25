@@ -33,7 +33,7 @@ namespace LazinatorCollections.OffsetList
         
         /* Clone overrides */
         
-        public LazinatorFastReadListInt32(IncludeChildrenMode originalIncludeChildrenMode) : base(originalIncludeChildrenMode)
+        public LazinatorFastReadListInt32(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren) : base(originalIncludeChildrenMode)
         {
         }
         

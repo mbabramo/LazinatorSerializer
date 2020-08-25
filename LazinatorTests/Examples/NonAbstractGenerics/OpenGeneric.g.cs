@@ -137,7 +137,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         /* Serialization, deserialization, and object relationships */
         
-        public OpenGeneric(IncludeChildrenMode originalIncludeChildrenMode)
+        public OpenGeneric(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

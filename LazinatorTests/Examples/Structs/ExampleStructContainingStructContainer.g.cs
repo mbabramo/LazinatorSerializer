@@ -110,7 +110,7 @@ namespace LazinatorTests.Examples.Structs
         
         /* Serialization, deserialization, and object relationships */
         
-        public ExampleStructContainingStructContainer(IncludeChildrenMode originalIncludeChildrenMode)
+        public ExampleStructContainingStructContainer(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

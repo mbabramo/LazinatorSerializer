@@ -103,7 +103,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         
         /* Serialization, deserialization, and object relationships */
         
-        public RemoteLevel1(IncludeChildrenMode originalIncludeChildrenMode)
+        public RemoteLevel1(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

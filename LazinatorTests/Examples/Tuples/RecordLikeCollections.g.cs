@@ -134,7 +134,7 @@ namespace LazinatorTests.Examples.Tuples
         
         /* Serialization, deserialization, and object relationships */
         
-        public RecordLikeCollections(IncludeChildrenMode originalIncludeChildrenMode)
+        public RecordLikeCollections(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

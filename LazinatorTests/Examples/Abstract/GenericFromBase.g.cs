@@ -109,7 +109,7 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Clone overrides */
         
-        public GenericFromBase(IncludeChildrenMode originalIncludeChildrenMode) : base(originalIncludeChildrenMode)
+        public GenericFromBase(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren) : base(originalIncludeChildrenMode)
         {
         }
         

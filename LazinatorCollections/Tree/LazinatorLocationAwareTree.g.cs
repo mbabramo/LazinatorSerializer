@@ -89,7 +89,7 @@ namespace LazinatorCollections.Tree
         
         /* Clone overrides */
         
-        public LazinatorLocationAwareTree(IncludeChildrenMode originalIncludeChildrenMode) : base(originalIncludeChildrenMode)
+        public LazinatorLocationAwareTree(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren) : base(originalIncludeChildrenMode)
         {
         }
         

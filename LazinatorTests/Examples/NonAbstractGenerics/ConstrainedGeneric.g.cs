@@ -140,7 +140,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         /* Serialization, deserialization, and object relationships */
         
-        public ConstrainedGeneric(IncludeChildrenMode originalIncludeChildrenMode)
+        public ConstrainedGeneric(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

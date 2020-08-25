@@ -74,7 +74,7 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Clone overrides */
         
-        public Concrete6(IncludeChildrenMode originalIncludeChildrenMode) : base(originalIncludeChildrenMode)
+        public Concrete6(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren) : base(originalIncludeChildrenMode)
         {
         }
         

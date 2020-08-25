@@ -93,7 +93,7 @@ namespace LazinatorTests.Examples.Collections
         }
         /* Clone overrides */
         
-        public DerivedArray_Values(IncludeChildrenMode originalIncludeChildrenMode) : base(originalIncludeChildrenMode)
+        public DerivedArray_Values(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren) : base(originalIncludeChildrenMode)
         {
         }
         

@@ -34,7 +34,7 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Clone overrides */
         
-        public ConcreteFromGenericFromBase(IncludeChildrenMode originalIncludeChildrenMode) : base(originalIncludeChildrenMode)
+        public ConcreteFromGenericFromBase(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren) : base(originalIncludeChildrenMode)
         {
         }
         

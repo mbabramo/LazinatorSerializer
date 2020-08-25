@@ -154,7 +154,7 @@ namespace LazinatorCollections.Tree
         
         /* Serialization, deserialization, and object relationships */
         
-        public LazinatorGeneralTree(IncludeChildrenMode originalIncludeChildrenMode)
+        public LazinatorGeneralTree(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

@@ -51,7 +51,7 @@ namespace LazinatorTests.Examples.Subclasses
         
         /* Serialization, deserialization, and object relationships */
         
-        public ClassWithForeignEnum(IncludeChildrenMode originalIncludeChildrenMode)
+        public ClassWithForeignEnum(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

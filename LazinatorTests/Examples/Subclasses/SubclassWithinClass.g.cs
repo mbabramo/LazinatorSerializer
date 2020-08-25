@@ -53,7 +53,7 @@ namespace LazinatorTests.Examples.Subclasses
             
             /* Serialization, deserialization, and object relationships */
             
-            public SubclassWithinClass(IncludeChildrenMode originalIncludeChildrenMode)
+            public SubclassWithinClass(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
             {
                 OriginalIncludeChildrenMode = originalIncludeChildrenMode;
             }

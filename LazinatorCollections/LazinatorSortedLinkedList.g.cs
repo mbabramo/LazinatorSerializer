@@ -33,7 +33,7 @@ namespace LazinatorCollections
         
         /* Clone overrides */
         
-        public LazinatorSortedLinkedList(IncludeChildrenMode originalIncludeChildrenMode) : base(originalIncludeChildrenMode)
+        public LazinatorSortedLinkedList(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren) : base(originalIncludeChildrenMode)
         {
         }
         

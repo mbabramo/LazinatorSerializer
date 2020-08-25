@@ -92,7 +92,7 @@ namespace LazinatorTests.Examples.Collections
         
         /* Serialization, deserialization, and object relationships */
         
-        public SpanInDotNetList(IncludeChildrenMode originalIncludeChildrenMode)
+        public SpanInDotNetList(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

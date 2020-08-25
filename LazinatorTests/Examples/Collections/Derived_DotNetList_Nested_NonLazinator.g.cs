@@ -90,7 +90,7 @@ namespace LazinatorTests.Examples.Collections
         
         /* Clone overrides */
         
-        public Derived_DotNetList_Nested_NonLazinator(IncludeChildrenMode originalIncludeChildrenMode) : base(originalIncludeChildrenMode)
+        public Derived_DotNetList_Nested_NonLazinator(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren) : base(originalIncludeChildrenMode)
         {
         }
         

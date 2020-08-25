@@ -160,7 +160,7 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Serialization, deserialization, and object relationships */
         
-        public ConcreteGeneric2a(IncludeChildrenMode originalIncludeChildrenMode)
+        public ConcreteGeneric2a(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

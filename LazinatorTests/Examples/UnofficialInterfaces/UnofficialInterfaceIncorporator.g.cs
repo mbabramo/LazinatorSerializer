@@ -166,7 +166,7 @@ namespace LazinatorTests.Examples
         
         /* Serialization, deserialization, and object relationships */
         
-        public UnofficialInterfaceIncorporator(IncludeChildrenMode originalIncludeChildrenMode)
+        public UnofficialInterfaceIncorporator(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

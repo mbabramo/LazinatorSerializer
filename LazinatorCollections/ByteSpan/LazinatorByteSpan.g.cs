@@ -108,7 +108,7 @@ namespace LazinatorCollections.ByteSpan
         
         /* Serialization, deserialization, and object relationships */
         
-        public LazinatorByteSpan(IncludeChildrenMode originalIncludeChildrenMode)
+        public LazinatorByteSpan(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

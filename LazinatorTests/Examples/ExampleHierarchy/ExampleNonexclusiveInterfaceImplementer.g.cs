@@ -51,7 +51,7 @@ namespace LazinatorTests.Examples
         
         /* Serialization, deserialization, and object relationships */
         
-        public ExampleNonexclusiveInterfaceImplementer(IncludeChildrenMode originalIncludeChildrenMode)
+        public ExampleNonexclusiveInterfaceImplementer(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

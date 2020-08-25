@@ -432,7 +432,7 @@ namespace LazinatorTests.Examples.Collections
         
         /* Serialization, deserialization, and object relationships */
         
-        public SpanAndMemory(IncludeChildrenMode originalIncludeChildrenMode)
+        public SpanAndMemory(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

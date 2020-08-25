@@ -115,7 +115,7 @@ namespace LazinatorCollections.BitArray
         
         /* Serialization, deserialization, and object relationships */
         
-        public LazinatorBitArray(IncludeChildrenMode originalIncludeChildrenMode)
+        public LazinatorBitArray(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

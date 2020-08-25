@@ -86,7 +86,7 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Serialization, deserialization, and object relationships */
         
-        public ContainerWithAbstract1(IncludeChildrenMode originalIncludeChildrenMode)
+        public ContainerWithAbstract1(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

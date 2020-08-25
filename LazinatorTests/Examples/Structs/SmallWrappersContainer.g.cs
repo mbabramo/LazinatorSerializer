@@ -664,7 +664,7 @@ namespace LazinatorTests.Examples.Structs
         
         /* Serialization, deserialization, and object relationships */
         
-        public SmallWrappersContainer(IncludeChildrenMode originalIncludeChildrenMode)
+        public SmallWrappersContainer(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

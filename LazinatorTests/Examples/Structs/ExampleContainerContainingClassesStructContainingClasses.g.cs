@@ -342,7 +342,7 @@ namespace LazinatorTests.Examples
         
         /* Serialization, deserialization, and object relationships */
         
-        public ExampleContainerContainingClassesStructContainingClasses(IncludeChildrenMode originalIncludeChildrenMode)
+        public ExampleContainerContainingClassesStructContainingClasses(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

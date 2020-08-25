@@ -108,7 +108,7 @@ namespace LazinatorCollections.Dictionary
         
         /* Serialization, deserialization, and object relationships */
         
-        public LazinatorDictionary(IncludeChildrenMode originalIncludeChildrenMode)
+        public LazinatorDictionary(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

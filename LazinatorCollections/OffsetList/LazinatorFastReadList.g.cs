@@ -65,7 +65,7 @@ namespace LazinatorCollections.OffsetList
         
         /* Serialization, deserialization, and object relationships */
         
-        public LazinatorFastReadList(IncludeChildrenMode originalIncludeChildrenMode)
+        public LazinatorFastReadList(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

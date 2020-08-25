@@ -65,7 +65,7 @@ namespace Lazinator.Wrappers
         
         /* Serialization, deserialization, and object relationships */
         
-        public WReadOnlySpanChar(IncludeChildrenMode originalIncludeChildrenMode) : this()
+        public WReadOnlySpanChar(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren) : this()
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

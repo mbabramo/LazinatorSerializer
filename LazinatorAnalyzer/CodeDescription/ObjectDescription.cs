@@ -1382,7 +1382,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                     }}"));
                 lazinateInSecondConstructor = $@"LazinatorMemory childData;
                             " + String.Join("", allPropertiesRequiringInitialization.Select(x => x.GetLazinateContentsForConstructor()));
-                firstConstructor = $@"public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}({parametersString}, IncludeChildrenMode originalIncludeChildrenMode){IIF(inheritFromBaseType, " : base({parametersForBaseClassString}), originalIncludeChildrenMode")}{IIF(IsStruct, " : this()")}
+                firstConstructor = $@"public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}({parametersString}, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren){IIF(inheritFromBaseType, " : base({parametersForBaseClassString}), originalIncludeChildrenMode")}{IIF(IsStruct, " : this()")}
                         {{
                             {initializationString}{throwIfNullString}{IIF(!inheritFromBaseType, $@"
                             OriginalIncludeChildrenMode = originalIncludeChildrenMode;")}
@@ -1390,7 +1390,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             }
             else
             {
-                firstConstructor = firstConstructor = $@"public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}(IncludeChildrenMode originalIncludeChildrenMode){IIF(inheritFromBaseType, " : base(originalIncludeChildrenMode)")}{IIF(IsStruct, " : this()")}
+                firstConstructor = firstConstructor = $@"public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren){IIF(inheritFromBaseType, " : base(originalIncludeChildrenMode)")}{IIF(IsStruct, " : this()")}
                         {{{IIF(!inheritFromBaseType, $@"
                             OriginalIncludeChildrenMode = originalIncludeChildrenMode;")}
                         }}";

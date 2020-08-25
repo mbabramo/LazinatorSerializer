@@ -66,7 +66,7 @@ namespace LazinatorTests.Examples
         
         /* Serialization, deserialization, and object relationships */
         
-        public NonLazinatorInterchangeStruct(IncludeChildrenMode originalIncludeChildrenMode) : this()
+        public NonLazinatorInterchangeStruct(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren) : this()
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

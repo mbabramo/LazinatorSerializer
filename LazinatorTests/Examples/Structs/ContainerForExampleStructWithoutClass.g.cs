@@ -214,7 +214,7 @@ namespace LazinatorTests.Examples.Structs
         
         /* Serialization, deserialization, and object relationships */
         
-        public ContainerForExampleStructWithoutClass(IncludeChildrenMode originalIncludeChildrenMode)
+        public ContainerForExampleStructWithoutClass(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

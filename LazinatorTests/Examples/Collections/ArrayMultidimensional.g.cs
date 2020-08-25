@@ -176,7 +176,7 @@ namespace LazinatorTests.Examples.Collections
         
         /* Serialization, deserialization, and object relationships */
         
-        public ArrayMultidimensional(IncludeChildrenMode originalIncludeChildrenMode)
+        public ArrayMultidimensional(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

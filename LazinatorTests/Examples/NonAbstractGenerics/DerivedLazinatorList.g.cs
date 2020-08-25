@@ -49,7 +49,7 @@ namespace LazinatorTests.Examples
         }
         /* Clone overrides */
         
-        public DerivedLazinatorList(IncludeChildrenMode originalIncludeChildrenMode) : base(originalIncludeChildrenMode)
+        public DerivedLazinatorList(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren) : base(originalIncludeChildrenMode)
         {
         }
         

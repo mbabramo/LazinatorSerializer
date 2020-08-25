@@ -54,7 +54,7 @@ namespace Lazinator.Wrappers
         
         /* Serialization, deserialization, and object relationships */
         
-        public WString(IncludeChildrenMode originalIncludeChildrenMode) : this()
+        public WString(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren) : this()
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
@@ -427,7 +427,7 @@ namespace Lazinator.Wrappers
             
             /* Serialization, deserialization, and object relationships */
             
-            public WString_RefStruct(IncludeChildrenMode originalIncludeChildrenMode) : this()
+            public WString_RefStruct(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren) : this()
             {
                 OriginalIncludeChildrenMode = originalIncludeChildrenMode;
             }

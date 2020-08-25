@@ -101,7 +101,7 @@ namespace LazinatorTests.Examples
         
         /* Serialization, deserialization, and object relationships */
         
-        public ClosedGenericWithoutBase(IncludeChildrenMode originalIncludeChildrenMode)
+        public ClosedGenericWithoutBase(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

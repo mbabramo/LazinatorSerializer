@@ -162,7 +162,7 @@ namespace LazinatorCollections.OffsetList
         
         /* Serialization, deserialization, and object relationships */
         
-        public LazinatorOffsetList(IncludeChildrenMode originalIncludeChildrenMode)
+        public LazinatorOffsetList(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren)
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }

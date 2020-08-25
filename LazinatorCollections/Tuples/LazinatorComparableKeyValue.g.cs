@@ -124,7 +124,7 @@ namespace LazinatorCollections.Tuples
         
         /* Serialization, deserialization, and object relationships */
         
-        public LazinatorComparableKeyValue(IncludeChildrenMode originalIncludeChildrenMode) : this()
+        public LazinatorComparableKeyValue(IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren) : this()
         {
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
