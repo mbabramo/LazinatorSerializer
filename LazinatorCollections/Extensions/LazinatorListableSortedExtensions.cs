@@ -4,7 +4,7 @@ using Lazinator.Core;
 using System;
 using System.Collections.Generic;
 
-namespace LazinatorCollections
+namespace LazinatorCollections.Extensions
 {
     /// <summary>
     /// Utility routines for sorted insertions, replacements, or removals of Lazinator items in Lazinator listables (such as LazinatorSortedList).
