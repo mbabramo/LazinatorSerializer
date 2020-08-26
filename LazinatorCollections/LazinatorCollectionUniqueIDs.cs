@@ -60,5 +60,6 @@
         IMultilevelReporter,
         IMultilevelReportReceiver,
         IRemote,
+        ILazinatorComparer,
     }
 }
