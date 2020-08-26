@@ -545,7 +545,7 @@ namespace LazinatorCodeGen.Roslyn
                 SyntaxReference declaringSyntaxReference = symbol.DeclaringSyntaxReferences[i];
                 int spanStart = declaringSyntaxReference.Span.Start;
                 var nullableContext2 = compilation.GetSemanticModel(declaringSyntaxReference.SyntaxTree).GetNullableContext(spanStart);
-                if (nullableContext.WarningsEnabled() != nullableContext2.WarningsEnabled())
+                if (nullableContext.AnnotationsEnabled() != nullableContext2.AnnotationsEnabled())
                 {
                     throw new LazinatorCodeGenException("Lazinator requires that nullability context must be same for all instances of type symbol.");
                 }
