@@ -561,7 +561,10 @@ namespace LazinatorCollections
                 if (!exploreOnlyDeserializedChildren || status.IsDeserialized)
                 {
                     var current = this[i];
-                    this[i] = (T) current.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
+                    if (this[i] != null)
+                    {
+                        this[i] = (T)current.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
+                    }
                 }
             }
         }
