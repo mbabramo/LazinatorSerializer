@@ -92,5 +92,7 @@
         ConstrainedGeneric,
         NullableEnabledContext,
         ContainerForEagerExample,
+        StructInAnotherNamespace,
+        ContainerForStructInAnotherNamespace,
     }
 }
