@@ -130,7 +130,7 @@ namespace LazinatorTests.Examples.NonLazinator
         {
             clone.FreeInMemoryObjects();
             FromNonLazinatorBase typedClone = (FromNonLazinatorBase) clone;
-            typedClone.MyInt = MyInt;
+            typedClone.MyInt = MyInt;/*Location397*/
             
             return typedClone;
         }

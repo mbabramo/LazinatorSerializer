@@ -130,7 +130,7 @@ namespace Lazinator.Wrappers
         {
             clone.FreeInMemoryObjects();
             WBool typedClone = (WBool) clone;
-            typedClone.WrappedValue = WrappedValue;
+            typedClone.WrappedValue = WrappedValue;/*Location639*/
             
             typedClone.IsDirty = false;
             return typedClone;

@@ -64,19 +64,19 @@ namespace LazinatorTests.Examples.Abstract
             }
             set
             {
-                if (value != null && value.IsStruct)
+                if (value != null && value.IsStruct)/*Location282*/
                 {
-                    value.LazinatorParents = new LazinatorParentsCollection(this);
+                    value.LazinatorParents = new LazinatorParentsCollection(this);/*Location283*/
                 }
                 else
                 {
                     if (_MyT != null)
                     {
-                        _MyT.LazinatorParents = _MyT.LazinatorParents.WithRemoved(this);
+                        _MyT.LazinatorParents = _MyT.LazinatorParents.WithRemoved(this);/*Location284*/
                     }
                     if (value != null)
                     {
-                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);/*Location285*/
                     }
                 }
                 
@@ -94,7 +94,7 @@ namespace LazinatorTests.Examples.Abstract
                 _MyT = default(T);
                 if (_MyT != null)
                 { // MyT is a struct
-                    _MyT.LazinatorParents = new LazinatorParentsCollection(this);
+                    _MyT.LazinatorParents = new LazinatorParentsCollection(this);/*Location281*/
                 }
             }
             else
@@ -138,16 +138,16 @@ namespace LazinatorTests.Examples.Abstract
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
             GenericFromBase<T> typedClone = (GenericFromBase<T>) clone;
-            typedClone.MyInt = MyInt;
+            typedClone.MyInt = MyInt;/*Location286*/
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (MyT == null)
                 {
-                    typedClone.MyT = default(T);
+                    typedClone.MyT = default(T);/*Location288*//*Location289*/
                 }
                 else
                 {
-                    typedClone.MyT = (T) MyT.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.MyT = (T) MyT.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location287*/
                 }
                 
             }

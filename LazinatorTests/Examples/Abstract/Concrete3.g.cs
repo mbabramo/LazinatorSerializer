@@ -370,18 +370,18 @@ namespace LazinatorTests.Examples.Abstract
         {
             clone.FreeInMemoryObjects();
             Concrete3 typedClone = (Concrete3) clone;
-            typedClone.String1 = String1;
-            typedClone.String2 = String2;
-            typedClone.String3 = String3;
+            typedClone.String1 = String1;/*Location261*/
+            typedClone.String2 = String2;/*Location262*/
+            typedClone.String3 = String3;/*Location263*/
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (Example2 == null)
                 {
-                    typedClone.Example2 = null;
+                    typedClone.Example2 = null;/*Location265*//*Location266*/
                 }
                 else
                 {
-                    typedClone.Example2 = (Example) Example2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.Example2 = (Example) Example2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location264*/
                 }
                 
             }
@@ -390,18 +390,18 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (Example3 == null)
                 {
-                    typedClone.Example3 = null;
+                    typedClone.Example3 = null;/*Location268*//*Location269*/
                 }
                 else
                 {
-                    typedClone.Example3 = (Example) Example3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.Example3 = (Example) Example3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location267*/
                 }
                 
             }
             
-            typedClone.IntList1 = CloneOrChange_List_Gint_g(IntList1, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.IntList2 = CloneOrChange_List_Gint_g(IntList2, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.IntList3 = CloneOrChange_List_Gint_g(IntList3, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.IntList1 = CloneOrChange_List_Gint_g(IntList1, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location270*/
+            typedClone.IntList2 = CloneOrChange_List_Gint_g(IntList2, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location271*/
+            typedClone.IntList3 = CloneOrChange_List_Gint_g(IntList3, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location272*/
             
             return typedClone;
         }

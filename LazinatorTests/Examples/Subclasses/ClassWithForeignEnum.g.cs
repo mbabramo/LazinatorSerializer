@@ -130,7 +130,7 @@ namespace LazinatorTests.Examples.Subclasses
         {
             clone.FreeInMemoryObjects();
             ClassWithForeignEnum typedClone = (ClassWithForeignEnum) clone;
-            typedClone.MyEnum = MyEnum;
+            typedClone.MyEnum = MyEnum;/*Location483*/
             
             return typedClone;
         }

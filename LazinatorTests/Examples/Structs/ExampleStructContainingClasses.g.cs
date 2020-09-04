@@ -369,17 +369,17 @@ namespace LazinatorTests.Examples
         {
             clone.FreeInMemoryObjects();
             ExampleStructContainingClasses typedClone = (ExampleStructContainingClasses) clone;
-            typedClone.MyBool = MyBool;
-            typedClone.MyChar = MyChar;
+            typedClone.MyBool = MyBool;/*Location62*/
+            typedClone.MyChar = MyChar;/*Location63*/
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (MyChild1 == null)
                 {
-                    typedClone.MyChild1 = null;
+                    typedClone.MyChild1 = null;/*Location65*//*Location66*/
                 }
                 else
                 {
-                    typedClone.MyChild1 = (ExampleChild) MyChild1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.MyChild1 = (ExampleChild) MyChild1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location64*/
                 }
                 
             }
@@ -388,18 +388,18 @@ namespace LazinatorTests.Examples
             {
                 if (MyChild2 == null)
                 {
-                    typedClone.MyChild2 = null;
+                    typedClone.MyChild2 = null;/*Location68*//*Location69*/
                 }
                 else
                 {
-                    typedClone.MyChild2 = (ExampleChild) MyChild2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.MyChild2 = (ExampleChild) MyChild2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location67*/
                 }
                 
             }
             
-            typedClone.MyLazinatorList = CloneOrChange_List_GExample_g(MyLazinatorList, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyListValues = CloneOrChange_List_Gint_g(MyListValues, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyTuple = CloneOrChange__PNonLazinatorClass_C32myitem1_c_C32int_n_C32myitem2_p(MyTuple, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyLazinatorList = CloneOrChange_List_GExample_g(MyLazinatorList, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location70*/
+            typedClone.MyListValues = CloneOrChange_List_Gint_g(MyListValues, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location71*/
+            typedClone.MyTuple = CloneOrChange__PNonLazinatorClass_C32myitem1_c_C32int_n_C32myitem2_p(MyTuple, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location72*/
             
             typedClone.IsDirty = false;
             return typedClone;

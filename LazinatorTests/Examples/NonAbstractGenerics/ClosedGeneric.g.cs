@@ -78,7 +78,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
             ClosedGeneric typedClone = (ClosedGeneric) clone;
-            typedClone.AnotherPropertyAdded = AnotherPropertyAdded;
+            typedClone.AnotherPropertyAdded = AnotherPropertyAdded;/*Location351*/
             
             return typedClone;
         }

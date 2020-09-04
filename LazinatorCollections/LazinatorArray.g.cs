@@ -175,11 +175,11 @@ namespace LazinatorCollections
             {
                 if (UnderlyingList == null)
                 {
-                    typedClone.UnderlyingList = null;
+                    typedClone.UnderlyingList = null;/*Location540*//*Location541*/
                 }
                 else
                 {
-                    typedClone.UnderlyingList = (ILazinatorListable<T>) UnderlyingList.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.UnderlyingList = (ILazinatorListable<T>) UnderlyingList.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location539*/
                 }
                 
             }

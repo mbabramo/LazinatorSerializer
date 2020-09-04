@@ -169,11 +169,11 @@ namespace LazinatorTests.Examples
             {
                 if (Example == null)
                 {
-                    typedClone.Example = null;
+                    typedClone.Example = null;/*Location37*//*Location38*/
                 }
                 else
                 {
-                    typedClone.Example = (Example) Example.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.Example = (Example) Example.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location36*/
                 }
                 
             }

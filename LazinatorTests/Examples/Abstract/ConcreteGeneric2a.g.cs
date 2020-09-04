@@ -239,20 +239,20 @@ namespace LazinatorTests.Examples.Abstract
         {
             clone.FreeInMemoryObjects();
             ConcreteGeneric2a typedClone = (ConcreteGeneric2a) clone;
-            typedClone.MyEnumWithinAbstractGeneric = MyEnumWithinAbstractGeneric;
-            typedClone.MyEnumWithinAbstractGeneric2 = MyEnumWithinAbstractGeneric2;
-            typedClone.MyT = MyT;
-            typedClone.MyUnofficialInt = MyUnofficialInt;
-            typedClone.AnotherProperty = AnotherProperty;
+            typedClone.MyEnumWithinAbstractGeneric = MyEnumWithinAbstractGeneric;/*Location309*/
+            typedClone.MyEnumWithinAbstractGeneric2 = MyEnumWithinAbstractGeneric2;/*Location310*/
+            typedClone.MyT = MyT;/*Location311*/
+            typedClone.MyUnofficialInt = MyUnofficialInt;/*Location312*/
+            typedClone.AnotherProperty = AnotherProperty;/*Location313*/
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (LazinatorExample == null)
                 {
-                    typedClone.LazinatorExample = null;
+                    typedClone.LazinatorExample = null;/*Location315*//*Location316*/
                 }
                 else
                 {
-                    typedClone.LazinatorExample = (Example) LazinatorExample.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.LazinatorExample = (Example) LazinatorExample.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location314*/
                 }
                 
             }

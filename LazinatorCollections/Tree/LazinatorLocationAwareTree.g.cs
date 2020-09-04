@@ -122,11 +122,11 @@ namespace LazinatorCollections.Tree
             {
                 if (Locations == null)
                 {
-                    typedClone.Locations = null;
+                    typedClone.Locations = null;/*Location563*//*Location564*/
                 }
                 else
                 {
-                    typedClone.Locations = (LazinatorDictionary<T, LazinatorList<WInt>>) Locations.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.Locations = (LazinatorDictionary<T, LazinatorList<WInt>>) Locations.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location562*/
                 }
                 
             }

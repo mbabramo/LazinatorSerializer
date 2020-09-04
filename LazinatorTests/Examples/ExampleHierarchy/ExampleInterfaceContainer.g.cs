@@ -210,16 +210,16 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (ExampleByInterface == null)
                 {
-                    typedClone.ExampleByInterface = null;
+                    typedClone.ExampleByInterface = null;/*Location43*//*Location44*/
                 }
                 else
                 {
-                    typedClone.ExampleByInterface = (IExample) ExampleByInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.ExampleByInterface = (IExample) ExampleByInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location42*/
                 }
                 
             }
             
-            typedClone.ExampleListByInterface = CloneOrChange_List_GIExample_g(ExampleListByInterface, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.ExampleListByInterface = CloneOrChange_List_GIExample_g(ExampleListByInterface, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location45*/
             
             return typedClone;
         }

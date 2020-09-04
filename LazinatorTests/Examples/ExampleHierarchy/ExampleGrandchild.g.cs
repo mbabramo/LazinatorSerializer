@@ -145,8 +145,8 @@ namespace LazinatorTests.Examples
         {
             clone.FreeInMemoryObjects();
             ExampleGrandchild typedClone = (ExampleGrandchild) clone;
-            typedClone.AString = AString;
-            typedClone.MyInt = MyInt;
+            typedClone.AString = AString;/*Location55*/
+            typedClone.MyInt = MyInt;/*Location56*/
             
             return typedClone;
         }

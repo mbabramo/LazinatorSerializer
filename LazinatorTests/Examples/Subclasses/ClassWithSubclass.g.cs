@@ -229,16 +229,16 @@ namespace LazinatorTests.Examples.Subclasses
         {
             clone.FreeInMemoryObjects();
             ClassWithSubclass typedClone = (ClassWithSubclass) clone;
-            typedClone.IntWithinSuperclass = IntWithinSuperclass;
+            typedClone.IntWithinSuperclass = IntWithinSuperclass;/*Location484*/
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (SubclassInstance1 == null)
                 {
-                    typedClone.SubclassInstance1 = null;
+                    typedClone.SubclassInstance1 = null;/*Location486*//*Location487*/
                 }
                 else
                 {
-                    typedClone.SubclassInstance1 = (global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass) SubclassInstance1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.SubclassInstance1 = (global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass) SubclassInstance1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location485*/
                 }
                 
             }
@@ -247,11 +247,11 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 if (SubclassInstance2 == null)
                 {
-                    typedClone.SubclassInstance2 = null;
+                    typedClone.SubclassInstance2 = null;/*Location489*//*Location490*/
                 }
                 else
                 {
-                    typedClone.SubclassInstance2 = (global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass) SubclassInstance2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.SubclassInstance2 = (global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass) SubclassInstance2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location488*/
                 }
                 
             }

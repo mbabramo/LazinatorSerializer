@@ -165,11 +165,11 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (Item == null)
                 {
-                    typedClone.Item = null;
+                    typedClone.Item = null;/*Location335*//*Location336*/
                 }
                 else
                 {
-                    typedClone.Item = (IAbstractGeneric1<Int32>) Item.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.Item = (IAbstractGeneric1<Int32>) Item.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location334*/
                 }
                 
             }

@@ -93,19 +93,19 @@ namespace LazinatorTests.Examples.Abstract
             }
             set
             {
-                if (value != null && value.IsStruct)
+                if (value != null && value.IsStruct)/*Location318*/
                 {
-                    value.LazinatorParents = new LazinatorParentsCollection(this);
+                    value.LazinatorParents = new LazinatorParentsCollection(this);/*Location319*/
                 }
                 else
                 {
                     if (_MyT != null)
                     {
-                        _MyT.LazinatorParents = _MyT.LazinatorParents.WithRemoved(this);
+                        _MyT.LazinatorParents = _MyT.LazinatorParents.WithRemoved(this);/*Location320*/
                     }
                     if (value != null)
                     {
-                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);/*Location321*/
                     }
                 }
                 
@@ -122,7 +122,7 @@ namespace LazinatorTests.Examples.Abstract
                 _MyT = default(T);
                 if (_MyT != null)
                 { // MyT is a struct
-                    _MyT.LazinatorParents = new LazinatorParentsCollection(this);
+                    _MyT.LazinatorParents = new LazinatorParentsCollection(this);/*Location317*/
                 }
             }
             else
@@ -217,18 +217,18 @@ namespace LazinatorTests.Examples.Abstract
         {
             clone.FreeInMemoryObjects();
             DerivedGeneric2c<T> typedClone = (DerivedGeneric2c<T>) clone;
-            typedClone.MyEnumWithinAbstractGeneric = MyEnumWithinAbstractGeneric;
-            typedClone.MyEnumWithinAbstractGeneric2 = MyEnumWithinAbstractGeneric2;
-            typedClone.MyUnofficialInt = MyUnofficialInt;
+            typedClone.MyEnumWithinAbstractGeneric = MyEnumWithinAbstractGeneric;/*Location322*/
+            typedClone.MyEnumWithinAbstractGeneric2 = MyEnumWithinAbstractGeneric2;/*Location323*/
+            typedClone.MyUnofficialInt = MyUnofficialInt;/*Location324*/
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (MyT == null)
                 {
-                    typedClone.MyT = default(T);
+                    typedClone.MyT = default(T);/*Location326*//*Location327*/
                 }
                 else
                 {
-                    typedClone.MyT = (T) MyT.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.MyT = (T) MyT.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location325*/
                 }
                 
             }

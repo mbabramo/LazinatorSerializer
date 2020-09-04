@@ -271,19 +271,19 @@ namespace LazinatorTests.Examples.Abstract
         {
             clone.FreeInMemoryObjects();
             ConcreteGeneric2b typedClone = (ConcreteGeneric2b) clone;
-            typedClone.MyEnumWithinAbstractGeneric = MyEnumWithinAbstractGeneric;
-            typedClone.MyEnumWithinAbstractGeneric2 = MyEnumWithinAbstractGeneric2;
-            typedClone.MyUnofficialInt = MyUnofficialInt;
-            typedClone.AnotherProperty = AnotherProperty;
+            typedClone.MyEnumWithinAbstractGeneric = MyEnumWithinAbstractGeneric;/*Location299*/
+            typedClone.MyEnumWithinAbstractGeneric2 = MyEnumWithinAbstractGeneric2;/*Location300*/
+            typedClone.MyUnofficialInt = MyUnofficialInt;/*Location301*/
+            typedClone.AnotherProperty = AnotherProperty;/*Location302*/
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (MyT == null)
                 {
-                    typedClone.MyT = null;
+                    typedClone.MyT = null;/*Location304*//*Location305*/
                 }
                 else
                 {
-                    typedClone.MyT = (Example) MyT.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.MyT = (Example) MyT.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location303*/
                 }
                 
             }
@@ -292,11 +292,11 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (LazinatorExample == null)
                 {
-                    typedClone.LazinatorExample = null;
+                    typedClone.LazinatorExample = null;/*Location307*//*Location308*/
                 }
                 else
                 {
-                    typedClone.LazinatorExample = (Example) LazinatorExample.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.LazinatorExample = (Example) LazinatorExample.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location306*/
                 }
                 
             }

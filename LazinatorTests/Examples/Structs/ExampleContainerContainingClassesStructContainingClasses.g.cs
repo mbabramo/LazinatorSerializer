@@ -62,7 +62,7 @@ namespace LazinatorTests.Examples
             }
             set
             {
-                value.LazinatorParents = new LazinatorParentsCollection(this);
+                value.LazinatorParents = new LazinatorParentsCollection(this);/*Location75*/
                 
                 IsDirty = true;
                 DescendantIsDirty = true;
@@ -76,14 +76,14 @@ namespace LazinatorTests.Examples
             if (LazinatorObjectBytes.Length == 0)
             {
                 _IntWrapper = default(WInt);
-                _IntWrapper.LazinatorParents = new LazinatorParentsCollection(this);
+                _IntWrapper.LazinatorParents = new LazinatorParentsCollection(this);/*Location73*/
             }
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntWrapper_ByteIndex, _IntWrapper_ByteLength, false, true, null);
                 _IntWrapper = new WInt()
                 {
-                    LazinatorParents = new LazinatorParentsCollection(this)
+                    LazinatorParents = new LazinatorParentsCollection(this)/*Location74*/
                 };
                 _IntWrapper.DeserializeLazinator(childData);
             }
@@ -132,7 +132,7 @@ namespace LazinatorTests.Examples
             }
             set
             {
-                value.LazinatorParents = new LazinatorParentsCollection(this);
+                value.LazinatorParents = new LazinatorParentsCollection(this);/*Location78*/
                 
                 IsDirty = true;
                 DescendantIsDirty = true;
@@ -146,14 +146,14 @@ namespace LazinatorTests.Examples
             if (LazinatorObjectBytes.Length == 0)
             {
                 _MyExampleStructContainingClasses = default(ExampleStructContainingClasses);
-                _MyExampleStructContainingClasses.LazinatorParents = new LazinatorParentsCollection(this);
+                _MyExampleStructContainingClasses.LazinatorParents = new LazinatorParentsCollection(this);/*Location76*/
             }
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, false, false, null);
                 _MyExampleStructContainingClasses = new ExampleStructContainingClasses()
                 {
-                    LazinatorParents = new LazinatorParentsCollection(this)
+                    LazinatorParents = new LazinatorParentsCollection(this)/*Location77*/
                 };
                 _MyExampleStructContainingClasses.DeserializeLazinator(childData);
             }
@@ -423,18 +423,18 @@ namespace LazinatorTests.Examples
             ExampleContainerContainingClassesStructContainingClasses typedClone = (ExampleContainerContainingClassesStructContainingClasses) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                typedClone.IntWrapper = (WInt) IntWrapper.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.IntWrapper = (WInt) IntWrapper.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location79*/
             }
             
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                typedClone.MyExampleStructContainingClasses = (ExampleStructContainingClasses) MyExampleStructContainingClasses.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.MyExampleStructContainingClasses = (ExampleStructContainingClasses) MyExampleStructContainingClasses.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location80*/
             }
             
-            typedClone.MyHashSetExampleStruct = CloneOrChange_HashSet_GExampleStructContainingClasses_g(MyHashSetExampleStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyListExampleStruct = CloneOrChange_List_GExampleStructContainingClasses_g(MyListExampleStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyListNullableExampleStruct = CloneOrChange_List_GWNullableStruct_GExampleStructContainingClasses_g_g(MyListNullableExampleStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyListUnwrappedNullableExampleStruct = CloneOrChange_List_GExampleStructContainingClasses_n_g(MyListUnwrappedNullableExampleStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyHashSetExampleStruct = CloneOrChange_HashSet_GExampleStructContainingClasses_g(MyHashSetExampleStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location81*/
+            typedClone.MyListExampleStruct = CloneOrChange_List_GExampleStructContainingClasses_g(MyListExampleStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location82*/
+            typedClone.MyListNullableExampleStruct = CloneOrChange_List_GWNullableStruct_GExampleStructContainingClasses_g_g(MyListNullableExampleStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location83*/
+            typedClone.MyListUnwrappedNullableExampleStruct = CloneOrChange_List_GExampleStructContainingClasses_n_g(MyListUnwrappedNullableExampleStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location84*/
             
             return typedClone;
         }

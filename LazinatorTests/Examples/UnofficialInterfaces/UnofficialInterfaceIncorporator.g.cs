@@ -245,17 +245,17 @@ namespace LazinatorTests.Examples
         {
             clone.FreeInMemoryObjects();
             UnofficialInterfaceIncorporator typedClone = (UnofficialInterfaceIncorporator) clone;
-            typedClone.MyOfficialLong = MyOfficialLong;
-            typedClone.MyUnofficialInt = MyUnofficialInt;
+            typedClone.MyOfficialLong = MyOfficialLong;/*Location398*/
+            typedClone.MyUnofficialInt = MyUnofficialInt;/*Location399*/
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (MyOfficialObject == null)
                 {
-                    typedClone.MyOfficialObject = null;
+                    typedClone.MyOfficialObject = null;/*Location401*//*Location402*/
                 }
                 else
                 {
-                    typedClone.MyOfficialObject = (Concrete5) MyOfficialObject.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.MyOfficialObject = (Concrete5) MyOfficialObject.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location400*/
                 }
                 
             }
@@ -264,11 +264,11 @@ namespace LazinatorTests.Examples
             {
                 if (MyUnofficialObject == null)
                 {
-                    typedClone.MyUnofficialObject = null;
+                    typedClone.MyUnofficialObject = null;/*Location404*//*Location405*/
                 }
                 else
                 {
-                    typedClone.MyUnofficialObject = (Concrete3) MyUnofficialObject.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.MyUnofficialObject = (Concrete3) MyUnofficialObject.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location403*/
                 }
                 
             }

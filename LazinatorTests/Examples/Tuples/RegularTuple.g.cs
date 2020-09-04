@@ -357,12 +357,12 @@ namespace LazinatorTests.Examples.Tuples
         {
             clone.FreeInMemoryObjects();
             RegularTuple typedClone = (RegularTuple) clone;
-            typedClone.MyListTuple = CloneOrChange_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(MyListTuple, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyTupleSerialized = CloneOrChange_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(MyTupleSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyTupleSerialized2 = CloneOrChange_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(MyTupleSerialized2, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyTupleSerialized3 = CloneOrChange_Tuple_Guint_n_c_C32ExampleChild_c_C32NonLazinatorClass_g(MyTupleSerialized3, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyTupleSerialized4 = CloneOrChange_Tuple_Gint_c_C32ExampleStructContainingClasses_g(MyTupleSerialized4, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyTupleSerialized5 = CloneOrChange_Tuple_Gint_c_C32ExampleStructContainingClasses_n_g(MyTupleSerialized5, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyListTuple = CloneOrChange_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(MyListTuple, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location465*/
+            typedClone.MyTupleSerialized = CloneOrChange_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(MyTupleSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location466*/
+            typedClone.MyTupleSerialized2 = CloneOrChange_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(MyTupleSerialized2, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location467*/
+            typedClone.MyTupleSerialized3 = CloneOrChange_Tuple_Guint_n_c_C32ExampleChild_c_C32NonLazinatorClass_g(MyTupleSerialized3, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location468*/
+            typedClone.MyTupleSerialized4 = CloneOrChange_Tuple_Gint_c_C32ExampleStructContainingClasses_g(MyTupleSerialized4, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location469*/
+            typedClone.MyTupleSerialized5 = CloneOrChange_Tuple_Gint_c_C32ExampleStructContainingClasses_n_g(MyTupleSerialized5, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location470*/
             
             return typedClone;
         }

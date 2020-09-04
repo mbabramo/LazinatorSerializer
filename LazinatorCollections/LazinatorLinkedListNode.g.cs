@@ -106,19 +106,19 @@ namespace LazinatorCollections
             [DebuggerStepThrough]
             set
             {
-                if (value != null && value.IsStruct)
+                if (value != null && value.IsStruct)/*Location520*/
                 {
-                    value.LazinatorParents = new LazinatorParentsCollection(this);
+                    value.LazinatorParents = new LazinatorParentsCollection(this);/*Location521*/
                 }
                 else
                 {
                     if (_Value != null)
                     {
-                        _Value.LazinatorParents = _Value.LazinatorParents.WithRemoved(this);
+                        _Value.LazinatorParents = _Value.LazinatorParents.WithRemoved(this);/*Location522*/
                     }
                     if (value != null)
                     {
-                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);/*Location523*/
                     }
                 }
                 
@@ -137,7 +137,7 @@ namespace LazinatorCollections
                 _Value = default(T);
                 if (_Value != null)
                 { // Value is a struct
-                    _Value.LazinatorParents = new LazinatorParentsCollection(this);
+                    _Value.LazinatorParents = new LazinatorParentsCollection(this);/*Location519*/
                 }
             }
             else
@@ -238,11 +238,11 @@ namespace LazinatorCollections
             {
                 if (NextNode == null)
                 {
-                    typedClone.NextNode = null;
+                    typedClone.NextNode = null;/*Location525*//*Location526*/
                 }
                 else
                 {
-                    typedClone.NextNode = (LazinatorLinkedListNode<T>) NextNode.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.NextNode = (LazinatorLinkedListNode<T>) NextNode.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location524*/
                 }
                 
             }
@@ -251,11 +251,11 @@ namespace LazinatorCollections
             {
                 if (Value == null)
                 {
-                    typedClone.Value = default(T);
+                    typedClone.Value = default(T);/*Location528*//*Location529*/
                 }
                 else
                 {
-                    typedClone.Value = (T) Value.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.Value = (T) Value.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location527*/
                 }
                 
             }

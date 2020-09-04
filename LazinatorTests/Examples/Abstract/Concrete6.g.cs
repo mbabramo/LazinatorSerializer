@@ -103,7 +103,7 @@ namespace LazinatorTests.Examples.Abstract
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
             Concrete6 typedClone = (Concrete6) clone;
-            typedClone.IntList6 = CloneOrChange_List_Gint_g(IntList6, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.IntList6 = CloneOrChange_List_Gint_g(IntList6, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location279*/
             
             return typedClone;
         }

@@ -170,11 +170,11 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (MyList == null)
                 {
-                    typedClone.MyList = null;
+                    typedClone.MyList = null;/*Location457*//*Location458*/
                 }
                 else
                 {
-                    typedClone.MyList = (LazinatorList<T>) MyList.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.MyList = (LazinatorList<T>) MyList.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location456*/
                 }
                 
             }

@@ -132,7 +132,7 @@ namespace Lazinator.Wrappers
         {
             clone.FreeInMemoryObjects();
             WNullableDouble typedClone = (WNullableDouble) clone;
-            typedClone.WrappedValue = WrappedValue;
+            typedClone.WrappedValue = WrappedValue;/*Location662*/
             
             typedClone.IsDirty = false;
             return typedClone;

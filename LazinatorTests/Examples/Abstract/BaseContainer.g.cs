@@ -169,11 +169,11 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (MyBase == null)
                 {
-                    typedClone.MyBase = null;
+                    typedClone.MyBase = null;/*Location291*//*Location292*/
                 }
                 else
                 {
-                    typedClone.MyBase = (Base) MyBase.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.MyBase = (Base) MyBase.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location290*/
                 }
                 
             }

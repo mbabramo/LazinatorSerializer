@@ -145,7 +145,7 @@ namespace LazinatorCollections.OffsetList
         {
             clone.FreeInMemoryObjects();
             LazinatorFastReadList<T> typedClone = (LazinatorFastReadList<T>) clone;
-            typedClone.ReadOnlyBytes = CloneOrChange_ReadOnlySpan_Gbyte_g(ReadOnlyBytes, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.ReadOnlyBytes = CloneOrChange_ReadOnlySpan_Gbyte_g(ReadOnlyBytes, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location497*/
             
             return typedClone;
         }

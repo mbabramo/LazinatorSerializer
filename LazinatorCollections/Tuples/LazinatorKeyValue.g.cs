@@ -209,11 +209,11 @@ namespace LazinatorCollections.Tuples
             {
                 if (Key == null)
                 {
-                    typedClone.Key = default(TKey);
+                    typedClone.Key = default(TKey);/*Location595*//*Location596*/
                 }
                 else
                 {
-                    typedClone.Key = (TKey) Key.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.Key = (TKey) Key.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location594*/
                 }
                 
             }
@@ -222,11 +222,11 @@ namespace LazinatorCollections.Tuples
             {
                 if (Value == null)
                 {
-                    typedClone.Value = default(TValue);
+                    typedClone.Value = default(TValue);/*Location598*//*Location599*/
                 }
                 else
                 {
-                    typedClone.Value = (TValue) Value.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.Value = (TValue) Value.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location597*/
                 }
                 
             }

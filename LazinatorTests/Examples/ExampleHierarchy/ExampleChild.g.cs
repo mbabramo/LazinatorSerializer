@@ -270,18 +270,18 @@ namespace LazinatorTests.Examples
         {
             clone.FreeInMemoryObjects();
             ExampleChild typedClone = (ExampleChild) clone;
-            typedClone.MyLong = MyLong;
-            typedClone.MyShort = MyShort;
-            typedClone.ByteSpan = CloneOrChange_ReadOnlySpan_Gbyte_g(ByteSpan, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyLong = MyLong;/*Location46*/
+            typedClone.MyShort = MyShort;/*Location47*/
+            typedClone.ByteSpan = CloneOrChange_ReadOnlySpan_Gbyte_g(ByteSpan, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location48*/
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (MyExampleGrandchild == null)
                 {
-                    typedClone.MyExampleGrandchild = null;
+                    typedClone.MyExampleGrandchild = null;/*Location50*//*Location51*/
                 }
                 else
                 {
-                    typedClone.MyExampleGrandchild = (ExampleGrandchild) MyExampleGrandchild.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.MyExampleGrandchild = (ExampleGrandchild) MyExampleGrandchild.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location49*/
                 }
                 
             }
@@ -290,11 +290,11 @@ namespace LazinatorTests.Examples
             {
                 if (MyWrapperContainer == null)
                 {
-                    typedClone.MyWrapperContainer = null;
+                    typedClone.MyWrapperContainer = null;/*Location53*//*Location54*/
                 }
                 else
                 {
-                    typedClone.MyWrapperContainer = (WrapperContainer) MyWrapperContainer.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.MyWrapperContainer = (WrapperContainer) MyWrapperContainer.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location52*/
                 }
                 
             }

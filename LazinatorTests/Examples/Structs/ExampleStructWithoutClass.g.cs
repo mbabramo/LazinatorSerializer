@@ -134,7 +134,7 @@ namespace LazinatorTests.Examples.Structs
         {
             clone.FreeInMemoryObjects();
             ExampleStructWithoutClass typedClone = (ExampleStructWithoutClass) clone;
-            typedClone.MyInt = MyInt;
+            typedClone.MyInt = MyInt;/*Location85*/
             
             typedClone.IsDirty = false;
             return typedClone;

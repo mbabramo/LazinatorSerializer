@@ -73,19 +73,19 @@ namespace LazinatorCollections.Remote
             [DebuggerStepThrough]
             set
             {
-                if (value != null && value.IsStruct)
+                if (value != null && value.IsStruct)/*Location507*/
                 {
-                    value.LazinatorParents = new LazinatorParentsCollection(this);
+                    value.LazinatorParents = new LazinatorParentsCollection(this);/*Location508*/
                 }
                 else
                 {
                     if (_Key != null)
                     {
-                        _Key.LazinatorParents = _Key.LazinatorParents.WithRemoved(this);
+                        _Key.LazinatorParents = _Key.LazinatorParents.WithRemoved(this);/*Location509*/
                     }
                     if (value != null)
                     {
-                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);/*Location510*/
                     }
                 }
                 
@@ -104,7 +104,7 @@ namespace LazinatorCollections.Remote
                 _Key = default(TKey);
                 if (_Key != null)
                 { // Key is a struct
-                    _Key.LazinatorParents = new LazinatorParentsCollection(this);
+                    _Key.LazinatorParents = new LazinatorParentsCollection(this);/*Location506*/
                 }
             }
             else
@@ -158,7 +158,7 @@ namespace LazinatorCollections.Remote
                 _Local = default(TValue);
                 if (_Local != null)
                 { // Local is a struct
-                    _Local.LazinatorParents = new LazinatorParentsCollection(this);
+                    _Local.LazinatorParents = new LazinatorParentsCollection(this);/*Location511*/
                 }
             }
             else
@@ -255,16 +255,16 @@ namespace LazinatorCollections.Remote
         {
             clone.FreeInMemoryObjects();
             Remote<TKey, TValue> typedClone = (Remote<TKey, TValue>) clone;
-            typedClone.StoreLocally = StoreLocally;
+            typedClone.StoreLocally = StoreLocally;/*Location512*/
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (Key == null)
                 {
-                    typedClone.Key = default(TKey);
+                    typedClone.Key = default(TKey);/*Location514*//*Location515*/
                 }
                 else
                 {
-                    typedClone.Key = (TKey) Key.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.Key = (TKey) Key.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location513*/
                 }
                 
             }
@@ -273,11 +273,11 @@ namespace LazinatorCollections.Remote
             {
                 if (Local == null)
                 {
-                    typedClone.Local = default(TValue);
+                    typedClone.Local = default(TValue);/*Location517*//*Location518*/
                 }
                 else
                 {
-                    typedClone.Local = (TValue) Local.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.Local = (TValue) Local.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location516*/
                 }
                 
             }

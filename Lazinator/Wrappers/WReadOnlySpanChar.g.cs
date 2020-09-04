@@ -143,7 +143,7 @@ namespace Lazinator.Wrappers
         {
             clone.FreeInMemoryObjects();
             WReadOnlySpanChar typedClone = (WReadOnlySpanChar) clone;
-            typedClone.Value = CloneOrChange_ReadOnlySpan_Gchar_g(Value, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.Value = CloneOrChange_ReadOnlySpan_Gchar_g(Value, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location677*/
             
             typedClone.IsDirty = false;
             return typedClone;

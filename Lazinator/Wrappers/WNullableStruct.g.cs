@@ -70,7 +70,7 @@ namespace Lazinator.Wrappers
             }
             [DebuggerStepThrough]
             set
-            {
+            {/*Location636*/
                 
                 IsDirty = true;
                 DescendantIsDirty = true;
@@ -84,7 +84,7 @@ namespace Lazinator.Wrappers
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _NonNullValue = default(T);
+                _NonNullValue = default(T);/*Location635*/
             }
             else
             {
@@ -179,10 +179,10 @@ namespace Lazinator.Wrappers
         {
             clone.FreeInMemoryObjects();
             WNullableStruct<T> typedClone = (WNullableStruct<T>) clone;
-            typedClone.HasValue = HasValue;
+            typedClone.HasValue = HasValue;/*Location637*/
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                typedClone.NonNullValue = (T) NonNullValue.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.NonNullValue = (T) NonNullValue.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location638*/
             }
             
             

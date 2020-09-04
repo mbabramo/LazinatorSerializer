@@ -200,9 +200,9 @@ namespace LazinatorCollections.BitArray
         {
             clone.FreeInMemoryObjects();
             LazinatorBitArray typedClone = (LazinatorBitArray) clone;
-            typedClone._version = _version;
-            typedClone.m_length = m_length;
-            typedClone.IntStorage = CloneOrChange_Memory_Gint_g(IntStorage, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone._version = _version;/*Location492*/
+            typedClone.m_length = m_length;/*Location493*/
+            typedClone.IntStorage = CloneOrChange_Memory_Gint_g(IntStorage, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location494*/
             
             return typedClone;
         }

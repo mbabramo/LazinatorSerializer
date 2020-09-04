@@ -65,7 +65,7 @@ namespace LazinatorTests.Examples
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _MyExampleNullableStruct = default(ExampleStructContainingClasses?);
+                _MyExampleNullableStruct = default(ExampleStructContainingClasses?);/*Location97*/
             }
             else
             {
@@ -130,7 +130,7 @@ namespace LazinatorTests.Examples
                 return _MyExampleStructContainingClasses;
             }
             set
-            {
+            {/*Location100*/
                 
                 IsDirty = true;
                 DescendantIsDirty = true;
@@ -143,7 +143,7 @@ namespace LazinatorTests.Examples
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _MyExampleStructContainingClasses = default(ExampleStructContainingClasses);
+                _MyExampleStructContainingClasses = default(ExampleStructContainingClasses);/*Location99*/
             }
             else
             {
@@ -271,18 +271,18 @@ namespace LazinatorTests.Examples
             {
                 if (MyExampleNullableStruct == null)
                 {
-                    typedClone.MyExampleNullableStruct = null;
+                    typedClone.MyExampleNullableStruct = null;/*Location102*//*Location103*/
                 }
                 else
                 {
-                    typedClone.MyExampleNullableStruct = (ExampleStructContainingClasses?) MyExampleNullableStruct.Value.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.MyExampleNullableStruct = (ExampleStructContainingClasses?) MyExampleNullableStruct.Value.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location101*/
                 }
                 
             }
             
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                typedClone.MyExampleStructContainingClasses = (ExampleStructContainingClasses) MyExampleStructContainingClasses.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.MyExampleStructContainingClasses = (ExampleStructContainingClasses) MyExampleStructContainingClasses.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location104*/
             }
             
             

@@ -189,16 +189,16 @@ namespace LazinatorCollections.Dictionary
         {
             clone.FreeInMemoryObjects();
             LazinatorDictionary<TKey, TValue> typedClone = (LazinatorDictionary<TKey, TValue>) clone;
-            typedClone.Count = Count;
+            typedClone.Count = Count;/*Location572*/
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (Buckets == null)
                 {
-                    typedClone.Buckets = null;
+                    typedClone.Buckets = null;/*Location574*//*Location575*/
                 }
                 else
                 {
-                    typedClone.Buckets = (LazinatorList<DictionaryBucket<TKey, TValue>>) Buckets.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.Buckets = (LazinatorList<DictionaryBucket<TKey, TValue>>) Buckets.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location573*/
                 }
                 
             }

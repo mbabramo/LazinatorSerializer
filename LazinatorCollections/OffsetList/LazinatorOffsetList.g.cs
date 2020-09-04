@@ -90,7 +90,7 @@ namespace LazinatorCollections.OffsetList
                 {
                     _FourByteItems = new LazinatorFastReadListInt32(IncludeChildrenMode.IncludeAllChildren)
                     {
-                        LazinatorParents = new LazinatorParentsCollection(this)
+                        LazinatorParents = new LazinatorParentsCollection(this)/*Location498*/
                     };
                     _FourByteItems.DeserializeLazinator(childData);
                 }
@@ -150,7 +150,7 @@ namespace LazinatorCollections.OffsetList
                 {
                     _TwoByteItems = new LazinatorFastReadListInt16(IncludeChildrenMode.IncludeAllChildren)
                     {
-                        LazinatorParents = new LazinatorParentsCollection(this)
+                        LazinatorParents = new LazinatorParentsCollection(this)/*Location499*/
                     };
                     _TwoByteItems.DeserializeLazinator(childData);
                 }
@@ -251,11 +251,11 @@ namespace LazinatorCollections.OffsetList
             {
                 if (FourByteItems == null)
                 {
-                    typedClone.FourByteItems = null;
+                    typedClone.FourByteItems = null;/*Location501*//*Location502*/
                 }
                 else
                 {
-                    typedClone.FourByteItems = (LazinatorFastReadListInt32) FourByteItems.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.FourByteItems = (LazinatorFastReadListInt32) FourByteItems.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location500*/
                 }
                 
             }
@@ -264,11 +264,11 @@ namespace LazinatorCollections.OffsetList
             {
                 if (TwoByteItems == null)
                 {
-                    typedClone.TwoByteItems = null;
+                    typedClone.TwoByteItems = null;/*Location504*//*Location505*/
                 }
                 else
                 {
-                    typedClone.TwoByteItems = (LazinatorFastReadListInt16) TwoByteItems.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.TwoByteItems = (LazinatorFastReadListInt16) TwoByteItems.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location503*/
                 }
                 
             }

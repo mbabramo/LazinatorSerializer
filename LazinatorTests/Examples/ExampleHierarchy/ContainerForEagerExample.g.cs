@@ -171,11 +171,11 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (EagerExample == null)
                 {
-                    typedClone.EagerExample = null;
+                    typedClone.EagerExample = null;/*Location40*//*Location41*/
                 }
                 else
                 {
-                    typedClone.EagerExample = (Example) EagerExample.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.EagerExample = (Example) EagerExample.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location39*/
                 }
                 
             }

@@ -58,19 +58,19 @@ namespace LazinatorCollections.Tuples
             [DebuggerStepThrough]
             set
             {
-                if (value != null && value.IsStruct)
+                if (value != null && value.IsStruct)/*Location609*/
                 {
-                    value.LazinatorParents = new LazinatorParentsCollection(this);
+                    value.LazinatorParents = new LazinatorParentsCollection(this);/*Location610*/
                 }
                 else
                 {
                     if (_Item1 != null)
                     {
-                        _Item1.LazinatorParents = _Item1.LazinatorParents.WithRemoved(this);
+                        _Item1.LazinatorParents = _Item1.LazinatorParents.WithRemoved(this);/*Location611*/
                     }
                     if (value != null)
                     {
-                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);/*Location612*/
                     }
                 }
                 
@@ -89,7 +89,7 @@ namespace LazinatorCollections.Tuples
                 _Item1 = default(T);
                 if (_Item1 != null)
                 { // Item1 is a struct
-                    _Item1.LazinatorParents = new LazinatorParentsCollection(this);
+                    _Item1.LazinatorParents = new LazinatorParentsCollection(this);/*Location608*/
                 }
             }
             else
@@ -119,19 +119,19 @@ namespace LazinatorCollections.Tuples
             [DebuggerStepThrough]
             set
             {
-                if (value != null && value.IsStruct)
+                if (value != null && value.IsStruct)/*Location614*/
                 {
-                    value.LazinatorParents = new LazinatorParentsCollection(this);
+                    value.LazinatorParents = new LazinatorParentsCollection(this);/*Location615*/
                 }
                 else
                 {
                     if (_Item2 != null)
                     {
-                        _Item2.LazinatorParents = _Item2.LazinatorParents.WithRemoved(this);
+                        _Item2.LazinatorParents = _Item2.LazinatorParents.WithRemoved(this);/*Location616*/
                     }
                     if (value != null)
                     {
-                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);/*Location617*/
                     }
                 }
                 
@@ -150,7 +150,7 @@ namespace LazinatorCollections.Tuples
                 _Item2 = default(U);
                 if (_Item2 != null)
                 { // Item2 is a struct
-                    _Item2.LazinatorParents = new LazinatorParentsCollection(this);
+                    _Item2.LazinatorParents = new LazinatorParentsCollection(this);/*Location613*/
                 }
             }
             else
@@ -180,19 +180,19 @@ namespace LazinatorCollections.Tuples
             [DebuggerStepThrough]
             set
             {
-                if (value != null && value.IsStruct)
+                if (value != null && value.IsStruct)/*Location619*/
                 {
-                    value.LazinatorParents = new LazinatorParentsCollection(this);
+                    value.LazinatorParents = new LazinatorParentsCollection(this);/*Location620*/
                 }
                 else
                 {
                     if (_Item3 != null)
                     {
-                        _Item3.LazinatorParents = _Item3.LazinatorParents.WithRemoved(this);
+                        _Item3.LazinatorParents = _Item3.LazinatorParents.WithRemoved(this);/*Location621*/
                     }
                     if (value != null)
                     {
-                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);/*Location622*/
                     }
                 }
                 
@@ -211,7 +211,7 @@ namespace LazinatorCollections.Tuples
                 _Item3 = default(V);
                 if (_Item3 != null)
                 { // Item3 is a struct
-                    _Item3.LazinatorParents = new LazinatorParentsCollection(this);
+                    _Item3.LazinatorParents = new LazinatorParentsCollection(this);/*Location618*/
                 }
             }
             else
@@ -312,11 +312,11 @@ namespace LazinatorCollections.Tuples
             {
                 if (Item1 == null)
                 {
-                    typedClone.Item1 = default(T);
+                    typedClone.Item1 = default(T);/*Location624*//*Location625*/
                 }
                 else
                 {
-                    typedClone.Item1 = (T) Item1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.Item1 = (T) Item1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location623*/
                 }
                 
             }
@@ -325,11 +325,11 @@ namespace LazinatorCollections.Tuples
             {
                 if (Item2 == null)
                 {
-                    typedClone.Item2 = default(U);
+                    typedClone.Item2 = default(U);/*Location627*//*Location628*/
                 }
                 else
                 {
-                    typedClone.Item2 = (U) Item2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.Item2 = (U) Item2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location626*/
                 }
                 
             }
@@ -338,11 +338,11 @@ namespace LazinatorCollections.Tuples
             {
                 if (Item3 == null)
                 {
-                    typedClone.Item3 = default(V);
+                    typedClone.Item3 = default(V);/*Location630*//*Location631*/
                 }
                 else
                 {
-                    typedClone.Item3 = (V) Item3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.Item3 = (V) Item3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location629*/
                 }
                 
             }

@@ -52,7 +52,7 @@ namespace LazinatorTests.Examples.Structs
             }
             set
             {
-                value.LazinatorParents = new LazinatorParentsCollection(this);
+                value.LazinatorParents = new LazinatorParentsCollection(this);/*Location107*/
                 
                 IsDirty = true;
                 DescendantIsDirty = true;
@@ -66,14 +66,14 @@ namespace LazinatorTests.Examples.Structs
             if (LazinatorObjectBytes.Length == 0)
             {
                 _Subcontainer = default(ExampleStructContainingStruct);
-                _Subcontainer.LazinatorParents = new LazinatorParentsCollection(this);
+                _Subcontainer.LazinatorParents = new LazinatorParentsCollection(this);/*Location105*/
             }
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, false, false, null);
                 _Subcontainer = new ExampleStructContainingStruct()
                 {
-                    LazinatorParents = new LazinatorParentsCollection(this)
+                    LazinatorParents = new LazinatorParentsCollection(this)/*Location106*/
                 };
                 _Subcontainer.DeserializeLazinator(childData);
             }
@@ -191,7 +191,7 @@ namespace LazinatorTests.Examples.Structs
             ExampleStructContainingStructContainer typedClone = (ExampleStructContainingStructContainer) clone;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                typedClone.Subcontainer = (ExampleStructContainingStruct) Subcontainer.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.Subcontainer = (ExampleStructContainingStruct) Subcontainer.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location108*/
             }
             
             

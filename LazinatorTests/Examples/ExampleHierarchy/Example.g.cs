@@ -577,7 +577,7 @@ namespace LazinatorTests.Examples
             }
             set
             {
-                value.LazinatorParents = new LazinatorParentsCollection(this);
+                value.LazinatorParents = new LazinatorParentsCollection(this);/*Location2*/
                 
                 IsDirty = true;
                 DescendantIsDirty = true;
@@ -591,14 +591,14 @@ namespace LazinatorTests.Examples
             if (LazinatorObjectBytes.Length == 0)
             {
                 _WrappedInt = default(WInt);
-                _WrappedInt.LazinatorParents = new LazinatorParentsCollection(this);
+                _WrappedInt.LazinatorParents = new LazinatorParentsCollection(this);/*Location0*/
             }
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, true, null);
                 _WrappedInt = new WInt()
                 {
-                    LazinatorParents = new LazinatorParentsCollection(this)
+                    LazinatorParents = new LazinatorParentsCollection(this)/*Location1*/
                 };
                 _WrappedInt.DeserializeLazinator(childData);
             }
@@ -766,36 +766,36 @@ namespace LazinatorTests.Examples
         {
             clone.FreeInMemoryObjects();
             Example typedClone = (Example) clone;
-            typedClone.MyNullableDouble = MyNullableDouble;
-            typedClone.MyBool = MyBool;
-            typedClone.MyChar = MyChar;
-            typedClone.MyDateTime = MyDateTime;
+            typedClone.MyNullableDouble = MyNullableDouble;/*Location3*/
+            typedClone.MyBool = MyBool;/*Location4*/
+            typedClone.MyChar = MyChar;/*Location5*/
+            typedClone.MyDateTime = MyDateTime;/*Location6*/
             if (LazinatorObjectVersion >= 3)
             {
-                typedClone.MyNewString = MyNewString;
+                typedClone.MyNewString = MyNewString;/*Location7*/
             }
             
-            typedClone.MyNullableDecimal = MyNullableDecimal;
-            typedClone.MyNullableTimeSpan = MyNullableTimeSpan;
+            typedClone.MyNullableDecimal = MyNullableDecimal;/*Location8*/
+            typedClone.MyNullableTimeSpan = MyNullableTimeSpan;/*Location9*/
             if (LazinatorObjectVersion < 3)
             {
-                typedClone.MyOldString = MyOldString;
+                typedClone.MyOldString = MyOldString;/*Location10*/
             }
             
-            typedClone.MyString = MyString;
-            typedClone.MyStringBrotli = MyStringBrotli;
-            typedClone.MyTestEnum = MyTestEnum;
-            typedClone.MyTestEnumByteNullable = MyTestEnumByteNullable;
-            typedClone.MyUint = MyUint;
+            typedClone.MyString = MyString;/*Location11*/
+            typedClone.MyStringBrotli = MyStringBrotli;/*Location12*/
+            typedClone.MyTestEnum = MyTestEnum;/*Location13*/
+            typedClone.MyTestEnumByteNullable = MyTestEnumByteNullable;/*Location14*/
+            typedClone.MyUint = MyUint;/*Location15*/
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
             {
                 if (IncludableChild == null)
                 {
-                    typedClone.IncludableChild = null;
+                    typedClone.IncludableChild = null;/*Location17*//*Location18*/
                 }
                 else
                 {
-                    typedClone.IncludableChild = (ExampleChild) IncludableChild.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.IncludableChild = (ExampleChild) IncludableChild.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location16*/
                 }
                 
             }
@@ -804,11 +804,11 @@ namespace LazinatorTests.Examples
             {
                 if (MyChild1 == null)
                 {
-                    typedClone.MyChild1 = null;
+                    typedClone.MyChild1 = null;/*Location20*//*Location21*/
                 }
                 else
                 {
-                    typedClone.MyChild1 = (ExampleChild) MyChild1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.MyChild1 = (ExampleChild) MyChild1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location19*/
                 }
                 
             }
@@ -817,11 +817,11 @@ namespace LazinatorTests.Examples
             {
                 if (MyChild2 == null)
                 {
-                    typedClone.MyChild2 = null;
+                    typedClone.MyChild2 = null;/*Location23*//*Location24*/
                 }
                 else
                 {
-                    typedClone.MyChild2 = (ExampleChild) MyChild2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.MyChild2 = (ExampleChild) MyChild2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location22*/
                 }
                 
             }
@@ -830,11 +830,11 @@ namespace LazinatorTests.Examples
             {
                 if (MyChild2Previous == null)
                 {
-                    typedClone.MyChild2Previous = null;
+                    typedClone.MyChild2Previous = null;/*Location26*//*Location27*/
                 }
                 else
                 {
-                    typedClone.MyChild2Previous = (ExampleChild) MyChild2Previous.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.MyChild2Previous = (ExampleChild) MyChild2Previous.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location25*/
                 }
                 
             }
@@ -843,30 +843,30 @@ namespace LazinatorTests.Examples
             {
                 if (MyInterfaceImplementer == null)
                 {
-                    typedClone.MyInterfaceImplementer = null;
+                    typedClone.MyInterfaceImplementer = null;/*Location29*//*Location30*/
                 }
                 else
                 {
-                    typedClone.MyInterfaceImplementer = (IExampleNonexclusiveInterface) MyInterfaceImplementer.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.MyInterfaceImplementer = (IExampleNonexclusiveInterface) MyInterfaceImplementer.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location28*/
                 }
                 
             }
             
-            typedClone.MyNonLazinatorChild = NonLazinatorDirectConverter.CloneOrChange_NonLazinatorClass(MyNonLazinatorChild, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyNonLazinatorChild = NonLazinatorDirectConverter.CloneOrChange_NonLazinatorClass(MyNonLazinatorChild, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location31*/
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                typedClone.WrappedInt = (WInt) WrappedInt.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.WrappedInt = (WInt) WrappedInt.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location32*/
             }
             
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren)
             {
                 if (ExcludableChild == null)
                 {
-                    typedClone.ExcludableChild = null;
+                    typedClone.ExcludableChild = null;/*Location34*//*Location35*/
                 }
                 else
                 {
-                    typedClone.ExcludableChild = (ExampleChild) ExcludableChild.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.ExcludableChild = (ExampleChild) ExcludableChild.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location33*/
                 }
                 
             }

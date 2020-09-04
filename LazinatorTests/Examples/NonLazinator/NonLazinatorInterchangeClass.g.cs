@@ -149,8 +149,8 @@ namespace LazinatorTests.Examples
         {
             clone.FreeInMemoryObjects();
             NonLazinatorInterchangeClass typedClone = (NonLazinatorInterchangeClass) clone;
-            typedClone.MyInt = MyInt;
-            typedClone.MyString = MyString;
+            typedClone.MyInt = MyInt;/*Location393*/
+            typedClone.MyString = MyString;/*Location394*/
             
             typedClone.IsDirty = false;
             return typedClone;

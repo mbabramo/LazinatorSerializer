@@ -119,8 +119,8 @@ namespace LazinatorTests.Examples.Collections
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
             Derived_DotNetList_Nested_NonLazinator typedClone = (Derived_DotNetList_Nested_NonLazinator) clone;
-            typedClone.MyLevel2Int = MyLevel2Int;
-            typedClone.MyLevel2ListNestedNonLazinatorType = CloneOrChange_List_GList_GNonLazinatorClass_g_g(MyLevel2ListNestedNonLazinatorType, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyLevel2Int = MyLevel2Int;/*Location412*/
+            typedClone.MyLevel2ListNestedNonLazinatorType = CloneOrChange_List_GList_GNonLazinatorClass_g_g(MyLevel2ListNestedNonLazinatorType, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location413*/
             
             return typedClone;
         }

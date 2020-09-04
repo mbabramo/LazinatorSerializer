@@ -107,19 +107,19 @@ namespace LazinatorCollections.Tree
             [DebuggerStepThrough]
             set
             {
-                if (value != null && value.IsStruct)
+                if (value != null && value.IsStruct)/*Location549*/
                 {
-                    value.LazinatorParents = new LazinatorParentsCollection(this);
+                    value.LazinatorParents = new LazinatorParentsCollection(this);/*Location550*/
                 }
                 else
                 {
                     if (_Item != null)
                     {
-                        _Item.LazinatorParents = _Item.LazinatorParents.WithRemoved(this);
+                        _Item.LazinatorParents = _Item.LazinatorParents.WithRemoved(this);/*Location551*/
                     }
                     if (value != null)
                     {
-                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                        value.LazinatorParents = value.LazinatorParents.WithAdded(this);/*Location552*/
                     }
                 }
                 
@@ -138,7 +138,7 @@ namespace LazinatorCollections.Tree
                 _Item = default(T);
                 if (_Item != null)
                 { // Item is a struct
-                    _Item.LazinatorParents = new LazinatorParentsCollection(this);
+                    _Item.LazinatorParents = new LazinatorParentsCollection(this);/*Location548*/
                 }
             }
             else
@@ -239,11 +239,11 @@ namespace LazinatorCollections.Tree
             {
                 if (Children == null)
                 {
-                    typedClone.Children = null;
+                    typedClone.Children = null;/*Location554*//*Location555*/
                 }
                 else
                 {
-                    typedClone.Children = (LazinatorList<LazinatorGeneralTree<T>>) Children.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.Children = (LazinatorList<LazinatorGeneralTree<T>>) Children.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location553*/
                 }
                 
             }
@@ -252,11 +252,11 @@ namespace LazinatorCollections.Tree
             {
                 if (Item == null)
                 {
-                    typedClone.Item = default(T);
+                    typedClone.Item = default(T);/*Location557*//*Location558*/
                 }
                 else
                 {
-                    typedClone.Item = (T) Item.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.Item = (T) Item.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location556*/
                 }
                 
             }

@@ -130,7 +130,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         {
             clone.FreeInMemoryObjects();
             RemoteLevel2 typedClone = (RemoteLevel2) clone;
-            typedClone.RemoteLevel2Int = RemoteLevel2Int;
+            typedClone.RemoteLevel2Int = RemoteLevel2Int;/*Location202*/
             
             return typedClone;
         }

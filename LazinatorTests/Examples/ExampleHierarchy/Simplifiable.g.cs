@@ -402,21 +402,21 @@ namespace LazinatorTests.Examples
         {
             clone.FreeInMemoryObjects();
             Simplifiable typedClone = (Simplifiable) clone;
-            typedClone.MyIntsAre3 = MyIntsAre3;
-            typedClone.Example2Char = Example2Char;
-            typedClone.Example3IsNull = Example3IsNull;
-            typedClone.ExampleHasDefaultValue = ExampleHasDefaultValue;
-            typedClone.MyInt = MyInt;
-            typedClone.MyOtherInt = MyOtherInt;
+            typedClone.MyIntsAre3 = MyIntsAre3;/*Location176*/
+            typedClone.Example2Char = Example2Char;/*Location177*/
+            typedClone.Example3IsNull = Example3IsNull;/*Location178*/
+            typedClone.ExampleHasDefaultValue = ExampleHasDefaultValue;/*Location179*/
+            typedClone.MyInt = MyInt;/*Location180*/
+            typedClone.MyOtherInt = MyOtherInt;/*Location181*/
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (ANonSkippableEarlierExample == null)
                 {
-                    typedClone.ANonSkippableEarlierExample = null;
+                    typedClone.ANonSkippableEarlierExample = null;/*Location183*//*Location184*/
                 }
                 else
                 {
-                    typedClone.ANonSkippableEarlierExample = (Example) ANonSkippableEarlierExample.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.ANonSkippableEarlierExample = (Example) ANonSkippableEarlierExample.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location182*/
                 }
                 
             }
@@ -425,11 +425,11 @@ namespace LazinatorTests.Examples
             {
                 if (Example == null)
                 {
-                    typedClone.Example = null;
+                    typedClone.Example = null;/*Location186*//*Location187*/
                 }
                 else
                 {
-                    typedClone.Example = (Example) Example.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.Example = (Example) Example.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location185*/
                 }
                 
             }
@@ -438,11 +438,11 @@ namespace LazinatorTests.Examples
             {
                 if (Example2 == null)
                 {
-                    typedClone.Example2 = null;
+                    typedClone.Example2 = null;/*Location189*//*Location190*/
                 }
                 else
                 {
-                    typedClone.Example2 = (Example) Example2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.Example2 = (Example) Example2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location188*/
                 }
                 
             }
@@ -451,11 +451,11 @@ namespace LazinatorTests.Examples
             {
                 if (Example3 == null)
                 {
-                    typedClone.Example3 = null;
+                    typedClone.Example3 = null;/*Location192*//*Location193*/
                 }
                 else
                 {
-                    typedClone.Example3 = (Example) Example3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.Example3 = (Example) Example3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location191*/
                 }
                 
             }

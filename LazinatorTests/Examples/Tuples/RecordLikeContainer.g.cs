@@ -291,11 +291,11 @@ namespace LazinatorTests.Examples.Tuples
         {
             clone.FreeInMemoryObjects();
             RecordLikeContainer typedClone = (RecordLikeContainer) clone;
-            typedClone.MyInt = MyInt;
-            typedClone.MyMismatchedRecordLikeType = CloneOrChange_MismatchedRecordLikeType(MyMismatchedRecordLikeType, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyRecordLikeClass = CloneOrChange_RecordLikeClass(MyRecordLikeClass, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyRecordLikeStruct = CloneOrChange_RecordLikeStruct(MyRecordLikeStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.MyRecordLikeTypeWithLazinator = CloneOrChange_RecordLikeTypeWithLazinator(MyRecordLikeTypeWithLazinator, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyInt = MyInt;/*Location473*/
+            typedClone.MyMismatchedRecordLikeType = CloneOrChange_MismatchedRecordLikeType(MyMismatchedRecordLikeType, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location474*/
+            typedClone.MyRecordLikeClass = CloneOrChange_RecordLikeClass(MyRecordLikeClass, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location475*/
+            typedClone.MyRecordLikeStruct = CloneOrChange_RecordLikeStruct(MyRecordLikeStruct, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location476*/
+            typedClone.MyRecordLikeTypeWithLazinator = CloneOrChange_RecordLikeTypeWithLazinator(MyRecordLikeTypeWithLazinator, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location477*/
             
             return typedClone;
         }

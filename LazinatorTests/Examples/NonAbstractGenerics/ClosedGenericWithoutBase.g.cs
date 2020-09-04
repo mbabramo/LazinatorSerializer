@@ -180,16 +180,16 @@ namespace LazinatorTests.Examples
         {
             clone.FreeInMemoryObjects();
             ClosedGenericWithoutBase typedClone = (ClosedGenericWithoutBase) clone;
-            typedClone.ItemT = ItemT;
+            typedClone.ItemT = ItemT;/*Location369*/
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (ItemU == null)
                 {
-                    typedClone.ItemU = null;
+                    typedClone.ItemU = null;/*Location371*//*Location372*/
                 }
                 else
                 {
-                    typedClone.ItemU = (ExampleChild) ItemU.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.ItemU = (ExampleChild) ItemU.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location370*/
                 }
                 
             }

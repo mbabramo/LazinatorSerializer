@@ -205,17 +205,17 @@ namespace LazinatorCollections
         {
             clone.FreeInMemoryObjects();
             LazinatorLinkedList<T> typedClone = (LazinatorLinkedList<T>) clone;
-            typedClone.AllowDuplicates = AllowDuplicates;
-            typedClone.Count = Count;
+            typedClone.AllowDuplicates = AllowDuplicates;/*Location530*/
+            typedClone.Count = Count;/*Location531*/
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (FirstNode == null)
                 {
-                    typedClone.FirstNode = null;
+                    typedClone.FirstNode = null;/*Location533*//*Location534*/
                 }
                 else
                 {
-                    typedClone.FirstNode = (LazinatorLinkedListNode<T>) FirstNode.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.FirstNode = (LazinatorLinkedListNode<T>) FirstNode.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location532*/
                 }
                 
             }

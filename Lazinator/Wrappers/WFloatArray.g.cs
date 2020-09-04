@@ -159,7 +159,7 @@ namespace Lazinator.Wrappers
         {
             clone.FreeInMemoryObjects();
             WFloatArray typedClone = (WFloatArray) clone;
-            typedClone.WrappedValue = CloneOrChange_float_B_b(WrappedValue, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.WrappedValue = CloneOrChange_float_B_b(WrappedValue, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location673*/
             
             typedClone.IsDirty = false;
             return typedClone;

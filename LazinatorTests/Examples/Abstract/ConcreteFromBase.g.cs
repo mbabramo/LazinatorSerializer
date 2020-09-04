@@ -77,7 +77,7 @@ namespace LazinatorTests.Examples.Abstract
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
             ConcreteFromBase typedClone = (ConcreteFromBase) clone;
-            typedClone.IntInConcreteFromBase = IntInConcreteFromBase;
+            typedClone.IntInConcreteFromBase = IntInConcreteFromBase;/*Location280*/
             
             return typedClone;
         }

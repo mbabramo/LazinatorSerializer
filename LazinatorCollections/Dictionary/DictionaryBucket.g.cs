@@ -241,16 +241,16 @@ namespace LazinatorCollections.Dictionary
         {
             clone.FreeInMemoryObjects();
             DictionaryBucket<TKey, TValue> typedClone = (DictionaryBucket<TKey, TValue>) clone;
-            typedClone.Initialized = Initialized;
+            typedClone.Initialized = Initialized;/*Location565*/
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (Keys == null)
                 {
-                    typedClone.Keys = null;
+                    typedClone.Keys = null;/*Location567*//*Location568*/
                 }
                 else
                 {
-                    typedClone.Keys = (LazinatorList<TKey>) Keys.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.Keys = (LazinatorList<TKey>) Keys.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location566*/
                 }
                 
             }
@@ -259,11 +259,11 @@ namespace LazinatorCollections.Dictionary
             {
                 if (Values == null)
                 {
-                    typedClone.Values = null;
+                    typedClone.Values = null;/*Location570*//*Location571*/
                 }
                 else
                 {
-                    typedClone.Values = (LazinatorList<TValue>) Values.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.Values = (LazinatorList<TValue>) Values.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location569*/
                 }
                 
             }

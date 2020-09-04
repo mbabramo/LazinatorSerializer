@@ -218,11 +218,11 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (RecursiveClass == null)
                 {
-                    typedClone.RecursiveClass = null;
+                    typedClone.RecursiveClass = null;/*Location243*//*Location244*/
                 }
                 else
                 {
-                    typedClone.RecursiveClass = (RecursiveExample) RecursiveClass.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.RecursiveClass = (RecursiveExample) RecursiveClass.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location242*/
                 }
                 
             }
@@ -231,11 +231,11 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (RecursiveInterface == null)
                 {
-                    typedClone.RecursiveInterface = null;
+                    typedClone.RecursiveInterface = null;/*Location246*//*Location247*/
                 }
                 else
                 {
-                    typedClone.RecursiveInterface = (IRecursiveExample) RecursiveInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.RecursiveInterface = (IRecursiveExample) RecursiveInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location245*/
                 }
                 
             }

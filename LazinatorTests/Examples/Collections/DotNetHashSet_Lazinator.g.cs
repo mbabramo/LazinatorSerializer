@@ -157,7 +157,7 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             DotNetHashSet_Lazinator typedClone = (DotNetHashSet_Lazinator) clone;
-            typedClone.MyHashSetSerialized = CloneOrChange_HashSet_GExampleChild_g(MyHashSetSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyHashSetSerialized = CloneOrChange_HashSet_GExampleChild_g(MyHashSetSerialized, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location410*/
             
             return typedClone;
         }

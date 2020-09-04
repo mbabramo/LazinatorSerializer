@@ -71,7 +71,7 @@ namespace LazinatorTests.Examples.Structs
                 if (value.HasValue)
                 {
                     var copy = value.Value;
-                    copy.LazinatorParents = new LazinatorParentsCollection(this);
+                    copy.LazinatorParents = new LazinatorParentsCollection(this);/*Location88*/
                     value = copy;
                 }
                 
@@ -87,7 +87,7 @@ namespace LazinatorTests.Examples.Structs
         {
             if (LazinatorObjectBytes.Length == 0)
             {
-                _ExampleNullableStruct = default(ExampleStructWithoutClass?);
+                _ExampleNullableStruct = default(ExampleStructWithoutClass?);/*Location86*/
             }
             else
             {
@@ -100,7 +100,7 @@ namespace LazinatorTests.Examples.Structs
                 {
                     _ExampleNullableStruct = new ExampleStructWithoutClass()
                     {
-                        LazinatorParents = new LazinatorParentsCollection(this)
+                        LazinatorParents = new LazinatorParentsCollection(this)/*Location87*/
                     };
                     var copy = _ExampleNullableStruct.Value;
                     copy.DeserializeLazinator(childData);
@@ -156,7 +156,7 @@ namespace LazinatorTests.Examples.Structs
             }
             set
             {
-                value.LazinatorParents = new LazinatorParentsCollection(this);
+                value.LazinatorParents = new LazinatorParentsCollection(this);/*Location91*/
                 
                 IsDirty = true;
                 DescendantIsDirty = true;
@@ -170,14 +170,14 @@ namespace LazinatorTests.Examples.Structs
             if (LazinatorObjectBytes.Length == 0)
             {
                 _ExampleStructWithoutClass = default(ExampleStructWithoutClass);
-                _ExampleStructWithoutClass.LazinatorParents = new LazinatorParentsCollection(this);
+                _ExampleStructWithoutClass.LazinatorParents = new LazinatorParentsCollection(this);/*Location89*/
             }
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleStructWithoutClass_ByteIndex, _ExampleStructWithoutClass_ByteLength, false, false, null);
                 _ExampleStructWithoutClass = new ExampleStructWithoutClass()
                 {
-                    LazinatorParents = new LazinatorParentsCollection(this)
+                    LazinatorParents = new LazinatorParentsCollection(this)/*Location90*/
                 };
                 _ExampleStructWithoutClass.DeserializeLazinator(childData);
             }
@@ -293,23 +293,23 @@ namespace LazinatorTests.Examples.Structs
         {
             clone.FreeInMemoryObjects();
             ContainerForExampleStructWithoutClass typedClone = (ContainerForExampleStructWithoutClass) clone;
-            typedClone.MyInt = MyInt;
+            typedClone.MyInt = MyInt;/*Location92*/
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (ExampleNullableStruct == null)
                 {
-                    typedClone.ExampleNullableStruct = null;
+                    typedClone.ExampleNullableStruct = null;/*Location94*//*Location95*/
                 }
                 else
                 {
-                    typedClone.ExampleNullableStruct = (ExampleStructWithoutClass?) ExampleNullableStruct.Value.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.ExampleNullableStruct = (ExampleStructWithoutClass?) ExampleNullableStruct.Value.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location93*/
                 }
                 
             }
             
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                typedClone.ExampleStructWithoutClass = (ExampleStructWithoutClass) ExampleStructWithoutClass.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.ExampleStructWithoutClass = (ExampleStructWithoutClass) ExampleStructWithoutClass.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location96*/
             }
             
             

@@ -130,7 +130,7 @@ namespace LazinatorTests.Examples
         {
             clone.FreeInMemoryObjects();
             ExampleNonexclusiveInterfaceImplementer typedClone = (ExampleNonexclusiveInterfaceImplementer) clone;
-            typedClone.MyInt = MyInt;
+            typedClone.MyInt = MyInt;/*Location61*/
             
             return typedClone;
         }

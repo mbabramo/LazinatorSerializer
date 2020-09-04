@@ -182,16 +182,16 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         {
             clone.FreeInMemoryObjects();
             RemoteHierarchy typedClone = (RemoteHierarchy) clone;
-            typedClone.TopOfHierarchyInt = TopOfHierarchyInt;
+            typedClone.TopOfHierarchyInt = TopOfHierarchyInt;/*Location194*/
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (RemoteLevel1Item == null)
                 {
-                    typedClone.RemoteLevel1Item = null;
+                    typedClone.RemoteLevel1Item = null;/*Location196*//*Location197*/
                 }
                 else
                 {
-                    typedClone.RemoteLevel1Item = (Remote<WGuid, RemoteLevel1>) RemoteLevel1Item.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.RemoteLevel1Item = (Remote<WGuid, RemoteLevel1>) RemoteLevel1Item.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location195*/
                 }
                 
             }

@@ -130,7 +130,7 @@ namespace Lazinator.Wrappers
         {
             clone.FreeInMemoryObjects();
             WNullableDateTime typedClone = (WNullableDateTime) clone;
-            typedClone.WrappedValue = WrappedValue;
+            typedClone.WrappedValue = WrappedValue;/*Location670*/
             
             typedClone.IsDirty = false;
             return typedClone;

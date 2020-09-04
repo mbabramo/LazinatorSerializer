@@ -132,7 +132,7 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 clone.FreeInMemoryObjects();
                 SubclassWithinClass typedClone = (SubclassWithinClass) clone;
-                typedClone.StringWithinSubclass = StringWithinSubclass;
+                typedClone.StringWithinSubclass = StringWithinSubclass;/*Location491*/
                 
                 return typedClone;
             }

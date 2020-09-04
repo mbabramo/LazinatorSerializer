@@ -169,11 +169,11 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (AbstractProperty == null)
                 {
-                    typedClone.AbstractProperty = null;
+                    typedClone.AbstractProperty = null;/*Location254*//*Location255*/
                 }
                 else
                 {
-                    typedClone.AbstractProperty = (Abstract1) AbstractProperty.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.AbstractProperty = (Abstract1) AbstractProperty.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location253*/
                 }
                 
             }

@@ -176,10 +176,10 @@ namespace LazinatorTests.Examples.Abstract
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
             Concrete5 typedClone = (Concrete5) clone;
-            typedClone.String4 = String4;
-            typedClone.String5 = String5;
-            typedClone.IntList4 = CloneOrChange_List_Gint_g(IntList4, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
-            typedClone.IntList5 = CloneOrChange_List_Gint_g(IntList5, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.String4 = String4;/*Location275*/
+            typedClone.String5 = String5;/*Location276*/
+            typedClone.IntList4 = CloneOrChange_List_Gint_g(IntList4, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location277*/
+            typedClone.IntList5 = CloneOrChange_List_Gint_g(IntList5, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);/*Location278*/
             
             return typedClone;
         }

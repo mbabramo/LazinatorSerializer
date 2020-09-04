@@ -247,17 +247,17 @@ namespace LazinatorTests.Examples.Collections
         {
             clone.FreeInMemoryObjects();
             LazinatorListContainer typedClone = (LazinatorListContainer) clone;
-            typedClone.MyInt = MyInt;
-            typedClone.MyLong = MyLong;
+            typedClone.MyInt = MyInt;/*Location448*/
+            typedClone.MyLong = MyLong;/*Location449*/
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (MyList == null)
                 {
-                    typedClone.MyList = null;
+                    typedClone.MyList = null;/*Location451*//*Location452*/
                 }
                 else
                 {
-                    typedClone.MyList = (LazinatorList<ExampleChild>) MyList.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.MyList = (LazinatorList<ExampleChild>) MyList.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location450*/
                 }
                 
             }
@@ -266,11 +266,11 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (MyStructList == null)
                 {
-                    typedClone.MyStructList = null;
+                    typedClone.MyStructList = null;/*Location454*//*Location455*/
                 }
                 else
                 {
-                    typedClone.MyStructList = (LazinatorList<WByte>) MyStructList.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.MyStructList = (LazinatorList<WByte>) MyStructList.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);/*Location453*/
                 }
                 
             }
