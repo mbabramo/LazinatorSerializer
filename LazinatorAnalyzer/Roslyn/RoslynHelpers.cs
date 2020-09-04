@@ -260,6 +260,10 @@ namespace LazinatorCodeGen.Roslyn
                     foreach (var baseType in GetTypeAndContainedTypes(namedTypeSymbol.BaseType))
                         yield return baseType;
             }
+            else
+            {
+                var DEBUG = 0;
+            }
         }
 
         public static IEnumerable<ITypeSymbol> GetContainingTypes(this ITypeSymbol typeSymbol)

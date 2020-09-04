@@ -282,6 +282,7 @@ namespace Lazinator.CodeDescription
 
         private void AppendDeclaration(CodeStringBuilder sb, string partialsuperclasses)
         {
+            var DEBUG = PropertiesToDefineThisLevel[0].PropertyAndInnerProperties().First().Namespace;
             List<string> namespaces = PropertiesToDefineThisLevel.SelectMany(x => x.PropertyAndInnerProperties().Select(y => y.Namespace)).ToList();
             namespaces.AddRange(ILazinatorTypeSymbol.GetNamespacesOfTypesAndContainedTypes());
             namespaces.AddRange(ILazinatorTypeSymbol.GetNamespacesOfContainingTypes());

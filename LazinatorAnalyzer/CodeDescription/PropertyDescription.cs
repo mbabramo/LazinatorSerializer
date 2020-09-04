@@ -160,7 +160,7 @@ namespace Lazinator.CodeDescription
         internal string AppropriatelyQualifiedTypeNameEncodable => Symbol.GetEncodableVersionOfIdentifier(UseFullyQualifiedNames);
         private string AppropriatelyQualifiedTypeNameEncodableWithoutNullable => (Symbol as INamedTypeSymbol).TypeArguments[0].GetEncodableVersionOfIdentifier(UseFullyQualifiedNames);
 
-        public string Namespace => Symbol.GetFullNamespace();
+        public string Namespace => (IsDefinitelyStruct && Nullable) ? ((INamedTypeSymbol)Symbol).TypeArguments[0].GetFullNamespace() : Symbol.GetFullNamespace();
         private string WriteMethodName { get; set; }
         private string ReadMethodName { get; set; }
         internal string PropertyName { get; set; }
@@ -1597,11 +1597,6 @@ namespace Lazinator.CodeDescription
         private void AppendPropertyWriteString_Lazinator(CodeStringBuilder sb)
         {
             string withInclusionConditional = null;
-            if (IsDefinitelyStruct && Nullable)
-            {
-                var DEBUG = 0;
-            }
-
             bool nullableStruct = PropertyType == LazinatorPropertyType.LazinatorStructNullable || (IsDefinitelyStruct && Nullable);
             string propertyNameOrCopy = nullableStruct ? "copy" : $"{BackingFieldString}";
             Func<string, string> lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen($"{BackingFieldString}", $"WriteNullChild(ref writer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")});", originalString) : originalString;
