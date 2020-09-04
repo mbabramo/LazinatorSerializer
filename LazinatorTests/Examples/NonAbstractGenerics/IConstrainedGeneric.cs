@@ -9,6 +9,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         where U : ILazinator, new()
     {
         T MyT { get; set; }
+        T? MyNullableT { get; set; }
         U MyU { get; set; }
     }
 }

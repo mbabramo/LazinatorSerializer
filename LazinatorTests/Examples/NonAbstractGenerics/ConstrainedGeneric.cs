@@ -8,6 +8,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
 {
     public partial class ConstrainedGeneric<T, U> : IConstrainedGeneric<T, U> where T : struct, ILazinator where U : ILazinator, new()
     {
+        public T? MyNullableT { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 
 }

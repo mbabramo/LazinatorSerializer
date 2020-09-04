@@ -607,7 +607,7 @@ namespace Lazinator.CodeDescription
 
         private void SetEnumOrPrimitivePropertyType(INamedTypeSymbol namedTypeSymbol)
         {
-            SetPropertyType(namedTypeSymbol.TypeArguments[0] as INamedTypeSymbol);
+            SetPropertyType(namedTypeSymbol.TypeArguments[0]);
             Nullable = true;
             if (EnumEquivalentType != null)
                 EnumEquivalentType += "?";
