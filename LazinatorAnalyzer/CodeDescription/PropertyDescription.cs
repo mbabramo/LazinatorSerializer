@@ -1208,8 +1208,8 @@ namespace Lazinator.CodeDescription
             string createDefault = $@"{BackingFieldString} = {DefaultExpression};{IIF(IsNonLazinatorType && TrackDirtinessNonSerialized, $@"
                                         {BackingDirtyFieldString} = true; ")}";
             if (IsLazinatorStruct)
-                createDefault = $@"{BackingFieldString}{DefaultInitializationIfPossible(AppropriatelyQualifiedTypeName)};{IIF(ContainerIsClass && PropertyType != LazinatorPropertyType.LazinatorStructNullable, $@"
-                                {BackingFieldString}{IIF(Nullable, ".Value")}.LazinatorParents = new LazinatorParentsCollection(this);")}{CodeStringBuilder.GetNextLocationString()}";
+                createDefault = $@"{BackingFieldString}{DefaultInitializationIfPossible(AppropriatelyQualifiedTypeName)};{IIF(ContainerIsClass && PropertyType != LazinatorPropertyType.LazinatorStructNullable && (!IsDefinitelyStruct || !Nullable), $@"
+                                {BackingFieldString}.LazinatorParents = new LazinatorParentsCollection(this);")}{CodeStringBuilder.GetNextLocationString()}";
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
                 createDefault = $@"{BackingFieldString}{DefaultInitializationIfPossible(AppropriatelyQualifiedTypeName)};{IIF(ContainerIsClass, $@"
                                 if ({BackingFieldString} != null)

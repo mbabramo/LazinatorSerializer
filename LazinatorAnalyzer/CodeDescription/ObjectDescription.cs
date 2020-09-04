@@ -1165,7 +1165,7 @@ namespace Lazinator.CodeDescription
                     else
                         reset +=
                             $@"
-                            if ({property.BackingFieldAccessedString} && _{property.PropertyName}{IIF(property.Nullable, "Value.")}.IsStruct && (_{property.PropertyName}{IIF(property.Nullable, "Value.")}.IsDirty || _{property.PropertyName}{IIF(property.Nullable, "Value.")}.DescendantIsDirty))
+                            if ({property.BackingFieldAccessedString} && _{property.PropertyName}{IIF(property.Nullable, ".Value")}.IsStruct && (_{property.PropertyName}{IIF(property.Nullable, ".Value")}.IsDirty || _{property.PropertyName}{IIF(property.Nullable, ".Value")}.DescendantIsDirty))
                             {{
                                 {property.BackingFieldAccessedString} = false;
                             }}";
