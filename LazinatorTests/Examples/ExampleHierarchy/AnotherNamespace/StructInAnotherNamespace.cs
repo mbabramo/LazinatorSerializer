@@ -6,6 +6,5 @@ namespace LazinatorTests.AnotherNamespace
 {
     public partial struct StructInAnotherNamespace : IStructInAnotherNamespace
     {
-        public int MyInt { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 }
