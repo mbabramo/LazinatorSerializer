@@ -123,7 +123,7 @@ namespace Lazinator.CodeDescription
         internal string IfInitializationRequiredAddElseThrow => $"{IIF(AddQuestionMarkInBackingFieldForNonNullable, elseThrowString)}";
         internal string BackingFieldAccessWithPossibleException => $"{BackingFieldString}{PossibleUnsetException}";
         internal string BackingFieldStringOrContainedSpanWithPossibleException(string propertyName) => $"{BackingFieldStringOrContainedSpan(propertyName)}{PossibleUnsetException}";
-        internal string BackingFieldWithPossibleValueDereference => $"{BackingFieldString}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@".Value")}";
+        internal string BackingFieldWithPossibleValueDereference => $"{BackingFieldString}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable || (PropertyType == LazinatorPropertyType.LazinatorStructNullable || (IsDefinitelyStruct && Nullable)), $@".Value")}";
         internal string BackingFieldWithPossibleValueDereferenceWithPossibleException => $"{BackingFieldString}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@".Value")}{PossibleUnsetException}";
         internal bool IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType => IsSupportedCollectionOrTuple || (PropertyType == LazinatorPropertyType.NonLazinator && HasInterchangeType);
         internal bool IsNotPrimitiveOrOpenGeneric => PropertyType != LazinatorPropertyType.OpenGenericParameter && PropertyType != LazinatorPropertyType.PrimitiveType && PropertyType != LazinatorPropertyType.PrimitiveTypeNullable;
@@ -1597,11 +1597,17 @@ namespace Lazinator.CodeDescription
         private void AppendPropertyWriteString_Lazinator(CodeStringBuilder sb)
         {
             string withInclusionConditional = null;
-            string propertyNameOrCopy = PropertyType == LazinatorPropertyType.LazinatorStructNullable ? "copy" : $"{BackingFieldString}";
+            if (IsDefinitelyStruct && Nullable)
+            {
+                var DEBUG = 0;
+            }
+
+            bool nullableStruct = PropertyType == LazinatorPropertyType.LazinatorStructNullable || (IsDefinitelyStruct && Nullable);
+            string propertyNameOrCopy = nullableStruct ? "copy" : $"{BackingFieldString}";
             Func<string, string> lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen($"{BackingFieldString}", $"WriteNullChild(ref writer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")});", originalString) : originalString;
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct)
             {
-                string mainWriteString = $@"{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"var copy = {BackingFieldString}.Value;
+                string mainWriteString = $@"{IIF(nullableStruct, $@"var copy = {BackingFieldString}.Value;
                             ")}WriteChild(ref writer, ref {propertyNameOrCopy}, includeChildrenMode, {BackingFieldAccessedString}, () => {ChildSliceString}, verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, this);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
                                 {BackingFieldString} = copy;")}";
                 withInclusionConditional =
