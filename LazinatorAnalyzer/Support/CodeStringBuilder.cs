@@ -48,7 +48,7 @@ namespace Lazinator.CodeDescription
             {
                 Debugger.Break();
             }
-            return $"/*Location{LocationIndex++}*/";
+            return AddLocationIndexComments ? $"/*Location{LocationIndex++}*/" : "";
         }
 
         private void AppendHelper(string s)
