@@ -1209,7 +1209,7 @@ namespace Lazinator.CodeDescription
                                         {BackingDirtyFieldString} = true; ")}";
             if (IsLazinatorStruct)
                 createDefault = $@"{BackingFieldString}{DefaultInitializationIfPossible(AppropriatelyQualifiedTypeName)};{IIF(ContainerIsClass && PropertyType != LazinatorPropertyType.LazinatorStructNullable, $@"
-                                {BackingFieldString}.LazinatorParents = new LazinatorParentsCollection(this);")}{CodeStringBuilder.GetNextLocationString()}";
+                                {BackingFieldString}{IIF(Nullable, "Value.")}.LazinatorParents = new LazinatorParentsCollection(this);")}{CodeStringBuilder.GetNextLocationString()}";
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
                 createDefault = $@"{BackingFieldString}{DefaultInitializationIfPossible(AppropriatelyQualifiedTypeName)};{IIF(ContainerIsClass, $@"
                                 if ({BackingFieldString} != null)
@@ -1636,7 +1636,7 @@ namespace Lazinator.CodeDescription
             string copyInstruction = "";
             if (IsLazinator)
             {
-                string nonNullStatement = $@"{nameOfCloneVariable}.{PropertyName} = ({AppropriatelyQualifiedTypeName}) {PropertyName}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, ".Value")}.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);{CodeStringBuilder.GetNextLocationString()}";
+                string nonNullStatement = $@"{nameOfCloneVariable}.{PropertyName} = ({AppropriatelyQualifiedTypeName}) {PropertyName}{IIF(IsDefinitelyStruct && Nullable, ".Value")}.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);{CodeStringBuilder.GetNextLocationString()}";
                 if (!Nullable)
                     copyInstruction = nonNullStatement;
                 else

@@ -10,7 +10,7 @@ namespace Lazinator.CodeDescription
         public int IndentLevel = 0;
         public bool IsBeginningOfLine = true;
         public static bool AddLocationIndexComments = true; // DEBUG
-        public static int StopAtLocationIndex = 24; // DEBUG
+        public static int StopAtLocationIndex = 36; // DEBUG
         public static int LocationIndex = 0;
 
         public override string ToString()
