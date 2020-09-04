@@ -31,7 +31,7 @@ namespace Lazinator.CodeDescription
         private ITypeSymbol TypeSymbolIfNoProperty { get; set; }
         private ITypeSymbol Symbol => PropertySymbol != null ? (ITypeSymbol)PropertySymbol.Type : (ITypeSymbol)TypeSymbolIfNoProperty;
         internal bool GenericConstrainedToClass => Symbol is ITypeParameterSymbol typeParameterSymbol && typeParameterSymbol.HasReferenceTypeConstraint;
-        internal bool GenericConstrainedToStruct => Symbol is ITypeParameterSymbol typeParameterSymbol && typeParameterSymbol.HasValueTypeConstraint;
+        internal bool GenericConstrainedToStruct => (Symbol is ITypeParameterSymbol typeParameterSymbol && typeParameterSymbol.HasValueTypeConstraint) || (PropertyType == LazinatorPropertyType.OpenGenericParameter && Symbol.IsValueType);
         internal string DerivationKeyword { get; set; }
         private bool IsAbstract { get; set; }
         public NullableContext NullableContextSetting { get; set; }
@@ -1165,14 +1165,14 @@ namespace Lazinator.CodeDescription
                         if (value.HasValue)
                         {{
                             var copy = value.Value;
-                            copy.LazinatorParents = new LazinatorParentsCollection(this);
+                            copy.LazinatorParents = new LazinatorParentsCollection(this);{CodeStringBuilder.GetNextLocationString()}
                             value = copy;
                         }}
                     ")}
                         ";
                 else
                     propertyTypeDependentSet = $@"{IIF(ContainerIsClass, $@"
-                        value.LazinatorParents = new LazinatorParentsCollection(this);")}
+                        value.LazinatorParents = new LazinatorParentsCollection(this);")}{CodeStringBuilder.GetNextLocationString()}
                         ";
             }
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
@@ -1181,7 +1181,7 @@ namespace Lazinator.CodeDescription
                     propertyTypeDependentSet = $@"
                         if (value != null && value.IsStruct){CodeStringBuilder.GetNextLocationString()}
                         {{{IIF(ContainerIsClass, $@"
-                            value.LazinatorParents = new LazinatorParentsCollection(this);")}
+                            value.LazinatorParents = new LazinatorParentsCollection(this);")}{CodeStringBuilder.GetNextLocationString()}
                         }}
                         else
                         {{
@@ -1209,12 +1209,12 @@ namespace Lazinator.CodeDescription
                                         {BackingDirtyFieldString} = true; ")}";
             if (IsLazinatorStruct)
                 createDefault = $@"{BackingFieldString}{DefaultInitializationIfPossible(AppropriatelyQualifiedTypeName)};{IIF(ContainerIsClass && PropertyType != LazinatorPropertyType.LazinatorStructNullable, $@"
-                                {BackingFieldString}.LazinatorParents = new LazinatorParentsCollection(this);")}";
+                                {BackingFieldString}.LazinatorParents = new LazinatorParentsCollection(this);")}{CodeStringBuilder.GetNextLocationString()}";
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
                 createDefault = $@"{BackingFieldString}{DefaultInitializationIfPossible(AppropriatelyQualifiedTypeName)};{IIF(ContainerIsClass, $@"
                                 if ({BackingFieldString} != null)
                                 {{ // {PropertyName} is a struct
-                                    {BackingFieldString}.LazinatorParents = new LazinatorParentsCollection(this);
+                                    {BackingFieldString}.LazinatorParents = new LazinatorParentsCollection(this);{CodeStringBuilder.GetNextLocationString()}
                                 }}{IfInitializationRequiredAddElseThrow}")}";
             return createDefault;
         }
@@ -1300,7 +1300,7 @@ namespace Lazinator.CodeDescription
                         else ";
             string lazinatorParentClassSet = ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct || ContainingObjectDescription.GeneratingRefStruct ? "" : $@"
                             {{
-                                LazinatorParents = new LazinatorParentsCollection(this)
+                                LazinatorParents = new LazinatorParentsCollection(this){CodeStringBuilder.GetNextLocationString()}
                             }}";
 
             string doCreation = $@"{BackingFieldString} = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}({ConstructorInitialization}){lazinatorParentClassSet};
