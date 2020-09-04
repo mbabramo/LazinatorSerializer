@@ -1179,7 +1179,7 @@ namespace Lazinator.CodeDescription
             {
                 if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct)
                     propertyTypeDependentSet = $@"
-                        if (value != null && value.IsStruct)
+                        if (value != null && value.IsStruct){CodeStringBuilder.GetNextLocationString()}
                         {{{IIF(ContainerIsClass, $@"
                             value.LazinatorParents = new LazinatorParentsCollection(this);")}
                         }}
@@ -1187,11 +1187,11 @@ namespace Lazinator.CodeDescription
                         {{
                             if ({BackingFieldString} != null)
                             {{
-                                {BackingFieldString}.LazinatorParents = {BackingFieldString}.LazinatorParents.WithRemoved(this);
+                                {BackingFieldString}.LazinatorParents = {BackingFieldString}.LazinatorParents.WithRemoved(this);{CodeStringBuilder.GetNextLocationString()}
                             }}
                             if (value != null)
                             {{
-                                value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                                value.LazinatorParents = value.LazinatorParents.WithAdded(this);{CodeStringBuilder.GetNextLocationString()}
                             }}
                         }}
                             ";
