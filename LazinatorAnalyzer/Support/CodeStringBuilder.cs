@@ -10,7 +10,7 @@ namespace Lazinator.CodeDescription
         public int IndentLevel = 0;
         public bool IsBeginningOfLine = true;
         public static bool AddLocationIndexComments = true; // DEBUG
-        public static int StopAtLocationIndex = 26; // DEBUG
+        public static int StopAtLocationIndex = 27; // DEBUG
         public static int LocationIndex = 0;
 
         public override string ToString()
@@ -39,11 +39,16 @@ namespace Lazinator.CodeDescription
             {
                 if (LocationIndex == StopAtLocationIndex)
                 {
-                   Debugger.Break();
+                    Debugger.Break();
                 }
-                AppendHelper($"/*Location{LocationIndex++}*/");
+                AppendHelper(GetNextLocationString());
             }
             AppendHelper(s);
+        }
+
+        public static string GetNextLocationString()
+        {
+            return $"/*Location{LocationIndex++}*/";
         }
 
         private void AppendHelper(string s)
