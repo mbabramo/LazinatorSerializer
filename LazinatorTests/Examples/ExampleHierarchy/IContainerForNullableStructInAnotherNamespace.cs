@@ -4,7 +4,7 @@ using LazinatorTests.AnotherNamespace;
 namespace LazinatorTests.Examples.ExampleHierarchy
 {
     [Lazinator((int)ExampleUniqueIDs.ContainerForStructInAnotherNamespace)]
-    public interface IContainerForStructInAnotherNamespace
+    public interface IContainerForNullableStructInAnotherNamespace
     {
         // Omit this because problem occured when it is omitted: StructInAnotherNamespace MyStruct { get; set; }
         StructInAnotherNamespace? MyNullableStruct { get; set; }

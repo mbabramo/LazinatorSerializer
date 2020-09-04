@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LazinatorTests.Examples.ExampleHierarchy
 {
-    public partial class ContainerForStructInAnotherNamespace : IContainerForStructInAnotherNamespace
+    public partial class ContainerForNullableStructInAnotherNamespace : IContainerForNullableStructInAnotherNamespace
     {
     }
 }

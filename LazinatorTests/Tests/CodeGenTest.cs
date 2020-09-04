@@ -222,7 +222,7 @@ public class MyOtherClass
             // await CompleteGenerateCode(typeof(NullableEnabledContext), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             //await CompleteGenerateCode(typeof(ConstrainedGeneric<,>), "LazinatorTests", "/Examples/", "NonAbstractGenerics/", ws);
             await CompleteGenerateCode(typeof(StructInAnotherNamespace), "LazinatorTests", "/Examples/", "ExampleHierarchy/AnotherNamespace/", ws);
-            await CompleteGenerateCode(typeof(ContainerForStructInAnotherNamespace), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
+            await CompleteGenerateCode(typeof(ContainerForNullableStructInAnotherNamespace), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
 
             // include some code so that we won't get a warning if not awaiting anything elsewhere
             Task GetT() { return Task.CompletedTask; };
