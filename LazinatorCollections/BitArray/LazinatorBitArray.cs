@@ -325,6 +325,7 @@ namespace LazinatorCollections.BitArray
                     for (int i = 0; i < lengthToCopy; i++)
                         newarray[i] = s[i];
                     IntStorage = new Memory<int>(newarray);
+                    s = IntStorage.Span;
                 }
 
                 if (value > m_length)

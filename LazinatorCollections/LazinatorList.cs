@@ -35,19 +35,19 @@ namespace LazinatorCollections
             return new LazinatorList<T>(AllowDuplicates);
         }
 
-        public LazinatorList(bool allowDuplicates)
+        public LazinatorList(bool allowDuplicates = true)
         {
             AllowDuplicates = allowDuplicates;
             PostDeserialization();
         }
 
-        public LazinatorList(int numItems, bool allowDuplicates) : this(allowDuplicates)
+        public LazinatorList(int numItems, bool allowDuplicates = true) : this(allowDuplicates)
         {
             for (int i = 0; i < numItems; i++)
                 Add(default);
         }
 
-        public LazinatorList(IEnumerable<T> items, bool allowDuplicates) : this(allowDuplicates)
+        public LazinatorList(IEnumerable<T> items, bool allowDuplicates = true) : this(allowDuplicates)
         {
             foreach (T item in items)
                 Add(item);

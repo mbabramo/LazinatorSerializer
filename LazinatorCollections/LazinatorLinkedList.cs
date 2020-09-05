@@ -22,7 +22,7 @@ namespace LazinatorCollections
         LazinatorLinkedListNode<T> _lastAccessedNode = null;
         int? _lastAccessedIndex = null;
 
-        public LazinatorLinkedList(bool allowDuplicates)
+        public LazinatorLinkedList(bool allowDuplicates = true)
         {
             AllowDuplicates = allowDuplicates;
         }

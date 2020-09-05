@@ -205,6 +205,14 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void LazinatorBitArrayResizes()
+        {
+            LazinatorBitArray b = new LazinatorBitArray(100);
+            b.Length = 200;
+            b[105] = true;
+        }
+
+        [Fact]
         public void LazinatorMemoryInt()
         {
             SpanAndMemory GetObject(int thirdItem)
