@@ -13,6 +13,7 @@ using LazinatorCollections.Interfaces;
 using LazinatorCollections.Extensions;
 using LazinatorCollections.Enumerators;
 using LazinatorCollections.Location;
+using Lazinator.Exceptions;
 
 namespace LazinatorCollections
 {
@@ -101,6 +102,8 @@ namespace LazinatorCollections
         {
             if (_ItemsTracker == null)
                 return false;
+            if (currentIndex >= _ItemsTracker.Count)
+                throw new IndexOutOfRangeException();
             return _ItemsTracker[currentIndex].IsDeserialized;
         }
 
@@ -124,6 +127,13 @@ namespace LazinatorCollections
                 firstItems = this.Take(maxNumItemsBeforeEllipsis).ToArray();
             }
             return $"[{String.Join(", ", firstItems)}{(moreThanMax ? ", ..." : "")}]";
+        }
+
+        public T GetReadOnly(int index)
+        {
+            if (ItemHasBeenAccessed(index))
+                return this[index].CloneLazinatorTyped();
+            return GetSerializedContents(index);
         }
 
         private T GetSerializedContents(int originalIndex)
