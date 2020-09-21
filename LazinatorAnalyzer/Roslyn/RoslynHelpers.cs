@@ -478,6 +478,14 @@ namespace LazinatorCodeGen.Roslyn
                 .Cast<TypeDeclarationSyntax>());
         }
 
+        public static bool IsRecord(this ITypeSymbol type)
+        {
+            if (type == null || type.TypeKind != TypeKind.Class)
+                return false;
+            bool isRecord = (type.DeclaringSyntaxReferences.Any(x => (x.SyntaxTree.GetRoot().FindNode(x.Span) is RecordDeclarationSyntax)));
+            return isRecord;
+        }
+
         public static bool IsReadOnlyStruct(this ITypeSymbol type)
         {
             if (type == null || type.TypeKind != TypeKind.Struct)
