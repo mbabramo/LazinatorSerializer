@@ -978,7 +978,7 @@ namespace Lazinator.CodeDescription
                 ")}{GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{abstractDerivationKeyword}{AppropriatelyQualifiedTypeName} {PropertyName}
                 {{
                     get;
-                    set;
+                    {SetterAccessibilityString}set;
                 }}
 ";
             sb.Append(propertyString);
