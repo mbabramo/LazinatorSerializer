@@ -94,5 +94,6 @@
         ContainerForEagerExample,
         StructInAnotherNamespace,
         ContainerForStructInAnotherNamespace,
+        LazinatorRecord,
     }
 }

@@ -93,7 +93,7 @@ namespace LazinatorAnalyzer.Analyzer
         public static async Task<Solution> FixGenerateLazinatorCodeBehind(Document originalDocument, TypeDeclarationSyntax enclosingType, LazinatorPairInformation lazinatorPairInformation, CancellationToken cancellationToken)
         {
 
-            if (!(enclosingType is ClassDeclarationSyntax) && !(enclosingType is StructDeclarationSyntax))
+            if (!(enclosingType is ClassDeclarationSyntax or StructDeclarationSyntax or RecordDeclarationSyntax))
                 throw new LazinatorCodeGenException("Could not fix. Attribute is not in a class or struct.");
 
             try
