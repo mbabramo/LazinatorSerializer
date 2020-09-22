@@ -36,7 +36,7 @@ namespace LazinatorCodeGen.Roslyn
         internal bool ImplementingTypeRequiresParameterlessConstructor { get; set; }
         internal Dictionary<string, HashSet<Attribute>> KnownAttributes = new Dictionary<string, HashSet<Attribute>>();
         internal Dictionary<string, List<(IParameterSymbol parameterSymbol, IPropertySymbol property)>> RecordLikeTypes = new Dictionary<string, List<(IParameterSymbol parameterSymbol, IPropertySymbol property)>>();
-        internal HashSet<string> NonRecordLikeTypes = new HashSet<string>();
+        internal HashSet<string> RecordLikeTypesExclusions = new HashSet<string>();
         internal Dictionary<string, Guid> InterfaceTextHash = new Dictionary<string, Guid>();
         internal static ConcurrentDictionary<string, INamedTypeSymbol> NameTypedSymbolFromString = new ConcurrentDictionary<string, INamedTypeSymbol>();
         internal static ConcurrentDictionary<string, LazinatorConfig> AdditionalConfigFiles = new ConcurrentDictionary<string, LazinatorConfig>();
@@ -446,35 +446,35 @@ namespace LazinatorCodeGen.Roslyn
         private void ConsiderAddingAsRecordLikeType(INamedTypeSymbol type)
         {
             string typeName = TypeSymbolToString(type);
-            if (RecordLikeTypes.ContainsKey(typeName) || NonRecordLikeTypes.Contains(typeName))
+            if (RecordLikeTypes.ContainsKey(typeName) || RecordLikeTypesExclusions.Contains(typeName))
                 return;
             // Consider whether to add this as a record-like type
             if (type.IsAbstract)
                 return; 
             if (!IsAllowedAsRecordLikeTypeIfProperlyFormed(type))
             {
-                NonRecordLikeTypes.Add(typeName);
+                RecordLikeTypesExclusions.Add(typeName);
                 return;
             }
 
             var constructorCandidates = type.Constructors.OrderByDescending(x => x.Parameters.Count()).ToList();
             if (!constructorCandidates.Any())
-                NonRecordLikeTypes.Add(typeName);
+                RecordLikeTypesExclusions.Add(typeName);
             else
             {
+                var properties = GetPropertyWithDefinitionInfo(type)
+                    .Where(x => (x?.Property?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as PropertyDeclarationSyntax)?.AccessorList?.Accessors
+                        .Any(y => y.Body == null)
+                        ?? false)
+                    .ToList();
                 foreach (var candidate in constructorCandidates)
                 {
                     var parameters = candidate.Parameters.ToList();
-                    var properties = GetPropertyWithDefinitionInfo(type)
-                        .Where(x => (x?.Property?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as PropertyDeclarationSyntax)?.AccessorList?.Accessors
-                            .Any(y => y.Body == null)
-                            ?? false)
-                        .ToList();
                     if (parameters.Count() < properties.Count() || !parameters.Any())
-                    { // better constructor candidates have already been rejected, so reject this too.
+                    { // there aren't enough parameters to set all properties (or this is parameterless, even if there aren't any properties)
                         if (!IsAllowedAsRecordLikeTypeIfMismatched(type))
                         {
-                            NonRecordLikeTypes.Add(typeName);
+                            RecordLikeTypesExclusions.Add(typeName);
                             return;
                         }
                     }
@@ -492,7 +492,7 @@ namespace LazinatorCodeGen.Roslyn
                     }
                 }
             }
-            NonRecordLikeTypes.Add(typeName);
+            RecordLikeTypesExclusions.Add(typeName);
         }
 
         private bool IsAllowedAsRecordLikeTypeIfProperlyFormed(INamedTypeSymbol type)
@@ -504,6 +504,8 @@ namespace LazinatorCodeGen.Roslyn
                 if (DefaultConfig.IncludeRecordLikeTypes.Contains(appropriatelyQualifiedName))
                     return true;
                 if (DefaultConfig.IgnoreRecordLikeTypes.Contains(appropriatelyQualifiedName))
+                    return false;
+                if (DefaultConfig.GetInterchangeConverterTypeName(type) != null || DefaultConfig.GetDirectConverterTypeName(type) != null)
                     return false;
                 defaultAllowRecordLikeClasses = DefaultConfig.DefaultAllowRecordLikeClasses;
                 defaultAllowRecordLikeRegularStructs = DefaultConfig.DefaultAllowRecordLikeRegularStructs;
