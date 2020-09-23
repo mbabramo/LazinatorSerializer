@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace LazinatorTests.Examples.Tuples
 {
-    public record NonLazinatorRecordWithConstructor(int age, Example example, double doubleValue);
+    public record NonLazinatorRecordWithConstructor(int age, Example example, double doubleValue, int? nullableInt);
 }

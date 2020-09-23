@@ -1016,7 +1016,7 @@ namespace LazinatorTests.Examples
                 
                 int? item2 = span.ToDecompressedNullableInt(ref bytesSoFar);
                 
-                var tupleType = (item1, item2);
+                var tupleType = /*DEBUG2*/(item1, item2);
                 
                 return tupleType;
             }

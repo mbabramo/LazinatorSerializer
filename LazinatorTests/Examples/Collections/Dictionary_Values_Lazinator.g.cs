@@ -728,7 +728,7 @@ namespace LazinatorTests.Examples.Collections
             }
             bytesSoFar += lengthCollectionMember_item2;
             
-            var tupleType = new KeyValuePair<Int32, ExampleChild>(item1, item2);
+            var tupleType = new KeyValuePair<Int32, ExampleChild>/*DEBUG2*/(item1, item2);
             
             return tupleType;
         }
@@ -751,7 +751,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static KeyValuePair<Int32, ExampleChild> CloneOrChange_KeyValuePair_Gint_c_C32ExampleChild_g(KeyValuePair<Int32, ExampleChild> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            return new KeyValuePair<Int32, ExampleChild>((int) (itemToConvert.Key),(ExampleChild) (cloneOrChangeFunc((itemToConvert.Value))));
+            return new KeyValuePair<Int32, ExampleChild>/*DEBUG1*/((int) (itemToConvert.Key),(ExampleChild) (cloneOrChangeFunc((itemToConvert.Value))));
         }
         
         private static Dictionary<WInt, WInt> ConvertFromBytes_Dictionary_GWInt_c_C32WInt_g(LazinatorMemory storage)
@@ -838,7 +838,7 @@ namespace LazinatorTests.Examples.Collections
             }
             bytesSoFar += lengthCollectionMember_item2;
             
-            var tupleType = new KeyValuePair<WInt, WInt>(item1, item2);
+            var tupleType = new KeyValuePair<WInt, WInt>/*DEBUG2*/(item1, item2);
             
             return tupleType;
         }
@@ -855,7 +855,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static KeyValuePair<WInt, WInt> CloneOrChange_KeyValuePair_GWInt_c_C32WInt_g(KeyValuePair<WInt, WInt> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            return new KeyValuePair<WInt, WInt>((WInt) (cloneOrChangeFunc((itemToConvert.Key))),(WInt) (cloneOrChangeFunc((itemToConvert.Value))));
+            return new KeyValuePair<WInt, WInt>/*DEBUG1*/((WInt) (cloneOrChangeFunc((itemToConvert.Key))),(WInt) (cloneOrChangeFunc((itemToConvert.Value))));
         }
         
         private static SortedDictionary<Int32, ExampleChild> ConvertFromBytes_SortedDictionary_Gint_c_C32ExampleChild_g(LazinatorMemory storage)

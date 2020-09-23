@@ -23,6 +23,11 @@ namespace LazinatorTests.Examples.Tuples
             get;
             set;
         }
-        public double GetOnly => DoubleValue;
+        public int? NullableInt
+        {
+            get;
+            set;
+        }
+        public int GetOnly => NullableInt ?? 0; // must make sure that code doesn't try to initialize this
     }
 }

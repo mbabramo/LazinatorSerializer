@@ -460,7 +460,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item3;
             
-            var tupleType = new Tuple<UInt32?, (ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>)), NonLazinatorClass>(item1, item2, item3);
+            var tupleType = new Tuple<UInt32?, (ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>)), NonLazinatorClass>/*DEBUG2*/(item1, item2, item3);
             
             return tupleType;
         }
@@ -495,7 +495,7 @@ namespace LazinatorTests.Examples.Tuples
                 return default(Tuple<UInt32?, (ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>)), NonLazinatorClass>);
             }
             
-            return new Tuple<UInt32?, (ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>)), NonLazinatorClass>((uint?) (itemToConvert?.Item1),((ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>))) CloneOrChange__PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_n_c_C32Tuple_Gshort_c_C32long_g_p_p((itemToConvert?.Item2 ?? default), cloneOrChangeFunc, avoidCloningIfPossible),(NonLazinatorClass) (itemToConvert?.Item3));
+            return new Tuple<UInt32?, (ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>)), NonLazinatorClass>/*DEBUG1*/((uint?) (itemToConvert?.Item1),((ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>))) CloneOrChange__PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_n_c_C32Tuple_Gshort_c_C32long_g_p_p((itemToConvert?.Item2 ?? default), cloneOrChangeFunc, avoidCloningIfPossible),(NonLazinatorClass) (itemToConvert?.Item3));
         }
         
         private static (ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>)) ConvertFromBytes__PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_n_c_C32Tuple_Gshort_c_C32long_g_p_p(LazinatorMemory storage)
@@ -526,7 +526,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item2;
             
-            var tupleType = (item1, item2);
+            var tupleType = /*DEBUG2*/(item1, item2);
             
             return tupleType;
         }
@@ -583,7 +583,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item3;
             
-            var tupleType = (item1, item2, item3);
+            var tupleType = /*DEBUG2*/(item1, item2, item3);
             
             return tupleType;
         }
@@ -633,7 +633,7 @@ namespace LazinatorTests.Examples.Tuples
             
             string item2 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
             
-            var tupleType = (item1, item2);
+            var tupleType = /*DEBUG2*/(item1, item2);
             
             return tupleType;
         }
@@ -674,7 +674,7 @@ namespace LazinatorTests.Examples.Tuples
             
             long item2 = span.ToDecompressedLong(ref bytesSoFar);
             
-            var tupleType = new Tuple<Int16, Int64>(item1, item2);
+            var tupleType = new Tuple<Int16, Int64>/*DEBUG2*/(item1, item2);
             
             return tupleType;
         }
@@ -698,7 +698,7 @@ namespace LazinatorTests.Examples.Tuples
                 return default(Tuple<Int16, Int64>);
             }
             
-            return new Tuple<Int16, Int64>((short) (itemToConvert?.Item1 ?? default),(long) (itemToConvert?.Item2 ?? default));
+            return new Tuple<Int16, Int64>/*DEBUG1*/((short) (itemToConvert?.Item1 ?? default),(long) (itemToConvert?.Item2 ?? default));
         }
         
     }

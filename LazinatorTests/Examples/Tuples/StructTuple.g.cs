@@ -756,7 +756,7 @@ namespace LazinatorTests.Examples.Tuples
                 
                 TestEnum item2 = (TestEnum)span.ToDecompressedInt(ref bytesSoFar);
                 
-                var tupleType = (item1, item2);
+                var tupleType = /*DEBUG2*/(item1, item2);
                 
                 return tupleType;
             }
@@ -788,7 +788,7 @@ namespace LazinatorTests.Examples.Tuples
                 
                 double item2 = span.ToDouble(ref bytesSoFar);
                 
-                var tupleType = (item1, item2);
+                var tupleType = /*DEBUG2*/(item1, item2);
                 
                 return tupleType;
             }
@@ -820,7 +820,7 @@ namespace LazinatorTests.Examples.Tuples
                 
                 double item2 = span.ToDouble(ref bytesSoFar);
                 
-                var tupleType = (item1, item2);
+                var tupleType = /*DEBUG2*/(item1, item2);
                 
                 return tupleType;
             }
@@ -884,7 +884,7 @@ namespace LazinatorTests.Examples.Tuples
                 }
                 bytesSoFar += lengthCollectionMember_item3;
                 
-                var tupleType = (item1, item2, item3);
+                var tupleType = /*DEBUG2*/(item1, item2, item3);
                 
                 return tupleType;
             }
@@ -937,7 +937,7 @@ namespace LazinatorTests.Examples.Tuples
                 }
                 bytesSoFar += lengthCollectionMember_item3;
                 
-                var tupleType = (item1, item2, item3);
+                var tupleType = /*DEBUG2*/(item1, item2, item3);
                 
                 return tupleType;
             }
@@ -1003,7 +1003,7 @@ namespace LazinatorTests.Examples.Tuples
                 }
                 bytesSoFar += lengthCollectionMember_item2;
                 
-                var tupleType = (item1, item2);
+                var tupleType = /*DEBUG2*/(item1, item2);
                 
                 return tupleType;
             }

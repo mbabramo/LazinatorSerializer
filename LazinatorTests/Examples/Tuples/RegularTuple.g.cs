@@ -894,7 +894,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item3;
             
-            var tupleType = new Tuple<UInt32, ExampleChild, NonLazinatorClass>(item1, item2, item3);
+            var tupleType = new Tuple<UInt32, ExampleChild, NonLazinatorClass>/*DEBUG2*/(item1, item2, item3);
             
             return tupleType;
         }
@@ -936,7 +936,7 @@ namespace LazinatorTests.Examples.Tuples
                 return default(Tuple<UInt32, ExampleChild, NonLazinatorClass>);
             }
             
-            return new Tuple<UInt32, ExampleChild, NonLazinatorClass>((uint) (itemToConvert?.Item1 ?? default),(ExampleChild) (cloneOrChangeFunc((itemToConvert?.Item2))),(NonLazinatorClass) (itemToConvert?.Item3));
+            return new Tuple<UInt32, ExampleChild, NonLazinatorClass>/*DEBUG1*/((uint) (itemToConvert?.Item1 ?? default),(ExampleChild) (cloneOrChangeFunc((itemToConvert?.Item2))),(NonLazinatorClass) (itemToConvert?.Item3));
         }
         
         private static Tuple<UInt32?, ExampleChild, NonLazinatorClass> ConvertFromBytes_Tuple_Guint_n_c_C32ExampleChild_c_C32NonLazinatorClass_g(LazinatorMemory storage)
@@ -969,7 +969,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item3;
             
-            var tupleType = new Tuple<UInt32?, ExampleChild, NonLazinatorClass>(item1, item2, item3);
+            var tupleType = new Tuple<UInt32?, ExampleChild, NonLazinatorClass>/*DEBUG2*/(item1, item2, item3);
             
             return tupleType;
         }
@@ -1011,7 +1011,7 @@ namespace LazinatorTests.Examples.Tuples
                 return default(Tuple<UInt32?, ExampleChild, NonLazinatorClass>);
             }
             
-            return new Tuple<UInt32?, ExampleChild, NonLazinatorClass>((uint?) (itemToConvert?.Item1),(ExampleChild) (cloneOrChangeFunc((itemToConvert?.Item2))),(NonLazinatorClass) (itemToConvert?.Item3));
+            return new Tuple<UInt32?, ExampleChild, NonLazinatorClass>/*DEBUG1*/((uint?) (itemToConvert?.Item1),(ExampleChild) (cloneOrChangeFunc((itemToConvert?.Item2))),(NonLazinatorClass) (itemToConvert?.Item3));
         }
         
         private static Tuple<Int32, ExampleStructContainingClasses> ConvertFromBytes_Tuple_Gint_c_C32ExampleStructContainingClasses_g(LazinatorMemory storage)
@@ -1036,7 +1036,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item2;
             
-            var tupleType = new Tuple<Int32, ExampleStructContainingClasses>(item1, item2);
+            var tupleType = new Tuple<Int32, ExampleStructContainingClasses>/*DEBUG2*/(item1, item2);
             
             return tupleType;
         }
@@ -1061,7 +1061,7 @@ namespace LazinatorTests.Examples.Tuples
                 return default(Tuple<Int32, ExampleStructContainingClasses>);
             }
             
-            return new Tuple<Int32, ExampleStructContainingClasses>((int) (itemToConvert?.Item1 ?? default),(ExampleStructContainingClasses) (cloneOrChangeFunc((itemToConvert?.Item2 ?? default))));
+            return new Tuple<Int32, ExampleStructContainingClasses>/*DEBUG1*/((int) (itemToConvert?.Item1 ?? default),(ExampleStructContainingClasses) (cloneOrChangeFunc((itemToConvert?.Item2 ?? default))));
         }
         
         private static Tuple<Int32, ExampleStructContainingClasses?> ConvertFromBytes_Tuple_Gint_c_C32ExampleStructContainingClasses_n_g(LazinatorMemory storage)
@@ -1085,7 +1085,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item2;
             
-            var tupleType = new Tuple<Int32, ExampleStructContainingClasses?>(item1, item2);
+            var tupleType = new Tuple<Int32, ExampleStructContainingClasses?>/*DEBUG2*/(item1, item2);
             
             return tupleType;
         }
@@ -1110,7 +1110,7 @@ namespace LazinatorTests.Examples.Tuples
                 return default(Tuple<Int32, ExampleStructContainingClasses?>);
             }
             
-            return new Tuple<Int32, ExampleStructContainingClasses?>((int) (itemToConvert?.Item1 ?? default),(ExampleStructContainingClasses?) (cloneOrChangeFunc((itemToConvert?.Item2))));
+            return new Tuple<Int32, ExampleStructContainingClasses?>/*DEBUG1*/((int) (itemToConvert?.Item1 ?? default),(ExampleStructContainingClasses?) (cloneOrChangeFunc((itemToConvert?.Item2))));
         }
         
     }

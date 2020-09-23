@@ -440,7 +440,7 @@ namespace LazinatorTests.Examples.Tuples
                 }
                 bytesSoFar += lengthCollectionMember_item2;
                 
-                var tupleType = new KeyValuePair<UInt32, ExampleChild>(item1, item2);
+                var tupleType = new KeyValuePair<UInt32, ExampleChild>/*DEBUG2*/(item1, item2);
                 
                 return tupleType;
             }
@@ -463,7 +463,7 @@ namespace LazinatorTests.Examples.Tuples
             
             private static KeyValuePair<UInt32, ExampleChild> CloneOrChange_KeyValuePair_Guint_c_C32ExampleChild_g(KeyValuePair<UInt32, ExampleChild> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
             {
-                return new KeyValuePair<UInt32, ExampleChild>((uint) (itemToConvert.Key),(ExampleChild) (cloneOrChangeFunc((itemToConvert.Value))));
+                return new KeyValuePair<UInt32, ExampleChild>/*DEBUG1*/((uint) (itemToConvert.Key),(ExampleChild) (cloneOrChangeFunc((itemToConvert.Value))));
             }
             
         }
