@@ -457,8 +457,10 @@ namespace LazinatorCodeGen.Roslyn
                 return;
             }
 
+            bool isActualRecord = type.IsRecord();
+
             var constructorCandidates = type.Constructors.OrderByDescending(x => x.Parameters.Count()).ToList();
-            if (!constructorCandidates.Any())
+            if (!constructorCandidates.Any() && !isActualRecord)
                 RecordLikeTypesExclusions.Add(typeName);
             else
             {
@@ -490,6 +492,16 @@ namespace LazinatorCodeGen.Roslyn
                         RecordLikeTypes[typeName] = parametersAndProperties;
                         return;
                     }
+                }
+                if (isActualRecord)
+                {
+                    // store the properties only, omitting the parameters. This will be our signal that we need to use the init-only context.
+                    PropertiesForType[typeName] = properties.ToList();
+                    foreach (var property in properties)
+                        RecordInformationAboutTypeAndRelatedTypes(property.Property.Type);
+                    List<(IParameterSymbol parameterSymbol, IPropertySymbol property)> parametersAndProperties = properties.Select(x => ((IParameterSymbol) null, x.Property)).ToList();
+                    RecordLikeTypes[typeName] = parametersAndProperties;
+                    return;
                 }
             }
             RecordLikeTypesExclusions.Add(typeName);

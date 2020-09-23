@@ -2366,7 +2366,7 @@ namespace Lazinator.CodeDescription
             string itemnamesLowercase = String.Join(", ", Enumerable.Range(1, InnerProperties.Count).Select(x => "item" + x));
             sb.Append(
                     $@"
-                        var tupleType = {(SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? "" : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}")}({itemnamesLowercase});
+                        var tupleType = {(SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? "" : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}")}/*DEBUG2*/({itemnamesLowercase});
 
                         return tupleType;
                     }}
@@ -2531,7 +2531,7 @@ namespace Lazinator.CodeDescription
                         (x, y) => new { InnerProperty = x, ItemString = "(" + propertyAccess + y + (Nullable && !x.Nullable ? " ?? default" : "") + ")" })
                     .Select(z => z.InnerProperty.GetCloneStringWithinCloneMethod(z.ItemString, GetTypeNameOfInnerProperty(z.InnerProperty)))
                 );
-            string creationText = SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? $"({innerClones})" : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}({innerClones})";
+            string creationText = SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? $"({innerClones})" : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}/*DEBUG1*/({innerClones})";
 
             // because we have a single cloneOrChangeFunc for the ILazinator, we don't make the nullability item specific
             sb.Append($@"
