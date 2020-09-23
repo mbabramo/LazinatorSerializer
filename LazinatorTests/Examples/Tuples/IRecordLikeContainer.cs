@@ -9,6 +9,8 @@ namespace LazinatorTests.Examples.Tuples
         RecordLikeTypeWithLazinator MyRecordLikeTypeWithLazinator { get; set; }
         RecordLikeClass MyRecordLikeClass { get; set; }
         MismatchedRecordLikeType MyMismatchedRecordLikeType { get; set; }
+        NonLazinatorRecordWithConstructor MyNonLazinatorRecordWithConstructor { get; set; }
+        NonLazinatorRecordWithoutConstructor MyNonLazinatorRecordWithoutConstructor { get; set; }
         int MyInt { get; set; }
     }
 }
