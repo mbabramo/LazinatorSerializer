@@ -319,7 +319,8 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(ClassWithForeignEnum), "LazinatorTests", "/Examples/", "Subclasses/", ws);
             await CompleteGenerateCode(typeof(ClassWithSubclass), "LazinatorTests", "/Examples/", "Subclasses/", ws);
             await CompleteGenerateCode(typeof(ClassWithSubclass.SubclassWithinClass), "LazinatorTests", "/Examples/", "Subclasses/", ws);
-            await CompleteGenerateCode(typeof(LazinatorRecord), "LazinatorTests", "/Examples/", "Tuples/", ws);
+            await CompleteGenerateCode(typeof(LazinatorRecord), "LazinatorTests", "/Examples/", "Subclasses/", ws);
+            await CompleteGenerateCode(typeof(LazinatorRecordSubclass), "LazinatorTests", "/Examples/", "Subclasses/", ws);
         }
 
         private static List<string> GetDirectories()

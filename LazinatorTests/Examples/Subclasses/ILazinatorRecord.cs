@@ -1,6 +1,6 @@
 ﻿using Lazinator.Attributes;
 
-namespace LazinatorTests.Examples.Tuples
+namespace LazinatorTests.Examples.Subclasses
 {
     [Lazinator((int) ExampleUniqueIDs.LazinatorRecord)]
     public interface ILazinatorRecord

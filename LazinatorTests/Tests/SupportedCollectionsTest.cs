@@ -11,6 +11,7 @@ using Xunit;
 using Lazinator.Wrappers;
 using Lazinator.Buffers;
 using LazinatorTests.Examples.Structs;
+using LazinatorTests.Examples.Subclasses;
 
 namespace LazinatorTests.Tests
 {
@@ -1203,19 +1204,6 @@ namespace LazinatorTests.Tests
 
             s2.DescendantIsDirty.Should().BeFalse(); // no automatic dirtiness tracking
             s2.IsDirty.Should().BeTrue(); // since no automatic dirtiness tracking, assumed dirty on first access
-        }
-
-        [Fact]
-        public void LazinatorRecords()
-        {
-            LazinatorRecord r = new LazinatorRecord()
-            {
-                MyInt = 17,
-                MyString = "hello"
-            };
-            var r2 = r.CloneLazinatorTyped();
-            r2.MyInt.Should().Be(17);
-            r2.MyString.Should().Be("hello");
         }
     }
 }

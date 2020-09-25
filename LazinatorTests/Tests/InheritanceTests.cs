@@ -119,5 +119,23 @@ namespace LazinatorTests.Tests
             c2_abstractProperty.Example3.Should().NotBeNull();
         }
 
+        [Fact]
+        public void LazinatorRecords()
+        {
+            LazinatorRecord r = new LazinatorRecord()
+            {
+                MyInt = 17,
+                MyString = "hello"
+            };
+            var r2 = r.CloneLazinatorTyped();
+            r2.MyInt.Should().Be(17);
+            r2.MyString.Should().Be("hello");
+        }
+
+        [Fact]
+        public void LazinatorRecordSubclass()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

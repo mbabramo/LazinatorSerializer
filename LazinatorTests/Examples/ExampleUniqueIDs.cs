@@ -95,5 +95,6 @@
         StructInAnotherNamespace,
         ContainerForStructInAnotherNamespace,
         LazinatorRecord,
+        LazinatorRecordSubclass,
     }
 }

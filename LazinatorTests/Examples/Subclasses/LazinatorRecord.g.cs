@@ -9,7 +9,7 @@
 //------------------------------------------------------------------------------
 
 #nullable disable
-namespace LazinatorTests.Examples.Tuples
+namespace LazinatorTests.Examples.Subclasses
 {
     using Lazinator.Attributes;
     using Lazinator.Buffers;

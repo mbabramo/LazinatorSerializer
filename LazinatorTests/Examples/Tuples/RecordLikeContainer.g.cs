@@ -850,8 +850,8 @@ namespace LazinatorTests.Examples.Tuples
                 }
                 else
                 {
-                    void actionexample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                    WriteToBinaryWithIntLengthPrefix(ref writer, actionexample);
+                    void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
                 };
                 
                 WriteUncompressedPrimitives.WriteDouble(ref writer, itemToConvert.DoubleValue);
