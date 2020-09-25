@@ -1016,9 +1016,9 @@ namespace LazinatorTests.Examples
                 
                 int? item2 = span.ToDecompressedNullableInt(ref bytesSoFar);
                 
-                var tupleType = /*DEBUG2*/(item1, item2);
+                var itemToCreate = (item1, item2);
                 
-                return tupleType;
+                return itemToCreate;
             }
             
             private static void ConvertToBytes__PNonLazinatorClass_C32myitem1_c_C32int_n_C32myitem2_p(ref BinaryBufferWriter writer, (NonLazinatorClass myitem1, Int32? myitem2) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -1039,7 +1039,7 @@ namespace LazinatorTests.Examples
             
             private static (NonLazinatorClass myitem1, Int32? myitem2) CloneOrChange__PNonLazinatorClass_C32myitem1_c_C32int_n_C32myitem2_p((NonLazinatorClass myitem1, Int32? myitem2) itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
             {
-                return ((NonLazinatorClass) (itemToConvert.Item1),(int?) (itemToConvert.Item2));
+                return ((NonLazinatorClass) (itemToConvert.Item1), (int?) (itemToConvert.Item2));
             }
             
         }

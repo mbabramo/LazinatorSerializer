@@ -269,10 +269,6 @@ namespace Lazinator.CodeDescription
             ContainingObjectDescription = container;
             NullableContextSetting = OutputNullableContextSetting = nullableContextSetting;
             PropertyName = propertySymbol.Name;
-            if (PropertyName.Contains("WithoutConstructor"))
-            {
-                var DEBUG = 0;
-            }
             DerivationKeyword = derivationKeyword;
             PropertyAccessibility = propertyAccessibility;
             IsLast = isLast;
@@ -2372,10 +2368,6 @@ namespace Lazinator.CodeDescription
                 sb.AppendLine();
             }
 
-            if (AppropriatelyQualifiedTypeNameWithoutNullableIndicator.Contains("WithoutConstructor"))
-            {
-                var DEBUG = 0;
-            }
             IEnumerable<string> assignments;
             if (InitializeRecordLikeTypePropertiesDirectly)
                 assignments = Enumerable.Range(1, InnerProperties.Count).Select(x => InnerProperties[x - 1].PropertyName + " = " + "item" + x);
@@ -2384,9 +2376,9 @@ namespace Lazinator.CodeDescription
             
             sb.Append(
                     $@"
-                        var tupleType = {(SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? "" : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}")}/*DEBUG2*/{GetInnerPropertyAssignments(InitializeRecordLikeTypePropertiesDirectly, assignments)};
+                        var itemToCreate = {(SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? "" : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}")}{GetInnerPropertyAssignments(InitializeRecordLikeTypePropertiesDirectly, assignments)};
 
-                        return tupleType;
+                        return itemToCreate;
                     }}
 
                     ");
@@ -2567,7 +2559,7 @@ namespace Lazinator.CodeDescription
                                 .Select(z => (InitializeRecordLikeTypePropertiesDirectly ? z.InnerProperty.PropertyName + " = " : "") + z.InnerProperty.GetCloneStringWithinCloneMethod(z.ItemString, GetTypeNameOfInnerProperty(z.InnerProperty)))
                                 .ToList();
             string innerPropertyAssignments = GetInnerPropertyAssignments(InitializeRecordLikeTypePropertiesDirectly, innerCloneStrings);
-            string creationText = SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? innerPropertyAssignments : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}/*DEBUG1*/{innerPropertyAssignments}";
+            string creationText = SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? innerPropertyAssignments : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}{innerPropertyAssignments}";
 
             // because we have a single cloneOrChangeFunc for the ILazinator, we don't make the nullability item specific
             sb.Append($@"

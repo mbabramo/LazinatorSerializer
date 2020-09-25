@@ -756,9 +756,9 @@ namespace LazinatorTests.Examples.Tuples
                 
                 TestEnum item2 = (TestEnum)span.ToDecompressedInt(ref bytesSoFar);
                 
-                var tupleType = /*DEBUG2*/(item1, item2);
+                var itemToCreate = (item1, item2);
                 
-                return tupleType;
+                return itemToCreate;
             }
             
             private static void ConvertToBytes__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p(ref BinaryBufferWriter writer, (TestEnum firstEnum, TestEnum anotherEnum) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -771,7 +771,7 @@ namespace LazinatorTests.Examples.Tuples
             
             private static (TestEnum firstEnum, TestEnum anotherEnum) CloneOrChange__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p((TestEnum firstEnum, TestEnum anotherEnum) itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
             {
-                return ((TestEnum) (itemToConvert.Item1),(TestEnum) (itemToConvert.Item2));
+                return ((TestEnum) (itemToConvert.Item1), (TestEnum) (itemToConvert.Item2));
             }
             
             private static (Int32 MyFirstItem, Double MySecondItem) ConvertFromBytes__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(LazinatorMemory storage)
@@ -788,9 +788,9 @@ namespace LazinatorTests.Examples.Tuples
                 
                 double item2 = span.ToDouble(ref bytesSoFar);
                 
-                var tupleType = /*DEBUG2*/(item1, item2);
+                var itemToCreate = (item1, item2);
                 
-                return tupleType;
+                return itemToCreate;
             }
             
             private static void ConvertToBytes__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(ref BinaryBufferWriter writer, (Int32 MyFirstItem, Double MySecondItem) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -803,7 +803,7 @@ namespace LazinatorTests.Examples.Tuples
             
             private static (Int32 MyFirstItem, Double MySecondItem) CloneOrChange__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p((Int32 MyFirstItem, Double MySecondItem) itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
             {
-                return ((int) (itemToConvert.Item1),(double) (itemToConvert.Item2));
+                return ((int) (itemToConvert.Item1), (double) (itemToConvert.Item2));
             }
             
             private static (Int32, Double)? ConvertFromBytes__Pint_c_C32double_p_n(LazinatorMemory storage)
@@ -820,9 +820,9 @@ namespace LazinatorTests.Examples.Tuples
                 
                 double item2 = span.ToDouble(ref bytesSoFar);
                 
-                var tupleType = /*DEBUG2*/(item1, item2);
+                var itemToCreate = (item1, item2);
                 
-                return tupleType;
+                return itemToCreate;
             }
             
             private static void ConvertToBytes__Pint_c_C32double_p_n(ref BinaryBufferWriter writer, (Int32, Double)? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -844,7 +844,7 @@ namespace LazinatorTests.Examples.Tuples
                     return default((Int32, Double)?);
                 }
                 
-                return ((int) (itemToConvert?.Item1 ?? default),(double) (itemToConvert?.Item2 ?? default));
+                return ((int) (itemToConvert?.Item1 ?? default), (double) (itemToConvert?.Item2 ?? default));
             }
             
             private static (ExampleStructContainingClasses?, ExampleStructContainingClasses?, ExampleStructContainingClasses?) ConvertFromBytes__PExampleStructContainingClasses_n_c_C32ExampleStructContainingClasses_n_c_C32ExampleStructContainingClasses_n_p(LazinatorMemory storage)
@@ -884,9 +884,9 @@ namespace LazinatorTests.Examples.Tuples
                 }
                 bytesSoFar += lengthCollectionMember_item3;
                 
-                var tupleType = /*DEBUG2*/(item1, item2, item3);
+                var itemToCreate = (item1, item2, item3);
                 
-                return tupleType;
+                return itemToCreate;
             }
             
             private static void ConvertToBytes__PExampleStructContainingClasses_n_c_C32ExampleStructContainingClasses_n_c_C32ExampleStructContainingClasses_n_p(ref BinaryBufferWriter writer, (ExampleStructContainingClasses?, ExampleStructContainingClasses?, ExampleStructContainingClasses?) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -904,7 +904,7 @@ namespace LazinatorTests.Examples.Tuples
             
             private static (ExampleStructContainingClasses?, ExampleStructContainingClasses?, ExampleStructContainingClasses?) CloneOrChange__PExampleStructContainingClasses_n_c_C32ExampleStructContainingClasses_n_c_C32ExampleStructContainingClasses_n_p((ExampleStructContainingClasses?, ExampleStructContainingClasses?, ExampleStructContainingClasses?) itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
             {
-                return ((ExampleStructContainingClasses?) (cloneOrChangeFunc((itemToConvert.Item1))),(ExampleStructContainingClasses?) (cloneOrChangeFunc((itemToConvert.Item2))),(ExampleStructContainingClasses?) (cloneOrChangeFunc((itemToConvert.Item3))));
+                return ((ExampleStructContainingClasses?) (cloneOrChangeFunc((itemToConvert.Item1))), (ExampleStructContainingClasses?) (cloneOrChangeFunc((itemToConvert.Item2))), (ExampleStructContainingClasses?) (cloneOrChangeFunc((itemToConvert.Item3))));
             }
             
             private static (UInt32, ExampleChild, NonLazinatorClass) ConvertFromBytes__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(LazinatorMemory storage)
@@ -937,9 +937,9 @@ namespace LazinatorTests.Examples.Tuples
                 }
                 bytesSoFar += lengthCollectionMember_item3;
                 
-                var tupleType = /*DEBUG2*/(item1, item2, item3);
+                var itemToCreate = (item1, item2, item3);
                 
-                return tupleType;
+                return itemToCreate;
             }
             
             private static void ConvertToBytes__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(ref BinaryBufferWriter writer, (UInt32, ExampleChild, NonLazinatorClass) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -970,7 +970,7 @@ namespace LazinatorTests.Examples.Tuples
             
             private static (UInt32, ExampleChild, NonLazinatorClass) CloneOrChange__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p((UInt32, ExampleChild, NonLazinatorClass) itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
             {
-                return ((uint) (itemToConvert.Item1),(ExampleChild) (cloneOrChangeFunc((itemToConvert.Item2))),(NonLazinatorClass) (itemToConvert.Item3));
+                return ((uint) (itemToConvert.Item1), (ExampleChild) (cloneOrChangeFunc((itemToConvert.Item2))), (NonLazinatorClass) (itemToConvert.Item3));
             }
             
             private static (WInt, WInt) ConvertFromBytes__PWInt_c_C32WInt_p(LazinatorMemory storage)
@@ -1003,9 +1003,9 @@ namespace LazinatorTests.Examples.Tuples
                 }
                 bytesSoFar += lengthCollectionMember_item2;
                 
-                var tupleType = /*DEBUG2*/(item1, item2);
+                var itemToCreate = (item1, item2);
                 
-                return tupleType;
+                return itemToCreate;
             }
             
             private static void ConvertToBytes__PWInt_c_C32WInt_p(ref BinaryBufferWriter writer, (WInt, WInt) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -1020,7 +1020,7 @@ namespace LazinatorTests.Examples.Tuples
             
             private static (WInt, WInt) CloneOrChange__PWInt_c_C32WInt_p((WInt, WInt) itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
             {
-                return ((WInt) (cloneOrChangeFunc((itemToConvert.Item1))),(WInt) (cloneOrChangeFunc((itemToConvert.Item2))));
+                return ((WInt) (cloneOrChangeFunc((itemToConvert.Item1))), (WInt) (cloneOrChangeFunc((itemToConvert.Item2))));
             }
             
         }

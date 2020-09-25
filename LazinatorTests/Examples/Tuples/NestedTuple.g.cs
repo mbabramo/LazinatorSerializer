@@ -460,9 +460,9 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item3;
             
-            var tupleType = new Tuple<UInt32?, (ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>)), NonLazinatorClass>/*DEBUG2*/(item1, item2, item3);
+            var itemToCreate = new Tuple<UInt32?, (ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>)), NonLazinatorClass>(item1, item2, item3);
             
-            return tupleType;
+            return itemToCreate;
         }
         
         private static void ConvertToBytes_Tuple_Guint_n_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_n_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(ref BinaryBufferWriter writer, Tuple<UInt32?, (ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>)), NonLazinatorClass> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -495,7 +495,7 @@ namespace LazinatorTests.Examples.Tuples
                 return default(Tuple<UInt32?, (ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>)), NonLazinatorClass>);
             }
             
-            return new Tuple<UInt32?, (ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>)), NonLazinatorClass>/*DEBUG1*/((uint?) (itemToConvert?.Item1),((ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>))) CloneOrChange__PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_n_c_C32Tuple_Gshort_c_C32long_g_p_p((itemToConvert?.Item2 ?? default), cloneOrChangeFunc, avoidCloningIfPossible),(NonLazinatorClass) (itemToConvert?.Item3));
+            return new Tuple<UInt32?, (ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>)), NonLazinatorClass>((uint?) (itemToConvert?.Item1), ((ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>))) CloneOrChange__PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_n_c_C32Tuple_Gshort_c_C32long_g_p_p((itemToConvert?.Item2 ?? default), cloneOrChangeFunc, avoidCloningIfPossible), (NonLazinatorClass) (itemToConvert?.Item3));
         }
         
         private static (ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>)) ConvertFromBytes__PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_n_c_C32Tuple_Gshort_c_C32long_g_p_p(LazinatorMemory storage)
@@ -526,9 +526,9 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item2;
             
-            var tupleType = /*DEBUG2*/(item1, item2);
+            var itemToCreate = (item1, item2);
             
-            return tupleType;
+            return itemToCreate;
         }
         
         private static void ConvertToBytes__PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_n_c_C32Tuple_Gshort_c_C32long_g_p_p(ref BinaryBufferWriter writer, (ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>)) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -550,7 +550,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static (ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>)) CloneOrChange__PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_n_c_C32Tuple_Gshort_c_C32long_g_p_p((ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>)) itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            return ((ExampleChild) (cloneOrChangeFunc((itemToConvert.Item1))),((UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>)) CloneOrChange__Puint_c_C32_Pint_C32a_c_C32string_C32b_p_n_c_C32Tuple_Gshort_c_C32long_g_p((itemToConvert.Item2), cloneOrChangeFunc, avoidCloningIfPossible));
+            return ((ExampleChild) (cloneOrChangeFunc((itemToConvert.Item1))), ((UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>)) CloneOrChange__Puint_c_C32_Pint_C32a_c_C32string_C32b_p_n_c_C32Tuple_Gshort_c_C32long_g_p((itemToConvert.Item2), cloneOrChangeFunc, avoidCloningIfPossible));
         }
         
         private static (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>) ConvertFromBytes__Puint_c_C32_Pint_C32a_c_C32string_C32b_p_n_c_C32Tuple_Gshort_c_C32long_g_p(LazinatorMemory storage)
@@ -583,9 +583,9 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item3;
             
-            var tupleType = /*DEBUG2*/(item1, item2, item3);
+            var itemToCreate = (item1, item2, item3);
             
-            return tupleType;
+            return itemToCreate;
         }
         
         private static void ConvertToBytes__Puint_c_C32_Pint_C32a_c_C32string_C32b_p_n_c_C32Tuple_Gshort_c_C32long_g_p(ref BinaryBufferWriter writer, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -616,7 +616,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>) CloneOrChange__Puint_c_C32_Pint_C32a_c_C32string_C32b_p_n_c_C32Tuple_Gshort_c_C32long_g_p((UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>) itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            return ((uint) (itemToConvert.Item1),((Int32 a, String b)?) CloneOrChange__Pint_C32a_c_C32string_C32b_p_n((itemToConvert.Item2), cloneOrChangeFunc, avoidCloningIfPossible),(Tuple<Int16, Int64>) CloneOrChange_Tuple_Gshort_c_C32long_g((itemToConvert.Item3), cloneOrChangeFunc, avoidCloningIfPossible));
+            return ((uint) (itemToConvert.Item1), ((Int32 a, String b)?) CloneOrChange__Pint_C32a_c_C32string_C32b_p_n((itemToConvert.Item2), cloneOrChangeFunc, avoidCloningIfPossible), (Tuple<Int16, Int64>) CloneOrChange_Tuple_Gshort_c_C32long_g((itemToConvert.Item3), cloneOrChangeFunc, avoidCloningIfPossible));
         }
         
         private static (Int32 a, String b)? ConvertFromBytes__Pint_C32a_c_C32string_C32b_p_n(LazinatorMemory storage)
@@ -633,9 +633,9 @@ namespace LazinatorTests.Examples.Tuples
             
             string item2 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
             
-            var tupleType = /*DEBUG2*/(item1, item2);
+            var itemToCreate = (item1, item2);
             
-            return tupleType;
+            return itemToCreate;
         }
         
         private static void ConvertToBytes__Pint_C32a_c_C32string_C32b_p_n(ref BinaryBufferWriter writer, (Int32 a, String b)? itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -657,7 +657,7 @@ namespace LazinatorTests.Examples.Tuples
                 return default((Int32 a, String b)?);
             }
             
-            return ((int) (itemToConvert?.Item1 ?? default),(string) (itemToConvert?.Item2));
+            return ((int) (itemToConvert?.Item1 ?? default), (string) (itemToConvert?.Item2));
         }
         
         private static Tuple<Int16, Int64> ConvertFromBytes_Tuple_Gshort_c_C32long_g(LazinatorMemory storage)
@@ -674,9 +674,9 @@ namespace LazinatorTests.Examples.Tuples
             
             long item2 = span.ToDecompressedLong(ref bytesSoFar);
             
-            var tupleType = new Tuple<Int16, Int64>/*DEBUG2*/(item1, item2);
+            var itemToCreate = new Tuple<Int16, Int64>(item1, item2);
             
-            return tupleType;
+            return itemToCreate;
         }
         
         private static void ConvertToBytes_Tuple_Gshort_c_C32long_g(ref BinaryBufferWriter writer, Tuple<Int16, Int64> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -698,7 +698,7 @@ namespace LazinatorTests.Examples.Tuples
                 return default(Tuple<Int16, Int64>);
             }
             
-            return new Tuple<Int16, Int64>/*DEBUG1*/((short) (itemToConvert?.Item1 ?? default),(long) (itemToConvert?.Item2 ?? default));
+            return new Tuple<Int16, Int64>((short) (itemToConvert?.Item1 ?? default), (long) (itemToConvert?.Item2 ?? default));
         }
         
     }

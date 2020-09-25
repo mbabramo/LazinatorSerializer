@@ -599,9 +599,9 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item2;
             
-            var tupleType = new KeyValuePair<Int32, RecordLikeContainer>/*DEBUG2*/(item1, item2);
+            var itemToCreate = new KeyValuePair<Int32, RecordLikeContainer>(item1, item2);
             
-            return tupleType;
+            return itemToCreate;
         }
         
         private static void ConvertToBytes_KeyValuePair_Gint_c_C32RecordLikeContainer_g(ref BinaryBufferWriter writer, KeyValuePair<Int32, RecordLikeContainer> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -622,7 +622,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static KeyValuePair<Int32, RecordLikeContainer> CloneOrChange_KeyValuePair_Gint_c_C32RecordLikeContainer_g(KeyValuePair<Int32, RecordLikeContainer> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            return new KeyValuePair<Int32, RecordLikeContainer>/*DEBUG1*/((int) (itemToConvert.Key),(RecordLikeContainer) (cloneOrChangeFunc((itemToConvert.Value))));
+            return new KeyValuePair<Int32, RecordLikeContainer>((int) (itemToConvert.Key), (RecordLikeContainer) (cloneOrChangeFunc((itemToConvert.Value))));
         }
         
         private static Dictionary<Int32, RecordLikeTypeWithLazinator> ConvertFromBytes_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(LazinatorMemory storage)
@@ -700,9 +700,9 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item2;
             
-            var tupleType = new KeyValuePair<Int32, RecordLikeTypeWithLazinator>/*DEBUG2*/(item1, item2);
+            var itemToCreate = new KeyValuePair<Int32, RecordLikeTypeWithLazinator>(item1, item2);
             
-            return tupleType;
+            return itemToCreate;
         }
         
         private static void ConvertToBytes_KeyValuePair_Gint_c_C32RecordLikeTypeWithLazinator_g(ref BinaryBufferWriter writer, KeyValuePair<Int32, RecordLikeTypeWithLazinator> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -716,7 +716,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static KeyValuePair<Int32, RecordLikeTypeWithLazinator> CloneOrChange_KeyValuePair_Gint_c_C32RecordLikeTypeWithLazinator_g(KeyValuePair<Int32, RecordLikeTypeWithLazinator> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            return new KeyValuePair<Int32, RecordLikeTypeWithLazinator>/*DEBUG1*/((int) (itemToConvert.Key),(RecordLikeTypeWithLazinator) CloneOrChange_RecordLikeTypeWithLazinator((itemToConvert.Value), cloneOrChangeFunc, avoidCloningIfPossible));
+            return new KeyValuePair<Int32, RecordLikeTypeWithLazinator>((int) (itemToConvert.Key), (RecordLikeTypeWithLazinator) CloneOrChange_RecordLikeTypeWithLazinator((itemToConvert.Value), cloneOrChangeFunc, avoidCloningIfPossible));
         }
         
         private static RecordLikeTypeWithLazinator ConvertFromBytes_RecordLikeTypeWithLazinator(LazinatorMemory storage)
@@ -752,9 +752,9 @@ namespace LazinatorTests.Examples.Tuples
             }
             bytesSoFar += lengthCollectionMember_item4;
             
-            var tupleType = new RecordLikeTypeWithLazinator/*DEBUG2*/(item1, item2, item3, item4);
+            var itemToCreate = new RecordLikeTypeWithLazinator(item1, item2, item3, item4);
             
-            return tupleType;
+            return itemToCreate;
         }
         
         private static void ConvertToBytes_RecordLikeTypeWithLazinator(ref BinaryBufferWriter writer, RecordLikeTypeWithLazinator itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -780,7 +780,7 @@ namespace LazinatorTests.Examples.Tuples
         
         private static RecordLikeTypeWithLazinator CloneOrChange_RecordLikeTypeWithLazinator(RecordLikeTypeWithLazinator itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            return new RecordLikeTypeWithLazinator/*DEBUG1*/((int) (itemToConvert.Age),(string) (itemToConvert.Name),(Example) (cloneOrChangeFunc((itemToConvert.Example))),(ExampleStructWithoutClass) (cloneOrChangeFunc((itemToConvert.ExampleStruct))));
+            return new RecordLikeTypeWithLazinator((int) (itemToConvert.Age), (string) (itemToConvert.Name), (Example) (cloneOrChangeFunc((itemToConvert.Example))), (ExampleStructWithoutClass) (cloneOrChangeFunc((itemToConvert.ExampleStruct))));
         }
         
     }
