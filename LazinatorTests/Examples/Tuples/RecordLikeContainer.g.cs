@@ -935,8 +935,8 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     return default(NonLazinatorRecordWithoutConstructor);
                 }
-                
-                return new NonLazinatorRecordWithoutConstructor/*DEBUG1*/((int) (itemToConvert?.Age ?? default),(double) (itemToConvert?.DoubleValue ?? default),(Example) (cloneOrChangeFunc((itemToConvert?.Example))),(int?) (itemToConvert?.NullableInt));
+
+            return new NonLazinatorRecordWithoutConstructor/*DEBUG1*/(); // DEBUG (int) (itemToConvert?.Age ?? default),(double) (itemToConvert?.DoubleValue ?? default),(Example) (cloneOrChangeFunc((itemToConvert?.Example))),(int?) (itemToConvert?.NullableInt));
             }
             
             private static RecordLikeClass ConvertFromBytes_RecordLikeClass(LazinatorMemory storage)
