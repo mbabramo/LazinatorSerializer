@@ -3,8 +3,8 @@
 namespace LazinatorTests.Examples.Subclasses
 {
     [Lazinator((int)ExampleUniqueIDs.LazinatorRecordSubclass)]
-    public interface ILazinatorRecordSubclass
+    public interface ILazinatorRecordSubclass : ILazinatorRecord
     {
-        // DEBUG -- must complete
+        int MySubclassInt { get; set; }
     }
 }

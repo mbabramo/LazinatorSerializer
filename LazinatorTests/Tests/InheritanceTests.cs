@@ -135,7 +135,16 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorRecordSubclass()
         {
-            throw new NotImplementedException();
+            LazinatorRecordSubclass r = new LazinatorRecordSubclass()
+            {
+                MyInt = 17,
+                MyString = "hello",
+                MySubclassInt = 18,
+            };
+            var r2 = r.CloneLazinatorTyped();
+            r2.MyInt.Should().Be(17);
+            r2.MyString.Should().Be("hello");
+            r2.MySubclassInt.Should().Be(18);
         }
     }
 }
