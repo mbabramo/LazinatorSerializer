@@ -1095,9 +1095,24 @@ namespace LazinatorTests.Examples.Tuples
                 
                 int bytesSoFar = 0;
                 
-                string item1 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
-
-            var itemToCreate = new NonLazinatorSubrecordWithConstructor(0, null, 0, null, "");
+                int item1 = span.ToDecompressedInt(ref bytesSoFar);
+                
+                Example item2 = default(Example);
+                int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
+                if (lengthCollectionMember_item2 != 0)
+                {
+                    LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
+                    item2 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+                }
+                bytesSoFar += lengthCollectionMember_item2;
+                
+                double item3 = span.ToDouble(ref bytesSoFar);
+                
+                int? item4 = span.ToDecompressedNullableInt(ref bytesSoFar);
+                
+                string item5 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+                
+                var itemToCreate = new NonLazinatorSubrecordWithConstructor(item1, item2, item3, item4, item5);
                 
                 return itemToCreate;
             }
@@ -1109,6 +1124,22 @@ namespace LazinatorTests.Examples.Tuples
                     return;
                 }
                 
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
+                
+                if (itemToConvert.Example == null)
+                {
+                    writer.Write((uint)0);
+                }
+                else
+                {
+                    void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
+                };
+                
+                WriteUncompressedPrimitives.WriteDouble(ref writer, itemToConvert.DoubleValue);
+                
+                CompressedIntegralTypes.WriteCompressedNullableInt(ref writer, itemToConvert.NullableInt);
+                
                 EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, itemToConvert.MyString);
             }
             
@@ -1118,8 +1149,8 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     return default(NonLazinatorSubrecordWithConstructor);
                 }
-
-            return new NonLazinatorSubrecordWithConstructor(0, null, 0, null, "");
+                
+                return new NonLazinatorSubrecordWithConstructor((int) (itemToConvert?.Age ?? default), (Example) (cloneOrChangeFunc((itemToConvert?.Example))), (double) (itemToConvert?.DoubleValue ?? default), (int?) (itemToConvert?.NullableInt), (string) (itemToConvert?.MyString));
             }
             
             private static NonLazinatorSubrecordWithoutConstructor ConvertFromBytes_NonLazinatorSubrecordWithoutConstructor(LazinatorMemory storage)
@@ -1134,9 +1165,28 @@ namespace LazinatorTests.Examples.Tuples
                 
                 string item1 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
                 
+                int item2 = span.ToDecompressedInt(ref bytesSoFar);
+                
+                double item3 = span.ToDouble(ref bytesSoFar);
+                
+                Example item4 = default(Example);
+                int lengthCollectionMember_item4 = span.ToInt32(ref bytesSoFar);
+                if (lengthCollectionMember_item4 != 0)
+                {
+                    LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item4);
+                    item4 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+                }
+                bytesSoFar += lengthCollectionMember_item4;
+                
+                int? item5 = span.ToDecompressedNullableInt(ref bytesSoFar);
+                
                 var itemToCreate = new NonLazinatorSubrecordWithoutConstructor()
                 {
-                    MyString = item1
+                    MyString = item1,
+                    Age = item2,
+                    DoubleValue = item3,
+                    Example = item4,
+                    NullableInt = item5
                 };
                 
                 return itemToCreate;
@@ -1150,6 +1200,22 @@ namespace LazinatorTests.Examples.Tuples
                 }
                 
                 EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, itemToConvert.MyString);
+                
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
+                
+                WriteUncompressedPrimitives.WriteDouble(ref writer, itemToConvert.DoubleValue);
+                
+                if (itemToConvert.Example == null)
+                {
+                    writer.Write((uint)0);
+                }
+                else
+                {
+                    void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
+                };
+                
+                CompressedIntegralTypes.WriteCompressedNullableInt(ref writer, itemToConvert.NullableInt);
             }
             
             private static NonLazinatorSubrecordWithoutConstructor CloneOrChange_NonLazinatorSubrecordWithoutConstructor(NonLazinatorSubrecordWithoutConstructor itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
@@ -1161,7 +1227,11 @@ namespace LazinatorTests.Examples.Tuples
                 
                 return new NonLazinatorSubrecordWithoutConstructor()
                 {
-                    MyString = (string) (itemToConvert?.MyString)
+                    MyString = (string) (itemToConvert?.MyString),
+                    Age = (int) (itemToConvert?.Age ?? default),
+                    DoubleValue = (double) (itemToConvert?.DoubleValue ?? default),
+                    Example = (Example) (cloneOrChangeFunc((itemToConvert?.Example))),
+                    NullableInt = (int?) (itemToConvert?.NullableInt)
                 };
             }
             
