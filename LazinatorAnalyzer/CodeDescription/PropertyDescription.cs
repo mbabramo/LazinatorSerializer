@@ -191,6 +191,8 @@ namespace Lazinator.CodeDescription
         private bool ContainsLazinatorInnerProperty => InnerProperties != null && InnerProperties.Any(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface || x.ContainsLazinatorInnerProperty);
         internal string NullableStructValueAccessor => IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, ".Value");
 
+        private bool InitializeRecordLikeTypePropertiesDirectly { get; set; }
+
         /* Conversion */
         private string InterchangeTypeName { get; set; }
         private string InterchangeTypeNameWithoutNullabilityIndicator => WithoutNullableIndicator(InterchangeTypeName);
@@ -267,6 +269,10 @@ namespace Lazinator.CodeDescription
             ContainingObjectDescription = container;
             NullableContextSetting = OutputNullableContextSetting = nullableContextSetting;
             PropertyName = propertySymbol.Name;
+            if (PropertyName.Contains("WithoutConstructor"))
+            {
+                var DEBUG = 0;
+            }
             DerivationKeyword = derivationKeyword;
             PropertyAccessibility = propertyAccessibility;
             IsLast = isLast;
@@ -753,7 +759,10 @@ namespace Lazinator.CodeDescription
             SupportedTupleType = LazinatorSupportedTupleType.RecordLikeType;
             Nullable = TypeReportedAsNullable;
 
-            InnerProperties = recordLikeTypes[LazinatorCompilation.TypeSymbolToString(originalDefinition)]
+            List<(IParameterSymbol parameterSymbol, IPropertySymbol property)> recordLikeType = recordLikeTypes[LazinatorCompilation.TypeSymbolToString(originalDefinition)];
+            if (recordLikeType.Any(x => x.parameterSymbol == null))
+                InitializeRecordLikeTypePropertiesDirectly = true;
+            InnerProperties = recordLikeType
                 .Select(x => GetPropertyDescriptionForPropertyDefinedElsewhere(x.property.Type, ContainingObjectDescription, this, x.property.Name, (((ISymbol)x.parameterSymbol ?? (ISymbol)x.property)).GetNullableContextForSymbol(Compilation), OutputNullableContextSetting)).ToList();
             return true;
         }
@@ -2363,17 +2372,40 @@ namespace Lazinator.CodeDescription
                 sb.AppendLine();
             }
 
-            string itemnamesLowercase = String.Join(", ", Enumerable.Range(1, InnerProperties.Count).Select(x => "item" + x));
-            sb.Append(
-                    $@"
-                        var tupleType = {(SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? "" : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}")}/*DEBUG2*/({itemnamesLowercase});
+            if (AppropriatelyQualifiedTypeNameWithoutNullableIndicator.Contains("WithoutConstructor"))
+            {
+                var DEBUG = 0;
+            }
+            if (InitializeRecordLikeTypePropertiesDirectly)
+            {
+                string propertyAssignments = String.Join("\r\n,", Enumerable.Range(1, InnerProperties.Count).Select(x => InnerProperties[x - 1].PropertyName + " = " + "item" + x));
+                sb.Append(
+                        $@"
+                            var recordLikeType = {(SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? "" : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}")}/*DEBUG2*/()
+                            {{
+                                {propertyAssignments}
+                            }};
 
-                        return tupleType;
-                    }}
+                            return recordLikeType;
+                        }}
 
-                    private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-                    {{
-                    ");
+                        ");
+            }
+            else
+            {
+                string itemnamesLowercase = String.Join(", ", Enumerable.Range(1, InnerProperties.Count).Select(x => "item" + x));
+                sb.Append(
+                        $@"
+                            var tupleType = {(SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? "" : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}")}/*DEBUG2*/({itemnamesLowercase});
+
+                            return tupleType;
+                        }}
+
+                        ");
+            }
+            sb.Append($@"private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+                        {{
+                        ");
 
             if (Nullable)
                 sb.Append($@"if (itemToConvert == null)
