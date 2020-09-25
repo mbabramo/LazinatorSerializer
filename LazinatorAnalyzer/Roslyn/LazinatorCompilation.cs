@@ -142,7 +142,7 @@ namespace LazinatorCodeGen.Roslyn
             if (ILazinatorProperties == null)
                 RecordILazinatorProperties();
             List<PropertyWithDefinitionInfo> propertiesInInterfaceWithLevel = new List<PropertyWithDefinitionInfo>();
-            foreach (var propertyWithLevelInfo in GetPropertyWithDefinitionInfo(@interface))
+            foreach (var propertyWithLevelInfo in GetPropertyWithDefinitionInfo(@interface, true))
             {
                 IPropertySymbol property1 = propertyWithLevelInfo.Property;
                 string property1Name = property1.GetFullyQualifiedName(true);
@@ -166,9 +166,10 @@ namespace LazinatorCodeGen.Roslyn
         }
 
         public List<PropertyWithDefinitionInfo> GetPropertyWithDefinitionInfo(
-            INamedTypeSymbol namedTypeSymbol)
+            INamedTypeSymbol namedTypeSymbol,
+            bool includeOnlyLowerLevelPropertiesFromInterfaces)
         {
-            var results = DistinctBy(GetPropertiesWithDefinitionInfoHelper(namedTypeSymbol).ToList(), x => x.Property.Name).ToList(); // ordinarily, we're not getting duplicate items. But sometimes we are.
+            var results = DistinctBy(GetPropertiesWithDefinitionInfoHelper(namedTypeSymbol, includeOnlyLowerLevelPropertiesFromInterfaces).ToList(), x => x.Property.Name).ToList(); // ordinarily, we're not getting duplicate items. But sometimes we are.
             return results;
         }
 
@@ -185,7 +186,7 @@ namespace LazinatorCodeGen.Roslyn
             }
         }
 
-        public IEnumerable<PropertyWithDefinitionInfo> GetPropertiesWithDefinitionInfoHelper(INamedTypeSymbol namedTypeSymbol)
+        public IEnumerable<PropertyWithDefinitionInfo> GetPropertiesWithDefinitionInfoHelper(INamedTypeSymbol namedTypeSymbol, bool includeOnlyLowerLevelPropertiesFromInterfaces)
         {
             // check whether there are lower level abstract or open generic types 
             Dictionary<INamedTypeSymbol, ImmutableList<IPropertySymbol>> lowerLevelInterfaces = null;
@@ -195,7 +196,7 @@ namespace LazinatorCodeGen.Roslyn
                     .Select(x => new KeyValuePair<INamedTypeSymbol, ImmutableList<IPropertySymbol>>(x, x.GetPropertySymbols()))
                     .ToDictionary(x => x.Key, x => x.Value);
             }
-            namedTypeSymbol.GetPropertiesForType(out ImmutableList<IPropertySymbol> propertiesThisLevel, out ImmutableList<IPropertySymbol> propertiesLowerLevels);
+            namedTypeSymbol.GetPropertiesForType(includeOnlyLowerLevelPropertiesFromInterfaces, out ImmutableList <IPropertySymbol> propertiesThisLevel, out ImmutableList<IPropertySymbol> propertiesLowerLevels);
             foreach (var p in propertiesThisLevel.OrderBy(x => x.Name).Where(x => !x.HasAttributeOfType<CloneDoNotAutogenerateAttribute>()))
                 yield return new PropertyWithDefinitionInfo(p, PropertyWithDefinitionInfo.Level.IsDefinedThisLevel);
             foreach (var p in propertiesLowerLevels.OrderBy(x => x.Name).Where(x => !x.HasAttributeOfType<CloneDoNotAutogenerateAttribute>()))
@@ -267,7 +268,8 @@ namespace LazinatorCodeGen.Roslyn
                             break;
                         }
                     }
-                    ConsiderAddingAsRecordLikeType(namedTypeSymbol, includesInterfaceWithLazinatorAttribute);
+                    if (!includesInterfaceWithLazinatorAttribute)
+                        ConsiderAddingAsRecordLikeType(namedTypeSymbol);
                     if (namedTypeSymbol.BaseType != null)
                         RecordInformationAboutTypeAndRelatedTypes(namedTypeSymbol.BaseType);
                 }
@@ -446,10 +448,8 @@ namespace LazinatorCodeGen.Roslyn
             return (byte) byteForImplementedMethods;
         }
 
-        private void ConsiderAddingAsRecordLikeType(INamedTypeSymbol type, bool includesInterfaceWithLazinatorAttribute)
+        private void ConsiderAddingAsRecordLikeType(INamedTypeSymbol type)
         {
-            if (includesInterfaceWithLazinatorAttribute)
-                return; // DEBUG
             string typeName = TypeSymbolToString(type);
             if (RecordLikeTypes.ContainsKey(typeName) || RecordLikeTypesExclusions.Contains(typeName))
                 return;
@@ -486,7 +486,7 @@ namespace LazinatorCodeGen.Roslyn
                         bool includesSetOrInit = accessors.Any(x => x.Kind() is SyntaxKind.SetAccessorDeclaration or SyntaxKind.InitAccessorDeclaration);
                         return includesGet && includesSetOrInit;
                     }
-                    List<PropertyWithDefinitionInfo> qualifyingProperties = GetPropertyWithDefinitionInfo(type)
+                    List<PropertyWithDefinitionInfo> qualifyingProperties = GetPropertyWithDefinitionInfo(type, false)
                         .Select(x => (x, x?.Property?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax()))
                         .Where(x =>
                             (x.Item2 is ParameterSyntax) /* a property declared as a parameter of a record */

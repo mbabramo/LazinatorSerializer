@@ -302,15 +302,15 @@ namespace LazinatorCodeGen.Roslyn
             return properties;
         }
 
-        public static ImmutableList<IPropertySymbol> GetPropertySymbolsBaseLevels(this INamedTypeSymbol namedTypeSymbol)
+        public static ImmutableList<IPropertySymbol> GetPropertySymbolsBaseLevels(this INamedTypeSymbol namedTypeSymbol, bool includeOnlyLowerLevelPropertiesFromInterfaces)
         {
             return namedTypeSymbol.AllInterfaces.SelectMany(x => x.GetPropertySymbols()).ToImmutableList();
         }
 
-        public static void GetPropertiesForType(this INamedTypeSymbol namedSymbolType, out ImmutableList<IPropertySymbol> propertiesThisLevel, out ImmutableList<IPropertySymbol> propertiesLowerLevels)
+        public static void GetPropertiesForType(this INamedTypeSymbol namedSymbolType, bool includeOnlyLowerLevelPropertiesFromInterfaces, out ImmutableList<IPropertySymbol> propertiesThisLevel, out ImmutableList<IPropertySymbol> propertiesLowerLevels)
         {
             propertiesThisLevel = namedSymbolType.GetPropertySymbols();
-            propertiesLowerLevels = namedSymbolType.GetPropertySymbolsBaseLevels();
+            propertiesLowerLevels = namedSymbolType.GetPropertySymbolsBaseLevels(includeOnlyLowerLevelPropertiesFromInterfaces);
         }
 
         #endregion
