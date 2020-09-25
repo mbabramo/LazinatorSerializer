@@ -220,7 +220,6 @@ public class MyOtherClass
             AdhocWorkspace ws = GetAdhocWorkspace();
             // can put a single CompleteGenerateCode here if having trouble with that file
             // await CompleteGenerateCode(typeof(NullableEnabledContext), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
-            await CompleteGenerateCode(typeof(LazinatorRecord), "LazinatorTests", "/Examples/", "Tuples/", ws);
 
             // include some code so that we won't get a warning if not awaiting anything elsewhere
             Task GetT() { return Task.CompletedTask; };
@@ -320,6 +319,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(ClassWithForeignEnum), "LazinatorTests", "/Examples/", "Subclasses/", ws);
             await CompleteGenerateCode(typeof(ClassWithSubclass), "LazinatorTests", "/Examples/", "Subclasses/", ws);
             await CompleteGenerateCode(typeof(ClassWithSubclass.SubclassWithinClass), "LazinatorTests", "/Examples/", "Subclasses/", ws);
+            await CompleteGenerateCode(typeof(LazinatorRecord), "LazinatorTests", "/Examples/", "Tuples/", ws);
         }
 
         private static List<string> GetDirectories()
