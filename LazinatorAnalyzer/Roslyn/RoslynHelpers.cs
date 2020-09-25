@@ -304,7 +304,16 @@ namespace LazinatorCodeGen.Roslyn
 
         public static ImmutableList<IPropertySymbol> GetPropertySymbolsBaseLevels(this INamedTypeSymbol namedTypeSymbol, bool includeOnlyLowerLevelPropertiesFromInterfaces)
         {
-            return namedTypeSymbol.AllInterfaces.SelectMany(x => x.GetPropertySymbols()).ToImmutableList();
+            if (includeOnlyLowerLevelPropertiesFromInterfaces)
+                return namedTypeSymbol.AllInterfaces.SelectMany(x => x.GetPropertySymbols()).ToImmutableList();
+            var baseType = namedTypeSymbol.BaseType;
+            ImmutableList<IPropertySymbol> result = ImmutableList.Create<IPropertySymbol>();
+            while (baseType != null && baseType.Name != "Object")
+            {
+                result = result.AddRange(baseType.GetPropertySymbols());
+                baseType = baseType.BaseType;
+            }
+            return result;
         }
 
         public static void GetPropertiesForType(this INamedTypeSymbol namedSymbolType, bool includeOnlyLowerLevelPropertiesFromInterfaces, out ImmutableList<IPropertySymbol> propertiesThisLevel, out ImmutableList<IPropertySymbol> propertiesLowerLevels)
