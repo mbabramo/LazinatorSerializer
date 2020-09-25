@@ -754,7 +754,7 @@ namespace Lazinator.CodeDescription
             Nullable = TypeReportedAsNullable;
 
             InnerProperties = recordLikeTypes[LazinatorCompilation.TypeSymbolToString(originalDefinition)]
-                .Select(x => GetPropertyDescriptionForPropertyDefinedElsewhere(x.property.Type, ContainingObjectDescription, this, x.property.Name, x.parameterSymbol.GetNullableContextForSymbol(Compilation), OutputNullableContextSetting)).ToList();
+                .Select(x => GetPropertyDescriptionForPropertyDefinedElsewhere(x.property.Type, ContainingObjectDescription, this, x.property.Name, (((ISymbol)x.parameterSymbol ?? (ISymbol)x.property)).GetNullableContextForSymbol(Compilation), OutputNullableContextSetting)).ToList();
             return true;
         }
 

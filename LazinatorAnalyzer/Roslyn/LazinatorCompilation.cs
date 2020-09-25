@@ -12,6 +12,7 @@ using LazinatorAnalyzer.Roslyn;
 using LazinatorAnalyzer.Settings;
 using System.Collections.Concurrent;
 using System.IO;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace LazinatorCodeGen.Roslyn
 {
@@ -464,15 +465,39 @@ namespace LazinatorCodeGen.Roslyn
                 RecordLikeTypesExclusions.Add(typeName);
             else
             {
-                var properties = GetPropertyWithDefinitionInfo(type)
-                    .Where(x => (x?.Property?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax() as PropertyDeclarationSyntax)?.AccessorList?.Accessors
-                        .Any(y => y.Body == null)
-                        ?? false)
-                    .ToList();
+                if (type.ToString().Contains("WithoutCon"))
+                {
+                    var DEBUG = 0;
+                }
+                List<PropertyWithDefinitionInfo> GetProperties(bool forConstructor)
+                {
+                    bool HasQualifyingAccessors(AccessorListSyntax accessorList)
+                    {
+                        if (accessorList == null)
+                            return false;
+                        SyntaxList<AccessorDeclarationSyntax> accessors = accessorList.Accessors;
+                        bool includesGet = accessors.Any(x => x.Kind() == SyntaxKind.GetAccessorDeclaration && x.Body == null);
+                        if (forConstructor)
+                            return includesGet;
+                        bool includesSetOrInit = accessors.Any(x => x.Kind() is SyntaxKind.SetAccessorDeclaration or SyntaxKind.InitAccessorDeclaration);
+                        return includesGet && includesSetOrInit;
+                    }
+                    List<PropertyWithDefinitionInfo> qualifyingProperties = GetPropertyWithDefinitionInfo(type)
+                        .Select(x => (x, x?.Property?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax()))
+                        .Where(x =>
+                            (x.Item2 is ParameterSyntax) /* a property declared as a parameter of a record */
+                            ||
+                            (HasQualifyingAccessors((x.Item2 as PropertyDeclarationSyntax)?.AccessorList))
+                        )
+                        .Select(x => x.x)
+                        .ToList();
+                    return qualifyingProperties;
+                }
+                List<PropertyWithDefinitionInfo> propertiesToMatchWithConstructor = GetProperties(true);
                 foreach (var candidate in constructorCandidates)
                 {
                     var parameters = candidate.Parameters.ToList();
-                    if (parameters.Count() < properties.Count() || !parameters.Any())
+                    if (!isActualRecord && (parameters.Count() < propertiesToMatchWithConstructor.Count() || !parameters.Any()))
                     { // there aren't enough parameters to set all properties (or this is parameterless, even if there aren't any properties)
                         if (!IsAllowedAsRecordLikeTypeIfMismatched(type))
                         {
@@ -480,14 +505,14 @@ namespace LazinatorCodeGen.Roslyn
                             return;
                         }
                     }
-                    if (parameters.All(x => properties.Any(y => y.Property.Name.ToUpper() == x.Name.ToUpper())))
+                    if (parameters.Any() && parameters.All(x => propertiesToMatchWithConstructor.Any(y => y.Property.Name.ToUpper() == x.Name.ToUpper())))
                     {
-                        List<(IParameterSymbol parameterSymbol, IPropertySymbol property)> parametersAndProperties = parameters.Select(x => (x, properties.FirstOrDefault(y => y.Property.Name.ToUpper() == x.Name.ToUpper()).Property)).ToList();
+                        List<(IParameterSymbol parameterSymbol, IPropertySymbol property)> parametersAndProperties = parameters.Select(x => (x, propertiesToMatchWithConstructor.FirstOrDefault(y => y.Property.Name.ToUpper() == x.Name.ToUpper()).Property)).ToList();
                         if (parametersAndProperties.Any(x => !SymbolEqualityComparer.Default.Equals(x.parameterSymbol.Type, x.property.Type)))
                             continue;
                         // we have found the constructor for our record like type
-                        PropertiesForType[typeName] = properties.ToList();
-                        foreach (var property in properties)
+                        PropertiesForType[typeName] = propertiesToMatchWithConstructor.ToList();
+                        foreach (var property in propertiesToMatchWithConstructor)
                             RecordInformationAboutTypeAndRelatedTypes(property.Property.Type);
                         RecordLikeTypes[typeName] = parametersAndProperties;
                         return;
@@ -495,11 +520,12 @@ namespace LazinatorCodeGen.Roslyn
                 }
                 if (isActualRecord)
                 {
+                    var propertiesToSetDirectly = GetProperties(false);
                     // store the properties only, omitting the parameters. This will be our signal that we need to use the init-only context.
-                    PropertiesForType[typeName] = properties.ToList();
-                    foreach (var property in properties)
+                    PropertiesForType[typeName] = propertiesToMatchWithConstructor.ToList();
+                    foreach (var property in propertiesToMatchWithConstructor)
                         RecordInformationAboutTypeAndRelatedTypes(property.Property.Type);
-                    List<(IParameterSymbol parameterSymbol, IPropertySymbol property)> parametersAndProperties = properties.Select(x => ((IParameterSymbol) null, x.Property)).ToList();
+                    List<(IParameterSymbol parameterSymbol, IPropertySymbol property)> parametersAndProperties = propertiesToMatchWithConstructor.Select(x => ((IParameterSymbol)null, x.Property)).ToList();
                     RecordLikeTypes[typeName] = parametersAndProperties;
                     return;
                 }
