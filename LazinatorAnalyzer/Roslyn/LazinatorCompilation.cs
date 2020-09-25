@@ -256,16 +256,18 @@ namespace LazinatorCodeGen.Roslyn
                 }
                 if (namedTypeSymbol.TypeKind == TypeKind.Class || namedTypeSymbol.TypeKind == TypeKind.Struct)
                 {
+                    bool includesInterfaceWithLazinatorAttribute = false;
                     foreach (var @interface in allInterfaces)
                     {
                         LazinatorAnalyzer.AttributeClones.CloneLazinatorAttribute attribute = GetFirstAttributeOfType<LazinatorAnalyzer.AttributeClones.CloneLazinatorAttribute>(@interface);
                         if (attribute != null)
                         {
                             AddLinkFromTypeToInterface(namedTypeSymbol, @interface);
+                            includesInterfaceWithLazinatorAttribute = true;
                             break;
                         }
                     }
-                    ConsiderAddingAsRecordLikeType(namedTypeSymbol);
+                    ConsiderAddingAsRecordLikeType(namedTypeSymbol, includesInterfaceWithLazinatorAttribute);
                     if (namedTypeSymbol.BaseType != null)
                         RecordInformationAboutTypeAndRelatedTypes(namedTypeSymbol.BaseType);
                 }
@@ -444,8 +446,10 @@ namespace LazinatorCodeGen.Roslyn
             return (byte) byteForImplementedMethods;
         }
 
-        private void ConsiderAddingAsRecordLikeType(INamedTypeSymbol type)
+        private void ConsiderAddingAsRecordLikeType(INamedTypeSymbol type, bool includesInterfaceWithLazinatorAttribute)
         {
+            if (includesInterfaceWithLazinatorAttribute)
+                return; // DEBUG
             string typeName = TypeSymbolToString(type);
             if (RecordLikeTypes.ContainsKey(typeName) || RecordLikeTypesExclusions.Contains(typeName))
                 return;
@@ -465,7 +469,7 @@ namespace LazinatorCodeGen.Roslyn
                 RecordLikeTypesExclusions.Add(typeName);
             else
             {
-                if (type.ToString().Contains("WithoutCon"))
+                if (type.ToString().Contains("NonLazinatorSubrecordWithConstructor"))
                 {
                     var DEBUG = 0;
                 }
