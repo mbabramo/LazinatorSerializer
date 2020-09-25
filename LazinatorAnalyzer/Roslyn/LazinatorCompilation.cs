@@ -469,10 +469,6 @@ namespace LazinatorCodeGen.Roslyn
                 RecordLikeTypesExclusions.Add(typeName);
             else
             {
-                if (type.ToString().Contains("NonLazinatorSubrecordWithConstructor"))
-                {
-                    var DEBUG = 0;
-                }
                 List<PropertyWithDefinitionInfo> GetProperties(bool forConstructor)
                 {
                     bool HasQualifyingAccessors(AccessorListSyntax accessorList)
