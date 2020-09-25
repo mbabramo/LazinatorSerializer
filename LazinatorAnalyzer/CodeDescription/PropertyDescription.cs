@@ -2376,33 +2376,20 @@ namespace Lazinator.CodeDescription
             {
                 var DEBUG = 0;
             }
+            IEnumerable<string> assignments;
             if (InitializeRecordLikeTypePropertiesDirectly)
-            {
-                string propertyAssignments = String.Join("\r\n,", Enumerable.Range(1, InnerProperties.Count).Select(x => InnerProperties[x - 1].PropertyName + " = " + "item" + x));
-                sb.Append(
-                        $@"
-                            var recordLikeType = {(SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? "" : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}")}/*DEBUG2*/()
-                            {{
-                                {propertyAssignments}
-                            }};
-
-                            return recordLikeType;
-                        }}
-
-                        ");
-            }
+                assignments = Enumerable.Range(1, InnerProperties.Count).Select(x => InnerProperties[x - 1].PropertyName + " = " + "item" + x);
             else
-            {
-                string itemnamesLowercase = String.Join(", ", Enumerable.Range(1, InnerProperties.Count).Select(x => "item" + x));
-                sb.Append(
-                        $@"
-                            var tupleType = {(SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? "" : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}")}/*DEBUG2*/({itemnamesLowercase});
+                assignments = Enumerable.Range(1, InnerProperties.Count).Select(x => "item" + x);
+            
+            sb.Append(
+                    $@"
+                        var tupleType = {(SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? "" : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}")}/*DEBUG2*/{GetInnerPropertyAssignments(InitializeRecordLikeTypePropertiesDirectly, assignments)};
 
-                            return tupleType;
-                        }}
+                        return tupleType;
+                    }}
 
-                        ");
-            }
+                    ");
             sb.Append($@"private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
                         {{
                         ");
@@ -2440,6 +2427,23 @@ namespace Lazinator.CodeDescription
             AppendSupportedTupleCloneMethod(sb);
 
             RecursivelyAppendConversionMethods(sb, alreadyGenerated);
+        }
+
+        private string GetInnerPropertyAssignments(bool assignPropertiesDirectly, IEnumerable<string> assignments)
+        {
+            if (assignPropertiesDirectly)
+            {
+                string propertyAssignmentStrings = string.Join(",\r\n", assignments);
+                return $@"()
+                            {{
+                                {propertyAssignmentStrings}
+                            }}";
+            }
+            else
+            {
+                string commaSeparatedAssignments = String.Join(", ", assignments);
+                return $"({commaSeparatedAssignments})";
+            }
         }
 
         private string GetSupportedTupleReadCommand(string itemName)
@@ -2556,14 +2560,14 @@ namespace Lazinator.CodeDescription
             }
             // zip the inner properties and item strings, then get the clone string using each corresponding item, and then join into a string.
             string propertyAccess = Nullable ? "itemToConvert?." : "itemToConvert.";
-            string innerClones = String.Join(",",
-                InnerProperties
-                    .Zip(
-                        itemStrings,
-                        (x, y) => new { InnerProperty = x, ItemString = "(" + propertyAccess + y + (Nullable && !x.Nullable ? " ?? default" : "") + ")" })
-                    .Select(z => z.InnerProperty.GetCloneStringWithinCloneMethod(z.ItemString, GetTypeNameOfInnerProperty(z.InnerProperty)))
-                );
-            string creationText = SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? $"({innerClones})" : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}/*DEBUG1*/({innerClones})";
+            List<string> innerCloneStrings = InnerProperties
+                                .Zip(
+                                    itemStrings,
+                                    (x, y) => new { InnerProperty = x, ItemString = "(" + propertyAccess + y + (Nullable && !x.Nullable ? " ?? default" : "") + ")" })
+                                .Select(z => (InitializeRecordLikeTypePropertiesDirectly ? z.InnerProperty.PropertyName + " = " : "") + z.InnerProperty.GetCloneStringWithinCloneMethod(z.ItemString, GetTypeNameOfInnerProperty(z.InnerProperty)))
+                                .ToList();
+            string innerPropertyAssignments = GetInnerPropertyAssignments(InitializeRecordLikeTypePropertiesDirectly, innerCloneStrings);
+            string creationText = SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? innerPropertyAssignments : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}/*DEBUG1*/{innerPropertyAssignments}";
 
             // because we have a single cloneOrChangeFunc for the ILazinator, we don't make the nullability item specific
             sb.Append($@"
