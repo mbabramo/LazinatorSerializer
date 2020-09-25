@@ -497,9 +497,11 @@ namespace LazinatorCodeGen.Roslyn
                 foreach (var candidate in constructorCandidates)
                 {
                     var parameters = candidate.Parameters.ToList();
+                    if (parameters.Count() > propertiesToMatchWithConstructor.Count())
+                        continue;
                     if (!isActualRecord && (parameters.Count() < propertiesToMatchWithConstructor.Count() || !parameters.Any()))
                     { // there aren't enough parameters to set all properties (or this is parameterless, even if there aren't any properties)
-                        if (!IsAllowedAsRecordLikeTypeIfMismatched(type))
+                        if (!IsSpecificallyIncludedRecordLikeType(type))
                         {
                             RecordLikeTypesExclusions.Add(typeName);
                             return;
@@ -518,7 +520,7 @@ namespace LazinatorCodeGen.Roslyn
                         return;
                     }
                 }
-                if (isActualRecord)
+                if (isActualRecord || IsSpecificallyIncludedRecordLikeType(type))
                 {
                     var propertiesToSetDirectly = GetProperties(false);
                     // store the properties only, omitting the parameters. This will be our signal that we need to use the init-only context.
@@ -556,7 +558,7 @@ namespace LazinatorCodeGen.Roslyn
             return defaultAllowRecordLikeRegularStructs;
         }
 
-        private bool IsAllowedAsRecordLikeTypeIfMismatched(INamedTypeSymbol type)
+        private bool IsSpecificallyIncludedRecordLikeType(INamedTypeSymbol type)
         {
             if (DefaultConfig != null)
             {
