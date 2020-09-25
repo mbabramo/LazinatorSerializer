@@ -1168,5 +1168,41 @@ namespace LazinatorTests.Tests
             s2.IsDirty.Should().BeTrue(); // since no automatic dirtiness tracking, assumed dirty on first access
         }
 
+
+
+
+        [Fact]
+        public void NonLazinatorRecordTypes()
+        {
+            RecordLikeContainer original = new RecordLikeContainer()
+            {
+                MyNonLazinatorRecordWithConstructor = new NonLazinatorRecordWithConstructor(20, new Example() { MyChar = 'q' }, 23.4, 7),
+                MyNonLazinatorRecordWithoutConstructor = new NonLazinatorRecordWithoutConstructor()
+                {
+                    Age = 21,
+                    Example = new Example() { MyChar = 'w' },
+                    DoubleValue = 23.5,
+                    NullableInt = 8
+                }
+            };
+            LazinatorMemory serialized = original.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+            RecordLikeContainer s2 = new RecordLikeContainer()
+            {
+            };
+            s2.DeserializeLazinator(serialized);
+            s2.MyNonLazinatorRecordWithConstructor.Age.Should().Be(20);
+            s2.MyNonLazinatorRecordWithConstructor.Example.MyChar.Should().Be('q');
+            s2.MyNonLazinatorRecordWithConstructor.DoubleValue.Should().Be(23.4);
+            s2.MyNonLazinatorRecordWithConstructor.NullableInt.Should().Be(7);
+
+            s2.MyNonLazinatorRecordWithoutConstructor.Age.Should().Be(21);
+            s2.MyNonLazinatorRecordWithoutConstructor.Example.MyChar.Should().Be('w');
+            s2.MyNonLazinatorRecordWithoutConstructor.DoubleValue.Should().Be(23.5);
+            s2.MyNonLazinatorRecordWithoutConstructor.NullableInt.Should().Be(8);
+
+
+            s2.DescendantIsDirty.Should().BeFalse(); // no automatic dirtiness tracking
+            s2.IsDirty.Should().BeTrue(); // since no automatic dirtiness tracking, assumed dirty on first access
+        }
     }
 }

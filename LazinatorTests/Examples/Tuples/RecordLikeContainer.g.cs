@@ -842,21 +842,21 @@ namespace LazinatorTests.Examples.Tuples
                     return;
                 }
                 
-                CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.age);
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
                 
-                if (itemToConvert.example == null)
+                if (itemToConvert.Example == null)
                 {
                     writer.Write((uint)0);
                 }
                 else
                 {
-                    void actionexample(ref BinaryBufferWriter w) => itemToConvert.example.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void actionexample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(ref writer, actionexample);
                 };
                 
-                WriteUncompressedPrimitives.WriteDouble(ref writer, itemToConvert.doubleValue);
+                WriteUncompressedPrimitives.WriteDouble(ref writer, itemToConvert.DoubleValue);
                 
-                CompressedIntegralTypes.WriteCompressedNullableInt(ref writer, itemToConvert.nullableInt);
+                CompressedIntegralTypes.WriteCompressedNullableInt(ref writer, itemToConvert.NullableInt);
             }
             
             private static NonLazinatorRecordWithConstructor CloneOrChange_NonLazinatorRecordWithConstructor(NonLazinatorRecordWithConstructor itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
@@ -866,7 +866,7 @@ namespace LazinatorTests.Examples.Tuples
                     return default(NonLazinatorRecordWithConstructor);
                 }
                 
-                return new NonLazinatorRecordWithConstructor((int) (itemToConvert?.age ?? default), (Example) (cloneOrChangeFunc((itemToConvert?.example))), (double) (itemToConvert?.doubleValue ?? default), (int?) (itemToConvert?.nullableInt));
+                return new NonLazinatorRecordWithConstructor((int) (itemToConvert?.Age ?? default), (Example) (cloneOrChangeFunc((itemToConvert?.Example))), (double) (itemToConvert?.DoubleValue ?? default), (int?) (itemToConvert?.NullableInt));
             }
             
             private static NonLazinatorRecordWithoutConstructor ConvertFromBytes_NonLazinatorRecordWithoutConstructor(LazinatorMemory storage)
