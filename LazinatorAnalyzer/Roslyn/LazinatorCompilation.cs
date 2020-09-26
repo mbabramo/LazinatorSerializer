@@ -452,10 +452,6 @@ namespace LazinatorCodeGen.Roslyn
         private void ConsiderAddingAsRecordLikeType(INamedTypeSymbol type)
         {
             string typeName = TypeSymbolToString(type);
-            if (typeName.Contains("Point"))
-            {
-                var DEBUG = 0;
-            }
             if (RecordLikeTypes.ContainsKey(typeName) || RecordLikeTypesExclusions.Contains(typeName))
                 return;
             // Consider whether to add this as a record-like type
@@ -476,17 +472,6 @@ namespace LazinatorCodeGen.Roslyn
             {
                 List<PropertyWithDefinitionInfo> GetProperties(bool forConstructor)
                 {
-                    bool HasQualifyingAccessors(AccessorListSyntax accessorList)
-                    {
-                        if (accessorList == null)
-                            return false;
-                        SyntaxList<AccessorDeclarationSyntax> accessors = accessorList.Accessors;
-                        bool includesGet = accessors.Any(x => x.Kind() == SyntaxKind.GetAccessorDeclaration && x.Body == null);
-                        if (forConstructor)
-                            return includesGet;
-                        bool includesSetOrInit = accessors.Any(x => x.Kind() is SyntaxKind.SetAccessorDeclaration or SyntaxKind.InitAccessorDeclaration);
-                        return includesGet && includesSetOrInit;
-                    }
                     static bool IsAutoProperty(IPropertySymbol propertySymbol)
                     {
                         // Get fields declared in the same type as the property
@@ -509,29 +494,11 @@ namespace LazinatorCodeGen.Roslyn
                         return includesGet || includesSetOrInit;
                     }
                     List<PropertyWithDefinitionInfo> qualifyingProperties = GetPropertyWithDefinitionInfo(type, false)
-                        .Select(x => (x, x?.Property?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax()))
-                        .Where(x =>
-                            (x.Item2 is ParameterSyntax) /* a property declared as a parameter of a record */
-                            ||
-                            (HasQualifyingAccessors((x.Item2 as PropertyDeclarationSyntax)?.AccessorList))
-                        )
-                        .Select(x => x.x)
-                        .ToList();
-                    // DEBUGasdf
-                    List<PropertyWithDefinitionInfo> qualifyingProperties2 = GetPropertyWithDefinitionInfo(type, false)
                         .Where(x => IsQualifyingProperty(x.Property))
                         .ToList();
-                    return qualifyingProperties2;
+                    return qualifyingProperties;
                 }
                 List<PropertyWithDefinitionInfo> propertiesToMatchWithConstructor = GetProperties(true);
-                var DEBUG = false;
-                if (DEBUG)
-                {
-                    var DEBUG1 = propertiesToMatchWithConstructor.First().Property;
-                    var DEBUG2 = DEBUG1 as IPropertySymbol;
-                    var DEBUG3 = DEBUG2.SetMethod;
-                    var DEBUG4 = DEBUG3.ToString();
-                }
                 foreach (var candidate in constructorCandidates)
                 {
                     var parameters = candidate.Parameters.ToList();
