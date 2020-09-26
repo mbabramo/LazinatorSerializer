@@ -13,6 +13,8 @@ namespace LazinatorTests.Examples.Tuples
         NonLazinatorRecordWithoutConstructor MyNonLazinatorRecordWithoutConstructor { get; set; }
         NonLazinatorSubrecordWithConstructor MyNonLazinatorSubrecordWithConstructor { get; set; }
         NonLazinatorSubrecordWithoutConstructor MyNonLazinatorSubrecordWithoutConstructor { get; set; }
+        System.Drawing.Point ExternalRecordLikeStruct { get; set; }
+
         int MyInt { get; set; }
     }
 }

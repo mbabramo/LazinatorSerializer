@@ -220,6 +220,7 @@ public class MyOtherClass
             AdhocWorkspace ws = GetAdhocWorkspace();
             // can put a single CompleteGenerateCode here if having trouble with that file
             // await CompleteGenerateCode(typeof(NullableEnabledContext), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
+            await CompleteGenerateCode(typeof(DerivedLazinatorList<>), "LazinatorTests", "/Examples/", "NonAbstractGenerics/", ws); // DEBUG
 
             // include some code so that we won't get a warning if not awaiting anything elsewhere
             Task GetT() { return Task.CompletedTask; };
