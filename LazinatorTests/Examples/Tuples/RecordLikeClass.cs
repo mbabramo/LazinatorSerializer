@@ -1,4 +1,7 @@
-﻿namespace LazinatorTests.Examples
+﻿using Microsoft.CodeAnalysis;
+using System.Diagnostics;
+
+namespace LazinatorTests.Examples
 {
     public class RecordLikeClass
     {
