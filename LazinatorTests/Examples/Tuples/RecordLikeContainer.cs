@@ -7,7 +7,5 @@ namespace LazinatorTests.Examples.Tuples
         public RecordLikeContainer()
         {
         }
-
-        public Point ExternalRecordLikeStruct { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
     }
 }

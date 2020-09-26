@@ -452,6 +452,10 @@ namespace LazinatorCodeGen.Roslyn
         private void ConsiderAddingAsRecordLikeType(INamedTypeSymbol type)
         {
             string typeName = TypeSymbolToString(type);
+            if (typeName.Contains("Point"))
+            {
+                var DEBUG = 0;
+            }
             if (RecordLikeTypes.ContainsKey(typeName) || RecordLikeTypesExclusions.Contains(typeName))
                 return;
             // Consider whether to add this as a record-like type
@@ -483,6 +487,27 @@ namespace LazinatorCodeGen.Roslyn
                         bool includesSetOrInit = accessors.Any(x => x.Kind() is SyntaxKind.SetAccessorDeclaration or SyntaxKind.InitAccessorDeclaration);
                         return includesGet && includesSetOrInit;
                     }
+                    static bool IsAutoProperty(IPropertySymbol propertySymbol)
+                    {
+                        // Get fields declared in the same type as the property
+                        var fields = propertySymbol.ContainingType.GetMembers().OfType<IFieldSymbol>();
+                        if (!fields.Any())
+                            return false;
+
+                        // Check if one field is associated to
+                        string propertyNameUppercase = propertySymbol.Name.ToUpper();
+                        return fields.Any(field => SymbolEqualityComparer.Default.Equals(field.AssociatedSymbol, propertySymbol) || field.Name.ToUpper() == propertyNameUppercase);
+                    }
+                    bool IsQualifyingProperty(IPropertySymbol propertySymbol)
+                    {
+                        if (propertySymbol.IsImplicitlyDeclared || !IsAutoProperty(propertySymbol))
+                            return false;
+                        bool includesGet = propertySymbol.GetMethod != null;
+                        if (forConstructor)
+                            return includesGet;
+                        bool includesSetOrInit = propertySymbol.SetMethod != null;
+                        return includesGet || includesSetOrInit;
+                    }
                     List<PropertyWithDefinitionInfo> qualifyingProperties = GetPropertyWithDefinitionInfo(type, false)
                         .Select(x => (x, x?.Property?.DeclaringSyntaxReferences.FirstOrDefault()?.GetSyntax()))
                         .Where(x =>
@@ -492,9 +517,21 @@ namespace LazinatorCodeGen.Roslyn
                         )
                         .Select(x => x.x)
                         .ToList();
-                    return qualifyingProperties;
+                    // DEBUGasdf
+                    List<PropertyWithDefinitionInfo> qualifyingProperties2 = GetPropertyWithDefinitionInfo(type, false)
+                        .Where(x => IsQualifyingProperty(x.Property))
+                        .ToList();
+                    return qualifyingProperties2;
                 }
                 List<PropertyWithDefinitionInfo> propertiesToMatchWithConstructor = GetProperties(true);
+                var DEBUG = false;
+                if (DEBUG)
+                {
+                    var DEBUG1 = propertiesToMatchWithConstructor.First().Property;
+                    var DEBUG2 = DEBUG1 as IPropertySymbol;
+                    var DEBUG3 = DEBUG2.SetMethod;
+                    var DEBUG4 = DEBUG3.ToString();
+                }
                 foreach (var candidate in constructorCandidates)
                 {
                     var parameters = candidate.Parameters.ToList();
