@@ -31,12 +31,13 @@ namespace LazinatorTests.Support
 
         public static string GetCodeBasePath(string project = "")
         {
-            string codeBaseLocation = System.Reflection.Assembly.GetExecutingAssembly().CodeBase;
-            string projectInOverallFolder = "LazinatorSerializer/" ;
+            System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            string codeBaseLocation = assembly.Location;
+            string projectInOverallFolder = "LazinatorSerializer\\" ;
             string throughProject =
                 codeBaseLocation.Substring(0, codeBaseLocation.IndexOf(projectInOverallFolder) + projectInOverallFolder.Length) + project;
-            string removingPrefix = throughProject.Substring("file:///".Length);
-            return removingPrefix;
+            //throughProject = throughProject.Substring("file:///".Length);
+            return throughProject;
         }
     }
 }
