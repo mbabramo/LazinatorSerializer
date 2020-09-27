@@ -19,7 +19,7 @@ namespace LazinatorTests.Tests
                 writer.Write(valueToWrite);
                 numBytesExpected = 1;
                 writer.Position.Should().Be(numBytesExpected);
-                bytes = writer.LazinatorMemory.Memory;
+                bytes = writer.LazinatorMemory.GetConsolidatedMemory();
                 valueRead = bytes.Span.ToByte(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
                 numBytesRead.Should().Be(numBytesExpected);
@@ -38,7 +38,7 @@ namespace LazinatorTests.Tests
                 writer.Write(valueToWrite);
                 numBytesExpected = 1;
                 writer.Position.Should().Be(numBytesExpected);
-                bytes = writer.LazinatorMemory.Memory;
+                bytes = writer.LazinatorMemory.GetConsolidatedMemory();
                 valueRead = bytes.Span.ToSByte(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
                 numBytesRead.Should().Be(numBytesExpected);
@@ -57,7 +57,7 @@ namespace LazinatorTests.Tests
                 writer.WriteCharInTwoBytes(valueToWrite);
                 numBytesExpected = 2;
                 writer.Position.Should().Be(numBytesExpected);
-                bytes = writer.LazinatorMemory.Memory;
+                bytes = writer.LazinatorMemory.GetConsolidatedMemory();
                 valueRead = bytes.Span.ToChar(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
                 numBytesRead.Should().Be(numBytesExpected);
@@ -76,7 +76,7 @@ namespace LazinatorTests.Tests
                 writer.Write(valueToWrite);
                 numBytesExpected = 2;
                 writer.Position.Should().Be(numBytesExpected);
-                bytes = writer.LazinatorMemory.Memory;
+                bytes = writer.LazinatorMemory.GetConsolidatedMemory();
                 valueRead = bytes.Span.ToChar(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
                 numBytesRead.Should().Be(numBytesExpected);
@@ -95,7 +95,7 @@ namespace LazinatorTests.Tests
                 writer.Write(valueToWrite);
                 numBytesExpected = 2;
                 writer.Position.Should().Be(numBytesExpected);
-                bytes = writer.LazinatorMemory.Memory;
+                bytes = writer.LazinatorMemory.GetConsolidatedMemory();
                 valueRead = bytes.Span.ToInt16(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
                 numBytesRead.Should().Be(numBytesExpected);
@@ -120,7 +120,7 @@ namespace LazinatorTests.Tests
                 writer.Write(valueToWrite);
                 numBytesExpected = 4;
                 writer.Position.Should().Be(numBytesExpected);
-                bytes = writer.LazinatorMemory.Memory;
+                bytes = writer.LazinatorMemory.GetConsolidatedMemory();
                 valueRead = bytes.Span.ToInt32(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
                 numBytesRead.Should().Be(numBytesExpected);
@@ -139,7 +139,7 @@ namespace LazinatorTests.Tests
                 writer.Write(valueToWrite);
                 numBytesExpected = 8;
                 writer.Position.Should().Be(numBytesExpected);
-                bytes = writer.LazinatorMemory.Memory;
+                bytes = writer.LazinatorMemory.GetConsolidatedMemory();
                 valueRead = bytes.Span.ToInt64(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
                 numBytesRead.Should().Be(numBytesExpected);
@@ -158,7 +158,7 @@ namespace LazinatorTests.Tests
                 writer.Write(valueToWrite);
                 numBytesExpected = 2;
                 writer.Position.Should().Be(numBytesExpected);
-                bytes = writer.LazinatorMemory.Memory;
+                bytes = writer.LazinatorMemory.GetConsolidatedMemory();
                 valueRead = bytes.Span.ToUInt16(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
                 numBytesRead.Should().Be(numBytesExpected);
@@ -177,7 +177,7 @@ namespace LazinatorTests.Tests
                 writer.Write(valueToWrite);
                 numBytesExpected = 4;
                 writer.Position.Should().Be(numBytesExpected);
-                bytes = writer.LazinatorMemory.Memory;
+                bytes = writer.LazinatorMemory.GetConsolidatedMemory();
                 valueRead = bytes.Span.ToUInt32(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
                 numBytesRead.Should().Be(numBytesExpected);
@@ -196,7 +196,7 @@ namespace LazinatorTests.Tests
                 writer.Write(valueToWrite);
                 numBytesExpected = 8;
                 writer.Position.Should().Be(numBytesExpected);
-                bytes = writer.LazinatorMemory.Memory;
+                bytes = writer.LazinatorMemory.GetConsolidatedMemory();
                 valueRead = bytes.Span.ToUInt64(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
                 numBytesRead.Should().Be(numBytesExpected);
@@ -215,8 +215,8 @@ namespace LazinatorTests.Tests
                 writer.Write(valueToWrite);
                 numBytesExpected = 4;
                 writer.Position.Should().Be(numBytesExpected);
-                bytes = writer.LazinatorMemory.Memory;
-                bytes = writer.LazinatorMemory.Memory;
+                bytes = writer.LazinatorMemory.GetConsolidatedMemory();
+                bytes = writer.LazinatorMemory.GetConsolidatedMemory();
                 valueRead = bytes.Span.ToSingle(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
                 numBytesRead.Should().Be(numBytesExpected);
@@ -235,7 +235,7 @@ namespace LazinatorTests.Tests
                 writer.Write(valueToWrite);
                 numBytesExpected = 8;
                 writer.Position.Should().Be(numBytesExpected);
-                bytes = writer.LazinatorMemory.Memory;
+                bytes = writer.LazinatorMemory.GetConsolidatedMemory();
                 valueRead = bytes.Span.ToDouble(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
                 numBytesRead.Should().Be(numBytesExpected);
@@ -272,7 +272,7 @@ namespace LazinatorTests.Tests
             {
                 EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, valueToWrite);
                 numBytesExpected = (valueToWrite?.Length ?? 0) + 1; // 12 characters (1 byte each) + 1 byte for length
-                bytes = writer.LazinatorMemory.Memory;
+                bytes = writer.LazinatorMemory.GetConsolidatedMemory();
                 valueRead = bytes.Span.ToString_VarIntLengthUtf8(ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
                 numBytesRead.Should().Be(numBytesExpected);
@@ -308,7 +308,7 @@ namespace LazinatorTests.Tests
             BinaryBufferWriter writer = new BinaryBufferWriter();
             {
                 EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, valueToWrite);
-                bytes = writer.LazinatorMemory.Memory;
+                bytes = writer.LazinatorMemory.GetConsolidatedMemory();
                 valueRead = bytes.Span.ToString_BrotliCompressedWithLength(ref numBytesRead);
                 numBytesRead.Should().Be(bytes.Length);
                 valueRead.Should().Be(valueToWrite);

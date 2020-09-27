@@ -295,7 +295,7 @@ namespace Lazinator.Buffers
             return total;
         }
 
-        public Memory<byte> GetConsolidatedMemory(bool includeOutsideOfRange)
+        public Memory<byte> GetConsolidatedMemory(bool includeOutsideOfRange = false)
         {
             if (SingleMemory)
             {

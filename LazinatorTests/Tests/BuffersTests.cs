@@ -32,7 +32,7 @@ namespace LazinatorTests.Tests
             e.LazinatorMemoryStorage.Dispose();
             Action a = () =>
             {
-                var m = e.MyChild1.LazinatorMemoryStorage.Memory;
+                var m = e.MyChild1.LazinatorMemoryStorage.GetConsolidatedMemory();
                 m.Span[0] = 1;
             };
             a.Should().NotThrow<ObjectDisposedException>();
@@ -51,7 +51,7 @@ namespace LazinatorTests.Tests
             e.MyChild1.UpdateStoredBuffer();
             Action a = () =>
             {
-                var m = f.LazinatorMemoryStorage.Memory;
+                var m = f.LazinatorMemoryStorage.GetConsolidatedMemory();
                 m.Span[0] = 1;
             };
             a.Should().NotThrow<ObjectDisposedException>();
@@ -66,7 +66,7 @@ namespace LazinatorTests.Tests
             e.LazinatorMemoryStorage.Dispose();
             Action a = () =>
             {
-                var m = e2.LazinatorMemoryStorage.Memory;
+                var m = e2.LazinatorMemoryStorage.GetConsolidatedMemory();
                 m.Span[0] = 1;
             };
             a.Should().NotThrow<ObjectDisposedException>();
@@ -687,7 +687,7 @@ namespace LazinatorTests.Tests
         private static void UpdateStoredBufferFromExisting(ILazinator e)
         {
             e.UpdateStoredBuffer();
-            var buffer = new Memory<byte>(e.LazinatorMemoryStorage.Memory.Span.ToArray());
+            var buffer = e.LazinatorMemoryStorage.GetConsolidatedMemory()l
             BinaryBufferWriter b = new BinaryBufferWriter();
             b.Write(buffer.Span);
             e.UpdateStoredBuffer(ref b, 0, buffer.Span.Length, IncludeChildrenMode.IncludeAllChildren, true);

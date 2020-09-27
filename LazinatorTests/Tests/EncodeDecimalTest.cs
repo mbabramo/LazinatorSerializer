@@ -18,7 +18,7 @@ namespace LazinatorTests.Tests
             {
                 numBytesWritten = CompressedDecimal.WriteCompressedNullableDecimal(ref writer, valueToWrite);
                 numBytesWritten.Should().Be((int) writer.Position);
-                bytes = writer.LazinatorMemory.Memory;
+                bytes = writer.LazinatorMemory.GetConsolidatedMemory();
                 valueRead = CompressedDecimal.ToDecompressedNullableDecimal(bytes.Span, ref numBytesRead);
                 valueRead.Should().Be(valueToWrite);
                 numBytesRead.Should().Be(numBytesWritten);

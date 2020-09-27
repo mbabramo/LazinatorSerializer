@@ -29,7 +29,7 @@ namespace LazinatorTests.Tests
         private static LazinatorMemory GetLazinatorMemoryCopy(ILazinator e)
         {
             e.UpdateStoredBuffer();
-            var buffer = new Memory<byte>(e.LazinatorMemoryStorage.Memory.Span.ToArray());
+            var buffer = e.LazinatorMemoryStorage.GetConsolidatedMemory();
             BinaryBufferWriter b = new BinaryBufferWriter();
             b.Write(buffer.Span);
             return b.LazinatorMemory;
