@@ -228,7 +228,7 @@ namespace LazinatorCollections.OffsetList
             set;
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected virtual ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage.IsEmpty ? LazinatorMemory.EmptyReadOnlyMemory : LazinatorMemoryStorage.Memory;
+        protected virtual ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage.IsEmpty ? LazinatorMemory.EmptyReadOnlyMemory : LazinatorMemoryStorage.InitialMemory;
         
         public virtual void UpdateStoredBuffer()
         {

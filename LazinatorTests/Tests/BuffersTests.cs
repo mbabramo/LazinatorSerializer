@@ -687,7 +687,7 @@ namespace LazinatorTests.Tests
         private static void UpdateStoredBufferFromExisting(ILazinator e)
         {
             e.UpdateStoredBuffer();
-            var buffer = e.LazinatorMemoryStorage.GetConsolidatedMemory()l
+            var buffer = e.LazinatorMemoryStorage.GetConsolidatedMemory();
             BinaryBufferWriter b = new BinaryBufferWriter();
             b.Write(buffer.Span);
             e.UpdateStoredBuffer(ref b, 0, buffer.Span.Length, IncludeChildrenMode.IncludeAllChildren, true);

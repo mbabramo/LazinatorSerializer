@@ -302,7 +302,7 @@ namespace Lazinator.Buffers
                 if (includeOutsideOfRange)
                     return InitialOwnedMemory.Memory;
                 else
-                    return InitialOwnedMemory.Memory.Slice(StartPosition);
+                    return InitialOwnedMemory.Memory.Slice(StartPosition, Length);
             }
 
             int totalLength = includeOutsideOfRange ? GetGrossLength() : Length;
