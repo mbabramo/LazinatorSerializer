@@ -36,14 +36,17 @@ namespace Lazinator.Buffers
         public readonly int Length;
         public bool IsEmpty => InitialOwnedMemory == null || Length == 0;
         public long? AllocationID => (InitialOwnedMemory as ExpandableBytes)?.AllocationID;
+        public static Memory<byte> EmptyMemory = new Memory<byte>();
+        public static ReadOnlyMemory<byte> EmptyReadOnlyMemory = new ReadOnlyMemory<byte>();
+        public static LazinatorMemory EmptyLazinatorMemory = new LazinatorMemory(new Memory<byte>());
+
+        // DEBUG -- should eliminate access to these
 
         public Memory<byte> Memory => IsEmpty ? EmptyMemory : InitialOwnedMemory.Memory.Slice(StartPosition, Length);
         public ReadOnlyMemory<byte> ReadOnlyMemory => Memory;
         public Span<byte> Span => Memory.Span;
         public ReadOnlySpan<byte> ReadOnlySpan => Memory.Span;
-        public static Memory<byte> EmptyMemory = new Memory<byte>();
-        public static ReadOnlyMemory<byte> EmptyReadOnlyMemory = new ReadOnlyMemory<byte>();
-        public static LazinatorMemory EmptyLazinatorMemory = new LazinatorMemory(new Memory<byte>());
+
 
         public override string ToString()
         {
@@ -222,7 +225,21 @@ namespace Lazinator.Buffers
                 }
             }
         }
-        public Span<byte> InitialSpan => InitialMemory.Span; // DEBUG
+
+        public Span<byte> InitialSpan => InitialMemory.Span;
+
+
+
+        public Memory<byte> OnlyMemory
+        {
+            get 
+            {
+                var initialMemory = InitialMemory;
+                if (initialMemory.Length == Length)
+                    return initialMemory;
+                throw new LazinatorCompoundMemoryException();
+            }
+        }
 
         public IEnumerable<byte> EnumerateBytes(bool includeOutsideOfRange)
         {
@@ -247,6 +264,21 @@ namespace Lazinator.Buffers
                         yield break;
                 }
             }
+        }
+
+        public bool Matches(ReadOnlySpan<byte> span)
+        {
+            int i = 0;
+            foreach (byte b in EnumerateBytes(false))
+                if (span[i++] != b)
+                    return false;
+            return true;
+        }
+        public void CopyToArray(byte[] array)
+        {
+            int i = 0;
+            foreach (byte b in EnumerateBytes(false))
+                array[i++] = b;
         }
 
         public int NumMemoryChunks()

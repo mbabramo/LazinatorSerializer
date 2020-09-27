@@ -575,7 +575,7 @@ namespace LazinatorTests.Tests
             v5.MyList[0].MyWrapperContainer = new WrapperContainer() { WrappedInt = 4 };
             v6 = v5.CloneLazinatorTyped();
             v7 = v5.CloneLazinatorTyped();
-            LazinatorUtilities.ConfirmMatch(v6.LazinatorMemoryStorage.Memory, v7.LazinatorMemoryStorage.Memory);
+            LazinatorUtilities.ConfirmMatch(v6.LazinatorMemoryStorage, v7.LazinatorMemoryStorage.Memory);
             v6item = v6.MyList[0];
             v6item.MyWrapperContainer.WrappedInt = 5;
             v6item.IsDirty.Should().BeFalse();

@@ -369,7 +369,7 @@ namespace Lazinator.Core
                 if (verifyCleanness)
                 {
                     ReadOnlyMemory<byte> revised = ConvertNonLazinatorObjectToBytes(nonLazinatorObject, binaryWriterAction);
-                    ConfirmMatch(original.Memory, revised);
+                    ConfirmMatch(original, revised);
                 }
                 original.ReadOnlySpan.Write_WithIntLengthPrefix(ref writer);
             }
@@ -407,7 +407,7 @@ namespace Lazinator.Core
                 if (verifyCleanness)
                 {
                     ReadOnlyMemory<byte> revised = ConvertNonLazinatorObjectToBytes(nonLazinatorObject, binaryWriterAction);
-                    ConfirmMatch(original.Memory, revised);
+                    ConfirmMatch(original, revised);
                 }
                 writer.Write(original.Span);
             }
@@ -427,9 +427,9 @@ namespace Lazinator.Core
 
             BinaryBufferWriter writer = new BinaryBufferWriter();
             binaryWriterAction(ref writer, true);
-            var memory = writer.LazinatorMemory.Memory;
+            var memory = writer.LazinatorMemory;
             byte[] bytes = new byte[memory.Length];
-            memory.CopyTo(bytes);
+            memory.CopyToArray(bytes);
             writer.LazinatorMemory.Dispose();
             return bytes;
         }
@@ -453,6 +453,20 @@ namespace Lazinator.Core
                 else
                     explanation = $"An object was found to have changed, even though internal records indicated that IsDirty was not set. The location in the bytestream was {location}. The stack trace will show what the object was";
                 throw new UnexpectedDirtinessException(explanation);
+            }
+        }
+
+        public static void ConfirmMatch(LazinatorMemory originalStorage, ReadOnlyMemory<byte> rewrittenStorage)
+        {
+            if (originalStorage.SingleMemory)
+            {
+                ConfirmMatch((ReadOnlyMemory<byte>) originalStorage.OnlyMemory, rewrittenStorage);
+                return;
+            }
+            bool matches = originalStorage.Matches(rewrittenStorage.Span);
+            if (!matches)
+            {
+                throw new UnexpectedDirtinessException();
             }
         }
 
@@ -787,7 +801,7 @@ namespace Lazinator.Core
         {
             lazinator.UpdateStoredBuffer();
             byte[] array = new byte[lazinator.LazinatorMemoryStorage.Length];
-            lazinator.LazinatorMemoryStorage.Memory.CopyTo(array);
+            lazinator.LazinatorMemoryStorage.CopyToArray(array);
             return array;
         }
 
@@ -799,7 +813,7 @@ namespace Lazinator.Core
         {
             LazinatorMemory memory = lazinator.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
             byte[] array = new byte[memory.Length];
-            memory.Memory.CopyTo(array);
+            memory.CopyToArray(array);
             memory.Dispose();
             return array;
         }
@@ -974,7 +988,7 @@ namespace Lazinator.Core
             if (lazinator.NonBinaryHash32)
                 return (uint) lazinator.GetHashCode();
             if (!lazinator.IsDirty && !lazinator.DescendantIsDirty && lazinator.OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren && lazinator.LazinatorMemoryStorage.IsEmpty == false && lazinator.LazinatorMemoryStorage.Disposed == false)
-                return FarmhashByteSpans.Hash32(lazinator.LazinatorMemoryStorage.Memory.Span);
+                return FarmhashByteSpans.Hash32(lazinator.LazinatorMemoryStorage.OnlyMemory.Span);
             else
             {
                 LazinatorMemory serialized =
@@ -990,7 +1004,7 @@ namespace Lazinator.Core
         {
             if (!lazinator.IsDirty && !lazinator.DescendantIsDirty && lazinator.OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren && lazinator.LazinatorMemoryStorage.IsEmpty == false && lazinator.LazinatorMemoryStorage.Disposed == false)
             {
-                var result = FarmhashByteSpans.Hash64(lazinator.LazinatorMemoryStorage.Memory.Span);
+                var result = FarmhashByteSpans.Hash64(lazinator.LazinatorMemoryStorage.OnlyMemory.Span);
                 return result;
             }
             else
@@ -1007,7 +1021,7 @@ namespace Lazinator.Core
         public static Guid GetBinaryHashCode128(this ILazinator lazinator)
         {
             if (!lazinator.IsDirty && !lazinator.DescendantIsDirty && lazinator.OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren && lazinator.LazinatorMemoryStorage.IsEmpty == false && lazinator.LazinatorMemoryStorage.Disposed == false)
-                return FarmhashByteSpans.Hash128(lazinator.LazinatorMemoryStorage.Memory.Span);
+                return FarmhashByteSpans.Hash128(lazinator.LazinatorMemoryStorage.OnlyMemory.Span);
             else
             {
                 LazinatorMemory serialized =
