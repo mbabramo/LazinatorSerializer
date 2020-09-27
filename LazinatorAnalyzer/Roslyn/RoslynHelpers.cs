@@ -491,18 +491,16 @@ namespace LazinatorCodeGen.Roslyn
         {
             if (type == null || type.TypeKind != TypeKind.Class)
                 return false;
-            bool isRecord = (type.DeclaringSyntaxReferences.Any(x => (x.SyntaxTree.GetRoot().FindNode(x.Span) is RecordDeclarationSyntax)));
+            // Syntax analysis (we are trying to avoid this because we want to be able to inspect external types): bool isRecord = (type.DeclaringSyntaxReferences.Any(x => (x.SyntaxTree.GetRoot().FindNode(x.Span) is RecordDeclarationSyntax)));
+            bool isRecord = type.GetMembers().Any(x => x.Kind == SymbolKind.Property && x.Name == "EqualityContract" && x.IsImplicitlyDeclared);
             return isRecord;
         }
 
         public static bool IsReadOnlyStruct(this ITypeSymbol type)
         {
-            if (type == null || type.TypeKind != TypeKind.Struct)
+            if (type == null)
                 return false;
-            // It does not appear to be possible to determine this only through the semantic model, as DeclarationModifiers is not in the public API of Roslyn. Thus, we look at the Syntax tree.
-            bool isReadOnly = (type.DeclaringSyntaxReferences
-                    .Any(x => (x.SyntaxTree.GetRoot().FindNode(x.Span) as StructDeclarationSyntax)?
-                        .Modifiers.Any(y => y.Text == "readonly") ?? false));
+            bool isReadOnly = type.IsReadOnlyStruct();
             return isReadOnly;
         }
 
