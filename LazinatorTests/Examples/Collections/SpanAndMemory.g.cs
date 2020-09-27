@@ -66,8 +66,7 @@ namespace LazinatorTests.Examples.Collections
                 if (!_MyMemoryByte_Accessed)
                 {
                     Lazinate_MyMemoryByte();
-                }
-                IsDirty = true; 
+                } 
                 return _MyMemoryByte;
             }
             set
@@ -104,8 +103,7 @@ namespace LazinatorTests.Examples.Collections
                 if (!_MyMemoryInt_Accessed)
                 {
                     Lazinate_MyMemoryInt();
-                }
-                IsDirty = true; 
+                } 
                 return _MyMemoryInt;
             }
             set
@@ -256,8 +254,7 @@ namespace LazinatorTests.Examples.Collections
                 if (!_MyReadOnlyMemoryByte_Accessed)
                 {
                     Lazinate_MyReadOnlyMemoryByte();
-                }
-                IsDirty = true; 
+                } 
                 return _MyReadOnlyMemoryByte;
             }
             set
@@ -294,8 +291,7 @@ namespace LazinatorTests.Examples.Collections
                 if (!_MyReadOnlyMemoryChar_Accessed)
                 {
                     Lazinate_MyReadOnlyMemoryChar();
-                }
-                IsDirty = true; 
+                } 
                 return _MyReadOnlyMemoryChar;
             }
             set
@@ -332,8 +328,7 @@ namespace LazinatorTests.Examples.Collections
                 if (!_MyReadOnlyMemoryInt_Accessed)
                 {
                     Lazinate_MyReadOnlyMemoryInt();
-                }
-                IsDirty = true; 
+                } 
                 return _MyReadOnlyMemoryInt;
             }
             set

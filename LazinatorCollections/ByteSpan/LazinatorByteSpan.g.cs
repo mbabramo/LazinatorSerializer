@@ -75,8 +75,7 @@ namespace LazinatorCollections.ByteSpan
                 if (!_ReadOrWrite_Accessed)
                 {
                     Lazinate_ReadOrWrite();
-                }
-                IsDirty = true; 
+                } 
                 return _ReadOrWrite;
             }
             [DebuggerStepThrough]

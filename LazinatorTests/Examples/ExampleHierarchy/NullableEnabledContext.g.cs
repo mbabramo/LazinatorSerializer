@@ -532,8 +532,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 if (!_NonNullableMemoryOfBytes_Accessed)
                 {
                     Lazinate_NonNullableMemoryOfBytes();
-                }
-                IsDirty = true; 
+                } 
                 return _NonNullableMemoryOfBytes;
             }
             set
@@ -608,8 +607,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 if (!_NonNullableReadOnlyMemoryOfBytes_Accessed)
                 {
                     Lazinate_NonNullableReadOnlyMemoryOfBytes();
-                }
-                IsDirty = true; 
+                } 
                 return _NonNullableReadOnlyMemoryOfBytes;
             }
             set

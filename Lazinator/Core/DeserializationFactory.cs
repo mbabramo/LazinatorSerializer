@@ -123,7 +123,7 @@ namespace Lazinator.Core
             if (storage.IsEmpty || storage.Length == 1)
                 return default;
             int bytesSoFar = 0;
-            var span = (ReadOnlySpan<byte>)storage.Memory.Span;
+            var span = (ReadOnlySpan<byte>)storage.InitialSpan;
             int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
             T itemToReturn;
             if (!UniqueIDToTypeMap.ContainsKey(uniqueID))
@@ -169,10 +169,10 @@ namespace Lazinator.Core
         /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
         public ILazinator CreateFromBytesIncludingID(LazinatorMemory storage, ILazinator parent = null)
         {
-            if (storage.Memory.Length <= 1)
+            if (storage.InitialSpan.Length <= 1)
                 return null;
             int bytesSoFar = 0;
-            int uniqueID = ((ReadOnlySpan<byte>)storage.Memory.Span).ToDecompressedInt(ref bytesSoFar);
+            int uniqueID = ((ReadOnlySpan<byte>)storage.InitialSpan).ToDecompressedInt(ref bytesSoFar);
             ILazinator itemToReturn = CreateKnownID(uniqueID, storage, parent);
             InitializeDeserialized(itemToReturn, storage, parent);
             return itemToReturn;
@@ -194,7 +194,7 @@ namespace Lazinator.Core
             {
                 (Type t, int numGenericParameters) = UniqueIDToTypeMap[uniqueID];
                 if (numGenericParameters > 0)
-                    lazinatorObject = CreateGenericFromBytesIncludingID(storage.Memory.Span, storage, parent);
+                    lazinatorObject = CreateGenericFromBytesIncludingID(storage.InitialSpan, storage, parent);
             }
             if (lazinatorObject == null)
                 throw new UnknownSerializedTypeException(uniqueID);
@@ -403,10 +403,10 @@ namespace Lazinator.Core
 
         #region Generic composition
 
-        private ILazinator CreateGenericFromBytesIncludingID(ReadOnlySpan<byte> span, LazinatorMemory storage, ILazinator parent = null)
+        private ILazinator CreateGenericFromBytesIncludingID(ReadOnlySpan<byte> spanIncludingID, LazinatorMemory storage, ILazinator parent = null)
         {
             int index = 0;
-            LazinatorGenericIDType id = ReadLazinatorGenericID(span, ref index);
+            LazinatorGenericIDType id = ReadLazinatorGenericID(spanIncludingID, ref index);
             return CreateGenericKnownID(id, storage, parent);
         }
 
