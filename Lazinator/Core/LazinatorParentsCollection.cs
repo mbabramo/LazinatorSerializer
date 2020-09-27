@@ -66,7 +66,7 @@ namespace Lazinator.Core
         /// <returns></returns>
         public bool ParentSharesBuffer(IMemoryOwner<byte> ownedMemory)
         {
-            return Any(x => x.LazinatorMemoryStorage.OwnedMemory == ownedMemory);
+            return Any(x => x.LazinatorMemoryStorage.InitialOwnedMemory == ownedMemory);
         }
 
         /// <summary>

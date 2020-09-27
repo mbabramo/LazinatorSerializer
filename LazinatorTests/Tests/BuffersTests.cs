@@ -26,9 +26,9 @@ namespace LazinatorTests.Tests
             Example e = GetTypicalExample(); // no memory backing yet
             e = e.CloneLazinatorTyped(); // now there is a memory buffer
             e.MyChild1.MyLong = -342356;
-            e.LazinatorMemoryStorage.OwnedMemory.Should().Be(e.MyChild1.LazinatorMemoryStorage.OwnedMemory);
+            e.LazinatorMemoryStorage.InitialOwnedMemory.Should().Be(e.MyChild1.LazinatorMemoryStorage.InitialOwnedMemory);
             e.MyChild1.UpdateStoredBuffer();
-            e.LazinatorMemoryStorage.OwnedMemory.Should().NotBe(e.MyChild1.LazinatorMemoryStorage.OwnedMemory);
+            e.LazinatorMemoryStorage.InitialOwnedMemory.Should().NotBe(e.MyChild1.LazinatorMemoryStorage.InitialOwnedMemory);
             e.LazinatorMemoryStorage.Dispose();
             Action a = () =>
             {
@@ -233,7 +233,7 @@ namespace LazinatorTests.Tests
             Example e = d[0];
             d[0] = GetTypicalExample();
             d.LazinatorMemoryStorage.Dispose();
-            Action a = () => { var x = e.MyChild1.LazinatorMemoryStorage.OwnedMemory.Memory; }; // note that error occurs only when looking at underlying memory
+            Action a = () => { var x = e.MyChild1.LazinatorMemoryStorage.InitialOwnedMemory.Memory; }; // note that error occurs only when looking at underlying memory
             a.Should().Throw<ObjectDisposedException>();
         }
 
@@ -676,8 +676,8 @@ namespace LazinatorTests.Tests
             var x = c.MyStructList[0];
             c.MyInt = -234;
             UpdateStoredBufferFromExisting(c);
-            var storageOverall = c.LazinatorMemoryStorage.OwnedMemory as ExpandableBytes;
-            var storageItem = c.MyStructList[0].LazinatorMemoryStorage.OwnedMemory as ExpandableBytes;
+            var storageOverall = c.LazinatorMemoryStorage.InitialOwnedMemory as ExpandableBytes;
+            var storageItem = c.MyStructList[0].LazinatorMemoryStorage.InitialOwnedMemory as ExpandableBytes;
             storageOverall.AllocationID.Should().Be(storageItem.AllocationID);
             var item = c.MyStructList[0].CloneLazinatorTyped();
             var c2 = c.CloneLazinatorTyped();
@@ -918,12 +918,12 @@ namespace LazinatorTests.Tests
         private static void ConfirmBuffersUpdateInTandem(ILazinator itemToUpdate)
         {
             itemToUpdate.UpdateStoredBuffer();
-            var allocationID = ((ExpandableBytes)itemToUpdate.LazinatorMemoryStorage.OwnedMemory).AllocationID;
+            var allocationID = ((ExpandableBytes)itemToUpdate.LazinatorMemoryStorage.InitialOwnedMemory).AllocationID;
             itemToUpdate.ForEachLazinator(x => 
             {
                 if (x.LazinatorMemoryStorage.IsEmpty == false)
                 {
-                    ExpandableBytes b = x.LazinatorMemoryStorage.OwnedMemory as ExpandableBytes;
+                    ExpandableBytes b = x.LazinatorMemoryStorage.InitialOwnedMemory as ExpandableBytes;
                     if (b != null)
                         b.AllocationID.Should().Be(allocationID);
                 }

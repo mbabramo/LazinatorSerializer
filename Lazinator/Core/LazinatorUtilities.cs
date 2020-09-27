@@ -214,7 +214,7 @@ namespace Lazinator.Core
         {
             if (childStorage.IsEmpty)
                 childStorage = getChildSliceFn(); // this is the storage holding the child, which has never been accessed
-            if (childStorage.OwnedMemory == null)
+            if (childStorage.InitialOwnedMemory == null)
                 ThrowHelper.ThrowChildStorageMissingException();
             if (skipLength)
                 writer.Write(childStorage.Span);

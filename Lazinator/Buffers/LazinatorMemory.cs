@@ -13,15 +13,30 @@ namespace Lazinator.Buffers
     /// </summary>
     public readonly struct LazinatorMemory : IMemoryOwner<byte>
     {
-        public readonly IMemoryOwner<byte> OwnedMemory;
+        /// <summary>
+        /// The first chunk of owned memory (and in ordinary usage, the only chunk).
+        /// </summary>
+        public readonly IMemoryOwner<byte> InitialOwnedMemory;
+        /// <summary>
+        /// Additional chunks of owned memory, where the memory storage is split across chunks.
+        /// </summary>
         public readonly List<IMemoryOwner<byte>> MoreOwnedMemory;
+        /// <summary>
+        /// The starting index from the set consisting of InitialOwnedMemory and MoreOwnedMemory for the referenced range.
+        /// </summary>
         public readonly int StartIndex;
+        /// <summary>
+        /// The starting position within the chunk of memory referred to by StartIndex of the referenced range.
+        /// </summary>
         public readonly int StartPosition;
+        /// <summary>
+        /// The total number of bytes in the referenced range, potentially spanning multiple chunks of memory.
+        /// </summary>
         public readonly int Length;
-        public bool IsEmpty => OwnedMemory == null || Length == 0;
-        public long? AllocationID => (OwnedMemory as ExpandableBytes)?.AllocationID;
+        public bool IsEmpty => InitialOwnedMemory == null || Length == 0;
+        public long? AllocationID => (InitialOwnedMemory as ExpandableBytes)?.AllocationID;
 
-        public Memory<byte> Memory => IsEmpty ? EmptyMemory : OwnedMemory.Memory.Slice(StartPosition, Length);
+        public Memory<byte> Memory => IsEmpty ? EmptyMemory : InitialOwnedMemory.Memory.Slice(StartPosition, Length);
         public ReadOnlyMemory<byte> ReadOnlyMemory => Memory;
         public Span<byte> Span => Memory.Span;
         public ReadOnlySpan<byte> ReadOnlySpan => Memory.Span;
@@ -38,7 +53,7 @@ namespace Lazinator.Buffers
 
         public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int startPosition, int length)
         {
-            OwnedMemory = ownedMemory;
+            InitialOwnedMemory = ownedMemory;
             MoreOwnedMemory = null;
             StartIndex = 0;
             if (startPosition < 0)
@@ -48,10 +63,6 @@ namespace Lazinator.Buffers
                 Length = 0;
             else
                 Length = length;
-            if (Length == 34)
-            {
-                var DEBUG = 0;
-            }
         }
 
         public LazinatorMemory(IMemoryOwner<byte> ownedMemory, List<IMemoryOwner<byte>> moreOwnedMemory, int startIndex, int startPosition, int length) : this(ownedMemory, startPosition, length)
@@ -76,12 +87,12 @@ namespace Lazinator.Buffers
         {
         }
 
-        public bool Disposed => OwnedMemory != null && (OwnedMemory is ExpandableBytes e && e.Disposed) || (OwnedMemory is SimpleMemoryOwner<byte> s && s.Disposed);
+        public bool Disposed => InitialOwnedMemory != null && (InitialOwnedMemory is ExpandableBytes e && e.Disposed) || (InitialOwnedMemory is SimpleMemoryOwner<byte> s && s.Disposed);
 
         public void Dispose()
         {
             // DEBUG -- should we do this only if Index and StartPosition are 0?
-            OwnedMemory?.Dispose();
+            InitialOwnedMemory?.Dispose();
             if (MoreOwnedMemory != null)
                 foreach (var additional in MoreOwnedMemory)
                     additional?.Dispose();
@@ -89,7 +100,7 @@ namespace Lazinator.Buffers
 
         public void LazinatorShouldNotReturnToPool()
         {
-            IMemoryOwner<byte> ownedMemory = OwnedMemory;
+            IMemoryOwner<byte> ownedMemory = InitialOwnedMemory;
             Helper(ownedMemory);
 
             if (MoreOwnedMemory != null)
@@ -125,12 +136,12 @@ namespace Lazinator.Buffers
             return new LazinatorMemory(array);
         }
 
-        private IMemoryOwner<byte> MemoryAtIndex(int i) => i == 0 ? OwnedMemory : MoreOwnedMemory[i - 1];
+        private IMemoryOwner<byte> MemoryAtIndex(int i) => i == 0 ? InitialOwnedMemory : MoreOwnedMemory[i - 1];
 
         private LazinatorMemory SliceInitial(int position) => Length - position is int revisedLength and > 0 ? SliceInitial(position, revisedLength) : LazinatorMemory.EmptyLazinatorMemory;
-        private LazinatorMemory SliceInitial(int position, int length) => length == 0 ? LazinatorMemory.EmptyLazinatorMemory : new LazinatorMemory(OwnedMemory, StartPosition + position, length);
+        private LazinatorMemory SliceInitial(int position, int length) => length == 0 ? LazinatorMemory.EmptyLazinatorMemory : new LazinatorMemory(InitialOwnedMemory, StartPosition + position, length);
 
-        public LazinatorMemory Slice(int position) => Slice(position, Length);
+        public LazinatorMemory Slice(int position) => Slice(position, Length - position);
 
         public LazinatorMemory Slice(int position, int length)
         {
@@ -161,11 +172,11 @@ namespace Lazinator.Buffers
                 }
             }
 
-            return new LazinatorMemory(OwnedMemory, MoreOwnedMemory, revisedStartIndex, revisedStartPosition, Length);
+            return new LazinatorMemory(InitialOwnedMemory, MoreOwnedMemory, revisedStartIndex, revisedStartPosition, Length);
         }
 
         public override bool Equals(object obj) => obj == null ? throw new LazinatorSerializationException("Invalid comparison of LazinatorMemory to null") :
-            obj is LazinatorMemory lm && lm.OwnedMemory.Equals(OwnedMemory) && lm.StartPosition == StartPosition && lm.Length == Length;
+            obj is LazinatorMemory lm && lm.InitialOwnedMemory.Equals(InitialOwnedMemory) && lm.StartPosition == StartPosition && lm.Length == Length;
 
         public override int GetHashCode()
         {
@@ -195,7 +206,7 @@ namespace Lazinator.Buffers
                 if (IsEmpty)
                     return EmptyMemory;
                 if (SingleMemory)
-                    return OwnedMemory.Memory.Slice(StartPosition, Length);
+                    return InitialOwnedMemory.Memory.Slice(StartPosition, Length);
                 else
                 {
                     var memory = MemoryAtIndex(StartIndex).Memory;
@@ -243,9 +254,9 @@ namespace Lazinator.Buffers
             if (SingleMemory)
             {
                 if (includeBeforeStart)
-                    return OwnedMemory.Memory;
+                    return InitialOwnedMemory.Memory;
                 else
-                    return OwnedMemory.Memory.Slice(StartPosition);
+                    return InitialOwnedMemory.Memory.Slice(StartPosition);
             }
 
             int totalLength = includeBeforeStart ? GetGrossLength() : Length;
