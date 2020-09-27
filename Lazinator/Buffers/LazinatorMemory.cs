@@ -3,6 +3,7 @@ using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Lazinator.Exceptions;
 using Lazinator.Support;
 
@@ -145,34 +146,39 @@ namespace Lazinator.Buffers
 
         public LazinatorMemory Slice(int position, int length)
         {
+            if (Length == 0)
+                return EmptyLazinatorMemory;
+
             if (SingleMemory)
             {
                 return SliceInitial(position, length);
             }
 
+            int positionRemaining = position;
             // position is relative to StartPosition within memory chunk index StartIndex. 
-            // We use up "position" by advancing StartPosition up to the end of the Length of the starting index.
+            // We use up "positionRemaining" by advancing StartPosition up to the end of the Length of the starting index.
             // If we go all the way to the end, then we increment the starting index.
             // Note that we never change the Length (which is the Length of all combined).
             int revisedStartIndex = StartIndex;
             int revisedStartPosition = StartPosition;
-            while (position > 0)
+            while (positionRemaining > 0)
             {
                 IMemoryOwner<byte> current = MemoryAtIndex(revisedStartIndex);
                 int remainingBytesThisMemory = current.Memory.Length - revisedStartPosition; // DEBUG -- we might want to have another IMemoryOwner variant IMemoryOwnerWithLength that has the length without accessing the Memory, for use with memory mapped files.
-                if (remainingBytesThisMemory <= position)
+                if (remainingBytesThisMemory <= positionRemaining)
                 {
-                    position -= remainingBytesThisMemory;
+                    positionRemaining -= remainingBytesThisMemory;
                     revisedStartIndex++;
                     revisedStartPosition = 0;
                 }
                 else
                 {
-                    revisedStartPosition += position;
+                    revisedStartPosition += positionRemaining;
+                    positionRemaining = 0;
                 }
             }
 
-            return new LazinatorMemory(InitialOwnedMemory, MoreOwnedMemory, revisedStartIndex, revisedStartPosition, Length);
+            return new LazinatorMemory(InitialOwnedMemory, MoreOwnedMemory, revisedStartIndex, revisedStartPosition, length);
         }
 
         public override bool Equals(object obj) => obj == null ? throw new LazinatorSerializationException("Invalid comparison of LazinatorMemory to null") :
@@ -198,7 +204,7 @@ namespace Lazinator.Buffers
         #region Multiple memories management
 
 
-        public bool SingleMemory => true;
+        public bool SingleMemory => MoreOwnedMemory == null || MoreOwnedMemory.Count() == 0;
         public Memory<byte> InitialMemory
         {
             get
@@ -218,20 +224,28 @@ namespace Lazinator.Buffers
         }
         public Span<byte> InitialSpan => InitialMemory.Span; // DEBUG
 
-        public IEnumerable<byte> EnumerateBytes(bool includeBeforeStart)
+        public IEnumerable<byte> EnumerateBytes(bool includeOutsideOfRange)
         {
-            int startIndexOrZero = includeBeforeStart ? 0 : StartIndex;
+            if (!includeOutsideOfRange && Length == 0)
+                yield break;
+            int startIndexOrZero = includeOutsideOfRange ? 0 : StartIndex;
             int totalItems = NumMemoryChunks();
+            int numYielded = 0;
             for (int i = StartIndex; i < totalItems; i++)
             {
                 var m = MemoryAtIndex(i);
                 int startPositionOrZero;
-                if (i == StartIndex && !includeBeforeStart)
+                if (i == StartIndex && !includeOutsideOfRange)
                     startPositionOrZero = StartPosition;
                 else
                     startPositionOrZero = 0;
-                for (int j = startPositionOrZero; j <= m.Memory.Length; j++)
+                for (int j = startPositionOrZero; j < m.Memory.Length; j++)
+                {
                     yield return m.Memory.Span[j];
+                    numYielded++;
+                    if (!includeOutsideOfRange && numYielded == Length)
+                        yield break;
+                }
             }
         }
 
@@ -249,21 +263,30 @@ namespace Lazinator.Buffers
             return total;
         }
 
-        public Memory<byte> GetConsolidatedMemory(bool includeBeforeStart)
+        public Memory<byte> GetConsolidatedMemory(bool includeOutsideOfRange)
         {
             if (SingleMemory)
             {
-                if (includeBeforeStart)
+                if (includeOutsideOfRange)
                     return InitialOwnedMemory.Memory;
                 else
                     return InitialOwnedMemory.Memory.Slice(StartPosition);
             }
 
-            int totalLength = includeBeforeStart ? GetGrossLength() : Length;
+            int totalLength = includeOutsideOfRange ? GetGrossLength() : Length;
             BinaryBufferWriter w = new BinaryBufferWriter(totalLength);
-            foreach (byte b in EnumerateBytes(includeBeforeStart))
+            foreach (byte b in EnumerateBytes(includeOutsideOfRange))
                 w.Write(b);
-            return w.UnderlyingMemory.Memory;
+            return w.LazinatorMemory.InitialMemory;
+        }
+
+        public LazinatorMemory WithAppendedChunk(IMemoryOwner<byte> chunk)
+        {
+            var evenMoreOwnedMemory = MoreOwnedMemory?.ToList() ?? new List<IMemoryOwner<byte>>();
+            evenMoreOwnedMemory.Add(chunk);
+            if (StartIndex == 0 && StartPosition == 0 && Length == GetGrossLength())
+                return new LazinatorMemory(InitialOwnedMemory, evenMoreOwnedMemory, 0, 0, Length + chunk.Memory.Length);
+            return new LazinatorMemory(InitialOwnedMemory, evenMoreOwnedMemory, StartIndex, StartPosition, Length);
         }
 
         #endregion

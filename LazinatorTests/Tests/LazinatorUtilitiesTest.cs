@@ -4,6 +4,7 @@ using Lazinator.Core;
 using Xunit;
 using System.Buffers;
 using System;
+using System.Linq;
 
 namespace LazinatorTests.Tests
 {
@@ -35,6 +36,42 @@ namespace LazinatorTests.Tests
                     e.EnsureMinBufferSize(bufferSize);
                     e.Memory.Span[bufferSize - 1] = 1;
                 }
+            }
+        }
+
+        [Fact]
+        public void LazinatorMemoryAggregationAndSlicing()
+        {
+            int numChunks = 5;
+            int memoryPerChunk = 100;
+            // build a single combined chunk and many individual chunks -- then see if the whole and slices match
+            byte[] c = new byte[memoryPerChunk * numChunks];
+            LazinatorMemory m = default;
+            for (int i = 0; i < numChunks; i++)
+            {
+                byte[] b = new byte[memoryPerChunk];
+                for (int j = 0; j < memoryPerChunk; j++)
+                {
+                    int overallIndex = i * memoryPerChunk + j;
+                    b[j] = (byte)(overallIndex % 255);
+                    c[overallIndex] = b[j];
+                }
+                if (i == 0)
+                    m = new LazinatorMemory(b);
+                else m = m.WithAppendedChunk(new SimpleMemoryOwner<byte>(b));
+            }
+
+            const int numChecks = 15;
+            Random r = new Random(0);
+            for (int i = 0; i < numChecks; i++)
+            {
+                int startPosition = r.Next(0, c.Length);
+                int numBytes = r.Next(0, c.Length - startPosition);
+                var s = m.Slice(startPosition, numBytes);
+                var consolidated = s.GetConsolidatedMemory(false).ToArray();
+                var comparison = c.Skip(startPosition).Take(numBytes).ToArray();
+                if (!comparison.SequenceEqual(consolidated))
+                    throw new Exception("LazinatorMemory did not match");
             }
         }
 
