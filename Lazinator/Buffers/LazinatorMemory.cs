@@ -128,13 +128,12 @@ namespace Lazinator.Buffers
         private IMemoryOwner<byte> MemoryAtIndex(int i) => i == 0 ? OwnedMemory : MoreOwnedMemory[i - 1];
 
         private LazinatorMemory SliceInitial(int position) => Length - position is int revisedLength and > 0 ? SliceInitial(position, revisedLength) : LazinatorMemory.EmptyLazinatorMemory;
-        private LazinatorMemory SliceInitial(int position, int length) => length == 0 ? LazinatorMemory.EmptyLazinatorMemory : new LazinatorMemory(OwnedMemory, StartPosition + position, Length - position);
+        private LazinatorMemory SliceInitial(int position, int length) => length == 0 ? LazinatorMemory.EmptyLazinatorMemory : new LazinatorMemory(OwnedMemory, StartPosition + position, length);
 
         public LazinatorMemory Slice(int position) => Slice(position, Length);
 
         public LazinatorMemory Slice(int position, int length)
         {
-
             if (SingleMemory)
             {
                 return SliceInitial(position, length);
@@ -196,13 +195,13 @@ namespace Lazinator.Buffers
                 if (IsEmpty)
                     return EmptyMemory;
                 if (SingleMemory)
-                    return OwnedMemory.Memory.Slice(StartPosition, Length - StartPosition);
+                    return OwnedMemory.Memory.Slice(StartPosition, Length);
                 else
                 {
                     var memory = MemoryAtIndex(StartIndex).Memory;
                     int overallMemoryLength = memory.Length;
-                    int lengthInMemory = overallMemoryLength - StartPosition;
-                    return memory.Slice(StartPosition, lengthInMemory);
+                    int lengthOfMemoryChunkAfterStartPosition = overallMemoryLength - StartPosition;
+                    return memory.Slice(StartPosition, lengthOfMemoryChunkAfterStartPosition);
                 }
             }
         }
@@ -230,14 +229,12 @@ namespace Lazinator.Buffers
             return 1 + (MoreOwnedMemory == null ? 0 : MoreOwnedMemory.Count);
         }
 
-        public int GetLengthFromStartPosition()
+        public int GetGrossLength()
         {
-            if (SingleMemory)
-                return Length - StartPosition;
-            int total = MemoryAtIndex(StartIndex).Memory.Length - StartPosition; // DEBUG -- see above
             int numMemoryChunks = NumMemoryChunks();
-            for (int i = StartIndex + 1; i < numMemoryChunks; i++)
-                total += MemoryAtIndex(i).Memory.Length; // DEBUG again
+            int total = 0;
+            for (int i = 0; i < numMemoryChunks; i++)
+                total += MemoryAtIndex(i).Memory.Length; // DEBUG -- create IMemoryOwnerWithLength
             return total;
         }
 
@@ -251,8 +248,8 @@ namespace Lazinator.Buffers
                     return OwnedMemory.Memory.Slice(StartPosition);
             }
 
-            int netLength = includeBeforeStart ? Length : GetLengthFromStartPosition();
-            BinaryBufferWriter w = new BinaryBufferWriter(netLength);
+            int totalLength = includeBeforeStart ? GetGrossLength() : Length;
+            BinaryBufferWriter w = new BinaryBufferWriter(totalLength);
             foreach (byte b in EnumerateBytes(includeBeforeStart))
                 w.Write(b);
             return w.UnderlyingMemory.Memory;
