@@ -498,9 +498,9 @@ namespace LazinatorCodeGen.Roslyn
 
         public static bool IsReadOnlyStruct(this ITypeSymbol type)
         {
-            if (type == null)
+            if (type == null || type.TypeKind != TypeKind.Struct)
                 return false;
-            bool isReadOnly = type.IsReadOnlyStruct();
+            bool isReadOnly = type.IsReadOnly;
             return isReadOnly;
         }
 
