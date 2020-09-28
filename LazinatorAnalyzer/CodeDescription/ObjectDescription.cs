@@ -430,11 +430,6 @@ namespace Lazinator.CodeDescription
                             set;
                         }}
 
-                        {HideILazinatorProperty}{ProtectedIfApplicable}abstract ReadOnlyMemory<byte> LazinatorObjectBytes
-                        {{
-			                get;
-                        }}
-
                         public abstract void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
                         public abstract void UpdateStoredBuffer();
                         public abstract void FreeInMemoryObjects();
@@ -589,7 +584,6 @@ namespace Lazinator.CodeDescription
                             get;
                             set;
                         }}
-                        {HideILazinatorProperty}{ProtectedIfApplicable}{DerivationKeyword}ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage.IsEmpty ? LazinatorMemory.EmptyReadOnlyMemory : LazinatorMemoryStorage.InitialMemory;
 
                         public {DerivationKeyword}void UpdateStoredBuffer()
                         {{

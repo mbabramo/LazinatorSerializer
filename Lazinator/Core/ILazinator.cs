@@ -119,7 +119,7 @@ namespace Lazinator.Core
         /// <returns></returns>
         ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode);
         /// <summary>
-        /// The memory used to initialize a Lazinator class/struct during initial deserialization. Header information, fields and child ISerializeds can then be read from this. This is set automatically by the Lazinator framework, either from DeserializeLazinator or from the parent's LazinatorObjectBytes.
+        /// The memory used to initialize a Lazinator class/struct during initial deserialization. Header information, fields and child ISerializeds can then be read from this. This is set automatically by the Lazinator framework, either from DeserializeLazinator or from the parent's memory storage.
         /// </summary>
         LazinatorMemory LazinatorMemoryStorage { get; set; }
         /// <summary>

@@ -142,9 +142,9 @@ namespace LazinatorTests.Tests
             // Suppose we have two properties, property A and property B. After deserialization, the byte points are set. Suppose that property A is accessed, but property B is not. If we then convert to bytes but continue to use the old object, then the old byte points will be out of date. Property A will be good; since it has been accessed, it still has the object. But unless we update the byte points, property B will now be pointing to a spot on the old set of bytes.
 
             LazinatorTriple<WString, WString, WString> x = new LazinatorTriple<WString, WString, WString>("one", "andtwo", "andthree");
-            var c3 = x.CloneLazinatorTyped(); // c3 has LazinatorObjectBytes set
+            var c3 = x.CloneLazinatorTyped(); // c3 has LazinatorMemoryStorage set
             c3.Item1 = "another";
-            var c4 = c3.CloneLazinatorTyped(); // LazinatorObjectBytes are now updated in C3
+            var c4 = c3.CloneLazinatorTyped(); // LazinatorMemoryStorage is now updated in C3
             c3.Item1.Should().Be("another");
             c3.Item2.Should().Be("andtwo"); // this will cause a problem if the byte indides are not set correctly
         }
