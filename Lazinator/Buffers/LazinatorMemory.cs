@@ -241,7 +241,39 @@ namespace Lazinator.Buffers
             }
         }
 
-        public IEnumerable<byte> EnumerateBytes(bool includeOutsideOfRange)
+        public IEnumerable<Memory<byte>> EnumerateMemoryChunks(bool includeOutsideOfRange = false)
+        {
+            if (!includeOutsideOfRange && Length == 0)
+                yield break;
+            int startIndexOrZero = includeOutsideOfRange ? 0 : StartIndex;
+            int totalItems = NumMemoryChunks();
+            int lengthRemaining = Length;
+            for (int i = StartIndex; i < totalItems; i++)
+            {
+                var m = MemoryAtIndex(i);
+                int startPositionOrZero;
+                if (i == StartIndex && !includeOutsideOfRange)
+                    startPositionOrZero = StartPosition;
+                else
+                    startPositionOrZero = 0;
+                int numBytes = m.Memory.Length - startPositionOrZero;
+                if (numBytes > lengthRemaining)
+                    numBytes = lengthRemaining;
+                yield return m.Memory.Slice(startPositionOrZero, numBytes);
+                lengthRemaining -= numBytes;
+                if (lengthRemaining == 0)
+                    yield break;
+            }
+        }
+
+        public void WriteToBinaryBuffer(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
+        {
+            foreach (Memory<byte> memory in EnumerateMemoryChunks(includeOutsideOfRange))
+                writer.Write(memory.Span);
+
+        }
+
+        public IEnumerable<byte> EnumerateBytes(bool includeOutsideOfRange = false)
         {
             if (!includeOutsideOfRange && Length == 0)
                 yield break;

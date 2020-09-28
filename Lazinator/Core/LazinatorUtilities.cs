@@ -932,7 +932,7 @@ namespace Lazinator.Core
         public static MemoryStream GetMemoryStream(this ILazinator lazinator)
         {
             lazinator.UpdateStoredBuffer();
-            return lazinator.LazinatorMemoryStorage.ReadOnlyMemory.GetMemoryStream();
+            return ((ReadOnlyMemory<byte>)lazinator.LazinatorMemoryStorage.GetConsolidatedMemory()).GetMemoryStream();
         }
 
         /// <summary>
