@@ -82,7 +82,7 @@ namespace LazinatorTests.Examples
         protected bool _MyGrandchildInInherited_Accessed;
         private void Lazinate_MyGrandchildInInherited()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyGrandchildInInherited = null;
             }

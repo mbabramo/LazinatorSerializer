@@ -247,7 +247,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _ExplicitlyNullable_Accessed;
         private void Lazinate_ExplicitlyNullable()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _ExplicitlyNullable = null;
             }
@@ -294,7 +294,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _ExplicitlyNullableInterface_Accessed;
         private void Lazinate_ExplicitlyNullableInterface()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _ExplicitlyNullableInterface = null;
             }
@@ -546,7 +546,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NonNullableMemoryOfBytes_Accessed;
         private void Lazinate_NonNullableMemoryOfBytes()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NonNullableMemoryOfBytes = default(Memory<Byte>);
             }
@@ -621,7 +621,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NonNullableReadOnlyMemoryOfBytes_Accessed;
         private void Lazinate_NonNullableReadOnlyMemoryOfBytes()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NonNullableReadOnlyMemoryOfBytes = default(ReadOnlyMemory<Byte>);
             }
@@ -773,7 +773,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NonNullableStruct_Accessed;
         private void Lazinate_NonNullableStruct()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NonNullableStruct = default(ExampleStructWithoutClass);
                 _NonNullableStruct.LazinatorParents = new LazinatorParentsCollection(this);
@@ -798,7 +798,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NonNullableStruct_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (LazinatorMemoryStorage.Length == 0)
                     {
                         return default(ExampleStructWithoutClass);
                     }
@@ -842,7 +842,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NullableArrayOfNonNullables_Accessed;
         private void Lazinate_NullableArrayOfNonNullables()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NullableArrayOfNonNullables = default(Example[]?);
             }
@@ -880,7 +880,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NullableArrayOfNullables_Accessed;
         private void Lazinate_NullableArrayOfNullables()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NullableArrayOfNullables = default(Example?[]?);
             }
@@ -918,7 +918,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NullableDictionaryWithNonNullable_Accessed;
         private void Lazinate_NullableDictionaryWithNonNullable()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NullableDictionaryWithNonNullable = default(Dictionary<Int32, Example>?);
             }
@@ -956,7 +956,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NullableDictionaryWithNullable_Accessed;
         private void Lazinate_NullableDictionaryWithNullable()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NullableDictionaryWithNullable = default(Dictionary<Int32, Example?>?);
             }
@@ -1002,7 +1002,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NullableLazinatorListNonNullable_Accessed;
         private void Lazinate_NullableLazinatorListNonNullable()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NullableLazinatorListNonNullable = null;
             }
@@ -1049,7 +1049,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NullableLazinatorListNullable_Accessed;
         private void Lazinate_NullableLazinatorListNullable()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NullableLazinatorListNullable = null;
             }
@@ -1088,7 +1088,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NullableListOfNonNullables_Accessed;
         private void Lazinate_NullableListOfNonNullables()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NullableListOfNonNullables = default(List<Example>?);
             }
@@ -1126,7 +1126,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NullableListOfNullables_Accessed;
         private void Lazinate_NullableListOfNullables()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NullableListOfNullables = default(List<Example?>?);
             }
@@ -1164,7 +1164,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NullableMemoryOfBytes_Accessed;
         private void Lazinate_NullableMemoryOfBytes()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NullableMemoryOfBytes = default(Memory<Byte>?);
             }
@@ -1202,7 +1202,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NullableQueueOfNonNullables_Accessed;
         private void Lazinate_NullableQueueOfNonNullables()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NullableQueueOfNonNullables = default(Queue<Example>?);
             }
@@ -1240,7 +1240,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NullableQueueOfNullables_Accessed;
         private void Lazinate_NullableQueueOfNullables()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NullableQueueOfNullables = default(Queue<Example?>?);
             }
@@ -1278,7 +1278,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NullableReadOnlyMemoryOfBytes_Accessed;
         private void Lazinate_NullableReadOnlyMemoryOfBytes()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NullableReadOnlyMemoryOfBytes = default(ReadOnlyMemory<Byte>?);
             }
@@ -1316,7 +1316,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NullableRecordLikeClass_Accessed;
         private void Lazinate_NullableRecordLikeClass()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NullableRecordLikeClass = default(RecordLikeClass?);
             }
@@ -1354,7 +1354,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NullableRecordLikeStruct_Accessed;
         private void Lazinate_NullableRecordLikeStruct()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NullableRecordLikeStruct = default(RecordLikeStruct?);
             }
@@ -1392,7 +1392,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NullableRegularTupleWithNonNullable_Accessed;
         private void Lazinate_NullableRegularTupleWithNonNullable()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NullableRegularTupleWithNonNullable = default(Tuple<Example, Int32>?);
             }
@@ -1430,7 +1430,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NullableRegularTupleWithNullable_Accessed;
         private void Lazinate_NullableRegularTupleWithNullable()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NullableRegularTupleWithNullable = default(Tuple<Example?, Int32>?);
             }
@@ -1468,7 +1468,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NullableStackOfNonNullables_Accessed;
         private void Lazinate_NullableStackOfNonNullables()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NullableStackOfNonNullables = default(Stack<Example>?);
             }
@@ -1506,7 +1506,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NullableStackOfNullables_Accessed;
         private void Lazinate_NullableStackOfNullables()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NullableStackOfNullables = default(Stack<Example?>?);
             }
@@ -1551,7 +1551,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NullableStruct_Accessed;
         private void Lazinate_NullableStruct()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NullableStruct = default(ExampleStructWithoutClass?);
             }
@@ -1584,7 +1584,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableStruct_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (LazinatorMemoryStorage.Length == 0)
                     {
                         return null;
                     }
@@ -1632,7 +1632,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NullableValueTupleWithNonNullable_Accessed;
         private void Lazinate_NullableValueTupleWithNonNullable()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NullableValueTupleWithNonNullable = default((Example, Int32)?);
             }
@@ -1670,7 +1670,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _NullableValueTupleWithNullable_Accessed;
         private void Lazinate_NullableValueTupleWithNullable()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NullableValueTupleWithNullable = default((Example?, Int32)?);
             }
@@ -1708,7 +1708,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _ValueTupleWithNonNullable_Accessed;
         private void Lazinate_ValueTupleWithNonNullable()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _ValueTupleWithNonNullable = default((Example, Int32));
             }
@@ -1746,7 +1746,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected bool _ValueTupleWithNullable_Accessed;
         private void Lazinate_ValueTupleWithNullable()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _ValueTupleWithNullable = default((Example?, Int32));
             }
@@ -2090,7 +2090,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty|| LazinatorObjectBytes.Length == 0;
+            get => _IsDirty|| LazinatorMemoryStorage.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -2157,7 +2157,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         public virtual void UpdateStoredBuffer()
         {
-            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
             }
@@ -2182,7 +2182,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         public virtual int GetByteLength()
         {
             UpdateStoredBuffer();
-            return LazinatorObjectBytes.Length;
+            return LazinatorMemoryStorage.Length;
         }
         
         public virtual bool NonBinaryHash32 => false;

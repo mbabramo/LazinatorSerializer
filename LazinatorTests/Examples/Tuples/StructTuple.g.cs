@@ -73,7 +73,7 @@ namespace LazinatorTests.Examples.Tuples
         protected bool _EnumTuple_Accessed;
         private void Lazinate_EnumTuple()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _EnumTuple = default((TestEnum firstEnum, TestEnum anotherEnum));
             }
@@ -111,7 +111,7 @@ namespace LazinatorTests.Examples.Tuples
         protected bool _MyNamedTuple_Accessed;
         private void Lazinate_MyNamedTuple()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNamedTuple = default((Int32 MyFirstItem, Double MySecondItem));
             }
@@ -149,7 +149,7 @@ namespace LazinatorTests.Examples.Tuples
         protected bool _MyNullableTuple_Accessed;
         private void Lazinate_MyNullableTuple()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNullableTuple = default((Int32, Double)?);
             }
@@ -187,7 +187,7 @@ namespace LazinatorTests.Examples.Tuples
         protected bool _MyValueTupleNullableStructs_Accessed;
         private void Lazinate_MyValueTupleNullableStructs()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyValueTupleNullableStructs = default((ExampleStructContainingClasses?, ExampleStructContainingClasses?, ExampleStructContainingClasses?));
             }
@@ -225,7 +225,7 @@ namespace LazinatorTests.Examples.Tuples
         protected bool _MyValueTupleSerialized_Accessed;
         private void Lazinate_MyValueTupleSerialized()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyValueTupleSerialized = default((UInt32, ExampleChild, NonLazinatorClass));
             }
@@ -263,7 +263,7 @@ namespace LazinatorTests.Examples.Tuples
         protected bool _MyValueTupleStructs_Accessed;
         private void Lazinate_MyValueTupleStructs()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyValueTupleStructs = default((WInt, WInt));
             }
@@ -374,7 +374,7 @@ namespace LazinatorTests.Examples.Tuples
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty|| LazinatorObjectBytes.Length == 0;
+            get => _IsDirty|| LazinatorMemoryStorage.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -441,7 +441,7 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual void UpdateStoredBuffer()
         {
-            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
             }
@@ -466,7 +466,7 @@ namespace LazinatorTests.Examples.Tuples
         public virtual int GetByteLength()
         {
             UpdateStoredBuffer();
-            return LazinatorObjectBytes.Length;
+            return LazinatorMemoryStorage.Length;
         }
         
         public virtual bool NonBinaryHash32 => false;

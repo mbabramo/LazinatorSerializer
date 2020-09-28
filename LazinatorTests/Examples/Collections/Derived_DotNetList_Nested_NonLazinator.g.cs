@@ -75,7 +75,7 @@ namespace LazinatorTests.Examples.Collections
         protected bool _MyLevel2ListNestedNonLazinatorType_Accessed;
         private void Lazinate_MyLevel2ListNestedNonLazinatorType()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyLevel2ListNestedNonLazinatorType = default(List<List<NonLazinatorClass>>);
             }

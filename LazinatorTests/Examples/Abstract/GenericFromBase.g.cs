@@ -89,7 +89,7 @@ namespace LazinatorTests.Examples.Abstract
         protected bool _MyT_Accessed;
         private void Lazinate_MyT()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyT = default(T);
                 if (_MyT != null)

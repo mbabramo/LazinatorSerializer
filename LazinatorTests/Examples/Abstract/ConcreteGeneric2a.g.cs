@@ -143,7 +143,7 @@ namespace LazinatorTests.Examples.Abstract
         protected bool _LazinatorExample_Accessed;
         private void Lazinate_LazinatorExample()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _LazinatorExample = null;
             }
@@ -267,7 +267,7 @@ namespace LazinatorTests.Examples.Abstract
         public override bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty|| LazinatorObjectBytes.Length == 0;
+            get => _IsDirty|| LazinatorMemoryStorage.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -334,7 +334,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override void UpdateStoredBuffer()
         {
-            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
             }
@@ -359,7 +359,7 @@ namespace LazinatorTests.Examples.Abstract
         public override int GetByteLength()
         {
             UpdateStoredBuffer();
-            return LazinatorObjectBytes.Length;
+            return LazinatorMemoryStorage.Length;
         }
         
         public override bool NonBinaryHash32 => false;

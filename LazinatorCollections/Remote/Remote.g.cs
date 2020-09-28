@@ -99,7 +99,7 @@ namespace LazinatorCollections.Remote
         protected bool _Key_Accessed;
         private void Lazinate_Key()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _Key = default(TKey);
                 if (_Key != null)
@@ -153,7 +153,7 @@ namespace LazinatorCollections.Remote
         protected bool _Local_Accessed;
         private void Lazinate_Local()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _Local = default(TValue);
                 if (_Local != null)
@@ -295,7 +295,7 @@ namespace LazinatorCollections.Remote
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty|| LazinatorObjectBytes.Length == 0;
+            get => _IsDirty|| LazinatorMemoryStorage.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -368,7 +368,7 @@ namespace LazinatorCollections.Remote
         
         public virtual void UpdateStoredBuffer()
         {
-            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
             }
@@ -393,7 +393,7 @@ namespace LazinatorCollections.Remote
         public virtual int GetByteLength()
         {
             UpdateStoredBuffer();
-            return LazinatorObjectBytes.Length;
+            return LazinatorMemoryStorage.Length;
         }
         
         public virtual bool NonBinaryHash32 => false;

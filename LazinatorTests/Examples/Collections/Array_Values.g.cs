@@ -65,7 +65,7 @@ namespace LazinatorTests.Examples.Collections
         protected bool _MyArrayInt_Accessed;
         private void Lazinate_MyArrayInt()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyArrayInt = default(Int32[]);
                 _MyArrayInt_Dirty = true; 
@@ -122,7 +122,7 @@ namespace LazinatorTests.Examples.Collections
         protected bool _MyArrayNullableInt_Accessed;
         private void Lazinate_MyArrayNullableInt()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyArrayNullableInt = default(Int32?[]);
             }
@@ -160,7 +160,7 @@ namespace LazinatorTests.Examples.Collections
         protected bool _MyJaggedArrayInt_Accessed;
         private void Lazinate_MyJaggedArrayInt()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyJaggedArrayInt = default(Int32[][]);
             }
@@ -268,7 +268,7 @@ namespace LazinatorTests.Examples.Collections
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty|| LazinatorObjectBytes.Length == 0;
+            get => _IsDirty|| LazinatorMemoryStorage.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -335,7 +335,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual void UpdateStoredBuffer()
         {
-            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
             }
@@ -360,7 +360,7 @@ namespace LazinatorTests.Examples.Collections
         public virtual int GetByteLength()
         {
             UpdateStoredBuffer();
-            return LazinatorObjectBytes.Length;
+            return LazinatorMemoryStorage.Length;
         }
         
         public virtual bool NonBinaryHash32 => false;

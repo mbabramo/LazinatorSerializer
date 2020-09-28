@@ -72,7 +72,7 @@ namespace LazinatorTests.Examples.Hierarchy
         protected bool _ExampleByInterface_Accessed;
         private void Lazinate_ExampleByInterface()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _ExampleByInterface = null;
             }
@@ -111,7 +111,7 @@ namespace LazinatorTests.Examples.Hierarchy
         protected bool _ExampleListByInterface_Accessed;
         private void Lazinate_ExampleListByInterface()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _ExampleListByInterface = default(List<IExample>);
             }
@@ -230,7 +230,7 @@ namespace LazinatorTests.Examples.Hierarchy
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty|| LazinatorObjectBytes.Length == 0;
+            get => _IsDirty|| LazinatorMemoryStorage.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -297,7 +297,7 @@ namespace LazinatorTests.Examples.Hierarchy
         
         public virtual void UpdateStoredBuffer()
         {
-            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
             }
@@ -322,7 +322,7 @@ namespace LazinatorTests.Examples.Hierarchy
         public virtual int GetByteLength()
         {
             UpdateStoredBuffer();
-            return LazinatorObjectBytes.Length;
+            return LazinatorMemoryStorage.Length;
         }
         
         public virtual bool NonBinaryHash32 => false;

@@ -67,7 +67,7 @@ namespace LazinatorTests.Examples
         bool _NonLazinatorClass_Accessed;
         private void Lazinate_NonLazinatorClass()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NonLazinatorClass = default(NonLazinatorClass);
             }
@@ -105,7 +105,7 @@ namespace LazinatorTests.Examples
         bool _NonLazinatorInterchangeableClass_Accessed;
         private void Lazinate_NonLazinatorInterchangeableClass()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NonLazinatorInterchangeableClass = default(NonLazinatorInterchangeableClass);
             }
@@ -142,7 +142,7 @@ namespace LazinatorTests.Examples
         bool _NonLazinatorInterchangeableStruct_Accessed;
         private void Lazinate_NonLazinatorInterchangeableStruct()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NonLazinatorInterchangeableStruct = default(NonLazinatorInterchangeableStruct);
             }
@@ -180,7 +180,7 @@ namespace LazinatorTests.Examples
         bool _NonLazinatorStruct_Accessed;
         private void Lazinate_NonLazinatorStruct()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NonLazinatorStruct = default(NonLazinatorStruct);
             }
@@ -361,7 +361,7 @@ namespace LazinatorTests.Examples
         
         public void UpdateStoredBuffer()
         {
-            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
             }
@@ -386,7 +386,7 @@ namespace LazinatorTests.Examples
         public int GetByteLength()
         {
             UpdateStoredBuffer();
-            return LazinatorObjectBytes.Length;
+            return LazinatorMemoryStorage.Length;
         }
         
         public bool NonBinaryHash32 => false;

@@ -73,7 +73,7 @@ namespace LazinatorCollections.Tree
         protected bool _Locations_Accessed;
         private void Lazinate_Locations()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _Locations = null;
             }

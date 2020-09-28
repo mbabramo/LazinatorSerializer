@@ -1103,7 +1103,7 @@ namespace Lazinator.CodeDescription
                             {{{StepThroughPropertiesString}
                                 get
                                 {{
-                                    {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(BackingAccessFieldIncluded, BackingFieldNotAccessedString, $@"if (LazinatorObjectBytes.Length == 0)
+                                    {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(BackingAccessFieldIncluded, BackingFieldNotAccessedString, $@"if (LazinatorMemoryStorage.Length == 0)
                                         {{
                                             return {DefaultExpression};
                                         }}
@@ -1288,7 +1288,7 @@ namespace Lazinator.CodeDescription
         private string GetLazinateContents(string createDefault, string recreation, bool defineChildData = true)
         {
             return $@"
-            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || NonNullableThatCanBeUninitialized, "LazinatorObjectBytes.Length == 0", createDefault, $@"{IIF(defineChildData, "LazinatorMemory ")}childData = {ChildSliceString};
+            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || NonNullableThatCanBeUninitialized, "LazinatorMemoryStorage.Length == 0", createDefault, $@"{IIF(defineChildData, "LazinatorMemory ")}childData = {ChildSliceString};
                 {recreation}")}{IIF(BackingAccessFieldIncluded, $@"
             {BackingFieldAccessedString} = true;")}";
         }

@@ -87,7 +87,7 @@ namespace LazinatorTests.Examples.Structs
         protected bool _ListWrappedBytes_Accessed;
         private void Lazinate_ListWrappedBytes()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _ListWrappedBytes = null;
             }
@@ -127,7 +127,7 @@ namespace LazinatorTests.Examples.Structs
         protected bool _WrappedBool_Accessed;
         private void Lazinate_WrappedBool()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _WrappedBool = default(WBool);
                 _WrappedBool.LazinatorParents = new LazinatorParentsCollection(this);
@@ -152,7 +152,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedBool_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (LazinatorMemoryStorage.Length == 0)
                     {
                         return default(WBool);
                     }
@@ -197,7 +197,7 @@ namespace LazinatorTests.Examples.Structs
         protected bool _WrappedByte_Accessed;
         private void Lazinate_WrappedByte()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _WrappedByte = default(WByte);
                 _WrappedByte.LazinatorParents = new LazinatorParentsCollection(this);
@@ -222,7 +222,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedByte_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (LazinatorMemoryStorage.Length == 0)
                     {
                         return default(WByte);
                     }
@@ -267,7 +267,7 @@ namespace LazinatorTests.Examples.Structs
         protected bool _WrappedChar_Accessed;
         private void Lazinate_WrappedChar()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _WrappedChar = default(WChar);
                 _WrappedChar.LazinatorParents = new LazinatorParentsCollection(this);
@@ -292,7 +292,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedChar_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (LazinatorMemoryStorage.Length == 0)
                     {
                         return default(WChar);
                     }
@@ -337,7 +337,7 @@ namespace LazinatorTests.Examples.Structs
         protected bool _WrappedNullableBool_Accessed;
         private void Lazinate_WrappedNullableBool()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _WrappedNullableBool = default(WNullableBool);
                 _WrappedNullableBool.LazinatorParents = new LazinatorParentsCollection(this);
@@ -362,7 +362,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedNullableBool_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (LazinatorMemoryStorage.Length == 0)
                     {
                         return default(WNullableBool);
                     }
@@ -407,7 +407,7 @@ namespace LazinatorTests.Examples.Structs
         protected bool _WrappedNullableByte_Accessed;
         private void Lazinate_WrappedNullableByte()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _WrappedNullableByte = default(WNullableByte);
                 _WrappedNullableByte.LazinatorParents = new LazinatorParentsCollection(this);
@@ -432,7 +432,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedNullableByte_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (LazinatorMemoryStorage.Length == 0)
                     {
                         return default(WNullableByte);
                     }
@@ -477,7 +477,7 @@ namespace LazinatorTests.Examples.Structs
         protected bool _WrappedNullableChar_Accessed;
         private void Lazinate_WrappedNullableChar()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _WrappedNullableChar = default(WNullableChar);
                 _WrappedNullableChar.LazinatorParents = new LazinatorParentsCollection(this);
@@ -502,7 +502,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedNullableChar_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (LazinatorMemoryStorage.Length == 0)
                     {
                         return default(WNullableChar);
                     }
@@ -547,7 +547,7 @@ namespace LazinatorTests.Examples.Structs
         protected bool _WrappedNullableSByte_Accessed;
         private void Lazinate_WrappedNullableSByte()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _WrappedNullableSByte = default(WNullableSByte);
                 _WrappedNullableSByte.LazinatorParents = new LazinatorParentsCollection(this);
@@ -572,7 +572,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedNullableSByte_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (LazinatorMemoryStorage.Length == 0)
                     {
                         return default(WNullableSByte);
                     }
@@ -617,7 +617,7 @@ namespace LazinatorTests.Examples.Structs
         protected bool _WrappedSByte_Accessed;
         private void Lazinate_WrappedSByte()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _WrappedSByte = default(WSByte);
                 _WrappedSByte.LazinatorParents = new LazinatorParentsCollection(this);
@@ -642,7 +642,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedSByte_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (LazinatorMemoryStorage.Length == 0)
                     {
                         return default(WSByte);
                     }
@@ -806,7 +806,7 @@ namespace LazinatorTests.Examples.Structs
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty|| LazinatorObjectBytes.Length == 0;
+            get => _IsDirty|| LazinatorMemoryStorage.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -873,7 +873,7 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual void UpdateStoredBuffer()
         {
-            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
             }
@@ -898,7 +898,7 @@ namespace LazinatorTests.Examples.Structs
         public virtual int GetByteLength()
         {
             UpdateStoredBuffer();
-            return LazinatorObjectBytes.Length;
+            return LazinatorMemoryStorage.Length;
         }
         
         public virtual bool NonBinaryHash32 => false;

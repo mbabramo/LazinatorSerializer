@@ -80,7 +80,7 @@ namespace LazinatorTests.Examples.Collections
         protected bool _MyMemoryByte_Accessed;
         private void Lazinate_MyMemoryByte()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyMemoryByte = default(Memory<Byte>);
             }
@@ -117,7 +117,7 @@ namespace LazinatorTests.Examples.Collections
         protected bool _MyMemoryInt_Accessed;
         private void Lazinate_MyMemoryInt()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyMemoryInt = default(Memory<Int32>);
             }
@@ -155,7 +155,7 @@ namespace LazinatorTests.Examples.Collections
         protected bool _MyNullableMemoryByte_Accessed;
         private void Lazinate_MyNullableMemoryByte()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNullableMemoryByte = default(Memory<Byte>?);
             }
@@ -193,7 +193,7 @@ namespace LazinatorTests.Examples.Collections
         protected bool _MyNullableMemoryInt_Accessed;
         private void Lazinate_MyNullableMemoryInt()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNullableMemoryInt = default(Memory<Int32>?);
             }
@@ -231,7 +231,7 @@ namespace LazinatorTests.Examples.Collections
         protected bool _MyNullableReadOnlyMemoryInt_Accessed;
         private void Lazinate_MyNullableReadOnlyMemoryInt()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNullableReadOnlyMemoryInt = default(ReadOnlyMemory<Int32>?);
             }
@@ -268,7 +268,7 @@ namespace LazinatorTests.Examples.Collections
         protected bool _MyReadOnlyMemoryByte_Accessed;
         private void Lazinate_MyReadOnlyMemoryByte()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyReadOnlyMemoryByte = default(ReadOnlyMemory<Byte>);
             }
@@ -305,7 +305,7 @@ namespace LazinatorTests.Examples.Collections
         protected bool _MyReadOnlyMemoryChar_Accessed;
         private void Lazinate_MyReadOnlyMemoryChar()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyReadOnlyMemoryChar = default(ReadOnlyMemory<Char>);
             }
@@ -342,7 +342,7 @@ namespace LazinatorTests.Examples.Collections
         protected bool _MyReadOnlyMemoryInt_Accessed;
         private void Lazinate_MyReadOnlyMemoryInt()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyReadOnlyMemoryInt = default(ReadOnlyMemory<Int32>);
             }
@@ -527,7 +527,7 @@ namespace LazinatorTests.Examples.Collections
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty|| LazinatorObjectBytes.Length == 0;
+            get => _IsDirty|| LazinatorMemoryStorage.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -594,7 +594,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual void UpdateStoredBuffer()
         {
-            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
             }
@@ -619,7 +619,7 @@ namespace LazinatorTests.Examples.Collections
         public virtual int GetByteLength()
         {
             UpdateStoredBuffer();
-            return LazinatorObjectBytes.Length;
+            return LazinatorMemoryStorage.Length;
         }
         
         public virtual bool NonBinaryHash32 => false;

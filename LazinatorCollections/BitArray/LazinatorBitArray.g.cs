@@ -98,7 +98,7 @@ namespace LazinatorCollections.BitArray
         bool _IntStorage_Accessed;
         private void Lazinate_IntStorage()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _IntStorage = default(Memory<Int32>);
             }
@@ -215,7 +215,7 @@ namespace LazinatorCollections.BitArray
         public bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty|| LazinatorObjectBytes.Length == 0;
+            get => _IsDirty|| LazinatorMemoryStorage.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -288,7 +288,7 @@ namespace LazinatorCollections.BitArray
         
         public void UpdateStoredBuffer()
         {
-            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
             }
@@ -313,7 +313,7 @@ namespace LazinatorCollections.BitArray
         public int GetByteLength()
         {
             UpdateStoredBuffer();
-            return LazinatorObjectBytes.Length;
+            return LazinatorMemoryStorage.Length;
         }
         
         public bool NonBinaryHash32 => false;

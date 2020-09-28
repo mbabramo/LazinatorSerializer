@@ -63,7 +63,7 @@ namespace LazinatorTests.Examples.Structs
         protected bool _Subcontainer_Accessed;
         private void Lazinate_Subcontainer()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _Subcontainer = default(ExampleStructContainingStruct);
                 _Subcontainer.LazinatorParents = new LazinatorParentsCollection(this);
@@ -88,7 +88,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_Subcontainer_Accessed)
                 {
-                    if (LazinatorObjectBytes.Length == 0)
+                    if (LazinatorMemoryStorage.Length == 0)
                     {
                         return default(ExampleStructContainingStruct);
                     }
@@ -204,7 +204,7 @@ namespace LazinatorTests.Examples.Structs
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty|| LazinatorObjectBytes.Length == 0;
+            get => _IsDirty|| LazinatorMemoryStorage.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -271,7 +271,7 @@ namespace LazinatorTests.Examples.Structs
         
         public virtual void UpdateStoredBuffer()
         {
-            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
             }
@@ -296,7 +296,7 @@ namespace LazinatorTests.Examples.Structs
         public virtual int GetByteLength()
         {
             UpdateStoredBuffer();
-            return LazinatorObjectBytes.Length;
+            return LazinatorMemoryStorage.Length;
         }
         
         public virtual bool NonBinaryHash32 => false;

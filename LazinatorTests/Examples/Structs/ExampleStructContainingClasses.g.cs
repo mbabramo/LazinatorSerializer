@@ -98,7 +98,7 @@ namespace LazinatorTests.Examples
         bool _MyChild1_Accessed;
         private void Lazinate_MyChild1()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyChild1 = null;
             }
@@ -136,7 +136,7 @@ namespace LazinatorTests.Examples
         bool _MyChild2_Accessed;
         private void Lazinate_MyChild2()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyChild2 = null;
             }
@@ -175,7 +175,7 @@ namespace LazinatorTests.Examples
         bool _MyLazinatorList_Accessed;
         private void Lazinate_MyLazinatorList()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyLazinatorList = default(List<Example>);
                 _MyLazinatorList_Dirty = true; 
@@ -232,7 +232,7 @@ namespace LazinatorTests.Examples
         bool _MyListValues_Accessed;
         private void Lazinate_MyListValues()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyListValues = default(List<Int32>);
             }
@@ -270,7 +270,7 @@ namespace LazinatorTests.Examples
         bool _MyTuple_Accessed;
         private void Lazinate_MyTuple()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyTuple = default((NonLazinatorClass myitem1, Int32? myitem2));
             }
@@ -478,7 +478,7 @@ namespace LazinatorTests.Examples
         
         public void UpdateStoredBuffer()
         {
-            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
             }
@@ -503,7 +503,7 @@ namespace LazinatorTests.Examples
         public int GetByteLength()
         {
             UpdateStoredBuffer();
-            return LazinatorObjectBytes.Length;
+            return LazinatorMemoryStorage.Length;
         }
         
         public bool NonBinaryHash32 => false;

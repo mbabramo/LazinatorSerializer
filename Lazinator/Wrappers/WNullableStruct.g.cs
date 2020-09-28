@@ -82,7 +82,7 @@ namespace Lazinator.Wrappers
         bool _NonNullValue_Accessed;
         private void Lazinate_NonNullValue()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _NonNullValue = default(T);
             }
@@ -272,7 +272,7 @@ namespace Lazinator.Wrappers
         
         public void UpdateStoredBuffer()
         {
-            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
             }
@@ -297,7 +297,7 @@ namespace Lazinator.Wrappers
         public int GetByteLength()
         {
             UpdateStoredBuffer();
-            return LazinatorObjectBytes.Length;
+            return LazinatorMemoryStorage.Length;
         }
         
         public bool NonBinaryHash32 => false;

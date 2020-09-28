@@ -89,7 +89,7 @@ namespace LazinatorTests.Examples.Abstract
         }
         private void Lazinate_IntList4()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _IntList4 = default(List<Int32>);
             }
@@ -127,7 +127,7 @@ namespace LazinatorTests.Examples.Abstract
         protected bool _IntList5_Accessed;
         private void Lazinate_IntList5()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _IntList5 = default(List<Int32>);
             }

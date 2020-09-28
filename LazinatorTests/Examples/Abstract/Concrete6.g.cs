@@ -59,7 +59,7 @@ namespace LazinatorTests.Examples.Abstract
         protected bool _IntList6_Accessed;
         private void Lazinate_IntList6()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _IntList6 = default(List<Int32>);
             }

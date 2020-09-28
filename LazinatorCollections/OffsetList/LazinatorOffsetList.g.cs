@@ -75,7 +75,7 @@ namespace LazinatorCollections.OffsetList
         bool _FourByteItems_Accessed;
         private void Lazinate_FourByteItems()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _FourByteItems = null;
             }
@@ -135,7 +135,7 @@ namespace LazinatorCollections.OffsetList
         bool _TwoByteItems_Accessed;
         private void Lazinate_TwoByteItems()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _TwoByteItems = null;
             }
@@ -286,7 +286,7 @@ namespace LazinatorCollections.OffsetList
         public bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty|| LazinatorObjectBytes.Length == 0;
+            get => _IsDirty|| LazinatorMemoryStorage.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -359,7 +359,7 @@ namespace LazinatorCollections.OffsetList
         
         public void UpdateStoredBuffer()
         {
-            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
             }
@@ -384,7 +384,7 @@ namespace LazinatorCollections.OffsetList
         public int GetByteLength()
         {
             UpdateStoredBuffer();
-            return LazinatorObjectBytes.Length;
+            return LazinatorMemoryStorage.Length;
         }
         
         public bool NonBinaryHash32 => false;

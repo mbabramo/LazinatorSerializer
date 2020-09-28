@@ -524,7 +524,7 @@ namespace Lazinator.CodeDescription
                         {HideILazinatorProperty}public {DerivationKeyword}bool IsDirty
                         {{
                             [DebuggerStepThrough]
-                            get => _IsDirty{IIF(!(ObjectType == LazinatorObjectType.Struct || GeneratingRefStruct), "|| LazinatorObjectBytes.Length == 0")};
+                            get => _IsDirty{IIF(!(ObjectType == LazinatorObjectType.Struct || GeneratingRefStruct), "|| LazinatorMemoryStorage.Length == 0")};
                             [DebuggerStepThrough]
                             set
                             {{
@@ -593,7 +593,7 @@ namespace Lazinator.CodeDescription
 
                         public {DerivationKeyword}void UpdateStoredBuffer()
                         {{
-                            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+                            if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                             {{
                                 return;
                             }}
@@ -618,7 +618,7 @@ namespace Lazinator.CodeDescription
                         public {DerivationKeyword}int GetByteLength()
                         {{
                             UpdateStoredBuffer();
-                            return LazinatorObjectBytes.Length;
+                            return LazinatorMemoryStorage.Length;
                         }}
 
                         public {DerivationKeyword}bool NonBinaryHash32 => {(NonbinaryHash ? "true" : "false")};

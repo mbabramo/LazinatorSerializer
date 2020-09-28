@@ -70,7 +70,7 @@ namespace LazinatorTests.Examples.Collections
         protected bool _MyLinkedListInt_Accessed;
         private void Lazinate_MyLinkedListInt()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyLinkedListInt = default(LinkedList<Int32>);
                 _MyLinkedListInt_Dirty = true; 
@@ -127,7 +127,7 @@ namespace LazinatorTests.Examples.Collections
         protected bool _MyListInt_Accessed;
         private void Lazinate_MyListInt()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyListInt = default(List<Int32>);
                 _MyListInt_Dirty = true; 
@@ -184,7 +184,7 @@ namespace LazinatorTests.Examples.Collections
         protected bool _MyListInt2_Accessed;
         private void Lazinate_MyListInt2()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyListInt2 = default(List<Int32>);
             }
@@ -222,7 +222,7 @@ namespace LazinatorTests.Examples.Collections
         protected bool _MyListNullableEnabledContext_Accessed;
         private void Lazinate_MyListNullableEnabledContext()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyListNullableEnabledContext = default(List<NullableEnabledContext>);
             }
@@ -260,7 +260,7 @@ namespace LazinatorTests.Examples.Collections
         protected bool _MySortedSetInt_Accessed;
         private void Lazinate_MySortedSetInt()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MySortedSetInt = default(SortedSet<Int32>);
                 _MySortedSetInt_Dirty = true; 
@@ -389,7 +389,7 @@ namespace LazinatorTests.Examples.Collections
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty|| LazinatorObjectBytes.Length == 0;
+            get => _IsDirty|| LazinatorMemoryStorage.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -456,7 +456,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual void UpdateStoredBuffer()
         {
-            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
             }
@@ -481,7 +481,7 @@ namespace LazinatorTests.Examples.Collections
         public virtual int GetByteLength()
         {
             UpdateStoredBuffer();
-            return LazinatorObjectBytes.Length;
+            return LazinatorMemoryStorage.Length;
         }
         
         public virtual bool NonBinaryHash32 => false;

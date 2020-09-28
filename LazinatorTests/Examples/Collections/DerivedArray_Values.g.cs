@@ -59,7 +59,7 @@ namespace LazinatorTests.Examples.Collections
         protected bool _MyArrayInt_DerivedLevel_Accessed;
         private void Lazinate_MyArrayInt_DerivedLevel()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyArrayInt_DerivedLevel = default(Int32[]);
                 _MyArrayInt_DerivedLevel_Dirty = true; 

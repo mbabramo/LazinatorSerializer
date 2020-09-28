@@ -66,7 +66,7 @@ namespace LazinatorCollections.Tuples
         bool _Key_Accessed;
         private void Lazinate_Key()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _Key = default(TKey);
             }
@@ -107,7 +107,7 @@ namespace LazinatorCollections.Tuples
         bool _Value_Accessed;
         private void Lazinate_Value()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _Value = default(TValue);
             }
@@ -318,7 +318,7 @@ namespace LazinatorCollections.Tuples
         
         public void UpdateStoredBuffer()
         {
-            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
             }
@@ -343,7 +343,7 @@ namespace LazinatorCollections.Tuples
         public int GetByteLength()
         {
             UpdateStoredBuffer();
-            return LazinatorObjectBytes.Length;
+            return LazinatorMemoryStorage.Length;
         }
         
         public bool NonBinaryHash32 => false;

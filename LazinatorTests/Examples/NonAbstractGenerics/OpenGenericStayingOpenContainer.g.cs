@@ -80,7 +80,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         protected bool _ClosedGenericBase_Accessed;
         private void Lazinate_ClosedGenericBase()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _ClosedGenericBase = null;
             }
@@ -127,7 +127,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         protected bool _ClosedGenericFloat_Accessed;
         private void Lazinate_ClosedGenericFloat()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _ClosedGenericFloat = null;
             }
@@ -174,7 +174,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         protected bool _ClosedGenericFromBaseWithBase_Accessed;
         private void Lazinate_ClosedGenericFromBaseWithBase()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _ClosedGenericFromBaseWithBase = null;
             }
@@ -221,7 +221,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         protected bool _ClosedGenericInterface_Accessed;
         private void Lazinate_ClosedGenericInterface()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _ClosedGenericInterface = null;
             }
@@ -268,7 +268,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         protected bool _ClosedGenericNonexclusiveInterface_Accessed;
         private void Lazinate_ClosedGenericNonexclusiveInterface()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _ClosedGenericNonexclusiveInterface = null;
             }
@@ -439,7 +439,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty|| LazinatorObjectBytes.Length == 0;
+            get => _IsDirty|| LazinatorMemoryStorage.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -506,7 +506,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         public virtual void UpdateStoredBuffer()
         {
-            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
             }
@@ -531,7 +531,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         public virtual int GetByteLength()
         {
             UpdateStoredBuffer();
-            return LazinatorObjectBytes.Length;
+            return LazinatorMemoryStorage.Length;
         }
         
         public virtual bool NonBinaryHash32 => false;

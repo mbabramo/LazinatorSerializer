@@ -95,7 +95,7 @@ namespace LazinatorTests.Examples.Tuples
         protected bool _ExternalRecordLikeStruct_Accessed;
         private void Lazinate_ExternalRecordLikeStruct()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _ExternalRecordLikeStruct = default(Point);
             }
@@ -132,7 +132,7 @@ namespace LazinatorTests.Examples.Tuples
         protected bool _MyMismatchedRecordLikeType_Accessed;
         private void Lazinate_MyMismatchedRecordLikeType()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyMismatchedRecordLikeType = default(MismatchedRecordLikeType);
             }
@@ -170,7 +170,7 @@ namespace LazinatorTests.Examples.Tuples
         protected bool _MyNonLazinatorRecordWithConstructor_Accessed;
         private void Lazinate_MyNonLazinatorRecordWithConstructor()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNonLazinatorRecordWithConstructor = default(NonLazinatorRecordWithConstructor);
             }
@@ -208,7 +208,7 @@ namespace LazinatorTests.Examples.Tuples
         protected bool _MyNonLazinatorRecordWithoutConstructor_Accessed;
         private void Lazinate_MyNonLazinatorRecordWithoutConstructor()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNonLazinatorRecordWithoutConstructor = default(NonLazinatorRecordWithoutConstructor);
             }
@@ -246,7 +246,7 @@ namespace LazinatorTests.Examples.Tuples
         protected bool _MyNonLazinatorSubrecordWithConstructor_Accessed;
         private void Lazinate_MyNonLazinatorSubrecordWithConstructor()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNonLazinatorSubrecordWithConstructor = default(NonLazinatorSubrecordWithConstructor);
             }
@@ -284,7 +284,7 @@ namespace LazinatorTests.Examples.Tuples
         protected bool _MyNonLazinatorSubrecordWithoutConstructor_Accessed;
         private void Lazinate_MyNonLazinatorSubrecordWithoutConstructor()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNonLazinatorSubrecordWithoutConstructor = default(NonLazinatorSubrecordWithoutConstructor);
             }
@@ -322,7 +322,7 @@ namespace LazinatorTests.Examples.Tuples
         protected bool _MyRecordLikeClass_Accessed;
         private void Lazinate_MyRecordLikeClass()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyRecordLikeClass = default(RecordLikeClass);
             }
@@ -359,7 +359,7 @@ namespace LazinatorTests.Examples.Tuples
         protected bool _MyRecordLikeStruct_Accessed;
         private void Lazinate_MyRecordLikeStruct()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyRecordLikeStruct = default(RecordLikeStruct);
             }
@@ -397,7 +397,7 @@ namespace LazinatorTests.Examples.Tuples
         protected bool _MyRecordLikeTypeWithLazinator_Accessed;
         private void Lazinate_MyRecordLikeTypeWithLazinator()
         {
-            if (LazinatorObjectBytes.Length == 0)
+            if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyRecordLikeTypeWithLazinator = default(RecordLikeTypeWithLazinator);
             }
@@ -512,7 +512,7 @@ namespace LazinatorTests.Examples.Tuples
         public virtual bool IsDirty
         {
             [DebuggerStepThrough]
-            get => _IsDirty|| LazinatorObjectBytes.Length == 0;
+            get => _IsDirty|| LazinatorMemoryStorage.Length == 0;
             [DebuggerStepThrough]
             set
             {
@@ -579,7 +579,7 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual void UpdateStoredBuffer()
         {
-            if (!IsDirty && !DescendantIsDirty && LazinatorObjectBytes.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
             }
@@ -604,7 +604,7 @@ namespace LazinatorTests.Examples.Tuples
         public virtual int GetByteLength()
         {
             UpdateStoredBuffer();
-            return LazinatorObjectBytes.Length;
+            return LazinatorMemoryStorage.Length;
         }
         
         public virtual bool NonBinaryHash32 => false;
