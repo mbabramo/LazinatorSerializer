@@ -71,7 +71,7 @@ namespace Lazinator.Buffers
             int tryNum = 0;
             while (!success)
             {
-                success = System.IO.Compression.BrotliEncoder.TryCompress(MemoryMarshal.Cast<char, byte>(s.AsSpan()), writer.Free, out bytesWritten);
+                success = System.IO.Compression.BrotliEncoder.TryCompress(MemoryMarshal.Cast<char, byte>(s.AsSpan()), writer.FreeSpan, out bytesWritten);
                 if (success)
                     writer.Position += bytesWritten;
                 else
@@ -105,7 +105,7 @@ namespace Lazinator.Buffers
             int tryNum = 0;
             while (!success)
             {
-                success = System.IO.Compression.BrotliDecoder.TryDecompress(source, decompressionBuffer.Free,
+                success = System.IO.Compression.BrotliDecoder.TryDecompress(source, decompressionBuffer.FreeSpan,
                     out int bytesWritten);
                 if (success)
                 {
@@ -121,8 +121,8 @@ namespace Lazinator.Buffers
                 }
             }
 
-            string s = new string(MemoryMarshal.Cast<byte, char>(decompressionBuffer.Written));
-            decompressionBuffer.UnderlyingMemory?.Dispose();
+            string s = new string(MemoryMarshal.Cast<byte, char>(decompressionBuffer.ActiveMemoryWrittenSpan));
+            decompressionBuffer.ActiveMemory?.Dispose();
             return s;
         }
     }

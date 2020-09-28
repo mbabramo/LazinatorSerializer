@@ -34,13 +34,12 @@ namespace Lazinator.Buffers
         /// The total number of bytes in the referenced range, potentially spanning multiple chunks of memory.
         /// </summary>
         public readonly int Length;
+
         public bool IsEmpty => InitialOwnedMemory == null || Length == 0;
         public long? AllocationID => (InitialOwnedMemory as ExpandableBytes)?.AllocationID;
         public static Memory<byte> EmptyMemory = new Memory<byte>();
         public static ReadOnlyMemory<byte> EmptyReadOnlyMemory = new ReadOnlyMemory<byte>();
         public static LazinatorMemory EmptyLazinatorMemory = new LazinatorMemory(new Memory<byte>());
-
-        // DEBUG -- should eliminate access to these
 
         /// <summary>
         /// The first chunk of the memory. To obtain all of the memory, use GetConsolidatedMemory(). 
@@ -91,11 +90,10 @@ namespace Lazinator.Buffers
         {
         }
 
-        public bool Disposed => InitialOwnedMemory != null && (InitialOwnedMemory is ExpandableBytes e && e.Disposed) || (InitialOwnedMemory is SimpleMemoryOwner<byte> s && s.Disposed);
+        public bool Disposed => EnumerateReferencedMemoryOwners().Any(x => x != null && (x is ExpandableBytes e && e.Disposed) || (x is SimpleMemoryOwner<byte> s && s.Disposed));
 
         public void Dispose()
         {
-            // DEBUG -- should we do this only if Index and StartPosition are 0?
             InitialOwnedMemory?.Dispose();
             if (MoreOwnedMemory != null)
                 foreach (var additional in MoreOwnedMemory)
@@ -206,7 +204,6 @@ namespace Lazinator.Buffers
 
         #region Multiple memories management
 
-
         public bool SingleMemory => MoreOwnedMemory == null || MoreOwnedMemory.Count() == 0;
         public Memory<byte> InitialMemory
         {
@@ -218,19 +215,25 @@ namespace Lazinator.Buffers
                     return InitialOwnedMemory.Memory.Slice(StartPosition, Length);
                 else
                 {
-                    var memory = MemoryAtIndex(StartIndex).Memory;
+                    IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
+                    var memory = memoryOwner.Memory;
                     int overallMemoryLength = memory.Length;
                     int lengthOfMemoryChunkAfterStartPosition = overallMemoryLength - StartPosition;
-                    return memory.Slice(StartPosition, lengthOfMemoryChunkAfterStartPosition);
+                    return memoryOwner.Memory.Slice(StartPosition, lengthOfMemoryChunkAfterStartPosition);
                 }
             }
+        }
+
+        private static IMemoryOwner<byte> SliceMemoryOwner(IMemoryOwner<byte> memoryOwner, int startPosition, int Length)
+        {
+            if (memoryOwner is MemoryReference reference)
+                return reference.Slice(startPosition, Length);
+            return memoryOwner.Slice(startPosition, Length);
         }
 
         public ReadOnlyMemory<byte> InitialReadOnlyMemory => InitialMemory;
         public Span<byte> InitialSpan => InitialMemory.Span;
         public ReadOnlySpan<byte> InitialReadOnlySpan => InitialMemory.Span;
-
-
 
         public Memory<byte> OnlyMemory
         {
@@ -266,6 +269,33 @@ namespace Lazinator.Buffers
                 if (lengthRemaining == 0)
                     yield break;
             }
+        }
+
+        public IEnumerable<IMemoryOwner<byte>> EnumerateMemoryOwners()
+        {
+            if (InitialOwnedMemory != null)
+                yield return InitialOwnedMemory;
+            if (MoreOwnedMemory != null)
+                foreach (var additional in MoreOwnedMemory)
+                    yield return additional;
+        }
+
+        public IEnumerable<IMemoryOwner<byte>> EnumerateReferencedMemoryOwners()
+        {
+            foreach (var owner in EnumerateMemoryOwners())
+                if (owner is MemoryReference memoryReference)
+                    yield return memoryReference.ReferencedMemory;
+                else
+                    yield return owner;
+        }
+
+        public List<(int versionIndex, IMemoryOwner<byte> memory)> GetMemoryReferences()
+        {
+            HashSet<(int versionIndex, IMemoryOwner<byte> memory)> hashSet = new HashSet<(int versionIndex, IMemoryOwner<byte> memory)>();
+            foreach (var owner in EnumerateMemoryOwners())
+                if (owner is MemoryReference memoryReference)
+                    hashSet.Add((memoryReference.VersionOfReferencedMemory, memoryReference.ReferencedMemory));
+            return hashSet.OrderBy(x => x.versionIndex).ToList();
         }
 
         public void WriteToBinaryBuffer(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
@@ -360,6 +390,7 @@ namespace Lazinator.Buffers
         public LazinatorMemory WithAppendedChunk(IMemoryOwner<byte> chunk)
         {
             var evenMoreOwnedMemory = MoreOwnedMemory?.ToList() ?? new List<IMemoryOwner<byte>>();
+
             evenMoreOwnedMemory.Add(chunk);
             if (StartIndex == 0 && StartPosition == 0 && Length == GetGrossLength())
                 return new LazinatorMemory(InitialOwnedMemory, evenMoreOwnedMemory, 0, 0, Length + chunk.Memory.Length);

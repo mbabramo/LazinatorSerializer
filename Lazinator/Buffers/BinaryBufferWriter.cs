@@ -1,6 +1,7 @@
 ﻿using System;
 using static System.Buffers.Binary.BinaryPrimitives;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
 namespace Lazinator.Buffers
 {
@@ -16,24 +17,38 @@ namespace Lazinator.Buffers
 
         public override string ToString()
         {
-            return UnderlyingMemory == null ? "" : "Position " + _Position + " " + UnderlyingMemory.ToString();
+            return ActiveMemory == null ? "" : "Position " + _Position + " " + ActiveMemory.ToString();
         }
 
-        public ExpandableBytes UnderlyingMemory { get; private set; }
-        Span<byte> BufferSpan => UnderlyingMemory == null ? new Span<byte>() : UnderlyingMemory.Memory.Span;
+        public ExpandableBytes ActiveMemory { get; private set; }
+        public LazinatorMemory CompletedMemory { get; private set; }
 
-        public BinaryBufferWriter(int minimumSize)
+        private List<BytesSegment> BytesSegments;
+
+        Span<byte> BufferSpan => ActiveMemory == null ? new Span<byte>() : ActiveMemory.Memory.Span;
+
+        public BinaryBufferWriter(int minimumSize, LazinatorMemory? completedMemory = null)
         {
             if (minimumSize == 0)
                 minimumSize = ExpandableBytes.DefaultMinBufferSize;
-            UnderlyingMemory = new ExpandableBytes(minimumSize);
+            ActiveMemory = new ExpandableBytes(minimumSize);
+            if (completedMemory == null)
+            {
+                CompletedMemory = null;
+                BytesSegments = null;
+            }
+            else
+            {
+                BytesSegments = new List<BytesSegment>();
+                CompletedMemory = completedMemory.Value;
+            }
             _Position = 0;
         }
 
         private void InitializeIfNecessary()
         {
-            if (UnderlyingMemory == null)
-                UnderlyingMemory = new ExpandableBytes();
+            if (ActiveMemory == null)
+                ActiveMemory = new ExpandableBytes();
         }
 
         /// <summary>
@@ -60,7 +75,7 @@ namespace Lazinator.Buffers
             get
             {
                 InitializeIfNecessary();
-                return new LazinatorMemory(UnderlyingMemory, 0, Position);
+                return new LazinatorMemory(ActiveMemory, 0, Position);
             }
         }
 
@@ -81,12 +96,12 @@ namespace Lazinator.Buffers
         /// <summary>
         /// Free bytes that have not been written to. The client can attempt to write to these bytes directly, calling EnsureMinBufferSize if the operation fails and trying again. Then, the client must update the position.
         /// </summary>
-        public Span<byte> Free => BufferSpan.Slice(Position);
+        public Span<byte> FreeSpan => BufferSpan.Slice(Position);
 
         /// <summary>
         /// The bytes written through the current position. Note that the client can change the position within the buffer.
         /// </summary>
-        public Span<byte> Written => BufferSpan.Slice(0, Position);
+        public Span<byte> ActiveMemoryWrittenSpan => BufferSpan.Slice(0, Position);
 
         /// <summary>
         /// Sets the position to the beginning of the buffer. It does not dispose the underlying memory, but prepares to rewrite it.
@@ -103,7 +118,15 @@ namespace Lazinator.Buffers
         public void EnsureMinBufferSize(int desiredBufferSize = 0)
         {
             InitializeIfNecessary();
-            UnderlyingMemory.EnsureMinBufferSize(desiredBufferSize);
+            ActiveMemory.EnsureMinBufferSize(desiredBufferSize);
+        }
+
+        public void WriteFromCompletedMemory(int startIndex, int numBytes)
+        {
+            if (CompletedMemory == null)
+                throw new ArgumentException();
+            List<BytesSegment> segmentsToAdd = CompletedMemory.GetRangeAsSegments(startIndex, numBytes);
+            BytesSegment.ExtendBytesSegmentList(BytesSegments, segmentsToAdd);
         }
 
         public void Write(bool value)
@@ -128,7 +151,7 @@ namespace Lazinator.Buffers
             int originalPosition = Position;
             if (originalPosition + value.Length > BufferSpan.Length)
                 EnsureMinBufferSize((originalPosition + value.Length) * 2);
-            value.CopyTo(Free);
+            value.CopyTo(FreeSpan);
             Position += value.Length;
         }
 
@@ -173,7 +196,7 @@ namespace Lazinator.Buffers
             bool success = false;
             while (!success)
             {
-                success = value.TryWriteBytes(Free);
+                success = value.TryWriteBytes(FreeSpan);
                 if (!success)
                     EnsureMinBufferSize();
             }
@@ -186,7 +209,7 @@ namespace Lazinator.Buffers
             bool success = false;
             while (!success)
             {
-                success = MemoryMarshal.TryWrite<T>(Free, ref value);
+                success = MemoryMarshal.TryWrite<T>(FreeSpan, ref value);
                 if (!success)
                     EnsureMinBufferSize();
             }
@@ -197,7 +220,7 @@ namespace Lazinator.Buffers
             bool success = false;
             while (!success)
             {
-                success = value.TryCopyTo(Free);
+                success = value.TryCopyTo(FreeSpan);
                 if (!success)
                     EnsureMinBufferSize();
             }
@@ -209,7 +232,7 @@ namespace Lazinator.Buffers
             bool success = false;
             while (!success)
             {
-                success = LittleEndianStorage ? TryWriteInt16LittleEndian(Free, value) : TryWriteInt16BigEndian(Free, value);
+                success = LittleEndianStorage ? TryWriteInt16LittleEndian(FreeSpan, value) : TryWriteInt16BigEndian(FreeSpan, value);
                 if (!success)
                     EnsureMinBufferSize();
             }
@@ -221,7 +244,7 @@ namespace Lazinator.Buffers
             bool success = false;
             while (!success)
             {
-                success = LittleEndianStorage ? TryWriteUInt16LittleEndian(Free, value) : TryWriteUInt16BigEndian(Free, value);
+                success = LittleEndianStorage ? TryWriteUInt16LittleEndian(FreeSpan, value) : TryWriteUInt16BigEndian(FreeSpan, value);
                 if (!success)
                     EnsureMinBufferSize();
             }
@@ -233,7 +256,7 @@ namespace Lazinator.Buffers
             bool success = false;
             while (!success)
             {
-                success = LittleEndianStorage ? TryWriteInt32LittleEndian(Free, value) : TryWriteInt32BigEndian(Free, value);
+                success = LittleEndianStorage ? TryWriteInt32LittleEndian(FreeSpan, value) : TryWriteInt32BigEndian(FreeSpan, value);
                 if (!success)
                     EnsureMinBufferSize();
             }
@@ -245,7 +268,7 @@ namespace Lazinator.Buffers
             bool success = false;
             while (!success)
             {
-                success = TryWriteInt32LittleEndian(Free, value);
+                success = TryWriteInt32LittleEndian(FreeSpan, value);
                 if (!success)
                     EnsureMinBufferSize();
             }
@@ -257,7 +280,7 @@ namespace Lazinator.Buffers
             bool success = false;
             while (!success)
             {
-                success = LittleEndianStorage ? TryWriteUInt32LittleEndian(Free, value) : TryWriteUInt32BigEndian(Free, value);
+                success = LittleEndianStorage ? TryWriteUInt32LittleEndian(FreeSpan, value) : TryWriteUInt32BigEndian(FreeSpan, value);
                 if (!success)
                     EnsureMinBufferSize();
             }
@@ -269,7 +292,7 @@ namespace Lazinator.Buffers
             bool success = false;
             while (!success)
             {
-                success = LittleEndianStorage ? TryWriteInt64LittleEndian(Free, value) : TryWriteInt64BigEndian(Free, value);
+                success = LittleEndianStorage ? TryWriteInt64LittleEndian(FreeSpan, value) : TryWriteInt64BigEndian(FreeSpan, value);
                 if (!success)
                     EnsureMinBufferSize();
             }
@@ -281,7 +304,7 @@ namespace Lazinator.Buffers
             bool success = false;
             while (!success)
             {
-                success = LittleEndianStorage ? TryWriteUInt64LittleEndian(Free, value) : TryWriteUInt64BigEndian(Free, value);
+                success = LittleEndianStorage ? TryWriteUInt64LittleEndian(FreeSpan, value) : TryWriteUInt64BigEndian(FreeSpan, value);
                 if (!success)
                     EnsureMinBufferSize();
             }

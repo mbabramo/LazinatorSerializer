@@ -104,7 +104,7 @@ namespace LazinatorTests.Tests
             BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
             for (int j = 0; j < 5000; j++)
                 writer.Write(j);
-            var written = writer.Written;
+            var written = writer.ActiveMemoryWrittenSpan;
             for (int j = 0; j < 5000; j++)
             {
                 int index = j * sizeof(int);
