@@ -2009,7 +2009,7 @@ namespace Lazinator.CodeDescription
                     {{");
                 if (Nullable)
                     sb.Append($@"int index = 0;
-                            bool isNull = storage.ReadOnlySpan.ToBoolean(ref index);
+                            bool isNull = storage.InitialReadOnlySpan.ToBoolean(ref index);
                             if (isNull)
                             {{
                                 return null;
@@ -2357,7 +2357,7 @@ namespace Lazinator.CodeDescription
                         {{
                             return default;
                         }}
-                        ")}ReadOnlySpan<byte> span = storage.ReadOnlySpan;
+                        ")}ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
 
                         int bytesSoFar = 0;
                         ");
