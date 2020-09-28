@@ -35,7 +35,7 @@ namespace Lazinator.Buffers
             ActiveMemory = new ExpandableBytes(minimumSize);
             if (completedMemory == null)
             {
-                CompletedMemory = null;
+                CompletedMemory = default;
                 BytesSegments = null;
             }
             else
@@ -131,7 +131,7 @@ namespace Lazinator.Buffers
         {
             if (CompletedMemory == null)
                 throw new ArgumentException();
-            IEnumerable<BytesSegment> segmentsToAdd = CompletedMemory.EnumerateSubrangesAsSegments(startIndex, numBytes);
+            IEnumerable<BytesSegment> segmentsToAdd = CompletedMemory.EnumerateSubrangesAsSegments(startIndex, numBytes); // DEBUG TODO: We should be able to call a faster routine most of the time (when we're on the same segment, rather than enumerating to find it)
             BytesSegment.ExtendBytesSegmentList(BytesSegments, segmentsToAdd);
         }
 
