@@ -450,7 +450,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default(Stack<Int32>);
             }
-            ReadOnlySpan<byte> span = storage.Span;
+            ReadOnlySpan<byte> span = storage.InitialSpan;
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             

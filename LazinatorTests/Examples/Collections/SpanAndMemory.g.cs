@@ -1070,7 +1070,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static Memory<Int32> ConvertFromBytes_Memory_Gint_g(LazinatorMemory storage)
         {
-            ReadOnlySpan<byte> span = storage.Span;
+            ReadOnlySpan<byte> span = storage.InitialSpan;
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
@@ -1289,7 +1289,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static ReadOnlyMemory<Char> ConvertFromBytes_ReadOnlyMemory_Gchar_g(LazinatorMemory storage)
         {
-            ReadOnlySpan<byte> span = storage.Span;
+            ReadOnlySpan<byte> span = storage.InitialSpan;
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             
@@ -1332,7 +1332,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static ReadOnlyMemory<Int32> ConvertFromBytes_ReadOnlyMemory_Gint_g(LazinatorMemory storage)
         {
-            ReadOnlySpan<byte> span = storage.Span;
+            ReadOnlySpan<byte> span = storage.InitialSpan;
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
             

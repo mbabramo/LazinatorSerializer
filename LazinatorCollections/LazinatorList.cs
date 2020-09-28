@@ -158,7 +158,7 @@ namespace LazinatorCollections
             if (status.IsDeserialized)
                 return ((IList<T>)_DeserializedItems)[status.DeserializedIndex].GetBinaryHashCode32();
             var byteSpan = GetListMemberSlice(status.OriginalIndex);
-            return FarmhashByteSpans.Hash32(byteSpan.Span);
+            return FarmhashByteSpans.Hash32(byteSpan.OnlyMemory.Span);
         }
 
         private LazinatorMemory GetListMemberSlice(int originalIndex)

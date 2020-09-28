@@ -2076,7 +2076,7 @@ namespace Lazinator.CodeDescription
                         {{
                             return {DefaultExpression};
                         }}
-                        ")}ReadOnlySpan<byte> span = storage.Span;";
+                        ")}ReadOnlySpan<byte> span = storage.InitialSpan;";
             }
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)

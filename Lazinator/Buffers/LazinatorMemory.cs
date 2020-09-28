@@ -52,7 +52,7 @@ namespace Lazinator.Buffers
 
         public override string ToString()
         {
-            return $@"{(AllocationID != null ? $"Allocation {AllocationID} " : "")}Length {Length} Bytes {String.Join(",", Span.Slice(0, Math.Min(Span.Length, 100)).ToArray())}";
+            return $@"{(AllocationID != null ? $"Allocation {AllocationID} " : "")}Length {Length} Bytes {String.Join(",", InitialMemory.Span.Slice(0, Math.Min(InitialMemory.Span.Length, 100)).ToArray())}";
         }
 
         #region Constructors
@@ -191,7 +191,7 @@ namespace Lazinator.Buffers
 
         public override int GetHashCode()
         {
-            return (int)FarmhashByteSpans.Hash32(Span);
+            return (int)FarmhashByteSpans.Hash32(OnlyMemory.Span);
         }
 
         public static bool operator ==(LazinatorMemory x, LazinatorMemory y)
