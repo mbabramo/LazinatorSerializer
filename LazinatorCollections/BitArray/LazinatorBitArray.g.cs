@@ -137,7 +137,7 @@ namespace LazinatorCollections.BitArray
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             if (span.Length == 0)
             {
                 return 0;
@@ -390,7 +390,7 @@ namespace LazinatorCollections.BitArray
         
         public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             __version = span.ToDecompressedInt(ref bytesSoFar);
             _m_length = span.ToDecompressedInt(ref bytesSoFar);
             _IntStorage_ByteIndex = bytesSoFar;

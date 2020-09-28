@@ -213,7 +213,7 @@ namespace LazinatorTests.Examples.Abstract
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             if (span.Length == 0)
             {
                 return 0;
@@ -532,7 +532,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public override void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _MyEnumWithinAbstractGeneric = (global::LazinatorTests.Examples.Abstract.AbstractGeneric1<global::LazinatorTests.Examples.Example>.EnumWithinAbstractGeneric)span.ToDecompressedInt(ref bytesSoFar);
             _MyEnumWithinAbstractGeneric2 = (global::LazinatorTests.Examples.Abstract.AbstractGeneric1<global::System.Int32>.EnumWithinAbstractGeneric)span.ToDecompressedInt(ref bytesSoFar);
             _MyUnofficialInt = span.ToDecompressedInt(ref bytesSoFar);

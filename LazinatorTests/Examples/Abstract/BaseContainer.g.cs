@@ -107,7 +107,7 @@ namespace LazinatorTests.Examples.Abstract
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             if (span.Length == 0)
             {
                 return 0;
@@ -375,7 +375,7 @@ namespace LazinatorTests.Examples.Abstract
         
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _MyBase_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {

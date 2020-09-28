@@ -139,7 +139,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         public override void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _AnotherPropertyAddedHereToo = span.ToDecompressedInt(ref bytesSoFar);
         }
         

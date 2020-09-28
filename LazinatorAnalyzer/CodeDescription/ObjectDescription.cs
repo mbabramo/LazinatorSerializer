@@ -468,7 +468,7 @@ namespace Lazinator.CodeDescription
                         {{
                             FreeInMemoryObjects();
                             int bytesSoFar = 0;
-                            ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+                            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
                             if (span.Length == 0)
                             {{
                                 return 0;
@@ -1334,7 +1334,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             sb.Append($@"public {DerivationKeyword}void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
                 {{
                     {(!IsDerivedFromNonAbstractLazinator ? "" : $@"base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-                    ")}ReadOnlySpan<byte> span = LazinatorObjectBytes.Span;
+                    ")}ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
                         ");
 
             foreach (var property in thisLevel)
