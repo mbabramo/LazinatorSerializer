@@ -42,8 +42,10 @@ namespace Lazinator.Buffers
 
         // DEBUG -- should eliminate access to these
 
-        public Memory<byte> Memory => IsEmpty ? EmptyMemory : InitialOwnedMemory.Memory.Slice(StartPosition, Length);
-        public ReadOnlyMemory<byte> ReadOnlyMemory => Memory;
+        /// <summary>
+        /// The first chunk of the memory. To obtain all of the memory, use GetConsolidatedMemory(). 
+        /// </summary>
+        public Memory<byte> Memory => InitialMemory; 
         public Span<byte> Span => Memory.Span;
         public ReadOnlySpan<byte> ReadOnlySpan => Memory.Span;
 
