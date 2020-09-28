@@ -46,8 +46,8 @@ namespace LazinatorTests.Tests
                 int i = 0;
                 if (clonedNoBuffer.IsStruct)
                     clonedNoBuffer = clonedNoBuffer.CloneLazinator();
-                for (; i < Math.Min(clonedWithBuffer.LazinatorMemoryStorage.Span.Length, clonedNoBuffer.LazinatorMemoryStorage.Span.Length); i++)
-                    if (clonedWithBuffer.LazinatorMemoryStorage.Span[i] != clonedNoBuffer.LazinatorMemoryStorage.Span[i])
+                for (; i < Math.Min(clonedWithBuffer.LazinatorMemoryStorage.Length, clonedNoBuffer.LazinatorMemoryStorage.Length); i++)
+                    if (clonedWithBuffer.LazinatorMemoryStorage.OnlyMemory.Span[i] != clonedNoBuffer.LazinatorMemoryStorage.OnlyMemory.Span[i])
                     {
                         break;
                     }
