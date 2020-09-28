@@ -46,7 +46,6 @@ namespace Lazinator.Buffers
         /// The first chunk of the memory. To obtain all of the memory, use GetConsolidatedMemory(). 
         /// </summary>
         public Memory<byte> Memory => InitialMemory; 
-        public ReadOnlySpan<byte> ReadOnlySpan => Memory.Span;
 
 
         public override string ToString()

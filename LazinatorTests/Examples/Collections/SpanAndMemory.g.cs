@@ -1114,7 +1114,7 @@ namespace LazinatorTests.Examples.Collections
         private static Memory<Byte>? ConvertFromBytes_Memory_Gbyte_g_n(LazinatorMemory storage)
         {
             int index = 0;
-            bool isNull = storage.ReadOnlySpan.ToBoolean(ref index);
+            bool isNull = storage.InitialReadOnlySpan.ToBoolean(ref index);
             if (isNull)
             {
                 return null;
@@ -1157,7 +1157,7 @@ namespace LazinatorTests.Examples.Collections
         private static Memory<Int32>? ConvertFromBytes_Memory_Gint_g_n(LazinatorMemory storage)
         {
             int index = 0;
-            bool isNull = storage.ReadOnlySpan.ToBoolean(ref index);
+            bool isNull = storage.InitialReadOnlySpan.ToBoolean(ref index);
             if (isNull)
             {
                 return null;
@@ -1211,7 +1211,7 @@ namespace LazinatorTests.Examples.Collections
         private static ReadOnlyMemory<Int32>? ConvertFromBytes_ReadOnlyMemory_Gint_g_n(LazinatorMemory storage)
         {
             int index = 0;
-            bool isNull = storage.ReadOnlySpan.ToBoolean(ref index);
+            bool isNull = storage.InitialReadOnlySpan.ToBoolean(ref index);
             if (isNull)
             {
                 return null;

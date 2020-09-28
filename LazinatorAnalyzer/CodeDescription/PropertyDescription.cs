@@ -2063,7 +2063,7 @@ namespace Lazinator.CodeDescription
             if (Nullable && (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory))
             {
                 preliminaryNullCheck = $@"int index = 0;
-                        bool isNull = storage.ReadOnlySpan.ToBoolean(ref index);
+                        bool isNull = storage.InitialReadOnlySpan.ToBoolean(ref index);
                         if (isNull)
                         {{
                             return null;

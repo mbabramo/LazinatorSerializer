@@ -584,7 +584,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 return default;
             }
-            ReadOnlySpan<byte> span = storage.ReadOnlySpan;
+            ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
             
             int bytesSoFar = 0;
             
@@ -685,7 +685,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 return default;
             }
-            ReadOnlySpan<byte> span = storage.ReadOnlySpan;
+            ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
             
             int bytesSoFar = 0;
             
@@ -725,7 +725,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 return default;
             }
-            ReadOnlySpan<byte> span = storage.ReadOnlySpan;
+            ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
             
             int bytesSoFar = 0;
             

@@ -1001,7 +1001,7 @@ namespace LazinatorTests.Examples
                 {
                     return default;
                 }
-                ReadOnlySpan<byte> span = storage.ReadOnlySpan;
+                ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
                 
                 int bytesSoFar = 0;
                 

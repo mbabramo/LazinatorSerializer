@@ -3845,7 +3845,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     return default;
                 }
-                ReadOnlySpan<byte> span = storage.ReadOnlySpan;
+                ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
                 
                 int bytesSoFar = 0;
                 
@@ -3933,7 +3933,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     return default;
                 }
-                ReadOnlySpan<byte> span = storage.ReadOnlySpan;
+                ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
                 
                 int bytesSoFar = 0;
                 
@@ -4826,7 +4826,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             private static Memory<Byte>? ConvertFromBytes_Memory_Gbyte_g_n(LazinatorMemory storage)
             {
                 int index = 0;
-                bool isNull = storage.ReadOnlySpan.ToBoolean(ref index);
+                bool isNull = storage.InitialReadOnlySpan.ToBoolean(ref index);
                 if (isNull)
                 {
                     return null;
@@ -5010,7 +5010,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             private static ReadOnlyMemory<Byte>? ConvertFromBytes_ReadOnlyMemory_Gbyte_g_n(LazinatorMemory storage)
             {
                 int index = 0;
-                bool isNull = storage.ReadOnlySpan.ToBoolean(ref index);
+                bool isNull = storage.InitialReadOnlySpan.ToBoolean(ref index);
                 if (isNull)
                 {
                     return null;
@@ -5197,7 +5197,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             private static RecordLikeClass ConvertFromBytes_RecordLikeClass(LazinatorMemory storage)
             {
-                ReadOnlySpan<byte> span = storage.ReadOnlySpan;
+                ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
                 
                 int bytesSoFar = 0;
                 
@@ -5244,7 +5244,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     return default;
                 }
-                ReadOnlySpan<byte> span = storage.ReadOnlySpan;
+                ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
                 
                 int bytesSoFar = 0;
                 
@@ -5272,7 +5272,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             private static Tuple<Example, Int32> ConvertFromBytes_Tuple_GExample_c_C32int_g(LazinatorMemory storage)
             {
-                ReadOnlySpan<byte> span = storage.ReadOnlySpan;
+                ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
                 
                 int bytesSoFar = 0;
                 
@@ -5311,7 +5311,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             private static Tuple<Example?, Int32> ConvertFromBytes_Tuple_GExample_n_c_C32int_g(LazinatorMemory storage)
             {
-                ReadOnlySpan<byte> span = storage.ReadOnlySpan;
+                ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
                 
                 int bytesSoFar = 0;
                 
@@ -5358,7 +5358,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     return default;
                 }
-                ReadOnlySpan<byte> span = storage.ReadOnlySpan;
+                ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
                 
                 int bytesSoFar = 0;
                 
@@ -5414,7 +5414,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     return default;
                 }
-                ReadOnlySpan<byte> span = storage.ReadOnlySpan;
+                ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
                 
                 int bytesSoFar = 0;
                 
@@ -5455,7 +5455,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     return default;
                 }
-                ReadOnlySpan<byte> span = storage.ReadOnlySpan;
+                ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
                 
                 int bytesSoFar = 0;
                 
@@ -5507,7 +5507,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     return default;
                 }
-                ReadOnlySpan<byte> span = storage.ReadOnlySpan;
+                ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
                 
                 int bytesSoFar = 0;
                 
@@ -5563,7 +5563,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     return default;
                 }
-                ReadOnlySpan<byte> span = storage.ReadOnlySpan;
+                ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
                 
                 int bytesSoFar = 0;
                 
@@ -5615,7 +5615,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     return default;
                 }
-                ReadOnlySpan<byte> span = storage.ReadOnlySpan;
+                ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
                 
                 int bytesSoFar = 0;
                 
@@ -5671,7 +5671,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     return default;
                 }
-                ReadOnlySpan<byte> span = storage.ReadOnlySpan;
+                ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
                 
                 int bytesSoFar = 0;
                 
@@ -5714,7 +5714,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     return default;
                 }
-                ReadOnlySpan<byte> span = storage.ReadOnlySpan;
+                ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
                 
                 int bytesSoFar = 0;
                 
