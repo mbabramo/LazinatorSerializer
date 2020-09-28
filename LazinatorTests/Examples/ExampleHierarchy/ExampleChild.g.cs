@@ -80,7 +80,7 @@ namespace LazinatorTests.Examples
                 if (!_ByteSpan_Accessed)
                 {
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ByteSpan_ByteIndex, _ByteSpan_ByteLength, false, false, null);
-                    return childData.Span;
+                    return childData.InitialSpan;
                 }
                 
                 return _ByteSpan.Span;

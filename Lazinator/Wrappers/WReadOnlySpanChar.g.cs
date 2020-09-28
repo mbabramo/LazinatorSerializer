@@ -47,7 +47,7 @@ namespace Lazinator.Wrappers
                 if (!_Value_Accessed)
                 {
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Value_ByteIndex, _Value_ByteLength, true, false, null);
-                    return MemoryMarshal.Cast<byte, char>(childData.Span);
+                    return MemoryMarshal.Cast<byte, char>(childData.InitialSpan);
                 }
                 
                 return MemoryMarshal.Cast<byte, char>(_Value.Span);

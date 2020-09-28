@@ -49,7 +49,7 @@ namespace LazinatorCollections.ByteSpan
                 if (!_ReadOnly_Accessed)
                 {
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ReadOnly_ByteIndex, _ReadOnly_ByteLength, false, false, null);
-                    return childData.Span;
+                    return childData.InitialSpan;
                 }
                 
                 return _ReadOnly.Span;

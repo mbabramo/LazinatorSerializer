@@ -47,7 +47,7 @@ namespace LazinatorCollections.OffsetList
                 if (!_ReadOnlyBytes_Accessed)
                 {
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ReadOnlyBytes_ByteIndex, _ReadOnlyBytes_ByteLength, false, false, null);
-                    return childData.Span;
+                    return childData.InitialSpan;
                 }
                 
                 return _ReadOnlyBytes.Span;

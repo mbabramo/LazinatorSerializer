@@ -200,7 +200,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 if (!_ByteReadOnlySpan_Accessed)
                 {
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ByteReadOnlySpan_ByteIndex, _ByteReadOnlySpan_ByteLength, false, false, null);
-                    return childData.Span;
+                    return childData.InitialSpan;
                 }
                 
                 return _ByteReadOnlySpan.Span;
