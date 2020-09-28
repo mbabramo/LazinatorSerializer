@@ -219,9 +219,9 @@ namespace Lazinator.Core
             if (skipLength)
                 childStorage.WriteToBinaryBuffer(ref writer);
             else if (restrictLengthTo250Bytes)
-                childStorage.ReadOnlySpan.Write_WithByteLengthPrefix(ref writer);
+                childStorage.WriteToBinaryBuffer_WithBytePrefix(ref writer);
             else
-                childStorage.ReadOnlySpan.Write_WithIntLengthPrefix(ref writer);
+                childStorage.WriteToBinaryBuffer_WithIntPrefix(ref writer);
             return childStorage;
         }
 
@@ -356,7 +356,7 @@ namespace Lazinator.Core
             {
                 // object has never been loaded into memory, so there is no need to verify cleanness
                 // just return what we have.
-                original.ReadOnlySpan.Write_WithIntLengthPrefix(ref writer);
+                original.WriteToBinaryBuffer_WithIntPrefix(ref writer);
             }
             else if (isBelievedDirty || length == 0)
             {
@@ -371,7 +371,7 @@ namespace Lazinator.Core
                     ReadOnlyMemory<byte> revised = ConvertNonLazinatorObjectToBytes(nonLazinatorObject, binaryWriterAction);
                     ConfirmMatch(original, revised);
                 }
-                original.ReadOnlySpan.Write_WithIntLengthPrefix(ref writer);
+                original.WriteToBinaryBuffer_WithIntPrefix(ref writer);
             }
         }
 
@@ -994,7 +994,7 @@ namespace Lazinator.Core
             {
                 LazinatorMemory serialized =
                     lazinator.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
-                var result = FarmhashByteSpans.Hash32(serialized.ReadOnlySpan);
+                var result = FarmhashByteSpans.Hash32(serialized.InitialSpan);
                 serialized.Dispose();
                 return result;
             }
@@ -1012,7 +1012,7 @@ namespace Lazinator.Core
             {
                 LazinatorMemory serialized =
                     lazinator.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
-                var result = FarmhashByteSpans.Hash64(serialized.ReadOnlySpan);
+                var result = FarmhashByteSpans.Hash64(serialized.InitialSpan);
                 serialized.Dispose();
                 return result;
             }
@@ -1027,7 +1027,7 @@ namespace Lazinator.Core
             {
                 LazinatorMemory serialized =
                     lazinator.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
-                var result = FarmhashByteSpans.Hash128(serialized.ReadOnlySpan);
+                var result = FarmhashByteSpans.Hash128(serialized.InitialSpan);
                 serialized.Dispose();
                 return result;
             }

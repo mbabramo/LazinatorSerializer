@@ -239,7 +239,7 @@ namespace Lazinator.Core
                 if (storage.Length <= 1)
                     yield break;
                 int bytesSoFar = 0;
-                int uniqueID = fixedUniqueID ?? storage.ReadOnlySpan.ToDecompressedInt(ref bytesSoFar);
+                int uniqueID = fixedUniqueID ?? ((ReadOnlySpan<byte>)storage.InitialSpan).ToDecompressedInt(ref bytesSoFar);
                 ILazinator itemToReturn = CreateKnownID(uniqueID, storage, null);
                 int bytes = itemToReturn.LazinatorMemoryStorage.Length;
                 storage = storage.Slice(bytes);

@@ -2068,7 +2068,7 @@ namespace Lazinator.CodeDescription
                         {{
                             return null;
                         }}
-                        ReadOnlySpan<byte> span = storage.Span.Slice(1);";
+                        ReadOnlySpan<byte> span = storage.InitialSpan.Slice(1);";
             }
             else
             {

@@ -46,7 +46,6 @@ namespace Lazinator.Buffers
         /// The first chunk of the memory. To obtain all of the memory, use GetConsolidatedMemory(). 
         /// </summary>
         public Memory<byte> Memory => InitialMemory; 
-        public Span<byte> Span => Memory.Span;
         public ReadOnlySpan<byte> ReadOnlySpan => Memory.Span;
 
 
@@ -272,7 +271,18 @@ namespace Lazinator.Buffers
         {
             foreach (Memory<byte> memory in EnumerateMemoryChunks(includeOutsideOfRange))
                 writer.Write(memory.Span);
-
+        }
+        public void WriteToBinaryBuffer_WithBytePrefix(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
+        {
+            if (Length > 250)
+                throw new LazinatorSerializationException("Span exceeded length of 250 bytes even though it was guaranteed to be no more than that.");
+            writer.Write((byte)Length);
+            WriteToBinaryBuffer(ref writer, includeOutsideOfRange);
+        }
+        public void WriteToBinaryBuffer_WithIntPrefix(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
+        {
+            writer.Write((uint)Length);
+            WriteToBinaryBuffer(ref writer, includeOutsideOfRange);
         }
 
         public IEnumerable<byte> EnumerateBytes(bool includeOutsideOfRange = false)
