@@ -33,7 +33,7 @@ namespace Lazinator.Buffers
             bytesSegmentList.Add(newSegment);
         }
 
-        public static void ExtendBytesSegmentList(List<BytesSegment> bytesSegmentList, List<BytesSegment> newSegments)
+        public static void ExtendBytesSegmentList(List<BytesSegment> bytesSegmentList, IEnumerable<BytesSegment> newSegments)
         {
             foreach (var newSegment in bytesSegmentList)
                 ExtendBytesSegmentList(bytesSegmentList, newSegment);

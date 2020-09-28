@@ -2,6 +2,7 @@
 using static System.Buffers.Binary.BinaryPrimitives;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Lazinator.Buffers
 {
@@ -121,11 +122,16 @@ namespace Lazinator.Buffers
             ActiveMemory.EnsureMinBufferSize(desiredBufferSize);
         }
 
+        /// <summary>
+        /// Writes from CompletedMemory. Instead of copying the bytes, it simply adds a reference to where those bytes are.
+        /// </summary>
+        /// <param name="startIndex"></param>
+        /// <param name="numBytes"></param>
         public void WriteFromCompletedMemory(int startIndex, int numBytes)
         {
             if (CompletedMemory == null)
                 throw new ArgumentException();
-            List<BytesSegment> segmentsToAdd = CompletedMemory.GetRangeAsSegments(startIndex, numBytes);
+            IEnumerable<BytesSegment> segmentsToAdd = CompletedMemory.EnumerateSubrangesAsSegments(startIndex, numBytes);
             BytesSegment.ExtendBytesSegmentList(BytesSegments, segmentsToAdd);
         }
 

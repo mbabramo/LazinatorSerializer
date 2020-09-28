@@ -58,7 +58,7 @@ namespace LazinatorTests.Tests
                 }
                 if (i == 0)
                     m = new LazinatorMemory(b);
-                else m = m.WithAppendedChunk(new SimpleMemoryOwner<byte>(b));
+                else m = m.WithAppendedChunk(new MemoryReference(new SimpleMemoryOwner<byte>(b), i, 0, b.Length));
             }
 
             const int numChecks = 15;
