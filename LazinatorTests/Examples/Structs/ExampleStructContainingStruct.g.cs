@@ -359,7 +359,6 @@ namespace LazinatorTests.Examples
             get;
             set;
         }
-        ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage.IsEmpty ? LazinatorMemory.EmptyReadOnlyMemory : LazinatorMemoryStorage.InitialMemory;
         
         public void UpdateStoredBuffer()
         {

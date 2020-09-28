@@ -352,8 +352,6 @@ namespace LazinatorCollections.Tuples
             get;
             set;
         }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected virtual ReadOnlyMemory<byte> LazinatorObjectBytes => LazinatorMemoryStorage.IsEmpty ? LazinatorMemory.EmptyReadOnlyMemory : LazinatorMemoryStorage.InitialMemory;
         
         public virtual void UpdateStoredBuffer()
         {

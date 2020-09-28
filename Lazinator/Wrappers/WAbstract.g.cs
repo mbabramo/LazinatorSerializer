@@ -108,12 +108,6 @@ namespace Lazinator.Wrappers
             set;
         }
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected abstract ReadOnlyMemory<byte> LazinatorObjectBytes
-        {
-            get;
-        }
-        
         public abstract void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
         public abstract void UpdateStoredBuffer();
         public abstract void FreeInMemoryObjects();
