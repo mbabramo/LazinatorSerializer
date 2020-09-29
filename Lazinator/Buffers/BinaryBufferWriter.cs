@@ -9,7 +9,7 @@ namespace Lazinator.Buffers
     /// <summary>
     /// Used internally by Lazinator to write data into a binary buffer.
     /// </summary>
-    public ref struct BinaryBufferWriter
+    public struct BinaryBufferWriter
     {
         /// <summary>
         /// Indicates whether storage should be in little Endian format. This should be true unless the intent is to use software primarily on big Endian computers, which are comparatively rarer.
