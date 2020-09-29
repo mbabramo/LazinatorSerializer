@@ -123,7 +123,7 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// Writes from CompletedMemory. Instead of copying the bytes, it simply adds a reference to where those bytes are.
+        /// Writes from CompletedMemory. Instead of copying the bytes, it simply adds a BytesSegment reference to where those bytes are in the overall sets of bytes.
         /// </summary>
         /// <param name="startIndex"></param>
         /// <param name="numBytes"></param>
@@ -131,8 +131,39 @@ namespace Lazinator.Buffers
         {
             if (CompletedMemory == null)
                 throw new ArgumentException();
-            IEnumerable<BytesSegment> segmentsToAdd = CompletedMemory.EnumerateSubrangesAsSegments(startIndex, numBytes); // DEBUG TODO: We should be able to call a faster routine most of the time (when we're on the same segment, rather than enumerating to find it)
+            RecordLastActiveMemoryBytesSegment();
+            IEnumerable<BytesSegment> segmentsToAdd = CompletedMemory.EnumerateSubrangeAsSegments(startIndex, numBytes);
             BytesSegment.ExtendBytesSegmentList(BytesSegments, segmentsToAdd);
+        }
+
+        public void FinalizeBytesSegments()
+        {
+            RecordLastActiveMemoryBytesSegment();
+            throw new NotImplementedException("DEBUG"); // Here, we need to add the list of bytes segments onto the end of the active memory, followed by the size. 
+        }
+
+        internal void RecordLastActiveMemoryBytesSegment()
+        {
+            int activeMemoryLength = ActiveMemory.Memory.Length;
+            if (activeMemoryLength == 0)
+                return;
+            int activeMemoryVersion = CompletedMemory.MoreOwnedMemory.Last().VersionOfReferencedMemory + 1;
+            int firstUnrecordedActiveMemoryByte = GetFirstUnrecordedActiveMemoryByte(activeMemoryVersion);
+            if (firstUnrecordedActiveMemoryByte != activeMemoryLength)
+                BytesSegment.ExtendBytesSegmentList(BytesSegments, new BytesSegment(activeMemoryVersion, firstUnrecordedActiveMemoryByte, activeMemoryLength));
+        }
+
+        private int GetFirstUnrecordedActiveMemoryByte(int memoryChunkVersion)
+        {
+            for (int i = BytesSegments.Count - 1; i >= 0; i--)
+            {
+                BytesSegment bytesSegment = BytesSegments[i];
+                if (bytesSegment.MemoryChunkVersion == memoryChunkVersion)
+                {
+                    return bytesSegment.IndexWithinMemoryChunk + bytesSegment.NumBytes;
+                }
+            }
+            return 0;
         }
 
         public void Write(bool value)

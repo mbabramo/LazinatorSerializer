@@ -304,7 +304,18 @@ namespace Lazinator.Buffers
             }
         }
 
-        public IEnumerable<BytesSegment> EnumerateSubrangesAsSegments(int relativeStartPositionOfSubrange, int numBytesInSubrange)
+        // Explanation of how delta serialization works:
+        // Assume we have a large LazinatorMemory consisting of big ranges of bytes.
+        // Then assume we have a cobbled-together LazinatorMemory with references to these big ranges. This is effectively the result of potentially multiple generations of delta serialization.
+        // Now, changes are made to this object graph, and the goal is to do another delta serialization. 
+        // BinaryBufferWriter will be compiling a list of the ranges we are writing to in the large LazinatorMemory.
+        // When an object has changed, then BinaryBufferWriter writes to a new big range of bytes and can directly record a BytesSegment. 
+        // When an object has not changed, then BinaryBufferWriter has a reference to a range of bytes in the cobbled-together LazinatorMemory. 
+        // So it needs to translate this range to get a reference to the large LazinatorMemory as a BytesSegment. It does this by calling EnumerateSubrangeAsSegments.
+        // The result is that we have a list of BytesSegments. We can save this list of BytesSegments at the end of the latest range of data that we have just written to (plus an indication of the size of this list).
+        // That way, we can see what versions we need to have in memory (or lazy loadable) and we can create the large LazinatorMemory, then the next-generation cobbled-together LazinatorMemory.
+
+        public IEnumerable<BytesSegment> EnumerateSubrangeAsSegments(int relativeStartPositionOfSubrange, int numBytesInSubrange)
         {
             foreach ((int chunkIndex, int startPosition, int numBytes) in EnumerateMemoryChunkSubranges(relativeStartPositionOfSubrange, numBytesInSubrange))
             {
@@ -316,6 +327,13 @@ namespace Lazinator.Buffers
                 else
                     throw new ArgumentException();
             }
+        }
+
+        public Memory<byte> GetMemoryAtBytesSegment(BytesSegment bytesSegment)
+        {
+            var m = (MemoryReference) MemoryAtIndex(bytesSegment.MemoryChunkVersion);
+            var underlyingChunk = m.ReferencedMemory.Memory.Slice(bytesSegment.IndexWithinMemoryChunk, bytesSegment.NumBytes);
+            return underlyingChunk;
         }
 
         public IEnumerable<Memory<byte>> EnumerateMemoryChunks(bool includeOutsideOfRange = false)
