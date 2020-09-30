@@ -467,7 +467,7 @@ namespace LazinatorTests.Examples.Abstract
             _LazinatorExample_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             }
             
             _ConcreteGeneric2a_EndByteIndex = bytesSoFar;

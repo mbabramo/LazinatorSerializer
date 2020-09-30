@@ -257,9 +257,9 @@ namespace LazinatorTests.Examples.Abstract
             _String4 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _String5 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _IntList4_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             _IntList5_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             _Concrete5_EndByteIndex = bytesSoFar;
         }
         

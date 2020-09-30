@@ -374,11 +374,11 @@ namespace LazinatorCollections
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _AllowDuplicates = span.ToBoolean(ref bytesSoFar);
             _MainListSerialized_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             _Offsets_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             }
             
             _LazinatorList_T_EndByteIndex = bytesSoFar;

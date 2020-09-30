@@ -380,7 +380,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             _EagerExample_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             }
             
             _ContainerForEagerExample_EndByteIndex = bytesSoFar;

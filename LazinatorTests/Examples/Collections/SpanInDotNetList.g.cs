@@ -349,7 +349,7 @@ namespace LazinatorTests.Examples.Collections
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _SomeInt = span.ToDecompressedInt(ref bytesSoFar);
             _SpanList_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             _SpanInDotNetList_EndByteIndex = bytesSoFar;
         }
         
@@ -456,7 +456,7 @@ namespace LazinatorTests.Examples.Collections
             List<SpanAndMemory> collection = new List<SpanAndMemory>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
+                int lengthCollectionMember = span.ToInt(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
                     collection.Add(null);

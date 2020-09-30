@@ -1278,35 +1278,35 @@ namespace LazinatorTests.Examples
             _IncludableChild_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
             {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             }
             
             _MyChild1_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             }
             
             _MyChild2_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             }
             
             _MyChild2Previous_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && serializedVersionNumber < 3)
             {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             }
             
             _MyInterfaceImplementer_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             }
             
             _MyNonLazinatorChild_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             _WrappedInt_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -1316,7 +1316,7 @@ namespace LazinatorTests.Examples
             _ExcludableChild_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren)
             {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             }
             
             _Example_EndByteIndex = bytesSoFar;

@@ -526,13 +526,13 @@ namespace LazinatorCollections.Remote
             _Key_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             }
             
             _Local_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             }
             
             _Remote_TKey_TValue_EndByteIndex = bytesSoFar;

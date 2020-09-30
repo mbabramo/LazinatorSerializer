@@ -434,11 +434,11 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _MyListT_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             _MyT_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             }
             
             _OpenGeneric_T_EndByteIndex = bytesSoFar;
@@ -569,7 +569,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             List<T> collection = new List<T>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
+                int lengthCollectionMember = span.ToInt(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
                     collection.Add(default(T));

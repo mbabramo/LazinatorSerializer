@@ -714,23 +714,23 @@ namespace LazinatorTests.Examples.Tuples
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _MyInt = span.ToDecompressedInt(ref bytesSoFar);
             _ExternalRecordLikeStruct_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             _MyMismatchedRecordLikeType_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             _MyNonLazinatorRecordWithConstructor_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             _MyNonLazinatorRecordWithoutConstructor_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             _MyNonLazinatorSubrecordWithConstructor_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             _MyNonLazinatorSubrecordWithoutConstructor_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             _MyRecordLikeClass_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             _MyRecordLikeStruct_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             _MyRecordLikeTypeWithLazinator_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             _RecordLikeContainer_EndByteIndex = bytesSoFar;
         }
         
@@ -1053,7 +1053,7 @@ namespace LazinatorTests.Examples.Tuples
                 int item1 = span.ToDecompressedInt(ref bytesSoFar);
                 
                 Example item2 = default(Example);
-                int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
+                int lengthCollectionMember_item2 = span.ToInt(ref bytesSoFar);
                 if (lengthCollectionMember_item2 != 0)
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
@@ -1119,7 +1119,7 @@ namespace LazinatorTests.Examples.Tuples
                 double item2 = span.ToDouble(ref bytesSoFar);
                 
                 Example item3 = default(Example);
-                int lengthCollectionMember_item3 = span.ToInt32(ref bytesSoFar);
+                int lengthCollectionMember_item3 = span.ToInt(ref bytesSoFar);
                 if (lengthCollectionMember_item3 != 0)
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item3);
@@ -1193,7 +1193,7 @@ namespace LazinatorTests.Examples.Tuples
                 int item1 = span.ToDecompressedInt(ref bytesSoFar);
                 
                 Example item2 = default(Example);
-                int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
+                int lengthCollectionMember_item2 = span.ToInt(ref bytesSoFar);
                 if (lengthCollectionMember_item2 != 0)
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
@@ -1265,7 +1265,7 @@ namespace LazinatorTests.Examples.Tuples
                 double item3 = span.ToDouble(ref bytesSoFar);
                 
                 Example item4 = default(Example);
-                int lengthCollectionMember_item4 = span.ToInt32(ref bytesSoFar);
+                int lengthCollectionMember_item4 = span.ToInt(ref bytesSoFar);
                 if (lengthCollectionMember_item4 != 0)
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item4);
@@ -1343,7 +1343,7 @@ namespace LazinatorTests.Examples.Tuples
                 int item1 = span.ToDecompressedInt(ref bytesSoFar);
                 
                 Example item2 = default(Example);
-                int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
+                int lengthCollectionMember_item2 = span.ToInt(ref bytesSoFar);
                 if (lengthCollectionMember_item2 != 0)
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
@@ -1433,7 +1433,7 @@ namespace LazinatorTests.Examples.Tuples
                 string item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
                 
                 Example item3 = default(Example);
-                int lengthCollectionMember_item3 = span.ToInt32(ref bytesSoFar);
+                int lengthCollectionMember_item3 = span.ToInt(ref bytesSoFar);
                 if (lengthCollectionMember_item3 != 0)
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item3);
@@ -1442,7 +1442,7 @@ namespace LazinatorTests.Examples.Tuples
                 bytesSoFar += lengthCollectionMember_item3;
                 
                 ExampleStructWithoutClass item4 = default(ExampleStructWithoutClass);
-                int lengthCollectionMember_item4 = span.ToInt32(ref bytesSoFar);
+                int lengthCollectionMember_item4 = span.ToInt(ref bytesSoFar);
                 if (lengthCollectionMember_item4 != 0)
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item4);

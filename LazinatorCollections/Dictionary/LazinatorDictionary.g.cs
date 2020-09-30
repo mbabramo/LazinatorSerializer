@@ -417,7 +417,7 @@ namespace LazinatorCollections.Dictionary
             _Buckets_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             }
             
             _LazinatorDictionary_TKey_TValue_EndByteIndex = bytesSoFar;
