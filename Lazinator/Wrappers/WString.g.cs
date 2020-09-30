@@ -318,7 +318,7 @@ namespace Lazinator.Wrappers
         public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
-            _WrappedValue = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+            _WrappedValue = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
         }
         
         public void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -372,7 +372,7 @@ namespace Lazinator.Wrappers
             CompressedIntegralTypes.WriteCompressedInt(ref writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
             
             // write properties
-            EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _WrappedValue);
+            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _WrappedValue);
         }
         
         public WString_RefStruct ToRefStruct()
@@ -627,7 +627,7 @@ namespace Lazinator.Wrappers
             public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
             {
                 ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
-                _WrappedValue = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+                _WrappedValue = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             }
             
             public void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -681,7 +681,7 @@ namespace Lazinator.Wrappers
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
                 
                 // write properties
-                EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _WrappedValue);
+                EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _WrappedValue);
             }
             
         }

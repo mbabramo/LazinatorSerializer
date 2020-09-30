@@ -317,7 +317,7 @@ namespace LazinatorTests.Examples.Subclasses
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _MyInt = span.ToDecompressedInt(ref bytesSoFar);
-            _MyString = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+            _MyString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
         }
         
         public virtual void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -379,7 +379,7 @@ namespace LazinatorTests.Examples.Subclasses
             writer.Write((byte)includeChildrenMode);
             // write properties
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyInt);
-            EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _MyString);
+            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _MyString);
         }
         
     }

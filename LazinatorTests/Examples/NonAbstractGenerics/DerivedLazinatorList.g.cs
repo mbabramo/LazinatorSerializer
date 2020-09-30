@@ -123,7 +123,7 @@ namespace LazinatorTests.Examples
         {
             base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
-            _MyListName = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+            _MyListName = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
         }
         
         public override void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -173,7 +173,7 @@ namespace LazinatorTests.Examples
         {
             base.WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
-            EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _MyListName);
+            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _MyListName);
             OnPropertiesWritten(updateStoredBuffer);
         }
         

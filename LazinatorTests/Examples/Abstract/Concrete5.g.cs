@@ -254,8 +254,8 @@ namespace LazinatorTests.Examples.Abstract
         {
             base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
-            _String4 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
-            _String5 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+            _String4 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+            _String5 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _IntList4_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _IntList5_ByteIndex = bytesSoFar;
@@ -318,8 +318,8 @@ namespace LazinatorTests.Examples.Abstract
             int startOfObjectPosition = 0;
             base.WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
-            EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _String4);
-            EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _String5);
+            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _String4);
+            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _String5);
             startOfObjectPosition = writer.Position;
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_IntList4_Accessed)
             {

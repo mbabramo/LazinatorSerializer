@@ -463,7 +463,7 @@ namespace LazinatorTests.Examples.Abstract
             _MyEnumWithinAbstractGeneric2 = (global::LazinatorTests.Examples.Abstract.AbstractGeneric1<global::System.Int32>.EnumWithinAbstractGeneric)span.ToDecompressedInt(ref bytesSoFar);
             _MyT = span.ToDecompressedInt(ref bytesSoFar);
             _MyUnofficialInt = span.ToDecompressedInt(ref bytesSoFar);
-            _AnotherProperty = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+            _AnotherProperty = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _LazinatorExample_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -542,7 +542,7 @@ namespace LazinatorTests.Examples.Abstract
             CompressedIntegralTypes.WriteCompressedInt(ref writer, (int) _MyEnumWithinAbstractGeneric2);
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyT);
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyUnofficialInt);
-            EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _AnotherProperty);
+            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _AnotherProperty);
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {

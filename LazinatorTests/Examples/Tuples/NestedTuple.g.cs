@@ -630,7 +630,7 @@ namespace LazinatorTests.Examples.Tuples
             
             int item1 = span.ToDecompressedInt(ref bytesSoFar);
             
-            string item2 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+            string item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             
             var itemToCreate = (item1, item2);
             
@@ -646,7 +646,7 @@ namespace LazinatorTests.Examples.Tuples
             
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Value.Item1);
             
-            EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, itemToConvert.Value.Item2);
+            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, itemToConvert.Value.Item2);
         }
         
         private static (Int32 a, String b)? CloneOrChange__Pint_C32a_c_C32string_C32b_p_n((Int32 a, String b)? itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)

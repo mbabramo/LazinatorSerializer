@@ -221,6 +221,7 @@ public class MyOtherClass
             // can put a single CompleteGenerateCode here if having trouble with that file
             // await CompleteGenerateCode(typeof(NullableEnabledContext), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             //await CompleteGenerateCode(typeof(RecordLikeContainer), "LazinatorTests", "/Examples/", "Tuples/", ws);
+            await CompleteGenerateCode(typeof(UncompressedContainer), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
 
             // include some code so that we won't get a warning if not awaiting anything elsewhere
             Task GetT() { return Task.CompletedTask; };

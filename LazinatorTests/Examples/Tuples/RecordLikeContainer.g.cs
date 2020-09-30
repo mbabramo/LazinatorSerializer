@@ -1020,7 +1020,7 @@ namespace LazinatorTests.Examples.Tuples
                 
                 int item1 = span.ToDecompressedInt(ref bytesSoFar);
                 
-                string item2 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+                string item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
                 
                 var itemToCreate = new MismatchedRecordLikeType(item1, item2);
                 
@@ -1032,7 +1032,7 @@ namespace LazinatorTests.Examples.Tuples
                 
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
                 
-                EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, itemToConvert.Name);
+                EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, itemToConvert.Name);
             }
             
             private static MismatchedRecordLikeType CloneOrChange_MismatchedRecordLikeType(MismatchedRecordLikeType itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
@@ -1205,7 +1205,7 @@ namespace LazinatorTests.Examples.Tuples
                 
                 int? item4 = span.ToDecompressedNullableInt(ref bytesSoFar);
                 
-                string item5 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+                string item5 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
                 
                 var itemToCreate = new NonLazinatorSubrecordWithConstructor(item1, item2, item3, item4, item5);
                 
@@ -1235,7 +1235,7 @@ namespace LazinatorTests.Examples.Tuples
                 
                 CompressedIntegralTypes.WriteCompressedNullableInt(ref writer, itemToConvert.NullableInt);
                 
-                EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, itemToConvert.MyString);
+                EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, itemToConvert.MyString);
             }
             
             private static NonLazinatorSubrecordWithConstructor CloneOrChange_NonLazinatorSubrecordWithConstructor(NonLazinatorSubrecordWithConstructor itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
@@ -1258,7 +1258,7 @@ namespace LazinatorTests.Examples.Tuples
                 
                 int bytesSoFar = 0;
                 
-                string item1 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+                string item1 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
                 
                 int item2 = span.ToDecompressedInt(ref bytesSoFar);
                 
@@ -1294,7 +1294,7 @@ namespace LazinatorTests.Examples.Tuples
                     return;
                 }
                 
-                EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, itemToConvert.MyString);
+                EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, itemToConvert.MyString);
                 
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
                 
@@ -1398,7 +1398,7 @@ namespace LazinatorTests.Examples.Tuples
                 
                 int item1 = span.ToDecompressedInt(ref bytesSoFar);
                 
-                string item2 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+                string item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
                 
                 var itemToCreate = new RecordLikeStruct(item1, item2);
                 
@@ -1410,7 +1410,7 @@ namespace LazinatorTests.Examples.Tuples
                 
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
                 
-                EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, itemToConvert.Name);
+                EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, itemToConvert.Name);
             }
             
             private static RecordLikeStruct CloneOrChange_RecordLikeStruct(RecordLikeStruct itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
@@ -1430,7 +1430,7 @@ namespace LazinatorTests.Examples.Tuples
                 
                 int item1 = span.ToDecompressedInt(ref bytesSoFar);
                 
-                string item2 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+                string item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
                 
                 Example item3 = default(Example);
                 int lengthCollectionMember_item3 = span.ToInt32(ref bytesSoFar);
@@ -1461,7 +1461,7 @@ namespace LazinatorTests.Examples.Tuples
                 
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
                 
-                EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, itemToConvert.Name);
+                EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, itemToConvert.Name);
                 
                 if (itemToConvert.Example == null)
                 {

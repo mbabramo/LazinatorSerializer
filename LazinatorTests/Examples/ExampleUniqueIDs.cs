@@ -96,5 +96,6 @@
         ContainerForStructInAnotherNamespace,
         LazinatorRecord,
         LazinatorRecordSubclass,
+        UncompressedContainer,
     }
 }

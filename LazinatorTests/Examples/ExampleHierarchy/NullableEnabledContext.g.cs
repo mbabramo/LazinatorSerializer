@@ -2653,8 +2653,8 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _MyInt = span.ToDecompressedInt(ref bytesSoFar);
             _MyNullableInt = span.ToDecompressedNullableInt(ref bytesSoFar);
-            _NonNullableString = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
-            _NullableString = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+            _NonNullableString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+            _NullableString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _ByteReadOnlySpan_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _ExplicitlyNullable_ByteIndex = bytesSoFar;
@@ -2934,8 +2934,8 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 // write properties
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyInt);
                 CompressedIntegralTypes.WriteCompressedNullableInt(ref writer, _MyNullableInt);
-                EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _NonNullableString);
-                EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _NullableString);
+                EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _NonNullableString);
+                EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _NullableString);
                 startOfObjectPosition = writer.Position;
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ByteReadOnlySpan_Accessed)
                 {
@@ -5249,7 +5249,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 
                 int item1 = span.ToDecompressedInt(ref bytesSoFar);
                 
-                string? item2 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+                string? item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
                 
                 var itemToCreate = new RecordLikeStruct(item1, item2);
                 
@@ -5261,7 +5261,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
                 
-                EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, itemToConvert.Name);
+                EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, itemToConvert.Name);
             }
             
             private static RecordLikeStruct CloneOrChange_RecordLikeStruct(RecordLikeStruct itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)
@@ -5419,7 +5419,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 
                 int item1 = span.ToDecompressedInt(ref bytesSoFar);
                 
-                string? item2 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+                string? item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
                 
                 var itemToCreate = new RecordLikeStruct(item1, item2);
                 
@@ -5435,7 +5435,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Value.Age);
                 
-                EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, itemToConvert.Value.Name);
+                EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, itemToConvert.Value.Name);
             }
             
             private static RecordLikeStruct? CloneOrChange_RecordLikeStruct_n(RecordLikeStruct? itemToConvert, Func<ILazinator?, ILazinator?> cloneOrChangeFunc, bool avoidCloningIfPossible)

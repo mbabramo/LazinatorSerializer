@@ -316,7 +316,7 @@ namespace LazinatorTests.Examples
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
-            _AString = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+            _AString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _MyInt = span.ToDecompressedInt(ref bytesSoFar);
         }
         
@@ -378,7 +378,7 @@ namespace LazinatorTests.Examples
             CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _AString);
+            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _AString);
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyInt);
         }
         

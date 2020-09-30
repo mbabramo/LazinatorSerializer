@@ -730,7 +730,7 @@ namespace LazinatorTests.Examples.Tuples
             
             int item1 = span.ToDecompressedInt(ref bytesSoFar);
             
-            string item2 = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+            string item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             
             Example item3 = default(Example);
             int lengthCollectionMember_item3 = span.ToInt32(ref bytesSoFar);
@@ -761,7 +761,7 @@ namespace LazinatorTests.Examples.Tuples
             
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
             
-            EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, itemToConvert.Name);
+            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, itemToConvert.Name);
             
             if (itemToConvert.Example == null)
             {
