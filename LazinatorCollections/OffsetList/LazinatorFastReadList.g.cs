@@ -96,7 +96,7 @@ namespace LazinatorCollections.OffsetList
             
             ReadGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
             
-            int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+            int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesSoFar);
             
             int serializedVersionNumber = -1; /* versioning disabled */
             
@@ -340,7 +340,7 @@ namespace LazinatorCollections.OffsetList
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _ReadOnlyBytes_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _LazinatorFastReadList_T_EndByteIndex = bytesSoFar;
         }
         

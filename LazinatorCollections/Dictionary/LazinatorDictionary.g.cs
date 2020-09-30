@@ -139,9 +139,9 @@ namespace LazinatorCollections.Dictionary
             
             ReadGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
             
-            int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+            int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesSoFar);
             
-            int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);
+            int serializedVersionNumber = span.ToDecompressedInt32(ref bytesSoFar);
             
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
@@ -413,11 +413,11 @@ namespace LazinatorCollections.Dictionary
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
-            _Count = span.ToDecompressedInt(ref bytesSoFar);
+            _Count = span.ToDecompressedInt32(ref bytesSoFar);
             _Buckets_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             
             _LazinatorDictionary_TKey_TValue_EndByteIndex = bytesSoFar;

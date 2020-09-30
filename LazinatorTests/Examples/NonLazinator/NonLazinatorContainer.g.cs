@@ -223,15 +223,15 @@ namespace LazinatorTests.Examples
                 return 0;
             }
             
-            int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
+            int uniqueID = span.ToDecompressedInt32(ref bytesSoFar);
             if (uniqueID != LazinatorUniqueID)
             {
                 ThrowHelper.ThrowFormatException();
             }
             
-            int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+            int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesSoFar);
             
-            int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);
+            int serializedVersionNumber = span.ToDecompressedInt32(ref bytesSoFar);
             
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
@@ -480,13 +480,13 @@ namespace LazinatorTests.Examples
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _NonLazinatorClass_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _NonLazinatorInterchangeableClass_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _NonLazinatorInterchangeableStruct_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _NonLazinatorStruct_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _NonLazinatorContainer_EndByteIndex = bytesSoFar;
         }
         

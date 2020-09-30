@@ -167,9 +167,9 @@ namespace LazinatorTests.Examples.Abstract
             
             ReadGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
             
-            int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+            int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesSoFar);
             
-            int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);
+            int serializedVersionNumber = span.ToDecompressedInt32(ref bytesSoFar);
             
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
@@ -433,13 +433,13 @@ namespace LazinatorTests.Examples.Abstract
         public override void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
-            _MyEnumWithinAbstractGeneric = (global::LazinatorTests.Examples.Abstract.AbstractGeneric1<T>.EnumWithinAbstractGeneric)span.ToDecompressedInt(ref bytesSoFar);
-            _MyEnumWithinAbstractGeneric2 = (global::LazinatorTests.Examples.Abstract.AbstractGeneric1<global::System.Int32>.EnumWithinAbstractGeneric)span.ToDecompressedInt(ref bytesSoFar);
-            _MyUnofficialInt = span.ToDecompressedInt(ref bytesSoFar);
+            _MyEnumWithinAbstractGeneric = (global::LazinatorTests.Examples.Abstract.AbstractGeneric1<T>.EnumWithinAbstractGeneric)span.ToDecompressedInt32(ref bytesSoFar);
+            _MyEnumWithinAbstractGeneric2 = (global::LazinatorTests.Examples.Abstract.AbstractGeneric1<global::System.Int32>.EnumWithinAbstractGeneric)span.ToDecompressedInt32(ref bytesSoFar);
+            _MyUnofficialInt = span.ToDecompressedInt32(ref bytesSoFar);
             _MyT_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             
             _DerivedGeneric2c_T_EndByteIndex = bytesSoFar;

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Lazinator.Attributes;
 using Lazinator.Wrappers;
 
@@ -12,6 +12,6 @@ namespace LazinatorTests.Examples
         List<ExampleStructContainingClasses> MyListExampleStruct { get; set; }
         List<WNullableStruct<ExampleStructContainingClasses>> MyListNullableExampleStruct { get; set; }
         List<ExampleStructContainingClasses?> MyListUnwrappedNullableExampleStruct { get; set; }
-        WInt IntWrapper { get; set; }
+        WInt32 IntWrapper { get; set; }
     }
 }

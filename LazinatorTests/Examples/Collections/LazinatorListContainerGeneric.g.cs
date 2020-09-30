@@ -116,9 +116,9 @@ namespace LazinatorTests.Examples.Collections
             
             ReadGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
             
-            int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+            int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesSoFar);
             
-            int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);
+            int serializedVersionNumber = span.ToDecompressedInt32(ref bytesSoFar);
             
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
@@ -379,7 +379,7 @@ namespace LazinatorTests.Examples.Collections
             _MyList_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             
             _LazinatorListContainerGeneric_T_EndByteIndex = bytesSoFar;

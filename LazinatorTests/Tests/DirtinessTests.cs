@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
@@ -310,7 +310,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void DirtinessWithOpenGenericStructChild()
         {
-            LazinatorTuple<WInt, WInt> e = new LazinatorTuple<WInt, WInt>
+            LazinatorTuple<WInt32, WInt32> e = new LazinatorTuple<WInt32, WInt32>
             {
                 Item1 = 3, 
                 Item2 = 4

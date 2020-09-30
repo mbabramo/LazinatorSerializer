@@ -107,9 +107,9 @@ namespace LazinatorTests.Examples.Tuples
             
             ReadGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
             
-            int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+            int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesSoFar);
             
-            int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);
+            int serializedVersionNumber = span.ToDecompressedInt32(ref bytesSoFar);
             
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
@@ -332,7 +332,7 @@ namespace LazinatorTests.Examples.Tuples
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _MyNestedTuple_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _NestedTuple_EndByteIndex = bytesSoFar;
         }
         
@@ -439,10 +439,10 @@ namespace LazinatorTests.Examples.Tuples
             
             int bytesSoFar = 0;
             
-            uint? item1 = span.ToDecompressedNullableUint(ref bytesSoFar);
+            uint? item1 = span.ToDecompressedNullableUInt32(ref bytesSoFar);
             
             (ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>)) item2 = default((ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>)));
-            int lengthCollectionMember_item2 = span.ToInt(ref bytesSoFar);
+            int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item2 != 0)
             {
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
@@ -451,7 +451,7 @@ namespace LazinatorTests.Examples.Tuples
             bytesSoFar += lengthCollectionMember_item2;
             
             NonLazinatorClass item3 = default(NonLazinatorClass);
-            int lengthCollectionMember_item3 = span.ToInt(ref bytesSoFar);
+            int lengthCollectionMember_item3 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item3 != 0)
             {
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item3);
@@ -471,7 +471,7 @@ namespace LazinatorTests.Examples.Tuples
                 return;
             }
             
-            CompressedIntegralTypes.WriteCompressedNullableUint(ref writer, itemToConvert.Item1);
+            CompressedIntegralTypes.WriteCompressedNullableUInt(ref writer, itemToConvert.Item1);
             
             void actionItem2(ref BinaryBufferWriter w) => ConvertToBytes__PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_n_c_C32Tuple_Gshort_c_C32long_g_p_p(ref w, itemToConvert.Item2, includeChildrenMode, verifyCleanness, updateStoredBuffer);
             WriteToBinaryWithIntLengthPrefix(ref writer, actionItem2);
@@ -508,7 +508,7 @@ namespace LazinatorTests.Examples.Tuples
             int bytesSoFar = 0;
             
             ExampleChild item1 = default(ExampleChild);
-            int lengthCollectionMember_item1 = span.ToInt(ref bytesSoFar);
+            int lengthCollectionMember_item1 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item1 != 0)
             {
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item1);
@@ -517,7 +517,7 @@ namespace LazinatorTests.Examples.Tuples
             bytesSoFar += lengthCollectionMember_item1;
             
             (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>) item2 = default((UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>));
-            int lengthCollectionMember_item2 = span.ToInt(ref bytesSoFar);
+            int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item2 != 0)
             {
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
@@ -562,10 +562,10 @@ namespace LazinatorTests.Examples.Tuples
             
             int bytesSoFar = 0;
             
-            uint item1 = span.ToDecompressedUint(ref bytesSoFar);
+            uint item1 = span.ToDecompressedUInt32(ref bytesSoFar);
             
             (Int32 a, String b)? item2 = default((Int32 a, String b)?);
-            int lengthCollectionMember_item2 = span.ToInt(ref bytesSoFar);
+            int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item2 != 0)
             {
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
@@ -574,7 +574,7 @@ namespace LazinatorTests.Examples.Tuples
             bytesSoFar += lengthCollectionMember_item2;
             
             Tuple<Int16, Int64> item3 = default(Tuple<Int16, Int64>);
-            int lengthCollectionMember_item3 = span.ToInt(ref bytesSoFar);
+            int lengthCollectionMember_item3 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item3 != 0)
             {
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item3);
@@ -590,7 +590,7 @@ namespace LazinatorTests.Examples.Tuples
         private static void ConvertToBytes__Puint_c_C32_Pint_C32a_c_C32string_C32b_p_n_c_C32Tuple_Gshort_c_C32long_g_p(ref BinaryBufferWriter writer, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             
-            CompressedIntegralTypes.WriteCompressedUint(ref writer, itemToConvert.Item1);
+            CompressedIntegralTypes.WriteCompressedUInt(ref writer, itemToConvert.Item1);
             
             if (itemToConvert.Item2 == null)
             {
@@ -628,7 +628,7 @@ namespace LazinatorTests.Examples.Tuples
             
             int bytesSoFar = 0;
             
-            int item1 = span.ToDecompressedInt(ref bytesSoFar);
+            int item1 = span.ToDecompressedInt32(ref bytesSoFar);
             
             string item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             
@@ -669,9 +669,9 @@ namespace LazinatorTests.Examples.Tuples
             
             int bytesSoFar = 0;
             
-            short item1 = span.ToDecompressedShort(ref bytesSoFar);
+            short item1 = span.ToDecompressedInt16(ref bytesSoFar);
             
-            long item2 = span.ToDecompressedLong(ref bytesSoFar);
+            long item2 = span.ToDecompressedInt64(ref bytesSoFar);
             
             var itemToCreate = new Tuple<Int16, Int64>(item1, item2);
             

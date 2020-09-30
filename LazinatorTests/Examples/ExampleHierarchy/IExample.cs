@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Lazinator.Attributes;
 using Lazinator.Core;
 using Lazinator.Wrappers;
@@ -31,10 +31,10 @@ namespace LazinatorTests.Examples
         string MyString { get; set; }
         [Uncompressed]
         string MyStringUncompressed { get; set; }
-        uint MyUint { get; set; }
+        uint MyUInt { get; set; }
         TestEnum MyTestEnum { get; set; }
         TestEnumByte? MyTestEnumByteNullable { get; set; }
-        WInt WrappedInt { get; set; }
+        WInt32 WrappedInt { get; set; }
         [RelativeOrder(2)] // not necessary, but can confirm that it works
         [ExcludableChild] ExampleChild ExcludableChild { get; set; }
         [IncludableChild] ExampleChild IncludableChild { get; set; }

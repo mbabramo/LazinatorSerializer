@@ -80,9 +80,9 @@ namespace LazinatorTests.Examples.Subclasses
             
             ReadGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
             
-            int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+            int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesSoFar);
             
-            int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);
+            int serializedVersionNumber = span.ToDecompressedInt32(ref bytesSoFar);
             
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
@@ -299,7 +299,7 @@ namespace LazinatorTests.Examples.Subclasses
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
-            _MyEnum = (global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass)span.ToDecompressedInt(ref bytesSoFar);
+            _MyEnum = (global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass)span.ToDecompressedInt32(ref bytesSoFar);
         }
         
         public virtual void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)

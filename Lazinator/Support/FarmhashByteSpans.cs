@@ -1,4 +1,4 @@
-﻿// ReSharper disable InconsistentNaming
+// ReSharper disable InconsistentNaming
 // ReSharper disable SuggestVarOrType_Elsewhere
 // ReSharper disable SuggestVarOrType_BuiltInTypes
 
@@ -186,7 +186,7 @@ namespace Lazinator.Support
 
         // https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/src/farmhash.h#L70
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static uint128_t Uint128(ulong lo, ulong hi) => new uint128_t(lo, hi);
+        private static uint128_t UInt128(ulong lo, ulong hi) => new uint128_t(lo, hi);
 
         // https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/src/farmhash.cc#L417-L419
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -218,7 +218,7 @@ namespace Lazinator.Support
             a += x;
             a += y;
             b += Rotate64(a, 44);
-            return Uint128(a + z, b + c);
+            return UInt128(a + z, b + c);
         }
 
         // https://github.com/google/farmhash/blob/34c13ddfab0e35422f4c3979f360635a8c050260/src/farmhash.cc#L485-L494
@@ -446,8 +446,8 @@ namespace Lazinator.Support
             ulong x = seed;
             ulong y = unchecked(seed * k1 + 113);
             ulong z = ShiftMix(y * k2 + 113) * k2;
-            uint128_t v = Uint128(0, 0);
-            uint128_t w = Uint128(0, 0);
+            uint128_t v = UInt128(0, 0);
+            uint128_t w = UInt128(0, 0);
             x = x * k2 + Fetch64(s);
 
             ulong tmp;
@@ -515,33 +515,33 @@ namespace Lazinator.Support
                 h3 = h1 * h2 + 37 * h2 + 19;
                 h4 = h1 + 101 * h2 + 119;
             }
-            Guid r = ConvertUlongsToGuid(h3, h4);
+            Guid r = ConvertULongsToGuid(h3, h4);
             return r;
         }
 
-        private static Guid ConvertUlongsToGuid(ulong a, ulong b)
+        private static Guid ConvertULongsToGuid(ulong a, ulong b)
         {
-            ConvertUlongToInts(a, out int a_1, out int a_2);
-            ConvertIntToShorts(a_2, out short a_2_1, out short a_2_2);
-            ConvertUlongToInts(b, out int b_1, out int b_2);
-            ConvertIntToShorts(b_1, out short b_1_1, out short b_1_2);
+            ConvertULongToInt32s(a, out int a_1, out int a_2);
+            ConvertIntToInt16s(a_2, out short a_2_1, out short a_2_2);
+            ConvertULongToInt32s(b, out int b_1, out int b_2);
+            ConvertIntToInt16s(b_1, out short b_1_1, out short b_1_2);
             ConvertShortToBytes(b_1_1, out byte b_1_1_1, out byte b_1_1_2);
             ConvertShortToBytes(b_1_2, out byte b_1_2_1, out byte b_1_2_2);
-            ConvertIntToShorts(b_2, out short b_2_1, out short b_2_2);
+            ConvertIntToInt16s(b_2, out short b_2_1, out short b_2_2);
             ConvertShortToBytes(b_2_1, out byte b_2_1_1, out byte b_2_1_2);
             ConvertShortToBytes(b_2_2, out byte b_2_2_1, out byte b_2_2_2);
             Guid g = new Guid(a_1, a_2_1, a_2_2, b_1_1_1, b_1_1_2, b_1_2_1, b_1_2_2, b_2_1_1, b_2_1_2, b_2_2_1, b_2_2_2);
             return g;
         }
 
-        private static void ConvertUlongToInts(ulong value, out int valueHigh, out int valueLow)
+        private static void ConvertULongToInt32s(ulong value, out int valueHigh, out int valueLow)
         {
             const long LOW_MASK = ((1L << 32) - 1);
             valueHigh = (int)((long)value >> 32);
             valueLow = (int)((long)value & LOW_MASK);
         }
 
-        private static void ConvertIntToShorts(int value, out short valueHigh, out short valueLow)
+        private static void ConvertIntToInt16s(int value, out short valueHigh, out short valueLow)
         {
             const int LOW_MASK = ((1 << 16) - 1);
             valueHigh = (short)((int)value >> 16);

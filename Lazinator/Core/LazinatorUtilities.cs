@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
@@ -287,7 +287,7 @@ namespace Lazinator.Core
             }
             else
             {
-                int readUniqueID = span.ToDecompressedInt(ref index);
+                int readUniqueID = span.ToDecompressedInt32(ref index);
                 if (readUniqueID != uniqueID)
                 {
                     ThrowHelper.ThrowFormatException();
@@ -322,12 +322,12 @@ namespace Lazinator.Core
         /// <returns></returns>
         public static LazinatorGenericIDType ReadLazinatorGenericID(ReadOnlySpan<byte> span, ref int index)
         {
-            int mainID = span.ToDecompressedInt(ref index);
+            int mainID = span.ToDecompressedInt32(ref index);
             List<int> l = new List<int>() { mainID };
             byte numEntries = span.ToByte(ref index);
             for (byte b = 1; b < numEntries; b++)
             {
-                l.Add(span.ToDecompressedInt(ref index));
+                l.Add(span.ToDecompressedInt32(ref index));
             }
             return new LazinatorGenericIDType(l);
         }

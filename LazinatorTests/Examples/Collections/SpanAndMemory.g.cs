@@ -456,9 +456,9 @@ namespace LazinatorTests.Examples.Collections
             
             ReadGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
             
-            int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+            int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesSoFar);
             
-            int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);
+            int serializedVersionNumber = span.ToDecompressedInt32(ref bytesSoFar);
             
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
@@ -763,27 +763,27 @@ namespace LazinatorTests.Examples.Collections
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _MyMemoryByte_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyMemoryInt_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyNullableMemoryByte_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyNullableMemoryInt_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyNullableReadOnlyMemoryInt_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyReadOnlyMemoryByte_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyReadOnlyMemoryChar_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyReadOnlyMemoryInt_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyReadOnlySpanByte_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyReadOnlySpanChar_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyReadOnlySpanLong_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _SpanAndMemory_EndByteIndex = bytesSoFar;
         }
         
@@ -1071,13 +1071,13 @@ namespace LazinatorTests.Examples.Collections
         {
             ReadOnlySpan<byte> span = storage.InitialSpan;
             int bytesSoFar = 0;
-            int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
+            int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
             Memory<Int32> collection = new Memory<Int32>(new int[collectionLength]);
             var collectionAsSpan = collection.Span;
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int item = span.ToDecompressedInt(ref bytesSoFar);
+                int item = span.ToDecompressedInt32(ref bytesSoFar);
                 collectionAsSpan[itemIndex] = item;
             }
             
@@ -1163,13 +1163,13 @@ namespace LazinatorTests.Examples.Collections
             }
             ReadOnlySpan<byte> span = storage.InitialSpan.Slice(1);
             int bytesSoFar = 0;
-            int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
+            int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
             Memory<Int32> collection = new Memory<Int32>(new int[collectionLength]);
             var collectionAsSpan = collection.Span;
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int item = span.ToDecompressedInt(ref bytesSoFar);
+                int item = span.ToDecompressedInt32(ref bytesSoFar);
                 collectionAsSpan[itemIndex] = item;
             }
             
@@ -1217,13 +1217,13 @@ namespace LazinatorTests.Examples.Collections
             }
             ReadOnlySpan<byte> span = storage.InitialSpan.Slice(1);
             int bytesSoFar = 0;
-            int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
+            int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
             Memory<Int32> collection = new Memory<Int32>(new int[collectionLength]);
             var collectionAsSpan = collection.Span;
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int item = span.ToDecompressedInt(ref bytesSoFar);
+                int item = span.ToDecompressedInt32(ref bytesSoFar);
                 collectionAsSpan[itemIndex] = item;
             }
             
@@ -1290,7 +1290,7 @@ namespace LazinatorTests.Examples.Collections
         {
             ReadOnlySpan<byte> span = storage.InitialSpan;
             int bytesSoFar = 0;
-            int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
+            int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
             Memory<Char> collection = new Memory<Char>(new char[collectionLength]);
             var collectionAsSpan = collection.Span;
@@ -1333,13 +1333,13 @@ namespace LazinatorTests.Examples.Collections
         {
             ReadOnlySpan<byte> span = storage.InitialSpan;
             int bytesSoFar = 0;
-            int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
+            int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
             Memory<Int32> collection = new Memory<Int32>(new int[collectionLength]);
             var collectionAsSpan = collection.Span;
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int item = span.ToDecompressedInt(ref bytesSoFar);
+                int item = span.ToDecompressedInt32(ref bytesSoFar);
                 collectionAsSpan[itemIndex] = item;
             }
             

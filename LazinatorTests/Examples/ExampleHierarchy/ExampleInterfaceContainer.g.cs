@@ -156,9 +156,9 @@ namespace LazinatorTests.Examples.Hierarchy
             
             ReadGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
             
-            int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+            int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesSoFar);
             
-            int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);
+            int serializedVersionNumber = span.ToDecompressedInt32(ref bytesSoFar);
             
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
@@ -426,11 +426,11 @@ namespace LazinatorTests.Examples.Hierarchy
             _ExampleByInterface_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
             {
-                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             
             _ExampleListByInterface_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _ExampleInterfaceContainer_EndByteIndex = bytesSoFar;
         }
         
@@ -550,12 +550,12 @@ namespace LazinatorTests.Examples.Hierarchy
             }
             ReadOnlySpan<byte> span = storage.InitialSpan;
             int bytesSoFar = 0;
-            int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
+            int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
             List<IExample> collection = new List<IExample>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int lengthCollectionMember = span.ToInt(ref bytesSoFar);
+                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
                     collection.Add(null);

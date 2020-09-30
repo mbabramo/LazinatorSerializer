@@ -1,4 +1,4 @@
-﻿using Lazinator.Attributes;
+using Lazinator.Attributes;
 using Lazinator.Wrappers;
 
 namespace LazinatorTests.Examples.Structs
@@ -6,6 +6,6 @@ namespace LazinatorTests.Examples.Structs
     [Lazinator((int)ExampleUniqueIDs.WrapperContainer)]
     interface IWrapperContainer
     {
-        WInt WrappedInt { get; set; }
+        WInt32 WrappedInt { get; set; }
     }
 }

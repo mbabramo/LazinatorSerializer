@@ -121,9 +121,9 @@ namespace LazinatorTests.Examples.Subclasses
             
             ReadGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
             
-            int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+            int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesSoFar);
             
-            int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);
+            int serializedVersionNumber = span.ToDecompressedInt32(ref bytesSoFar);
             
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
@@ -347,9 +347,9 @@ namespace LazinatorTests.Examples.Subclasses
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
-            _MyEnum = (global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass)span.ToDecompressedInt(ref bytesSoFar);
+            _MyEnum = (global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass)span.ToDecompressedInt32(ref bytesSoFar);
             _MyEnumList_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _ClassWithLocalEnum_EndByteIndex = bytesSoFar;
         }
         
@@ -451,12 +451,12 @@ namespace LazinatorTests.Examples.Subclasses
             }
             ReadOnlySpan<byte> span = storage.InitialSpan;
             int bytesSoFar = 0;
-            int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
+            int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
             List<EnumWithinClass> collection = new List<EnumWithinClass>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass item = (global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass)span.ToDecompressedInt(ref bytesSoFar);
+                global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass item = (global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass)span.ToDecompressedInt32(ref bytesSoFar);
                 collection.Add(item);
             }
             

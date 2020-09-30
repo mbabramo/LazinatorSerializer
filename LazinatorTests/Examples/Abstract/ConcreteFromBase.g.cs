@@ -139,7 +139,7 @@ namespace LazinatorTests.Examples.Abstract
         {
             base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
-            _IntInConcreteFromBase = span.ToDecompressedInt(ref bytesSoFar);
+            _IntInConcreteFromBase = span.ToDecompressedInt32(ref bytesSoFar);
         }
         
         public override void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)

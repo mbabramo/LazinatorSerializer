@@ -125,9 +125,9 @@ namespace LazinatorTests.Examples.Collections
             
             ReadGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
             
-            int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+            int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesSoFar);
             
-            int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);
+            int serializedVersionNumber = span.ToDecompressedInt32(ref bytesSoFar);
             
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
@@ -350,7 +350,7 @@ namespace LazinatorTests.Examples.Collections
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _MyStackInt_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _DotNetStack_Values_EndByteIndex = bytesSoFar;
         }
         
@@ -451,12 +451,12 @@ namespace LazinatorTests.Examples.Collections
             }
             ReadOnlySpan<byte> span = storage.InitialSpan;
             int bytesSoFar = 0;
-            int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
+            int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
             Stack<Int32> collection = new Stack<Int32>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int item = span.ToDecompressedInt(ref bytesSoFar);
+                int item = span.ToDecompressedInt32(ref bytesSoFar);
                 collection.Push(item);
             }
             

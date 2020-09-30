@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -440,7 +440,7 @@ namespace Lazinator.CodeDescription
                 {
                     string readUniqueID;
                     if (!ContainsOpenGenericParameters && IsSealedOrStruct)
-                        readUniqueID = $@"{(UniqueIDCanBeSkipped ? "" : $@"int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
+                        readUniqueID = $@"{(UniqueIDCanBeSkipped ? "" : $@"int uniqueID = span.ToDecompressedInt32(ref bytesSoFar);
                             if (uniqueID != LazinatorUniqueID)
                             {{
                                 ThrowHelper.ThrowFormatException();
@@ -469,9 +469,9 @@ namespace Lazinator.CodeDescription
                                 return 0;
                             }}{classContainingStructContainingClassError}
 
-                            {readUniqueID}{(SuppressLazinatorVersionByte ? "" : $@"int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+                            {readUniqueID}{(SuppressLazinatorVersionByte ? "" : $@"int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesSoFar);
                             
-                        ")}int serializedVersionNumber = {(Version == -1 ? "-1; /* versioning disabled */" : $@"span.ToDecompressedInt(ref bytesSoFar);")}
+                        ")}int serializedVersionNumber = {(Version == -1 ? "-1; /* versioning disabled */" : $@"span.ToDecompressedInt32(ref bytesSoFar);")}
 
                             OriginalIncludeChildrenMode = {(CanNeverHaveChildren ? "IncludeChildrenMode.IncludeAllChildren; /* cannot have children */" : $@"(IncludeChildrenMode)span.ToByte(ref bytesSoFar);")}
 

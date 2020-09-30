@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -124,7 +124,7 @@ namespace Lazinator.Core
                 return default;
             int bytesSoFar = 0;
             var span = (ReadOnlySpan<byte>)storage.InitialSpan;
-            int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
+            int uniqueID = span.ToDecompressedInt32(ref bytesSoFar);
             T itemToReturn;
             if (!UniqueIDToTypeMap.ContainsKey(uniqueID))
                 throw new LazinatorDeserializationException($"Could not deserialize, because unique ID {uniqueID} was found in the memory to be deserialized, but this unique ID is not known. This could arise by creating a Lazinator object and then deserializing it in an assembly where that object type is not present. "); // If there is a Lazinator internal error causing the unique ID to be read in the wrong place, that could also cause the error.
@@ -172,7 +172,7 @@ namespace Lazinator.Core
             if (storage.InitialSpan.Length <= 1)
                 return null;
             int bytesSoFar = 0;
-            int uniqueID = ((ReadOnlySpan<byte>)storage.InitialSpan).ToDecompressedInt(ref bytesSoFar);
+            int uniqueID = ((ReadOnlySpan<byte>)storage.InitialSpan).ToDecompressedInt32(ref bytesSoFar);
             ILazinator itemToReturn = CreateKnownID(uniqueID, storage, parent);
             InitializeDeserialized(itemToReturn, storage, parent);
             return itemToReturn;
@@ -239,7 +239,7 @@ namespace Lazinator.Core
                 if (storage.Length <= 1)
                     yield break;
                 int bytesSoFar = 0;
-                int uniqueID = fixedUniqueID ?? ((ReadOnlySpan<byte>)storage.InitialSpan).ToDecompressedInt(ref bytesSoFar);
+                int uniqueID = fixedUniqueID ?? ((ReadOnlySpan<byte>)storage.InitialSpan).ToDecompressedInt32(ref bytesSoFar);
                 ILazinator itemToReturn = CreateKnownID(uniqueID, storage, null);
                 int bytes = itemToReturn.LazinatorMemoryStorage.Length;
                 storage = storage.Slice(bytes);

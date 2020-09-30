@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 using Lazinator.Core;
 using Lazinator.Exceptions;
@@ -56,7 +56,7 @@ namespace Lazinator.Buffers
 
         public static string ToString_VarIntLengthUtf8(this ReadOnlySpan<byte> b, ref int index)
         {
-            int? length = b.ToDecompressedNullableInt(ref index);
+            int? length = b.ToDecompressedNullableInt32(ref index);
             if (length == null)
                 return null;
             string s = b.ToString(ref index, (int)length);
@@ -94,7 +94,7 @@ namespace Lazinator.Buffers
 
         public static string ToString_BrotliCompressedWithLength(this ReadOnlySpan<byte> b, ref int index)
         {
-            int length = b.ToInt(ref index);
+            int length = b.ToInt32(ref index);
             if (length == -1)
                 return null;
             ReadOnlySpan<byte> source = b.Slice(index, length);

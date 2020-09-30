@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Lazinator.Buffers
 {
@@ -30,7 +30,7 @@ namespace Lazinator.Buffers
             writer.Write(value);
             return (byte)sizeof(short);
         }
-        public static byte WriteUshort(ref BinaryBufferWriter writer, ushort value)
+        public static byte WriteUShort(ref BinaryBufferWriter writer, ushort value)
         {
             writer.Write(value);
             return (byte)sizeof(ushort);
@@ -40,7 +40,7 @@ namespace Lazinator.Buffers
             writer.Write(value);
             return (byte)sizeof(int);
         }
-        public static byte WriteUint(ref BinaryBufferWriter writer, uint value)
+        public static byte WriteUInt(ref BinaryBufferWriter writer, uint value)
         {
             writer.Write(value);
             return (byte)sizeof(uint);
@@ -50,7 +50,7 @@ namespace Lazinator.Buffers
             writer.Write(value);
             return (byte)sizeof(long);
         }
-        public static byte WriteUlong(ref BinaryBufferWriter writer, ulong value)
+        public static byte WriteULong(ref BinaryBufferWriter writer, ulong value)
         {
             writer.Write(value);
             return (byte)sizeof(ulong);
@@ -132,7 +132,7 @@ namespace Lazinator.Buffers
             writer.Write(value.Value);
             return (byte)sizeof(short) + 1;
         }
-        public static byte WriteNullableUshort(ref BinaryBufferWriter writer, ushort? value)
+        public static byte WriteNullableUShort(ref BinaryBufferWriter writer, ushort? value)
         {
             if (value == null)
             {
@@ -154,7 +154,7 @@ namespace Lazinator.Buffers
             writer.Write(value.Value);
             return (byte)sizeof(int) + 1;
         }
-        public static byte WriteNullableUint(ref BinaryBufferWriter writer, uint? value)
+        public static byte WriteNullableUInt(ref BinaryBufferWriter writer, uint? value)
         {
             if (value == null)
             {
@@ -176,7 +176,7 @@ namespace Lazinator.Buffers
             writer.Write(value.Value);
             return (byte)sizeof(long) + 1;
         }
-        public static byte WriteNullableUlong(ref BinaryBufferWriter writer, ulong? value)
+        public static byte WriteNullableULong(ref BinaryBufferWriter writer, ulong? value)
         {
             if (value == null)
             {

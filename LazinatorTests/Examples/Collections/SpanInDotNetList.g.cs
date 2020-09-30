@@ -121,9 +121,9 @@ namespace LazinatorTests.Examples.Collections
             
             ReadGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
             
-            int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+            int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesSoFar);
             
-            int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);
+            int serializedVersionNumber = span.ToDecompressedInt32(ref bytesSoFar);
             
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
@@ -347,9 +347,9 @@ namespace LazinatorTests.Examples.Collections
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
-            _SomeInt = span.ToDecompressedInt(ref bytesSoFar);
+            _SomeInt = span.ToDecompressedInt32(ref bytesSoFar);
             _SpanList_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _SpanInDotNetList_EndByteIndex = bytesSoFar;
         }
         
@@ -451,12 +451,12 @@ namespace LazinatorTests.Examples.Collections
             }
             ReadOnlySpan<byte> span = storage.InitialSpan;
             int bytesSoFar = 0;
-            int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
+            int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
             List<SpanAndMemory> collection = new List<SpanAndMemory>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int lengthCollectionMember = span.ToInt(ref bytesSoFar);
+                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
                     collection.Add(null);

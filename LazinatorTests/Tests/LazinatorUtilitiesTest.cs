@@ -1,4 +1,4 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Lazinator.Buffers;
 using Lazinator.Core;
 using Xunit;
@@ -177,7 +177,7 @@ namespace LazinatorTests.Tests
             for (int j = 0; j < 5000; j++)
             {
                 int index = j * sizeof(int);
-                ReadUncompressedPrimitives.ToInt(written, ref index).Should().Be(j);
+                ReadUncompressedPrimitives.ToInt32(written, ref index).Should().Be(j);
             }
         }
     }

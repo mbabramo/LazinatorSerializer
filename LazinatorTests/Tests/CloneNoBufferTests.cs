@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LazinatorCollections;
@@ -142,7 +142,7 @@ namespace LazinatorTests.Tests
             VerifyCloningEquivalence(() => new DotNetList_Wrapper()
             {
                 MyListNullableByte = new List<WNullableByte>() { 3, 4, 249, null },
-                MyListNullableInt = new List<WNullableInt>() { 3, 16000, 249, null, 1000000000 }
+                MyListNullableInt = new List<WNullableInt32>() { 3, 16000, 249, null, 1000000000 }
             });
         }
 
@@ -250,11 +250,11 @@ namespace LazinatorTests.Tests
             {
                 ClosedGenericBase = new OpenGeneric<Base>()
                 {
-                    MyT = new GenericFromBase<WInt>()
+                    MyT = new GenericFromBase<WInt32>()
                 },
                 ClosedGenericFromBaseWithBase = new GenericFromBase<Base>()
                 {
-                    MyT = new GenericFromBase<WInt>()
+                    MyT = new GenericFromBase<WInt32>()
                 }
             });
         }
@@ -273,9 +273,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void CloneWithoutBuffer_DerivedGenericContainer()
         {
-            VerifyCloningEquivalence(() => new DerivedGenericContainer<WInt>()
+            VerifyCloningEquivalence(() => new DerivedGenericContainer<WInt32>()
             {
-                Item = new DerivedGeneric2c<WInt>()
+                Item = new DerivedGeneric2c<WInt32>()
                 {
                     MyT = 5 // now is a wrapped int -- note that Item is defined as being IAbstract<T>
                 },
@@ -285,7 +285,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void CloneWithoutBuffer_GenericFromBase()
         {
-            VerifyCloningEquivalence(() => new GenericFromBase<WInt>()
+            VerifyCloningEquivalence(() => new GenericFromBase<WInt32>()
             {
                 MyT = 5
             });
@@ -429,9 +429,9 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void CloneWithoutBuffer_LazinatorList_WInt()
+        public void CloneWithoutBuffer_LazinatorList_WInt32()
         {
-            VerifyCloningEquivalence(() => new LazinatorList<WInt>() { 3 });
+            VerifyCloningEquivalence(() => new LazinatorList<WInt32>() { 3 });
         }
 
         [Fact]
@@ -451,9 +451,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void CloneWithoutBuffer_LazinatorDictionary()
         {
-            LazinatorDictionary<WInt, Example> GetDictionary()
+            LazinatorDictionary<WInt32, Example> GetDictionary()
             {
-                LazinatorDictionary<WInt, Example> d = new LazinatorDictionary<WInt, Example>();
+                LazinatorDictionary<WInt32, Example> d = new LazinatorDictionary<WInt32, Example>();
                 d[23] = GetExample(1);
                 d[0] = GetExample(2);
                 return d;

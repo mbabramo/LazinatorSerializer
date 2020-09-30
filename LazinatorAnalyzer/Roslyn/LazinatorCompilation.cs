@@ -1,4 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
@@ -253,7 +253,7 @@ namespace LazinatorCodeGen.Roslyn
                     if (@interface.GetFullNamespace().StartsWith("System.Collections"))
                         continue;
                     RecordInformationAboutTypeAndRelatedTypes(@interface);
-                    AddLinkFromTypeToInterface(namedTypeSymbol, @interface);
+                    AddLinkFromTypeToInt32erface(namedTypeSymbol, @interface);
                 }
                 if (namedTypeSymbol.TypeKind == TypeKind.Class || namedTypeSymbol.TypeKind == TypeKind.Struct)
                 {
@@ -263,7 +263,7 @@ namespace LazinatorCodeGen.Roslyn
                         LazinatorAnalyzer.AttributeClones.CloneLazinatorAttribute attribute = GetFirstAttributeOfType<LazinatorAnalyzer.AttributeClones.CloneLazinatorAttribute>(@interface);
                         if (attribute != null)
                         {
-                            AddLinkFromTypeToInterface(namedTypeSymbol, @interface);
+                            AddLinkFromTypeToInt32erface(namedTypeSymbol, @interface);
                             includesInterfaceWithLazinatorAttribute = true;
                             break;
                         }
@@ -286,7 +286,7 @@ namespace LazinatorCodeGen.Roslyn
             }
         }
 
-        private void AddLinkFromTypeToInterface(INamedTypeSymbol namedTypeSymbol, INamedTypeSymbol @interface)
+        private void AddLinkFromTypeToInt32erface(INamedTypeSymbol namedTypeSymbol, INamedTypeSymbol @interface)
         {
             if (namedTypeSymbol.TypeKind != TypeKind.Interface && ExclusiveInterfaces.Contains(TypeSymbolToString(@interface)) && !TypeToExclusiveInterface.ContainsKey(TypeSymbolToString(namedTypeSymbol)))
                 TypeToExclusiveInterface[TypeSymbolToString(namedTypeSymbol.OriginalDefinition)] = TypeSymbolToString(@interface.OriginalDefinition);

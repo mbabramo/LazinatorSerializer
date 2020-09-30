@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Lazinator.Buffers
 {
@@ -27,7 +27,7 @@ namespace Lazinator.Buffers
             return numBytes;
         }
 
-        public static int ToDecompressedInt(this ReadOnlySpan<byte> bytes, ref int index)
+        public static int ToDecompressedInt32(this ReadOnlySpan<byte> bytes, ref int index)
         {
             int returnValue = 0;
             int bitIndex = 0;
@@ -67,7 +67,7 @@ namespace Lazinator.Buffers
             return numBytes;
         }
 
-        public static long ToDecompressedLong(this ReadOnlySpan<byte> bytes, ref int index)
+        public static long ToDecompressedInt64(this ReadOnlySpan<byte> bytes, ref int index)
         {
             long returnValue = 0;
             int bitIndex = 0;
@@ -95,21 +95,21 @@ namespace Lazinator.Buffers
 
         public static byte WriteCompressedShort(ref BinaryBufferWriter writer, short value) => WriteCompressedInt(ref writer, value);
 
-        public static short ToDecompressedShort(this ReadOnlySpan<byte> bytes, ref int index)
+        public static short ToDecompressedInt16(this ReadOnlySpan<byte> bytes, ref int index)
         {
-            int value = ToDecompressedInt(bytes, ref index);
+            int value = ToDecompressedInt32(bytes, ref index);
             if (value > short.MaxValue || value < short.MinValue)
-                throw new FormatException("Format_BadCompressedUshort");
+                throw new FormatException("Format_BadCompressedUShort");
             return (short)value;
         }
 
-        public static byte WriteCompressedUshort(ref BinaryBufferWriter writer, ushort value) => WriteCompressedUint(ref writer, value);
+        public static byte WriteCompressedUShort(ref BinaryBufferWriter writer, ushort value) => WriteCompressedUInt(ref writer, value);
 
-        public static ushort ToDecompressedUshort(this ReadOnlySpan<byte> bytes, ref int index)
+        public static ushort ToDecompressedUInt16(this ReadOnlySpan<byte> bytes, ref int index)
         {
-            uint value = ToDecompressedUint(bytes, ref index);
+            uint value = ToDecompressedUInt32(bytes, ref index);
             if (value > ushort.MaxValue)
-                throw new FormatException("Format_BadCompressedUshort");
+                throw new FormatException("Format_BadCompressedUShort");
             return (ushort)value;
         }
 
@@ -117,19 +117,19 @@ namespace Lazinator.Buffers
 
         #region Unsigned (using int/long methods)
 
-        public static byte WriteCompressedUint(ref BinaryBufferWriter writer, uint value) => WriteCompressedInt(ref writer, (int) value);
+        public static byte WriteCompressedUInt(ref BinaryBufferWriter writer, uint value) => WriteCompressedInt(ref writer, (int) value);
 
-        public static uint ToDecompressedUint(this ReadOnlySpan<byte> bytes, ref int index)
+        public static uint ToDecompressedUInt32(this ReadOnlySpan<byte> bytes, ref int index)
         {
-            int value = ToDecompressedInt(bytes, ref index);
+            int value = ToDecompressedInt32(bytes, ref index);
             return (uint) value;
         }
 
-        public static byte WriteCompressedUlong(ref BinaryBufferWriter writer, ulong value) => WriteCompressedLong(ref writer, (long) value);
+        public static byte WriteCompressedULong(ref BinaryBufferWriter writer, ulong value) => WriteCompressedLong(ref writer, (long) value);
 
-        public static ulong ToDecompressedUlong(this ReadOnlySpan<byte> bytes, ref int index)
+        public static ulong ToDecompressedUInt64(this ReadOnlySpan<byte> bytes, ref int index)
         {
-            long value = ToDecompressedLong(bytes, ref index);
+            long value = ToDecompressedInt64(bytes, ref index);
             return (ulong) value;
         }
 
@@ -153,10 +153,10 @@ namespace Lazinator.Buffers
             return WriteCompressedInt(ref writer, (int) value);
         }
 
-        public static int? ToDecompressedNullableInt(this ReadOnlySpan<byte> bytes, ref int index)
+        public static int? ToDecompressedNullableInt32(this ReadOnlySpan<byte> bytes, ref int index)
         {
             int initialIndex = index;
-            int initialValue = ToDecompressedInt(bytes, ref index);
+            int initialValue = ToDecompressedInt32(bytes, ref index);
             if (initialValue == 127)
             {
                 if (index == initialIndex + 1)
@@ -180,10 +180,10 @@ namespace Lazinator.Buffers
             return WriteCompressedLong(ref writer, (long) value);
         }
 
-        public static long? ToDecompressedNullableLong(this ReadOnlySpan<byte> bytes, ref int index)
+        public static long? ToDecompressedNullableInt64(this ReadOnlySpan<byte> bytes, ref int index)
         {
             int initialIndex = index;
-            long initialValue = ToDecompressedLong(bytes, ref index);
+            long initialValue = ToDecompressedInt64(bytes, ref index);
             if (initialValue == 127)
             {
                 if (index == initialIndex + 1)
@@ -200,9 +200,9 @@ namespace Lazinator.Buffers
 
         public static byte WriteCompressedNullableShort(ref BinaryBufferWriter writer, short? value) => WriteCompressedNullableInt(ref writer, value);
 
-        public static short? ToDecompressedNullableShort(this ReadOnlySpan<byte> bytes, ref int index)
+        public static short? ToDecompressedNullableInt16(this ReadOnlySpan<byte> bytes, ref int index)
         {
-            int? value = ToDecompressedNullableInt(bytes, ref index);
+            int? value = ToDecompressedNullableInt32(bytes, ref index);
             if (value == null)
                 return null;
             if (value > short.MaxValue || value < short.MinValue)
@@ -210,29 +210,29 @@ namespace Lazinator.Buffers
             return (short) (int) value;
         }
 
-        public static byte WriteCompressedNullableUshort(ref BinaryBufferWriter writer, ushort? value) => WriteCompressedNullableInt(ref writer, (int?)value);
+        public static byte WriteCompressedNullableUShort(ref BinaryBufferWriter writer, ushort? value) => WriteCompressedNullableInt(ref writer, (int?)value);
 
-        public static ushort? ToDecompressedNullableUshort(this ReadOnlySpan<byte> bytes, ref int index)
+        public static ushort? ToDecompressedNullableUInt16(this ReadOnlySpan<byte> bytes, ref int index)
         {
-            int? value = ToDecompressedNullableInt(bytes, ref index);
+            int? value = ToDecompressedNullableInt32(bytes, ref index);
             if (value > ushort.MaxValue || value < ushort.MinValue)
-                throw new FormatException("Format_BadCompressedNullableUshort");
+                throw new FormatException("Format_BadCompressedNullableUShort");
             return (ushort?)value;
         }
 
-        public static byte WriteCompressedNullableUint(ref BinaryBufferWriter writer, uint? value) => WriteCompressedNullableInt(ref writer, (int?) value);
+        public static byte WriteCompressedNullableUInt(ref BinaryBufferWriter writer, uint? value) => WriteCompressedNullableInt(ref writer, (int?) value);
 
-        public static uint? ToDecompressedNullableUint(this ReadOnlySpan<byte> bytes, ref int index)
+        public static uint? ToDecompressedNullableUInt32(this ReadOnlySpan<byte> bytes, ref int index)
         {
-            int? value = ToDecompressedNullableInt(bytes, ref index);
+            int? value = ToDecompressedNullableInt32(bytes, ref index);
             return (uint?) value;
         }
 
-        public static byte WriteCompressedNullableUlong(ref BinaryBufferWriter writer, ulong? value) => WriteCompressedNullableLong(ref writer, (long?) value);
+        public static byte WriteCompressedNullableULong(ref BinaryBufferWriter writer, ulong? value) => WriteCompressedNullableLong(ref writer, (long?) value);
 
-        public static ulong? ToDecompressedNullableUlong(this ReadOnlySpan<byte> bytes, ref int index)
+        public static ulong? ToDecompressedNullableUInt64(this ReadOnlySpan<byte> bytes, ref int index)
         {
-            long? value = ToDecompressedNullableLong(bytes, ref index);
+            long? value = ToDecompressedNullableInt64(bytes, ref index);
             return (ulong?) value;
         }
 
@@ -249,7 +249,7 @@ namespace Lazinator.Buffers
 
         public static byte? ToDecompressedNullableByte(this ReadOnlySpan<byte> bytes, ref int index)
         {
-            int? value = ToDecompressedNullableInt(bytes, ref index);
+            int? value = ToDecompressedNullableInt32(bytes, ref index);
             if (value == null)
                 return null;
             if (value > byte.MaxValue)
@@ -289,7 +289,7 @@ namespace Lazinator.Buffers
 
         public static TimeSpan ToDecompressedTimeSpan(this ReadOnlySpan<byte> bytes, ref int index)
         {
-            long value = ToDecompressedLong(bytes, ref index);
+            long value = ToDecompressedInt64(bytes, ref index);
             return new TimeSpan(value);
         }
 
@@ -297,7 +297,7 @@ namespace Lazinator.Buffers
 
         public static TimeSpan? ToDecompressedNullableTimeSpan(this ReadOnlySpan<byte> bytes, ref int index)
         {
-            long? value = ToDecompressedNullableLong(bytes, ref index);
+            long? value = ToDecompressedNullableInt64(bytes, ref index);
             return value == null ? (TimeSpan?) null : new TimeSpan((long) value);
         }
 
@@ -305,7 +305,7 @@ namespace Lazinator.Buffers
 
         public static DateTime ToDecompressedDateTime(this ReadOnlySpan<byte> bytes, ref int index)
         {
-            long value = ToDecompressedLong(bytes, ref index);
+            long value = ToDecompressedInt64(bytes, ref index);
             return new DateTime(value);
         }
 
@@ -313,7 +313,7 @@ namespace Lazinator.Buffers
 
         public static DateTime? ToDecompressedNullableDateTime(this ReadOnlySpan<byte> bytes, ref int index)
         {
-            long? value = ToDecompressedNullableLong(bytes, ref index);
+            long? value = ToDecompressedNullableInt64(bytes, ref index);
             return value == null ? (DateTime?)null : new DateTime((long)value);
         }
 

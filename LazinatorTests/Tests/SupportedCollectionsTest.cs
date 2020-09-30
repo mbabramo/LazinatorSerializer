@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
@@ -56,7 +56,7 @@ namespace LazinatorTests.Tests
             {
                 return new DotNetList_Wrapper()
                 {
-                    MyListInt = new List<WInt>() { 3, 4, thirdItem }
+                    MyListInt = new List<WInt32>() { 3, 4, thirdItem }
                 };
             }
 
@@ -86,7 +86,7 @@ namespace LazinatorTests.Tests
             DotNetList_Wrapper w = new DotNetList_Wrapper()
             {
                 MyListNullableByte = new List<WNullableByte>() { 3, 4, 249, null },
-                MyListNullableInt = new List<WNullableInt>() { 3, 16000, 249, null, 1000000000 }
+                MyListNullableInt = new List<WNullableInt32>() { 3, 16000, 249, null, 1000000000 }
             };
             var c = w.CloneLazinatorTyped();
             c.MyListNullableByte[0].WrappedValue.Should().Be((byte)3);
@@ -898,7 +898,7 @@ namespace LazinatorTests.Tests
             {
                 return new StructTuple()
                 {
-                    MyValueTupleStructs = (3, 4) // WInts
+                    MyValueTupleStructs = (3, 4) // WInt32s
                 };
             }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using FluentAssertions;
 using LazinatorCollections;
@@ -91,10 +91,10 @@ namespace LazinatorTests.Tests
         [Fact]
         public void ParentsWorksWithGenericStruct()
         {
-            LazinatorTuple<WInt, WInt> e = new LazinatorTuple<WInt, WInt>()
+            LazinatorTuple<WInt32, WInt32> e = new LazinatorTuple<WInt32, WInt32>()
             {
-                Item1 = new WInt(1),
-                Item2 = new WInt(2)
+                Item1 = new WInt32(1),
+                Item2 = new WInt32(2)
             };
             e.Item1.LazinatorParents.LastAdded.Should().Be(e);
             var c = e.CloneLazinatorTyped();
@@ -197,7 +197,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void ParentSetForDefaultItem()
         {
-            LazinatorTuple<WInt, WInt> e = new LazinatorTuple<WInt, WInt>()
+            LazinatorTuple<WInt32, WInt32> e = new LazinatorTuple<WInt32, WInt32>()
             {
                 Item1 = 0
             };

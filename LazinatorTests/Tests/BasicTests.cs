@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
@@ -222,7 +222,7 @@ namespace LazinatorTests.Tests
             {
                 (results[2 * i] as Example).Should().NotBeNull();
                 (results[2 * i + 1] as OpenGeneric<WFloat>).Should().NotBeNull();
-                (results[2 * i + 1] as OpenGeneric<WInt>).Should().BeNull();
+                (results[2 * i + 1] as OpenGeneric<WInt32>).Should().BeNull();
             }
         }
 

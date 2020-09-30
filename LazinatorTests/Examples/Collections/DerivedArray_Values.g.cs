@@ -190,7 +190,7 @@ namespace LazinatorTests.Examples.Collections
             base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _MyArrayInt_DerivedLevel_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _DerivedArray_Values_EndByteIndex = bytesSoFar;
         }
         
@@ -278,12 +278,12 @@ namespace LazinatorTests.Examples.Collections
             }
             ReadOnlySpan<byte> span = storage.InitialSpan;
             int bytesSoFar = 0;
-            int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
+            int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
             Int32[] collection = new int[collectionLength];
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int item = span.ToDecompressedInt(ref bytesSoFar);
+                int item = span.ToDecompressedInt32(ref bytesSoFar);
                 collection[itemIndex] = item;
             }
             

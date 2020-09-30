@@ -95,9 +95,9 @@ namespace LazinatorTests.Examples
             
             ReadGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
             
-            int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+            int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesSoFar);
             
-            int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);
+            int serializedVersionNumber = span.ToDecompressedInt32(ref bytesSoFar);
             
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
@@ -317,7 +317,7 @@ namespace LazinatorTests.Examples
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _AString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
-            _MyInt = span.ToDecompressedInt(ref bytesSoFar);
+            _MyInt = span.ToDecompressedInt32(ref bytesSoFar);
         }
         
         public virtual void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)

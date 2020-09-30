@@ -107,9 +107,9 @@ namespace LazinatorTests.Examples.Tuples
             
             ReadGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
             
-            int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+            int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesSoFar);
             
-            int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);
+            int serializedVersionNumber = span.ToDecompressedInt32(ref bytesSoFar);
             
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
@@ -329,7 +329,7 @@ namespace LazinatorTests.Examples.Tuples
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _MyKeyValuePairSerialized_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _KeyValuePairTuple_EndByteIndex = bytesSoFar;
         }
         
@@ -428,10 +428,10 @@ namespace LazinatorTests.Examples.Tuples
                 
                 int bytesSoFar = 0;
                 
-                uint item1 = span.ToDecompressedUint(ref bytesSoFar);
+                uint item1 = span.ToDecompressedUInt32(ref bytesSoFar);
                 
                 ExampleChild item2 = default(ExampleChild);
-                int lengthCollectionMember_item2 = span.ToInt(ref bytesSoFar);
+                int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember_item2 != 0)
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
@@ -447,7 +447,7 @@ namespace LazinatorTests.Examples.Tuples
             private static void ConvertToBytes_KeyValuePair_Guint_c_C32ExampleChild_g(ref BinaryBufferWriter writer, KeyValuePair<UInt32, ExampleChild> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
             {
                 
-                CompressedIntegralTypes.WriteCompressedUint(ref writer, itemToConvert.Key);
+                CompressedIntegralTypes.WriteCompressedUInt(ref writer, itemToConvert.Key);
                 
                 if (itemToConvert.Value == null)
                 {

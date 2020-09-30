@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using LazinatorCollections;
@@ -30,7 +30,7 @@ namespace LazinatorTests.Tests
             results = c.GetDirtyNodes(true).ToList();
             results.Count().Should().Be(0);
 
-            c.MyUint = 12345;
+            c.MyUInt = 12345;
             results = c.GetDirtyNodes(true).ToList();
             results.Count().Should().Be(1);
             results = c.GetDirtyNodes(true).ToList();
@@ -63,7 +63,7 @@ namespace LazinatorTests.Tests
             results = c.GetDirtyNodes(true).ToList();
             results.Count().Should().Be(3);
             (results[1] is WrapperContainer).Should().BeTrue();
-            (results[2] is WInt).Should().BeTrue();
+            (results[2] is WInt32).Should().BeTrue();
 
             c = c.CloneLazinatorTyped();
             c.MyChar = 'R';
@@ -73,7 +73,7 @@ namespace LazinatorTests.Tests
             results.Count().Should().Be(4);
             (results[0] is Example).Should().BeTrue();
             (results[1] is WrapperContainer).Should().BeTrue(); // wrapped int is a property of the container itself
-            (results[2] is WInt).Should().BeTrue();
+            (results[2] is WInt32).Should().BeTrue();
             (results[3] is ExampleChild).Should().BeTrue(); // i.e., MyChild2
             results = c.GetDirtyNodes(true).ToList();
             results.Count().Should().Be(4); // no change
@@ -85,9 +85,9 @@ namespace LazinatorTests.Tests
             results = c.EnumerateLazinatorNodes(null, false, x => !(x is WrapperContainer), true, false).ToList();
             results.Count().Should().Be(5); // WrapperContainer is yielded but not further explored; dirtiness is not a consideration; meanwhile, all structs are included
 
-            results = c.EnumerateLazinatorNodes(x => x is WInt, false, null, true, false).ToList();
+            results = c.EnumerateLazinatorNodes(x => x is WInt32, false, null, true, false).ToList();
             results.Count().Should().Be(2); // full exploration, with all structs returned 
-            (results[0] is WInt).Should().BeTrue();
+            (results[0] is WInt32).Should().BeTrue();
         }
 
         [Fact]
@@ -194,7 +194,7 @@ $@"LazinatorTests.Examples.Example
     MyStringUncompressed: 
     MyTestEnum: MyTestValue3
     MyTestEnumByteNullable: MyTestValue
-    MyUint: 1235
+    MyUInt: 1235
     MyNonLazinatorChild: LazinatorTests.Examples.NonLazinatorClass
     IncludableChild: NULL
     MyChild1: LazinatorTests.Examples.ExampleChild
@@ -243,7 +243,7 @@ $@"LazinatorTests.Examples.Example
     MyStringUncompressed: this is a very long way of saying hello, world
     MyTestEnum: MyTestValue2
     MyTestEnumByteNullable: NULL
-    MyUint: 2342343242
+    MyUInt: 2342343242
     MyNonLazinatorChild: NULL
     IncludableChild: NULL
     MyChild1: LazinatorTests.Examples.ExampleChild

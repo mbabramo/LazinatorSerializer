@@ -94,7 +94,7 @@ namespace Lazinator.Wrappers
                 return 0;
             }
             
-            int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+            int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesSoFar);
             
             int serializedVersionNumber = -1; /* versioning disabled */
             

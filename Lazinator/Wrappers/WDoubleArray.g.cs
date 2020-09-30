@@ -110,7 +110,7 @@ namespace Lazinator.Wrappers
                 return 0;
             }
             
-            int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+            int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesSoFar);
             
             int serializedVersionNumber = -1; /* versioning disabled */
             
@@ -448,7 +448,7 @@ namespace Lazinator.Wrappers
             }
             ReadOnlySpan<byte> span = storage.InitialSpan;
             int bytesSoFar = 0;
-            int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
+            int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
             Double[] collection = new double[collectionLength];
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)

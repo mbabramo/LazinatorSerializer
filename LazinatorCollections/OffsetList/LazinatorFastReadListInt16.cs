@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace LazinatorCollections.OffsetList
 {
@@ -13,7 +13,7 @@ namespace LazinatorCollections.OffsetList
 
         public override ReadOnlySpan<Int16> ReadOnly
         {
-            get => Lazinator.Buffers.Spans.CastSpanToInt16(ReadOnlyBytes);
+            get => Lazinator.Buffers.Spans.CastSpanToInt3216(ReadOnlyBytes);
             set => ReadOnlyBytes = Lazinator.Buffers.Spans.CastSpanFromInt16(value);
         }
     }

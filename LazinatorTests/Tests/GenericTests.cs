@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using FluentAssertions;
 using LazinatorTests.Examples;
 using Lazinator.Core;
@@ -113,11 +113,11 @@ namespace LazinatorTests.Tests
             {
                 ClosedGenericBase = new OpenGeneric<Base>()
                 {
-                    MyT = new GenericFromBase<WInt>()
+                    MyT = new GenericFromBase<WInt32>()
                 },
                 ClosedGenericFromBaseWithBase = new GenericFromBase<Base>()
                 {
-                    MyT = new GenericFromBase<WInt>()
+                    MyT = new GenericFromBase<WInt32>()
                 }
             };
             var c = x.CloneLazinatorTyped();
@@ -192,22 +192,22 @@ namespace LazinatorTests.Tests
         [Fact]
         public void ConcreteGenericContainerWithDerivedGeneric()
         {
-            DerivedGenericContainer<WInt> c = new DerivedGenericContainer<WInt>()
+            DerivedGenericContainer<WInt32> c = new DerivedGenericContainer<WInt32>()
             {
-                Item = new DerivedGeneric2c<WInt>()
+                Item = new DerivedGeneric2c<WInt32>()
                 {
                     MyT = 5 // now is a wrapped int -- note that Item is defined as being IAbstract<T>
                 },
             };
             var c2 = c.CloneLazinatorTyped();
             var item = c2.Item;
-            ((DerivedGeneric2c<WInt>)item).MyT.WrappedValue.Should().Be(5);
+            ((DerivedGeneric2c<WInt32>)item).MyT.WrappedValue.Should().Be(5);
         }
 
         [Fact]
         public void GenericFromBase()
         {
-            GenericFromBase<WInt> c = new GenericFromBase<WInt>()
+            GenericFromBase<WInt32> c = new GenericFromBase<WInt32>()
             {
                 MyT = 5
             };
@@ -219,7 +219,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void GenericFromBaseInContainer()
         {
-            GenericFromBase<WInt> g = new GenericFromBase<WInt>()
+            GenericFromBase<WInt32> g = new GenericFromBase<WInt32>()
             {
                 MyT = 5
             };
@@ -228,7 +228,7 @@ namespace LazinatorTests.Tests
                 MyBase = g
             };
             var c2 = c.CloneLazinatorTyped();
-            var item = ((GenericFromBase<WInt>)c2.MyBase);
+            var item = ((GenericFromBase<WInt32>)c2.MyBase);
             item.MyT.WrappedValue.Should().Be(5);
         }
     }

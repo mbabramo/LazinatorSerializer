@@ -143,15 +143,15 @@ namespace LazinatorCollections.BitArray
                 return 0;
             }
             
-            int uniqueID = span.ToDecompressedInt(ref bytesSoFar);
+            int uniqueID = span.ToDecompressedInt32(ref bytesSoFar);
             if (uniqueID != LazinatorUniqueID)
             {
                 ThrowHelper.ThrowFormatException();
             }
             
-            int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+            int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesSoFar);
             
-            int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);
+            int serializedVersionNumber = span.ToDecompressedInt32(ref bytesSoFar);
             
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
@@ -389,10 +389,10 @@ namespace LazinatorCollections.BitArray
         public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
-            __version = span.ToDecompressedInt(ref bytesSoFar);
-            _m_length = span.ToDecompressedInt(ref bytesSoFar);
+            __version = span.ToDecompressedInt32(ref bytesSoFar);
+            _m_length = span.ToDecompressedInt32(ref bytesSoFar);
             _IntStorage_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _LazinatorBitArray_EndByteIndex = bytesSoFar;
         }
         
@@ -481,13 +481,13 @@ namespace LazinatorCollections.BitArray
         {
             ReadOnlySpan<byte> span = storage.InitialSpan;
             int bytesSoFar = 0;
-            int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
+            int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
             Memory<Int32> collection = new Memory<Int32>(new int[collectionLength]);
             var collectionAsSpan = collection.Span;
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int item = span.ToDecompressedInt(ref bytesSoFar);
+                int item = span.ToDecompressedInt32(ref bytesSoFar);
                 collectionAsSpan[itemIndex] = item;
             }
             

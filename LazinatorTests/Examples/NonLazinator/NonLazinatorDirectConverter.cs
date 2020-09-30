@@ -1,4 +1,4 @@
-﻿using Lazinator.Buffers;
+using Lazinator.Buffers;
 using Lazinator.Core;
 using System;
 
@@ -16,7 +16,7 @@ namespace LazinatorTests.Examples
             ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
 
             int bytesSoFar = 0;
-            int myInt = span.ToDecompressedInt(ref bytesSoFar);
+            int myInt = span.ToDecompressedInt32(ref bytesSoFar);
 
             string myString = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
 
@@ -46,7 +46,7 @@ namespace LazinatorTests.Examples
             ReadOnlySpan<byte> span = storage.InitialSpan;
 
             int bytesSoFar = 0;
-            int myInt = span.ToDecompressedInt(ref bytesSoFar);
+            int myInt = span.ToDecompressedInt32(ref bytesSoFar);
 
             string myString = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
 

@@ -1,4 +1,4 @@
-﻿using LazinatorCollections.Dictionary;
+using LazinatorCollections.Dictionary;
 using Lazinator.Core;
 using Lazinator.Wrappers;
 using System;
@@ -33,7 +33,7 @@ namespace LazinatorCollections.Tree
         private void InitializeLocationsIfNecessary()
         {
             if (Locations == null)
-                Locations = new LazinatorDictionary<T, LazinatorList<WInt>>();
+                Locations = new LazinatorDictionary<T, LazinatorList<WInt32>>();
         }
 
         public LazinatorLocationAwareTree<T> GetLocationAwareRoot()
@@ -80,12 +80,12 @@ namespace LazinatorCollections.Tree
             return null;
         }
 
-        private LazinatorList<WInt> ConvertToLazinatorList(List<int> list)
+        private LazinatorList<WInt32> ConvertToLazinatorList(List<int> list)
         {
-            return new LazinatorList<WInt>(list.Select(x => new WInt(x)), false);
+            return new LazinatorList<WInt32>(list.Select(x => new WInt32(x)), false);
         }
 
-        private List<int> ConvertToRegularList(LazinatorList<WInt> list)
+        private List<int> ConvertToRegularList(LazinatorList<WInt32> list)
         {
             return list.Select(x => x.WrappedValue).ToList();
         }

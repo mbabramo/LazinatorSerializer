@@ -232,11 +232,11 @@ namespace LazinatorTests.Examples
         {
             base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
-            _MyInt = span.ToDecompressedInt(ref bytesSoFar);
+            _MyInt = span.ToDecompressedInt32(ref bytesSoFar);
             _MyGrandchildInInherited_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             
             _ExampleChildInherited_EndByteIndex = bytesSoFar;

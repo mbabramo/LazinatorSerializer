@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
@@ -20,8 +20,8 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorTuple()
         {
-            LazinatorTuple<WInt, WString> item =
-                new LazinatorTuple<WInt, WString>(5, "hello");
+            LazinatorTuple<WInt32, WString> item =
+                new LazinatorTuple<WInt32, WString>(5, "hello");
             var clone = item.CloneLazinatorTyped();
             clone.Item1.WrappedValue.Should().Be(5);
             clone.Item2.WrappedValue.Should().Be("hello");
@@ -74,7 +74,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorListWithStructsWorks()
         {
-            LazinatorList<WInt> l = new LazinatorList<WInt>() { 3 };
+            LazinatorList<WInt32> l = new LazinatorList<WInt32>() { 3 };
 
             var c = l.CloneLazinatorTyped();
             c[0].WrappedValue.Should().Be(3);
@@ -383,27 +383,27 @@ namespace LazinatorTests.Tests
         public void LazinatorListRemoveAllWorks()
         {
 
-            LazinatorList<WInt> l = new LazinatorList<WInt>() { 2, 3, 4, 5, 6 };
+            LazinatorList<WInt32> l = new LazinatorList<WInt32>() { 2, 3, 4, 5, 6 };
             l.RemoveAll(x => x % 2 == 0);
             var results = l.ToList().Select(x => x.WrappedValue);
             results.SequenceEqual(new int[] { 3, 5 }).Should().BeTrue();
 
-            l = new LazinatorList<WInt>() { 2, 3, 4, 5, 6 };
+            l = new LazinatorList<WInt32>() { 2, 3, 4, 5, 6 };
             l.RemoveAll(x => x % 2 == 1);
             results = l.ToList().Select(x => x.WrappedValue);
             results.SequenceEqual(new int[] { 2, 4, 6 }).Should().BeTrue();
 
-            l = new LazinatorList<WInt>() { 2, 3, 4, 5, 6 };
+            l = new LazinatorList<WInt32>() { 2, 3, 4, 5, 6 };
             l.RemoveAll(x => x > 6);
             results = l.ToList().Select(x => x.WrappedValue);
             results.SequenceEqual(new int[] { 2, 3, 4, 5, 6 }).Should().BeTrue();
 
-            l = new LazinatorList<WInt>() { 2, 3, 4, 5, 6 };
+            l = new LazinatorList<WInt32>() { 2, 3, 4, 5, 6 };
             l.RemoveAll(x => x <= 6);
             results = l.ToList().Select(x => x.WrappedValue);
             results.SequenceEqual(new int[] { }).Should().BeTrue();
 
-            l = new LazinatorList<WInt>() { };
+            l = new LazinatorList<WInt32>() { };
             l.RemoveAll(x => x <= 6);
             results = l.ToList().Select(x => x.WrappedValue);
             results.SequenceEqual(new int[] { }).Should().BeTrue();
@@ -412,7 +412,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorListWorksWithPartialAccessAfterChange()
         {
-            LazinatorList<WInt> l = new LazinatorList<WInt>();
+            LazinatorList<WInt32> l = new LazinatorList<WInt32>();
             l.Add(3);
             l.Add(4);
             var c = l.CloneLazinatorTyped();
@@ -458,7 +458,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void EmptyLazinatorListWorks()
         {
-            LazinatorList<WInt> l = new LazinatorList<WInt>();
+            LazinatorList<WInt32> l = new LazinatorList<WInt32>();
             var c = l.CloneLazinatorTyped();
             c.Count().Should().Be(0);
         }
@@ -466,7 +466,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void ShortLazinatorListWorks()
         {
-            LazinatorList<WInt> l = new LazinatorList<WInt>();
+            LazinatorList<WInt32> l = new LazinatorList<WInt32>();
             l.Add(3);
             var c = l.CloneLazinatorTyped();
             var result = c[0];
@@ -477,7 +477,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorArrayWorks()
         {
-            LazinatorArray<WInt> l = new LazinatorArray<WInt>(3);
+            LazinatorArray<WInt32> l = new LazinatorArray<WInt32>(3);
             l[0] = 10;
             l[2] = 12;
             var c = l.CloneLazinatorTyped();
@@ -611,9 +611,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorListDirtinessWithStructs()
         {
-            LazinatorList<WInt> l = new LazinatorList<WInt>()
+            LazinatorList<WInt32> l = new LazinatorList<WInt32>()
             {
-                new WInt(3)
+                new WInt32(3)
             };
             l.UpdateStoredBuffer();
             var c = l.CloneLazinatorTyped();
@@ -690,7 +690,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorStackWorks()
         {
-            LazinatorStack<WInt> s = new LazinatorStack<WInt>();
+            LazinatorStack<WInt32> s = new LazinatorStack<WInt32>();
             s.Push(3);
             s.Any().Should().BeTrue();
             var r = s.Pop();
@@ -716,7 +716,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorStack_PopAfterDeserialize()
         {
-            LazinatorStack<WInt> s = new LazinatorStack<WInt>();
+            LazinatorStack<WInt32> s = new LazinatorStack<WInt32>();
             s.Push(1);
             s.Push(2);
             s.Push(3);
@@ -741,7 +741,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorQueueWorks()
         {
-            LazinatorQueue<WInt> s = new LazinatorQueue<WInt>();
+            LazinatorQueue<WInt32> s = new LazinatorQueue<WInt32>();
             s.Enqueue(3);
             s.Any().Should().BeTrue();
             var r = s.Dequeue();
@@ -772,7 +772,7 @@ namespace LazinatorTests.Tests
             const int numOperations = 100;
             const int maxValue = 60;
             Random r = new Random();
-            LazinatorSortedList<WInt> s = new LazinatorSortedList<WInt>(allowDuplicates);
+            LazinatorSortedList<WInt32> s = new LazinatorSortedList<WInt32>(allowDuplicates);
             List<int> basic = new List<int>();
             for (int i = 0; i < numOperations; i++)
             {

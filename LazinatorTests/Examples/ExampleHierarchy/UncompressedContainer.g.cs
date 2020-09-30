@@ -350,9 +350,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             ReadGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
             
-            int lazinatorLibraryVersion = span.ToDecompressedInt(ref bytesSoFar);
+            int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesSoFar);
             
-            int serializedVersionNumber = span.ToDecompressedInt(ref bytesSoFar);
+            int serializedVersionNumber = span.ToDecompressedInt32(ref bytesSoFar);
             
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
@@ -608,22 +608,22 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             _MyUncompressed = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
             _MyUncompressedDateTime = span.ToDateTime(ref bytesSoFar);
             _MyUncompressedDecimal = span.ToDecimal(ref bytesSoFar);
-            _MyUncompressedInt = span.ToInt(ref bytesSoFar);
-            _MyUncompressedLong = span.ToLong(ref bytesSoFar);
+            _MyUncompressedInt = span.ToInt32(ref bytesSoFar);
+            _MyUncompressedLong = span.ToInt64(ref bytesSoFar);
             _MyUncompressedNullableDateTime = span.ToNullableDateTime(ref bytesSoFar);
             _MyUncompressedNullableDecimal = span.ToNullableDecimal(ref bytesSoFar);
-            _MyUncompressedNullableInt = span.ToNullableInt(ref bytesSoFar);
-            _MyUncompressedNullableLong = span.ToNullableLong(ref bytesSoFar);
-            _MyUncompressedNullableShort = span.ToNullableShort(ref bytesSoFar);
+            _MyUncompressedNullableInt = span.ToNullableInt32(ref bytesSoFar);
+            _MyUncompressedNullableLong = span.ToNullableInt64(ref bytesSoFar);
+            _MyUncompressedNullableShort = span.ToNullableInt16(ref bytesSoFar);
             _MyUncompressedNullableTimeSpan = span.ToNullableTimeSpan(ref bytesSoFar);
-            _MyUncompressedNullableUInt = span.ToNullableUint(ref bytesSoFar);
-            _MyUncompressedNullableULong = span.ToNullableUlong(ref bytesSoFar);
-            _MyUncompressedNullableUShort = span.ToNullableUshort(ref bytesSoFar);
-            _MyUncompressedShort = span.ToShort(ref bytesSoFar);
+            _MyUncompressedNullableUInt = span.ToNullableUInt32(ref bytesSoFar);
+            _MyUncompressedNullableULong = span.ToNullableUInt64(ref bytesSoFar);
+            _MyUncompressedNullableUShort = span.ToNullableUInt16(ref bytesSoFar);
+            _MyUncompressedShort = span.ToInt16(ref bytesSoFar);
             _MyUncompressedTimeSpan = span.ToTimeSpan(ref bytesSoFar);
-            _MyUncompressedUInt = span.ToUint(ref bytesSoFar);
-            _MyUncompressedULong = span.ToUlong(ref bytesSoFar);
-            _MyUncompressedUShort = span.ToUshort(ref bytesSoFar);
+            _MyUncompressedUInt = span.ToUInt32(ref bytesSoFar);
+            _MyUncompressedULong = span.ToUInt64(ref bytesSoFar);
+            _MyUncompressedUShort = span.ToUInt16(ref bytesSoFar);
         }
         
         public virtual void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
@@ -695,14 +695,14 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             WriteUncompressedPrimitives.WriteNullableLong(ref writer, _MyUncompressedNullableLong);
             WriteUncompressedPrimitives.WriteNullableShort(ref writer, _MyUncompressedNullableShort);
             WriteUncompressedPrimitives.WriteNullableTimeSpan(ref writer, _MyUncompressedNullableTimeSpan);
-            WriteUncompressedPrimitives.WriteNullableUint(ref writer, _MyUncompressedNullableUInt);
-            WriteUncompressedPrimitives.WriteNullableUlong(ref writer, _MyUncompressedNullableULong);
-            WriteUncompressedPrimitives.WriteNullableUshort(ref writer, _MyUncompressedNullableUShort);
+            WriteUncompressedPrimitives.WriteNullableUInt(ref writer, _MyUncompressedNullableUInt);
+            WriteUncompressedPrimitives.WriteNullableULong(ref writer, _MyUncompressedNullableULong);
+            WriteUncompressedPrimitives.WriteNullableUShort(ref writer, _MyUncompressedNullableUShort);
             WriteUncompressedPrimitives.WriteShort(ref writer, _MyUncompressedShort);
             WriteUncompressedPrimitives.WriteTimeSpan(ref writer, _MyUncompressedTimeSpan);
-            WriteUncompressedPrimitives.WriteUint(ref writer, _MyUncompressedUInt);
-            WriteUncompressedPrimitives.WriteUlong(ref writer, _MyUncompressedULong);
-            WriteUncompressedPrimitives.WriteUshort(ref writer, _MyUncompressedUShort);
+            WriteUncompressedPrimitives.WriteUInt(ref writer, _MyUncompressedUInt);
+            WriteUncompressedPrimitives.WriteULong(ref writer, _MyUncompressedULong);
+            WriteUncompressedPrimitives.WriteUShort(ref writer, _MyUncompressedUShort);
         }
         
     }

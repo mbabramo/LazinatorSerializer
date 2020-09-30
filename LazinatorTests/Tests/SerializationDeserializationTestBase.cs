@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using FluentAssertions;
 using LazinatorTests.Examples;
@@ -71,7 +71,7 @@ namespace LazinatorTests.Tests
                     MyChar = 'b',
                     MyString = "this is a very long way of saying hello, world",
                     MyStringUncompressed = "this is a very long way of saying hello, world",
-                    MyUint = (uint) 2342343242,
+                    MyUInt = (uint) 2342343242,
                     MyNullableDouble = (double)3.5,
                     MyNullableDecimal = (decimal?)-2341.5212352,
                     MyNullableTimeSpan = TimeSpan.FromHours(3),
@@ -87,7 +87,7 @@ namespace LazinatorTests.Tests
                     MyBool = false,
                     MyChar = '\u2342',
                     MyStringUncompressed = "",
-                    MyUint = (uint) 1235,
+                    MyUInt = (uint) 1235,
                     MyNullableDouble = (double?)4.2,
                     MyNullableDecimal = null,
                     MyNullableTimeSpan = TimeSpan.FromDays(4),
@@ -103,7 +103,7 @@ namespace LazinatorTests.Tests
                     MyChar = '\n',
                     MyString = null,
                     MyStringUncompressed = null,
-                    MyUint = (uint) 3127,
+                    MyUInt = (uint) 3127,
                     MyNullableDouble = null,
                     MyNullableDecimal = (decimal?)234243252341,
                     MyTestEnum = TestEnum.MyTestValue3,
@@ -155,7 +155,7 @@ namespace LazinatorTests.Tests
                 return true;
             if ((example1 == null) != (example2 == null))
                 return false;
-            return example1.MyBool == example2.MyBool && example1.MyString == example2.MyString && example1.MyStringUncompressed == example2.MyStringUncompressed && example1.MyNewString == example2.MyNewString && example1.MyOldString == example2.MyOldString && example1.MyUint == example2.MyUint && example1.MyNullableDouble == example2.MyNullableDouble && example1.MyNullableDecimal == example2.MyNullableDecimal && example1.MyDateTime == example2.MyDateTime && example1.MyNullableTimeSpan == example2.MyNullableTimeSpan && ExampleChildEqual(example1.MyChild1, example2.MyChild1) && ExampleChildEqual(example1.MyChild2, example2.MyChild2) && InterfaceImplementerEqual(example1.MyInterfaceImplementer, example2.MyInterfaceImplementer) && NonLazinatorTypeEqual(example1.MyNonLazinatorChild, example2.MyNonLazinatorChild);
+            return example1.MyBool == example2.MyBool && example1.MyString == example2.MyString && example1.MyStringUncompressed == example2.MyStringUncompressed && example1.MyNewString == example2.MyNewString && example1.MyOldString == example2.MyOldString && example1.MyUInt == example2.MyUInt && example1.MyNullableDouble == example2.MyNullableDouble && example1.MyNullableDecimal == example2.MyNullableDecimal && example1.MyDateTime == example2.MyDateTime && example1.MyNullableTimeSpan == example2.MyNullableTimeSpan && ExampleChildEqual(example1.MyChild1, example2.MyChild1) && ExampleChildEqual(example1.MyChild2, example2.MyChild2) && InterfaceImplementerEqual(example1.MyInterfaceImplementer, example2.MyInterfaceImplementer) && NonLazinatorTypeEqual(example1.MyNonLazinatorChild, example2.MyNonLazinatorChild);
         }
 
         internal bool ExampleChildEqual(ExampleChild child1, ExampleChild child2)

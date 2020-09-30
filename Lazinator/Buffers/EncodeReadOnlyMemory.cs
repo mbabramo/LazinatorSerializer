@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 
 namespace Lazinator.Buffers
@@ -40,7 +40,7 @@ namespace Lazinator.Buffers
 
         public static ReadOnlyMemory<T> ToReadOnlyMemory_VarIntLength<T>(this ReadOnlySpan<byte> b, ref int index) where T : struct
         {
-            int? length = b.ToDecompressedNullableInt(ref index);
+            int? length = b.ToDecompressedNullableInt32(ref index);
             if (length == null)
                 return null;
             return ToReadOnlyMemory<T>(b, ref index, (int) length);

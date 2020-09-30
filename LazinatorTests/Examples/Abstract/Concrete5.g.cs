@@ -257,9 +257,9 @@ namespace LazinatorTests.Examples.Abstract
             _String4 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _String5 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _IntList4_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _IntList5_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _Concrete5_EndByteIndex = bytesSoFar;
         }
         
@@ -370,12 +370,12 @@ namespace LazinatorTests.Examples.Abstract
             }
             ReadOnlySpan<byte> span = storage.InitialSpan;
             int bytesSoFar = 0;
-            int collectionLength = span.ToDecompressedInt(ref bytesSoFar);
+            int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
             List<Int32> collection = new List<Int32>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int item = span.ToDecompressedInt(ref bytesSoFar);
+                int item = span.ToDecompressedInt32(ref bytesSoFar);
                 collection.Add(item);
             }
             

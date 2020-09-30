@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
@@ -196,7 +196,7 @@ namespace LazinatorTests.Tests
         public void CanCloneListOfStructsAndThenEnsureUpToDate()
         {
             // Note: This works because of IsStruct parameter in ReplaceBuffer. Without that parameter, the last call would lead to disposal of memory still needed.
-            var l = new LazinatorList<WInt>() { 1 };
+            var l = new LazinatorList<WInt32>() { 1 };
             var l2 = l.CloneLazinatorTyped();
             var l3 = l.CloneLazinatorTyped();
             l.UpdateStoredBuffer();
@@ -224,7 +224,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void ObjectDisposedExceptionThrownOnItemRemovedFromHierarchy()
         {
-            LazinatorDictionary<WInt, Example> d = GetDictionary();
+            LazinatorDictionary<WInt32, Example> d = GetDictionary();
             //same effect if both of the following lines are included
             //d.UpdateStoredBuffer();
             //d[0].MyChar = 'q';
@@ -240,7 +240,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void ObjectDisposedExceptionAvoidedByCloneToIndependentBuffer()
         {
-            LazinatorDictionary<WInt, Example> d = GetDictionary();
+            LazinatorDictionary<WInt32, Example> d = GetDictionary();
             d[0].UpdateStoredBuffer(); // OwnedMemory has allocation ID of 0. 
             d.UpdateStoredBuffer(); // OwnedMemory for this and d[0] share allocation ID of 1
             Example e = d[0].CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.IndependentBuffers);
@@ -253,7 +253,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void CanAccessCopiedItemAfterEnsureUpToDate()
         {
-            LazinatorDictionary<WInt, Example> d = GetDictionary();
+            LazinatorDictionary<WInt32, Example> d = GetDictionary();
             d.UpdateStoredBuffer(); // OwnedMemory for this and d[0] share allocation ID of 0. As the original source, this will not be automatically disposed. 
             Example e = d[0];
             d[0] = GetTypicalExample();
@@ -619,7 +619,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void UpdateStoredBuffer_Struct()
         {
-            WInt w = 3;
+            WInt32 w = 3;
             w.UpdateStoredBuffer();
             w.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             w.WrappedValue.Should().Be(3);
@@ -824,7 +824,7 @@ namespace LazinatorTests.Tests
         {
             StructTuple e = new StructTuple
             {
-                MyValueTupleStructs = (3, 4), // WInts
+                MyValueTupleStructs = (3, 4), // WInt32s
                 MyValueTupleSerialized = (4, GetExampleChild(0), GetNonLazinatorType(1))
             };
 
@@ -931,9 +931,9 @@ namespace LazinatorTests.Tests
             }, true, true);
         }
 
-        private LazinatorDictionary<WInt, Example> GetDictionary()
+        private LazinatorDictionary<WInt32, Example> GetDictionary()
         {
-            LazinatorDictionary<WInt, Example> d = new LazinatorDictionary<WInt, Example>();
+            LazinatorDictionary<WInt32, Example> d = new LazinatorDictionary<WInt32, Example>();
             for (int i = 0; i < dictsize; i++)
             {
                 d[i] = GetTypicalExample();

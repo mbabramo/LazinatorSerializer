@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Buffers.Binary;
 
 namespace Lazinator.Buffers
@@ -59,51 +59,51 @@ namespace Lazinator.Buffers
             return b.ToDouble(ref index);
         }
 
-        public static short? ToNullableShort(this ReadOnlySpan<byte> b, ref int index)
+        public static short? ToNullableInt16(this ReadOnlySpan<byte> b, ref int index)
         {
             bool isNull = !b.ToBoolean(ref index);
             if (isNull)
                 return null;
-            return b.ToShort(ref index);
+            return b.ToInt16(ref index);
         }
 
-        public static int? ToNullableInt(this ReadOnlySpan<byte> b, ref int index)
+        public static int? ToNullableInt32(this ReadOnlySpan<byte> b, ref int index)
         {
             bool isNull = !b.ToBoolean(ref index);
             if (isNull)
                 return null;
-            return b.ToInt(ref index);
+            return b.ToInt32(ref index);
         }
 
-        public static long? ToNullableLong(this ReadOnlySpan<byte> b, ref int index)
+        public static long? ToNullableInt64(this ReadOnlySpan<byte> b, ref int index)
         {
             bool isNull = !b.ToBoolean(ref index);
             if (isNull)
                 return null;
-            return b.ToLong(ref index);
+            return b.ToInt64(ref index);
         }
-        public static ushort? ToNullableUshort(this ReadOnlySpan<byte> b, ref int index)
+        public static ushort? ToNullableUInt16(this ReadOnlySpan<byte> b, ref int index)
         {
             bool isNull = !b.ToBoolean(ref index);
             if (isNull)
                 return null;
-            return b.ToUshort(ref index);
-        }
-
-        public static uint? ToNullableUint(this ReadOnlySpan<byte> b, ref int index)
-        {
-            bool isNull = !b.ToBoolean(ref index);
-            if (isNull)
-                return null;
-            return b.ToUint(ref index);
+            return b.ToUInt16(ref index);
         }
 
-        public static ulong? ToNullableUlong(this ReadOnlySpan<byte> b, ref int index)
+        public static uint? ToNullableUInt32(this ReadOnlySpan<byte> b, ref int index)
         {
             bool isNull = !b.ToBoolean(ref index);
             if (isNull)
                 return null;
-            return b.ToUlong(ref index);
+            return b.ToUInt32(ref index);
+        }
+
+        public static ulong? ToNullableUInt64(this ReadOnlySpan<byte> b, ref int index)
+        {
+            bool isNull = !b.ToBoolean(ref index);
+            if (isNull)
+                return null;
+            return b.ToUInt64(ref index);
         }
         public static DateTime? ToNullableDateTime(this ReadOnlySpan<byte> b, ref int index)
         {
@@ -170,42 +170,42 @@ namespace Lazinator.Buffers
             index += sizeof(double);
             return result;
         }
-        public static short ToShort(this ReadOnlySpan<byte> b, ref int index)
+        public static short ToInt16(this ReadOnlySpan<byte> b, ref int index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
             var result = BinaryBufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadInt16LittleEndian(b) : BinaryPrimitives.ReadInt16BigEndian(b);
             index += sizeof(short);
             return result;
         }
-        public static int ToInt(this ReadOnlySpan<byte> b, ref int index)
+        public static int ToInt32(this ReadOnlySpan<byte> b, ref int index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
             var result = BinaryBufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadInt32LittleEndian(byteSpan) : BinaryPrimitives.ReadInt32BigEndian(byteSpan);
             index += sizeof(int);
             return result;
         }
-        public static long ToLong(this ReadOnlySpan<byte> b, ref int index)
+        public static long ToInt64(this ReadOnlySpan<byte> b, ref int index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
             var result = BinaryBufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadInt64LittleEndian(byteSpan) : BinaryPrimitives.ReadInt64BigEndian(byteSpan);
             index += sizeof(long);
             return result;
         }
-        public static ushort ToUshort(this ReadOnlySpan<byte> b, ref int index)
+        public static ushort ToUInt16(this ReadOnlySpan<byte> b, ref int index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
             var result = BinaryBufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadUInt16LittleEndian(byteSpan) : BinaryPrimitives.ReadUInt16BigEndian(byteSpan);
             index += sizeof(ushort);
             return result;
         }
-        public static uint ToUint(this ReadOnlySpan<byte> b, ref int index)
+        public static uint ToUInt32(this ReadOnlySpan<byte> b, ref int index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
             var result = BinaryBufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadUInt32LittleEndian(byteSpan) : BinaryPrimitives.ReadUInt32BigEndian(byteSpan);
             index += sizeof(uint);
             return result;
         }
-        public static ulong ToUlong(this ReadOnlySpan<byte> b, ref int index)
+        public static ulong ToUInt64(this ReadOnlySpan<byte> b, ref int index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
             var result = BinaryBufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadUInt64LittleEndian(byteSpan) : BinaryPrimitives.ReadUInt64BigEndian(byteSpan);
@@ -215,13 +215,13 @@ namespace Lazinator.Buffers
 
         public static DateTime ToDateTime(this ReadOnlySpan<byte> b, ref int index)
         {
-            long asInt64 = b.ToLong(ref index);
+            long asInt64 = b.ToInt64(ref index);
             var result = new DateTime(asInt64);
             return result;
         }
         public static TimeSpan ToTimeSpan(this ReadOnlySpan<byte> b, ref int index)
         {
-            long asInt64 = b.ToLong(ref index);
+            long asInt64 = b.ToInt64(ref index);
             var result = new TimeSpan(asInt64);
             return result;
         }

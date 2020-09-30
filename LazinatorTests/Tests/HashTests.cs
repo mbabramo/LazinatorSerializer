@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using FluentAssertions;
 using LazinatorCollections;
 using LazinatorTests.Examples;
@@ -139,9 +139,9 @@ namespace LazinatorTests.Tests
         [Fact]
         void BinaryHashInList()
         {
-            var wrapped = new WInt(1);
-            var wrapped2 = new WInt(1);
-            LazinatorList<WInt> x = new LazinatorList<WInt>();
+            var wrapped = new WInt32(1);
+            var wrapped2 = new WInt32(1);
+            LazinatorList<WInt32> x = new LazinatorList<WInt32>();
             x.Add(wrapped2);
             x.GetListMemberHash32(0).Should().Be(wrapped.GetBinaryHashCode32());
             var clone = x.CloneLazinatorTyped();

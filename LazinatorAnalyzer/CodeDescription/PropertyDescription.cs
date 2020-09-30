@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
@@ -1496,7 +1496,7 @@ namespace Lazinator.CodeDescription
                     sb.AppendLine(
                         $@"{BackingFieldByteIndex} = bytesSoFar;{skipCheckString}
                             " + new ConditionalCodeGenerator(ReadInclusionConditional,
-                            "bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;"));
+                            "bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;"));
             }
             if (SkipCondition != null)
             {
@@ -2039,7 +2039,7 @@ namespace Lazinator.CodeDescription
                 StringBuilder arrayStringBuilder = new StringBuilder();
                 for (int i = 0; i < ArrayRank; i++)
                 {
-                    string rankLengthCommand = $"int collectionLength{i} = span.ToDecompressedInt(ref bytesSoFar);";
+                    string rankLengthCommand = $"int collectionLength{i} = span.ToDecompressedInt32(ref bytesSoFar);";
                     if (i == ArrayRank - 1)
                         arrayStringBuilder.Append(rankLengthCommand);
                     else
@@ -2059,7 +2059,7 @@ namespace Lazinator.CodeDescription
             }
             else
             {
-                readCollectionLengthCommand = $"int collectionLength = span.ToDecompressedInt(ref bytesSoFar);";
+                readCollectionLengthCommand = $"int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);";
                 forStatementCommand = $"for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)";
             }
 
@@ -2178,14 +2178,14 @@ namespace Lazinator.CodeDescription
                 {
                     if (Nullable)
                         return ($@"
-                            int lengthCollectionMember = span.ToInt(ref bytesSoFar);
+                            int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                             {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(addNullPossible, "lengthCollectionMember == 0", collectionAddNull, $@"LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                                 var item = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);
                                 {collectionAddItem}")}bytesSoFar += lengthCollectionMember;");
                     else
                     {
                         return ($@"
-                            int lengthCollectionMember = span.ToInt(ref bytesSoFar);
+                            int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                             var item = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);
                                 {collectionAddItem}
@@ -2221,7 +2221,7 @@ namespace Lazinator.CodeDescription
             else if (IsGuaranteedSmall)
                 return "span.ToByte(ref bytesSoFar)";
             else
-                return "span.ToInt(ref bytesSoFar)";
+                return "span.ToInt32(ref bytesSoFar)";
         }
 
         private void GetSupportedCollectionAddCommands(PropertyDescription outerProperty, out string collectionAddItem, out string collectionAddNull)
@@ -2453,7 +2453,7 @@ namespace Lazinator.CodeDescription
             else if (IsNonLazinatorType)
                 return ($@"
                         {AppropriatelyQualifiedTypeName} {itemName}{DefaultInitializationIfPossible(AppropriatelyQualifiedTypeName)};
-                        int lengthCollectionMember_{itemName} = span.ToInt(ref bytesSoFar);
+                        int lengthCollectionMember_{itemName} = span.ToInt32(ref bytesSoFar);
                         if (lengthCollectionMember_{itemName} != 0)
                         {{
                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_{itemName});

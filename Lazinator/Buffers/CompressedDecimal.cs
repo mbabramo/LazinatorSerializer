@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 
 namespace Lazinator.Buffers
@@ -90,7 +90,7 @@ namespace Lazinator.Buffers
                 return 1;
             }
             decimal d2 = (decimal) d;
-            var result = ConvertToIntegralComponentAndExponent(d2);
+            var result = ConvertToInt32egralComponentAndExponent(d2);
             if (result == null)
             {
                 writer.Write((byte) 0); // not using compact format
@@ -154,17 +154,17 @@ namespace Lazinator.Buffers
             }
             else if (((b & (byte) 8) != 0))
             {
-                integralComponent = bytes.ToUshort(ref index);
+                integralComponent = bytes.ToUInt16(ref index);
             }
             else
             {
-                integralComponent = bytes.ToUint(ref index);
+                integralComponent = bytes.ToUInt32(ref index);
             }
             DecomposableDecimal d = new DecomposableDecimal(new DecomposedDecimal(negative, scale, 0, 0, (int) integralComponent));
             return d.Decimal;
         }
 
-        private static (int integralComponent, byte scale, bool negative, bool fitsInShort, bool fitsInByte)? ConvertToIntegralComponentAndExponent(Decimal d)
+        private static (int integralComponent, byte scale, bool negative, bool fitsInShort, bool fitsInByte)? ConvertToInt32egralComponentAndExponent(Decimal d)
         {
             DecomposableDecimal de = new DecomposableDecimal(d);
             if (de.DecomposedDecimal.mid != 0 || de.DecomposedDecimal.hi != 0)
