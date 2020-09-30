@@ -2,8 +2,8 @@
 
 namespace LazinatorTests.Examples.Collections
 {
-    [Lazinator((int)ExampleUniqueIDs.ArrayMultidimensionalAndJagged)]
-    public interface IArrayMultidimensional_Values
+    [Lazinator((int)ExampleUniqueIDs.MultidimensionalArray)]
+    public interface IMultidimensionalArray
     {
         int[,] MyArrayInt { get; set; }
         bool MyArrayInt_Dirty { get; set; }

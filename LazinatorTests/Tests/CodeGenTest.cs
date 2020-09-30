@@ -308,7 +308,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(SpanInDotNetList), "LazinatorTests", "/Examples/", "Collections/", ws);
             await CompleteGenerateCode(typeof(Array_Values), "LazinatorTests", "/Examples/", "Collections/", ws);
             await CompleteGenerateCode(typeof(DerivedArray_Values), "LazinatorTests", "/Examples/", "Collections/", ws);
-            await CompleteGenerateCode(typeof(ArrayMultidimensional), "LazinatorTests", "/Examples/", "Collections/", ws);
+            await CompleteGenerateCode(typeof(MultidimensionalArray), "LazinatorTests", "/Examples/", "Collections/", ws);
             await CompleteGenerateCode(typeof(LazinatorListContainer), "LazinatorTests", "/Examples/", "Collections/", ws);
             await CompleteGenerateCode(typeof(LazinatorListContainerGeneric<>), "LazinatorTests", "/Examples/", "Collections/", ws);
             await CompleteGenerateCode(typeof(StructTuple), "LazinatorTests", "/Examples/", "Tuples/", ws);

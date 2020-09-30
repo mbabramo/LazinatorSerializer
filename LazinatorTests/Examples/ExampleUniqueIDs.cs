@@ -4,7 +4,7 @@
 
     public enum ExampleUniqueIDs
     {
-        ArrayMultidimensionalAndJagged = 1000,
+        MultidimensionalArray = 1000,
         Array_Values,
         ClosedGenericWithoutBase,
         DerivedLazinatorList,
