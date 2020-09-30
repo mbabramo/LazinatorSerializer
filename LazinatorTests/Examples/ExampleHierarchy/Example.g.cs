@@ -209,18 +209,18 @@ namespace LazinatorTests.Examples
             }
         }
         
-        protected string _MyStringBrotli;
+        protected string _MyStringUncompressed;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public string MyStringBrotli
+        public string MyStringUncompressed
         {
             get
             {
-                return _MyStringBrotli;
+                return _MyStringUncompressed;
             }
             set
             {
                 IsDirty = true;
-                _MyStringBrotli = value;
+                _MyStringUncompressed = value;
             }
         }
         
@@ -783,7 +783,7 @@ namespace LazinatorTests.Examples
             }
             
             typedClone.MyString = MyString;
-            typedClone.MyStringBrotli = MyStringBrotli;
+            typedClone.MyStringUncompressed = MyStringUncompressed;
             typedClone.MyTestEnum = MyTestEnum;
             typedClone.MyTestEnumByteNullable = MyTestEnumByteNullable;
             typedClone.MyUint = MyUint;
@@ -1177,7 +1177,7 @@ namespace LazinatorTests.Examples
             yield return ("MyNullableTimeSpan", (object)MyNullableTimeSpan);
             yield return ("MyOldString", (object)MyOldString);
             yield return ("MyString", (object)MyString);
-            yield return ("MyStringBrotli", (object)MyStringBrotli);
+            yield return ("MyStringBrotli", (object)MyStringUncompressed);
             yield return ("MyTestEnum", (object)MyTestEnum);
             yield return ("MyTestEnumByteNullable", (object)MyTestEnumByteNullable);
             yield return ("MyUint", (object)MyUint);
@@ -1271,7 +1271,7 @@ namespace LazinatorTests.Examples
             }
             
             _MyString = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
-            _MyStringBrotli = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+            _MyStringUncompressed = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             _MyTestEnum = (TestEnum)span.ToDecompressedInt(ref bytesSoFar);
             _MyTestEnumByteNullable = (TestEnumByte?)span.ToDecompressedNullableByte(ref bytesSoFar);
             _MyUint = span.ToDecompressedUint(ref bytesSoFar);
@@ -1431,7 +1431,7 @@ namespace LazinatorTests.Examples
             }
             
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _MyString);
-            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _MyStringBrotli);
+            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _MyStringUncompressed);
             CompressedIntegralTypes.WriteCompressedInt(ref writer, (int) _MyTestEnum);
             CompressedIntegralTypes.WriteCompressedNullableByte(ref writer, (byte?) _MyTestEnumByteNullable);
             CompressedIntegralTypes.WriteCompressedUint(ref writer, _MyUint);

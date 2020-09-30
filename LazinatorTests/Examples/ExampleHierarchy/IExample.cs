@@ -29,8 +29,8 @@ namespace LazinatorTests.Examples
         [EliminatedWithVersion(3)] string MyOldString { get; set; }
         [IncludeRefProperty]
         string MyString { get; set; }
-        [BrotliCompress]
-        string MyStringBrotli { get; set; }
+        [Uncompressed]
+        string MyStringUncompressed { get; set; }
         uint MyUint { get; set; }
         TestEnum MyTestEnum { get; set; }
         TestEnumByte? MyTestEnumByteNullable { get; set; }

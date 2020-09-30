@@ -241,7 +241,6 @@ namespace LazinatorCodeGen.Roslyn
             if (type is INamedTypeSymbol namedTypeSymbol)
             {
                 AddKnownAttributesForSymbol(type);
-                var DEBUG = type.IsRecord();
                 if (namedTypeSymbol.TypeKind == TypeKind.Interface && GetFirstAttributeOfType<CloneLazinatorAttribute>(namedTypeSymbol) == null && GetFirstAttributeOfType<CloneNonexclusiveLazinatorAttribute>(namedTypeSymbol) == null)
                     return; // don't worry about IEnumerable etc.
                 

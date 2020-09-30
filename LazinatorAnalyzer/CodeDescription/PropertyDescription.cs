@@ -216,7 +216,7 @@ namespace Lazinator.CodeDescription
         private int? EliminatedWithVersion { get; set; }
         internal bool DoNotEnumerate { get; set; }
         private bool IncludeRefProperty { get; set; }
-        internal bool BrotliCompress { get; set; }
+        internal bool Uncompressed { get; set; }
         public string SkipCondition { get; set; }
         public string InitializeWhenSkipped { get; set; }
         internal bool TrackDirtinessNonSerialized { get; set; }
@@ -344,8 +344,8 @@ namespace Lazinator.CodeDescription
             DoNotEnumerate = doNotEnumerate != null;
             CloneIncludeRefPropertyAttribute includeRefProperty = UserAttributes.OfType<CloneIncludeRefPropertyAttribute>().FirstOrDefault();
             IncludeRefProperty = includeRefProperty != null;
-            CloneBrotliCompressAttribute brotliCompress = UserAttributes.OfType<CloneBrotliCompressAttribute>().FirstOrDefault();
-            BrotliCompress = brotliCompress != null;
+            CloneUncompressedAttribute uncompressed = UserAttributes.OfType<CloneUncompressedAttribute>().FirstOrDefault();
+            Uncompressed = uncompressed != null;
             if (IncludeRefProperty && !IsPrimitive)
                 throw new LazinatorCodeGenException($"The IncludeRefPropertyAttribute was applied to {PropertySymbol}, but can be used only with a non-primitive property.");
             CloneAllowLazinatorInNonLazinatorAttribute allowLazinatorInNonLazinator = UserAttributes.OfType<CloneAllowLazinatorInNonLazinatorAttribute>().FirstOrDefault();
@@ -1422,10 +1422,17 @@ namespace Lazinator.CodeDescription
                 PropertyType == LazinatorPropertyType.PrimitiveTypeNullable)
             {
                 string name = EnumEquivalentType ?? ShortTypeName();
-                if (name == "string" && BrotliCompress)
-                    name += "_brotli";
-                ReadMethodName = PrimitiveReadWriteMethodNames.ReadNames[name];
-                WriteMethodName = PrimitiveReadWriteMethodNames.WriteNames[name];
+                if (Uncompressed)
+                {
+
+                    ReadMethodName = PrimitiveReadWriteMethodNames.ReadNamesUncompressed[name];
+                    WriteMethodName = PrimitiveReadWriteMethodNames.WriteNamesUncompressed[name];
+                }
+                else
+                {
+                    ReadMethodName = PrimitiveReadWriteMethodNames.ReadNames[name];
+                    WriteMethodName = PrimitiveReadWriteMethodNames.WriteNames[name];
+                }
             }
         }
 

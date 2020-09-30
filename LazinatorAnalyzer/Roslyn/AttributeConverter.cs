@@ -134,7 +134,7 @@ namespace LazinatorCodeGen.Roslyn
                 case "AllowLazinatorInNonLazinatorAttribute":
                     return new CloneAllowLazinatorInNonLazinatorAttribute();
                 case "BrotliCompressAttribute":
-                    return new CloneBrotliCompressAttribute();
+                    return new CloneUncompressedAttribute();
                 case "DoNotAutogenerateAttribute":
                     return new CloneDoNotAutogenerateAttribute();
                 case "ExcludableChildAttribute":
