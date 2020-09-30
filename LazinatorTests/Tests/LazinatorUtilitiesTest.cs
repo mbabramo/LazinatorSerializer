@@ -177,7 +177,7 @@ namespace LazinatorTests.Tests
             for (int j = 0; j < 5000; j++)
             {
                 int index = j * sizeof(int);
-                ReadUncompressedPrimitives.ToInt32(written, ref index).Should().Be(j);
+                ReadUncompressedPrimitives.ToInt(written, ref index).Should().Be(j);
             }
         }
     }

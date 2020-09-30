@@ -94,7 +94,7 @@ namespace Lazinator.Buffers
 
         public static string ToString_BrotliCompressedWithLength(this ReadOnlySpan<byte> b, ref int index)
         {
-            int length = b.ToInt32(ref index);
+            int length = b.ToInt(ref index);
             if (length == -1)
                 return null;
             ReadOnlySpan<byte> source = b.Slice(index, length);

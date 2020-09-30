@@ -778,7 +778,7 @@ namespace LazinatorTests.Examples
             _ANonSkippableEarlierExample_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             }
             
             _Example_ByteIndex = bytesSoFar;
@@ -790,7 +790,7 @@ namespace LazinatorTests.Examples
             {
                 if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
                 {
-                    bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+                    bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
                 }
                 
             }
@@ -803,7 +803,7 @@ namespace LazinatorTests.Examples
             {
                 if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && serializedVersionNumber >= 4)
                 {
-                    bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+                    bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
                 }
                 
             }
@@ -816,7 +816,7 @@ namespace LazinatorTests.Examples
             {
                 if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
                 {
-                    bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+                    bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
                 }
                 
             }

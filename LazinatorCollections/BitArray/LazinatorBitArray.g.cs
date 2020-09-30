@@ -392,7 +392,7 @@ namespace LazinatorCollections.BitArray
             __version = span.ToDecompressedInt(ref bytesSoFar);
             _m_length = span.ToDecompressedInt(ref bytesSoFar);
             _IntStorage_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
             _LazinatorBitArray_EndByteIndex = bytesSoFar;
         }
         

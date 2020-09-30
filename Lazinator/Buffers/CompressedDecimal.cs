@@ -154,11 +154,11 @@ namespace Lazinator.Buffers
             }
             else if (((b & (byte) 8) != 0))
             {
-                integralComponent = bytes.ToUInt16(ref index);
+                integralComponent = bytes.ToUshort(ref index);
             }
             else
             {
-                integralComponent = bytes.ToUInt32(ref index);
+                integralComponent = bytes.ToUint(ref index);
             }
             DecomposableDecimal d = new DecomposableDecimal(new DecomposedDecimal(negative, scale, 0, 0, (int) integralComponent));
             return d.Decimal;
