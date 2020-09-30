@@ -350,7 +350,7 @@ namespace LazinatorTests.Examples.Collections
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _MyQueueInt_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _DotNetQueue_Values_EndByteIndex = bytesSoFar;
         }
         

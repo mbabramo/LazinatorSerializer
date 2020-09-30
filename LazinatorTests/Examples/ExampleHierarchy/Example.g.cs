@@ -1271,42 +1271,42 @@ namespace LazinatorTests.Examples
             }
             
             _MyString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
-            _MyStringUncompressed = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+            _MyStringUncompressed = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
             _MyTestEnum = (TestEnum)span.ToDecompressedInt(ref bytesSoFar);
             _MyTestEnumByteNullable = (TestEnumByte?)span.ToDecompressedNullableByte(ref bytesSoFar);
             _MyUint = span.ToDecompressedUint(ref bytesSoFar);
             _IncludableChild_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
             {
-                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             
             _MyChild1_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             
             _MyChild2_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             
             _MyChild2Previous_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && serializedVersionNumber < 3)
             {
-                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             
             _MyInterfaceImplementer_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             
             _MyNonLazinatorChild_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _WrappedInt_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -1316,7 +1316,7 @@ namespace LazinatorTests.Examples
             _ExcludableChild_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren)
             {
-                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             
             _Example_EndByteIndex = bytesSoFar;
@@ -1431,7 +1431,7 @@ namespace LazinatorTests.Examples
             }
             
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _MyString);
-            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _MyStringUncompressed);
+            EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _MyStringUncompressed);
             CompressedIntegralTypes.WriteCompressedInt(ref writer, (int) _MyTestEnum);
             CompressedIntegralTypes.WriteCompressedNullableByte(ref writer, (byte?) _MyTestEnumByteNullable);
             CompressedIntegralTypes.WriteCompressedUint(ref writer, _MyUint);

@@ -577,15 +577,15 @@ namespace LazinatorTests.Examples.Collections
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _MyLinkedListInt_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyListInt_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyListInt2_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyListNullableEnabledContext_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MySortedSetInt_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _DotNetList_Values_EndByteIndex = bytesSoFar;
         }
         
@@ -879,7 +879,7 @@ namespace LazinatorTests.Examples.Collections
             List<NullableEnabledContext> collection = new List<NullableEnabledContext>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int lengthCollectionMember = span.ToInt(ref bytesSoFar);
+                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
                     collection.Add(null);

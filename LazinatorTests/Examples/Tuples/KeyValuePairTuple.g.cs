@@ -329,7 +329,7 @@ namespace LazinatorTests.Examples.Tuples
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _MyKeyValuePairSerialized_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _KeyValuePairTuple_EndByteIndex = bytesSoFar;
         }
         
@@ -431,7 +431,7 @@ namespace LazinatorTests.Examples.Tuples
                 uint item1 = span.ToDecompressedUint(ref bytesSoFar);
                 
                 ExampleChild item2 = default(ExampleChild);
-                int lengthCollectionMember_item2 = span.ToInt(ref bytesSoFar);
+                int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember_item2 != 0)
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);

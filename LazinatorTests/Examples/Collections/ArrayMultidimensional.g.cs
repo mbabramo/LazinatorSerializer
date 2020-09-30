@@ -444,11 +444,11 @@ namespace LazinatorTests.Examples.Collections
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _MyArrayInt_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyCrazyJaggedArray_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyThreeDimArrayInt_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _ArrayMultidimensional_EndByteIndex = bytesSoFar;
         }
         
@@ -655,7 +655,7 @@ namespace LazinatorTests.Examples.Collections
             Int32[][,,][,,,] collection = new Int32[collectionLength][,,][,,,];
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int lengthCollectionMember = span.ToInt(ref bytesSoFar);
+                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
                     collection[itemIndex] = default(Int32[,,][,,,]);
@@ -739,7 +739,7 @@ namespace LazinatorTests.Examples.Collections
             for (int itemIndex1 = 0; itemIndex1 < collectionLength1; itemIndex1++)
             for (int itemIndex2 = 0; itemIndex2 < collectionLength2; itemIndex2++)
             {
-                int lengthCollectionMember = span.ToInt(ref bytesSoFar);
+                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
                     collection[itemIndex0, itemIndex1, itemIndex2] = default(Int32[,,,]);

@@ -387,9 +387,9 @@ namespace LazinatorCollections.ByteSpan
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _ReadOnly_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _ReadOrWrite_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _LazinatorByteSpan_EndByteIndex = bytesSoFar;
         }
         

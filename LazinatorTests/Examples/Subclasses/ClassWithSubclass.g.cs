@@ -488,13 +488,13 @@ namespace LazinatorTests.Examples.Subclasses
             _SubclassInstance1_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             
             _SubclassInstance2_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             
             _ClassWithSubclass_EndByteIndex = bytesSoFar;

@@ -474,13 +474,13 @@ namespace LazinatorTests.Examples.Collections
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _MyDictionary_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyDictionaryStructs_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MySortedDictionary_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MySortedList_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _Dictionary_Values_Lazinator_EndByteIndex = bytesSoFar;
         }
         
@@ -665,7 +665,7 @@ namespace LazinatorTests.Examples.Collections
             Dictionary<Int32, ExampleChild> collection = new Dictionary<Int32, ExampleChild>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int lengthCollectionMember = span.ToInt(ref bytesSoFar);
+                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                 var item = ConvertFromBytes_KeyValuePair_Gint_c_C32ExampleChild_g(childData);
                 collection.Add(item.Key, item.Value);
@@ -719,7 +719,7 @@ namespace LazinatorTests.Examples.Collections
             int item1 = span.ToDecompressedInt(ref bytesSoFar);
             
             ExampleChild item2 = default(ExampleChild);
-            int lengthCollectionMember_item2 = span.ToInt(ref bytesSoFar);
+            int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item2 != 0)
             {
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
@@ -766,7 +766,7 @@ namespace LazinatorTests.Examples.Collections
             Dictionary<WInt, WInt> collection = new Dictionary<WInt, WInt>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int lengthCollectionMember = span.ToInt(ref bytesSoFar);
+                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                 var item = ConvertFromBytes_KeyValuePair_GWInt_c_C32WInt_g(childData);
                 collection.Add(item.Key, item.Value);
@@ -870,7 +870,7 @@ namespace LazinatorTests.Examples.Collections
             SortedDictionary<Int32, ExampleChild> collection = new SortedDictionary<Int32, ExampleChild>();
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int lengthCollectionMember = span.ToInt(ref bytesSoFar);
+                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                 var item = ConvertFromBytes_KeyValuePair_Gint_c_C32ExampleChild_g(childData);
                 collection.Add(item.Key, item.Value);
@@ -924,7 +924,7 @@ namespace LazinatorTests.Examples.Collections
             SortedList<Int32, ExampleChild> collection = new SortedList<Int32, ExampleChild>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int lengthCollectionMember = span.ToInt(ref bytesSoFar);
+                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                 var item = ConvertFromBytes_KeyValuePair_Gint_c_C32ExampleChild_g(childData);
                 collection.Add(item.Key, item.Value);

@@ -332,7 +332,7 @@ namespace LazinatorTests.Examples.Collections
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _MyListNestedNonLazinatorType_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _DotNetList_Nested_NonLazinator_EndByteIndex = bytesSoFar;
         }
         
@@ -438,7 +438,7 @@ namespace LazinatorTests.Examples.Collections
             List<List<NonLazinatorClass>> collection = new List<List<NonLazinatorClass>>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int lengthCollectionMember = span.ToInt(ref bytesSoFar);
+                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
                     collection.Add(default(List<NonLazinatorClass>));
@@ -518,7 +518,7 @@ namespace LazinatorTests.Examples.Collections
             List<NonLazinatorClass> collection = new List<NonLazinatorClass>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int lengthCollectionMember = span.ToInt(ref bytesSoFar);
+                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
                     collection.Add(default(NonLazinatorClass));

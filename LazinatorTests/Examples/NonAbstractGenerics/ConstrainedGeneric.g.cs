@@ -520,19 +520,19 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             _MyNullableT_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             
             _MyT_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             
             _MyU_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             
             _ConstrainedGeneric_T_U_EndByteIndex = bytesSoFar;

@@ -332,7 +332,7 @@ namespace LazinatorTests.Examples.Collections
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _MyHashSetSerialized_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _DotNetHashSet_Lazinator_EndByteIndex = bytesSoFar;
         }
         
@@ -438,7 +438,7 @@ namespace LazinatorTests.Examples.Collections
             HashSet<ExampleChild> collection = new HashSet<ExampleChild>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int lengthCollectionMember = span.ToInt(ref bytesSoFar);
+                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
                     collection.Add(null);

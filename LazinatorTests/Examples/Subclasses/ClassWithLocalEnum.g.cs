@@ -349,7 +349,7 @@ namespace LazinatorTests.Examples.Subclasses
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _MyEnum = (global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass)span.ToDecompressedInt(ref bytesSoFar);
             _MyEnumList_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _ClassWithLocalEnum_EndByteIndex = bytesSoFar;
         }
         

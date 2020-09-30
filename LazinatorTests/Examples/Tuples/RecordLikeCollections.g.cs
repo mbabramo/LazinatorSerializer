@@ -398,9 +398,9 @@ namespace LazinatorTests.Examples.Tuples
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _MyInt = span.ToDecompressedInt(ref bytesSoFar);
             _MyDictionaryWithRecordLikeContainers_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyDictionaryWithRecordLikeTypeValues_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _RecordLikeCollections_EndByteIndex = bytesSoFar;
         }
         
@@ -536,7 +536,7 @@ namespace LazinatorTests.Examples.Tuples
             Dictionary<Int32, RecordLikeContainer> collection = new Dictionary<Int32, RecordLikeContainer>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int lengthCollectionMember = span.ToInt(ref bytesSoFar);
+                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                 var item = ConvertFromBytes_KeyValuePair_Gint_c_C32RecordLikeContainer_g(childData);
                 collection.Add(item.Key, item.Value);
@@ -590,7 +590,7 @@ namespace LazinatorTests.Examples.Tuples
             int item1 = span.ToDecompressedInt(ref bytesSoFar);
             
             RecordLikeContainer item2 = default(RecordLikeContainer);
-            int lengthCollectionMember_item2 = span.ToInt(ref bytesSoFar);
+            int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item2 != 0)
             {
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
@@ -637,7 +637,7 @@ namespace LazinatorTests.Examples.Tuples
             Dictionary<Int32, RecordLikeTypeWithLazinator> collection = new Dictionary<Int32, RecordLikeTypeWithLazinator>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int lengthCollectionMember = span.ToInt(ref bytesSoFar);
+                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                 var item = ConvertFromBytes_KeyValuePair_Gint_c_C32RecordLikeTypeWithLazinator_g(childData);
                 collection.Add(item.Key, item.Value);
@@ -691,7 +691,7 @@ namespace LazinatorTests.Examples.Tuples
             int item1 = span.ToDecompressedInt(ref bytesSoFar);
             
             RecordLikeTypeWithLazinator item2 = default(RecordLikeTypeWithLazinator);
-            int lengthCollectionMember_item2 = span.ToInt(ref bytesSoFar);
+            int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item2 != 0)
             {
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
@@ -733,7 +733,7 @@ namespace LazinatorTests.Examples.Tuples
             string item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             
             Example item3 = default(Example);
-            int lengthCollectionMember_item3 = span.ToInt(ref bytesSoFar);
+            int lengthCollectionMember_item3 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item3 != 0)
             {
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item3);
@@ -742,7 +742,7 @@ namespace LazinatorTests.Examples.Tuples
             bytesSoFar += lengthCollectionMember_item3;
             
             ExampleStructWithoutClass item4 = default(ExampleStructWithoutClass);
-            int lengthCollectionMember_item4 = span.ToInt(ref bytesSoFar);
+            int lengthCollectionMember_item4 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item4 != 0)
             {
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item4);

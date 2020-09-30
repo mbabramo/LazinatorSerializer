@@ -171,7 +171,7 @@ namespace LazinatorTests.Examples.Abstract
             base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _IntList6_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _Concrete6_EndByteIndex = bytesSoFar;
         }
         

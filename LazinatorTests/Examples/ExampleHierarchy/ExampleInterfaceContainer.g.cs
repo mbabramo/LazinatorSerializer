@@ -426,11 +426,11 @@ namespace LazinatorTests.Examples.Hierarchy
             _ExampleByInterface_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
             {
-                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             
             _ExampleListByInterface_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _ExampleInterfaceContainer_EndByteIndex = bytesSoFar;
         }
         
@@ -555,7 +555,7 @@ namespace LazinatorTests.Examples.Hierarchy
             List<IExample> collection = new List<IExample>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int lengthCollectionMember = span.ToInt(ref bytesSoFar);
+                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 if (lengthCollectionMember == 0)
                 {
                     collection.Add(null);

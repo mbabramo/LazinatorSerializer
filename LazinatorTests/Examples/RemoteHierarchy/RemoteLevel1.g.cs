@@ -398,7 +398,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             _RemoteLevel2Item_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             
             _RemoteLevel1_EndByteIndex = bytesSoFar;

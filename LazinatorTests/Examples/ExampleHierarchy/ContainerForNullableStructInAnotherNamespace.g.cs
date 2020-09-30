@@ -420,7 +420,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             _MyNullableStruct_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             
             _ContainerForNullableStructInAnotherNamespace_EndByteIndex = bytesSoFar;

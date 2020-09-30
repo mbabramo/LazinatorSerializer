@@ -190,7 +190,7 @@ namespace LazinatorTests.Examples.Collections
             base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
             _MyArrayInt_DerivedLevel_ByteIndex = bytesSoFar;
-            bytesSoFar = span.ToInt(ref bytesSoFar) + bytesSoFar;
+            bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _DerivedArray_Values_EndByteIndex = bytesSoFar;
         }
         
