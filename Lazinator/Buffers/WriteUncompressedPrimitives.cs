@@ -65,6 +65,21 @@ namespace Lazinator.Buffers
             writer.Write(value);
             return (byte)sizeof(double);
         }
+        public static byte WriteDecimal(ref BinaryBufferWriter writer, decimal value)
+        {
+            writer.Write(value);
+            return (byte)sizeof(decimal);
+        }
+        public static byte WriteDateTime(ref BinaryBufferWriter writer, DateTime value)
+        {
+            writer.Write(value.Ticks);
+            return (byte)sizeof(long);
+        }
+        public static byte WriteTimeSpan(ref BinaryBufferWriter writer, TimeSpan value)
+        {
+            writer.Write(value.Ticks);
+            return (byte)sizeof(long);
+        }
         public static byte WriteGuid(ref BinaryBufferWriter writer, Guid value)
         {
             writer.Write(value); // TODO: when not using BinaryBufferWriter, we should be able to write directly to a destination span, using available extension methods
@@ -194,7 +209,39 @@ namespace Lazinator.Buffers
             writer.Write(value.Value);
             return (byte)sizeof(double) + 1;
         }
-
+        public static byte WriteNullableDecimal(ref BinaryBufferWriter writer, decimal? value)
+        {
+            if (value == null)
+            {
+                writer.Write((byte)0);
+                return 1;
+            }
+            writer.Write((byte)1);
+            writer.Write((decimal)value);
+            return (byte)17;
+        }
+        public static byte WriteNullableDateTime(ref BinaryBufferWriter writer, DateTime? value)
+        {
+            if (value == null)
+            {
+                writer.Write((byte)0);
+                return 1;
+            }
+            writer.Write((byte)1);
+            writer.Write(value.Value.Ticks);
+            return (byte)17;
+        }
+        public static byte WriteNullableTimeSpan(ref BinaryBufferWriter writer, TimeSpan? value)
+        {
+            if (value == null)
+            {
+                writer.Write((byte)0);
+                return 1;
+            }
+            writer.Write((byte)1);
+            writer.Write(((TimeSpan)value).Ticks);
+            return (byte)17;
+        }
         public static byte WriteNullableGuid(ref BinaryBufferWriter writer, Guid? value)
         {
             if (value == null)
