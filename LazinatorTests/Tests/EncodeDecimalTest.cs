@@ -16,7 +16,7 @@ namespace LazinatorTests.Tests
             ReadOnlyMemory<byte> bytes;
             BinaryBufferWriter writer = new BinaryBufferWriter();
             {
-                numBytesWritten = CompressedDecimal.WriteCompressedNullableDecimal(writer, valueToWrite);
+                numBytesWritten = CompressedDecimal.WriteCompressedNullableDecimal(ref writer, valueToWrite);
                 numBytesWritten.Should().Be((int) writer.Position);
                 bytes = writer.LazinatorMemory.GetConsolidatedMemory();
                 valueRead = CompressedDecimal.ToDecompressedNullableDecimal(bytes.Span, ref numBytesRead);

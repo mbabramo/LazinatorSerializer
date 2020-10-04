@@ -24,9 +24,9 @@ namespace Lazinator.Core
 
         public delegate LazinatorMemory ReturnLazinatorMemoryDelegate();
 
-        public delegate void WriteDelegate(BinaryBufferWriter writer);
+        public delegate void WriteDelegate(ref BinaryBufferWriter writer);
 
-        public delegate void WritePossiblyVerifyingCleannessDelegate(BinaryBufferWriter writer, bool verifyCleanness);
+        public delegate void WritePossiblyVerifyingCleannessDelegate(ref BinaryBufferWriter writer, bool verifyCleanness);
 
         #endregion
         
@@ -63,7 +63,7 @@ namespace Lazinator.Core
 
             // We can use the original storage. But we still have to copy it into a new buffer, as requested.
             BinaryBufferWriter writer = new BinaryBufferWriter(originalStorage.Length);
-            originalStorage.WriteToBinaryBuffer(writer);
+            originalStorage.WriteToBinaryBuffer(ref writer);
             return writer.LazinatorMemory;
         }
 
@@ -71,7 +71,7 @@ namespace Lazinator.Core
         {
             int bufferSize = lazinatorObject.LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : lazinatorObject.LazinatorMemoryStorage.Length;
             BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
-            lazinatorObject.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+            lazinatorObject.SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
             return writer.LazinatorMemory;
         }
 
@@ -80,11 +80,11 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="writer">The binary writer</param>
         /// <param name="action">The action to complete</param>
-        public static void WriteToBinaryWithIntLengthPrefix(BinaryBufferWriter writer, WriteDelegate action)
+        public static void WriteToBinaryWithIntLengthPrefix(ref BinaryBufferWriter writer, WriteDelegate action)
         {
             int lengthPosition = writer.Position;
             writer.Write((uint)0);
-            action(writer);
+            action(ref writer);
             int afterPosition = writer.Position;
             writer.Position = lengthPosition;
             int length = (afterPosition - lengthPosition - sizeof(uint));
@@ -97,9 +97,9 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="writer">The binary writer</param>
         /// <param name="action">The action to complete</param>
-        public static void WriteToBinaryWithoutLengthPrefix(BinaryBufferWriter writer, WriteDelegate action)
+        public static void WriteToBinaryWithoutLengthPrefix(ref BinaryBufferWriter writer, WriteDelegate action)
         {
-            action(writer);
+            action(ref writer);
         }
 
         /// <summary>
@@ -107,11 +107,11 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="writer">The binary writer</param>
         /// <param name="action">The action to complete</param>
-        public static void WriteToBinaryWithByteLengthPrefix(BinaryBufferWriter writer, WriteDelegate action)
+        public static void WriteToBinaryWithByteLengthPrefix(ref BinaryBufferWriter writer, WriteDelegate action)
         {
             int lengthPosition = writer.Position;
             writer.Write((byte)0);
-            action(writer);
+            action(ref writer);
             int afterPosition = writer.Position;
             writer.Position = lengthPosition;
             int length = (afterPosition - lengthPosition - sizeof(byte));
@@ -134,7 +134,7 @@ namespace Lazinator.Core
         /// <param name="restrictLengthTo250Bytes">If true, the length is stored in a single byte. If the length might be bigger then this, and length is not being skipped, set this to true.</param>
         /// <param name="skipLength">If true, the length is omitted altogether.</param>
         /// <param name="parent">The parent of the object being written</param>
-        public static void WriteChild<T>(BinaryBufferWriter writer, ref T child,
+        public static void WriteChild<T>(ref BinaryBufferWriter writer, ref T child,
             IncludeChildrenMode includeChildrenMode, bool childHasBeenAccessed,
             ReturnLazinatorMemoryDelegate getChildSliceFn, bool verifyCleanness, bool updateStoredBuffer, bool restrictLengthTo250Bytes, bool skipLength, ILazinator parent) where T : ILazinator
         {
@@ -160,7 +160,7 @@ namespace Lazinator.Core
             if (!childCouldHaveChanged)
             {
                 int startPosition = writer.Position;
-                childStorage = WriteExistingChildStorage(writer, getChildSliceFn, restrictLengthTo250Bytes, skipLength, childStorage);
+                childStorage = WriteExistingChildStorage(ref writer, getChildSliceFn, restrictLengthTo250Bytes, skipLength, childStorage);
                 if (updateStoredBuffer)
                 {
                     if (child != null)
@@ -171,7 +171,7 @@ namespace Lazinator.Core
                             startPosition += restrictLengthTo250Bytes ? 1 : 4;
                             // note that the length is set correctly
                         }
-                        child.UpdateStoredBuffer(writer, startPosition, length, includeChildrenMode, true);
+                        child.UpdateStoredBuffer(ref writer, startPosition, length, includeChildrenMode, true);
                     }
                 }
             }
@@ -179,17 +179,17 @@ namespace Lazinator.Core
             {
                 if (child == null)
                 {
-                    WriteNullChild(writer, restrictLengthTo250Bytes, skipLength);
+                    WriteNullChild(ref writer, restrictLengthTo250Bytes, skipLength);
                 }
                 else
                 {
-                    WriteChildToBinary(writer, ref child, includeChildrenMode, verifyCleanness, updateStoredBuffer, restrictLengthTo250Bytes, skipLength);
+                    WriteChildToBinary(ref writer, ref child, includeChildrenMode, verifyCleanness, updateStoredBuffer, restrictLengthTo250Bytes, skipLength);
                 }
             }
             AddParentToChildless(ref child, parent);
         }
 
-        public static void WriteNullChild(BinaryBufferWriter writer, bool restrictLengthTo250Bytes, bool skipLength)
+        public static void WriteNullChild(ref BinaryBufferWriter writer, bool restrictLengthTo250Bytes, bool skipLength)
         {
             if (!skipLength)
             {
@@ -210,18 +210,18 @@ namespace Lazinator.Core
         /// <param name="skipLength"></param>
         /// <param name="childStorage"></param>
         /// <returns></returns>
-        public static LazinatorMemory WriteExistingChildStorage(BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceFn, bool restrictLengthTo250Bytes, bool skipLength, LazinatorMemory childStorage)
+        public static LazinatorMemory WriteExistingChildStorage(ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceFn, bool restrictLengthTo250Bytes, bool skipLength, LazinatorMemory childStorage)
         {
             if (childStorage.IsEmpty)
                 childStorage = getChildSliceFn(); // this is the storage holding the child, which has never been accessed
             if (childStorage.InitialOwnedMemory == null)
                 ThrowHelper.ThrowChildStorageMissingException();
             if (skipLength)
-                childStorage.WriteToBinaryBuffer(writer);
+                childStorage.WriteToBinaryBuffer(ref writer);
             else if (restrictLengthTo250Bytes)
-                childStorage.WriteToBinaryBuffer_WithBytePrefix(writer);
+                childStorage.WriteToBinaryBuffer_WithBytePrefix(ref writer);
             else
-                childStorage.WriteToBinaryBuffer_WithIntPrefix(writer);
+                childStorage.WriteToBinaryBuffer_WithIntPrefix(ref writer);
             return childStorage;
         }
 
@@ -242,22 +242,22 @@ namespace Lazinator.Core
         /// <param name="restrictLengthTo250Bytes">If true, the length is stored in a single byte. If the length might be bigger then this, and length is not being skipped, set this to true.</param>
         /// <param name="skipLength">If true, the length is omitted altogether.</param>
         /// <param name="parent">The parent of the object being written</param>
-        public static void WriteChildToBinary<T>(BinaryBufferWriter writer, ref T child, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool restrictLengthTo250Bytes, bool skipLength) where T : ILazinator
+        public static void WriteChildToBinary<T>(ref BinaryBufferWriter writer, ref T child, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool restrictLengthTo250Bytes, bool skipLength) where T : ILazinator
         {
             T childCopy = child;
-            void action(BinaryBufferWriter w)
+            void action(ref BinaryBufferWriter w)
             {
                 if (childCopy.LazinatorMemoryStorage.IsEmpty || childCopy.IsDirty || childCopy.DescendantIsDirty || verifyCleanness || includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != childCopy.OriginalIncludeChildrenMode)
-                    childCopy.SerializeExistingBuffer(w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    childCopy.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 else
-                    childCopy.LazinatorMemoryStorage.WriteToBinaryBuffer(w); // the childCopy has been accessed, but is unchanged, so we can use the storage holding the childCopy
+                    childCopy.LazinatorMemoryStorage.WriteToBinaryBuffer(ref w); // the childCopy has been accessed, but is unchanged, so we can use the storage holding the childCopy
             }
             if (skipLength)
-                LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(writer, action);
+                LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(ref writer, action);
             else if (restrictLengthTo250Bytes)
-                LazinatorUtilities.WriteToBinaryWithByteLengthPrefix(writer, action);
+                LazinatorUtilities.WriteToBinaryWithByteLengthPrefix(ref writer, action);
             else
-                LazinatorUtilities.WriteToBinaryWithIntLengthPrefix(writer, action);
+                LazinatorUtilities.WriteToBinaryWithIntLengthPrefix(ref writer, action);
         }
 
         #endregion
@@ -302,15 +302,15 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="writer"></param>
         /// <param name="lazinatorGenericID"></param>
-        public static void WriteLazinatorGenericID(BinaryBufferWriter writer, LazinatorGenericIDType lazinatorGenericID)
+        public static void WriteLazinatorGenericID(ref BinaryBufferWriter writer, LazinatorGenericIDType lazinatorGenericID)
         {
             // We write the first component before the total count to be consistent with non-generic items.
-            CompressedIntegralTypes.WriteCompressedInt(writer, lazinatorGenericID.TypeAndInnerTypeIDs[0]);
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, lazinatorGenericID.TypeAndInnerTypeIDs[0]);
             int numItems = lazinatorGenericID.TypeAndInnerTypeIDs.Count;
             writer.Write((byte)numItems);
             for (int i = 1; i < numItems; i++)
             {
-                CompressedIntegralTypes.WriteCompressedInt(writer, lazinatorGenericID.TypeAndInnerTypeIDs[i]);
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, lazinatorGenericID.TypeAndInnerTypeIDs[i]);
             }
         }
 
@@ -347,7 +347,7 @@ namespace Lazinator.Core
         /// <param name="verifyCleanness">If true, then the dirty-conversion will always be performed unless we are sure it is clean, and if the object is not believed to be dirty, the results will be compared to the clean version. This allows for errors from failure to serialize objects that have been changed to be caught during development.</param>
         /// <param name="binaryWriterAction">The action to complete the write to the binary buffer</param>
         public static void WriteNonLazinatorObject(object nonLazinatorObject,
-            bool isBelievedDirty, bool isAccessed, BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceForFieldFn,
+            bool isBelievedDirty, bool isAccessed, ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceForFieldFn,
             bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction)
         {
             LazinatorMemory original = getChildSliceForFieldFn();
@@ -356,13 +356,13 @@ namespace Lazinator.Core
             {
                 // object has never been loaded into memory, so there is no need to verify cleanness
                 // just return what we have.
-                original.WriteToBinaryBuffer_WithIntPrefix(writer);
+                original.WriteToBinaryBuffer_WithIntPrefix(ref writer);
             }
             else if (isBelievedDirty || length == 0)
             {
                 // We definitely need to write to binary, because either the dirty flag has been set or the original storage doesn't have anything to help us.
-                void action(BinaryBufferWriter w) => binaryWriterAction(w, verifyCleanness);
-                WriteToBinaryWithIntLengthPrefix(writer, action);
+                void action(ref BinaryBufferWriter w) => binaryWriterAction(ref w, verifyCleanness);
+                WriteToBinaryWithIntLengthPrefix(ref writer, action);
             }
             else
             {
@@ -371,7 +371,7 @@ namespace Lazinator.Core
                     ReadOnlyMemory<byte> revised = ConvertNonLazinatorObjectToBytes(nonLazinatorObject, binaryWriterAction);
                     ConfirmMatch(original, revised);
                 }
-                original.WriteToBinaryBuffer_WithIntPrefix(writer);
+                original.WriteToBinaryBuffer_WithIntPrefix(ref writer);
             }
         }
 
@@ -386,7 +386,7 @@ namespace Lazinator.Core
         /// <param name="verifyCleanness">If true, then the dirty-conversion will always be performed unless we are sure it is clean, and if the object is not believed to be dirty, the results will be compared to the clean version. This allows for errors from failure to serialize objects that have been changed to be caught during development.</param>
         /// <param name="binaryWriterAction">The action to complete the write to the binary buffer</param>
         public static void WriteNonLazinatorObject_WithoutLengthPrefix(object nonLazinatorObject,
-            bool isBelievedDirty, bool isAccessed, BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceForFieldFn,
+            bool isBelievedDirty, bool isAccessed, ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceForFieldFn,
             bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction)
         {
             LazinatorMemory original = getChildSliceForFieldFn();
@@ -394,13 +394,13 @@ namespace Lazinator.Core
             {
                 // object has never been loaded into memory, so there is no need to verify cleanness
                 // just return what we have.
-                original.WriteToBinaryBuffer(writer);
+                original.WriteToBinaryBuffer(ref writer);
             }
             else if (isBelievedDirty || original.Length == 0)
             {
                 // We definitely need to write to binary, because either the dirty flag has been set or the original storage doesn't have anything to help us.
-                void action(BinaryBufferWriter w) => binaryWriterAction(w, verifyCleanness);
-                WriteToBinaryWithoutLengthPrefix(writer, action);
+                void action(ref BinaryBufferWriter w) => binaryWriterAction(ref w, verifyCleanness);
+                WriteToBinaryWithoutLengthPrefix(ref writer, action);
             }
             else
             {
@@ -409,7 +409,7 @@ namespace Lazinator.Core
                     ReadOnlyMemory<byte> revised = ConvertNonLazinatorObjectToBytes(nonLazinatorObject, binaryWriterAction);
                     ConfirmMatch(original, revised);
                 }
-                original.WriteToBinaryBuffer(writer);
+                original.WriteToBinaryBuffer(ref writer);
             }
         }
 
@@ -426,7 +426,7 @@ namespace Lazinator.Core
                 return new ReadOnlyMemory<byte>();
 
             BinaryBufferWriter writer = new BinaryBufferWriter();
-            binaryWriterAction(writer, true);
+            binaryWriterAction(ref writer, true);
             var memory = writer.LazinatorMemory;
             byte[] bytes = new byte[memory.Length];
             memory.CopyToArray(bytes);

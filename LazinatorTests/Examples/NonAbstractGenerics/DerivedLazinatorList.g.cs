@@ -126,7 +126,7 @@ namespace LazinatorTests.Examples
             _MyListName = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
         }
         
-        public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        public override void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
@@ -134,14 +134,14 @@ namespace LazinatorTests.Examples
             }
             PreSerialization(verifyCleanness, updateStoredBuffer);
             int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
+            WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
             if (updateStoredBuffer)
             {
-                UpdateStoredBuffer(writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
+                UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
             }
         }
         
-        public override void UpdateStoredBuffer(BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        public override void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
         {
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
@@ -149,8 +149,8 @@ namespace LazinatorTests.Examples
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    UpdateDeserializedChildren(writer, startPosition);
-                    OnUpdateDeserializedChildren(writer, startPosition);
+                    UpdateDeserializedChildren(ref writer, startPosition);
+                    OnUpdateDeserializedChildren(ref writer, startPosition);
                 }
                 
             }
@@ -163,17 +163,17 @@ namespace LazinatorTests.Examples
             LazinatorMemoryStorage = newBuffer;
         }
         
-        protected override void UpdateDeserializedChildren(BinaryBufferWriter writer, int startPosition)
+        protected override void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            base.UpdateDeserializedChildren(writer, startPosition);
+            base.UpdateDeserializedChildren(ref writer, startPosition);
         }
         
         
-        protected override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
+        protected override void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
-            base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
+            base.WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
-            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, _MyListName);
+            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _MyListName);
             OnPropertiesWritten(updateStoredBuffer);
         }
         

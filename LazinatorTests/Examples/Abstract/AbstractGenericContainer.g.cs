@@ -101,7 +101,7 @@ namespace LazinatorTests.Examples.Abstract
             set;
         }
         
-        public abstract void UpdateStoredBuffer(BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
+        public abstract void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
         public abstract void UpdateStoredBuffer();
         public abstract void FreeInMemoryObjects();
         public abstract int GetByteLength();
@@ -111,10 +111,10 @@ namespace LazinatorTests.Examples.Abstract
         public abstract LazinatorGenericIDType LazinatorGenericID { get; }
         public abstract int LazinatorObjectVersion { get; set; }
         public abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
-        public abstract void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
+        public abstract void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
         protected abstract LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
-        protected abstract void UpdateDeserializedChildren(BinaryBufferWriter writer, int startPosition);
-        protected abstract void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);
+        protected abstract void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition);
+        protected abstract void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);
         
     }
 }

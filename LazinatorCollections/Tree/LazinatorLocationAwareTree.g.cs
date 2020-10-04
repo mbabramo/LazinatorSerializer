@@ -234,21 +234,21 @@ namespace LazinatorCollections.Tree
             _LazinatorLocationAwareTree_T_EndByteIndex = bytesSoFar;
         }
         
-        public override void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        public override void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
             }
             int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
+            WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
             if (updateStoredBuffer)
             {
-                UpdateStoredBuffer(writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
+                UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
             }
         }
         
-        public override void UpdateStoredBuffer(BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        public override void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
         {
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
@@ -256,7 +256,7 @@ namespace LazinatorCollections.Tree
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    UpdateDeserializedChildren(writer, startPosition);
+                    UpdateDeserializedChildren(ref writer, startPosition);
                 }
                 
                 if (_Item_Accessed && _Item != null && _Item.IsStruct && (_Item.IsDirty || _Item.DescendantIsDirty))
@@ -273,22 +273,22 @@ namespace LazinatorCollections.Tree
             LazinatorMemoryStorage = newBuffer;
         }
         
-        protected override void UpdateDeserializedChildren(BinaryBufferWriter writer, int startPosition)
+        protected override void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            base.UpdateDeserializedChildren(writer, startPosition);
+            base.UpdateDeserializedChildren(ref writer, startPosition);
             if (_Locations_Accessed && _Locations != null)
             {
-                Locations.UpdateStoredBuffer(writer, startPosition + _Locations_ByteIndex + sizeof(int), _Locations_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                Locations.UpdateStoredBuffer(ref writer, startPosition + _Locations_ByteIndex + sizeof(int), _Locations_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
             
         }
         
         
-        protected override void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
+        protected override void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
             int startPosition = writer.Position;
             int startOfObjectPosition = 0;
-            base.WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
+            base.WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             // write properties
             startOfObjectPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
@@ -297,7 +297,7 @@ namespace LazinatorCollections.Tree
                 {
                     var deserialized = Locations;
                 }
-                WriteChild(writer, ref _Locations, includeChildrenMode, _Locations_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Locations_ByteIndex, _Locations_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
+                WriteChild(ref writer, ref _Locations, includeChildrenMode, _Locations_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Locations_ByteIndex, _Locations_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             
             if (updateStoredBuffer)
