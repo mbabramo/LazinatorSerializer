@@ -391,22 +391,22 @@ namespace Lazinator.Buffers
                     yield return additional;
         }
 
-        public void WriteToBinaryBuffer(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
+        public void WriteToBinaryBuffer(BinaryBufferWriter writer, bool includeOutsideOfRange = false)
         {
             foreach (Memory<byte> memory in EnumerateMemoryChunks(includeOutsideOfRange))
                 writer.Write(memory.Span);
         }
-        public void WriteToBinaryBuffer_WithBytePrefix(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
+        public void WriteToBinaryBuffer_WithBytePrefix(BinaryBufferWriter writer, bool includeOutsideOfRange = false)
         {
             if (Length > 250)
                 throw new LazinatorSerializationException("Span exceeded length of 250 bytes even though it was guaranteed to be no more than that.");
             writer.Write((byte)Length);
-            WriteToBinaryBuffer(ref writer, includeOutsideOfRange);
+            WriteToBinaryBuffer(writer, includeOutsideOfRange);
         }
-        public void WriteToBinaryBuffer_WithIntPrefix(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
+        public void WriteToBinaryBuffer_WithIntPrefix(BinaryBufferWriter writer, bool includeOutsideOfRange = false)
         {
             writer.Write((uint)Length);
-            WriteToBinaryBuffer(ref writer, includeOutsideOfRange);
+            WriteToBinaryBuffer(writer, includeOutsideOfRange);
         }
 
         public IEnumerable<byte> EnumerateBytes(bool includeOutsideOfRange = false)

@@ -164,19 +164,19 @@ namespace Lazinator.Buffers
             return MemoryMarshal.Cast<UInt64, byte>(new Memory<UInt64>(reversed).Span);
         }
 
-        public static void Write_WithVarLongLengthPrefix(this ReadOnlySpan<byte> b, ref BinaryBufferWriter writer)
+        public static void Write_WithVarLongLengthPrefix(this ReadOnlySpan<byte> b, BinaryBufferWriter writer)
         {
-            CompressedIntegralTypes.WriteCompressedLong(ref writer, (long)b.Length);
+            CompressedIntegralTypes.WriteCompressedLong(writer, (long)b.Length);
             writer.Write(b);
         }
 
-        public static void Write_WithIntLengthPrefix(this ReadOnlySpan<byte> b, ref BinaryBufferWriter writer)
+        public static void Write_WithIntLengthPrefix(this ReadOnlySpan<byte> b, BinaryBufferWriter writer)
         {
             writer.Write((uint)b.Length);
             writer.Write(b);
         }
 
-        public static void Write_WithByteLengthPrefix(this ReadOnlySpan<byte> b, ref BinaryBufferWriter writer)
+        public static void Write_WithByteLengthPrefix(this ReadOnlySpan<byte> b, BinaryBufferWriter writer)
         {
             if (b.Length > 250)
                 throw new LazinatorSerializationException("Span exceeded length of 250 bytes even though it was guaranteed to be no more than that.");
@@ -184,7 +184,7 @@ namespace Lazinator.Buffers
             writer.Write(b);
         }
 
-        public static void Write(this ReadOnlyMemory<byte> m, ref BinaryBufferWriter writer)
+        public static void Write(this ReadOnlyMemory<byte> m, BinaryBufferWriter writer)
         {
             ReadOnlySpan<byte> toConvert = m.Span;
             writer.Write(toConvert);

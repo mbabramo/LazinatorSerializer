@@ -246,7 +246,7 @@ namespace LazinatorTests.Examples
                 return EncodeToNewBuffer(includeChildrenMode, verifyCleanness, updateStoredBuffer);
             }
             BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
-            LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
+            LazinatorMemoryStorage.WriteToBinaryBuffer(writer);
             return writer.LazinatorMemory;
         }
         
@@ -254,7 +254,7 @@ namespace LazinatorTests.Examples
         {
             int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.Length;
             BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
-            SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+            SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
             return writer.LazinatorMemory;
         }
         
@@ -372,7 +372,7 @@ namespace LazinatorTests.Examples
             else
             {
                 BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
-                LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
+                LazinatorMemoryStorage.WriteToBinaryBuffer(writer);
                 LazinatorMemoryStorage = writer.LazinatorMemory;
             }
             OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
@@ -490,21 +490,21 @@ namespace LazinatorTests.Examples
             _NonLazinatorContainer_EndByteIndex = bytesSoFar;
         }
         
-        public void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        public void SerializeExistingBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
             }
             int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
+            WritePropertiesIntoBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
             if (updateStoredBuffer)
             {
-                UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
+                UpdateStoredBuffer(writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
             }
         }
         
-        public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        public void UpdateStoredBuffer(BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
         {
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
@@ -512,7 +512,7 @@ namespace LazinatorTests.Examples
                 _DescendantIsDirty = false;
                 if (updateDeserializedChildren)
                 {
-                    UpdateDeserializedChildren(ref writer, startPosition);
+                    UpdateDeserializedChildren(writer, startPosition);
                 }
                 
             }
@@ -525,7 +525,7 @@ namespace LazinatorTests.Examples
             LazinatorMemoryStorage = newBuffer;
         }
         
-        void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        void UpdateDeserializedChildren(BinaryBufferWriter writer, int startPosition)
         {
             if (_NonLazinatorInterchangeableClass_Accessed && _NonLazinatorInterchangeableClass != null)
             {
@@ -534,18 +534,18 @@ namespace LazinatorTests.Examples
             _NonLazinatorInterchangeableStruct = (NonLazinatorInterchangeableStruct) CloneOrChange_NonLazinatorInterchangeableStruct(_NonLazinatorInterchangeableStruct, l => l.RemoveBufferInHierarchy(), true);}
             
             
-            void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
+            void WritePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
             {
                 int startPosition = writer.Position;
                 int startOfObjectPosition = 0;
                 // header information
                 if (includeUniqueID)
                 {
-                    CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
+                    CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorUniqueID);
                 }
                 
-                CompressedIntegralTypes.WriteCompressedInt(ref writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
-                CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
+                CompressedIntegralTypes.WriteCompressedInt(writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
+                CompressedIntegralTypes.WriteCompressedInt(writer, LazinatorObjectVersion);
                 writer.Write((byte)includeChildrenMode);
                 // write properties
                 startOfObjectPosition = writer.Position;
@@ -559,11 +559,11 @@ namespace LazinatorTests.Examples
                 var copy_NonLazinatorClass = _NonLazinatorClass;
                 WriteNonLazinatorObject(
                 nonLazinatorObject: _NonLazinatorClass, isBelievedDirty: _NonLazinatorClass_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
-                isAccessed: _NonLazinatorClass_Accessed, writer: ref writer,
+                isAccessed: _NonLazinatorClass_Accessed, writer: writer,
                 getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_NonLazinatorClass, byteIndexCopy_NonLazinatorClass, byteLengthCopy_NonLazinatorClass, false, false, null),
                 verifyCleanness: false,
-                binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-                NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(ref w, copy_NonLazinatorClass, includeChildrenMode, v, updateStoredBuffer));
+                binaryWriterAction: (BinaryBufferWriter w, bool v) =>
+                NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(w, copy_NonLazinatorClass, includeChildrenMode, v, updateStoredBuffer));
                 if (updateStoredBuffer)
                 {
                     _NonLazinatorClass_ByteIndex = startOfObjectPosition - startPosition;
@@ -579,11 +579,11 @@ namespace LazinatorTests.Examples
                 var copy_NonLazinatorInterchangeableClass = _NonLazinatorInterchangeableClass;
                 WriteNonLazinatorObject(
                 nonLazinatorObject: _NonLazinatorInterchangeableClass, isBelievedDirty: _NonLazinatorInterchangeableClass_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
-                isAccessed: _NonLazinatorInterchangeableClass_Accessed, writer: ref writer,
+                isAccessed: _NonLazinatorInterchangeableClass_Accessed, writer: writer,
                 getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_NonLazinatorInterchangeableClass, byteIndexCopy_NonLazinatorInterchangeableClass, byteLengthCopy_NonLazinatorInterchangeableClass, false, false, null),
                 verifyCleanness: false,
-                binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-                ConvertToBytes_NonLazinatorInterchangeableClass(ref w, copy_NonLazinatorInterchangeableClass, includeChildrenMode, v, updateStoredBuffer));
+                binaryWriterAction: (BinaryBufferWriter w, bool v) =>
+                ConvertToBytes_NonLazinatorInterchangeableClass(w, copy_NonLazinatorInterchangeableClass, includeChildrenMode, v, updateStoredBuffer));
                 if (updateStoredBuffer)
                 {
                     _NonLazinatorInterchangeableClass_ByteIndex = startOfObjectPosition - startPosition;
@@ -599,11 +599,11 @@ namespace LazinatorTests.Examples
                 var copy_NonLazinatorInterchangeableStruct = _NonLazinatorInterchangeableStruct;
                 WriteNonLazinatorObject(
                 nonLazinatorObject: _NonLazinatorInterchangeableStruct, isBelievedDirty: _NonLazinatorInterchangeableStruct_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
-                isAccessed: _NonLazinatorInterchangeableStruct_Accessed, writer: ref writer,
+                isAccessed: _NonLazinatorInterchangeableStruct_Accessed, writer: writer,
                 getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_NonLazinatorInterchangeableStruct, byteIndexCopy_NonLazinatorInterchangeableStruct, byteLengthCopy_NonLazinatorInterchangeableStruct, false, false, null),
                 verifyCleanness: false,
-                binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-                ConvertToBytes_NonLazinatorInterchangeableStruct(ref w, copy_NonLazinatorInterchangeableStruct, includeChildrenMode, v, updateStoredBuffer));
+                binaryWriterAction: (BinaryBufferWriter w, bool v) =>
+                ConvertToBytes_NonLazinatorInterchangeableStruct(w, copy_NonLazinatorInterchangeableStruct, includeChildrenMode, v, updateStoredBuffer));
                 if (updateStoredBuffer)
                 {
                     _NonLazinatorInterchangeableStruct_ByteIndex = startOfObjectPosition - startPosition;
@@ -619,11 +619,11 @@ namespace LazinatorTests.Examples
                 var copy_NonLazinatorStruct = _NonLazinatorStruct;
                 WriteNonLazinatorObject(
                 nonLazinatorObject: _NonLazinatorStruct, isBelievedDirty: _NonLazinatorStruct_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
-                isAccessed: _NonLazinatorStruct_Accessed, writer: ref writer,
+                isAccessed: _NonLazinatorStruct_Accessed, writer: writer,
                 getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_NonLazinatorStruct, byteIndexCopy_NonLazinatorStruct, byteLengthCopy_NonLazinatorStruct, false, false, null),
                 verifyCleanness: false,
-                binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-                NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorStruct(ref w, copy_NonLazinatorStruct, includeChildrenMode, v, updateStoredBuffer));
+                binaryWriterAction: (BinaryBufferWriter w, bool v) =>
+                NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorStruct(w, copy_NonLazinatorStruct, includeChildrenMode, v, updateStoredBuffer));
                 if (updateStoredBuffer)
                 {
                     _NonLazinatorStruct_ByteIndex = startOfObjectPosition - startPosition;
@@ -644,7 +644,7 @@ namespace LazinatorTests.Examples
                 return interchange.Interchange_NonLazinatorInterchangeableClass(false);
             }
             
-            private static void ConvertToBytes_NonLazinatorInterchangeableClass(ref BinaryBufferWriter writer,
+            private static void ConvertToBytes_NonLazinatorInterchangeableClass(BinaryBufferWriter writer,
             NonLazinatorInterchangeableClass itemToConvert, IncludeChildrenMode includeChildrenMode,
             bool verifyCleanness, bool updateStoredBuffer)
             {
@@ -654,7 +654,7 @@ namespace LazinatorTests.Examples
                 }
                 
                 NonLazinatorInterchangeClass interchange = new NonLazinatorInterchangeClass(itemToConvert);
-                interchange.SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                interchange.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
             }
             
             
@@ -675,13 +675,13 @@ namespace LazinatorTests.Examples
                 return interchange.Interchange_NonLazinatorInterchangeableStruct(false);
             }
             
-            private static void ConvertToBytes_NonLazinatorInterchangeableStruct(ref BinaryBufferWriter writer,
+            private static void ConvertToBytes_NonLazinatorInterchangeableStruct(BinaryBufferWriter writer,
             NonLazinatorInterchangeableStruct itemToConvert, IncludeChildrenMode includeChildrenMode,
             bool verifyCleanness, bool updateStoredBuffer)
             {
                 
                 NonLazinatorInterchangeStruct interchange = new NonLazinatorInterchangeStruct(itemToConvert);
-                interchange.SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                interchange.SerializeExistingBuffer(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
             }
             
             

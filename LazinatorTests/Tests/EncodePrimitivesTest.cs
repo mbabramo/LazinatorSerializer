@@ -270,7 +270,7 @@ namespace LazinatorTests.Tests
             ReadOnlyMemory<byte> bytes;
             BinaryBufferWriter writer = new BinaryBufferWriter();
             {
-                EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, valueToWrite);
+                EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(writer, valueToWrite);
                 numBytesExpected = (valueToWrite?.Length ?? 0) + 1; // 12 characters (1 byte each) + 1 byte for length
                 bytes = writer.LazinatorMemory.GetConsolidatedMemory();
                 valueRead = bytes.Span.ToString_VarIntLengthUtf8(ref numBytesRead);
@@ -307,7 +307,7 @@ namespace LazinatorTests.Tests
             ReadOnlyMemory<byte> bytes;
             BinaryBufferWriter writer = new BinaryBufferWriter();
             {
-                EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, valueToWrite);
+                EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(writer, valueToWrite);
                 bytes = writer.LazinatorMemory.GetConsolidatedMemory();
                 valueRead = bytes.Span.ToString_BrotliCompressedWithLength(ref numBytesRead);
                 numBytesRead.Should().Be(bytes.Length);
