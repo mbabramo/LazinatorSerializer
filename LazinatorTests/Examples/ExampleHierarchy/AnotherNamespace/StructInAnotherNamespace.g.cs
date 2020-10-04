@@ -72,7 +72,7 @@ namespace LazinatorTests.AnotherNamespace
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             if (span.Length == 0)
             {
                 return 0;
@@ -313,7 +313,7 @@ namespace LazinatorTests.AnotherNamespace
         
         public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             _MyInt = span.ToDecompressedInt32(ref bytesSoFar);
         }
         

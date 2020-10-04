@@ -307,7 +307,7 @@ namespace LazinatorTests.Examples
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             if (span.Length == 0)
             {
                 return 0;
@@ -654,7 +654,7 @@ namespace LazinatorTests.Examples
         
         public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             _MyBool = span.ToBoolean(ref bytesSoFar);
             _MyChar = span.ToChar(ref bytesSoFar);
             _MyChild1_ByteIndex = bytesSoFar;
@@ -860,7 +860,7 @@ namespace LazinatorTests.Examples
                 {
                     return default(List<Example>);
                 }
-                ReadOnlySpan<byte> span = storage.InitialSpan;
+                ReadOnlySpan<byte> span = storage.InitialMemory.Span;
                 int bytesSoFar = 0;
                 int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
                 
@@ -948,7 +948,7 @@ namespace LazinatorTests.Examples
                 {
                     return default(List<Int32>);
                 }
-                ReadOnlySpan<byte> span = storage.InitialSpan;
+                ReadOnlySpan<byte> span = storage.InitialMemory.Span;
                 int bytesSoFar = 0;
                 int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
                 
@@ -1000,7 +1000,7 @@ namespace LazinatorTests.Examples
                 {
                     return default;
                 }
-                ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
+                ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
                 
                 int bytesSoFar = 0;
                 

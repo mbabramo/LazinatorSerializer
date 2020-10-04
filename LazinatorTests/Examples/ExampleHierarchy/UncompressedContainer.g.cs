@@ -342,7 +342,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             if (span.Length == 0)
             {
                 return 0;
@@ -604,7 +604,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             _MyUncompressed = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
             _MyUncompressedDateTime = span.ToDateTime(ref bytesSoFar);
             _MyUncompressedDecimal = span.ToDecimal(ref bytesSoFar);

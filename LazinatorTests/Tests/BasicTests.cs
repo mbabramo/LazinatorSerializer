@@ -52,7 +52,7 @@ namespace LazinatorTests.Tests
             LazinatorMemory serializedBytes = GetLazinatorMemoryCopy(original);
             NullableEnabledContext copy = new NullableEnabledContext(serializedBytes);
             LazinatorMemory serializedBytesCopy = GetLazinatorMemoryCopy(original);
-            serializedBytes.Matches(serializedBytesCopy.InitialSpan).Should().BeTrue();
+            serializedBytes.Matches(serializedBytesCopy.InitialMemory.Span).Should().BeTrue();
         }
 
         [Fact]

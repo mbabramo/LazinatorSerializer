@@ -188,7 +188,7 @@ namespace LazinatorTests.Examples.Collections
         public override void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             base.ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             _MyArrayInt_DerivedLevel_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _DerivedArray_Values_EndByteIndex = bytesSoFar;
@@ -276,7 +276,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default(Int32[]);
             }
-            ReadOnlySpan<byte> span = storage.InitialSpan;
+            ReadOnlySpan<byte> span = storage.InitialMemory.Span;
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             

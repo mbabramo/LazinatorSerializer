@@ -240,8 +240,6 @@ namespace Lazinator.Buffers
         }
 
         public ReadOnlyMemory<byte> InitialReadOnlyMemory => InitialMemory;
-        public Span<byte> InitialSpan => InitialMemory.Span;
-        public ReadOnlySpan<byte> InitialReadOnlySpan => InitialMemory.Span;
 
         public Memory<byte> OnlyMemory
         {

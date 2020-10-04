@@ -124,7 +124,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             if (span.Length == 0)
             {
                 return 0;
@@ -393,7 +393,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             _TopOfHierarchyInt = span.ToDecompressedInt32(ref bytesSoFar);
             _RemoteLevel1Item_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)

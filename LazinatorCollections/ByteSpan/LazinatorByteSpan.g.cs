@@ -49,7 +49,7 @@ namespace LazinatorCollections.ByteSpan
                 if (!_ReadOnly_Accessed)
                 {
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ReadOnly_ByteIndex, _ReadOnly_ByteLength, false, false, null);
-                    return childData.InitialSpan;
+                    return childData.InitialMemory.Span;
                 }
                 
                 return _ReadOnly.Span;
@@ -130,7 +130,7 @@ namespace LazinatorCollections.ByteSpan
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             if (span.Length == 0)
             {
                 return 0;
@@ -385,7 +385,7 @@ namespace LazinatorCollections.ByteSpan
         
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             _ReadOnly_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _ReadOrWrite_ByteIndex = bytesSoFar;

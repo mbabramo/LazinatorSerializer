@@ -137,7 +137,7 @@ namespace LazinatorCollections.BitArray
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             if (span.Length == 0)
             {
                 return 0;
@@ -388,7 +388,7 @@ namespace LazinatorCollections.BitArray
         
         public void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             __version = span.ToDecompressedInt32(ref bytesSoFar);
             _m_length = span.ToDecompressedInt32(ref bytesSoFar);
             _IntStorage_ByteIndex = bytesSoFar;
@@ -479,7 +479,7 @@ namespace LazinatorCollections.BitArray
         
         private static Memory<Int32> ConvertFromBytes_Memory_Gint_g(LazinatorMemory storage)
         {
-            ReadOnlySpan<byte> span = storage.InitialSpan;
+            ReadOnlySpan<byte> span = storage.InitialMemory.Span;
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             

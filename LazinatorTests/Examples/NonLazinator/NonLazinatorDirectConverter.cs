@@ -13,7 +13,7 @@ namespace LazinatorTests.Examples
 
             if (storage.Length == 0)
                 return null;
-            ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
+            ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
 
             int bytesSoFar = 0;
             int myInt = span.ToDecompressedInt32(ref bytesSoFar);
@@ -43,7 +43,7 @@ namespace LazinatorTests.Examples
 
             if (storage.Length == 0)
                 return default;
-            ReadOnlySpan<byte> span = storage.InitialSpan;
+            ReadOnlySpan<byte> span = storage.InitialMemory.Span;
 
             int bytesSoFar = 0;
             int myInt = span.ToDecompressedInt32(ref bytesSoFar);

@@ -197,7 +197,7 @@ namespace LazinatorTests.Examples.Collections
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             if (span.Length == 0)
             {
                 return 0;
@@ -442,7 +442,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             _MyArrayInt_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyArrayNullableInt_ByteIndex = bytesSoFar;
@@ -589,7 +589,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default(Int32[]);
             }
-            ReadOnlySpan<byte> span = storage.InitialSpan;
+            ReadOnlySpan<byte> span = storage.InitialMemory.Span;
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
@@ -641,7 +641,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default(Int32?[]);
             }
-            ReadOnlySpan<byte> span = storage.InitialSpan;
+            ReadOnlySpan<byte> span = storage.InitialMemory.Span;
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
@@ -701,7 +701,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default(Int32[][]);
             }
-            ReadOnlySpan<byte> span = storage.InitialSpan;
+            ReadOnlySpan<byte> span = storage.InitialMemory.Span;
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             

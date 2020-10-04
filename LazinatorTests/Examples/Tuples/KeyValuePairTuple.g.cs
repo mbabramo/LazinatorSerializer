@@ -99,7 +99,7 @@ namespace LazinatorTests.Examples.Tuples
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             if (span.Length == 0)
             {
                 return 0;
@@ -327,7 +327,7 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             _MyKeyValuePairSerialized_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _KeyValuePairTuple_EndByteIndex = bytesSoFar;
@@ -424,7 +424,7 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     return default;
                 }
-                ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
+                ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
                 
                 int bytesSoFar = 0;
                 

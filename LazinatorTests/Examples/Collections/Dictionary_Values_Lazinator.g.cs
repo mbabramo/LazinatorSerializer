@@ -220,7 +220,7 @@ namespace LazinatorTests.Examples.Collections
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             if (span.Length == 0)
             {
                 return 0;
@@ -472,7 +472,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialSpan;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             _MyDictionary_ByteIndex = bytesSoFar;
             bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             _MyDictionaryStructs_ByteIndex = bytesSoFar;
@@ -658,7 +658,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default(Dictionary<Int32, ExampleChild>);
             }
-            ReadOnlySpan<byte> span = storage.InitialSpan;
+            ReadOnlySpan<byte> span = storage.InitialMemory.Span;
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
@@ -712,7 +712,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
+            ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
             
             int bytesSoFar = 0;
             
@@ -759,7 +759,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default(Dictionary<WInt32, WInt32>);
             }
-            ReadOnlySpan<byte> span = storage.InitialSpan;
+            ReadOnlySpan<byte> span = storage.InitialMemory.Span;
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
@@ -813,7 +813,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            ReadOnlySpan<byte> span = storage.InitialReadOnlySpan;
+            ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
             
             int bytesSoFar = 0;
             
@@ -863,7 +863,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default(SortedDictionary<Int32, ExampleChild>);
             }
-            ReadOnlySpan<byte> span = storage.InitialSpan;
+            ReadOnlySpan<byte> span = storage.InitialMemory.Span;
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
@@ -917,7 +917,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default(SortedList<Int32, ExampleChild>);
             }
-            ReadOnlySpan<byte> span = storage.InitialSpan;
+            ReadOnlySpan<byte> span = storage.InitialMemory.Span;
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
