@@ -245,10 +245,9 @@ namespace Lazinator.Buffers
         {
             get 
             {
-                var initialMemory = InitialMemory;
-                if (initialMemory.Length == Length)
-                    return initialMemory;
-                throw new LazinatorCompoundMemoryException();
+                if (!SingleMemory)
+                    throw new LazinatorCompoundMemoryException();
+                return InitialOwnedMemory.Memory.Slice(StartPosition, Length);
             }
         }
 
