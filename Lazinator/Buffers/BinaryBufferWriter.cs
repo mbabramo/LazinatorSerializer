@@ -347,10 +347,5 @@ namespace Lazinator.Buffers
             }
             Position += sizeof(ulong);
         }
-
-        public class BufferTooSmallException : Exception
-        {
-            public BufferTooSmallException() : base("Buffer is too small") { }
-        }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Lazinator.Exceptions;
 using Lazinator.Support;
 
@@ -179,7 +180,7 @@ namespace Lazinator.Buffers
             while (positionRemaining > 0)
             {
                 IMemoryOwner<byte> current = MemoryAtIndex(revisedStartIndex);
-                int remainingBytesThisMemory = GetMemoryOwnerLength(current) - revisedStartPosition; // DEBUG -- we might want to have another IMemoryOwner variant IMemoryOwnerWithLength that has the length without accessing the Memory, for use with memory mapped files.
+                int remainingBytesThisMemory = GetMemoryOwnerLength(current) - revisedStartPosition; 
                 if (remainingBytesThisMemory <= positionRemaining)
                 {
                     positionRemaining -= remainingBytesThisMemory;
@@ -252,6 +253,26 @@ namespace Lazinator.Buffers
                 throw new LazinatorCompoundMemoryException();
             }
         }
+
+        public async ValueTask<Memory<byte>> GetInitialMemoryAsync()
+        {
+            if (IsEmpty)
+                return EmptyMemory;
+            if (SingleMemory)
+                return InitialOwnedMemory.Memory.Slice(StartPosition, Length);
+            else
+            {
+                IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
+                if (memoryOwner is MemoryReference memoryReference && memoryReference.IsLoaded == false)
+                    await memoryReference.LoadMemoryAsync();
+                var memory = memoryOwner.Memory;
+                int overallMemoryLength = memory.Length;
+                int lengthOfMemoryChunkAfterStartPosition = overallMemoryLength - StartPosition;
+                return memoryOwner.Memory.Slice(StartPosition, lengthOfMemoryChunkAfterStartPosition);
+            }
+        }
+
+        public async ValueTask<ReadOnlyMemory<byte>> GetInitialReadOnlyMemoryAsync() => await GetInitialMemoryAsync();
 
         public IEnumerable<(int chunkIndex, int startPosition, int numBytes)> EnumerateMemoryChunkRanges(bool includeOutsideOfRange = false)
         {
