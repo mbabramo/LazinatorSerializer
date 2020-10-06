@@ -24,10 +24,7 @@ namespace LazinatorTests.Tests
         private void ConfirmStreamEqual(Example e, MemoryStream s)
         {
             byte[] b = s.ToByteArray();
-            Example e2 = new Example()
-            {
-            };
-            e2.DeserializeLazinator(b);
+            Example e2 = new Example(b);
             ExampleEqual(e, e2).Should().BeTrue();
         }
 

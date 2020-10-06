@@ -297,7 +297,7 @@ namespace LazinatorCollections.Tuples
             }
         }
         
-        public void DeserializeLazinator(LazinatorMemory serializedBytes)
+        void DeserializeLazinator(LazinatorMemory serializedBytes)
         {
             LazinatorMemoryStorage = serializedBytes;
             int length = Deserialize();

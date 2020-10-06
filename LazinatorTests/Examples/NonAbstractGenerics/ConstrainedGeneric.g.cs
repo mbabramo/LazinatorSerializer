@@ -348,7 +348,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         
-        public virtual void DeserializeLazinator(LazinatorMemory serializedBytes)
+        protected  virtual void DeserializeLazinator(LazinatorMemory serializedBytes)
         {
             LazinatorMemoryStorage = serializedBytes;
             int length = Deserialize();

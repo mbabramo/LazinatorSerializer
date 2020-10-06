@@ -106,7 +106,7 @@ namespace LazinatorTests.Examples.Abstract
         public abstract IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties();
         public abstract ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel);
         
-        public abstract void DeserializeLazinator(LazinatorMemory serializedBytes);
+        protected  abstract void DeserializeLazinator(LazinatorMemory serializedBytes);
         
         public abstract LazinatorMemory LazinatorMemoryStorage
         {

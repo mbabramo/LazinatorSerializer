@@ -73,20 +73,20 @@ namespace LazinatorTests.Tests
             original.LazinatorObjectVersion = 2;
             original.MyOldString = "Old string";
             var bytes = original.SerializeLazinator(IncludeChildrenMode.ExcludeAllChildren, false, false); // serializes as version 3
-            // Now, deserializing, but again setting to the old version.
-            var stillOldVersion = new Example
-            {
-                LazinatorObjectVersion = 2,
-            };
-            stillOldVersion.DeserializeLazinator(bytes);
-            stillOldVersion.MyOldString.Should().Be("Old string");
-            stillOldVersion.MyNewString.Should().Be(null);
 
-            var upgraded = new Example
-            {
-                LazinatorObjectVersion = 3,
-            };
-            upgraded.DeserializeLazinator(bytes);
+            // Note: The following does not work -- we can't currently downgrade to old version,
+            // because we can't set the LazinatorObjectVersion before call to DeserializeLazinator.
+            // We could potentially add an option for a constructor that would accept a LazinatorObjectVersion,
+            // thus allowing downgrading.
+            //// Now, deserializing, but again setting to the old version.
+            //var stillOldVersion = new Example(bytes)
+            //{
+            //    LazinatorObjectVersion = 2,
+            //};
+            //stillOldVersion.MyOldString.Should().Be("Old string");
+            //stillOldVersion.MyNewString.Should().Be(null);
+
+            var upgraded = new Example(bytes);
             upgraded.LazinatorObjectVersion.Should().Be(3);
             upgraded.MyOldString.Should().Be(null);
             upgraded.MyNewString.Should().Be("NEW Old string");

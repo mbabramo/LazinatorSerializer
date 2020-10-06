@@ -415,7 +415,7 @@ namespace Lazinator.CodeDescription
                         public abstract IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties();
                         public abstract {ILazinatorString} ForEachLazinator(Func<{ILazinatorString}, {ILazinatorString}>{QuestionMarkIfNullableModeEnabled} changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel);
 		                
-                        public abstract void DeserializeLazinator(LazinatorMemory serializedBytes);
+                        {ProtectedIfApplicable} abstract void DeserializeLazinator(LazinatorMemory serializedBytes);
 
                         {HideILazinatorProperty}public abstract LazinatorMemory LazinatorMemoryStorage
                         {{
@@ -568,7 +568,7 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
         
-                        public {DerivationKeyword}void DeserializeLazinator(LazinatorMemory serializedBytes)
+                        {ProtectedIfApplicable} {DerivationKeyword}void DeserializeLazinator(LazinatorMemory serializedBytes)
                         {{
                             LazinatorMemoryStorage = serializedBytes;
                             int length = Deserialize();

@@ -315,7 +315,7 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         
-        public override void DeserializeLazinator(LazinatorMemory serializedBytes)
+        protected  override void DeserializeLazinator(LazinatorMemory serializedBytes)
         {
             LazinatorMemoryStorage = serializedBytes;
             int length = Deserialize();

@@ -92,7 +92,7 @@ namespace Lazinator.Wrappers
         public abstract IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties();
         public abstract ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel);
         
-        public abstract void DeserializeLazinator(LazinatorMemory serializedBytes);
+        protected  abstract void DeserializeLazinator(LazinatorMemory serializedBytes);
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public abstract LazinatorMemory LazinatorMemoryStorage

@@ -138,10 +138,7 @@ namespace LazinatorTests.Tests
             reserializationAction.Should().Throw<UnexpectedDirtinessException>();
             s3.MyLazinatorList_Dirty = true;
             var s3Serialized = s3.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, true, false);
-            ExampleStructContainingClasses s3b = new ExampleStructContainingClasses()
-            {
-            };
-            s3b.DeserializeLazinator(s3Serialized);
+            ExampleStructContainingClasses s3b = new ExampleStructContainingClasses(s3Serialized);
             s3b.MyLazinatorList[0].MyChar.Should().Be('y');
 
             var s4 = s.CloneLazinatorTyped();
