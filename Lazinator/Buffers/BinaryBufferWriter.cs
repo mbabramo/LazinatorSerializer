@@ -21,10 +21,10 @@ namespace Lazinator.Buffers
             return ActiveMemory == null ? "" : "Position " + _Position + " " + ActiveMemory.ToString();
         }
 
-        public ExpandableBytes ActiveMemory { get; private set; }
-        public LazinatorMemory CompletedMemory { get; private set; }
+        public ExpandableBytes ActiveMemory { get; set; }
+        public LazinatorMemory CompletedMemory { get; set; }
 
-        private List<BytesSegment> BytesSegments;
+        public List<BytesSegment> BytesSegments;
 
         Span<byte> BufferSpan => ActiveMemory == null ? new Span<byte>() : ActiveMemory.Memory.Span;
 
