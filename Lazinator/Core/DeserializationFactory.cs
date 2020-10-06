@@ -186,16 +186,7 @@ namespace Lazinator.Core
             }
             if (lazinatorObject == null)
                 throw new UnknownSerializedTypeException(uniqueID);
-            InitializeDeserialized(lazinatorObject, storage, parent);
             return lazinatorObject;
-        }
-
-        private void InitializeDeserialized(ILazinator lazinatorType, LazinatorMemory serializedBytes, ILazinator parent)
-        {
-            lazinatorType.LazinatorParents = new LazinatorParentsCollection(parent);
-            lazinatorType.DeserializeLazinator(serializedBytes);
-            lazinatorType.HasChanged = false;
-            lazinatorType.DescendantHasChanged = false;
         }
 
         /// <summary>
