@@ -98,13 +98,11 @@ namespace LazinatorTests.Examples.Structs
                 }
                 else 
                 {
-                    _ExampleNullableStruct = new ExampleStructWithoutClass()
+                    _ExampleNullableStruct = new ExampleStructWithoutClass(childData)
                     {
                         LazinatorParents = new LazinatorParentsCollection(this)
                     };
-                    var copy = _ExampleNullableStruct.Value;
-                    copy.DeserializeLazinator(childData);
-                    _ExampleNullableStruct = copy;
+                    
                 }
             }
             
@@ -175,11 +173,11 @@ namespace LazinatorTests.Examples.Structs
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleStructWithoutClass_ByteIndex, _ExampleStructWithoutClass_ByteLength, false, false, null);
-                _ExampleStructWithoutClass = new ExampleStructWithoutClass()
+                _ExampleStructWithoutClass = new ExampleStructWithoutClass(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
-                _ExampleStructWithoutClass.DeserializeLazinator(childData);
+                
             }
             
             _ExampleStructWithoutClass_Accessed = true;

@@ -135,11 +135,11 @@ namespace LazinatorTests.Examples.Structs
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedBool_ByteIndex, _WrappedBool_ByteLength, false, true, 1);
-                _WrappedBool = new WBool()
+                _WrappedBool = new WBool(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
-                _WrappedBool.DeserializeLazinator(childData);
+                
             }
             
             _WrappedBool_Accessed = true;
@@ -205,11 +205,11 @@ namespace LazinatorTests.Examples.Structs
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedByte_ByteIndex, _WrappedByte_ByteLength, false, true, 1);
-                _WrappedByte = new WByte()
+                _WrappedByte = new WByte(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
-                _WrappedByte.DeserializeLazinator(childData);
+                
             }
             
             _WrappedByte_Accessed = true;
@@ -275,11 +275,11 @@ namespace LazinatorTests.Examples.Structs
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedChar_ByteIndex, _WrappedChar_ByteLength, false, true, 2);
-                _WrappedChar = new WChar()
+                _WrappedChar = new WChar(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
-                _WrappedChar.DeserializeLazinator(childData);
+                
             }
             
             _WrappedChar_Accessed = true;
@@ -345,11 +345,11 @@ namespace LazinatorTests.Examples.Structs
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedNullableBool_ByteIndex, _WrappedNullableBool_ByteLength, false, true, 1);
-                _WrappedNullableBool = new WNullableBool()
+                _WrappedNullableBool = new WNullableBool(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
-                _WrappedNullableBool.DeserializeLazinator(childData);
+                
             }
             
             _WrappedNullableBool_Accessed = true;
@@ -415,11 +415,11 @@ namespace LazinatorTests.Examples.Structs
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedNullableByte_ByteIndex, _WrappedNullableByte_ByteLength, false, true, null);
-                _WrappedNullableByte = new WNullableByte()
+                _WrappedNullableByte = new WNullableByte(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
-                _WrappedNullableByte.DeserializeLazinator(childData);
+                
             }
             
             _WrappedNullableByte_Accessed = true;
@@ -485,11 +485,11 @@ namespace LazinatorTests.Examples.Structs
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedNullableChar_ByteIndex, _WrappedNullableChar_ByteLength, false, true, null);
-                _WrappedNullableChar = new WNullableChar()
+                _WrappedNullableChar = new WNullableChar(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
-                _WrappedNullableChar.DeserializeLazinator(childData);
+                
             }
             
             _WrappedNullableChar_Accessed = true;
@@ -555,11 +555,11 @@ namespace LazinatorTests.Examples.Structs
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedNullableSByte_ByteIndex, _WrappedNullableSByte_ByteLength, false, true, null);
-                _WrappedNullableSByte = new WNullableSByte()
+                _WrappedNullableSByte = new WNullableSByte(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
-                _WrappedNullableSByte.DeserializeLazinator(childData);
+                
             }
             
             _WrappedNullableSByte_Accessed = true;
@@ -625,11 +625,11 @@ namespace LazinatorTests.Examples.Structs
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedSByte_ByteIndex, _WrappedSByte_ByteLength, false, true, 1);
-                _WrappedSByte = new WSByte()
+                _WrappedSByte = new WSByte(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
-                _WrappedSByte.DeserializeLazinator(childData);
+                
             }
             
             _WrappedSByte_Accessed = true;

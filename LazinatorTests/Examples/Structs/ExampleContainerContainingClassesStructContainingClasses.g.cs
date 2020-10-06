@@ -81,11 +81,11 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntWrapper_ByteIndex, _IntWrapper_ByteLength, false, true, null);
-                _IntWrapper = new WInt32()
+                _IntWrapper = new WInt32(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
-                _IntWrapper.DeserializeLazinator(childData);
+                
             }
             
             _IntWrapper_Accessed = true;
@@ -151,11 +151,11 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, false, false, null);
-                _MyExampleStructContainingClasses = new ExampleStructContainingClasses()
+                _MyExampleStructContainingClasses = new ExampleStructContainingClasses(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
-                _MyExampleStructContainingClasses.DeserializeLazinator(childData);
+                
             }
             
             _MyExampleStructContainingClasses_Accessed = true;

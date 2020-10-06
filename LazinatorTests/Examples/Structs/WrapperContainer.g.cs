@@ -71,11 +71,11 @@ namespace LazinatorTests.Examples.Structs
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, true, null);
-                _WrappedInt = new WInt32()
+                _WrappedInt = new WInt32(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
-                _WrappedInt.DeserializeLazinator(childData);
+                
             }
             
             _WrappedInt_Accessed = true;

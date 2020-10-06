@@ -781,11 +781,11 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableStruct_ByteIndex, _NonNullableStruct_ByteLength, false, false, null);
-                _NonNullableStruct = new ExampleStructWithoutClass()
+                _NonNullableStruct = new ExampleStructWithoutClass(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
-                _NonNullableStruct.DeserializeLazinator(childData);
+                
             }
             
             _NonNullableStruct_Accessed = true;
@@ -1564,13 +1564,11 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 else 
                 {
-                    _NullableStruct = new ExampleStructWithoutClass()
+                    _NullableStruct = new ExampleStructWithoutClass(childData)
                     {
                         LazinatorParents = new LazinatorParentsCollection(this)
                     };
-                    var copy = _NullableStruct.Value;
-                    copy.DeserializeLazinator(childData);
-                    _NullableStruct = copy;
+                    
                 }
             }
             

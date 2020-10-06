@@ -88,11 +88,11 @@ namespace LazinatorCollections.OffsetList
                 }
                 else 
                 {
-                    _FourByteItems = new LazinatorFastReadListInt32(IncludeChildrenMode.IncludeAllChildren)
+                    _FourByteItems = new LazinatorFastReadListInt32(childData)
                     {
                         LazinatorParents = new LazinatorParentsCollection(this)
                     };
-                    _FourByteItems.DeserializeLazinator(childData);
+                    
                 }
             }
             
@@ -148,11 +148,11 @@ namespace LazinatorCollections.OffsetList
                 }
                 else 
                 {
-                    _TwoByteItems = new LazinatorFastReadListInt16(IncludeChildrenMode.IncludeAllChildren)
+                    _TwoByteItems = new LazinatorFastReadListInt16(childData)
                     {
                         LazinatorParents = new LazinatorParentsCollection(this)
                     };
-                    _TwoByteItems.DeserializeLazinator(childData);
+                    
                 }
             }
             

@@ -82,13 +82,11 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 else 
                 {
-                    _MyNullableStruct = new StructInAnotherNamespace()
+                    _MyNullableStruct = new StructInAnotherNamespace(childData)
                     {
                         LazinatorParents = new LazinatorParentsCollection(this)
                     };
-                    var copy = _MyNullableStruct.Value;
-                    copy.DeserializeLazinator(childData);
-                    _MyNullableStruct = copy;
+                    
                 }
             }
             

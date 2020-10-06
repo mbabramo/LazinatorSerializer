@@ -130,6 +130,16 @@ namespace Lazinator.CodeDescription
         internal bool IsNonLazinatorType => PropertyType == LazinatorPropertyType.NonLazinator || PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
         internal bool IsNonLazinatorTypeWithoutInterchange => PropertyType == LazinatorPropertyType.NonLazinator && !HasInterchangeType;
         internal string ConstructorInitialization => IIF(PropertyType != LazinatorPropertyType.LazinatorStruct && PropertyType != LazinatorPropertyType.LazinatorStructNullable && !NonSerializedIsStruct, "IncludeChildrenMode.IncludeAllChildren");
+        internal string ConstructorInitializationWithChildData
+            {
+                get
+                {
+                    string basicInitialization = ConstructorInitialization;
+                    if (basicInitialization == "" || basicInitialization == "IncludeChildrenMode.IncludeAllChildren")
+                        return "childData";
+                    return $"{basicInitialization}, childData";
+                }
+            }
 
         /* Names */
         private bool UseFullyQualifiedNames => (Config?.UseFullyQualifiedNames ?? false) || HasFullyQualifyAttribute || Symbol.ContainingType != null;
@@ -1308,14 +1318,8 @@ namespace Lazinator.CodeDescription
                                 LazinatorParents = new LazinatorParentsCollection(this){CodeStringBuilder.GetNextLocationString()}
                             }}";
 
-            string doCreation = $@"{BackingFieldString} = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}({ConstructorInitialization}){lazinatorParentClassSet};
+            string doCreation = $@"{BackingFieldString} = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}({ConstructorInitializationWithChildData}){lazinatorParentClassSet};
                         ";
-            if (PropertyType == LazinatorPropertyType.LazinatorStructNullable)
-                doCreation += $@" var copy = {BackingFieldString}.Value;
-                                copy.DeserializeLazinator(childData);
-                                {BackingFieldString} = copy;";
-            else
-                doCreation += $@" {BackingFieldString}.DeserializeLazinator(childData);";
             string creation = nullItemCheck == "" ? doCreation : $@"{nullItemCheck}
                     {{
                         {doCreation}

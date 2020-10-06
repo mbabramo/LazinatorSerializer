@@ -76,10 +76,8 @@ namespace LazinatorTests.Examples
                 }
                 else 
                 {
-                    _MyExampleNullableStruct = new ExampleStructContainingClasses();
-                    var copy = _MyExampleNullableStruct.Value;
-                    copy.DeserializeLazinator(childData);
-                    _MyExampleNullableStruct = copy;
+                    _MyExampleNullableStruct = new ExampleStructContainingClasses(childData);
+                    
                 }
             }
             
@@ -148,8 +146,8 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, false, false, null);
-                _MyExampleStructContainingClasses = new ExampleStructContainingClasses();
-                _MyExampleStructContainingClasses.DeserializeLazinator(childData);
+                _MyExampleStructContainingClasses = new ExampleStructContainingClasses(childData);
+                
             }
             
             _MyExampleStructContainingClasses_Accessed = true;

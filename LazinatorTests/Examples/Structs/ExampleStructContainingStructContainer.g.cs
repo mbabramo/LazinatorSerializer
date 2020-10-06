@@ -71,11 +71,11 @@ namespace LazinatorTests.Examples.Structs
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, false, false, null);
-                _Subcontainer = new ExampleStructContainingStruct()
+                _Subcontainer = new ExampleStructContainingStruct(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
-                _Subcontainer.DeserializeLazinator(childData);
+                
             }
             
             _Subcontainer_Accessed = true;
