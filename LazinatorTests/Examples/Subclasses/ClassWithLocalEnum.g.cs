@@ -276,12 +276,6 @@ namespace LazinatorTests.Examples.Subclasses
             }
         }
         
-        public virtual int GetByteLength()
-        {
-            UpdateStoredBuffer();
-            return LazinatorMemoryStorage.Length;
-        }
-        
         public virtual bool NonBinaryHash32 => false;
         
         

@@ -59,12 +59,6 @@ namespace Lazinator.Core
         Task<ILazinator> ForEachLazinatorAsync(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel);
 
         /// <summary>
-        /// Returns the serialized length of an object, performing the serialization needed to make the computation if necessary.
-        /// </summary>
-        /// <returns></returns>
-        Task<int> GetByteLengthAsync();
-
-        /// <summary>
         /// This is primarily used internally for communication between Lazinator objects. Continues serialization of this object and optionally its descendants by writing bytes into a pre-existing buffer. 
         /// </summary>
         /// <param name="writer">The BinaryBufferWriter to stream bytes to</param>
@@ -73,7 +67,7 @@ namespace Lazinator.Core
         /// <param name="updateStoredBuffer">Whether the object being serialized should be updated to use the new buffer. This is ignored and treated as false if includeChildrenMode is not set to include all children.</param>
         Task SerializeExistingBufferAsync(BinaryBufferWriterContainer writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
         /// <summary>
-        /// This is used internally to update a stored buffer.
+        /// This updates the stored buffer. This may be used to obtain LazinatorMemoryStorage before making further changes to the object.
         /// </summary>
         /// <param name="writer">The BinaryBufferWriter containing the new stored buffer</param>
         /// <param name="startPosition">The start position within the writer</param>
@@ -81,12 +75,5 @@ namespace Lazinator.Core
         /// <param name="includeChildrenMode">Whether child objects should be included.</param>
         /// <param name="updateDeserializedChildren">Whether deserialized children should also have buffers updated</param>
         Task UpdateStoredBufferAsync(BinaryBufferWriterContainer writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
-        /// <summary>
-        /// Assigns Lazinator properties from this object to another object of the same type.
-        /// </summary>
-        /// <param name="clone">A clone of this object</param>
-        /// <param name="includeChildrenMode">Whether child objects should be included.</param>
-        /// <returns></returns>
-        Task<ILazinator> AssignClonePropertiesAsync(ILazinator clone, IncludeChildrenMode includeChildrenMode);
     }
 }

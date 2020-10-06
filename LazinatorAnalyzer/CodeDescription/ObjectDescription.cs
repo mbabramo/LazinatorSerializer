@@ -427,7 +427,6 @@ namespace Lazinator.CodeDescription
                         public abstract void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
                         public abstract void UpdateStoredBuffer();
                         public abstract void FreeInMemoryObjects();
-                        public abstract int GetByteLength();
         
                 ";
                 else
@@ -601,12 +600,6 @@ namespace Lazinator.CodeDescription
                             {{
                                 previousBuffer.Dispose();
                             }}
-                        }}
-
-                        public {DerivationKeyword}int GetByteLength()
-                        {{
-                            UpdateStoredBuffer();
-                            return LazinatorMemoryStorage.Length;
                         }}
 
                         public {DerivationKeyword}bool NonBinaryHash32 => {(NonbinaryHash ? "true" : "false")};

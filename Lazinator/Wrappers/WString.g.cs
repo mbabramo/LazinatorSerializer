@@ -245,12 +245,6 @@ namespace Lazinator.Wrappers
             }
         }
         
-        public int GetByteLength()
-        {
-            UpdateStoredBuffer();
-            return LazinatorMemoryStorage.Length;
-        }
-        
         public bool NonBinaryHash32 => true;
         
         
@@ -590,12 +584,6 @@ namespace Lazinator.Wrappers
                 {
                     previousBuffer.Dispose();
                 }
-            }
-            
-            public int GetByteLength()
-            {
-                UpdateStoredBuffer();
-                return LazinatorMemoryStorage.Length;
             }
             
             public bool NonBinaryHash32 => true;

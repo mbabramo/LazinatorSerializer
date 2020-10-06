@@ -239,12 +239,6 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         
-        public int GetByteLength()
-        {
-            UpdateStoredBuffer();
-            return LazinatorMemoryStorage.Length;
-        }
-        
         public bool NonBinaryHash32 => false;
         
         

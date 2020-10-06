@@ -343,12 +343,6 @@ namespace LazinatorCollections.Tuples
             }
         }
         
-        public int GetByteLength()
-        {
-            UpdateStoredBuffer();
-            return LazinatorMemoryStorage.Length;
-        }
-        
         public bool NonBinaryHash32 => false;
         
         

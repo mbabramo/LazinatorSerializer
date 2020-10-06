@@ -297,12 +297,6 @@ namespace Lazinator.Wrappers
             }
         }
         
-        public int GetByteLength()
-        {
-            UpdateStoredBuffer();
-            return LazinatorMemoryStorage.Length;
-        }
-        
         public bool NonBinaryHash32 => false;
         
         

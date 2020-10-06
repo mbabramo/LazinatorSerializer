@@ -404,12 +404,6 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         
-        public override int GetByteLength()
-        {
-            UpdateStoredBuffer();
-            return LazinatorMemoryStorage.Length;
-        }
-        
         public override bool NonBinaryHash32 => false;
         
         
