@@ -30,11 +30,22 @@ namespace Lazinator.Buffers
         public Memory<byte> Memory => ReferencedMemory.Memory.Slice(StartIndex, Length);
 
         /// <summary>
-        /// This method should be overriden for a MemoryReference subclass that loads memory lazily. The subclass method
-        /// should set ReferencedMemory.
+        /// This method should be overridden for a MemoryReference subclass that loads memory lazily. The subclass method
+        /// should set ReferencedMemory. The base class always has memory available and thus this method does nothing.
         /// </summary>
         /// <returns></returns>
         public virtual ValueTask LoadMemoryAsync()
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        /// <summary>
+        /// This method should be overridden for a MemoryReference subclass that saves memory lazily. This will be called
+        /// during the serialization of a splittable object after a page of memory has been completed. A subclass may 
+        /// choose not to unload memory, as this base class does.
+        /// </summary>
+        /// <returns></returns>
+        public virtual ValueTask UnloadMemoryAsync()
         {
             return ValueTask.CompletedTask;
         }
