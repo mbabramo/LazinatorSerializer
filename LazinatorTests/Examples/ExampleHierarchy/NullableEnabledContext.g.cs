@@ -3669,8 +3669,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                    var item = new Example();
-                    item.DeserializeLazinator(childData);
+                    var item = new Example(childData);
                     collection[itemIndex] = item;
                     bytesSoFar += lengthCollectionMember;
                 }
@@ -3984,8 +3983,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                    var item = new Example();
-                    item.DeserializeLazinator(childData);
+                    var item = new Example(childData);
                     collection.Add(item);
                     bytesSoFar += lengthCollectionMember;
                 }
@@ -4144,8 +4142,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                    var item = new Example();
-                    item.DeserializeLazinator(childData);
+                    var item = new Example(childData);
                     collection.Enqueue(item);
                     bytesSoFar += lengthCollectionMember;
                 }
@@ -4292,8 +4289,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                    var item = new Example();
-                    item.DeserializeLazinator(childData);
+                    var item = new Example(childData);
                     collection.Push(item);
                     bytesSoFar += lengthCollectionMember;
                 }
@@ -4423,8 +4419,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                    var item = new Example();
-                    item.DeserializeLazinator(childData);
+                    var item = new Example(childData);
                     collection[itemIndex] = item;
                     bytesSoFar += lengthCollectionMember;
                 }
@@ -4684,8 +4679,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                    var item = new Example();
-                    item.DeserializeLazinator(childData);
+                    var item = new Example(childData);
                     collection.Add(item);
                     bytesSoFar += lengthCollectionMember;
                 }
@@ -4880,8 +4874,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                    var item = new Example();
-                    item.DeserializeLazinator(childData);
+                    var item = new Example(childData);
                     collection.Enqueue(item);
                     bytesSoFar += lengthCollectionMember;
                 }
@@ -5064,8 +5057,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                    var item = new Example();
-                    item.DeserializeLazinator(childData);
+                    var item = new Example(childData);
                     collection.Push(item);
                     bytesSoFar += lengthCollectionMember;
                 }

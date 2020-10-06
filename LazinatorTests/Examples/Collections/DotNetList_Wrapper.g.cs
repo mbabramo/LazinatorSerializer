@@ -599,8 +599,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 int lengthCollectionMember = span.ToByte(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                var item = new WInt32();
-                item.DeserializeLazinator(childData);
+                var item = new WInt32(childData);
                 collection.Add(item);
                 bytesSoFar += lengthCollectionMember;
             }
@@ -669,8 +668,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 int lengthCollectionMember = span.ToByte(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                var item = new WNullableByte();
-                item.DeserializeLazinator(childData);
+                var item = new WNullableByte(childData);
                 collection.Add(item);
                 bytesSoFar += lengthCollectionMember;
             }
@@ -739,8 +737,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 int lengthCollectionMember = span.ToByte(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                var item = new WNullableInt32();
-                item.DeserializeLazinator(childData);
+                var item = new WNullableInt32(childData);
                 collection.Add(item);
                 bytesSoFar += lengthCollectionMember;
             }

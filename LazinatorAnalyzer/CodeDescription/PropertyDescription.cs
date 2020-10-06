@@ -2206,8 +2206,7 @@ namespace Lazinator.CodeDescription
                             $@"
                             {lengthCollectionMemberString}
                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                            var item = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}();
-                            item.DeserializeLazinator(childData);
+                            var item = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}(childData);
                             {collectionAddItem}
                             bytesSoFar += lengthCollectionMember;");
                 }

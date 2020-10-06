@@ -18,7 +18,7 @@ namespace Lazinator.Core
         /// <returns></returns>
         Task<LazinatorMemory> SerializeLazinatorAsync(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
         /// <summary>
-        /// Deserializes from serialized memory. This is called internally after creating an object from LazinatorMemory before any properties
+        /// Deserializes from serialized memory. This is called internally after construction of an object from LazinatorMemory before any properties
         /// are called.
         /// </summary>
         Task DeserializeLazinatorAsync(LazinatorMemory serialized);
