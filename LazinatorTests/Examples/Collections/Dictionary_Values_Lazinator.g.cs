@@ -822,8 +822,7 @@ namespace LazinatorTests.Examples.Collections
             if (lengthCollectionMember_item1 != 0)
             {
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item1);
-                item1 = new WInt32();
-                item1.DeserializeLazinator(childData);;
+                item1 = new WInt32(childData);
             }
             bytesSoFar += lengthCollectionMember_item1;
             
@@ -832,8 +831,7 @@ namespace LazinatorTests.Examples.Collections
             if (lengthCollectionMember_item2 != 0)
             {
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
-                item2 = new WInt32();
-                item2.DeserializeLazinator(childData);;
+                item2 = new WInt32(childData);
             }
             bytesSoFar += lengthCollectionMember_item2;
             

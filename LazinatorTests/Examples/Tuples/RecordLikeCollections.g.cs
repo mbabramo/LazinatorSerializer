@@ -746,8 +746,7 @@ namespace LazinatorTests.Examples.Tuples
             if (lengthCollectionMember_item4 != 0)
             {
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item4);
-                item4 = new ExampleStructWithoutClass();
-                item4.DeserializeLazinator(childData);;
+                item4 = new ExampleStructWithoutClass(childData);
             }
             bytesSoFar += lengthCollectionMember_item4;
             

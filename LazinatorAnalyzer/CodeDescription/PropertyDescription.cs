@@ -2469,8 +2469,7 @@ namespace Lazinator.CodeDescription
                         if (lengthCollectionMember_{itemName} != 0)
                         {{
                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_{itemName});
-                            {itemName} = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}();
-                            {itemName}.DeserializeLazinator(childData);;
+                            {itemName} = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}(childData);
                         }}{IfInitializationRequiredAddElseThrow}
                         bytesSoFar += lengthCollectionMember_{itemName};");
                 else
