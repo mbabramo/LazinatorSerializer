@@ -362,7 +362,6 @@ namespace Lazinator.CodeDescription
         {
             string additionalDescendantDirtinessChecks = GetDescendantDirtinessChecks(false);
             string additionalDescendantHasChangedChecks = GetDescendantDirtinessChecks(true);
-            string classContainingStructContainingClassError = GetClassContainingStructContainingClassError();
             string constructors = GetConstructors();
             string cloneMethod = GetCloneMethod();
 
@@ -467,7 +466,7 @@ namespace Lazinator.CodeDescription
                             if (span.Length == 0)
                             {{
                                 return 0;
-                            }}{classContainingStructContainingClassError}
+                            }}
 
                             {readUniqueID}{(SuppressLazinatorVersionByte ? "" : $@"int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesSoFar);
                             
@@ -1411,26 +1410,6 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                         
             //            ";
             return constructors;
-        }
-
-        public static bool AllowClassContainingStructContainingClass = true; // for now, let's allow this scenario
-        private string GetClassContainingStructContainingClassError()
-        {
-            if (AllowClassContainingStructContainingClass)
-                return "";
-            string classContainingStructContainingClassError = "";
-            if (ObjectType == LazinatorObjectType.Struct || GeneratingRefStruct)
-            {
-                if (PropertiesToDefineThisLevel.Any(x => x.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || x.PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface))
-                    classContainingStructContainingClassError = $@"
-
-                        if (LazinatorParents.Any())
-                        {{
-                            throw new LazinatorDeserializationException(""A Lazinator struct may include a Lazinator class or interface as a property only when the Lazinator struct has no parent class."");
-                        }}"; //  Otherwise, when a child is deserialized, the struct's parent will not automatically be affected, because the deserialization will take place in a copy of the struct. Though it is possible to handle this scenario by setting the deserialized property immediately after mutating it, the risk of error is great, and so we do not allow it.
-            }
-
-            return classContainingStructContainingClassError;
         }
 
         private string GetDescendantDirtinessChecks(bool usePastTense)

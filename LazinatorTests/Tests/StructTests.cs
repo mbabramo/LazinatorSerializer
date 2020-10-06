@@ -51,22 +51,6 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void ClassContainingStructContainingClassThrowsIfDisallowed()
-        {
-            ExampleContainerContainingClassesStructContainingClasses c = new ExampleContainerContainingClassesStructContainingClasses()
-            {
-                MyExampleStructContainingClasses = new ExampleStructContainingClasses() { MyChar = 'z', MyLazinatorList = new List<Example>() }
-            };
-            var c2 = c.CloneLazinatorTyped();
-
-            Action a = () => { var result = c2.MyExampleStructContainingClasses; };
-            if (Lazinator.CodeDescription.ObjectDescription.AllowClassContainingStructContainingClass)
-                a.Should().NotThrow<LazinatorDeserializationException>();
-            else
-                a.Should().Throw<LazinatorDeserializationException>();
-        }
-
-        [Fact]
         public void CopyPropertyForStructWorks()
         {
             ContainerForExampleStructWithoutClass c = new ContainerForExampleStructWithoutClass()
