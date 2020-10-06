@@ -18,11 +18,6 @@ namespace Lazinator.Core
         /// <returns></returns>
         Task<LazinatorMemory> SerializeLazinatorAsync(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
         /// <summary>
-        /// Deserializes from serialized memory. This is called internally after construction of an object from LazinatorMemory before any properties
-        /// are called.
-        /// </summary>
-        Task DeserializeLazinatorAsync(LazinatorMemory serialized);
-        /// <summary>
         /// Clones the class/struct, possibly excluding some or all children or descendants
         /// </summary>
         /// <param name="includeChildrenMode">Whether some or all children should be included</param>
