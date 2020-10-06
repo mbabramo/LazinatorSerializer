@@ -206,7 +206,7 @@ namespace LazinatorCollections.Tuples
             return clone;
         }
         
-        public ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             LazinatorComparableKeyValue<TKey, TValue> typedClone = (LazinatorComparableKeyValue<TKey, TValue>) clone;

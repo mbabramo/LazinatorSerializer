@@ -114,7 +114,7 @@ namespace Lazinator.Wrappers
             return clone;
         }
         
-        public ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             Placeholder typedClone = (Placeholder) clone;

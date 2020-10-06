@@ -358,7 +358,7 @@ namespace LazinatorTests.Examples.Tuples
             return clone;
         }
         
-        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             RegularTuple typedClone = (RegularTuple) clone;

@@ -57,7 +57,7 @@ namespace LazinatorCollections.OffsetList
             return clone;
         }
         
-        public override ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected override ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
             LazinatorFastReadListInt32 typedClone = (LazinatorFastReadListInt32) clone;

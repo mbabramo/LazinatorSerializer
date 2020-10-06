@@ -58,7 +58,7 @@ namespace LazinatorCollections
             return clone;
         }
         
-        public override ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected override ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
             LazinatorSortedLinkedList<T> typedClone = (LazinatorSortedLinkedList<T>) clone;

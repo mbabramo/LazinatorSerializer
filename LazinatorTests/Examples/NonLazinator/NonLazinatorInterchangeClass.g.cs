@@ -150,7 +150,7 @@ namespace LazinatorTests.Examples
             return clone;
         }
         
-        public ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             NonLazinatorInterchangeClass typedClone = (NonLazinatorInterchangeClass) clone;

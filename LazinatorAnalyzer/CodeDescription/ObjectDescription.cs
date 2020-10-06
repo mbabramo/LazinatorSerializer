@@ -375,7 +375,7 @@ namespace Lazinator.CodeDescription
                         
                         public abstract {ILazinatorString} CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers);
 
-                        {IIF(!ImplementsAssignCloneProperties, $@"public abstract {ILazinatorString} AssignCloneProperties({ILazinatorStringWithoutQuestionMark} clone, IncludeChildrenMode includeChildrenMode);
+                        {IIF(!ImplementsAssignCloneProperties, $@"{ProtectedIfApplicable}abstract {ILazinatorString} AssignCloneProperties({ILazinatorStringWithoutQuestionMark} clone, IncludeChildrenMode includeChildrenMode);
 
                         ")}{HideILazinatorProperty}public abstract bool HasChanged
                         {{
@@ -654,7 +654,7 @@ namespace Lazinator.CodeDescription
                             return clone;
                         }}{IIF(!ImplementsAssignCloneProperties, $@"
 
-                        public {DerivationKeyword}{ILazinatorString} AssignCloneProperties({ILazinatorStringWithoutQuestionMark} clone, IncludeChildrenMode includeChildrenMode)
+                        {ProtectedIfApplicable}{DerivationKeyword}{ILazinatorString} AssignCloneProperties({ILazinatorStringWithoutQuestionMark} clone, IncludeChildrenMode includeChildrenMode)
                         {{
                             {(IsDerivedFromNonAbstractLazinator ? $"base.AssignCloneProperties(clone, includeChildrenMode);" : $"clone.FreeInMemoryObjects();")}
                             {NameIncludingGenerics} typedClone = ({NameIncludingGenerics}) clone;

@@ -507,7 +507,7 @@ namespace LazinatorTests.Examples.Collections
             return clone;
         }
         
-        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             SpanAndMemory typedClone = (SpanAndMemory) clone;

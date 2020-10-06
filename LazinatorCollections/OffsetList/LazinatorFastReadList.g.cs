@@ -146,7 +146,7 @@ namespace LazinatorCollections.OffsetList
             return clone;
         }
         
-        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             LazinatorFastReadList<T> typedClone = (LazinatorFastReadList<T>) clone;

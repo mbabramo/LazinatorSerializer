@@ -236,7 +236,7 @@ namespace LazinatorCollections.Tree
             return clone;
         }
         
-        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             LazinatorGeneralTree<T> typedClone = (LazinatorGeneralTree<T>) clone;

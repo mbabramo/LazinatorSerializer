@@ -190,7 +190,7 @@ namespace LazinatorCollections.Dictionary
             return clone;
         }
         
-        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             LazinatorDictionary<TKey, TValue> typedClone = (LazinatorDictionary<TKey, TValue>) clone;

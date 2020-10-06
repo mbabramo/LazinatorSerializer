@@ -123,7 +123,7 @@ namespace LazinatorTests.Examples
             return clone;
         }
         
-        public override ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected override ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
             ExampleChildInherited typedClone = (ExampleChildInherited) clone;

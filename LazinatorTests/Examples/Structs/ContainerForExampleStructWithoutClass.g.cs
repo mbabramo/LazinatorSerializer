@@ -292,7 +292,7 @@ namespace LazinatorTests.Examples.Structs
             return clone;
         }
         
-        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             ContainerForExampleStructWithoutClass typedClone = (ContainerForExampleStructWithoutClass) clone;

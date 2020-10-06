@@ -135,7 +135,7 @@ namespace LazinatorTests.Examples.Structs
             return clone;
         }
         
-        public ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             ExampleStructWithoutClass typedClone = (ExampleStructWithoutClass) clone;

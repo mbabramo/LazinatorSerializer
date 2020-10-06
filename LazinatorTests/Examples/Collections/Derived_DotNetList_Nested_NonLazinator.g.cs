@@ -115,7 +115,7 @@ namespace LazinatorTests.Examples.Collections
             return clone;
         }
         
-        public override ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected override ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
             Derived_DotNetList_Nested_NonLazinator typedClone = (Derived_DotNetList_Nested_NonLazinator) clone;

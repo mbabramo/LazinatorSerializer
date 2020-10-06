@@ -131,7 +131,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             return clone;
         }
         
-        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             RemoteLevel2 typedClone = (RemoteLevel2) clone;

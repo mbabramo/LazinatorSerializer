@@ -268,7 +268,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             return clone;
         }
         
-        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             ConstrainedGeneric<T, U> typedClone = (ConstrainedGeneric<T, U>) clone;

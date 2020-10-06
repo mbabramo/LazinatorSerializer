@@ -131,7 +131,7 @@ namespace LazinatorTests.Examples.NonLazinator
             return clone;
         }
         
-        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             FromNonLazinatorBase typedClone = (FromNonLazinatorBase) clone;

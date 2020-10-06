@@ -240,7 +240,7 @@ namespace LazinatorTests.Examples.Abstract
             return clone;
         }
         
-        public override ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected override ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             ConcreteGeneric2a typedClone = (ConcreteGeneric2a) clone;

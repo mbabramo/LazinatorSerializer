@@ -118,7 +118,7 @@ namespace LazinatorTests.Examples.Collections
             return clone;
         }
         
-        public override ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected override ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
             DerivedArray_Values typedClone = (DerivedArray_Values) clone;

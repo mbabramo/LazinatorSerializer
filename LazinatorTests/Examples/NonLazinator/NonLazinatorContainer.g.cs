@@ -280,7 +280,7 @@ namespace LazinatorTests.Examples
             return clone;
         }
         
-        public ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             NonLazinatorContainer typedClone = (NonLazinatorContainer) clone;

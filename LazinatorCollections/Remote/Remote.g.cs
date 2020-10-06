@@ -256,7 +256,7 @@ namespace LazinatorCollections.Remote
             return clone;
         }
         
-        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             Remote<TKey, TValue> typedClone = (Remote<TKey, TValue>) clone;

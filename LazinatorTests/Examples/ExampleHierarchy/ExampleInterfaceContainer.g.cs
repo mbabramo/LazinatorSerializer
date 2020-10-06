@@ -207,7 +207,7 @@ namespace LazinatorTests.Examples.Hierarchy
             return clone;
         }
         
-        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             ExampleInterfaceContainer typedClone = (ExampleInterfaceContainer) clone;

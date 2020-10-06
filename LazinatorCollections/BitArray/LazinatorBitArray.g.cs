@@ -200,7 +200,7 @@ namespace LazinatorCollections.BitArray
             return clone;
         }
         
-        public ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             LazinatorBitArray typedClone = (LazinatorBitArray) clone;

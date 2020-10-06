@@ -309,7 +309,7 @@ namespace LazinatorCollections.Tuples
             return clone;
         }
         
-        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             LazinatorTriple<T, U, V> typedClone = (LazinatorTriple<T, U, V>) clone;

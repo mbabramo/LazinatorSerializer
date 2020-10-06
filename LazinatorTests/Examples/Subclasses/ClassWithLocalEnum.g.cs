@@ -172,7 +172,7 @@ namespace LazinatorTests.Examples.Subclasses
             return clone;
         }
         
-        public virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        protected virtual ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             ClassWithLocalEnum typedClone = (ClassWithLocalEnum) clone;
