@@ -37,7 +37,7 @@ namespace LazinatorCollections
         {
         }
         
-        public LazinatorSortedList(LazinatorMemory serializedBytes, ILazinator parent = null) : base(serializedBytes, parent)
+        public LazinatorSortedList(LazinatorMemory serializedBytes, ILazinator parent = null, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren, int? lazinatorObjectVersion = null) : base(serializedBytes, parent, originalIncludeChildrenMode, lazinatorObjectVersion)
         {
         }
         

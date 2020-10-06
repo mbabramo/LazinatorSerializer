@@ -41,10 +41,10 @@ namespace Lazinator.Core
         /// <summary>
         /// A dictionary with a key equal to a unique ID and the value equal to a factory that creates the object with that unique ID, given the LazinatorMemory and the parent. This can be used only for types that have no open generic parameters. Types with properties that contain closed generic parameters can be included.
         /// </summary>
-        private Dictionary<int, Func<LazinatorMemory, ILazinator, ILazinator>> FactoriesByID =
-            new Dictionary<int, Func<LazinatorMemory, ILazinator, ILazinator>>();
+        private Dictionary<int, Func<LazinatorMemory, ILazinator, IncludeChildrenMode, int?, ILazinator>> FactoriesByID =
+            new Dictionary<int, Func<LazinatorMemory, ILazinator, IncludeChildrenMode, int?, ILazinator>>();
 
-        private ConcurrentDictionary<LazinatorGenericIDType, Func<LazinatorMemory, ILazinator, ILazinator>> GenericFactories = new ConcurrentDictionary<LazinatorGenericIDType, Func<LazinatorMemory, ILazinator, ILazinator>>();
+        private ConcurrentDictionary<LazinatorGenericIDType, Func<LazinatorMemory, ILazinator, IncludeChildrenMode, int?, ILazinator>> GenericFactories = new ConcurrentDictionary<LazinatorGenericIDType, Func<LazinatorMemory, ILazinator, IncludeChildrenMode, int?, ILazinator>>();
 
         /// <summary>
         /// A dictionary with a key equal to a unique ID of a Lazinator type and a value recording the type and the number of generic parameters.
@@ -75,25 +75,27 @@ namespace Lazinator.Core
 
         #region Factory creation
 
-        private static Func<LazinatorMemory, ILazinator, ILazinator> GetCompiledFunctionForType(Type t)
+        private static Func<LazinatorMemory, ILazinator, IncludeChildrenMode, int?, ILazinator> GetCompiledFunctionForType(Type t)
         {
             Expression exnew;
             LambdaExpression lambda;
-            Func<LazinatorMemory, ILazinator, ILazinator> result;
+            Func<LazinatorMemory, ILazinator, IncludeChildrenMode, int?, ILazinator> result;
             var lazinatorMemoryParam = Expression.Parameter(typeof(LazinatorMemory), "lazinatorMemory");
             var iLazinatorParam = Expression.Parameter(typeof(ILazinator), "ilazinator");
+            var originalIncludeChildrenModeParam = Expression.Parameter(typeof(IncludeChildrenMode), "originalIncludeChildrenMode");
+            var lazinatorObjectVersionParam = Expression.Parameter(typeof(int?), "lazinatorObjectVersion");
             ConstructorInfo constructorInfo = t.GetConstructors().FirstOrDefault(x =>
             {
                 var parameters = x?.GetParameters();
-                if (parameters == null || parameters.Count() != 2)
+                if (parameters == null || parameters.Count() != 4)
                     return false;
-                return (parameters[0].ParameterType == typeof(LazinatorMemory) && parameters[1].ParameterType == typeof(ILazinator));
+                return (parameters[0].ParameterType == typeof(LazinatorMemory) && parameters[1].ParameterType == typeof(ILazinator) && parameters[2].ParameterType == typeof(IncludeChildrenMode) && parameters[3].ParameterType == typeof(int?));
             });
-            exnew = Expression.New(constructorInfo, lazinatorMemoryParam, iLazinatorParam);
+            exnew = Expression.New(constructorInfo, lazinatorMemoryParam, iLazinatorParam, originalIncludeChildrenModeParam, lazinatorObjectVersionParam);
             var exconv = Expression.Convert(exnew, typeof(ILazinator));
-            lambda = Expression.Lambda(exconv, lazinatorMemoryParam, iLazinatorParam);
+            lambda = Expression.Lambda(exconv, lazinatorMemoryParam, iLazinatorParam, originalIncludeChildrenModeParam, lazinatorObjectVersionParam);
             Delegate compiled = lambda.Compile();
-            result = (Func<LazinatorMemory, ILazinator, ILazinator>)compiled;
+            result = (Func<LazinatorMemory, ILazinator, IncludeChildrenMode, int?, ILazinator>)compiled;
             return result;
         }
 
@@ -134,7 +136,7 @@ namespace Lazinator.Core
                 {
                     if (FactoriesByID.ContainsKey(uniqueID))
                     {
-                        itemToReturn = (T)FactoriesByID[uniqueID](storage, parent);
+                        itemToReturn = (T)FactoriesByID[uniqueID](storage, parent, IncludeChildrenMode.IncludeAllChildren, null);
                     }
                     else
                         throw new UnknownSerializedTypeException(uniqueID);
@@ -177,7 +179,7 @@ namespace Lazinator.Core
         {
             ILazinator lazinatorObject = null;
             if (FactoriesByID.ContainsKey(uniqueID))
-                lazinatorObject = FactoriesByID[uniqueID](storage, parent);
+                lazinatorObject = FactoriesByID[uniqueID](storage, parent, IncludeChildrenMode.IncludeAllChildren, null);
             else
             {
                 (Type t, int numGenericParameters) = UniqueIDToTypeMap[uniqueID];
@@ -299,7 +301,7 @@ namespace Lazinator.Core
                 }
                 TypeToUniqueIDMap[type] = uniqueID;
                 if (FactoriesByID.ContainsKey(uniqueID))
-                    throw new LazinatorDeserializationException($"The type {type} has self-serialization UniqueID of {uniqueID}, but that {uniqueID} is already used by {FactoriesByID[uniqueID](new LazinatorMemory(), null).GetType()}.");
+                    throw new LazinatorDeserializationException($"The type {type} has self-serialization UniqueID of {uniqueID}, but that {uniqueID} is already used by {FactoriesByID[uniqueID](new LazinatorMemory(), null, IncludeChildrenMode.IncludeAllChildren, null).GetType()}.");
                 if (type.ContainsGenericParameters)
                 {
                     var genericArguments = type.GetGenericArguments().ToList();
@@ -391,8 +393,8 @@ namespace Lazinator.Core
 
         private ILazinator CreateGenericKnownID(LazinatorGenericIDType typeAndGenericTypeArgumentIDs, LazinatorMemory storage, ILazinator parent = null)
         {
-            Func<LazinatorMemory, ILazinator, ILazinator> func = GetGenericFactoryBasedOnGenericIDType(typeAndGenericTypeArgumentIDs);
-            return func(storage, parent);
+            Func<LazinatorMemory, ILazinator, IncludeChildrenMode, int?, ILazinator> func = GetGenericFactoryBasedOnGenericIDType(typeAndGenericTypeArgumentIDs);
+            return func(storage, parent, IncludeChildrenMode.IncludeAllChildren, null);
         }
 
         public LazinatorGenericIDType GetUniqueIDListForGenericType(int outerTypeUniqueID, IEnumerable<Type> innerTypes)
@@ -429,7 +431,7 @@ namespace Lazinator.Core
                 l.Add(TypeToUniqueIDMap[t]);
         }
 
-        public Func<LazinatorMemory, ILazinator, ILazinator> GetGenericFactoryBasedOnGenericIDType(LazinatorGenericIDType typeAndGenericTypeArgumentIDs)
+        public Func<LazinatorMemory, ILazinator, IncludeChildrenMode, int?, ILazinator> GetGenericFactoryBasedOnGenericIDType(LazinatorGenericIDType typeAndGenericTypeArgumentIDs)
         {
             // NOTE: If this code causes a stack overflow error, it is likely because a property is being accessed in the constructor
             // before deserialization.

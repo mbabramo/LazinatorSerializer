@@ -83,8 +83,13 @@ namespace LazinatorTests.Examples.Collections
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
-        public DotNetQueue_Lazinator(LazinatorMemory serializedBytes, ILazinator parent = null)
+        public DotNetQueue_Lazinator(LazinatorMemory serializedBytes, ILazinator parent = null, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren, int? lazinatorObjectVersion = null)
         {
+            if (lazinatorObjectVersion != null)
+            {
+                LazinatorObjectVersion = (int) lazinatorObjectVersion;
+            }
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
             LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
             HasChanged = false;
@@ -95,7 +100,7 @@ namespace LazinatorTests.Examples.Collections
         
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }
         
-        public virtual int Deserialize()
+        protected virtual int Deserialize()
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;
@@ -216,7 +221,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        protected  virtual void DeserializeLazinator(LazinatorMemory serializedBytes)
+        protected virtual void DeserializeLazinator(LazinatorMemory serializedBytes)
         {
             LazinatorMemoryStorage = serializedBytes;
             int length = Deserialize();

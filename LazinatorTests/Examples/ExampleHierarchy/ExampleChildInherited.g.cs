@@ -102,7 +102,7 @@ namespace LazinatorTests.Examples
         {
         }
         
-        public ExampleChildInherited(LazinatorMemory serializedBytes, ILazinator parent = null) : base(serializedBytes, parent)
+        public ExampleChildInherited(LazinatorMemory serializedBytes, ILazinator parent = null, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren, int? lazinatorObjectVersion = null) : base(serializedBytes, parent, originalIncludeChildrenMode, lazinatorObjectVersion)
         {
         }
         

@@ -97,8 +97,13 @@ namespace LazinatorTests.Examples.Subclasses
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
-        public ClassWithLocalEnum(LazinatorMemory serializedBytes, ILazinator parent = null)
+        public ClassWithLocalEnum(LazinatorMemory serializedBytes, ILazinator parent = null, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren, int? lazinatorObjectVersion = null)
         {
+            if (lazinatorObjectVersion != null)
+            {
+                LazinatorObjectVersion = (int) lazinatorObjectVersion;
+            }
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
             LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
             HasChanged = false;
@@ -109,7 +114,7 @@ namespace LazinatorTests.Examples.Subclasses
         
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }
         
-        public virtual int Deserialize()
+        protected virtual int Deserialize()
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;
@@ -231,7 +236,7 @@ namespace LazinatorTests.Examples.Subclasses
             }
         }
         
-        protected  virtual void DeserializeLazinator(LazinatorMemory serializedBytes)
+        protected virtual void DeserializeLazinator(LazinatorMemory serializedBytes)
         {
             LazinatorMemoryStorage = serializedBytes;
             int length = Deserialize();

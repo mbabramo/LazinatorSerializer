@@ -53,7 +53,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
         }
         
-        public ClosedGenericWithGeneric(LazinatorMemory serializedBytes, ILazinator parent = null) : base(serializedBytes, parent)
+        public ClosedGenericWithGeneric(LazinatorMemory serializedBytes, ILazinator parent = null, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren, int? lazinatorObjectVersion = null) : base(serializedBytes, parent, originalIncludeChildrenMode, lazinatorObjectVersion)
         {
         }
         

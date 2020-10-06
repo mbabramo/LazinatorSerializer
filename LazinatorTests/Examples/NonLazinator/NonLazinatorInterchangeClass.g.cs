@@ -71,8 +71,13 @@ namespace LazinatorTests.Examples
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
-        public NonLazinatorInterchangeClass(LazinatorMemory serializedBytes, ILazinator parent = null) : this()
+        public NonLazinatorInterchangeClass(LazinatorMemory serializedBytes, ILazinator parent = null, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren, int? lazinatorObjectVersion = null) : this()
         {
+            if (lazinatorObjectVersion != null)
+            {
+                LazinatorObjectVersion = (int) lazinatorObjectVersion;
+            }
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
             LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
             HasChanged = false;
@@ -83,7 +88,7 @@ namespace LazinatorTests.Examples
         
         public IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }
         
-        public int Deserialize()
+        int Deserialize()
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;

@@ -418,8 +418,13 @@ namespace LazinatorTests.Examples.Tuples
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
-        public RecordLikeContainer(LazinatorMemory serializedBytes, ILazinator parent = null)
+        public RecordLikeContainer(LazinatorMemory serializedBytes, ILazinator parent = null, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren, int? lazinatorObjectVersion = null)
         {
+            if (lazinatorObjectVersion != null)
+            {
+                LazinatorObjectVersion = (int) lazinatorObjectVersion;
+            }
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
             LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
             HasChanged = false;
@@ -430,7 +435,7 @@ namespace LazinatorTests.Examples.Tuples
         
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }
         
-        public virtual int Deserialize()
+        protected virtual int Deserialize()
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;
@@ -560,7 +565,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         
-        protected  virtual void DeserializeLazinator(LazinatorMemory serializedBytes)
+        protected virtual void DeserializeLazinator(LazinatorMemory serializedBytes)
         {
             LazinatorMemoryStorage = serializedBytes;
             int length = Deserialize();

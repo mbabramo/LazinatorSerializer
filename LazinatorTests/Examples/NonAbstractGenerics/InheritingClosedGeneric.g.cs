@@ -53,7 +53,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
         }
         
-        public InheritingClosedGeneric(LazinatorMemory serializedBytes, ILazinator parent = null) : base(serializedBytes, parent)
+        public InheritingClosedGeneric(LazinatorMemory serializedBytes, ILazinator parent = null, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren, int? lazinatorObjectVersion = null) : base(serializedBytes, parent, originalIncludeChildrenMode, lazinatorObjectVersion)
         {
         }
         

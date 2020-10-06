@@ -94,7 +94,7 @@ namespace LazinatorTests.Examples.Collections
         {
         }
         
-        public Derived_DotNetList_Nested_NonLazinator(LazinatorMemory serializedBytes, ILazinator parent = null) : base(serializedBytes, parent)
+        public Derived_DotNetList_Nested_NonLazinator(LazinatorMemory serializedBytes, ILazinator parent = null, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren, int? lazinatorObjectVersion = null) : base(serializedBytes, parent, originalIncludeChildrenMode, lazinatorObjectVersion)
         {
         }
         

@@ -119,8 +119,13 @@ namespace LazinatorCollections.BitArray
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
-        public LazinatorBitArray(LazinatorMemory serializedBytes, ILazinator parent = null)
+        public LazinatorBitArray(LazinatorMemory serializedBytes, ILazinator parent = null, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren, int? lazinatorObjectVersion = null)
         {
+            if (lazinatorObjectVersion != null)
+            {
+                LazinatorObjectVersion = (int) lazinatorObjectVersion;
+            }
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
             LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
             HasChanged = false;
@@ -133,7 +138,7 @@ namespace LazinatorCollections.BitArray
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }
         
-        public int Deserialize()
+        int Deserialize()
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;

@@ -113,7 +113,7 @@ namespace LazinatorTests.Examples.Abstract
         {
         }
         
-        public GenericFromBase(LazinatorMemory serializedBytes, ILazinator parent = null) : base(serializedBytes, parent)
+        public GenericFromBase(LazinatorMemory serializedBytes, ILazinator parent = null, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren, int? lazinatorObjectVersion = null) : base(serializedBytes, parent, originalIncludeChildrenMode, lazinatorObjectVersion)
         {
         }
         

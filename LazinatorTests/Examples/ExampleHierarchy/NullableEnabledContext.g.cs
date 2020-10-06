@@ -1848,8 +1848,13 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
-        public NullableEnabledContext(LazinatorMemory serializedBytes, ILazinator? parent = null)
+        public NullableEnabledContext(LazinatorMemory serializedBytes, ILazinator? parent = null, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren, int? lazinatorObjectVersion = null)
         {
+            if (lazinatorObjectVersion != null)
+            {
+                LazinatorObjectVersion = (int) lazinatorObjectVersion;
+            }
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
             LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
             HasChanged = false;
@@ -1901,7 +1906,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }
         
-        public virtual int Deserialize()
+        protected virtual int Deserialize()
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;
@@ -2136,7 +2141,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         
-        protected  virtual void DeserializeLazinator(LazinatorMemory serializedBytes)
+        protected virtual void DeserializeLazinator(LazinatorMemory serializedBytes)
         {
             LazinatorMemoryStorage = serializedBytes;
             int length = Deserialize();

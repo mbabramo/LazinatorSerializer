@@ -37,7 +37,7 @@ namespace LazinatorCollections.OffsetList
         {
         }
         
-        public LazinatorFastReadListInt32(LazinatorMemory serializedBytes, ILazinator parent = null) : base(serializedBytes, parent)
+        public LazinatorFastReadListInt32(LazinatorMemory serializedBytes, ILazinator parent = null, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren, int? lazinatorObjectVersion = null) : base(serializedBytes, parent, originalIncludeChildrenMode, lazinatorObjectVersion)
         {
         }
         

@@ -158,8 +158,13 @@ namespace LazinatorCollections
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
-        public LazinatorLinkedListNode(LazinatorMemory serializedBytes, ILazinator parent = null)
+        public LazinatorLinkedListNode(LazinatorMemory serializedBytes, ILazinator parent = null, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren, int? lazinatorObjectVersion = null)
         {
+            if (lazinatorObjectVersion != null)
+            {
+                LazinatorObjectVersion = (int) lazinatorObjectVersion;
+            }
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
             LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
             HasChanged = false;
@@ -172,7 +177,7 @@ namespace LazinatorCollections
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public virtual IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }
         
-        public virtual int Deserialize()
+        protected virtual int Deserialize()
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;
@@ -325,7 +330,7 @@ namespace LazinatorCollections
             }
         }
         
-        protected  virtual void DeserializeLazinator(LazinatorMemory serializedBytes)
+        protected virtual void DeserializeLazinator(LazinatorMemory serializedBytes)
         {
             LazinatorMemoryStorage = serializedBytes;
             int length = Deserialize();

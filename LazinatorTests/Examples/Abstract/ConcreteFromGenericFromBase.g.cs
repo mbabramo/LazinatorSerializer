@@ -38,7 +38,7 @@ namespace LazinatorTests.Examples.Abstract
         {
         }
         
-        public ConcreteFromGenericFromBase(LazinatorMemory serializedBytes, ILazinator parent = null) : base(serializedBytes, parent)
+        public ConcreteFromGenericFromBase(LazinatorMemory serializedBytes, ILazinator parent = null, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren, int? lazinatorObjectVersion = null) : base(serializedBytes, parent, originalIncludeChildrenMode, lazinatorObjectVersion)
         {
         }
         

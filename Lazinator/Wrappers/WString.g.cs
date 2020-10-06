@@ -59,8 +59,13 @@ namespace Lazinator.Wrappers
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
-        public WString(LazinatorMemory serializedBytes, ILazinator parent = null) : this()
+        public WString(LazinatorMemory serializedBytes, ILazinator parent = null, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren, int? lazinatorObjectVersion = null) : this()
         {
+            if (lazinatorObjectVersion != null)
+            {
+                LazinatorObjectVersion = (int) lazinatorObjectVersion;
+            }
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
             LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
             HasChanged = false;
@@ -73,7 +78,7 @@ namespace Lazinator.Wrappers
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }
         
-        public int Deserialize()
+        int Deserialize()
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;
@@ -378,12 +383,7 @@ namespace Lazinator.Wrappers
         public WString_RefStruct ToRefStruct()
         {
             UpdateStoredBuffer();
-            var clone = new WString_RefStruct()
-            {
-                OriginalIncludeChildrenMode = OriginalIncludeChildrenMode,
-                LazinatorMemoryStorage = LazinatorMemoryStorage
-            };
-            clone.Deserialize();
+            var clone = new WString_RefStruct(LazinatorMemoryStorage, null, OriginalIncludeChildrenMode, null);
             return clone;
         }
         
@@ -430,8 +430,13 @@ namespace Lazinator.Wrappers
                 OriginalIncludeChildrenMode = originalIncludeChildrenMode;
             }
             
-            public WString_RefStruct(LazinatorMemory serializedBytes, ILazinator parent = null) : this()
+            public WString_RefStruct(LazinatorMemory serializedBytes, ILazinator parent = null, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren, int? lazinatorObjectVersion = null) : this()
             {
+                if (lazinatorObjectVersion != null)
+                {
+                    LazinatorObjectVersion = (int) lazinatorObjectVersion;
+                }
+                OriginalIncludeChildrenMode = originalIncludeChildrenMode;
                 LazinatorParents = new LazinatorParentsCollection(parent);
                 DeserializeLazinator(serializedBytes);
                 HasChanged = false;
@@ -444,7 +449,7 @@ namespace Lazinator.Wrappers
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             public IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }
             
-            public int Deserialize()
+            int Deserialize()
             {
                 FreeInMemoryObjects();
                 int bytesSoFar = 0;

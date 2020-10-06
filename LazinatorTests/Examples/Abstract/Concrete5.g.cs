@@ -147,8 +147,13 @@ namespace LazinatorTests.Examples.Abstract
             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
         }
         
-        public Concrete5(LazinatorMemory serializedBytes, ILazinator parent = null)
+        public Concrete5(LazinatorMemory serializedBytes, ILazinator parent = null, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren, int? lazinatorObjectVersion = null)
         {
+            if (lazinatorObjectVersion != null)
+            {
+                LazinatorObjectVersion = (int) lazinatorObjectVersion;
+            }
+            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
             LazinatorParents = new LazinatorParentsCollection(parent);
             DeserializeLazinator(serializedBytes);
             HasChanged = false;

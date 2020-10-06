@@ -30,10 +30,10 @@ namespace Lazinator.CodeDescription
         public NullableContext NullableContextSetting { get; set; }
         public bool NullableModeEnabled => NullableContextSetting.AnnotationsEnabled();
         public bool NullableModeInherited => NullableContextSetting.AnnotationsEnabled();
-        public bool AlwaysSpecifyNullableMode => true; 
+        public bool AlwaysSpecifyNullableMode => true;
         public string NullableModeSettingString => NullableModeInherited && !AlwaysSpecifyNullableMode ? "" : (NullableModeEnabled ? $@"
             #nullable enable" : $@"
-            #nullable disable"); 
+            #nullable disable");
         public string QuestionMarkIfNullableModeEnabled => NullableModeEnabled ? "?" : "";
         public string ILazinatorStringWithoutQuestionMark => "ILazinator";
         public string ILazinatorString => "ILazinator" + QuestionMarkIfNullableModeEnabled;
@@ -80,7 +80,7 @@ namespace Lazinator.CodeDescription
         public int TotalNumProperties => ExclusiveInterface.TotalNumProperties;
         internal bool AutoChangeParentAllThisLevel => ExclusiveInterface?.AutoChangeParentAll ?? false;
         public bool AutoChangeParentAll => AutoChangeParentAllThisLevel || GetBaseObjectDescriptions().Any(x => x.AutoChangeParentAllThisLevel);
- 
+
         /* Implementations */
         public string[] ImplementedMethods { get; set; }
         public bool ImplementsLazinatorObjectVersionUpgrade => ImplementedMethods.Contains("LazinatorObjectVersionUpgrade");
@@ -334,12 +334,7 @@ namespace Lazinator.CodeDescription
                 public {NameIncludingGenerics_RefStruct} ToRefStruct()
                 {{
                     UpdateStoredBuffer();
-                    var clone = new {NameIncludingGenerics_RefStruct}()
-                    {{
-                        OriginalIncludeChildrenMode = OriginalIncludeChildrenMode,
-                        LazinatorMemoryStorage = LazinatorMemoryStorage
-                    }};
-                    clone.Deserialize();
+                    var clone = new {NameIncludingGenerics_RefStruct}(LazinatorMemoryStorage, null, OriginalIncludeChildrenMode, null);
                     return clone;
                 }}");
         }
@@ -374,7 +369,7 @@ namespace Lazinator.CodeDescription
                     boilerplate = $@"        /* Abstract declarations */
 			            public abstract LazinatorParentsCollection LazinatorParents {{ get; set; }}
                     
-                        public abstract int Deserialize();
+                        {ProtectedIfApplicable}abstract int Deserialize();
                         
                         public abstract LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
                         
@@ -415,7 +410,7 @@ namespace Lazinator.CodeDescription
                         public abstract IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties();
                         public abstract {ILazinatorString} ForEachLazinator(Func<{ILazinatorString}, {ILazinatorString}>{QuestionMarkIfNullableModeEnabled} changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel);
 		                
-                        {ProtectedIfApplicable} abstract void DeserializeLazinator(LazinatorMemory serializedBytes);
+                        {ProtectedIfApplicable}abstract void DeserializeLazinator(LazinatorMemory serializedBytes);
 
                         {HideILazinatorProperty}public abstract LazinatorMemory LazinatorMemoryStorage
                         {{
@@ -458,7 +453,7 @@ namespace Lazinator.CodeDescription
 
                         {HideILazinatorProperty}public {DerivationKeyword}IncludeChildrenMode OriginalIncludeChildrenMode {{ get; set; }}
 
-                        public {DerivationKeyword}int Deserialize()
+                        {ProtectedIfApplicable}{DerivationKeyword}int Deserialize()
                         {{
                             FreeInMemoryObjects();
                             int bytesSoFar = 0;
@@ -568,7 +563,7 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
         
-                        {ProtectedIfApplicable} {DerivationKeyword}void DeserializeLazinator(LazinatorMemory serializedBytes)
+                        {ProtectedIfApplicable}{DerivationKeyword}void DeserializeLazinator(LazinatorMemory serializedBytes)
                         {{
                             LazinatorMemoryStorage = serializedBytes;
                             int length = Deserialize();
@@ -646,7 +641,7 @@ namespace Lazinator.CodeDescription
                             {NameIncludingGenerics} clone;
                             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
                             {{
-                                clone = new {NameIncludingGenerics}({parametersToFirstConstructor}includeChildrenMode);{IIF(Version != -1,$@"
+                                clone = new {NameIncludingGenerics}({parametersToFirstConstructor}includeChildrenMode);{IIF(Version != -1, $@"
                                 clone.LazinatorObjectVersion = LazinatorObjectVersion;")}
                                 clone = ({NameIncludingGenerics})AssignCloneProperties(clone, includeChildrenMode){IIF(NullableModeEnabled, "!")};
                             }}
@@ -857,13 +852,13 @@ namespace Lazinator.CodeDescription
                                     }}").ToString();
                         string ifThenStatement = property.GetNullCheckPlusPrecedingConditionIfThen(
                                 ConditionsCodeGenerator.AndCombine(
-                                    "enumerateNulls", 
+                                    "enumerateNulls",
                                     ConditionsCodeGenerator.OrCombine(
                                         "!exploreOnlyDeserializedChildren",
                                         property.BackingFieldAccessedString))
-                                , propertyName, 
+                                , propertyName,
                                 // CONSEQUENT
-                                $@"yield return (""{propertyName}"", default);", 
+                                $@"yield return (""{propertyName}"", default);",
                                 // ELSE CONSEQUENT -- another conditional
                                 elseConsequent);
                         sb.AppendLine(ifThenStatement);
@@ -874,7 +869,7 @@ namespace Lazinator.CodeDescription
                 }
             }
         }
-        
+
         private void AppendEnumerateNonLazinatorProperties(CodeStringBuilder sb)
         {
             if (IsAbstract || GeneratingRefStruct)
@@ -933,11 +928,11 @@ namespace Lazinator.CodeDescription
                     {{
                         {IIF(IsDerivedFromNonAbstractLazinator, $@"base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, false);
                         ")}");
-            ConditionCodeGenerator getAntecedent(PropertyDescription property) => 
+            ConditionCodeGenerator getAntecedent(PropertyDescription property) =>
                 ConditionsCodeGenerator.OrCombine(
                     ConditionsCodeGenerator.AndCombine(
                         "!exploreOnlyDeserializedChildren",
-                        property.GetNonNullCheck(false)), 
+                        property.GetNonNullCheck(false)),
                     property.GetNonNullCheck(true));
             bool nonNullCheckDefinitelyTrue(PropertyDescription property) => property.GetNonNullCheck(false).ToString() == "true";
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator && x.PlaceholderMemoryWriteMethod == null))
@@ -976,7 +971,7 @@ namespace Lazinator.CodeDescription
                     }}
 ");
             }
-            
+
             sb.Append($@"{IIF(ImplementsOnForEachLazinator && (BaseLazinatorObject == null || !BaseLazinatorObject.ImplementsOnForEachLazinator), $@"OnForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, changeThisLevel);
                     ")}if (changeThisLevel && changeFunc != null)
                         {{
@@ -1089,7 +1084,7 @@ namespace Lazinator.CodeDescription
             sb.AppendLine($@"{ IIF(ImplementsPreSerialization, $@"PreSerialization(verifyCleanness, updateStoredBuffer);
                             ")}int startPosition = writer.Position;
                             WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, {(UniqueIDCanBeSkipped ? "false" : "true")});");
-            
+
             sb.AppendLine($@"if (updateStoredBuffer)
                         {{
                             UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);");
@@ -1276,7 +1271,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             {
                 if (IncludeTracingCode)
                 {
-                    if (property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (property.PropertyType == LazinatorPropertyType.LazinatorStructNullable) || (property.PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface) )
+                    if (property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (property.PropertyType == LazinatorPropertyType.LazinatorStructNullable) || (property.PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface))
                     {
                         sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) (backing var null? {{_{property.PropertyName} == null}}) "");");
                     }
@@ -1391,11 +1386,16 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                             OriginalIncludeChildrenMode = originalIncludeChildrenMode;")}
                         }}";
             }
-            string constructors = 
+            string constructors =
                         $@"{firstConstructor}
 
-                        public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}(LazinatorMemory serializedBytes, ILazinator{IIF(NullableModeEnabled, "?")} parent = null){IIF(inheritFromBaseType, " : base(serializedBytes, parent)")}{IIF(IsStruct, " : this()")}
+                        public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}(LazinatorMemory serializedBytes, ILazinator{IIF(NullableModeEnabled, "?")} parent = null, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren, int? lazinatorObjectVersion = null){IIF(inheritFromBaseType, " : base(serializedBytes, parent, originalIncludeChildrenMode, lazinatorObjectVersion)")}{IIF(IsStruct, " : this()")}
                         {{{IIF(!inheritFromBaseType, $@"
+                            if (lazinatorObjectVersion != null)
+                            {{
+                                LazinatorObjectVersion = (int) lazinatorObjectVersion;
+                            }}
+                            OriginalIncludeChildrenMode = originalIncludeChildrenMode;
                             LazinatorParents = new LazinatorParentsCollection(parent);
                             DeserializeLazinator(serializedBytes);
                             HasChanged = false;
@@ -1407,7 +1407,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             //        $@"public {SimpleName}(){IIF(ILazinatorTypeSymbol.BaseType != null, " : base()")}
             //            {{
             //            }}
-                        
+
             //            ";
             return constructors;
         }
