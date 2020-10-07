@@ -194,6 +194,10 @@ namespace Lazinator.CodeDescription
         private string EnumEquivalentType { get; set; }
         private string EnumEquivalentCastToEquivalentType => EnumEquivalentType != null ? $"({EnumEquivalentType}) " : $"";
         private string EnumEquivalentCastToEnum => EnumEquivalentType != null ? $"({AppropriatelyQualifiedTypeName})" : $"";
+        /* Async */
+        private bool IncludeAsyncCode => ContainingObjectDescription.AsyncLazinatorMemory;
+        private string AsyncIfNeeded(bool async) => async && IncludeAsyncCode ? "Async" : "";
+        private string AwaitIfNeeded(bool async) => async && IncludeAsyncCode ? "await " : "";
 
         /* Inner properties */
         public List<PropertyDescription> InnerProperties { get; set; }
@@ -1073,10 +1077,10 @@ namespace Lazinator.CodeDescription
             // Now we need to worry about the set accessor. 
             string propertyTypeDependentSet = GetPropertyTypeDependentSetString();
 
-            string propertyGetContents = $@"
+            string propertyGetContents(bool async) => $@"
                 {IIF(BackingAccessFieldIncluded, $@"if ({BackingFieldNotAccessedString})
                 {{
-                    Lazinate{PropertyName}();
+                    {AwaitIfNeeded(async)}Lazinate{PropertyName}{AsyncIfNeeded(async)}();
                 }}")}{IIF(IsNonLazinatorType && !TrackDirtinessNonSerialized && (!RoslynHelpers.IsReadOnlyStruct(Symbol) || ContainsLazinatorInnerProperty || ContainsOpenGenericInnerProperty), $@"
                     IsDirty = true;")} {IIF(CodeOnAccessed != "", $@"
                 {CodeOnAccessed}")}
@@ -1087,7 +1091,7 @@ namespace Lazinator.CodeDescription
         {GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
         {{{StepThroughPropertiesString}
             get
-            {{{propertyGetContents}
+            {{{propertyGetContents(false)}
             }}{StepThroughPropertiesString}
             set
             {{{propertyTypeDependentSet}{RepeatedCodeExecution}
@@ -1101,9 +1105,12 @@ namespace Lazinator.CodeDescription
         {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}bool {BackingFieldAccessedString};")}{IIF(BackingAccessFieldIncluded, $@"
         private void Lazinate{PropertyName}()
         {{{GetLazinateContents(createDefault, recreation, true, false)}
-        }}")}{IIF(BackingAccessFieldIncluded && ContainingObjectDescription.AsyncLazinatorMemory, $@"
+        }}")}{IIF(BackingAccessFieldIncluded && IncludeAsyncCode, $@"
         private async Task Lazinate{PropertyName}Async()
         {{{GetLazinateContents(createDefault, recreation, true, true)}
+        }}
+        public async ValueTask<{AppropriatelyQualifiedTypeName}> Get{PropertyName}Async()
+        {{{propertyGetContents(true)}
         }}")}
 
 ");
@@ -1301,9 +1308,9 @@ namespace Lazinator.CodeDescription
         private string GetLazinateContents(string createDefault, string recreation, bool defineChildData, bool async)
         {
             return $@"
-            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || NonNullableThatCanBeUninitialized, "LazinatorMemoryStorage.Length == 0", createDefault, $@"{IIF(defineChildData, "LazinatorMemory ")}childData = {ChildSliceString};{IIF(async, $@"await childData.LoadInitialMemoryAsync();
-                ")}
-                {recreation}")}{IIF(BackingAccessFieldIncluded, $@"
+            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || NonNullableThatCanBeUninitialized, "LazinatorMemoryStorage.Length == 0", createDefault, $@"{IIF(defineChildData, "LazinatorMemory ")}childData = {ChildSliceString};
+                {IIF(async, $@"await childData.LoadInitialMemoryAsync();
+                ")}{recreation}")}{IIF(BackingAccessFieldIncluded, $@"
             {BackingFieldAccessedString} = true;")}";
         }
 

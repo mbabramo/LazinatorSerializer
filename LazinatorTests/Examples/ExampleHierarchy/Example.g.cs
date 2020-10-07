@@ -323,13 +323,21 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IncludableChild_ByteIndex, _IncludableChild_ByteLength, false, false, null);await childData.LoadInitialMemoryAsync();
-                
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IncludableChild_ByteIndex, _IncludableChild_ByteLength, false, false, null);
+                await childData.LoadInitialMemoryAsync();
                 
                 _IncludableChild = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, (c, p) => new ExampleChild(c, p), childData, this); 
             }
             
             _IncludableChild_Accessed = true;
+        }
+        public async ValueTask<ExampleChild> GetIncludableChildAsync()
+        {
+            if (!_IncludableChild_Accessed)
+            {
+                await LazinateIncludableChildAsync();
+            } 
+            return _IncludableChild;
         }
         
         
@@ -388,14 +396,23 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild1_ByteIndex, _MyChild1_ByteLength, false, false, null);await childData.LoadInitialMemoryAsync();
-                
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild1_ByteIndex, _MyChild1_ByteLength, false, false, null);
+                await childData.LoadInitialMemoryAsync();
                 
                 _MyChild1 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, (c, p) => new ExampleChild(c, p), childData, this); 
                 OnMyChild1Deserialized(_MyChild1);
             }
             
             _MyChild1_Accessed = true;
+        }
+        public async ValueTask<ExampleChild> GetMyChild1Async()
+        {
+            if (!_MyChild1_Accessed)
+            {
+                await LazinateMyChild1Async();
+            } 
+            OnMyChild1Accessed(_MyChild1);
+            return _MyChild1;
         }
         
         
@@ -452,13 +469,21 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild2_ByteIndex, _MyChild2_ByteLength, false, false, null);await childData.LoadInitialMemoryAsync();
-                
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild2_ByteIndex, _MyChild2_ByteLength, false, false, null);
+                await childData.LoadInitialMemoryAsync();
                 
                 _MyChild2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, (c, p) => new ExampleChild(c, p), childData, this); 
             }
             
             _MyChild2_Accessed = true;
+        }
+        public async ValueTask<ExampleChild> GetMyChild2Async()
+        {
+            if (!_MyChild2_Accessed)
+            {
+                await LazinateMyChild2Async();
+            } 
+            return _MyChild2;
         }
         
         
@@ -515,13 +540,21 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild2Previous_ByteIndex, _MyChild2Previous_ByteLength, false, false, null);await childData.LoadInitialMemoryAsync();
-                
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild2Previous_ByteIndex, _MyChild2Previous_ByteLength, false, false, null);
+                await childData.LoadInitialMemoryAsync();
                 
                 _MyChild2Previous = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, (c, p) => new ExampleChild(c, p), childData, this); 
             }
             
             _MyChild2Previous_Accessed = true;
+        }
+        public async ValueTask<ExampleChild> GetMyChild2PreviousAsync()
+        {
+            if (!_MyChild2Previous_Accessed)
+            {
+                await LazinateMyChild2PreviousAsync();
+            } 
+            return _MyChild2Previous;
         }
         
         
@@ -578,13 +611,21 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyInterfaceImplementer_ByteIndex, _MyInterfaceImplementer_ByteLength, false, false, null);await childData.LoadInitialMemoryAsync();
-                
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyInterfaceImplementer_ByteIndex, _MyInterfaceImplementer_ByteLength, false, false, null);
+                await childData.LoadInitialMemoryAsync();
                 
                 _MyInterfaceImplementer = DeserializationFactory.Instance.CreateBasedOnType<IExampleNonexclusiveInterface>(childData, this); 
             }
             
             _MyInterfaceImplementer_Accessed = true;
+        }
+        public async ValueTask<IExampleNonexclusiveInterface> GetMyInterfaceImplementerAsync()
+        {
+            if (!_MyInterfaceImplementer_Accessed)
+            {
+                await LazinateMyInterfaceImplementerAsync();
+            } 
+            return _MyInterfaceImplementer;
         }
         
         
@@ -634,12 +675,20 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorChild_ByteIndex, _MyNonLazinatorChild_ByteLength, false, false, null);await childData.LoadInitialMemoryAsync();
-                
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorChild_ByteIndex, _MyNonLazinatorChild_ByteLength, false, false, null);
+                await childData.LoadInitialMemoryAsync();
                 _MyNonLazinatorChild = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData);
             }
             
             _MyNonLazinatorChild_Accessed = true;
+        }
+        public async ValueTask<NonLazinatorClass> GetMyNonLazinatorChildAsync()
+        {
+            if (!_MyNonLazinatorChild_Accessed)
+            {
+                await LazinateMyNonLazinatorChildAsync();
+            } 
+            return _MyNonLazinatorChild;
         }
         
         
@@ -712,8 +761,8 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, true, null);await childData.LoadInitialMemoryAsync();
-                
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, true, null);
+                await childData.LoadInitialMemoryAsync();
                 _WrappedInt = new WInt32(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
@@ -722,6 +771,14 @@ namespace LazinatorTests.Examples
             }
             
             _WrappedInt_Accessed = true;
+        }
+        public async ValueTask<WInt32> GetWrappedIntAsync()
+        {
+            if (!_WrappedInt_Accessed)
+            {
+                await LazinateWrappedIntAsync();
+            } 
+            return _WrappedInt;
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -804,13 +861,21 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExcludableChild_ByteIndex, _ExcludableChild_ByteLength, false, false, null);await childData.LoadInitialMemoryAsync();
-                
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExcludableChild_ByteIndex, _ExcludableChild_ByteLength, false, false, null);
+                await childData.LoadInitialMemoryAsync();
                 
                 _ExcludableChild = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, (c, p) => new ExampleChild(c, p), childData, this); 
             }
             
             _ExcludableChild_Accessed = true;
+        }
+        public async ValueTask<ExampleChild> GetExcludableChildAsync()
+        {
+            if (!_ExcludableChild_Accessed)
+            {
+                await LazinateExcludableChildAsync();
+            } 
+            return _ExcludableChild;
         }
         
         

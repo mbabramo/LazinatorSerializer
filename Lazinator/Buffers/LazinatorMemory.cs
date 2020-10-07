@@ -251,6 +251,10 @@ namespace Lazinator.Buffers
             }
         }
 
+        // DEBUG: Should we also add a ConsiderUnloadInitialMemoryAsync(), which would have the right to unload the initial memory
+        // if it no longer seems needed. Ideally, the implementation might decide to keep the n most recent pages in memory, so that
+        // we don't have to reload if we need the same page right away. 
+
         public async ValueTask<IMemoryOwner<byte>> LoadInitialMemoryAsync()
         {
             IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
