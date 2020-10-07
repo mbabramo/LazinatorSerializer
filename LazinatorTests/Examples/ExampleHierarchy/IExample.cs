@@ -6,6 +6,7 @@ using Lazinator.Wrappers;
 namespace LazinatorTests.Examples
 {
     [Lazinator((int) ExampleUniqueIDs.Example, 3, true)]
+    [AsyncLazinatorMemory]
     public interface IExample : ILazinator // note that this ILazinator reference is unnecessary
     {
         bool MyBool { get; set; }

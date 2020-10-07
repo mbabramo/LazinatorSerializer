@@ -1464,6 +1464,8 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 return $@"
                         ";
             otherNamespaces.AddRange(new string[] { "System", "System.Buffers", "System.Collections.Generic", "System.Diagnostics", "System.IO", "System.Linq", "System.Runtime.InteropServices", "Lazinator.Attributes", "Lazinator.Buffers", "Lazinator.Core", "Lazinator.Exceptions", "Lazinator.Support" });
+            if (AsyncLazinatorMemory)
+                otherNamespaces.Add("System.Threading.Tasks");
             otherNamespaces.RemoveAll(x => x == primaryNamespace);
             otherNamespaces = otherNamespaces.Where(x => x != null && x != "").OrderBy(x => x).Distinct().ToList();
             CodeStringBuilder header = new CodeStringBuilder();

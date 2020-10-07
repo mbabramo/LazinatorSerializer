@@ -37,7 +37,7 @@ namespace LazinatorTests.Tests
                 LazinatorCompilation lazinatorFiles = await GetMiniRoslynFileSet(typeof(Example));
                 INamedTypeSymbol exampleInterface = lazinatorFiles.LookupSymbol("IExample");
                 ImmutableArray<AttributeData> attributes = exampleInterface.GetAttributes();
-                attributes.Count().Should().Be(1);
+                attributes.Count().Should().BeGreaterOrEqualTo(1);
                 Attribute converted = AttributeConverter.ConvertAttribute(attributes[0]);
                 LazinatorAnalyzer.AttributeClones.CloneLazinatorAttribute cloneLazinatorAttribute = converted as LazinatorAnalyzer.AttributeClones.CloneLazinatorAttribute;
                 cloneLazinatorAttribute.UniqueID.Should().NotBe(0);

@@ -1102,7 +1102,7 @@ namespace Lazinator.CodeDescription
         private void Lazinate_{PropertyName}()
         {{{GetLazinateContents(createDefault, recreation, true, false)}
         }}")}{IIF(BackingAccessFieldIncluded && ContainingObjectDescription.AsyncLazinatorMemory, $@"
-        private async Task Lazinate_{PropertyName}()
+        private async Task Lazinate_{PropertyName}_Async()
         {{{GetLazinateContents(createDefault, recreation, true, true)}
         }}")}
 
