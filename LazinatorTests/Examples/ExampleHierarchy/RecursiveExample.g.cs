@@ -47,7 +47,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (!_RecursiveClass_Accessed)
                 {
-                    Lazinate_RecursiveClass();
+                    LazinateRecursiveClass();
                 } 
                 return _RecursiveClass;
             }
@@ -69,7 +69,7 @@ namespace LazinatorTests.Examples.Hierarchy
             }
         }
         protected bool _RecursiveClass_Accessed;
-        private void Lazinate_RecursiveClass()
+        private void LazinateRecursiveClass()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -94,7 +94,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (!_RecursiveInterface_Accessed)
                 {
-                    Lazinate_RecursiveInterface();
+                    LazinateRecursiveInterface();
                 } 
                 return _RecursiveInterface;
             }
@@ -116,7 +116,7 @@ namespace LazinatorTests.Examples.Hierarchy
             }
         }
         protected bool _RecursiveInterface_Accessed;
-        private void Lazinate_RecursiveInterface()
+        private void LazinateRecursiveInterface()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

@@ -53,7 +53,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyDictionary_Accessed)
                 {
-                    Lazinate_MyDictionary();
+                    LazinateMyDictionary();
                 }
                 IsDirty = true; 
                 return _MyDictionary;
@@ -67,7 +67,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyDictionary_Accessed;
-        private void Lazinate_MyDictionary()
+        private void LazinateMyDictionary()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -91,7 +91,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyDictionaryStructs_Accessed)
                 {
-                    Lazinate_MyDictionaryStructs();
+                    LazinateMyDictionaryStructs();
                 }
                 IsDirty = true; 
                 return _MyDictionaryStructs;
@@ -105,7 +105,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyDictionaryStructs_Accessed;
-        private void Lazinate_MyDictionaryStructs()
+        private void LazinateMyDictionaryStructs()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -129,7 +129,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MySortedDictionary_Accessed)
                 {
-                    Lazinate_MySortedDictionary();
+                    LazinateMySortedDictionary();
                 }
                 IsDirty = true; 
                 return _MySortedDictionary;
@@ -143,7 +143,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MySortedDictionary_Accessed;
-        private void Lazinate_MySortedDictionary()
+        private void LazinateMySortedDictionary()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -167,7 +167,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MySortedList_Accessed)
                 {
-                    Lazinate_MySortedList();
+                    LazinateMySortedList();
                 }
                 IsDirty = true; 
                 return _MySortedList;
@@ -181,7 +181,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MySortedList_Accessed;
-        private void Lazinate_MySortedList()
+        private void LazinateMySortedList()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

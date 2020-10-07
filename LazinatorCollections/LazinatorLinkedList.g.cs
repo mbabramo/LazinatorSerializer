@@ -81,7 +81,7 @@ namespace LazinatorCollections
             {
                 if (!_FirstNode_Accessed)
                 {
-                    Lazinate_FirstNode();
+                    LazinateFirstNode();
                 } 
                 return _FirstNode;
             }
@@ -105,7 +105,7 @@ namespace LazinatorCollections
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _FirstNode_Accessed;
-        private void Lazinate_FirstNode()
+        private void LazinateFirstNode()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

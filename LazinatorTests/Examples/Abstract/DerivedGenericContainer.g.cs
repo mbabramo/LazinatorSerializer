@@ -45,7 +45,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_Item_Accessed)
                 {
-                    Lazinate_Item();
+                    LazinateItem();
                 } 
                 return _Item;
             }
@@ -67,7 +67,7 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         protected bool _Item_Accessed;
-        private void Lazinate_Item()
+        private void LazinateItem()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

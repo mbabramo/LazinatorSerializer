@@ -56,7 +56,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyListTuple_Accessed)
                 {
-                    Lazinate_MyListTuple();
+                    LazinateMyListTuple();
                 }
                 IsDirty = true; 
                 return _MyListTuple;
@@ -70,7 +70,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyListTuple_Accessed;
-        private void Lazinate_MyListTuple()
+        private void LazinateMyListTuple()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -94,7 +94,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyTupleSerialized_Accessed)
                 {
-                    Lazinate_MyTupleSerialized();
+                    LazinateMyTupleSerialized();
                 }
                 IsDirty = true; 
                 return _MyTupleSerialized;
@@ -108,7 +108,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyTupleSerialized_Accessed;
-        private void Lazinate_MyTupleSerialized()
+        private void LazinateMyTupleSerialized()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -132,7 +132,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyTupleSerialized2_Accessed)
                 {
-                    Lazinate_MyTupleSerialized2();
+                    LazinateMyTupleSerialized2();
                 }
                 IsDirty = true; 
                 return _MyTupleSerialized2;
@@ -146,7 +146,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyTupleSerialized2_Accessed;
-        private void Lazinate_MyTupleSerialized2()
+        private void LazinateMyTupleSerialized2()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -170,7 +170,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyTupleSerialized3_Accessed)
                 {
-                    Lazinate_MyTupleSerialized3();
+                    LazinateMyTupleSerialized3();
                 }
                 IsDirty = true; 
                 return _MyTupleSerialized3;
@@ -184,7 +184,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyTupleSerialized3_Accessed;
-        private void Lazinate_MyTupleSerialized3()
+        private void LazinateMyTupleSerialized3()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -208,7 +208,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyTupleSerialized4_Accessed)
                 {
-                    Lazinate_MyTupleSerialized4();
+                    LazinateMyTupleSerialized4();
                 }
                 IsDirty = true; 
                 return _MyTupleSerialized4;
@@ -222,7 +222,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyTupleSerialized4_Accessed;
-        private void Lazinate_MyTupleSerialized4()
+        private void LazinateMyTupleSerialized4()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -246,7 +246,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyTupleSerialized5_Accessed)
                 {
-                    Lazinate_MyTupleSerialized5();
+                    LazinateMyTupleSerialized5();
                 }
                 IsDirty = true; 
                 return _MyTupleSerialized5;
@@ -260,7 +260,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyTupleSerialized5_Accessed;
-        private void Lazinate_MyTupleSerialized5()
+        private void LazinateMyTupleSerialized5()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

@@ -62,7 +62,7 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 if (!_SubclassInstance1_Accessed)
                 {
-                    Lazinate_SubclassInstance1();
+                    LazinateSubclassInstance1();
                 } 
                 return _SubclassInstance1;
             }
@@ -84,7 +84,7 @@ namespace LazinatorTests.Examples.Subclasses
             }
         }
         protected bool _SubclassInstance1_Accessed;
-        private void Lazinate_SubclassInstance1()
+        private void LazinateSubclassInstance1()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -109,7 +109,7 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 if (!_SubclassInstance2_Accessed)
                 {
-                    Lazinate_SubclassInstance2();
+                    LazinateSubclassInstance2();
                 } 
                 return _SubclassInstance2;
             }
@@ -131,7 +131,7 @@ namespace LazinatorTests.Examples.Subclasses
             }
         }
         protected bool _SubclassInstance2_Accessed;
-        private void Lazinate_SubclassInstance2()
+        private void LazinateSubclassInstance2()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

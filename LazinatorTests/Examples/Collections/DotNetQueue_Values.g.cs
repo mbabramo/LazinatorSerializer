@@ -45,7 +45,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyQueueInt_Accessed)
                 {
-                    Lazinate_MyQueueInt();
+                    LazinateMyQueueInt();
                 } 
                 return _MyQueueInt;
             }
@@ -59,7 +59,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyQueueInt_Accessed;
-        private void Lazinate_MyQueueInt()
+        private void LazinateMyQueueInt()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

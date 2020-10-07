@@ -46,7 +46,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_MyNullableStruct_Accessed)
                 {
-                    Lazinate_MyNullableStruct();
+                    LazinateMyNullableStruct();
                 } 
                 return _MyNullableStruct;
             }
@@ -67,7 +67,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _MyNullableStruct_Accessed;
-        private void Lazinate_MyNullableStruct()
+        private void LazinateMyNullableStruct()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

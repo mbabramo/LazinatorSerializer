@@ -46,7 +46,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyList_Accessed)
                 {
-                    Lazinate_MyList();
+                    LazinateMyList();
                 } 
                 return _MyList;
             }
@@ -68,7 +68,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyList_Accessed;
-        private void Lazinate_MyList()
+        private void LazinateMyList()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

@@ -48,7 +48,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (!_ExampleByInterface_Accessed)
                 {
-                    Lazinate_ExampleByInterface();
+                    LazinateExampleByInterface();
                 } 
                 return _ExampleByInterface;
             }
@@ -70,7 +70,7 @@ namespace LazinatorTests.Examples.Hierarchy
             }
         }
         protected bool _ExampleByInterface_Accessed;
-        private void Lazinate_ExampleByInterface()
+        private void LazinateExampleByInterface()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -95,7 +95,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (!_ExampleListByInterface_Accessed)
                 {
-                    Lazinate_ExampleListByInterface();
+                    LazinateExampleListByInterface();
                 }
                 IsDirty = true; 
                 return _ExampleListByInterface;
@@ -109,7 +109,7 @@ namespace LazinatorTests.Examples.Hierarchy
             }
         }
         protected bool _ExampleListByInterface_Accessed;
-        private void Lazinate_ExampleListByInterface()
+        private void LazinateExampleListByInterface()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

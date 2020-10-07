@@ -141,7 +141,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_ANonSkippableEarlierExample_Accessed)
                 {
-                    Lazinate_ANonSkippableEarlierExample();
+                    LazinateANonSkippableEarlierExample();
                 } 
                 return _ANonSkippableEarlierExample;
             }
@@ -163,7 +163,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _ANonSkippableEarlierExample_Accessed;
-        private void Lazinate_ANonSkippableEarlierExample()
+        private void LazinateANonSkippableEarlierExample()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -188,7 +188,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_Example_Accessed)
                 {
-                    Lazinate_Example();
+                    LazinateExample();
                 } 
                 return _Example;
             }
@@ -210,7 +210,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _Example_Accessed;
-        private void Lazinate_Example()
+        private void LazinateExample()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -235,7 +235,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_Example2_Accessed)
                 {
-                    Lazinate_Example2();
+                    LazinateExample2();
                 } 
                 return _Example2;
             }
@@ -257,7 +257,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _Example2_Accessed;
-        private void Lazinate_Example2()
+        private void LazinateExample2()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -282,7 +282,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_Example3_Accessed)
                 {
-                    Lazinate_Example3();
+                    LazinateExample3();
                 } 
                 return _Example3;
             }
@@ -304,7 +304,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _Example3_Accessed;
-        private void Lazinate_Example3()
+        private void LazinateExample3()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

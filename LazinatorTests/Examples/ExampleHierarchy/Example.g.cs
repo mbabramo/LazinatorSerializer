@@ -278,7 +278,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_IncludableChild_Accessed)
                 {
-                    Lazinate_IncludableChild();
+                    LazinateIncludableChild();
                 } 
                 return _IncludableChild;
             }
@@ -300,7 +300,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _IncludableChild_Accessed;
-        private void Lazinate_IncludableChild()
+        private void LazinateIncludableChild()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -315,7 +315,7 @@ namespace LazinatorTests.Examples
             
             _IncludableChild_Accessed = true;
         }
-        private async Task Lazinate_IncludableChild_Async()
+        private async Task LazinateIncludableChildAsync()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -341,7 +341,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyChild1_Accessed)
                 {
-                    Lazinate_MyChild1();
+                    LazinateMyChild1();
                 } 
                 OnMyChild1Accessed(_MyChild1);
                 return _MyChild1;
@@ -364,7 +364,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyChild1_Accessed;
-        private void Lazinate_MyChild1()
+        private void LazinateMyChild1()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -380,7 +380,7 @@ namespace LazinatorTests.Examples
             
             _MyChild1_Accessed = true;
         }
-        private async Task Lazinate_MyChild1_Async()
+        private async Task LazinateMyChild1Async()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -407,7 +407,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyChild2_Accessed)
                 {
-                    Lazinate_MyChild2();
+                    LazinateMyChild2();
                 } 
                 return _MyChild2;
             }
@@ -429,7 +429,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyChild2_Accessed;
-        private void Lazinate_MyChild2()
+        private void LazinateMyChild2()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -444,7 +444,7 @@ namespace LazinatorTests.Examples
             
             _MyChild2_Accessed = true;
         }
-        private async Task Lazinate_MyChild2_Async()
+        private async Task LazinateMyChild2Async()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -470,7 +470,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyChild2Previous_Accessed)
                 {
-                    Lazinate_MyChild2Previous();
+                    LazinateMyChild2Previous();
                 } 
                 return _MyChild2Previous;
             }
@@ -492,7 +492,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyChild2Previous_Accessed;
-        private void Lazinate_MyChild2Previous()
+        private void LazinateMyChild2Previous()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -507,7 +507,7 @@ namespace LazinatorTests.Examples
             
             _MyChild2Previous_Accessed = true;
         }
-        private async Task Lazinate_MyChild2Previous_Async()
+        private async Task LazinateMyChild2PreviousAsync()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -533,7 +533,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyInterfaceImplementer_Accessed)
                 {
-                    Lazinate_MyInterfaceImplementer();
+                    LazinateMyInterfaceImplementer();
                 } 
                 return _MyInterfaceImplementer;
             }
@@ -555,7 +555,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyInterfaceImplementer_Accessed;
-        private void Lazinate_MyInterfaceImplementer()
+        private void LazinateMyInterfaceImplementer()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -570,7 +570,7 @@ namespace LazinatorTests.Examples
             
             _MyInterfaceImplementer_Accessed = true;
         }
-        private async Task Lazinate_MyInterfaceImplementer_Async()
+        private async Task LazinateMyInterfaceImplementerAsync()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -596,7 +596,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyNonLazinatorChild_Accessed)
                 {
-                    Lazinate_MyNonLazinatorChild();
+                    LazinateMyNonLazinatorChild();
                 } 
                 return _MyNonLazinatorChild;
             }
@@ -610,7 +610,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyNonLazinatorChild_Accessed;
-        private void Lazinate_MyNonLazinatorChild()
+        private void LazinateMyNonLazinatorChild()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -625,7 +625,7 @@ namespace LazinatorTests.Examples
             
             _MyNonLazinatorChild_Accessed = true;
         }
-        private async Task Lazinate_MyNonLazinatorChild_Async()
+        private async Task LazinateMyNonLazinatorChildAsync()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -669,7 +669,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_WrappedInt_Accessed)
                 {
-                    Lazinate_WrappedInt();
+                    LazinateWrappedInt();
                 } 
                 return _WrappedInt;
             }
@@ -684,7 +684,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _WrappedInt_Accessed;
-        private void Lazinate_WrappedInt()
+        private void LazinateWrappedInt()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -703,7 +703,7 @@ namespace LazinatorTests.Examples
             
             _WrappedInt_Accessed = true;
         }
-        private async Task Lazinate_WrappedInt_Async()
+        private async Task LazinateWrappedIntAsync()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -759,7 +759,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_ExcludableChild_Accessed)
                 {
-                    Lazinate_ExcludableChild();
+                    LazinateExcludableChild();
                 } 
                 return _ExcludableChild;
             }
@@ -781,7 +781,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _ExcludableChild_Accessed;
-        private void Lazinate_ExcludableChild()
+        private void LazinateExcludableChild()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -796,7 +796,7 @@ namespace LazinatorTests.Examples
             
             _ExcludableChild_Accessed = true;
         }
-        private async Task Lazinate_ExcludableChild_Async()
+        private async Task LazinateExcludableChildAsync()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

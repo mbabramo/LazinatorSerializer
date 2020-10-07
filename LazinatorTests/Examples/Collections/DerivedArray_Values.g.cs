@@ -43,7 +43,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyArrayInt_DerivedLevel_Accessed)
                 {
-                    Lazinate_MyArrayInt_DerivedLevel();
+                    LazinateMyArrayInt_DerivedLevel();
                 } 
                 return _MyArrayInt_DerivedLevel;
             }
@@ -57,7 +57,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyArrayInt_DerivedLevel_Accessed;
-        private void Lazinate_MyArrayInt_DerivedLevel()
+        private void LazinateMyArrayInt_DerivedLevel()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

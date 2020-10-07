@@ -46,7 +46,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListSerialized_Accessed)
                 {
-                    Lazinate_MyListSerialized();
+                    LazinateMyListSerialized();
                 } 
                 return _MyListSerialized;
             }
@@ -60,7 +60,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyListSerialized_Accessed;
-        private void Lazinate_MyListSerialized()
+        private void LazinateMyListSerialized()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

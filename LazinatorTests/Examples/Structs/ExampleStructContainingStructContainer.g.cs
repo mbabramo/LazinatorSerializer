@@ -46,7 +46,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_Subcontainer_Accessed)
                 {
-                    Lazinate_Subcontainer();
+                    LazinateSubcontainer();
                 } 
                 return _Subcontainer;
             }
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         protected bool _Subcontainer_Accessed;
-        private void Lazinate_Subcontainer()
+        private void LazinateSubcontainer()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

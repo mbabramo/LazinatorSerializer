@@ -47,7 +47,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyExampleNullableStruct_Accessed)
                 {
-                    Lazinate_MyExampleNullableStruct();
+                    LazinateMyExampleNullableStruct();
                 } 
                 return _MyExampleNullableStruct;
             }
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples
             }
         }
         bool _MyExampleNullableStruct_Accessed;
-        private void Lazinate_MyExampleNullableStruct()
+        private void LazinateMyExampleNullableStruct()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -123,7 +123,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyExampleStructContainingClasses_Accessed)
                 {
-                    Lazinate_MyExampleStructContainingClasses();
+                    LazinateMyExampleStructContainingClasses();
                 } 
                 return _MyExampleStructContainingClasses;
             }
@@ -137,7 +137,7 @@ namespace LazinatorTests.Examples
             }
         }
         bool _MyExampleStructContainingClasses_Accessed;
-        private void Lazinate_MyExampleStructContainingClasses()
+        private void LazinateMyExampleStructContainingClasses()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

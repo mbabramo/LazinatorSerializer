@@ -67,7 +67,7 @@ namespace LazinatorCollections.Dictionary
             {
                 if (!_Keys_Accessed)
                 {
-                    Lazinate_Keys();
+                    LazinateKeys();
                 } 
                 return _Keys;
             }
@@ -91,7 +91,7 @@ namespace LazinatorCollections.Dictionary
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _Keys_Accessed;
-        private void Lazinate_Keys()
+        private void LazinateKeys()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -117,7 +117,7 @@ namespace LazinatorCollections.Dictionary
             {
                 if (!_Values_Accessed)
                 {
-                    Lazinate_Values();
+                    LazinateValues();
                 } 
                 return _Values;
             }
@@ -141,7 +141,7 @@ namespace LazinatorCollections.Dictionary
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _Values_Accessed;
-        private void Lazinate_Values()
+        private void LazinateValues()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

@@ -45,7 +45,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyStackInt_Accessed)
                 {
-                    Lazinate_MyStackInt();
+                    LazinateMyStackInt();
                 } 
                 return _MyStackInt;
             }
@@ -59,7 +59,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyStackInt_Accessed;
-        private void Lazinate_MyStackInt()
+        private void LazinateMyStackInt()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

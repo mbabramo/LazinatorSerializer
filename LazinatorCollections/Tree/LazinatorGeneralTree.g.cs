@@ -50,7 +50,7 @@ namespace LazinatorCollections.Tree
             {
                 if (!_Children_Accessed)
                 {
-                    Lazinate_Children();
+                    LazinateChildren();
                 } 
                 return _Children;
             }
@@ -74,7 +74,7 @@ namespace LazinatorCollections.Tree
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _Children_Accessed;
-        private void Lazinate_Children()
+        private void LazinateChildren()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -100,7 +100,7 @@ namespace LazinatorCollections.Tree
             {
                 if (!_Item_Accessed)
                 {
-                    Lazinate_Item();
+                    LazinateItem();
                 } 
                 return _Item;
             }
@@ -131,7 +131,7 @@ namespace LazinatorCollections.Tree
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _Item_Accessed;
-        private void Lazinate_Item()
+        private void LazinateItem()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

@@ -56,7 +56,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_ClosedGenericBase_Accessed)
                 {
-                    Lazinate_ClosedGenericBase();
+                    LazinateClosedGenericBase();
                 } 
                 return _ClosedGenericBase;
             }
@@ -78,7 +78,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _ClosedGenericBase_Accessed;
-        private void Lazinate_ClosedGenericBase()
+        private void LazinateClosedGenericBase()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -103,7 +103,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_ClosedGenericFloat_Accessed)
                 {
-                    Lazinate_ClosedGenericFloat();
+                    LazinateClosedGenericFloat();
                 } 
                 return _ClosedGenericFloat;
             }
@@ -125,7 +125,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _ClosedGenericFloat_Accessed;
-        private void Lazinate_ClosedGenericFloat()
+        private void LazinateClosedGenericFloat()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -150,7 +150,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_ClosedGenericFromBaseWithBase_Accessed)
                 {
-                    Lazinate_ClosedGenericFromBaseWithBase();
+                    LazinateClosedGenericFromBaseWithBase();
                 } 
                 return _ClosedGenericFromBaseWithBase;
             }
@@ -172,7 +172,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _ClosedGenericFromBaseWithBase_Accessed;
-        private void Lazinate_ClosedGenericFromBaseWithBase()
+        private void LazinateClosedGenericFromBaseWithBase()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -197,7 +197,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_ClosedGenericInterface_Accessed)
                 {
-                    Lazinate_ClosedGenericInterface();
+                    LazinateClosedGenericInterface();
                 } 
                 return _ClosedGenericInterface;
             }
@@ -219,7 +219,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _ClosedGenericInterface_Accessed;
-        private void Lazinate_ClosedGenericInterface()
+        private void LazinateClosedGenericInterface()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -244,7 +244,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_ClosedGenericNonexclusiveInterface_Accessed)
                 {
-                    Lazinate_ClosedGenericNonexclusiveInterface();
+                    LazinateClosedGenericNonexclusiveInterface();
                 } 
                 return _ClosedGenericNonexclusiveInterface;
             }
@@ -266,7 +266,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _ClosedGenericNonexclusiveInterface_Accessed;
-        private void Lazinate_ClosedGenericNonexclusiveInterface()
+        private void LazinateClosedGenericNonexclusiveInterface()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

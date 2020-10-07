@@ -93,7 +93,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_Example2_Accessed)
                 {
-                    Lazinate_Example2();
+                    LazinateExample2();
                 } 
                 return _Example2;
             }
@@ -114,7 +114,7 @@ namespace LazinatorTests.Examples.Abstract
                 _Example2_Accessed = true;
             }
         }
-        private void Lazinate_Example2()
+        private void LazinateExample2()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -139,7 +139,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_Example3_Accessed)
                 {
-                    Lazinate_Example3();
+                    LazinateExample3();
                 } 
                 return _Example3;
             }
@@ -160,7 +160,7 @@ namespace LazinatorTests.Examples.Abstract
                 _Example3_Accessed = true;
             }
         }
-        private void Lazinate_Example3()
+        private void LazinateExample3()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -185,7 +185,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_IntList1_Accessed)
                 {
-                    Lazinate_IntList1();
+                    LazinateIntList1();
                 }
                 IsDirty = true; 
                 return _IntList1;
@@ -198,7 +198,7 @@ namespace LazinatorTests.Examples.Abstract
                 _IntList1_Accessed = true;
             }
         }
-        private void Lazinate_IntList1()
+        private void LazinateIntList1()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -222,7 +222,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_IntList2_Accessed)
                 {
-                    Lazinate_IntList2();
+                    LazinateIntList2();
                 }
                 IsDirty = true; 
                 return _IntList2;
@@ -235,7 +235,7 @@ namespace LazinatorTests.Examples.Abstract
                 _IntList2_Accessed = true;
             }
         }
-        private void Lazinate_IntList2()
+        private void LazinateIntList2()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -259,7 +259,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_IntList3_Accessed)
                 {
-                    Lazinate_IntList3();
+                    LazinateIntList3();
                 }
                 IsDirty = true; 
                 return _IntList3;
@@ -273,7 +273,7 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         protected bool _IntList3_Accessed;
-        private void Lazinate_IntList3()
+        private void LazinateIntList3()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

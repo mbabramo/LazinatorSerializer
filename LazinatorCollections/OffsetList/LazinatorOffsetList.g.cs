@@ -49,7 +49,7 @@ namespace LazinatorCollections.OffsetList
             {
                 if (!_FourByteItems_Accessed)
                 {
-                    Lazinate_FourByteItems();
+                    LazinateFourByteItems();
                 } 
                 return _FourByteItems;
             }
@@ -73,7 +73,7 @@ namespace LazinatorCollections.OffsetList
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool _FourByteItems_Accessed;
-        private void Lazinate_FourByteItems()
+        private void LazinateFourByteItems()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -109,7 +109,7 @@ namespace LazinatorCollections.OffsetList
             {
                 if (!_TwoByteItems_Accessed)
                 {
-                    Lazinate_TwoByteItems();
+                    LazinateTwoByteItems();
                 } 
                 return _TwoByteItems;
             }
@@ -133,7 +133,7 @@ namespace LazinatorCollections.OffsetList
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool _TwoByteItems_Accessed;
-        private void Lazinate_TwoByteItems()
+        private void LazinateTwoByteItems()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

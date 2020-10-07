@@ -47,7 +47,7 @@ namespace LazinatorCollections.Tree
             {
                 if (!_Locations_Accessed)
                 {
-                    Lazinate_Locations();
+                    LazinateLocations();
                 } 
                 return _Locations;
             }
@@ -71,7 +71,7 @@ namespace LazinatorCollections.Tree
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _Locations_Accessed;
-        private void Lazinate_Locations()
+        private void LazinateLocations()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

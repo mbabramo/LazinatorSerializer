@@ -62,7 +62,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             {
                 if (!_RemoteLevel1Item_Accessed)
                 {
-                    Lazinate_RemoteLevel1Item();
+                    LazinateRemoteLevel1Item();
                 } 
                 return _RemoteLevel1Item;
             }
@@ -84,7 +84,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             }
         }
         protected bool _RemoteLevel1Item_Accessed;
-        private void Lazinate_RemoteLevel1Item()
+        private void LazinateRemoteLevel1Item()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

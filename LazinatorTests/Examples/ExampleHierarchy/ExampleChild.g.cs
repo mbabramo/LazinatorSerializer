@@ -103,7 +103,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyExampleGrandchild_Accessed)
                 {
-                    Lazinate_MyExampleGrandchild();
+                    LazinateMyExampleGrandchild();
                 } 
                 return _MyExampleGrandchild;
             }
@@ -125,7 +125,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyExampleGrandchild_Accessed;
-        private void Lazinate_MyExampleGrandchild()
+        private void LazinateMyExampleGrandchild()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -150,7 +150,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyWrapperContainer_Accessed)
                 {
-                    Lazinate_MyWrapperContainer();
+                    LazinateMyWrapperContainer();
                 } 
                 return _MyWrapperContainer;
             }
@@ -172,7 +172,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyWrapperContainer_Accessed;
-        private void Lazinate_MyWrapperContainer()
+        private void LazinateMyWrapperContainer()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

@@ -46,7 +46,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyQueueSerialized_Accessed)
                 {
-                    Lazinate_MyQueueSerialized();
+                    LazinateMyQueueSerialized();
                 }
                 IsDirty = true; 
                 return _MyQueueSerialized;
@@ -60,7 +60,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyQueueSerialized_Accessed;
-        private void Lazinate_MyQueueSerialized()
+        private void LazinateMyQueueSerialized()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

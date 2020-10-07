@@ -46,7 +46,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_EagerExample_Accessed)
                 {
-                    Lazinate_EagerExample();
+                    LazinateEagerExample();
                 } 
                 return _EagerExample;
             }
@@ -68,7 +68,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _EagerExample_Accessed;
-        private void Lazinate_EagerExample()
+        private void LazinateEagerExample()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

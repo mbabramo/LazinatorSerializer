@@ -57,7 +57,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_EnumTuple_Accessed)
                 {
-                    Lazinate_EnumTuple();
+                    LazinateEnumTuple();
                 }
                 IsDirty = true; 
                 return _EnumTuple;
@@ -71,7 +71,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _EnumTuple_Accessed;
-        private void Lazinate_EnumTuple()
+        private void LazinateEnumTuple()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -95,7 +95,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyNamedTuple_Accessed)
                 {
-                    Lazinate_MyNamedTuple();
+                    LazinateMyNamedTuple();
                 }
                 IsDirty = true; 
                 return _MyNamedTuple;
@@ -109,7 +109,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyNamedTuple_Accessed;
-        private void Lazinate_MyNamedTuple()
+        private void LazinateMyNamedTuple()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -133,7 +133,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyNullableTuple_Accessed)
                 {
-                    Lazinate_MyNullableTuple();
+                    LazinateMyNullableTuple();
                 }
                 IsDirty = true; 
                 return _MyNullableTuple;
@@ -147,7 +147,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyNullableTuple_Accessed;
-        private void Lazinate_MyNullableTuple()
+        private void LazinateMyNullableTuple()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -171,7 +171,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyValueTupleNullableStructs_Accessed)
                 {
-                    Lazinate_MyValueTupleNullableStructs();
+                    LazinateMyValueTupleNullableStructs();
                 }
                 IsDirty = true; 
                 return _MyValueTupleNullableStructs;
@@ -185,7 +185,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyValueTupleNullableStructs_Accessed;
-        private void Lazinate_MyValueTupleNullableStructs()
+        private void LazinateMyValueTupleNullableStructs()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -209,7 +209,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyValueTupleSerialized_Accessed)
                 {
-                    Lazinate_MyValueTupleSerialized();
+                    LazinateMyValueTupleSerialized();
                 }
                 IsDirty = true; 
                 return _MyValueTupleSerialized;
@@ -223,7 +223,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyValueTupleSerialized_Accessed;
-        private void Lazinate_MyValueTupleSerialized()
+        private void LazinateMyValueTupleSerialized()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -247,7 +247,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyValueTupleStructs_Accessed)
                 {
-                    Lazinate_MyValueTupleStructs();
+                    LazinateMyValueTupleStructs();
                 }
                 IsDirty = true; 
                 return _MyValueTupleStructs;
@@ -261,7 +261,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyValueTupleStructs_Accessed;
-        private void Lazinate_MyValueTupleStructs()
+        private void LazinateMyValueTupleStructs()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

@@ -223,7 +223,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_ExplicitlyNullable_Accessed)
                 {
-                    Lazinate_ExplicitlyNullable();
+                    LazinateExplicitlyNullable();
                 } 
                 return _ExplicitlyNullable;
             }
@@ -245,7 +245,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _ExplicitlyNullable_Accessed;
-        private void Lazinate_ExplicitlyNullable()
+        private void LazinateExplicitlyNullable()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -270,7 +270,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_ExplicitlyNullableInterface_Accessed)
                 {
-                    Lazinate_ExplicitlyNullableInterface();
+                    LazinateExplicitlyNullableInterface();
                 } 
                 return _ExplicitlyNullableInterface;
             }
@@ -292,7 +292,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _ExplicitlyNullableInterface_Accessed;
-        private void Lazinate_ExplicitlyNullableInterface()
+        private void LazinateExplicitlyNullableInterface()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -531,7 +531,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NonNullableMemoryOfBytes_Accessed)
                 {
-                    Lazinate_NonNullableMemoryOfBytes();
+                    LazinateNonNullableMemoryOfBytes();
                 } 
                 return _NonNullableMemoryOfBytes;
             }
@@ -544,7 +544,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _NonNullableMemoryOfBytes_Accessed;
-        private void Lazinate_NonNullableMemoryOfBytes()
+        private void LazinateNonNullableMemoryOfBytes()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -606,7 +606,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NonNullableReadOnlyMemoryOfBytes_Accessed)
                 {
-                    Lazinate_NonNullableReadOnlyMemoryOfBytes();
+                    LazinateNonNullableReadOnlyMemoryOfBytes();
                 } 
                 return _NonNullableReadOnlyMemoryOfBytes;
             }
@@ -619,7 +619,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _NonNullableReadOnlyMemoryOfBytes_Accessed;
-        private void Lazinate_NonNullableReadOnlyMemoryOfBytes()
+        private void LazinateNonNullableReadOnlyMemoryOfBytes()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -756,7 +756,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NonNullableStruct_Accessed)
                 {
-                    Lazinate_NonNullableStruct();
+                    LazinateNonNullableStruct();
                 } 
                 return _NonNullableStruct;
             }
@@ -771,7 +771,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _NonNullableStruct_Accessed;
-        private void Lazinate_NonNullableStruct()
+        private void LazinateNonNullableStruct()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -826,7 +826,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableArrayOfNonNullables_Accessed)
                 {
-                    Lazinate_NullableArrayOfNonNullables();
+                    LazinateNullableArrayOfNonNullables();
                 }
                 IsDirty = true; 
                 return _NullableArrayOfNonNullables;
@@ -840,7 +840,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _NullableArrayOfNonNullables_Accessed;
-        private void Lazinate_NullableArrayOfNonNullables()
+        private void LazinateNullableArrayOfNonNullables()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -864,7 +864,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableArrayOfNullables_Accessed)
                 {
-                    Lazinate_NullableArrayOfNullables();
+                    LazinateNullableArrayOfNullables();
                 }
                 IsDirty = true; 
                 return _NullableArrayOfNullables;
@@ -878,7 +878,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _NullableArrayOfNullables_Accessed;
-        private void Lazinate_NullableArrayOfNullables()
+        private void LazinateNullableArrayOfNullables()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -902,7 +902,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableDictionaryWithNonNullable_Accessed)
                 {
-                    Lazinate_NullableDictionaryWithNonNullable();
+                    LazinateNullableDictionaryWithNonNullable();
                 }
                 IsDirty = true; 
                 return _NullableDictionaryWithNonNullable;
@@ -916,7 +916,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _NullableDictionaryWithNonNullable_Accessed;
-        private void Lazinate_NullableDictionaryWithNonNullable()
+        private void LazinateNullableDictionaryWithNonNullable()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -940,7 +940,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableDictionaryWithNullable_Accessed)
                 {
-                    Lazinate_NullableDictionaryWithNullable();
+                    LazinateNullableDictionaryWithNullable();
                 }
                 IsDirty = true; 
                 return _NullableDictionaryWithNullable;
@@ -954,7 +954,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _NullableDictionaryWithNullable_Accessed;
-        private void Lazinate_NullableDictionaryWithNullable()
+        private void LazinateNullableDictionaryWithNullable()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -978,7 +978,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableLazinatorListNonNullable_Accessed)
                 {
-                    Lazinate_NullableLazinatorListNonNullable();
+                    LazinateNullableLazinatorListNonNullable();
                 } 
                 return _NullableLazinatorListNonNullable;
             }
@@ -1000,7 +1000,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _NullableLazinatorListNonNullable_Accessed;
-        private void Lazinate_NullableLazinatorListNonNullable()
+        private void LazinateNullableLazinatorListNonNullable()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -1025,7 +1025,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableLazinatorListNullable_Accessed)
                 {
-                    Lazinate_NullableLazinatorListNullable();
+                    LazinateNullableLazinatorListNullable();
                 } 
                 return _NullableLazinatorListNullable;
             }
@@ -1047,7 +1047,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _NullableLazinatorListNullable_Accessed;
-        private void Lazinate_NullableLazinatorListNullable()
+        private void LazinateNullableLazinatorListNullable()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -1072,7 +1072,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableListOfNonNullables_Accessed)
                 {
-                    Lazinate_NullableListOfNonNullables();
+                    LazinateNullableListOfNonNullables();
                 }
                 IsDirty = true; 
                 return _NullableListOfNonNullables;
@@ -1086,7 +1086,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _NullableListOfNonNullables_Accessed;
-        private void Lazinate_NullableListOfNonNullables()
+        private void LazinateNullableListOfNonNullables()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -1110,7 +1110,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableListOfNullables_Accessed)
                 {
-                    Lazinate_NullableListOfNullables();
+                    LazinateNullableListOfNullables();
                 }
                 IsDirty = true; 
                 return _NullableListOfNullables;
@@ -1124,7 +1124,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _NullableListOfNullables_Accessed;
-        private void Lazinate_NullableListOfNullables()
+        private void LazinateNullableListOfNullables()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -1148,7 +1148,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableMemoryOfBytes_Accessed)
                 {
-                    Lazinate_NullableMemoryOfBytes();
+                    LazinateNullableMemoryOfBytes();
                 }
                 IsDirty = true; 
                 return _NullableMemoryOfBytes;
@@ -1162,7 +1162,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _NullableMemoryOfBytes_Accessed;
-        private void Lazinate_NullableMemoryOfBytes()
+        private void LazinateNullableMemoryOfBytes()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -1186,7 +1186,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableQueueOfNonNullables_Accessed)
                 {
-                    Lazinate_NullableQueueOfNonNullables();
+                    LazinateNullableQueueOfNonNullables();
                 }
                 IsDirty = true; 
                 return _NullableQueueOfNonNullables;
@@ -1200,7 +1200,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _NullableQueueOfNonNullables_Accessed;
-        private void Lazinate_NullableQueueOfNonNullables()
+        private void LazinateNullableQueueOfNonNullables()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -1224,7 +1224,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableQueueOfNullables_Accessed)
                 {
-                    Lazinate_NullableQueueOfNullables();
+                    LazinateNullableQueueOfNullables();
                 }
                 IsDirty = true; 
                 return _NullableQueueOfNullables;
@@ -1238,7 +1238,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _NullableQueueOfNullables_Accessed;
-        private void Lazinate_NullableQueueOfNullables()
+        private void LazinateNullableQueueOfNullables()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -1262,7 +1262,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableReadOnlyMemoryOfBytes_Accessed)
                 {
-                    Lazinate_NullableReadOnlyMemoryOfBytes();
+                    LazinateNullableReadOnlyMemoryOfBytes();
                 }
                 IsDirty = true; 
                 return _NullableReadOnlyMemoryOfBytes;
@@ -1276,7 +1276,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _NullableReadOnlyMemoryOfBytes_Accessed;
-        private void Lazinate_NullableReadOnlyMemoryOfBytes()
+        private void LazinateNullableReadOnlyMemoryOfBytes()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -1300,7 +1300,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableRecordLikeClass_Accessed)
                 {
-                    Lazinate_NullableRecordLikeClass();
+                    LazinateNullableRecordLikeClass();
                 }
                 IsDirty = true; 
                 return _NullableRecordLikeClass;
@@ -1314,7 +1314,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _NullableRecordLikeClass_Accessed;
-        private void Lazinate_NullableRecordLikeClass()
+        private void LazinateNullableRecordLikeClass()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -1338,7 +1338,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableRecordLikeStruct_Accessed)
                 {
-                    Lazinate_NullableRecordLikeStruct();
+                    LazinateNullableRecordLikeStruct();
                 }
                 IsDirty = true; 
                 return _NullableRecordLikeStruct;
@@ -1352,7 +1352,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _NullableRecordLikeStruct_Accessed;
-        private void Lazinate_NullableRecordLikeStruct()
+        private void LazinateNullableRecordLikeStruct()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -1376,7 +1376,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableRegularTupleWithNonNullable_Accessed)
                 {
-                    Lazinate_NullableRegularTupleWithNonNullable();
+                    LazinateNullableRegularTupleWithNonNullable();
                 }
                 IsDirty = true; 
                 return _NullableRegularTupleWithNonNullable;
@@ -1390,7 +1390,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _NullableRegularTupleWithNonNullable_Accessed;
-        private void Lazinate_NullableRegularTupleWithNonNullable()
+        private void LazinateNullableRegularTupleWithNonNullable()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -1414,7 +1414,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableRegularTupleWithNullable_Accessed)
                 {
-                    Lazinate_NullableRegularTupleWithNullable();
+                    LazinateNullableRegularTupleWithNullable();
                 }
                 IsDirty = true; 
                 return _NullableRegularTupleWithNullable;
@@ -1428,7 +1428,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _NullableRegularTupleWithNullable_Accessed;
-        private void Lazinate_NullableRegularTupleWithNullable()
+        private void LazinateNullableRegularTupleWithNullable()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -1452,7 +1452,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableStackOfNonNullables_Accessed)
                 {
-                    Lazinate_NullableStackOfNonNullables();
+                    LazinateNullableStackOfNonNullables();
                 }
                 IsDirty = true; 
                 return _NullableStackOfNonNullables;
@@ -1466,7 +1466,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _NullableStackOfNonNullables_Accessed;
-        private void Lazinate_NullableStackOfNonNullables()
+        private void LazinateNullableStackOfNonNullables()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -1490,7 +1490,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableStackOfNullables_Accessed)
                 {
-                    Lazinate_NullableStackOfNullables();
+                    LazinateNullableStackOfNullables();
                 }
                 IsDirty = true; 
                 return _NullableStackOfNullables;
@@ -1504,7 +1504,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _NullableStackOfNullables_Accessed;
-        private void Lazinate_NullableStackOfNullables()
+        private void LazinateNullableStackOfNullables()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -1528,7 +1528,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableStruct_Accessed)
                 {
-                    Lazinate_NullableStruct();
+                    LazinateNullableStruct();
                 } 
                 return _NullableStruct;
             }
@@ -1549,7 +1549,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _NullableStruct_Accessed;
-        private void Lazinate_NullableStruct()
+        private void LazinateNullableStruct()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -1614,7 +1614,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableValueTupleWithNonNullable_Accessed)
                 {
-                    Lazinate_NullableValueTupleWithNonNullable();
+                    LazinateNullableValueTupleWithNonNullable();
                 }
                 IsDirty = true; 
                 return _NullableValueTupleWithNonNullable;
@@ -1628,7 +1628,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _NullableValueTupleWithNonNullable_Accessed;
-        private void Lazinate_NullableValueTupleWithNonNullable()
+        private void LazinateNullableValueTupleWithNonNullable()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -1652,7 +1652,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableValueTupleWithNullable_Accessed)
                 {
-                    Lazinate_NullableValueTupleWithNullable();
+                    LazinateNullableValueTupleWithNullable();
                 }
                 IsDirty = true; 
                 return _NullableValueTupleWithNullable;
@@ -1666,7 +1666,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _NullableValueTupleWithNullable_Accessed;
-        private void Lazinate_NullableValueTupleWithNullable()
+        private void LazinateNullableValueTupleWithNullable()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -1690,7 +1690,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_ValueTupleWithNonNullable_Accessed)
                 {
-                    Lazinate_ValueTupleWithNonNullable();
+                    LazinateValueTupleWithNonNullable();
                 }
                 IsDirty = true; 
                 return _ValueTupleWithNonNullable;
@@ -1704,7 +1704,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _ValueTupleWithNonNullable_Accessed;
-        private void Lazinate_ValueTupleWithNonNullable()
+        private void LazinateValueTupleWithNonNullable()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -1728,7 +1728,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_ValueTupleWithNullable_Accessed)
                 {
-                    Lazinate_ValueTupleWithNullable();
+                    LazinateValueTupleWithNullable();
                 }
                 IsDirty = true; 
                 return _ValueTupleWithNullable;
@@ -1742,7 +1742,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         protected bool _ValueTupleWithNullable_Accessed;
-        private void Lazinate_ValueTupleWithNullable()
+        private void LazinateValueTupleWithNullable()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

@@ -79,7 +79,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_ExternalRecordLikeStruct_Accessed)
                 {
-                    Lazinate_ExternalRecordLikeStruct();
+                    LazinateExternalRecordLikeStruct();
                 }
                 IsDirty = true; 
                 return _ExternalRecordLikeStruct;
@@ -93,7 +93,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _ExternalRecordLikeStruct_Accessed;
-        private void Lazinate_ExternalRecordLikeStruct()
+        private void LazinateExternalRecordLikeStruct()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -117,7 +117,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyMismatchedRecordLikeType_Accessed)
                 {
-                    Lazinate_MyMismatchedRecordLikeType();
+                    LazinateMyMismatchedRecordLikeType();
                 } 
                 return _MyMismatchedRecordLikeType;
             }
@@ -130,7 +130,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyMismatchedRecordLikeType_Accessed;
-        private void Lazinate_MyMismatchedRecordLikeType()
+        private void LazinateMyMismatchedRecordLikeType()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -154,7 +154,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyNonLazinatorRecordWithConstructor_Accessed)
                 {
-                    Lazinate_MyNonLazinatorRecordWithConstructor();
+                    LazinateMyNonLazinatorRecordWithConstructor();
                 }
                 IsDirty = true; 
                 return _MyNonLazinatorRecordWithConstructor;
@@ -168,7 +168,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyNonLazinatorRecordWithConstructor_Accessed;
-        private void Lazinate_MyNonLazinatorRecordWithConstructor()
+        private void LazinateMyNonLazinatorRecordWithConstructor()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -192,7 +192,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyNonLazinatorRecordWithoutConstructor_Accessed)
                 {
-                    Lazinate_MyNonLazinatorRecordWithoutConstructor();
+                    LazinateMyNonLazinatorRecordWithoutConstructor();
                 }
                 IsDirty = true; 
                 return _MyNonLazinatorRecordWithoutConstructor;
@@ -206,7 +206,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyNonLazinatorRecordWithoutConstructor_Accessed;
-        private void Lazinate_MyNonLazinatorRecordWithoutConstructor()
+        private void LazinateMyNonLazinatorRecordWithoutConstructor()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -230,7 +230,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyNonLazinatorSubrecordWithConstructor_Accessed)
                 {
-                    Lazinate_MyNonLazinatorSubrecordWithConstructor();
+                    LazinateMyNonLazinatorSubrecordWithConstructor();
                 }
                 IsDirty = true; 
                 return _MyNonLazinatorSubrecordWithConstructor;
@@ -244,7 +244,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyNonLazinatorSubrecordWithConstructor_Accessed;
-        private void Lazinate_MyNonLazinatorSubrecordWithConstructor()
+        private void LazinateMyNonLazinatorSubrecordWithConstructor()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -268,7 +268,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyNonLazinatorSubrecordWithoutConstructor_Accessed)
                 {
-                    Lazinate_MyNonLazinatorSubrecordWithoutConstructor();
+                    LazinateMyNonLazinatorSubrecordWithoutConstructor();
                 }
                 IsDirty = true; 
                 return _MyNonLazinatorSubrecordWithoutConstructor;
@@ -282,7 +282,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyNonLazinatorSubrecordWithoutConstructor_Accessed;
-        private void Lazinate_MyNonLazinatorSubrecordWithoutConstructor()
+        private void LazinateMyNonLazinatorSubrecordWithoutConstructor()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -306,7 +306,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyRecordLikeClass_Accessed)
                 {
-                    Lazinate_MyRecordLikeClass();
+                    LazinateMyRecordLikeClass();
                 }
                 IsDirty = true; 
                 return _MyRecordLikeClass;
@@ -320,7 +320,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyRecordLikeClass_Accessed;
-        private void Lazinate_MyRecordLikeClass()
+        private void LazinateMyRecordLikeClass()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -344,7 +344,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyRecordLikeStruct_Accessed)
                 {
-                    Lazinate_MyRecordLikeStruct();
+                    LazinateMyRecordLikeStruct();
                 } 
                 return _MyRecordLikeStruct;
             }
@@ -357,7 +357,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyRecordLikeStruct_Accessed;
-        private void Lazinate_MyRecordLikeStruct()
+        private void LazinateMyRecordLikeStruct()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -381,7 +381,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyRecordLikeTypeWithLazinator_Accessed)
                 {
-                    Lazinate_MyRecordLikeTypeWithLazinator();
+                    LazinateMyRecordLikeTypeWithLazinator();
                 }
                 IsDirty = true; 
                 return _MyRecordLikeTypeWithLazinator;
@@ -395,7 +395,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyRecordLikeTypeWithLazinator_Accessed;
-        private void Lazinate_MyRecordLikeTypeWithLazinator()
+        private void LazinateMyRecordLikeTypeWithLazinator()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

@@ -78,7 +78,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyOfficialObject_Accessed)
                 {
-                    Lazinate_MyOfficialObject();
+                    LazinateMyOfficialObject();
                 } 
                 return _MyOfficialObject;
             }
@@ -100,7 +100,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyOfficialObject_Accessed;
-        private void Lazinate_MyOfficialObject()
+        private void LazinateMyOfficialObject()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -125,7 +125,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyUnofficialObject_Accessed)
                 {
-                    Lazinate_MyUnofficialObject();
+                    LazinateMyUnofficialObject();
                 } 
                 return _MyUnofficialObject;
             }
@@ -147,7 +147,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyUnofficialObject_Accessed;
-        private void Lazinate_MyUnofficialObject()
+        private void LazinateMyUnofficialObject()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

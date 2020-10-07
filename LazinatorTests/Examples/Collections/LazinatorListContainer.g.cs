@@ -80,7 +80,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyList_Accessed)
                 {
-                    Lazinate_MyList();
+                    LazinateMyList();
                 } 
                 return _MyList;
             }
@@ -102,7 +102,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyList_Accessed;
-        private void Lazinate_MyList()
+        private void LazinateMyList()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -127,7 +127,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyStructList_Accessed)
                 {
-                    Lazinate_MyStructList();
+                    LazinateMyStructList();
                 } 
                 return _MyStructList;
             }
@@ -149,7 +149,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyStructList_Accessed;
-        private void Lazinate_MyStructList()
+        private void LazinateMyStructList()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

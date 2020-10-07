@@ -63,7 +63,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_ListWrappedBytes_Accessed)
                 {
-                    Lazinate_ListWrappedBytes();
+                    LazinateListWrappedBytes();
                 } 
                 return _ListWrappedBytes;
             }
@@ -85,7 +85,7 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         protected bool _ListWrappedBytes_Accessed;
-        private void Lazinate_ListWrappedBytes()
+        private void LazinateListWrappedBytes()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -110,7 +110,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedBool_Accessed)
                 {
-                    Lazinate_WrappedBool();
+                    LazinateWrappedBool();
                 } 
                 return _WrappedBool;
             }
@@ -125,7 +125,7 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         protected bool _WrappedBool_Accessed;
-        private void Lazinate_WrappedBool()
+        private void LazinateWrappedBool()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -180,7 +180,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedByte_Accessed)
                 {
-                    Lazinate_WrappedByte();
+                    LazinateWrappedByte();
                 } 
                 return _WrappedByte;
             }
@@ -195,7 +195,7 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         protected bool _WrappedByte_Accessed;
-        private void Lazinate_WrappedByte()
+        private void LazinateWrappedByte()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -250,7 +250,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedChar_Accessed)
                 {
-                    Lazinate_WrappedChar();
+                    LazinateWrappedChar();
                 } 
                 return _WrappedChar;
             }
@@ -265,7 +265,7 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         protected bool _WrappedChar_Accessed;
-        private void Lazinate_WrappedChar()
+        private void LazinateWrappedChar()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -320,7 +320,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedNullableBool_Accessed)
                 {
-                    Lazinate_WrappedNullableBool();
+                    LazinateWrappedNullableBool();
                 } 
                 return _WrappedNullableBool;
             }
@@ -335,7 +335,7 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         protected bool _WrappedNullableBool_Accessed;
-        private void Lazinate_WrappedNullableBool()
+        private void LazinateWrappedNullableBool()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -390,7 +390,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedNullableByte_Accessed)
                 {
-                    Lazinate_WrappedNullableByte();
+                    LazinateWrappedNullableByte();
                 } 
                 return _WrappedNullableByte;
             }
@@ -405,7 +405,7 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         protected bool _WrappedNullableByte_Accessed;
-        private void Lazinate_WrappedNullableByte()
+        private void LazinateWrappedNullableByte()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -460,7 +460,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedNullableChar_Accessed)
                 {
-                    Lazinate_WrappedNullableChar();
+                    LazinateWrappedNullableChar();
                 } 
                 return _WrappedNullableChar;
             }
@@ -475,7 +475,7 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         protected bool _WrappedNullableChar_Accessed;
-        private void Lazinate_WrappedNullableChar()
+        private void LazinateWrappedNullableChar()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -530,7 +530,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedNullableSByte_Accessed)
                 {
-                    Lazinate_WrappedNullableSByte();
+                    LazinateWrappedNullableSByte();
                 } 
                 return _WrappedNullableSByte;
             }
@@ -545,7 +545,7 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         protected bool _WrappedNullableSByte_Accessed;
-        private void Lazinate_WrappedNullableSByte()
+        private void LazinateWrappedNullableSByte()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -600,7 +600,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedSByte_Accessed)
                 {
-                    Lazinate_WrappedSByte();
+                    LazinateWrappedSByte();
                 } 
                 return _WrappedSByte;
             }
@@ -615,7 +615,7 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         protected bool _WrappedSByte_Accessed;
-        private void Lazinate_WrappedSByte()
+        private void LazinateWrappedSByte()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

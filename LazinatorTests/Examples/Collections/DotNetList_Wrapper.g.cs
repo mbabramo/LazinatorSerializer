@@ -50,7 +50,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListInt_Accessed)
                 {
-                    Lazinate_MyListInt();
+                    LazinateMyListInt();
                 } 
                 return _MyListInt;
             }
@@ -64,7 +64,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyListInt_Accessed;
-        private void Lazinate_MyListInt()
+        private void LazinateMyListInt()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -107,7 +107,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListNullableByte_Accessed)
                 {
-                    Lazinate_MyListNullableByte();
+                    LazinateMyListNullableByte();
                 }
                 IsDirty = true; 
                 return _MyListNullableByte;
@@ -121,7 +121,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyListNullableByte_Accessed;
-        private void Lazinate_MyListNullableByte()
+        private void LazinateMyListNullableByte()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -145,7 +145,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListNullableInt_Accessed)
                 {
-                    Lazinate_MyListNullableInt();
+                    LazinateMyListNullableInt();
                 }
                 IsDirty = true; 
                 return _MyListNullableInt;
@@ -159,7 +159,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyListNullableInt_Accessed;
-        private void Lazinate_MyListNullableInt()
+        private void LazinateMyListNullableInt()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

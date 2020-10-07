@@ -49,7 +49,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyArrayInt_Accessed)
                 {
-                    Lazinate_MyArrayInt();
+                    LazinateMyArrayInt();
                 } 
                 return _MyArrayInt;
             }
@@ -63,7 +63,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyArrayInt_Accessed;
-        private void Lazinate_MyArrayInt()
+        private void LazinateMyArrayInt()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -106,7 +106,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyCrazyJaggedArray_Accessed)
                 {
-                    Lazinate_MyCrazyJaggedArray();
+                    LazinateMyCrazyJaggedArray();
                 }
                 IsDirty = true; 
                 return _MyCrazyJaggedArray;
@@ -120,7 +120,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyCrazyJaggedArray_Accessed;
-        private void Lazinate_MyCrazyJaggedArray()
+        private void LazinateMyCrazyJaggedArray()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -144,7 +144,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyThreeDimArrayInt_Accessed)
                 {
-                    Lazinate_MyThreeDimArrayInt();
+                    LazinateMyThreeDimArrayInt();
                 }
                 IsDirty = true; 
                 return _MyThreeDimArrayInt;
@@ -158,7 +158,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyThreeDimArrayInt_Accessed;
-        private void Lazinate_MyThreeDimArrayInt()
+        private void LazinateMyThreeDimArrayInt()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

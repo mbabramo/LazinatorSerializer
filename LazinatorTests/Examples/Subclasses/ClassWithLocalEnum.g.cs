@@ -60,7 +60,7 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 if (!_MyEnumList_Accessed)
                 {
-                    Lazinate_MyEnumList();
+                    LazinateMyEnumList();
                 }
                 IsDirty = true; 
                 return _MyEnumList;
@@ -74,7 +74,7 @@ namespace LazinatorTests.Examples.Subclasses
             }
         }
         protected bool _MyEnumList_Accessed;
-        private void Lazinate_MyEnumList()
+        private void LazinateMyEnumList()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

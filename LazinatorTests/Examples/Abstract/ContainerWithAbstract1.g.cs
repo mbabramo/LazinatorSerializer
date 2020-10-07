@@ -45,7 +45,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_AbstractProperty_Accessed)
                 {
-                    Lazinate_AbstractProperty();
+                    LazinateAbstractProperty();
                 } 
                 return _AbstractProperty;
             }
@@ -67,7 +67,7 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         protected bool _AbstractProperty_Accessed;
-        private void Lazinate_AbstractProperty()
+        private void LazinateAbstractProperty()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

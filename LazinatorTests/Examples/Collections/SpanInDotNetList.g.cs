@@ -60,7 +60,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_SpanList_Accessed)
                 {
-                    Lazinate_SpanList();
+                    LazinateSpanList();
                 }
                 IsDirty = true; 
                 return _SpanList;
@@ -74,7 +74,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _SpanList_Accessed;
-        private void Lazinate_SpanList()
+        private void LazinateSpanList()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

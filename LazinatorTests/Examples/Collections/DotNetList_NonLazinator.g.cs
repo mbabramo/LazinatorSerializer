@@ -48,7 +48,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListNonLazinatorType_Accessed)
                 {
-                    Lazinate_MyListNonLazinatorType();
+                    LazinateMyListNonLazinatorType();
                 } 
                 return _MyListNonLazinatorType;
             }
@@ -62,7 +62,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyListNonLazinatorType_Accessed;
-        private void Lazinate_MyListNonLazinatorType()
+        private void LazinateMyListNonLazinatorType()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -105,7 +105,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListNonLazinatorType2_Accessed)
                 {
-                    Lazinate_MyListNonLazinatorType2();
+                    LazinateMyListNonLazinatorType2();
                 }
                 IsDirty = true; 
                 return _MyListNonLazinatorType2;
@@ -119,7 +119,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyListNonLazinatorType2_Accessed;
-        private void Lazinate_MyListNonLazinatorType2()
+        private void LazinateMyListNonLazinatorType2()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

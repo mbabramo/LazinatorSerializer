@@ -49,7 +49,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyArrayInt_Accessed)
                 {
-                    Lazinate_MyArrayInt();
+                    LazinateMyArrayInt();
                 } 
                 return _MyArrayInt;
             }
@@ -63,7 +63,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyArrayInt_Accessed;
-        private void Lazinate_MyArrayInt()
+        private void LazinateMyArrayInt()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -106,7 +106,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyArrayNullableInt_Accessed)
                 {
-                    Lazinate_MyArrayNullableInt();
+                    LazinateMyArrayNullableInt();
                 }
                 IsDirty = true; 
                 return _MyArrayNullableInt;
@@ -120,7 +120,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyArrayNullableInt_Accessed;
-        private void Lazinate_MyArrayNullableInt()
+        private void LazinateMyArrayNullableInt()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -144,7 +144,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyJaggedArrayInt_Accessed)
                 {
-                    Lazinate_MyJaggedArrayInt();
+                    LazinateMyJaggedArrayInt();
                 }
                 IsDirty = true; 
                 return _MyJaggedArrayInt;
@@ -158,7 +158,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyJaggedArrayInt_Accessed;
-        private void Lazinate_MyJaggedArrayInt()
+        private void LazinateMyJaggedArrayInt()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

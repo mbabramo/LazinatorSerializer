@@ -72,7 +72,7 @@ namespace LazinatorCollections
             {
                 if (!_Offsets_Accessed)
                 {
-                    Lazinate_Offsets();
+                    LazinateOffsets();
                 } 
                 return _Offsets;
             }
@@ -96,7 +96,7 @@ namespace LazinatorCollections
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _Offsets_Accessed;
-        private void Lazinate_Offsets()
+        private void LazinateOffsets()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

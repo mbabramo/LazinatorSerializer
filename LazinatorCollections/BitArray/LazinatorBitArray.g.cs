@@ -81,7 +81,7 @@ namespace LazinatorCollections.BitArray
             {
                 if (!_IntStorage_Accessed)
                 {
-                    Lazinate_IntStorage();
+                    LazinateIntStorage();
                 } 
                 return _IntStorage;
             }
@@ -96,7 +96,7 @@ namespace LazinatorCollections.BitArray
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool _IntStorage_Accessed;
-        private void Lazinate_IntStorage()
+        private void LazinateIntStorage()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

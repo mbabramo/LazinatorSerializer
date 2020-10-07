@@ -46,7 +46,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyNestedTuple_Accessed)
                 {
-                    Lazinate_MyNestedTuple();
+                    LazinateMyNestedTuple();
                 }
                 IsDirty = true; 
                 return _MyNestedTuple;
@@ -60,7 +60,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyNestedTuple_Accessed;
-        private void Lazinate_MyNestedTuple()
+        private void LazinateMyNestedTuple()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

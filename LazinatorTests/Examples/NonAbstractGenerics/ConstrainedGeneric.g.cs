@@ -49,7 +49,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_MyNullableT_Accessed)
                 {
-                    Lazinate_MyNullableT();
+                    LazinateMyNullableT();
                 } 
                 return _MyNullableT;
             }
@@ -70,7 +70,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _MyNullableT_Accessed;
-        private void Lazinate_MyNullableT()
+        private void LazinateMyNullableT()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -95,7 +95,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_MyT_Accessed)
                 {
-                    Lazinate_MyT();
+                    LazinateMyT();
                 } 
                 return _MyT;
             }
@@ -110,7 +110,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _MyT_Accessed;
-        private void Lazinate_MyT()
+        private void LazinateMyT()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -136,7 +136,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_MyU_Accessed)
                 {
-                    Lazinate_MyU();
+                    LazinateMyU();
                 } 
                 return _MyU;
             }
@@ -165,7 +165,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _MyU_Accessed;
-        private void Lazinate_MyU()
+        private void LazinateMyU()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

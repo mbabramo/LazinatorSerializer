@@ -83,7 +83,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyChild1_Accessed)
                 {
-                    Lazinate_MyChild1();
+                    LazinateMyChild1();
                 } 
                 return _MyChild1;
             }
@@ -96,7 +96,7 @@ namespace LazinatorTests.Examples
             }
         }
         bool _MyChild1_Accessed;
-        private void Lazinate_MyChild1()
+        private void LazinateMyChild1()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -121,7 +121,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyChild2_Accessed)
                 {
-                    Lazinate_MyChild2();
+                    LazinateMyChild2();
                 } 
                 return _MyChild2;
             }
@@ -134,7 +134,7 @@ namespace LazinatorTests.Examples
             }
         }
         bool _MyChild2_Accessed;
-        private void Lazinate_MyChild2()
+        private void LazinateMyChild2()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -159,7 +159,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyLazinatorList_Accessed)
                 {
-                    Lazinate_MyLazinatorList();
+                    LazinateMyLazinatorList();
                 } 
                 return _MyLazinatorList;
             }
@@ -173,7 +173,7 @@ namespace LazinatorTests.Examples
             }
         }
         bool _MyLazinatorList_Accessed;
-        private void Lazinate_MyLazinatorList()
+        private void LazinateMyLazinatorList()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -216,7 +216,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyListValues_Accessed)
                 {
-                    Lazinate_MyListValues();
+                    LazinateMyListValues();
                 }
                 IsDirty = true; 
                 return _MyListValues;
@@ -230,7 +230,7 @@ namespace LazinatorTests.Examples
             }
         }
         bool _MyListValues_Accessed;
-        private void Lazinate_MyListValues()
+        private void LazinateMyListValues()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -254,7 +254,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyTuple_Accessed)
                 {
-                    Lazinate_MyTuple();
+                    LazinateMyTuple();
                 }
                 IsDirty = true; 
                 return _MyTuple;
@@ -268,7 +268,7 @@ namespace LazinatorTests.Examples
             }
         }
         bool _MyTuple_Accessed;
-        private void Lazinate_MyTuple()
+        private void LazinateMyTuple()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

@@ -46,7 +46,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyKeyValuePairSerialized_Accessed)
                 {
-                    Lazinate_MyKeyValuePairSerialized();
+                    LazinateMyKeyValuePairSerialized();
                 }
                 IsDirty = true; 
                 return _MyKeyValuePairSerialized;
@@ -60,7 +60,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyKeyValuePairSerialized_Accessed;
-        private void Lazinate_MyKeyValuePairSerialized()
+        private void LazinateMyKeyValuePairSerialized()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

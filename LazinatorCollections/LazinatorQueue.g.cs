@@ -47,7 +47,7 @@ namespace LazinatorCollections
             {
                 if (!_UnderlyingList_Accessed)
                 {
-                    Lazinate_UnderlyingList();
+                    LazinateUnderlyingList();
                 } 
                 return _UnderlyingList;
             }
@@ -71,7 +71,7 @@ namespace LazinatorCollections
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _UnderlyingList_Accessed;
-        private void Lazinate_UnderlyingList()
+        private void LazinateUnderlyingList()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

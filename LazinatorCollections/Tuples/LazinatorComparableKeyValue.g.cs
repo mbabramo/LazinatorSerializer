@@ -49,7 +49,7 @@ namespace LazinatorCollections.Tuples
             {
                 if (!_Key_Accessed)
                 {
-                    Lazinate_Key();
+                    LazinateKey();
                 } 
                 return _Key;
             }
@@ -64,7 +64,7 @@ namespace LazinatorCollections.Tuples
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool _Key_Accessed;
-        private void Lazinate_Key()
+        private void LazinateKey()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -90,7 +90,7 @@ namespace LazinatorCollections.Tuples
             {
                 if (!_Value_Accessed)
                 {
-                    Lazinate_Value();
+                    LazinateValue();
                 } 
                 return _Value;
             }
@@ -105,7 +105,7 @@ namespace LazinatorCollections.Tuples
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool _Value_Accessed;
-        private void Lazinate_Value()
+        private void LazinateValue()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

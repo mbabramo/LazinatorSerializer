@@ -64,7 +64,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyDictionaryWithRecordLikeContainers_Accessed)
                 {
-                    Lazinate_MyDictionaryWithRecordLikeContainers();
+                    LazinateMyDictionaryWithRecordLikeContainers();
                 }
                 IsDirty = true; 
                 return _MyDictionaryWithRecordLikeContainers;
@@ -78,7 +78,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyDictionaryWithRecordLikeContainers_Accessed;
-        private void Lazinate_MyDictionaryWithRecordLikeContainers()
+        private void LazinateMyDictionaryWithRecordLikeContainers()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -102,7 +102,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyDictionaryWithRecordLikeTypeValues_Accessed)
                 {
-                    Lazinate_MyDictionaryWithRecordLikeTypeValues();
+                    LazinateMyDictionaryWithRecordLikeTypeValues();
                 }
                 IsDirty = true; 
                 return _MyDictionaryWithRecordLikeTypeValues;
@@ -116,7 +116,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         protected bool _MyDictionaryWithRecordLikeTypeValues_Accessed;
-        private void Lazinate_MyDictionaryWithRecordLikeTypeValues()
+        private void LazinateMyDictionaryWithRecordLikeTypeValues()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

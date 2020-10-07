@@ -47,7 +47,7 @@ namespace Lazinator.Wrappers
             {
                 if (!_WrappedValue_Accessed)
                 {
-                    Lazinate_WrappedValue();
+                    LazinateWrappedValue();
                 }
                 IsDirty = true; 
                 return _WrappedValue;
@@ -63,7 +63,7 @@ namespace Lazinator.Wrappers
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool _WrappedValue_Accessed;
-        private void Lazinate_WrappedValue()
+        private void LazinateWrappedValue()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

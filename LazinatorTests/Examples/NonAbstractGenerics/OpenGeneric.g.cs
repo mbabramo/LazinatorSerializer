@@ -47,7 +47,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_MyListT_Accessed)
                 {
-                    Lazinate_MyListT();
+                    LazinateMyListT();
                 }
                 IsDirty = true; 
                 return _MyListT;
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _MyListT_Accessed;
-        private void Lazinate_MyListT()
+        private void LazinateMyListT()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -85,7 +85,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_MyT_Accessed)
                 {
-                    Lazinate_MyT();
+                    LazinateMyT();
                 } 
                 return _MyT;
             }
@@ -114,7 +114,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         protected bool _MyT_Accessed;
-        private void Lazinate_MyT()
+        private void LazinateMyT()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

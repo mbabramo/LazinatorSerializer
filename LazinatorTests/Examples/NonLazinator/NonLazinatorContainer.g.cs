@@ -51,7 +51,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_NonLazinatorClass_Accessed)
                 {
-                    Lazinate_NonLazinatorClass();
+                    LazinateNonLazinatorClass();
                 }
                 IsDirty = true; 
                 return _NonLazinatorClass;
@@ -65,7 +65,7 @@ namespace LazinatorTests.Examples
             }
         }
         bool _NonLazinatorClass_Accessed;
-        private void Lazinate_NonLazinatorClass()
+        private void LazinateNonLazinatorClass()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -89,7 +89,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_NonLazinatorInterchangeableClass_Accessed)
                 {
-                    Lazinate_NonLazinatorInterchangeableClass();
+                    LazinateNonLazinatorInterchangeableClass();
                 }
                 IsDirty = true; 
                 return _NonLazinatorInterchangeableClass;
@@ -103,7 +103,7 @@ namespace LazinatorTests.Examples
             }
         }
         bool _NonLazinatorInterchangeableClass_Accessed;
-        private void Lazinate_NonLazinatorInterchangeableClass()
+        private void LazinateNonLazinatorInterchangeableClass()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -127,7 +127,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_NonLazinatorInterchangeableStruct_Accessed)
                 {
-                    Lazinate_NonLazinatorInterchangeableStruct();
+                    LazinateNonLazinatorInterchangeableStruct();
                 } 
                 return _NonLazinatorInterchangeableStruct;
             }
@@ -140,7 +140,7 @@ namespace LazinatorTests.Examples
             }
         }
         bool _NonLazinatorInterchangeableStruct_Accessed;
-        private void Lazinate_NonLazinatorInterchangeableStruct()
+        private void LazinateNonLazinatorInterchangeableStruct()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -164,7 +164,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_NonLazinatorStruct_Accessed)
                 {
-                    Lazinate_NonLazinatorStruct();
+                    LazinateNonLazinatorStruct();
                 }
                 IsDirty = true; 
                 return _NonLazinatorStruct;
@@ -178,7 +178,7 @@ namespace LazinatorTests.Examples
             }
         }
         bool _NonLazinatorStruct_Accessed;
-        private void Lazinate_NonLazinatorStruct()
+        private void LazinateNonLazinatorStruct()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

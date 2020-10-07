@@ -56,7 +56,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_IntWrapper_Accessed)
                 {
-                    Lazinate_IntWrapper();
+                    LazinateIntWrapper();
                 } 
                 return _IntWrapper;
             }
@@ -71,7 +71,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _IntWrapper_Accessed;
-        private void Lazinate_IntWrapper()
+        private void LazinateIntWrapper()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -126,7 +126,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyExampleStructContainingClasses_Accessed)
                 {
-                    Lazinate_MyExampleStructContainingClasses();
+                    LazinateMyExampleStructContainingClasses();
                 } 
                 return _MyExampleStructContainingClasses;
             }
@@ -141,7 +141,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyExampleStructContainingClasses_Accessed;
-        private void Lazinate_MyExampleStructContainingClasses()
+        private void LazinateMyExampleStructContainingClasses()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -196,7 +196,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyHashSetExampleStruct_Accessed)
                 {
-                    Lazinate_MyHashSetExampleStruct();
+                    LazinateMyHashSetExampleStruct();
                 }
                 IsDirty = true; 
                 return _MyHashSetExampleStruct;
@@ -210,7 +210,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyHashSetExampleStruct_Accessed;
-        private void Lazinate_MyHashSetExampleStruct()
+        private void LazinateMyHashSetExampleStruct()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -234,7 +234,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyListExampleStruct_Accessed)
                 {
-                    Lazinate_MyListExampleStruct();
+                    LazinateMyListExampleStruct();
                 }
                 IsDirty = true; 
                 return _MyListExampleStruct;
@@ -248,7 +248,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyListExampleStruct_Accessed;
-        private void Lazinate_MyListExampleStruct()
+        private void LazinateMyListExampleStruct()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -272,7 +272,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyListNullableExampleStruct_Accessed)
                 {
-                    Lazinate_MyListNullableExampleStruct();
+                    LazinateMyListNullableExampleStruct();
                 }
                 IsDirty = true; 
                 return _MyListNullableExampleStruct;
@@ -286,7 +286,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyListNullableExampleStruct_Accessed;
-        private void Lazinate_MyListNullableExampleStruct()
+        private void LazinateMyListNullableExampleStruct()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -310,7 +310,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyListUnwrappedNullableExampleStruct_Accessed)
                 {
-                    Lazinate_MyListUnwrappedNullableExampleStruct();
+                    LazinateMyListUnwrappedNullableExampleStruct();
                 }
                 IsDirty = true; 
                 return _MyListUnwrappedNullableExampleStruct;
@@ -324,7 +324,7 @@ namespace LazinatorTests.Examples
             }
         }
         protected bool _MyListUnwrappedNullableExampleStruct_Accessed;
-        private void Lazinate_MyListUnwrappedNullableExampleStruct()
+        private void LazinateMyListUnwrappedNullableExampleStruct()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

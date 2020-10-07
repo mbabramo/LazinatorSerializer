@@ -1076,7 +1076,7 @@ namespace Lazinator.CodeDescription
             string propertyGetContents = $@"
                 {IIF(BackingAccessFieldIncluded, $@"if ({BackingFieldNotAccessedString})
                 {{
-                    Lazinate_{PropertyName}();
+                    Lazinate{PropertyName}();
                 }}")}{IIF(IsNonLazinatorType && !TrackDirtinessNonSerialized && (!RoslynHelpers.IsReadOnlyStruct(Symbol) || ContainsLazinatorInnerProperty || ContainsOpenGenericInnerProperty), $@"
                     IsDirty = true;")} {IIF(CodeOnAccessed != "", $@"
                 {CodeOnAccessed}")}
@@ -1099,10 +1099,10 @@ namespace Lazinator.CodeDescription
             }}
         }}{(GetModifiedDerivationKeyword() == "override " || !BackingAccessFieldIncluded ? "" : $@"
         {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}bool {BackingFieldAccessedString};")}{IIF(BackingAccessFieldIncluded, $@"
-        private void Lazinate_{PropertyName}()
+        private void Lazinate{PropertyName}()
         {{{GetLazinateContents(createDefault, recreation, true, false)}
         }}")}{IIF(BackingAccessFieldIncluded && ContainingObjectDescription.AsyncLazinatorMemory, $@"
-        private async Task Lazinate_{PropertyName}_Async()
+        private async Task Lazinate{PropertyName}Async()
         {{{GetLazinateContents(createDefault, recreation, true, true)}
         }}")}
 

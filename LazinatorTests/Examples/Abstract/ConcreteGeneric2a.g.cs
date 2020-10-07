@@ -119,7 +119,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_LazinatorExample_Accessed)
                 {
-                    Lazinate_LazinatorExample();
+                    LazinateLazinatorExample();
                 } 
                 return _LazinatorExample;
             }
@@ -141,7 +141,7 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         protected bool _LazinatorExample_Accessed;
-        private void Lazinate_LazinatorExample()
+        private void LazinateLazinatorExample()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

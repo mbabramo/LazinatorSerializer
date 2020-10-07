@@ -59,7 +59,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyLevel2ListNestedNonLazinatorType_Accessed)
                 {
-                    Lazinate_MyLevel2ListNestedNonLazinatorType();
+                    LazinateMyLevel2ListNestedNonLazinatorType();
                 }
                 IsDirty = true; 
                 return _MyLevel2ListNestedNonLazinatorType;
@@ -73,7 +73,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyLevel2ListNestedNonLazinatorType_Accessed;
-        private void Lazinate_MyLevel2ListNestedNonLazinatorType()
+        private void LazinateMyLevel2ListNestedNonLazinatorType()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

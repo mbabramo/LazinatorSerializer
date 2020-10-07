@@ -66,7 +66,7 @@ namespace LazinatorCollections.Remote
             {
                 if (!_Key_Accessed)
                 {
-                    Lazinate_Key();
+                    LazinateKey();
                 } 
                 return _Key;
             }
@@ -97,7 +97,7 @@ namespace LazinatorCollections.Remote
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _Key_Accessed;
-        private void Lazinate_Key()
+        private void LazinateKey()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -127,7 +127,7 @@ namespace LazinatorCollections.Remote
             {
                 if (!_Local_Accessed)
                 {
-                    Lazinate_Local();
+                    LazinateLocal();
                 } 
                 return _Local;
             }
@@ -151,7 +151,7 @@ namespace LazinatorCollections.Remote
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _Local_Accessed;
-        private void Lazinate_Local()
+        private void LazinateLocal()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

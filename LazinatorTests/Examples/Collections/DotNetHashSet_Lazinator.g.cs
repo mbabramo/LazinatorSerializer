@@ -46,7 +46,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyHashSetSerialized_Accessed)
                 {
-                    Lazinate_MyHashSetSerialized();
+                    LazinateMyHashSetSerialized();
                 }
                 IsDirty = true; 
                 return _MyHashSetSerialized;
@@ -60,7 +60,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         protected bool _MyHashSetSerialized_Accessed;
-        private void Lazinate_MyHashSetSerialized()
+        private void LazinateMyHashSetSerialized()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

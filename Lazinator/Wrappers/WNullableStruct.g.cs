@@ -64,7 +64,7 @@ namespace Lazinator.Wrappers
             {
                 if (!_NonNullValue_Accessed)
                 {
-                    Lazinate_NonNullValue();
+                    LazinateNonNullValue();
                 } 
                 return _NonNullValue;
             }
@@ -80,7 +80,7 @@ namespace Lazinator.Wrappers
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         bool _NonNullValue_Accessed;
-        private void Lazinate_NonNullValue()
+        private void LazinateNonNullValue()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

@@ -46,7 +46,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedInt_Accessed)
                 {
-                    Lazinate_WrappedInt();
+                    LazinateWrappedInt();
                 } 
                 return _WrappedInt;
             }
@@ -61,7 +61,7 @@ namespace LazinatorTests.Examples.Structs
             }
         }
         protected bool _WrappedInt_Accessed;
-        private void Lazinate_WrappedInt()
+        private void LazinateWrappedInt()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

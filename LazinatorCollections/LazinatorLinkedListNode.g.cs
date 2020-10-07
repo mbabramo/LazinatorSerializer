@@ -49,7 +49,7 @@ namespace LazinatorCollections
             {
                 if (!_NextNode_Accessed)
                 {
-                    Lazinate_NextNode();
+                    LazinateNextNode();
                 } 
                 return _NextNode;
             }
@@ -73,7 +73,7 @@ namespace LazinatorCollections
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _NextNode_Accessed;
-        private void Lazinate_NextNode()
+        private void LazinateNextNode()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
@@ -99,7 +99,7 @@ namespace LazinatorCollections
             {
                 if (!_Value_Accessed)
                 {
-                    Lazinate_Value();
+                    LazinateValue();
                 } 
                 return _Value;
             }
@@ -130,7 +130,7 @@ namespace LazinatorCollections
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _Value_Accessed;
-        private void Lazinate_Value()
+        private void LazinateValue()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

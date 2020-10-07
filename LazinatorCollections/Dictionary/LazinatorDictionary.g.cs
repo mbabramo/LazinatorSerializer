@@ -65,7 +65,7 @@ namespace LazinatorCollections.Dictionary
             {
                 if (!_Buckets_Accessed)
                 {
-                    Lazinate_Buckets();
+                    LazinateBuckets();
                 } 
                 return _Buckets;
             }
@@ -89,7 +89,7 @@ namespace LazinatorCollections.Dictionary
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _Buckets_Accessed;
-        private void Lazinate_Buckets()
+        private void LazinateBuckets()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

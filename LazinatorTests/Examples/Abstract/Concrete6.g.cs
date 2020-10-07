@@ -43,7 +43,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_IntList6_Accessed)
                 {
-                    Lazinate_IntList6();
+                    LazinateIntList6();
                 }
                 IsDirty = true; 
                 return _IntList6;
@@ -57,7 +57,7 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         protected bool _IntList6_Accessed;
-        private void Lazinate_IntList6()
+        private void LazinateIntList6()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

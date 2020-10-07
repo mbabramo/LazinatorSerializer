@@ -45,7 +45,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_MyBase_Accessed)
                 {
-                    Lazinate_MyBase();
+                    LazinateMyBase();
                 } 
                 return _MyBase;
             }
@@ -67,7 +67,7 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         protected bool _MyBase_Accessed;
-        private void Lazinate_MyBase()
+        private void LazinateMyBase()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {

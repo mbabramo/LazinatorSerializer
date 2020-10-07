@@ -74,7 +74,7 @@ namespace LazinatorCollections.ByteSpan
             {
                 if (!_ReadOrWrite_Accessed)
                 {
-                    Lazinate_ReadOrWrite();
+                    LazinateReadOrWrite();
                 } 
                 return _ReadOrWrite;
             }
@@ -89,7 +89,7 @@ namespace LazinatorCollections.ByteSpan
         }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _ReadOrWrite_Accessed;
-        private void Lazinate_ReadOrWrite()
+        private void LazinateReadOrWrite()
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
