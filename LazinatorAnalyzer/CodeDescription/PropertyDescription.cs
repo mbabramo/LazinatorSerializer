@@ -181,6 +181,7 @@ namespace Lazinator.CodeDescription
 
         internal string BackingFieldString => $"_{PropertyName}";
 
+        // DEBUG -- if any of these is true, then maybe we can't have async lazinator.
         internal bool BackingAccessFieldIncluded => PlaceholderMemoryWriteMethod == null && !IsNonNullableWithNonNullableBackingField && !IsNonNullableRecordLikeTypeInNullableEnabledContext;
         internal string BackingAccessFieldName => $"_{PropertyName}_Accessed";
         internal string BackingFieldAccessedString => BackingAccessFieldIncluded ? BackingAccessFieldName : "true";
@@ -1072,8 +1073,6 @@ namespace Lazinator.CodeDescription
             // Now we need to worry about the set accessor. 
             string propertyTypeDependentSet = GetPropertyTypeDependentSetString();
 
-            string lazinateContents = GetLazinateContents(createDefault, recreation);
-
             string propertyGetContents = $@"
                 {IIF(BackingAccessFieldIncluded, $@"if ({BackingFieldNotAccessedString})
                 {{
@@ -1101,7 +1100,10 @@ namespace Lazinator.CodeDescription
         }}{(GetModifiedDerivationKeyword() == "override " || !BackingAccessFieldIncluded ? "" : $@"
         {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}bool {BackingFieldAccessedString};")}{IIF(BackingAccessFieldIncluded, $@"
         private void Lazinate_{PropertyName}()
-        {{{lazinateContents}
+        {{{GetLazinateContents(createDefault, recreation, true, false)}
+        }}")}{IIF(BackingAccessFieldIncluded && ContainingObjectDescription.AsyncLazinatorMemory, $@"
+        private async Task Lazinate_{PropertyName}()
+        {{{GetLazinateContents(createDefault, recreation, true, true)}
         }}")}
 
 ");
@@ -1295,11 +1297,12 @@ namespace Lazinator.CodeDescription
             return recreation;
         }
 
-        public string GetLazinateContentsForConstructor() => GetLazinateContents(GetCreateDefaultString(), GetRecreationString(GetAssignmentString()), false);
-        private string GetLazinateContents(string createDefault, string recreation, bool defineChildData = true)
+        public string GetLazinateContentsForConstructor() => GetLazinateContents(GetCreateDefaultString(), GetRecreationString(GetAssignmentString()), false, false);
+        private string GetLazinateContents(string createDefault, string recreation, bool defineChildData, bool async)
         {
             return $@"
-            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || NonNullableThatCanBeUninitialized, "LazinatorMemoryStorage.Length == 0", createDefault, $@"{IIF(defineChildData, "LazinatorMemory ")}childData = {ChildSliceString};
+            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || NonNullableThatCanBeUninitialized, "LazinatorMemoryStorage.Length == 0", createDefault, $@"{IIF(defineChildData, "LazinatorMemory ")}childData = {ChildSliceString};{IIF(async, $@"await childData.LoadInitialMemoryAsync();
+                ")}
                 {recreation}")}{IIF(BackingAccessFieldIncluded, $@"
             {BackingFieldAccessedString} = true;")}";
         }

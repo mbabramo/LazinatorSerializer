@@ -251,6 +251,14 @@ namespace Lazinator.Buffers
             }
         }
 
+        public async ValueTask<IMemoryOwner<byte>> LoadInitialMemoryAsync()
+        {
+            IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
+            if (memoryOwner is MemoryReference memoryReference && memoryReference.IsLoaded == false)
+                await memoryReference.LoadMemoryAsync();
+            return memoryOwner;
+        }
+
         public async ValueTask<Memory<byte>> GetInitialMemoryAsync()
         {
             if (IsEmpty)
@@ -259,9 +267,7 @@ namespace Lazinator.Buffers
                 return InitialOwnedMemory.Memory.Slice(StartPosition, Length);
             else
             {
-                IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
-                if (memoryOwner is MemoryReference memoryReference && memoryReference.IsLoaded == false)
-                    await memoryReference.LoadMemoryAsync();
+                IMemoryOwner<byte> memoryOwner = await LoadInitialMemoryAsync();
                 var memory = memoryOwner.Memory;
                 int overallMemoryLength = memory.Length;
                 int lengthOfMemoryChunkAfterStartPosition = overallMemoryLength - StartPosition;
