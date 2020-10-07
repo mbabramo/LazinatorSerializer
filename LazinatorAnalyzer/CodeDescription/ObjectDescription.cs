@@ -694,20 +694,20 @@ namespace Lazinator.CodeDescription
             var lastPropertyToIndex = withRecordedIndices.LastOrDefault();
             for (int i = 0; i < withRecordedIndices.Count(); i++)
                 if (withRecordedIndices[i].DerivationKeyword != "override ")
-                    sb.AppendLine($"        {ProtectedIfApplicable}int _{withRecordedIndices[i].PropertyName}_ByteIndex;");
+                    sb.AppendLine($"        {ProtectedIfApplicable}int {withRecordedIndices[i].BackingFieldByteIndex};");
             for (int i = 0; i < withRecordedIndices.Count() - 1; i++)
             {
                 PropertyDescription propertyDescription = withRecordedIndices[i];
                 string derivationKeyword = GetDerivationKeywordForLengthProperty(propertyDescription);
                 sb.AppendLine(
-                        $"{ProtectedIfApplicable}{derivationKeyword}int _{propertyDescription.PropertyName}_ByteLength => _{withRecordedIndices[i + 1].PropertyName}_ByteIndex - _{propertyDescription.PropertyName}_ByteIndex;");
+                        $"{ProtectedIfApplicable}{derivationKeyword}int {propertyDescription.BackingFieldByteLength} => {withRecordedIndices[i + 1].BackingFieldByteIndex} - {propertyDescription.BackingFieldByteIndex};");
             }
             if (lastPropertyToIndex != null)
             {
                 if (IsAbstract)
                 {
                     sb.AppendLine(
-                            $"{ProtectedIfApplicable}virtual int _{lastPropertyToIndex.PropertyName}_ByteLength {{ get; }}"); // defined as virtual so that it's not mandatory to override, since it won't be used if an open generic is redefined.
+                            $"{ProtectedIfApplicable}virtual int {lastPropertyToIndex.BackingFieldByteLength} {{ get; }}"); // defined as virtual so that it's not mandatory to override, since it won't be used if an open generic is redefined.
                 }
                 else
                 {
@@ -718,7 +718,7 @@ namespace Lazinator.CodeDescription
                     else sb.AppendLine(
                             $"private int _{ObjectNameEncodable}_EndByteIndex;");
                     sb.AppendLine(
-                            $"{ProtectedIfApplicable}{derivationKeyword}int _{lastPropertyToIndex.PropertyName}_ByteLength => _{ObjectNameEncodable}_EndByteIndex - _{lastPropertyToIndex.PropertyName}_ByteIndex;");
+                            $"{ProtectedIfApplicable}{derivationKeyword}int {lastPropertyToIndex.BackingFieldByteLength} => _{ObjectNameEncodable}_EndByteIndex - {lastPropertyToIndex.BackingFieldByteIndex};");
                 }
             }
             sb.AppendLine();
@@ -1177,7 +1177,7 @@ namespace Lazinator.CodeDescription
             foreach (var property in PropertiesToDefineThisLevel.Where(x => !x.IsPrimitive && !x.IsNonLazinatorType && x.PlaceholderMemoryWriteMethod == null))
             {
                 sb.AppendLine(new ConditionalCodeGenerator(property.GetNonNullCheck(true),
-$@"{property.PropertyName}{property.NullForgiveness}{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable || (property.IsDefinitelyStruct && property.Nullable), ".Value")}.UpdateStoredBuffer(ref writer, startPosition + _{property.PropertyName}_ByteIndex{property.IncrementChildStartBySizeOfLength}, _{property.PropertyName}_ByteLength{property.DecrementTotalLengthBySizeOfLength}, IncludeChildrenMode.IncludeAllChildren, true);").ToString());
+$@"{property.PropertyName}{property.NullForgiveness}{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable || (property.IsDefinitelyStruct && property.Nullable), ".Value")}.UpdateStoredBuffer(ref writer, startPosition + {property.BackingFieldByteIndex}{property.IncrementChildStartBySizeOfLength}, {property.BackingFieldByteLength}{property.DecrementTotalLengthBySizeOfLength}, IncludeChildrenMode.IncludeAllChildren, true);").ToString());
             }
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && x.PlaceholderMemoryWriteMethod == null))
             {
