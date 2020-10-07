@@ -751,7 +751,7 @@ namespace Lazinator.CodeDescription
                 if (property.BackingAccessFieldIncluded)
                 {
                     if (!property.NonNullableThatRequiresInitialization)
-                        resetStorage += $@"_{property.PropertyName} = default;
+                        resetStorage += $@"{property.BackingFieldString} = default;
                             ";
                     resetAccessed += $"{property.BackingFieldAccessedString} = ";
                 }
@@ -958,10 +958,10 @@ namespace Lazinator.CodeDescription
                 // we want to deserialize the memory. In case of ReadOnlySpan<byte>, we also want to duplicate the memory if it hasn't been set by the user, since we want to make sure that the property will work even if the buffer is removed (which might be the reason for the ForEachLazinator call)
                 sb.Append($@"if (!exploreOnlyDeserializedChildren)
                     {{
-                        var deserialized_{property.PropertyName} = {property.PropertyName};{IIF(property.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan, $@"
+                        var deserialized{property.BackingFieldString} = {property.PropertyName};{IIF(property.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan, $@"
                         if ({property.BackingFieldNotAccessedString})
                         {{
-                            {property.PropertyName} = deserialized_{property.PropertyName};
+                            {property.PropertyName} = deserialized{property.BackingFieldString};
                         }}")}
                     }}
 ");
@@ -1144,14 +1144,14 @@ namespace Lazinator.CodeDescription
                     if (!property.GenericConstrainedToStruct)
                         reset +=
                             $@"
-                            if ({property.BackingFieldAccessedString} && _{property.PropertyName} != null && _{property.PropertyName}.IsStruct && (_{property.PropertyName}.IsDirty || _{property.PropertyName}.DescendantIsDirty))
+                            if ({property.BackingFieldAccessedString} && {property.BackingFieldString} != null && {property.BackingFieldString}.IsStruct && ({property.BackingFieldString}.IsDirty || {property.BackingFieldString}.DescendantIsDirty))
                             {{
                                 {property.BackingFieldAccessedString} = false;
                             }}";
                     else
                         reset +=
                             $@"
-                            if ({property.BackingFieldAccessedString} && _{property.PropertyName}{IIF(property.Nullable, ".Value")}.IsStruct && (_{property.PropertyName}{IIF(property.Nullable, ".Value")}.IsDirty || _{property.PropertyName}{IIF(property.Nullable, ".Value")}.DescendantIsDirty))
+                            if ({property.BackingFieldAccessedString} && {property.BackingFieldString}{IIF(property.Nullable, ".Value")}.IsStruct && ({property.BackingFieldString}{IIF(property.Nullable, ".Value")}.IsDirty || {property.BackingFieldString}{IIF(property.Nullable, ".Value")}.DescendantIsDirty))
                             {{
                                 {property.BackingFieldAccessedString} = false;
                             }}";
@@ -1268,18 +1268,18 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 {
                     if (property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (property.PropertyType == LazinatorPropertyType.LazinatorStructNullable) || (property.PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface))
                     {
-                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) (backing var null? {{_{property.PropertyName} == null}}) "");");
+                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) (backing var null? {{{property.BackingFieldString} == null}}) "");");
                     }
                     else if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
                     {
                         sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) "");");
                     }
                     else if (property.TrackDirtinessNonSerialized)
-                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) (dirty? {{_{property.PropertyName}_Dirty}})"");");
+                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) (dirty? {{{property.BackingDirtyFieldString}}})"");");
                     else if (property.PropertyType == LazinatorPropertyType.NonLazinator || property.PropertyType == LazinatorPropertyType.SupportedCollection || property.PropertyType == LazinatorPropertyType.SupportedTuple)
                         sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")})"");");
                     else
-                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} value {{_{property.PropertyName}}}"");");
+                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} value {{{property.BackingFieldString}}}"");");
                     sb.AppendLine($@"TabbedText.Tabs++;");
                 }
                 property.AppendPropertyWriteString(sb);

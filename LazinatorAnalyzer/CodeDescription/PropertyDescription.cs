@@ -186,7 +186,6 @@ namespace Lazinator.CodeDescription
         internal string BackingFieldAccessedString => BackingAccessFieldIncluded ? BackingAccessFieldName : "true";
         internal string BackingFieldNotAccessedString => BackingAccessFieldIncluded ? $"!{BackingAccessFieldName}" : "false";
         internal string BackingDirtyFieldString => $"_{PropertyName}_Dirty";
-
         internal string BackingFieldByteIndex => $"_{PropertyName}_ByteIndex";
         internal string BackingFieldByteLength => $"_{PropertyName}_ByteLength";
 
@@ -1075,19 +1074,21 @@ namespace Lazinator.CodeDescription
 
             string lazinateContents = GetLazinateContents(createDefault, recreation);
 
-            sb.Append($@"
-                {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName}{IIF(AddQuestionMarkInBackingFieldForNonNullable && !AppropriatelyQualifiedTypeName.EndsWith("?"), "?")} {BackingFieldString};
-        {GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
-        {{{StepThroughPropertiesString}
-            get
-            {{
+            string propertyGetContents = $@"
                 {IIF(BackingAccessFieldIncluded, $@"if ({BackingFieldNotAccessedString})
                 {{
                     Lazinate_{PropertyName}();
                 }}")}{IIF(IsNonLazinatorType && !TrackDirtinessNonSerialized && (!RoslynHelpers.IsReadOnlyStruct(Symbol) || ContainsLazinatorInnerProperty || ContainsOpenGenericInnerProperty), $@"
                     IsDirty = true;")} {IIF(CodeOnAccessed != "", $@"
                 {CodeOnAccessed}")}
-                return {BackingFieldAccessWithPossibleException};
+                return {BackingFieldAccessWithPossibleException};";
+
+            sb.Append($@"
+                {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}{AppropriatelyQualifiedTypeName}{IIF(AddQuestionMarkInBackingFieldForNonNullable && !AppropriatelyQualifiedTypeName.EndsWith("?"), "?")} {BackingFieldString};
+        {GetAttributesToInsert()}{ContainingObjectDescription.HideMainProperty}{PropertyAccessibilityString}{GetModifiedDerivationKeyword()}{AppropriatelyQualifiedTypeName} {PropertyName}
+        {{{StepThroughPropertiesString}
+            get
+            {{{propertyGetContents}
             }}{StepThroughPropertiesString}
             set
             {{{propertyTypeDependentSet}{RepeatedCodeExecution}
