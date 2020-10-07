@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Security.Cryptography.X509Certificates;
+using Lazinator.Attributes;
 using LazinatorAnalyzer.AttributeClones;
 using LazinatorAnalyzer.Settings;
 using LazinatorAnalyzer.Support;
@@ -110,6 +111,7 @@ namespace Lazinator.CodeDescription
         public bool CanNeverHaveChildren => Version == -1 && IsSealedOrStruct && !ExclusiveInterface.PropertiesIncludingInherited.Any(x => x.PropertyType != LazinatorPropertyType.PrimitiveType && x.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable) && !IsGeneric;
         public bool UniqueIDCanBeSkipped => Version == -1 && IsSealedOrStruct && BaseLazinatorObject == null && !HasNonexclusiveInterfaces && !ContainsOpenGenericParameters;
         public bool SuppressDate { get; set; }
+        public bool AsyncLazinatorMemory => InterfaceTypeSymbol.HasAttributeOfType<CloneAsyncLazinatorMemoryAttribute>();
         public bool AllowNonlazinatorGenerics => InterfaceTypeSymbol.HasAttributeOfType<CloneAllowNonlazinatorOpenGenericsAttribute>();
         public bool SuppressLazinatorVersionByte => InterfaceTypeSymbol.HasAttributeOfType<CloneExcludeLazinatorVersionByteAttribute>();
         public bool GenerateRefStruct => InterfaceTypeSymbol.HasAttributeOfType<CloneGenerateRefStructAttribute>() && !GeneratingRefStruct;
