@@ -166,6 +166,11 @@ namespace Lazinator.Buffers
             return 0;
         }
 
+        public void Skip(int length)
+        {
+            Position += length;
+        }
+
         public void Write(bool value)
         {
             WriteEnlargingIfNecessary(ref value);

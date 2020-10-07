@@ -10,6 +10,7 @@ using System.Text;
 using Lazinator.Buffers;
 using Lazinator.Exceptions;
 using Lazinator.Support;
+using static System.Buffers.Binary.BinaryPrimitives;
 
 namespace Lazinator.Core
 {
@@ -120,6 +121,23 @@ namespace Lazinator.Core
             writer.Write((byte)length);
             writer.Position = afterPosition;
         }
+
+        /// <summary>
+        /// Writes a byte value to a span, returning true if the span is at least one byte long.
+        /// </summary>
+        public static bool WriteValueToSpan(Span<byte> targetSpan, byte value) => BinaryBufferWriter.LittleEndianStorage ? TryWriteUInt16LittleEndian(targetSpan, (byte)value) : TryWriteUInt16BigEndian(targetSpan, (byte)value);
+        /// <summary>
+        /// Writes a byte value to a span, returning true if the span is at least two bytes long.
+        /// </summary>
+        public static bool WriteValueToSpan(Span<byte> targetSpan, ushort value) => BinaryBufferWriter.LittleEndianStorage ? TryWriteUInt16LittleEndian(targetSpan, (ushort)value) : TryWriteUInt16BigEndian(targetSpan, (ushort)value);
+        /// <summary>
+        /// Writes a byte value to a span, returning true if the span is at least four bytes long.
+        /// </summary>
+        public static bool WriteValueToSpan(Span<byte> targetSpan, uint value) => BinaryBufferWriter.LittleEndianStorage ? TryWriteUInt32LittleEndian(targetSpan, (uint)value) : TryWriteUInt32BigEndian(targetSpan, (uint)value);
+        /// <summary>
+        /// Writes a byte value to a span, returning true if the span is at least eight bytes long.
+        /// </summary>
+        public static bool WriteValueToSpan(Span<byte> targetSpan, ulong value) => BinaryBufferWriter.LittleEndianStorage ? TryWriteUInt64LittleEndian(targetSpan, (ulong)value) : TryWriteUInt64BigEndian(targetSpan, (ulong)value);
 
         /// <summary>
         /// Initiates a binary write to a child of a Lazinator object, optionally including a length prefix, using existing storage if possible
