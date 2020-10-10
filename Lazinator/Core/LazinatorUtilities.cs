@@ -260,7 +260,7 @@ namespace Lazinator.Core
         /// <param name="restrictLengthTo255Bytes">If true, the length is stored in a single byte. If the length might be bigger then this, and length is not being skipped, set this to true.</param>
         /// <param name="skipLength">If true, the length is omitted altogether.</param>
         /// <param name="parent">The parent of the object being written</param>
-        public static void WriteChildToBinary<T>(ref BinaryBufferWriter writer, ref T child, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool restrictLengthTo255Bytes, bool skipLength) where T : ILazinator
+        private static void WriteChildToBinary<T>(ref BinaryBufferWriter writer, ref T child, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool restrictLengthTo255Bytes, bool skipLength) where T : ILazinator
         {
             T childCopy = child;
             void action(ref BinaryBufferWriter w)

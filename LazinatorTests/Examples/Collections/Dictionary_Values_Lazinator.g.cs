@@ -817,7 +817,7 @@ namespace LazinatorTests.Examples.Collections
             int bytesSoFar = 0;
             
             WInt32 item1 = default(WInt32);
-            int lengthCollectionMember_item1 = span.ToByte(ref bytesSoFar);
+            int lengthCollectionMember_item1 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item1 != 0)
             {
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item1);
@@ -826,7 +826,7 @@ namespace LazinatorTests.Examples.Collections
             bytesSoFar += lengthCollectionMember_item1;
             
             WInt32 item2 = default(WInt32);
-            int lengthCollectionMember_item2 = span.ToByte(ref bytesSoFar);
+            int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
             if (lengthCollectionMember_item2 != 0)
             {
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
@@ -843,10 +843,10 @@ namespace LazinatorTests.Examples.Collections
         {
             
             void actionKey(ref BinaryBufferWriter w) => itemToConvert.Key.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-            WriteToBinaryWithByteLengthPrefix(ref writer, actionKey);
+            WriteToBinaryWithIntLengthPrefix(ref writer, actionKey);
             
             void actionValue(ref BinaryBufferWriter w) => itemToConvert.Value.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-            WriteToBinaryWithByteLengthPrefix(ref writer, actionValue);
+            WriteToBinaryWithIntLengthPrefix(ref writer, actionValue);
         }
         
         private static KeyValuePair<WInt32, WInt32> CloneOrChange_KeyValuePair_GWInt32_c_C32WInt32_g(KeyValuePair<WInt32, WInt32> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)

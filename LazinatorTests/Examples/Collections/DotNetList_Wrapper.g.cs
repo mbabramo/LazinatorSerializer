@@ -596,7 +596,7 @@ namespace LazinatorTests.Examples.Collections
             List<WInt32> collection = new List<WInt32>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int lengthCollectionMember = span.ToByte(ref bytesSoFar);
+                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                 var item = new WInt32(childData);
                 collection.Add(item);
@@ -622,7 +622,7 @@ namespace LazinatorTests.Examples.Collections
                     copy.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     itemToConvert[itemIndex] = copy;
                 }
-                WriteToBinaryWithByteLengthPrefix(ref writer, action);
+                WriteToBinaryWithIntLengthPrefix(ref writer, action);
             }
         }
         
@@ -665,7 +665,7 @@ namespace LazinatorTests.Examples.Collections
             List<WNullableByte> collection = new List<WNullableByte>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int lengthCollectionMember = span.ToByte(ref bytesSoFar);
+                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                 var item = new WNullableByte(childData);
                 collection.Add(item);
@@ -691,7 +691,7 @@ namespace LazinatorTests.Examples.Collections
                     copy.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     itemToConvert[itemIndex] = copy;
                 }
-                WriteToBinaryWithByteLengthPrefix(ref writer, action);
+                WriteToBinaryWithIntLengthPrefix(ref writer, action);
             }
         }
         
@@ -734,7 +734,7 @@ namespace LazinatorTests.Examples.Collections
             List<WNullableInt32> collection = new List<WNullableInt32>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int lengthCollectionMember = span.ToByte(ref bytesSoFar);
+                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                 var item = new WNullableInt32(childData);
                 collection.Add(item);
@@ -760,7 +760,7 @@ namespace LazinatorTests.Examples.Collections
                     copy.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     itemToConvert[itemIndex] = copy;
                 }
-                WriteToBinaryWithByteLengthPrefix(ref writer, action);
+                WriteToBinaryWithIntLengthPrefix(ref writer, action);
             }
         }
         

@@ -70,7 +70,7 @@ namespace LazinatorTests.Examples.Structs
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, true, null);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, false, null);
                 _WrappedInt = new WInt32(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
@@ -94,7 +94,7 @@ namespace LazinatorTests.Examples.Structs
                     }
                     else
                     {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, true, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, false, null);
                         var toReturn = new WInt32(childData);
                         toReturn.IsDirty = false;
                         return toReturn;
@@ -378,7 +378,7 @@ namespace LazinatorTests.Examples.Structs
             _WrappedInt_ByteIndex = bytesSoFar;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToByte(ref bytesSoFar) + bytesSoFar;
+                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
             }
             
             _WrapperContainer_EndByteIndex = bytesSoFar;
@@ -422,7 +422,7 @@ namespace LazinatorTests.Examples.Structs
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            WrappedInt.UpdateStoredBuffer(ref writer, startPosition + _WrappedInt_ByteIndex + sizeof(byte), _WrappedInt_ByteLength - sizeof(byte), IncludeChildrenMode.IncludeAllChildren, true);
+            WrappedInt.UpdateStoredBuffer(ref writer, startPosition + _WrappedInt_ByteIndex + sizeof(int), _WrappedInt_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
         }
         
         
@@ -453,7 +453,7 @@ namespace LazinatorTests.Examples.Structs
                 {
                     var deserialized = WrappedInt;
                 }
-                WriteChild(ref writer, ref _WrappedInt, includeChildrenMode, _WrappedInt_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, true, null), verifyCleanness, updateStoredBuffer, true, false, this);
+                WriteChild(ref writer, ref _WrappedInt, includeChildrenMode, _WrappedInt_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
             }
             
             if (updateStoredBuffer)
