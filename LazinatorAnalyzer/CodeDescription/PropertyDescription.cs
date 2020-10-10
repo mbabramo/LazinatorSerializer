@@ -60,9 +60,9 @@ namespace Lazinator.CodeDescription
         internal bool IsLast { get; set; }
         private bool OmitLengthBecauseDefinitelyLast => (IsLast && ContainingObjectDescription.IsSealedOrStruct && ContainingObjectDescription.Version == -1);
         private string ChildSliceString => $"GetChildSlice(LazinatorMemoryStorage, {BackingFieldByteIndex}, {BackingFieldByteLength}{ChildSliceEndString})";
-        private string ChildSliceEndString => $", {(OmitLengthBecauseDefinitelyLast ? "true" : "false")}, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength ? $"{FixedLength}" : "null")}";
-        internal string IncrementChildStartBySizeOfLength => OmitLengthBecauseDefinitelyLast || IsGuaranteedFixedLength ? "" : (IsGuaranteedSmall ? " + sizeof(byte)" : " + sizeof(int)");
-        internal string DecrementTotalLengthBySizeOfLength => OmitLengthBecauseDefinitelyLast || IsGuaranteedFixedLength ? "" : (IsGuaranteedSmall ? " - sizeof(byte)" : " - sizeof(int)");
+        private string ChildSliceEndString => $", {(OmitLengthBecauseDefinitelyLast ? "true" : "false")}, {(SingleByteLength ? "true" : "false")}, {(IsGuaranteedFixedLength ? $"{FixedLength}" : "null")}";
+        internal string IncrementChildStartBySizeOfLength => OmitLengthBecauseDefinitelyLast || IsGuaranteedFixedLength ? "" : (SingleByteLength ? " + sizeof(byte)" : " + sizeof(int)");
+        internal string DecrementTotalLengthBySizeOfLength => OmitLengthBecauseDefinitelyLast || IsGuaranteedFixedLength ? "" : (SingleByteLength ? " - sizeof(byte)" : " - sizeof(int)");
 
         /* Property type */
         internal LazinatorPropertyType PropertyType { get; set; }
@@ -242,11 +242,11 @@ namespace Lazinator.CodeDescription
         private string CodeOnAccessed { get; set; }
         private bool IsGuaranteedFixedLength { get; set; }
         private int FixedLength { get; set; }
-        private bool IsGuaranteedSmall { get; set; }
-        private string LengthPrefixTypeString => IsGuaranteedFixedLength ? "out" : (IsGuaranteedSmall ? "Byte" : "Int");
+        private bool SingleByteLength { get; set; }
+        private string LengthPrefixTypeString => IsGuaranteedFixedLength ? "out" : (SingleByteLength ? "Byte" : "Int");
         private string WriteDefaultLengthString =>
             !IsGuaranteedFixedLength || FixedLength == 1 ?
-                $"writer.Write(({(IsGuaranteedSmall || IsGuaranteedFixedLength ? "byte" : "uint")})0);"
+                $"writer.Write(({(SingleByteLength || IsGuaranteedFixedLength ? "byte" : "uint")})0);"
             :
                 $@"for (int indexInFixedLength = 0; indexInFixedLength < {FixedLength}; indexInFixedLength++)
                     {{
@@ -663,10 +663,10 @@ namespace Lazinator.CodeDescription
                         throw new LazinatorCodeGenException(
                             "Lazinator attribute is required for each interface implementing ILazinator, including inherited attributes.");
                     UniqueIDForLazinatorType = attribute.UniqueID;
-                    CloneSmallLazinatorAttribute smallAttribute =
-                        ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneSmallLazinatorAttribute>(exclusiveInterface);
+                    CloneSingleByteLengthAttribute smallAttribute =
+                        ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneSingleByteLengthAttribute>(exclusiveInterface);
                     if (smallAttribute != null)
-                        IsGuaranteedSmall = true;
+                        SingleByteLength = true;
 
                     CloneFixedLengthLazinatorAttribute fixedLengthAttribute =
                         ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneFixedLengthLazinatorAttribute>(exclusiveInterface);
@@ -1502,7 +1502,7 @@ namespace Lazinator.CodeDescription
                         sb.AppendLine($@"{BackingFieldByteIndex} = bytesSoFar;{skipCheckString}
                                         bytesSoFar += {FixedLength};");
                 }
-                else if (IsGuaranteedSmall)
+                else if (SingleByteLength)
                     sb.AppendLine(
                         $@"{BackingFieldByteIndex} = bytesSoFar;{skipCheckString}
                             " + new ConditionalCodeGenerator(ReadInclusionConditional,
@@ -1626,11 +1626,11 @@ namespace Lazinator.CodeDescription
             string withInclusionConditional = null;
             bool nullableStruct = PropertyType == LazinatorPropertyType.LazinatorStructNullable || (IsDefinitelyStruct && Nullable);
             string propertyNameOrCopy = nullableStruct ? "copy" : $"{BackingFieldString}";
-            Func<string, string> lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen($"{BackingFieldString}", $"WriteNullChild(ref writer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")});", originalString) : originalString;
+            Func<string, string> lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen($"{BackingFieldString}", $"WriteNullChild(ref writer, {(SingleByteLength ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")});", originalString) : originalString;
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct)
             {
                 string mainWriteString = $@"{IIF(nullableStruct, $@"var copy = {BackingFieldString}.Value;
-                            ")}WriteChild(ref writer, ref {propertyNameOrCopy}, includeChildrenMode, {BackingFieldAccessedString}, () => {ChildSliceString}, verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, this);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
+                            ")}WriteChild(ref writer, ref {propertyNameOrCopy}, includeChildrenMode, {BackingFieldAccessedString}, () => {ChildSliceString}, verifyCleanness, updateStoredBuffer, {(SingleByteLength ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, this);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
                                 {BackingFieldString} = copy;")}";
                 withInclusionConditional =
                     new ConditionalCodeGenerator(WriteInclusionConditional, $@"{EnsureDeserialized()}{lazinatorNullableStructNullCheck(mainWriteString)}").ToString();
@@ -1642,7 +1642,7 @@ namespace Lazinator.CodeDescription
                             var byteIndexCopy = {BackingFieldByteIndex};
                             var byteLengthCopy = {BackingFieldByteLength};
                             {IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"var copy = {BackingFieldString}.Value;
-                            ")}WriteChild(ref writer, ref {propertyNameOrCopy}, includeChildrenMode, {BackingFieldAccessedString}, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy{ChildSliceEndString}), verifyCleanness, updateStoredBuffer, {(IsGuaranteedSmall ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, null);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
+                            ")}WriteChild(ref writer, ref {propertyNameOrCopy}, includeChildrenMode, {BackingFieldAccessedString}, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy{ChildSliceEndString}), verifyCleanness, updateStoredBuffer, {(SingleByteLength ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, null);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
                                 {BackingFieldString} = copy;")}";
                 withInclusionConditional =
                     $@"{new ConditionalCodeGenerator(WriteInclusionConditional, $"{EnsureDeserialized()}{lazinatorNullableStructNullCheck(mainWriteString)}")}";
@@ -2232,7 +2232,7 @@ namespace Lazinator.CodeDescription
         {
             if (IsGuaranteedFixedLength)
                 return $"{FixedLength}";
-            else if (IsGuaranteedSmall)
+            else if (SingleByteLength)
                 return "span.ToByte(ref bytesSoFar)";
             else
                 return "span.ToInt32(ref bytesSoFar)";

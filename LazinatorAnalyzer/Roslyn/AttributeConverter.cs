@@ -156,7 +156,7 @@ namespace LazinatorCodeGen.Roslyn
                 case "NonbinaryHashAttribute":
                     return new CloneNonbinaryHashAttribute();
                 case "SmallLazinatorAttribute":
-                    return new CloneSmallLazinatorAttribute();
+                    return new CloneSingleByteLengthAttribute();
                 case "ExcludeLazinatorVersionByteAttribute":
                     return new CloneExcludeLazinatorVersionByteAttribute();
                 case "UncompressedAttribute":

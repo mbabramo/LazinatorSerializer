@@ -6,7 +6,7 @@ namespace Lazinator.Wrappers
     /// <summary>
     /// A Lazinator interface for a Lazinator wrapper for a nullable time span. A wrapper can be used as a generic type where the unwrapped object cannot be.
     /// </summary>
-    [SmallLazinator]
+    [SingleByteLength]
     [ExcludeLazinatorVersionByte]
     [NonbinaryHash]
     [Lazinator((int)LazinatorCoreUniqueIDs.ILazinatorNullableTimeSpan, -1)]
