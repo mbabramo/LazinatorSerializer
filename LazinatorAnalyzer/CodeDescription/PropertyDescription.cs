@@ -1490,33 +1490,42 @@ namespace Lazinator.CodeDescription
             {
                 if (OmitLengthBecauseDefinitelyLast)
                 {
-                    sb.AppendLine($@"{BackingFieldByteIndex} = bytesSoFar;{skipCheckString}
-                                        bytesSoFar = span.Length;");
+                    sb.AppendLine($@"{BackingFieldByteIndex} = indexOfFirstChild + totalChildrenBytes;{skipCheckString}
+                                        totalChildrenBytes = span.Length - bytesSoFar;");
                 }
                 else if (IsGuaranteedFixedLength)
                 {
                     if (FixedLength == 1)
-                        sb.AppendLine($@"{BackingFieldByteIndex} = bytesSoFar;{skipCheckString}
-                                            bytesSoFar++;");
+                        sb.AppendLine($@"{BackingFieldByteIndex} = indexOfFirstChild + totalChildrenBytes;{skipCheckString}
+                                            totalChildrenBytes++;");
                     else
-                        sb.AppendLine($@"{BackingFieldByteIndex} = bytesSoFar;{skipCheckString}
-                                        bytesSoFar += {FixedLength};");
+                        sb.AppendLine($@"{BackingFieldByteIndex} = indexOfFirstChild + totalChildrenBytes;{skipCheckString}
+                                        totalChildrenBytes += {FixedLength};");
                 }
                 else if (SingleByteLength)
                     sb.AppendLine(
-                        $@"{BackingFieldByteIndex} = bytesSoFar;{skipCheckString}
+                        $@"{BackingFieldByteIndex} = indexOfFirstChild + totalChildrenBytes;{skipCheckString}
                             " + new ConditionalCodeGenerator(ReadInclusionConditional,
-                            "bytesSoFar = span.ToByte(ref bytesSoFar) + bytesSoFar;"));
+                            "totalChildrenBytes += span.ToByte(ref bytesSoFar);"));
                 else
                     sb.AppendLine(
-                        $@"{BackingFieldByteIndex} = bytesSoFar;{skipCheckString}
+                        $@"{BackingFieldByteIndex} = indexOfFirstChild + totalChildrenBytes;{skipCheckString}
                             " + new ConditionalCodeGenerator(ReadInclusionConditional,
-                            "bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;"));
+                            "totalChildrenBytes += span.ToInt32(ref bytesSoFar);"));
             }
             if (SkipCondition != null)
             {
                 sb.AppendLine($@"}}");
             }
+        }
+
+        public int BytesUsedForLength()
+        {
+            if (IsPrimitive || OmitLengthBecauseDefinitelyLast || IsGuaranteedFixedLength)
+                return 0;
+            if (SingleByteLength)
+                return sizeof(byte);
+            return sizeof(uint);
         }
 
         public void AppendPropertyWriteString(CodeStringBuilder sb)
