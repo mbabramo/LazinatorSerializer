@@ -1214,93 +1214,122 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                     int startPosition = writer.Position;
                     int startOfObjectPosition = 0;";
 
-            if (IsDerivedFromNonAbstractLazinator)
-                sb.AppendLine(
-                        $@"
-                        {ProtectedIfApplicable}override void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
-                        {{{positionInitialization}
-                            base.WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);");
-            else
-            {
-                sb.AppendLine(
+            sb.AppendLine(
                         $@"
                         {ProtectedIfApplicable}{DerivationKeyword}void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
-                        {{{positionInitialization}
-                            // header information");
+                        {{{positionInitialization}");
 
 
-                if (IncludeTracingCode)
-                {
-                    sb.AppendLine($@"TabbedText.WriteLine($""Writing properties for {ILazinatorTypeSymbol} starting at {{writer.Position}}."");");
-                    sb.AppendLine($@"TabbedText.WriteLine($""Includes? uniqueID {{(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("""","""",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))}} {{includeUniqueID}}, Lazinator version {{Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion}} {!SuppressLazinatorVersionByte}, Object version {{LazinatorObjectVersion}} {Version != -1}, IncludeChildrenMode {{includeChildrenMode}} {!CanNeverHaveChildren}"");");
-                    sb.AppendLine($@"TabbedText.WriteLine($""IsDirty {{IsDirty}} DescendantIsDirty {{DescendantIsDirty}} HasParentClass {{LazinatorParents.Any()}}"");");
-                }
+            if (IncludeTracingCode)
+            {
+                sb.AppendLine($@"TabbedText.WriteLine($""Writing properties for {ILazinatorTypeSymbol} starting at {{writer.Position}}."");");
+                sb.AppendLine($@"TabbedText.WriteLine($""Includes? uniqueID {{(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("""","""",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))}} {{includeUniqueID}}, Lazinator version {{Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion}} {!SuppressLazinatorVersionByte}, Object version {{LazinatorObjectVersion}} {Version != -1}, IncludeChildrenMode {{includeChildrenMode}} {!CanNeverHaveChildren}"");");
+                sb.AppendLine($@"TabbedText.WriteLine($""IsDirty {{IsDirty}} DescendantIsDirty {{DescendantIsDirty}} HasParentClass {{LazinatorParents.Any()}}"");");
+            }
 
-                if (ContainsOpenGenericParameters || !IsSealedOrStruct)
-                    sb.AppendLine($@"if (includeUniqueID)
-                            {{
-                                if (!ContainsOpenGenericParameters)
-                                {{
-                                    CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
-                                }}
-                                else
-                                {{
-                                    WriteLazinatorGenericID(ref writer, LazinatorGenericID);
-                                }}
-                            }}");
-                else
-                    sb.AppendLine(
-                       $@"if (includeUniqueID)
+            if (ContainsOpenGenericParameters || !IsSealedOrStruct)
+                sb.AppendLine($@"if (includeUniqueID)
+                        {{
+                            if (!ContainsOpenGenericParameters)
                             {{
                                 CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
                             }}
-                        ");
-
+                            else
+                            {{
+                                WriteLazinatorGenericID(ref writer, LazinatorGenericID);
+                            }}
+                        }}");
+            else
                 sb.AppendLine(
-                        $@"{(SuppressLazinatorVersionByte ? "" : $@"CompressedIntegralTypes.WriteCompressedInt(ref writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
-                        ")}{(Version == -1 ? "" : $@"CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
-                        ")}{(CanNeverHaveChildren ? "" : $@"writer.Write((byte)includeChildrenMode);")}");
-            }
+                    $@"if (includeUniqueID)
+                        {{
+                            CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
+                        }}
+                    ");
+
+            sb.AppendLine(
+                    $@"{(SuppressLazinatorVersionByte ? "" : $@"CompressedIntegralTypes.WriteCompressedInt(ref writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
+                    ")}{(Version == -1 ? "" : $@"CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
+                    ")}{(CanNeverHaveChildren ? "" : $@"writer.Write((byte)includeChildrenMode);")}");
 
             sb.AppendLine("// write properties");
+            sb.AppendLine($@"
+                            WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
+                            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);");
 
-            foreach (var property in thisLevel)
-            {
-                if (IncludeTracingCode)
-                {
-                    if (property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (property.PropertyType == LazinatorPropertyType.LazinatorStructNullable) || (property.PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface))
-                    {
-                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) (backing var null? {{{property.BackingFieldString} == null}}) "");");
-                    }
-                    else if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
-                    {
-                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) "");");
-                    }
-                    else if (property.TrackDirtinessNonSerialized)
-                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) (dirty? {{{property.BackingDirtyFieldString}}})"");");
-                    else if (property.PropertyType == LazinatorPropertyType.NonLazinator || property.PropertyType == LazinatorPropertyType.SupportedCollection || property.PropertyType == LazinatorPropertyType.SupportedTuple)
-                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")})"");");
-                    else
-                        sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} value {{{property.BackingFieldString}}}"");");
-                    sb.AppendLine($@"TabbedText.Tabs++;");
-                }
-                property.AppendPropertyWriteString(sb);
-                if (IncludeTracingCode)
-                {
-                    sb.AppendLine($@"TabbedText.Tabs--;");
-                }
-            }
-            AppendEndByteIndex(sb, thisLevel, "writer.Position - startPosition", true);
             if (IncludeTracingCode)
             {
                 sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}} (end of {NameIncludingGenerics}) "");");
             }
+
             if (ImplementsOnPropertiesWritten)
             {
                 sb.AppendLine($@"OnPropertiesWritten(updateStoredBuffer);");
             }
             sb.Append($@"}}
 ");
+
+            AppendWritePropertiesHelper(sb, thisLevel, true);
+            AppendWritePropertiesHelper(sb, thisLevel, false);
+
+        }
+
+        private void AppendWritePropertiesHelper(CodeStringBuilder sb, List<PropertyDescription> thisLevel, bool isPrimitive)
+        {
+            string helperMethod = isPrimitive ? "WritePrimitivePropertiesIntoBuffer" : "WriteChildrenPropertiesIntoBuffer";
+            if (IsDerivedFromNonAbstractLazinator)
+                sb.AppendLine(
+                        $@"
+                        {ProtectedIfApplicable}override void {helperMethod}(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
+                        {{
+                            base.WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);");
+            else
+            {
+                sb.AppendLine(
+                        $@"
+                        {ProtectedIfApplicable}{DerivationKeyword}void {helperMethod}(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
+                        {{");
+            }
+
+
+            foreach (var property in thisLevel)
+            {
+                if (property.IsPrimitive == isPrimitive)
+                    AppendPropertyWrite(sb, property);
+            }
+
+            if (!isPrimitive)
+                AppendEndByteIndex(sb, thisLevel, "writer.Position - startPosition", true);
+
+            sb.Append($@"}}
+");
+        }
+
+        private void AppendPropertyWrite(CodeStringBuilder sb, PropertyDescription property)
+        {
+            if (IncludeTracingCode)
+            {
+                if (property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (property.PropertyType == LazinatorPropertyType.LazinatorStructNullable) || (property.PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface))
+                {
+                    sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) (backing var null? {{{property.BackingFieldString} == null}}) "");");
+                }
+                else if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
+                {
+                    sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) "");");
+                }
+                else if (property.TrackDirtinessNonSerialized)
+                    sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) (dirty? {{{property.BackingDirtyFieldString}}})"");");
+                else if (property.PropertyType == LazinatorPropertyType.NonLazinator || property.PropertyType == LazinatorPropertyType.SupportedCollection || property.PropertyType == LazinatorPropertyType.SupportedTuple)
+                    sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")})"");");
+                else
+                    sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} value {{{property.BackingFieldString}}}"");");
+                sb.AppendLine($@"TabbedText.Tabs++;");
+            }
+            property.AppendPropertyWriteString(sb);
+            if (IncludeTracingCode)
+            {
+                sb.AppendLine($@"TabbedText.Tabs--;");
+            }
         }
 
         string skipConvertFromBytesAfterHeaderString = "// ConvertFromBytesAfterHeader defined in main class; thus skipped here";
