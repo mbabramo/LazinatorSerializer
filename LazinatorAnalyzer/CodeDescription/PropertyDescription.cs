@@ -1530,11 +1530,11 @@ namespace Lazinator.CodeDescription
 
         public void AppendPropertyWriteString(CodeStringBuilder sb)
         {
-            // We remember the startOfObjectPosition, and then update the stored buffer at the end,
+            // We remember the startOfChildPosition, and then update the stored buffer at the end,
             // because we can't change the _ByteIndex until after the write, since we may need
             // to read from storage during the write.
             if (!IsPrimitive)
-                sb.AppendLine("startOfObjectPosition = writer.Position;");
+                sb.AppendLine("startOfChildPosition = writer.Position;");
             // Now, we have to consider the SkipCondition, from a SkipIf attribute. We don't write if the skip condition is
             // met (but still must update the byte index).
             if (SkipCondition != null)
@@ -1563,7 +1563,7 @@ namespace Lazinator.CodeDescription
                     removeBuffers = new ConditionalCodeGenerator(GetNonNullCheck(true), $" {BackingFieldString} = ({AppropriatelyQualifiedTypeName}) CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({BackingFieldAccessWithPossibleException}, l => l.RemoveBufferInHierarchy(), true);").ToString();
                 sb.AppendLine($@"if (updateStoredBuffer)
                                 {{
-                                    {BackingFieldByteIndex} = startOfObjectPosition - startPosition;{removeBuffers}
+                                    {BackingFieldByteIndex} = writer.Position;{removeBuffers}
                                 }}");
             }
         }
@@ -1632,6 +1632,8 @@ namespace Lazinator.CodeDescription
 
         private void AppendPropertyWriteString_Lazinator(CodeStringBuilder sb)
         {
+            bool allLengthsPrecedeChildren = true; 
+            bool skipLengthForThisProperty = IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast;
             string withInclusionConditional = null;
             bool nullableStruct = PropertyType == LazinatorPropertyType.LazinatorStructNullable || (IsDefinitelyStruct && Nullable);
             string propertyNameOrCopy = nullableStruct ? "copy" : $"{BackingFieldString}";
@@ -1651,12 +1653,26 @@ namespace Lazinator.CodeDescription
                             var byteIndexCopy = {BackingFieldByteIndex};
                             var byteLengthCopy = {BackingFieldByteLength};
                             {IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"var copy = {BackingFieldString}.Value;
-                            ")}WriteChild(ref writer, ref {propertyNameOrCopy}, includeChildrenMode, {BackingFieldAccessedString}, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy{ChildSliceEndString}), verifyCleanness, updateStoredBuffer, {(SingleByteLength ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, null);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
+                            ")}WriteChild(ref writer, ref {propertyNameOrCopy}, includeChildrenMode, {BackingFieldAccessedString}, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy{ChildSliceEndString}), verifyCleanness, updateStoredBuffer, {(SingleByteLength ? "true" : "false")}, {(allLengthsPrecedeChildren || skipLengthForThisProperty ? "true" : "false")}, null);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
                                 {BackingFieldString} = copy;")}";
                 withInclusionConditional =
                     $@"{new ConditionalCodeGenerator(WriteInclusionConditional, $"{EnsureDeserialized()}{lazinatorNullableStructNullCheck(mainWriteString)}")}";
             }
             sb.AppendLine(withInclusionConditional);
+            if (allLengthsPrecedeChildren && !skipLengthForThisProperty)
+            {
+                string byteLengthString = SingleByteLength ? "Byte" : "Int32";
+                string byteLengthAbbreviatedString = SingleByteLength ? "byte" : "int";
+                sb.AppendLine($@"{byteLengthAbbreviatedString} lengthValue = writer.Position - startOfChildPosition;
+                if (LittleEndianStorage)
+                {{
+                    TryWrite{byteLengthString}LittleEndian(lengthsSpan, lengthValue);
+                }}
+                else
+                {{
+                    TryWrite{byteLengthString}BigEndian(lengthsSpan, lengthValue);
+                }}");
+            }
         }
 
         private string EnsureDeserialized()

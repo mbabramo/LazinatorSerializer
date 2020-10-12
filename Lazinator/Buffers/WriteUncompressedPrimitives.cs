@@ -1,4 +1,5 @@
 using System;
+using static System.Buffers.Binary.BinaryPrimitives;
 
 namespace Lazinator.Buffers
 {
@@ -35,6 +36,15 @@ namespace Lazinator.Buffers
             writer.Write(value);
             return (byte)sizeof(ushort);
         }
+
+        public static void WriteInt(Span<byte> span, int value)
+        {
+            if (BinaryBufferWriter.LittleEndianStorage)
+                WriteInt32LittleEndian(span, value);
+            else
+                WriteInt32BigEndian(span, value);
+        }
+
         public static byte WriteInt(ref BinaryBufferWriter writer, int value)
         {
             writer.Write(value);
