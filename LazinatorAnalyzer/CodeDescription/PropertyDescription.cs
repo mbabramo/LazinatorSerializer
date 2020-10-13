@@ -131,15 +131,15 @@ namespace Lazinator.CodeDescription
         internal bool IsNonLazinatorTypeWithoutInterchange => PropertyType == LazinatorPropertyType.NonLazinator && !HasInterchangeType;
         internal string ConstructorInitialization => IIF(PropertyType != LazinatorPropertyType.LazinatorStruct && PropertyType != LazinatorPropertyType.LazinatorStructNullable && !NonSerializedIsStruct, "IncludeChildrenMode.IncludeAllChildren");
         internal string ConstructorInitializationWithChildData
+        {
+            get
             {
-                get
-                {
-                    string basicInitialization = ConstructorInitialization;
-                    if (basicInitialization == "" || basicInitialization == "IncludeChildrenMode.IncludeAllChildren")
-                        return "childData";
-                    return $"{basicInitialization}, childData";
-                }
+                string basicInitialization = ConstructorInitialization;
+                if (basicInitialization == "" || basicInitialization == "IncludeChildrenMode.IncludeAllChildren")
+                    return "childData";
+                return $"{basicInitialization}, childData";
             }
+        }
 
         /* Names */
         private bool UseFullyQualifiedNames => (Config?.UseFullyQualifiedNames ?? false) || HasFullyQualifyAttribute || Symbol.ContainingType != null;
@@ -1570,6 +1570,7 @@ namespace Lazinator.CodeDescription
 
         private void AppendPropertyWriteString_NonLazinator(CodeStringBuilder sb)
         {
+            bool allLengthsPrecedeChildren = true;
             string omitLengthSuffix = IIF(OmitLengthBecauseDefinitelyLast, "_WithoutLengthPrefix");
             string writeMethodName = PlaceholderMemoryWriteMethod == null ? $"ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}" : PlaceholderMemoryWriteMethod;
             if (PlaceholderMemoryWriteMethod == null)
@@ -1632,16 +1633,16 @@ namespace Lazinator.CodeDescription
 
         private void AppendPropertyWriteString_Lazinator(CodeStringBuilder sb)
         {
-            bool allLengthsPrecedeChildren = true; 
+            bool allLengthsPrecedeChildren = true;
             bool skipLengthForThisProperty = IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast;
             string withInclusionConditional = null;
             bool nullableStruct = PropertyType == LazinatorPropertyType.LazinatorStructNullable || (IsDefinitelyStruct && Nullable);
             string propertyNameOrCopy = nullableStruct ? "copy" : $"{BackingFieldString}";
-            Func<string, string> lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen($"{BackingFieldString}", $"WriteNullChild(ref writer, {(SingleByteLength ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")});", originalString) : originalString;
+            Func<string, string> lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen($"{BackingFieldString}", $"WriteNullChild(ref writer, {(SingleByteLength ? "true" : "false")}, {(allLengthsPrecedeChildren || skipLengthForThisProperty ? "true" : "false")});", originalString) : originalString;
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct)
             {
                 string mainWriteString = $@"{IIF(nullableStruct, $@"var copy = {BackingFieldString}.Value;
-                            ")}WriteChild(ref writer, ref {propertyNameOrCopy}, includeChildrenMode, {BackingFieldAccessedString}, () => {ChildSliceString}, verifyCleanness, updateStoredBuffer, {(SingleByteLength ? "true" : "false")}, {(IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, this);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
+                            ")}WriteChild(ref writer, ref {propertyNameOrCopy}, includeChildrenMode, {BackingFieldAccessedString}, () => {ChildSliceString}, verifyCleanness, updateStoredBuffer, {(SingleByteLength ? "true" : "false")}, {(allLengthsPrecedeChildren || skipLengthForThisProperty ? "true" : "false")}, this);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
                                 {BackingFieldString} = copy;")}";
                 withInclusionConditional =
                     new ConditionalCodeGenerator(WriteInclusionConditional, $@"{EnsureDeserialized()}{lazinatorNullableStructNullCheck(mainWriteString)}").ToString();
@@ -1658,24 +1659,23 @@ namespace Lazinator.CodeDescription
                 withInclusionConditional =
                     $@"{new ConditionalCodeGenerator(WriteInclusionConditional, $"{EnsureDeserialized()}{lazinatorNullableStructNullCheck(mainWriteString)}")}";
             }
-            sb.AppendLine(withInclusionConditional);
+            if (withInclusionConditional != "")
+                sb.Append(withInclusionConditional);
             if (allLengthsPrecedeChildren && !skipLengthForThisProperty)
             {
                 if (SingleByteLength)
                 {
-                    sb.AppendLine($@"int lengthValue = writer.Position - startOfChildPosition;
+                    sb.AppendLine($@"lengthValue = writer.Position - startOfChildPosition;
                         if (lengthValue > byte.MaxValue)
                         {{
-                            ThrowMoreThan255BytesException();
+                            ThrowHelper.ThrowMoreThan255BytesException();
                         }}
-                        lengthsSpan[0] = (byte) lengthValue;
-                        ");
+                        lengthsSpan[0] = (byte) lengthValue;");
                 }
                 else
                 {
-                    sb.AppendLine($@"int lengthValue = writer.Position - startOfChildPosition;
-                        WriteInt(lengthsSpan, lengthValue);
-                        ");
+                    sb.AppendLine($@"lengthValue = writer.Position - startOfChildPosition;
+                        WriteInt(lengthsSpan, lengthValue);");
                 }
             }
         }
@@ -2424,7 +2424,7 @@ namespace Lazinator.CodeDescription
                 assignments = Enumerable.Range(1, InnerProperties.Count).Select(x => InnerProperties[x - 1].PropertyName + " = " + "item" + x);
             else
                 assignments = Enumerable.Range(1, InnerProperties.Count).Select(x => "item" + x);
-            
+
             sb.Append(
                     $@"
                         var itemToCreate = {(SupportedTupleType == LazinatorSupportedTupleType.ValueTuple ? "" : $"new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}")}{GetInnerPropertyAssignments(InitializeRecordLikeTypePropertiesDirectly, assignments)};

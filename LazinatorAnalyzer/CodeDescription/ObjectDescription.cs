@@ -1211,8 +1211,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             var thisLevel = PropertiesToDefineThisLevel;
             bool hasChildrenThisLevel = thisLevel.Any(x => !x.IsPrimitive);
             string positionInitialization = !hasChildrenThisLevel ? $@"" : $@"
-                    int startPosition = writer.Position;
-                    int startOfObjectPosition = 0;";
+                    int startPosition = writer.Position;";
 
             sb.AppendLine(
                         $@"
@@ -1296,7 +1295,8 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                         {{");
             }
             if (!isPrimitive)
-                sb.AppendLine($"int startOfChildPosition = 0;");
+                sb.AppendLine($@"int startOfChildPosition = 0;
+                    int lengthValue = 0;");
 
 
             foreach (var property in thisLevel)
@@ -1529,7 +1529,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             if (GeneratingRefStruct)
                 return $@"
                         ";
-            otherNamespaces.AddRange(new string[] { "System", "System.Buffers", "System.Collections.Generic", "System.Diagnostics", "System.IO", "System.Linq", "System.Runtime.InteropServices", "Lazinator.Attributes", "Lazinator.Buffers", "Lazinator.Core", "Lazinator.Exceptions", "Lazinator.Support" });
+            otherNamespaces.AddRange(new string[] { "System", "System.Buffers", "System.Collections.Generic", "System.Diagnostics", "System.IO", "System.Linq", "System.Runtime.InteropServices", "Lazinator.Attributes", "Lazinator.Buffers", "Lazinator.Core", "Lazinator.Exceptions", "Lazinator.Support", "static Lazinator.Buffers.WriteUncompressedPrimitives" });
             if (AsyncLazinatorMemory)
                 otherNamespaces.Add("System.Threading.Tasks");
             otherNamespaces.RemoveAll(x => x == primaryNamespace);

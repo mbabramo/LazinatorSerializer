@@ -413,7 +413,7 @@ namespace Lazinator.Buffers
             writer.Write((byte)Length);
             WriteToBinaryBuffer(ref writer, includeOutsideOfRange);
         }
-        public void WriteToBinaryBuffer_WithIntPrefix(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
+        public void WriteToBinaryBuffer_WithUIntPrefix(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
         {
             writer.Write((uint)Length);
             WriteToBinaryBuffer(ref writer, includeOutsideOfRange);

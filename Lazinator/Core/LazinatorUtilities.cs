@@ -239,7 +239,7 @@ namespace Lazinator.Core
             else if (restrictLengthTo255Bytes)
                 childStorage.WriteToBinaryBuffer_WithBytePrefix(ref writer);
             else
-                childStorage.WriteToBinaryBuffer_WithIntPrefix(ref writer);
+                childStorage.WriteToBinaryBuffer_WithUIntPrefix(ref writer);
             return childStorage;
         }
 
@@ -374,7 +374,7 @@ namespace Lazinator.Core
             {
                 // object has never been loaded into memory, so there is no need to verify cleanness
                 // just return what we have.
-                original.WriteToBinaryBuffer_WithIntPrefix(ref writer);
+                original.WriteToBinaryBuffer_WithUIntPrefix(ref writer);
             }
             else if (isBelievedDirty || length == 0)
             {
@@ -389,8 +389,49 @@ namespace Lazinator.Core
                     ReadOnlyMemory<byte> revised = ConvertNonLazinatorObjectToBytes(nonLazinatorObject, binaryWriterAction);
                     ConfirmMatch(original, revised);
                 }
-                original.WriteToBinaryBuffer_WithIntPrefix(ref writer);
+                original.WriteToBinaryBuffer_WithUIntPrefix(ref writer);
             }
+        }
+
+        /// <summary>
+        /// Initiates the conversion to binary of a non-lazinator object. Called in Lazinator code-behind.
+        /// </summary>
+        /// <param name="nonLazinatorObject">An object that does not implement ILazinator</param>
+        /// <param name="isBelievedDirty">An indication of whether the object to be converted to bytes is believed to be dirty, e.g. has had its dirty flag set.</param>
+        /// <param name="isAccessed">An indication of whether the object has been accessed.</param>
+        /// <param name="writer">The binary writer</param>
+        /// <param name="getChildSliceForFieldFn">A function to return the child slice of memory for the non-Lazinator object</param>
+        /// <param name="verifyCleanness">If true, then the dirty-conversion will always be performed unless we are sure it is clean, and if the object is not believed to be dirty, the results will be compared to the clean version. This allows for errors from failure to serialize objects that have been changed to be caught during development.</param>
+        /// <param name="binaryWriterAction">The action to complete the write to the binary buffer</param>
+        public static void WriteNonLazinatorObject(object nonLazinatorObject,
+            bool isBelievedDirty, bool isAccessed, ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceForFieldFn,
+            bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction, Span<byte> lengthSpan)
+        {
+            LazinatorMemory original = getChildSliceForFieldFn();
+            int length = original.Length;
+            int startPosition = writer.Position;
+            if (!isAccessed && length > 0)
+            {
+                // object has never been loaded into memory, so there is no need to verify cleanness
+                // just return what we have.
+                original.WriteToBinaryBuffer(ref writer);
+            }
+            else if (isBelievedDirty || length == 0)
+            {
+                // We definitely need to write to binary, because either the dirty flag has been set or the original storage doesn't have anything to help us.
+                void action(ref BinaryBufferWriter w) => binaryWriterAction(ref w, verifyCleanness);
+                WriteToBinaryWithoutLengthPrefix(ref writer, action);
+            }
+            else
+            {
+                if (verifyCleanness)
+                {
+                    ReadOnlyMemory<byte> revised = ConvertNonLazinatorObjectToBytes(nonLazinatorObject, binaryWriterAction);
+                    ConfirmMatch(original, revised);
+                }
+                original.WriteToBinaryBuffer(ref writer);
+            }
+            WriteUncompressedPrimitives.WriteUInt(lengthSpan, (uint) (writer.Position - startPosition));
         }
 
         /// <summary>
