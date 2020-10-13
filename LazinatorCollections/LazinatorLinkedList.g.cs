@@ -447,7 +447,6 @@ namespace LazinatorCollections
                 {
                     totalChildrenBytes += span.ToInt32(ref bytesSoFar);
                 }
-                
                 _LazinatorLinkedList_T_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
                 return totalChildrenBytes;
             }
@@ -520,11 +519,10 @@ namespace LazinatorCollections
                 writer.Write((byte)includeChildrenMode);
                 // write properties
                 
-                int startOfObjectPosition = writer.Position;
                 WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
                 Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 4);
                 writer.Skip(4);
-                WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+                WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
                 TabbedText.WriteLine($"Byte {writer.Position} (end of LazinatorLinkedList<T>) ");
             }
             
@@ -547,6 +545,10 @@ namespace LazinatorCollections
                 TabbedText.WriteLine($"Byte {writer.Position}, FirstNode (accessed? {_FirstNode_Accessed}) (backing var null? {_FirstNode == null}) ");
                 TabbedText.Tabs++;
                 startOfChildPosition = writer.Position;
+                if (updateStoredBuffer)
+                {
+                    _FirstNode_ByteIndex = writer.Position - startOfObjectPosition;
+                }
                 if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
                 {
                     if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_FirstNode_Accessed)
@@ -558,10 +560,6 @@ namespace LazinatorCollections
                 lengthValue = writer.Position - startOfChildPosition;
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
-                if (updateStoredBuffer)
-                {
-                    _FirstNode_ByteIndex = writer.Position - startOfObjectPosition;
-                }
                 TabbedText.Tabs--;
                 if (updateStoredBuffer)
                 {

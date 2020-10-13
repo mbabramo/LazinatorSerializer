@@ -874,10 +874,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             writer.Write((byte)includeChildrenMode);
             // write properties
             
-            int startOfObjectPosition = writer.Position;
+            
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 20);
             writer.Skip(20);
-            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
             TabbedText.WriteLine($"Byte {writer.Position} (end of OpenGenericStayingOpenContainer) ");
         }
         
@@ -892,6 +892,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             TabbedText.WriteLine($"Byte {writer.Position}, ClosedGenericBase (accessed? {_ClosedGenericBase_Accessed}) (backing var null? {_ClosedGenericBase == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _ClosedGenericBase_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ClosedGenericBase_Accessed)
@@ -903,14 +907,14 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             lengthValue = writer.Position - startOfChildPosition;
             WriteInt(lengthsSpan, lengthValue);
             lengthsSpan = lengthsSpan.Slice(sizeof(int));
-            if (updateStoredBuffer)
-            {
-                _ClosedGenericBase_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, ClosedGenericFloat (accessed? {_ClosedGenericFloat_Accessed}) (backing var null? {_ClosedGenericFloat == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _ClosedGenericFloat_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ClosedGenericFloat_Accessed)
@@ -922,14 +926,14 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             lengthValue = writer.Position - startOfChildPosition;
             WriteInt(lengthsSpan, lengthValue);
             lengthsSpan = lengthsSpan.Slice(sizeof(int));
-            if (updateStoredBuffer)
-            {
-                _ClosedGenericFloat_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, ClosedGenericFromBaseWithBase (accessed? {_ClosedGenericFromBaseWithBase_Accessed}) (backing var null? {_ClosedGenericFromBaseWithBase == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _ClosedGenericFromBaseWithBase_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ClosedGenericFromBaseWithBase_Accessed)
@@ -941,14 +945,14 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             lengthValue = writer.Position - startOfChildPosition;
             WriteInt(lengthsSpan, lengthValue);
             lengthsSpan = lengthsSpan.Slice(sizeof(int));
-            if (updateStoredBuffer)
-            {
-                _ClosedGenericFromBaseWithBase_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, ClosedGenericInterface (accessed? {_ClosedGenericInterface_Accessed}) (backing var null? {_ClosedGenericInterface == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _ClosedGenericInterface_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ClosedGenericInterface_Accessed)
@@ -960,14 +964,14 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             lengthValue = writer.Position - startOfChildPosition;
             WriteInt(lengthsSpan, lengthValue);
             lengthsSpan = lengthsSpan.Slice(sizeof(int));
-            if (updateStoredBuffer)
-            {
-                _ClosedGenericInterface_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, ClosedGenericNonexclusiveInterface (accessed? {_ClosedGenericNonexclusiveInterface_Accessed}) (backing var null? {_ClosedGenericNonexclusiveInterface == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _ClosedGenericNonexclusiveInterface_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ClosedGenericNonexclusiveInterface_Accessed)
@@ -979,10 +983,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             lengthValue = writer.Position - startOfChildPosition;
             WriteInt(lengthsSpan, lengthValue);
             lengthsSpan = lengthsSpan.Slice(sizeof(int));
-            if (updateStoredBuffer)
-            {
-                _ClosedGenericNonexclusiveInterface_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

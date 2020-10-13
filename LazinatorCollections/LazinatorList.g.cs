@@ -384,13 +384,11 @@ namespace LazinatorCollections
             {
                 int totalChildrenBytes = 0;
                 _MainListSerialized_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-                totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-                _Offsets_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+                totalChildrenBytes += span.ToInt32(ref bytesSoFar);_Offsets_ByteIndex = indexOfFirstChild + totalChildrenBytes;
                 if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
                 {
                     totalChildrenBytes += span.ToInt32(ref bytesSoFar);
                 }
-                
                 _LazinatorList_T_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
                 return totalChildrenBytes;
             }
@@ -465,11 +463,10 @@ namespace LazinatorCollections
                 writer.Write((byte)includeChildrenMode);
                 // write properties
                 
-                int startOfObjectPosition = writer.Position;
                 WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
                 Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 8);
                 writer.Skip(8);
-                WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+                WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
                 TabbedText.WriteLine($"Byte {writer.Position} (end of LazinatorList<T>) ");
                 OnPropertiesWritten(updateStoredBuffer);
             }
@@ -489,6 +486,10 @@ namespace LazinatorCollections
                 TabbedText.WriteLine($"Byte {writer.Position}, MainListSerialized (accessed? )");
                 TabbedText.Tabs++;
                 startOfChildPosition = writer.Position;
+                if (updateStoredBuffer)
+                {
+                    _MainListSerialized_ByteIndex = writer.Position - startOfObjectPosition;
+                }
                 WriteNonLazinatorObject(
                 nonLazinatorObject: default, isBelievedDirty: true,
                 isAccessed: true, writer: ref writer,
@@ -498,14 +499,14 @@ namespace LazinatorCollections
                 WriteMainList(ref w, default,
                 includeChildrenMode, v, updateStoredBuffer),
                 lengthsSpan: ref lengthsSpan);
-                if (updateStoredBuffer)
-                {
-                    _MainListSerialized_ByteIndex = writer.Position - startOfObjectPosition;
-                }
                 TabbedText.Tabs--;
                 TabbedText.WriteLine($"Byte {writer.Position}, Offsets (accessed? {_Offsets_Accessed}) (backing var null? {_Offsets == null}) ");
                 TabbedText.Tabs++;
                 startOfChildPosition = writer.Position;
+                if (updateStoredBuffer)
+                {
+                    _Offsets_ByteIndex = writer.Position - startOfObjectPosition;
+                }
                 if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
                 {
                     if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_Offsets_Accessed)
@@ -517,10 +518,6 @@ namespace LazinatorCollections
                 lengthValue = writer.Position - startOfChildPosition;
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
-                if (updateStoredBuffer)
-                {
-                    _Offsets_ByteIndex = writer.Position - startOfObjectPosition;
-                }
                 TabbedText.Tabs--;
                 if (updateStoredBuffer)
                 {

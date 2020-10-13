@@ -430,11 +430,10 @@ namespace LazinatorTests.Examples.Subclasses
                 writer.Write((byte)includeChildrenMode);
                 // write properties
                 
-                int startOfObjectPosition = writer.Position;
                 WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
                 Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 4);
                 writer.Skip(4);
-                WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+                WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
                 TabbedText.WriteLine($"Byte {writer.Position} (end of ClassWithLocalEnum) ");
             }
             
@@ -453,6 +452,10 @@ namespace LazinatorTests.Examples.Subclasses
                 TabbedText.WriteLine($"Byte {writer.Position}, MyEnumList (accessed? {_MyEnumList_Accessed})");
                 TabbedText.Tabs++;
                 startOfChildPosition = writer.Position;
+                if (updateStoredBuffer)
+                {
+                    _MyEnumList_ByteIndex = writer.Position - startOfObjectPosition;
+                }
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyEnumList_Accessed)
                 {
                     var deserialized = MyEnumList;
@@ -466,10 +469,6 @@ namespace LazinatorTests.Examples.Subclasses
                 ConvertToBytes_List_GEnumWithinClass_g(ref w, _MyEnumList,
                 includeChildrenMode, v, updateStoredBuffer),
                 lengthsSpan: ref lengthsSpan);
-                if (updateStoredBuffer)
-                {
-                    _MyEnumList_ByteIndex = writer.Position - startOfObjectPosition;
-                }
                 TabbedText.Tabs--;
                 if (updateStoredBuffer)
                 {

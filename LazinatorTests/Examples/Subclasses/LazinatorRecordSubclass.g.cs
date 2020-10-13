@@ -198,6 +198,7 @@ namespace LazinatorTests.Examples.Subclasses
             
             protected override void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
             {
+                int startPosition = writer.Position;
                 TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Subclasses.LazinatorRecordSubclass starting at {writer.Position}.");
                 TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
                 TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
@@ -217,11 +218,10 @@ namespace LazinatorTests.Examples.Subclasses
                 writer.Write((byte)includeChildrenMode);
                 // write properties
                 
-                int startOfObjectPosition = writer.Position;
                 WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
                 Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 0);
                 writer.Skip(0);
-                WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+                WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
                 TabbedText.WriteLine($"Byte {writer.Position} (end of LazinatorRecordSubclass) ");
             }
             

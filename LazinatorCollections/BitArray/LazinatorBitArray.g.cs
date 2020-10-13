@@ -401,8 +401,7 @@ namespace LazinatorCollections.BitArray
             {
                 int totalChildrenBytes = 0;
                 _IntStorage_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-                totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-                _LazinatorBitArray_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+                totalChildrenBytes += span.ToInt32(ref bytesSoFar);_LazinatorBitArray_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
                 return totalChildrenBytes;
             }
             
@@ -463,11 +462,10 @@ namespace LazinatorCollections.BitArray
                 writer.Write((byte)includeChildrenMode);
                 // write properties
                 
-                int startOfObjectPosition = writer.Position;
                 WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
                 Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 4);
                 writer.Skip(4);
-                WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+                WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
                 TabbedText.WriteLine($"Byte {writer.Position} (end of LazinatorBitArray) ");
             }
             
@@ -490,6 +488,10 @@ namespace LazinatorCollections.BitArray
                 TabbedText.WriteLine($"Byte {writer.Position}, IntStorage (accessed? {_IntStorage_Accessed})");
                 TabbedText.Tabs++;
                 startOfChildPosition = writer.Position;
+                if (updateStoredBuffer)
+                {
+                    _IntStorage_ByteIndex = writer.Position - startOfObjectPosition;
+                }
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_IntStorage_Accessed)
                 {
                     var deserialized = IntStorage;
@@ -503,10 +505,6 @@ namespace LazinatorCollections.BitArray
                 ConvertToBytes_Memory_Gint_g(ref w, _IntStorage,
                 includeChildrenMode, v, updateStoredBuffer),
                 lengthsSpan: ref lengthsSpan);
-                if (updateStoredBuffer)
-                {
-                    _IntStorage_ByteIndex = writer.Position - startOfObjectPosition;
-                }
                 TabbedText.Tabs--;
                 if (updateStoredBuffer)
                 {

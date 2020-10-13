@@ -465,10 +465,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             writer.Write((byte)includeChildrenMode);
             // write properties
             
-            int startOfObjectPosition = writer.Position;
+            
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 4);
             writer.Skip(4);
-            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
             TabbedText.WriteLine($"Byte {writer.Position} (end of ContainerForEagerExample) ");
         }
         
@@ -483,6 +483,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             TabbedText.WriteLine($"Byte {writer.Position}, EagerExample (accessed? {_EagerExample_Accessed}) (backing var null? {_EagerExample == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _EagerExample_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_EagerExample_Accessed)
@@ -494,10 +498,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             lengthValue = writer.Position - startOfChildPosition;
             WriteInt(lengthsSpan, lengthValue);
             lengthsSpan = lengthsSpan.Slice(sizeof(int));
-            if (updateStoredBuffer)
-            {
-                _EagerExample_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

@@ -384,7 +384,6 @@ namespace Lazinator.Wrappers
                 
                 // write properties
                 
-                int startOfObjectPosition = writer.Position;
                 WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
                 TabbedText.WriteLine($"Byte {writer.Position} (end of WUInt32) ");
             }

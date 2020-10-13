@@ -516,10 +516,10 @@ namespace LazinatorTests.Examples.Hierarchy
             writer.Write((byte)includeChildrenMode);
             // write properties
             
-            int startOfObjectPosition = writer.Position;
+            
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 8);
             writer.Skip(8);
-            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
             TabbedText.WriteLine($"Byte {writer.Position} (end of ExampleInterfaceContainer) ");
         }
         
@@ -534,6 +534,10 @@ namespace LazinatorTests.Examples.Hierarchy
             TabbedText.WriteLine($"Byte {writer.Position}, ExampleByInterface (accessed? {_ExampleByInterface_Accessed}) (backing var null? {_ExampleByInterface == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _ExampleByInterface_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ExampleByInterface_Accessed)
@@ -545,14 +549,14 @@ namespace LazinatorTests.Examples.Hierarchy
             lengthValue = writer.Position - startOfChildPosition;
             WriteInt(lengthsSpan, lengthValue);
             lengthsSpan = lengthsSpan.Slice(sizeof(int));
-            if (updateStoredBuffer)
-            {
-                _ExampleByInterface_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, ExampleListByInterface (accessed? {_ExampleListByInterface_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _ExampleListByInterface_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ExampleListByInterface_Accessed)
             {
                 var deserialized = ExampleListByInterface;
@@ -566,10 +570,6 @@ namespace LazinatorTests.Examples.Hierarchy
             ConvertToBytes_List_GIExample_g(ref w, _ExampleListByInterface,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _ExampleListByInterface_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

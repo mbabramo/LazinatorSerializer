@@ -674,10 +674,10 @@ namespace LazinatorTests.Examples.Tuples
             writer.Write((byte)includeChildrenMode);
             // write properties
             
-            int startOfObjectPosition = writer.Position;
+            
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 24);
             writer.Skip(24);
-            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
             TabbedText.WriteLine($"Byte {writer.Position} (end of RegularTuple) ");
         }
         
@@ -692,6 +692,10 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, MyListTuple (accessed? {_MyListTuple_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyListTuple_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyListTuple_Accessed)
             {
                 var deserialized = MyListTuple;
@@ -705,14 +709,14 @@ namespace LazinatorTests.Examples.Tuples
             ConvertToBytes_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(ref w, _MyListTuple,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _MyListTuple_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyTupleSerialized (accessed? {_MyTupleSerialized_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyTupleSerialized_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyTupleSerialized_Accessed)
             {
                 var deserialized = MyTupleSerialized;
@@ -726,14 +730,14 @@ namespace LazinatorTests.Examples.Tuples
             ConvertToBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(ref w, _MyTupleSerialized,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _MyTupleSerialized_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyTupleSerialized2 (accessed? {_MyTupleSerialized2_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyTupleSerialized2_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyTupleSerialized2_Accessed)
             {
                 var deserialized = MyTupleSerialized2;
@@ -747,14 +751,14 @@ namespace LazinatorTests.Examples.Tuples
             ConvertToBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(ref w, _MyTupleSerialized2,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _MyTupleSerialized2_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyTupleSerialized3 (accessed? {_MyTupleSerialized3_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyTupleSerialized3_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyTupleSerialized3_Accessed)
             {
                 var deserialized = MyTupleSerialized3;
@@ -768,14 +772,14 @@ namespace LazinatorTests.Examples.Tuples
             ConvertToBytes_Tuple_Guint_n_c_C32ExampleChild_c_C32NonLazinatorClass_g(ref w, _MyTupleSerialized3,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _MyTupleSerialized3_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyTupleSerialized4 (accessed? {_MyTupleSerialized4_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyTupleSerialized4_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyTupleSerialized4_Accessed)
             {
                 var deserialized = MyTupleSerialized4;
@@ -791,7 +795,7 @@ namespace LazinatorTests.Examples.Tuples
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _MyTupleSerialized4_ByteIndex = writer.Position - startOfObjectPosition;if (_MyTupleSerialized4_Accessed && _MyTupleSerialized4 != null)
+                if (_MyTupleSerialized4_Accessed && _MyTupleSerialized4 != null)
                 {
                     _MyTupleSerialized4 = (Tuple<Int32, ExampleStructContainingClasses>) CloneOrChange_Tuple_Gint_c_C32ExampleStructContainingClasses_g(_MyTupleSerialized4, l => l.RemoveBufferInHierarchy(), true);
                 }
@@ -801,6 +805,10 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, MyTupleSerialized5 (accessed? {_MyTupleSerialized5_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyTupleSerialized5_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyTupleSerialized5_Accessed)
             {
                 var deserialized = MyTupleSerialized5;
@@ -816,7 +824,7 @@ namespace LazinatorTests.Examples.Tuples
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _MyTupleSerialized5_ByteIndex = writer.Position - startOfObjectPosition;if (_MyTupleSerialized5_Accessed && _MyTupleSerialized5 != null)
+                if (_MyTupleSerialized5_Accessed && _MyTupleSerialized5 != null)
                 {
                     _MyTupleSerialized5 = (Tuple<Int32, ExampleStructContainingClasses?>) CloneOrChange_Tuple_Gint_c_C32ExampleStructContainingClasses_n_g(_MyTupleSerialized5, l => l.RemoveBufferInHierarchy(), true);
                 }

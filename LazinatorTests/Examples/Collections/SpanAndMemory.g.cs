@@ -851,10 +851,10 @@ namespace LazinatorTests.Examples.Collections
             writer.Write((byte)includeChildrenMode);
             // write properties
             
-            int startOfObjectPosition = writer.Position;
+            
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 44);
             writer.Skip(44);
-            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
             TabbedText.WriteLine($"Byte {writer.Position} (end of SpanAndMemory) ");
         }
         
@@ -869,6 +869,10 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyMemoryByte (accessed? {_MyMemoryByte_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyMemoryByte_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyMemoryByte_Accessed)
             {
                 var deserialized = MyMemoryByte;
@@ -882,14 +886,14 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_Memory_Gbyte_g(ref w, _MyMemoryByte,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _MyMemoryByte_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyMemoryInt (accessed? {_MyMemoryInt_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyMemoryInt_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyMemoryInt_Accessed)
             {
                 var deserialized = MyMemoryInt;
@@ -903,14 +907,14 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_Memory_Gint_g(ref w, _MyMemoryInt,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _MyMemoryInt_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyNullableMemoryByte (accessed? {_MyNullableMemoryByte_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyNullableMemoryByte_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyNullableMemoryByte_Accessed)
             {
                 var deserialized = MyNullableMemoryByte;
@@ -924,14 +928,14 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_Memory_Gbyte_g_n(ref w, _MyNullableMemoryByte,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _MyNullableMemoryByte_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyNullableMemoryInt (accessed? {_MyNullableMemoryInt_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyNullableMemoryInt_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyNullableMemoryInt_Accessed)
             {
                 var deserialized = MyNullableMemoryInt;
@@ -945,14 +949,14 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_Memory_Gint_g_n(ref w, _MyNullableMemoryInt,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _MyNullableMemoryInt_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyNullableReadOnlyMemoryInt (accessed? {_MyNullableReadOnlyMemoryInt_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyNullableReadOnlyMemoryInt_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyNullableReadOnlyMemoryInt_Accessed)
             {
                 var deserialized = MyNullableReadOnlyMemoryInt;
@@ -966,14 +970,14 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_ReadOnlyMemory_Gint_g_n(ref w, _MyNullableReadOnlyMemoryInt,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _MyNullableReadOnlyMemoryInt_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyReadOnlyMemoryByte (accessed? {_MyReadOnlyMemoryByte_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyReadOnlyMemoryByte_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyReadOnlyMemoryByte_Accessed)
             {
                 var deserialized = MyReadOnlyMemoryByte;
@@ -987,14 +991,14 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_ReadOnlyMemory_Gbyte_g(ref w, _MyReadOnlyMemoryByte,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _MyReadOnlyMemoryByte_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyReadOnlyMemoryChar (accessed? {_MyReadOnlyMemoryChar_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyReadOnlyMemoryChar_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyReadOnlyMemoryChar_Accessed)
             {
                 var deserialized = MyReadOnlyMemoryChar;
@@ -1008,14 +1012,14 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_ReadOnlyMemory_Gchar_g(ref w, _MyReadOnlyMemoryChar,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _MyReadOnlyMemoryChar_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyReadOnlyMemoryInt (accessed? {_MyReadOnlyMemoryInt_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyReadOnlyMemoryInt_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyReadOnlyMemoryInt_Accessed)
             {
                 var deserialized = MyReadOnlyMemoryInt;
@@ -1029,14 +1033,14 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_ReadOnlyMemory_Gint_g(ref w, _MyReadOnlyMemoryInt,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _MyReadOnlyMemoryInt_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyReadOnlySpanByte (accessed? {_MyReadOnlySpanByte_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyReadOnlySpanByte_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyReadOnlySpanByte_Accessed)
             {
                 var deserialized = MyReadOnlySpanByte;
@@ -1050,14 +1054,14 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_ReadOnlySpan_Gbyte_g(ref w, _MyReadOnlySpanByte.Span,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _MyReadOnlySpanByte_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyReadOnlySpanChar (accessed? {_MyReadOnlySpanChar_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyReadOnlySpanChar_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyReadOnlySpanChar_Accessed)
             {
                 var deserialized = MyReadOnlySpanChar;
@@ -1071,14 +1075,14 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_ReadOnlySpan_Gchar_g(ref w, MemoryMarshal.Cast<byte, char>(_MyReadOnlySpanChar.Span),
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _MyReadOnlySpanChar_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyReadOnlySpanLong (accessed? {_MyReadOnlySpanLong_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyReadOnlySpanLong_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyReadOnlySpanLong_Accessed)
             {
                 var deserialized = MyReadOnlySpanLong;
@@ -1092,10 +1096,6 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_ReadOnlySpan_Glong_g(ref w, MemoryMarshal.Cast<byte, long>(_MyReadOnlySpanLong.Span),
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _MyReadOnlySpanLong_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

@@ -524,13 +524,11 @@ namespace LazinatorCollections.Dictionary
                 {
                     totalChildrenBytes += span.ToInt32(ref bytesSoFar);
                 }
-                
                 _Values_ByteIndex = indexOfFirstChild + totalChildrenBytes;
                 if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
                 {
                     totalChildrenBytes += span.ToInt32(ref bytesSoFar);
                 }
-                
                 _DictionaryBucket_TKey_TValue_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
                 return totalChildrenBytes;
             }
@@ -608,11 +606,10 @@ namespace LazinatorCollections.Dictionary
                 writer.Write((byte)includeChildrenMode);
                 // write properties
                 
-                int startOfObjectPosition = writer.Position;
                 WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
                 Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 8);
                 writer.Skip(8);
-                WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+                WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
                 TabbedText.WriteLine($"Byte {writer.Position} (end of DictionaryBucket<TKey, TValue>) ");
             }
             
@@ -631,6 +628,10 @@ namespace LazinatorCollections.Dictionary
                 TabbedText.WriteLine($"Byte {writer.Position}, Keys (accessed? {_Keys_Accessed}) (backing var null? {_Keys == null}) ");
                 TabbedText.Tabs++;
                 startOfChildPosition = writer.Position;
+                if (updateStoredBuffer)
+                {
+                    _Keys_ByteIndex = writer.Position - startOfObjectPosition;
+                }
                 if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
                 {
                     if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_Keys_Accessed)
@@ -642,14 +643,14 @@ namespace LazinatorCollections.Dictionary
                 lengthValue = writer.Position - startOfChildPosition;
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
-                if (updateStoredBuffer)
-                {
-                    _Keys_ByteIndex = writer.Position - startOfObjectPosition;
-                }
                 TabbedText.Tabs--;
                 TabbedText.WriteLine($"Byte {writer.Position}, Values (accessed? {_Values_Accessed}) (backing var null? {_Values == null}) ");
                 TabbedText.Tabs++;
                 startOfChildPosition = writer.Position;
+                if (updateStoredBuffer)
+                {
+                    _Values_ByteIndex = writer.Position - startOfObjectPosition;
+                }
                 if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
                 {
                     if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_Values_Accessed)
@@ -661,10 +662,6 @@ namespace LazinatorCollections.Dictionary
                 lengthValue = writer.Position - startOfChildPosition;
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
-                if (updateStoredBuffer)
-                {
-                    _Values_ByteIndex = writer.Position - startOfObjectPosition;
-                }
                 TabbedText.Tabs--;
                 if (updateStoredBuffer)
                 {

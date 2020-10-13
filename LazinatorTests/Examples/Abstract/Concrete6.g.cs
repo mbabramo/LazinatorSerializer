@@ -255,11 +255,10 @@ namespace LazinatorTests.Examples.Abstract
             writer.Write((byte)includeChildrenMode);
             // write properties
             
-            int startOfObjectPosition = writer.Position;
             WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 32);
             writer.Skip(32);
-            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
             TabbedText.WriteLine($"Byte {writer.Position} (end of Concrete6) ");
         }
         
@@ -276,6 +275,10 @@ namespace LazinatorTests.Examples.Abstract
             TabbedText.WriteLine($"Byte {writer.Position}, IntList6 (accessed? {_IntList6_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _IntList6_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_IntList6_Accessed)
             {
                 var deserialized = IntList6;
@@ -289,10 +292,6 @@ namespace LazinatorTests.Examples.Abstract
             ConvertToBytes_List_Gint_g(ref w, _IntList6,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _IntList6_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

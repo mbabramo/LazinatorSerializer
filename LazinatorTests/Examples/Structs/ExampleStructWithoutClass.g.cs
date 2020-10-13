@@ -384,7 +384,6 @@ namespace LazinatorTests.Examples.Structs
                 writer.Write((byte)includeChildrenMode);
                 // write properties
                 
-                int startOfObjectPosition = writer.Position;
                 WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
                 TabbedText.WriteLine($"Byte {writer.Position} (end of ExampleStructWithoutClass) ");
             }

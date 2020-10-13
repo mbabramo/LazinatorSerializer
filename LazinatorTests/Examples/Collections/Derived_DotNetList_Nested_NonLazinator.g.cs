@@ -273,11 +273,10 @@ namespace LazinatorTests.Examples.Collections
                 writer.Write((byte)includeChildrenMode);
                 // write properties
                 
-                int startOfObjectPosition = writer.Position;
                 WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
                 Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 8);
                 writer.Skip(8);
-                WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+                WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
                 TabbedText.WriteLine($"Byte {writer.Position} (end of Derived_DotNetList_Nested_NonLazinator) ");
             }
             
@@ -298,6 +297,10 @@ namespace LazinatorTests.Examples.Collections
                 TabbedText.WriteLine($"Byte {writer.Position}, MyLevel2ListNestedNonLazinatorType (accessed? {_MyLevel2ListNestedNonLazinatorType_Accessed})");
                 TabbedText.Tabs++;
                 startOfChildPosition = writer.Position;
+                if (updateStoredBuffer)
+                {
+                    _MyLevel2ListNestedNonLazinatorType_ByteIndex = writer.Position - startOfObjectPosition;
+                }
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyLevel2ListNestedNonLazinatorType_Accessed)
                 {
                     var deserialized = MyLevel2ListNestedNonLazinatorType;
@@ -311,10 +314,6 @@ namespace LazinatorTests.Examples.Collections
                 ConvertToBytes_List_GList_GNonLazinatorClass_g_g(ref w, _MyLevel2ListNestedNonLazinatorType,
                 includeChildrenMode, v, updateStoredBuffer),
                 lengthsSpan: ref lengthsSpan);
-                if (updateStoredBuffer)
-                {
-                    _MyLevel2ListNestedNonLazinatorType_ByteIndex = writer.Position - startOfObjectPosition;
-                }
                 TabbedText.Tabs--;
                 if (updateStoredBuffer)
                 {

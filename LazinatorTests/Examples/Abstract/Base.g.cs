@@ -358,7 +358,7 @@ namespace LazinatorTests.Examples.Abstract
             writer.Write((byte)includeChildrenMode);
             // write properties
             
-            int startOfObjectPosition = writer.Position;
+            
             TabbedText.WriteLine($"Byte {writer.Position} (end of Base) ");
         }
         

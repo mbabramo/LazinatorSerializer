@@ -274,11 +274,10 @@ namespace LazinatorTests.Examples.Collections
             writer.Write((byte)includeChildrenMode);
             // write properties
             
-            int startOfObjectPosition = writer.Position;
             WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 16);
             writer.Skip(16);
-            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
             TabbedText.WriteLine($"Byte {writer.Position} (end of DerivedArray_Values) ");
         }
         
@@ -295,6 +294,10 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyArrayInt_DerivedLevel (accessed? {_MyArrayInt_DerivedLevel_Accessed}) (dirty? {_MyArrayInt_DerivedLevel_Dirty})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyArrayInt_DerivedLevel_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyArrayInt_DerivedLevel_Accessed)
             {
                 var deserialized = MyArrayInt_DerivedLevel;
@@ -308,10 +311,6 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_int_B_b(ref w, _MyArrayInt_DerivedLevel,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _MyArrayInt_DerivedLevel_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

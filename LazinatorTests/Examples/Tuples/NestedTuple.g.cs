@@ -414,10 +414,10 @@ namespace LazinatorTests.Examples.Tuples
             writer.Write((byte)includeChildrenMode);
             // write properties
             
-            int startOfObjectPosition = writer.Position;
+            
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 4);
             writer.Skip(4);
-            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
             TabbedText.WriteLine($"Byte {writer.Position} (end of NestedTuple) ");
         }
         
@@ -432,6 +432,10 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, MyNestedTuple (accessed? {_MyNestedTuple_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyNestedTuple_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyNestedTuple_Accessed)
             {
                 var deserialized = MyNestedTuple;
@@ -447,7 +451,7 @@ namespace LazinatorTests.Examples.Tuples
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _MyNestedTuple_ByteIndex = writer.Position - startOfObjectPosition;if (_MyNestedTuple_Accessed && _MyNestedTuple != null)
+                if (_MyNestedTuple_Accessed && _MyNestedTuple != null)
                 {
                     _MyNestedTuple = (Tuple<UInt32?, (ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>)), NonLazinatorClass>) CloneOrChange_Tuple_Guint_n_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_n_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(_MyNestedTuple, l => l.RemoveBufferInHierarchy(), true);
                 }

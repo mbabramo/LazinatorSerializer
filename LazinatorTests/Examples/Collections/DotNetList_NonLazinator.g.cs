@@ -485,10 +485,10 @@ namespace LazinatorTests.Examples.Collections
             writer.Write((byte)includeChildrenMode);
             // write properties
             
-            int startOfObjectPosition = writer.Position;
+            
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 8);
             writer.Skip(8);
-            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
             TabbedText.WriteLine($"Byte {writer.Position} (end of DotNetList_NonLazinator) ");
         }
         
@@ -503,6 +503,10 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyListNonLazinatorType (accessed? {_MyListNonLazinatorType_Accessed}) (dirty? {_MyListNonLazinatorType_Dirty})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyListNonLazinatorType_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyListNonLazinatorType_Accessed)
             {
                 var deserialized = MyListNonLazinatorType;
@@ -516,14 +520,14 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_List_GNonLazinatorClass_g(ref w, _MyListNonLazinatorType,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _MyListNonLazinatorType_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyListNonLazinatorType2 (accessed? {_MyListNonLazinatorType2_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyListNonLazinatorType2_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyListNonLazinatorType2_Accessed)
             {
                 var deserialized = MyListNonLazinatorType2;
@@ -537,10 +541,6 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_List_GNonLazinatorClass_g(ref w, _MyListNonLazinatorType2,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _MyListNonLazinatorType2_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

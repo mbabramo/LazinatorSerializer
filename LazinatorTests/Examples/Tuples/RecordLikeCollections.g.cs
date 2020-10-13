@@ -484,11 +484,10 @@ namespace LazinatorTests.Examples.Tuples
                 writer.Write((byte)includeChildrenMode);
                 // write properties
                 
-                int startOfObjectPosition = writer.Position;
                 WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
                 Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 8);
                 writer.Skip(8);
-                WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+                WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
                 TabbedText.WriteLine($"Byte {writer.Position} (end of RecordLikeCollections) ");
             }
             
@@ -507,6 +506,10 @@ namespace LazinatorTests.Examples.Tuples
                 TabbedText.WriteLine($"Byte {writer.Position}, MyDictionaryWithRecordLikeContainers (accessed? {_MyDictionaryWithRecordLikeContainers_Accessed})");
                 TabbedText.Tabs++;
                 startOfChildPosition = writer.Position;
+                if (updateStoredBuffer)
+                {
+                    _MyDictionaryWithRecordLikeContainers_ByteIndex = writer.Position - startOfObjectPosition;
+                }
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyDictionaryWithRecordLikeContainers_Accessed)
                 {
                     var deserialized = MyDictionaryWithRecordLikeContainers;
@@ -522,7 +525,7 @@ namespace LazinatorTests.Examples.Tuples
                 lengthsSpan: ref lengthsSpan);
                 if (updateStoredBuffer)
                 {
-                    _MyDictionaryWithRecordLikeContainers_ByteIndex = writer.Position - startOfObjectPosition;if (_MyDictionaryWithRecordLikeContainers_Accessed && _MyDictionaryWithRecordLikeContainers != null)
+                    if (_MyDictionaryWithRecordLikeContainers_Accessed && _MyDictionaryWithRecordLikeContainers != null)
                     {
                         _MyDictionaryWithRecordLikeContainers = (Dictionary<Int32, RecordLikeContainer>) CloneOrChange_Dictionary_Gint_c_C32RecordLikeContainer_g(_MyDictionaryWithRecordLikeContainers, l => l.RemoveBufferInHierarchy(), true);
                     }
@@ -532,6 +535,10 @@ namespace LazinatorTests.Examples.Tuples
                 TabbedText.WriteLine($"Byte {writer.Position}, MyDictionaryWithRecordLikeTypeValues (accessed? {_MyDictionaryWithRecordLikeTypeValues_Accessed})");
                 TabbedText.Tabs++;
                 startOfChildPosition = writer.Position;
+                if (updateStoredBuffer)
+                {
+                    _MyDictionaryWithRecordLikeTypeValues_ByteIndex = writer.Position - startOfObjectPosition;
+                }
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyDictionaryWithRecordLikeTypeValues_Accessed)
                 {
                     var deserialized = MyDictionaryWithRecordLikeTypeValues;
@@ -547,7 +554,7 @@ namespace LazinatorTests.Examples.Tuples
                 lengthsSpan: ref lengthsSpan);
                 if (updateStoredBuffer)
                 {
-                    _MyDictionaryWithRecordLikeTypeValues_ByteIndex = writer.Position - startOfObjectPosition;if (_MyDictionaryWithRecordLikeTypeValues_Accessed && _MyDictionaryWithRecordLikeTypeValues != null)
+                    if (_MyDictionaryWithRecordLikeTypeValues_Accessed && _MyDictionaryWithRecordLikeTypeValues != null)
                     {
                         _MyDictionaryWithRecordLikeTypeValues = (Dictionary<Int32, RecordLikeTypeWithLazinator>) CloneOrChange_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(_MyDictionaryWithRecordLikeTypeValues, l => l.RemoveBufferInHierarchy(), true);
                     }

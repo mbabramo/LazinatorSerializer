@@ -351,8 +351,7 @@ namespace LazinatorCollections.OffsetList
         {
             int totalChildrenBytes = 0;
             _ReadOnlyBytes_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            _LazinatorFastReadList_T_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_LazinatorFastReadList_T_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         
@@ -419,10 +418,10 @@ namespace LazinatorCollections.OffsetList
             writer.Write((byte)includeChildrenMode);
             // write properties
             
-            int startOfObjectPosition = writer.Position;
+            
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 4);
             writer.Skip(4);
-            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
             TabbedText.WriteLine($"Byte {writer.Position} (end of LazinatorFastReadList<T>) ");
         }
         
@@ -437,6 +436,10 @@ namespace LazinatorCollections.OffsetList
             TabbedText.WriteLine($"Byte {writer.Position}, ReadOnlyBytes (accessed? {_ReadOnlyBytes_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _ReadOnlyBytes_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ReadOnlyBytes_Accessed)
             {
                 var deserialized = ReadOnlyBytes;
@@ -450,10 +453,6 @@ namespace LazinatorCollections.OffsetList
             ConvertToBytes_ReadOnlySpan_Gbyte_g(ref w, _ReadOnlyBytes.Span,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _ReadOnlyBytes_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

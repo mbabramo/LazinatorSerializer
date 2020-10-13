@@ -768,10 +768,10 @@ namespace LazinatorTests.Examples
             writer.Write((byte)includeChildrenMode);
             // write properties
             
-            int startOfObjectPosition = writer.Position;
+            
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 24);
             writer.Skip(24);
-            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
             TabbedText.WriteLine($"Byte {writer.Position} (end of ExampleContainerContainingClassesStructContainingClasses) ");
         }
         
@@ -786,6 +786,10 @@ namespace LazinatorTests.Examples
             TabbedText.WriteLine($"Byte {writer.Position}, IntWrapper (accessed? {_IntWrapper_Accessed}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _IntWrapper_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_IntWrapper_Accessed)
@@ -797,14 +801,14 @@ namespace LazinatorTests.Examples
             lengthValue = writer.Position - startOfChildPosition;
             WriteInt(lengthsSpan, lengthValue);
             lengthsSpan = lengthsSpan.Slice(sizeof(int));
-            if (updateStoredBuffer)
-            {
-                _IntWrapper_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyExampleStructContainingClasses (accessed? {_MyExampleStructContainingClasses_Accessed}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyExampleStructContainingClasses_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyExampleStructContainingClasses_Accessed)
@@ -816,14 +820,14 @@ namespace LazinatorTests.Examples
             lengthValue = writer.Position - startOfChildPosition;
             WriteInt(lengthsSpan, lengthValue);
             lengthsSpan = lengthsSpan.Slice(sizeof(int));
-            if (updateStoredBuffer)
-            {
-                _MyExampleStructContainingClasses_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyHashSetExampleStruct (accessed? {_MyHashSetExampleStruct_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyHashSetExampleStruct_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyHashSetExampleStruct_Accessed)
             {
                 var deserialized = MyHashSetExampleStruct;
@@ -839,7 +843,7 @@ namespace LazinatorTests.Examples
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _MyHashSetExampleStruct_ByteIndex = writer.Position - startOfObjectPosition;if (_MyHashSetExampleStruct_Accessed && _MyHashSetExampleStruct != null)
+                if (_MyHashSetExampleStruct_Accessed && _MyHashSetExampleStruct != null)
                 {
                     _MyHashSetExampleStruct = (HashSet<ExampleStructContainingClasses>) CloneOrChange_HashSet_GExampleStructContainingClasses_g(_MyHashSetExampleStruct, l => l.RemoveBufferInHierarchy(), true);
                 }
@@ -849,6 +853,10 @@ namespace LazinatorTests.Examples
             TabbedText.WriteLine($"Byte {writer.Position}, MyListExampleStruct (accessed? {_MyListExampleStruct_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyListExampleStruct_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyListExampleStruct_Accessed)
             {
                 var deserialized = MyListExampleStruct;
@@ -862,14 +870,14 @@ namespace LazinatorTests.Examples
             ConvertToBytes_List_GExampleStructContainingClasses_g(ref w, _MyListExampleStruct,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _MyListExampleStruct_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyListNullableExampleStruct (accessed? {_MyListNullableExampleStruct_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyListNullableExampleStruct_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyListNullableExampleStruct_Accessed)
             {
                 var deserialized = MyListNullableExampleStruct;
@@ -883,14 +891,14 @@ namespace LazinatorTests.Examples
             ConvertToBytes_List_GWNullableStruct_GExampleStructContainingClasses_g_g(ref w, _MyListNullableExampleStruct,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _MyListNullableExampleStruct_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyListUnwrappedNullableExampleStruct (accessed? {_MyListUnwrappedNullableExampleStruct_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyListUnwrappedNullableExampleStruct_ByteIndex = writer.Position - startOfObjectPosition;
+            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyListUnwrappedNullableExampleStruct_Accessed)
             {
                 var deserialized = MyListUnwrappedNullableExampleStruct;
@@ -904,10 +912,6 @@ namespace LazinatorTests.Examples
             ConvertToBytes_List_GExampleStructContainingClasses_n_g(ref w, _MyListUnwrappedNullableExampleStruct,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _MyListUnwrappedNullableExampleStruct_ByteIndex = writer.Position - startOfObjectPosition;
-            }
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

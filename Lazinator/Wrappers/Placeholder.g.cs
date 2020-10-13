@@ -365,7 +365,7 @@ namespace Lazinator.Wrappers
             
             // write properties
             
-            int startOfObjectPosition = writer.Position;
+            
             TabbedText.WriteLine($"Byte {writer.Position} (end of Placeholder) ");
         }
         

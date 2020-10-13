@@ -469,11 +469,10 @@ namespace Lazinator.Wrappers
                 writer.Write((byte)includeChildrenMode);
                 // write properties
                 
-                int startOfObjectPosition = writer.Position;
                 WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
                 Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 0);
                 writer.Skip(0);
-                WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+                WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
                 TabbedText.WriteLine($"Byte {writer.Position} (end of WNullableStruct<T>) ");
             }
             
@@ -491,6 +490,10 @@ namespace Lazinator.Wrappers
                 TabbedText.WriteLine($"Byte {writer.Position}, NonNullValue value {_NonNullValue}");
                 TabbedText.Tabs++;
                 startOfChildPosition = writer.Position;
+                if (updateStoredBuffer)
+                {
+                    _NonNullValue_ByteIndex = writer.Position - startOfObjectPosition;
+                }
                 if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
                 {
                     if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_NonNullValue_Accessed)
@@ -501,10 +504,6 @@ namespace Lazinator.Wrappers
                     var byteIndexCopy = _NonNullValue_ByteIndex;
                     var byteLengthCopy = _NonNullValue_ByteLength;
                     WriteChild(ref writer, ref _NonNullValue, includeChildrenMode, _NonNullValue_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, true, false, null), verifyCleanness, updateStoredBuffer, false, true, null);
-                }
-                if (updateStoredBuffer)
-                {
-                    _NonNullValue_ByteIndex = writer.Position - startOfObjectPosition;
                 }
                 TabbedText.Tabs--;
                 if (updateStoredBuffer)

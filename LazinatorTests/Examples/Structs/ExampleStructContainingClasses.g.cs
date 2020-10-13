@@ -758,11 +758,10 @@ namespace LazinatorTests.Examples
                     writer.Write((byte)includeChildrenMode);
                     // write properties
                     
-                    int startOfObjectPosition = writer.Position;
                     WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
                     Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 20);
                     writer.Skip(20);
-                    WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+                    WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
                     TabbedText.WriteLine($"Byte {writer.Position} (end of ExampleStructContainingClasses) ");
                 }
                 
@@ -785,6 +784,10 @@ namespace LazinatorTests.Examples
                     TabbedText.WriteLine($"Byte {writer.Position}, MyChild1 (accessed? {_MyChild1_Accessed}) (backing var null? {_MyChild1 == null}) ");
                     TabbedText.Tabs++;
                     startOfChildPosition = writer.Position;
+                    if (updateStoredBuffer)
+                    {
+                        _MyChild1_ByteIndex = writer.Position - startOfObjectPosition;
+                    }
                     if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
                     {
                         if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyChild1_Accessed)
@@ -799,14 +802,14 @@ namespace LazinatorTests.Examples
                     lengthValue = writer.Position - startOfChildPosition;
                     WriteInt(lengthsSpan, lengthValue);
                     lengthsSpan = lengthsSpan.Slice(sizeof(int));
-                    if (updateStoredBuffer)
-                    {
-                        _MyChild1_ByteIndex = writer.Position - startOfObjectPosition;
-                    }
                     TabbedText.Tabs--;
                     TabbedText.WriteLine($"Byte {writer.Position}, MyChild2 (accessed? {_MyChild2_Accessed}) (backing var null? {_MyChild2 == null}) ");
                     TabbedText.Tabs++;
                     startOfChildPosition = writer.Position;
+                    if (updateStoredBuffer)
+                    {
+                        _MyChild2_ByteIndex = writer.Position - startOfObjectPosition;
+                    }
                     if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
                     {
                         if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyChild2_Accessed)
@@ -821,14 +824,14 @@ namespace LazinatorTests.Examples
                     lengthValue = writer.Position - startOfChildPosition;
                     WriteInt(lengthsSpan, lengthValue);
                     lengthsSpan = lengthsSpan.Slice(sizeof(int));
-                    if (updateStoredBuffer)
-                    {
-                        _MyChild2_ByteIndex = writer.Position - startOfObjectPosition;
-                    }
                     TabbedText.Tabs--;
                     TabbedText.WriteLine($"Byte {writer.Position}, MyLazinatorList (accessed? {_MyLazinatorList_Accessed}) (dirty? {_MyLazinatorList_Dirty})");
                     TabbedText.Tabs++;
                     startOfChildPosition = writer.Position;
+                    if (updateStoredBuffer)
+                    {
+                        _MyLazinatorList_ByteIndex = writer.Position - startOfObjectPosition;
+                    }
                     if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyLazinatorList_Accessed)
                     {
                         var deserialized = MyLazinatorList;
@@ -845,14 +848,14 @@ namespace LazinatorTests.Examples
                     binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
                     ConvertToBytes_List_GExample_g(ref w, copy_MyLazinatorList, includeChildrenMode, v, updateStoredBuffer),
                     lengthsSpan: ref lengthsSpan);
-                    if (updateStoredBuffer)
-                    {
-                        _MyLazinatorList_ByteIndex = writer.Position - startOfObjectPosition;
-                    }
                     TabbedText.Tabs--;
                     TabbedText.WriteLine($"Byte {writer.Position}, MyListValues (accessed? {_MyListValues_Accessed})");
                     TabbedText.Tabs++;
                     startOfChildPosition = writer.Position;
+                    if (updateStoredBuffer)
+                    {
+                        _MyListValues_ByteIndex = writer.Position - startOfObjectPosition;
+                    }
                     if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyListValues_Accessed)
                     {
                         var deserialized = MyListValues;
@@ -869,14 +872,14 @@ namespace LazinatorTests.Examples
                     binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
                     ConvertToBytes_List_Gint_g(ref w, copy_MyListValues, includeChildrenMode, v, updateStoredBuffer),
                     lengthsSpan: ref lengthsSpan);
-                    if (updateStoredBuffer)
-                    {
-                        _MyListValues_ByteIndex = writer.Position - startOfObjectPosition;
-                    }
                     TabbedText.Tabs--;
                     TabbedText.WriteLine($"Byte {writer.Position}, MyTuple (accessed? {_MyTuple_Accessed})");
                     TabbedText.Tabs++;
                     startOfChildPosition = writer.Position;
+                    if (updateStoredBuffer)
+                    {
+                        _MyTuple_ByteIndex = writer.Position - startOfObjectPosition;
+                    }
                     if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyTuple_Accessed)
                     {
                         var deserialized = MyTuple;
@@ -893,10 +896,6 @@ namespace LazinatorTests.Examples
                     binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
                     ConvertToBytes__PNonLazinatorClass_C32myitem1_c_C32int_n_C32myitem2_p(ref w, copy_MyTuple, includeChildrenMode, v, updateStoredBuffer),
                     lengthsSpan: ref lengthsSpan);
-                    if (updateStoredBuffer)
-                    {
-                        _MyTuple_ByteIndex = writer.Position - startOfObjectPosition;
-                    }
                     TabbedText.Tabs--;
                     if (updateStoredBuffer)
                     {
