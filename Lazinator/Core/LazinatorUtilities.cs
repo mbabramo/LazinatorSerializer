@@ -394,7 +394,7 @@ namespace Lazinator.Core
         }
 
         /// <summary>
-        /// Initiates the conversion to binary of a non-lazinator object. Called in Lazinator code-behind.
+        /// Initiates the conversion to binary of a non-lazinator object, writing the length to a separate lengths span. Called in Lazinator code-behind.
         /// </summary>
         /// <param name="nonLazinatorObject">An object that does not implement ILazinator</param>
         /// <param name="isBelievedDirty">An indication of whether the object to be converted to bytes is believed to be dirty, e.g. has had its dirty flag set.</param>
@@ -408,31 +408,7 @@ namespace Lazinator.Core
             bool isBelievedDirty, bool isAccessed, ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceForFieldFn,
             bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction, ref Span<byte> lengthsSpan)
         {
-            LazinatorMemory original = getChildSliceForFieldFn();
-            int originalLength = original.Length;
-            int startPosition = writer.Position;
-            if (!isAccessed && originalLength > 0)
-            {
-                // object has never been loaded into memory, so there is no need to verify cleanness
-                // just return what we have.
-                original.WriteToBinaryBuffer(ref writer);
-            }
-            else if (isBelievedDirty || originalLength == 0)
-            {
-                // We definitely need to write to binary, because either the dirty flag has been set or the original storage doesn't have anything to help us.
-                void action(ref BinaryBufferWriter w) => binaryWriterAction(ref w, verifyCleanness);
-                WriteToBinaryWithoutLengthPrefix(ref writer, action);
-            }
-            else
-            {
-                if (verifyCleanness)
-                {
-                    ReadOnlyMemory<byte> revised = ConvertNonLazinatorObjectToBytes(nonLazinatorObject, binaryWriterAction);
-                    ConfirmMatch(original, revised);
-                }
-                original.WriteToBinaryBuffer(ref writer);
-            }
-            WriteUncompressedPrimitives.WriteInt(lengthsSpan, (writer.Position - startPosition));
+            WriteNonLazinatorObject_WithoutLengthPrefix(nonLazinatorObject, isBelievedDirty, isAccessed, ref writer, getChildSliceForFieldFn, verifyCleanness, binaryWriterAction);
             lengthsSpan = lengthsSpan.Slice(sizeof(int));
         }
 

@@ -742,8 +742,8 @@ namespace Lazinator.CodeDescription
                         {ProtectedIfApplicable}abstract LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
                         {ProtectedIfApplicable}abstract void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition);
                         {(ImplementsWritePropertiesIntoBuffer ? skipWritePropertiesIntoBufferString : $@"{ProtectedIfApplicable}abstract void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);
-                            {ProtectedIfApplicable}abstract void WritePrimitivePropertiesIntoBufferString(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);
-                            {ProtectedIfApplicable}abstract void WriteChildrenPropertiesIntoBufferString(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition, Span<byte> lengthsSpan);
+                            {ProtectedIfApplicable}abstract void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);
+                            {ProtectedIfApplicable}abstract void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition, Span<byte> lengthsSpan);
 ")}
 ");
         }
@@ -1256,13 +1256,16 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 
             sb.AppendLine("// write properties");
 
+
+            IEnumerable<PropertyDescription> primitiveProperties = thisLevel.Where(x => x.IsPrimitive);
+            IEnumerable<PropertyDescription> childrenProperties = thisLevel.Where(x => !x.IsPrimitive);
             int numBytesChildLengthsAllLevels = PropertiesIncludingInherited.Sum(x => x.BytesUsedForLength());
             sb.AppendLine($@"
-                            int startOfObjectPosition = writer.Position;
-                            WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
-                            Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, {numBytesChildLengthsAllLevels}); // DEBUG -- skip all this if no child properties
+                            int startOfObjectPosition = writer.Position;{IIF(primitiveProperties.Any() || IsDerivedFromNonAbstractLazinator, $@"
+                            WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);")}{IIF(childrenProperties.Any() || IsDerivedFromNonAbstractLazinator, $@"
+                            Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, {numBytesChildLengthsAllLevels});
                             writer.Skip({numBytesChildLengthsAllLevels});
-                            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);");
+                            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);")}");
 
             if (IncludeTracingCode)
             {
@@ -1275,41 +1278,45 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             }
             sb.Append($@"}}
 ");
-
-            AppendWritePropertiesHelper(sb, thisLevel, true);
-            AppendWritePropertiesHelper(sb, thisLevel, false);
+            if (primitiveProperties.Any() || !IsSealedOrStruct)
+                AppendWritePropertiesHelper(sb, primitiveProperties, true);
+            if (childrenProperties.Any() || !IsSealedOrStruct)
+                AppendWritePropertiesHelper(sb, childrenProperties, false);
 
         }
 
-        private void AppendWritePropertiesHelper(CodeStringBuilder sb, List<PropertyDescription> thisLevel, bool isPrimitive)
+        private void AppendWritePropertiesHelper(CodeStringBuilder sb, IEnumerable<PropertyDescription> propertiesToWrite, bool isPrimitive)
         {
-            string helperMethod = isPrimitive ? "WritePrimitivePropertiesIntoBuffer" : "WriteChildrenPropertiesIntoBuffer";
+            string methodName = isPrimitive ? "WritePrimitivePropertiesIntoBuffer" : "WriteChildrenPropertiesIntoBuffer";
+
             if (IsDerivedFromNonAbstractLazinator)
                 sb.AppendLine(
                         $@"
-                        {ProtectedIfApplicable}override void {helperMethod}(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID{IIF(!isPrimitive, $", int startOfObjectPosition, Span<byte> lengthsSpan")})
+                        {ProtectedIfApplicable}override void {methodName}(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID{IIF(!isPrimitive, $", int startOfObjectPosition, Span<byte> lengthsSpan")})
                         {{
-                            base.{helperMethod}(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID{IIF(!isPrimitive, ", startOfObjectPosition, lengthsSpan")});");
+                            base.{methodName}(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID{IIF(!isPrimitive, ", startOfObjectPosition, lengthsSpan")});");
             else
             {
                 sb.AppendLine(
                         $@"
-                        {ProtectedIfApplicable}{DerivationKeyword}void {helperMethod}(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID{IIF(!isPrimitive, $", int startOfObjectPosition, Span<byte> lengthsSpan")})
+                        {ProtectedIfApplicable}{DerivationKeyword}void {methodName}(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID{IIF(!isPrimitive, $", int startOfObjectPosition, Span<byte> lengthsSpan")})
                         {{");
             }
-            if (!isPrimitive)
-                sb.AppendLine($@"int startOfChildPosition = 0;
-                    int lengthValue = 0;");
-
-
-            foreach (var property in thisLevel)
+            if (!isPrimitive && propertiesToWrite.Any())
             {
-                if (property.IsPrimitive == isPrimitive)
-                    AppendPropertyWrite(sb, property);
+                sb.AppendLine($@"int startOfChildPosition = 0;");
+                if (propertiesToWrite.Any(x => x.UsesLengthValue))
+                    sb.AppendLine($@"int lengthValue = 0;");
+            }
+
+
+            foreach (var property in propertiesToWrite)
+            {
+                AppendPropertyWrite(sb, property);
             }
 
             if (!isPrimitive)
-                AppendEndByteIndex(sb, thisLevel, "writer.Position - startOfObjectPosition", true);
+                AppendEndByteIndex(sb, propertiesToWrite, "writer.Position - startOfObjectPosition", true);
 
             sb.Append($@"}}
 ");
@@ -1400,7 +1407,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
         ");
         }
 
-        private void AppendEndByteIndex(CodeStringBuilder sb, List<PropertyDescription> thisLevel, string endByteString, bool addConditionalForUpdateStoredBuffer)
+        private void AppendEndByteIndex(CodeStringBuilder sb, IEnumerable<PropertyDescription> thisLevel, string endByteString, bool addConditionalForUpdateStoredBuffer)
         {
             var lastProperty = thisLevel.LastOrDefault();
             if (lastProperty != null && lastProperty.PropertyType != LazinatorPropertyType.PrimitiveType && lastProperty.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable)
