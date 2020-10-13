@@ -403,20 +403,21 @@ namespace Lazinator.Core
         /// <param name="getChildSliceForFieldFn">A function to return the child slice of memory for the non-Lazinator object</param>
         /// <param name="verifyCleanness">If true, then the dirty-conversion will always be performed unless we are sure it is clean, and if the object is not believed to be dirty, the results will be compared to the clean version. This allows for errors from failure to serialize objects that have been changed to be caught during development.</param>
         /// <param name="binaryWriterAction">The action to complete the write to the binary buffer</param>
+        /// <param name="lengthSpan">A span containing exactly four bytes into which the length of the non-Lazinator object will be written, instead of placing the length as a prefix</param>
         public static void WriteNonLazinatorObject(object nonLazinatorObject,
             bool isBelievedDirty, bool isAccessed, ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceForFieldFn,
-            bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction, Span<byte> lengthSpan)
+            bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction, ref Span<byte> lengthSpan)
         {
             LazinatorMemory original = getChildSliceForFieldFn();
-            int length = original.Length;
+            int originalLength = original.Length;
             int startPosition = writer.Position;
-            if (!isAccessed && length > 0)
+            if (!isAccessed && originalLength > 0)
             {
                 // object has never been loaded into memory, so there is no need to verify cleanness
                 // just return what we have.
                 original.WriteToBinaryBuffer(ref writer);
             }
-            else if (isBelievedDirty || length == 0)
+            else if (isBelievedDirty || originalLength == 0)
             {
                 // We definitely need to write to binary, because either the dirty flag has been set or the original storage doesn't have anything to help us.
                 void action(ref BinaryBufferWriter w) => binaryWriterAction(ref w, verifyCleanness);
@@ -431,7 +432,8 @@ namespace Lazinator.Core
                 }
                 original.WriteToBinaryBuffer(ref writer);
             }
-            WriteUncompressedPrimitives.WriteUInt(lengthSpan, (uint) (writer.Position - startPosition));
+            WriteUncompressedPrimitives.WriteInt(lengthSpan, (writer.Position - startPosition));
+            lengthSpan = lengthSpan.Slice(sizeof(int));
         }
 
         /// <summary>

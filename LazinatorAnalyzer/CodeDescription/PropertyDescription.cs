@@ -1571,6 +1571,8 @@ namespace Lazinator.CodeDescription
         private void AppendPropertyWriteString_NonLazinator(CodeStringBuilder sb)
         {
             bool allLengthsPrecedeChildren = true;
+            string lengthsSpanString = allLengthsPrecedeChildren ? $@",
+                lengthsSpan: ref lengthsSpan" : "";
             string omitLengthSuffix = IIF(OmitLengthBecauseDefinitelyLast, "_WithoutLengthPrefix");
             string writeMethodName = PlaceholderMemoryWriteMethod == null ? $"ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}" : PlaceholderMemoryWriteMethod;
             if (PlaceholderMemoryWriteMethod == null)
@@ -1589,7 +1591,7 @@ namespace Lazinator.CodeDescription
                     verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                     binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
                         {DirectConverterTypeNamePrefix}{writeMethodName}(ref w, {BackingFieldStringOrContainedSpanWithPossibleException(null)},
-                            includeChildrenMode, v, updateStoredBuffer));");
+                            includeChildrenMode, v, updateStoredBuffer){lengthsSpanString});");
 
                 }
                 else
@@ -1616,7 +1618,7 @@ namespace Lazinator.CodeDescription
                         getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_{PropertyName}, byteIndexCopy_{PropertyName}, byteLengthCopy_{PropertyName}{ChildSliceEndString}),
                         verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                         binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-                            {binaryWriterAction});");
+                            {binaryWriterAction}{lengthsSpanString});");
 
                 }
             }
@@ -1628,7 +1630,7 @@ namespace Lazinator.CodeDescription
                         verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                         binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
                             {DirectConverterTypeNamePrefix}{writeMethodName}(ref w, default,
-                                includeChildrenMode, v, updateStoredBuffer));");
+                                includeChildrenMode, v, updateStoredBuffer){lengthsSpanString});");
         }
 
         private void AppendPropertyWriteString_Lazinator(CodeStringBuilder sb)
@@ -1670,12 +1672,14 @@ namespace Lazinator.CodeDescription
                         {{
                             ThrowHelper.ThrowMoreThan255BytesException();
                         }}
-                        lengthsSpan[0] = (byte) lengthValue;");
+                        lengthsSpan[0] = (byte) lengthValue;
+                        lengthsSpan = lengthsSpan.Slice(1);");
                 }
                 else
                 {
                     sb.AppendLine($@"lengthValue = writer.Position - startOfChildPosition;
-                        WriteInt(lengthsSpan, lengthValue);");
+                        WriteInt(lengthsSpan, lengthValue);
+                        lengthsSpan = lengthsSpan.Slice(sizeof(int));");
                 }
             }
         }
