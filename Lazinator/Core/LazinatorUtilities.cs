@@ -432,8 +432,8 @@ namespace Lazinator.Core
                 }
                 original.WriteToBinaryBuffer(ref writer);
             }
-            WriteUncompressedPrimitives.WriteInt(lengthSpan, (writer.Position - startPosition));
-            lengthSpan = lengthSpan.Slice(sizeof(int));
+            WriteUncompressedPrimitives.WriteInt(lengthsSpan, (writer.Position - startPosition));
+            lengthsSpan = lengthsSpan.Slice(sizeof(int));
         }
 
         /// <summary>
