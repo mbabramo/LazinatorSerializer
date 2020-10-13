@@ -14,7 +14,7 @@ namespace Lazinator.Exceptions
 
         public static void ThrowVersioningDisabledException(string nameIncludingGenerics) => throw new LazinatorSerializationException($"Lazinator versioning disabled for {nameIncludingGenerics}.");
 
-        public static void ThrowMoreThan255BytesException() => throw new LazinatorSerializationException("Writing with byte length prefix limited to items no more than 250 bytes.");
+        public static void ThrowMoreThan255BytesException() => throw new LazinatorSerializationException("Writing with byte length prefix limited to items no more than 255 bytes.");
 
         internal static void ThrowChildStorageMissingException() => throw new LazinatorSerializationException("Internal error. Child storage missing.");
 

@@ -1661,17 +1661,22 @@ namespace Lazinator.CodeDescription
             sb.AppendLine(withInclusionConditional);
             if (allLengthsPrecedeChildren && !skipLengthForThisProperty)
             {
-                string byteLengthString = SingleByteLength ? "Byte" : "Int32";
-                string byteLengthAbbreviatedString = SingleByteLength ? "byte" : "int";
-                sb.AppendLine($@"{byteLengthAbbreviatedString} lengthValue = writer.Position - startOfChildPosition;
-                if (LittleEndianStorage)
-                {{
-                    TryWrite{byteLengthString}LittleEndian(lengthsSpan, lengthValue);
-                }}
+                if (SingleByteLength)
+                {
+                    sb.AppendLine($@"int lengthValue = writer.Position - startOfChildPosition;
+                        if (lengthValue > byte.MaxValue)
+                        {{
+                            ThrowMoreThan255BytesException();
+                        }}
+                        lengthsSpan[0] = (byte) lengthValue;
+                        ");
+                }
                 else
-                {{
-                    TryWrite{byteLengthString}BigEndian(lengthsSpan, lengthValue);
-                }}");
+                {
+                    sb.AppendLine($@"int lengthValue = writer.Position - startOfChildPosition;
+                        WriteInt(lengthsSpan, lengthValue);
+                        ");
+                }
             }
         }
 
