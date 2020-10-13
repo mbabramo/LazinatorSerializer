@@ -1286,7 +1286,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                         $@"
                         {ProtectedIfApplicable}override void {helperMethod}(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID{IIF(!isPrimitive, $", int startOfObjectPosition, Span<byte> lengthsSpan")})
                         {{
-                            base.{helperMethod}(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);");
+                            base.{helperMethod}(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID{IIF(!isPrimitive, ", startOfObjectPosition, lengthsSpan")});");
             else
             {
                 sb.AppendLine(
