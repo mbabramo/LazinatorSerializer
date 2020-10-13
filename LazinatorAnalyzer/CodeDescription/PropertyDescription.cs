@@ -1563,7 +1563,7 @@ namespace Lazinator.CodeDescription
                     removeBuffers = new ConditionalCodeGenerator(GetNonNullCheck(true), $" {BackingFieldString} = ({AppropriatelyQualifiedTypeName}) CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({BackingFieldAccessWithPossibleException}, l => l.RemoveBufferInHierarchy(), true);").ToString();
                 sb.AppendLine($@"if (updateStoredBuffer)
                                 {{
-                                    {BackingFieldByteIndex} = writer.Position;{removeBuffers}
+                                    {BackingFieldByteIndex} = writer.Position - startOfObjectPosition;{removeBuffers}
                                 }}");
             }
         }

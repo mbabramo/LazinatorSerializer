@@ -1306,7 +1306,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             }
 
             if (!isPrimitive)
-                AppendEndByteIndex(sb, thisLevel, "writer.Position - startPosition", true);
+                AppendEndByteIndex(sb, thisLevel, "writer.Position - startOfObjectPosition", true);
 
             sb.Append($@"}}
 ");
