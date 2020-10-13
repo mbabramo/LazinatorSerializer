@@ -42,6 +42,7 @@ namespace Lazinator.CodeDescription
 
         /* Derivation */
         public ObjectDescription BaseLazinatorObject { get; set; }
+        public bool IsDerived => BaseLazinatorObject != null;
         public bool IsDerivedFromNonAbstractLazinator => BaseLazinatorObject != null &&
                         (BaseLazinatorObject.IsDerivedFromNonAbstractLazinator ||
                         !BaseLazinatorObject.IsAbstract) && !GeneratingRefStruct;
@@ -1213,7 +1214,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 
             var thisLevel = PropertiesToDefineThisLevel;
             bool hasChildrenThisLevel = thisLevel.Any(x => !x.IsPrimitive);
-            string positionInitialization = !hasChildrenThisLevel ? $@"" : $@"
+            string positionInitialization = !hasChildrenThisLevel && !IsDerived ? $@"" : $@"
                     int startPosition = writer.Position;";
 
             sb.AppendLine(
