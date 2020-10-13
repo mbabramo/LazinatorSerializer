@@ -18,6 +18,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
     using Lazinator.Support;
     using Lazinator.Wrappers;
     using LazinatorCollections.Remote;
+    using static Lazinator.Buffers.WriteUncompressedPrimitives;
     using System;
     using System.Buffers;
     using System.Collections.Generic;
@@ -92,7 +93,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _RemoteLevel2Item_ByteIndex, _RemoteLevel2Item_ByteLength, false, false, null);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _RemoteLevel2Item_ByteIndex, _RemoteLevel2Item_ByteLength, true, false, null);
                 
                 _RemoteLevel2Item = DeserializationFactory.Instance.CreateBaseOrDerivedType(254, (c, p) => new Remote<WGuid, RemoteLevel2>(c, p), childData, this); 
             }
@@ -390,21 +391,34 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         public virtual int LazinatorObjectVersion { get; set; } = 0;
         
         
-        public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
+        protected virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
+            ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
+            ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + 4, ref bytesSoFar);
+        }
+        
+        protected virtual void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
+        {
             _RemoteLevel1Int = span.ToDecompressedInt32(ref bytesSoFar);
-            _RemoteLevel2Item_ByteIndex = bytesSoFar;
+        }
+        
+        protected virtual int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
+        {
+            int totalChildrenBytes = 0;
+            _RemoteLevel2Item_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+                totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
             
-            _RemoteLevel1_EndByteIndex = bytesSoFar;
+            _RemoteLevel1_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+            return totalChildrenBytes;
         }
         
         public virtual void SerializeToExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
+            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.RemoteHierarchy.RemoteLevel1 ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -451,8 +465,9 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
             int startPosition = writer.Position;
-            int startOfObjectPosition = 0;
-            // header information
+            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.RemoteHierarchy.RemoteLevel1 starting at {writer.Position}.");
+            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
+            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
             {
                 if (!ContainsOpenGenericParameters)
@@ -468,24 +483,49 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
+            
+            int startOfObjectPosition = writer.Position;
+            WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
+            Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 4);
+            writer.Skip(4);
+            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+            TabbedText.WriteLine($"Byte {writer.Position} (end of RemoteLevel1) ");
+        }
+        
+        protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
+        {
+            TabbedText.WriteLine($"Byte {writer.Position}, RemoteLevel1Int value {_RemoteLevel1Int}");
+            TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _RemoteLevel1Int);
-            startOfObjectPosition = writer.Position;
+            TabbedText.Tabs--;
+        }
+        
+        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition, Span<byte> lengthsSpan)
+        {
+            int startOfChildPosition = 0;
+            int lengthValue = 0;
+            TabbedText.WriteLine($"Byte {writer.Position}, RemoteLevel2Item (accessed? {_RemoteLevel2Item_Accessed}) (backing var null? {_RemoteLevel2Item == null}) ");
+            TabbedText.Tabs++;
+            startOfChildPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_RemoteLevel2Item_Accessed)
                 {
                     var deserialized = RemoteLevel2Item;
                 }
-                WriteChild(ref writer, ref _RemoteLevel2Item, includeChildrenMode, _RemoteLevel2Item_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _RemoteLevel2Item_ByteIndex, _RemoteLevel2Item_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
+                WriteChild(ref writer, ref _RemoteLevel2Item, includeChildrenMode, _RemoteLevel2Item_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _RemoteLevel2Item_ByteIndex, _RemoteLevel2Item_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
             }
-            
+            lengthValue = writer.Position - startOfChildPosition;
+            WriteInt(lengthsSpan, lengthValue);
+            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             if (updateStoredBuffer)
             {
-                _RemoteLevel2Item_ByteIndex = startOfObjectPosition - startPosition;
+                _RemoteLevel2Item_ByteIndex = writer.Position - startOfObjectPosition;
             }
+            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
-                _RemoteLevel1_EndByteIndex = writer.Position - startPosition;
+                _RemoteLevel1_EndByteIndex = writer.Position - startOfObjectPosition;
             }
         }
         

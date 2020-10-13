@@ -17,6 +17,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
     using Lazinator.Exceptions;
     using Lazinator.Support;
     using LazinatorTests.Examples;
+    using static Lazinator.Buffers.WriteUncompressedPrimitives;
     using System;
     using System.Buffers;
     using System.Collections.Generic;
@@ -76,7 +77,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _EagerExample_ByteIndex, _EagerExample_ByteLength, false, false, null);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _EagerExample_ByteIndex, _EagerExample_ByteLength, true, false, null);
                 
                 _EagerExample = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, (c, p) => new Example(c, p), childData, this); 
             }
@@ -373,20 +374,33 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         public virtual int LazinatorObjectVersion { get; set; } = 0;
         
         
-        public virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
+        protected virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
-            _EagerExample_ByteIndex = bytesSoFar;
+            ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
+            ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + 4, ref bytesSoFar);
+        }
+        
+        protected virtual void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
+        {
+        }
+        
+        protected virtual int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
+        {
+            int totalChildrenBytes = 0;
+            _EagerExample_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                bytesSoFar = span.ToInt32(ref bytesSoFar) + bytesSoFar;
+                totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
             
-            _ContainerForEagerExample_EndByteIndex = bytesSoFar;
+            _ContainerForEagerExample_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+            return totalChildrenBytes;
         }
         
         public virtual void SerializeToExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
+            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.ExampleHierarchy.ContainerForEagerExample ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -433,8 +447,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
             int startPosition = writer.Position;
-            int startOfObjectPosition = 0;
-            // header information
+            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.ExampleHierarchy.ContainerForEagerExample starting at {writer.Position}.");
+            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
+            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
             {
                 if (!ContainsOpenGenericParameters)
@@ -450,23 +465,44 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
             writer.Write((byte)includeChildrenMode);
             // write properties
-            startOfObjectPosition = writer.Position;
+            
+            int startOfObjectPosition = writer.Position;
+            Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 4);
+            writer.Skip(4);
+            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+            TabbedText.WriteLine($"Byte {writer.Position} (end of ContainerForEagerExample) ");
+        }
+        
+        protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
+        {
+        }
+        
+        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition, Span<byte> lengthsSpan)
+        {
+            int startOfChildPosition = 0;
+            int lengthValue = 0;
+            TabbedText.WriteLine($"Byte {writer.Position}, EagerExample (accessed? {_EagerExample_Accessed}) (backing var null? {_EagerExample == null}) ");
+            TabbedText.Tabs++;
+            startOfChildPosition = writer.Position;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_EagerExample_Accessed)
                 {
                     var deserialized = EagerExample;
                 }
-                WriteChild(ref writer, ref _EagerExample, includeChildrenMode, _EagerExample_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _EagerExample_ByteIndex, _EagerExample_ByteLength, false, false, null), verifyCleanness, updateStoredBuffer, false, false, this);
+                WriteChild(ref writer, ref _EagerExample, includeChildrenMode, _EagerExample_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _EagerExample_ByteIndex, _EagerExample_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
             }
-            
+            lengthValue = writer.Position - startOfChildPosition;
+            WriteInt(lengthsSpan, lengthValue);
+            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             if (updateStoredBuffer)
             {
-                _EagerExample_ByteIndex = startOfObjectPosition - startPosition;
+                _EagerExample_ByteIndex = writer.Position - startOfObjectPosition;
             }
+            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
-                _ContainerForEagerExample_EndByteIndex = writer.Position - startPosition;
+                _ContainerForEagerExample_EndByteIndex = writer.Position - startOfObjectPosition;
             }
         }
         

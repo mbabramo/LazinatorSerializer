@@ -116,7 +116,7 @@ namespace Lazinator.CodeDescription
         public bool SuppressLazinatorVersionByte => InterfaceTypeSymbol.HasAttributeOfType<CloneExcludeLazinatorVersionByteAttribute>();
         public bool GenerateRefStruct => InterfaceTypeSymbol.HasAttributeOfType<CloneGenerateRefStructAttribute>() && !GeneratingRefStruct;
         public bool GeneratingRefStruct = false;
-        public bool IncludeTracingCode => Config?.IncludeTracingCode ?? false;
+        public bool IncludeTracingCode => true; // DEBUG Config?.IncludeTracingCode ?? false;
         public bool StepThroughProperties => Config?.StepThroughProperties ?? true;
         public bool NonbinaryHash => InterfaceTypeSymbol.HasAttributeOfType<CloneNonbinaryHashAttribute>();
         private string IIF(bool x, string y) => x ? y : ""; // Include if function
@@ -1367,7 +1367,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 {{
                     ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
                     ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-                    ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, {numBytesChildLengthsAllLevels}, ref bytesSoFar);
+                    ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + {numBytesChildLengthsAllLevels}, ref bytesSoFar);
                 }}
                     
 ");

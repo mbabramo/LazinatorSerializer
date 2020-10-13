@@ -18,6 +18,14 @@ namespace LazinatorTests.Tests
     public class BasicTests : SerializationDeserializationTestBase
     {
         [Fact]
+        public void BasicLazinatorSerializationWorks_WInt()
+        {
+            var original = (WInt32)17;
+            var copy = original.CloneLazinatorTyped();
+            copy.WrappedValue.Should().Be(17);
+        }
+
+        [Fact]
         public void BasicLazinatorSerializationWorks()
         {
             var original = GetTypicalExample();
