@@ -1255,11 +1255,10 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 
             int numBytesChildLengthsAllLevels = PropertiesIncludingInherited.Sum(x => x.BytesUsedForLength());
             sb.AppendLine($@"
-                            int startOfObjectPosition = writer.Position;
                             WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
                             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, {numBytesChildLengthsAllLevels}); // DEBUG -- skip all this if no child properties
                             writer.Skip({numBytesChildLengthsAllLevels});
-                            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);");
+                            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, lengthsSpan);");
 
             if (IncludeTracingCode)
             {
@@ -1284,14 +1283,14 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             if (IsDerivedFromNonAbstractLazinator)
                 sb.AppendLine(
                         $@"
-                        {ProtectedIfApplicable}override void {helperMethod}(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID{IIF(!isPrimitive, $", int startOfObjectPosition, Span<byte> lengthsSpan")})
+                        {ProtectedIfApplicable}override void {helperMethod}(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID{IIF(!isPrimitive, $", Span<byte> lengthsSpan")})
                         {{
                             base.{helperMethod}(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);");
             else
             {
                 sb.AppendLine(
                         $@"
-                        {ProtectedIfApplicable}{DerivationKeyword}void {helperMethod}(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID{IIF(!isPrimitive, $", int startOfObjectPosition, Span<byte> lengthsSpan")})
+                        {ProtectedIfApplicable}{DerivationKeyword}void {helperMethod}(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID{IIF(!isPrimitive, $", Span<byte> lengthsSpan")})
                         {{");
             }
             if (!isPrimitive)
