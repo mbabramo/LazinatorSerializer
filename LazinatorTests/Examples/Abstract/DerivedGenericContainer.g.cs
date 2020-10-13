@@ -391,7 +391,6 @@ namespace LazinatorTests.Examples.Abstract
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            
             _DerivedGenericContainer_T_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }

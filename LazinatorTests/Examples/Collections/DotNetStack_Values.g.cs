@@ -361,8 +361,7 @@ namespace LazinatorTests.Examples.Collections
         {
             int totalChildrenBytes = 0;
             _MyStackInt_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            _DotNetStack_Values_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_DotNetStack_Values_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         

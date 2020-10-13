@@ -409,10 +409,8 @@ namespace LazinatorTests.Examples.Collections
         {
             int totalChildrenBytes = 0;
             _MyListNonLazinatorType_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            _MyListNonLazinatorType2_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            _DotNetList_NonLazinator_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyListNonLazinatorType2_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_DotNetList_NonLazinator_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         

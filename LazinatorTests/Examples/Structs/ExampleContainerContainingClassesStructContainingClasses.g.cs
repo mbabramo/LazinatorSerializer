@@ -672,22 +672,16 @@ namespace LazinatorTests.Examples
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            
             _MyExampleStructContainingClasses_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            
             _MyHashSetExampleStruct_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            _MyListExampleStruct_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            _MyListNullableExampleStruct_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            _MyListUnwrappedNullableExampleStruct_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            _ExampleContainerContainingClassesStructContainingClasses_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyListExampleStruct_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyListNullableExampleStruct_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyListUnwrappedNullableExampleStruct_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_ExampleContainerContainingClassesStructContainingClasses_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         

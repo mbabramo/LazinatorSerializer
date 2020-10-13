@@ -485,14 +485,10 @@ namespace LazinatorTests.Examples.Collections
         {
             int totalChildrenBytes = 0;
             _MyDictionary_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            _MyDictionaryStructs_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            _MySortedDictionary_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            _MySortedList_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            _Dictionary_Values_Lazinator_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyDictionaryStructs_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MySortedDictionary_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MySortedList_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_Dictionary_Values_Lazinator_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         

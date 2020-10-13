@@ -1486,7 +1486,7 @@ namespace Lazinator.CodeDescription
             {
                 if (SkipCondition != null)
                     sb.AppendLine(skipCheckString);
-                sb.AppendLine(
+                sb.Append(
                         new ConditionalCodeGenerator(ReadInclusionConditional, $@"{BackingFieldString} = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref bytesSoFar);").ToString());
             }
             else
@@ -1506,12 +1506,12 @@ namespace Lazinator.CodeDescription
                                         totalChildrenBytes += {FixedLength};");
                 }
                 else if (SingleByteLength)
-                    sb.AppendLine(
+                    sb.Append(
                         $@"{BackingFieldByteIndex} = indexOfFirstChild + totalChildrenBytes;{skipCheckString}
                             " + new ConditionalCodeGenerator(ReadInclusionConditional,
                             "totalChildrenBytes += span.ToByte(ref bytesSoFar);"));
                 else
-                    sb.AppendLine(
+                    sb.Append(
                         $@"{BackingFieldByteIndex} = indexOfFirstChild + totalChildrenBytes;{skipCheckString}
                             " + new ConditionalCodeGenerator(ReadInclusionConditional,
                             "totalChildrenBytes += span.ToInt32(ref bytesSoFar);"));
@@ -1549,6 +1549,10 @@ namespace Lazinator.CodeDescription
                         new ConditionalCodeGenerator(WriteInclusionConditional, $"{WriteMethodName}(ref writer, {EnumEquivalentCastToEquivalentType}{BackingFieldString});").ToString());
             else
             {
+                sb.AppendLine($@"if (updateStoredBuffer)
+                                {{
+                                    {BackingFieldByteIndex} = writer.Position - startOfObjectPosition;
+                                }}");
                 // Finally, the main code for writing a serialized or non serialized object.
                 if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable || PropertyType == LazinatorPropertyType.OpenGenericParameter)
                     AppendPropertyWriteString_Lazinator(sb);
@@ -1564,10 +1568,11 @@ namespace Lazinator.CodeDescription
                 if (IsSupportedCollectionOrTuple && !IsSimpleListOrArray &&
                     InnerProperties.Any(x => x.IsPossiblyStruct))
                     removeBuffers = new ConditionalCodeGenerator(GetNonNullCheck(true), $" {BackingFieldString} = ({AppropriatelyQualifiedTypeName}) CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({BackingFieldAccessWithPossibleException}, l => l.RemoveBufferInHierarchy(), true);").ToString();
-                sb.AppendLine($@"if (updateStoredBuffer)
-                                {{
-                                    {BackingFieldByteIndex} = writer.Position - startOfObjectPosition;{removeBuffers}
-                                }}");
+                if (removeBuffers.Trim() != "")
+                    sb.AppendLine($@"if (updateStoredBuffer)
+                                    {{
+                                        {removeBuffers}
+                                    }}");
             }
         }
 

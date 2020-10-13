@@ -353,185 +353,183 @@ namespace LazinatorTests.Examples.Subclasses
         
         protected virtual void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            _MyEnum = (global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass)span.ToDecompressedInt32(ref bytesSoFar);
-        }
-        
-        protected virtual int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
-        {
-            int totalChildrenBytes = 0;
-            _MyEnumList_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            _ClassWithLocalEnum_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
-            return totalChildrenBytes;
-        }
-        
-        public virtual void SerializeToExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-        {
-            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Subclasses.ClassWithLocalEnum ");
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
+            _MyEnum = (global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass)span.ToDecompressedInt32(ref bytesSoFar);        }
+            
+            protected virtual int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
             {
-                updateStoredBuffer = false;
-            }
-            int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
-            if (updateStoredBuffer)
-            {
-                UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
-            }
-        }
-        
-        public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
-        {
-            _IsDirty = false;
-            if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
-            {
-                _DescendantIsDirty = false;
-                if (updateDeserializedChildren)
-                {
-                    UpdateDeserializedChildren(ref writer, startPosition);
-                }
-                
-            }
-            else
-            {
-                ThrowHelper.ThrowCannotUpdateStoredBuffer();
+                int totalChildrenBytes = 0;
+                _MyEnumList_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+                totalChildrenBytes += span.ToInt32(ref bytesSoFar);_ClassWithLocalEnum_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+                return totalChildrenBytes;
             }
             
-            var newBuffer = writer.Slice(startPosition, length);
-            LazinatorMemoryStorage = newBuffer;
-        }
-        
-        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
-        {
-            if (_MyEnumList_Accessed && _MyEnumList != null)
+            public virtual void SerializeToExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
             {
-                _MyEnumList = (List<EnumWithinClass>) CloneOrChange_List_GEnumWithinClass_g(_MyEnumList, l => l.RemoveBufferInHierarchy(), true);
-            }
-        }
-        
-        
-        protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
-        {
-            int startPosition = writer.Position;
-            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Subclasses.ClassWithLocalEnum starting at {writer.Position}.");
-            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
-            if (includeUniqueID)
-            {
-                if (!ContainsOpenGenericParameters)
+                TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Subclasses.ClassWithLocalEnum ");
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
                 {
-                    CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
+                    updateStoredBuffer = false;
+                }
+                int startPosition = writer.Position;
+                WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
+                if (updateStoredBuffer)
+                {
+                    UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
+                }
+            }
+            
+            public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+            {
+                _IsDirty = false;
+                if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+                {
+                    _DescendantIsDirty = false;
+                    if (updateDeserializedChildren)
+                    {
+                        UpdateDeserializedChildren(ref writer, startPosition);
+                    }
+                    
                 }
                 else
                 {
-                    WriteLazinatorGenericID(ref writer, LazinatorGenericID);
+                    ThrowHelper.ThrowCannotUpdateStoredBuffer();
+                }
+                
+                var newBuffer = writer.Slice(startPosition, length);
+                LazinatorMemoryStorage = newBuffer;
+            }
+            
+            protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+            {
+                if (_MyEnumList_Accessed && _MyEnumList != null)
+                {
+                    _MyEnumList = (List<EnumWithinClass>) CloneOrChange_List_GEnumWithinClass_g(_MyEnumList, l => l.RemoveBufferInHierarchy(), true);
                 }
             }
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
-            writer.Write((byte)includeChildrenMode);
-            // write properties
             
-            int startOfObjectPosition = writer.Position;
-            WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
-            Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 4);
-            writer.Skip(4);
-            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
-            TabbedText.WriteLine($"Byte {writer.Position} (end of ClassWithLocalEnum) ");
-        }
-        
-        protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
-        {
-            TabbedText.WriteLine($"Byte {writer.Position}, MyEnum value {_MyEnum}");
-            TabbedText.Tabs++;
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, (int) _MyEnum);
-            TabbedText.Tabs--;
-        }
-        
-        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition, Span<byte> lengthsSpan)
-        {
-            int startOfChildPosition = 0;
-            int lengthValue = 0;
-            TabbedText.WriteLine($"Byte {writer.Position}, MyEnumList (accessed? {_MyEnumList_Accessed})");
-            TabbedText.Tabs++;
-            startOfChildPosition = writer.Position;
-            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyEnumList_Accessed)
-            {
-                var deserialized = MyEnumList;
-            }
-            WriteNonLazinatorObject(
-            nonLazinatorObject: _MyEnumList, isBelievedDirty: _MyEnumList_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
-            isAccessed: _MyEnumList_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyEnumList_ByteIndex, _MyEnumList_ByteLength, true, false, null),
-            verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_List_GEnumWithinClass_g(ref w, _MyEnumList,
-            includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _MyEnumList_ByteIndex = writer.Position - startOfObjectPosition;
-            }
-            TabbedText.Tabs--;
-            if (updateStoredBuffer)
-            {
-                _ClassWithLocalEnum_EndByteIndex = writer.Position - startOfObjectPosition;
-            }
-        }
-        
-        /* Conversion of supported collections and tuples */
-        
-        private static List<EnumWithinClass> ConvertFromBytes_List_GEnumWithinClass_g(LazinatorMemory storage)
-        {
-            if (storage.Length == 0)
-            {
-                return default(List<EnumWithinClass>);
-            }
-            ReadOnlySpan<byte> span = storage.InitialMemory.Span;
-            int bytesSoFar = 0;
-            int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
-            List<EnumWithinClass> collection = new List<EnumWithinClass>(collectionLength);
-            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
+            protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
             {
-                global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass item = (global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass)span.ToDecompressedInt32(ref bytesSoFar);
-                collection.Add(item);
+                int startPosition = writer.Position;
+                TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Subclasses.ClassWithLocalEnum starting at {writer.Position}.");
+                TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
+                TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
+                if (includeUniqueID)
+                {
+                    if (!ContainsOpenGenericParameters)
+                    {
+                        CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
+                    }
+                    else
+                    {
+                        WriteLazinatorGenericID(ref writer, LazinatorGenericID);
+                    }
+                }
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
+                writer.Write((byte)includeChildrenMode);
+                // write properties
+                
+                int startOfObjectPosition = writer.Position;
+                WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
+                Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 4);
+                writer.Skip(4);
+                WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+                TabbedText.WriteLine($"Byte {writer.Position} (end of ClassWithLocalEnum) ");
             }
             
-            return collection;
-        }
-        
-        private static void ConvertToBytes_List_GEnumWithinClass_g(ref BinaryBufferWriter writer, List<EnumWithinClass> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-        {
-            if (itemToConvert == default(List<EnumWithinClass>))
+            protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
             {
-                return;
-            }
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Count);
-            int itemToConvertCount = itemToConvert.Count;
-            for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
-            {
-                CompressedIntegralTypes.WriteCompressedInt(ref writer, (int) itemToConvert[itemIndex]);
-            }
-        }
-        
-        private static List<EnumWithinClass> CloneOrChange_List_GEnumWithinClass_g(List<EnumWithinClass> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
-        {
-            if (itemToClone == null)
-            {
-                return default;
+                TabbedText.WriteLine($"Byte {writer.Position}, MyEnum value {_MyEnum}");
+                TabbedText.Tabs++;
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, (int) _MyEnum);
+                TabbedText.Tabs--;
             }
             
-            int collectionLength = itemToClone.Count;
-            List<EnumWithinClass> collection = new List<EnumWithinClass>(collectionLength);
-            int itemToCloneCount = itemToClone.Count;
-            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition, Span<byte> lengthsSpan)
             {
-                var itemCopied = (global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass) itemToClone[itemIndex];
-                collection.Add(itemCopied);
+                int startOfChildPosition = 0;
+                int lengthValue = 0;
+                TabbedText.WriteLine($"Byte {writer.Position}, MyEnumList (accessed? {_MyEnumList_Accessed})");
+                TabbedText.Tabs++;
+                startOfChildPosition = writer.Position;
+                if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyEnumList_Accessed)
+                {
+                    var deserialized = MyEnumList;
+                }
+                WriteNonLazinatorObject(
+                nonLazinatorObject: _MyEnumList, isBelievedDirty: _MyEnumList_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
+                isAccessed: _MyEnumList_Accessed, writer: ref writer,
+                getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyEnumList_ByteIndex, _MyEnumList_ByteLength, true, false, null),
+                verifyCleanness: false,
+                binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+                ConvertToBytes_List_GEnumWithinClass_g(ref w, _MyEnumList,
+                includeChildrenMode, v, updateStoredBuffer),
+                lengthsSpan: ref lengthsSpan);
+                if (updateStoredBuffer)
+                {
+                    _MyEnumList_ByteIndex = writer.Position - startOfObjectPosition;
+                }
+                TabbedText.Tabs--;
+                if (updateStoredBuffer)
+                {
+                    _ClassWithLocalEnum_EndByteIndex = writer.Position - startOfObjectPosition;
+                }
             }
-            return collection;
+            
+            /* Conversion of supported collections and tuples */
+            
+            private static List<EnumWithinClass> ConvertFromBytes_List_GEnumWithinClass_g(LazinatorMemory storage)
+            {
+                if (storage.Length == 0)
+                {
+                    return default(List<EnumWithinClass>);
+                }
+                ReadOnlySpan<byte> span = storage.InitialMemory.Span;
+                int bytesSoFar = 0;
+                int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
+                
+                List<EnumWithinClass> collection = new List<EnumWithinClass>(collectionLength);
+                for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
+                {
+                    global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass item = (global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass)span.ToDecompressedInt32(ref bytesSoFar);
+                    collection.Add(item);
+                }
+                
+                return collection;
+            }
+            
+            private static void ConvertToBytes_List_GEnumWithinClass_g(ref BinaryBufferWriter writer, List<EnumWithinClass> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+            {
+                if (itemToConvert == default(List<EnumWithinClass>))
+                {
+                    return;
+                }
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Count);
+                int itemToConvertCount = itemToConvert.Count;
+                for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
+                {
+                    CompressedIntegralTypes.WriteCompressedInt(ref writer, (int) itemToConvert[itemIndex]);
+                }
+            }
+            
+            private static List<EnumWithinClass> CloneOrChange_List_GEnumWithinClass_g(List<EnumWithinClass> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+            {
+                if (itemToClone == null)
+                {
+                    return default;
+                }
+                
+                int collectionLength = itemToClone.Count;
+                List<EnumWithinClass> collection = new List<EnumWithinClass>(collectionLength);
+                int itemToCloneCount = itemToClone.Count;
+                for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+                {
+                    var itemCopied = (global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass) itemToClone[itemIndex];
+                    collection.Add(itemCopied);
+                }
+                return collection;
+            }
+            
         }
-        
     }
-}

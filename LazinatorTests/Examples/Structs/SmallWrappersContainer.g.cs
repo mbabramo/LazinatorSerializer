@@ -1129,7 +1129,6 @@ namespace LazinatorTests.Examples.Structs
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            
             _WrappedBool_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             totalChildrenBytes++;
             _WrappedByte_ByteIndex = indexOfFirstChild + totalChildrenBytes;
@@ -1143,19 +1142,16 @@ namespace LazinatorTests.Examples.Structs
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            
             _WrappedNullableChar_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            
             _WrappedNullableSByte_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            
             _WrappedSByte_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             totalChildrenBytes++;
             _SmallWrappersContainer_EndByteIndex = indexOfFirstChild + totalChildrenBytes;

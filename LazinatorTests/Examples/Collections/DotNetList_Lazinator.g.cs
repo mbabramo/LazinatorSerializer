@@ -362,8 +362,7 @@ namespace LazinatorTests.Examples.Collections
         {
             int totalChildrenBytes = 0;
             _MyListSerialized_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            _DotNetList_Lazinator_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_DotNetList_Lazinator_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         

@@ -402,426 +402,423 @@ namespace LazinatorTests.Examples.Tuples
         
         protected virtual void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            _MyInt = span.ToDecompressedInt32(ref bytesSoFar);
-        }
-        
-        protected virtual int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
-        {
-            int totalChildrenBytes = 0;
-            _MyDictionaryWithRecordLikeContainers_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            _MyDictionaryWithRecordLikeTypeValues_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            _RecordLikeCollections_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
-            return totalChildrenBytes;
-        }
-        
-        public virtual void SerializeToExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-        {
-            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Tuples.RecordLikeCollections ");
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
+            _MyInt = span.ToDecompressedInt32(ref bytesSoFar);        }
+            
+            protected virtual int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
             {
-                updateStoredBuffer = false;
-            }
-            int startPosition = writer.Position;
-            WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
-            if (updateStoredBuffer)
-            {
-                UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
-            }
-        }
-        
-        public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
-        {
-            _IsDirty = false;
-            if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
-            {
-                _DescendantIsDirty = false;
-                if (updateDeserializedChildren)
-                {
-                    UpdateDeserializedChildren(ref writer, startPosition);
-                }
-                
-            }
-            else
-            {
-                ThrowHelper.ThrowCannotUpdateStoredBuffer();
+                int totalChildrenBytes = 0;
+                _MyDictionaryWithRecordLikeContainers_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+                totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyDictionaryWithRecordLikeTypeValues_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+                totalChildrenBytes += span.ToInt32(ref bytesSoFar);_RecordLikeCollections_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+                return totalChildrenBytes;
             }
             
-            var newBuffer = writer.Slice(startPosition, length);
-            LazinatorMemoryStorage = newBuffer;
-        }
-        
-        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
-        {
-            if (_MyDictionaryWithRecordLikeContainers_Accessed && _MyDictionaryWithRecordLikeContainers != null)
+            public virtual void SerializeToExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
             {
-                _MyDictionaryWithRecordLikeContainers = (Dictionary<Int32, RecordLikeContainer>) CloneOrChange_Dictionary_Gint_c_C32RecordLikeContainer_g(_MyDictionaryWithRecordLikeContainers, l => l.RemoveBufferInHierarchy(), true);
-            }
-            if (_MyDictionaryWithRecordLikeTypeValues_Accessed && _MyDictionaryWithRecordLikeTypeValues != null)
-            {
-                _MyDictionaryWithRecordLikeTypeValues = (Dictionary<Int32, RecordLikeTypeWithLazinator>) CloneOrChange_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(_MyDictionaryWithRecordLikeTypeValues, l => l.RemoveBufferInHierarchy(), true);
-            }
-        }
-        
-        
-        protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
-        {
-            int startPosition = writer.Position;
-            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Tuples.RecordLikeCollections starting at {writer.Position}.");
-            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
-            if (includeUniqueID)
-            {
-                if (!ContainsOpenGenericParameters)
+                TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Tuples.RecordLikeCollections ");
+                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
                 {
-                    CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
+                    updateStoredBuffer = false;
+                }
+                int startPosition = writer.Position;
+                WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
+                if (updateStoredBuffer)
+                {
+                    UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
+                }
+            }
+            
+            public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+            {
+                _IsDirty = false;
+                if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+                {
+                    _DescendantIsDirty = false;
+                    if (updateDeserializedChildren)
+                    {
+                        UpdateDeserializedChildren(ref writer, startPosition);
+                    }
+                    
                 }
                 else
                 {
-                    WriteLazinatorGenericID(ref writer, LazinatorGenericID);
+                    ThrowHelper.ThrowCannotUpdateStoredBuffer();
                 }
+                
+                var newBuffer = writer.Slice(startPosition, length);
+                LazinatorMemoryStorage = newBuffer;
             }
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
-            writer.Write((byte)includeChildrenMode);
-            // write properties
             
-            int startOfObjectPosition = writer.Position;
-            WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
-            Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 8);
-            writer.Skip(8);
-            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
-            TabbedText.WriteLine($"Byte {writer.Position} (end of RecordLikeCollections) ");
-        }
-        
-        protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
-        {
-            TabbedText.WriteLine($"Byte {writer.Position}, MyInt value {_MyInt}");
-            TabbedText.Tabs++;
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyInt);
-            TabbedText.Tabs--;
-        }
-        
-        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition, Span<byte> lengthsSpan)
-        {
-            int startOfChildPosition = 0;
-            int lengthValue = 0;
-            TabbedText.WriteLine($"Byte {writer.Position}, MyDictionaryWithRecordLikeContainers (accessed? {_MyDictionaryWithRecordLikeContainers_Accessed})");
-            TabbedText.Tabs++;
-            startOfChildPosition = writer.Position;
-            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyDictionaryWithRecordLikeContainers_Accessed)
+            protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
             {
-                var deserialized = MyDictionaryWithRecordLikeContainers;
-            }
-            WriteNonLazinatorObject(
-            nonLazinatorObject: _MyDictionaryWithRecordLikeContainers, isBelievedDirty: _MyDictionaryWithRecordLikeContainers_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
-            isAccessed: _MyDictionaryWithRecordLikeContainers_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyDictionaryWithRecordLikeContainers_ByteIndex, _MyDictionaryWithRecordLikeContainers_ByteLength, true, false, null),
-            verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_Dictionary_Gint_c_C32RecordLikeContainer_g(ref w, _MyDictionaryWithRecordLikeContainers,
-            includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _MyDictionaryWithRecordLikeContainers_ByteIndex = writer.Position - startOfObjectPosition;if (_MyDictionaryWithRecordLikeContainers_Accessed && _MyDictionaryWithRecordLikeContainers != null)
+                if (_MyDictionaryWithRecordLikeContainers_Accessed && _MyDictionaryWithRecordLikeContainers != null)
                 {
                     _MyDictionaryWithRecordLikeContainers = (Dictionary<Int32, RecordLikeContainer>) CloneOrChange_Dictionary_Gint_c_C32RecordLikeContainer_g(_MyDictionaryWithRecordLikeContainers, l => l.RemoveBufferInHierarchy(), true);
                 }
-                
-            }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, MyDictionaryWithRecordLikeTypeValues (accessed? {_MyDictionaryWithRecordLikeTypeValues_Accessed})");
-            TabbedText.Tabs++;
-            startOfChildPosition = writer.Position;
-            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyDictionaryWithRecordLikeTypeValues_Accessed)
-            {
-                var deserialized = MyDictionaryWithRecordLikeTypeValues;
-            }
-            WriteNonLazinatorObject(
-            nonLazinatorObject: _MyDictionaryWithRecordLikeTypeValues, isBelievedDirty: _MyDictionaryWithRecordLikeTypeValues_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
-            isAccessed: _MyDictionaryWithRecordLikeTypeValues_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyDictionaryWithRecordLikeTypeValues_ByteIndex, _MyDictionaryWithRecordLikeTypeValues_ByteLength, true, false, null),
-            verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-            ConvertToBytes_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(ref w, _MyDictionaryWithRecordLikeTypeValues,
-            includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
-            if (updateStoredBuffer)
-            {
-                _MyDictionaryWithRecordLikeTypeValues_ByteIndex = writer.Position - startOfObjectPosition;if (_MyDictionaryWithRecordLikeTypeValues_Accessed && _MyDictionaryWithRecordLikeTypeValues != null)
+                if (_MyDictionaryWithRecordLikeTypeValues_Accessed && _MyDictionaryWithRecordLikeTypeValues != null)
                 {
                     _MyDictionaryWithRecordLikeTypeValues = (Dictionary<Int32, RecordLikeTypeWithLazinator>) CloneOrChange_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(_MyDictionaryWithRecordLikeTypeValues, l => l.RemoveBufferInHierarchy(), true);
                 }
+            }
+            
+            
+            protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
+            {
+                int startPosition = writer.Position;
+                TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Tuples.RecordLikeCollections starting at {writer.Position}.");
+                TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
+                TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
+                if (includeUniqueID)
+                {
+                    if (!ContainsOpenGenericParameters)
+                    {
+                        CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
+                    }
+                    else
+                    {
+                        WriteLazinatorGenericID(ref writer, LazinatorGenericID);
+                    }
+                }
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
+                writer.Write((byte)includeChildrenMode);
+                // write properties
                 
-            }
-            TabbedText.Tabs--;
-            if (updateStoredBuffer)
-            {
-                _RecordLikeCollections_EndByteIndex = writer.Position - startOfObjectPosition;
-            }
-        }
-        
-        /* Conversion of supported collections and tuples */
-        
-        private static Dictionary<Int32, RecordLikeContainer> ConvertFromBytes_Dictionary_Gint_c_C32RecordLikeContainer_g(LazinatorMemory storage)
-        {
-            if (storage.Length == 0)
-            {
-                return default(Dictionary<Int32, RecordLikeContainer>);
-            }
-            ReadOnlySpan<byte> span = storage.InitialMemory.Span;
-            int bytesSoFar = 0;
-            int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
-            
-            Dictionary<Int32, RecordLikeContainer> collection = new Dictionary<Int32, RecordLikeContainer>(collectionLength);
-            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
-            {
-                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
-                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                var item = ConvertFromBytes_KeyValuePair_Gint_c_C32RecordLikeContainer_g(childData);
-                collection.Add(item.Key, item.Value);
-                bytesSoFar += lengthCollectionMember;
+                int startOfObjectPosition = writer.Position;
+                WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
+                Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 8);
+                writer.Skip(8);
+                WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);
+                TabbedText.WriteLine($"Byte {writer.Position} (end of RecordLikeCollections) ");
             }
             
-            return collection;
-        }
-        
-        private static void ConvertToBytes_Dictionary_Gint_c_C32RecordLikeContainer_g(ref BinaryBufferWriter writer, Dictionary<Int32, RecordLikeContainer> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-        {
-            if (itemToConvert == default(Dictionary<Int32, RecordLikeContainer>))
+            protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
             {
-                return;
-            }
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Count);
-            foreach (var item in itemToConvert)
-            {
-                void action(ref BinaryBufferWriter w) => ConvertToBytes_KeyValuePair_Gint_c_C32RecordLikeContainer_g(ref w, item, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                WriteToBinaryWithIntLengthPrefix(ref writer, action);
-            }
-        }
-        
-        private static Dictionary<Int32, RecordLikeContainer> CloneOrChange_Dictionary_Gint_c_C32RecordLikeContainer_g(Dictionary<Int32, RecordLikeContainer> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
-        {
-            if (itemToClone == null)
-            {
-                return default;
+                TabbedText.WriteLine($"Byte {writer.Position}, MyInt value {_MyInt}");
+                TabbedText.Tabs++;
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyInt);
+                TabbedText.Tabs--;
             }
             
-            int collectionLength = itemToClone.Count;
-            Dictionary<Int32, RecordLikeContainer> collection = new Dictionary<Int32, RecordLikeContainer>(collectionLength);
-            foreach (var item in itemToClone)
+            protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition, Span<byte> lengthsSpan)
             {
-                var itemCopied = (KeyValuePair<Int32, RecordLikeContainer>) CloneOrChange_KeyValuePair_Gint_c_C32RecordLikeContainer_g(item, cloneOrChangeFunc, avoidCloningIfPossible);
-                collection.Add(itemCopied.Key, itemCopied.Value);
+                int startOfChildPosition = 0;
+                int lengthValue = 0;
+                TabbedText.WriteLine($"Byte {writer.Position}, MyDictionaryWithRecordLikeContainers (accessed? {_MyDictionaryWithRecordLikeContainers_Accessed})");
+                TabbedText.Tabs++;
+                startOfChildPosition = writer.Position;
+                if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyDictionaryWithRecordLikeContainers_Accessed)
+                {
+                    var deserialized = MyDictionaryWithRecordLikeContainers;
+                }
+                WriteNonLazinatorObject(
+                nonLazinatorObject: _MyDictionaryWithRecordLikeContainers, isBelievedDirty: _MyDictionaryWithRecordLikeContainers_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
+                isAccessed: _MyDictionaryWithRecordLikeContainers_Accessed, writer: ref writer,
+                getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyDictionaryWithRecordLikeContainers_ByteIndex, _MyDictionaryWithRecordLikeContainers_ByteLength, true, false, null),
+                verifyCleanness: false,
+                binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+                ConvertToBytes_Dictionary_Gint_c_C32RecordLikeContainer_g(ref w, _MyDictionaryWithRecordLikeContainers,
+                includeChildrenMode, v, updateStoredBuffer),
+                lengthsSpan: ref lengthsSpan);
+                if (updateStoredBuffer)
+                {
+                    _MyDictionaryWithRecordLikeContainers_ByteIndex = writer.Position - startOfObjectPosition;if (_MyDictionaryWithRecordLikeContainers_Accessed && _MyDictionaryWithRecordLikeContainers != null)
+                    {
+                        _MyDictionaryWithRecordLikeContainers = (Dictionary<Int32, RecordLikeContainer>) CloneOrChange_Dictionary_Gint_c_C32RecordLikeContainer_g(_MyDictionaryWithRecordLikeContainers, l => l.RemoveBufferInHierarchy(), true);
+                    }
+                    
+                }
+                TabbedText.Tabs--;
+                TabbedText.WriteLine($"Byte {writer.Position}, MyDictionaryWithRecordLikeTypeValues (accessed? {_MyDictionaryWithRecordLikeTypeValues_Accessed})");
+                TabbedText.Tabs++;
+                startOfChildPosition = writer.Position;
+                if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyDictionaryWithRecordLikeTypeValues_Accessed)
+                {
+                    var deserialized = MyDictionaryWithRecordLikeTypeValues;
+                }
+                WriteNonLazinatorObject(
+                nonLazinatorObject: _MyDictionaryWithRecordLikeTypeValues, isBelievedDirty: _MyDictionaryWithRecordLikeTypeValues_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
+                isAccessed: _MyDictionaryWithRecordLikeTypeValues_Accessed, writer: ref writer,
+                getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyDictionaryWithRecordLikeTypeValues_ByteIndex, _MyDictionaryWithRecordLikeTypeValues_ByteLength, true, false, null),
+                verifyCleanness: false,
+                binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+                ConvertToBytes_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(ref w, _MyDictionaryWithRecordLikeTypeValues,
+                includeChildrenMode, v, updateStoredBuffer),
+                lengthsSpan: ref lengthsSpan);
+                if (updateStoredBuffer)
+                {
+                    _MyDictionaryWithRecordLikeTypeValues_ByteIndex = writer.Position - startOfObjectPosition;if (_MyDictionaryWithRecordLikeTypeValues_Accessed && _MyDictionaryWithRecordLikeTypeValues != null)
+                    {
+                        _MyDictionaryWithRecordLikeTypeValues = (Dictionary<Int32, RecordLikeTypeWithLazinator>) CloneOrChange_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(_MyDictionaryWithRecordLikeTypeValues, l => l.RemoveBufferInHierarchy(), true);
+                    }
+                    
+                }
+                TabbedText.Tabs--;
+                if (updateStoredBuffer)
+                {
+                    _RecordLikeCollections_EndByteIndex = writer.Position - startOfObjectPosition;
+                }
             }
-            return collection;
-        }
-        
-        private static KeyValuePair<Int32, RecordLikeContainer> ConvertFromBytes_KeyValuePair_Gint_c_C32RecordLikeContainer_g(LazinatorMemory storage)
-        {
-            if (storage.Length == 0)
+            
+            /* Conversion of supported collections and tuples */
+            
+            private static Dictionary<Int32, RecordLikeContainer> ConvertFromBytes_Dictionary_Gint_c_C32RecordLikeContainer_g(LazinatorMemory storage)
             {
-                return default;
+                if (storage.Length == 0)
+                {
+                    return default(Dictionary<Int32, RecordLikeContainer>);
+                }
+                ReadOnlySpan<byte> span = storage.InitialMemory.Span;
+                int bytesSoFar = 0;
+                int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
+                
+                Dictionary<Int32, RecordLikeContainer> collection = new Dictionary<Int32, RecordLikeContainer>(collectionLength);
+                for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
+                {
+                    int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
+                    LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
+                    var item = ConvertFromBytes_KeyValuePair_Gint_c_C32RecordLikeContainer_g(childData);
+                    collection.Add(item.Key, item.Value);
+                    bytesSoFar += lengthCollectionMember;
+                }
+                
+                return collection;
             }
-            ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
             
-            int bytesSoFar = 0;
-            
-            int item1 = span.ToDecompressedInt32(ref bytesSoFar);
-            
-            RecordLikeContainer item2 = default(RecordLikeContainer);
-            int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
-            if (lengthCollectionMember_item2 != 0)
+            private static void ConvertToBytes_Dictionary_Gint_c_C32RecordLikeContainer_g(ref BinaryBufferWriter writer, Dictionary<Int32, RecordLikeContainer> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
             {
-                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
-                item2 = DeserializationFactory.Instance.CreateBasedOnType<RecordLikeContainer>(childData);
+                if (itemToConvert == default(Dictionary<Int32, RecordLikeContainer>))
+                {
+                    return;
+                }
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Count);
+                foreach (var item in itemToConvert)
+                {
+                    void action(ref BinaryBufferWriter w) => ConvertToBytes_KeyValuePair_Gint_c_C32RecordLikeContainer_g(ref w, item, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    WriteToBinaryWithIntLengthPrefix(ref writer, action);
+                }
             }
-            bytesSoFar += lengthCollectionMember_item2;
             
-            var itemToCreate = new KeyValuePair<Int32, RecordLikeContainer>(item1, item2);
-            
-            return itemToCreate;
-        }
-        
-        private static void ConvertToBytes_KeyValuePair_Gint_c_C32RecordLikeContainer_g(ref BinaryBufferWriter writer, KeyValuePair<Int32, RecordLikeContainer> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-        {
-            
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Key);
-            
-            if (itemToConvert.Value == null)
+            private static Dictionary<Int32, RecordLikeContainer> CloneOrChange_Dictionary_Gint_c_C32RecordLikeContainer_g(Dictionary<Int32, RecordLikeContainer> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
             {
-                writer.Write((uint)0);
+                if (itemToClone == null)
+                {
+                    return default;
+                }
+                
+                int collectionLength = itemToClone.Count;
+                Dictionary<Int32, RecordLikeContainer> collection = new Dictionary<Int32, RecordLikeContainer>(collectionLength);
+                foreach (var item in itemToClone)
+                {
+                    var itemCopied = (KeyValuePair<Int32, RecordLikeContainer>) CloneOrChange_KeyValuePair_Gint_c_C32RecordLikeContainer_g(item, cloneOrChangeFunc, avoidCloningIfPossible);
+                    collection.Add(itemCopied.Key, itemCopied.Value);
+                }
+                return collection;
             }
-            else
+            
+            private static KeyValuePair<Int32, RecordLikeContainer> ConvertFromBytes_KeyValuePair_Gint_c_C32RecordLikeContainer_g(LazinatorMemory storage)
             {
-                void actionValue(ref BinaryBufferWriter w) => itemToConvert.Value.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                if (storage.Length == 0)
+                {
+                    return default;
+                }
+                ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
+                
+                int bytesSoFar = 0;
+                
+                int item1 = span.ToDecompressedInt32(ref bytesSoFar);
+                
+                RecordLikeContainer item2 = default(RecordLikeContainer);
+                int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
+                if (lengthCollectionMember_item2 != 0)
+                {
+                    LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
+                    item2 = DeserializationFactory.Instance.CreateBasedOnType<RecordLikeContainer>(childData);
+                }
+                bytesSoFar += lengthCollectionMember_item2;
+                
+                var itemToCreate = new KeyValuePair<Int32, RecordLikeContainer>(item1, item2);
+                
+                return itemToCreate;
+            }
+            
+            private static void ConvertToBytes_KeyValuePair_Gint_c_C32RecordLikeContainer_g(ref BinaryBufferWriter writer, KeyValuePair<Int32, RecordLikeContainer> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+            {
+                
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Key);
+                
+                if (itemToConvert.Value == null)
+                {
+                    writer.Write((uint)0);
+                }
+                else
+                {
+                    void actionValue(ref BinaryBufferWriter w) => itemToConvert.Value.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    WriteToBinaryWithIntLengthPrefix(ref writer, actionValue);
+                };
+            }
+            
+            private static KeyValuePair<Int32, RecordLikeContainer> CloneOrChange_KeyValuePair_Gint_c_C32RecordLikeContainer_g(KeyValuePair<Int32, RecordLikeContainer> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+            {
+                return new KeyValuePair<Int32, RecordLikeContainer>((int) (itemToConvert.Key), (RecordLikeContainer) (cloneOrChangeFunc((itemToConvert.Value))));
+            }
+            
+            private static Dictionary<Int32, RecordLikeTypeWithLazinator> ConvertFromBytes_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(LazinatorMemory storage)
+            {
+                if (storage.Length == 0)
+                {
+                    return default(Dictionary<Int32, RecordLikeTypeWithLazinator>);
+                }
+                ReadOnlySpan<byte> span = storage.InitialMemory.Span;
+                int bytesSoFar = 0;
+                int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
+                
+                Dictionary<Int32, RecordLikeTypeWithLazinator> collection = new Dictionary<Int32, RecordLikeTypeWithLazinator>(collectionLength);
+                for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
+                {
+                    int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
+                    LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
+                    var item = ConvertFromBytes_KeyValuePair_Gint_c_C32RecordLikeTypeWithLazinator_g(childData);
+                    collection.Add(item.Key, item.Value);
+                    bytesSoFar += lengthCollectionMember;
+                }
+                
+                return collection;
+            }
+            
+            private static void ConvertToBytes_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(ref BinaryBufferWriter writer, Dictionary<Int32, RecordLikeTypeWithLazinator> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+            {
+                if (itemToConvert == default(Dictionary<Int32, RecordLikeTypeWithLazinator>))
+                {
+                    return;
+                }
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Count);
+                foreach (var item in itemToConvert)
+                {
+                    void action(ref BinaryBufferWriter w) => ConvertToBytes_KeyValuePair_Gint_c_C32RecordLikeTypeWithLazinator_g(ref w, item, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    WriteToBinaryWithIntLengthPrefix(ref writer, action);
+                }
+            }
+            
+            private static Dictionary<Int32, RecordLikeTypeWithLazinator> CloneOrChange_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(Dictionary<Int32, RecordLikeTypeWithLazinator> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+            {
+                if (itemToClone == null)
+                {
+                    return default;
+                }
+                
+                int collectionLength = itemToClone.Count;
+                Dictionary<Int32, RecordLikeTypeWithLazinator> collection = new Dictionary<Int32, RecordLikeTypeWithLazinator>(collectionLength);
+                foreach (var item in itemToClone)
+                {
+                    var itemCopied = (KeyValuePair<Int32, RecordLikeTypeWithLazinator>) CloneOrChange_KeyValuePair_Gint_c_C32RecordLikeTypeWithLazinator_g(item, cloneOrChangeFunc, avoidCloningIfPossible);
+                    collection.Add(itemCopied.Key, itemCopied.Value);
+                }
+                return collection;
+            }
+            
+            private static KeyValuePair<Int32, RecordLikeTypeWithLazinator> ConvertFromBytes_KeyValuePair_Gint_c_C32RecordLikeTypeWithLazinator_g(LazinatorMemory storage)
+            {
+                if (storage.Length == 0)
+                {
+                    return default;
+                }
+                ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
+                
+                int bytesSoFar = 0;
+                
+                int item1 = span.ToDecompressedInt32(ref bytesSoFar);
+                
+                RecordLikeTypeWithLazinator item2 = default(RecordLikeTypeWithLazinator);
+                int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
+                if (lengthCollectionMember_item2 != 0)
+                {
+                    LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
+                    item2 = ConvertFromBytes_RecordLikeTypeWithLazinator(childData);
+                }
+                bytesSoFar += lengthCollectionMember_item2;
+                
+                var itemToCreate = new KeyValuePair<Int32, RecordLikeTypeWithLazinator>(item1, item2);
+                
+                return itemToCreate;
+            }
+            
+            private static void ConvertToBytes_KeyValuePair_Gint_c_C32RecordLikeTypeWithLazinator_g(ref BinaryBufferWriter writer, KeyValuePair<Int32, RecordLikeTypeWithLazinator> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+            {
+                
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Key);
+                
+                void actionValue(ref BinaryBufferWriter w) => ConvertToBytes_RecordLikeTypeWithLazinator(ref w, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 WriteToBinaryWithIntLengthPrefix(ref writer, actionValue);
-            };
+            }
+            
+            private static KeyValuePair<Int32, RecordLikeTypeWithLazinator> CloneOrChange_KeyValuePair_Gint_c_C32RecordLikeTypeWithLazinator_g(KeyValuePair<Int32, RecordLikeTypeWithLazinator> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+            {
+                return new KeyValuePair<Int32, RecordLikeTypeWithLazinator>((int) (itemToConvert.Key), (RecordLikeTypeWithLazinator) CloneOrChange_RecordLikeTypeWithLazinator((itemToConvert.Value), cloneOrChangeFunc, avoidCloningIfPossible));
+            }
+            
+            private static RecordLikeTypeWithLazinator ConvertFromBytes_RecordLikeTypeWithLazinator(LazinatorMemory storage)
+            {
+                if (storage.Length == 0)
+                {
+                    return default;
+                }
+                ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
+                
+                int bytesSoFar = 0;
+                
+                int item1 = span.ToDecompressedInt32(ref bytesSoFar);
+                
+                string item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+                
+                Example item3 = default(Example);
+                int lengthCollectionMember_item3 = span.ToInt32(ref bytesSoFar);
+                if (lengthCollectionMember_item3 != 0)
+                {
+                    LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item3);
+                    item3 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+                }
+                bytesSoFar += lengthCollectionMember_item3;
+                
+                ExampleStructWithoutClass item4 = default(ExampleStructWithoutClass);
+                int lengthCollectionMember_item4 = span.ToInt32(ref bytesSoFar);
+                if (lengthCollectionMember_item4 != 0)
+                {
+                    LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item4);
+                    item4 = new ExampleStructWithoutClass(childData);
+                }
+                bytesSoFar += lengthCollectionMember_item4;
+                
+                var itemToCreate = new RecordLikeTypeWithLazinator(item1, item2, item3, item4);
+                
+                return itemToCreate;
+            }
+            
+            private static void ConvertToBytes_RecordLikeTypeWithLazinator(ref BinaryBufferWriter writer, RecordLikeTypeWithLazinator itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+            {
+                
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
+                
+                EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, itemToConvert.Name);
+                
+                if (itemToConvert.Example == null)
+                {
+                    writer.Write((uint)0);
+                }
+                else
+                {
+                    void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
+                };
+                
+                void actionExampleStruct(ref BinaryBufferWriter w) => itemToConvert.ExampleStruct.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                WriteToBinaryWithIntLengthPrefix(ref writer, actionExampleStruct);
+            }
+            
+            private static RecordLikeTypeWithLazinator CloneOrChange_RecordLikeTypeWithLazinator(RecordLikeTypeWithLazinator itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+            {
+                return new RecordLikeTypeWithLazinator((int) (itemToConvert.Age), (string) (itemToConvert.Name), (Example) (cloneOrChangeFunc((itemToConvert.Example))), (ExampleStructWithoutClass) (cloneOrChangeFunc((itemToConvert.ExampleStruct))));
+            }
+            
         }
-        
-        private static KeyValuePair<Int32, RecordLikeContainer> CloneOrChange_KeyValuePair_Gint_c_C32RecordLikeContainer_g(KeyValuePair<Int32, RecordLikeContainer> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
-        {
-            return new KeyValuePair<Int32, RecordLikeContainer>((int) (itemToConvert.Key), (RecordLikeContainer) (cloneOrChangeFunc((itemToConvert.Value))));
-        }
-        
-        private static Dictionary<Int32, RecordLikeTypeWithLazinator> ConvertFromBytes_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(LazinatorMemory storage)
-        {
-            if (storage.Length == 0)
-            {
-                return default(Dictionary<Int32, RecordLikeTypeWithLazinator>);
-            }
-            ReadOnlySpan<byte> span = storage.InitialMemory.Span;
-            int bytesSoFar = 0;
-            int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
-            
-            Dictionary<Int32, RecordLikeTypeWithLazinator> collection = new Dictionary<Int32, RecordLikeTypeWithLazinator>(collectionLength);
-            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
-            {
-                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
-                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                var item = ConvertFromBytes_KeyValuePair_Gint_c_C32RecordLikeTypeWithLazinator_g(childData);
-                collection.Add(item.Key, item.Value);
-                bytesSoFar += lengthCollectionMember;
-            }
-            
-            return collection;
-        }
-        
-        private static void ConvertToBytes_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(ref BinaryBufferWriter writer, Dictionary<Int32, RecordLikeTypeWithLazinator> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-        {
-            if (itemToConvert == default(Dictionary<Int32, RecordLikeTypeWithLazinator>))
-            {
-                return;
-            }
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Count);
-            foreach (var item in itemToConvert)
-            {
-                void action(ref BinaryBufferWriter w) => ConvertToBytes_KeyValuePair_Gint_c_C32RecordLikeTypeWithLazinator_g(ref w, item, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                WriteToBinaryWithIntLengthPrefix(ref writer, action);
-            }
-        }
-        
-        private static Dictionary<Int32, RecordLikeTypeWithLazinator> CloneOrChange_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(Dictionary<Int32, RecordLikeTypeWithLazinator> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
-        {
-            if (itemToClone == null)
-            {
-                return default;
-            }
-            
-            int collectionLength = itemToClone.Count;
-            Dictionary<Int32, RecordLikeTypeWithLazinator> collection = new Dictionary<Int32, RecordLikeTypeWithLazinator>(collectionLength);
-            foreach (var item in itemToClone)
-            {
-                var itemCopied = (KeyValuePair<Int32, RecordLikeTypeWithLazinator>) CloneOrChange_KeyValuePair_Gint_c_C32RecordLikeTypeWithLazinator_g(item, cloneOrChangeFunc, avoidCloningIfPossible);
-                collection.Add(itemCopied.Key, itemCopied.Value);
-            }
-            return collection;
-        }
-        
-        private static KeyValuePair<Int32, RecordLikeTypeWithLazinator> ConvertFromBytes_KeyValuePair_Gint_c_C32RecordLikeTypeWithLazinator_g(LazinatorMemory storage)
-        {
-            if (storage.Length == 0)
-            {
-                return default;
-            }
-            ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
-            
-            int bytesSoFar = 0;
-            
-            int item1 = span.ToDecompressedInt32(ref bytesSoFar);
-            
-            RecordLikeTypeWithLazinator item2 = default(RecordLikeTypeWithLazinator);
-            int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
-            if (lengthCollectionMember_item2 != 0)
-            {
-                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
-                item2 = ConvertFromBytes_RecordLikeTypeWithLazinator(childData);
-            }
-            bytesSoFar += lengthCollectionMember_item2;
-            
-            var itemToCreate = new KeyValuePair<Int32, RecordLikeTypeWithLazinator>(item1, item2);
-            
-            return itemToCreate;
-        }
-        
-        private static void ConvertToBytes_KeyValuePair_Gint_c_C32RecordLikeTypeWithLazinator_g(ref BinaryBufferWriter writer, KeyValuePair<Int32, RecordLikeTypeWithLazinator> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-        {
-            
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Key);
-            
-            void actionValue(ref BinaryBufferWriter w) => ConvertToBytes_RecordLikeTypeWithLazinator(ref w, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-            WriteToBinaryWithIntLengthPrefix(ref writer, actionValue);
-        }
-        
-        private static KeyValuePair<Int32, RecordLikeTypeWithLazinator> CloneOrChange_KeyValuePair_Gint_c_C32RecordLikeTypeWithLazinator_g(KeyValuePair<Int32, RecordLikeTypeWithLazinator> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
-        {
-            return new KeyValuePair<Int32, RecordLikeTypeWithLazinator>((int) (itemToConvert.Key), (RecordLikeTypeWithLazinator) CloneOrChange_RecordLikeTypeWithLazinator((itemToConvert.Value), cloneOrChangeFunc, avoidCloningIfPossible));
-        }
-        
-        private static RecordLikeTypeWithLazinator ConvertFromBytes_RecordLikeTypeWithLazinator(LazinatorMemory storage)
-        {
-            if (storage.Length == 0)
-            {
-                return default;
-            }
-            ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
-            
-            int bytesSoFar = 0;
-            
-            int item1 = span.ToDecompressedInt32(ref bytesSoFar);
-            
-            string item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
-            
-            Example item3 = default(Example);
-            int lengthCollectionMember_item3 = span.ToInt32(ref bytesSoFar);
-            if (lengthCollectionMember_item3 != 0)
-            {
-                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item3);
-                item3 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
-            }
-            bytesSoFar += lengthCollectionMember_item3;
-            
-            ExampleStructWithoutClass item4 = default(ExampleStructWithoutClass);
-            int lengthCollectionMember_item4 = span.ToInt32(ref bytesSoFar);
-            if (lengthCollectionMember_item4 != 0)
-            {
-                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item4);
-                item4 = new ExampleStructWithoutClass(childData);
-            }
-            bytesSoFar += lengthCollectionMember_item4;
-            
-            var itemToCreate = new RecordLikeTypeWithLazinator(item1, item2, item3, item4);
-            
-            return itemToCreate;
-        }
-        
-        private static void ConvertToBytes_RecordLikeTypeWithLazinator(ref BinaryBufferWriter writer, RecordLikeTypeWithLazinator itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-        {
-            
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
-            
-            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, itemToConvert.Name);
-            
-            if (itemToConvert.Example == null)
-            {
-                writer.Write((uint)0);
-            }
-            else
-            {
-                void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
-            };
-            
-            void actionExampleStruct(ref BinaryBufferWriter w) => itemToConvert.ExampleStruct.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-            WriteToBinaryWithIntLengthPrefix(ref writer, actionExampleStruct);
-        }
-        
-        private static RecordLikeTypeWithLazinator CloneOrChange_RecordLikeTypeWithLazinator(RecordLikeTypeWithLazinator itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
-        {
-            return new RecordLikeTypeWithLazinator((int) (itemToConvert.Age), (string) (itemToConvert.Name), (Example) (cloneOrChangeFunc((itemToConvert.Example))), (ExampleStructWithoutClass) (cloneOrChangeFunc((itemToConvert.ExampleStruct))));
-        }
-        
     }
-}

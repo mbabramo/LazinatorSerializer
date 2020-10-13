@@ -483,13 +483,11 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            
             _RecursiveInterface_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            
             _RecursiveExample_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }

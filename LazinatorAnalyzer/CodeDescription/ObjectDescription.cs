@@ -1261,11 +1261,10 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             IEnumerable<PropertyDescription> childrenProperties = thisLevel.Where(x => !x.IsPrimitive);
             int numBytesChildLengthsAllLevels = PropertiesIncludingInherited.Sum(x => x.BytesUsedForLength());
             sb.AppendLine($@"
-                            int startOfObjectPosition = writer.Position;{IIF(primitiveProperties.Any() || IsDerivedFromNonAbstractLazinator, $@"
-                            WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);")}{IIF(childrenProperties.Any() || IsDerivedFromNonAbstractLazinator, $@"
+                            {IIF(primitiveProperties.Any() || IsDerivedFromNonAbstractLazinator, $@"WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);")}{IIF(childrenProperties.Any() || IsDerivedFromNonAbstractLazinator, $@"
                             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, {numBytesChildLengthsAllLevels});
                             writer.Skip({numBytesChildLengthsAllLevels});
-                            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, lengthsSpan);")}");
+                            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);")}");
 
             if (IncludeTracingCode)
             {

@@ -522,13 +522,11 @@ namespace LazinatorTests.Examples
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            
             _MyExampleStructContainingClasses_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            
             _ExampleStructContainingStruct_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }

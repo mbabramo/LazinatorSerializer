@@ -393,7 +393,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            
             _ContainerForEagerExample_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }

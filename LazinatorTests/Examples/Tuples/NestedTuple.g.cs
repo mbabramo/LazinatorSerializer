@@ -343,8 +343,7 @@ namespace LazinatorTests.Examples.Tuples
         {
             int totalChildrenBytes = 0;
             _MyNestedTuple_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            _NestedTuple_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_NestedTuple_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         

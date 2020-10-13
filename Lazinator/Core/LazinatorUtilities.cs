@@ -408,7 +408,9 @@ namespace Lazinator.Core
             bool isBelievedDirty, bool isAccessed, ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceForFieldFn,
             bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction, ref Span<byte> lengthsSpan)
         {
+            int startPosition = writer.Position; 
             WriteNonLazinatorObject_WithoutLengthPrefix(nonLazinatorObject, isBelievedDirty, isAccessed, ref writer, getChildSliceForFieldFn, verifyCleanness, binaryWriterAction);
+            WriteUncompressedPrimitives.WriteInt(lengthsSpan, writer.Position - startPosition);
             lengthsSpan = lengthsSpan.Slice(sizeof(int));
         }
 

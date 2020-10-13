@@ -431,7 +431,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            
             _ContainerForNullableStructInAnotherNamespace_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }

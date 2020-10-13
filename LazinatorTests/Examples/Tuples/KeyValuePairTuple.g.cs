@@ -340,8 +340,7 @@ namespace LazinatorTests.Examples.Tuples
         {
             int totalChildrenBytes = 0;
             _MyKeyValuePairSerialized_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            _KeyValuePairTuple_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_KeyValuePairTuple_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         
