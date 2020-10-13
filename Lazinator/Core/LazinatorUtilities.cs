@@ -72,7 +72,7 @@ namespace Lazinator.Core
         {
             int bufferSize = lazinatorObject.LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : lazinatorObject.LazinatorMemoryStorage.Length;
             BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
-            lazinatorObject.SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+            lazinatorObject.SerializeToExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
             return writer.LazinatorMemory;
         }
 
@@ -266,7 +266,7 @@ namespace Lazinator.Core
             void action(ref BinaryBufferWriter w)
             {
                 if (childCopy.LazinatorMemoryStorage.IsEmpty || childCopy.IsDirty || childCopy.DescendantIsDirty || verifyCleanness || includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != childCopy.OriginalIncludeChildrenMode)
-                    childCopy.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    childCopy.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 else
                     childCopy.LazinatorMemoryStorage.WriteToBinaryBuffer(ref w); // the childCopy has been accessed, but is unchanged, so we can use the storage holding the childCopy
             }
@@ -406,7 +406,7 @@ namespace Lazinator.Core
         /// <param name="lengthSpan">A span containing exactly four bytes into which the length of the non-Lazinator object will be written, instead of placing the length as a prefix</param>
         public static void WriteNonLazinatorObject(object nonLazinatorObject,
             bool isBelievedDirty, bool isAccessed, ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceForFieldFn,
-            bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction, ref Span<byte> lengthSpan)
+            bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction, ref Span<byte> lengthsSpan)
         {
             LazinatorMemory original = getChildSliceForFieldFn();
             int originalLength = original.Length;

@@ -84,7 +84,7 @@ namespace LazinatorTests.Tests
             c.DescendantIsDirty = true; // force serialization to test whether the serialization itself causes dirtiness
             c.UpdateStoredBuffer();
             var c3 = c.CloneLazinatorTyped();
-            c.IsDirty.Should().BeFalse(); // this is easy because SerializeExistingBuffer resets Dirty
+            c.IsDirty.Should().BeFalse(); // this is easy because SerializeToExistingBuffer resets Dirty
             c.HasChanged.Should().BeFalse(); // this is harder -- for it to work, CloneLazinatorTyped must not temporarily cause c to become dirty
             c3.IsDirty.Should().BeFalse();
             c3.HasChanged.Should().BeFalse();

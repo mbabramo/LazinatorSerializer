@@ -338,7 +338,7 @@ namespace LazinatorTests.Examples.Tuples
         {
             int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.Length;
             BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
-            SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+            SerializeToExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
             return writer.LazinatorMemory;
         }
         
@@ -566,7 +566,7 @@ namespace LazinatorTests.Examples.Tuples
             _StructTuple_EndByteIndex = bytesSoFar;
         }
         
-        public virtual void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        public virtual void SerializeToExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
@@ -890,13 +890,13 @@ namespace LazinatorTests.Examples.Tuples
             private static void ConvertToBytes__PExampleStructContainingClasses_n_c_C32ExampleStructContainingClasses_n_c_C32ExampleStructContainingClasses_n_p(ref BinaryBufferWriter writer, (ExampleStructContainingClasses?, ExampleStructContainingClasses?, ExampleStructContainingClasses?) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
             {
                 
-                void actionItem1(ref BinaryBufferWriter w) => itemToConvert.Item1?.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                void actionItem1(ref BinaryBufferWriter w) => itemToConvert.Item1?.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 WriteToBinaryWithIntLengthPrefix(ref writer, actionItem1);
                 
-                void actionItem2(ref BinaryBufferWriter w) => itemToConvert.Item2?.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                void actionItem2(ref BinaryBufferWriter w) => itemToConvert.Item2?.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 WriteToBinaryWithIntLengthPrefix(ref writer, actionItem2);
                 
-                void actionItem3(ref BinaryBufferWriter w) => itemToConvert.Item3?.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                void actionItem3(ref BinaryBufferWriter w) => itemToConvert.Item3?.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 WriteToBinaryWithIntLengthPrefix(ref writer, actionItem3);
             }
             
@@ -951,7 +951,7 @@ namespace LazinatorTests.Examples.Tuples
                 }
                 else
                 {
-                    void actionItem2(ref BinaryBufferWriter w) => itemToConvert.Item2.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void actionItem2(ref BinaryBufferWriter w) => itemToConvert.Item2.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(ref writer, actionItem2);
                 };
                 
@@ -1007,10 +1007,10 @@ namespace LazinatorTests.Examples.Tuples
             private static void ConvertToBytes__PWInt32_c_C32WInt32_p(ref BinaryBufferWriter writer, (WInt32, WInt32) itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
             {
                 
-                void actionItem1(ref BinaryBufferWriter w) => itemToConvert.Item1.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                void actionItem1(ref BinaryBufferWriter w) => itemToConvert.Item1.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 WriteToBinaryWithIntLengthPrefix(ref writer, actionItem1);
                 
-                void actionItem2(ref BinaryBufferWriter w) => itemToConvert.Item2.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                void actionItem2(ref BinaryBufferWriter w) => itemToConvert.Item2.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                 WriteToBinaryWithIntLengthPrefix(ref writer, actionItem2);
             }
             

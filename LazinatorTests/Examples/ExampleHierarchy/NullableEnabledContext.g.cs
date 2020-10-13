@@ -1943,7 +1943,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.Length;
             BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
-            SerializeExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+            SerializeToExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
             return writer.LazinatorMemory;
         }
         
@@ -2773,7 +2773,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             _NullableEnabledContext_EndByteIndex = bytesSoFar;
         }
         
-        public virtual void SerializeExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        public virtual void SerializeToExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
@@ -3684,7 +3684,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 int itemToConvertCount = itemToConvert.Length;
                 for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
                 {
-                    void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex]!.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex]!.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(ref writer, action);
                 }
             }
@@ -3753,7 +3753,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     else 
                     {
                         
-                        void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex]!.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                        void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex]!.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                         WriteToBinaryWithIntLengthPrefix(ref writer, action);
                     }
                     
@@ -3867,7 +3867,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 else
                 {
-                    void actionValue(ref BinaryBufferWriter w) => itemToConvert.Value.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void actionValue(ref BinaryBufferWriter w) => itemToConvert.Value.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(ref writer, actionValue);
                 };
             }
@@ -3959,7 +3959,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 else
                 {
-                    void actionValue(ref BinaryBufferWriter w) => itemToConvert.Value.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void actionValue(ref BinaryBufferWriter w) => itemToConvert.Value.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(ref writer, actionValue);
                 };
             }
@@ -3998,7 +3998,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 int itemToConvertCount = itemToConvert.Count;
                 for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
                 {
-                    void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex]!.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex]!.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(ref writer, action);
                 }
             }
@@ -4067,7 +4067,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     else 
                     {
                         
-                        void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex]!.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                        void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex]!.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                         WriteToBinaryWithIntLengthPrefix(ref writer, action);
                     }
                     
@@ -4158,7 +4158,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 var q = System.Linq.Enumerable.ToList(itemToConvert);
                 for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
                 {
-                    void action(ref BinaryBufferWriter w) => q[itemIndex]!.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void action(ref BinaryBufferWriter w) => q[itemIndex]!.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(ref writer, action);
                 }
             }
@@ -4221,7 +4221,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     else 
                     {
                         
-                        void action(ref BinaryBufferWriter w) => q[itemIndex]!.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                        void action(ref BinaryBufferWriter w) => q[itemIndex]!.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                         WriteToBinaryWithIntLengthPrefix(ref writer, action);
                     }
                     
@@ -4306,7 +4306,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 stackReversed.Reverse();
                 for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
                 {
-                    void action(ref BinaryBufferWriter w) => stackReversed[itemIndex]!.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void action(ref BinaryBufferWriter w) => stackReversed[itemIndex]!.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(ref writer, action);
                 }
             }
@@ -4371,7 +4371,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     else 
                     {
                         
-                        void action(ref BinaryBufferWriter w) => stackReversed[itemIndex]!.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                        void action(ref BinaryBufferWriter w) => stackReversed[itemIndex]!.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                         WriteToBinaryWithIntLengthPrefix(ref writer, action);
                     }
                     
@@ -4434,7 +4434,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 int itemToConvertCount = itemToConvert.Length;
                 for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
                 {
-                    void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex]!.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex]!.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(ref writer, action);
                 }
             }
@@ -4512,7 +4512,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     else 
                     {
                         
-                        void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex]!.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                        void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex]!.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                         WriteToBinaryWithIntLengthPrefix(ref writer, action);
                     }
                     
@@ -4694,7 +4694,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 int itemToConvertCount = itemToConvert.Count;
                 for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
                 {
-                    void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex]!.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex]!.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(ref writer, action);
                 }
             }
@@ -4772,7 +4772,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     else 
                     {
                         
-                        void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex]!.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                        void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex]!.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                         WriteToBinaryWithIntLengthPrefix(ref writer, action);
                     }
                     
@@ -4890,7 +4890,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 var q = System.Linq.Enumerable.ToList(itemToConvert);
                 for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
                 {
-                    void action(ref BinaryBufferWriter w) => q[itemIndex]!.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void action(ref BinaryBufferWriter w) => q[itemIndex]!.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(ref writer, action);
                 }
             }
@@ -4962,7 +4962,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     else 
                     {
                         
-                        void action(ref BinaryBufferWriter w) => q[itemIndex]!.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                        void action(ref BinaryBufferWriter w) => q[itemIndex]!.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                         WriteToBinaryWithIntLengthPrefix(ref writer, action);
                     }
                     
@@ -5074,7 +5074,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 stackReversed.Reverse();
                 for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
                 {
-                    void action(ref BinaryBufferWriter w) => stackReversed[itemIndex]!.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void action(ref BinaryBufferWriter w) => stackReversed[itemIndex]!.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(ref writer, action);
                 }
             }
@@ -5148,7 +5148,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     else 
                     {
                         
-                        void action(ref BinaryBufferWriter w) => stackReversed[itemIndex]!.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                        void action(ref BinaryBufferWriter w) => stackReversed[itemIndex]!.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                         WriteToBinaryWithIntLengthPrefix(ref writer, action);
                     }
                     
@@ -5216,7 +5216,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 else
                 {
-                    void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
                 };
             }
@@ -5285,7 +5285,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 else
                 {
-                    void actionItem1(ref BinaryBufferWriter w) => itemToConvert.Item1.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void actionItem1(ref BinaryBufferWriter w) => itemToConvert.Item1.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(ref writer, actionItem1);
                 };
                 
@@ -5328,7 +5328,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 else
                 {
-                    void actionItem1(ref BinaryBufferWriter w) => itemToConvert.Item1.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void actionItem1(ref BinaryBufferWriter w) => itemToConvert.Item1.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(ref writer, actionItem1);
                 };
                 
@@ -5381,7 +5381,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 else
                 {
-                    void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
                 };
             }
@@ -5472,7 +5472,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 else
                 {
-                    void actionItem1(ref BinaryBufferWriter w) => itemToConvert.Item1.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void actionItem1(ref BinaryBufferWriter w) => itemToConvert.Item1.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(ref writer, actionItem1);
                 };
                 
@@ -5528,7 +5528,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 else
                 {
-                    void actionItem1(ref BinaryBufferWriter w) => itemToConvert.Item1.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void actionItem1(ref BinaryBufferWriter w) => itemToConvert.Item1.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(ref writer, actionItem1);
                 };
                 
@@ -5580,7 +5580,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 else
                 {
-                    void actionItem1(ref BinaryBufferWriter w) => itemToConvert.Value.Item1.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void actionItem1(ref BinaryBufferWriter w) => itemToConvert.Value.Item1.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(ref writer, actionItem1);
                 };
                 
@@ -5636,7 +5636,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 else
                 {
-                    void actionItem1(ref BinaryBufferWriter w) => itemToConvert.Value.Item1.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void actionItem1(ref BinaryBufferWriter w) => itemToConvert.Value.Item1.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(ref writer, actionItem1);
                 };
                 
@@ -5684,7 +5684,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 else
                 {
-                    void actionItem1(ref BinaryBufferWriter w) => itemToConvert.Item1.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void actionItem1(ref BinaryBufferWriter w) => itemToConvert.Item1.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(ref writer, actionItem1);
                 };
                 
@@ -5731,7 +5731,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 else
                 {
-                    void actionItem1(ref BinaryBufferWriter w) => itemToConvert.Item1.SerializeExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void actionItem1(ref BinaryBufferWriter w) => itemToConvert.Item1.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     WriteToBinaryWithIntLengthPrefix(ref writer, actionItem1);
                 };
                 
