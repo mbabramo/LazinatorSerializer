@@ -2362,7 +2362,7 @@ namespace Lazinator.CodeDescription
                         $@"
                     if (System.Collections.Generic.EqualityComparer<{AppropriatelyQualifiedTypeName}>.Default.Equals({itemString}, {DefaultExpression}))
                     {{
-                        writer.Write((uint)0);
+                        writer.Write((int)0);
                     }}
                     else 
                     {{

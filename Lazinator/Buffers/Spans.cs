@@ -172,7 +172,7 @@ namespace Lazinator.Buffers
 
         public static void Write_WithIntLengthPrefix(this ReadOnlySpan<byte> b, ref BinaryBufferWriter writer)
         {
-            writer.Write((uint)b.Length);
+            writer.Write(b.Length);
             writer.Write(b);
         }
 
