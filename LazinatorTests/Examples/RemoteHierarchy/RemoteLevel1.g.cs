@@ -37,7 +37,8 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         
         protected int _RemoteLevel2Item_ByteIndex;
         private int _RemoteLevel1_EndByteIndex;
-        protected virtual int _RemoteLevel2Item_ByteLength => _RemoteLevel1_EndByteIndex - _RemoteLevel2Item_ByteIndex;
+        protected int _RemoteLevel2Item_ByteLength => _RemoteLevel1_EndByteIndex - _RemoteLevel2Item_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _RemoteLevel1_EndByteIndex;
         
         
         protected int _RemoteLevel1Int;
@@ -143,7 +144,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _RemoteLevel1_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

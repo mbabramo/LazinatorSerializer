@@ -40,7 +40,8 @@ namespace LazinatorCollections.Tuples
         protected virtual int _Item1_ByteLength => _Item2_ByteIndex - _Item1_ByteIndex;
         protected virtual int _Item2_ByteLength => _Item3_ByteIndex - _Item2_ByteIndex;
         private int _LazinatorTriple_T_U_V_EndByteIndex = 0;
-        protected virtual int _Item3_ByteLength => _LazinatorTriple_T_U_V_EndByteIndex - _Item3_ByteIndex;
+        protected int _Item3_ByteLength => _LazinatorTriple_T_U_V_EndByteIndex - _Item3_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _LazinatorTriple_T_U_V_EndByteIndex;
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -265,7 +266,7 @@ namespace LazinatorCollections.Tuples
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _LazinatorTriple_T_U_V_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

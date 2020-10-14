@@ -43,7 +43,8 @@ namespace LazinatorTests.Examples.Collections
         protected virtual int _MyDictionaryStructs_ByteLength => _MySortedDictionary_ByteIndex - _MyDictionaryStructs_ByteIndex;
         protected virtual int _MySortedDictionary_ByteLength => _MySortedList_ByteIndex - _MySortedDictionary_ByteIndex;
         private int _Dictionary_Values_Lazinator_EndByteIndex;
-        protected virtual int _MySortedList_ByteLength => _Dictionary_Values_Lazinator_EndByteIndex - _MySortedList_ByteIndex;
+        protected int _MySortedList_ByteLength => _Dictionary_Values_Lazinator_EndByteIndex - _MySortedList_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _Dictionary_Values_Lazinator_EndByteIndex;
         
         
         protected Dictionary<Int32, ExampleChild> _MyDictionary;
@@ -233,7 +234,7 @@ namespace LazinatorTests.Examples.Collections
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _Dictionary_Values_Lazinator_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

@@ -33,7 +33,8 @@ namespace LazinatorTests.Examples.Collections
         
         protected int _MyArrayInt_DerivedLevel_ByteIndex;
         private int _DerivedArray_Values_EndByteIndex;
-        protected virtual int _MyArrayInt_DerivedLevel_ByteLength => _DerivedArray_Values_EndByteIndex - _MyArrayInt_DerivedLevel_ByteIndex;
+        protected int _MyArrayInt_DerivedLevel_ByteLength => _DerivedArray_Values_EndByteIndex - _MyArrayInt_DerivedLevel_ByteIndex;
+        protected override int _OverallEndByteIndex => _DerivedArray_Values_EndByteIndex;
         
         
         protected Int32[] _MyArrayInt_DerivedLevel;

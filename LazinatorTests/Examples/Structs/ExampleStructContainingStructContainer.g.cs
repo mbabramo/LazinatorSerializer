@@ -36,7 +36,8 @@ namespace LazinatorTests.Examples.Structs
         
         protected int _Subcontainer_ByteIndex;
         private int _ExampleStructContainingStructContainer_EndByteIndex;
-        protected virtual int _Subcontainer_ByteLength => _ExampleStructContainingStructContainer_EndByteIndex - _Subcontainer_ByteIndex;
+        protected int _Subcontainer_ByteLength => _ExampleStructContainingStructContainer_EndByteIndex - _Subcontainer_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _ExampleStructContainingStructContainer_EndByteIndex;
         
         
         protected ExampleStructContainingStruct _Subcontainer;
@@ -149,7 +150,7 @@ namespace LazinatorTests.Examples.Structs
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _ExampleStructContainingStructContainer_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

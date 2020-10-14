@@ -39,7 +39,8 @@ namespace LazinatorCollections
         protected int _Offsets_ByteIndex;
         protected virtual int _MainListSerialized_ByteLength => _Offsets_ByteIndex - _MainListSerialized_ByteIndex;
         private int _LazinatorList_T_EndByteIndex;
-        protected virtual int _Offsets_ByteLength => _LazinatorList_T_EndByteIndex - _Offsets_ByteIndex;
+        protected int _Offsets_ByteLength => _LazinatorList_T_EndByteIndex - _Offsets_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _LazinatorList_T_EndByteIndex;
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -158,7 +159,7 @@ namespace LazinatorCollections
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             PostDeserialization();
-            return _LazinatorList_T_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

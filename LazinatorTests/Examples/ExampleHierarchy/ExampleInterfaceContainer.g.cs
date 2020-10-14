@@ -38,7 +38,8 @@ namespace LazinatorTests.Examples.Hierarchy
         protected int _ExampleListByInterface_ByteIndex;
         protected virtual int _ExampleByInterface_ByteLength => _ExampleListByInterface_ByteIndex - _ExampleByInterface_ByteIndex;
         private int _ExampleInterfaceContainer_EndByteIndex;
-        protected virtual int _ExampleListByInterface_ByteLength => _ExampleInterfaceContainer_EndByteIndex - _ExampleListByInterface_ByteIndex;
+        protected int _ExampleListByInterface_ByteLength => _ExampleInterfaceContainer_EndByteIndex - _ExampleListByInterface_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _ExampleInterfaceContainer_EndByteIndex;
         
         
         protected IExample _ExampleByInterface;
@@ -165,7 +166,7 @@ namespace LazinatorTests.Examples.Hierarchy
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _ExampleInterfaceContainer_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

@@ -35,7 +35,8 @@ namespace LazinatorTests.Examples.Abstract
         protected int _LazinatorExample_ByteIndex;
         protected override int _MyT_ByteLength => _LazinatorExample_ByteIndex - _MyT_ByteIndex;
         private int _ConcreteGeneric2b_EndByteIndex;
-        protected virtual int _LazinatorExample_ByteLength => _ConcreteGeneric2b_EndByteIndex - _LazinatorExample_ByteIndex;
+        protected int _LazinatorExample_ByteLength => _ConcreteGeneric2b_EndByteIndex - _LazinatorExample_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _ConcreteGeneric2b_EndByteIndex;
         
         
         protected global::LazinatorTests.Examples.Abstract.AbstractGeneric1<global::LazinatorTests.Examples.Example>.EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric;
@@ -230,7 +231,7 @@ namespace LazinatorTests.Examples.Abstract
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _ConcreteGeneric2b_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public override LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

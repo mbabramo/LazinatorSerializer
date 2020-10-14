@@ -37,7 +37,8 @@ namespace LazinatorTests.Examples.Subclasses
         protected int _SubclassInstance2_ByteIndex;
         protected virtual int _SubclassInstance1_ByteLength => _SubclassInstance2_ByteIndex - _SubclassInstance1_ByteIndex;
         private int _ClassWithSubclass_EndByteIndex;
-        protected virtual int _SubclassInstance2_ByteLength => _ClassWithSubclass_EndByteIndex - _SubclassInstance2_ByteIndex;
+        protected int _SubclassInstance2_ByteLength => _ClassWithSubclass_EndByteIndex - _SubclassInstance2_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _ClassWithSubclass_EndByteIndex;
         
         
         protected int _IntWithinSuperclass;
@@ -188,7 +189,7 @@ namespace LazinatorTests.Examples.Subclasses
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _ClassWithSubclass_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

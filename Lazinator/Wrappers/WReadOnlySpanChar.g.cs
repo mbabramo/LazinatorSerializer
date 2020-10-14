@@ -35,8 +35,7 @@ namespace Lazinator.Wrappers
         /* Property definitions */
         
         int _Value_ByteIndex;
-        private int _WReadOnlySpanChar_EndByteIndex;
-        int _Value_ByteLength => _WReadOnlySpanChar_EndByteIndex - _Value_ByteIndex;
+        int _Value_ByteLength => LazinatorMemoryStorage.Length - _Value_ByteIndex;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private ReadOnlyMemory<byte> _Value;
@@ -106,7 +105,7 @@ namespace Lazinator.Wrappers
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _WReadOnlySpanChar_EndByteIndex;
+            return bytesSoFar;
         }
         
         public LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
@@ -353,7 +352,6 @@ namespace Lazinator.Wrappers
             _Value_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             
             totalChildrenBytes = span.Length - bytesSoFar;
-            _WReadOnlySpanChar_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         
@@ -448,10 +446,6 @@ namespace Lazinator.Wrappers
                 
             }
             TabbedText.Tabs--;
-            if (updateStoredBuffer)
-            {
-                _WReadOnlySpanChar_EndByteIndex = writer.Position - startOfObjectPosition;
-            }
         }
         
         /* Conversion of supported collections and tuples */

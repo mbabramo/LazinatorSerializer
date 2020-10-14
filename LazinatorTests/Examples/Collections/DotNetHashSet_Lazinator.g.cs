@@ -36,7 +36,8 @@ namespace LazinatorTests.Examples.Collections
         
         protected int _MyHashSetSerialized_ByteIndex;
         private int _DotNetHashSet_Lazinator_EndByteIndex;
-        protected virtual int _MyHashSetSerialized_ByteLength => _DotNetHashSet_Lazinator_EndByteIndex - _MyHashSetSerialized_ByteIndex;
+        protected int _MyHashSetSerialized_ByteLength => _DotNetHashSet_Lazinator_EndByteIndex - _MyHashSetSerialized_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _DotNetHashSet_Lazinator_EndByteIndex;
         
         
         protected HashSet<ExampleChild> _MyHashSetSerialized;
@@ -118,7 +119,7 @@ namespace LazinatorTests.Examples.Collections
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _DotNetHashSet_Lazinator_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

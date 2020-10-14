@@ -36,7 +36,8 @@ namespace LazinatorTests.Examples.Tuples
         
         protected int _MyNestedTuple_ByteIndex;
         private int _NestedTuple_EndByteIndex;
-        protected virtual int _MyNestedTuple_ByteLength => _NestedTuple_EndByteIndex - _MyNestedTuple_ByteIndex;
+        protected int _MyNestedTuple_ByteLength => _NestedTuple_EndByteIndex - _MyNestedTuple_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _NestedTuple_EndByteIndex;
         
         
         protected Tuple<UInt32?, (ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>)), NonLazinatorClass> _MyNestedTuple;
@@ -118,7 +119,7 @@ namespace LazinatorTests.Examples.Tuples
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _NestedTuple_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

@@ -36,7 +36,8 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         protected int _EagerExample_ByteIndex;
         private int _ContainerForEagerExample_EndByteIndex;
-        protected virtual int _EagerExample_ByteLength => _ContainerForEagerExample_EndByteIndex - _EagerExample_ByteIndex;
+        protected int _EagerExample_ByteLength => _ContainerForEagerExample_EndByteIndex - _EagerExample_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _ContainerForEagerExample_EndByteIndex;
         
         
         protected Example _EagerExample;
@@ -128,7 +129,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             _ = EagerExample;
-            return _ContainerForEagerExample_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

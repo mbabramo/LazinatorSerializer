@@ -36,8 +36,7 @@ namespace LazinatorTests.Examples
         int _MyExampleNullableStruct_ByteIndex;
         int _MyExampleStructContainingClasses_ByteIndex;
         int _MyExampleNullableStruct_ByteLength => _MyExampleStructContainingClasses_ByteIndex - _MyExampleNullableStruct_ByteIndex;
-        private int _ExampleStructContainingStruct_EndByteIndex;
-        int _MyExampleStructContainingClasses_ByteLength => _ExampleStructContainingStruct_EndByteIndex - _MyExampleStructContainingClasses_ByteIndex;
+        int _MyExampleStructContainingClasses_ByteLength => LazinatorMemoryStorage.Length - _MyExampleStructContainingClasses_ByteIndex;
         
         
         ExampleStructContainingClasses? _MyExampleNullableStruct;
@@ -222,7 +221,7 @@ namespace LazinatorTests.Examples
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _ExampleStructContainingStruct_EndByteIndex;
+            return bytesSoFar;
         }
         
         public LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
@@ -522,7 +521,6 @@ namespace LazinatorTests.Examples
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            _ExampleStructContainingStruct_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         
@@ -660,10 +658,6 @@ namespace LazinatorTests.Examples
                 
             }
             TabbedText.Tabs--;
-            if (updateStoredBuffer)
-            {
-                _ExampleStructContainingStruct_EndByteIndex = writer.Position - startOfObjectPosition;
-            }
         }
         
     }

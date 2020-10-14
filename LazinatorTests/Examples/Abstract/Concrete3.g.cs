@@ -38,7 +38,8 @@ namespace LazinatorTests.Examples.Abstract
         protected override int _IntList1_ByteLength => _IntList2_ByteIndex - _IntList1_ByteIndex;
         protected override int _IntList2_ByteLength => _IntList3_ByteIndex - _IntList2_ByteIndex;
         private int _Concrete3_EndByteIndex;
-        protected virtual int _IntList3_ByteLength => _Concrete3_EndByteIndex - _IntList3_ByteIndex;
+        protected int _IntList3_ByteLength => _Concrete3_EndByteIndex - _IntList3_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _Concrete3_EndByteIndex;
         
         
         protected string _String1;
@@ -323,7 +324,7 @@ namespace LazinatorTests.Examples.Abstract
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _Concrete3_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public override LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

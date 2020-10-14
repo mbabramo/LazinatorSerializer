@@ -39,7 +39,8 @@ namespace LazinatorTests.Examples.Tuples
         protected int _MyDictionaryWithRecordLikeTypeValues_ByteIndex;
         protected virtual int _MyDictionaryWithRecordLikeContainers_ByteLength => _MyDictionaryWithRecordLikeTypeValues_ByteIndex - _MyDictionaryWithRecordLikeContainers_ByteIndex;
         private int _RecordLikeCollections_EndByteIndex;
-        protected virtual int _MyDictionaryWithRecordLikeTypeValues_ByteLength => _RecordLikeCollections_EndByteIndex - _MyDictionaryWithRecordLikeTypeValues_ByteIndex;
+        protected int _MyDictionaryWithRecordLikeTypeValues_ByteLength => _RecordLikeCollections_EndByteIndex - _MyDictionaryWithRecordLikeTypeValues_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _RecordLikeCollections_EndByteIndex;
         
         
         protected int _MyInt;
@@ -172,7 +173,7 @@ namespace LazinatorTests.Examples.Tuples
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _RecordLikeCollections_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

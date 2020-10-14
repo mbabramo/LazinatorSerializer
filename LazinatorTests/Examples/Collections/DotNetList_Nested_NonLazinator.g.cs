@@ -36,7 +36,8 @@ namespace LazinatorTests.Examples.Collections
         
         protected int _MyListNestedNonLazinatorType_ByteIndex;
         private int _DotNetList_Nested_NonLazinator_EndByteIndex;
-        protected virtual int _MyListNestedNonLazinatorType_ByteLength => _DotNetList_Nested_NonLazinator_EndByteIndex - _MyListNestedNonLazinatorType_ByteIndex;
+        protected int _MyListNestedNonLazinatorType_ByteLength => _DotNetList_Nested_NonLazinator_EndByteIndex - _MyListNestedNonLazinatorType_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _DotNetList_Nested_NonLazinator_EndByteIndex;
         
         
         protected List<List<NonLazinatorClass>> _MyListNestedNonLazinatorType;
@@ -118,7 +119,7 @@ namespace LazinatorTests.Examples.Collections
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _DotNetList_Nested_NonLazinator_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

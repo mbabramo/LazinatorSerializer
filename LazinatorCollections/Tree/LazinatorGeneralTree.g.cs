@@ -39,7 +39,8 @@ namespace LazinatorCollections.Tree
         protected int _Item_ByteIndex;
         protected virtual int _Children_ByteLength => _Item_ByteIndex - _Children_ByteIndex;
         private int _LazinatorGeneralTree_T_EndByteIndex = 0;
-        protected virtual int _Item_ByteLength => _LazinatorGeneralTree_T_EndByteIndex - _Item_ByteIndex;
+        protected int _Item_ByteLength => _LazinatorGeneralTree_T_EndByteIndex - _Item_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _LazinatorGeneralTree_T_EndByteIndex;
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -194,7 +195,7 @@ namespace LazinatorCollections.Tree
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _LazinatorGeneralTree_T_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

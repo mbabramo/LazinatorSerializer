@@ -35,8 +35,7 @@ namespace LazinatorCollections.BitArray
         /* Property definitions */
         
         int _IntStorage_ByteIndex;
-        private int _LazinatorBitArray_EndByteIndex;
-        int _IntStorage_ByteLength => _LazinatorBitArray_EndByteIndex - _IntStorage_ByteIndex;
+        int _IntStorage_ByteLength => LazinatorMemoryStorage.Length - _IntStorage_ByteIndex;
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -160,7 +159,7 @@ namespace LazinatorCollections.BitArray
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _LazinatorBitArray_EndByteIndex;
+            return bytesSoFar;
         }
         
         public LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
@@ -406,7 +405,6 @@ namespace LazinatorCollections.BitArray
             TabbedText.WriteLine($"Reading length of IntStorage at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
             _IntStorage_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            _LazinatorBitArray_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         
@@ -512,10 +510,6 @@ namespace LazinatorCollections.BitArray
                 
             }
             TabbedText.Tabs--;
-            if (updateStoredBuffer)
-            {
-                _LazinatorBitArray_EndByteIndex = writer.Position - startOfObjectPosition;
-            }
         }
         
         /* Conversion of supported collections and tuples */

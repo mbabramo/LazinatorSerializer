@@ -54,7 +54,8 @@ namespace LazinatorTests.Examples
         protected virtual int _MyNonLazinatorChild_ByteLength => _WrappedInt_ByteIndex - _MyNonLazinatorChild_ByteIndex;
         protected virtual int _WrappedInt_ByteLength => _ExcludableChild_ByteIndex - _WrappedInt_ByteIndex;
         private int _Example_EndByteIndex;
-        protected virtual int _ExcludableChild_ByteLength => _Example_EndByteIndex - _ExcludableChild_ByteIndex;
+        protected int _ExcludableChild_ByteLength => _Example_EndByteIndex - _ExcludableChild_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _Example_EndByteIndex;
         
         
         protected double? _MyNullableDouble;
@@ -894,7 +895,7 @@ namespace LazinatorTests.Examples
             {
                 LazinatorObjectVersionUpgrade(serializedVersionNumber);
             }
-            return _Example_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

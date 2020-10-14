@@ -130,7 +130,8 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected virtual int _NullableValueTupleWithNullable_ByteLength => _ValueTupleWithNonNullable_ByteIndex - _NullableValueTupleWithNullable_ByteIndex;
         protected virtual int _ValueTupleWithNonNullable_ByteLength => _ValueTupleWithNullable_ByteIndex - _ValueTupleWithNonNullable_ByteIndex;
         private int _NullableEnabledContext_EndByteIndex;
-        protected virtual int _ValueTupleWithNullable_ByteLength => _NullableEnabledContext_EndByteIndex - _ValueTupleWithNullable_ByteIndex;
+        protected int _ValueTupleWithNullable_ByteLength => _NullableEnabledContext_EndByteIndex - _ValueTupleWithNullable_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _NullableEnabledContext_EndByteIndex;
         
         
         protected int _MyInt;
@@ -1867,7 +1868,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _NullableEnabledContext_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

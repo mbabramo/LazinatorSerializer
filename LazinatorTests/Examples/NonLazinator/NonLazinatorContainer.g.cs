@@ -40,8 +40,7 @@ namespace LazinatorTests.Examples
         int _NonLazinatorClass_ByteLength => _NonLazinatorInterchangeableClass_ByteIndex - _NonLazinatorClass_ByteIndex;
         int _NonLazinatorInterchangeableClass_ByteLength => _NonLazinatorInterchangeableStruct_ByteIndex - _NonLazinatorInterchangeableClass_ByteIndex;
         int _NonLazinatorInterchangeableStruct_ByteLength => _NonLazinatorStruct_ByteIndex - _NonLazinatorInterchangeableStruct_ByteIndex;
-        private int _NonLazinatorContainer_EndByteIndex;
-        int _NonLazinatorStruct_ByteLength => _NonLazinatorContainer_EndByteIndex - _NonLazinatorStruct_ByteIndex;
+        int _NonLazinatorStruct_ByteLength => LazinatorMemoryStorage.Length - _NonLazinatorStruct_ByteIndex;
         
         
         NonLazinatorClass _NonLazinatorClass;
@@ -234,7 +233,7 @@ namespace LazinatorTests.Examples
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _NonLazinatorContainer_EndByteIndex;
+            return bytesSoFar;
         }
         
         public LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
@@ -497,7 +496,6 @@ namespace LazinatorTests.Examples
             TabbedText.WriteLine($"Reading length of NonLazinatorStruct at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
             _NonLazinatorStruct_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            _NonLazinatorContainer_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         
@@ -674,10 +672,6 @@ namespace LazinatorTests.Examples
                 
             }
             TabbedText.Tabs--;
-            if (updateStoredBuffer)
-            {
-                _NonLazinatorContainer_EndByteIndex = writer.Position - startOfObjectPosition;
-            }
         }
         
         private static NonLazinatorInterchangeableClass ConvertFromBytes_NonLazinatorInterchangeableClass(LazinatorMemory storage)

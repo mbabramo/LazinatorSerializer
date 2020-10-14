@@ -36,7 +36,8 @@ namespace LazinatorTests.Examples.Collections
         
         protected int _MyList_ByteIndex;
         private int _LazinatorListContainerGeneric_T_EndByteIndex;
-        protected virtual int _MyList_ByteLength => _LazinatorListContainerGeneric_T_EndByteIndex - _MyList_ByteIndex;
+        protected int _MyList_ByteLength => _LazinatorListContainerGeneric_T_EndByteIndex - _MyList_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _LazinatorListContainerGeneric_T_EndByteIndex;
         
         
         protected LazinatorList<T> _MyList;
@@ -127,7 +128,7 @@ namespace LazinatorTests.Examples.Collections
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _LazinatorListContainerGeneric_T_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

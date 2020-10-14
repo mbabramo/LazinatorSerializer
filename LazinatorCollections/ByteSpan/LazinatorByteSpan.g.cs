@@ -38,7 +38,8 @@ namespace LazinatorCollections.ByteSpan
         protected int _ReadOrWrite_ByteIndex;
         protected virtual int _ReadOnly_ByteLength => _ReadOrWrite_ByteIndex - _ReadOnly_ByteIndex;
         private int _LazinatorByteSpan_EndByteIndex;
-        protected virtual int _ReadOrWrite_ByteLength => _LazinatorByteSpan_EndByteIndex - _ReadOrWrite_ByteIndex;
+        protected int _ReadOrWrite_ByteLength => _LazinatorByteSpan_EndByteIndex - _ReadOrWrite_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _LazinatorByteSpan_EndByteIndex;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private ReadOnlyMemory<byte> _ReadOnly;
@@ -149,7 +150,7 @@ namespace LazinatorCollections.ByteSpan
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             PostDeserialization();
-            return _LazinatorByteSpan_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

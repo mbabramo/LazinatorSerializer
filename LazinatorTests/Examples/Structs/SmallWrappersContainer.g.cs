@@ -53,7 +53,8 @@ namespace LazinatorTests.Examples.Structs
         protected virtual int _WrappedNullableChar_ByteLength => _WrappedNullableSByte_ByteIndex - _WrappedNullableChar_ByteIndex;
         protected virtual int _WrappedNullableSByte_ByteLength => _WrappedSByte_ByteIndex - _WrappedNullableSByte_ByteIndex;
         private int _SmallWrappersContainer_EndByteIndex;
-        protected virtual int _WrappedSByte_ByteLength => _SmallWrappersContainer_EndByteIndex - _WrappedSByte_ByteIndex;
+        protected int _WrappedSByte_ByteLength => _SmallWrappersContainer_EndByteIndex - _WrappedSByte_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _SmallWrappersContainer_EndByteIndex;
         
         
         protected LazinatorList<WByte> _ListWrappedBytes;
@@ -680,7 +681,7 @@ namespace LazinatorTests.Examples.Structs
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _SmallWrappersContainer_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

@@ -36,7 +36,8 @@ namespace LazinatorTests.Examples.Collections
         
         protected int _MyQueueSerialized_ByteIndex;
         private int _DotNetQueue_Lazinator_EndByteIndex;
-        protected virtual int _MyQueueSerialized_ByteLength => _DotNetQueue_Lazinator_EndByteIndex - _MyQueueSerialized_ByteIndex;
+        protected int _MyQueueSerialized_ByteLength => _DotNetQueue_Lazinator_EndByteIndex - _MyQueueSerialized_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _DotNetQueue_Lazinator_EndByteIndex;
         
         
         protected Queue<ExampleChild> _MyQueueSerialized;
@@ -118,7 +119,7 @@ namespace LazinatorTests.Examples.Collections
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _DotNetQueue_Lazinator_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

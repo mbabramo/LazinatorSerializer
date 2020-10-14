@@ -37,8 +37,7 @@ namespace LazinatorCollections.Tuples
         int _Key_ByteIndex;
         int _Value_ByteIndex;
         int _Key_ByteLength => _Value_ByteIndex - _Key_ByteIndex;
-        private int _LazinatorComparableKeyValue_TKey_TValue_EndByteIndex;
-        int _Value_ByteLength => _LazinatorComparableKeyValue_TKey_TValue_EndByteIndex - _Value_ByteIndex;
+        int _Value_ByteLength => LazinatorMemoryStorage.Length - _Value_ByteIndex;
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -164,7 +163,7 @@ namespace LazinatorCollections.Tuples
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _LazinatorComparableKeyValue_TKey_TValue_EndByteIndex;
+            return bytesSoFar;
         }
         
         public LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
@@ -495,7 +494,6 @@ namespace LazinatorCollections.Tuples
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            _LazinatorComparableKeyValue_TKey_TValue_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         
@@ -640,10 +638,6 @@ namespace LazinatorCollections.Tuples
                 
             }
             TabbedText.Tabs--;
-            if (updateStoredBuffer)
-            {
-                _LazinatorComparableKeyValue_TKey_TValue_EndByteIndex = writer.Position - startOfObjectPosition;
-            }
         }
         
     }

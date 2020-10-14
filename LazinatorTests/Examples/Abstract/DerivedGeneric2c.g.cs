@@ -32,7 +32,8 @@ namespace LazinatorTests.Examples.Abstract
         /* Property definitions */
         
         private int _DerivedGeneric2c_T_EndByteIndex = 0;
-        protected override int _MyT_ByteLength => _DerivedGeneric2c_T_EndByteIndex - _MyT_ByteIndex;
+        protected int _MyT_ByteLength => _DerivedGeneric2c_T_EndByteIndex - _MyT_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _DerivedGeneric2c_T_EndByteIndex;
         
         
         protected global::LazinatorTests.Examples.Abstract.AbstractGeneric1<T>.EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric;
@@ -178,7 +179,7 @@ namespace LazinatorTests.Examples.Abstract
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _DerivedGeneric2c_T_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public override LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

@@ -38,7 +38,8 @@ namespace LazinatorCollections.Remote
         protected int _Local_ByteIndex;
         protected virtual int _Key_ByteLength => _Local_ByteIndex - _Key_ByteIndex;
         private int _Remote_TKey_TValue_EndByteIndex = 0;
-        protected virtual int _Local_ByteLength => _Remote_TKey_TValue_EndByteIndex - _Local_ByteIndex;
+        protected int _Local_ByteLength => _Remote_TKey_TValue_EndByteIndex - _Local_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _Remote_TKey_TValue_EndByteIndex;
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -214,7 +215,7 @@ namespace LazinatorCollections.Remote
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _Remote_TKey_TValue_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

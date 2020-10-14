@@ -37,8 +37,7 @@ namespace LazinatorCollections.OffsetList
         int _FourByteItems_ByteIndex;
         int _TwoByteItems_ByteIndex;
         int _FourByteItems_ByteLength => _TwoByteItems_ByteIndex - _FourByteItems_ByteIndex;
-        private int _LazinatorOffsetList_EndByteIndex;
-        int _TwoByteItems_ByteLength => _LazinatorOffsetList_EndByteIndex - _TwoByteItems_ByteIndex;
+        int _TwoByteItems_ByteLength => LazinatorMemoryStorage.Length - _TwoByteItems_ByteIndex;
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -206,7 +205,7 @@ namespace LazinatorCollections.OffsetList
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _LazinatorOffsetList_EndByteIndex;
+            return bytesSoFar;
         }
         
         public LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
@@ -524,7 +523,6 @@ namespace LazinatorCollections.OffsetList
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            _LazinatorOffsetList_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         
@@ -649,10 +647,6 @@ namespace LazinatorCollections.OffsetList
                 
             }
             TabbedText.Tabs--;
-            if (updateStoredBuffer)
-            {
-                _LazinatorOffsetList_EndByteIndex = writer.Position - startOfObjectPosition;
-            }
         }
         
     }

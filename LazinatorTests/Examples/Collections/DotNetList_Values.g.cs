@@ -44,7 +44,8 @@ namespace LazinatorTests.Examples.Collections
         protected virtual int _MyListInt2_ByteLength => _MyListNullableEnabledContext_ByteIndex - _MyListInt2_ByteIndex;
         protected virtual int _MyListNullableEnabledContext_ByteLength => _MySortedSetInt_ByteIndex - _MyListNullableEnabledContext_ByteIndex;
         private int _DotNetList_Values_EndByteIndex;
-        protected virtual int _MySortedSetInt_ByteLength => _DotNetList_Values_EndByteIndex - _MySortedSetInt_ByteIndex;
+        protected int _MySortedSetInt_ByteLength => _DotNetList_Values_EndByteIndex - _MySortedSetInt_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _DotNetList_Values_EndByteIndex;
         
         
         protected LinkedList<Int32> _MyLinkedListInt;
@@ -327,7 +328,7 @@ namespace LazinatorTests.Examples.Collections
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _DotNetList_Values_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

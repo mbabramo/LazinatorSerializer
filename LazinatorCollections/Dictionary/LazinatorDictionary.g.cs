@@ -37,7 +37,8 @@ namespace LazinatorCollections.Dictionary
         
         protected int _Buckets_ByteIndex;
         private int _LazinatorDictionary_TKey_TValue_EndByteIndex;
-        protected virtual int _Buckets_ByteLength => _LazinatorDictionary_TKey_TValue_EndByteIndex - _Buckets_ByteIndex;
+        protected int _Buckets_ByteLength => _LazinatorDictionary_TKey_TValue_EndByteIndex - _Buckets_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _LazinatorDictionary_TKey_TValue_EndByteIndex;
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -150,7 +151,7 @@ namespace LazinatorCollections.Dictionary
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _LazinatorDictionary_TKey_TValue_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

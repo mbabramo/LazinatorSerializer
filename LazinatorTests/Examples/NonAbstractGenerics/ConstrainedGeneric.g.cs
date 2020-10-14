@@ -39,7 +39,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         protected virtual int _MyNullableT_ByteLength => _MyT_ByteIndex - _MyNullableT_ByteIndex;
         protected virtual int _MyT_ByteLength => _MyU_ByteIndex - _MyT_ByteIndex;
         private int _ConstrainedGeneric_T_U_EndByteIndex = 0;
-        protected virtual int _MyU_ByteLength => _ConstrainedGeneric_T_U_EndByteIndex - _MyU_ByteIndex;
+        protected int _MyU_ByteLength => _ConstrainedGeneric_T_U_EndByteIndex - _MyU_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _ConstrainedGeneric_T_U_EndByteIndex;
         
         
         protected T? _MyNullableT;
@@ -224,7 +225,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _ConstrainedGeneric_T_U_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

@@ -42,8 +42,7 @@ namespace LazinatorTests.Examples
         int _MyChild2_ByteLength => _MyLazinatorList_ByteIndex - _MyChild2_ByteIndex;
         int _MyLazinatorList_ByteLength => _MyListValues_ByteIndex - _MyLazinatorList_ByteIndex;
         int _MyListValues_ByteLength => _MyTuple_ByteIndex - _MyListValues_ByteIndex;
-        private int _ExampleStructContainingClasses_EndByteIndex;
-        int _MyTuple_ByteLength => _ExampleStructContainingClasses_EndByteIndex - _MyTuple_ByteIndex;
+        int _MyTuple_ByteLength => LazinatorMemoryStorage.Length - _MyTuple_ByteIndex;
         
         
         bool _MyBool;
@@ -322,7 +321,7 @@ namespace LazinatorTests.Examples
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _ExampleStructContainingClasses_EndByteIndex;
+            return bytesSoFar;
         }
         
         public LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
@@ -675,7 +674,6 @@ namespace LazinatorTests.Examples
             TabbedText.WriteLine($"Reading length of MyTuple at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
             _MyTuple_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            _ExampleStructContainingClasses_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         
@@ -902,10 +900,6 @@ namespace LazinatorTests.Examples
                 
             }
             TabbedText.Tabs--;
-            if (updateStoredBuffer)
-            {
-                _ExampleStructContainingClasses_EndByteIndex = writer.Position - startOfObjectPosition;
-            }
         }
         
         /* Conversion of supported collections and tuples */

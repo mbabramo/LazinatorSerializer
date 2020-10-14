@@ -39,7 +39,8 @@ namespace LazinatorTests.Examples.Collections
         protected virtual int _MyArrayInt_ByteLength => _MyCrazyJaggedArray_ByteIndex - _MyArrayInt_ByteIndex;
         protected virtual int _MyCrazyJaggedArray_ByteLength => _MyThreeDimArrayInt_ByteIndex - _MyCrazyJaggedArray_ByteIndex;
         private int _MultidimensionalArray_EndByteIndex;
-        protected virtual int _MyThreeDimArrayInt_ByteLength => _MultidimensionalArray_EndByteIndex - _MyThreeDimArrayInt_ByteIndex;
+        protected int _MyThreeDimArrayInt_ByteLength => _MultidimensionalArray_EndByteIndex - _MyThreeDimArrayInt_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _MultidimensionalArray_EndByteIndex;
         
         
         protected Int32[,] _MyArrayInt;
@@ -212,7 +213,7 @@ namespace LazinatorTests.Examples.Collections
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _MultidimensionalArray_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

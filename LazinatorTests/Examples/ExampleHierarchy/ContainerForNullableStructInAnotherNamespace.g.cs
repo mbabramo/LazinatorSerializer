@@ -36,7 +36,8 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         protected int _MyNullableStruct_ByteIndex;
         private int _ContainerForNullableStructInAnotherNamespace_EndByteIndex;
-        protected virtual int _MyNullableStruct_ByteLength => _ContainerForNullableStructInAnotherNamespace_EndByteIndex - _MyNullableStruct_ByteIndex;
+        protected int _MyNullableStruct_ByteLength => _ContainerForNullableStructInAnotherNamespace_EndByteIndex - _MyNullableStruct_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _ContainerForNullableStructInAnotherNamespace_EndByteIndex;
         
         
         protected StructInAnotherNamespace? _MyNullableStruct;
@@ -165,7 +166,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _ContainerForNullableStructInAnotherNamespace_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

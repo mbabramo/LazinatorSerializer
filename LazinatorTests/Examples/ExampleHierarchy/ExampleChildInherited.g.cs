@@ -33,7 +33,8 @@ namespace LazinatorTests.Examples
         
         protected int _MyGrandchildInInherited_ByteIndex;
         private int _ExampleChildInherited_EndByteIndex;
-        protected virtual int _MyGrandchildInInherited_ByteLength => _ExampleChildInherited_EndByteIndex - _MyGrandchildInInherited_ByteIndex;
+        protected int _MyGrandchildInInherited_ByteLength => _ExampleChildInherited_EndByteIndex - _MyGrandchildInInherited_ByteIndex;
+        protected override int _OverallEndByteIndex => _ExampleChildInherited_EndByteIndex;
         
         
         protected int _MyInt;

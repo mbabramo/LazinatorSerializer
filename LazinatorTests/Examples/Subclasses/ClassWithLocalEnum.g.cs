@@ -35,7 +35,8 @@ namespace LazinatorTests.Examples.Subclasses
         
         protected int _MyEnumList_ByteIndex;
         private int _ClassWithLocalEnum_EndByteIndex;
-        protected virtual int _MyEnumList_ByteLength => _ClassWithLocalEnum_EndByteIndex - _MyEnumList_ByteIndex;
+        protected int _MyEnumList_ByteLength => _ClassWithLocalEnum_EndByteIndex - _MyEnumList_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _ClassWithLocalEnum_EndByteIndex;
         
         
         protected global::LazinatorTests.Examples.Subclasses.ClassWithLocalEnum.EnumWithinClass _MyEnum;
@@ -132,7 +133,7 @@ namespace LazinatorTests.Examples.Subclasses
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _ClassWithLocalEnum_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

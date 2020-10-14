@@ -36,7 +36,8 @@ namespace LazinatorCollections.OffsetList
         
         protected int _ReadOnlyBytes_ByteIndex;
         private int _LazinatorFastReadList_T_EndByteIndex;
-        protected virtual int _ReadOnlyBytes_ByteLength => _LazinatorFastReadList_T_EndByteIndex - _ReadOnlyBytes_ByteIndex;
+        protected int _ReadOnlyBytes_ByteLength => _LazinatorFastReadList_T_EndByteIndex - _ReadOnlyBytes_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _LazinatorFastReadList_T_EndByteIndex;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private ReadOnlyMemory<byte> _ReadOnlyBytes;
@@ -108,7 +109,7 @@ namespace LazinatorCollections.OffsetList
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _LazinatorFastReadList_T_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

@@ -36,7 +36,8 @@ namespace LazinatorTests.Examples.Tuples
         
         protected int _MyKeyValuePairSerialized_ByteIndex;
         private int _KeyValuePairTuple_EndByteIndex;
-        protected virtual int _MyKeyValuePairSerialized_ByteLength => _KeyValuePairTuple_EndByteIndex - _MyKeyValuePairSerialized_ByteIndex;
+        protected int _MyKeyValuePairSerialized_ByteLength => _KeyValuePairTuple_EndByteIndex - _MyKeyValuePairSerialized_ByteIndex;
+        protected virtual int _OverallEndByteIndex => _KeyValuePairTuple_EndByteIndex;
         
         
         protected KeyValuePair<UInt32, ExampleChild> _MyKeyValuePairSerialized;
@@ -118,7 +119,7 @@ namespace LazinatorTests.Examples.Tuples
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            return _KeyValuePairTuple_EndByteIndex;
+            return _OverallEndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
