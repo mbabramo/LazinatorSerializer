@@ -1905,7 +1905,7 @@ namespace Lazinator.CodeDescription
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({AppropriatelyQualifiedTypeName} itemToClone, Func<{innerProperty.ILazinatorString}, {innerProperty.ILazinatorString}> cloneOrChangeFunc, bool avoidCloningIfPossible)
                     {{
-                        {(GetNullCheckIfThenButOnlyIfNullable(Nullable, "itemToClone", "return default;", ""))}int collectionLength = itemToClone.{lengthWord};{IIF(ArrayRank > 1, () => "\n" + String.Join("\n", Enumerable.Range(0, ArrayRank.Value).Select(x => $"int collectionLength{x} = itemToClone.GetLength({x});")))}
+                        {(GetNullCheckIfThenButOnlyIfNullable(Nullable, "itemToClone", "return default;", ""))}int collectionLength = itemToClone.{lengthWord};{IIF(ArrayRank > 1, () => "\r\n" + String.Join("\r\n", Enumerable.Range(0, ArrayRank.Value).Select(x => $"int collectionLength{x} = itemToClone.GetLength({x});")))}
                         {creationText}
                         {forStatement}
                         {{
