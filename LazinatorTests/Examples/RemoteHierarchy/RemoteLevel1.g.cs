@@ -506,11 +506,6 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             TabbedText.WriteLine($"Byte {writer.Position}, RemoteLevel2Item (accessed? {_RemoteLevel2Item_Accessed}) (backing var null? {_RemoteLevel2Item == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _RemoteLevel2Item_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _RemoteLevel2Item_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_RemoteLevel2Item_Accessed)
@@ -524,7 +519,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             }
             if (updateStoredBuffer)
             {
-                _RemoteLevel2Item_ByteIndex = _RemoteLevel2Item_ByteIndex_copy;
+                _RemoteLevel2Item_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

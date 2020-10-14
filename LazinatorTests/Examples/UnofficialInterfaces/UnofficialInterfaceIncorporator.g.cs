@@ -620,11 +620,6 @@ namespace LazinatorTests.Examples
             TabbedText.WriteLine($"Byte {writer.Position}, MyOfficialObject (accessed? {_MyOfficialObject_Accessed}) (backing var null? {_MyOfficialObject == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyOfficialObject_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyOfficialObject_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyOfficialObject_Accessed)
@@ -638,18 +633,13 @@ namespace LazinatorTests.Examples
             }
             if (updateStoredBuffer)
             {
-                _MyOfficialObject_ByteIndex = _MyOfficialObject_ByteIndex_copy;
+                _MyOfficialObject_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyUnofficialObject (accessed? {_MyUnofficialObject_Accessed}) (backing var null? {_MyUnofficialObject == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyUnofficialObject_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyUnofficialObject_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyUnofficialObject_Accessed)
@@ -663,7 +653,7 @@ namespace LazinatorTests.Examples
             }
             if (updateStoredBuffer)
             {
-                _MyUnofficialObject_ByteIndex = _MyUnofficialObject_ByteIndex_copy;
+                _MyUnofficialObject_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

@@ -595,11 +595,6 @@ namespace LazinatorCollections.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, Key value {_Key}");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _Key_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _Key_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_Key_Accessed)
@@ -610,21 +605,19 @@ namespace LazinatorCollections.Tuples
                 var byteIndexCopy = _Key_ByteIndex;
                 var byteLengthCopy = _Key_ByteLength;
                 WriteChild(ref writer, ref _Key, includeChildrenMode, _Key_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, true, false, null), verifyCleanness, updateStoredBuffer, false, true, null);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
             if (updateStoredBuffer)
             {
-                _Key_ByteIndex = _Key_ByteIndex_copy;
+                _Key_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, Value value {_Value}");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _Value_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _Value_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_Value_Accessed)
@@ -635,10 +628,13 @@ namespace LazinatorCollections.Tuples
                 var byteIndexCopy = _Value_ByteIndex;
                 var byteLengthCopy = _Value_ByteLength;
                 WriteChild(ref writer, ref _Value, includeChildrenMode, _Value_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, true, false, null), verifyCleanness, updateStoredBuffer, false, true, null);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
             if (updateStoredBuffer)
             {
-                _Value_ByteIndex = _Value_ByteIndex_copy;
+                _Value_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

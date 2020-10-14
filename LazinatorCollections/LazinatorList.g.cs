@@ -495,11 +495,6 @@ namespace LazinatorCollections
             TabbedText.WriteLine($"Byte {writer.Position}, MainListSerialized (accessed? )");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MainListSerialized_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MainListSerialized_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             WriteNonLazinatorObject(
             nonLazinatorObject: default, isBelievedDirty: true,
             isAccessed: true, writer: ref writer,
@@ -511,18 +506,13 @@ namespace LazinatorCollections
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _MainListSerialized_ByteIndex = _MainListSerialized_ByteIndex_copy;
+                _MainListSerialized_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, Offsets (accessed? {_Offsets_Accessed}) (backing var null? {_Offsets == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _Offsets_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _Offsets_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_Offsets_Accessed)
@@ -536,7 +526,7 @@ namespace LazinatorCollections
             }
             if (updateStoredBuffer)
             {
-                _Offsets_ByteIndex = _Offsets_ByteIndex_copy;
+                _Offsets_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

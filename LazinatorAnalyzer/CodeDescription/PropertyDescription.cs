@@ -1537,7 +1537,9 @@ namespace Lazinator.CodeDescription
             // because we can't change the _ByteIndex until after the write, since we may need
             // to read from storage during the write.
             if (!IsPrimitive)
+            {
                 sb.AppendLine("startOfChildPosition = writer.Position;");
+            }
             // Now, we have to consider the SkipCondition, from a SkipIf attribute. We don't write if the skip condition is
             // met (but still must update the byte index).
             if (SkipCondition != null)
@@ -1549,11 +1551,6 @@ namespace Lazinator.CodeDescription
                         new ConditionalCodeGenerator(WriteInclusionConditional, $"{WriteMethodName}(ref writer, {EnumEquivalentCastToEquivalentType}{BackingFieldString});").ToString());
             else
             {
-                sb.AppendLine($@"int {BackingFieldByteIndex}_copy = 0;
-                                if (updateStoredBuffer)
-                                {{
-                                    {BackingFieldByteIndex}_copy = writer.Position - startOfObjectPosition;
-                                }}"); // we can't set this now because we may use GetChildSlice to copy the bytes directly and we need to know their original location
                 // Finally, the main code for writing a serialized or non serialized object.
                 if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable || PropertyType == LazinatorPropertyType.OpenGenericParameter)
                     AppendPropertyWriteString_Lazinator(sb);
@@ -1571,7 +1568,7 @@ namespace Lazinator.CodeDescription
                     removeBuffers = new ConditionalCodeGenerator(GetNonNullCheck(true), $" {BackingFieldString} = ({AppropriatelyQualifiedTypeName}) CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({BackingFieldAccessWithPossibleException}, l => l.RemoveBufferInHierarchy(), true);").ToString();
                 sb.AppendLine($@"if (updateStoredBuffer)
                                     {{
-                                        {BackingFieldByteIndex} = {BackingFieldByteIndex}_copy;
+                                        {BackingFieldByteIndex} = startOfChildPosition - startOfObjectPosition;
                                         {removeBuffers}
                                     }}");
             }
@@ -1684,7 +1681,8 @@ namespace Lazinator.CodeDescription
                             var byteLengthCopy = {BackingFieldByteLength};
                             {IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"var copy = {BackingFieldString}.Value;
                             ")}WriteChild(ref writer, ref {propertyNameOrCopy}, includeChildrenMode, {BackingFieldAccessedString}, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy{ChildSliceLastParametersString}), verifyCleanness, updateStoredBuffer, {(SingleByteLength ? "true" : "false")}, {(AllLengthsPrecedeChildren || SkipLengthForThisProperty ? "true" : "false")}, null);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
-                                {BackingFieldString} = copy;")}";
+                                {BackingFieldString} = copy;")}
+                                {lengthString}";
                 withInclusionConditional =
                     $@"{new ConditionalCodeGenerator(WriteInclusionConditional, $"{EnsureDeserialized()}{lazinatorNullableStructNullCheck(mainWriteString)}")}";
             }

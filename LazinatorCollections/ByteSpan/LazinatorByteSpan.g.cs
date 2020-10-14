@@ -486,11 +486,6 @@ namespace LazinatorCollections.ByteSpan
             TabbedText.WriteLine($"Byte {writer.Position}, ReadOnly (accessed? {_ReadOnly_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _ReadOnly_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _ReadOnly_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ReadOnly_Accessed)
             {
                 var deserialized = ReadOnly;
@@ -506,18 +501,13 @@ namespace LazinatorCollections.ByteSpan
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _ReadOnly_ByteIndex = _ReadOnly_ByteIndex_copy;
+                _ReadOnly_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, ReadOrWrite (accessed? {_ReadOrWrite_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _ReadOrWrite_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _ReadOrWrite_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ReadOrWrite_Accessed)
             {
                 var deserialized = ReadOrWrite;
@@ -533,7 +523,7 @@ namespace LazinatorCollections.ByteSpan
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _ReadOrWrite_ByteIndex = _ReadOrWrite_ByteIndex_copy;
+                _ReadOrWrite_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

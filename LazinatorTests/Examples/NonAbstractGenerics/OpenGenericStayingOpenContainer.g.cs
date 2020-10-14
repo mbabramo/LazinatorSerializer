@@ -857,11 +857,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             TabbedText.WriteLine($"Byte {writer.Position}, ClosedGenericBase (accessed? {_ClosedGenericBase_Accessed}) (backing var null? {_ClosedGenericBase == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _ClosedGenericBase_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _ClosedGenericBase_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ClosedGenericBase_Accessed)
@@ -875,18 +870,13 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             if (updateStoredBuffer)
             {
-                _ClosedGenericBase_ByteIndex = _ClosedGenericBase_ByteIndex_copy;
+                _ClosedGenericBase_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, ClosedGenericFloat (accessed? {_ClosedGenericFloat_Accessed}) (backing var null? {_ClosedGenericFloat == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _ClosedGenericFloat_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _ClosedGenericFloat_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ClosedGenericFloat_Accessed)
@@ -900,18 +890,13 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             if (updateStoredBuffer)
             {
-                _ClosedGenericFloat_ByteIndex = _ClosedGenericFloat_ByteIndex_copy;
+                _ClosedGenericFloat_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, ClosedGenericFromBaseWithBase (accessed? {_ClosedGenericFromBaseWithBase_Accessed}) (backing var null? {_ClosedGenericFromBaseWithBase == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _ClosedGenericFromBaseWithBase_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _ClosedGenericFromBaseWithBase_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ClosedGenericFromBaseWithBase_Accessed)
@@ -925,18 +910,13 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             if (updateStoredBuffer)
             {
-                _ClosedGenericFromBaseWithBase_ByteIndex = _ClosedGenericFromBaseWithBase_ByteIndex_copy;
+                _ClosedGenericFromBaseWithBase_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, ClosedGenericInterface (accessed? {_ClosedGenericInterface_Accessed}) (backing var null? {_ClosedGenericInterface == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _ClosedGenericInterface_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _ClosedGenericInterface_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ClosedGenericInterface_Accessed)
@@ -950,18 +930,13 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             if (updateStoredBuffer)
             {
-                _ClosedGenericInterface_ByteIndex = _ClosedGenericInterface_ByteIndex_copy;
+                _ClosedGenericInterface_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, ClosedGenericNonexclusiveInterface (accessed? {_ClosedGenericNonexclusiveInterface_Accessed}) (backing var null? {_ClosedGenericNonexclusiveInterface == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _ClosedGenericNonexclusiveInterface_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _ClosedGenericNonexclusiveInterface_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ClosedGenericNonexclusiveInterface_Accessed)
@@ -975,7 +950,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             if (updateStoredBuffer)
             {
-                _ClosedGenericNonexclusiveInterface_ByteIndex = _ClosedGenericNonexclusiveInterface_ByteIndex_copy;
+                _ClosedGenericNonexclusiveInterface_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

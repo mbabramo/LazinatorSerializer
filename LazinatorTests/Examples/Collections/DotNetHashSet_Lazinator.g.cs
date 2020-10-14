@@ -433,11 +433,6 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyHashSetSerialized (accessed? {_MyHashSetSerialized_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyHashSetSerialized_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyHashSetSerialized_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyHashSetSerialized_Accessed)
             {
                 var deserialized = MyHashSetSerialized;
@@ -453,7 +448,7 @@ namespace LazinatorTests.Examples.Collections
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _MyHashSetSerialized_ByteIndex = _MyHashSetSerialized_ByteIndex_copy;
+                _MyHashSetSerialized_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

@@ -284,11 +284,6 @@ namespace LazinatorTests.Examples.Abstract
             TabbedText.WriteLine($"Byte {writer.Position}, IntList6 (accessed? {_IntList6_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _IntList6_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _IntList6_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_IntList6_Accessed)
             {
                 var deserialized = IntList6;
@@ -304,7 +299,7 @@ namespace LazinatorTests.Examples.Abstract
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _IntList6_ByteIndex = _IntList6_ByteIndex_copy;
+                _IntList6_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

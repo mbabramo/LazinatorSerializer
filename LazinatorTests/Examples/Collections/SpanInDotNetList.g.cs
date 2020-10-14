@@ -454,11 +454,6 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, SpanList (accessed? {_SpanList_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _SpanList_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _SpanList_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_SpanList_Accessed)
             {
                 var deserialized = SpanList;
@@ -474,7 +469,7 @@ namespace LazinatorTests.Examples.Collections
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _SpanList_ByteIndex = _SpanList_ByteIndex_copy;
+                _SpanList_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

@@ -534,11 +534,6 @@ namespace LazinatorTests.Examples.Hierarchy
             TabbedText.WriteLine($"Byte {writer.Position}, ExampleByInterface (accessed? {_ExampleByInterface_Accessed}) (backing var null? {_ExampleByInterface == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _ExampleByInterface_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _ExampleByInterface_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ExampleByInterface_Accessed)
@@ -552,18 +547,13 @@ namespace LazinatorTests.Examples.Hierarchy
             }
             if (updateStoredBuffer)
             {
-                _ExampleByInterface_ByteIndex = _ExampleByInterface_ByteIndex_copy;
+                _ExampleByInterface_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, ExampleListByInterface (accessed? {_ExampleListByInterface_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _ExampleListByInterface_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _ExampleListByInterface_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ExampleListByInterface_Accessed)
             {
                 var deserialized = ExampleListByInterface;
@@ -579,7 +569,7 @@ namespace LazinatorTests.Examples.Hierarchy
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _ExampleListByInterface_ByteIndex = _ExampleListByInterface_ByteIndex_copy;
+                _ExampleListByInterface_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

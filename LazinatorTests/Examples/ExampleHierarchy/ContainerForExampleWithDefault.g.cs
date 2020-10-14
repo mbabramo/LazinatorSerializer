@@ -482,11 +482,6 @@ namespace LazinatorTests.Examples
             TabbedText.WriteLine($"Byte {writer.Position}, Example (accessed? {_Example_Accessed}) (backing var null? {_Example == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _Example_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _Example_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_Example_Accessed)
@@ -500,7 +495,7 @@ namespace LazinatorTests.Examples
             }
             if (updateStoredBuffer)
             {
-                _Example_ByteIndex = _Example_ByteIndex_copy;
+                _Example_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

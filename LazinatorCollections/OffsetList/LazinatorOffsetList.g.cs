@@ -610,11 +610,6 @@ namespace LazinatorCollections.OffsetList
             TabbedText.WriteLine($"Byte {writer.Position}, FourByteItems (accessed? {_FourByteItems_Accessed}) (backing var null? {_FourByteItems == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _FourByteItems_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _FourByteItems_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_FourByteItems_Accessed)
@@ -628,18 +623,13 @@ namespace LazinatorCollections.OffsetList
             }
             if (updateStoredBuffer)
             {
-                _FourByteItems_ByteIndex = _FourByteItems_ByteIndex_copy;
+                _FourByteItems_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, TwoByteItems (accessed? {_TwoByteItems_Accessed}) (backing var null? {_TwoByteItems == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _TwoByteItems_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _TwoByteItems_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_TwoByteItems_Accessed)
@@ -653,7 +643,7 @@ namespace LazinatorCollections.OffsetList
             }
             if (updateStoredBuffer)
             {
-                _TwoByteItems_ByteIndex = _TwoByteItems_ByteIndex_copy;
+                _TwoByteItems_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

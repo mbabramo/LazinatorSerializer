@@ -500,11 +500,6 @@ namespace LazinatorCollections
             TabbedText.WriteLine($"Byte {writer.Position}, UnderlyingList (accessed? {_UnderlyingList_Accessed}) (backing var null? {_UnderlyingList == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _UnderlyingList_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _UnderlyingList_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_UnderlyingList_Accessed)
@@ -518,7 +513,7 @@ namespace LazinatorCollections
             }
             if (updateStoredBuffer)
             {
-                _UnderlyingList_ByteIndex = _UnderlyingList_ByteIndex_copy;
+                _UnderlyingList_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

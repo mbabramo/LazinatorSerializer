@@ -621,11 +621,6 @@ namespace LazinatorCollections.Dictionary
             TabbedText.WriteLine($"Byte {writer.Position}, Keys (accessed? {_Keys_Accessed}) (backing var null? {_Keys == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _Keys_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _Keys_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_Keys_Accessed)
@@ -639,18 +634,13 @@ namespace LazinatorCollections.Dictionary
             }
             if (updateStoredBuffer)
             {
-                _Keys_ByteIndex = _Keys_ByteIndex_copy;
+                _Keys_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, Values (accessed? {_Values_Accessed}) (backing var null? {_Values == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _Values_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _Values_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_Values_Accessed)
@@ -664,7 +654,7 @@ namespace LazinatorCollections.Dictionary
             }
             if (updateStoredBuffer)
             {
-                _Values_ByteIndex = _Values_ByteIndex_copy;
+                _Values_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

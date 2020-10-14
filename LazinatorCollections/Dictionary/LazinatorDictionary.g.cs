@@ -525,11 +525,6 @@ namespace LazinatorCollections.Dictionary
             TabbedText.WriteLine($"Byte {writer.Position}, Buckets (accessed? {_Buckets_Accessed}) (backing var null? {_Buckets == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _Buckets_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _Buckets_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_Buckets_Accessed)
@@ -543,7 +538,7 @@ namespace LazinatorCollections.Dictionary
             }
             if (updateStoredBuffer)
             {
-                _Buckets_ByteIndex = _Buckets_ByteIndex_copy;
+                _Buckets_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

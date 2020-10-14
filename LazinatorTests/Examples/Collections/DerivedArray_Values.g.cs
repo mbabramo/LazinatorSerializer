@@ -295,11 +295,6 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyArrayInt_DerivedLevel (accessed? {_MyArrayInt_DerivedLevel_Accessed}) (dirty? {_MyArrayInt_DerivedLevel_Dirty})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyArrayInt_DerivedLevel_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyArrayInt_DerivedLevel_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyArrayInt_DerivedLevel_Accessed)
             {
                 var deserialized = MyArrayInt_DerivedLevel;
@@ -315,7 +310,7 @@ namespace LazinatorTests.Examples.Collections
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _MyArrayInt_DerivedLevel_ByteIndex = _MyArrayInt_DerivedLevel_ByteIndex_copy;
+                _MyArrayInt_DerivedLevel_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

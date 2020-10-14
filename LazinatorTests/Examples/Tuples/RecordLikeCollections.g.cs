@@ -507,11 +507,6 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, MyDictionaryWithRecordLikeContainers (accessed? {_MyDictionaryWithRecordLikeContainers_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyDictionaryWithRecordLikeContainers_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyDictionaryWithRecordLikeContainers_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyDictionaryWithRecordLikeContainers_Accessed)
             {
                 var deserialized = MyDictionaryWithRecordLikeContainers;
@@ -527,7 +522,7 @@ namespace LazinatorTests.Examples.Tuples
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _MyDictionaryWithRecordLikeContainers_ByteIndex = _MyDictionaryWithRecordLikeContainers_ByteIndex_copy;
+                _MyDictionaryWithRecordLikeContainers_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 if (_MyDictionaryWithRecordLikeContainers_Accessed && _MyDictionaryWithRecordLikeContainers != null)
                 {
                     _MyDictionaryWithRecordLikeContainers = (Dictionary<Int32, RecordLikeContainer>) CloneOrChange_Dictionary_Gint_c_C32RecordLikeContainer_g(_MyDictionaryWithRecordLikeContainers, l => l.RemoveBufferInHierarchy(), true);
@@ -537,11 +532,6 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, MyDictionaryWithRecordLikeTypeValues (accessed? {_MyDictionaryWithRecordLikeTypeValues_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyDictionaryWithRecordLikeTypeValues_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyDictionaryWithRecordLikeTypeValues_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyDictionaryWithRecordLikeTypeValues_Accessed)
             {
                 var deserialized = MyDictionaryWithRecordLikeTypeValues;
@@ -557,7 +547,7 @@ namespace LazinatorTests.Examples.Tuples
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _MyDictionaryWithRecordLikeTypeValues_ByteIndex = _MyDictionaryWithRecordLikeTypeValues_ByteIndex_copy;
+                _MyDictionaryWithRecordLikeTypeValues_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 if (_MyDictionaryWithRecordLikeTypeValues_Accessed && _MyDictionaryWithRecordLikeTypeValues != null)
                 {
                     _MyDictionaryWithRecordLikeTypeValues = (Dictionary<Int32, RecordLikeTypeWithLazinator>) CloneOrChange_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(_MyDictionaryWithRecordLikeTypeValues, l => l.RemoveBufferInHierarchy(), true);

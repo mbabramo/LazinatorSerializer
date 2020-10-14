@@ -387,11 +387,6 @@ namespace LazinatorTests.Examples.Abstract
             TabbedText.WriteLine($"Byte {writer.Position}, IntList4 (accessed? {_IntList4_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _IntList4_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _IntList4_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_IntList4_Accessed)
             {
                 var deserialized = IntList4;
@@ -407,18 +402,13 @@ namespace LazinatorTests.Examples.Abstract
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _IntList4_ByteIndex = _IntList4_ByteIndex_copy;
+                _IntList4_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, IntList5 (accessed? {_IntList5_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _IntList5_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _IntList5_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_IntList5_Accessed)
             {
                 var deserialized = IntList5;
@@ -434,7 +424,7 @@ namespace LazinatorTests.Examples.Abstract
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _IntList5_ByteIndex = _IntList5_ByteIndex_copy;
+                _IntList5_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

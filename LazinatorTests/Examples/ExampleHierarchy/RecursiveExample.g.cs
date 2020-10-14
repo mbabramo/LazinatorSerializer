@@ -575,11 +575,6 @@ namespace LazinatorTests.Examples.Hierarchy
             TabbedText.WriteLine($"Byte {writer.Position}, RecursiveClass (accessed? {_RecursiveClass_Accessed}) (backing var null? {_RecursiveClass == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _RecursiveClass_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _RecursiveClass_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_RecursiveClass_Accessed)
@@ -593,18 +588,13 @@ namespace LazinatorTests.Examples.Hierarchy
             }
             if (updateStoredBuffer)
             {
-                _RecursiveClass_ByteIndex = _RecursiveClass_ByteIndex_copy;
+                _RecursiveClass_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, RecursiveInterface (accessed? {_RecursiveInterface_Accessed}) (backing var null? {_RecursiveInterface == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _RecursiveInterface_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _RecursiveInterface_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_RecursiveInterface_Accessed)
@@ -618,7 +608,7 @@ namespace LazinatorTests.Examples.Hierarchy
             }
             if (updateStoredBuffer)
             {
-                _RecursiveInterface_ByteIndex = _RecursiveInterface_ByteIndex_copy;
+                _RecursiveInterface_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

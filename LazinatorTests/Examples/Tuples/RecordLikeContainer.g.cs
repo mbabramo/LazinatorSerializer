@@ -843,11 +843,6 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, ExternalRecordLikeStruct (accessed? {_ExternalRecordLikeStruct_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _ExternalRecordLikeStruct_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _ExternalRecordLikeStruct_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ExternalRecordLikeStruct_Accessed)
             {
                 var deserialized = ExternalRecordLikeStruct;
@@ -863,18 +858,13 @@ namespace LazinatorTests.Examples.Tuples
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _ExternalRecordLikeStruct_ByteIndex = _ExternalRecordLikeStruct_ByteIndex_copy;
+                _ExternalRecordLikeStruct_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyMismatchedRecordLikeType (accessed? {_MyMismatchedRecordLikeType_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyMismatchedRecordLikeType_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyMismatchedRecordLikeType_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyMismatchedRecordLikeType_Accessed)
             {
                 var deserialized = MyMismatchedRecordLikeType;
@@ -890,18 +880,13 @@ namespace LazinatorTests.Examples.Tuples
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _MyMismatchedRecordLikeType_ByteIndex = _MyMismatchedRecordLikeType_ByteIndex_copy;
+                _MyMismatchedRecordLikeType_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyNonLazinatorRecordWithConstructor (accessed? {_MyNonLazinatorRecordWithConstructor_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyNonLazinatorRecordWithConstructor_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyNonLazinatorRecordWithConstructor_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyNonLazinatorRecordWithConstructor_Accessed)
             {
                 var deserialized = MyNonLazinatorRecordWithConstructor;
@@ -917,18 +902,13 @@ namespace LazinatorTests.Examples.Tuples
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _MyNonLazinatorRecordWithConstructor_ByteIndex = _MyNonLazinatorRecordWithConstructor_ByteIndex_copy;
+                _MyNonLazinatorRecordWithConstructor_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyNonLazinatorRecordWithoutConstructor (accessed? {_MyNonLazinatorRecordWithoutConstructor_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyNonLazinatorRecordWithoutConstructor_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyNonLazinatorRecordWithoutConstructor_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyNonLazinatorRecordWithoutConstructor_Accessed)
             {
                 var deserialized = MyNonLazinatorRecordWithoutConstructor;
@@ -944,18 +924,13 @@ namespace LazinatorTests.Examples.Tuples
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _MyNonLazinatorRecordWithoutConstructor_ByteIndex = _MyNonLazinatorRecordWithoutConstructor_ByteIndex_copy;
+                _MyNonLazinatorRecordWithoutConstructor_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyNonLazinatorSubrecordWithConstructor (accessed? {_MyNonLazinatorSubrecordWithConstructor_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyNonLazinatorSubrecordWithConstructor_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyNonLazinatorSubrecordWithConstructor_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyNonLazinatorSubrecordWithConstructor_Accessed)
             {
                 var deserialized = MyNonLazinatorSubrecordWithConstructor;
@@ -971,18 +946,13 @@ namespace LazinatorTests.Examples.Tuples
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _MyNonLazinatorSubrecordWithConstructor_ByteIndex = _MyNonLazinatorSubrecordWithConstructor_ByteIndex_copy;
+                _MyNonLazinatorSubrecordWithConstructor_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyNonLazinatorSubrecordWithoutConstructor (accessed? {_MyNonLazinatorSubrecordWithoutConstructor_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyNonLazinatorSubrecordWithoutConstructor_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyNonLazinatorSubrecordWithoutConstructor_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyNonLazinatorSubrecordWithoutConstructor_Accessed)
             {
                 var deserialized = MyNonLazinatorSubrecordWithoutConstructor;
@@ -998,18 +968,13 @@ namespace LazinatorTests.Examples.Tuples
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _MyNonLazinatorSubrecordWithoutConstructor_ByteIndex = _MyNonLazinatorSubrecordWithoutConstructor_ByteIndex_copy;
+                _MyNonLazinatorSubrecordWithoutConstructor_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyRecordLikeClass (accessed? {_MyRecordLikeClass_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyRecordLikeClass_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyRecordLikeClass_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyRecordLikeClass_Accessed)
             {
                 var deserialized = MyRecordLikeClass;
@@ -1025,18 +990,13 @@ namespace LazinatorTests.Examples.Tuples
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _MyRecordLikeClass_ByteIndex = _MyRecordLikeClass_ByteIndex_copy;
+                _MyRecordLikeClass_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyRecordLikeStruct (accessed? {_MyRecordLikeStruct_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyRecordLikeStruct_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyRecordLikeStruct_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyRecordLikeStruct_Accessed)
             {
                 var deserialized = MyRecordLikeStruct;
@@ -1052,18 +1012,13 @@ namespace LazinatorTests.Examples.Tuples
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _MyRecordLikeStruct_ByteIndex = _MyRecordLikeStruct_ByteIndex_copy;
+                _MyRecordLikeStruct_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyRecordLikeTypeWithLazinator (accessed? {_MyRecordLikeTypeWithLazinator_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyRecordLikeTypeWithLazinator_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyRecordLikeTypeWithLazinator_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyRecordLikeTypeWithLazinator_Accessed)
             {
                 var deserialized = MyRecordLikeTypeWithLazinator;
@@ -1079,7 +1034,7 @@ namespace LazinatorTests.Examples.Tuples
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _MyRecordLikeTypeWithLazinator_ByteIndex = _MyRecordLikeTypeWithLazinator_ByteIndex_copy;
+                _MyRecordLikeTypeWithLazinator_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 _MyRecordLikeTypeWithLazinator = (RecordLikeTypeWithLazinator) CloneOrChange_RecordLikeTypeWithLazinator(_MyRecordLikeTypeWithLazinator, l => l.RemoveBufferInHierarchy(), true);
             }
             TabbedText.Tabs--;

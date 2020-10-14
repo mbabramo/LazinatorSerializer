@@ -438,11 +438,6 @@ namespace LazinatorCollections.OffsetList
             TabbedText.WriteLine($"Byte {writer.Position}, ReadOnlyBytes (accessed? {_ReadOnlyBytes_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _ReadOnlyBytes_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _ReadOnlyBytes_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ReadOnlyBytes_Accessed)
             {
                 var deserialized = ReadOnlyBytes;
@@ -458,7 +453,7 @@ namespace LazinatorCollections.OffsetList
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _ReadOnlyBytes_ByteIndex = _ReadOnlyBytes_ByteIndex_copy;
+                _ReadOnlyBytes_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

@@ -433,11 +433,6 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyQueueSerialized (accessed? {_MyQueueSerialized_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyQueueSerialized_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyQueueSerialized_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyQueueSerialized_Accessed)
             {
                 var deserialized = MyQueueSerialized;
@@ -453,7 +448,7 @@ namespace LazinatorTests.Examples.Collections
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _MyQueueSerialized_ByteIndex = _MyQueueSerialized_ByteIndex_copy;
+                _MyQueueSerialized_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

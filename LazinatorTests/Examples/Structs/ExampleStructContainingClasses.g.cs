@@ -777,11 +777,6 @@ namespace LazinatorTests.Examples
             TabbedText.WriteLine($"Byte {writer.Position}, MyChild1 (accessed? {_MyChild1_Accessed}) (backing var null? {_MyChild1 == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyChild1_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyChild1_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyChild1_Accessed)
@@ -792,21 +787,19 @@ namespace LazinatorTests.Examples
                 var byteIndexCopy = _MyChild1_ByteIndex;
                 var byteLengthCopy = _MyChild1_ByteLength;
                 WriteChild(ref writer, ref _MyChild1, includeChildrenMode, _MyChild1_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, true, false, null), verifyCleanness, updateStoredBuffer, false, true, null);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
             if (updateStoredBuffer)
             {
-                _MyChild1_ByteIndex = _MyChild1_ByteIndex_copy;
+                _MyChild1_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyChild2 (accessed? {_MyChild2_Accessed}) (backing var null? {_MyChild2 == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyChild2_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyChild2_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyChild2_Accessed)
@@ -817,21 +810,19 @@ namespace LazinatorTests.Examples
                 var byteIndexCopy = _MyChild2_ByteIndex;
                 var byteLengthCopy = _MyChild2_ByteLength;
                 WriteChild(ref writer, ref _MyChild2, includeChildrenMode, _MyChild2_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, true, false, null), verifyCleanness, updateStoredBuffer, false, true, null);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
             if (updateStoredBuffer)
             {
-                _MyChild2_ByteIndex = _MyChild2_ByteIndex_copy;
+                _MyChild2_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyLazinatorList (accessed? {_MyLazinatorList_Accessed}) (dirty? {_MyLazinatorList_Dirty})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyLazinatorList_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyLazinatorList_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyLazinatorList_Accessed)
             {
                 var deserialized = MyLazinatorList;
@@ -850,18 +841,13 @@ namespace LazinatorTests.Examples
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _MyLazinatorList_ByteIndex = _MyLazinatorList_ByteIndex_copy;
+                _MyLazinatorList_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyListValues (accessed? {_MyListValues_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyListValues_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyListValues_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyListValues_Accessed)
             {
                 var deserialized = MyListValues;
@@ -880,18 +866,13 @@ namespace LazinatorTests.Examples
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _MyListValues_ByteIndex = _MyListValues_ByteIndex_copy;
+                _MyListValues_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyTuple (accessed? {_MyTuple_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyTuple_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyTuple_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyTuple_Accessed)
             {
                 var deserialized = MyTuple;
@@ -910,7 +891,7 @@ namespace LazinatorTests.Examples
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _MyTuple_ByteIndex = _MyTuple_ByteIndex_copy;
+                _MyTuple_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

@@ -607,11 +607,6 @@ namespace LazinatorTests.Examples
             TabbedText.WriteLine($"Byte {writer.Position}, MyExampleNullableStruct (accessed? {_MyExampleNullableStruct_Accessed}) (backing var null? {_MyExampleNullableStruct == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyExampleNullableStruct_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyExampleNullableStruct_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyExampleNullableStruct_Accessed)
@@ -629,22 +624,20 @@ namespace LazinatorTests.Examples
                     var copy = _MyExampleNullableStruct.Value;
                     WriteChild(ref writer, ref copy, includeChildrenMode, _MyExampleNullableStruct_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, true, false, null), verifyCleanness, updateStoredBuffer, false, true, null);
                     _MyExampleNullableStruct = copy;
+                    lengthValue = writer.Position - startOfChildPosition;
+                    WriteInt(lengthsSpan, lengthValue);
+                    lengthsSpan = lengthsSpan.Slice(sizeof(int));
                 }
             }
             if (updateStoredBuffer)
             {
-                _MyExampleNullableStruct_ByteIndex = _MyExampleNullableStruct_ByteIndex_copy;
+                _MyExampleNullableStruct_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyExampleStructContainingClasses (accessed? {_MyExampleStructContainingClasses_Accessed}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyExampleStructContainingClasses_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyExampleStructContainingClasses_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyExampleStructContainingClasses_Accessed)
@@ -655,10 +648,13 @@ namespace LazinatorTests.Examples
                 var byteIndexCopy = _MyExampleStructContainingClasses_ByteIndex;
                 var byteLengthCopy = _MyExampleStructContainingClasses_ByteLength;
                 WriteChild(ref writer, ref _MyExampleStructContainingClasses, includeChildrenMode, _MyExampleStructContainingClasses_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, true, false, null), verifyCleanness, updateStoredBuffer, false, true, null);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
             if (updateStoredBuffer)
             {
-                _MyExampleStructContainingClasses_ByteIndex = _MyExampleStructContainingClasses_ByteIndex_copy;
+                _MyExampleStructContainingClasses_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

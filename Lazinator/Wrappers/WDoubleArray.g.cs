@@ -440,11 +440,6 @@ namespace Lazinator.Wrappers
             TabbedText.WriteLine($"Byte {writer.Position}, WrappedValue (accessed? {_WrappedValue_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _WrappedValue_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _WrappedValue_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_WrappedValue_Accessed)
             {
                 var deserialized = WrappedValue;
@@ -462,7 +457,7 @@ namespace Lazinator.Wrappers
             ConvertToBytes_double_B_b(ref w, copy_WrappedValue, includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
-                _WrappedValue_ByteIndex = _WrappedValue_ByteIndex_copy;
+                _WrappedValue_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

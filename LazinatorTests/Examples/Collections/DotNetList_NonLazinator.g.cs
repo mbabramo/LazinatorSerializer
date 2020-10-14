@@ -503,11 +503,6 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyListNonLazinatorType (accessed? {_MyListNonLazinatorType_Accessed}) (dirty? {_MyListNonLazinatorType_Dirty})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyListNonLazinatorType_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyListNonLazinatorType_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyListNonLazinatorType_Accessed)
             {
                 var deserialized = MyListNonLazinatorType;
@@ -523,18 +518,13 @@ namespace LazinatorTests.Examples.Collections
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _MyListNonLazinatorType_ByteIndex = _MyListNonLazinatorType_ByteIndex_copy;
+                _MyListNonLazinatorType_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyListNonLazinatorType2 (accessed? {_MyListNonLazinatorType2_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyListNonLazinatorType2_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyListNonLazinatorType2_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyListNonLazinatorType2_Accessed)
             {
                 var deserialized = MyListNonLazinatorType2;
@@ -550,7 +540,7 @@ namespace LazinatorTests.Examples.Collections
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _MyListNonLazinatorType2_ByteIndex = _MyListNonLazinatorType2_ByteIndex_copy;
+                _MyListNonLazinatorType2_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

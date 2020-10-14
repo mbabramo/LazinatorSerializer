@@ -622,11 +622,6 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyList (accessed? {_MyList_Accessed}) (backing var null? {_MyList == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyList_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyList_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyList_Accessed)
@@ -640,18 +635,13 @@ namespace LazinatorTests.Examples.Collections
             }
             if (updateStoredBuffer)
             {
-                _MyList_ByteIndex = _MyList_ByteIndex_copy;
+                _MyList_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyStructList (accessed? {_MyStructList_Accessed}) (backing var null? {_MyStructList == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyStructList_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyStructList_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyStructList_Accessed)
@@ -665,7 +655,7 @@ namespace LazinatorTests.Examples.Collections
             }
             if (updateStoredBuffer)
             {
-                _MyStructList_ByteIndex = _MyStructList_ByteIndex_copy;
+                _MyStructList_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

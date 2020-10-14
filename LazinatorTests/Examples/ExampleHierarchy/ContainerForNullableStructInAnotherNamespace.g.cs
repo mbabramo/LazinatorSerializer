@@ -522,11 +522,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             TabbedText.WriteLine($"Byte {writer.Position}, MyNullableStruct (accessed? {_MyNullableStruct_Accessed}) (backing var null? {_MyNullableStruct == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyNullableStruct_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyNullableStruct_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyNullableStruct_Accessed)
@@ -548,7 +543,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             if (updateStoredBuffer)
             {
-                _MyNullableStruct_ByteIndex = _MyNullableStruct_ByteIndex_copy;
+                _MyNullableStruct_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

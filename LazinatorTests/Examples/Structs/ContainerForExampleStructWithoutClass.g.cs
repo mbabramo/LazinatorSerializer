@@ -639,11 +639,6 @@ namespace LazinatorTests.Examples.Structs
             TabbedText.WriteLine($"Byte {writer.Position}, ExampleNullableStruct (accessed? {_ExampleNullableStruct_Accessed}) (backing var null? {_ExampleNullableStruct == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _ExampleNullableStruct_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _ExampleNullableStruct_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ExampleNullableStruct_Accessed)
@@ -665,18 +660,13 @@ namespace LazinatorTests.Examples.Structs
             }
             if (updateStoredBuffer)
             {
-                _ExampleNullableStruct_ByteIndex = _ExampleNullableStruct_ByteIndex_copy;
+                _ExampleNullableStruct_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, ExampleStructWithoutClass (accessed? {_ExampleStructWithoutClass_Accessed}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _ExampleStructWithoutClass_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _ExampleStructWithoutClass_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ExampleStructWithoutClass_Accessed)
@@ -690,7 +680,7 @@ namespace LazinatorTests.Examples.Structs
             }
             if (updateStoredBuffer)
             {
-                _ExampleStructWithoutClass_ByteIndex = _ExampleStructWithoutClass_ByteIndex_copy;
+                _ExampleStructWithoutClass_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;

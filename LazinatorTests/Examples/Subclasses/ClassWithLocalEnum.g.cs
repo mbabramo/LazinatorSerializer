@@ -454,11 +454,6 @@ namespace LazinatorTests.Examples.Subclasses
             TabbedText.WriteLine($"Byte {writer.Position}, MyEnumList (accessed? {_MyEnumList_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
-            int _MyEnumList_ByteIndex_copy = 0;
-            if (updateStoredBuffer)
-            {
-                _MyEnumList_ByteIndex_copy = writer.Position - startOfObjectPosition;
-            }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyEnumList_Accessed)
             {
                 var deserialized = MyEnumList;
@@ -474,7 +469,7 @@ namespace LazinatorTests.Examples.Subclasses
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
-                _MyEnumList_ByteIndex = _MyEnumList_ByteIndex_copy;
+                _MyEnumList_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
