@@ -102,13 +102,11 @@ namespace LazinatorCollections.BitArray
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _IntStorage = default(Memory<Int32>);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntStorage_ByteIndex, _IntStorage_ByteLength, true, false, null);
                 _IntStorage = ConvertFromBytes_Memory_Gint_g(childData);
             }
-            
             _IntStorage_Accessed = true;
         }
         
@@ -390,182 +388,177 @@ namespace LazinatorCollections.BitArray
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 4;
-            }
+            int lengthForLengths = 4;
             ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
         }
         
         void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            __version = span.ToDecompressedInt32(ref bytesSoFar);_m_length = span.ToDecompressedInt32(ref bytesSoFar);        }
-            
-            int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
-            {
-                int totalChildrenBytes = 0;
-                _IntStorage_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-                totalChildrenBytes += span.ToInt32(ref bytesSoFar);_LazinatorBitArray_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
-                return totalChildrenBytes;
-            }
-            
-            public void SerializeToExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-            {
-                TabbedText.WriteLine($"Initiating serialization of LazinatorCollections.BitArray.LazinatorBitArray ");
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
-                {
-                    updateStoredBuffer = false;
-                }
-                int startPosition = writer.Position;
-                WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
-                if (updateStoredBuffer)
-                {
-                    UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
-                }
-            }
-            
-            public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
-            {
-                _IsDirty = false;
-                if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
-                {
-                    _DescendantIsDirty = false;
-                    if (updateDeserializedChildren)
-                    {
-                        UpdateDeserializedChildren(ref writer, startPosition);
-                    }
-                    
-                }
-                else
-                {
-                    ThrowHelper.ThrowCannotUpdateStoredBuffer();
-                }
-                
-                var newBuffer = writer.Slice(startPosition, length);
-                LazinatorMemoryStorage = newBuffer;
-            }
-            
-            void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
-            {
-            }
-            
-            
-            void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
-            {
-                int startPosition = writer.Position;
-                TabbedText.WriteLine($"Writing properties for LazinatorCollections.BitArray.LazinatorBitArray starting at {writer.Position}.");
-                TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
-                TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
-                if (includeUniqueID)
-                {
-                    CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
-                }
-                
-                CompressedIntegralTypes.WriteCompressedInt(ref writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
-                CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
-                writer.Write((byte)includeChildrenMode);
-                // write properties
-                
-                WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
-                int lengthForLengths = 0;
-                if (true)
-                {
-                    lengthForLengths += 4;
-                }
-                Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
-                writer.Skip(lengthForLengths);
-                WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
-                TabbedText.WriteLine($"Byte {writer.Position} (end of LazinatorBitArray) ");
-            }
-            
-            void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
-            {
-                TabbedText.WriteLine($"Byte {writer.Position}, _version value {__version}");
-                TabbedText.Tabs++;
-                CompressedIntegralTypes.WriteCompressedInt(ref writer, __version);
-                TabbedText.Tabs--;
-                TabbedText.WriteLine($"Byte {writer.Position}, m_length value {_m_length}");
-                TabbedText.Tabs++;
-                CompressedIntegralTypes.WriteCompressedInt(ref writer, _m_length);
-                TabbedText.Tabs--;
-            }
-            
-            void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition, Span<byte> lengthsSpan)
-            {
-                int startOfChildPosition = 0;
-                int lengthValue = 0;
-                TabbedText.WriteLine($"Byte {writer.Position}, IntStorage (accessed? {_IntStorage_Accessed})");
-                TabbedText.Tabs++;
-                startOfChildPosition = writer.Position;
-                if (updateStoredBuffer)
-                {
-                    _IntStorage_ByteIndex = writer.Position - startOfObjectPosition;
-                }
-                if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_IntStorage_Accessed)
-                {
-                    var deserialized = IntStorage;
-                }
-                WriteNonLazinatorObject(
-                nonLazinatorObject: _IntStorage, isBelievedDirty: _IntStorage_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
-                isAccessed: _IntStorage_Accessed, writer: ref writer,
-                getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _IntStorage_ByteIndex, _IntStorage_ByteLength, true, false, null),
-                verifyCleanness: false,
-                binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-                ConvertToBytes_Memory_Gint_g(ref w, _IntStorage,
-                includeChildrenMode, v, updateStoredBuffer),
-                lengthsSpan: ref lengthsSpan);
-                TabbedText.Tabs--;
-                if (updateStoredBuffer)
-                {
-                    _LazinatorBitArray_EndByteIndex = writer.Position - startOfObjectPosition;
-                }
-            }
-            
-            /* Conversion of supported collections and tuples */
-            
-            private static Memory<Int32> ConvertFromBytes_Memory_Gint_g(LazinatorMemory storage)
-            {
-                ReadOnlySpan<byte> span = storage.InitialMemory.Span;
-                int bytesSoFar = 0;
-                int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
-                
-                Memory<Int32> collection = new Memory<Int32>(new int[collectionLength]);
-                var collectionAsSpan = collection.Span;
-                for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
-                {
-                    int item = span.ToDecompressedInt32(ref bytesSoFar);
-                    collectionAsSpan[itemIndex] = item;
-                }
-                
-                return collection;
-            }
-            
-            private static void ConvertToBytes_Memory_Gint_g(ref BinaryBufferWriter writer, Memory<Int32> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-            {
-                CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Length);
-                var itemToConvertSpan = itemToConvert.Span;
-                int itemToConvertCount = itemToConvertSpan.Length;
-                for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
-                {
-                    CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvertSpan[itemIndex]);
-                }
-            }
-            
-            private static Memory<Int32> CloneOrChange_Memory_Gint_g(Memory<Int32> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
-            {
-                int collectionLength = itemToClone.Length;
-                Memory<Int32> collection = new Memory<Int32>(new int[collectionLength]);
-                var collectionAsSpan = collection.Span;
-                var itemToCloneSpan = itemToClone.Span;
-                int itemToCloneCount = itemToCloneSpan.Length;
-                for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
-                {
-                    var itemCopied = (int) itemToCloneSpan[itemIndex];
-                    collectionAsSpan[itemIndex] = itemCopied;
-                }
-                return collection;
-            }
-            
+            __version = span.ToDecompressedInt32(ref bytesSoFar);
+            _m_length = span.ToDecompressedInt32(ref bytesSoFar);
         }
+        
+        int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
+        {
+            int totalChildrenBytes = 0;
+            _IntStorage_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _LazinatorBitArray_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+            return totalChildrenBytes;
+        }
+        
+        public void SerializeToExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        {
+            TabbedText.WriteLine($"Initiating serialization of LazinatorCollections.BitArray.LazinatorBitArray ");
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
+            {
+                updateStoredBuffer = false;
+            }
+            int startPosition = writer.Position;
+            WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
+            if (updateStoredBuffer)
+            {
+                UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
+            }
+        }
+        
+        public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        {
+            _IsDirty = false;
+            if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            {
+                _DescendantIsDirty = false;
+                if (updateDeserializedChildren)
+                {
+                    UpdateDeserializedChildren(ref writer, startPosition);
+                }
+                
+            }
+            else
+            {
+                ThrowHelper.ThrowCannotUpdateStoredBuffer();
+            }
+            
+            var newBuffer = writer.Slice(startPosition, length);
+            LazinatorMemoryStorage = newBuffer;
+        }
+        
+        void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        {
+        }
+        
+        
+        void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
+        {
+            int startPosition = writer.Position;
+            TabbedText.WriteLine($"Writing properties for LazinatorCollections.BitArray.LazinatorBitArray starting at {writer.Position}.");
+            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
+            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
+            if (includeUniqueID)
+            {
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
+            }
+            
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
+            writer.Write((byte)includeChildrenMode);
+            // write properties
+            
+            WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
+            int lengthForLengths = 4;
+            Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
+            writer.Skip(lengthForLengths);
+            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
+            TabbedText.WriteLine($"Byte {writer.Position} (end of LazinatorBitArray) ");
+        }
+        
+        void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
+        {
+            TabbedText.WriteLine($"Byte {writer.Position}, _version value {__version}");
+            TabbedText.Tabs++;
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, __version);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.Position}, m_length value {_m_length}");
+            TabbedText.Tabs++;
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, _m_length);
+            TabbedText.Tabs--;
+        }
+        
+        void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition, Span<byte> lengthsSpan)
+        {
+            int startOfChildPosition = 0;
+            int lengthValue = 0;
+            TabbedText.WriteLine($"Byte {writer.Position}, IntStorage (accessed? {_IntStorage_Accessed})");
+            TabbedText.Tabs++;
+            startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _IntStorage_ByteIndex = writer.Position - startOfObjectPosition;
+            }
+            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_IntStorage_Accessed)
+            {
+                var deserialized = IntStorage;
+            }
+            WriteNonLazinatorObject(
+            nonLazinatorObject: _IntStorage, isBelievedDirty: _IntStorage_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
+            isAccessed: _IntStorage_Accessed, writer: ref writer,
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _IntStorage_ByteIndex, _IntStorage_ByteLength, true, false, null),
+            verifyCleanness: false,
+            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            ConvertToBytes_Memory_Gint_g(ref w, _IntStorage,
+            includeChildrenMode, v, updateStoredBuffer),
+            lengthsSpan: ref lengthsSpan);
+            TabbedText.Tabs--;
+            if (updateStoredBuffer)
+            {
+                _LazinatorBitArray_EndByteIndex = writer.Position - startOfObjectPosition;
+            }
+        }
+        
+        /* Conversion of supported collections and tuples */
+        
+        private static Memory<Int32> ConvertFromBytes_Memory_Gint_g(LazinatorMemory storage)
+        {
+            ReadOnlySpan<byte> span = storage.InitialMemory.Span;
+            int bytesSoFar = 0;
+            int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
+            
+            Memory<Int32> collection = new Memory<Int32>(new int[collectionLength]);
+            var collectionAsSpan = collection.Span;
+            for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
+            {
+                int item = span.ToDecompressedInt32(ref bytesSoFar);
+                collectionAsSpan[itemIndex] = item;
+            }
+            
+            return collection;
+        }
+        
+        private static void ConvertToBytes_Memory_Gint_g(ref BinaryBufferWriter writer, Memory<Int32> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        {
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Length);
+            var itemToConvertSpan = itemToConvert.Span;
+            int itemToConvertCount = itemToConvertSpan.Length;
+            for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
+            {
+                CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvertSpan[itemIndex]);
+            }
+        }
+        
+        private static Memory<Int32> CloneOrChange_Memory_Gint_g(Memory<Int32> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        {
+            int collectionLength = itemToClone.Length;
+            Memory<Int32> collection = new Memory<Int32>(new int[collectionLength]);
+            var collectionAsSpan = collection.Span;
+            var itemToCloneSpan = itemToClone.Span;
+            int itemToCloneCount = itemToCloneSpan.Length;
+            for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
+            {
+                var itemCopied = (int) itemToCloneSpan[itemIndex];
+                collectionAsSpan[itemIndex] = itemCopied;
+            }
+            return collection;
+        }
+        
     }
+}

@@ -99,13 +99,11 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _ExternalRecordLikeStruct = default(Point);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExternalRecordLikeStruct_ByteIndex, _ExternalRecordLikeStruct_ByteLength, true, false, null);
                 _ExternalRecordLikeStruct = ConvertFromBytes_Point(childData);
             }
-            
             _ExternalRecordLikeStruct_Accessed = true;
         }
         
@@ -136,13 +134,11 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyMismatchedRecordLikeType = default(MismatchedRecordLikeType);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyMismatchedRecordLikeType_ByteIndex, _MyMismatchedRecordLikeType_ByteLength, true, false, null);
                 _MyMismatchedRecordLikeType = ConvertFromBytes_MismatchedRecordLikeType(childData);
             }
-            
             _MyMismatchedRecordLikeType_Accessed = true;
         }
         
@@ -174,13 +170,11 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNonLazinatorRecordWithConstructor = default(NonLazinatorRecordWithConstructor);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorRecordWithConstructor_ByteIndex, _MyNonLazinatorRecordWithConstructor_ByteLength, true, false, null);
                 _MyNonLazinatorRecordWithConstructor = ConvertFromBytes_NonLazinatorRecordWithConstructor(childData);
             }
-            
             _MyNonLazinatorRecordWithConstructor_Accessed = true;
         }
         
@@ -212,13 +206,11 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNonLazinatorRecordWithoutConstructor = default(NonLazinatorRecordWithoutConstructor);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorRecordWithoutConstructor_ByteIndex, _MyNonLazinatorRecordWithoutConstructor_ByteLength, true, false, null);
                 _MyNonLazinatorRecordWithoutConstructor = ConvertFromBytes_NonLazinatorRecordWithoutConstructor(childData);
             }
-            
             _MyNonLazinatorRecordWithoutConstructor_Accessed = true;
         }
         
@@ -250,13 +242,11 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNonLazinatorSubrecordWithConstructor = default(NonLazinatorSubrecordWithConstructor);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorSubrecordWithConstructor_ByteIndex, _MyNonLazinatorSubrecordWithConstructor_ByteLength, true, false, null);
                 _MyNonLazinatorSubrecordWithConstructor = ConvertFromBytes_NonLazinatorSubrecordWithConstructor(childData);
             }
-            
             _MyNonLazinatorSubrecordWithConstructor_Accessed = true;
         }
         
@@ -288,13 +278,11 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNonLazinatorSubrecordWithoutConstructor = default(NonLazinatorSubrecordWithoutConstructor);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorSubrecordWithoutConstructor_ByteIndex, _MyNonLazinatorSubrecordWithoutConstructor_ByteLength, true, false, null);
                 _MyNonLazinatorSubrecordWithoutConstructor = ConvertFromBytes_NonLazinatorSubrecordWithoutConstructor(childData);
             }
-            
             _MyNonLazinatorSubrecordWithoutConstructor_Accessed = true;
         }
         
@@ -326,13 +314,11 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyRecordLikeClass = default(RecordLikeClass);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeClass_ByteIndex, _MyRecordLikeClass_ByteLength, true, false, null);
                 _MyRecordLikeClass = ConvertFromBytes_RecordLikeClass(childData);
             }
-            
             _MyRecordLikeClass_Accessed = true;
         }
         
@@ -363,13 +349,11 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyRecordLikeStruct = default(RecordLikeStruct);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeStruct_ByteIndex, _MyRecordLikeStruct_ByteLength, true, false, null);
                 _MyRecordLikeStruct = ConvertFromBytes_RecordLikeStruct(childData);
             }
-            
             _MyRecordLikeStruct_Accessed = true;
         }
         
@@ -401,13 +385,11 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyRecordLikeTypeWithLazinator = default(RecordLikeTypeWithLazinator);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeTypeWithLazinator_ByteIndex, _MyRecordLikeTypeWithLazinator_ByteLength, true, false, null);
                 _MyRecordLikeTypeWithLazinator = ConvertFromBytes_RecordLikeTypeWithLazinator(childData);
             }
-            
             _MyRecordLikeTypeWithLazinator_Accessed = true;
         }
         
@@ -650,8 +632,10 @@ namespace LazinatorTests.Examples.Tuples
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             var deserialized_ExternalRecordLikeStruct = ExternalRecordLikeStruct;
-            _ExternalRecordLikeStruct = (Point) CloneOrChange_Point(_ExternalRecordLikeStruct, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);var deserialized_MyMismatchedRecordLikeType = MyMismatchedRecordLikeType;
-            _MyMismatchedRecordLikeType = (MismatchedRecordLikeType) CloneOrChange_MismatchedRecordLikeType(_MyMismatchedRecordLikeType, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);if ((!exploreOnlyDeserializedChildren && MyNonLazinatorRecordWithConstructor != null) || (_MyNonLazinatorRecordWithConstructor_Accessed && _MyNonLazinatorRecordWithConstructor != null))
+            _ExternalRecordLikeStruct = (Point) CloneOrChange_Point(_ExternalRecordLikeStruct, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
+            var deserialized_MyMismatchedRecordLikeType = MyMismatchedRecordLikeType;
+            _MyMismatchedRecordLikeType = (MismatchedRecordLikeType) CloneOrChange_MismatchedRecordLikeType(_MyMismatchedRecordLikeType, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
+            if ((!exploreOnlyDeserializedChildren && MyNonLazinatorRecordWithConstructor != null) || (_MyNonLazinatorRecordWithConstructor_Accessed && _MyNonLazinatorRecordWithConstructor != null))
             {
                 _MyNonLazinatorRecordWithConstructor = (NonLazinatorRecordWithConstructor) CloneOrChange_NonLazinatorRecordWithConstructor(_MyNonLazinatorRecordWithConstructor, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
@@ -672,8 +656,10 @@ namespace LazinatorTests.Examples.Tuples
                 _MyRecordLikeClass = (RecordLikeClass) CloneOrChange_RecordLikeClass(_MyRecordLikeClass, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             var deserialized_MyRecordLikeStruct = MyRecordLikeStruct;
-            _MyRecordLikeStruct = (RecordLikeStruct) CloneOrChange_RecordLikeStruct(_MyRecordLikeStruct, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);var deserialized_MyRecordLikeTypeWithLazinator = MyRecordLikeTypeWithLazinator;
-            _MyRecordLikeTypeWithLazinator = (RecordLikeTypeWithLazinator) CloneOrChange_RecordLikeTypeWithLazinator(_MyRecordLikeTypeWithLazinator, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);if (changeThisLevel && changeFunc != null)
+            _MyRecordLikeStruct = (RecordLikeStruct) CloneOrChange_RecordLikeStruct(_MyRecordLikeStruct, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
+            var deserialized_MyRecordLikeTypeWithLazinator = MyRecordLikeTypeWithLazinator;
+            _MyRecordLikeTypeWithLazinator = (RecordLikeTypeWithLazinator) CloneOrChange_RecordLikeTypeWithLazinator(_MyRecordLikeTypeWithLazinator, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }
@@ -713,846 +699,847 @@ namespace LazinatorTests.Examples.Tuples
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 36;
-            }
+            int lengthForLengths = 36;
             ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
         }
         
         protected virtual void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            _MyInt = span.ToDecompressedInt32(ref bytesSoFar);        }
-            
-            protected virtual int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
+            _MyInt = span.ToDecompressedInt32(ref bytesSoFar);
+        }
+        
+        protected virtual int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
+        {
+            int totalChildrenBytes = 0;
+            _ExternalRecordLikeStruct_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyMismatchedRecordLikeType_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyNonLazinatorRecordWithConstructor_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyNonLazinatorRecordWithoutConstructor_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyNonLazinatorSubrecordWithConstructor_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyNonLazinatorSubrecordWithoutConstructor_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyRecordLikeClass_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyRecordLikeStruct_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyRecordLikeTypeWithLazinator_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _RecordLikeContainer_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+            return totalChildrenBytes;
+        }
+        
+        public virtual void SerializeToExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        {
+            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Tuples.RecordLikeContainer ");
+            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
-                int totalChildrenBytes = 0;
-                _ExternalRecordLikeStruct_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-                totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyMismatchedRecordLikeType_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-                totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyNonLazinatorRecordWithConstructor_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-                totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyNonLazinatorRecordWithoutConstructor_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-                totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyNonLazinatorSubrecordWithConstructor_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-                totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyNonLazinatorSubrecordWithoutConstructor_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-                totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyRecordLikeClass_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-                totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyRecordLikeStruct_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-                totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyRecordLikeTypeWithLazinator_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-                totalChildrenBytes += span.ToInt32(ref bytesSoFar);_RecordLikeContainer_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
-                return totalChildrenBytes;
+                updateStoredBuffer = false;
+            }
+            int startPosition = writer.Position;
+            WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
+            if (updateStoredBuffer)
+            {
+                UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
+            }
+        }
+        
+        public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        {
+            _IsDirty = false;
+            if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            {
+                _DescendantIsDirty = false;
+                if (updateDeserializedChildren)
+                {
+                    UpdateDeserializedChildren(ref writer, startPosition);
+                }
+                
+            }
+            else
+            {
+                ThrowHelper.ThrowCannotUpdateStoredBuffer();
             }
             
-            public virtual void SerializeToExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+            var newBuffer = writer.Slice(startPosition, length);
+            LazinatorMemoryStorage = newBuffer;
+        }
+        
+        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        {
+            _ExternalRecordLikeStruct = (Point) CloneOrChange_Point(_ExternalRecordLikeStruct, l => l.RemoveBufferInHierarchy(), true);
+            _MyMismatchedRecordLikeType = (MismatchedRecordLikeType) CloneOrChange_MismatchedRecordLikeType(_MyMismatchedRecordLikeType, l => l.RemoveBufferInHierarchy(), true);
+            if (_MyNonLazinatorRecordWithConstructor_Accessed && _MyNonLazinatorRecordWithConstructor != null)
             {
-                TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Tuples.RecordLikeContainer ");
-                if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
-                {
-                    updateStoredBuffer = false;
-                }
-                int startPosition = writer.Position;
-                WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
-                if (updateStoredBuffer)
-                {
-                    UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
-                }
+                _MyNonLazinatorRecordWithConstructor = (NonLazinatorRecordWithConstructor) CloneOrChange_NonLazinatorRecordWithConstructor(_MyNonLazinatorRecordWithConstructor, l => l.RemoveBufferInHierarchy(), true);
             }
-            
-            public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+            if (_MyNonLazinatorRecordWithoutConstructor_Accessed && _MyNonLazinatorRecordWithoutConstructor != null)
             {
-                _IsDirty = false;
-                if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+                _MyNonLazinatorRecordWithoutConstructor = (NonLazinatorRecordWithoutConstructor) CloneOrChange_NonLazinatorRecordWithoutConstructor(_MyNonLazinatorRecordWithoutConstructor, l => l.RemoveBufferInHierarchy(), true);
+            }
+            if (_MyNonLazinatorSubrecordWithConstructor_Accessed && _MyNonLazinatorSubrecordWithConstructor != null)
+            {
+                _MyNonLazinatorSubrecordWithConstructor = (NonLazinatorSubrecordWithConstructor) CloneOrChange_NonLazinatorSubrecordWithConstructor(_MyNonLazinatorSubrecordWithConstructor, l => l.RemoveBufferInHierarchy(), true);
+            }
+            if (_MyNonLazinatorSubrecordWithoutConstructor_Accessed && _MyNonLazinatorSubrecordWithoutConstructor != null)
+            {
+                _MyNonLazinatorSubrecordWithoutConstructor = (NonLazinatorSubrecordWithoutConstructor) CloneOrChange_NonLazinatorSubrecordWithoutConstructor(_MyNonLazinatorSubrecordWithoutConstructor, l => l.RemoveBufferInHierarchy(), true);
+            }
+            if (_MyRecordLikeClass_Accessed && _MyRecordLikeClass != null)
+            {
+                _MyRecordLikeClass = (RecordLikeClass) CloneOrChange_RecordLikeClass(_MyRecordLikeClass, l => l.RemoveBufferInHierarchy(), true);
+            }
+            _MyRecordLikeStruct = (RecordLikeStruct) CloneOrChange_RecordLikeStruct(_MyRecordLikeStruct, l => l.RemoveBufferInHierarchy(), true);
+            _MyRecordLikeTypeWithLazinator = (RecordLikeTypeWithLazinator) CloneOrChange_RecordLikeTypeWithLazinator(_MyRecordLikeTypeWithLazinator, l => l.RemoveBufferInHierarchy(), true);
+        }
+        
+        
+        protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
+        {
+            int startPosition = writer.Position;
+            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Tuples.RecordLikeContainer starting at {writer.Position}.");
+            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
+            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
+            if (includeUniqueID)
+            {
+                if (!ContainsOpenGenericParameters)
                 {
-                    _DescendantIsDirty = false;
-                    if (updateDeserializedChildren)
-                    {
-                        UpdateDeserializedChildren(ref writer, startPosition);
-                    }
-                    
+                    CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
                 }
                 else
                 {
-                    ThrowHelper.ThrowCannotUpdateStoredBuffer();
+                    WriteLazinatorGenericID(ref writer, LazinatorGenericID);
                 }
-                
-                var newBuffer = writer.Slice(startPosition, length);
-                LazinatorMemoryStorage = newBuffer;
             }
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
+            writer.Write((byte)includeChildrenMode);
+            // write properties
             
-            protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+            WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
+            int lengthForLengths = 36;
+            Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
+            writer.Skip(lengthForLengths);
+            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
+            TabbedText.WriteLine($"Byte {writer.Position} (end of RecordLikeContainer) ");
+        }
+        
+        protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
+        {
+            TabbedText.WriteLine($"Byte {writer.Position}, MyInt value {_MyInt}");
+            TabbedText.Tabs++;
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyInt);
+            TabbedText.Tabs--;
+        }
+        
+        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition, Span<byte> lengthsSpan)
+        {
+            int startOfChildPosition = 0;
+            int lengthValue = 0;
+            TabbedText.WriteLine($"Byte {writer.Position}, ExternalRecordLikeStruct (accessed? {_ExternalRecordLikeStruct_Accessed})");
+            TabbedText.Tabs++;
+            startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
             {
-                _ExternalRecordLikeStruct = (Point) CloneOrChange_Point(_ExternalRecordLikeStruct, l => l.RemoveBufferInHierarchy(), true);_MyMismatchedRecordLikeType = (MismatchedRecordLikeType) CloneOrChange_MismatchedRecordLikeType(_MyMismatchedRecordLikeType, l => l.RemoveBufferInHierarchy(), true);if (_MyNonLazinatorRecordWithConstructor_Accessed && _MyNonLazinatorRecordWithConstructor != null)
-                {
-                    _MyNonLazinatorRecordWithConstructor = (NonLazinatorRecordWithConstructor) CloneOrChange_NonLazinatorRecordWithConstructor(_MyNonLazinatorRecordWithConstructor, l => l.RemoveBufferInHierarchy(), true);
-                }
-                if (_MyNonLazinatorRecordWithoutConstructor_Accessed && _MyNonLazinatorRecordWithoutConstructor != null)
-                {
-                    _MyNonLazinatorRecordWithoutConstructor = (NonLazinatorRecordWithoutConstructor) CloneOrChange_NonLazinatorRecordWithoutConstructor(_MyNonLazinatorRecordWithoutConstructor, l => l.RemoveBufferInHierarchy(), true);
-                }
-                if (_MyNonLazinatorSubrecordWithConstructor_Accessed && _MyNonLazinatorSubrecordWithConstructor != null)
-                {
-                    _MyNonLazinatorSubrecordWithConstructor = (NonLazinatorSubrecordWithConstructor) CloneOrChange_NonLazinatorSubrecordWithConstructor(_MyNonLazinatorSubrecordWithConstructor, l => l.RemoveBufferInHierarchy(), true);
-                }
-                if (_MyNonLazinatorSubrecordWithoutConstructor_Accessed && _MyNonLazinatorSubrecordWithoutConstructor != null)
-                {
-                    _MyNonLazinatorSubrecordWithoutConstructor = (NonLazinatorSubrecordWithoutConstructor) CloneOrChange_NonLazinatorSubrecordWithoutConstructor(_MyNonLazinatorSubrecordWithoutConstructor, l => l.RemoveBufferInHierarchy(), true);
-                }
-                if (_MyRecordLikeClass_Accessed && _MyRecordLikeClass != null)
-                {
-                    _MyRecordLikeClass = (RecordLikeClass) CloneOrChange_RecordLikeClass(_MyRecordLikeClass, l => l.RemoveBufferInHierarchy(), true);
-                }
-                _MyRecordLikeStruct = (RecordLikeStruct) CloneOrChange_RecordLikeStruct(_MyRecordLikeStruct, l => l.RemoveBufferInHierarchy(), true);_MyRecordLikeTypeWithLazinator = (RecordLikeTypeWithLazinator) CloneOrChange_RecordLikeTypeWithLazinator(_MyRecordLikeTypeWithLazinator, l => l.RemoveBufferInHierarchy(), true);}
-                
-                
-                protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
-                {
-                    int startPosition = writer.Position;
-                    TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Tuples.RecordLikeContainer starting at {writer.Position}.");
-                    TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
-                    TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
-                    if (includeUniqueID)
-                    {
-                        if (!ContainsOpenGenericParameters)
-                        {
-                            CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
-                        }
-                        else
-                        {
-                            WriteLazinatorGenericID(ref writer, LazinatorGenericID);
-                        }
-                    }
-                    CompressedIntegralTypes.WriteCompressedInt(ref writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
-                    CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
-                    writer.Write((byte)includeChildrenMode);
-                    // write properties
-                    
-                    WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
-                    int lengthForLengths = 0;
-                    if (true)
-                    {
-                        lengthForLengths += 36;
-                    }
-                    Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
-                    writer.Skip(lengthForLengths);
-                    WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
-                    TabbedText.WriteLine($"Byte {writer.Position} (end of RecordLikeContainer) ");
-                }
-                
-                protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
-                {
-                    TabbedText.WriteLine($"Byte {writer.Position}, MyInt value {_MyInt}");
-                    TabbedText.Tabs++;
-                    CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyInt);
-                    TabbedText.Tabs--;
-                }
-                
-                protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition, Span<byte> lengthsSpan)
-                {
-                    int startOfChildPosition = 0;
-                    int lengthValue = 0;
-                    TabbedText.WriteLine($"Byte {writer.Position}, ExternalRecordLikeStruct (accessed? {_ExternalRecordLikeStruct_Accessed})");
-                    TabbedText.Tabs++;
-                    startOfChildPosition = writer.Position;
-                    if (updateStoredBuffer)
-                    {
-                        _ExternalRecordLikeStruct_ByteIndex = writer.Position - startOfObjectPosition;
-                    }
-                    if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ExternalRecordLikeStruct_Accessed)
-                    {
-                        var deserialized = ExternalRecordLikeStruct;
-                    }
-                    WriteNonLazinatorObject(
-                    nonLazinatorObject: _ExternalRecordLikeStruct, isBelievedDirty: _ExternalRecordLikeStruct_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
-                    isAccessed: _ExternalRecordLikeStruct_Accessed, writer: ref writer,
-                    getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _ExternalRecordLikeStruct_ByteIndex, _ExternalRecordLikeStruct_ByteLength, true, false, null),
-                    verifyCleanness: false,
-                    binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-                    ConvertToBytes_Point(ref w, _ExternalRecordLikeStruct,
-                    includeChildrenMode, v, updateStoredBuffer),
-                    lengthsSpan: ref lengthsSpan);
-                    TabbedText.Tabs--;
-                    TabbedText.WriteLine($"Byte {writer.Position}, MyMismatchedRecordLikeType (accessed? {_MyMismatchedRecordLikeType_Accessed})");
-                    TabbedText.Tabs++;
-                    startOfChildPosition = writer.Position;
-                    if (updateStoredBuffer)
-                    {
-                        _MyMismatchedRecordLikeType_ByteIndex = writer.Position - startOfObjectPosition;
-                    }
-                    if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyMismatchedRecordLikeType_Accessed)
-                    {
-                        var deserialized = MyMismatchedRecordLikeType;
-                    }
-                    WriteNonLazinatorObject(
-                    nonLazinatorObject: _MyMismatchedRecordLikeType, isBelievedDirty: _MyMismatchedRecordLikeType_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
-                    isAccessed: _MyMismatchedRecordLikeType_Accessed, writer: ref writer,
-                    getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyMismatchedRecordLikeType_ByteIndex, _MyMismatchedRecordLikeType_ByteLength, true, false, null),
-                    verifyCleanness: false,
-                    binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-                    ConvertToBytes_MismatchedRecordLikeType(ref w, _MyMismatchedRecordLikeType,
-                    includeChildrenMode, v, updateStoredBuffer),
-                    lengthsSpan: ref lengthsSpan);
-                    TabbedText.Tabs--;
-                    TabbedText.WriteLine($"Byte {writer.Position}, MyNonLazinatorRecordWithConstructor (accessed? {_MyNonLazinatorRecordWithConstructor_Accessed})");
-                    TabbedText.Tabs++;
-                    startOfChildPosition = writer.Position;
-                    if (updateStoredBuffer)
-                    {
-                        _MyNonLazinatorRecordWithConstructor_ByteIndex = writer.Position - startOfObjectPosition;
-                    }
-                    if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyNonLazinatorRecordWithConstructor_Accessed)
-                    {
-                        var deserialized = MyNonLazinatorRecordWithConstructor;
-                    }
-                    WriteNonLazinatorObject(
-                    nonLazinatorObject: _MyNonLazinatorRecordWithConstructor, isBelievedDirty: _MyNonLazinatorRecordWithConstructor_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
-                    isAccessed: _MyNonLazinatorRecordWithConstructor_Accessed, writer: ref writer,
-                    getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorRecordWithConstructor_ByteIndex, _MyNonLazinatorRecordWithConstructor_ByteLength, true, false, null),
-                    verifyCleanness: false,
-                    binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-                    ConvertToBytes_NonLazinatorRecordWithConstructor(ref w, _MyNonLazinatorRecordWithConstructor,
-                    includeChildrenMode, v, updateStoredBuffer),
-                    lengthsSpan: ref lengthsSpan);
-                    TabbedText.Tabs--;
-                    TabbedText.WriteLine($"Byte {writer.Position}, MyNonLazinatorRecordWithoutConstructor (accessed? {_MyNonLazinatorRecordWithoutConstructor_Accessed})");
-                    TabbedText.Tabs++;
-                    startOfChildPosition = writer.Position;
-                    if (updateStoredBuffer)
-                    {
-                        _MyNonLazinatorRecordWithoutConstructor_ByteIndex = writer.Position - startOfObjectPosition;
-                    }
-                    if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyNonLazinatorRecordWithoutConstructor_Accessed)
-                    {
-                        var deserialized = MyNonLazinatorRecordWithoutConstructor;
-                    }
-                    WriteNonLazinatorObject(
-                    nonLazinatorObject: _MyNonLazinatorRecordWithoutConstructor, isBelievedDirty: _MyNonLazinatorRecordWithoutConstructor_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
-                    isAccessed: _MyNonLazinatorRecordWithoutConstructor_Accessed, writer: ref writer,
-                    getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorRecordWithoutConstructor_ByteIndex, _MyNonLazinatorRecordWithoutConstructor_ByteLength, true, false, null),
-                    verifyCleanness: false,
-                    binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-                    ConvertToBytes_NonLazinatorRecordWithoutConstructor(ref w, _MyNonLazinatorRecordWithoutConstructor,
-                    includeChildrenMode, v, updateStoredBuffer),
-                    lengthsSpan: ref lengthsSpan);
-                    TabbedText.Tabs--;
-                    TabbedText.WriteLine($"Byte {writer.Position}, MyNonLazinatorSubrecordWithConstructor (accessed? {_MyNonLazinatorSubrecordWithConstructor_Accessed})");
-                    TabbedText.Tabs++;
-                    startOfChildPosition = writer.Position;
-                    if (updateStoredBuffer)
-                    {
-                        _MyNonLazinatorSubrecordWithConstructor_ByteIndex = writer.Position - startOfObjectPosition;
-                    }
-                    if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyNonLazinatorSubrecordWithConstructor_Accessed)
-                    {
-                        var deserialized = MyNonLazinatorSubrecordWithConstructor;
-                    }
-                    WriteNonLazinatorObject(
-                    nonLazinatorObject: _MyNonLazinatorSubrecordWithConstructor, isBelievedDirty: _MyNonLazinatorSubrecordWithConstructor_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
-                    isAccessed: _MyNonLazinatorSubrecordWithConstructor_Accessed, writer: ref writer,
-                    getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorSubrecordWithConstructor_ByteIndex, _MyNonLazinatorSubrecordWithConstructor_ByteLength, true, false, null),
-                    verifyCleanness: false,
-                    binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-                    ConvertToBytes_NonLazinatorSubrecordWithConstructor(ref w, _MyNonLazinatorSubrecordWithConstructor,
-                    includeChildrenMode, v, updateStoredBuffer),
-                    lengthsSpan: ref lengthsSpan);
-                    TabbedText.Tabs--;
-                    TabbedText.WriteLine($"Byte {writer.Position}, MyNonLazinatorSubrecordWithoutConstructor (accessed? {_MyNonLazinatorSubrecordWithoutConstructor_Accessed})");
-                    TabbedText.Tabs++;
-                    startOfChildPosition = writer.Position;
-                    if (updateStoredBuffer)
-                    {
-                        _MyNonLazinatorSubrecordWithoutConstructor_ByteIndex = writer.Position - startOfObjectPosition;
-                    }
-                    if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyNonLazinatorSubrecordWithoutConstructor_Accessed)
-                    {
-                        var deserialized = MyNonLazinatorSubrecordWithoutConstructor;
-                    }
-                    WriteNonLazinatorObject(
-                    nonLazinatorObject: _MyNonLazinatorSubrecordWithoutConstructor, isBelievedDirty: _MyNonLazinatorSubrecordWithoutConstructor_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
-                    isAccessed: _MyNonLazinatorSubrecordWithoutConstructor_Accessed, writer: ref writer,
-                    getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorSubrecordWithoutConstructor_ByteIndex, _MyNonLazinatorSubrecordWithoutConstructor_ByteLength, true, false, null),
-                    verifyCleanness: false,
-                    binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-                    ConvertToBytes_NonLazinatorSubrecordWithoutConstructor(ref w, _MyNonLazinatorSubrecordWithoutConstructor,
-                    includeChildrenMode, v, updateStoredBuffer),
-                    lengthsSpan: ref lengthsSpan);
-                    TabbedText.Tabs--;
-                    TabbedText.WriteLine($"Byte {writer.Position}, MyRecordLikeClass (accessed? {_MyRecordLikeClass_Accessed})");
-                    TabbedText.Tabs++;
-                    startOfChildPosition = writer.Position;
-                    if (updateStoredBuffer)
-                    {
-                        _MyRecordLikeClass_ByteIndex = writer.Position - startOfObjectPosition;
-                    }
-                    if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyRecordLikeClass_Accessed)
-                    {
-                        var deserialized = MyRecordLikeClass;
-                    }
-                    WriteNonLazinatorObject(
-                    nonLazinatorObject: _MyRecordLikeClass, isBelievedDirty: _MyRecordLikeClass_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
-                    isAccessed: _MyRecordLikeClass_Accessed, writer: ref writer,
-                    getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeClass_ByteIndex, _MyRecordLikeClass_ByteLength, true, false, null),
-                    verifyCleanness: false,
-                    binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-                    ConvertToBytes_RecordLikeClass(ref w, _MyRecordLikeClass,
-                    includeChildrenMode, v, updateStoredBuffer),
-                    lengthsSpan: ref lengthsSpan);
-                    TabbedText.Tabs--;
-                    TabbedText.WriteLine($"Byte {writer.Position}, MyRecordLikeStruct (accessed? {_MyRecordLikeStruct_Accessed})");
-                    TabbedText.Tabs++;
-                    startOfChildPosition = writer.Position;
-                    if (updateStoredBuffer)
-                    {
-                        _MyRecordLikeStruct_ByteIndex = writer.Position - startOfObjectPosition;
-                    }
-                    if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyRecordLikeStruct_Accessed)
-                    {
-                        var deserialized = MyRecordLikeStruct;
-                    }
-                    WriteNonLazinatorObject(
-                    nonLazinatorObject: _MyRecordLikeStruct, isBelievedDirty: _MyRecordLikeStruct_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
-                    isAccessed: _MyRecordLikeStruct_Accessed, writer: ref writer,
-                    getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeStruct_ByteIndex, _MyRecordLikeStruct_ByteLength, true, false, null),
-                    verifyCleanness: false,
-                    binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-                    ConvertToBytes_RecordLikeStruct(ref w, _MyRecordLikeStruct,
-                    includeChildrenMode, v, updateStoredBuffer),
-                    lengthsSpan: ref lengthsSpan);
-                    TabbedText.Tabs--;
-                    TabbedText.WriteLine($"Byte {writer.Position}, MyRecordLikeTypeWithLazinator (accessed? {_MyRecordLikeTypeWithLazinator_Accessed})");
-                    TabbedText.Tabs++;
-                    startOfChildPosition = writer.Position;
-                    if (updateStoredBuffer)
-                    {
-                        _MyRecordLikeTypeWithLazinator_ByteIndex = writer.Position - startOfObjectPosition;
-                    }
-                    if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyRecordLikeTypeWithLazinator_Accessed)
-                    {
-                        var deserialized = MyRecordLikeTypeWithLazinator;
-                    }
-                    WriteNonLazinatorObject(
-                    nonLazinatorObject: _MyRecordLikeTypeWithLazinator, isBelievedDirty: _MyRecordLikeTypeWithLazinator_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
-                    isAccessed: _MyRecordLikeTypeWithLazinator_Accessed, writer: ref writer,
-                    getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeTypeWithLazinator_ByteIndex, _MyRecordLikeTypeWithLazinator_ByteLength, true, false, null),
-                    verifyCleanness: false,
-                    binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-                    ConvertToBytes_RecordLikeTypeWithLazinator(ref w, _MyRecordLikeTypeWithLazinator,
-                    includeChildrenMode, v, updateStoredBuffer),
-                    lengthsSpan: ref lengthsSpan);
-                    if (updateStoredBuffer)
-                    {
-                        _MyRecordLikeTypeWithLazinator = (RecordLikeTypeWithLazinator) CloneOrChange_RecordLikeTypeWithLazinator(_MyRecordLikeTypeWithLazinator, l => l.RemoveBufferInHierarchy(), true);
-                    }
-                    TabbedText.Tabs--;
-                    if (updateStoredBuffer)
-                    {
-                        _RecordLikeContainer_EndByteIndex = writer.Position - startOfObjectPosition;
-                    }
-                }
-                
-                /* Conversion of supported collections and tuples */
-                
-                private static Point ConvertFromBytes_Point(LazinatorMemory storage)
-                {
-                    if (storage.Length == 0)
-                    {
-                        return default;
-                    }
-                    ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
-                    
-                    int bytesSoFar = 0;
-                    
-                    int item1 = span.ToDecompressedInt32(ref bytesSoFar);
-                    
-                    int item2 = span.ToDecompressedInt32(ref bytesSoFar);
-                    
-                    var itemToCreate = new Point(item1, item2);
-                    
-                    return itemToCreate;
-                }
-                
-                private static void ConvertToBytes_Point(ref BinaryBufferWriter writer, Point itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-                {
-                    
-                    CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.X);
-                    
-                    CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Y);
-                }
-                
-                private static Point CloneOrChange_Point(Point itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
-                {
-                    return new Point((int) (itemToConvert.X), (int) (itemToConvert.Y));
-                }
-                
-                private static MismatchedRecordLikeType ConvertFromBytes_MismatchedRecordLikeType(LazinatorMemory storage)
-                {
-                    if (storage.Length == 0)
-                    {
-                        return default;
-                    }
-                    ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
-                    
-                    int bytesSoFar = 0;
-                    
-                    int item1 = span.ToDecompressedInt32(ref bytesSoFar);
-                    
-                    string item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
-                    
-                    var itemToCreate = new MismatchedRecordLikeType(item1, item2);
-                    
-                    return itemToCreate;
-                }
-                
-                private static void ConvertToBytes_MismatchedRecordLikeType(ref BinaryBufferWriter writer, MismatchedRecordLikeType itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-                {
-                    
-                    CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
-                    
-                    EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, itemToConvert.Name);
-                }
-                
-                private static MismatchedRecordLikeType CloneOrChange_MismatchedRecordLikeType(MismatchedRecordLikeType itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
-                {
-                    return new MismatchedRecordLikeType((int) (itemToConvert.Age), (string) (itemToConvert.Name));
-                }
-                
-                private static NonLazinatorRecordWithConstructor ConvertFromBytes_NonLazinatorRecordWithConstructor(LazinatorMemory storage)
-                {
-                    if (storage.Length == 0)
-                    {
-                        return default;
-                    }
-                    ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
-                    
-                    int bytesSoFar = 0;
-                    
-                    int item1 = span.ToDecompressedInt32(ref bytesSoFar);
-                    
-                    Example item2 = default(Example);
-                    int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
-                    if (lengthCollectionMember_item2 != 0)
-                    {
-                        LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
-                        item2 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
-                    }
-                    bytesSoFar += lengthCollectionMember_item2;
-                    
-                    double item3 = span.ToDouble(ref bytesSoFar);
-                    
-                    int? item4 = span.ToDecompressedNullableInt32(ref bytesSoFar);
-                    
-                    var itemToCreate = new NonLazinatorRecordWithConstructor(item1, item2, item3, item4);
-                    
-                    return itemToCreate;
-                }
-                
-                private static void ConvertToBytes_NonLazinatorRecordWithConstructor(ref BinaryBufferWriter writer, NonLazinatorRecordWithConstructor itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-                {
-                    if (itemToConvert == null)
-                    {
-                        return;
-                    }
-                    
-                    CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
-                    
-                    if (itemToConvert.Example == null)
-                    {
-                        writer.Write((uint)0);
-                    }
-                    else
-                    {
-                        void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                        WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
-                    };
-                    
-                    WriteUncompressedPrimitives.WriteDouble(ref writer, itemToConvert.DoubleValue);
-                    
-                    CompressedIntegralTypes.WriteCompressedNullableInt(ref writer, itemToConvert.NullableInt);
-                }
-                
-                private static NonLazinatorRecordWithConstructor CloneOrChange_NonLazinatorRecordWithConstructor(NonLazinatorRecordWithConstructor itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
-                {
-                    if (itemToConvert == null)
-                    {
-                        return default(NonLazinatorRecordWithConstructor);
-                    }
-                    
-                    return new NonLazinatorRecordWithConstructor((int) (itemToConvert?.Age ?? default), (Example) (cloneOrChangeFunc((itemToConvert?.Example))), (double) (itemToConvert?.DoubleValue ?? default), (int?) (itemToConvert?.NullableInt));
-                }
-                
-                private static NonLazinatorRecordWithoutConstructor ConvertFromBytes_NonLazinatorRecordWithoutConstructor(LazinatorMemory storage)
-                {
-                    if (storage.Length == 0)
-                    {
-                        return default;
-                    }
-                    ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
-                    
-                    int bytesSoFar = 0;
-                    
-                    int item1 = span.ToDecompressedInt32(ref bytesSoFar);
-                    
-                    double item2 = span.ToDouble(ref bytesSoFar);
-                    
-                    Example item3 = default(Example);
-                    int lengthCollectionMember_item3 = span.ToInt32(ref bytesSoFar);
-                    if (lengthCollectionMember_item3 != 0)
-                    {
-                        LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item3);
-                        item3 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
-                    }
-                    bytesSoFar += lengthCollectionMember_item3;
-                    
-                    int? item4 = span.ToDecompressedNullableInt32(ref bytesSoFar);
-                    
-                    var itemToCreate = new NonLazinatorRecordWithoutConstructor()
-                    {
-                        Age = item1,
-                        DoubleValue = item2,
-                        Example = item3,
-                        NullableInt = item4
-                    };
-                    
-                    return itemToCreate;
-                }
-                
-                private static void ConvertToBytes_NonLazinatorRecordWithoutConstructor(ref BinaryBufferWriter writer, NonLazinatorRecordWithoutConstructor itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-                {
-                    if (itemToConvert == null)
-                    {
-                        return;
-                    }
-                    
-                    CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
-                    
-                    WriteUncompressedPrimitives.WriteDouble(ref writer, itemToConvert.DoubleValue);
-                    
-                    if (itemToConvert.Example == null)
-                    {
-                        writer.Write((uint)0);
-                    }
-                    else
-                    {
-                        void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                        WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
-                    };
-                    
-                    CompressedIntegralTypes.WriteCompressedNullableInt(ref writer, itemToConvert.NullableInt);
-                }
-                
-                private static NonLazinatorRecordWithoutConstructor CloneOrChange_NonLazinatorRecordWithoutConstructor(NonLazinatorRecordWithoutConstructor itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
-                {
-                    if (itemToConvert == null)
-                    {
-                        return default(NonLazinatorRecordWithoutConstructor);
-                    }
-                    
-                    return new NonLazinatorRecordWithoutConstructor()
-                    {
-                        Age = (int) (itemToConvert?.Age ?? default),
-                        DoubleValue = (double) (itemToConvert?.DoubleValue ?? default),
-                        Example = (Example) (cloneOrChangeFunc((itemToConvert?.Example))),
-                        NullableInt = (int?) (itemToConvert?.NullableInt)
-                    };
-                }
-                
-                private static NonLazinatorSubrecordWithConstructor ConvertFromBytes_NonLazinatorSubrecordWithConstructor(LazinatorMemory storage)
-                {
-                    if (storage.Length == 0)
-                    {
-                        return default;
-                    }
-                    ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
-                    
-                    int bytesSoFar = 0;
-                    
-                    int item1 = span.ToDecompressedInt32(ref bytesSoFar);
-                    
-                    Example item2 = default(Example);
-                    int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
-                    if (lengthCollectionMember_item2 != 0)
-                    {
-                        LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
-                        item2 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
-                    }
-                    bytesSoFar += lengthCollectionMember_item2;
-                    
-                    double item3 = span.ToDouble(ref bytesSoFar);
-                    
-                    int? item4 = span.ToDecompressedNullableInt32(ref bytesSoFar);
-                    
-                    string item5 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
-                    
-                    var itemToCreate = new NonLazinatorSubrecordWithConstructor(item1, item2, item3, item4, item5);
-                    
-                    return itemToCreate;
-                }
-                
-                private static void ConvertToBytes_NonLazinatorSubrecordWithConstructor(ref BinaryBufferWriter writer, NonLazinatorSubrecordWithConstructor itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-                {
-                    if (itemToConvert == null)
-                    {
-                        return;
-                    }
-                    
-                    CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
-                    
-                    if (itemToConvert.Example == null)
-                    {
-                        writer.Write((uint)0);
-                    }
-                    else
-                    {
-                        void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                        WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
-                    };
-                    
-                    WriteUncompressedPrimitives.WriteDouble(ref writer, itemToConvert.DoubleValue);
-                    
-                    CompressedIntegralTypes.WriteCompressedNullableInt(ref writer, itemToConvert.NullableInt);
-                    
-                    EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, itemToConvert.MyString);
-                }
-                
-                private static NonLazinatorSubrecordWithConstructor CloneOrChange_NonLazinatorSubrecordWithConstructor(NonLazinatorSubrecordWithConstructor itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
-                {
-                    if (itemToConvert == null)
-                    {
-                        return default(NonLazinatorSubrecordWithConstructor);
-                    }
-                    
-                    return new NonLazinatorSubrecordWithConstructor((int) (itemToConvert?.Age ?? default), (Example) (cloneOrChangeFunc((itemToConvert?.Example))), (double) (itemToConvert?.DoubleValue ?? default), (int?) (itemToConvert?.NullableInt), (string) (itemToConvert?.MyString));
-                }
-                
-                private static NonLazinatorSubrecordWithoutConstructor ConvertFromBytes_NonLazinatorSubrecordWithoutConstructor(LazinatorMemory storage)
-                {
-                    if (storage.Length == 0)
-                    {
-                        return default;
-                    }
-                    ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
-                    
-                    int bytesSoFar = 0;
-                    
-                    string item1 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
-                    
-                    int item2 = span.ToDecompressedInt32(ref bytesSoFar);
-                    
-                    double item3 = span.ToDouble(ref bytesSoFar);
-                    
-                    Example item4 = default(Example);
-                    int lengthCollectionMember_item4 = span.ToInt32(ref bytesSoFar);
-                    if (lengthCollectionMember_item4 != 0)
-                    {
-                        LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item4);
-                        item4 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
-                    }
-                    bytesSoFar += lengthCollectionMember_item4;
-                    
-                    int? item5 = span.ToDecompressedNullableInt32(ref bytesSoFar);
-                    
-                    var itemToCreate = new NonLazinatorSubrecordWithoutConstructor()
-                    {
-                        MyString = item1,
-                        Age = item2,
-                        DoubleValue = item3,
-                        Example = item4,
-                        NullableInt = item5
-                    };
-                    
-                    return itemToCreate;
-                }
-                
-                private static void ConvertToBytes_NonLazinatorSubrecordWithoutConstructor(ref BinaryBufferWriter writer, NonLazinatorSubrecordWithoutConstructor itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-                {
-                    if (itemToConvert == null)
-                    {
-                        return;
-                    }
-                    
-                    EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, itemToConvert.MyString);
-                    
-                    CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
-                    
-                    WriteUncompressedPrimitives.WriteDouble(ref writer, itemToConvert.DoubleValue);
-                    
-                    if (itemToConvert.Example == null)
-                    {
-                        writer.Write((uint)0);
-                    }
-                    else
-                    {
-                        void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                        WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
-                    };
-                    
-                    CompressedIntegralTypes.WriteCompressedNullableInt(ref writer, itemToConvert.NullableInt);
-                }
-                
-                private static NonLazinatorSubrecordWithoutConstructor CloneOrChange_NonLazinatorSubrecordWithoutConstructor(NonLazinatorSubrecordWithoutConstructor itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
-                {
-                    if (itemToConvert == null)
-                    {
-                        return default(NonLazinatorSubrecordWithoutConstructor);
-                    }
-                    
-                    return new NonLazinatorSubrecordWithoutConstructor()
-                    {
-                        MyString = (string) (itemToConvert?.MyString),
-                        Age = (int) (itemToConvert?.Age ?? default),
-                        DoubleValue = (double) (itemToConvert?.DoubleValue ?? default),
-                        Example = (Example) (cloneOrChangeFunc((itemToConvert?.Example))),
-                        NullableInt = (int?) (itemToConvert?.NullableInt)
-                    };
-                }
-                
-                private static RecordLikeClass ConvertFromBytes_RecordLikeClass(LazinatorMemory storage)
-                {
-                    if (storage.Length == 0)
-                    {
-                        return default;
-                    }
-                    ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
-                    
-                    int bytesSoFar = 0;
-                    
-                    int item1 = span.ToDecompressedInt32(ref bytesSoFar);
-                    
-                    Example item2 = default(Example);
-                    int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
-                    if (lengthCollectionMember_item2 != 0)
-                    {
-                        LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
-                        item2 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
-                    }
-                    bytesSoFar += lengthCollectionMember_item2;
-                    
-                    var itemToCreate = new RecordLikeClass(item1, item2);
-                    
-                    return itemToCreate;
-                }
-                
-                private static void ConvertToBytes_RecordLikeClass(ref BinaryBufferWriter writer, RecordLikeClass itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-                {
-                    if (itemToConvert == null)
-                    {
-                        return;
-                    }
-                    
-                    CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
-                    
-                    if (itemToConvert.Example == null)
-                    {
-                        writer.Write((uint)0);
-                    }
-                    else
-                    {
-                        void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                        WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
-                    };
-                }
-                
-                private static RecordLikeClass CloneOrChange_RecordLikeClass(RecordLikeClass itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
-                {
-                    if (itemToConvert == null)
-                    {
-                        return default(RecordLikeClass);
-                    }
-                    
-                    return new RecordLikeClass((int) (itemToConvert?.Age ?? default), (Example) (cloneOrChangeFunc((itemToConvert?.Example))));
-                }
-                
-                private static RecordLikeStruct ConvertFromBytes_RecordLikeStruct(LazinatorMemory storage)
-                {
-                    if (storage.Length == 0)
-                    {
-                        return default;
-                    }
-                    ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
-                    
-                    int bytesSoFar = 0;
-                    
-                    int item1 = span.ToDecompressedInt32(ref bytesSoFar);
-                    
-                    string item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
-                    
-                    var itemToCreate = new RecordLikeStruct(item1, item2);
-                    
-                    return itemToCreate;
-                }
-                
-                private static void ConvertToBytes_RecordLikeStruct(ref BinaryBufferWriter writer, RecordLikeStruct itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-                {
-                    
-                    CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
-                    
-                    EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, itemToConvert.Name);
-                }
-                
-                private static RecordLikeStruct CloneOrChange_RecordLikeStruct(RecordLikeStruct itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
-                {
-                    return new RecordLikeStruct((int) (itemToConvert.Age), (string) (itemToConvert.Name));
-                }
-                
-                private static RecordLikeTypeWithLazinator ConvertFromBytes_RecordLikeTypeWithLazinator(LazinatorMemory storage)
-                {
-                    if (storage.Length == 0)
-                    {
-                        return default;
-                    }
-                    ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
-                    
-                    int bytesSoFar = 0;
-                    
-                    int item1 = span.ToDecompressedInt32(ref bytesSoFar);
-                    
-                    string item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
-                    
-                    Example item3 = default(Example);
-                    int lengthCollectionMember_item3 = span.ToInt32(ref bytesSoFar);
-                    if (lengthCollectionMember_item3 != 0)
-                    {
-                        LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item3);
-                        item3 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
-                    }
-                    bytesSoFar += lengthCollectionMember_item3;
-                    
-                    ExampleStructWithoutClass item4 = default(ExampleStructWithoutClass);
-                    int lengthCollectionMember_item4 = span.ToInt32(ref bytesSoFar);
-                    if (lengthCollectionMember_item4 != 0)
-                    {
-                        LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item4);
-                        item4 = new ExampleStructWithoutClass(childData);
-                    }
-                    bytesSoFar += lengthCollectionMember_item4;
-                    
-                    var itemToCreate = new RecordLikeTypeWithLazinator(item1, item2, item3, item4);
-                    
-                    return itemToCreate;
-                }
-                
-                private static void ConvertToBytes_RecordLikeTypeWithLazinator(ref BinaryBufferWriter writer, RecordLikeTypeWithLazinator itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-                {
-                    
-                    CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
-                    
-                    EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, itemToConvert.Name);
-                    
-                    if (itemToConvert.Example == null)
-                    {
-                        writer.Write((uint)0);
-                    }
-                    else
-                    {
-                        void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                        WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
-                    };
-                    
-                    void actionExampleStruct(ref BinaryBufferWriter w) => itemToConvert.ExampleStruct.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                    WriteToBinaryWithIntLengthPrefix(ref writer, actionExampleStruct);
-                }
-                
-                private static RecordLikeTypeWithLazinator CloneOrChange_RecordLikeTypeWithLazinator(RecordLikeTypeWithLazinator itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
-                {
-                    return new RecordLikeTypeWithLazinator((int) (itemToConvert.Age), (string) (itemToConvert.Name), (Example) (cloneOrChangeFunc((itemToConvert.Example))), (ExampleStructWithoutClass) (cloneOrChangeFunc((itemToConvert.ExampleStruct))));
-                }
-                
+                _ExternalRecordLikeStruct_ByteIndex = writer.Position - startOfObjectPosition;
+            }
+            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ExternalRecordLikeStruct_Accessed)
+            {
+                var deserialized = ExternalRecordLikeStruct;
+            }
+            WriteNonLazinatorObject(
+            nonLazinatorObject: _ExternalRecordLikeStruct, isBelievedDirty: _ExternalRecordLikeStruct_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
+            isAccessed: _ExternalRecordLikeStruct_Accessed, writer: ref writer,
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _ExternalRecordLikeStruct_ByteIndex, _ExternalRecordLikeStruct_ByteLength, true, false, null),
+            verifyCleanness: false,
+            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            ConvertToBytes_Point(ref w, _ExternalRecordLikeStruct,
+            includeChildrenMode, v, updateStoredBuffer),
+            lengthsSpan: ref lengthsSpan);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.Position}, MyMismatchedRecordLikeType (accessed? {_MyMismatchedRecordLikeType_Accessed})");
+            TabbedText.Tabs++;
+            startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyMismatchedRecordLikeType_ByteIndex = writer.Position - startOfObjectPosition;
+            }
+            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyMismatchedRecordLikeType_Accessed)
+            {
+                var deserialized = MyMismatchedRecordLikeType;
+            }
+            WriteNonLazinatorObject(
+            nonLazinatorObject: _MyMismatchedRecordLikeType, isBelievedDirty: _MyMismatchedRecordLikeType_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
+            isAccessed: _MyMismatchedRecordLikeType_Accessed, writer: ref writer,
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyMismatchedRecordLikeType_ByteIndex, _MyMismatchedRecordLikeType_ByteLength, true, false, null),
+            verifyCleanness: false,
+            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            ConvertToBytes_MismatchedRecordLikeType(ref w, _MyMismatchedRecordLikeType,
+            includeChildrenMode, v, updateStoredBuffer),
+            lengthsSpan: ref lengthsSpan);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.Position}, MyNonLazinatorRecordWithConstructor (accessed? {_MyNonLazinatorRecordWithConstructor_Accessed})");
+            TabbedText.Tabs++;
+            startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyNonLazinatorRecordWithConstructor_ByteIndex = writer.Position - startOfObjectPosition;
+            }
+            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyNonLazinatorRecordWithConstructor_Accessed)
+            {
+                var deserialized = MyNonLazinatorRecordWithConstructor;
+            }
+            WriteNonLazinatorObject(
+            nonLazinatorObject: _MyNonLazinatorRecordWithConstructor, isBelievedDirty: _MyNonLazinatorRecordWithConstructor_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
+            isAccessed: _MyNonLazinatorRecordWithConstructor_Accessed, writer: ref writer,
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorRecordWithConstructor_ByteIndex, _MyNonLazinatorRecordWithConstructor_ByteLength, true, false, null),
+            verifyCleanness: false,
+            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            ConvertToBytes_NonLazinatorRecordWithConstructor(ref w, _MyNonLazinatorRecordWithConstructor,
+            includeChildrenMode, v, updateStoredBuffer),
+            lengthsSpan: ref lengthsSpan);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.Position}, MyNonLazinatorRecordWithoutConstructor (accessed? {_MyNonLazinatorRecordWithoutConstructor_Accessed})");
+            TabbedText.Tabs++;
+            startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyNonLazinatorRecordWithoutConstructor_ByteIndex = writer.Position - startOfObjectPosition;
+            }
+            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyNonLazinatorRecordWithoutConstructor_Accessed)
+            {
+                var deserialized = MyNonLazinatorRecordWithoutConstructor;
+            }
+            WriteNonLazinatorObject(
+            nonLazinatorObject: _MyNonLazinatorRecordWithoutConstructor, isBelievedDirty: _MyNonLazinatorRecordWithoutConstructor_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
+            isAccessed: _MyNonLazinatorRecordWithoutConstructor_Accessed, writer: ref writer,
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorRecordWithoutConstructor_ByteIndex, _MyNonLazinatorRecordWithoutConstructor_ByteLength, true, false, null),
+            verifyCleanness: false,
+            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            ConvertToBytes_NonLazinatorRecordWithoutConstructor(ref w, _MyNonLazinatorRecordWithoutConstructor,
+            includeChildrenMode, v, updateStoredBuffer),
+            lengthsSpan: ref lengthsSpan);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.Position}, MyNonLazinatorSubrecordWithConstructor (accessed? {_MyNonLazinatorSubrecordWithConstructor_Accessed})");
+            TabbedText.Tabs++;
+            startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyNonLazinatorSubrecordWithConstructor_ByteIndex = writer.Position - startOfObjectPosition;
+            }
+            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyNonLazinatorSubrecordWithConstructor_Accessed)
+            {
+                var deserialized = MyNonLazinatorSubrecordWithConstructor;
+            }
+            WriteNonLazinatorObject(
+            nonLazinatorObject: _MyNonLazinatorSubrecordWithConstructor, isBelievedDirty: _MyNonLazinatorSubrecordWithConstructor_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
+            isAccessed: _MyNonLazinatorSubrecordWithConstructor_Accessed, writer: ref writer,
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorSubrecordWithConstructor_ByteIndex, _MyNonLazinatorSubrecordWithConstructor_ByteLength, true, false, null),
+            verifyCleanness: false,
+            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            ConvertToBytes_NonLazinatorSubrecordWithConstructor(ref w, _MyNonLazinatorSubrecordWithConstructor,
+            includeChildrenMode, v, updateStoredBuffer),
+            lengthsSpan: ref lengthsSpan);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.Position}, MyNonLazinatorSubrecordWithoutConstructor (accessed? {_MyNonLazinatorSubrecordWithoutConstructor_Accessed})");
+            TabbedText.Tabs++;
+            startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyNonLazinatorSubrecordWithoutConstructor_ByteIndex = writer.Position - startOfObjectPosition;
+            }
+            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyNonLazinatorSubrecordWithoutConstructor_Accessed)
+            {
+                var deserialized = MyNonLazinatorSubrecordWithoutConstructor;
+            }
+            WriteNonLazinatorObject(
+            nonLazinatorObject: _MyNonLazinatorSubrecordWithoutConstructor, isBelievedDirty: _MyNonLazinatorSubrecordWithoutConstructor_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
+            isAccessed: _MyNonLazinatorSubrecordWithoutConstructor_Accessed, writer: ref writer,
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorSubrecordWithoutConstructor_ByteIndex, _MyNonLazinatorSubrecordWithoutConstructor_ByteLength, true, false, null),
+            verifyCleanness: false,
+            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            ConvertToBytes_NonLazinatorSubrecordWithoutConstructor(ref w, _MyNonLazinatorSubrecordWithoutConstructor,
+            includeChildrenMode, v, updateStoredBuffer),
+            lengthsSpan: ref lengthsSpan);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.Position}, MyRecordLikeClass (accessed? {_MyRecordLikeClass_Accessed})");
+            TabbedText.Tabs++;
+            startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyRecordLikeClass_ByteIndex = writer.Position - startOfObjectPosition;
+            }
+            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyRecordLikeClass_Accessed)
+            {
+                var deserialized = MyRecordLikeClass;
+            }
+            WriteNonLazinatorObject(
+            nonLazinatorObject: _MyRecordLikeClass, isBelievedDirty: _MyRecordLikeClass_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
+            isAccessed: _MyRecordLikeClass_Accessed, writer: ref writer,
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeClass_ByteIndex, _MyRecordLikeClass_ByteLength, true, false, null),
+            verifyCleanness: false,
+            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            ConvertToBytes_RecordLikeClass(ref w, _MyRecordLikeClass,
+            includeChildrenMode, v, updateStoredBuffer),
+            lengthsSpan: ref lengthsSpan);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.Position}, MyRecordLikeStruct (accessed? {_MyRecordLikeStruct_Accessed})");
+            TabbedText.Tabs++;
+            startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyRecordLikeStruct_ByteIndex = writer.Position - startOfObjectPosition;
+            }
+            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyRecordLikeStruct_Accessed)
+            {
+                var deserialized = MyRecordLikeStruct;
+            }
+            WriteNonLazinatorObject(
+            nonLazinatorObject: _MyRecordLikeStruct, isBelievedDirty: _MyRecordLikeStruct_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
+            isAccessed: _MyRecordLikeStruct_Accessed, writer: ref writer,
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeStruct_ByteIndex, _MyRecordLikeStruct_ByteLength, true, false, null),
+            verifyCleanness: false,
+            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            ConvertToBytes_RecordLikeStruct(ref w, _MyRecordLikeStruct,
+            includeChildrenMode, v, updateStoredBuffer),
+            lengthsSpan: ref lengthsSpan);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.Position}, MyRecordLikeTypeWithLazinator (accessed? {_MyRecordLikeTypeWithLazinator_Accessed})");
+            TabbedText.Tabs++;
+            startOfChildPosition = writer.Position;
+            if (updateStoredBuffer)
+            {
+                _MyRecordLikeTypeWithLazinator_ByteIndex = writer.Position - startOfObjectPosition;
+            }
+            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyRecordLikeTypeWithLazinator_Accessed)
+            {
+                var deserialized = MyRecordLikeTypeWithLazinator;
+            }
+            WriteNonLazinatorObject(
+            nonLazinatorObject: _MyRecordLikeTypeWithLazinator, isBelievedDirty: _MyRecordLikeTypeWithLazinator_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
+            isAccessed: _MyRecordLikeTypeWithLazinator_Accessed, writer: ref writer,
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeTypeWithLazinator_ByteIndex, _MyRecordLikeTypeWithLazinator_ByteLength, true, false, null),
+            verifyCleanness: false,
+            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            ConvertToBytes_RecordLikeTypeWithLazinator(ref w, _MyRecordLikeTypeWithLazinator,
+            includeChildrenMode, v, updateStoredBuffer),
+            lengthsSpan: ref lengthsSpan);
+            if (updateStoredBuffer)
+            {
+                _MyRecordLikeTypeWithLazinator = (RecordLikeTypeWithLazinator) CloneOrChange_RecordLikeTypeWithLazinator(_MyRecordLikeTypeWithLazinator, l => l.RemoveBufferInHierarchy(), true);
+            }
+            TabbedText.Tabs--;
+            if (updateStoredBuffer)
+            {
+                _RecordLikeContainer_EndByteIndex = writer.Position - startOfObjectPosition;
             }
         }
+        
+        /* Conversion of supported collections and tuples */
+        
+        private static Point ConvertFromBytes_Point(LazinatorMemory storage)
+        {
+            if (storage.Length == 0)
+            {
+                return default;
+            }
+            ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
+            
+            int bytesSoFar = 0;
+            
+            int item1 = span.ToDecompressedInt32(ref bytesSoFar);
+            
+            int item2 = span.ToDecompressedInt32(ref bytesSoFar);
+            
+            var itemToCreate = new Point(item1, item2);
+            
+            return itemToCreate;
+        }
+        
+        private static void ConvertToBytes_Point(ref BinaryBufferWriter writer, Point itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        {
+            
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.X);
+            
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Y);
+        }
+        
+        private static Point CloneOrChange_Point(Point itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        {
+            return new Point((int) (itemToConvert.X), (int) (itemToConvert.Y));
+        }
+        
+        private static MismatchedRecordLikeType ConvertFromBytes_MismatchedRecordLikeType(LazinatorMemory storage)
+        {
+            if (storage.Length == 0)
+            {
+                return default;
+            }
+            ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
+            
+            int bytesSoFar = 0;
+            
+            int item1 = span.ToDecompressedInt32(ref bytesSoFar);
+            
+            string item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+            
+            var itemToCreate = new MismatchedRecordLikeType(item1, item2);
+            
+            return itemToCreate;
+        }
+        
+        private static void ConvertToBytes_MismatchedRecordLikeType(ref BinaryBufferWriter writer, MismatchedRecordLikeType itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        {
+            
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
+            
+            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, itemToConvert.Name);
+        }
+        
+        private static MismatchedRecordLikeType CloneOrChange_MismatchedRecordLikeType(MismatchedRecordLikeType itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        {
+            return new MismatchedRecordLikeType((int) (itemToConvert.Age), (string) (itemToConvert.Name));
+        }
+        
+        private static NonLazinatorRecordWithConstructor ConvertFromBytes_NonLazinatorRecordWithConstructor(LazinatorMemory storage)
+        {
+            if (storage.Length == 0)
+            {
+                return default;
+            }
+            ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
+            
+            int bytesSoFar = 0;
+            
+            int item1 = span.ToDecompressedInt32(ref bytesSoFar);
+            
+            Example item2 = default(Example);
+            int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
+            if (lengthCollectionMember_item2 != 0)
+            {
+                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
+                item2 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+            }
+            bytesSoFar += lengthCollectionMember_item2;
+            
+            double item3 = span.ToDouble(ref bytesSoFar);
+            
+            int? item4 = span.ToDecompressedNullableInt32(ref bytesSoFar);
+            
+            var itemToCreate = new NonLazinatorRecordWithConstructor(item1, item2, item3, item4);
+            
+            return itemToCreate;
+        }
+        
+        private static void ConvertToBytes_NonLazinatorRecordWithConstructor(ref BinaryBufferWriter writer, NonLazinatorRecordWithConstructor itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        {
+            if (itemToConvert == null)
+            {
+                return;
+            }
+            
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
+            
+            if (itemToConvert.Example == null)
+            {
+                writer.Write((uint)0);
+            }
+            else
+            {
+                void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
+            };
+            
+            WriteUncompressedPrimitives.WriteDouble(ref writer, itemToConvert.DoubleValue);
+            
+            CompressedIntegralTypes.WriteCompressedNullableInt(ref writer, itemToConvert.NullableInt);
+        }
+        
+        private static NonLazinatorRecordWithConstructor CloneOrChange_NonLazinatorRecordWithConstructor(NonLazinatorRecordWithConstructor itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        {
+            if (itemToConvert == null)
+            {
+                return default(NonLazinatorRecordWithConstructor);
+            }
+            return new NonLazinatorRecordWithConstructor((int) (itemToConvert?.Age ?? default), (Example) (cloneOrChangeFunc((itemToConvert?.Example))), (double) (itemToConvert?.DoubleValue ?? default), (int?) (itemToConvert?.NullableInt));
+        }
+        
+        private static NonLazinatorRecordWithoutConstructor ConvertFromBytes_NonLazinatorRecordWithoutConstructor(LazinatorMemory storage)
+        {
+            if (storage.Length == 0)
+            {
+                return default;
+            }
+            ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
+            
+            int bytesSoFar = 0;
+            
+            int item1 = span.ToDecompressedInt32(ref bytesSoFar);
+            
+            double item2 = span.ToDouble(ref bytesSoFar);
+            
+            Example item3 = default(Example);
+            int lengthCollectionMember_item3 = span.ToInt32(ref bytesSoFar);
+            if (lengthCollectionMember_item3 != 0)
+            {
+                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item3);
+                item3 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+            }
+            bytesSoFar += lengthCollectionMember_item3;
+            
+            int? item4 = span.ToDecompressedNullableInt32(ref bytesSoFar);
+            
+            var itemToCreate = new NonLazinatorRecordWithoutConstructor()
+            {
+                Age = item1,
+                DoubleValue = item2,
+                Example = item3,
+                NullableInt = item4
+            };
+            
+            return itemToCreate;
+        }
+        
+        private static void ConvertToBytes_NonLazinatorRecordWithoutConstructor(ref BinaryBufferWriter writer, NonLazinatorRecordWithoutConstructor itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        {
+            if (itemToConvert == null)
+            {
+                return;
+            }
+            
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
+            
+            WriteUncompressedPrimitives.WriteDouble(ref writer, itemToConvert.DoubleValue);
+            
+            if (itemToConvert.Example == null)
+            {
+                writer.Write((uint)0);
+            }
+            else
+            {
+                void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
+            };
+            
+            CompressedIntegralTypes.WriteCompressedNullableInt(ref writer, itemToConvert.NullableInt);
+        }
+        
+        private static NonLazinatorRecordWithoutConstructor CloneOrChange_NonLazinatorRecordWithoutConstructor(NonLazinatorRecordWithoutConstructor itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        {
+            if (itemToConvert == null)
+            {
+                return default(NonLazinatorRecordWithoutConstructor);
+            }
+            return new NonLazinatorRecordWithoutConstructor()
+            {
+                Age = (int) (itemToConvert?.Age ?? default),
+                DoubleValue = (double) (itemToConvert?.DoubleValue ?? default),
+                Example = (Example) (cloneOrChangeFunc((itemToConvert?.Example))),
+                NullableInt = (int?) (itemToConvert?.NullableInt)
+            };
+        }
+        
+        private static NonLazinatorSubrecordWithConstructor ConvertFromBytes_NonLazinatorSubrecordWithConstructor(LazinatorMemory storage)
+        {
+            if (storage.Length == 0)
+            {
+                return default;
+            }
+            ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
+            
+            int bytesSoFar = 0;
+            
+            int item1 = span.ToDecompressedInt32(ref bytesSoFar);
+            
+            Example item2 = default(Example);
+            int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
+            if (lengthCollectionMember_item2 != 0)
+            {
+                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
+                item2 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+            }
+            bytesSoFar += lengthCollectionMember_item2;
+            
+            double item3 = span.ToDouble(ref bytesSoFar);
+            
+            int? item4 = span.ToDecompressedNullableInt32(ref bytesSoFar);
+            
+            string item5 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+            
+            var itemToCreate = new NonLazinatorSubrecordWithConstructor(item1, item2, item3, item4, item5);
+            
+            return itemToCreate;
+        }
+        
+        private static void ConvertToBytes_NonLazinatorSubrecordWithConstructor(ref BinaryBufferWriter writer, NonLazinatorSubrecordWithConstructor itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        {
+            if (itemToConvert == null)
+            {
+                return;
+            }
+            
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
+            
+            if (itemToConvert.Example == null)
+            {
+                writer.Write((uint)0);
+            }
+            else
+            {
+                void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
+            };
+            
+            WriteUncompressedPrimitives.WriteDouble(ref writer, itemToConvert.DoubleValue);
+            
+            CompressedIntegralTypes.WriteCompressedNullableInt(ref writer, itemToConvert.NullableInt);
+            
+            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, itemToConvert.MyString);
+        }
+        
+        private static NonLazinatorSubrecordWithConstructor CloneOrChange_NonLazinatorSubrecordWithConstructor(NonLazinatorSubrecordWithConstructor itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        {
+            if (itemToConvert == null)
+            {
+                return default(NonLazinatorSubrecordWithConstructor);
+            }
+            return new NonLazinatorSubrecordWithConstructor((int) (itemToConvert?.Age ?? default), (Example) (cloneOrChangeFunc((itemToConvert?.Example))), (double) (itemToConvert?.DoubleValue ?? default), (int?) (itemToConvert?.NullableInt), (string) (itemToConvert?.MyString));
+        }
+        
+        private static NonLazinatorSubrecordWithoutConstructor ConvertFromBytes_NonLazinatorSubrecordWithoutConstructor(LazinatorMemory storage)
+        {
+            if (storage.Length == 0)
+            {
+                return default;
+            }
+            ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
+            
+            int bytesSoFar = 0;
+            
+            string item1 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+            
+            int item2 = span.ToDecompressedInt32(ref bytesSoFar);
+            
+            double item3 = span.ToDouble(ref bytesSoFar);
+            
+            Example item4 = default(Example);
+            int lengthCollectionMember_item4 = span.ToInt32(ref bytesSoFar);
+            if (lengthCollectionMember_item4 != 0)
+            {
+                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item4);
+                item4 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+            }
+            bytesSoFar += lengthCollectionMember_item4;
+            
+            int? item5 = span.ToDecompressedNullableInt32(ref bytesSoFar);
+            
+            var itemToCreate = new NonLazinatorSubrecordWithoutConstructor()
+            {
+                MyString = item1,
+                Age = item2,
+                DoubleValue = item3,
+                Example = item4,
+                NullableInt = item5
+            };
+            
+            return itemToCreate;
+        }
+        
+        private static void ConvertToBytes_NonLazinatorSubrecordWithoutConstructor(ref BinaryBufferWriter writer, NonLazinatorSubrecordWithoutConstructor itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        {
+            if (itemToConvert == null)
+            {
+                return;
+            }
+            
+            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, itemToConvert.MyString);
+            
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
+            
+            WriteUncompressedPrimitives.WriteDouble(ref writer, itemToConvert.DoubleValue);
+            
+            if (itemToConvert.Example == null)
+            {
+                writer.Write((uint)0);
+            }
+            else
+            {
+                void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
+            };
+            
+            CompressedIntegralTypes.WriteCompressedNullableInt(ref writer, itemToConvert.NullableInt);
+        }
+        
+        private static NonLazinatorSubrecordWithoutConstructor CloneOrChange_NonLazinatorSubrecordWithoutConstructor(NonLazinatorSubrecordWithoutConstructor itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        {
+            if (itemToConvert == null)
+            {
+                return default(NonLazinatorSubrecordWithoutConstructor);
+            }
+            return new NonLazinatorSubrecordWithoutConstructor()
+            {
+                MyString = (string) (itemToConvert?.MyString),
+                Age = (int) (itemToConvert?.Age ?? default),
+                DoubleValue = (double) (itemToConvert?.DoubleValue ?? default),
+                Example = (Example) (cloneOrChangeFunc((itemToConvert?.Example))),
+                NullableInt = (int?) (itemToConvert?.NullableInt)
+            };
+        }
+        
+        private static RecordLikeClass ConvertFromBytes_RecordLikeClass(LazinatorMemory storage)
+        {
+            if (storage.Length == 0)
+            {
+                return default;
+            }
+            ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
+            
+            int bytesSoFar = 0;
+            
+            int item1 = span.ToDecompressedInt32(ref bytesSoFar);
+            
+            Example item2 = default(Example);
+            int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
+            if (lengthCollectionMember_item2 != 0)
+            {
+                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
+                item2 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+            }
+            bytesSoFar += lengthCollectionMember_item2;
+            
+            var itemToCreate = new RecordLikeClass(item1, item2);
+            
+            return itemToCreate;
+        }
+        
+        private static void ConvertToBytes_RecordLikeClass(ref BinaryBufferWriter writer, RecordLikeClass itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        {
+            if (itemToConvert == null)
+            {
+                return;
+            }
+            
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
+            
+            if (itemToConvert.Example == null)
+            {
+                writer.Write((uint)0);
+            }
+            else
+            {
+                void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
+            };
+        }
+        
+        private static RecordLikeClass CloneOrChange_RecordLikeClass(RecordLikeClass itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        {
+            if (itemToConvert == null)
+            {
+                return default(RecordLikeClass);
+            }
+            return new RecordLikeClass((int) (itemToConvert?.Age ?? default), (Example) (cloneOrChangeFunc((itemToConvert?.Example))));
+        }
+        
+        private static RecordLikeStruct ConvertFromBytes_RecordLikeStruct(LazinatorMemory storage)
+        {
+            if (storage.Length == 0)
+            {
+                return default;
+            }
+            ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
+            
+            int bytesSoFar = 0;
+            
+            int item1 = span.ToDecompressedInt32(ref bytesSoFar);
+            
+            string item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+            
+            var itemToCreate = new RecordLikeStruct(item1, item2);
+            
+            return itemToCreate;
+        }
+        
+        private static void ConvertToBytes_RecordLikeStruct(ref BinaryBufferWriter writer, RecordLikeStruct itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        {
+            
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
+            
+            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, itemToConvert.Name);
+        }
+        
+        private static RecordLikeStruct CloneOrChange_RecordLikeStruct(RecordLikeStruct itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        {
+            return new RecordLikeStruct((int) (itemToConvert.Age), (string) (itemToConvert.Name));
+        }
+        
+        private static RecordLikeTypeWithLazinator ConvertFromBytes_RecordLikeTypeWithLazinator(LazinatorMemory storage)
+        {
+            if (storage.Length == 0)
+            {
+                return default;
+            }
+            ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
+            
+            int bytesSoFar = 0;
+            
+            int item1 = span.ToDecompressedInt32(ref bytesSoFar);
+            
+            string item2 = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+            
+            Example item3 = default(Example);
+            int lengthCollectionMember_item3 = span.ToInt32(ref bytesSoFar);
+            if (lengthCollectionMember_item3 != 0)
+            {
+                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item3);
+                item3 = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
+            }
+            bytesSoFar += lengthCollectionMember_item3;
+            
+            ExampleStructWithoutClass item4 = default(ExampleStructWithoutClass);
+            int lengthCollectionMember_item4 = span.ToInt32(ref bytesSoFar);
+            if (lengthCollectionMember_item4 != 0)
+            {
+                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item4);
+                item4 = new ExampleStructWithoutClass(childData);
+            }
+            bytesSoFar += lengthCollectionMember_item4;
+            
+            var itemToCreate = new RecordLikeTypeWithLazinator(item1, item2, item3, item4);
+            
+            return itemToCreate;
+        }
+        
+        private static void ConvertToBytes_RecordLikeTypeWithLazinator(ref BinaryBufferWriter writer, RecordLikeTypeWithLazinator itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        {
+            
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
+            
+            EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, itemToConvert.Name);
+            
+            if (itemToConvert.Example == null)
+            {
+                writer.Write((uint)0);
+            }
+            else
+            {
+                void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
+            };
+            
+            void actionExampleStruct(ref BinaryBufferWriter w) => itemToConvert.ExampleStruct.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+            WriteToBinaryWithIntLengthPrefix(ref writer, actionExampleStruct);
+        }
+        
+        private static RecordLikeTypeWithLazinator CloneOrChange_RecordLikeTypeWithLazinator(RecordLikeTypeWithLazinator itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        {
+            return new RecordLikeTypeWithLazinator((int) (itemToConvert.Age), (string) (itemToConvert.Name), (Example) (cloneOrChangeFunc((itemToConvert.Example))), (ExampleStructWithoutClass) (cloneOrChangeFunc((itemToConvert.ExampleStruct))));
+        }
+        
+    }
+}

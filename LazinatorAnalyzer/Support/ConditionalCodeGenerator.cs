@@ -34,14 +34,12 @@ namespace LazinatorAnalyzer.Support
             string mainString = $@"if ({antecedentString})
                     {{
                         {Consequent}
-                    }}
-                    ";
+                    }}";
             if (ElseConsequent != null && ElseConsequent != "")
                 mainString += $@"else
                     {{
                         {ElseConsequent}
-                    }}
-                    ";
+                    }}";
             return mainString;
 
         }

@@ -63,13 +63,11 @@ namespace LazinatorTests.Examples.Abstract
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _IntList6 = default(List<Int32>);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList6_ByteIndex, _IntList6_ByteLength, true, false, null);
                 _IntList6 = ConvertFromBytes_List_Gint_g(childData);
             }
-            
             _IntList6_Accessed = true;
         }
         
@@ -171,11 +169,7 @@ namespace LazinatorTests.Examples.Abstract
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 24;
-            }
+            int lengthForLengths = 24;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 lengthForLengths += 8;
@@ -192,7 +186,8 @@ namespace LazinatorTests.Examples.Abstract
         {
             int totalChildrenBytes = base.ConvertFromBytesForChildProperties(span, OriginalIncludeChildrenMode, serializedVersionNumber, indexOfFirstChild, ref bytesSoFar);
             _IntList6_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_Concrete6_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _Concrete6_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         
@@ -265,11 +260,7 @@ namespace LazinatorTests.Examples.Abstract
             // write properties
             
             WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 24;
-            }
+            int lengthForLengths = 24;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 lengthForLengths += 8;
@@ -359,7 +350,6 @@ namespace LazinatorTests.Examples.Abstract
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             List<Int32> collection = new List<Int32>(collectionLength);
             int itemToCloneCount = itemToClone.Count;

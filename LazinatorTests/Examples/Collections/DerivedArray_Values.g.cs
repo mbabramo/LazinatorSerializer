@@ -64,13 +64,11 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyArrayInt_DerivedLevel = default(Int32[]);
                 _MyArrayInt_DerivedLevel_Dirty = true; 
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyArrayInt_DerivedLevel_ByteIndex, _MyArrayInt_DerivedLevel_ByteLength, true, false, null);
                 _MyArrayInt_DerivedLevel = ConvertFromBytes_int_B_b(childData);
             }
-            
             _MyArrayInt_DerivedLevel_Accessed = true;
         }
         
@@ -190,11 +188,7 @@ namespace LazinatorTests.Examples.Collections
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 16;
-            }
+            int lengthForLengths = 16;
             ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
         }
         
@@ -207,7 +201,8 @@ namespace LazinatorTests.Examples.Collections
         {
             int totalChildrenBytes = base.ConvertFromBytesForChildProperties(span, OriginalIncludeChildrenMode, serializedVersionNumber, indexOfFirstChild, ref bytesSoFar);
             _MyArrayInt_DerivedLevel_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_DerivedArray_Values_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _DerivedArray_Values_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         
@@ -280,11 +275,7 @@ namespace LazinatorTests.Examples.Collections
             // write properties
             
             WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 16;
-            }
+            int lengthForLengths = 16;
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
             writer.Skip(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
@@ -370,7 +361,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Length;
             Int32[] collection = new int[collectionLength];
             int itemToCloneCount = itemToClone.Length;

@@ -69,13 +69,11 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyListNonLazinatorType = default(List<NonLazinatorClass>);
                 _MyListNonLazinatorType_Dirty = true; 
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType_ByteIndex, _MyListNonLazinatorType_ByteLength, true, false, null);
                 _MyListNonLazinatorType = ConvertFromBytes_List_GNonLazinatorClass_g(childData);
             }
-            
             _MyListNonLazinatorType_Accessed = true;
         }
         
@@ -125,13 +123,11 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyListNonLazinatorType2 = default(List<NonLazinatorClass>);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType2_ByteIndex, _MyListNonLazinatorType2_ByteLength, true, false, null);
                 _MyListNonLazinatorType2 = ConvertFromBytes_List_GNonLazinatorClass_g(childData);
             }
-            
             _MyListNonLazinatorType2_Accessed = true;
         }
         
@@ -398,11 +394,7 @@ namespace LazinatorTests.Examples.Collections
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 8;
-            }
+            int lengthForLengths = 8;
             ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
         }
         
@@ -414,8 +406,10 @@ namespace LazinatorTests.Examples.Collections
         {
             int totalChildrenBytes = 0;
             _MyListNonLazinatorType_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyListNonLazinatorType2_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_DotNetList_NonLazinator_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyListNonLazinatorType2_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _DotNetList_NonLazinator_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         
@@ -491,11 +485,7 @@ namespace LazinatorTests.Examples.Collections
             // write properties
             
             
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 8;
-            }
+            int lengthForLengths = 8;
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
             writer.Skip(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
@@ -577,14 +567,12 @@ namespace LazinatorTests.Examples.Collections
                 if (lengthCollectionMember == 0)
                 {
                     collection.Add(default(NonLazinatorClass));
-                }
-                else
+                }else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData);
                     collection.Add(item);
-                }
-                bytesSoFar += lengthCollectionMember;
+                }bytesSoFar += lengthCollectionMember;
             }
             
             return collection;
@@ -620,7 +608,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             List<NonLazinatorClass> collection = new List<NonLazinatorClass>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
@@ -629,13 +616,11 @@ namespace LazinatorTests.Examples.Collections
                 if (itemToClone[itemIndex] == null)
                 {
                     collection.Add(default(NonLazinatorClass));
-                }
-                else
+                }else
                 {
                     var itemCopied = (NonLazinatorClass) itemToClone[itemIndex];
                     collection.Add(itemCopied);
                 }
-                
             }
             return collection;
         }

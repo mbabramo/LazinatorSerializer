@@ -70,13 +70,11 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyArrayInt = default(Int32[,]);
                 _MyArrayInt_Dirty = true; 
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyArrayInt_ByteIndex, _MyArrayInt_ByteLength, true, false, null);
                 _MyArrayInt = ConvertFromBytes_int_B_c_b(childData);
             }
-            
             _MyArrayInt_Accessed = true;
         }
         
@@ -126,13 +124,11 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyCrazyJaggedArray = default(Int32[][,,][,,,]);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyCrazyJaggedArray_ByteIndex, _MyCrazyJaggedArray_ByteLength, true, false, null);
                 _MyCrazyJaggedArray = ConvertFromBytes_int_B_b_B_c_c_b_B_c_c_c_b(childData);
             }
-            
             _MyCrazyJaggedArray_Accessed = true;
         }
         
@@ -164,13 +160,11 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyThreeDimArrayInt = default(Int32[,,]);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyThreeDimArrayInt_ByteIndex, _MyThreeDimArrayInt_ByteLength, true, false, null);
                 _MyThreeDimArrayInt = ConvertFromBytes_int_B_c_c_b(childData);
             }
-            
             _MyThreeDimArrayInt_Accessed = true;
         }
         
@@ -444,11 +438,7 @@ namespace LazinatorTests.Examples.Collections
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 12;
-            }
+            int lengthForLengths = 12;
             ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
         }
         
@@ -460,9 +450,12 @@ namespace LazinatorTests.Examples.Collections
         {
             int totalChildrenBytes = 0;
             _MyArrayInt_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyCrazyJaggedArray_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyThreeDimArrayInt_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MultidimensionalArray_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyCrazyJaggedArray_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyThreeDimArrayInt_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MultidimensionalArray_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         
@@ -542,11 +535,7 @@ namespace LazinatorTests.Examples.Collections
             // write properties
             
             
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 12;
-            }
+            int lengthForLengths = 12;
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
             writer.Skip(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
@@ -677,7 +666,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Length;
             int collectionLength0 = itemToClone.GetLength(0);
             int collectionLength1 = itemToClone.GetLength(1);
@@ -708,14 +696,12 @@ namespace LazinatorTests.Examples.Collections
                 if (lengthCollectionMember == 0)
                 {
                     collection[itemIndex] = default(Int32[,,][,,,]);
-                }
-                else
+                }else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = ConvertFromBytes_int_B_c_c_b_B_c_c_c_b(childData);
                     collection[itemIndex] = item;
-                }
-                bytesSoFar += lengthCollectionMember;
+                }bytesSoFar += lengthCollectionMember;
             }
             
             return collection;
@@ -751,7 +737,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Length;
             Int32[][,,][,,,] collection = new Int32[collectionLength][,,][,,,];
             int itemToCloneCount = itemToClone.Length;
@@ -760,13 +745,11 @@ namespace LazinatorTests.Examples.Collections
                 if (itemToClone[itemIndex] == null)
                 {
                     collection[itemIndex] = default(Int32[,,][,,,]);
-                }
-                else
+                }else
                 {
                     var itemCopied = (Int32[,,][,,,]) CloneOrChange_int_B_c_c_b_B_c_c_c_b(itemToClone[itemIndex], cloneOrChangeFunc, avoidCloningIfPossible);
                     collection[itemIndex] = itemCopied;
                 }
-                
             }
             return collection;
         }
@@ -792,14 +775,12 @@ namespace LazinatorTests.Examples.Collections
                 if (lengthCollectionMember == 0)
                 {
                     collection[itemIndex0, itemIndex1, itemIndex2] = default(Int32[,,,]);
-                }
-                else
+                }else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = ConvertFromBytes_int_B_c_c_c_b(childData);
                     collection[itemIndex0, itemIndex1, itemIndex2] = item;
-                }
-                bytesSoFar += lengthCollectionMember;
+                }bytesSoFar += lengthCollectionMember;
             }
             
             return collection;
@@ -841,7 +822,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Length;
             int collectionLength0 = itemToClone.GetLength(0);
             int collectionLength1 = itemToClone.GetLength(1);
@@ -854,13 +834,11 @@ namespace LazinatorTests.Examples.Collections
                 if (itemToClone[itemIndex0, itemIndex1, itemIndex2] == null)
                 {
                     collection[itemIndex0, itemIndex1, itemIndex2] = default(Int32[,,,]);
-                }
-                else
+                }else
                 {
                     var itemCopied = (Int32[,,,]) CloneOrChange_int_B_c_c_c_b(itemToClone[itemIndex0, itemIndex1, itemIndex2], cloneOrChangeFunc, avoidCloningIfPossible);
                     collection[itemIndex0, itemIndex1, itemIndex2] = itemCopied;
                 }
-                
             }
             return collection;
         }
@@ -920,7 +898,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Length;
             int collectionLength0 = itemToClone.GetLength(0);
             int collectionLength1 = itemToClone.GetLength(1);
@@ -988,7 +965,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Length;
             int collectionLength0 = itemToClone.GetLength(0);
             int collectionLength1 = itemToClone.GetLength(1);

@@ -84,14 +84,12 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _ClosedGenericBase = null;
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericBase_ByteIndex, _ClosedGenericBase_ByteLength, true, false, null);
                 
                 _ClosedGenericBase = DeserializationFactory.Instance.CreateBaseOrDerivedType(1033, (c, p) => new OpenGeneric<Base>(c, p), childData, this); 
             }
-            
             _ClosedGenericBase_Accessed = true;
         }
         
@@ -131,14 +129,12 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _ClosedGenericFloat = null;
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericFloat_ByteIndex, _ClosedGenericFloat_ByteLength, true, false, null);
                 
                 _ClosedGenericFloat = DeserializationFactory.Instance.CreateBaseOrDerivedType(1033, (c, p) => new OpenGeneric<WFloat>(c, p), childData, this); 
             }
-            
             _ClosedGenericFloat_Accessed = true;
         }
         
@@ -178,14 +174,12 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _ClosedGenericFromBaseWithBase = null;
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericFromBaseWithBase_ByteIndex, _ClosedGenericFromBaseWithBase_ByteLength, true, false, null);
                 
                 _ClosedGenericFromBaseWithBase = DeserializationFactory.Instance.CreateBaseOrDerivedType(1067, (c, p) => new GenericFromBase<Base>(c, p), childData, this); 
             }
-            
             _ClosedGenericFromBaseWithBase_Accessed = true;
         }
         
@@ -225,14 +219,12 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _ClosedGenericInterface = null;
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericInterface_ByteIndex, _ClosedGenericInterface_ByteLength, true, false, null);
                 
                 _ClosedGenericInterface = DeserializationFactory.Instance.CreateBaseOrDerivedType(1033, (c, p) => new OpenGeneric<IExampleChild>(c, p), childData, this); 
             }
-            
             _ClosedGenericInterface_Accessed = true;
         }
         
@@ -272,14 +264,12 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _ClosedGenericNonexclusiveInterface = null;
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericNonexclusiveInterface_ByteIndex, _ClosedGenericNonexclusiveInterface_ByteLength, true, false, null);
                 
                 _ClosedGenericNonexclusiveInterface = DeserializationFactory.Instance.CreateBaseOrDerivedType(1033, (c, p) => new OpenGeneric<IExampleNonexclusiveInterface>(c, p), childData, this); 
             }
-            
             _ClosedGenericNonexclusiveInterface_Accessed = true;
         }
         
@@ -375,66 +365,51 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 if (ClosedGenericBase == null)
                 {
                     typedClone.ClosedGenericBase = null;
-                }
-                else
+                }else
                 {
                     typedClone.ClosedGenericBase = (OpenGeneric<Base>) ClosedGenericBase.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
-                
             }
-            
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (ClosedGenericFloat == null)
                 {
                     typedClone.ClosedGenericFloat = null;
-                }
-                else
+                }else
                 {
                     typedClone.ClosedGenericFloat = (OpenGeneric<WFloat>) ClosedGenericFloat.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
-                
             }
-            
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (ClosedGenericFromBaseWithBase == null)
                 {
                     typedClone.ClosedGenericFromBaseWithBase = null;
-                }
-                else
+                }else
                 {
                     typedClone.ClosedGenericFromBaseWithBase = (GenericFromBase<Base>) ClosedGenericFromBaseWithBase.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
-                
             }
-            
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (ClosedGenericInterface == null)
                 {
                     typedClone.ClosedGenericInterface = null;
-                }
-                else
+                }else
                 {
                     typedClone.ClosedGenericInterface = (OpenGeneric<IExampleChild>) ClosedGenericInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
-                
             }
-            
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (ClosedGenericNonexclusiveInterface == null)
                 {
                     typedClone.ClosedGenericNonexclusiveInterface = null;
-                }
-                else
+                }else
                 {
                     typedClone.ClosedGenericNonexclusiveInterface = (OpenGeneric<IExampleNonexclusiveInterface>) ClosedGenericNonexclusiveInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
-                
             }
-            
             
             return typedClone;
         }
@@ -558,8 +533,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ClosedGenericBase_Accessed) && ClosedGenericBase == null)
             {
                 yield return ("ClosedGenericBase", default);
-            }
-            else
+            }else
             {
                 if ((!exploreOnlyDeserializedChildren && ClosedGenericBase != null) || (_ClosedGenericBase_Accessed && _ClosedGenericBase != null))
                 {
@@ -577,14 +551,11 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                         }
                     }
                 }
-                
             }
-            
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ClosedGenericFloat_Accessed) && ClosedGenericFloat == null)
             {
                 yield return ("ClosedGenericFloat", default);
-            }
-            else
+            }else
             {
                 if ((!exploreOnlyDeserializedChildren && ClosedGenericFloat != null) || (_ClosedGenericFloat_Accessed && _ClosedGenericFloat != null))
                 {
@@ -602,14 +573,11 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                         }
                     }
                 }
-                
             }
-            
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ClosedGenericFromBaseWithBase_Accessed) && ClosedGenericFromBaseWithBase == null)
             {
                 yield return ("ClosedGenericFromBaseWithBase", default);
-            }
-            else
+            }else
             {
                 if ((!exploreOnlyDeserializedChildren && ClosedGenericFromBaseWithBase != null) || (_ClosedGenericFromBaseWithBase_Accessed && _ClosedGenericFromBaseWithBase != null))
                 {
@@ -627,14 +595,11 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                         }
                     }
                 }
-                
             }
-            
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ClosedGenericInterface_Accessed) && ClosedGenericInterface == null)
             {
                 yield return ("ClosedGenericInterface", default);
-            }
-            else
+            }else
             {
                 if ((!exploreOnlyDeserializedChildren && ClosedGenericInterface != null) || (_ClosedGenericInterface_Accessed && _ClosedGenericInterface != null))
                 {
@@ -652,14 +617,11 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                         }
                     }
                 }
-                
             }
-            
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ClosedGenericNonexclusiveInterface_Accessed) && ClosedGenericNonexclusiveInterface == null)
             {
                 yield return ("ClosedGenericNonexclusiveInterface", default);
-            }
-            else
+            }else
             {
                 if ((!exploreOnlyDeserializedChildren && ClosedGenericNonexclusiveInterface != null) || (_ClosedGenericNonexclusiveInterface_Accessed && _ClosedGenericNonexclusiveInterface != null))
                 {
@@ -677,9 +639,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                         }
                     }
                 }
-                
             }
-            
             yield break;
         }
         
@@ -833,27 +793,22 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 ClosedGenericBase.UpdateStoredBuffer(ref writer, startPosition + _ClosedGenericBase_ByteIndex + sizeof(int), _ClosedGenericBase_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            
             if (_ClosedGenericFloat_Accessed && _ClosedGenericFloat != null)
             {
                 ClosedGenericFloat.UpdateStoredBuffer(ref writer, startPosition + _ClosedGenericFloat_ByteIndex + sizeof(int), _ClosedGenericFloat_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            
             if (_ClosedGenericFromBaseWithBase_Accessed && _ClosedGenericFromBaseWithBase != null)
             {
                 ClosedGenericFromBaseWithBase.UpdateStoredBuffer(ref writer, startPosition + _ClosedGenericFromBaseWithBase_ByteIndex + sizeof(int), _ClosedGenericFromBaseWithBase_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            
             if (_ClosedGenericInterface_Accessed && _ClosedGenericInterface != null)
             {
                 ClosedGenericInterface.UpdateStoredBuffer(ref writer, startPosition + _ClosedGenericInterface_ByteIndex + sizeof(int), _ClosedGenericInterface_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            
             if (_ClosedGenericNonexclusiveInterface_Accessed && _ClosedGenericNonexclusiveInterface != null)
             {
                 ClosedGenericNonexclusiveInterface.UpdateStoredBuffer(ref writer, startPosition + _ClosedGenericNonexclusiveInterface_ByteIndex + sizeof(int), _ClosedGenericNonexclusiveInterface_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            
         }
         
         
@@ -913,10 +868,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     var deserialized = ClosedGenericBase;
                 }
                 WriteChild(ref writer, ref _ClosedGenericBase, includeChildrenMode, _ClosedGenericBase_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ClosedGenericBase_ByteIndex, _ClosedGenericBase_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, ClosedGenericFloat (accessed? {_ClosedGenericFloat_Accessed}) (backing var null? {_ClosedGenericFloat == null}) ");
             TabbedText.Tabs++;
@@ -932,10 +887,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     var deserialized = ClosedGenericFloat;
                 }
                 WriteChild(ref writer, ref _ClosedGenericFloat, includeChildrenMode, _ClosedGenericFloat_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ClosedGenericFloat_ByteIndex, _ClosedGenericFloat_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, ClosedGenericFromBaseWithBase (accessed? {_ClosedGenericFromBaseWithBase_Accessed}) (backing var null? {_ClosedGenericFromBaseWithBase == null}) ");
             TabbedText.Tabs++;
@@ -951,10 +906,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     var deserialized = ClosedGenericFromBaseWithBase;
                 }
                 WriteChild(ref writer, ref _ClosedGenericFromBaseWithBase, includeChildrenMode, _ClosedGenericFromBaseWithBase_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ClosedGenericFromBaseWithBase_ByteIndex, _ClosedGenericFromBaseWithBase_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, ClosedGenericInterface (accessed? {_ClosedGenericInterface_Accessed}) (backing var null? {_ClosedGenericInterface == null}) ");
             TabbedText.Tabs++;
@@ -970,10 +925,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     var deserialized = ClosedGenericInterface;
                 }
                 WriteChild(ref writer, ref _ClosedGenericInterface, includeChildrenMode, _ClosedGenericInterface_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ClosedGenericInterface_ByteIndex, _ClosedGenericInterface_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, ClosedGenericNonexclusiveInterface (accessed? {_ClosedGenericNonexclusiveInterface_Accessed}) (backing var null? {_ClosedGenericNonexclusiveInterface == null}) ");
             TabbedText.Tabs++;
@@ -989,10 +944,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     var deserialized = ClosedGenericNonexclusiveInterface;
                 }
                 WriteChild(ref writer, ref _ClosedGenericNonexclusiveInterface, includeChildrenMode, _ClosedGenericNonexclusiveInterface_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ClosedGenericNonexclusiveInterface_ByteIndex, _ClosedGenericNonexclusiveInterface_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

@@ -66,13 +66,11 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyQueueSerialized = default(Queue<ExampleChild>);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyQueueSerialized_ByteIndex, _MyQueueSerialized_ByteLength, true, false, null);
                 _MyQueueSerialized = ConvertFromBytes_Queue_GExampleChild_g(childData);
             }
-            
             _MyQueueSerialized_Accessed = true;
         }
         
@@ -332,11 +330,7 @@ namespace LazinatorTests.Examples.Collections
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 4;
-            }
+            int lengthForLengths = 4;
             ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
         }
         
@@ -348,7 +342,8 @@ namespace LazinatorTests.Examples.Collections
         {
             int totalChildrenBytes = 0;
             _MyQueueSerialized_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_DotNetQueue_Lazinator_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _DotNetQueue_Lazinator_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         
@@ -420,11 +415,7 @@ namespace LazinatorTests.Examples.Collections
             // write properties
             
             
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 4;
-            }
+            int lengthForLengths = 4;
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
             writer.Skip(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
@@ -485,14 +476,12 @@ namespace LazinatorTests.Examples.Collections
                 if (lengthCollectionMember == 0)
                 {
                     collection.Enqueue(null);
-                }
-                else
+                }else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = DeserializationFactory.Instance.CreateBasedOnType<ExampleChild>(childData);
                     collection.Enqueue(item);
-                }
-                bytesSoFar += lengthCollectionMember;
+                }bytesSoFar += lengthCollectionMember;
             }
             
             return collection;
@@ -529,7 +518,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             Queue<ExampleChild> collection = new Queue<ExampleChild>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
@@ -539,13 +527,11 @@ namespace LazinatorTests.Examples.Collections
                 if (q[itemIndex] == null)
                 {
                     collection.Enqueue(null);
-                }
-                else
+                }else
                 {
                     var itemCopied = (ExampleChild) (cloneOrChangeFunc(q[itemIndex]));
                     collection.Enqueue(itemCopied);
                 }
-                
             }
             return collection;
         }

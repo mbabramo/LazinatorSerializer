@@ -67,8 +67,7 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyExampleNullableStruct = default(ExampleStructContainingClasses?);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleNullableStruct_ByteIndex, _MyExampleNullableStruct_ByteLength, true, false, null);
                 if (childData.Length == 0)
@@ -81,7 +80,6 @@ namespace LazinatorTests.Examples
                     
                 }
             }
-            
             _MyExampleNullableStruct_Accessed = true;
         }
         
@@ -104,7 +102,6 @@ namespace LazinatorTests.Examples
                         return toReturn;
                     }
                 }
-                
                 if (_MyExampleNullableStruct == null)
                 {
                     return null;
@@ -143,14 +140,12 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyExampleStructContainingClasses = default(ExampleStructContainingClasses);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, true, false, null);
                 _MyExampleStructContainingClasses = new ExampleStructContainingClasses(childData);
                 
             }
-            
             _MyExampleStructContainingClasses_Accessed = true;
         }
         
@@ -173,7 +168,6 @@ namespace LazinatorTests.Examples
                         return toReturn;
                     }
                 }
-                
                 var cleanCopy = _MyExampleStructContainingClasses;
                 cleanCopy.IsDirty = false;
                 cleanCopy.DescendantIsDirty = false;
@@ -276,19 +270,15 @@ namespace LazinatorTests.Examples
                 if (MyExampleNullableStruct == null)
                 {
                     typedClone.MyExampleNullableStruct = null;
-                }
-                else
+                }else
                 {
                     typedClone.MyExampleNullableStruct = (ExampleStructContainingClasses?) MyExampleNullableStruct.Value.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
-                
             }
-            
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 typedClone.MyExampleStructContainingClasses = (ExampleStructContainingClasses) MyExampleStructContainingClasses.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
             
             typedClone.IsDirty = false;
             return typedClone;
@@ -413,8 +403,7 @@ namespace LazinatorTests.Examples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyExampleNullableStruct_Accessed) && MyExampleNullableStruct == null)
             {
                 yield return ("MyExampleNullableStruct", default);
-            }
-            else
+            }else
             {
                 if ((!exploreOnlyDeserializedChildren && MyExampleNullableStruct != null) || (_MyExampleNullableStruct_Accessed && _MyExampleNullableStruct != null))
                 {
@@ -432,9 +421,7 @@ namespace LazinatorTests.Examples
                         }
                     }
                 }
-                
             }
-            
             bool isMatch_MyExampleStructContainingClasses = matchCriterion == null || matchCriterion(MyExampleStructContainingClasses);
             bool shouldExplore_MyExampleStructContainingClasses = exploreCriterion == null || exploreCriterion(MyExampleStructContainingClasses);
             if (isMatch_MyExampleStructContainingClasses)
@@ -464,7 +451,8 @@ namespace LazinatorTests.Examples
                 _MyExampleNullableStruct = (ExampleStructContainingClasses?) _MyExampleNullableStruct.Value.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
             var deserialized_MyExampleStructContainingClasses = MyExampleStructContainingClasses;
-            _MyExampleStructContainingClasses = (ExampleStructContainingClasses) _MyExampleStructContainingClasses.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);if (changeThisLevel && changeFunc != null)
+            _MyExampleStructContainingClasses = (ExampleStructContainingClasses) _MyExampleStructContainingClasses.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }
@@ -580,7 +568,6 @@ namespace LazinatorTests.Examples
             {
                 MyExampleNullableStruct.Value.UpdateStoredBuffer(ref writer, startPosition + _MyExampleNullableStruct_ByteIndex + sizeof(int), _MyExampleNullableStruct_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            
             MyExampleStructContainingClasses.UpdateStoredBuffer(ref writer, startPosition + _MyExampleStructContainingClasses_ByteIndex + sizeof(int), _MyExampleStructContainingClasses_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
         }
         
@@ -633,8 +620,7 @@ namespace LazinatorTests.Examples
                 if (_MyExampleNullableStruct == null)
                 {
                     WriteNullChild(ref writer, false, true);
-                }
-                else
+                }else
                 {
                     var serializedBytesCopy = LazinatorMemoryStorage;
                     var byteIndexCopy = _MyExampleNullableStruct_ByteIndex;
@@ -643,11 +629,7 @@ namespace LazinatorTests.Examples
                     WriteChild(ref writer, ref copy, includeChildrenMode, _MyExampleNullableStruct_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, true, false, null), verifyCleanness, updateStoredBuffer, false, true, null);
                     _MyExampleNullableStruct = copy;
                 }
-                
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyExampleStructContainingClasses (accessed? {_MyExampleStructContainingClasses_Accessed}) ");
             TabbedText.Tabs++;
@@ -667,9 +649,6 @@ namespace LazinatorTests.Examples
                 var byteLengthCopy = _MyExampleStructContainingClasses_ByteLength;
                 WriteChild(ref writer, ref _MyExampleStructContainingClasses, includeChildrenMode, _MyExampleStructContainingClasses_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, true, false, null), verifyCleanness, updateStoredBuffer, false, true, null);
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

@@ -77,14 +77,12 @@ namespace LazinatorCollections.Tree
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _Locations = null;
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Locations_ByteIndex, _Locations_ByteLength, true, false, null);
                 
                 _Locations = DeserializationFactory.Instance.CreateBaseOrDerivedType(211, (c, p) => new LazinatorDictionary<T, LazinatorList<WInt32>>(c, p), childData, this); 
             }
-            
             _Locations_Accessed = true;
         }
         
@@ -124,14 +122,11 @@ namespace LazinatorCollections.Tree
                 if (Locations == null)
                 {
                     typedClone.Locations = null;
-                }
-                else
+                }else
                 {
                     typedClone.Locations = (LazinatorDictionary<T, LazinatorList<WInt32>>) Locations.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
-                
             }
-            
             
             return typedClone;
         }
@@ -147,8 +142,7 @@ namespace LazinatorCollections.Tree
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Locations_Accessed) && Locations == null)
             {
                 yield return ("Locations", default);
-            }
-            else
+            }else
             {
                 if ((!exploreOnlyDeserializedChildren && Locations != null) || (_Locations_Accessed && _Locations != null))
                 {
@@ -166,9 +160,7 @@ namespace LazinatorCollections.Tree
                         }
                     }
                 }
-                
             }
-            
             yield break;
         }
         
@@ -298,7 +290,6 @@ namespace LazinatorCollections.Tree
             {
                 Locations.UpdateStoredBuffer(ref writer, startPosition + _Locations_ByteIndex + sizeof(int), _Locations_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            
         }
         
         
@@ -360,10 +351,10 @@ namespace LazinatorCollections.Tree
                     var deserialized = Locations;
                 }
                 WriteChild(ref writer, ref _Locations, includeChildrenMode, _Locations_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Locations_ByteIndex, _Locations_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

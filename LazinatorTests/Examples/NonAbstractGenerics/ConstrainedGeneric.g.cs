@@ -76,14 +76,12 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNullableT = default(T?);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNullableT_ByteIndex, _MyNullableT_ByteLength, true, false, null);
                 
                 _MyNullableT = DeserializationFactory.Instance.CreateBasedOnType<T?>(childData, this); 
             }
-            
             _MyNullableT_Accessed = true;
         }
         
@@ -117,14 +115,12 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 _MyT = default(T);
                 _MyT.LazinatorParents = new LazinatorParentsCollection(this);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, true, false, null);
                 
                 _MyT = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
             }
-            
             _MyT_Accessed = true;
         }
         
@@ -175,14 +171,12 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 { // MyU is a struct
                     _MyU.LazinatorParents = new LazinatorParentsCollection(this);
                 }
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyU_ByteIndex, _MyU_ByteLength, true, false, null);
                 
                 _MyU = DeserializationFactory.Instance.CreateBasedOnType<U>(childData, this); 
             }
-            
             _MyU_Accessed = true;
         }
         
@@ -277,25 +271,20 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 typedClone.MyNullableT = (T?) MyNullableT.Value.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 typedClone.MyT = (T) MyT.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (MyU == null)
                 {
                     typedClone.MyU = default(U);
-                }
-                else
+                }else
                 {
                     typedClone.MyU = (U) MyU.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
-                
             }
-            
             
             return typedClone;
         }
@@ -445,8 +434,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyU_Accessed) && MyU == null)
             {
                 yield return ("MyU", default);
-            }
-            else
+            }else
             {
                 if ((!exploreOnlyDeserializedChildren && MyU != null) || (_MyU_Accessed && _MyU != null))
                 {
@@ -464,9 +452,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                         }
                     }
                 }
-                
             }
-            
             yield break;
         }
         
@@ -479,8 +465,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             var deserialized_MyNullableT = MyNullableT;
-            _MyNullableT = (T?) _MyNullableT.Value.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);var deserialized_MyT = MyT;
-            _MyT = (T) _MyT.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);if ((!exploreOnlyDeserializedChildren && MyU != null) || (_MyU_Accessed && _MyU != null))
+            _MyNullableT = (T?) _MyNullableT.Value.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
+            var deserialized_MyT = MyT;
+            _MyT = (T) _MyT.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
+            if ((!exploreOnlyDeserializedChildren && MyU != null) || (_MyU_Accessed && _MyU != null))
             {
                 _MyU = (U) _MyU.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
             }
@@ -608,7 +596,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 MyU.UpdateStoredBuffer(ref writer, startPosition + _MyU_ByteIndex + sizeof(int), _MyU_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            
         }
         
         
@@ -669,10 +656,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 }
                 var copy = _MyNullableT.Value;
                 WriteChild(ref writer, ref copy, includeChildrenMode, _MyNullableT_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyNullableT_ByteIndex, _MyNullableT_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyT value {_MyT}");
             TabbedText.Tabs++;
@@ -688,10 +675,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     var deserialized = MyT;
                 }
                 WriteChild(ref writer, ref _MyT, includeChildrenMode, _MyT_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyU value {_MyU}");
             TabbedText.Tabs++;
@@ -707,10 +694,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     var deserialized = MyU;
                 }
                 WriteChild(ref writer, ref _MyU, includeChildrenMode, _MyU_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyU_ByteIndex, _MyU_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

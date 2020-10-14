@@ -73,14 +73,12 @@ namespace LazinatorTests.Examples.Abstract
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _Item = null;
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Item_ByteIndex, _Item_ByteLength, true, false, null);
                 
                 _Item = DeserializationFactory.Instance.CreateAbstractType<AbstractGeneric1<T>>(childData, this); 
             }
-            
             _Item_Accessed = true;
         }
         
@@ -176,14 +174,11 @@ namespace LazinatorTests.Examples.Abstract
                 if (Item == null)
                 {
                     typedClone.Item = null;
-                }
-                else
+                }else
                 {
                     typedClone.Item = (AbstractGeneric1<T>) Item.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
-                
             }
-            
             
             return typedClone;
         }
@@ -307,8 +302,7 @@ namespace LazinatorTests.Examples.Abstract
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Item_Accessed) && Item == null)
             {
                 yield return ("Item", default);
-            }
-            else
+            }else
             {
                 if ((!exploreOnlyDeserializedChildren && Item != null) || (_Item_Accessed && _Item != null))
                 {
@@ -326,9 +320,7 @@ namespace LazinatorTests.Examples.Abstract
                         }
                     }
                 }
-                
             }
-            
             yield break;
         }
         
@@ -442,7 +434,6 @@ namespace LazinatorTests.Examples.Abstract
             {
                 Item.UpdateStoredBuffer(ref writer, startPosition + _Item_ByteIndex + sizeof(int), _Item_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            
         }
         
         
@@ -502,10 +493,10 @@ namespace LazinatorTests.Examples.Abstract
                     var deserialized = Item;
                 }
                 WriteChild(ref writer, ref _Item, includeChildrenMode, _Item_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Item_ByteIndex, _Item_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

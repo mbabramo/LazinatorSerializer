@@ -76,13 +76,11 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyListTuple = default(List<Tuple<UInt32, ExampleChild, NonLazinatorClass>>);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListTuple_ByteIndex, _MyListTuple_ByteLength, true, false, null);
                 _MyListTuple = ConvertFromBytes_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(childData);
             }
-            
             _MyListTuple_Accessed = true;
         }
         
@@ -114,13 +112,11 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyTupleSerialized = default(Tuple<UInt32, ExampleChild, NonLazinatorClass>);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized_ByteIndex, _MyTupleSerialized_ByteLength, true, false, null);
                 _MyTupleSerialized = ConvertFromBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData);
             }
-            
             _MyTupleSerialized_Accessed = true;
         }
         
@@ -152,13 +148,11 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyTupleSerialized2 = default(Tuple<UInt32, ExampleChild, NonLazinatorClass>);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized2_ByteIndex, _MyTupleSerialized2_ByteLength, true, false, null);
                 _MyTupleSerialized2 = ConvertFromBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData);
             }
-            
             _MyTupleSerialized2_Accessed = true;
         }
         
@@ -190,13 +184,11 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyTupleSerialized3 = default(Tuple<UInt32?, ExampleChild, NonLazinatorClass>);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized3_ByteIndex, _MyTupleSerialized3_ByteLength, true, false, null);
                 _MyTupleSerialized3 = ConvertFromBytes_Tuple_Guint_n_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData);
             }
-            
             _MyTupleSerialized3_Accessed = true;
         }
         
@@ -228,13 +220,11 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyTupleSerialized4 = default(Tuple<Int32, ExampleStructContainingClasses>);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized4_ByteIndex, _MyTupleSerialized4_ByteLength, true, false, null);
                 _MyTupleSerialized4 = ConvertFromBytes_Tuple_Gint_c_C32ExampleStructContainingClasses_g(childData);
             }
-            
             _MyTupleSerialized4_Accessed = true;
         }
         
@@ -266,13 +256,11 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyTupleSerialized5 = default(Tuple<Int32, ExampleStructContainingClasses?>);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized5_ByteIndex, _MyTupleSerialized5_ByteLength, true, false, null);
                 _MyTupleSerialized5 = ConvertFromBytes_Tuple_Gint_c_C32ExampleStructContainingClasses_n_g(childData);
             }
-            
             _MyTupleSerialized5_Accessed = true;
         }
         
@@ -567,11 +555,7 @@ namespace LazinatorTests.Examples.Tuples
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 24;
-            }
+            int lengthForLengths = 24;
             ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
         }
         
@@ -583,12 +567,18 @@ namespace LazinatorTests.Examples.Tuples
         {
             int totalChildrenBytes = 0;
             _MyListTuple_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyTupleSerialized_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyTupleSerialized2_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyTupleSerialized3_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyTupleSerialized4_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyTupleSerialized5_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_RegularTuple_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyTupleSerialized_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyTupleSerialized2_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyTupleSerialized3_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyTupleSerialized4_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyTupleSerialized5_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _RegularTuple_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         
@@ -680,11 +670,7 @@ namespace LazinatorTests.Examples.Tuples
             // write properties
             
             
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 24;
-            }
+            int lengthForLengths = 24;
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
             writer.Skip(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
@@ -809,7 +795,6 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     _MyTupleSerialized4 = (Tuple<Int32, ExampleStructContainingClasses>) CloneOrChange_Tuple_Gint_c_C32ExampleStructContainingClasses_g(_MyTupleSerialized4, l => l.RemoveBufferInHierarchy(), true);
                 }
-                
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyTupleSerialized5 (accessed? {_MyTupleSerialized5_Accessed})");
@@ -838,7 +823,6 @@ namespace LazinatorTests.Examples.Tuples
                 {
                     _MyTupleSerialized5 = (Tuple<Int32, ExampleStructContainingClasses?>) CloneOrChange_Tuple_Gint_c_C32ExampleStructContainingClasses_n_g(_MyTupleSerialized5, l => l.RemoveBufferInHierarchy(), true);
                 }
-                
             }
             TabbedText.Tabs--;
             if (updateStoredBuffer)
@@ -866,14 +850,12 @@ namespace LazinatorTests.Examples.Tuples
                 if (lengthCollectionMember == 0)
                 {
                     collection.Add(default(Tuple<UInt32, ExampleChild, NonLazinatorClass>));
-                }
-                else
+                }else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = ConvertFromBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData);
                     collection.Add(item);
-                }
-                bytesSoFar += lengthCollectionMember;
+                }bytesSoFar += lengthCollectionMember;
             }
             
             return collection;
@@ -909,7 +891,6 @@ namespace LazinatorTests.Examples.Tuples
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             List<Tuple<UInt32, ExampleChild, NonLazinatorClass>> collection = new List<Tuple<UInt32, ExampleChild, NonLazinatorClass>>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
@@ -918,13 +899,11 @@ namespace LazinatorTests.Examples.Tuples
                 if (itemToClone[itemIndex] == null)
                 {
                     collection.Add(default(Tuple<UInt32, ExampleChild, NonLazinatorClass>));
-                }
-                else
+                }else
                 {
                     var itemCopied = (Tuple<UInt32, ExampleChild, NonLazinatorClass>) CloneOrChange_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(itemToClone[itemIndex], cloneOrChangeFunc, avoidCloningIfPossible);
                     collection.Add(itemCopied);
                 }
-                
             }
             return collection;
         }
@@ -1000,7 +979,6 @@ namespace LazinatorTests.Examples.Tuples
             {
                 return default(Tuple<UInt32, ExampleChild, NonLazinatorClass>);
             }
-            
             return new Tuple<UInt32, ExampleChild, NonLazinatorClass>((uint) (itemToConvert?.Item1 ?? default), (ExampleChild) (cloneOrChangeFunc((itemToConvert?.Item2))), (NonLazinatorClass) (itemToConvert?.Item3));
         }
         
@@ -1075,7 +1053,6 @@ namespace LazinatorTests.Examples.Tuples
             {
                 return default(Tuple<UInt32?, ExampleChild, NonLazinatorClass>);
             }
-            
             return new Tuple<UInt32?, ExampleChild, NonLazinatorClass>((uint?) (itemToConvert?.Item1), (ExampleChild) (cloneOrChangeFunc((itemToConvert?.Item2))), (NonLazinatorClass) (itemToConvert?.Item3));
         }
         
@@ -1124,7 +1101,6 @@ namespace LazinatorTests.Examples.Tuples
             {
                 return default(Tuple<Int32, ExampleStructContainingClasses>);
             }
-            
             return new Tuple<Int32, ExampleStructContainingClasses>((int) (itemToConvert?.Item1 ?? default), (ExampleStructContainingClasses) (cloneOrChangeFunc((itemToConvert?.Item2 ?? default))));
         }
         
@@ -1173,7 +1149,6 @@ namespace LazinatorTests.Examples.Tuples
             {
                 return default(Tuple<Int32, ExampleStructContainingClasses?>);
             }
-            
             return new Tuple<Int32, ExampleStructContainingClasses?>((int) (itemToConvert?.Item1 ?? default), (ExampleStructContainingClasses?) (cloneOrChangeFunc((itemToConvert?.Item2))));
         }
         

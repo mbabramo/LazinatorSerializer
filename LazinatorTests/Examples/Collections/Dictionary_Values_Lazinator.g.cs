@@ -73,13 +73,11 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyDictionary = default(Dictionary<Int32, ExampleChild>);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionary_ByteIndex, _MyDictionary_ByteLength, true, false, null);
                 _MyDictionary = ConvertFromBytes_Dictionary_Gint_c_C32ExampleChild_g(childData);
             }
-            
             _MyDictionary_Accessed = true;
         }
         
@@ -111,13 +109,11 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyDictionaryStructs = default(Dictionary<WInt32, WInt32>);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionaryStructs_ByteIndex, _MyDictionaryStructs_ByteLength, true, false, null);
                 _MyDictionaryStructs = ConvertFromBytes_Dictionary_GWInt32_c_C32WInt32_g(childData);
             }
-            
             _MyDictionaryStructs_Accessed = true;
         }
         
@@ -149,13 +145,11 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MySortedDictionary = default(SortedDictionary<Int32, ExampleChild>);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MySortedDictionary_ByteIndex, _MySortedDictionary_ByteLength, true, false, null);
                 _MySortedDictionary = ConvertFromBytes_SortedDictionary_Gint_c_C32ExampleChild_g(childData);
             }
-            
             _MySortedDictionary_Accessed = true;
         }
         
@@ -187,13 +181,11 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MySortedList = default(SortedList<Int32, ExampleChild>);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MySortedList_ByteIndex, _MySortedList_ByteLength, true, false, null);
                 _MySortedList = ConvertFromBytes_SortedList_Gint_c_C32ExampleChild_g(childData);
             }
-            
             _MySortedList_Accessed = true;
         }
         
@@ -474,11 +466,7 @@ namespace LazinatorTests.Examples.Collections
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 16;
-            }
+            int lengthForLengths = 16;
             ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
         }
         
@@ -490,10 +478,14 @@ namespace LazinatorTests.Examples.Collections
         {
             int totalChildrenBytes = 0;
             _MyDictionary_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyDictionaryStructs_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MySortedDictionary_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MySortedList_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_Dictionary_Values_Lazinator_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyDictionaryStructs_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MySortedDictionary_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MySortedList_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _Dictionary_Values_Lazinator_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         
@@ -577,11 +569,7 @@ namespace LazinatorTests.Examples.Collections
             // write properties
             
             
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 16;
-            }
+            int lengthForLengths = 16;
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
             writer.Skip(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
@@ -622,7 +610,6 @@ namespace LazinatorTests.Examples.Collections
                 {
                     _MyDictionary = (Dictionary<Int32, ExampleChild>) CloneOrChange_Dictionary_Gint_c_C32ExampleChild_g(_MyDictionary, l => l.RemoveBufferInHierarchy(), true);
                 }
-                
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyDictionaryStructs (accessed? {_MyDictionaryStructs_Accessed})");
@@ -651,7 +638,6 @@ namespace LazinatorTests.Examples.Collections
                 {
                     _MyDictionaryStructs = (Dictionary<WInt32, WInt32>) CloneOrChange_Dictionary_GWInt32_c_C32WInt32_g(_MyDictionaryStructs, l => l.RemoveBufferInHierarchy(), true);
                 }
-                
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MySortedDictionary (accessed? {_MySortedDictionary_Accessed})");
@@ -680,7 +666,6 @@ namespace LazinatorTests.Examples.Collections
                 {
                     _MySortedDictionary = (SortedDictionary<Int32, ExampleChild>) CloneOrChange_SortedDictionary_Gint_c_C32ExampleChild_g(_MySortedDictionary, l => l.RemoveBufferInHierarchy(), true);
                 }
-                
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MySortedList (accessed? {_MySortedList_Accessed})");
@@ -709,7 +694,6 @@ namespace LazinatorTests.Examples.Collections
                 {
                     _MySortedList = (SortedList<Int32, ExampleChild>) CloneOrChange_SortedList_Gint_c_C32ExampleChild_g(_MySortedList, l => l.RemoveBufferInHierarchy(), true);
                 }
-                
             }
             TabbedText.Tabs--;
             if (updateStoredBuffer)
@@ -763,7 +747,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             Dictionary<Int32, ExampleChild> collection = new Dictionary<Int32, ExampleChild>(collectionLength);
             foreach (var item in itemToClone)
@@ -864,7 +847,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             Dictionary<WInt32, WInt32> collection = new Dictionary<WInt32, WInt32>(collectionLength);
             foreach (var item in itemToClone)
@@ -966,7 +948,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             SortedDictionary<Int32, ExampleChild> collection = new SortedDictionary<Int32, ExampleChild>();
             foreach (var item in itemToClone)
@@ -1020,7 +1001,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             SortedList<Int32, ExampleChild> collection = new SortedList<Int32, ExampleChild>(collectionLength);
             foreach (var item in itemToClone)

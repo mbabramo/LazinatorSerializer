@@ -73,14 +73,12 @@ namespace LazinatorTests.Examples.Abstract
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyBase = null;
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyBase_ByteIndex, _MyBase_ByteLength, true, false, null);
                 
                 _MyBase = DeserializationFactory.Instance.CreateBaseOrDerivedType(1066, (c, p) => new Base(c, p), childData, this); 
             }
-            
             _MyBase_Accessed = true;
         }
         
@@ -176,14 +174,11 @@ namespace LazinatorTests.Examples.Abstract
                 if (MyBase == null)
                 {
                     typedClone.MyBase = null;
-                }
-                else
+                }else
                 {
                     typedClone.MyBase = (Base) MyBase.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
-                
             }
-            
             
             return typedClone;
         }
@@ -307,8 +302,7 @@ namespace LazinatorTests.Examples.Abstract
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyBase_Accessed) && MyBase == null)
             {
                 yield return ("MyBase", default);
-            }
-            else
+            }else
             {
                 if ((!exploreOnlyDeserializedChildren && MyBase != null) || (_MyBase_Accessed && _MyBase != null))
                 {
@@ -326,9 +320,7 @@ namespace LazinatorTests.Examples.Abstract
                         }
                     }
                 }
-                
             }
-            
             yield break;
         }
         
@@ -442,7 +434,6 @@ namespace LazinatorTests.Examples.Abstract
             {
                 MyBase.UpdateStoredBuffer(ref writer, startPosition + _MyBase_ByteIndex + sizeof(int), _MyBase_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            
         }
         
         
@@ -502,10 +493,10 @@ namespace LazinatorTests.Examples.Abstract
                     var deserialized = MyBase;
                 }
                 WriteChild(ref writer, ref _MyBase, includeChildrenMode, _MyBase_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyBase_ByteIndex, _MyBase_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

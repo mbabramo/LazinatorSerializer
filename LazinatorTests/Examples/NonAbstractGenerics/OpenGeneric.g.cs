@@ -67,13 +67,11 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyListT = default(List<T>);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListT_ByteIndex, _MyListT_ByteLength, true, false, null);
                 _MyListT = ConvertFromBytes_List_GT_g(childData);
             }
-            
             _MyListT_Accessed = true;
         }
         
@@ -124,14 +122,12 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 { // MyT is a struct
                     _MyT.LazinatorParents = new LazinatorParentsCollection(this);
                 }
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, true, false, null);
                 
                 _MyT = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
             }
-            
             _MyT_Accessed = true;
         }
         
@@ -228,14 +224,11 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 if (MyT == null)
                 {
                     typedClone.MyT = default(T);
-                }
-                else
+                }else
                 {
                     typedClone.MyT = (T) MyT.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
-                
             }
-            
             
             return typedClone;
         }
@@ -359,8 +352,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyT_Accessed) && MyT == null)
             {
                 yield return ("MyT", default);
-            }
-            else
+            }else
             {
                 if ((!exploreOnlyDeserializedChildren && MyT != null) || (_MyT_Accessed && _MyT != null))
                 {
@@ -378,9 +370,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                         }
                     }
                 }
-                
             }
-            
             yield break;
         }
         
@@ -434,11 +424,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 4;
-            }
+            int lengthForLengths = 4;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 lengthForLengths += 4;
@@ -454,7 +440,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
             int totalChildrenBytes = 0;
             _MyListT_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyT_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyT_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
@@ -509,7 +496,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex + sizeof(int), _MyT_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            
             if (_MyListT_Accessed && _MyListT != null)
             {
                 _MyListT = (List<T>) CloneOrChange_List_GT_g(_MyListT, l => l.RemoveBufferInHierarchy(), true);
@@ -540,11 +526,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             // write properties
             
             
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 4;
-            }
+            int lengthForLengths = 4;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 lengthForLengths += 4;
@@ -598,10 +580,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                     var deserialized = MyT;
                 }
                 WriteChild(ref writer, ref _MyT, includeChildrenMode, _MyT_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
@@ -628,14 +610,12 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 if (lengthCollectionMember == 0)
                 {
                     collection.Add(default(T));
-                }
-                else
+                }else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = DeserializationFactory.Instance.CreateBasedOnType<T>(childData);
                     collection.Add(item);
-                }
-                bytesSoFar += lengthCollectionMember;
+                }bytesSoFar += lengthCollectionMember;
             }
             
             return collection;
@@ -676,7 +656,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             List<T> collection = avoidCloningIfPossible ? itemToClone : new List<T>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
@@ -693,13 +672,11 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 if (itemToClone[itemIndex] == null)
                 {
                     collection.Add(default(T));
-                }
-                else
+                }else
                 {
                     var itemCopied = (T) (cloneOrChangeFunc(itemToClone[itemIndex]));
                     collection.Add(itemCopied);
                 }
-                
             }
             return collection;
         }

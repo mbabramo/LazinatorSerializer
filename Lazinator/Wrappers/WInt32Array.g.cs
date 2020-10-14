@@ -69,13 +69,11 @@ namespace Lazinator.Wrappers
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _WrappedValue = default(Int32[]);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedValue_ByteIndex, _WrappedValue_ByteLength, true, false, null);
                 _WrappedValue = ConvertFromBytes_int_B_b(childData);
             }
-            
             _WrappedValue_Accessed = true;
         }
         
@@ -352,10 +350,6 @@ namespace Lazinator.Wrappers
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 0;
-            }
             ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
         }
         
@@ -434,10 +428,6 @@ namespace Lazinator.Wrappers
             
             
             int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 0;
-            }
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
             writer.Skip(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
@@ -518,7 +508,6 @@ namespace Lazinator.Wrappers
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Length;
             Int32[] collection = new int[collectionLength];
             int itemToCloneCount = itemToClone.Length;

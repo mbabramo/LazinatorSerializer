@@ -84,13 +84,11 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyMemoryByte = default(Memory<Byte>);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyMemoryByte_ByteIndex, _MyMemoryByte_ByteLength, true, false, null);
                 _MyMemoryByte = ConvertFromBytes_Memory_Gbyte_g(childData);
             }
-            
             _MyMemoryByte_Accessed = true;
         }
         
@@ -121,13 +119,11 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyMemoryInt = default(Memory<Int32>);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyMemoryInt_ByteIndex, _MyMemoryInt_ByteLength, true, false, null);
                 _MyMemoryInt = ConvertFromBytes_Memory_Gint_g(childData);
             }
-            
             _MyMemoryInt_Accessed = true;
         }
         
@@ -159,13 +155,11 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNullableMemoryByte = default(Memory<Byte>?);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNullableMemoryByte_ByteIndex, _MyNullableMemoryByte_ByteLength, true, false, null);
                 _MyNullableMemoryByte = ConvertFromBytes_Memory_Gbyte_g_n(childData);
             }
-            
             _MyNullableMemoryByte_Accessed = true;
         }
         
@@ -197,13 +191,11 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNullableMemoryInt = default(Memory<Int32>?);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNullableMemoryInt_ByteIndex, _MyNullableMemoryInt_ByteLength, true, false, null);
                 _MyNullableMemoryInt = ConvertFromBytes_Memory_Gint_g_n(childData);
             }
-            
             _MyNullableMemoryInt_Accessed = true;
         }
         
@@ -235,13 +227,11 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNullableReadOnlyMemoryInt = default(ReadOnlyMemory<Int32>?);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNullableReadOnlyMemoryInt_ByteIndex, _MyNullableReadOnlyMemoryInt_ByteLength, true, false, null);
                 _MyNullableReadOnlyMemoryInt = ConvertFromBytes_ReadOnlyMemory_Gint_g_n(childData);
             }
-            
             _MyNullableReadOnlyMemoryInt_Accessed = true;
         }
         
@@ -272,13 +262,11 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyReadOnlyMemoryByte = default(ReadOnlyMemory<Byte>);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlyMemoryByte_ByteIndex, _MyReadOnlyMemoryByte_ByteLength, true, false, null);
                 _MyReadOnlyMemoryByte = ConvertFromBytes_ReadOnlyMemory_Gbyte_g(childData);
             }
-            
             _MyReadOnlyMemoryByte_Accessed = true;
         }
         
@@ -309,13 +297,11 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyReadOnlyMemoryChar = default(ReadOnlyMemory<Char>);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlyMemoryChar_ByteIndex, _MyReadOnlyMemoryChar_ByteLength, true, false, null);
                 _MyReadOnlyMemoryChar = ConvertFromBytes_ReadOnlyMemory_Gchar_g(childData);
             }
-            
             _MyReadOnlyMemoryChar_Accessed = true;
         }
         
@@ -346,13 +332,11 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyReadOnlyMemoryInt = default(ReadOnlyMemory<Int32>);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlyMemoryInt_ByteIndex, _MyReadOnlyMemoryInt_ByteLength, true, false, null);
                 _MyReadOnlyMemoryInt = ConvertFromBytes_ReadOnlyMemory_Gint_g(childData);
             }
-            
             _MyReadOnlyMemoryInt_Accessed = true;
         }
         
@@ -367,7 +351,6 @@ namespace LazinatorTests.Examples.Collections
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanByte_ByteIndex, _MyReadOnlySpanByte_ByteLength, true, false, null);
                     return childData.InitialMemory.Span;
                 }
-                
                 return _MyReadOnlySpanByte.Span;
             }
             set
@@ -390,7 +373,6 @@ namespace LazinatorTests.Examples.Collections
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanChar_ByteIndex, _MyReadOnlySpanChar_ByteLength, true, false, null);
                     return MemoryMarshal.Cast<byte, char>(childData.InitialMemory.Span);
                 }
-                
                 return MemoryMarshal.Cast<byte, char>(_MyReadOnlySpanChar.Span);
             }
             set
@@ -413,7 +395,6 @@ namespace LazinatorTests.Examples.Collections
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanLong_ByteIndex, _MyReadOnlySpanLong_ByteLength, true, false, null);
                     return MemoryMarshal.Cast<byte, long>(childData.InitialMemory.Span);
                 }
-                
                 return MemoryMarshal.Cast<byte, long>(_MyReadOnlySpanLong.Span);
             }
             set
@@ -763,11 +744,7 @@ namespace LazinatorTests.Examples.Collections
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 44;
-            }
+            int lengthForLengths = 44;
             ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
         }
         
@@ -779,17 +756,28 @@ namespace LazinatorTests.Examples.Collections
         {
             int totalChildrenBytes = 0;
             _MyMemoryByte_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyMemoryInt_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyNullableMemoryByte_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyNullableMemoryInt_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyNullableReadOnlyMemoryInt_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyReadOnlyMemoryByte_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyReadOnlyMemoryChar_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyReadOnlyMemoryInt_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyReadOnlySpanByte_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyReadOnlySpanChar_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyReadOnlySpanLong_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_SpanAndMemory_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyMemoryInt_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyNullableMemoryByte_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyNullableMemoryInt_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyNullableReadOnlyMemoryInt_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyReadOnlyMemoryByte_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyReadOnlyMemoryChar_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyReadOnlyMemoryInt_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyReadOnlySpanByte_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyReadOnlySpanChar_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyReadOnlySpanLong_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _SpanAndMemory_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         
@@ -857,11 +845,7 @@ namespace LazinatorTests.Examples.Collections
             // write properties
             
             
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 44;
-            }
+            int lengthForLengths = 44;
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
             writer.Skip(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
@@ -1212,7 +1196,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Value.Length;
             Memory<Byte> collection = new Memory<Byte>(new byte[collectionLength]);
             var collectionAsSpan = collection.Span;
@@ -1266,7 +1249,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Value.Length;
             Memory<Int32> collection = new Memory<Int32>(new int[collectionLength]);
             var collectionAsSpan = collection.Span;
@@ -1320,7 +1302,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Value.Length;
             Memory<Int32> collection = new Memory<Int32>(new int[collectionLength]);
             var collectionAsSpan = collection.Span;

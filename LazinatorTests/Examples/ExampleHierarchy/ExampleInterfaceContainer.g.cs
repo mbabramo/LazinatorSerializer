@@ -76,14 +76,12 @@ namespace LazinatorTests.Examples.Hierarchy
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _ExampleByInterface = null;
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength, true, false, null);
                 
                 _ExampleByInterface = DeserializationFactory.Instance.CreateBasedOnType<IExample>(childData, this); 
             }
-            
             _ExampleByInterface_Accessed = true;
         }
         
@@ -115,13 +113,11 @@ namespace LazinatorTests.Examples.Hierarchy
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _ExampleListByInterface = default(List<IExample>);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleListByInterface_ByteIndex, _ExampleListByInterface_ByteLength, true, false, null);
                 _ExampleListByInterface = ConvertFromBytes_List_GIExample_g(childData);
             }
-            
             _ExampleListByInterface_Accessed = true;
         }
         
@@ -217,14 +213,11 @@ namespace LazinatorTests.Examples.Hierarchy
                 if (ExampleByInterface == null)
                 {
                     typedClone.ExampleByInterface = null;
-                }
-                else
+                }else
                 {
                     typedClone.ExampleByInterface = (IExample) ExampleByInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
-                
             }
-            
             typedClone.ExampleListByInterface = CloneOrChange_List_GIExample_g(ExampleListByInterface, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
@@ -349,8 +342,7 @@ namespace LazinatorTests.Examples.Hierarchy
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ExampleByInterface_Accessed) && ExampleByInterface == null)
             {
                 yield return ("ExampleByInterface", default);
-            }
-            else
+            }else
             {
                 if ((!exploreOnlyDeserializedChildren && ExampleByInterface != null) || (_ExampleByInterface_Accessed && _ExampleByInterface != null))
                 {
@@ -368,9 +360,7 @@ namespace LazinatorTests.Examples.Hierarchy
                         }
                     }
                 }
-                
             }
-            
             yield break;
         }
         
@@ -424,11 +414,7 @@ namespace LazinatorTests.Examples.Hierarchy
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 4;
-            }
+            int lengthForLengths = 4;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
             {
                 lengthForLengths += 4;
@@ -449,7 +435,8 @@ namespace LazinatorTests.Examples.Hierarchy
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
             _ExampleListByInterface_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_ExampleInterfaceContainer_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _ExampleInterfaceContainer_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         
@@ -495,7 +482,6 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 ExampleByInterface.UpdateStoredBuffer(ref writer, startPosition + _ExampleByInterface_ByteIndex + sizeof(int), _ExampleByInterface_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            
             if (_ExampleListByInterface_Accessed && _ExampleListByInterface != null)
             {
                 _ExampleListByInterface = (List<IExample>) CloneOrChange_List_GIExample_g(_ExampleListByInterface, l => l.RemoveBufferInHierarchy(), true);
@@ -526,11 +512,7 @@ namespace LazinatorTests.Examples.Hierarchy
             // write properties
             
             
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 4;
-            }
+            int lengthForLengths = 4;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
             {
                 lengthForLengths += 4;
@@ -563,10 +545,10 @@ namespace LazinatorTests.Examples.Hierarchy
                     var deserialized = ExampleByInterface;
                 }
                 WriteChild(ref writer, ref _ExampleByInterface, includeChildrenMode, _ExampleByInterface_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, ExampleListByInterface (accessed? {_ExampleListByInterface_Accessed})");
             TabbedText.Tabs++;
@@ -614,14 +596,12 @@ namespace LazinatorTests.Examples.Hierarchy
                 if (lengthCollectionMember == 0)
                 {
                     collection.Add(null);
-                }
-                else
+                }else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = DeserializationFactory.Instance.CreateBasedOnType<IExample>(childData);
                     collection.Add(item);
-                }
-                bytesSoFar += lengthCollectionMember;
+                }bytesSoFar += lengthCollectionMember;
             }
             
             return collection;
@@ -657,7 +637,6 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             List<IExample> collection = avoidCloningIfPossible ? itemToClone : new List<IExample>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
@@ -674,13 +653,11 @@ namespace LazinatorTests.Examples.Hierarchy
                 if (itemToClone[itemIndex] == null)
                 {
                     collection.Add(null);
-                }
-                else
+                }else
                 {
                     var itemCopied = (IExample) (cloneOrChangeFunc(itemToClone[itemIndex]));
                     collection.Add(itemCopied);
                 }
-                
             }
             return collection;
         }

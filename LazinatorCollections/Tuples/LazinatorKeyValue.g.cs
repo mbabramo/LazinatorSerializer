@@ -70,14 +70,12 @@ namespace LazinatorCollections.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _Key = default(TKey);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Key_ByteIndex, _Key_ByteLength, true, false, null);
                 
                 _Key = DeserializationFactory.Instance.CreateBasedOnType<TKey>(childData); 
             }
-            
             _Key_Accessed = true;
         }
         
@@ -111,14 +109,12 @@ namespace LazinatorCollections.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _Value = default(TValue);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Value_ByteIndex, _Value_ByteLength, true, false, null);
                 
                 _Value = DeserializationFactory.Instance.CreateBasedOnType<TValue>(childData); 
             }
-            
             _Value_Accessed = true;
         }
         
@@ -216,27 +212,21 @@ namespace LazinatorCollections.Tuples
                 if (Key == null)
                 {
                     typedClone.Key = default(TKey);
-                }
-                else
+                }else
                 {
                     typedClone.Key = (TKey) Key.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
-                
             }
-            
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (Value == null)
                 {
                     typedClone.Value = default(TValue);
-                }
-                else
+                }else
                 {
                     typedClone.Value = (TValue) Value.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
-                
             }
-            
             
             typedClone.IsDirty = false;
             return typedClone;
@@ -369,8 +359,7 @@ namespace LazinatorCollections.Tuples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Key_Accessed) && Key == null)
             {
                 yield return ("Key", default);
-            }
-            else
+            }else
             {
                 if ((!exploreOnlyDeserializedChildren && Key != null) || (_Key_Accessed && _Key != null))
                 {
@@ -388,14 +377,11 @@ namespace LazinatorCollections.Tuples
                         }
                     }
                 }
-                
             }
-            
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Value_Accessed) && Value == null)
             {
                 yield return ("Value", default);
-            }
-            else
+            }else
             {
                 if ((!exploreOnlyDeserializedChildren && Value != null) || (_Value_Accessed && _Value != null))
                 {
@@ -413,9 +399,7 @@ namespace LazinatorCollections.Tuples
                         }
                     }
                 }
-                
             }
-            
             yield break;
         }
         
@@ -563,12 +547,10 @@ namespace LazinatorCollections.Tuples
             {
                 Key.UpdateStoredBuffer(ref writer, startPosition + _Key_ByteIndex + sizeof(int), _Key_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            
             if (_Value_Accessed && _Value != null)
             {
                 Value.UpdateStoredBuffer(ref writer, startPosition + _Value_ByteIndex + sizeof(int), _Value_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            
         }
         
         
@@ -628,9 +610,6 @@ namespace LazinatorCollections.Tuples
                 var byteLengthCopy = _Key_ByteLength;
                 WriteChild(ref writer, ref _Key, includeChildrenMode, _Key_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, true, false, null), verifyCleanness, updateStoredBuffer, false, true, null);
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, Value value {_Value}");
             TabbedText.Tabs++;
@@ -650,9 +629,6 @@ namespace LazinatorCollections.Tuples
                 var byteLengthCopy = _Value_ByteLength;
                 WriteChild(ref writer, ref _Value, includeChildrenMode, _Value_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, true, false, null), verifyCleanness, updateStoredBuffer, false, true, null);
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

@@ -1486,7 +1486,7 @@ namespace Lazinator.CodeDescription
             {
                 if (SkipCondition != null)
                     sb.AppendLine(skipCheckString);
-                sb.Append(
+                sb.AppendLine(
                         new ConditionalCodeGenerator(ReadInclusionConditional, $@"{BackingFieldString} = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref bytesSoFar);").ToString());
             }
             else
@@ -1506,12 +1506,12 @@ namespace Lazinator.CodeDescription
                                         totalChildrenBytes += {FixedLength};");
                 }
                 else if (SingleByteLength)
-                    sb.Append(
+                    sb.AppendLine(
                         $@"{BackingFieldByteIndex} = indexOfFirstChild + totalChildrenBytes;{skipCheckString}
                             " + new ConditionalCodeGenerator(ReadInclusionConditional,
                             "totalChildrenBytes += span.ToByte(ref bytesSoFar);"));
                 else
-                    sb.Append(
+                    sb.AppendLine(
                         $@"{BackingFieldByteIndex} = indexOfFirstChild + totalChildrenBytes;{skipCheckString}
                             " + new ConditionalCodeGenerator(ReadInclusionConditional,
                             "totalChildrenBytes += span.ToInt32(ref bytesSoFar);"));
@@ -1646,11 +1646,32 @@ namespace Lazinator.CodeDescription
             bool nullableStruct = PropertyType == LazinatorPropertyType.LazinatorStructNullable || (IsDefinitelyStruct && Nullable);
             string propertyNameOrCopy = nullableStruct ? "copy" : $"{BackingFieldString}";
             Func<string, string> lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen($"{BackingFieldString}", $"WriteNullChild(ref writer, {(SingleByteLength ? "true" : "false")}, {(AllLengthsPrecedeChildren || SkipLengthForThisProperty ? "true" : "false")});", originalString) : originalString;
+            string lengthString = "";
+            if (AllLengthsPrecedeChildren && !SkipLengthForThisProperty)
+            {
+                if (SingleByteLength)
+                {
+                    lengthString = $@"lengthValue = writer.Position - startOfChildPosition;
+                        if (lengthValue > byte.MaxValue)
+                        {{
+                            ThrowHelper.ThrowMoreThan255BytesException();
+                        }}
+                        lengthsSpan[0] = (byte) lengthValue;
+                        lengthsSpan = lengthsSpan.Slice(1);";
+                }
+                else
+                {
+                    lengthString = $@"lengthValue = writer.Position - startOfChildPosition;
+                        WriteInt(lengthsSpan, lengthValue);
+                        lengthsSpan = lengthsSpan.Slice(sizeof(int));";
+                }
+            }
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct)
             {
                 string mainWriteString = $@"{IIF(nullableStruct, $@"var copy = {BackingFieldString}.Value;
                             ")}WriteChild(ref writer, ref {propertyNameOrCopy}, includeChildrenMode, {BackingFieldAccessedString}, () => {ChildSliceString}, verifyCleanness, updateStoredBuffer, {(SingleByteLength ? "true" : "false")}, {(AllLengthsPrecedeChildren || SkipLengthForThisProperty ? "true" : "false")}, this);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
-                                {BackingFieldString} = copy;")}";
+                                {BackingFieldString} = copy;")}
+                                {lengthString}";
                 withInclusionConditional =
                     new ConditionalCodeGenerator(WriteInclusionConditional, $@"{EnsureDeserialized()}{lazinatorNullableStructNullCheck(mainWriteString)}").ToString();
             }
@@ -1667,26 +1688,8 @@ namespace Lazinator.CodeDescription
                     $@"{new ConditionalCodeGenerator(WriteInclusionConditional, $"{EnsureDeserialized()}{lazinatorNullableStructNullCheck(mainWriteString)}")}";
             }
             if (withInclusionConditional != "")
-                sb.Append(withInclusionConditional);
-            if (AllLengthsPrecedeChildren && !SkipLengthForThisProperty)
-            {
-                if (SingleByteLength)
-                {
-                    sb.AppendLine($@"lengthValue = writer.Position - startOfChildPosition;
-                        if (lengthValue > byte.MaxValue)
-                        {{
-                            ThrowHelper.ThrowMoreThan255BytesException();
-                        }}
-                        lengthsSpan[0] = (byte) lengthValue;
-                        lengthsSpan = lengthsSpan.Slice(1);");
-                }
-                else
-                {
-                    sb.AppendLine($@"lengthValue = writer.Position - startOfChildPosition;
-                        WriteInt(lengthsSpan, lengthValue);
-                        lengthsSpan = lengthsSpan.Slice(sizeof(int));");
-                }
-            }
+                sb.AppendLine(withInclusionConditional);
+            
         }
 
         private string EnsureDeserialized()
@@ -1695,7 +1698,8 @@ namespace Lazinator.CodeDescription
                 ConditionsCodeGenerator.AndCombine(
                     $"(includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode)",
                     $"{BackingFieldNotAccessedString}"),
-                $"var deserialized = {PropertyName};")}";
+                $"var deserialized = {PropertyName};")}
+                ";
         }
 
         public void AppendCopyPropertyToClone(CodeStringBuilder sb, string nameOfCloneVariable)

@@ -940,7 +940,7 @@ namespace Lazinator.CodeDescription
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator && x.PlaceholderMemoryWriteMethod == null))
             {
                 string propertyName = property.PropertyName;
-                sb.Append(new ConditionalCodeGenerator(getAntecedent(property),
+                sb.AppendLine(new ConditionalCodeGenerator(getAntecedent(property),
                         $@"{IIF(nonNullCheckDefinitelyTrue(property), $@"var deserialized_{propertyName} = {propertyName};
                             ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) _{propertyName}{property.NullForgiveness}{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable || (property.IsDefinitelyStruct && property.Nullable), ".Value")}.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);").ToString());
             }
@@ -948,14 +948,14 @@ namespace Lazinator.CodeDescription
             {
                 string propertyName = property.PropertyName;
 
-                sb.Append(new ConditionalCodeGenerator(getAntecedent(property),
+                sb.AppendLine(new ConditionalCodeGenerator(getAntecedent(property),
                         $@"{IIF(nonNullCheckDefinitelyTrue(property), $@"var deserialized_{propertyName} = {propertyName};
                             ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}({property.BackingFieldAccessWithPossibleException}, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true){property.InnerProperties?[0].PossibleUnsetException}, true);").ToString());
             }
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsNonLazinatorTypeWithoutInterchange && x.PlaceholderMemoryWriteMethod == null))
             {
                 string propertyName = property.PropertyName;
-                sb.Append(new ConditionalCodeGenerator(getAntecedent(property),
+                sb.AppendLine(new ConditionalCodeGenerator(getAntecedent(property),
                         $@"{IIF(nonNullCheckDefinitelyTrue(property), $@"var deserialized_{propertyName} = {propertyName};
                             ")}_{propertyName} = {property.DirectConverterTypeNamePrefix}CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}(_{propertyName}, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);").ToString());
             }
@@ -1194,7 +1194,7 @@ $@"{property.PropertyName}{property.NullForgiveness}{IIF(property.PropertyType =
                 else
                 {
                     string propertyName = property.PropertyName;
-                    sb.Append(new ConditionalCodeGenerator(property.GetNonNullCheck(true),
+                    sb.AppendLine(new ConditionalCodeGenerator(property.GetNonNullCheck(true),
 $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}({property.BackingFieldWithPossibleValueDereferenceWithPossibleException}, l => l.RemoveBufferInHierarchy(), true);").ToString());
                 }
             }
@@ -1287,7 +1287,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 
         public string GetLengthsCalculation(bool readVersion)
         {
-            var properties = PropertiesIncludingInherited.Select(x => (x.InclusionConditionalHelper(readVersion).ToString(), x.BytesUsedForLength()));
+            var properties = PropertiesIncludingInherited.Where(x => !x.IsPrimitive && x.BytesUsedForLength() > 0).Select(x => (x.InclusionConditionalHelper(readVersion).ToString(), x.BytesUsedForLength()));
             Dictionary<string, int> distinct = new Dictionary<string, int>();
             foreach (var property in properties)
             {
@@ -1323,9 +1323,8 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 else
                     portionOfStringToInclude = result.Key;
                 sb.AppendLine($@"if ({portionOfStringToInclude})
-                    {{
-                        lengthForLengths += {result.Value};
-                    ");
+                    {{{IIF(result.Value > 0, $@"
+                        lengthForLengths += {result.Value};")}");
                 s.Push(result.Key);
             } 
             while (s.Any())

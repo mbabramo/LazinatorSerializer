@@ -68,8 +68,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 _Subcontainer = default(ExampleStructContainingStruct);
                 _Subcontainer.LazinatorParents = new LazinatorParentsCollection(this);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, true, false, null);
                 _Subcontainer = new ExampleStructContainingStruct(childData)
@@ -78,7 +77,6 @@ namespace LazinatorTests.Examples.Structs
                 };
                 
             }
-            
             _Subcontainer_Accessed = true;
         }
         
@@ -101,7 +99,6 @@ namespace LazinatorTests.Examples.Structs
                         return toReturn;
                     }
                 }
-                
                 var cleanCopy = _Subcontainer;
                 cleanCopy.IsDirty = false;
                 cleanCopy.DescendantIsDirty = false;
@@ -199,7 +196,6 @@ namespace LazinatorTests.Examples.Structs
             {
                 typedClone.Subcontainer = (ExampleStructContainingStruct) Subcontainer.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
             
             return typedClone;
         }
@@ -345,7 +341,8 @@ namespace LazinatorTests.Examples.Structs
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             var deserialized_Subcontainer = Subcontainer;
-            _Subcontainer = (ExampleStructContainingStruct) _Subcontainer.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);if (changeThisLevel && changeFunc != null)
+            _Subcontainer = (ExampleStructContainingStruct) _Subcontainer.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }
@@ -500,10 +497,10 @@ namespace LazinatorTests.Examples.Structs
                     var deserialized = Subcontainer;
                 }
                 WriteChild(ref writer, ref _Subcontainer, includeChildrenMode, _Subcontainer_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

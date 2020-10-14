@@ -77,14 +77,12 @@ namespace LazinatorCollections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _UnderlyingList = null;
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _UnderlyingList_ByteIndex, _UnderlyingList_ByteLength, true, false, null);
                 
                 _UnderlyingList = DeserializationFactory.Instance.CreateBasedOnType<ILazinatorListable<T>>(childData, this); 
             }
-            
             _UnderlyingList_Accessed = true;
         }
         
@@ -182,14 +180,11 @@ namespace LazinatorCollections
                 if (UnderlyingList == null)
                 {
                     typedClone.UnderlyingList = null;
-                }
-                else
+                }else
                 {
                     typedClone.UnderlyingList = (ILazinatorListable<T>) UnderlyingList.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
-                
             }
-            
             
             return typedClone;
         }
@@ -321,8 +316,7 @@ namespace LazinatorCollections
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _UnderlyingList_Accessed) && UnderlyingList == null)
             {
                 yield return ("UnderlyingList", default);
-            }
-            else
+            }else
             {
                 if ((!exploreOnlyDeserializedChildren && UnderlyingList != null) || (_UnderlyingList_Accessed && _UnderlyingList != null))
                 {
@@ -340,9 +334,7 @@ namespace LazinatorCollections
                         }
                     }
                 }
-                
             }
-            
             yield break;
         }
         
@@ -460,7 +452,6 @@ namespace LazinatorCollections
             {
                 UnderlyingList.UpdateStoredBuffer(ref writer, startPosition + _UnderlyingList_ByteIndex + sizeof(int), _UnderlyingList_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            
         }
         
         
@@ -520,10 +511,10 @@ namespace LazinatorCollections
                     var deserialized = UnderlyingList;
                 }
                 WriteChild(ref writer, ref _UnderlyingList, includeChildrenMode, _UnderlyingList_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _UnderlyingList_ByteIndex, _UnderlyingList_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

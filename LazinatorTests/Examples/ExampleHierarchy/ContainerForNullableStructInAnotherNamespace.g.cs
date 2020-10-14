@@ -73,8 +73,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNullableStruct = default(StructInAnotherNamespace?);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNullableStruct_ByteIndex, _MyNullableStruct_ByteLength, true, false, null);
                 if (childData.Length == 0)
@@ -90,7 +89,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     
                 }
             }
-            
             _MyNullableStruct_Accessed = true;
         }
         
@@ -113,7 +111,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                         return toReturn;
                     }
                 }
-                
                 if (_MyNullableStruct == null)
                 {
                     return null;
@@ -216,14 +213,11 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 if (MyNullableStruct == null)
                 {
                     typedClone.MyNullableStruct = null;
-                }
-                else
+                }else
                 {
                     typedClone.MyNullableStruct = (StructInAnotherNamespace?) MyNullableStruct.Value.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
-                
             }
-            
             
             return typedClone;
         }
@@ -347,8 +341,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyNullableStruct_Accessed) && MyNullableStruct == null)
             {
                 yield return ("MyNullableStruct", default);
-            }
-            else
+            }else
             {
                 if ((!exploreOnlyDeserializedChildren && MyNullableStruct != null) || (_MyNullableStruct_Accessed && _MyNullableStruct != null))
                 {
@@ -366,9 +359,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                         }
                     }
                 }
-                
             }
-            
             yield break;
         }
         
@@ -483,7 +474,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 MyNullableStruct.Value.UpdateStoredBuffer(ref writer, startPosition + _MyNullableStruct_ByteIndex + sizeof(int), _MyNullableStruct_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            
         }
         
         
@@ -545,18 +535,16 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 if (_MyNullableStruct == null)
                 {
                     WriteNullChild(ref writer, false, true);
-                }
-                else
+                }else
                 {
                     var copy = _MyNullableStruct.Value;
                     WriteChild(ref writer, ref copy, includeChildrenMode, _MyNullableStruct_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyNullableStruct_ByteIndex, _MyNullableStruct_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                     _MyNullableStruct = copy;
+                    lengthValue = writer.Position - startOfChildPosition;
+                    WriteInt(lengthsSpan, lengthValue);
+                    lengthsSpan = lengthsSpan.Slice(sizeof(int));
                 }
-                
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

@@ -71,13 +71,11 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyListInt = default(List<WInt32>);
                 _MyListInt_Dirty = true; 
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListInt_ByteIndex, _MyListInt_ByteLength, true, false, null);
                 _MyListInt = ConvertFromBytes_List_GWInt32_g(childData);
             }
-            
             _MyListInt_Accessed = true;
         }
         
@@ -127,13 +125,11 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyListNullableByte = default(List<WNullableByte>);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableByte_ByteIndex, _MyListNullableByte_ByteLength, true, false, null);
                 _MyListNullableByte = ConvertFromBytes_List_GWNullableByte_g(childData);
             }
-            
             _MyListNullableByte_Accessed = true;
         }
         
@@ -165,13 +161,11 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyListNullableInt = default(List<WNullableInt32>);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableInt_ByteIndex, _MyListNullableInt_ByteLength, true, false, null);
                 _MyListNullableInt = ConvertFromBytes_List_GWNullableInt32_g(childData);
             }
-            
             _MyListNullableInt_Accessed = true;
         }
         
@@ -445,11 +439,7 @@ namespace LazinatorTests.Examples.Collections
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 12;
-            }
+            int lengthForLengths = 12;
             ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
         }
         
@@ -461,9 +451,12 @@ namespace LazinatorTests.Examples.Collections
         {
             int totalChildrenBytes = 0;
             _MyListInt_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyListNullableByte_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_MyListNullableInt_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_DotNetList_Wrapper_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyListNullableByte_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _MyListNullableInt_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _DotNetList_Wrapper_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         
@@ -543,11 +536,7 @@ namespace LazinatorTests.Examples.Collections
             // write properties
             
             
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 12;
-            }
+            int lengthForLengths = 12;
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
             writer.Skip(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
@@ -682,7 +671,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             List<WInt32> collection = avoidCloningIfPossible ? itemToClone : new List<WInt32>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
@@ -751,7 +739,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             List<WNullableByte> collection = avoidCloningIfPossible ? itemToClone : new List<WNullableByte>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
@@ -820,7 +807,6 @@ namespace LazinatorTests.Examples.Collections
             {
                 return default;
             }
-            
             int collectionLength = itemToClone.Count;
             List<WNullableInt32> collection = avoidCloningIfPossible ? itemToClone : new List<WNullableInt32>(collectionLength);
             int itemToCloneCount = itemToClone.Count;

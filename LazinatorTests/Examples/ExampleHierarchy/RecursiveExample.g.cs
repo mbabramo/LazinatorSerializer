@@ -75,14 +75,12 @@ namespace LazinatorTests.Examples.Hierarchy
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _RecursiveClass = null;
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _RecursiveClass_ByteIndex, _RecursiveClass_ByteLength, true, false, null);
                 
                 _RecursiveClass = DeserializationFactory.Instance.CreateBaseOrDerivedType(1047, (c, p) => new RecursiveExample(c, p), childData, this); 
             }
-            
             _RecursiveClass_Accessed = true;
         }
         
@@ -122,14 +120,12 @@ namespace LazinatorTests.Examples.Hierarchy
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _RecursiveInterface = null;
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _RecursiveInterface_ByteIndex, _RecursiveInterface_ByteLength, true, false, null);
                 
                 _RecursiveInterface = DeserializationFactory.Instance.CreateBasedOnType<IRecursiveExample>(childData, this); 
             }
-            
             _RecursiveInterface_Accessed = true;
         }
         
@@ -225,27 +221,21 @@ namespace LazinatorTests.Examples.Hierarchy
                 if (RecursiveClass == null)
                 {
                     typedClone.RecursiveClass = null;
-                }
-                else
+                }else
                 {
                     typedClone.RecursiveClass = (RecursiveExample) RecursiveClass.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
-                
             }
-            
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (RecursiveInterface == null)
                 {
                     typedClone.RecursiveInterface = null;
-                }
-                else
+                }else
                 {
                     typedClone.RecursiveInterface = (IRecursiveExample) RecursiveInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
-                
             }
-            
             
             return typedClone;
         }
@@ -369,8 +359,7 @@ namespace LazinatorTests.Examples.Hierarchy
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _RecursiveClass_Accessed) && RecursiveClass == null)
             {
                 yield return ("RecursiveClass", default);
-            }
-            else
+            }else
             {
                 if ((!exploreOnlyDeserializedChildren && RecursiveClass != null) || (_RecursiveClass_Accessed && _RecursiveClass != null))
                 {
@@ -388,14 +377,11 @@ namespace LazinatorTests.Examples.Hierarchy
                         }
                     }
                 }
-                
             }
-            
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _RecursiveInterface_Accessed) && RecursiveInterface == null)
             {
                 yield return ("RecursiveInterface", default);
-            }
-            else
+            }else
             {
                 if ((!exploreOnlyDeserializedChildren && RecursiveInterface != null) || (_RecursiveInterface_Accessed && _RecursiveInterface != null))
                 {
@@ -413,9 +399,7 @@ namespace LazinatorTests.Examples.Hierarchy
                         }
                     }
                 }
-                
             }
-            
             yield break;
         }
         
@@ -539,12 +523,10 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 RecursiveClass.UpdateStoredBuffer(ref writer, startPosition + _RecursiveClass_ByteIndex + sizeof(int), _RecursiveClass_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            
             if (_RecursiveInterface_Accessed && _RecursiveInterface != null)
             {
                 RecursiveInterface.UpdateStoredBuffer(ref writer, startPosition + _RecursiveInterface_ByteIndex + sizeof(int), _RecursiveInterface_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            
         }
         
         
@@ -604,10 +586,10 @@ namespace LazinatorTests.Examples.Hierarchy
                     var deserialized = RecursiveClass;
                 }
                 WriteChild(ref writer, ref _RecursiveClass, includeChildrenMode, _RecursiveClass_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _RecursiveClass_ByteIndex, _RecursiveClass_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, RecursiveInterface (accessed? {_RecursiveInterface_Accessed}) (backing var null? {_RecursiveInterface == null}) ");
             TabbedText.Tabs++;
@@ -623,10 +605,10 @@ namespace LazinatorTests.Examples.Hierarchy
                     var deserialized = RecursiveInterface;
                 }
                 WriteChild(ref writer, ref _RecursiveInterface, includeChildrenMode, _RecursiveInterface_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _RecursiveInterface_ByteIndex, _RecursiveInterface_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

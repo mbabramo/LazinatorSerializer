@@ -79,8 +79,7 @@ namespace LazinatorCollections.OffsetList
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _FourByteItems = null;
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _FourByteItems_ByteIndex, _FourByteItems_ByteLength, true, false, null);
                 if (childData.Length == 0)
@@ -96,7 +95,6 @@ namespace LazinatorCollections.OffsetList
                     
                 }
             }
-            
             _FourByteItems_Accessed = true;
         }
         
@@ -139,8 +137,7 @@ namespace LazinatorCollections.OffsetList
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _TwoByteItems = null;
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _TwoByteItems_ByteIndex, _TwoByteItems_ByteLength, true, false, null);
                 if (childData.Length == 0)
@@ -156,7 +153,6 @@ namespace LazinatorCollections.OffsetList
                     
                 }
             }
-            
             _TwoByteItems_Accessed = true;
         }
         
@@ -258,27 +254,21 @@ namespace LazinatorCollections.OffsetList
                 if (FourByteItems == null)
                 {
                     typedClone.FourByteItems = null;
-                }
-                else
+                }else
                 {
                     typedClone.FourByteItems = (LazinatorFastReadListInt32) FourByteItems.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
-                
             }
-            
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if (TwoByteItems == null)
                 {
                     typedClone.TwoByteItems = null;
-                }
-                else
+                }else
                 {
                     typedClone.TwoByteItems = (LazinatorFastReadListInt16) TwoByteItems.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
-                
             }
-            
             
             return typedClone;
         }
@@ -410,8 +400,7 @@ namespace LazinatorCollections.OffsetList
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _FourByteItems_Accessed) && FourByteItems == null)
             {
                 yield return ("FourByteItems", default);
-            }
-            else
+            }else
             {
                 if ((!exploreOnlyDeserializedChildren && FourByteItems != null) || (_FourByteItems_Accessed && _FourByteItems != null))
                 {
@@ -429,14 +418,11 @@ namespace LazinatorCollections.OffsetList
                         }
                     }
                 }
-                
             }
-            
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _TwoByteItems_Accessed) && TwoByteItems == null)
             {
                 yield return ("TwoByteItems", default);
-            }
-            else
+            }else
             {
                 if ((!exploreOnlyDeserializedChildren && TwoByteItems != null) || (_TwoByteItems_Accessed && _TwoByteItems != null))
                 {
@@ -454,9 +440,7 @@ namespace LazinatorCollections.OffsetList
                         }
                     }
                 }
-                
             }
-            
             yield break;
         }
         
@@ -584,12 +568,10 @@ namespace LazinatorCollections.OffsetList
             {
                 FourByteItems.UpdateStoredBuffer(ref writer, startPosition + _FourByteItems_ByteIndex + sizeof(int), _FourByteItems_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            
             if (_TwoByteItems_Accessed && _TwoByteItems != null)
             {
                 TwoByteItems.UpdateStoredBuffer(ref writer, startPosition + _TwoByteItems_ByteIndex + sizeof(int), _TwoByteItems_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
             }
-            
         }
         
         
@@ -639,10 +621,10 @@ namespace LazinatorCollections.OffsetList
                     var deserialized = FourByteItems;
                 }
                 WriteChild(ref writer, ref _FourByteItems, includeChildrenMode, _FourByteItems_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _FourByteItems_ByteIndex, _FourByteItems_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, TwoByteItems (accessed? {_TwoByteItems_Accessed}) (backing var null? {_TwoByteItems == null}) ");
             TabbedText.Tabs++;
@@ -658,10 +640,10 @@ namespace LazinatorCollections.OffsetList
                     var deserialized = TwoByteItems;
                 }
                 WriteChild(ref writer, ref _TwoByteItems, includeChildrenMode, _TwoByteItems_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _TwoByteItems_ByteIndex, _TwoByteItems_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

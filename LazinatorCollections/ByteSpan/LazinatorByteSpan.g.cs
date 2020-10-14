@@ -52,7 +52,6 @@ namespace LazinatorCollections.ByteSpan
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ReadOnly_ByteIndex, _ReadOnly_ByteLength, true, false, null);
                     return childData.InitialMemory.Span;
                 }
-                
                 return _ReadOnly.Span;
             }
             [DebuggerStepThrough]
@@ -95,13 +94,11 @@ namespace LazinatorCollections.ByteSpan
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _ReadOrWrite = default(Memory<Byte>);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ReadOrWrite_ByteIndex, _ReadOrWrite_ByteLength, true, false, null);
                 _ReadOrWrite = ConvertFromBytes_Memory_Gbyte_g(childData);
             }
-            
             _ReadOrWrite_Accessed = true;
         }
         
@@ -387,11 +384,7 @@ namespace LazinatorCollections.ByteSpan
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 8;
-            }
+            int lengthForLengths = 8;
             ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
         }
         
@@ -403,8 +396,10 @@ namespace LazinatorCollections.ByteSpan
         {
             int totalChildrenBytes = 0;
             _ReadOnly_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_ReadOrWrite_ByteIndex = indexOfFirstChild + totalChildrenBytes;
-            totalChildrenBytes += span.ToInt32(ref bytesSoFar);_LazinatorByteSpan_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _ReadOrWrite_ByteIndex = indexOfFirstChild + totalChildrenBytes;
+            totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            _LazinatorByteSpan_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
         }
         
@@ -473,11 +468,7 @@ namespace LazinatorCollections.ByteSpan
             // write properties
             
             
-            int lengthForLengths = 0;
-            if (true)
-            {
-                lengthForLengths += 8;
-            }
+            int lengthForLengths = 8;
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
             writer.Skip(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);

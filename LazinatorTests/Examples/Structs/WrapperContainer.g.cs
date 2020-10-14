@@ -68,8 +68,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 _WrappedInt = default(WInt32);
                 _WrappedInt.LazinatorParents = new LazinatorParentsCollection(this);
-            }
-            else
+            }else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, true, false, null);
                 _WrappedInt = new WInt32(childData)
@@ -78,7 +77,6 @@ namespace LazinatorTests.Examples.Structs
                 };
                 
             }
-            
             _WrappedInt_Accessed = true;
         }
         
@@ -101,7 +99,6 @@ namespace LazinatorTests.Examples.Structs
                         return toReturn;
                     }
                 }
-                
                 var cleanCopy = _WrappedInt;
                 cleanCopy.IsDirty = false;
                 cleanCopy.DescendantIsDirty = false;
@@ -199,7 +196,6 @@ namespace LazinatorTests.Examples.Structs
             {
                 typedClone.WrappedInt = (WInt32) WrappedInt.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
-            
             
             return typedClone;
         }
@@ -345,7 +341,8 @@ namespace LazinatorTests.Examples.Structs
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             var deserialized_WrappedInt = WrappedInt;
-            _WrappedInt = (WInt32) _WrappedInt.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);if (changeThisLevel && changeFunc != null)
+            _WrappedInt = (WInt32) _WrappedInt.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);
+            if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }
@@ -500,10 +497,10 @@ namespace LazinatorTests.Examples.Structs
                     var deserialized = WrappedInt;
                 }
                 WriteChild(ref writer, ref _WrappedInt, includeChildrenMode, _WrappedInt_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                lengthValue = writer.Position - startOfChildPosition;
+                WriteInt(lengthsSpan, lengthValue);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
-            lengthValue = writer.Position - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
