@@ -158,7 +158,7 @@ namespace LazinatorCollections
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             PostDeserialization();
-            return bytesSoFar;
+            return _LazinatorList_T_EndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

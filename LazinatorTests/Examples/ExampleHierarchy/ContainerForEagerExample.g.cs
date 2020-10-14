@@ -128,7 +128,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             _ = EagerExample;
-            return bytesSoFar;
+            return _ContainerForEagerExample_EndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

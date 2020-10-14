@@ -894,7 +894,7 @@ namespace LazinatorTests.Examples
             {
                 LazinatorObjectVersionUpgrade(serializedVersionNumber);
             }
-            return bytesSoFar;
+            return _Example_EndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

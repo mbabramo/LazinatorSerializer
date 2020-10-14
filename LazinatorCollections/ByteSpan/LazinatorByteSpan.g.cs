@@ -149,7 +149,7 @@ namespace LazinatorCollections.ByteSpan
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             PostDeserialization();
-            return bytesSoFar;
+            return _LazinatorByteSpan_EndByteIndex;
         }
         
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
