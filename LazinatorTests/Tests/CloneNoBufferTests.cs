@@ -35,10 +35,23 @@ namespace LazinatorTests.Tests
         {
             var clonedWithBuffer = lazinator.CloneLazinator(includeChildrenMode, CloneBufferOptions.IndependentBuffers);
             var clonedNoBuffer = lazinator.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
-            var clonedWithBufferString = new HierarchyTree(clonedWithBuffer).ToString();
-            var clonedNoBufferString = new HierarchyTree(clonedNoBuffer).ToString();
+            string clonedWithBufferString = new HierarchyTree(clonedWithBuffer).ToString();
+            string clonedNoBufferString = new HierarchyTree(clonedNoBuffer).ToString();
+            if (clonedWithBufferString != clonedNoBufferString)
+            {
+                var DEBUG = 0;
+            }
             try
             {
+                //var DEBUGX = ((ExampleStructContainingClasses)clonedWithBuffer).MyChild1;
+                //var DEBUGX2 = ((ExampleStructContainingClasses)clonedNoBuffer).MyChild1;
+                //var DEBUG = lazinator.GetHierarchyString();
+                //var DEBUG2 = clonedWithBuffer.GetHierarchyString();
+                //var DEBUG3 = clonedWithBuffer.GetHierarchyString();
+                //if (DEBUG != DEBUG2 || DEBUG2 != DEBUG3)
+                //{
+                //    var DEBUG4 = 0;
+                //}
                 LazinatorUtilities.ConfirmHierarchiesEqual(clonedWithBuffer, clonedNoBuffer);
             }
             catch (Exception ex)
