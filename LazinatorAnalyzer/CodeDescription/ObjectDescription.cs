@@ -373,7 +373,7 @@ namespace Lazinator.CodeDescription
                     boilerplate = $@"        /* Abstract declarations */
 			            public abstract LazinatorParentsCollection LazinatorParents {{ get; set; }}
                     
-                        {ProtectedIfApplicable}abstract int Deserialize();
+                        {ProtectedIfApplicable}abstract void Deserialize();
                         
                         public abstract LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
                         
@@ -456,7 +456,7 @@ namespace Lazinator.CodeDescription
 
                         {HideILazinatorProperty}public {DerivationKeyword}IncludeChildrenMode OriginalIncludeChildrenMode {{ get; set; }}
 
-                        {ProtectedIfApplicable}{DerivationKeyword}int Deserialize()
+                        {ProtectedIfApplicable}{DerivationKeyword}void Deserialize()
                         {{
                             FreeInMemoryObjects();
                             int bytesSoFar = 0;
@@ -486,7 +486,6 @@ namespace Lazinator.CodeDescription
                                 $@"
                             PostDeserialization();")
                         }
-                            return bytesSoFar;
                         }}
 
                         public {DerivationKeyword}LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
@@ -569,10 +568,10 @@ namespace Lazinator.CodeDescription
                         {ProtectedIfApplicable}{DerivationKeyword}void DeserializeLazinator(LazinatorMemory serializedBytes)
                         {{
                             LazinatorMemoryStorage = serializedBytes;
-                            int length = Deserialize();
-                            if (length != LazinatorMemoryStorage.Length)
+                            Deserialize();
+                            if (_{ObjectNameEncodable}_EndByteIndex != LazinatorMemoryStorage.Length)
                             {{
-                                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
+                                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, _{ObjectNameEncodable}_EndByteIndex);
                             }}
                         }}
 
