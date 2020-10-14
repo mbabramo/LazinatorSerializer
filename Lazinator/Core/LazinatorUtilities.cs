@@ -1074,6 +1074,29 @@ namespace Lazinator.Core
 
         #endregion
 
+        #region Tracing reads
 
+        static Stack<long> TraceBytePositions = new Stack<long>();
+
+        public static void TraceReadNewObject(long bytePosition) => TraceBytePositions.Push(bytePosition);
+        public static void TraceConcludeReadingObject() => TraceBytePositions.Pop();
+
+        private static void TabBasedOnCurrentBytePosition()
+        {
+            int spacesPerIndentLevel = 5;
+            int indentLevel = TraceBytePositions.Count();
+            int indentSpaces = indentLevel * spacesPerIndentLevel;
+            for (int i = 0; i < indentSpaces; i++)
+                Debug.Write(" ");
+        }
+
+        public static void TraceRead(string variableName, long bytePositionWithinObject)
+        {
+            TabBasedOnCurrentBytePosition();
+            long sumOfPreviousObjectsStartPositions = TraceBytePositions.Sum();
+            System.Diagnostics.Debug.WriteLine($"Reading {variableName} at byte {sumOfPreviousObjectsStartPositions + bytePositionWithinObject}");
+        }
+
+        #endregion
     }
 }
