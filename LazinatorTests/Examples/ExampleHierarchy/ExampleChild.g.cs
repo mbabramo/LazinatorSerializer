@@ -357,6 +357,10 @@ namespace LazinatorTests.Examples
         {
             LazinatorMemoryStorage = serializedBytes;
             int length = Deserialize();
+            if (length == 41 || serializedBytes.Length == 41)
+            {
+                var DEBUG = 0;
+            }
             if (length != LazinatorMemoryStorage.Length)
             {
                 LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
@@ -379,12 +383,20 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.IsEmpty || IncludeChildrenMode.IncludeAllChildren != OriginalIncludeChildrenMode || (IsDirty || DescendantIsDirty))
             {
                 LazinatorMemoryStorage = EncodeToNewBuffer(IncludeChildrenMode.IncludeAllChildren, false, true);
+                if (LazinatorMemoryStorage.Length == 41)
+                {
+                    var DEBUG = 0;
+                }
             }
             else
             {
                 BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
                 LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
                 LazinatorMemoryStorage = writer.LazinatorMemory;
+                if (LazinatorMemoryStorage.Length == 41)
+                {
+                    var DEBUG = 0;
+                }
             }
             OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
             if (!LazinatorParents.Any())
@@ -596,6 +608,10 @@ namespace LazinatorTests.Examples
             
             var newBuffer = writer.Slice(startPosition, length);
             LazinatorMemoryStorage = newBuffer;
+            if (LazinatorMemoryStorage.Length == 41)
+            {
+                var DEBUG = 0;
+            }
         }
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)

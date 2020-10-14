@@ -641,6 +641,20 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
+        public void UpdateBufferPreservesChange()
+        {
+            Example e = GetTypicalExample();
+            e.MyChild1.MyShort = 5;
+            e = e.CloneLazinatorTyped();
+            e.MyChild1.MyShort = 6;
+            e.UpdateStoredBuffer();
+            e.MyChar = '5';
+            var e2 = e.CloneLazinatorTyped();
+            var x = e2.MyChild1.MyShort;
+            x.Should().Be(6);
+        }
+
+        [Fact]
         public void UpdateBufferForDeserialized()
         {
             Example e = GetTypicalExample();
