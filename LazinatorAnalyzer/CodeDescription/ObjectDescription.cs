@@ -486,7 +486,7 @@ namespace Lazinator.CodeDescription
                                 $@"
                             PostDeserialization();")
                         }
-                            return bytesSoFar;
+                            return {(ContainsEndByteIndex ? $"_OverallEndByteIndex" : "bytesSoFar")};
                         }}
 
                         public {DerivationKeyword}LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
@@ -676,6 +676,16 @@ namespace Lazinator.CodeDescription
             return sb.ToString();
         }
 
+        private bool ContainsEndByteIndex => !IsAbstract && PropertiesToDefineThisLevel.Any(property =>
+                    property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface ||
+                    property.PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface ||
+                    property.PropertyType == LazinatorPropertyType.LazinatorStruct ||
+                    property.PropertyType == LazinatorPropertyType.LazinatorStructNullable ||
+                    property.PropertyType == LazinatorPropertyType.NonLazinator ||
+                    property.PropertyType == LazinatorPropertyType.SupportedCollection ||
+                    property.PropertyType == LazinatorPropertyType.SupportedTuple ||
+                    property.PropertyType == LazinatorPropertyType.OpenGenericParameter);
+
         private void AppendPropertyDefinitions(CodeStringBuilder sb)
         {
             sb.AppendLine($@"/* Property definitions */
@@ -713,11 +723,15 @@ namespace Lazinator.CodeDescription
                 }
                 else
                 {
-                    sb.AppendLine(
-                            $"{ProtectedIfApplicable}{GetDerivationKeywordForLengthProperty(lastPropertyToIndex)}int {lastPropertyToIndex.BackingFieldByteLength} => _OverallEndByteIndex - {lastPropertyToIndex.BackingFieldByteIndex};");
-                    if (!IsDerived)
+                    string derivationKeyword = GetDerivationKeywordForLengthProperty(lastPropertyToIndex);
+                    if ((ObjectType != LazinatorObjectType.Struct && !GeneratingRefStruct) && (lastPropertyToIndex.PropertyType == LazinatorPropertyType.OpenGenericParameter || derivationKeyword == "override "))
                         sb.AppendLine(
-                            $"{ProtectedIfApplicable} int {lastPropertyToIndex.BackingFieldByteLength} => LazinatorMemoryStorage.Length - {lastPropertyToIndex.BackingFieldByteIndex};");
+                            $"private int _{ObjectNameEncodable}_EndByteIndex = 0;"); // initialization suppresses warning in case the open generic is never closed
+                    else sb.AppendLine(
+                            $"private int _{ObjectNameEncodable}_EndByteIndex;");
+                    sb.AppendLine(
+                            $"{ProtectedIfApplicable}{derivationKeyword}int {lastPropertyToIndex.BackingFieldByteLength} => _{ObjectNameEncodable}_EndByteIndex - {lastPropertyToIndex.BackingFieldByteIndex};");
+                    sb.AppendLine($@"{ProtectedIfApplicable}{(IsDerivedFromNonAbstractLazinator && BaseLazinatorObject.ContainsEndByteIndex ? "override" : "virtual")} int _OverallEndByteIndex => _{ObjectNameEncodable}_EndByteIndex;");
                 }
             }
             sb.AppendLine();
@@ -1362,6 +1376,9 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 AppendPropertyWrite(sb, property);
             }
 
+            if (!isPrimitive)
+                AppendEndByteIndex(sb, propertiesToWrite, "writer.Position - startOfObjectPosition", true);
+
             sb.Append($@"}}
 ");
         }
@@ -1442,10 +1459,27 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                     property.AppendPropertyReadString(sb, IncludeTracingCode);
             }
 
+            AppendEndByteIndex(sb, thisLevel, "indexOfFirstChild + totalChildrenBytes", false);
+
             sb.Append($@"return totalChildrenBytes;
                 }}
 
         ");
+        }
+
+        private void AppendEndByteIndex(CodeStringBuilder sb, IEnumerable<PropertyDescription> thisLevel, string endByteString, bool addConditionalForUpdateStoredBuffer)
+        {
+            var lastProperty = thisLevel.LastOrDefault();
+            if (lastProperty != null && lastProperty.PropertyType != LazinatorPropertyType.PrimitiveType && lastProperty.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable)
+            {
+                if (addConditionalForUpdateStoredBuffer)
+                    sb.AppendLine($@"if (updateStoredBuffer)
+                                {{");
+                sb.Append($@"_{ObjectNameEncodable}_EndByteIndex = {endByteString};
+                    ");
+                if (addConditionalForUpdateStoredBuffer)
+                    sb.AppendLine($@"}}");
+            }
         }
 
         private string GetConstructors()
@@ -1591,8 +1625,6 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             return header.ToString();
         }
 
-        // Properties have corresponding _ByteLength properties, but these sometimes need to be overridable,
-        // since one may be defined relative to the end of the object, yet a subclass may add properties.
         private string GetDerivationKeywordForLengthProperty(PropertyDescription propertyDescription)
         {
             string derivationKeyword;
