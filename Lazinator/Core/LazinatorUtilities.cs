@@ -429,13 +429,14 @@ namespace Lazinator.Core
             bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction)
         {
             LazinatorMemory original = getChildSliceForFieldFn();
-            if (!isAccessed)
+            int length = original.Length;
+            if (!isAccessed && length > 0)
             {
                 // object has never been loaded into memory, so there is no need to verify cleanness
                 // just return what we have.
                 original.WriteToBinaryBuffer(ref writer);
             }
-            else if (isBelievedDirty || original.Length == 0)
+            else if (isBelievedDirty || length == 0)
             {
                 // We definitely need to write to binary, because either the dirty flag has been set or the original storage doesn't have anything to help us.
                 void action(ref BinaryBufferWriter w) => binaryWriterAction(ref w, verifyCleanness);
