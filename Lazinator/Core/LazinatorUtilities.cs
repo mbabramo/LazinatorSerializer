@@ -1044,8 +1044,8 @@ namespace Lazinator.Core
         {
             if (!lazinator.IsDirty && !lazinator.DescendantIsDirty && lazinator.OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren && lazinator.LazinatorMemoryStorage.IsEmpty == false && lazinator.LazinatorMemoryStorage.Disposed == false)
             {
-                var result = FarmhashByteSpans.Hash64(lazinator.LazinatorMemoryStorage.OnlyMemory.Span);
                 var DEBUG = String.Join(",", lazinator.LazinatorMemoryStorage.OnlyMemory.Span.ToArray());
+                var result = FarmhashByteSpans.Hash64(lazinator.LazinatorMemoryStorage.OnlyMemory.Span);
                 Debug.WriteLine(DEBUG);
                 return result;
             }
@@ -1053,8 +1053,8 @@ namespace Lazinator.Core
             {
                 LazinatorMemory serialized =
                     lazinator.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
-                var result = FarmhashByteSpans.Hash64(serialized.InitialMemory.Span);
                 var DEBUG = String.Join(",", serialized.InitialMemory.Span.ToArray());
+                var result = FarmhashByteSpans.Hash64(serialized.InitialMemory.Span);
                 Debug.WriteLine(DEBUG);
                 serialized.Dispose();
                 return result;
