@@ -676,7 +676,7 @@ namespace Lazinator.CodeDescription
             return sb.ToString();
         }
 
-        private bool ContainsEndByteIndex => !IsAbstract && PropertiesToDefineThisLevel.Any(property =>
+        private bool ContainsEndByteIndex => !IsAbstract && !IsSealedOrStruct && PropertiesToDefineThisLevel.Any(property =>
                     property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface ||
                     property.PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface ||
                     property.PropertyType == LazinatorPropertyType.LazinatorStruct ||
@@ -723,15 +723,21 @@ namespace Lazinator.CodeDescription
                 }
                 else
                 {
-                    string derivationKeyword = GetDerivationKeywordForLengthProperty(lastPropertyToIndex);
-                    if ((ObjectType != LazinatorObjectType.Struct && !GeneratingRefStruct) && (lastPropertyToIndex.PropertyType == LazinatorPropertyType.OpenGenericParameter || derivationKeyword == "override "))
+                    // DEBUG string derivationKeyword = GetDerivationKeywordForLengthProperty(lastPropertyToIndex);
+                    if (ContainsEndByteIndex)
+                    {
+                        bool mustInitialize = ((ObjectType != LazinatorObjectType.Struct && !GeneratingRefStruct) && (lastPropertyToIndex.PropertyType == LazinatorPropertyType.OpenGenericParameter));  // initialization suppresses warning in case the open generic is never closed
                         sb.AppendLine(
-                            $"private int _{ObjectNameEncodable}_EndByteIndex = 0;"); // initialization suppresses warning in case the open generic is never closed
-                    else sb.AppendLine(
-                            $"private int _{ObjectNameEncodable}_EndByteIndex;");
-                    sb.AppendLine(
-                            $"{ProtectedIfApplicable}{derivationKeyword}int {lastPropertyToIndex.BackingFieldByteLength} => _{ObjectNameEncodable}_EndByteIndex - {lastPropertyToIndex.BackingFieldByteIndex};");
-                    sb.AppendLine($@"{ProtectedIfApplicable}{(IsDerivedFromNonAbstractLazinator && BaseLazinatorObject.ContainsEndByteIndex ? "override" : "virtual")} int _OverallEndByteIndex => _{ObjectNameEncodable}_EndByteIndex;");
+                                $"private int _{ObjectNameEncodable}_EndByteIndex{IIF(mustInitialize, " = 0")};");
+                        sb.AppendLine(
+                                $"{ProtectedIfApplicable}int {lastPropertyToIndex.BackingFieldByteLength} => _{ObjectNameEncodable}_EndByteIndex - {lastPropertyToIndex.BackingFieldByteIndex};");
+                        sb.AppendLine($@"{ProtectedIfApplicable}{(IsDerivedFromNonAbstractLazinator && BaseLazinatorObject.ContainsEndByteIndex ? "override" : "virtual")} int _OverallEndByteIndex => _{ObjectNameEncodable}_EndByteIndex;");
+                    }
+                    else
+                    {
+                        sb.AppendLine(
+                                $"{ProtectedIfApplicable}int {lastPropertyToIndex.BackingFieldByteLength} => LazinatorMemoryStorage.Length - {lastPropertyToIndex.BackingFieldByteIndex};");
+                    }
                 }
             }
             sb.AppendLine();
@@ -1376,7 +1382,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 AppendPropertyWrite(sb, property);
             }
 
-            if (!isPrimitive)
+            if (!isPrimitive && ContainsEndByteIndex)
                 AppendEndByteIndex(sb, propertiesToWrite, "writer.Position - startOfObjectPosition", true);
 
             sb.Append($@"}}
@@ -1459,7 +1465,8 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                     property.AppendPropertyReadString(sb, IncludeTracingCode);
             }
 
-            AppendEndByteIndex(sb, thisLevel, "indexOfFirstChild + totalChildrenBytes", false);
+            if (ContainsEndByteIndex)
+                AppendEndByteIndex(sb, thisLevel, "indexOfFirstChild + totalChildrenBytes", false);
 
             sb.Append($@"return totalChildrenBytes;
                 }}
