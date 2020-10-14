@@ -1487,7 +1487,7 @@ namespace Lazinator.CodeDescription
                 if (SkipCondition != null)
                     sb.AppendLine(skipCheckString);
                 if (includeTracingCode)
-                    sb.Append($"TabbedText.WriteLine($\"Reading {PropertyName} at byte location {{bytesSoFar}}\") ");
+                    sb.AppendLine($"TabbedText.WriteLine($\"Reading {PropertyName} at byte location {{bytesSoFar}}\"); ");
                 sb.AppendLine(
                         new ConditionalCodeGenerator(ReadInclusionConditional, $@"{BackingFieldString} = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref bytesSoFar);").ToString());
             }
@@ -1495,7 +1495,7 @@ namespace Lazinator.CodeDescription
             {
                 if (includeTracingCode)
                 {
-                    sb.Append($"TabbedText.WriteLine($\"Reading length of {PropertyName} at byte location {{bytesSoFar}} to determine location: {{indexOfFirstChild + totalChildrenBytes}}\") ");
+                    sb.AppendLine($"TabbedText.WriteLine($\"Reading length of {PropertyName} at byte location {{bytesSoFar}} to determine location: {{indexOfFirstChild + totalChildrenBytes}}\"); ");
                 }
                 sb.Append($@"{BackingFieldByteIndex} = indexOfFirstChild + totalChildrenBytes;{skipCheckString}
                         ");
