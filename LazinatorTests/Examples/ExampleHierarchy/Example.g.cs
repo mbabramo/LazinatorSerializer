@@ -1454,7 +1454,36 @@ namespace LazinatorTests.Examples
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + 32, ref bytesSoFar);
+            int lengthForLengths = 0;
+            if (true)
+            {
+                lengthForLengths += 4;
+            }
+            if (serializedVersionNumber < 3)
+            {
+                lengthForLengths += 0;
+            }
+            if (serializedVersionNumber >= 3)
+            {
+                lengthForLengths += 0;
+            }
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
+            {
+                lengthForLengths += 4;
+            }
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
+            {
+                lengthForLengths += 16;
+            }
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && serializedVersionNumber < 3)
+            {
+                lengthForLengths += 4;
+            }
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren)
+            {
+                lengthForLengths += 4;
+            }
+            ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
         }
         
         protected virtual void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
@@ -1608,8 +1637,37 @@ namespace LazinatorTests.Examples
                 // write properties
                 
                 WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
-                Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 32);
-                writer.Skip(32);
+                int lengthForLengths = 0;
+                if (true)
+                {
+                    lengthForLengths += 4;
+                }
+                if (LazinatorObjectVersion < 3)
+                {
+                    lengthForLengths += 0;
+                }
+                if (LazinatorObjectVersion >= 3)
+                {
+                    lengthForLengths += 0;
+                }
+                if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
+                {
+                    lengthForLengths += 4;
+                }
+                if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
+                {
+                    lengthForLengths += 16;
+                }
+                if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && LazinatorObjectVersion < 3)
+                {
+                    lengthForLengths += 4;
+                }
+                if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren)
+                {
+                    lengthForLengths += 4;
+                }
+                Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
+                writer.Skip(lengthForLengths);
                 WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
                 TabbedText.WriteLine($"Byte {writer.Position} (end of Example) ");
             }

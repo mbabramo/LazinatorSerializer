@@ -713,7 +713,12 @@ namespace LazinatorTests.Examples.Tuples
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + 36, ref bytesSoFar);
+            int lengthForLengths = 0;
+            if (true)
+            {
+                lengthForLengths += 36;
+            }
+            ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
         }
         
         protected virtual void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
@@ -820,8 +825,13 @@ namespace LazinatorTests.Examples.Tuples
                     // write properties
                     
                     WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
-                    Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 36);
-                    writer.Skip(36);
+                    int lengthForLengths = 0;
+                    if (true)
+                    {
+                        lengthForLengths += 36;
+                    }
+                    Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
+                    writer.Skip(lengthForLengths);
                     WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
                     TabbedText.WriteLine($"Byte {writer.Position} (end of RecordLikeContainer) ");
                 }

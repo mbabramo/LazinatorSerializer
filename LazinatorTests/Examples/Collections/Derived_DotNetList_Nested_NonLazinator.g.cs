@@ -189,7 +189,12 @@ namespace LazinatorTests.Examples.Collections
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + 8, ref bytesSoFar);
+            int lengthForLengths = 0;
+            if (true)
+            {
+                lengthForLengths += 8;
+            }
+            ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
         }
         
         protected override void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
@@ -274,8 +279,13 @@ namespace LazinatorTests.Examples.Collections
                 // write properties
                 
                 WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
-                Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 8);
-                writer.Skip(8);
+                int lengthForLengths = 0;
+                if (true)
+                {
+                    lengthForLengths += 8;
+                }
+                Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
+                writer.Skip(lengthForLengths);
                 WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
                 TabbedText.WriteLine($"Byte {writer.Position} (end of Derived_DotNetList_Nested_NonLazinator) ");
             }

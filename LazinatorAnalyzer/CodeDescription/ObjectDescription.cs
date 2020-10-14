@@ -1297,14 +1297,16 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                     distinct[property.Item1] = property.Item2;
             }
             var results = distinct.OrderBy(x => x.Key.Length);
+            bool firstIsAlwaysTrue = results.FirstOrDefault().Key == "true";
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine("int lengthForLengths = 0;");
-            foreach (var result in results)
+            sb.AppendLine($"int lengthForLengths = {(firstIsAlwaysTrue ? results.First().Value.ToString() : "0")};");
+            foreach (KeyValuePair<string, int> result in results)
             {
-                sb.AppendLine($@"if ({result.Key})
-                    {{
-                        lengthForLengths += {result.Value};
-                    }}");
+                if (result.Key != "true"  && result.Key != "false")
+                    sb.AppendLine($@"if ({result.Key})
+                        {{
+                            lengthForLengths += {result.Value};
+                        }}");
             }
             return sb.ToString();
         }

@@ -2650,7 +2650,16 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + 188, ref bytesSoFar);
+            int lengthForLengths = 0;
+            if (true)
+            {
+                lengthForLengths += 164;
+            }
+            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
+            {
+                lengthForLengths += 24;
+            }
+            ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
         }
         
         protected virtual void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
@@ -2895,8 +2904,17 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     // write properties
                     
                     WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
-                    Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, 188);
-                    writer.Skip(188);
+                    int lengthForLengths = 0;
+                    if (true)
+                    {
+                        lengthForLengths += 164;
+                    }
+                    if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
+                    {
+                        lengthForLengths += 24;
+                    }
+                    Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
+                    writer.Skip(lengthForLengths);
                     WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
                     TabbedText.WriteLine($"Byte {writer.Position} (end of NullableEnabledContext) ");
                 }
