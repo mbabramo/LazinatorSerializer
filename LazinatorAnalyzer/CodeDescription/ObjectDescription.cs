@@ -486,7 +486,7 @@ namespace Lazinator.CodeDescription
                                 $@"
                             PostDeserialization();")
                         }
-                            return {(ContainsEndByteIndex ? $"_{ObjectNameEncodable}_EndByteIndex" : "bytesSoFar")};
+                            return {(ContainsEndByteIndex ? $"_OverallEndByteIndex" : "bytesSoFar")};
                         }}
 
                         public {DerivationKeyword}LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
@@ -731,6 +731,7 @@ namespace Lazinator.CodeDescription
                             $"private int _{ObjectNameEncodable}_EndByteIndex;");
                     sb.AppendLine(
                             $"{ProtectedIfApplicable}{derivationKeyword}int {lastPropertyToIndex.BackingFieldByteLength} => _{ObjectNameEncodable}_EndByteIndex - {lastPropertyToIndex.BackingFieldByteIndex};");
+                    sb.AppendLine($@"{ProtectedIfApplicable}{(IsDerivedFromNonAbstractLazinator && BaseLazinatorObject.ContainsEndByteIndex ? "override" : "virtual")} int _OverallEndByteIndex => _{ObjectNameEncodable}_EndByteIndex;");
                 }
             }
             sb.AppendLine();
