@@ -1549,10 +1549,11 @@ namespace Lazinator.CodeDescription
                         new ConditionalCodeGenerator(WriteInclusionConditional, $"{WriteMethodName}(ref writer, {EnumEquivalentCastToEquivalentType}{BackingFieldString});").ToString());
             else
             {
-                sb.AppendLine($@"if (updateStoredBuffer)
+                sb.AppendLine($@"int {BackingFieldByteIndex}_copy = 0;
+                                if (updateStoredBuffer)
                                 {{
-                                    {BackingFieldByteIndex} = writer.Position - startOfObjectPosition;
-                                }}");
+                                    {BackingFieldByteIndex}_copy = writer.Position - startOfObjectPosition;
+                                }}"); // we can't set this now because we may use GetChildSlice to copy the bytes directly and we need to know their original location
                 // Finally, the main code for writing a serialized or non serialized object.
                 if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable || PropertyType == LazinatorPropertyType.OpenGenericParameter)
                     AppendPropertyWriteString_Lazinator(sb);
@@ -1568,9 +1569,9 @@ namespace Lazinator.CodeDescription
                 if (IsSupportedCollectionOrTuple && !IsSimpleListOrArray &&
                     InnerProperties.Any(x => x.IsPossiblyStruct))
                     removeBuffers = new ConditionalCodeGenerator(GetNonNullCheck(true), $" {BackingFieldString} = ({AppropriatelyQualifiedTypeName}) CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({BackingFieldAccessWithPossibleException}, l => l.RemoveBufferInHierarchy(), true);").ToString();
-                if (removeBuffers.Trim() != "")
-                    sb.AppendLine($@"if (updateStoredBuffer)
+                sb.AppendLine($@"if (updateStoredBuffer)
                                     {{
+                                        {BackingFieldByteIndex} = {BackingFieldByteIndex}_copy;
                                         {removeBuffers}
                                     }}");
             }
