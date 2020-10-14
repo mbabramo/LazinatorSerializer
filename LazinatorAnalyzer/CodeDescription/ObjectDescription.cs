@@ -1296,17 +1296,42 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 else
                     distinct[property.Item1] = property.Item2;
             }
-            var results = distinct.OrderBy(x => x.Key.Length);
-            bool firstIsAlwaysTrue = results.FirstOrDefault().Key == "true";
+            string variableInitializationString = "0";
+            var alwaysTrue = distinct.FirstOrDefault(x => x.Key == "true");
+            if (alwaysTrue.Key != null)
+                variableInitializationString = alwaysTrue.Value.ToString();
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"int lengthForLengths = {(firstIsAlwaysTrue ? results.First().Value.ToString() : "0")};");
-            foreach (KeyValuePair<string, int> result in results)
+            sb.AppendLine($"int lengthForLengths = {variableInitializationString};");
+            IEnumerable<KeyValuePair<string, int>> results = distinct.Where(x => x.Key != "true" && x.Key != "false").OrderBy(x => x.Key);
+            // we want to indent these results, so if we have X and then X && Y, we format as 
+            // if (X)
+            // {
+            //   if (Y)
+            //   ...
+            // So, let's create a stack showing the active prefixes;
+            Stack<string> s = new Stack<string>();
+            foreach (var result in results)
             {
-                if (result.Key != "true"  && result.Key != "false")
-                    sb.AppendLine($@"if ({result.Key})
-                        {{
-                            lengthForLengths += {result.Value};
-                        }}");
+                while (s.Any() && !result.Key.StartsWith(s.Peek()))
+                {
+                    s.Pop();
+                    sb.AppendLine($"}}");
+                }
+                string portionOfStringToInclude;
+                if (s.Any())
+                    portionOfStringToInclude = result.Key.Substring(s.Peek().Length + 4); // include " && "
+                else
+                    portionOfStringToInclude = result.Key;
+                sb.AppendLine($@"if ({portionOfStringToInclude})
+                    {{
+                        lengthForLengths += {result.Value};
+                    ");
+                s.Push(result.Key);
+            } 
+            while (s.Any())
+            {
+                s.Pop();
+                sb.AppendLine($"}}");
             }
             return sb.ToString();
         }
