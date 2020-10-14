@@ -707,7 +707,7 @@ namespace Lazinator.CodeDescription
                     property.PropertyType == LazinatorPropertyType.NonLazinator ||
                     property.PropertyType == LazinatorPropertyType.SupportedCollection ||
                     property.PropertyType == LazinatorPropertyType.SupportedTuple ||
-                    property.PropertyType == LazinatorPropertyType.OpenGenericParameter);
+                    property.PropertyType == LazinatorPropertyType.OpenGenericParameter); // DEBUG must also add possibility that this is separable.
 
         private void AppendPropertyDefinitions(CodeStringBuilder sb)
         {
@@ -1456,7 +1456,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 {{
                     ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
                     ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-                    {GetLengthsCalculation(true)}ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
+                    {GetLengthsCalculation(true)}bytesSoFar += ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
                 }}
                     
 ");
