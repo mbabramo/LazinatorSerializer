@@ -1430,7 +1430,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             foreach (var property in thisLevel)
             {
                 if (property.IsPrimitive)
-                    property.AppendPropertyReadString(sb);
+                    property.AppendPropertyReadString(sb, IncludeTracingCode);
             }
 
             sb.Append($@"        }}
@@ -1445,7 +1445,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             foreach (var property in thisLevel)
             {
                 if (!property.IsPrimitive)
-                    property.AppendPropertyReadString(sb);
+                    property.AppendPropertyReadString(sb, IncludeTracingCode);
             }
 
             AppendEndByteIndex(sb, thisLevel, "indexOfFirstChild + totalChildrenBytes", false);

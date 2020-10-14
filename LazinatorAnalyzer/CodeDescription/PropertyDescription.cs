@@ -62,7 +62,7 @@ namespace Lazinator.CodeDescription
         private string ChildSliceString => $"GetChildSlice(LazinatorMemoryStorage, {BackingFieldByteIndex}, {BackingFieldByteLength}{ChildSliceLastParametersString})";
         private bool AllLengthsPrecedeChildren => true;
         public bool SkipLengthForThisProperty => IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast;
-        public bool UsesLengthValue => AllLengthsPrecedeChildren && !SkipLengthForThisProperty;
+        public bool UsesLengthValue => AllLengthsPrecedeChildren && !SkipLengthForThisProperty && IsLazinator;
         private string ChildSliceLastParametersString => $", {(AllLengthsPrecedeChildren || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, {(SingleByteLength ? "true" : "false")}, {(IsGuaranteedFixedLength ? $"{FixedLength}" : "null")}";
         internal string IncrementChildStartBySizeOfLength => OmitLengthBecauseDefinitelyLast || IsGuaranteedFixedLength ? "" : (SingleByteLength ? " + sizeof(byte)" : " + sizeof(int)");
         internal string DecrementTotalLengthBySizeOfLength => OmitLengthBecauseDefinitelyLast || IsGuaranteedFixedLength ? "" : (SingleByteLength ? " - sizeof(byte)" : " - sizeof(int)");
@@ -1555,7 +1555,7 @@ namespace Lazinator.CodeDescription
             else
             {
                 // Finally, the main code for writing a serialized or non serialized object.
-                if (PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable || PropertyType == LazinatorPropertyType.OpenGenericParameter)
+                if (IsLazinator)
                     AppendPropertyWriteString_Lazinator(sb);
                 else
                     AppendPropertyWriteString_NonLazinator(sb);
