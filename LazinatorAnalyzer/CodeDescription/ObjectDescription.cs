@@ -486,7 +486,7 @@ namespace Lazinator.CodeDescription
                                 $@"
                             PostDeserialization();")
                         }
-                            return bytesSoFar;
+                            return {(ContainsEndByteIndex ? $"_{ObjectNameEncodable}_EndByteIndex" : "bytesSoFar")};
                         }}
 
                         public {DerivationKeyword}LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
@@ -675,6 +675,16 @@ namespace Lazinator.CodeDescription
             }
             return sb.ToString();
         }
+
+        private bool ContainsEndByteIndex => !IsAbstract && PropertiesToDefineThisLevel.Any(property =>
+                    property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface ||
+                    property.PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface ||
+                    property.PropertyType == LazinatorPropertyType.LazinatorStruct ||
+                    property.PropertyType == LazinatorPropertyType.LazinatorStructNullable ||
+                    property.PropertyType == LazinatorPropertyType.NonLazinator ||
+                    property.PropertyType == LazinatorPropertyType.SupportedCollection ||
+                    property.PropertyType == LazinatorPropertyType.SupportedTuple ||
+                    property.PropertyType == LazinatorPropertyType.OpenGenericParameter);
 
         private void AppendPropertyDefinitions(CodeStringBuilder sb)
         {
