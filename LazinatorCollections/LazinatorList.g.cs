@@ -495,9 +495,10 @@ namespace LazinatorCollections
             TabbedText.WriteLine($"Byte {writer.Position}, MainListSerialized (accessed? )");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MainListSerialized_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MainListSerialized_ByteIndex = writer.Position - startOfObjectPosition;
+                _MainListSerialized_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             WriteNonLazinatorObject(
             nonLazinatorObject: default, isBelievedDirty: true,
@@ -508,13 +509,19 @@ namespace LazinatorCollections
             WriteMainList(ref w, default,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
+            if (updateStoredBuffer)
+            {
+                _MainListSerialized_ByteIndex = _MainListSerialized_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, Offsets (accessed? {_Offsets_Accessed}) (backing var null? {_Offsets == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _Offsets_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _Offsets_ByteIndex = writer.Position - startOfObjectPosition;
+                _Offsets_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -526,6 +533,11 @@ namespace LazinatorCollections
                 lengthValue = writer.Position - startOfChildPosition;
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
+            }
+            if (updateStoredBuffer)
+            {
+                _Offsets_ByteIndex = _Offsets_ByteIndex_copy;
+                
             }
             TabbedText.Tabs--;
             if (updateStoredBuffer)

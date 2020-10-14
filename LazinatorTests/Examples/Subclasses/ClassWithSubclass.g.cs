@@ -597,9 +597,10 @@ namespace LazinatorTests.Examples.Subclasses
             TabbedText.WriteLine($"Byte {writer.Position}, SubclassInstance1 (accessed? {_SubclassInstance1_Accessed}) (backing var null? {_SubclassInstance1 == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _SubclassInstance1_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _SubclassInstance1_ByteIndex = writer.Position - startOfObjectPosition;
+                _SubclassInstance1_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -612,13 +613,19 @@ namespace LazinatorTests.Examples.Subclasses
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
+            if (updateStoredBuffer)
+            {
+                _SubclassInstance1_ByteIndex = _SubclassInstance1_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, SubclassInstance2 (accessed? {_SubclassInstance2_Accessed}) (backing var null? {_SubclassInstance2 == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _SubclassInstance2_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _SubclassInstance2_ByteIndex = writer.Position - startOfObjectPosition;
+                _SubclassInstance2_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -630,6 +637,11 @@ namespace LazinatorTests.Examples.Subclasses
                 lengthValue = writer.Position - startOfChildPosition;
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
+            }
+            if (updateStoredBuffer)
+            {
+                _SubclassInstance2_ByteIndex = _SubclassInstance2_ByteIndex_copy;
+                
             }
             TabbedText.Tabs--;
             if (updateStoredBuffer)

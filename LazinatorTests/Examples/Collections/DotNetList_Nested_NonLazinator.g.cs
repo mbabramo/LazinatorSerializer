@@ -433,9 +433,10 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyListNestedNonLazinatorType (accessed? {_MyListNestedNonLazinatorType_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MyListNestedNonLazinatorType_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MyListNestedNonLazinatorType_ByteIndex = writer.Position - startOfObjectPosition;
+                _MyListNestedNonLazinatorType_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyListNestedNonLazinatorType_Accessed)
             {
@@ -450,6 +451,11 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_List_GList_GNonLazinatorClass_g_g(ref w, _MyListNestedNonLazinatorType,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
+            if (updateStoredBuffer)
+            {
+                _MyListNestedNonLazinatorType_ByteIndex = _MyListNestedNonLazinatorType_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

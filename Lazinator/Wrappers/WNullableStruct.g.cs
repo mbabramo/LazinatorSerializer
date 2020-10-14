@@ -491,9 +491,10 @@ namespace Lazinator.Wrappers
             TabbedText.WriteLine($"Byte {writer.Position}, NonNullValue value {_NonNullValue}");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _NonNullValue_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _NonNullValue_ByteIndex = writer.Position - startOfObjectPosition;
+                _NonNullValue_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -505,6 +506,11 @@ namespace Lazinator.Wrappers
                 var byteIndexCopy = _NonNullValue_ByteIndex;
                 var byteLengthCopy = _NonNullValue_ByteLength;
                 WriteChild(ref writer, ref _NonNullValue, includeChildrenMode, _NonNullValue_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, true, false, null), verifyCleanness, updateStoredBuffer, false, true, null);
+            }
+            if (updateStoredBuffer)
+            {
+                _NonNullValue_ByteIndex = _NonNullValue_ByteIndex_copy;
+                
             }
             TabbedText.Tabs--;
             if (updateStoredBuffer)

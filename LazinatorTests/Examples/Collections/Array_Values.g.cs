@@ -553,9 +553,10 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyArrayInt (accessed? {_MyArrayInt_Accessed}) (dirty? {_MyArrayInt_Dirty})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MyArrayInt_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MyArrayInt_ByteIndex = writer.Position - startOfObjectPosition;
+                _MyArrayInt_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyArrayInt_Accessed)
             {
@@ -570,13 +571,19 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_int_B_b(ref w, _MyArrayInt,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
+            if (updateStoredBuffer)
+            {
+                _MyArrayInt_ByteIndex = _MyArrayInt_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyArrayNullableInt (accessed? {_MyArrayNullableInt_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MyArrayNullableInt_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MyArrayNullableInt_ByteIndex = writer.Position - startOfObjectPosition;
+                _MyArrayNullableInt_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyArrayNullableInt_Accessed)
             {
@@ -591,13 +598,19 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_int_n_B_b(ref w, _MyArrayNullableInt,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
+            if (updateStoredBuffer)
+            {
+                _MyArrayNullableInt_ByteIndex = _MyArrayNullableInt_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyJaggedArrayInt (accessed? {_MyJaggedArrayInt_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MyJaggedArrayInt_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MyJaggedArrayInt_ByteIndex = writer.Position - startOfObjectPosition;
+                _MyJaggedArrayInt_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyJaggedArrayInt_Accessed)
             {
@@ -612,6 +625,11 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_int_B_b_B_b(ref w, _MyJaggedArrayInt,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
+            if (updateStoredBuffer)
+            {
+                _MyJaggedArrayInt_ByteIndex = _MyJaggedArrayInt_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

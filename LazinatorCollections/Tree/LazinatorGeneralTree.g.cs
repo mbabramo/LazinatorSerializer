@@ -612,9 +612,10 @@ namespace LazinatorCollections.Tree
             TabbedText.WriteLine($"Byte {writer.Position}, Children (accessed? {_Children_Accessed}) (backing var null? {_Children == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _Children_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _Children_ByteIndex = writer.Position - startOfObjectPosition;
+                _Children_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -627,13 +628,19 @@ namespace LazinatorCollections.Tree
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
+            if (updateStoredBuffer)
+            {
+                _Children_ByteIndex = _Children_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, Item value {_Item}");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _Item_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _Item_ByteIndex = writer.Position - startOfObjectPosition;
+                _Item_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -645,6 +652,11 @@ namespace LazinatorCollections.Tree
                 lengthValue = writer.Position - startOfChildPosition;
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
+            }
+            if (updateStoredBuffer)
+            {
+                _Item_ByteIndex = _Item_ByteIndex_copy;
+                
             }
             TabbedText.Tabs--;
             if (updateStoredBuffer)

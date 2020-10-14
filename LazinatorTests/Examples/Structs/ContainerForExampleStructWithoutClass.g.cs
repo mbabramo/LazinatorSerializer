@@ -639,9 +639,10 @@ namespace LazinatorTests.Examples.Structs
             TabbedText.WriteLine($"Byte {writer.Position}, ExampleNullableStruct (accessed? {_ExampleNullableStruct_Accessed}) (backing var null? {_ExampleNullableStruct == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _ExampleNullableStruct_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _ExampleNullableStruct_ByteIndex = writer.Position - startOfObjectPosition;
+                _ExampleNullableStruct_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -662,13 +663,19 @@ namespace LazinatorTests.Examples.Structs
                     lengthsSpan = lengthsSpan.Slice(sizeof(int));
                 }
             }
+            if (updateStoredBuffer)
+            {
+                _ExampleNullableStruct_ByteIndex = _ExampleNullableStruct_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, ExampleStructWithoutClass (accessed? {_ExampleStructWithoutClass_Accessed}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _ExampleStructWithoutClass_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _ExampleStructWithoutClass_ByteIndex = writer.Position - startOfObjectPosition;
+                _ExampleStructWithoutClass_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -680,6 +687,11 @@ namespace LazinatorTests.Examples.Structs
                 lengthValue = writer.Position - startOfChildPosition;
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
+            }
+            if (updateStoredBuffer)
+            {
+                _ExampleStructWithoutClass_ByteIndex = _ExampleStructWithoutClass_ByteIndex_copy;
+                
             }
             TabbedText.Tabs--;
             if (updateStoredBuffer)

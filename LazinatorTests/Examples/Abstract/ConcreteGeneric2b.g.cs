@@ -660,9 +660,10 @@ namespace LazinatorTests.Examples.Abstract
             TabbedText.WriteLine($"Byte {writer.Position}, MyT (accessed? {_MyT_Accessed}) (backing var null? {_MyT == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MyT_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MyT_ByteIndex = writer.Position - startOfObjectPosition;
+                _MyT_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -675,13 +676,19 @@ namespace LazinatorTests.Examples.Abstract
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
+            if (updateStoredBuffer)
+            {
+                _MyT_ByteIndex = _MyT_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, LazinatorExample (accessed? {_LazinatorExample_Accessed}) (backing var null? {_LazinatorExample == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _LazinatorExample_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _LazinatorExample_ByteIndex = writer.Position - startOfObjectPosition;
+                _LazinatorExample_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -693,6 +700,11 @@ namespace LazinatorTests.Examples.Abstract
                 lengthValue = writer.Position - startOfChildPosition;
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
+            }
+            if (updateStoredBuffer)
+            {
+                _LazinatorExample_ByteIndex = _LazinatorExample_ByteIndex_copy;
+                
             }
             TabbedText.Tabs--;
             if (updateStoredBuffer)

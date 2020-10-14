@@ -575,9 +575,10 @@ namespace LazinatorTests.Examples.Hierarchy
             TabbedText.WriteLine($"Byte {writer.Position}, RecursiveClass (accessed? {_RecursiveClass_Accessed}) (backing var null? {_RecursiveClass == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _RecursiveClass_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _RecursiveClass_ByteIndex = writer.Position - startOfObjectPosition;
+                _RecursiveClass_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -590,13 +591,19 @@ namespace LazinatorTests.Examples.Hierarchy
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
+            if (updateStoredBuffer)
+            {
+                _RecursiveClass_ByteIndex = _RecursiveClass_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, RecursiveInterface (accessed? {_RecursiveInterface_Accessed}) (backing var null? {_RecursiveInterface == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _RecursiveInterface_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _RecursiveInterface_ByteIndex = writer.Position - startOfObjectPosition;
+                _RecursiveInterface_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -608,6 +615,11 @@ namespace LazinatorTests.Examples.Hierarchy
                 lengthValue = writer.Position - startOfChildPosition;
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
+            }
+            if (updateStoredBuffer)
+            {
+                _RecursiveInterface_ByteIndex = _RecursiveInterface_ByteIndex_copy;
+                
             }
             TabbedText.Tabs--;
             if (updateStoredBuffer)

@@ -451,9 +451,10 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyQueueInt (accessed? {_MyQueueInt_Accessed}) (dirty? {_MyQueueInt_Dirty})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MyQueueInt_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MyQueueInt_ByteIndex = writer.Position - startOfObjectPosition;
+                _MyQueueInt_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyQueueInt_Accessed)
             {
@@ -468,6 +469,11 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_Queue_Gint_g(ref w, _MyQueueInt,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
+            if (updateStoredBuffer)
+            {
+                _MyQueueInt_ByteIndex = _MyQueueInt_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

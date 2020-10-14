@@ -664,9 +664,10 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, EnumTuple (accessed? {_EnumTuple_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _EnumTuple_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _EnumTuple_ByteIndex = writer.Position - startOfObjectPosition;
+                _EnumTuple_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_EnumTuple_Accessed)
             {
@@ -681,13 +682,19 @@ namespace LazinatorTests.Examples.Tuples
             ConvertToBytes__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p(ref w, _EnumTuple,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
+            if (updateStoredBuffer)
+            {
+                _EnumTuple_ByteIndex = _EnumTuple_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyNamedTuple (accessed? {_MyNamedTuple_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MyNamedTuple_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MyNamedTuple_ByteIndex = writer.Position - startOfObjectPosition;
+                _MyNamedTuple_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyNamedTuple_Accessed)
             {
@@ -702,13 +709,19 @@ namespace LazinatorTests.Examples.Tuples
             ConvertToBytes__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(ref w, _MyNamedTuple,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
+            if (updateStoredBuffer)
+            {
+                _MyNamedTuple_ByteIndex = _MyNamedTuple_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyNullableTuple (accessed? {_MyNullableTuple_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MyNullableTuple_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MyNullableTuple_ByteIndex = writer.Position - startOfObjectPosition;
+                _MyNullableTuple_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyNullableTuple_Accessed)
             {
@@ -723,13 +736,19 @@ namespace LazinatorTests.Examples.Tuples
             ConvertToBytes__Pint_c_C32double_p_n(ref w, _MyNullableTuple,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
+            if (updateStoredBuffer)
+            {
+                _MyNullableTuple_ByteIndex = _MyNullableTuple_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyValueTupleNullableStructs (accessed? {_MyValueTupleNullableStructs_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MyValueTupleNullableStructs_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MyValueTupleNullableStructs_ByteIndex = writer.Position - startOfObjectPosition;
+                _MyValueTupleNullableStructs_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyValueTupleNullableStructs_Accessed)
             {
@@ -746,15 +765,17 @@ namespace LazinatorTests.Examples.Tuples
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
+                _MyValueTupleNullableStructs_ByteIndex = _MyValueTupleNullableStructs_ByteIndex_copy;
                 _MyValueTupleNullableStructs = ((ExampleStructContainingClasses?, ExampleStructContainingClasses?, ExampleStructContainingClasses?)) CloneOrChange__PExampleStructContainingClasses_n_c_C32ExampleStructContainingClasses_n_c_C32ExampleStructContainingClasses_n_p(_MyValueTupleNullableStructs, l => l.RemoveBufferInHierarchy(), true);
             }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyValueTupleSerialized (accessed? {_MyValueTupleSerialized_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MyValueTupleSerialized_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MyValueTupleSerialized_ByteIndex = writer.Position - startOfObjectPosition;
+                _MyValueTupleSerialized_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyValueTupleSerialized_Accessed)
             {
@@ -769,13 +790,19 @@ namespace LazinatorTests.Examples.Tuples
             ConvertToBytes__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(ref w, _MyValueTupleSerialized,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
+            if (updateStoredBuffer)
+            {
+                _MyValueTupleSerialized_ByteIndex = _MyValueTupleSerialized_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyValueTupleStructs (accessed? {_MyValueTupleStructs_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MyValueTupleStructs_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MyValueTupleStructs_ByteIndex = writer.Position - startOfObjectPosition;
+                _MyValueTupleStructs_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyValueTupleStructs_Accessed)
             {
@@ -792,6 +819,7 @@ namespace LazinatorTests.Examples.Tuples
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
+                _MyValueTupleStructs_ByteIndex = _MyValueTupleStructs_ByteIndex_copy;
                 _MyValueTupleStructs = ((WInt32, WInt32)) CloneOrChange__PWInt32_c_C32WInt32_p(_MyValueTupleStructs, l => l.RemoveBufferInHierarchy(), true);
             }
             TabbedText.Tabs--;

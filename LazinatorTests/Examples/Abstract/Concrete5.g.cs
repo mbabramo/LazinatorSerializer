@@ -387,9 +387,10 @@ namespace LazinatorTests.Examples.Abstract
             TabbedText.WriteLine($"Byte {writer.Position}, IntList4 (accessed? {_IntList4_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _IntList4_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _IntList4_ByteIndex = writer.Position - startOfObjectPosition;
+                _IntList4_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_IntList4_Accessed)
             {
@@ -404,13 +405,19 @@ namespace LazinatorTests.Examples.Abstract
             ConvertToBytes_List_Gint_g(ref w, _IntList4,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
+            if (updateStoredBuffer)
+            {
+                _IntList4_ByteIndex = _IntList4_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, IntList5 (accessed? {_IntList5_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _IntList5_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _IntList5_ByteIndex = writer.Position - startOfObjectPosition;
+                _IntList5_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_IntList5_Accessed)
             {
@@ -425,6 +432,11 @@ namespace LazinatorTests.Examples.Abstract
             ConvertToBytes_List_Gint_g(ref w, _IntList5,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
+            if (updateStoredBuffer)
+            {
+                _IntList5_ByteIndex = _IntList5_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

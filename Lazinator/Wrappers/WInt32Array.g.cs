@@ -440,9 +440,10 @@ namespace Lazinator.Wrappers
             TabbedText.WriteLine($"Byte {writer.Position}, WrappedValue (accessed? {_WrappedValue_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _WrappedValue_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _WrappedValue_ByteIndex = writer.Position - startOfObjectPosition;
+                _WrappedValue_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_WrappedValue_Accessed)
             {
@@ -459,6 +460,11 @@ namespace Lazinator.Wrappers
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_int_B_b(ref w, copy_WrappedValue, includeChildrenMode, v, updateStoredBuffer));
+            if (updateStoredBuffer)
+            {
+                _WrappedValue_ByteIndex = _WrappedValue_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

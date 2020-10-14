@@ -620,9 +620,10 @@ namespace LazinatorTests.Examples
             TabbedText.WriteLine($"Byte {writer.Position}, MyOfficialObject (accessed? {_MyOfficialObject_Accessed}) (backing var null? {_MyOfficialObject == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MyOfficialObject_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MyOfficialObject_ByteIndex = writer.Position - startOfObjectPosition;
+                _MyOfficialObject_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -635,13 +636,19 @@ namespace LazinatorTests.Examples
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
+            if (updateStoredBuffer)
+            {
+                _MyOfficialObject_ByteIndex = _MyOfficialObject_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyUnofficialObject (accessed? {_MyUnofficialObject_Accessed}) (backing var null? {_MyUnofficialObject == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MyUnofficialObject_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MyUnofficialObject_ByteIndex = writer.Position - startOfObjectPosition;
+                _MyUnofficialObject_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -653,6 +660,11 @@ namespace LazinatorTests.Examples
                 lengthValue = writer.Position - startOfChildPosition;
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
+            }
+            if (updateStoredBuffer)
+            {
+                _MyUnofficialObject_ByteIndex = _MyUnofficialObject_ByteIndex_copy;
+                
             }
             TabbedText.Tabs--;
             if (updateStoredBuffer)

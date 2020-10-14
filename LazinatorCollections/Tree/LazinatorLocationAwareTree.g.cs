@@ -340,9 +340,10 @@ namespace LazinatorCollections.Tree
             TabbedText.WriteLine($"Byte {writer.Position}, Locations (accessed? {_Locations_Accessed}) (backing var null? {_Locations == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _Locations_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _Locations_ByteIndex = writer.Position - startOfObjectPosition;
+                _Locations_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -354,6 +355,11 @@ namespace LazinatorCollections.Tree
                 lengthValue = writer.Position - startOfChildPosition;
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
+            }
+            if (updateStoredBuffer)
+            {
+                _Locations_ByteIndex = _Locations_ByteIndex_copy;
+                
             }
             TabbedText.Tabs--;
             if (updateStoredBuffer)

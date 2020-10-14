@@ -607,9 +607,10 @@ namespace LazinatorTests.Examples
             TabbedText.WriteLine($"Byte {writer.Position}, MyExampleNullableStruct (accessed? {_MyExampleNullableStruct_Accessed}) (backing var null? {_MyExampleNullableStruct == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MyExampleNullableStruct_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MyExampleNullableStruct_ByteIndex = writer.Position - startOfObjectPosition;
+                _MyExampleNullableStruct_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -630,13 +631,19 @@ namespace LazinatorTests.Examples
                     _MyExampleNullableStruct = copy;
                 }
             }
+            if (updateStoredBuffer)
+            {
+                _MyExampleNullableStruct_ByteIndex = _MyExampleNullableStruct_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyExampleStructContainingClasses (accessed? {_MyExampleStructContainingClasses_Accessed}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MyExampleStructContainingClasses_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MyExampleStructContainingClasses_ByteIndex = writer.Position - startOfObjectPosition;
+                _MyExampleStructContainingClasses_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -648,6 +655,11 @@ namespace LazinatorTests.Examples
                 var byteIndexCopy = _MyExampleStructContainingClasses_ByteIndex;
                 var byteLengthCopy = _MyExampleStructContainingClasses_ByteLength;
                 WriteChild(ref writer, ref _MyExampleStructContainingClasses, includeChildrenMode, _MyExampleStructContainingClasses_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, true, false, null), verifyCleanness, updateStoredBuffer, false, true, null);
+            }
+            if (updateStoredBuffer)
+            {
+                _MyExampleStructContainingClasses_ByteIndex = _MyExampleStructContainingClasses_ByteIndex_copy;
+                
             }
             TabbedText.Tabs--;
             if (updateStoredBuffer)

@@ -454,9 +454,10 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, SpanList (accessed? {_SpanList_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _SpanList_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _SpanList_ByteIndex = writer.Position - startOfObjectPosition;
+                _SpanList_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_SpanList_Accessed)
             {
@@ -471,6 +472,11 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_List_GSpanAndMemory_g(ref w, _SpanList,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
+            if (updateStoredBuffer)
+            {
+                _SpanList_ByteIndex = _SpanList_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

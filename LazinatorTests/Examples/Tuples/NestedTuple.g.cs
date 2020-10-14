@@ -433,9 +433,10 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, MyNestedTuple (accessed? {_MyNestedTuple_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MyNestedTuple_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MyNestedTuple_ByteIndex = writer.Position - startOfObjectPosition;
+                _MyNestedTuple_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyNestedTuple_Accessed)
             {
@@ -452,6 +453,7 @@ namespace LazinatorTests.Examples.Tuples
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
+                _MyNestedTuple_ByteIndex = _MyNestedTuple_ByteIndex_copy;
                 if (_MyNestedTuple_Accessed && _MyNestedTuple != null)
                 {
                     _MyNestedTuple = (Tuple<UInt32?, (ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>)), NonLazinatorClass>) CloneOrChange_Tuple_Guint_n_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_n_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(_MyNestedTuple, l => l.RemoveBufferInHierarchy(), true);

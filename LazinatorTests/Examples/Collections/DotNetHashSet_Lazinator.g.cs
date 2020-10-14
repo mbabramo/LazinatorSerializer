@@ -433,9 +433,10 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.WriteLine($"Byte {writer.Position}, MyHashSetSerialized (accessed? {_MyHashSetSerialized_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MyHashSetSerialized_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MyHashSetSerialized_ByteIndex = writer.Position - startOfObjectPosition;
+                _MyHashSetSerialized_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyHashSetSerialized_Accessed)
             {
@@ -450,6 +451,11 @@ namespace LazinatorTests.Examples.Collections
             ConvertToBytes_HashSet_GExampleChild_g(ref w, _MyHashSetSerialized,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
+            if (updateStoredBuffer)
+            {
+                _MyHashSetSerialized_ByteIndex = _MyHashSetSerialized_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

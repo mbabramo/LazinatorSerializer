@@ -595,9 +595,10 @@ namespace LazinatorCollections.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, Key value {_Key}");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _Key_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _Key_ByteIndex = writer.Position - startOfObjectPosition;
+                _Key_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -610,13 +611,19 @@ namespace LazinatorCollections.Tuples
                 var byteLengthCopy = _Key_ByteLength;
                 WriteChild(ref writer, ref _Key, includeChildrenMode, _Key_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, true, false, null), verifyCleanness, updateStoredBuffer, false, true, null);
             }
+            if (updateStoredBuffer)
+            {
+                _Key_ByteIndex = _Key_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, Value value {_Value}");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _Value_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _Value_ByteIndex = writer.Position - startOfObjectPosition;
+                _Value_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -628,6 +635,11 @@ namespace LazinatorCollections.Tuples
                 var byteIndexCopy = _Value_ByteIndex;
                 var byteLengthCopy = _Value_ByteLength;
                 WriteChild(ref writer, ref _Value, includeChildrenMode, _Value_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, true, false, null), verifyCleanness, updateStoredBuffer, false, true, null);
+            }
+            if (updateStoredBuffer)
+            {
+                _Value_ByteIndex = _Value_ByteIndex_copy;
+                
             }
             TabbedText.Tabs--;
             if (updateStoredBuffer)

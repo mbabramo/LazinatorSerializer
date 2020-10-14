@@ -428,9 +428,10 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.WriteLine($"Byte {writer.Position}, MyKeyValuePairSerialized (accessed? {_MyKeyValuePairSerialized_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MyKeyValuePairSerialized_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MyKeyValuePairSerialized_ByteIndex = writer.Position - startOfObjectPosition;
+                _MyKeyValuePairSerialized_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyKeyValuePairSerialized_Accessed)
             {
@@ -445,6 +446,11 @@ namespace LazinatorTests.Examples.Tuples
             ConvertToBytes_KeyValuePair_Guint_c_C32ExampleChild_g(ref w, _MyKeyValuePairSerialized,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
+            if (updateStoredBuffer)
+            {
+                _MyKeyValuePairSerialized_ByteIndex = _MyKeyValuePairSerialized_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

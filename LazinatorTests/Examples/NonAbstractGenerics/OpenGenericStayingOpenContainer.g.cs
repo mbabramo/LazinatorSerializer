@@ -857,9 +857,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             TabbedText.WriteLine($"Byte {writer.Position}, ClosedGenericBase (accessed? {_ClosedGenericBase_Accessed}) (backing var null? {_ClosedGenericBase == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _ClosedGenericBase_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _ClosedGenericBase_ByteIndex = writer.Position - startOfObjectPosition;
+                _ClosedGenericBase_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -872,13 +873,19 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
+            if (updateStoredBuffer)
+            {
+                _ClosedGenericBase_ByteIndex = _ClosedGenericBase_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, ClosedGenericFloat (accessed? {_ClosedGenericFloat_Accessed}) (backing var null? {_ClosedGenericFloat == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _ClosedGenericFloat_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _ClosedGenericFloat_ByteIndex = writer.Position - startOfObjectPosition;
+                _ClosedGenericFloat_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -891,13 +898,19 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
+            if (updateStoredBuffer)
+            {
+                _ClosedGenericFloat_ByteIndex = _ClosedGenericFloat_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, ClosedGenericFromBaseWithBase (accessed? {_ClosedGenericFromBaseWithBase_Accessed}) (backing var null? {_ClosedGenericFromBaseWithBase == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _ClosedGenericFromBaseWithBase_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _ClosedGenericFromBaseWithBase_ByteIndex = writer.Position - startOfObjectPosition;
+                _ClosedGenericFromBaseWithBase_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -910,13 +923,19 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
+            if (updateStoredBuffer)
+            {
+                _ClosedGenericFromBaseWithBase_ByteIndex = _ClosedGenericFromBaseWithBase_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, ClosedGenericInterface (accessed? {_ClosedGenericInterface_Accessed}) (backing var null? {_ClosedGenericInterface == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _ClosedGenericInterface_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _ClosedGenericInterface_ByteIndex = writer.Position - startOfObjectPosition;
+                _ClosedGenericInterface_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -929,13 +948,19 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
+            if (updateStoredBuffer)
+            {
+                _ClosedGenericInterface_ByteIndex = _ClosedGenericInterface_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, ClosedGenericNonexclusiveInterface (accessed? {_ClosedGenericNonexclusiveInterface_Accessed}) (backing var null? {_ClosedGenericNonexclusiveInterface == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _ClosedGenericNonexclusiveInterface_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _ClosedGenericNonexclusiveInterface_ByteIndex = writer.Position - startOfObjectPosition;
+                _ClosedGenericNonexclusiveInterface_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -947,6 +972,11 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 lengthValue = writer.Position - startOfChildPosition;
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
+            }
+            if (updateStoredBuffer)
+            {
+                _ClosedGenericNonexclusiveInterface_ByteIndex = _ClosedGenericNonexclusiveInterface_ByteIndex_copy;
+                
             }
             TabbedText.Tabs--;
             if (updateStoredBuffer)

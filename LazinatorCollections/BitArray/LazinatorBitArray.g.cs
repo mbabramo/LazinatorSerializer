@@ -491,9 +491,10 @@ namespace LazinatorCollections.BitArray
             TabbedText.WriteLine($"Byte {writer.Position}, IntStorage (accessed? {_IntStorage_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _IntStorage_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _IntStorage_ByteIndex = writer.Position - startOfObjectPosition;
+                _IntStorage_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_IntStorage_Accessed)
             {
@@ -508,6 +509,11 @@ namespace LazinatorCollections.BitArray
             ConvertToBytes_Memory_Gint_g(ref w, _IntStorage,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
+            if (updateStoredBuffer)
+            {
+                _IntStorage_ByteIndex = _IntStorage_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

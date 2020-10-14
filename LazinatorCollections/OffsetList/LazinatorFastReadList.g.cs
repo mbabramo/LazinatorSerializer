@@ -438,9 +438,10 @@ namespace LazinatorCollections.OffsetList
             TabbedText.WriteLine($"Byte {writer.Position}, ReadOnlyBytes (accessed? {_ReadOnlyBytes_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _ReadOnlyBytes_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _ReadOnlyBytes_ByteIndex = writer.Position - startOfObjectPosition;
+                _ReadOnlyBytes_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ReadOnlyBytes_Accessed)
             {
@@ -455,6 +456,11 @@ namespace LazinatorCollections.OffsetList
             ConvertToBytes_ReadOnlySpan_Gbyte_g(ref w, _ReadOnlyBytes.Span,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
+            if (updateStoredBuffer)
+            {
+                _ReadOnlyBytes_ByteIndex = _ReadOnlyBytes_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

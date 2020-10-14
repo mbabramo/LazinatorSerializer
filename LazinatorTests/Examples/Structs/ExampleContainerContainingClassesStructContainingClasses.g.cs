@@ -786,9 +786,10 @@ namespace LazinatorTests.Examples
             TabbedText.WriteLine($"Byte {writer.Position}, IntWrapper (accessed? {_IntWrapper_Accessed}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _IntWrapper_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _IntWrapper_ByteIndex = writer.Position - startOfObjectPosition;
+                _IntWrapper_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -801,13 +802,19 @@ namespace LazinatorTests.Examples
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
+            if (updateStoredBuffer)
+            {
+                _IntWrapper_ByteIndex = _IntWrapper_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyExampleStructContainingClasses (accessed? {_MyExampleStructContainingClasses_Accessed}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MyExampleStructContainingClasses_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MyExampleStructContainingClasses_ByteIndex = writer.Position - startOfObjectPosition;
+                _MyExampleStructContainingClasses_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -820,13 +827,19 @@ namespace LazinatorTests.Examples
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
+            if (updateStoredBuffer)
+            {
+                _MyExampleStructContainingClasses_ByteIndex = _MyExampleStructContainingClasses_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyHashSetExampleStruct (accessed? {_MyHashSetExampleStruct_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MyHashSetExampleStruct_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MyHashSetExampleStruct_ByteIndex = writer.Position - startOfObjectPosition;
+                _MyHashSetExampleStruct_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyHashSetExampleStruct_Accessed)
             {
@@ -843,6 +856,7 @@ namespace LazinatorTests.Examples
             lengthsSpan: ref lengthsSpan);
             if (updateStoredBuffer)
             {
+                _MyHashSetExampleStruct_ByteIndex = _MyHashSetExampleStruct_ByteIndex_copy;
                 if (_MyHashSetExampleStruct_Accessed && _MyHashSetExampleStruct != null)
                 {
                     _MyHashSetExampleStruct = (HashSet<ExampleStructContainingClasses>) CloneOrChange_HashSet_GExampleStructContainingClasses_g(_MyHashSetExampleStruct, l => l.RemoveBufferInHierarchy(), true);
@@ -852,9 +866,10 @@ namespace LazinatorTests.Examples
             TabbedText.WriteLine($"Byte {writer.Position}, MyListExampleStruct (accessed? {_MyListExampleStruct_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MyListExampleStruct_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MyListExampleStruct_ByteIndex = writer.Position - startOfObjectPosition;
+                _MyListExampleStruct_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyListExampleStruct_Accessed)
             {
@@ -869,13 +884,19 @@ namespace LazinatorTests.Examples
             ConvertToBytes_List_GExampleStructContainingClasses_g(ref w, _MyListExampleStruct,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
+            if (updateStoredBuffer)
+            {
+                _MyListExampleStruct_ByteIndex = _MyListExampleStruct_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyListNullableExampleStruct (accessed? {_MyListNullableExampleStruct_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MyListNullableExampleStruct_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MyListNullableExampleStruct_ByteIndex = writer.Position - startOfObjectPosition;
+                _MyListNullableExampleStruct_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyListNullableExampleStruct_Accessed)
             {
@@ -890,13 +911,19 @@ namespace LazinatorTests.Examples
             ConvertToBytes_List_GWNullableStruct_GExampleStructContainingClasses_g_g(ref w, _MyListNullableExampleStruct,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
+            if (updateStoredBuffer)
+            {
+                _MyListNullableExampleStruct_ByteIndex = _MyListNullableExampleStruct_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.Position}, MyListUnwrappedNullableExampleStruct (accessed? {_MyListUnwrappedNullableExampleStruct_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MyListUnwrappedNullableExampleStruct_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MyListUnwrappedNullableExampleStruct_ByteIndex = writer.Position - startOfObjectPosition;
+                _MyListUnwrappedNullableExampleStruct_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyListUnwrappedNullableExampleStruct_Accessed)
             {
@@ -911,6 +938,11 @@ namespace LazinatorTests.Examples
             ConvertToBytes_List_GExampleStructContainingClasses_n_g(ref w, _MyListUnwrappedNullableExampleStruct,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
+            if (updateStoredBuffer)
+            {
+                _MyListUnwrappedNullableExampleStruct_ByteIndex = _MyListUnwrappedNullableExampleStruct_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {

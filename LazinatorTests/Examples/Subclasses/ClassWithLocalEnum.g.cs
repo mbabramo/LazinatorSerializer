@@ -454,9 +454,10 @@ namespace LazinatorTests.Examples.Subclasses
             TabbedText.WriteLine($"Byte {writer.Position}, MyEnumList (accessed? {_MyEnumList_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Position;
+            int _MyEnumList_ByteIndex_copy = 0;
             if (updateStoredBuffer)
             {
-                _MyEnumList_ByteIndex = writer.Position - startOfObjectPosition;
+                _MyEnumList_ByteIndex_copy = writer.Position - startOfObjectPosition;
             }
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyEnumList_Accessed)
             {
@@ -471,6 +472,11 @@ namespace LazinatorTests.Examples.Subclasses
             ConvertToBytes_List_GEnumWithinClass_g(ref w, _MyEnumList,
             includeChildrenMode, v, updateStoredBuffer),
             lengthsSpan: ref lengthsSpan);
+            if (updateStoredBuffer)
+            {
+                _MyEnumList_ByteIndex = _MyEnumList_ByteIndex_copy;
+                
+            }
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
