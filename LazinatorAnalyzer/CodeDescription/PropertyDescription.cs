@@ -407,7 +407,7 @@ namespace Lazinator.CodeDescription
             WriteInclusionConditional = InclusionConditionalHelper(false);
         }
 
-        private ConditionsCodeGenerator InclusionConditionalHelper(bool readVersion)
+        public ConditionsCodeGenerator InclusionConditionalHelper(bool readVersion)
         {
             string versionNumberVariable = readVersion ? "serializedVersionNumber" : "LazinatorObjectVersion";
             List<string> conditions = new List<string>();

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using Lazinator.Attributes;
 using LazinatorAnalyzer.AttributeClones;
 using LazinatorAnalyzer.Settings;
@@ -1260,11 +1261,10 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 
             IEnumerable<PropertyDescription> primitiveProperties = thisLevel.Where(x => x.IsPrimitive);
             IEnumerable<PropertyDescription> childrenProperties = thisLevel.Where(x => !x.IsPrimitive);
-            int numBytesChildLengthsAllLevels = PropertiesIncludingInherited.Sum(x => x.BytesUsedForLength());
             sb.AppendLine($@"
                             {IIF(primitiveProperties.Any() || IsDerivedFromNonAbstractLazinator, $@"WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);")}{IIF(childrenProperties.Any() || IsDerivedFromNonAbstractLazinator, $@"
-                            Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, {numBytesChildLengthsAllLevels});
-                            writer.Skip({numBytesChildLengthsAllLevels});
+                            {GetLengthsCalculation(false)}Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
+                            writer.Skip(lengthForLengths);
                             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);")}");
 
             if (IncludeTracingCode)
@@ -1283,6 +1283,30 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             if (childrenProperties.Any() || !IsSealedOrStruct)
                 AppendWritePropertiesHelper(sb, childrenProperties, false);
 
+        }
+
+        public string GetLengthsCalculation(bool readVersion)
+        {
+            var properties = PropertiesIncludingInherited.Select(x => (x.InclusionConditionalHelper(readVersion).ToString(), x.BytesUsedForLength()));
+            Dictionary<string, int> distinct = new Dictionary<string, int>();
+            foreach (var property in properties)
+            {
+                if (distinct.ContainsKey(property.Item1))
+                    distinct[property.Item1] += property.Item2;
+                else
+                    distinct[property.Item1] = property.Item2;
+            }
+            var results = distinct.OrderBy(x => x.Key.Length);
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("int lengthForLengths = 0;");
+            foreach (var result in results)
+            {
+                sb.AppendLine($@"if ({result.Key})
+                    {{
+                        lengthForLengths += {result.Value};
+                    }}");
+            }
+            return sb.ToString();
         }
 
         private void AppendWritePropertiesHelper(CodeStringBuilder sb, IEnumerable<PropertyDescription> propertiesToWrite, bool isPrimitive)
@@ -1354,7 +1378,6 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
         private void AppendConvertFromBytesAfterHeader(CodeStringBuilder sb)
         {
             var thisLevel = PropertiesToDefineThisLevel;
-            int numBytesChildLengthsAllLevels = PropertiesIncludingInherited.Sum(x => x.BytesUsedForLength());
             if (ImplementsConvertFromBytesAfterHeader)
             {
                 sb.Append($@"{skipConvertFromBytesAfterHeaderString}
@@ -1367,7 +1390,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 {{
                     ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
                     ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-                    ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + {numBytesChildLengthsAllLevels}, ref bytesSoFar);
+                    {GetLengthsCalculation(true)}ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
                 }}
                     
 ");
