@@ -1531,7 +1531,7 @@ namespace Lazinator.CodeDescription
                 return 0;
             if (SingleByteLength)
                 return sizeof(byte);
-            return sizeof(uint);
+            return sizeof(int);
         }
 
         public void AppendPropertyWriteString(CodeStringBuilder sb)

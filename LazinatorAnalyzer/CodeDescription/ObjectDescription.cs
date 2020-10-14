@@ -108,7 +108,30 @@ namespace Lazinator.CodeDescription
         public bool AllGenericsAreNonlazinator { get; set; }
         public bool ContainsOpenGenericParameters => IsGeneric && !AllGenericsAreNonlazinator;
         public List<PropertyDescription> PropertiesToDefineThisLevel => ExclusiveInterface?.PropertiesToDefineThisLevel;
-        public List<PropertyDescription> PropertiesIncludingInherited => ExclusiveInterface?.PropertiesIncludingInherited;
+        public IEnumerable<PropertyDescription> PropertiesIncludingInherited => ExclusiveInterface?.PropertiesIncludingInherited;
+        // DEBUG
+        //{
+        //    get
+        //    {
+        //        if (IsDerived)
+        //        {
+        //            HashSet<string> propertyStrings = new HashSet<string>();
+        //            foreach (var thisLevel in PropertiesToDefineThisLevel)
+        //            {
+        //                yield return thisLevel;
+        //                propertyStrings.Add(thisLevel.PropertyName);
+        //            }
+        //            foreach (var )
+        //        }
+        //        else
+        //        {
+        //            foreach (var thisLevel in PropertiesToDefineThisLevel)
+        //            {
+        //                yield return thisLevel;
+        //            }
+        //        }
+        //    }
+        //}
         public List<PropertyDescription> PropertiesInherited => ExclusiveInterface?.PropertiesInherited;
         public bool CanNeverHaveChildren => Version == -1 && IsSealedOrStruct && !ExclusiveInterface.PropertiesIncludingInherited.Any(x => x.PropertyType != LazinatorPropertyType.PrimitiveType && x.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable) && !IsGeneric;
         public bool UniqueIDCanBeSkipped => Version == -1 && IsSealedOrStruct && BaseLazinatorObject == null && !HasNonexclusiveInterfaces && !ContainsOpenGenericParameters;
