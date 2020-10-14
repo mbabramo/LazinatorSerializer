@@ -1534,28 +1534,28 @@ namespace LazinatorTests.Examples
         {
             if (_IncludableChild_Accessed && _IncludableChild != null)
             {
-                IncludableChild.UpdateStoredBuffer(ref writer, startPosition + _IncludableChild_ByteIndex + sizeof(int), _IncludableChild_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                IncludableChild.UpdateStoredBuffer(ref writer, startPosition + _IncludableChild_ByteIndex, _IncludableChild_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_MyChild1_Accessed && _MyChild1 != null)
             {
-                MyChild1.UpdateStoredBuffer(ref writer, startPosition + _MyChild1_ByteIndex + sizeof(int), _MyChild1_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                MyChild1.UpdateStoredBuffer(ref writer, startPosition + _MyChild1_ByteIndex, _MyChild1_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_MyChild2_Accessed && _MyChild2 != null)
             {
-                MyChild2.UpdateStoredBuffer(ref writer, startPosition + _MyChild2_ByteIndex + sizeof(int), _MyChild2_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                MyChild2.UpdateStoredBuffer(ref writer, startPosition + _MyChild2_ByteIndex, _MyChild2_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_MyChild2Previous_Accessed && _MyChild2Previous != null)
             {
-                MyChild2Previous.UpdateStoredBuffer(ref writer, startPosition + _MyChild2Previous_ByteIndex + sizeof(int), _MyChild2Previous_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                MyChild2Previous.UpdateStoredBuffer(ref writer, startPosition + _MyChild2Previous_ByteIndex, _MyChild2Previous_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_MyInterfaceImplementer_Accessed && _MyInterfaceImplementer != null)
             {
-                MyInterfaceImplementer.UpdateStoredBuffer(ref writer, startPosition + _MyInterfaceImplementer_ByteIndex + sizeof(int), _MyInterfaceImplementer_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                MyInterfaceImplementer.UpdateStoredBuffer(ref writer, startPosition + _MyInterfaceImplementer_ByteIndex, _MyInterfaceImplementer_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
-            WrappedInt.UpdateStoredBuffer(ref writer, startPosition + _WrappedInt_ByteIndex + sizeof(int), _WrappedInt_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+            WrappedInt.UpdateStoredBuffer(ref writer, startPosition + _WrappedInt_ByteIndex, _WrappedInt_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             if (_ExcludableChild_Accessed && _ExcludableChild != null)
             {
-                ExcludableChild.UpdateStoredBuffer(ref writer, startPosition + _ExcludableChild_ByteIndex + sizeof(int), _ExcludableChild_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                ExcludableChild.UpdateStoredBuffer(ref writer, startPosition + _ExcludableChild_ByteIndex, _ExcludableChild_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

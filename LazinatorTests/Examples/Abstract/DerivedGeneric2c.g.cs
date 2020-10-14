@@ -503,7 +503,7 @@ namespace LazinatorTests.Examples.Abstract
         {
             if (_MyT_Accessed && _MyT != null)
             {
-                MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex + sizeof(int), _MyT_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex, _MyT_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

@@ -590,11 +590,11 @@ namespace LazinatorCollections.Remote
         {
             if (_Key_Accessed && _Key != null)
             {
-                Key.UpdateStoredBuffer(ref writer, startPosition + _Key_ByteIndex + sizeof(int), _Key_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                Key.UpdateStoredBuffer(ref writer, startPosition + _Key_ByteIndex, _Key_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_Local_Accessed && _Local != null)
             {
-                Local.UpdateStoredBuffer(ref writer, startPosition + _Local_ByteIndex + sizeof(int), _Local_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                Local.UpdateStoredBuffer(ref writer, startPosition + _Local_ByteIndex, _Local_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

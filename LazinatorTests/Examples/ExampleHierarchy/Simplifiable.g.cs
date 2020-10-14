@@ -861,19 +861,19 @@ namespace LazinatorTests.Examples
         {
             if (_ANonSkippableEarlierExample_Accessed && _ANonSkippableEarlierExample != null)
             {
-                ANonSkippableEarlierExample.UpdateStoredBuffer(ref writer, startPosition + _ANonSkippableEarlierExample_ByteIndex + sizeof(int), _ANonSkippableEarlierExample_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                ANonSkippableEarlierExample.UpdateStoredBuffer(ref writer, startPosition + _ANonSkippableEarlierExample_ByteIndex, _ANonSkippableEarlierExample_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_Example_Accessed && _Example != null)
             {
-                Example.UpdateStoredBuffer(ref writer, startPosition + _Example_ByteIndex + sizeof(int), _Example_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                Example.UpdateStoredBuffer(ref writer, startPosition + _Example_ByteIndex, _Example_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_Example2_Accessed && _Example2 != null)
             {
-                Example2.UpdateStoredBuffer(ref writer, startPosition + _Example2_ByteIndex + sizeof(int), _Example2_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                Example2.UpdateStoredBuffer(ref writer, startPosition + _Example2_ByteIndex, _Example2_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_Example3_Accessed && _Example3 != null)
             {
-                Example3.UpdateStoredBuffer(ref writer, startPosition + _Example3_ByteIndex + sizeof(int), _Example3_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                Example3.UpdateStoredBuffer(ref writer, startPosition + _Example3_ByteIndex, _Example3_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

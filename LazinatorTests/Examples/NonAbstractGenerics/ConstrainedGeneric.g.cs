@@ -595,11 +595,11 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            MyNullableT.Value.UpdateStoredBuffer(ref writer, startPosition + _MyNullableT_ByteIndex + sizeof(int), _MyNullableT_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-            MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex + sizeof(int), _MyT_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+            MyNullableT.Value.UpdateStoredBuffer(ref writer, startPosition + _MyNullableT_ByteIndex, _MyNullableT_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
+            MyT.UpdateStoredBuffer(ref writer, startPosition + _MyT_ByteIndex, _MyT_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             if (_MyU_Accessed && _MyU != null)
             {
-                MyU.UpdateStoredBuffer(ref writer, startPosition + _MyU_ByteIndex + sizeof(int), _MyU_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                MyU.UpdateStoredBuffer(ref writer, startPosition + _MyU_ByteIndex, _MyU_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

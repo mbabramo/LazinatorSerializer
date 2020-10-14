@@ -567,11 +567,11 @@ namespace LazinatorCollections.OffsetList
         {
             if (_FourByteItems_Accessed && _FourByteItems != null)
             {
-                FourByteItems.UpdateStoredBuffer(ref writer, startPosition + _FourByteItems_ByteIndex + sizeof(int), _FourByteItems_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                FourByteItems.UpdateStoredBuffer(ref writer, startPosition + _FourByteItems_ByteIndex, _FourByteItems_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_TwoByteItems_Accessed && _TwoByteItems != null)
             {
-                TwoByteItems.UpdateStoredBuffer(ref writer, startPosition + _TwoByteItems_ByteIndex + sizeof(int), _TwoByteItems_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                TwoByteItems.UpdateStoredBuffer(ref writer, startPosition + _TwoByteItems_ByteIndex, _TwoByteItems_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

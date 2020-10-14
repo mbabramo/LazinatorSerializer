@@ -437,7 +437,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             if (_EagerExample_Accessed && _EagerExample != null)
             {
-                EagerExample.UpdateStoredBuffer(ref writer, startPosition + _EagerExample_ByteIndex + sizeof(int), _EagerExample_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                EagerExample.UpdateStoredBuffer(ref writer, startPosition + _EagerExample_ByteIndex, _EagerExample_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

@@ -568,11 +568,11 @@ namespace LazinatorCollections.Dictionary
         {
             if (_Keys_Accessed && _Keys != null)
             {
-                Keys.UpdateStoredBuffer(ref writer, startPosition + _Keys_ByteIndex + sizeof(int), _Keys_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                Keys.UpdateStoredBuffer(ref writer, startPosition + _Keys_ByteIndex, _Keys_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_Values_Accessed && _Values != null)
             {
-                Values.UpdateStoredBuffer(ref writer, startPosition + _Values_ByteIndex + sizeof(int), _Values_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                Values.UpdateStoredBuffer(ref writer, startPosition + _Values_ByteIndex, _Values_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

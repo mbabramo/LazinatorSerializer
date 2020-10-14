@@ -561,11 +561,11 @@ namespace LazinatorCollections
         {
             if (_NextNode_Accessed && _NextNode != null)
             {
-                NextNode.UpdateStoredBuffer(ref writer, startPosition + _NextNode_ByteIndex + sizeof(int), _NextNode_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                NextNode.UpdateStoredBuffer(ref writer, startPosition + _NextNode_ByteIndex, _NextNode_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_Value_Accessed && _Value != null)
             {
-                Value.UpdateStoredBuffer(ref writer, startPosition + _Value_ByteIndex + sizeof(int), _Value_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                Value.UpdateStoredBuffer(ref writer, startPosition + _Value_ByteIndex, _Value_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

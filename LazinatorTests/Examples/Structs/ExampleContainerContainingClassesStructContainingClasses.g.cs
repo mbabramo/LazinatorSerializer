@@ -728,8 +728,8 @@ namespace LazinatorTests.Examples
         
         protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
-            IntWrapper.UpdateStoredBuffer(ref writer, startPosition + _IntWrapper_ByteIndex + sizeof(int), _IntWrapper_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-            MyExampleStructContainingClasses.UpdateStoredBuffer(ref writer, startPosition + _MyExampleStructContainingClasses_ByteIndex + sizeof(int), _MyExampleStructContainingClasses_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+            IntWrapper.UpdateStoredBuffer(ref writer, startPosition + _IntWrapper_ByteIndex, _IntWrapper_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
+            MyExampleStructContainingClasses.UpdateStoredBuffer(ref writer, startPosition + _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             if (_MyHashSetExampleStruct_Accessed && _MyHashSetExampleStruct != null)
             {
                 _MyHashSetExampleStruct = (HashSet<ExampleStructContainingClasses>) CloneOrChange_HashSet_GExampleStructContainingClasses_g(_MyHashSetExampleStruct, l => l.RemoveBufferInHierarchy(), true);

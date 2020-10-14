@@ -544,11 +544,11 @@ namespace LazinatorTests.Examples.Subclasses
         {
             if (_SubclassInstance1_Accessed && _SubclassInstance1 != null)
             {
-                SubclassInstance1.UpdateStoredBuffer(ref writer, startPosition + _SubclassInstance1_ByteIndex + sizeof(int), _SubclassInstance1_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                SubclassInstance1.UpdateStoredBuffer(ref writer, startPosition + _SubclassInstance1_ByteIndex, _SubclassInstance1_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_SubclassInstance2_Accessed && _SubclassInstance2 != null)
             {
-                SubclassInstance2.UpdateStoredBuffer(ref writer, startPosition + _SubclassInstance2_ByteIndex + sizeof(int), _SubclassInstance2_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                SubclassInstance2.UpdateStoredBuffer(ref writer, startPosition + _SubclassInstance2_ByteIndex, _SubclassInstance2_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

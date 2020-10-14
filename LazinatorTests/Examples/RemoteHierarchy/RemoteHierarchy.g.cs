@@ -456,7 +456,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         {
             if (_RemoteLevel1Item_Accessed && _RemoteLevel1Item != null)
             {
-                RemoteLevel1Item.UpdateStoredBuffer(ref writer, startPosition + _RemoteLevel1Item_ByteIndex + sizeof(int), _RemoteLevel1Item_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                RemoteLevel1Item.UpdateStoredBuffer(ref writer, startPosition + _RemoteLevel1Item_ByteIndex, _RemoteLevel1Item_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

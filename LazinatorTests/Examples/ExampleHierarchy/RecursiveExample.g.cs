@@ -525,11 +525,11 @@ namespace LazinatorTests.Examples.Hierarchy
         {
             if (_RecursiveClass_Accessed && _RecursiveClass != null)
             {
-                RecursiveClass.UpdateStoredBuffer(ref writer, startPosition + _RecursiveClass_ByteIndex + sizeof(int), _RecursiveClass_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                RecursiveClass.UpdateStoredBuffer(ref writer, startPosition + _RecursiveClass_ByteIndex, _RecursiveClass_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_RecursiveInterface_Accessed && _RecursiveInterface != null)
             {
-                RecursiveInterface.UpdateStoredBuffer(ref writer, startPosition + _RecursiveInterface_ByteIndex + sizeof(int), _RecursiveInterface_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                RecursiveInterface.UpdateStoredBuffer(ref writer, startPosition + _RecursiveInterface_ByteIndex, _RecursiveInterface_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

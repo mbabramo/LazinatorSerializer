@@ -436,7 +436,7 @@ namespace LazinatorTests.Examples.Collections
         {
             if (_MyList_Accessed && _MyList != null)
             {
-                MyList.UpdateStoredBuffer(ref writer, startPosition + _MyList_ByteIndex + sizeof(int), _MyList_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                MyList.UpdateStoredBuffer(ref writer, startPosition + _MyList_ByteIndex, _MyList_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

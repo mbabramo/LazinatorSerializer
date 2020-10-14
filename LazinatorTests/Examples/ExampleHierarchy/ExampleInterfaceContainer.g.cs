@@ -484,7 +484,7 @@ namespace LazinatorTests.Examples.Hierarchy
         {
             if (_ExampleByInterface_Accessed && _ExampleByInterface != null)
             {
-                ExampleByInterface.UpdateStoredBuffer(ref writer, startPosition + _ExampleByInterface_ByteIndex + sizeof(int), _ExampleByInterface_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                ExampleByInterface.UpdateStoredBuffer(ref writer, startPosition + _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_ExampleListByInterface_Accessed && _ExampleListByInterface != null)
             {

@@ -546,11 +546,11 @@ namespace LazinatorCollections.Tuples
         {
             if (_Key_Accessed && _Key != null)
             {
-                Key.UpdateStoredBuffer(ref writer, startPosition + _Key_ByteIndex + sizeof(int), _Key_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                Key.UpdateStoredBuffer(ref writer, startPosition + _Key_ByteIndex, _Key_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_Value_Accessed && _Value != null)
             {
-                Value.UpdateStoredBuffer(ref writer, startPosition + _Value_ByteIndex + sizeof(int), _Value_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                Value.UpdateStoredBuffer(ref writer, startPosition + _Value_ByteIndex, _Value_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

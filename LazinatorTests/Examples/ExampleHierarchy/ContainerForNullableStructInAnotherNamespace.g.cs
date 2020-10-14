@@ -475,7 +475,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             if (_MyNullableStruct_Accessed && _MyNullableStruct != null)
             {
-                MyNullableStruct.Value.UpdateStoredBuffer(ref writer, startPosition + _MyNullableStruct_ByteIndex + sizeof(int), _MyNullableStruct_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                MyNullableStruct.Value.UpdateStoredBuffer(ref writer, startPosition + _MyNullableStruct_ByteIndex, _MyNullableStruct_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

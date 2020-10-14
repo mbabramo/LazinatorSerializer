@@ -296,7 +296,7 @@ namespace LazinatorTests.Examples
             base.UpdateDeserializedChildren(ref writer, startPosition);
             if (_MyGrandchildInInherited_Accessed && _MyGrandchildInInherited != null)
             {
-                MyGrandchildInInherited.UpdateStoredBuffer(ref writer, startPosition + _MyGrandchildInInherited_ByteIndex + sizeof(int), _MyGrandchildInInherited_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                MyGrandchildInInherited.UpdateStoredBuffer(ref writer, startPosition + _MyGrandchildInInherited_ByteIndex, _MyGrandchildInInherited_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

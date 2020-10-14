@@ -1190,15 +1190,15 @@ namespace LazinatorTests.Examples.Structs
         {
             if (_ListWrappedBytes_Accessed && _ListWrappedBytes != null)
             {
-                ListWrappedBytes.UpdateStoredBuffer(ref writer, startPosition + _ListWrappedBytes_ByteIndex + sizeof(int), _ListWrappedBytes_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                ListWrappedBytes.UpdateStoredBuffer(ref writer, startPosition + _ListWrappedBytes_ByteIndex, _ListWrappedBytes_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             WrappedBool.UpdateStoredBuffer(ref writer, startPosition + _WrappedBool_ByteIndex, _WrappedBool_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             WrappedByte.UpdateStoredBuffer(ref writer, startPosition + _WrappedByte_ByteIndex, _WrappedByte_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             WrappedChar.UpdateStoredBuffer(ref writer, startPosition + _WrappedChar_ByteIndex, _WrappedChar_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             WrappedNullableBool.UpdateStoredBuffer(ref writer, startPosition + _WrappedNullableBool_ByteIndex, _WrappedNullableBool_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
-            WrappedNullableByte.UpdateStoredBuffer(ref writer, startPosition + _WrappedNullableByte_ByteIndex + sizeof(int), _WrappedNullableByte_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-            WrappedNullableChar.UpdateStoredBuffer(ref writer, startPosition + _WrappedNullableChar_ByteIndex + sizeof(int), _WrappedNullableChar_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-            WrappedNullableSByte.UpdateStoredBuffer(ref writer, startPosition + _WrappedNullableSByte_ByteIndex + sizeof(int), _WrappedNullableSByte_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+            WrappedNullableByte.UpdateStoredBuffer(ref writer, startPosition + _WrappedNullableByte_ByteIndex, _WrappedNullableByte_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
+            WrappedNullableChar.UpdateStoredBuffer(ref writer, startPosition + _WrappedNullableChar_ByteIndex, _WrappedNullableChar_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
+            WrappedNullableSByte.UpdateStoredBuffer(ref writer, startPosition + _WrappedNullableSByte_ByteIndex, _WrappedNullableSByte_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             WrappedSByte.UpdateStoredBuffer(ref writer, startPosition + _WrappedSByte_ByteIndex, _WrappedSByte_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
         }
         

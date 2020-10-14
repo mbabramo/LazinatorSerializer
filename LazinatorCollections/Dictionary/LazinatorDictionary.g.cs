@@ -475,7 +475,7 @@ namespace LazinatorCollections.Dictionary
         {
             if (_Buckets_Accessed && _Buckets != null)
             {
-                Buckets.UpdateStoredBuffer(ref writer, startPosition + _Buckets_ByteIndex + sizeof(int), _Buckets_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                Buckets.UpdateStoredBuffer(ref writer, startPosition + _Buckets_ByteIndex, _Buckets_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

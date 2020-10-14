@@ -567,9 +567,9 @@ namespace LazinatorTests.Examples
         {
             if (_MyExampleNullableStruct_Accessed && _MyExampleNullableStruct != null)
             {
-                MyExampleNullableStruct.Value.UpdateStoredBuffer(ref writer, startPosition + _MyExampleNullableStruct_ByteIndex + sizeof(int), _MyExampleNullableStruct_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                MyExampleNullableStruct.Value.UpdateStoredBuffer(ref writer, startPosition + _MyExampleNullableStruct_ByteIndex, _MyExampleNullableStruct_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
-            MyExampleStructContainingClasses.UpdateStoredBuffer(ref writer, startPosition + _MyExampleStructContainingClasses_ByteIndex + sizeof(int), _MyExampleStructContainingClasses_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+            MyExampleStructContainingClasses.UpdateStoredBuffer(ref writer, startPosition + _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
         }
         
         

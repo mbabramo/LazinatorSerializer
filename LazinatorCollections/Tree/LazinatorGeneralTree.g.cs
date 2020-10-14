@@ -562,11 +562,11 @@ namespace LazinatorCollections.Tree
         {
             if (_Children_Accessed && _Children != null)
             {
-                Children.UpdateStoredBuffer(ref writer, startPosition + _Children_ByteIndex + sizeof(int), _Children_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                Children.UpdateStoredBuffer(ref writer, startPosition + _Children_ByteIndex, _Children_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_Item_Accessed && _Item != null)
             {
-                Item.UpdateStoredBuffer(ref writer, startPosition + _Item_ByteIndex + sizeof(int), _Item_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                Item.UpdateStoredBuffer(ref writer, startPosition + _Item_ByteIndex, _Item_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

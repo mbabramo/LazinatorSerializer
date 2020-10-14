@@ -435,7 +435,7 @@ namespace LazinatorTests.Examples
         {
             if (_Example_Accessed && _Example != null)
             {
-                Example.UpdateStoredBuffer(ref writer, startPosition + _Example_ByteIndex + sizeof(int), _Example_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                Example.UpdateStoredBuffer(ref writer, startPosition + _Example_ByteIndex, _Example_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

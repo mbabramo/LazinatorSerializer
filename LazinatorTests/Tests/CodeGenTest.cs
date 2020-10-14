@@ -222,7 +222,6 @@ public class MyOtherClass
             // await CompleteGenerateCode(typeof(NullableEnabledContext), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             //await CompleteGenerateCode(typeof(RecordLikeContainer), "LazinatorTests", "/Examples/", "Tuples/", ws);
             //await CompleteGenerateCode(typeof(UncompressedContainer), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
-            await CompleteGenerateCode(typeof(LazinatorFastReadListInt16), project: "LazinatorCollections", mainFolder: "/OffsetList/", subfolder: "", ws); // DEBUG
 
             // include some code so that we won't get a warning if not awaiting anything elsewhere
             Task GetT() { return Task.CompletedTask; };

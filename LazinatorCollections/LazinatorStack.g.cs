@@ -453,7 +453,7 @@ namespace LazinatorCollections
         {
             if (_UnderlyingList_Accessed && _UnderlyingList != null)
             {
-                UnderlyingList.UpdateStoredBuffer(ref writer, startPosition + _UnderlyingList_ByteIndex + sizeof(int), _UnderlyingList_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                UnderlyingList.UpdateStoredBuffer(ref writer, startPosition + _UnderlyingList_ByteIndex, _UnderlyingList_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

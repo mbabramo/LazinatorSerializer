@@ -291,7 +291,7 @@ namespace LazinatorCollections.Tree
             base.UpdateDeserializedChildren(ref writer, startPosition);
             if (_Locations_Accessed && _Locations != null)
             {
-                Locations.UpdateStoredBuffer(ref writer, startPosition + _Locations_ByteIndex + sizeof(int), _Locations_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                Locations.UpdateStoredBuffer(ref writer, startPosition + _Locations_ByteIndex, _Locations_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

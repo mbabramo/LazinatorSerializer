@@ -566,11 +566,11 @@ namespace LazinatorTests.Examples.Collections
         {
             if (_MyList_Accessed && _MyList != null)
             {
-                MyList.UpdateStoredBuffer(ref writer, startPosition + _MyList_ByteIndex + sizeof(int), _MyList_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                MyList.UpdateStoredBuffer(ref writer, startPosition + _MyList_ByteIndex, _MyList_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_MyStructList_Accessed && _MyStructList != null)
             {
-                MyStructList.UpdateStoredBuffer(ref writer, startPosition + _MyStructList_ByteIndex + sizeof(int), _MyStructList_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                MyStructList.UpdateStoredBuffer(ref writer, startPosition + _MyStructList_ByteIndex, _MyStructList_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

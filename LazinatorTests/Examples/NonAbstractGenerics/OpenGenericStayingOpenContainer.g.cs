@@ -798,23 +798,23 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
             if (_ClosedGenericBase_Accessed && _ClosedGenericBase != null)
             {
-                ClosedGenericBase.UpdateStoredBuffer(ref writer, startPosition + _ClosedGenericBase_ByteIndex + sizeof(int), _ClosedGenericBase_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                ClosedGenericBase.UpdateStoredBuffer(ref writer, startPosition + _ClosedGenericBase_ByteIndex, _ClosedGenericBase_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_ClosedGenericFloat_Accessed && _ClosedGenericFloat != null)
             {
-                ClosedGenericFloat.UpdateStoredBuffer(ref writer, startPosition + _ClosedGenericFloat_ByteIndex + sizeof(int), _ClosedGenericFloat_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                ClosedGenericFloat.UpdateStoredBuffer(ref writer, startPosition + _ClosedGenericFloat_ByteIndex, _ClosedGenericFloat_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_ClosedGenericFromBaseWithBase_Accessed && _ClosedGenericFromBaseWithBase != null)
             {
-                ClosedGenericFromBaseWithBase.UpdateStoredBuffer(ref writer, startPosition + _ClosedGenericFromBaseWithBase_ByteIndex + sizeof(int), _ClosedGenericFromBaseWithBase_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                ClosedGenericFromBaseWithBase.UpdateStoredBuffer(ref writer, startPosition + _ClosedGenericFromBaseWithBase_ByteIndex, _ClosedGenericFromBaseWithBase_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_ClosedGenericInterface_Accessed && _ClosedGenericInterface != null)
             {
-                ClosedGenericInterface.UpdateStoredBuffer(ref writer, startPosition + _ClosedGenericInterface_ByteIndex + sizeof(int), _ClosedGenericInterface_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                ClosedGenericInterface.UpdateStoredBuffer(ref writer, startPosition + _ClosedGenericInterface_ByteIndex, _ClosedGenericInterface_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_ClosedGenericNonexclusiveInterface_Accessed && _ClosedGenericNonexclusiveInterface != null)
             {
-                ClosedGenericNonexclusiveInterface.UpdateStoredBuffer(ref writer, startPosition + _ClosedGenericNonexclusiveInterface_ByteIndex + sizeof(int), _ClosedGenericNonexclusiveInterface_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                ClosedGenericNonexclusiveInterface.UpdateStoredBuffer(ref writer, startPosition + _ClosedGenericNonexclusiveInterface_ByteIndex, _ClosedGenericNonexclusiveInterface_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

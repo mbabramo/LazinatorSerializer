@@ -495,7 +495,7 @@ namespace LazinatorCollections
         {
             if (_FirstNode_Accessed && _FirstNode != null)
             {
-                FirstNode.UpdateStoredBuffer(ref writer, startPosition + _FirstNode_ByteIndex + sizeof(int), _FirstNode_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                FirstNode.UpdateStoredBuffer(ref writer, startPosition + _FirstNode_ByteIndex, _FirstNode_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

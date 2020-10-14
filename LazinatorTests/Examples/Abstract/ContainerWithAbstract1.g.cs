@@ -435,7 +435,7 @@ namespace LazinatorTests.Examples.Abstract
         {
             if (_AbstractProperty_Accessed && _AbstractProperty != null)
             {
-                AbstractProperty.UpdateStoredBuffer(ref writer, startPosition + _AbstractProperty_ByteIndex + sizeof(int), _AbstractProperty_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                AbstractProperty.UpdateStoredBuffer(ref writer, startPosition + _AbstractProperty_ByteIndex, _AbstractProperty_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

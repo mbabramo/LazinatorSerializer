@@ -445,7 +445,7 @@ namespace LazinatorCollections
         {
             if (_Offsets_Accessed && _Offsets != null)
             {
-                Offsets.UpdateStoredBuffer(ref writer, startPosition + _Offsets_ByteIndex + sizeof(int), _Offsets_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                Offsets.UpdateStoredBuffer(ref writer, startPosition + _Offsets_ByteIndex, _Offsets_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

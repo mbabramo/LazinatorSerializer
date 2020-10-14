@@ -718,11 +718,11 @@ namespace LazinatorTests.Examples
         {
             if (_MyChild1_Accessed && _MyChild1 != null)
             {
-                MyChild1.UpdateStoredBuffer(ref writer, startPosition + _MyChild1_ByteIndex + sizeof(int), _MyChild1_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                MyChild1.UpdateStoredBuffer(ref writer, startPosition + _MyChild1_ByteIndex, _MyChild1_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_MyChild2_Accessed && _MyChild2 != null)
             {
-                MyChild2.UpdateStoredBuffer(ref writer, startPosition + _MyChild2_ByteIndex + sizeof(int), _MyChild2_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                MyChild2.UpdateStoredBuffer(ref writer, startPosition + _MyChild2_ByteIndex, _MyChild2_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_MyLazinatorList_Accessed && _MyLazinatorList != null)
             {

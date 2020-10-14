@@ -529,7 +529,7 @@ namespace LazinatorTests.Examples.Abstract
         {
             if (_LazinatorExample_Accessed && _LazinatorExample != null)
             {
-                LazinatorExample.UpdateStoredBuffer(ref writer, startPosition + _LazinatorExample_ByteIndex + sizeof(int), _LazinatorExample_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                LazinatorExample.UpdateStoredBuffer(ref writer, startPosition + _LazinatorExample_ByteIndex, _LazinatorExample_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
         }
         

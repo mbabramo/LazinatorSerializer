@@ -2803,28 +2803,28 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             if (_ExplicitlyNullable_Accessed && _ExplicitlyNullable != null)
             {
-                ExplicitlyNullable!.UpdateStoredBuffer(ref writer, startPosition + _ExplicitlyNullable_ByteIndex + sizeof(int), _ExplicitlyNullable_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                ExplicitlyNullable!.UpdateStoredBuffer(ref writer, startPosition + _ExplicitlyNullable_ByteIndex, _ExplicitlyNullable_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_ExplicitlyNullableInterface_Accessed && _ExplicitlyNullableInterface != null)
             {
-                ExplicitlyNullableInterface!.UpdateStoredBuffer(ref writer, startPosition + _ExplicitlyNullableInterface_ByteIndex + sizeof(int), _ExplicitlyNullableInterface_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                ExplicitlyNullableInterface!.UpdateStoredBuffer(ref writer, startPosition + _ExplicitlyNullableInterface_ByteIndex, _ExplicitlyNullableInterface_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
-            NonNullableClass!.UpdateStoredBuffer(ref writer, startPosition + _NonNullableClass_ByteIndex + sizeof(int), _NonNullableClass_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-            NonNullableInterface!.UpdateStoredBuffer(ref writer, startPosition + _NonNullableInterface_ByteIndex + sizeof(int), _NonNullableInterface_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-            NonNullableLazinatorListNonNullable!.UpdateStoredBuffer(ref writer, startPosition + _NonNullableLazinatorListNonNullable_ByteIndex + sizeof(int), _NonNullableLazinatorListNonNullable_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-            NonNullableLazinatorListNullable!.UpdateStoredBuffer(ref writer, startPosition + _NonNullableLazinatorListNullable_ByteIndex + sizeof(int), _NonNullableLazinatorListNullable_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
-            NonNullableStruct!.UpdateStoredBuffer(ref writer, startPosition + _NonNullableStruct_ByteIndex + sizeof(int), _NonNullableStruct_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+            NonNullableClass!.UpdateStoredBuffer(ref writer, startPosition + _NonNullableClass_ByteIndex, _NonNullableClass_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
+            NonNullableInterface!.UpdateStoredBuffer(ref writer, startPosition + _NonNullableInterface_ByteIndex, _NonNullableInterface_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
+            NonNullableLazinatorListNonNullable!.UpdateStoredBuffer(ref writer, startPosition + _NonNullableLazinatorListNonNullable_ByteIndex, _NonNullableLazinatorListNonNullable_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
+            NonNullableLazinatorListNullable!.UpdateStoredBuffer(ref writer, startPosition + _NonNullableLazinatorListNullable_ByteIndex, _NonNullableLazinatorListNullable_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
+            NonNullableStruct!.UpdateStoredBuffer(ref writer, startPosition + _NonNullableStruct_ByteIndex, _NonNullableStruct_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             if (_NullableLazinatorListNonNullable_Accessed && _NullableLazinatorListNonNullable != null)
             {
-                NullableLazinatorListNonNullable!.UpdateStoredBuffer(ref writer, startPosition + _NullableLazinatorListNonNullable_ByteIndex + sizeof(int), _NullableLazinatorListNonNullable_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                NullableLazinatorListNonNullable!.UpdateStoredBuffer(ref writer, startPosition + _NullableLazinatorListNonNullable_ByteIndex, _NullableLazinatorListNonNullable_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_NullableLazinatorListNullable_Accessed && _NullableLazinatorListNullable != null)
             {
-                NullableLazinatorListNullable!.UpdateStoredBuffer(ref writer, startPosition + _NullableLazinatorListNullable_ByteIndex + sizeof(int), _NullableLazinatorListNullable_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                NullableLazinatorListNullable!.UpdateStoredBuffer(ref writer, startPosition + _NullableLazinatorListNullable_ByteIndex, _NullableLazinatorListNullable_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             if (_NullableStruct_Accessed && _NullableStruct != null)
             {
-                NullableStruct!.Value.UpdateStoredBuffer(ref writer, startPosition + _NullableStruct_ByteIndex + sizeof(int), _NullableStruct_ByteLength - sizeof(int), IncludeChildrenMode.IncludeAllChildren, true);
+                NullableStruct!.Value.UpdateStoredBuffer(ref writer, startPosition + _NullableStruct_ByteIndex, _NullableStruct_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             _NonNullableArrayOfNonNullables = (Example[]) CloneOrChange_Example_B_b(_NonNullableArrayOfNonNullables!, l => l.RemoveBufferInHierarchy(), true);
             _NonNullableArrayOfNullables = (Example?[]) CloneOrChange_Example_n_B_b(_NonNullableArrayOfNullables!, l => l.RemoveBufferInHierarchy(), true);
