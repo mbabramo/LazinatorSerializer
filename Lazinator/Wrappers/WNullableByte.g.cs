@@ -323,6 +323,7 @@ namespace Lazinator.Wrappers
         
         void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
+            TabbedText.WriteLine($"Reading WrappedValue at byte location {bytesSoFar}"); 
             _WrappedValue = span.ToDecompressedNullableByte(ref bytesSoFar);
         }
         

@@ -338,7 +338,9 @@ namespace LazinatorTests.Examples
         
         void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
+            TabbedText.WriteLine($"Reading MyInt at byte location {bytesSoFar}"); 
             _MyInt = span.ToDecompressedInt32(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyString at byte location {bytesSoFar}"); 
             _MyString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
         }
         

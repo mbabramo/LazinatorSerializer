@@ -306,6 +306,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         
         protected virtual void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
+            TabbedText.WriteLine($"Reading RemoteLevel2Int at byte location {bytesSoFar}"); 
             _RemoteLevel2Int = span.ToDecompressedInt32(ref bytesSoFar);
         }
         

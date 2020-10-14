@@ -612,24 +612,43 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         protected virtual void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
+            TabbedText.WriteLine($"Reading MyUncompressed at byte location {bytesSoFar}"); 
             _MyUncompressed = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedDateTime at byte location {bytesSoFar}"); 
             _MyUncompressedDateTime = span.ToDateTime(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedDecimal at byte location {bytesSoFar}"); 
             _MyUncompressedDecimal = span.ToDecimal(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedInt at byte location {bytesSoFar}"); 
             _MyUncompressedInt = span.ToInt32(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedLong at byte location {bytesSoFar}"); 
             _MyUncompressedLong = span.ToInt64(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedNullableDateTime at byte location {bytesSoFar}"); 
             _MyUncompressedNullableDateTime = span.ToNullableDateTime(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedNullableDecimal at byte location {bytesSoFar}"); 
             _MyUncompressedNullableDecimal = span.ToNullableDecimal(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedNullableInt at byte location {bytesSoFar}"); 
             _MyUncompressedNullableInt = span.ToNullableInt32(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedNullableLong at byte location {bytesSoFar}"); 
             _MyUncompressedNullableLong = span.ToNullableInt64(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedNullableShort at byte location {bytesSoFar}"); 
             _MyUncompressedNullableShort = span.ToNullableInt16(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedNullableTimeSpan at byte location {bytesSoFar}"); 
             _MyUncompressedNullableTimeSpan = span.ToNullableTimeSpan(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedNullableUInt at byte location {bytesSoFar}"); 
             _MyUncompressedNullableUInt = span.ToNullableUInt32(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedNullableULong at byte location {bytesSoFar}"); 
             _MyUncompressedNullableULong = span.ToNullableUInt64(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedNullableUShort at byte location {bytesSoFar}"); 
             _MyUncompressedNullableUShort = span.ToNullableUInt16(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedShort at byte location {bytesSoFar}"); 
             _MyUncompressedShort = span.ToInt16(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedTimeSpan at byte location {bytesSoFar}"); 
             _MyUncompressedTimeSpan = span.ToTimeSpan(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedUInt at byte location {bytesSoFar}"); 
             _MyUncompressedUInt = span.ToUInt32(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedULong at byte location {bytesSoFar}"); 
             _MyUncompressedULong = span.ToUInt64(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedUShort at byte location {bytesSoFar}"); 
             _MyUncompressedUShort = span.ToUInt16(ref bytesSoFar);
         }
         

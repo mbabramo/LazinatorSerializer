@@ -308,6 +308,7 @@ namespace LazinatorTests.Examples.Subclasses
             
             protected virtual void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
             {
+                TabbedText.WriteLine($"Reading StringWithinSubclass at byte location {bytesSoFar}"); 
                 _StringWithinSubclass = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             }
             

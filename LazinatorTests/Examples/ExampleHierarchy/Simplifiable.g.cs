@@ -736,9 +736,13 @@ namespace LazinatorTests.Examples
         
         protected virtual void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
+            TabbedText.WriteLine($"Reading MyIntsAre3 at byte location {bytesSoFar}"); 
             _MyIntsAre3 = span.ToBoolean(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading Example2Char at byte location {bytesSoFar}"); 
             _Example2Char = span.ToNullableChar(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading Example3IsNull at byte location {bytesSoFar}"); 
             _Example3IsNull = span.ToBoolean(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading ExampleHasDefaultValue at byte location {bytesSoFar}"); 
             _ExampleHasDefaultValue = span.ToBoolean(ref bytesSoFar);
             
             if (MyIntsAre3)
@@ -747,6 +751,7 @@ namespace LazinatorTests.Examples
             }
             else
             {
+                TabbedText.WriteLine($"Reading MyInt at byte location {bytesSoFar}"); 
                 _MyInt = span.ToDecompressedInt32(ref bytesSoFar);
             }
             
@@ -756,6 +761,7 @@ namespace LazinatorTests.Examples
             }
             else
             {
+                TabbedText.WriteLine($"Reading MyOtherInt at byte location {bytesSoFar}"); 
                 _MyOtherInt = span.ToDecompressedInt32(ref bytesSoFar);
             }
         }
@@ -763,11 +769,13 @@ namespace LazinatorTests.Examples
         protected virtual int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
         {
             int totalChildrenBytes = 0;
+            TabbedText.WriteLine($"Reading length of ANonSkippableEarlierExample at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
             _ANonSkippableEarlierExample_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
+            TabbedText.WriteLine($"Reading length of Example at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
             _Example_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (ExampleHasDefaultValue)
             {
@@ -780,6 +788,7 @@ namespace LazinatorTests.Examples
                     totalChildrenBytes += span.ToInt32(ref bytesSoFar);
                 }
             }
+            TabbedText.WriteLine($"Reading length of Example2 at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
             _Example2_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (Example2Char != null)
             {
@@ -792,6 +801,7 @@ namespace LazinatorTests.Examples
                     totalChildrenBytes += span.ToInt32(ref bytesSoFar);
                 }
             }
+            TabbedText.WriteLine($"Reading length of Example3 at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
             _Example3_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (Example3IsNull)
             {
@@ -899,7 +909,7 @@ namespace LazinatorTests.Examples
                 }
             }
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
-            writer.Skip(lengthForLengths);
+            writer.Skip(lengthForLengths);TabbedText.WriteLine($"Byte {writer.Position}, Leaving {lengthForLengths} bytes to store lengths of child objects");
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
             TabbedText.WriteLine($"Byte {writer.Position} (end of Simplifiable) ");
         }

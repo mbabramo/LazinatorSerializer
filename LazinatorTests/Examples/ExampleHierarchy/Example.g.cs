@@ -1405,62 +1405,83 @@ namespace LazinatorTests.Examples
         
         protected virtual void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
+            TabbedText.WriteLine($"Reading MyNullableDouble at byte location {bytesSoFar}"); 
             _MyNullableDouble = span.ToNullableDouble(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyBool at byte location {bytesSoFar}"); 
             _MyBool = span.ToBoolean(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyChar at byte location {bytesSoFar}"); 
             _MyChar = span.ToChar(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyDateTime at byte location {bytesSoFar}"); 
             _MyDateTime = span.ToDecompressedDateTime(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyNewString at byte location {bytesSoFar}"); 
             if (serializedVersionNumber >= 3)
             {
                 _MyNewString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             }
+            TabbedText.WriteLine($"Reading MyNullableDecimal at byte location {bytesSoFar}"); 
             _MyNullableDecimal = span.ToDecompressedNullableDecimal(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyNullableTimeSpan at byte location {bytesSoFar}"); 
             _MyNullableTimeSpan = span.ToDecompressedNullableTimeSpan(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyOldString at byte location {bytesSoFar}"); 
             if (serializedVersionNumber < 3)
             {
                 _MyOldString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             }
+            TabbedText.WriteLine($"Reading MyString at byte location {bytesSoFar}"); 
             _MyString = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyStringUncompressed at byte location {bytesSoFar}"); 
             _MyStringUncompressed = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyTestEnum at byte location {bytesSoFar}"); 
             _MyTestEnum = (TestEnum)span.ToDecompressedInt32(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyTestEnumByteNullable at byte location {bytesSoFar}"); 
             _MyTestEnumByteNullable = (TestEnumByte?)span.ToDecompressedNullableByte(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUInt at byte location {bytesSoFar}"); 
             _MyUInt = span.ToDecompressedUInt32(ref bytesSoFar);
         }
         
         protected virtual int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
         {
             int totalChildrenBytes = 0;
+            TabbedText.WriteLine($"Reading length of IncludableChild at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
             _IncludableChild_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
+            TabbedText.WriteLine($"Reading length of MyChild1 at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
             _MyChild1_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
+            TabbedText.WriteLine($"Reading length of MyChild2 at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
             _MyChild2_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
+            TabbedText.WriteLine($"Reading length of MyChild2Previous at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
             _MyChild2Previous_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && serializedVersionNumber < 3)
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
+            TabbedText.WriteLine($"Reading length of MyInterfaceImplementer at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
             _MyInterfaceImplementer_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
+            TabbedText.WriteLine($"Reading length of MyNonLazinatorChild at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
             _MyNonLazinatorChild_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             totalChildrenBytes += span.ToInt32(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading length of WrappedInt at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
             _WrappedInt_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
+            TabbedText.WriteLine($"Reading length of ExcludableChild at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
             _ExcludableChild_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren)
             {
@@ -1578,7 +1599,7 @@ namespace LazinatorTests.Examples
                 }
             }
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
-            writer.Skip(lengthForLengths);
+            writer.Skip(lengthForLengths);TabbedText.WriteLine($"Byte {writer.Position}, Leaving {lengthForLengths} bytes to store lengths of child objects");
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, lengthsSpan);
             TabbedText.WriteLine($"Byte {writer.Position} (end of Example) ");
         }
