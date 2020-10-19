@@ -45,8 +45,32 @@ namespace Lazinator.CodeDescription
         public ObjectDescription BaseLazinatorObject { get; set; }
         public bool IsDerived => BaseLazinatorObject != null;
         public bool IsDerivedFromNonAbstractLazinator => BaseLazinatorObject != null &&
-                        (BaseLazinatorObject.IsDerivedFromNonAbstractLazinator ||
-                        !BaseLazinatorObject.IsAbstract) && !GeneratingRefStruct;
+                        (!BaseLazinatorObject.IsAbstract || BaseLazinatorObject.IsDerivedFromNonAbstractLazinator) && !GeneratingRefStruct;
+
+        public bool IsIndirectlyDerivedFromNonAbstractLazinator
+        {
+            get
+            {
+                if (BaseLazinatorObject == null)
+                    return false;
+                if (!BaseLazinatorObject.IsAbstract)
+                    return true;
+                return BaseLazinatorObject.IsIndirectlyDerivedFromNonAbstractLazinator; // even though base is abstract, there could be a nonabstract lazinator from which it is derived
+            }
+        }
+
+        public bool DerivedFromObjectContainingEndByteIndex
+        {
+            get
+            {
+                if (BaseLazinatorObject == null)
+                    return false;
+                if (BaseLazinatorObject.ContainsEndByteIndex)
+                    return true;
+                return BaseLazinatorObject.DerivedFromObjectContainingEndByteIndex;
+            }
+        }
+
         public bool IsDerivedFromAbstractLazinator => BaseLazinatorObject != null &&
                         (BaseLazinatorObject.IsDerivedFromAbstractLazinator || BaseLazinatorObject.IsAbstract) && !GeneratingRefStruct;
         public string DerivationKeyword => (IsDerivedFromNonAbstractLazinator || IsDerivedFromAbstractLazinator) ? "override " : (IsSealedOrStruct ? "" : "virtual ");
@@ -747,7 +771,7 @@ namespace Lazinator.CodeDescription
                 else
                 {
                     if (ContainsEndByteIndex)
-                    {
+                    { // not sealed or struct etc.
                         bool mustInitialize = ((ObjectType != LazinatorObjectType.Struct && !GeneratingRefStruct) && (lastPropertyToIndex.PropertyType == LazinatorPropertyType.OpenGenericParameter));  // initialization suppresses warning in case the open generic is never closed
                         sb.AppendLine(
                                 $"private int _{ObjectNameEncodable}_EndByteIndex{IIF(mustInitialize, " = 0")};");
@@ -755,7 +779,7 @@ namespace Lazinator.CodeDescription
                         string propertyDerivationKeyword = GetDerivationKeywordForLengthProperty(lastPropertyToIndex);
                         sb.AppendLine(
                                 $"{ProtectedIfApplicable}{propertyDerivationKeyword} int {lastPropertyToIndex.BackingFieldByteLength} => _{ObjectNameEncodable}_EndByteIndex - {lastPropertyToIndex.BackingFieldByteIndex};");
-                        string overallDerivationKeyword = IsDerivedFromNonAbstractLazinator && BaseLazinatorObject.ContainsEndByteIndex ? "override" : "virtual";
+                        string overallDerivationKeyword = DerivedFromObjectContainingEndByteIndex ? "override" : "virtual";
                         sb.AppendLine($@"{ProtectedIfApplicable}{overallDerivationKeyword} int _OverallEndByteIndex => _{ObjectNameEncodable}_EndByteIndex;");
                     }
                     else
