@@ -1646,7 +1646,7 @@ namespace Lazinator.CodeDescription
             string withInclusionConditional = null;
             bool nullableStruct = PropertyType == LazinatorPropertyType.LazinatorStructNullable || (IsDefinitelyStruct && Nullable);
             string propertyNameOrCopy = nullableStruct ? "copy" : $"{BackingFieldString}";
-            Func<string, string> lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen($"{BackingFieldString}", $@"WriteNullChild(ref writer, {(SingleByteLength ? "true" : "false")}, {(AllLengthsPrecedeChildren || SkipLengthForThisProperty ? "true" : "false")}, ref lengthsSpan);", originalString) : originalString;
+            Func<string, string> lazinatorNullableStructNullCheck; 
             string lengthString = "";
             if (AllLengthsPrecedeChildren && !SkipLengthForThisProperty)
             {
@@ -1666,7 +1666,10 @@ namespace Lazinator.CodeDescription
                         WriteInt(lengthsSpan, lengthValue);
                         lengthsSpan = lengthsSpan.Slice(sizeof(int));";
                 }
+                lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen($"{BackingFieldString}", $@"WriteNullChild({(SingleByteLength ? "true" : "false")}, ref lengthsSpan);", originalString) : originalString;
             }
+            else
+                lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen($"{BackingFieldString}", $@"WriteNullChild(ref writer, {(SingleByteLength ? "true" : "false")}, {(AllLengthsPrecedeChildren || SkipLengthForThisProperty ? "true" : "false")});", originalString) : originalString;
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct)
             {
                 string mainWriteString = $@"{IIF(nullableStruct, $@"var copy = {BackingFieldString}.Value;

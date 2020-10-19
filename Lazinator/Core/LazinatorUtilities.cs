@@ -218,22 +218,17 @@ namespace Lazinator.Core
             }
         }
 
-        public static void WriteNullChild(ref BinaryBufferWriter writer, bool restrictLengthTo255Bytes, bool skipLength, ref Span<byte> lengthsSpan)
+        public static void WriteNullChild(bool restrictLengthTo255Bytes, ref Span<byte> lengthsSpan)
         {
-            if (!skipLength)
+            if (restrictLengthTo255Bytes)
             {
-                if (restrictLengthTo255Bytes)
-                {
-                    writer.Write((byte)0);
-                    lengthsSpan[0] = (byte)0;
-                    lengthsSpan = lengthsSpan.Slice(1);
-                }
-                else
-                {
-                    writer.Write((int)0);
-                    WriteUncompressedPrimitives.WriteInt(lengthsSpan, 0);
-                    lengthsSpan = lengthsSpan.Slice(sizeof(int));
-                }
+                lengthsSpan[0] = (byte)0;
+                lengthsSpan = lengthsSpan.Slice(1);
+            }
+            else
+            {
+                WriteUncompressedPrimitives.WriteInt(lengthsSpan, 0);
+                lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
         }
 
