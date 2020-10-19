@@ -26,8 +26,6 @@ namespace Lazinator.Buffers
 
         public List<BytesSegment> BytesSegments;
 
-        Span<byte> ActiveSpan => ActiveMemory == null ? new Span<byte>() : ActiveMemory.Memory.Span;
-
         public BinaryBufferWriter(int minimumSize, LazinatorMemory? completedMemory = null)
         {
             if (minimumSize == 0)
@@ -44,6 +42,7 @@ namespace Lazinator.Buffers
                 CompletedMemory = completedMemory.Value;
             }
             _ActiveMemoryPosition = 0;
+            _LengthsPosition = 0;
         }
 
         private void InitializeIfNecessary()
@@ -95,6 +94,13 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
+        /// An earlier position in the buffer, to which we can write information on the lengths that we are writing later in the buffer.
+        /// </summary>
+        private int _LengthsPosition;
+
+        Span<byte> ActiveSpan => ActiveMemory == null ? new Span<byte>() : ActiveMemory.Memory.Span;
+
+        /// <summary>
         /// Free bytes that have not been written to. The client can attempt to write to these bytes directly, calling EnsureMinBufferSize if the operation fails and trying again. Then, the client must update the position.
         /// </summary>
         public Span<byte> FreeSpan => ActiveSpan.Slice(ActiveMemoryPosition);
@@ -103,6 +109,11 @@ namespace Lazinator.Buffers
         /// The bytes written through the current position. Note that the client can change the position within the buffer.
         /// </summary>
         public Span<byte> ActiveMemoryWrittenSpan => ActiveSpan.Slice(0, ActiveMemoryPosition);
+
+        /// <summary>
+        /// A span containing space reserved to write length values of what is written later in the buffer.
+        /// </summary>
+        public Span<byte> LengthsSpan => ActiveSpan.Slice(_LengthsPosition);
 
         /// <summary>
         /// Sets the position to the beginning of the buffer. It does not dispose the underlying memory, but prepares to rewrite it.
@@ -363,6 +374,31 @@ namespace Lazinator.Buffers
                     EnsureMinBufferSize();
             }
             ActiveMemoryPosition += sizeof(ulong);
+        }
+        
+        /// <summary>
+        /// Designates the current active memory position as the position at which to store length information. 
+        /// </summary>
+        /// <param name="bytesToReserve">The number of bytes to reserve</param>
+        public void SetLengthsPosition(int bytesToReserve)
+        {
+            _LengthsPosition = _ActiveMemoryPosition;
+            Skip(bytesToReserve);
+        }
+
+        public void RecordLength(byte length)
+        {
+            LengthsSpan[0] = length;
+            _LengthsPosition++;
+        }
+
+        public void RecordLength(int length)
+        {
+            if (BinaryBufferWriter.LittleEndianStorage)
+                WriteInt32LittleEndian(LengthsSpan, length);
+            else
+                WriteInt32BigEndian(LengthsSpan, length);
+            _LengthsPosition += sizeof(int);
         }
     }
 }

@@ -44,6 +44,8 @@ namespace Lazinator.Buffers
             return (byte)sizeof(ushort);
         }
 
+        // DEBUG -- consider getting rid of Span method here
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void WriteInt(Span<byte> span, int value)
         {
