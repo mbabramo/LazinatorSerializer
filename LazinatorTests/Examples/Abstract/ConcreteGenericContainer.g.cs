@@ -32,7 +32,7 @@ namespace LazinatorTests.Examples.Abstract
         /* Property definitions */
         
         private int _ConcreteGenericContainer_EndByteIndex;
-        protected int _Item_ByteLength => _ConcreteGenericContainer_EndByteIndex - _Item_ByteIndex;
+        protected override int _Item_ByteLength => _ConcreteGenericContainer_EndByteIndex - _Item_ByteIndex;
         protected virtual int _OverallEndByteIndex => _ConcreteGenericContainer_EndByteIndex;
         
         

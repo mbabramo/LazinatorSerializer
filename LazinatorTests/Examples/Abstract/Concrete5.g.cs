@@ -35,7 +35,7 @@ namespace LazinatorTests.Examples.Abstract
         protected override int _IntList4_ByteLength => _IntList5_ByteIndex - _IntList4_ByteIndex;
         private int _Concrete5_EndByteIndex;
         protected int _IntList5_ByteLength => _Concrete5_EndByteIndex - _IntList5_ByteIndex;
-        protected virtual int _OverallEndByteIndex => _Concrete5_EndByteIndex;
+        protected override int _OverallEndByteIndex => _Concrete5_EndByteIndex;
         
         
         protected string _String4;

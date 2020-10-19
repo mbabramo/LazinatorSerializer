@@ -733,9 +733,9 @@ namespace Lazinator.CodeDescription
             for (int i = 0; i < withRecordedIndices.Count() - 1; i++)
             {
                 PropertyDescription propertyDescription = withRecordedIndices[i];
-                string derivationKeyword = GetDerivationKeywordForLengthProperty(propertyDescription);
+                string propertyDerivationKeyword = GetDerivationKeywordForLengthProperty(propertyDescription);
                 sb.AppendLine(
-                        $"{ProtectedIfApplicable}{derivationKeyword}int {propertyDescription.BackingFieldByteLength} => {withRecordedIndices[i + 1].BackingFieldByteIndex} - {propertyDescription.BackingFieldByteIndex};");
+                        $"{ProtectedIfApplicable}{propertyDerivationKeyword}int {propertyDescription.BackingFieldByteLength} => {withRecordedIndices[i + 1].BackingFieldByteIndex} - {propertyDescription.BackingFieldByteIndex};");
             }
             if (lastPropertyToIndex != null)
             {
@@ -751,10 +751,12 @@ namespace Lazinator.CodeDescription
                         bool mustInitialize = ((ObjectType != LazinatorObjectType.Struct && !GeneratingRefStruct) && (lastPropertyToIndex.PropertyType == LazinatorPropertyType.OpenGenericParameter));  // initialization suppresses warning in case the open generic is never closed
                         sb.AppendLine(
                                 $"private int _{ObjectNameEncodable}_EndByteIndex{IIF(mustInitialize, " = 0")};");
-                        string derivationKeyword = IsDerivedFromNonAbstractLazinator && BaseLazinatorObject.ContainsEndByteIndex ? "override" : "virtual";
+
+                        string propertyDerivationKeyword = GetDerivationKeywordForLengthProperty(lastPropertyToIndex);
                         sb.AppendLine(
-                                $"{ProtectedIfApplicable}{derivationKeyword} int {lastPropertyToIndex.BackingFieldByteLength} => _{ObjectNameEncodable}_EndByteIndex - {lastPropertyToIndex.BackingFieldByteIndex};");
-                        sb.AppendLine($@"{ProtectedIfApplicable}{derivationKeyword} int _OverallEndByteIndex => _{ObjectNameEncodable}_EndByteIndex;");
+                                $"{ProtectedIfApplicable}{propertyDerivationKeyword} int {lastPropertyToIndex.BackingFieldByteLength} => _{ObjectNameEncodable}_EndByteIndex - {lastPropertyToIndex.BackingFieldByteIndex};");
+                        string overallDerivationKeyword = IsDerivedFromNonAbstractLazinator && BaseLazinatorObject.ContainsEndByteIndex ? "override" : "virtual";
+                        sb.AppendLine($@"{ProtectedIfApplicable}{overallDerivationKeyword} int _OverallEndByteIndex => _{ObjectNameEncodable}_EndByteIndex;");
                     }
                     else
                     {

@@ -32,7 +32,7 @@ namespace LazinatorTests.Examples.Abstract
         /* Property definitions */
         
         private int _DerivedGeneric2c_T_EndByteIndex = 0;
-        protected int _MyT_ByteLength => _DerivedGeneric2c_T_EndByteIndex - _MyT_ByteIndex;
+        protected override int _MyT_ByteLength => _DerivedGeneric2c_T_EndByteIndex - _MyT_ByteIndex;
         protected virtual int _OverallEndByteIndex => _DerivedGeneric2c_T_EndByteIndex;
         
         
