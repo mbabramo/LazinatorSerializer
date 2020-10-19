@@ -10,7 +10,12 @@ namespace Lazinator.Core
     public interface ILazinator
     {
         /// <summary>
-        /// Initiates serialization starting from here (and optionally including descendants), using the original bytes if the object is clean and manually writing bytes if necessary.
+        /// Serializes the Lazinator, if it has changed, into a new buffer, resetting dirtiness properties (but not HasChanged). This method will not create a new buffer if the 
+        /// existing buffer already represents the current state of the object. If a new buffer is created, then the old buffer is disposed.
+        /// </summary>
+        void UpdateStoredBuffer();
+        /// <summary>
+        /// Initiates serialization starting from here (and optionally including descendants), returning a new buffer.
         /// </summary>
         /// <param name="includeChildrenMode">Whether child objects should be included. If false, the child objects will be skipped.</param>
         /// <param name="verifyCleanness">Whether double-checking is needed to ensure that objects thought to be clean really are clean</param>
@@ -42,13 +47,18 @@ namespace Lazinator.Core
         /// </summary>
         bool DescendantIsDirty { get; set; }
         /// <summary>
-        /// Internally serializes the Lazinator, if it has changed, and resets dirtiness properties (but not HasChanged). This does not need to be called manually before serialization.
-        /// </summary>
-        void UpdateStoredBuffer();
-        /// <summary>
         /// Removes any native .Net objects, including those previously deserialized. Subsequent access to properties will thus be satisfied through the Lazinator memory storage. Typically, this is preceded by a call to UpdateStoredBuffer; otherwise, this has the effect of reverting to the last point at which the memory was up to date (e.g., initial deserialization or when a hash was obtained).
         /// </summary>
         void FreeInMemoryObjects();
+        /// <summary>
+        /// This updates the buffer in an in-memory Lazinator object to a specified range of bytes. 
+        /// </summary>
+        /// <param name="writer">The BinaryBufferWriter containing the new stored buffer</param>
+        /// <param name="startPosition">The start position within the writer</param>
+        /// <param name="length">The length within the writer</param>
+        /// <param name="includeChildrenMode">Whether child objects should be included.</param>
+        /// <param name="updateDeserializedChildren">Whether deserialized children should also have buffers updated</param>
+        void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
 
         /// <summary>
         /// Enumerates nodes in the hierarchy, including the node at the top of the hierarchy, based on specified parameters.
@@ -91,15 +101,6 @@ namespace Lazinator.Core
         /// <param name="verifyCleanness">Whether double-checking is needed to ensure that objects thought to be clean really are clean</param>
         /// <param name="updateStoredBuffer">Whether the object being serialized should be updated to use the new buffer. This is ignored and treated as false if includeChildrenMode is not set to include all children.</param>
         void SerializeToExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
-        /// <summary>
-        /// This updates the stored buffer. This may be used to obtain LazinatorMemoryStorage before making further changes to the object.
-        /// </summary>
-        /// <param name="writer">The BinaryBufferWriter containing the new stored buffer</param>
-        /// <param name="startPosition">The start position within the writer</param>
-        /// <param name="length">The length within the writer</param>
-        /// <param name="includeChildrenMode">Whether child objects should be included.</param>
-        /// <param name="updateDeserializedChildren">Whether deserialized children should also have buffers updated</param>
-        void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
         /// <summary>
         /// The memory used to initialize a Lazinator class/struct during initial deserialization. Header information, fields and child ISerializeds can then be read from this. This is set automatically by the Lazinator framework, either from DeserializeLazinator or from the parent's memory storage.
         /// </summary>
