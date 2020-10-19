@@ -454,7 +454,7 @@ namespace LazinatorCollections
                     var current = ((IList<T>)_DeserializedItems)[status.DeserializedIndex];
                     if (current != null)
                     {
-                        current.UpdateStoredBuffer(ref writer, startPosition + _MainListSerialized_ByteIndex + sizeof(int) + GetOffset(index), GetOffset(index + 1) - GetOffset(index), IncludeChildrenMode.IncludeAllChildren, true);
+                        current.UpdateStoredBuffer(ref writer, startPosition + _MainListSerialized_ByteIndex + GetOffset(index), GetOffset(index + 1) - GetOffset(index), IncludeChildrenMode.IncludeAllChildren, true);
                         if (current.IsStruct)
                         {
                             _DeserializedItems[status.DeserializedIndex] = current;
