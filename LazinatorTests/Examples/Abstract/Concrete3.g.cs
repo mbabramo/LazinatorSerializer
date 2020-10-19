@@ -775,9 +775,11 @@ namespace LazinatorTests.Examples.Abstract
             {
                 lengthForLengths += 8;
             }
-            Span<byte> lengthsSpan = writer.GetFreeBytes(lengthForLengths);
-            writer.Skip(lengthForLengths);TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Leaving {lengthForLengths} bytes to store lengths of child objects");
-            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, ref lengthsSpan);
+            
+            int previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Leaving {lengthForLengths} bytes to store lengths of child objects");
+            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition);
+            writer.ResetLengthsPosition(previousLengthsPosition);
             TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of Concrete3) ");
         }
         
@@ -797,7 +799,7 @@ namespace LazinatorTests.Examples.Abstract
             TabbedText.Tabs--;
         }
         
-        protected override void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition, ref Span<byte> lengthsSpan)
+        protected override void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
             int startOfChildPosition = 0;
             int lengthValue = 0;
@@ -812,8 +814,7 @@ namespace LazinatorTests.Examples.Abstract
                 }
                 WriteChild(ref writer, ref _Example2, includeChildrenMode, _Example2_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Example2_ByteIndex, _Example2_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
-                WriteInt(lengthsSpan, lengthValue);
-                lengthsSpan = lengthsSpan.Slice(sizeof(int));
+                writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)
             {
@@ -832,8 +833,7 @@ namespace LazinatorTests.Examples.Abstract
                 }
                 WriteChild(ref writer, ref _Example3, includeChildrenMode, _Example3_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Example3_ByteIndex, _Example3_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
-                WriteInt(lengthsSpan, lengthValue);
-                lengthsSpan = lengthsSpan.Slice(sizeof(int));
+                writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)
             {
@@ -856,7 +856,7 @@ namespace LazinatorTests.Examples.Abstract
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_Gint_g(ref w, _IntList1,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _IntList1_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -878,7 +878,7 @@ namespace LazinatorTests.Examples.Abstract
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_Gint_g(ref w, _IntList2,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _IntList2_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -900,7 +900,7 @@ namespace LazinatorTests.Examples.Abstract
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_Gint_g(ref w, _IntList3,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _IntList3_ByteIndex = startOfChildPosition - startOfObjectPosition;

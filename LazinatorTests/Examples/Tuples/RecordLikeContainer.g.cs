@@ -843,9 +843,11 @@ namespace LazinatorTests.Examples.Tuples
             
             WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             int lengthForLengths = 36;
-            Span<byte> lengthsSpan = writer.GetFreeBytes(lengthForLengths);
-            writer.Skip(lengthForLengths);TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Leaving {lengthForLengths} bytes to store lengths of child objects");
-            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, ref lengthsSpan);
+            
+            int previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Leaving {lengthForLengths} bytes to store lengths of child objects");
+            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition);
+            writer.ResetLengthsPosition(previousLengthsPosition);
             TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of RecordLikeContainer) ");
         }
         
@@ -857,7 +859,7 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.Tabs--;
         }
         
-        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition, ref Span<byte> lengthsSpan)
+        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
             int startOfChildPosition = 0;
             TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, ExternalRecordLikeStruct (accessed? {_ExternalRecordLikeStruct_Accessed})");
@@ -875,7 +877,7 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Point(ref w, _ExternalRecordLikeStruct,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _ExternalRecordLikeStruct_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -897,7 +899,7 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_MismatchedRecordLikeType(ref w, _MyMismatchedRecordLikeType,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _MyMismatchedRecordLikeType_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -919,7 +921,7 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_NonLazinatorRecordWithConstructor(ref w, _MyNonLazinatorRecordWithConstructor,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _MyNonLazinatorRecordWithConstructor_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -941,7 +943,7 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_NonLazinatorRecordWithoutConstructor(ref w, _MyNonLazinatorRecordWithoutConstructor,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _MyNonLazinatorRecordWithoutConstructor_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -963,7 +965,7 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_NonLazinatorSubrecordWithConstructor(ref w, _MyNonLazinatorSubrecordWithConstructor,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _MyNonLazinatorSubrecordWithConstructor_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -985,7 +987,7 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_NonLazinatorSubrecordWithoutConstructor(ref w, _MyNonLazinatorSubrecordWithoutConstructor,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _MyNonLazinatorSubrecordWithoutConstructor_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -1007,7 +1009,7 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_RecordLikeClass(ref w, _MyRecordLikeClass,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _MyRecordLikeClass_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -1029,7 +1031,7 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_RecordLikeStruct(ref w, _MyRecordLikeStruct,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _MyRecordLikeStruct_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -1051,7 +1053,7 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_RecordLikeTypeWithLazinator(ref w, _MyRecordLikeTypeWithLazinator,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _MyRecordLikeTypeWithLazinator_ByteIndex = startOfChildPosition - startOfObjectPosition;

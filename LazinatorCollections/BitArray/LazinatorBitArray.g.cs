@@ -469,9 +469,11 @@ namespace LazinatorCollections.BitArray
             
             WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             int lengthForLengths = 4;
-            Span<byte> lengthsSpan = writer.GetFreeBytes(lengthForLengths);
-            writer.Skip(lengthForLengths);TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Leaving {lengthForLengths} bytes to store lengths of child objects");
-            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, ref lengthsSpan);
+            
+            int previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Leaving {lengthForLengths} bytes to store lengths of child objects");
+            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition);
+            writer.ResetLengthsPosition(previousLengthsPosition);
             TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of LazinatorBitArray) ");
         }
         
@@ -487,7 +489,7 @@ namespace LazinatorCollections.BitArray
             TabbedText.Tabs--;
         }
         
-        void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition, ref Span<byte> lengthsSpan)
+        void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
             int startOfChildPosition = 0;
             TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, IntStorage (accessed? {_IntStorage_Accessed})");
@@ -505,14 +507,13 @@ namespace LazinatorCollections.BitArray
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Memory_Gint_g(ref w, _IntStorage,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _IntStorage_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             TabbedText.Tabs--;
-            if (lengthsSpan.Length > 0) throw new Exception("DEBUG");
         }
         
         /* Conversion of supported collections and tuples */

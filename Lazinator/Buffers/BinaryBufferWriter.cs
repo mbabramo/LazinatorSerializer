@@ -375,15 +375,26 @@ namespace Lazinator.Buffers
             }
             ActiveMemoryPosition += sizeof(ulong);
         }
-        
+
         /// <summary>
         /// Designates the current active memory position as the position at which to store length information. 
         /// </summary>
         /// <param name="bytesToReserve">The number of bytes to reserve</param>
-        public void SetLengthsPosition(int bytesToReserve)
+        public int SetLengthsPosition(int bytesToReserve)
         {
+            int previousPosition = _LengthsPosition;
             _LengthsPosition = _ActiveMemoryPosition;
             Skip(bytesToReserve);
+            return previousPosition;
+        }
+
+        /// <summary>
+        /// Resets the lengths position to the previous position.
+        /// </summary>
+        /// <param name="previousPosition"></param>
+        public void ResetLengthsPosition(int previousPosition)
+        {
+            _LengthsPosition = previousPosition;
         }
 
         public void RecordLength(byte length)

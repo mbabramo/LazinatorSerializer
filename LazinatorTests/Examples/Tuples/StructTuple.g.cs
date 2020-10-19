@@ -661,9 +661,11 @@ namespace LazinatorTests.Examples.Tuples
             
             
             int lengthForLengths = 24;
-            Span<byte> lengthsSpan = writer.GetFreeBytes(lengthForLengths);
-            writer.Skip(lengthForLengths);TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Leaving {lengthForLengths} bytes to store lengths of child objects");
-            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, ref lengthsSpan);
+            
+            int previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Leaving {lengthForLengths} bytes to store lengths of child objects");
+            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition);
+            writer.ResetLengthsPosition(previousLengthsPosition);
             TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of StructTuple) ");
         }
         
@@ -671,7 +673,7 @@ namespace LazinatorTests.Examples.Tuples
         {
         }
         
-        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition, ref Span<byte> lengthsSpan)
+        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
             int startOfChildPosition = 0;
             TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, EnumTuple (accessed? {_EnumTuple_Accessed})");
@@ -689,7 +691,7 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p(ref w, _EnumTuple,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _EnumTuple_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -711,7 +713,7 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(ref w, _MyNamedTuple,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _MyNamedTuple_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -733,7 +735,7 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes__Pint_c_C32double_p_n(ref w, _MyNullableTuple,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _MyNullableTuple_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -755,7 +757,7 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes__PExampleStructContainingClasses_n_c_C32ExampleStructContainingClasses_n_c_C32ExampleStructContainingClasses_n_p(ref w, _MyValueTupleNullableStructs,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _MyValueTupleNullableStructs_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -777,7 +779,7 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(ref w, _MyValueTupleSerialized,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _MyValueTupleSerialized_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -799,7 +801,7 @@ namespace LazinatorTests.Examples.Tuples
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes__PWInt32_c_C32WInt32_p(ref w, _MyValueTupleStructs,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _MyValueTupleStructs_ByteIndex = startOfChildPosition - startOfObjectPosition;

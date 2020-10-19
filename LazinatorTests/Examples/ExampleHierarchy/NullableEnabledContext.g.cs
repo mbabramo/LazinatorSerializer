@@ -2979,9 +2979,11 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 lengthForLengths += 24;
             }
-            Span<byte> lengthsSpan = writer.GetFreeBytes(lengthForLengths);
-            writer.Skip(lengthForLengths);TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Leaving {lengthForLengths} bytes to store lengths of child objects");
-            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, ref lengthsSpan);
+            
+            int previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Leaving {lengthForLengths} bytes to store lengths of child objects");
+            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition);
+            writer.ResetLengthsPosition(previousLengthsPosition);
             TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of NullableEnabledContext) ");
         }
         
@@ -3005,9 +3007,8 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             TabbedText.Tabs--;
         }
         
-        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition, ref Span<byte> lengthsSpan)
+        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
-            TabbedText.WriteBytesVertically(writer.ActiveMemory.Memory.ToArray(), true);
             int startOfChildPosition = 0;
             int lengthValue = 0;
             TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, ByteReadOnlySpan (accessed? {_ByteReadOnlySpan_Accessed})");
@@ -3025,7 +3026,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_ReadOnlySpan_Gbyte_g(ref w, _ByteReadOnlySpan.Span,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _ByteReadOnlySpan_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3043,8 +3044,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 WriteChild(ref writer, ref _ExplicitlyNullable, includeChildrenMode, _ExplicitlyNullable_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ExplicitlyNullable_ByteIndex, _ExplicitlyNullable_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
-                WriteInt(lengthsSpan, lengthValue);
-                lengthsSpan = lengthsSpan.Slice(sizeof(int));
+                writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)
             {
@@ -3063,8 +3063,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 WriteChild(ref writer, ref _ExplicitlyNullableInterface, includeChildrenMode, _ExplicitlyNullableInterface_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ExplicitlyNullableInterface_ByteIndex, _ExplicitlyNullableInterface_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
-                WriteInt(lengthsSpan, lengthValue);
-                lengthsSpan = lengthsSpan.Slice(sizeof(int));
+                writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)
             {
@@ -3084,7 +3083,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Example_B_b(ref w, _NonNullableArrayOfNonNullables!,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NonNullableArrayOfNonNullables_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3103,7 +3102,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Example_n_B_b(ref w, _NonNullableArrayOfNullables!,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NonNullableArrayOfNullables_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3116,8 +3115,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             WriteChild(ref writer, ref _NonNullableClass!, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableClass_ByteIndex, _NonNullableClass_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
             lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
+            writer.RecordLength((int) lengthValue);
             if (updateStoredBuffer)
             {
                 _NonNullableClass_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3136,7 +3134,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Dictionary_Gint_c_C32Example_g(ref w, _NonNullableDictionaryWithNonNullable!,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NonNullableDictionaryWithNonNullable_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3155,7 +3153,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Dictionary_Gint_c_C32Example_n_g(ref w, _NonNullableDictionaryWithNullable!,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NonNullableDictionaryWithNullable_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3168,8 +3166,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             WriteChild(ref writer, ref _NonNullableInterface!, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableInterface_ByteIndex, _NonNullableInterface_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
             lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
+            writer.RecordLength((int) lengthValue);
             if (updateStoredBuffer)
             {
                 _NonNullableInterface_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3182,15 +3179,12 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             WriteChild(ref writer, ref _NonNullableLazinatorListNonNullable!, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableLazinatorListNonNullable_ByteIndex, _NonNullableLazinatorListNonNullable_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
             lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
+            writer.RecordLength((int) lengthValue);
             if (updateStoredBuffer)
             {
                 _NonNullableLazinatorListNonNullable_ByteIndex = startOfChildPosition - startOfObjectPosition;
-
+                
             }
-            byte[] bytes = writer.ActiveMemory.Memory.ToArray();
-            TabbedText.WriteBytesVertically(bytes, true);
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, NonNullableLazinatorListNullable (accessed? ) (backing var null? {_NonNullableLazinatorListNullable == null}) ");
             TabbedText.Tabs++;
@@ -3198,23 +3192,17 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             WriteChild(ref writer, ref _NonNullableLazinatorListNullable!, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableLazinatorListNullable_ByteIndex, _NonNullableLazinatorListNullable_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
             lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
-
-            byte[] bytes2a = writer.ActiveMemoryWrittenSpan.ToArray();
-            TabbedText.WriteBytesVertically(bytes2a, true, bytes);
-            WriteInt(lengthsSpan, lengthValue);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
+            writer.RecordLength((int) lengthValue);
             if (updateStoredBuffer)
             {
                 _NonNullableLazinatorListNullable_ByteIndex = startOfChildPosition - startOfObjectPosition;
-
+                
             }
-            byte[] bytes2b = writer.ActiveMemoryWrittenSpan.ToArray();
-            TabbedText.WriteBytesVertically(bytes2b, true, bytes2a);
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, NonNullableListOfNonNullables (accessed? )");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
-
+            
             WriteNonLazinatorObject(
             nonLazinatorObject: _NonNullableListOfNonNullables, isBelievedDirty: true,
             isAccessed: true, writer: ref writer,
@@ -3223,19 +3211,17 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_GExample_g(ref w, _NonNullableListOfNonNullables!,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NonNullableListOfNonNullables_ByteIndex = startOfChildPosition - startOfObjectPosition;
-
+                
             }
-            byte[] bytes3 = writer.ActiveMemoryWrittenSpan.ToArray();
-            TabbedText.WriteBytesVertically(bytes3, true, bytes2b);
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, NonNullableListOfNullables (accessed? )");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
-
+            
             WriteNonLazinatorObject(
             nonLazinatorObject: _NonNullableListOfNullables, isBelievedDirty: true,
             isAccessed: true, writer: ref writer,
@@ -3244,14 +3230,12 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_GExample_n_g(ref w, _NonNullableListOfNullables!,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NonNullableListOfNullables_ByteIndex = startOfChildPosition - startOfObjectPosition;
-
+                
             }
-            byte[] bytes4 = writer.ActiveMemoryWrittenSpan.ToArray();
-            TabbedText.WriteBytesVertically(bytes4, true, bytes3);
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, NonNullableMemoryOfBytes (accessed? {_NonNullableMemoryOfBytes_Accessed})");
             TabbedText.Tabs++;
@@ -3268,7 +3252,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Memory_Gbyte_g(ref w, _NonNullableMemoryOfBytes,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NonNullableMemoryOfBytes_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3287,7 +3271,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Queue_GExample_g(ref w, _NonNullableQueueOfNonNullables!,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NonNullableQueueOfNonNullables_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3306,7 +3290,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Queue_GExample_n_g(ref w, _NonNullableQueueOfNullables!,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NonNullableQueueOfNullables_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3328,7 +3312,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_ReadOnlyMemory_Gbyte_g(ref w, _NonNullableReadOnlyMemoryOfBytes,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NonNullableReadOnlyMemoryOfBytes_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3347,7 +3331,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_RecordLikeClass(ref w, _NonNullableRecordLikeClass!,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NonNullableRecordLikeClass_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3366,7 +3350,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_RecordLikeStruct(ref w, _NonNullableRecordLikeStruct!,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NonNullableRecordLikeStruct_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3385,7 +3369,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Tuple_GExample_c_C32int_g(ref w, _NonNullableRegularTupleWithNonNullable!,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NonNullableRegularTupleWithNonNullable_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3404,7 +3388,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Tuple_GExample_n_c_C32int_g(ref w, _NonNullableRegularTupleWithNullable!,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NonNullableRegularTupleWithNullable_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3423,7 +3407,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Stack_GExample_g(ref w, _NonNullableStackOfNonNullables!,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NonNullableStackOfNonNullables_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3442,7 +3426,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Stack_GExample_n_g(ref w, _NonNullableStackOfNullables!,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NonNullableStackOfNullables_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3460,8 +3444,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 WriteChild(ref writer, ref _NonNullableStruct!, includeChildrenMode, _NonNullableStruct_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableStruct_ByteIndex, _NonNullableStruct_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
-                WriteInt(lengthsSpan, lengthValue);
-                lengthsSpan = lengthsSpan.Slice(sizeof(int));
+                writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)
             {
@@ -3484,7 +3467,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Example_B_b_n(ref w, _NullableArrayOfNonNullables,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NullableArrayOfNonNullables_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3506,7 +3489,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Example_n_B_b_n(ref w, _NullableArrayOfNullables,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NullableArrayOfNullables_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3528,7 +3511,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Dictionary_Gint_c_C32Example_g_n(ref w, _NullableDictionaryWithNonNullable,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NullableDictionaryWithNonNullable_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3553,7 +3536,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Dictionary_Gint_c_C32Example_n_g_n(ref w, _NullableDictionaryWithNullable,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NullableDictionaryWithNullable_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3574,8 +3557,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 WriteChild(ref writer, ref _NullableLazinatorListNonNullable, includeChildrenMode, _NullableLazinatorListNonNullable_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _NullableLazinatorListNonNullable_ByteIndex, _NullableLazinatorListNonNullable_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
-                WriteInt(lengthsSpan, lengthValue);
-                lengthsSpan = lengthsSpan.Slice(sizeof(int));
+                writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)
             {
@@ -3594,8 +3576,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 WriteChild(ref writer, ref _NullableLazinatorListNullable, includeChildrenMode, _NullableLazinatorListNullable_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _NullableLazinatorListNullable_ByteIndex, _NullableLazinatorListNullable_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
-                WriteInt(lengthsSpan, lengthValue);
-                lengthsSpan = lengthsSpan.Slice(sizeof(int));
+                writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)
             {
@@ -3618,7 +3599,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_GExample_g_n(ref w, _NullableListOfNonNullables,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NullableListOfNonNullables_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3640,7 +3621,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_GExample_n_g_n(ref w, _NullableListOfNullables,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NullableListOfNullables_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3662,7 +3643,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Memory_Gbyte_g_n(ref w, _NullableMemoryOfBytes,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NullableMemoryOfBytes_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3684,7 +3665,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Queue_GExample_g_n(ref w, _NullableQueueOfNonNullables,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NullableQueueOfNonNullables_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3706,7 +3687,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Queue_GExample_n_g_n(ref w, _NullableQueueOfNullables,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NullableQueueOfNullables_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3728,7 +3709,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_ReadOnlyMemory_Gbyte_g_n(ref w, _NullableReadOnlyMemoryOfBytes,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NullableReadOnlyMemoryOfBytes_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3750,7 +3731,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_RecordLikeClass_n(ref w, _NullableRecordLikeClass,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NullableRecordLikeClass_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3772,7 +3753,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_RecordLikeStruct_n(ref w, _NullableRecordLikeStruct,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NullableRecordLikeStruct_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3794,7 +3775,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Tuple_GExample_c_C32int_g_n(ref w, _NullableRegularTupleWithNonNullable,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NullableRegularTupleWithNonNullable_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3816,7 +3797,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Tuple_GExample_n_c_C32int_g_n(ref w, _NullableRegularTupleWithNullable,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NullableRegularTupleWithNullable_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3838,7 +3819,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Stack_GExample_g_n(ref w, _NullableStackOfNonNullables,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NullableStackOfNonNullables_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3860,7 +3841,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Stack_GExample_n_g_n(ref w, _NullableStackOfNullables,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NullableStackOfNullables_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3878,7 +3859,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 if (_NullableStruct == null)
                 {
-                    WriteNullChild(false, ref lengthsSpan);
+                    WriteNullChild_LengthsSeparate(ref writer, false);
                 }
                 else
                 {
@@ -3886,8 +3867,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     WriteChild(ref writer, ref copy, includeChildrenMode, _NullableStruct_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _NullableStruct_ByteIndex, _NullableStruct_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                     _NullableStruct = copy;
                     lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
-                    WriteInt(lengthsSpan, lengthValue);
-                    lengthsSpan = lengthsSpan.Slice(sizeof(int));
+                    writer.RecordLength((int) lengthValue);
                 }
             }
             if (updateStoredBuffer)
@@ -3911,7 +3891,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes__PExample_c_C32int_p_n(ref w, _NullableValueTupleWithNonNullable,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NullableValueTupleWithNonNullable_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3933,7 +3913,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes__PExample_n_c_C32int_p_n(ref w, _NullableValueTupleWithNullable,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _NullableValueTupleWithNullable_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3955,7 +3935,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes__PExample_c_C32int_p(ref w, _ValueTupleWithNonNullable,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _ValueTupleWithNonNullable_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -3977,7 +3957,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes__PExample_n_c_C32int_p(ref w, _ValueTupleWithNullable,
             includeChildrenMode, v, updateStoredBuffer),
-            lengthsSpan: ref lengthsSpan);
+            writeLengthInByte: false);
             if (updateStoredBuffer)
             {
                 _ValueTupleWithNullable_ByteIndex = startOfChildPosition - startOfObjectPosition;
