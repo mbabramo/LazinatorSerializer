@@ -3113,7 +3113,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             
-            WriteChild(ref writer, ref _NonNullableClass, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableClass_ByteIndex, _NonNullableClass_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+            WriteChild(ref writer, ref _NonNullableClass!, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableClass_ByteIndex, _NonNullableClass_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
             lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
             WriteInt(lengthsSpan, lengthValue);
             lengthsSpan = lengthsSpan.Slice(sizeof(int));
@@ -3165,7 +3165,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             
-            WriteChild(ref writer, ref _NonNullableInterface, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableInterface_ByteIndex, _NonNullableInterface_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+            WriteChild(ref writer, ref _NonNullableInterface!, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableInterface_ByteIndex, _NonNullableInterface_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
             lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
             WriteInt(lengthsSpan, lengthValue);
             lengthsSpan = lengthsSpan.Slice(sizeof(int));
@@ -3179,7 +3179,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             
-            WriteChild(ref writer, ref _NonNullableLazinatorListNonNullable, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableLazinatorListNonNullable_ByteIndex, _NonNullableLazinatorListNonNullable_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+            WriteChild(ref writer, ref _NonNullableLazinatorListNonNullable!, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableLazinatorListNonNullable_ByteIndex, _NonNullableLazinatorListNonNullable_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
             lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
             WriteInt(lengthsSpan, lengthValue);
             lengthsSpan = lengthsSpan.Slice(sizeof(int));
@@ -3193,7 +3193,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             
-            WriteChild(ref writer, ref _NonNullableLazinatorListNullable, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableLazinatorListNullable_ByteIndex, _NonNullableLazinatorListNullable_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+            WriteChild(ref writer, ref _NonNullableLazinatorListNullable!, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableLazinatorListNullable_ByteIndex, _NonNullableLazinatorListNullable_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
             lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
             WriteInt(lengthsSpan, lengthValue);
             lengthsSpan = lengthsSpan.Slice(sizeof(int));
@@ -3446,7 +3446,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     var deserialized = NonNullableStruct;
                 }
-                WriteChild(ref writer, ref _NonNullableStruct, includeChildrenMode, _NonNullableStruct_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableStruct_ByteIndex, _NonNullableStruct_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                WriteChild(ref writer, ref _NonNullableStruct!, includeChildrenMode, _NonNullableStruct_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableStruct_ByteIndex, _NonNullableStruct_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
