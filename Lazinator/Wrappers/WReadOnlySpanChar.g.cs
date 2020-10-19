@@ -447,6 +447,7 @@ namespace Lazinator.Wrappers
                 
             }
             TabbedText.Tabs--;
+            if (lengthsSpan.Length > 0) throw new Exception("DEBUG");
         }
         
         /* Conversion of supported collections and tuples */

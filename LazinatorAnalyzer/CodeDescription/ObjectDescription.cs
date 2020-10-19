@@ -1408,6 +1408,8 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             if (!isPrimitive && ContainsEndByteIndex)
                 AppendEndByteIndex(sb, propertiesToWrite, "writer.ActiveMemoryPosition - startOfObjectPosition", true);
 
+            if (!isPrimitive && IsSealedOrStruct)
+                sb.AppendLine($"if (lengthsSpan.Length > 0) throw new Exception(\"DEBUG\");");
             sb.Append($@"}}
 ");
         }

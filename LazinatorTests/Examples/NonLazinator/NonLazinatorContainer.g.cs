@@ -673,6 +673,7 @@ namespace LazinatorTests.Examples
                 
             }
             TabbedText.Tabs--;
+            if (lengthsSpan.Length > 0) throw new Exception("DEBUG");
         }
         
         private static NonLazinatorInterchangeableClass ConvertFromBytes_NonLazinatorInterchangeableClass(LazinatorMemory storage)
