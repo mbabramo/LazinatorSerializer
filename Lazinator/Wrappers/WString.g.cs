@@ -411,7 +411,7 @@ namespace Lazinator.Wrappers
             
             public WString FromRefStruct()
             {
-                UpdateStoredBuffer();
+                SerializeLazinator();
                 var clone = new WString(LazinatorMemoryStorage);
                 return clone;
             }
@@ -582,7 +582,7 @@ namespace Lazinator.Wrappers
                 set;
             }
             
-            public void UpdateStoredBuffer()
+            public void SerializeLazinator()
             {
                 if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                 {

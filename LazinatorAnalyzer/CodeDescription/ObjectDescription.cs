@@ -1173,7 +1173,7 @@ namespace Lazinator.CodeDescription
                     }}
                     else
                     {{
-                        ThrowHelper.ThrowCannotSerializeLazinator();
+                        ThrowHelper.ThrowCannotUpdateStoredBuffer();
                     }}");
         }
 
