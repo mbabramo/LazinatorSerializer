@@ -109,7 +109,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyList = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyList_ByteIndex, _MyList_ByteLength, true, false, null);
                 
@@ -154,7 +155,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyStructList = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyStructList_ByteIndex, _MyStructList_ByteLength, true, false, null);
                 
@@ -257,7 +259,8 @@ namespace LazinatorTests.Examples.Collections
                 if (MyList == null)
                 {
                     typedClone.MyList = null;
-                }else
+                }
+                else
                 {
                     typedClone.MyList = (LazinatorList<ExampleChild>) MyList.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -267,7 +270,8 @@ namespace LazinatorTests.Examples.Collections
                 if (MyStructList == null)
                 {
                     typedClone.MyStructList = null;
-                }else
+                }
+                else
                 {
                     typedClone.MyStructList = (LazinatorList<WByte>) MyStructList.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -395,7 +399,8 @@ namespace LazinatorTests.Examples.Collections
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyList_Accessed) && MyList == null)
             {
                 yield return ("MyList", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && MyList != null) || (_MyList_Accessed && _MyList != null))
                 {
@@ -417,7 +422,8 @@ namespace LazinatorTests.Examples.Collections
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyStructList_Accessed) && MyStructList == null)
             {
                 yield return ("MyStructList", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && MyStructList != null) || (_MyStructList_Accessed && _MyStructList != null))
                 {

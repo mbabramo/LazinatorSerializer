@@ -78,7 +78,8 @@ namespace LazinatorCollections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _UnderlyingList = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _UnderlyingList_ByteIndex, _UnderlyingList_ByteLength, true, false, null);
                 
@@ -181,7 +182,8 @@ namespace LazinatorCollections
                 if (UnderlyingList == null)
                 {
                     typedClone.UnderlyingList = null;
-                }else
+                }
+                else
                 {
                     typedClone.UnderlyingList = (ILazinatorListable<T>) UnderlyingList.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -317,7 +319,8 @@ namespace LazinatorCollections
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _UnderlyingList_Accessed) && UnderlyingList == null)
             {
                 yield return ("UnderlyingList", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && UnderlyingList != null) || (_UnderlyingList_Accessed && _UnderlyingList != null))
                 {

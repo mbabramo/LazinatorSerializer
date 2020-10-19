@@ -95,7 +95,8 @@ namespace LazinatorCollections.ByteSpan
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _ReadOrWrite = default(Memory<Byte>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ReadOrWrite_ByteIndex, _ReadOrWrite_ByteLength, true, false, null);
                 _ReadOrWrite = ConvertFromBytes_Memory_Gbyte_g(childData);

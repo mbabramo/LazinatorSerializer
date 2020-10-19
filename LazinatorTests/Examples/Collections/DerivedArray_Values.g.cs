@@ -65,7 +65,8 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyArrayInt_DerivedLevel = default(Int32[]);
                 _MyArrayInt_DerivedLevel_Dirty = true; 
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyArrayInt_DerivedLevel_ByteIndex, _MyArrayInt_DerivedLevel_ByteLength, true, false, null);
                 _MyArrayInt_DerivedLevel = ConvertFromBytes_int_B_b(childData);

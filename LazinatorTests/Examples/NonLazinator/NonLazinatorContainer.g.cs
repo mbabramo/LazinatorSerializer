@@ -70,7 +70,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _NonLazinatorClass = default(NonLazinatorClass);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonLazinatorClass_ByteIndex, _NonLazinatorClass_ByteLength, true, false, null);
                 _NonLazinatorClass = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData);
@@ -106,7 +107,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _NonLazinatorInterchangeableClass = default(NonLazinatorInterchangeableClass);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonLazinatorInterchangeableClass_ByteIndex, _NonLazinatorInterchangeableClass_ByteLength, true, false, null);
                 _NonLazinatorInterchangeableClass = ConvertFromBytes_NonLazinatorInterchangeableClass(childData);
@@ -141,7 +143,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _NonLazinatorInterchangeableStruct = default(NonLazinatorInterchangeableStruct);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonLazinatorInterchangeableStruct_ByteIndex, _NonLazinatorInterchangeableStruct_ByteLength, true, false, null);
                 _NonLazinatorInterchangeableStruct = ConvertFromBytes_NonLazinatorInterchangeableStruct(childData);
@@ -177,7 +180,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _NonLazinatorStruct = default(NonLazinatorStruct);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonLazinatorStruct_ByteIndex, _NonLazinatorStruct_ByteLength, true, false, null);
                 _NonLazinatorStruct = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorStruct(childData);

@@ -112,7 +112,8 @@ namespace LazinatorCollections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _FirstNode = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _FirstNode_ByteIndex, _FirstNode_ByteLength, true, false, null);
                 
@@ -217,7 +218,8 @@ namespace LazinatorCollections
                 if (FirstNode == null)
                 {
                     typedClone.FirstNode = null;
-                }else
+                }
+                else
                 {
                     typedClone.FirstNode = (LazinatorLinkedListNode<T>) FirstNode.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -353,7 +355,8 @@ namespace LazinatorCollections
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _FirstNode_Accessed) && FirstNode == null)
             {
                 yield return ("FirstNode", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && FirstNode != null) || (_FirstNode_Accessed && _FirstNode != null))
                 {

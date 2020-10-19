@@ -93,7 +93,8 @@ namespace LazinatorCollections.Tuples
                 { // Item1 is a struct
                     _Item1.LazinatorParents = new LazinatorParentsCollection(this);
                 }
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Item1_ByteIndex, _Item1_ByteLength, true, false, null);
                 
@@ -152,7 +153,8 @@ namespace LazinatorCollections.Tuples
                 { // Item2 is a struct
                     _Item2.LazinatorParents = new LazinatorParentsCollection(this);
                 }
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Item2_ByteIndex, _Item2_ByteLength, true, false, null);
                 
@@ -211,7 +213,8 @@ namespace LazinatorCollections.Tuples
                 { // Item3 is a struct
                     _Item3.LazinatorParents = new LazinatorParentsCollection(this);
                 }
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Item3_ByteIndex, _Item3_ByteLength, true, false, null);
                 
@@ -314,7 +317,8 @@ namespace LazinatorCollections.Tuples
                 if (Item1 == null)
                 {
                     typedClone.Item1 = default(T);
-                }else
+                }
+                else
                 {
                     typedClone.Item1 = (T) Item1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -324,7 +328,8 @@ namespace LazinatorCollections.Tuples
                 if (Item2 == null)
                 {
                     typedClone.Item2 = default(U);
-                }else
+                }
+                else
                 {
                     typedClone.Item2 = (U) Item2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -334,7 +339,8 @@ namespace LazinatorCollections.Tuples
                 if (Item3 == null)
                 {
                     typedClone.Item3 = default(V);
-                }else
+                }
+                else
                 {
                     typedClone.Item3 = (V) Item3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -470,7 +476,8 @@ namespace LazinatorCollections.Tuples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Item1_Accessed) && Item1 == null)
             {
                 yield return ("Item1", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && Item1 != null) || (_Item1_Accessed && _Item1 != null))
                 {
@@ -492,7 +499,8 @@ namespace LazinatorCollections.Tuples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Item2_Accessed) && Item2 == null)
             {
                 yield return ("Item2", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && Item2 != null) || (_Item2_Accessed && _Item2 != null))
                 {
@@ -514,7 +522,8 @@ namespace LazinatorCollections.Tuples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Item3_Accessed) && Item3 == null)
             {
                 yield return ("Item3", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && Item3 != null) || (_Item3_Accessed && _Item3 != null))
                 {

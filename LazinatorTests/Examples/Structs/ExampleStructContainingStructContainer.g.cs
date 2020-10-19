@@ -69,7 +69,8 @@ namespace LazinatorTests.Examples.Structs
             {
                 _Subcontainer = default(ExampleStructContainingStruct);
                 _Subcontainer.LazinatorParents = new LazinatorParentsCollection(this);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, true, false, null);
                 _Subcontainer = new ExampleStructContainingStruct(childData)

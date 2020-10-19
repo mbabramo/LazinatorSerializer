@@ -103,7 +103,8 @@ namespace LazinatorCollections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _Offsets = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Offsets_ByteIndex, _Offsets_ByteLength, true, false, null);
                 

@@ -91,7 +91,8 @@ namespace LazinatorCollections.Tuples
                 { // Item1 is a struct
                     _Item1.LazinatorParents = new LazinatorParentsCollection(this);
                 }
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Item1_ByteIndex, _Item1_ByteLength, true, false, null);
                 
@@ -150,7 +151,8 @@ namespace LazinatorCollections.Tuples
                 { // Item2 is a struct
                     _Item2.LazinatorParents = new LazinatorParentsCollection(this);
                 }
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Item2_ByteIndex, _Item2_ByteLength, true, false, null);
                 
@@ -253,7 +255,8 @@ namespace LazinatorCollections.Tuples
                 if (Item1 == null)
                 {
                     typedClone.Item1 = default(T);
-                }else
+                }
+                else
                 {
                     typedClone.Item1 = (T) Item1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -263,7 +266,8 @@ namespace LazinatorCollections.Tuples
                 if (Item2 == null)
                 {
                     typedClone.Item2 = default(U);
-                }else
+                }
+                else
                 {
                     typedClone.Item2 = (U) Item2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -399,7 +403,8 @@ namespace LazinatorCollections.Tuples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Item1_Accessed) && Item1 == null)
             {
                 yield return ("Item1", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && Item1 != null) || (_Item1_Accessed && _Item1 != null))
                 {
@@ -421,7 +426,8 @@ namespace LazinatorCollections.Tuples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Item2_Accessed) && Item2 == null)
             {
                 yield return ("Item2", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && Item2 != null) || (_Item2_Accessed && _Item2 != null))
                 {

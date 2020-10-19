@@ -71,7 +71,8 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyArrayInt = default(Int32[,]);
                 _MyArrayInt_Dirty = true; 
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyArrayInt_ByteIndex, _MyArrayInt_ByteLength, true, false, null);
                 _MyArrayInt = ConvertFromBytes_int_B_c_b(childData);
@@ -125,7 +126,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyCrazyJaggedArray = default(Int32[][,,][,,,]);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyCrazyJaggedArray_ByteIndex, _MyCrazyJaggedArray_ByteLength, true, false, null);
                 _MyCrazyJaggedArray = ConvertFromBytes_int_B_b_B_c_c_b_B_c_c_c_b(childData);
@@ -161,7 +163,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyThreeDimArrayInt = default(Int32[,,]);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyThreeDimArrayInt_ByteIndex, _MyThreeDimArrayInt_ByteLength, true, false, null);
                 _MyThreeDimArrayInt = ConvertFromBytes_int_B_c_c_b(childData);
@@ -703,7 +706,8 @@ namespace LazinatorTests.Examples.Collections
                 if (lengthCollectionMember == 0)
                 {
                     collection[itemIndex] = default(Int32[,,][,,,]);
-                }else
+                }
+                else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = ConvertFromBytes_int_B_c_c_b_B_c_c_c_b(childData);
@@ -752,7 +756,8 @@ namespace LazinatorTests.Examples.Collections
                 if (itemToClone[itemIndex] == null)
                 {
                     collection[itemIndex] = default(Int32[,,][,,,]);
-                }else
+                }
+                else
                 {
                     var itemCopied = (Int32[,,][,,,]) CloneOrChange_int_B_c_c_b_B_c_c_c_b(itemToClone[itemIndex], cloneOrChangeFunc, avoidCloningIfPossible);
                     collection[itemIndex] = itemCopied;
@@ -782,7 +787,8 @@ namespace LazinatorTests.Examples.Collections
                 if (lengthCollectionMember == 0)
                 {
                     collection[itemIndex0, itemIndex1, itemIndex2] = default(Int32[,,,]);
-                }else
+                }
+                else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = ConvertFromBytes_int_B_c_c_c_b(childData);
@@ -841,7 +847,8 @@ namespace LazinatorTests.Examples.Collections
                 if (itemToClone[itemIndex0, itemIndex1, itemIndex2] == null)
                 {
                     collection[itemIndex0, itemIndex1, itemIndex2] = default(Int32[,,,]);
-                }else
+                }
+                else
                 {
                     var itemCopied = (Int32[,,,]) CloneOrChange_int_B_c_c_c_b(itemToClone[itemIndex0, itemIndex1, itemIndex2], cloneOrChangeFunc, avoidCloningIfPossible);
                     collection[itemIndex0, itemIndex1, itemIndex2] = itemCopied;

@@ -87,7 +87,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyGrandchildInInherited = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyGrandchildInInherited_ByteIndex, _MyGrandchildInInherited_ByteLength, true, false, null);
                 
@@ -133,7 +134,8 @@ namespace LazinatorTests.Examples
                 if (MyGrandchildInInherited == null)
                 {
                     typedClone.MyGrandchildInInherited = null;
-                }else
+                }
+                else
                 {
                     typedClone.MyGrandchildInInherited = (ExampleGrandchild) MyGrandchildInInherited.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -153,7 +155,8 @@ namespace LazinatorTests.Examples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyGrandchildInInherited_Accessed) && MyGrandchildInInherited == null)
             {
                 yield return ("MyGrandchildInInherited", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && MyGrandchildInInherited != null) || (_MyGrandchildInInherited_Accessed && _MyGrandchildInInherited != null))
                 {

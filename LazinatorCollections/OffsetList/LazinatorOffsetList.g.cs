@@ -78,7 +78,8 @@ namespace LazinatorCollections.OffsetList
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _FourByteItems = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _FourByteItems_ByteIndex, _FourByteItems_ByteLength, true, false, null);
                 if (childData.Length == 0)
@@ -136,7 +137,8 @@ namespace LazinatorCollections.OffsetList
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _TwoByteItems = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _TwoByteItems_ByteIndex, _TwoByteItems_ByteLength, true, false, null);
                 if (childData.Length == 0)
@@ -253,7 +255,8 @@ namespace LazinatorCollections.OffsetList
                 if (FourByteItems == null)
                 {
                     typedClone.FourByteItems = null;
-                }else
+                }
+                else
                 {
                     typedClone.FourByteItems = (LazinatorFastReadListInt32) FourByteItems.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -263,7 +266,8 @@ namespace LazinatorCollections.OffsetList
                 if (TwoByteItems == null)
                 {
                     typedClone.TwoByteItems = null;
-                }else
+                }
+                else
                 {
                     typedClone.TwoByteItems = (LazinatorFastReadListInt16) TwoByteItems.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -399,7 +403,8 @@ namespace LazinatorCollections.OffsetList
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _FourByteItems_Accessed) && FourByteItems == null)
             {
                 yield return ("FourByteItems", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && FourByteItems != null) || (_FourByteItems_Accessed && _FourByteItems != null))
                 {
@@ -421,7 +426,8 @@ namespace LazinatorCollections.OffsetList
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _TwoByteItems_Accessed) && TwoByteItems == null)
             {
                 yield return ("TwoByteItems", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && TwoByteItems != null) || (_TwoByteItems_Accessed && _TwoByteItems != null))
                 {

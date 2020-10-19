@@ -67,7 +67,8 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyStackInt = default(Stack<Int32>);
                 _MyStackInt_Dirty = true; 
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyStackInt_ByteIndex, _MyStackInt_ByteLength, true, false, null);
                 _MyStackInt = ConvertFromBytes_Stack_Gint_g(childData);

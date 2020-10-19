@@ -74,7 +74,8 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNullableStruct = default(StructInAnotherNamespace?);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNullableStruct_ByteIndex, _MyNullableStruct_ByteLength, true, false, null);
                 if (childData.Length == 0)
@@ -214,7 +215,8 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 if (MyNullableStruct == null)
                 {
                     typedClone.MyNullableStruct = null;
-                }else
+                }
+                else
                 {
                     typedClone.MyNullableStruct = (StructInAnotherNamespace?) MyNullableStruct.Value.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -342,7 +344,8 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyNullableStruct_Accessed) && MyNullableStruct == null)
             {
                 yield return ("MyNullableStruct", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && MyNullableStruct != null) || (_MyNullableStruct_Accessed && _MyNullableStruct != null))
                 {
@@ -533,8 +536,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 if (_MyNullableStruct == null)
                 {
-                    WriteNullChild(ref writer, false, true);
-                }else
+                    WriteNullChild(ref writer, false, true, ref lengthsSpan);
+                }
+                else
                 {
                     var copy = _MyNullableStruct.Value;
                     WriteChild(ref writer, ref copy, includeChildrenMode, _MyNullableStruct_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyNullableStruct_ByteIndex, _MyNullableStruct_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);

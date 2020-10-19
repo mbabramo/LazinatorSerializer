@@ -91,7 +91,8 @@ namespace LazinatorTests.Examples.Subclasses
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _SubclassInstance1 = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _SubclassInstance1_ByteIndex, _SubclassInstance1_ByteLength, true, false, null);
                 
@@ -136,7 +137,8 @@ namespace LazinatorTests.Examples.Subclasses
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _SubclassInstance2 = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _SubclassInstance2_ByteIndex, _SubclassInstance2_ByteLength, true, false, null);
                 
@@ -238,7 +240,8 @@ namespace LazinatorTests.Examples.Subclasses
                 if (SubclassInstance1 == null)
                 {
                     typedClone.SubclassInstance1 = null;
-                }else
+                }
+                else
                 {
                     typedClone.SubclassInstance1 = (global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass) SubclassInstance1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -248,7 +251,8 @@ namespace LazinatorTests.Examples.Subclasses
                 if (SubclassInstance2 == null)
                 {
                     typedClone.SubclassInstance2 = null;
-                }else
+                }
+                else
                 {
                     typedClone.SubclassInstance2 = (global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass) SubclassInstance2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -376,7 +380,8 @@ namespace LazinatorTests.Examples.Subclasses
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _SubclassInstance1_Accessed) && SubclassInstance1 == null)
             {
                 yield return ("SubclassInstance1", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && SubclassInstance1 != null) || (_SubclassInstance1_Accessed && _SubclassInstance1 != null))
                 {
@@ -398,7 +403,8 @@ namespace LazinatorTests.Examples.Subclasses
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _SubclassInstance2_Accessed) && SubclassInstance2 == null)
             {
                 yield return ("SubclassInstance2", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && SubclassInstance2 != null) || (_SubclassInstance2_Accessed && _SubclassInstance2 != null))
                 {

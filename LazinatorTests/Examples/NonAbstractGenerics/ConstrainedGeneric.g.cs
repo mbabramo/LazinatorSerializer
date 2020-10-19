@@ -77,7 +77,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNullableT = default(T?);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNullableT_ByteIndex, _MyNullableT_ByteLength, true, false, null);
                 
@@ -116,7 +117,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 _MyT = default(T);
                 _MyT.LazinatorParents = new LazinatorParentsCollection(this);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, true, false, null);
                 
@@ -172,7 +174,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 { // MyU is a struct
                     _MyU.LazinatorParents = new LazinatorParentsCollection(this);
                 }
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyU_ByteIndex, _MyU_ByteLength, true, false, null);
                 
@@ -281,7 +284,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 if (MyU == null)
                 {
                     typedClone.MyU = default(U);
-                }else
+                }
+                else
                 {
                     typedClone.MyU = (U) MyU.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -435,7 +439,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyU_Accessed) && MyU == null)
             {
                 yield return ("MyU", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && MyU != null) || (_MyU_Accessed && _MyU != null))
                 {

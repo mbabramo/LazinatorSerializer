@@ -98,7 +98,8 @@ namespace LazinatorTests.Examples.Abstract
                 { // MyT is a struct
                     _MyT.LazinatorParents = new LazinatorParentsCollection(this);
                 }
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, true, false, null);
                 
@@ -144,7 +145,8 @@ namespace LazinatorTests.Examples.Abstract
                 if (MyT == null)
                 {
                     typedClone.MyT = default(T);
-                }else
+                }
+                else
                 {
                     typedClone.MyT = (T) MyT.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -164,7 +166,8 @@ namespace LazinatorTests.Examples.Abstract
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyT_Accessed) && MyT == null)
             {
                 yield return ("MyT", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && MyT != null) || (_MyT_Accessed && _MyT != null))
                 {

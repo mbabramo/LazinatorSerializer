@@ -96,7 +96,8 @@ namespace LazinatorCollections.Dictionary
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _Buckets = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Buckets_ByteIndex, _Buckets_ByteLength, true, false, null);
                 
@@ -200,7 +201,8 @@ namespace LazinatorCollections.Dictionary
                 if (Buckets == null)
                 {
                     typedClone.Buckets = null;
-                }else
+                }
+                else
                 {
                     typedClone.Buckets = (LazinatorList<DictionaryBucket<TKey, TValue>>) Buckets.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -336,7 +338,8 @@ namespace LazinatorCollections.Dictionary
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Buckets_Accessed) && Buckets == null)
             {
                 yield return ("Buckets", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && Buckets != null) || (_Buckets_Accessed && _Buckets != null))
                 {

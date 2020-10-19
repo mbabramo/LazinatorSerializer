@@ -76,7 +76,8 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyLinkedListInt = default(LinkedList<Int32>);
                 _MyLinkedListInt_Dirty = true; 
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyLinkedListInt_ByteIndex, _MyLinkedListInt_ByteLength, true, false, null);
                 _MyLinkedListInt = ConvertFromBytes_LinkedList_Gint_g(childData);
@@ -131,7 +132,8 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyListInt = default(List<Int32>);
                 _MyListInt_Dirty = true; 
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListInt_ByteIndex, _MyListInt_ByteLength, true, false, null);
                 _MyListInt = ConvertFromBytes_List_Gint_g(childData);
@@ -185,7 +187,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyListInt2 = default(List<Int32>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListInt2_ByteIndex, _MyListInt2_ByteLength, true, false, null);
                 _MyListInt2 = ConvertFromBytes_List_Gint_g(childData);
@@ -221,7 +224,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyListNullableEnabledContext = default(List<NullableEnabledContext>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableEnabledContext_ByteIndex, _MyListNullableEnabledContext_ByteLength, true, false, null);
                 _MyListNullableEnabledContext = ConvertFromBytes_List_GNullableEnabledContext_g(childData);
@@ -258,7 +262,8 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MySortedSetInt = default(SortedSet<Int32>);
                 _MySortedSetInt_Dirty = true; 
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MySortedSetInt_ByteIndex, _MySortedSetInt_ByteLength, true, false, null);
                 _MySortedSetInt = ConvertFromBytes_SortedSet_Gint_g(childData);
@@ -934,7 +939,8 @@ namespace LazinatorTests.Examples.Collections
                 if (lengthCollectionMember == 0)
                 {
                     collection.Add(null);
-                }else
+                }
+                else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = DeserializationFactory.Instance.CreateBasedOnType<NullableEnabledContext>(childData);
@@ -991,7 +997,8 @@ namespace LazinatorTests.Examples.Collections
                 if (itemToClone[itemIndex] == null)
                 {
                     collection.Add(null);
-                }else
+                }
+                else
                 {
                     var itemCopied = (NullableEnabledContext) (cloneOrChangeFunc(itemToClone[itemIndex]));
                     collection.Add(itemCopied);

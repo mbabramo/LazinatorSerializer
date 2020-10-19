@@ -80,7 +80,8 @@ namespace LazinatorCollections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _NextNode = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NextNode_ByteIndex, _NextNode_ByteLength, true, false, null);
                 
@@ -139,7 +140,8 @@ namespace LazinatorCollections
                 { // Value is a struct
                     _Value.LazinatorParents = new LazinatorParentsCollection(this);
                 }
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Value_ByteIndex, _Value_ByteLength, true, false, null);
                 
@@ -242,7 +244,8 @@ namespace LazinatorCollections
                 if (NextNode == null)
                 {
                     typedClone.NextNode = null;
-                }else
+                }
+                else
                 {
                     typedClone.NextNode = (LazinatorLinkedListNode<T>) NextNode.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -252,7 +255,8 @@ namespace LazinatorCollections
                 if (Value == null)
                 {
                     typedClone.Value = default(T);
-                }else
+                }
+                else
                 {
                     typedClone.Value = (T) Value.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -388,7 +392,8 @@ namespace LazinatorCollections
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _NextNode_Accessed) && NextNode == null)
             {
                 yield return ("NextNode", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && NextNode != null) || (_NextNode_Accessed && _NextNode != null))
                 {
@@ -410,7 +415,8 @@ namespace LazinatorCollections
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Value_Accessed) && Value == null)
             {
                 yield return ("Value", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && Value != null) || (_Value_Accessed && _Value != null))
                 {

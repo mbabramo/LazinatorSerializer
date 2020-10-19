@@ -85,7 +85,8 @@ namespace Lazinator.Wrappers
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _NonNullValue = default(T);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonNullValue_ByteIndex, _NonNullValue_ByteLength, true, false, null);
                 

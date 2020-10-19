@@ -79,7 +79,8 @@ namespace LazinatorTests.Examples
             {
                 _IntWrapper = default(WInt32);
                 _IntWrapper.LazinatorParents = new LazinatorParentsCollection(this);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntWrapper_ByteIndex, _IntWrapper_ByteLength, true, false, null);
                 _IntWrapper = new WInt32(childData)
@@ -146,7 +147,8 @@ namespace LazinatorTests.Examples
             {
                 _MyExampleStructContainingClasses = default(ExampleStructContainingClasses);
                 _MyExampleStructContainingClasses.LazinatorParents = new LazinatorParentsCollection(this);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, true, false, null);
                 _MyExampleStructContainingClasses = new ExampleStructContainingClasses(childData)
@@ -211,7 +213,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyHashSetExampleStruct = default(HashSet<ExampleStructContainingClasses>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyHashSetExampleStruct_ByteIndex, _MyHashSetExampleStruct_ByteLength, true, false, null);
                 _MyHashSetExampleStruct = ConvertFromBytes_HashSet_GExampleStructContainingClasses_g(childData);
@@ -247,7 +250,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyListExampleStruct = default(List<ExampleStructContainingClasses>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListExampleStruct_ByteIndex, _MyListExampleStruct_ByteLength, true, false, null);
                 _MyListExampleStruct = ConvertFromBytes_List_GExampleStructContainingClasses_g(childData);
@@ -283,7 +287,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyListNullableExampleStruct = default(List<WNullableStruct<ExampleStructContainingClasses>>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableExampleStruct_ByteIndex, _MyListNullableExampleStruct_ByteLength, true, false, null);
                 _MyListNullableExampleStruct = ConvertFromBytes_List_GWNullableStruct_GExampleStructContainingClasses_g_g(childData);
@@ -319,7 +324,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyListUnwrappedNullableExampleStruct = default(List<ExampleStructContainingClasses?>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListUnwrappedNullableExampleStruct_ByteIndex, _MyListUnwrappedNullableExampleStruct_ByteLength, true, false, null);
                 _MyListUnwrappedNullableExampleStruct = ConvertFromBytes_List_GExampleStructContainingClasses_n_g(childData);
@@ -1136,7 +1142,8 @@ namespace LazinatorTests.Examples
                 if (lengthCollectionMember == 0)
                 {
                     collection.Add(null);
-                }else
+                }
+                else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = DeserializationFactory.Instance.CreateBasedOnType<ExampleStructContainingClasses?>(childData);
@@ -1201,7 +1208,8 @@ namespace LazinatorTests.Examples
                 if (itemToClone[itemIndex] == null)
                 {
                     collection.Add(null);
-                }else
+                }
+                else
                 {
                     var itemCopied = (ExampleStructContainingClasses?) (cloneOrChangeFunc(itemToClone[itemIndex]));
                     collection.Add(itemCopied);

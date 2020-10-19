@@ -108,7 +108,8 @@ namespace LazinatorCollections.Remote
                 { // Key is a struct
                     _Key.LazinatorParents = new LazinatorParentsCollection(this);
                 }
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Key_ByteIndex, _Key_ByteLength, true, false, null);
                 
@@ -160,7 +161,8 @@ namespace LazinatorCollections.Remote
                 { // Local is a struct
                     _Local.LazinatorParents = new LazinatorParentsCollection(this);
                 }
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Local_ByteIndex, _Local_ByteLength, true, false, null);
                 
@@ -264,7 +266,8 @@ namespace LazinatorCollections.Remote
                 if (Key == null)
                 {
                     typedClone.Key = default(TKey);
-                }else
+                }
+                else
                 {
                     typedClone.Key = (TKey) Key.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -274,7 +277,8 @@ namespace LazinatorCollections.Remote
                 if (Local == null)
                 {
                     typedClone.Local = default(TValue);
-                }else
+                }
+                else
                 {
                     typedClone.Local = (TValue) Local.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -410,7 +414,8 @@ namespace LazinatorCollections.Remote
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Key_Accessed) && Key == null)
             {
                 yield return ("Key", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && Key != null) || (_Key_Accessed && _Key != null))
                 {
@@ -432,7 +437,8 @@ namespace LazinatorCollections.Remote
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Local_Accessed) && Local == null)
             {
                 yield return ("Local", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && Local != null) || (_Local_Accessed && _Local != null))
                 {

@@ -81,7 +81,8 @@ namespace LazinatorCollections.Tree
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _Children = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Children_ByteIndex, _Children_ByteLength, true, false, null);
                 
@@ -140,7 +141,8 @@ namespace LazinatorCollections.Tree
                 { // Item is a struct
                     _Item.LazinatorParents = new LazinatorParentsCollection(this);
                 }
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Item_ByteIndex, _Item_ByteLength, true, false, null);
                 
@@ -243,7 +245,8 @@ namespace LazinatorCollections.Tree
                 if (Children == null)
                 {
                     typedClone.Children = null;
-                }else
+                }
+                else
                 {
                     typedClone.Children = (LazinatorList<LazinatorGeneralTree<T>>) Children.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -253,7 +256,8 @@ namespace LazinatorCollections.Tree
                 if (Item == null)
                 {
                     typedClone.Item = default(T);
-                }else
+                }
+                else
                 {
                     typedClone.Item = (T) Item.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -389,7 +393,8 @@ namespace LazinatorCollections.Tree
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Children_Accessed) && Children == null)
             {
                 yield return ("Children", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && Children != null) || (_Children_Accessed && _Children != null))
                 {
@@ -411,7 +416,8 @@ namespace LazinatorCollections.Tree
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Item_Accessed) && Item == null)
             {
                 yield return ("Item", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && Item != null) || (_Item_Accessed && _Item != null))
                 {

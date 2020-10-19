@@ -67,7 +67,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyListNestedNonLazinatorType = default(List<List<NonLazinatorClass>>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNestedNonLazinatorType_ByteIndex, _MyListNestedNonLazinatorType_ByteLength, true, false, null);
                 _MyListNestedNonLazinatorType = ConvertFromBytes_List_GList_GNonLazinatorClass_g_g(childData);
@@ -479,7 +480,8 @@ namespace LazinatorTests.Examples.Collections
                 if (lengthCollectionMember == 0)
                 {
                     collection.Add(default(List<NonLazinatorClass>));
-                }else
+                }
+                else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = ConvertFromBytes_List_GNonLazinatorClass_g(childData);
@@ -528,7 +530,8 @@ namespace LazinatorTests.Examples.Collections
                 if (itemToClone[itemIndex] == null)
                 {
                     collection.Add(default(List<NonLazinatorClass>));
-                }else
+                }
+                else
                 {
                     var itemCopied = (List<NonLazinatorClass>) CloneOrChange_List_GNonLazinatorClass_g(itemToClone[itemIndex], cloneOrChangeFunc, avoidCloningIfPossible);
                     collection.Add(itemCopied);
@@ -554,7 +557,8 @@ namespace LazinatorTests.Examples.Collections
                 if (lengthCollectionMember == 0)
                 {
                     collection.Add(default(NonLazinatorClass));
-                }else
+                }
+                else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData);
@@ -603,7 +607,8 @@ namespace LazinatorTests.Examples.Collections
                 if (itemToClone[itemIndex] == null)
                 {
                     collection.Add(default(NonLazinatorClass));
-                }else
+                }
+                else
                 {
                     var itemCopied = (NonLazinatorClass) itemToClone[itemIndex];
                     collection.Add(itemCopied);

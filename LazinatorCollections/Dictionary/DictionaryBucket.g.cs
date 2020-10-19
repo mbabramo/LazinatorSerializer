@@ -98,7 +98,8 @@ namespace LazinatorCollections.Dictionary
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _Keys = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Keys_ByteIndex, _Keys_ByteLength, true, false, null);
                 
@@ -146,7 +147,8 @@ namespace LazinatorCollections.Dictionary
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _Values = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Values_ByteIndex, _Values_ByteLength, true, false, null);
                 
@@ -250,7 +252,8 @@ namespace LazinatorCollections.Dictionary
                 if (Keys == null)
                 {
                     typedClone.Keys = null;
-                }else
+                }
+                else
                 {
                     typedClone.Keys = (LazinatorList<TKey>) Keys.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -260,7 +263,8 @@ namespace LazinatorCollections.Dictionary
                 if (Values == null)
                 {
                     typedClone.Values = null;
-                }else
+                }
+                else
                 {
                     typedClone.Values = (LazinatorList<TValue>) Values.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -396,7 +400,8 @@ namespace LazinatorCollections.Dictionary
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Keys_Accessed) && Keys == null)
             {
                 yield return ("Keys", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && Keys != null) || (_Keys_Accessed && _Keys != null))
                 {
@@ -418,7 +423,8 @@ namespace LazinatorCollections.Dictionary
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Values_Accessed) && Values == null)
             {
                 yield return ("Values", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && Values != null) || (_Values_Accessed && _Values != null))
                 {

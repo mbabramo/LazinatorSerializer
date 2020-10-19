@@ -133,7 +133,8 @@ namespace LazinatorTests.Examples.Abstract
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyT = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, true, false, null);
                 
@@ -178,7 +179,8 @@ namespace LazinatorTests.Examples.Abstract
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _LazinatorExample = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _LazinatorExample_ByteIndex, _LazinatorExample_ByteLength, true, false, null);
                 
@@ -283,7 +285,8 @@ namespace LazinatorTests.Examples.Abstract
                 if (MyT == null)
                 {
                     typedClone.MyT = null;
-                }else
+                }
+                else
                 {
                     typedClone.MyT = (Example) MyT.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -293,7 +296,8 @@ namespace LazinatorTests.Examples.Abstract
                 if (LazinatorExample == null)
                 {
                     typedClone.LazinatorExample = null;
-                }else
+                }
+                else
                 {
                     typedClone.LazinatorExample = (Example) LazinatorExample.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -421,7 +425,8 @@ namespace LazinatorTests.Examples.Abstract
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyT_Accessed) && MyT == null)
             {
                 yield return ("MyT", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && MyT != null) || (_MyT_Accessed && _MyT != null))
                 {
@@ -443,7 +448,8 @@ namespace LazinatorTests.Examples.Abstract
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _LazinatorExample_Accessed) && LazinatorExample == null)
             {
                 yield return ("LazinatorExample", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && LazinatorExample != null) || (_LazinatorExample_Accessed && _LazinatorExample != null))
                 {

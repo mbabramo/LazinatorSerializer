@@ -67,7 +67,8 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyQueueInt = default(Queue<Int32>);
                 _MyQueueInt_Dirty = true; 
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyQueueInt_ByteIndex, _MyQueueInt_ByteLength, true, false, null);
                 _MyQueueInt = ConvertFromBytes_Queue_Gint_g(childData);

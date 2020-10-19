@@ -69,7 +69,8 @@ namespace LazinatorTests.Examples.Structs
             {
                 _WrappedInt = default(WInt32);
                 _WrappedInt.LazinatorParents = new LazinatorParentsCollection(this);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, true, false, null);
                 _WrappedInt = new WInt32(childData)

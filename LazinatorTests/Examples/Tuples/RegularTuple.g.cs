@@ -77,7 +77,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyListTuple = default(List<Tuple<UInt32, ExampleChild, NonLazinatorClass>>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListTuple_ByteIndex, _MyListTuple_ByteLength, true, false, null);
                 _MyListTuple = ConvertFromBytes_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(childData);
@@ -113,7 +114,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyTupleSerialized = default(Tuple<UInt32, ExampleChild, NonLazinatorClass>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized_ByteIndex, _MyTupleSerialized_ByteLength, true, false, null);
                 _MyTupleSerialized = ConvertFromBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData);
@@ -149,7 +151,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyTupleSerialized2 = default(Tuple<UInt32, ExampleChild, NonLazinatorClass>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized2_ByteIndex, _MyTupleSerialized2_ByteLength, true, false, null);
                 _MyTupleSerialized2 = ConvertFromBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData);
@@ -185,7 +188,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyTupleSerialized3 = default(Tuple<UInt32?, ExampleChild, NonLazinatorClass>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized3_ByteIndex, _MyTupleSerialized3_ByteLength, true, false, null);
                 _MyTupleSerialized3 = ConvertFromBytes_Tuple_Guint_n_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData);
@@ -221,7 +225,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyTupleSerialized4 = default(Tuple<Int32, ExampleStructContainingClasses>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized4_ByteIndex, _MyTupleSerialized4_ByteLength, true, false, null);
                 _MyTupleSerialized4 = ConvertFromBytes_Tuple_Gint_c_C32ExampleStructContainingClasses_g(childData);
@@ -257,7 +262,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyTupleSerialized5 = default(Tuple<Int32, ExampleStructContainingClasses?>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized5_ByteIndex, _MyTupleSerialized5_ByteLength, true, false, null);
                 _MyTupleSerialized5 = ConvertFromBytes_Tuple_Gint_c_C32ExampleStructContainingClasses_n_g(childData);
@@ -855,7 +861,8 @@ namespace LazinatorTests.Examples.Tuples
                 if (lengthCollectionMember == 0)
                 {
                     collection.Add(default(Tuple<UInt32, ExampleChild, NonLazinatorClass>));
-                }else
+                }
+                else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = ConvertFromBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(childData);
@@ -904,7 +911,8 @@ namespace LazinatorTests.Examples.Tuples
                 if (itemToClone[itemIndex] == null)
                 {
                     collection.Add(default(Tuple<UInt32, ExampleChild, NonLazinatorClass>));
-                }else
+                }
+                else
                 {
                     var itemCopied = (Tuple<UInt32, ExampleChild, NonLazinatorClass>) CloneOrChange_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(itemToClone[itemIndex], cloneOrChangeFunc, avoidCloningIfPossible);
                     collection.Add(itemCopied);

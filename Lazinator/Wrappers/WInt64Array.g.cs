@@ -68,7 +68,8 @@ namespace Lazinator.Wrappers
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _WrappedValue = default(Int64[]);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedValue_ByteIndex, _WrappedValue_ByteLength, true, false, null);
                 _WrappedValue = ConvertFromBytes_long_B_b(childData);

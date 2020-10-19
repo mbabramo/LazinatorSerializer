@@ -75,7 +75,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyList = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyList_ByteIndex, _MyList_ByteLength, true, false, null);
                 
@@ -176,7 +177,8 @@ namespace LazinatorTests.Examples.Collections
                 if (MyList == null)
                 {
                     typedClone.MyList = null;
-                }else
+                }
+                else
                 {
                     typedClone.MyList = (LazinatorList<T>) MyList.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -304,7 +306,8 @@ namespace LazinatorTests.Examples.Collections
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyList_Accessed) && MyList == null)
             {
                 yield return ("MyList", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && MyList != null) || (_MyList_Accessed && _MyList != null))
                 {

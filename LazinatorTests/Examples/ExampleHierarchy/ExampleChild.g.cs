@@ -131,7 +131,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyExampleGrandchild = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleGrandchild_ByteIndex, _MyExampleGrandchild_ByteLength, true, false, null);
                 
@@ -176,7 +177,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyWrapperContainer = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyWrapperContainer_ByteIndex, _MyWrapperContainer_ByteLength, true, false, null);
                 
@@ -280,7 +282,8 @@ namespace LazinatorTests.Examples
                 if (MyExampleGrandchild == null)
                 {
                     typedClone.MyExampleGrandchild = null;
-                }else
+                }
+                else
                 {
                     typedClone.MyExampleGrandchild = (ExampleGrandchild) MyExampleGrandchild.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -290,7 +293,8 @@ namespace LazinatorTests.Examples
                 if (MyWrapperContainer == null)
                 {
                     typedClone.MyWrapperContainer = null;
-                }else
+                }
+                else
                 {
                     typedClone.MyWrapperContainer = (WrapperContainer) MyWrapperContainer.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -418,7 +422,8 @@ namespace LazinatorTests.Examples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyExampleGrandchild_Accessed) && MyExampleGrandchild == null)
             {
                 yield return ("MyExampleGrandchild", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && MyExampleGrandchild != null) || (_MyExampleGrandchild_Accessed && _MyExampleGrandchild != null))
                 {
@@ -440,7 +445,8 @@ namespace LazinatorTests.Examples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyWrapperContainer_Accessed) && MyWrapperContainer == null)
             {
                 yield return ("MyWrapperContainer", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && MyWrapperContainer != null) || (_MyWrapperContainer_Accessed && _MyWrapperContainer != null))
                 {

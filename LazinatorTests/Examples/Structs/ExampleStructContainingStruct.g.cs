@@ -66,7 +66,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyExampleNullableStruct = default(ExampleStructContainingClasses?);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleNullableStruct_ByteIndex, _MyExampleNullableStruct_ByteLength, true, false, null);
                 if (childData.Length == 0)
@@ -139,7 +140,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyExampleStructContainingClasses = default(ExampleStructContainingClasses);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, true, false, null);
                 _MyExampleStructContainingClasses = new ExampleStructContainingClasses(childData);
@@ -269,7 +271,8 @@ namespace LazinatorTests.Examples
                 if (MyExampleNullableStruct == null)
                 {
                     typedClone.MyExampleNullableStruct = null;
-                }else
+                }
+                else
                 {
                     typedClone.MyExampleNullableStruct = (ExampleStructContainingClasses?) MyExampleNullableStruct.Value.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -402,7 +405,8 @@ namespace LazinatorTests.Examples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyExampleNullableStruct_Accessed) && MyExampleNullableStruct == null)
             {
                 yield return ("MyExampleNullableStruct", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && MyExampleNullableStruct != null) || (_MyExampleNullableStruct_Accessed && _MyExampleNullableStruct != null))
                 {
@@ -616,8 +620,9 @@ namespace LazinatorTests.Examples
                 }
                 if (_MyExampleNullableStruct == null)
                 {
-                    WriteNullChild(ref writer, false, true);
-                }else
+                    WriteNullChild(ref writer, false, true, ref lengthsSpan);
+                }
+                else
                 {
                     var serializedBytesCopy = LazinatorMemoryStorage;
                     var byteIndexCopy = _MyExampleNullableStruct_ByteIndex;

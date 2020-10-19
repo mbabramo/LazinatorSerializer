@@ -71,7 +71,8 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyArrayInt = default(Int32[]);
                 _MyArrayInt_Dirty = true; 
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyArrayInt_ByteIndex, _MyArrayInt_ByteLength, true, false, null);
                 _MyArrayInt = ConvertFromBytes_int_B_b(childData);
@@ -125,7 +126,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyArrayNullableInt = default(Int32?[]);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyArrayNullableInt_ByteIndex, _MyArrayNullableInt_ByteLength, true, false, null);
                 _MyArrayNullableInt = ConvertFromBytes_int_n_B_b(childData);
@@ -161,7 +163,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyJaggedArrayInt = default(Int32[][]);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyJaggedArrayInt_ByteIndex, _MyJaggedArrayInt_ByteLength, true, false, null);
                 _MyJaggedArrayInt = ConvertFromBytes_int_B_b_B_b(childData);
@@ -727,7 +730,8 @@ namespace LazinatorTests.Examples.Collections
                 if (itemToClone[itemIndex] == null)
                 {
                     collection[itemIndex] = default(int?);
-                }else
+                }
+                else
                 {
                     var itemCopied = (int?) itemToClone[itemIndex];
                     collection[itemIndex] = itemCopied;
@@ -753,7 +757,8 @@ namespace LazinatorTests.Examples.Collections
                 if (lengthCollectionMember == 0)
                 {
                     collection[itemIndex] = default(Int32[]);
-                }else
+                }
+                else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = ConvertFromBytes_int_B_b(childData);
@@ -802,7 +807,8 @@ namespace LazinatorTests.Examples.Collections
                 if (itemToClone[itemIndex] == null)
                 {
                     collection[itemIndex] = default(Int32[]);
-                }else
+                }
+                else
                 {
                     var itemCopied = (Int32[]) CloneOrChange_int_B_b(itemToClone[itemIndex], cloneOrChangeFunc, avoidCloningIfPossible);
                     collection[itemIndex] = itemCopied;

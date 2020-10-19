@@ -69,7 +69,8 @@ namespace LazinatorCollections.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _Key = default(TKey);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Key_ByteIndex, _Key_ByteLength, true, false, null);
                 
@@ -108,7 +109,8 @@ namespace LazinatorCollections.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _Value = default(TValue);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Value_ByteIndex, _Value_ByteLength, true, false, null);
                 
@@ -211,7 +213,8 @@ namespace LazinatorCollections.Tuples
                 if (Key == null)
                 {
                     typedClone.Key = default(TKey);
-                }else
+                }
+                else
                 {
                     typedClone.Key = (TKey) Key.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -221,7 +224,8 @@ namespace LazinatorCollections.Tuples
                 if (Value == null)
                 {
                     typedClone.Value = default(TValue);
-                }else
+                }
+                else
                 {
                     typedClone.Value = (TValue) Value.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -358,7 +362,8 @@ namespace LazinatorCollections.Tuples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Key_Accessed) && Key == null)
             {
                 yield return ("Key", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && Key != null) || (_Key_Accessed && _Key != null))
                 {
@@ -380,7 +385,8 @@ namespace LazinatorCollections.Tuples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Value_Accessed) && Value == null)
             {
                 yield return ("Value", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && Value != null) || (_Value_Accessed && _Value != null))
                 {

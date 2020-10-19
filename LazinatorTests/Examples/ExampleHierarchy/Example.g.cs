@@ -307,7 +307,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _IncludableChild = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IncludableChild_ByteIndex, _IncludableChild_ByteLength, true, false, null);
                 
@@ -320,7 +321,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _IncludableChild = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IncludableChild_ByteIndex, _IncludableChild_ByteLength, true, false, null);
                 await childData.LoadInitialMemoryAsync();
@@ -375,7 +377,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyChild1 = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild1_ByteIndex, _MyChild1_ByteLength, true, false, null);
                 
@@ -389,7 +392,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyChild1 = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild1_ByteIndex, _MyChild1_ByteLength, true, false, null);
                 await childData.LoadInitialMemoryAsync();
@@ -445,7 +449,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyChild2 = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild2_ByteIndex, _MyChild2_ByteLength, true, false, null);
                 
@@ -458,7 +463,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyChild2 = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild2_ByteIndex, _MyChild2_ByteLength, true, false, null);
                 await childData.LoadInitialMemoryAsync();
@@ -512,7 +518,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyChild2Previous = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild2Previous_ByteIndex, _MyChild2Previous_ByteLength, true, false, null);
                 
@@ -525,7 +532,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyChild2Previous = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild2Previous_ByteIndex, _MyChild2Previous_ByteLength, true, false, null);
                 await childData.LoadInitialMemoryAsync();
@@ -579,7 +587,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyInterfaceImplementer = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyInterfaceImplementer_ByteIndex, _MyInterfaceImplementer_ByteLength, true, false, null);
                 
@@ -592,7 +601,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyInterfaceImplementer = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyInterfaceImplementer_ByteIndex, _MyInterfaceImplementer_ByteLength, true, false, null);
                 await childData.LoadInitialMemoryAsync();
@@ -639,7 +649,8 @@ namespace LazinatorTests.Examples
             {
                 _MyNonLazinatorChild = default(NonLazinatorClass);
                 _MyNonLazinatorChild_Dirty = true; 
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorChild_ByteIndex, _MyNonLazinatorChild_ByteLength, true, false, null);
                 _MyNonLazinatorChild = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData);
@@ -652,7 +663,8 @@ namespace LazinatorTests.Examples
             {
                 _MyNonLazinatorChild = default(NonLazinatorClass);
                 _MyNonLazinatorChild_Dirty = true; 
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorChild_ByteIndex, _MyNonLazinatorChild_ByteLength, true, false, null);
                 await childData.LoadInitialMemoryAsync();
@@ -717,7 +729,8 @@ namespace LazinatorTests.Examples
             {
                 _WrappedInt = default(WInt32);
                 _WrappedInt.LazinatorParents = new LazinatorParentsCollection(this);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, true, false, null);
                 _WrappedInt = new WInt32(childData)
@@ -734,7 +747,8 @@ namespace LazinatorTests.Examples
             {
                 _WrappedInt = default(WInt32);
                 _WrappedInt.LazinatorParents = new LazinatorParentsCollection(this);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, true, false, null);
                 await childData.LoadInitialMemoryAsync();
@@ -816,7 +830,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _ExcludableChild = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExcludableChild_ByteIndex, _ExcludableChild_ByteLength, true, false, null);
                 
@@ -829,7 +844,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _ExcludableChild = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExcludableChild_ByteIndex, _ExcludableChild_ByteLength, true, false, null);
                 await childData.LoadInitialMemoryAsync();
@@ -963,7 +979,8 @@ namespace LazinatorTests.Examples
                 if (IncludableChild == null)
                 {
                     typedClone.IncludableChild = null;
-                }else
+                }
+                else
                 {
                     typedClone.IncludableChild = (ExampleChild) IncludableChild.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -973,7 +990,8 @@ namespace LazinatorTests.Examples
                 if (MyChild1 == null)
                 {
                     typedClone.MyChild1 = null;
-                }else
+                }
+                else
                 {
                     typedClone.MyChild1 = (ExampleChild) MyChild1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -983,7 +1001,8 @@ namespace LazinatorTests.Examples
                 if (MyChild2 == null)
                 {
                     typedClone.MyChild2 = null;
-                }else
+                }
+                else
                 {
                     typedClone.MyChild2 = (ExampleChild) MyChild2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -993,7 +1012,8 @@ namespace LazinatorTests.Examples
                 if (MyChild2Previous == null)
                 {
                     typedClone.MyChild2Previous = null;
-                }else
+                }
+                else
                 {
                     typedClone.MyChild2Previous = (ExampleChild) MyChild2Previous.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -1003,7 +1023,8 @@ namespace LazinatorTests.Examples
                 if (MyInterfaceImplementer == null)
                 {
                     typedClone.MyInterfaceImplementer = null;
-                }else
+                }
+                else
                 {
                     typedClone.MyInterfaceImplementer = (IExampleNonexclusiveInterface) MyInterfaceImplementer.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -1018,7 +1039,8 @@ namespace LazinatorTests.Examples
                 if (ExcludableChild == null)
                 {
                     typedClone.ExcludableChild = null;
-                }else
+                }
+                else
                 {
                     typedClone.ExcludableChild = (ExampleChild) ExcludableChild.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -1148,7 +1170,8 @@ namespace LazinatorTests.Examples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _IncludableChild_Accessed) && IncludableChild == null)
             {
                 yield return ("IncludableChild", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && IncludableChild != null) || (_IncludableChild_Accessed && _IncludableChild != null))
                 {
@@ -1170,7 +1193,8 @@ namespace LazinatorTests.Examples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyChild1_Accessed) && MyChild1 == null)
             {
                 yield return ("MyChild1", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && MyChild1 != null) || (_MyChild1_Accessed && _MyChild1 != null))
                 {
@@ -1192,7 +1216,8 @@ namespace LazinatorTests.Examples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyChild2_Accessed) && MyChild2 == null)
             {
                 yield return ("MyChild2", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && MyChild2 != null) || (_MyChild2_Accessed && _MyChild2 != null))
                 {
@@ -1214,7 +1239,8 @@ namespace LazinatorTests.Examples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyChild2Previous_Accessed) && MyChild2Previous == null)
             {
                 yield return ("MyChild2Previous", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && MyChild2Previous != null) || (_MyChild2Previous_Accessed && _MyChild2Previous != null))
                 {
@@ -1236,7 +1262,8 @@ namespace LazinatorTests.Examples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyInterfaceImplementer_Accessed) && MyInterfaceImplementer == null)
             {
                 yield return ("MyInterfaceImplementer", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && MyInterfaceImplementer != null) || (_MyInterfaceImplementer_Accessed && _MyInterfaceImplementer != null))
                 {
@@ -1271,7 +1298,8 @@ namespace LazinatorTests.Examples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ExcludableChild_Accessed) && ExcludableChild == null)
             {
                 yield return ("ExcludableChild", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && ExcludableChild != null) || (_ExcludableChild_Accessed && _ExcludableChild != null))
                 {

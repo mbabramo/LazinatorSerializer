@@ -121,7 +121,8 @@ namespace LazinatorTests.Examples.Abstract
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _Example2 = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Example2_ByteIndex, _Example2_ByteLength, true, false, null);
                 
@@ -165,7 +166,8 @@ namespace LazinatorTests.Examples.Abstract
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _Example3 = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Example3_ByteIndex, _Example3_ByteLength, true, false, null);
                 
@@ -201,7 +203,8 @@ namespace LazinatorTests.Examples.Abstract
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _IntList1 = default(List<Int32>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList1_ByteIndex, _IntList1_ByteLength, true, false, null);
                 _IntList1 = ConvertFromBytes_List_Gint_g(childData);
@@ -236,7 +239,8 @@ namespace LazinatorTests.Examples.Abstract
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _IntList2 = default(List<Int32>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList2_ByteIndex, _IntList2_ByteLength, true, false, null);
                 _IntList2 = ConvertFromBytes_List_Gint_g(childData);
@@ -272,7 +276,8 @@ namespace LazinatorTests.Examples.Abstract
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _IntList3 = default(List<Int32>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList3_ByteIndex, _IntList3_ByteLength, true, false, null);
                 _IntList3 = ConvertFromBytes_List_Gint_g(childData);
@@ -375,7 +380,8 @@ namespace LazinatorTests.Examples.Abstract
                 if (Example2 == null)
                 {
                     typedClone.Example2 = null;
-                }else
+                }
+                else
                 {
                     typedClone.Example2 = (Example) Example2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -385,7 +391,8 @@ namespace LazinatorTests.Examples.Abstract
                 if (Example3 == null)
                 {
                     typedClone.Example3 = null;
-                }else
+                }
+                else
                 {
                     typedClone.Example3 = (Example) Example3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -516,7 +523,8 @@ namespace LazinatorTests.Examples.Abstract
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Example2_Accessed) && Example2 == null)
             {
                 yield return ("Example2", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && Example2 != null) || (_Example2_Accessed && _Example2 != null))
                 {
@@ -538,7 +546,8 @@ namespace LazinatorTests.Examples.Abstract
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Example3_Accessed) && Example3 == null)
             {
                 yield return ("Example3", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && Example3 != null) || (_Example3_Accessed && _Example3 != null))
                 {

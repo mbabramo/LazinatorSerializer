@@ -170,7 +170,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _ANonSkippableEarlierExample = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ANonSkippableEarlierExample_ByteIndex, _ANonSkippableEarlierExample_ByteLength, true, false, null);
                 
@@ -215,7 +216,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _Example = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Example_ByteIndex, _Example_ByteLength, true, false, null);
                 
@@ -260,7 +262,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _Example2 = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Example2_ByteIndex, _Example2_ByteLength, true, false, null);
                 
@@ -305,7 +308,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _Example3 = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Example3_ByteIndex, _Example3_ByteLength, true, false, null);
                 
@@ -412,7 +416,8 @@ namespace LazinatorTests.Examples
                 if (ANonSkippableEarlierExample == null)
                 {
                     typedClone.ANonSkippableEarlierExample = null;
-                }else
+                }
+                else
                 {
                     typedClone.ANonSkippableEarlierExample = (Example) ANonSkippableEarlierExample.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -422,7 +427,8 @@ namespace LazinatorTests.Examples
                 if (Example == null)
                 {
                     typedClone.Example = null;
-                }else
+                }
+                else
                 {
                     typedClone.Example = (Example) Example.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -432,7 +438,8 @@ namespace LazinatorTests.Examples
                 if (Example2 == null)
                 {
                     typedClone.Example2 = null;
-                }else
+                }
+                else
                 {
                     typedClone.Example2 = (Example) Example2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -442,7 +449,8 @@ namespace LazinatorTests.Examples
                 if (Example3 == null)
                 {
                     typedClone.Example3 = null;
-                }else
+                }
+                else
                 {
                     typedClone.Example3 = (Example) Example3.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -570,7 +578,8 @@ namespace LazinatorTests.Examples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ANonSkippableEarlierExample_Accessed) && ANonSkippableEarlierExample == null)
             {
                 yield return ("ANonSkippableEarlierExample", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && ANonSkippableEarlierExample != null) || (_ANonSkippableEarlierExample_Accessed && _ANonSkippableEarlierExample != null))
                 {
@@ -592,7 +601,8 @@ namespace LazinatorTests.Examples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Example_Accessed) && Example == null)
             {
                 yield return ("Example", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && Example != null) || (_Example_Accessed && _Example != null))
                 {
@@ -614,7 +624,8 @@ namespace LazinatorTests.Examples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Example2_Accessed) && Example2 == null)
             {
                 yield return ("Example2", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && Example2 != null) || (_Example2_Accessed && _Example2 != null))
                 {
@@ -636,7 +647,8 @@ namespace LazinatorTests.Examples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Example3_Accessed) && Example3 == null)
             {
                 yield return ("Example3", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && Example3 != null) || (_Example3_Accessed && _Example3 != null))
                 {

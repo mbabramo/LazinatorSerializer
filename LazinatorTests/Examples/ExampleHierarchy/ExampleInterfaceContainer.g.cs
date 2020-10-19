@@ -77,7 +77,8 @@ namespace LazinatorTests.Examples.Hierarchy
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _ExampleByInterface = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength, true, false, null);
                 
@@ -114,7 +115,8 @@ namespace LazinatorTests.Examples.Hierarchy
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _ExampleListByInterface = default(List<IExample>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleListByInterface_ByteIndex, _ExampleListByInterface_ByteLength, true, false, null);
                 _ExampleListByInterface = ConvertFromBytes_List_GIExample_g(childData);
@@ -214,7 +216,8 @@ namespace LazinatorTests.Examples.Hierarchy
                 if (ExampleByInterface == null)
                 {
                     typedClone.ExampleByInterface = null;
-                }else
+                }
+                else
                 {
                     typedClone.ExampleByInterface = (IExample) ExampleByInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -343,7 +346,8 @@ namespace LazinatorTests.Examples.Hierarchy
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ExampleByInterface_Accessed) && ExampleByInterface == null)
             {
                 yield return ("ExampleByInterface", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && ExampleByInterface != null) || (_ExampleByInterface_Accessed && _ExampleByInterface != null))
                 {
@@ -602,7 +606,8 @@ namespace LazinatorTests.Examples.Hierarchy
                 if (lengthCollectionMember == 0)
                 {
                     collection.Add(null);
-                }else
+                }
+                else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = DeserializationFactory.Instance.CreateBasedOnType<IExample>(childData);
@@ -659,7 +664,8 @@ namespace LazinatorTests.Examples.Hierarchy
                 if (itemToClone[itemIndex] == null)
                 {
                     collection.Add(null);
-                }else
+                }
+                else
                 {
                     var itemCopied = (IExample) (cloneOrChangeFunc(itemToClone[itemIndex]));
                     collection.Add(itemCopied);

@@ -67,7 +67,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyQueueSerialized = default(Queue<ExampleChild>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyQueueSerialized_ByteIndex, _MyQueueSerialized_ByteLength, true, false, null);
                 _MyQueueSerialized = ConvertFromBytes_Queue_GExampleChild_g(childData);
@@ -479,7 +480,8 @@ namespace LazinatorTests.Examples.Collections
                 if (lengthCollectionMember == 0)
                 {
                     collection.Enqueue(null);
-                }else
+                }
+                else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = DeserializationFactory.Instance.CreateBasedOnType<ExampleChild>(childData);
@@ -530,7 +532,8 @@ namespace LazinatorTests.Examples.Collections
                 if (q[itemIndex] == null)
                 {
                     collection.Enqueue(null);
-                }else
+                }
+                else
                 {
                     var itemCopied = (ExampleChild) (cloneOrChangeFunc(q[itemIndex]));
                     collection.Enqueue(itemCopied);

@@ -76,7 +76,8 @@ namespace LazinatorTests.Examples.Hierarchy
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _RecursiveClass = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _RecursiveClass_ByteIndex, _RecursiveClass_ByteLength, true, false, null);
                 
@@ -121,7 +122,8 @@ namespace LazinatorTests.Examples.Hierarchy
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _RecursiveInterface = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _RecursiveInterface_ByteIndex, _RecursiveInterface_ByteLength, true, false, null);
                 
@@ -222,7 +224,8 @@ namespace LazinatorTests.Examples.Hierarchy
                 if (RecursiveClass == null)
                 {
                     typedClone.RecursiveClass = null;
-                }else
+                }
+                else
                 {
                     typedClone.RecursiveClass = (RecursiveExample) RecursiveClass.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -232,7 +235,8 @@ namespace LazinatorTests.Examples.Hierarchy
                 if (RecursiveInterface == null)
                 {
                     typedClone.RecursiveInterface = null;
-                }else
+                }
+                else
                 {
                     typedClone.RecursiveInterface = (IRecursiveExample) RecursiveInterface.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -360,7 +364,8 @@ namespace LazinatorTests.Examples.Hierarchy
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _RecursiveClass_Accessed) && RecursiveClass == null)
             {
                 yield return ("RecursiveClass", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && RecursiveClass != null) || (_RecursiveClass_Accessed && _RecursiveClass != null))
                 {
@@ -382,7 +387,8 @@ namespace LazinatorTests.Examples.Hierarchy
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _RecursiveInterface_Accessed) && RecursiveInterface == null)
             {
                 yield return ("RecursiveInterface", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && RecursiveInterface != null) || (_RecursiveInterface_Accessed && _RecursiveInterface != null))
                 {

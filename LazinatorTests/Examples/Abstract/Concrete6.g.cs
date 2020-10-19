@@ -64,7 +64,8 @@ namespace LazinatorTests.Examples.Abstract
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _IntList6 = default(List<Int32>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList6_ByteIndex, _IntList6_ByteLength, true, false, null);
                 _IntList6 = ConvertFromBytes_List_Gint_g(childData);

@@ -94,7 +94,8 @@ namespace LazinatorTests.Examples.Abstract
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _IntList4 = default(List<Int32>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList4_ByteIndex, _IntList4_ByteLength, true, false, null);
                 _IntList4 = ConvertFromBytes_List_Gint_g(childData);
@@ -130,7 +131,8 @@ namespace LazinatorTests.Examples.Abstract
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _IntList5 = default(List<Int32>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList5_ByteIndex, _IntList5_ByteLength, true, false, null);
                 _IntList5 = ConvertFromBytes_List_Gint_g(childData);

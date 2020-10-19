@@ -101,7 +101,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyChild1 = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild1_ByteIndex, _MyChild1_ByteLength, true, false, null);
                 
@@ -137,7 +138,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyChild2 = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild2_ByteIndex, _MyChild2_ByteLength, true, false, null);
                 
@@ -175,7 +177,8 @@ namespace LazinatorTests.Examples
             {
                 _MyLazinatorList = default(List<Example>);
                 _MyLazinatorList_Dirty = true; 
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyLazinatorList_ByteIndex, _MyLazinatorList_ByteLength, true, false, null);
                 _MyLazinatorList = ConvertFromBytes_List_GExample_g(childData);
@@ -229,7 +232,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyListValues = default(List<Int32>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListValues_ByteIndex, _MyListValues_ByteLength, true, false, null);
                 _MyListValues = ConvertFromBytes_List_Gint_g(childData);
@@ -265,7 +269,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyTuple = default((NonLazinatorClass myitem1, Int32? myitem2));
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyTuple_ByteIndex, _MyTuple_ByteLength, true, false, null);
                 _MyTuple = ConvertFromBytes__PNonLazinatorClass_C32myitem1_c_C32int_n_C32myitem2_p(childData);
@@ -371,7 +376,8 @@ namespace LazinatorTests.Examples
                 if (MyChild1 == null)
                 {
                     typedClone.MyChild1 = null;
-                }else
+                }
+                else
                 {
                     typedClone.MyChild1 = (ExampleChild) MyChild1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -381,7 +387,8 @@ namespace LazinatorTests.Examples
                 if (MyChild2 == null)
                 {
                     typedClone.MyChild2 = null;
-                }else
+                }
+                else
                 {
                     typedClone.MyChild2 = (ExampleChild) MyChild2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -513,7 +520,8 @@ namespace LazinatorTests.Examples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyChild1_Accessed) && MyChild1 == null)
             {
                 yield return ("MyChild1", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && MyChild1 != null) || (_MyChild1_Accessed && _MyChild1 != null))
                 {
@@ -535,7 +543,8 @@ namespace LazinatorTests.Examples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyChild2_Accessed) && MyChild2 == null)
             {
                 yield return ("MyChild2", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && MyChild2 != null) || (_MyChild2_Accessed && _MyChild2 != null))
                 {
@@ -923,7 +932,8 @@ namespace LazinatorTests.Examples
                 if (lengthCollectionMember == 0)
                 {
                     collection.Add(null);
-                }else
+                }
+                else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = DeserializationFactory.Instance.CreateBasedOnType<Example>(childData);
@@ -980,7 +990,8 @@ namespace LazinatorTests.Examples
                 if (itemToClone[itemIndex] == null)
                 {
                     collection.Add(null);
-                }else
+                }
+                else
                 {
                     var itemCopied = (Example) (cloneOrChangeFunc(itemToClone[itemIndex]));
                     collection.Add(itemCopied);

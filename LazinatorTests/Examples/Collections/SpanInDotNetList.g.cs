@@ -81,7 +81,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _SpanList = default(List<SpanAndMemory>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _SpanList_ByteIndex, _SpanList_ByteLength, true, false, null);
                 _SpanList = ConvertFromBytes_List_GSpanAndMemory_g(childData);
@@ -501,7 +502,8 @@ namespace LazinatorTests.Examples.Collections
                 if (lengthCollectionMember == 0)
                 {
                     collection.Add(null);
-                }else
+                }
+                else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = DeserializationFactory.Instance.CreateBasedOnType<SpanAndMemory>(childData);
@@ -558,7 +560,8 @@ namespace LazinatorTests.Examples.Collections
                 if (itemToClone[itemIndex] == null)
                 {
                     collection.Add(null);
-                }else
+                }
+                else
                 {
                     var itemCopied = (SpanAndMemory) (cloneOrChangeFunc(itemToClone[itemIndex]));
                     collection.Add(itemCopied);

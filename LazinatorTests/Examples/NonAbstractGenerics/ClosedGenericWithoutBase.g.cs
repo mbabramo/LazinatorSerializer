@@ -89,7 +89,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _ItemU = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ItemU_ByteIndex, _ItemU_ByteLength, true, false, null);
                 
@@ -191,7 +192,8 @@ namespace LazinatorTests.Examples
                 if (ItemU == null)
                 {
                     typedClone.ItemU = null;
-                }else
+                }
+                else
                 {
                     typedClone.ItemU = (ExampleChild) ItemU.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -319,7 +321,8 @@ namespace LazinatorTests.Examples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _ItemU_Accessed) && ItemU == null)
             {
                 yield return ("ItemU", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && ItemU != null) || (_ItemU_Accessed && _ItemU != null))
                 {

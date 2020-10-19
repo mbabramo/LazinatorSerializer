@@ -78,7 +78,8 @@ namespace LazinatorCollections.Tree
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _Locations = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Locations_ByteIndex, _Locations_ByteLength, true, false, null);
                 
@@ -123,7 +124,8 @@ namespace LazinatorCollections.Tree
                 if (Locations == null)
                 {
                     typedClone.Locations = null;
-                }else
+                }
+                else
                 {
                     typedClone.Locations = (LazinatorDictionary<T, LazinatorList<WInt32>>) Locations.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -143,7 +145,8 @@ namespace LazinatorCollections.Tree
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _Locations_Accessed) && Locations == null)
             {
                 yield return ("Locations", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && Locations != null) || (_Locations_Accessed && _Locations != null))
                 {

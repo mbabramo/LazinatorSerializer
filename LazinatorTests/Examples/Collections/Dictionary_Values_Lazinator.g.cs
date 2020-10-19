@@ -74,7 +74,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyDictionary = default(Dictionary<Int32, ExampleChild>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionary_ByteIndex, _MyDictionary_ByteLength, true, false, null);
                 _MyDictionary = ConvertFromBytes_Dictionary_Gint_c_C32ExampleChild_g(childData);
@@ -110,7 +111,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyDictionaryStructs = default(Dictionary<WInt32, WInt32>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionaryStructs_ByteIndex, _MyDictionaryStructs_ByteLength, true, false, null);
                 _MyDictionaryStructs = ConvertFromBytes_Dictionary_GWInt32_c_C32WInt32_g(childData);
@@ -146,7 +148,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MySortedDictionary = default(SortedDictionary<Int32, ExampleChild>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MySortedDictionary_ByteIndex, _MySortedDictionary_ByteLength, true, false, null);
                 _MySortedDictionary = ConvertFromBytes_SortedDictionary_Gint_c_C32ExampleChild_g(childData);
@@ -182,7 +185,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MySortedList = default(SortedList<Int32, ExampleChild>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MySortedList_ByteIndex, _MySortedList_ByteLength, true, false, null);
                 _MySortedList = ConvertFromBytes_SortedList_Gint_c_C32ExampleChild_g(childData);

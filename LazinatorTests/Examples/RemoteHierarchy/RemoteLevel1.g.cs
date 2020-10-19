@@ -91,7 +91,8 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _RemoteLevel2Item = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _RemoteLevel2Item_ByteIndex, _RemoteLevel2Item_ByteLength, true, false, null);
                 
@@ -193,7 +194,8 @@ namespace LazinatorTests.Examples.RemoteHierarchy
                 if (RemoteLevel2Item == null)
                 {
                     typedClone.RemoteLevel2Item = null;
-                }else
+                }
+                else
                 {
                     typedClone.RemoteLevel2Item = (Remote<WGuid, RemoteLevel2>) RemoteLevel2Item.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -321,7 +323,8 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _RemoteLevel2Item_Accessed) && RemoteLevel2Item == null)
             {
                 yield return ("RemoteLevel2Item", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && RemoteLevel2Item != null) || (_RemoteLevel2Item_Accessed && _RemoteLevel2Item != null))
                 {

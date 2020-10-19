@@ -70,7 +70,8 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyListNonLazinatorType = default(List<NonLazinatorClass>);
                 _MyListNonLazinatorType_Dirty = true; 
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType_ByteIndex, _MyListNonLazinatorType_ByteLength, true, false, null);
                 _MyListNonLazinatorType = ConvertFromBytes_List_GNonLazinatorClass_g(childData);
@@ -124,7 +125,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyListNonLazinatorType2 = default(List<NonLazinatorClass>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType2_ByteIndex, _MyListNonLazinatorType2_ByteLength, true, false, null);
                 _MyListNonLazinatorType2 = ConvertFromBytes_List_GNonLazinatorClass_g(childData);
@@ -572,7 +574,8 @@ namespace LazinatorTests.Examples.Collections
                 if (lengthCollectionMember == 0)
                 {
                     collection.Add(default(NonLazinatorClass));
-                }else
+                }
+                else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData);
@@ -621,7 +624,8 @@ namespace LazinatorTests.Examples.Collections
                 if (itemToClone[itemIndex] == null)
                 {
                     collection.Add(default(NonLazinatorClass));
-                }else
+                }
+                else
                 {
                     var itemCopied = (NonLazinatorClass) itemToClone[itemIndex];
                     collection.Add(itemCopied);

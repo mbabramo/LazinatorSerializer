@@ -85,7 +85,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyMemoryByte = default(Memory<Byte>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyMemoryByte_ByteIndex, _MyMemoryByte_ByteLength, true, false, null);
                 _MyMemoryByte = ConvertFromBytes_Memory_Gbyte_g(childData);
@@ -120,7 +121,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyMemoryInt = default(Memory<Int32>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyMemoryInt_ByteIndex, _MyMemoryInt_ByteLength, true, false, null);
                 _MyMemoryInt = ConvertFromBytes_Memory_Gint_g(childData);
@@ -156,7 +158,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNullableMemoryByte = default(Memory<Byte>?);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNullableMemoryByte_ByteIndex, _MyNullableMemoryByte_ByteLength, true, false, null);
                 _MyNullableMemoryByte = ConvertFromBytes_Memory_Gbyte_g_n(childData);
@@ -192,7 +195,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNullableMemoryInt = default(Memory<Int32>?);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNullableMemoryInt_ByteIndex, _MyNullableMemoryInt_ByteLength, true, false, null);
                 _MyNullableMemoryInt = ConvertFromBytes_Memory_Gint_g_n(childData);
@@ -228,7 +232,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNullableReadOnlyMemoryInt = default(ReadOnlyMemory<Int32>?);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNullableReadOnlyMemoryInt_ByteIndex, _MyNullableReadOnlyMemoryInt_ByteLength, true, false, null);
                 _MyNullableReadOnlyMemoryInt = ConvertFromBytes_ReadOnlyMemory_Gint_g_n(childData);
@@ -263,7 +268,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyReadOnlyMemoryByte = default(ReadOnlyMemory<Byte>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlyMemoryByte_ByteIndex, _MyReadOnlyMemoryByte_ByteLength, true, false, null);
                 _MyReadOnlyMemoryByte = ConvertFromBytes_ReadOnlyMemory_Gbyte_g(childData);
@@ -298,7 +304,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyReadOnlyMemoryChar = default(ReadOnlyMemory<Char>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlyMemoryChar_ByteIndex, _MyReadOnlyMemoryChar_ByteLength, true, false, null);
                 _MyReadOnlyMemoryChar = ConvertFromBytes_ReadOnlyMemory_Gchar_g(childData);
@@ -333,7 +340,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyReadOnlyMemoryInt = default(ReadOnlyMemory<Int32>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlyMemoryInt_ByteIndex, _MyReadOnlyMemoryInt_ByteLength, true, false, null);
                 _MyReadOnlyMemoryInt = ConvertFromBytes_ReadOnlyMemory_Gint_g(childData);

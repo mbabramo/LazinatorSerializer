@@ -81,7 +81,8 @@ namespace LazinatorTests.Examples.Subclasses
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyEnumList = default(List<EnumWithinClass>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyEnumList_ByteIndex, _MyEnumList_ByteLength, true, false, null);
                 _MyEnumList = ConvertFromBytes_List_GEnumWithinClass_g(childData);

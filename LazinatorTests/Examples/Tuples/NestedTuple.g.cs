@@ -67,7 +67,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNestedTuple = default(Tuple<UInt32?, (ExampleChild, (UInt32, (Int32 a, String b)?, Tuple<Int16, Int64>)), NonLazinatorClass>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNestedTuple_ByteIndex, _MyNestedTuple_ByteLength, true, false, null);
                 _MyNestedTuple = ConvertFromBytes_Tuple_Guint_n_c_C32_PExampleChild_c_C32_Puint_c_C32_Pint_C32a_c_C32string_C32b_p_n_c_C32Tuple_Gshort_c_C32long_g_p_p_c_C32NonLazinatorClass_g(childData);

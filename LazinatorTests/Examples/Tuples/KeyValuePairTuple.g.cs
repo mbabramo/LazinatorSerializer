@@ -67,7 +67,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyKeyValuePairSerialized = default(KeyValuePair<UInt32, ExampleChild>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyKeyValuePairSerialized_ByteIndex, _MyKeyValuePairSerialized_ByteLength, true, false, null);
                 _MyKeyValuePairSerialized = ConvertFromBytes_KeyValuePair_Guint_c_C32ExampleChild_g(childData);

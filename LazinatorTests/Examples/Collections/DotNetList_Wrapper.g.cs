@@ -72,7 +72,8 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyListInt = default(List<WInt32>);
                 _MyListInt_Dirty = true; 
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListInt_ByteIndex, _MyListInt_ByteLength, true, false, null);
                 _MyListInt = ConvertFromBytes_List_GWInt32_g(childData);
@@ -126,7 +127,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyListNullableByte = default(List<WNullableByte>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableByte_ByteIndex, _MyListNullableByte_ByteLength, true, false, null);
                 _MyListNullableByte = ConvertFromBytes_List_GWNullableByte_g(childData);
@@ -162,7 +164,8 @@ namespace LazinatorTests.Examples.Collections
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyListNullableInt = default(List<WNullableInt32>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableInt_ByteIndex, _MyListNullableInt_ByteLength, true, false, null);
                 _MyListNullableInt = ConvertFromBytes_List_GWNullableInt32_g(childData);

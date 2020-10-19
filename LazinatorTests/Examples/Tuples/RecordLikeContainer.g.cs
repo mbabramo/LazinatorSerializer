@@ -100,7 +100,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _ExternalRecordLikeStruct = default(Point);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExternalRecordLikeStruct_ByteIndex, _ExternalRecordLikeStruct_ByteLength, true, false, null);
                 _ExternalRecordLikeStruct = ConvertFromBytes_Point(childData);
@@ -135,7 +136,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyMismatchedRecordLikeType = default(MismatchedRecordLikeType);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyMismatchedRecordLikeType_ByteIndex, _MyMismatchedRecordLikeType_ByteLength, true, false, null);
                 _MyMismatchedRecordLikeType = ConvertFromBytes_MismatchedRecordLikeType(childData);
@@ -171,7 +173,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNonLazinatorRecordWithConstructor = default(NonLazinatorRecordWithConstructor);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorRecordWithConstructor_ByteIndex, _MyNonLazinatorRecordWithConstructor_ByteLength, true, false, null);
                 _MyNonLazinatorRecordWithConstructor = ConvertFromBytes_NonLazinatorRecordWithConstructor(childData);
@@ -207,7 +210,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNonLazinatorRecordWithoutConstructor = default(NonLazinatorRecordWithoutConstructor);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorRecordWithoutConstructor_ByteIndex, _MyNonLazinatorRecordWithoutConstructor_ByteLength, true, false, null);
                 _MyNonLazinatorRecordWithoutConstructor = ConvertFromBytes_NonLazinatorRecordWithoutConstructor(childData);
@@ -243,7 +247,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNonLazinatorSubrecordWithConstructor = default(NonLazinatorSubrecordWithConstructor);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorSubrecordWithConstructor_ByteIndex, _MyNonLazinatorSubrecordWithConstructor_ByteLength, true, false, null);
                 _MyNonLazinatorSubrecordWithConstructor = ConvertFromBytes_NonLazinatorSubrecordWithConstructor(childData);
@@ -279,7 +284,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNonLazinatorSubrecordWithoutConstructor = default(NonLazinatorSubrecordWithoutConstructor);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorSubrecordWithoutConstructor_ByteIndex, _MyNonLazinatorSubrecordWithoutConstructor_ByteLength, true, false, null);
                 _MyNonLazinatorSubrecordWithoutConstructor = ConvertFromBytes_NonLazinatorSubrecordWithoutConstructor(childData);
@@ -315,7 +321,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyRecordLikeClass = default(RecordLikeClass);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeClass_ByteIndex, _MyRecordLikeClass_ByteLength, true, false, null);
                 _MyRecordLikeClass = ConvertFromBytes_RecordLikeClass(childData);
@@ -350,7 +357,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyRecordLikeStruct = default(RecordLikeStruct);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeStruct_ByteIndex, _MyRecordLikeStruct_ByteLength, true, false, null);
                 _MyRecordLikeStruct = ConvertFromBytes_RecordLikeStruct(childData);
@@ -386,7 +394,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyRecordLikeTypeWithLazinator = default(RecordLikeTypeWithLazinator);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeTypeWithLazinator_ByteIndex, _MyRecordLikeTypeWithLazinator_ByteLength, true, false, null);
                 _MyRecordLikeTypeWithLazinator = ConvertFromBytes_RecordLikeTypeWithLazinator(childData);

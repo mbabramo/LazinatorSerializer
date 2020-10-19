@@ -74,7 +74,8 @@ namespace LazinatorTests.Examples.Abstract
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _AbstractProperty = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _AbstractProperty_ByteIndex, _AbstractProperty_ByteLength, true, false, null);
                 
@@ -175,7 +176,8 @@ namespace LazinatorTests.Examples.Abstract
                 if (AbstractProperty == null)
                 {
                     typedClone.AbstractProperty = null;
-                }else
+                }
+                else
                 {
                     typedClone.AbstractProperty = (Abstract1) AbstractProperty.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -303,7 +305,8 @@ namespace LazinatorTests.Examples.Abstract
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _AbstractProperty_Accessed) && AbstractProperty == null)
             {
                 yield return ("AbstractProperty", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && AbstractProperty != null) || (_AbstractProperty_Accessed && _AbstractProperty != null))
                 {

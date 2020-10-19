@@ -78,7 +78,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _EnumTuple = default((TestEnum firstEnum, TestEnum anotherEnum));
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _EnumTuple_ByteIndex, _EnumTuple_ByteLength, true, false, null);
                 _EnumTuple = ConvertFromBytes__PTestEnum_C32firstEnum_c_C32TestEnum_C32anotherEnum_p(childData);
@@ -114,7 +115,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNamedTuple = default((Int32 MyFirstItem, Double MySecondItem));
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNamedTuple_ByteIndex, _MyNamedTuple_ByteLength, true, false, null);
                 _MyNamedTuple = ConvertFromBytes__Pint_C32MyFirstItem_c_C32double_C32MySecondItem_p(childData);
@@ -150,7 +152,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyNullableTuple = default((Int32, Double)?);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNullableTuple_ByteIndex, _MyNullableTuple_ByteLength, true, false, null);
                 _MyNullableTuple = ConvertFromBytes__Pint_c_C32double_p_n(childData);
@@ -186,7 +189,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyValueTupleNullableStructs = default((ExampleStructContainingClasses?, ExampleStructContainingClasses?, ExampleStructContainingClasses?));
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyValueTupleNullableStructs_ByteIndex, _MyValueTupleNullableStructs_ByteLength, true, false, null);
                 _MyValueTupleNullableStructs = ConvertFromBytes__PExampleStructContainingClasses_n_c_C32ExampleStructContainingClasses_n_c_C32ExampleStructContainingClasses_n_p(childData);
@@ -222,7 +226,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyValueTupleSerialized = default((UInt32, ExampleChild, NonLazinatorClass));
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyValueTupleSerialized_ByteIndex, _MyValueTupleSerialized_ByteLength, true, false, null);
                 _MyValueTupleSerialized = ConvertFromBytes__Puint_c_C32ExampleChild_c_C32NonLazinatorClass_p(childData);
@@ -258,7 +263,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyValueTupleStructs = default((WInt32, WInt32));
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyValueTupleStructs_ByteIndex, _MyValueTupleStructs_ByteLength, true, false, null);
                 _MyValueTupleStructs = ConvertFromBytes__PWInt32_c_C32WInt32_p(childData);

@@ -68,7 +68,8 @@ namespace LazinatorTests.Examples.Collections
             {
                 _MyListSerialized = default(List<ExampleChild>);
                 _MyListSerialized_Dirty = true; 
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListSerialized_ByteIndex, _MyListSerialized_ByteLength, true, false, null);
                 _MyListSerialized = ConvertFromBytes_List_GExampleChild_g(childData);
@@ -498,7 +499,8 @@ namespace LazinatorTests.Examples.Collections
                 if (lengthCollectionMember == 0)
                 {
                     collection.Add(null);
-                }else
+                }
+                else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = DeserializationFactory.Instance.CreateBasedOnType<ExampleChild>(childData);
@@ -555,7 +557,8 @@ namespace LazinatorTests.Examples.Collections
                 if (itemToClone[itemIndex] == null)
                 {
                     collection.Add(null);
-                }else
+                }
+                else
                 {
                     var itemCopied = (ExampleChild) (cloneOrChangeFunc(itemToClone[itemIndex]));
                     collection.Add(itemCopied);

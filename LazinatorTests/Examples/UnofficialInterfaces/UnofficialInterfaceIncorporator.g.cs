@@ -107,7 +107,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyOfficialObject = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyOfficialObject_ByteIndex, _MyOfficialObject_ByteLength, true, false, null);
                 
@@ -152,7 +153,8 @@ namespace LazinatorTests.Examples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyUnofficialObject = null;
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyUnofficialObject_ByteIndex, _MyUnofficialObject_ByteLength, true, false, null);
                 
@@ -255,7 +257,8 @@ namespace LazinatorTests.Examples
                 if (MyOfficialObject == null)
                 {
                     typedClone.MyOfficialObject = null;
-                }else
+                }
+                else
                 {
                     typedClone.MyOfficialObject = (Concrete5) MyOfficialObject.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -265,7 +268,8 @@ namespace LazinatorTests.Examples
                 if (MyUnofficialObject == null)
                 {
                     typedClone.MyUnofficialObject = null;
-                }else
+                }
+                else
                 {
                     typedClone.MyUnofficialObject = (Concrete3) MyUnofficialObject.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -393,7 +397,8 @@ namespace LazinatorTests.Examples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyOfficialObject_Accessed) && MyOfficialObject == null)
             {
                 yield return ("MyOfficialObject", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && MyOfficialObject != null) || (_MyOfficialObject_Accessed && _MyOfficialObject != null))
                 {
@@ -415,7 +420,8 @@ namespace LazinatorTests.Examples
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyUnofficialObject_Accessed) && MyUnofficialObject == null)
             {
                 yield return ("MyUnofficialObject", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && MyUnofficialObject != null) || (_MyUnofficialObject_Accessed && _MyUnofficialObject != null))
                 {

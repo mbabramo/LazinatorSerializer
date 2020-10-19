@@ -101,7 +101,8 @@ namespace LazinatorCollections.BitArray
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _IntStorage = default(Memory<Int32>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntStorage_ByteIndex, _IntStorage_ByteLength, true, false, null);
                 _IntStorage = ConvertFromBytes_Memory_Gint_g(childData);

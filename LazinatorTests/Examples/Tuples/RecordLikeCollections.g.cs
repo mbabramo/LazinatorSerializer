@@ -85,7 +85,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyDictionaryWithRecordLikeContainers = default(Dictionary<Int32, RecordLikeContainer>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionaryWithRecordLikeContainers_ByteIndex, _MyDictionaryWithRecordLikeContainers_ByteLength, true, false, null);
                 _MyDictionaryWithRecordLikeContainers = ConvertFromBytes_Dictionary_Gint_c_C32RecordLikeContainer_g(childData);
@@ -121,7 +122,8 @@ namespace LazinatorTests.Examples.Tuples
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyDictionaryWithRecordLikeTypeValues = default(Dictionary<Int32, RecordLikeTypeWithLazinator>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionaryWithRecordLikeTypeValues_ByteIndex, _MyDictionaryWithRecordLikeTypeValues_ByteLength, true, false, null);
                 _MyDictionaryWithRecordLikeTypeValues = ConvertFromBytes_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(childData);

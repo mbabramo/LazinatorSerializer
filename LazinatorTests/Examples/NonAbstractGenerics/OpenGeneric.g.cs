@@ -68,7 +68,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             if (LazinatorMemoryStorage.Length == 0)
             {
                 _MyListT = default(List<T>);
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListT_ByteIndex, _MyListT_ByteLength, true, false, null);
                 _MyListT = ConvertFromBytes_List_GT_g(childData);
@@ -123,7 +124,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 { // MyT is a struct
                     _MyT.LazinatorParents = new LazinatorParentsCollection(this);
                 }
-            }else
+            }
+            else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, true, false, null);
                 
@@ -225,7 +227,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 if (MyT == null)
                 {
                     typedClone.MyT = default(T);
-                }else
+                }
+                else
                 {
                     typedClone.MyT = (T) MyT.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
@@ -353,7 +356,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             if (enumerateNulls && (!exploreOnlyDeserializedChildren || _MyT_Accessed) && MyT == null)
             {
                 yield return ("MyT", default);
-            }else
+            }
+            else
             {
                 if ((!exploreOnlyDeserializedChildren && MyT != null) || (_MyT_Accessed && _MyT != null))
                 {
@@ -616,7 +620,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 if (lengthCollectionMember == 0)
                 {
                     collection.Add(default(T));
-                }else
+                }
+                else
                 {
                     LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                     var item = DeserializationFactory.Instance.CreateBasedOnType<T>(childData);
@@ -678,7 +683,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 if (itemToClone[itemIndex] == null)
                 {
                     collection.Add(default(T));
-                }else
+                }
+                else
                 {
                     var itemCopied = (T) (cloneOrChangeFunc(itemToClone[itemIndex]));
                     collection.Add(itemCopied);
