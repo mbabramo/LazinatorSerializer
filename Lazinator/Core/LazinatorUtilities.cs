@@ -218,6 +218,25 @@ namespace Lazinator.Core
             }
         }
 
+        public static void WriteNullChild(ref BinaryBufferWriter writer, bool restrictLengthTo255Bytes, bool skipLength, ref Span<byte> lengthsSpan)
+        {
+            if (!skipLength)
+            {
+                if (restrictLengthTo255Bytes)
+                {
+                    writer.Write((byte)0);
+                    lengthsSpan[0] = (byte)0;
+                    lengthsSpan = lengthsSpan.Slice(1);
+                }
+                else
+                {
+                    writer.Write((int)0);
+                    WriteUncompressedPrimitives.WriteInt(lengthsSpan, 0);
+                    lengthsSpan = lengthsSpan.Slice(sizeof(int));
+                }
+            }
+        }
+
         /// <summary>
         /// Writes a child to a binary buffer, where that child has not been previously accessed. This thus obtains the last version from storage (or stores a zer length if this
         /// is the first time saving the child and it really is empty).

@@ -36,7 +36,8 @@ namespace LazinatorAnalyzer.Support
                         {Consequent}
                     }}";
             if (ElseConsequent != null && ElseConsequent != "")
-                mainString += $@"else
+                mainString += $@"
+                    else
                     {{
                         {ElseConsequent}
                     }}";

@@ -1646,7 +1646,7 @@ namespace Lazinator.CodeDescription
             string withInclusionConditional = null;
             bool nullableStruct = PropertyType == LazinatorPropertyType.LazinatorStructNullable || (IsDefinitelyStruct && Nullable);
             string propertyNameOrCopy = nullableStruct ? "copy" : $"{BackingFieldString}";
-            Func<string, string> lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen($"{BackingFieldString}", $"WriteNullChild(ref writer, {(SingleByteLength ? "true" : "false")}, {(AllLengthsPrecedeChildren || SkipLengthForThisProperty ? "true" : "false")});", originalString) : originalString;
+            Func<string, string> lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen($"{BackingFieldString}", $@"WriteNullChild(ref writer, {(SingleByteLength ? "true" : "false")}, {(AllLengthsPrecedeChildren || SkipLengthForThisProperty ? "true" : "false")}, ref lengthsSpan);", originalString) : originalString;
             string lengthString = "";
             if (AllLengthsPrecedeChildren && !SkipLengthForThisProperty)
             {
