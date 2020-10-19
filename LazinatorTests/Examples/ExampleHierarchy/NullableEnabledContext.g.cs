@@ -3007,7 +3007,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition, ref Span<byte> lengthsSpan)
         {
-            var DEBUG = lengthsSpan;
+            TabbedText.WriteBytesVertically(writer.ActiveMemory.Memory.ToArray(), true);
             int startOfChildPosition = 0;
             int lengthValue = 0;
             TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, ByteReadOnlySpan (accessed? {_ByteReadOnlySpan_Accessed})");
@@ -3187,8 +3187,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             if (updateStoredBuffer)
             {
                 _NonNullableLazinatorListNonNullable_ByteIndex = startOfChildPosition - startOfObjectPosition;
-                
+
             }
+            byte[] bytes = writer.ActiveMemory.Memory.ToArray();
+            TabbedText.WriteBytesVertically(bytes, true);
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, NonNullableLazinatorListNullable (accessed? ) (backing var null? {_NonNullableLazinatorListNullable == null}) ");
             TabbedText.Tabs++;
@@ -3197,18 +3199,22 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             WriteChild(ref writer, ref _NonNullableLazinatorListNullable!, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableLazinatorListNullable_ByteIndex, _NonNullableLazinatorListNullable_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
             lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
 
+            byte[] bytes2a = writer.ActiveMemoryWrittenSpan.ToArray();
+            TabbedText.WriteBytesVertically(bytes2a, true, bytes);
             WriteInt(lengthsSpan, lengthValue);
             lengthsSpan = lengthsSpan.Slice(sizeof(int));
             if (updateStoredBuffer)
             {
                 _NonNullableLazinatorListNullable_ByteIndex = startOfChildPosition - startOfObjectPosition;
-                
+
             }
+            byte[] bytes2b = writer.ActiveMemoryWrittenSpan.ToArray();
+            TabbedText.WriteBytesVertically(bytes2b, true, bytes2a);
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, NonNullableListOfNonNullables (accessed? )");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
-            
+
             WriteNonLazinatorObject(
             nonLazinatorObject: _NonNullableListOfNonNullables, isBelievedDirty: true,
             isAccessed: true, writer: ref writer,
@@ -3221,13 +3227,15 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             if (updateStoredBuffer)
             {
                 _NonNullableListOfNonNullables_ByteIndex = startOfChildPosition - startOfObjectPosition;
-                
+
             }
+            byte[] bytes3 = writer.ActiveMemoryWrittenSpan.ToArray();
+            TabbedText.WriteBytesVertically(bytes3, true, bytes2b);
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, NonNullableListOfNullables (accessed? )");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
-            
+
             WriteNonLazinatorObject(
             nonLazinatorObject: _NonNullableListOfNullables, isBelievedDirty: true,
             isAccessed: true, writer: ref writer,
@@ -3240,8 +3248,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             if (updateStoredBuffer)
             {
                 _NonNullableListOfNullables_ByteIndex = startOfChildPosition - startOfObjectPosition;
-                
+
             }
+            byte[] bytes4 = writer.ActiveMemoryWrittenSpan.ToArray();
+            TabbedText.WriteBytesVertically(bytes4, true, bytes3);
             TabbedText.Tabs--;
             TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, NonNullableMemoryOfBytes (accessed? {_NonNullableMemoryOfBytes_Accessed})");
             TabbedText.Tabs++;

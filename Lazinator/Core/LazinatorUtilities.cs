@@ -425,6 +425,11 @@ namespace Lazinator.Core
             int startPosition = writer.ActiveMemoryPosition; 
             WriteNonLazinatorObject_WithoutLengthPrefix(nonLazinatorObject, isBelievedDirty, isAccessed, ref writer, getChildSliceForFieldFn, verifyCleanness, binaryWriterAction);
             WriteUncompressedPrimitives.WriteInt(lengthsSpan, writer.ActiveMemoryPosition - startPosition);
+            bool DEBUG = false;
+            if (DEBUG)
+            {
+                lengthsSpan[0] = 58;
+            }
             lengthsSpan = lengthsSpan.Slice(sizeof(int));
         }
 

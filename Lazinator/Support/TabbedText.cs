@@ -68,13 +68,19 @@ namespace Lazinator.Support
             AccumulatedText = new StringBuilder();
         }
 
-        public static void WriteBytesVertically(IEnumerable<byte> bytes, bool includeIndices, int startingIndex = 0)
+        public static void WriteBytesVertically(IEnumerable<byte> bytes, bool includeIndices, IEnumerable<byte> previousForComparison = null, int startingIndex = 0)
         {
             var bytesList = bytes.ToList();
             if (includeIndices)
             {
                 WriteVerticalStrings(Enumerable.Range(startingIndex, bytesList.Count).Select(x => (ulong)x));
-                WriteLine("");
+                if (previousForComparison == null)
+                    WriteLine("");
+                else
+                {
+                    char[] differencesAsterisked = bytes.Zip(previousForComparison).Select(x => x.First == x.Second ? ' ' : '*').ToArray();
+                    WriteLine(new string(differencesAsterisked));
+                }
             }
             WriteVerticalStrings(bytes.Select(x => (ulong)x));
         }
