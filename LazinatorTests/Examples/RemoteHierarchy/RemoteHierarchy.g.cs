@@ -423,11 +423,11 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             {
                 updateStoredBuffer = false;
             }
-            int startPosition = writer.Position;
+            int startPosition = writer.ActiveMemoryPosition;
             WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
             if (updateStoredBuffer)
             {
-                UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
+                UpdateStoredBuffer(ref writer, startPosition, writer.ActiveMemoryPosition - startPosition, includeChildrenMode, false);
             }
         }
         
@@ -463,8 +463,8 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
-            int startPosition = writer.Position;
-            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.RemoteHierarchy.RemoteHierarchy starting at {writer.Position}.");
+            int startPosition = writer.ActiveMemoryPosition;
+            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.RemoteHierarchy.RemoteHierarchy starting at {writer.ActiveMemoryPosition}.");
             TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
             TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
@@ -490,14 +490,14 @@ namespace LazinatorTests.Examples.RemoteHierarchy
                 lengthForLengths += 4;
             }
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
-            writer.Skip(lengthForLengths);TabbedText.WriteLine($"Byte {writer.Position}, Leaving {lengthForLengths} bytes to store lengths of child objects");
+            writer.Skip(lengthForLengths);TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Leaving {lengthForLengths} bytes to store lengths of child objects");
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, ref lengthsSpan);
-            TabbedText.WriteLine($"Byte {writer.Position} (end of RemoteHierarchy) ");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of RemoteHierarchy) ");
         }
         
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.Position}, TopOfHierarchyInt value {_TopOfHierarchyInt}");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, TopOfHierarchyInt value {_TopOfHierarchyInt}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _TopOfHierarchyInt);
             TabbedText.Tabs--;
@@ -507,9 +507,9 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         {
             int startOfChildPosition = 0;
             int lengthValue = 0;
-            TabbedText.WriteLine($"Byte {writer.Position}, RemoteLevel1Item (accessed? {_RemoteLevel1Item_Accessed}) (backing var null? {_RemoteLevel1Item == null}) ");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, RemoteLevel1Item (accessed? {_RemoteLevel1Item_Accessed}) (backing var null? {_RemoteLevel1Item == null}) ");
             TabbedText.Tabs++;
-            startOfChildPosition = writer.Position;
+            startOfChildPosition = writer.ActiveMemoryPosition;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_RemoteLevel1Item_Accessed)
@@ -517,7 +517,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
                     var deserialized = RemoteLevel1Item;
                 }
                 WriteChild(ref writer, ref _RemoteLevel1Item, includeChildrenMode, _RemoteLevel1Item_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _RemoteLevel1Item_ByteIndex, _RemoteLevel1Item_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
-                lengthValue = writer.Position - startOfChildPosition;
+                lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 WriteInt(lengthsSpan, lengthValue);
                 lengthsSpan = lengthsSpan.Slice(sizeof(int));
             }
@@ -529,7 +529,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
-                _RemoteHierarchy_EndByteIndex = writer.Position - startOfObjectPosition;
+                _RemoteHierarchy_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;
             }
         }
         

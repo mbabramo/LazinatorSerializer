@@ -375,11 +375,11 @@ namespace LazinatorTests.Examples.Collections
             {
                 updateStoredBuffer = false;
             }
-            int startPosition = writer.Position;
+            int startPosition = writer.ActiveMemoryPosition;
             WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
             if (updateStoredBuffer)
             {
-                UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
+                UpdateStoredBuffer(ref writer, startPosition, writer.ActiveMemoryPosition - startPosition, includeChildrenMode, false);
             }
         }
         
@@ -415,8 +415,8 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
-            int startPosition = writer.Position;
-            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Collections.SpanInDotNetList starting at {writer.Position}.");
+            int startPosition = writer.ActiveMemoryPosition;
+            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Collections.SpanInDotNetList starting at {writer.ActiveMemoryPosition}.");
             TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
             TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
@@ -438,14 +438,14 @@ namespace LazinatorTests.Examples.Collections
             WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             int lengthForLengths = 4;
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
-            writer.Skip(lengthForLengths);TabbedText.WriteLine($"Byte {writer.Position}, Leaving {lengthForLengths} bytes to store lengths of child objects");
+            writer.Skip(lengthForLengths);TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Leaving {lengthForLengths} bytes to store lengths of child objects");
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, ref lengthsSpan);
-            TabbedText.WriteLine($"Byte {writer.Position} (end of SpanInDotNetList) ");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of SpanInDotNetList) ");
         }
         
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.Position}, SomeInt value {_SomeInt}");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, SomeInt value {_SomeInt}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _SomeInt);
             TabbedText.Tabs--;
@@ -454,9 +454,9 @@ namespace LazinatorTests.Examples.Collections
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition, ref Span<byte> lengthsSpan)
         {
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Byte {writer.Position}, SpanList (accessed? {_SpanList_Accessed})");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, SpanList (accessed? {_SpanList_Accessed})");
             TabbedText.Tabs++;
-            startOfChildPosition = writer.Position;
+            startOfChildPosition = writer.ActiveMemoryPosition;
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_SpanList_Accessed)
             {
                 var deserialized = SpanList;
@@ -478,7 +478,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
-                _SpanInDotNetList_EndByteIndex = writer.Position - startOfObjectPosition;
+                _SpanInDotNetList_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;
             }
         }
         

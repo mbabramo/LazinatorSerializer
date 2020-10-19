@@ -1541,7 +1541,7 @@ namespace Lazinator.CodeDescription
             // to read from storage during the write.
             if (!IsPrimitive)
             {
-                sb.AppendLine("startOfChildPosition = writer.Position;");
+                sb.AppendLine("startOfChildPosition = writer.ActiveMemoryPosition;");
             }
             // Now, we have to consider the SkipCondition, from a SkipIf attribute. We don't write if the skip condition is
             // met (but still must update the byte index).
@@ -1652,7 +1652,7 @@ namespace Lazinator.CodeDescription
             {
                 if (SingleByteLength)
                 {
-                    lengthString = $@"lengthValue = writer.Position - startOfChildPosition;
+                    lengthString = $@"lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                         if (lengthValue > byte.MaxValue)
                         {{
                             ThrowHelper.ThrowMoreThan255BytesException();
@@ -1662,7 +1662,7 @@ namespace Lazinator.CodeDescription
                 }
                 else
                 {
-                    lengthString = $@"lengthValue = writer.Position - startOfChildPosition;
+                    lengthString = $@"lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                         WriteInt(lengthsSpan, lengthValue);
                         lengthsSpan = lengthsSpan.Slice(sizeof(int));";
                 }

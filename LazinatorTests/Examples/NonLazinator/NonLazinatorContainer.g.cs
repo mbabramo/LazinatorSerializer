@@ -507,11 +507,11 @@ namespace LazinatorTests.Examples
             {
                 updateStoredBuffer = false;
             }
-            int startPosition = writer.Position;
+            int startPosition = writer.ActiveMemoryPosition;
             WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
             if (updateStoredBuffer)
             {
-                UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
+                UpdateStoredBuffer(ref writer, startPosition, writer.ActiveMemoryPosition - startPosition, includeChildrenMode, false);
             }
         }
         
@@ -548,8 +548,8 @@ namespace LazinatorTests.Examples
         
         void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
-            int startPosition = writer.Position;
-            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.NonLazinatorContainer starting at {writer.Position}.");
+            int startPosition = writer.ActiveMemoryPosition;
+            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.NonLazinatorContainer starting at {writer.ActiveMemoryPosition}.");
             TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
             TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
@@ -565,17 +565,17 @@ namespace LazinatorTests.Examples
             
             int lengthForLengths = 16;
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
-            writer.Skip(lengthForLengths);TabbedText.WriteLine($"Byte {writer.Position}, Leaving {lengthForLengths} bytes to store lengths of child objects");
+            writer.Skip(lengthForLengths);TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Leaving {lengthForLengths} bytes to store lengths of child objects");
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, ref lengthsSpan);
-            TabbedText.WriteLine($"Byte {writer.Position} (end of NonLazinatorContainer) ");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of NonLazinatorContainer) ");
         }
         
         void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition, ref Span<byte> lengthsSpan)
         {
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Byte {writer.Position}, NonLazinatorClass (accessed? {_NonLazinatorClass_Accessed})");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, NonLazinatorClass (accessed? {_NonLazinatorClass_Accessed})");
             TabbedText.Tabs++;
-            startOfChildPosition = writer.Position;
+            startOfChildPosition = writer.ActiveMemoryPosition;
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_NonLazinatorClass_Accessed)
             {
                 var deserialized = NonLazinatorClass;
@@ -598,9 +598,9 @@ namespace LazinatorTests.Examples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, NonLazinatorInterchangeableClass (accessed? {_NonLazinatorInterchangeableClass_Accessed})");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, NonLazinatorInterchangeableClass (accessed? {_NonLazinatorInterchangeableClass_Accessed})");
             TabbedText.Tabs++;
-            startOfChildPosition = writer.Position;
+            startOfChildPosition = writer.ActiveMemoryPosition;
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_NonLazinatorInterchangeableClass_Accessed)
             {
                 var deserialized = NonLazinatorInterchangeableClass;
@@ -623,9 +623,9 @@ namespace LazinatorTests.Examples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, NonLazinatorInterchangeableStruct (accessed? {_NonLazinatorInterchangeableStruct_Accessed})");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, NonLazinatorInterchangeableStruct (accessed? {_NonLazinatorInterchangeableStruct_Accessed})");
             TabbedText.Tabs++;
-            startOfChildPosition = writer.Position;
+            startOfChildPosition = writer.ActiveMemoryPosition;
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_NonLazinatorInterchangeableStruct_Accessed)
             {
                 var deserialized = NonLazinatorInterchangeableStruct;
@@ -648,9 +648,9 @@ namespace LazinatorTests.Examples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, NonLazinatorStruct (accessed? {_NonLazinatorStruct_Accessed})");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, NonLazinatorStruct (accessed? {_NonLazinatorStruct_Accessed})");
             TabbedText.Tabs++;
-            startOfChildPosition = writer.Position;
+            startOfChildPosition = writer.ActiveMemoryPosition;
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_NonLazinatorStruct_Accessed)
             {
                 var deserialized = NonLazinatorStruct;

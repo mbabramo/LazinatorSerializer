@@ -597,11 +597,11 @@ namespace LazinatorTests.Examples.Tuples
             {
                 updateStoredBuffer = false;
             }
-            int startPosition = writer.Position;
+            int startPosition = writer.ActiveMemoryPosition;
             WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
             if (updateStoredBuffer)
             {
-                UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
+                UpdateStoredBuffer(ref writer, startPosition, writer.ActiveMemoryPosition - startPosition, includeChildrenMode, false);
             }
         }
         
@@ -657,8 +657,8 @@ namespace LazinatorTests.Examples.Tuples
         
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
-            int startPosition = writer.Position;
-            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Tuples.RegularTuple starting at {writer.Position}.");
+            int startPosition = writer.ActiveMemoryPosition;
+            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Tuples.RegularTuple starting at {writer.ActiveMemoryPosition}.");
             TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
             TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
@@ -680,9 +680,9 @@ namespace LazinatorTests.Examples.Tuples
             
             int lengthForLengths = 24;
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
-            writer.Skip(lengthForLengths);TabbedText.WriteLine($"Byte {writer.Position}, Leaving {lengthForLengths} bytes to store lengths of child objects");
+            writer.Skip(lengthForLengths);TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Leaving {lengthForLengths} bytes to store lengths of child objects");
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, ref lengthsSpan);
-            TabbedText.WriteLine($"Byte {writer.Position} (end of RegularTuple) ");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of RegularTuple) ");
         }
         
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
@@ -692,9 +692,9 @@ namespace LazinatorTests.Examples.Tuples
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition, ref Span<byte> lengthsSpan)
         {
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Byte {writer.Position}, MyListTuple (accessed? {_MyListTuple_Accessed})");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyListTuple (accessed? {_MyListTuple_Accessed})");
             TabbedText.Tabs++;
-            startOfChildPosition = writer.Position;
+            startOfChildPosition = writer.ActiveMemoryPosition;
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyListTuple_Accessed)
             {
                 var deserialized = MyListTuple;
@@ -714,9 +714,9 @@ namespace LazinatorTests.Examples.Tuples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, MyTupleSerialized (accessed? {_MyTupleSerialized_Accessed})");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyTupleSerialized (accessed? {_MyTupleSerialized_Accessed})");
             TabbedText.Tabs++;
-            startOfChildPosition = writer.Position;
+            startOfChildPosition = writer.ActiveMemoryPosition;
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyTupleSerialized_Accessed)
             {
                 var deserialized = MyTupleSerialized;
@@ -736,9 +736,9 @@ namespace LazinatorTests.Examples.Tuples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, MyTupleSerialized2 (accessed? {_MyTupleSerialized2_Accessed})");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyTupleSerialized2 (accessed? {_MyTupleSerialized2_Accessed})");
             TabbedText.Tabs++;
-            startOfChildPosition = writer.Position;
+            startOfChildPosition = writer.ActiveMemoryPosition;
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyTupleSerialized2_Accessed)
             {
                 var deserialized = MyTupleSerialized2;
@@ -758,9 +758,9 @@ namespace LazinatorTests.Examples.Tuples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, MyTupleSerialized3 (accessed? {_MyTupleSerialized3_Accessed})");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyTupleSerialized3 (accessed? {_MyTupleSerialized3_Accessed})");
             TabbedText.Tabs++;
-            startOfChildPosition = writer.Position;
+            startOfChildPosition = writer.ActiveMemoryPosition;
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyTupleSerialized3_Accessed)
             {
                 var deserialized = MyTupleSerialized3;
@@ -780,9 +780,9 @@ namespace LazinatorTests.Examples.Tuples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, MyTupleSerialized4 (accessed? {_MyTupleSerialized4_Accessed})");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyTupleSerialized4 (accessed? {_MyTupleSerialized4_Accessed})");
             TabbedText.Tabs++;
-            startOfChildPosition = writer.Position;
+            startOfChildPosition = writer.ActiveMemoryPosition;
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyTupleSerialized4_Accessed)
             {
                 var deserialized = MyTupleSerialized4;
@@ -805,9 +805,9 @@ namespace LazinatorTests.Examples.Tuples
                 }
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.Position}, MyTupleSerialized5 (accessed? {_MyTupleSerialized5_Accessed})");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyTupleSerialized5 (accessed? {_MyTupleSerialized5_Accessed})");
             TabbedText.Tabs++;
-            startOfChildPosition = writer.Position;
+            startOfChildPosition = writer.ActiveMemoryPosition;
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyTupleSerialized5_Accessed)
             {
                 var deserialized = MyTupleSerialized5;
@@ -832,7 +832,7 @@ namespace LazinatorTests.Examples.Tuples
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
-                _RegularTuple_EndByteIndex = writer.Position - startOfObjectPosition;
+                _RegularTuple_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;
             }
         }
         

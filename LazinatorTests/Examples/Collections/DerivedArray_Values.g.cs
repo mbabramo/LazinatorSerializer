@@ -216,11 +216,11 @@ namespace LazinatorTests.Examples.Collections
             {
                 updateStoredBuffer = false;
             }
-            int startPosition = writer.Position;
+            int startPosition = writer.ActiveMemoryPosition;
             WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
             if (updateStoredBuffer)
             {
-                UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
+                UpdateStoredBuffer(ref writer, startPosition, writer.ActiveMemoryPosition - startPosition, includeChildrenMode, false);
             }
         }
         
@@ -257,8 +257,8 @@ namespace LazinatorTests.Examples.Collections
         
         protected override void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
-            int startPosition = writer.Position;
-            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Collections.DerivedArray_Values starting at {writer.Position}.");
+            int startPosition = writer.ActiveMemoryPosition;
+            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Collections.DerivedArray_Values starting at {writer.ActiveMemoryPosition}.");
             TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
             TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
@@ -280,9 +280,9 @@ namespace LazinatorTests.Examples.Collections
             WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             int lengthForLengths = 16;
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
-            writer.Skip(lengthForLengths);TabbedText.WriteLine($"Byte {writer.Position}, Leaving {lengthForLengths} bytes to store lengths of child objects");
+            writer.Skip(lengthForLengths);TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Leaving {lengthForLengths} bytes to store lengths of child objects");
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, ref lengthsSpan);
-            TabbedText.WriteLine($"Byte {writer.Position} (end of DerivedArray_Values) ");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of DerivedArray_Values) ");
         }
         
         protected override void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
@@ -294,9 +294,9 @@ namespace LazinatorTests.Examples.Collections
         {
             base.WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, ref lengthsSpan);
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Byte {writer.Position}, MyArrayInt_DerivedLevel (accessed? {_MyArrayInt_DerivedLevel_Accessed}) (dirty? {_MyArrayInt_DerivedLevel_Dirty})");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyArrayInt_DerivedLevel (accessed? {_MyArrayInt_DerivedLevel_Accessed}) (dirty? {_MyArrayInt_DerivedLevel_Dirty})");
             TabbedText.Tabs++;
-            startOfChildPosition = writer.Position;
+            startOfChildPosition = writer.ActiveMemoryPosition;
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyArrayInt_DerivedLevel_Accessed)
             {
                 var deserialized = MyArrayInt_DerivedLevel;
@@ -318,7 +318,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
-                _DerivedArray_Values_EndByteIndex = writer.Position - startOfObjectPosition;
+                _DerivedArray_Values_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;
             }
         }
         

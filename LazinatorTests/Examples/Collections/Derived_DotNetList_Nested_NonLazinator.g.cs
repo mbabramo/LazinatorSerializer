@@ -217,11 +217,11 @@ namespace LazinatorTests.Examples.Collections
             {
                 updateStoredBuffer = false;
             }
-            int startPosition = writer.Position;
+            int startPosition = writer.ActiveMemoryPosition;
             WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
             if (updateStoredBuffer)
             {
-                UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
+                UpdateStoredBuffer(ref writer, startPosition, writer.ActiveMemoryPosition - startPosition, includeChildrenMode, false);
             }
         }
         
@@ -258,8 +258,8 @@ namespace LazinatorTests.Examples.Collections
         
         protected override void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
-            int startPosition = writer.Position;
-            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Collections.Derived_DotNetList_Nested_NonLazinator starting at {writer.Position}.");
+            int startPosition = writer.ActiveMemoryPosition;
+            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Collections.Derived_DotNetList_Nested_NonLazinator starting at {writer.ActiveMemoryPosition}.");
             TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
             TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
@@ -281,15 +281,15 @@ namespace LazinatorTests.Examples.Collections
             WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             int lengthForLengths = 8;
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
-            writer.Skip(lengthForLengths);TabbedText.WriteLine($"Byte {writer.Position}, Leaving {lengthForLengths} bytes to store lengths of child objects");
+            writer.Skip(lengthForLengths);TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Leaving {lengthForLengths} bytes to store lengths of child objects");
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, ref lengthsSpan);
-            TabbedText.WriteLine($"Byte {writer.Position} (end of Derived_DotNetList_Nested_NonLazinator) ");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of Derived_DotNetList_Nested_NonLazinator) ");
         }
         
         protected override void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
             base.WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
-            TabbedText.WriteLine($"Byte {writer.Position}, MyLevel2Int value {_MyLevel2Int}");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyLevel2Int value {_MyLevel2Int}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyLevel2Int);
             TabbedText.Tabs--;
@@ -299,9 +299,9 @@ namespace LazinatorTests.Examples.Collections
         {
             base.WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition, ref lengthsSpan);
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Byte {writer.Position}, MyLevel2ListNestedNonLazinatorType (accessed? {_MyLevel2ListNestedNonLazinatorType_Accessed})");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyLevel2ListNestedNonLazinatorType (accessed? {_MyLevel2ListNestedNonLazinatorType_Accessed})");
             TabbedText.Tabs++;
-            startOfChildPosition = writer.Position;
+            startOfChildPosition = writer.ActiveMemoryPosition;
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyLevel2ListNestedNonLazinatorType_Accessed)
             {
                 var deserialized = MyLevel2ListNestedNonLazinatorType;
@@ -323,7 +323,7 @@ namespace LazinatorTests.Examples.Collections
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
-                _Derived_DotNetList_Nested_NonLazinator_EndByteIndex = writer.Position - startOfObjectPosition;
+                _Derived_DotNetList_Nested_NonLazinator_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;
             }
         }
         

@@ -18,7 +18,7 @@ namespace Lazinator.Buffers
 
         public override string ToString()
         {
-            return ActiveMemory == null ? "" : "Position " + _Position + " " + ActiveMemory.ToString();
+            return ActiveMemory == null ? "" : "Position " + _ActiveMemoryPosition + " " + ActiveMemory.ToString();
         }
 
         public ExpandableBytes ActiveMemory { get; set; }
@@ -26,7 +26,7 @@ namespace Lazinator.Buffers
 
         public List<BytesSegment> BytesSegments;
 
-        Span<byte> BufferSpan => ActiveMemory == null ? new Span<byte>() : ActiveMemory.Memory.Span;
+        Span<byte> ActiveSpan => ActiveMemory == null ? new Span<byte>() : ActiveMemory.Memory.Span;
 
         public BinaryBufferWriter(int minimumSize, LazinatorMemory? completedMemory = null)
         {
@@ -43,7 +43,7 @@ namespace Lazinator.Buffers
                 BytesSegments = new List<BytesSegment>();
                 CompletedMemory = completedMemory.Value;
             }
-            _Position = 0;
+            _ActiveMemoryPosition = 0;
         }
 
         private void InitializeIfNecessary()
@@ -76,40 +76,40 @@ namespace Lazinator.Buffers
             get
             {
                 InitializeIfNecessary();
-                return new LazinatorMemory(ActiveMemory, 0, Position);
+                return new LazinatorMemory(ActiveMemory, 0, ActiveMemoryPosition);
             }
         }
 
         /// <summary>
         /// The position within the buffer. This is changed by the client after writing to the buffer.
         /// </summary>
-        private int _Position;
-        public int Position
+        private int _ActiveMemoryPosition;
+        public int ActiveMemoryPosition
         {
-            get => _Position;
+            get => _ActiveMemoryPosition;
             set
             {
                 EnsureMinBufferSize(value);
-                _Position = value;
+                _ActiveMemoryPosition = value;
             }
         }
 
         /// <summary>
         /// Free bytes that have not been written to. The client can attempt to write to these bytes directly, calling EnsureMinBufferSize if the operation fails and trying again. Then, the client must update the position.
         /// </summary>
-        public Span<byte> FreeSpan => BufferSpan.Slice(Position);
+        public Span<byte> FreeSpan => ActiveSpan.Slice(ActiveMemoryPosition);
 
         /// <summary>
         /// The bytes written through the current position. Note that the client can change the position within the buffer.
         /// </summary>
-        public Span<byte> ActiveMemoryWrittenSpan => BufferSpan.Slice(0, Position);
+        public Span<byte> ActiveMemoryWrittenSpan => ActiveSpan.Slice(0, ActiveMemoryPosition);
 
         /// <summary>
         /// Sets the position to the beginning of the buffer. It does not dispose the underlying memory, but prepares to rewrite it.
         /// </summary>
         public void Clear()
         {
-            Position = 0;
+            ActiveMemoryPosition = 0;
         }
 
         /// <summary>
@@ -120,6 +120,12 @@ namespace Lazinator.Buffers
         {
             InitializeIfNecessary();
             ActiveMemory.EnsureMinBufferSize(desiredBufferSize);
+        }
+
+        public void EnsureMinFreeSize(int desiredFreeSize)
+        {
+            if (ActiveSpan.Length < desiredFreeSize)
+                EnsureMinBufferSize(ActiveMemoryPosition + desiredFreeSize - ActiveSpan.Length);
         }
 
         /// <summary>
@@ -168,45 +174,45 @@ namespace Lazinator.Buffers
 
         public void Skip(int length)
         {
-            Position += length;
+            ActiveMemoryPosition += length;
         }
 
         public void Write(bool value)
         {
             WriteEnlargingIfNecessary(ref value);
-            Position += sizeof(byte);
+            ActiveMemoryPosition += sizeof(byte);
         }
 
         public void Write(byte value)
         {
-            if (BufferSpan.Length > Position)
-                BufferSpan[Position++] = value;
+            if (ActiveSpan.Length > ActiveMemoryPosition)
+                ActiveSpan[ActiveMemoryPosition++] = value;
             else
             {
                 WriteEnlargingIfNecessary(ref value);
-                Position++;
+                ActiveMemoryPosition++;
             }
         }
 
         public void Write(Span<byte> value)
         {
-            int originalPosition = Position;
-            if (originalPosition + value.Length > BufferSpan.Length)
+            int originalPosition = ActiveMemoryPosition;
+            if (originalPosition + value.Length > ActiveSpan.Length)
                 EnsureMinBufferSize((originalPosition + value.Length) * 2);
             value.CopyTo(FreeSpan);
-            Position += value.Length;
+            ActiveMemoryPosition += value.Length;
         }
 
         public void Write(sbyte value)
         {
             WriteEnlargingIfNecessary(ref value);
-            Position += sizeof(sbyte);
+            ActiveMemoryPosition += sizeof(sbyte);
         }
 
         public void Write(char value)
         {
             WriteEnlargingIfNecessary(ref value);
-            Position += sizeof(char);
+            ActiveMemoryPosition += sizeof(char);
         }
 
         public void Write(float value)
@@ -242,7 +248,7 @@ namespace Lazinator.Buffers
                 if (!success)
                     EnsureMinBufferSize();
             }
-            Position += 16; // trywritebytes always writes exactly 16 bytes even though sizeof(Guid) is not defined
+            ActiveMemoryPosition += 16; // trywritebytes always writes exactly 16 bytes even though sizeof(Guid) is not defined
         }
 
         private void WriteEnlargingIfNecessary<T>(ref T value) where T : struct
@@ -266,7 +272,7 @@ namespace Lazinator.Buffers
                 if (!success)
                     EnsureMinBufferSize();
             }
-            Position += value.Length;
+            ActiveMemoryPosition += value.Length;
         }
 
         public void Write(short value)
@@ -278,7 +284,7 @@ namespace Lazinator.Buffers
                 if (!success)
                     EnsureMinBufferSize();
             }
-            Position += sizeof(short);
+            ActiveMemoryPosition += sizeof(short);
         }
 
         public void Write(ushort value)
@@ -290,7 +296,7 @@ namespace Lazinator.Buffers
                 if (!success)
                     EnsureMinBufferSize();
             }
-            Position += sizeof(ushort);
+            ActiveMemoryPosition += sizeof(ushort);
         }
 
         public void Write(int value)
@@ -302,7 +308,7 @@ namespace Lazinator.Buffers
                 if (!success)
                     EnsureMinBufferSize();
             }
-            Position += sizeof(int);
+            ActiveMemoryPosition += sizeof(int);
         }
 
         public void WriteAlwaysLittleEndian(int value)
@@ -314,7 +320,7 @@ namespace Lazinator.Buffers
                 if (!success)
                     EnsureMinBufferSize();
             }
-            Position += sizeof(int);
+            ActiveMemoryPosition += sizeof(int);
         }
 
         public void Write(uint value)
@@ -326,7 +332,7 @@ namespace Lazinator.Buffers
                 if (!success)
                     EnsureMinBufferSize();
             }
-            Position += sizeof(uint);
+            ActiveMemoryPosition += sizeof(uint);
         }
 
         public void Write(long value)
@@ -338,7 +344,7 @@ namespace Lazinator.Buffers
                 if (!success)
                     EnsureMinBufferSize();
             }
-            Position += sizeof(long);
+            ActiveMemoryPosition += sizeof(long);
         }
 
         public void Write(ulong value)
@@ -350,7 +356,7 @@ namespace Lazinator.Buffers
                 if (!success)
                     EnsureMinBufferSize();
             }
-            Position += sizeof(ulong);
+            ActiveMemoryPosition += sizeof(ulong);
         }
     }
 }

@@ -326,11 +326,11 @@ namespace LazinatorTests.Examples.Subclasses
                 {
                     updateStoredBuffer = false;
                 }
-                int startPosition = writer.Position;
+                int startPosition = writer.ActiveMemoryPosition;
                 WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
                 if (updateStoredBuffer)
                 {
-                    UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
+                    UpdateStoredBuffer(ref writer, startPosition, writer.ActiveMemoryPosition - startPosition, includeChildrenMode, false);
                 }
             }
             
@@ -362,7 +362,7 @@ namespace LazinatorTests.Examples.Subclasses
             
             protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
             {
-                TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass starting at {writer.Position}.");
+                TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass starting at {writer.ActiveMemoryPosition}.");
                 TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
                 TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
                 if (includeUniqueID)
@@ -382,12 +382,12 @@ namespace LazinatorTests.Examples.Subclasses
                 // write properties
                 
                 WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
-                TabbedText.WriteLine($"Byte {writer.Position} (end of SubclassWithinClass) ");
+                TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of SubclassWithinClass) ");
             }
             
             protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
             {
-                TabbedText.WriteLine($"Byte {writer.Position}, StringWithinSubclass value {_StringWithinSubclass}");
+                TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, StringWithinSubclass value {_StringWithinSubclass}");
                 TabbedText.Tabs++;
                 EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _StringWithinSubclass);
                 TabbedText.Tabs--;

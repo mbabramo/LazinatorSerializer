@@ -73,7 +73,7 @@ namespace Lazinator.Buffers
             {
                 success = System.IO.Compression.BrotliEncoder.TryCompress(MemoryMarshal.Cast<char, byte>(s.AsSpan()), writer.FreeSpan, out bytesWritten);
                 if (success)
-                    writer.Position += bytesWritten;
+                    writer.ActiveMemoryPosition += bytesWritten;
                 else
                 {
                     tryNum++;
@@ -108,7 +108,7 @@ namespace Lazinator.Buffers
                     out int bytesWritten);
                 if (success)
                 {
-                    decompressionBuffer.Position += bytesWritten;
+                    decompressionBuffer.ActiveMemoryPosition += bytesWritten;
                     index += length;
                 }
                 else

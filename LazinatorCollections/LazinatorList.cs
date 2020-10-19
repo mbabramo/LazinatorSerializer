@@ -469,13 +469,13 @@ namespace LazinatorCollections
         /// </summary>
         private void WriteMainList(ref BinaryBufferWriter writer, ReadOnlyMemory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            int originalStartingPosition = writer.Position;
+            int originalStartingPosition = writer.ActiveMemoryPosition;
             if (IsDirty || DescendantIsDirty || includeChildrenMode != OriginalIncludeChildrenMode || LazinatorMemoryStorage.IsEmpty)
             {
                 var offsetList = new LazinatorOffsetList();
                 LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(ref writer, (ref BinaryBufferWriter w) =>
                 {
-                    int startingPosition = w.Position;
+                    int startingPosition = w.ActiveMemoryPosition;
                     if (_DeserializedItems == null && _CountWhenDeserialized > 0)
                         SetupItemsTracker();
                     for (int i = 0; i < (_ItemsTracker?.Count ?? 0); i++)
@@ -494,7 +494,7 @@ namespace LazinatorCollections
                         }
                         else
                             WriteExistingChildStorage(ref w, () => GetListMemberSlice(status.OriginalIndex), false, true, LazinatorMemory.EmptyLazinatorMemory);
-                        var offset = (int)(w.Position - startingPosition);
+                        var offset = (int)(w.ActiveMemoryPosition - startingPosition);
                         offsetList.AddOffset(offset);
                     }
                 });

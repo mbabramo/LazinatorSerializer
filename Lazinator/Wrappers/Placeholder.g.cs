@@ -320,11 +320,11 @@ namespace Lazinator.Wrappers
             {
                 updateStoredBuffer = false;
             }
-            int startPosition = writer.Position;
+            int startPosition = writer.ActiveMemoryPosition;
             WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, false);
             if (updateStoredBuffer)
             {
-                UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
+                UpdateStoredBuffer(ref writer, startPosition, writer.ActiveMemoryPosition - startPosition, includeChildrenMode, false);
             }
         }
         
@@ -356,7 +356,7 @@ namespace Lazinator.Wrappers
         
         void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Writing properties for Lazinator.Wrappers.Placeholder starting at {writer.Position}.");
+            TabbedText.WriteLine($"Writing properties for Lazinator.Wrappers.Placeholder starting at {writer.ActiveMemoryPosition}.");
             TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} False, Object version {LazinatorObjectVersion} False, IncludeChildrenMode {includeChildrenMode} False");
             TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
@@ -368,7 +368,7 @@ namespace Lazinator.Wrappers
             // write properties
             
             
-            TabbedText.WriteLine($"Byte {writer.Position} (end of Placeholder) ");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of Placeholder) ");
         }
         
     }

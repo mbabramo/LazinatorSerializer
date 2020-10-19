@@ -441,11 +441,11 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 updateStoredBuffer = false;
             }
-            int startPosition = writer.Position;
+            int startPosition = writer.ActiveMemoryPosition;
             WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
             if (updateStoredBuffer)
             {
-                UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);
+                UpdateStoredBuffer(ref writer, startPosition, writer.ActiveMemoryPosition - startPosition, includeChildrenMode, false);
             }
         }
         
@@ -482,8 +482,8 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
-            int startPosition = writer.Position;
-            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.ExampleHierarchy.ContainerForNullableStructInAnotherNamespace starting at {writer.Position}.");
+            int startPosition = writer.ActiveMemoryPosition;
+            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.ExampleHierarchy.ContainerForNullableStructInAnotherNamespace starting at {writer.ActiveMemoryPosition}.");
             TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
             TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
@@ -509,9 +509,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 lengthForLengths += 4;
             }
             Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
-            writer.Skip(lengthForLengths);TabbedText.WriteLine($"Byte {writer.Position}, Leaving {lengthForLengths} bytes to store lengths of child objects");
+            writer.Skip(lengthForLengths);TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Leaving {lengthForLengths} bytes to store lengths of child objects");
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, ref lengthsSpan);
-            TabbedText.WriteLine($"Byte {writer.Position} (end of ContainerForNullableStructInAnotherNamespace) ");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of ContainerForNullableStructInAnotherNamespace) ");
         }
         
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
@@ -522,9 +522,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             int startOfChildPosition = 0;
             int lengthValue = 0;
-            TabbedText.WriteLine($"Byte {writer.Position}, MyNullableStruct (accessed? {_MyNullableStruct_Accessed}) (backing var null? {_MyNullableStruct == null}) ");
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyNullableStruct (accessed? {_MyNullableStruct_Accessed}) (backing var null? {_MyNullableStruct == null}) ");
             TabbedText.Tabs++;
-            startOfChildPosition = writer.Position;
+            startOfChildPosition = writer.ActiveMemoryPosition;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyNullableStruct_Accessed)
@@ -539,7 +539,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     var copy = _MyNullableStruct.Value;
                     WriteChild(ref writer, ref copy, includeChildrenMode, _MyNullableStruct_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyNullableStruct_ByteIndex, _MyNullableStruct_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                     _MyNullableStruct = copy;
-                    lengthValue = writer.Position - startOfChildPosition;
+                    lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                     WriteInt(lengthsSpan, lengthValue);
                     lengthsSpan = lengthsSpan.Slice(sizeof(int));
                 }
@@ -552,7 +552,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
-                _ContainerForNullableStructInAnotherNamespace_EndByteIndex = writer.Position - startOfObjectPosition;
+                _ContainerForNullableStructInAnotherNamespace_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;
             }
         }
         

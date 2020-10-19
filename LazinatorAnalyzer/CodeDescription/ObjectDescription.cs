@@ -1124,12 +1124,12 @@ namespace Lazinator.CodeDescription
                             }}");
 
             sb.AppendLine($@"{ IIF(ImplementsPreSerialization, $@"PreSerialization(verifyCleanness, updateStoredBuffer);
-                            ")}int startPosition = writer.Position;
+                            ")}int startPosition = writer.ActiveMemoryPosition;
                             WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, {(UniqueIDCanBeSkipped ? "false" : "true")});");
 
             sb.AppendLine($@"if (updateStoredBuffer)
                         {{
-                            UpdateStoredBuffer(ref writer, startPosition, writer.Position - startPosition, includeChildrenMode, false);");
+                            UpdateStoredBuffer(ref writer, startPosition, writer.ActiveMemoryPosition - startPosition, includeChildrenMode, false);");
             sb.Append($@"}}
 ");
             sb.Append($@"}}
@@ -1256,7 +1256,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             var thisLevel = PropertiesToDefineThisLevel;
             bool hasChildrenThisLevel = thisLevel.Any(x => !x.IsPrimitive);
             string positionInitialization = !hasChildrenThisLevel && !IsDerived ? $@"" : $@"
-                    int startPosition = writer.Position;";
+                    int startPosition = writer.ActiveMemoryPosition;";
 
             sb.AppendLine(
                         $@"
@@ -1266,7 +1266,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 
             if (IncludeTracingCode)
             {
-                sb.AppendLine($@"TabbedText.WriteLine($""Writing properties for {ILazinatorTypeSymbol} starting at {{writer.Position}}."");");
+                sb.AppendLine($@"TabbedText.WriteLine($""Writing properties for {ILazinatorTypeSymbol} starting at {{writer.ActiveMemoryPosition}}."");");
                 sb.AppendLine($@"TabbedText.WriteLine($""Includes? uniqueID {{(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("""","""",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))}} {{includeUniqueID}}, Lazinator version {{Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion}} {!SuppressLazinatorVersionByte}, Object version {{LazinatorObjectVersion}} {Version != -1}, IncludeChildrenMode {{includeChildrenMode}} {!CanNeverHaveChildren}"");");
                 sb.AppendLine($@"TabbedText.WriteLine($""IsDirty {{IsDirty}} DescendantIsDirty {{DescendantIsDirty}} HasParentClass {{LazinatorParents.Any()}}"");");
             }
@@ -1304,12 +1304,12 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             sb.AppendLine($@"
                             {IIF(primitiveProperties.Any() || IsDerivedFromNonAbstractLazinator, $@"WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);")}{IIF(childrenProperties.Any() || IsDerivedFromNonAbstractLazinator, $@"
                             {GetLengthsCalculation(false)}Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
-                            writer.Skip(lengthForLengths);{IIF(IncludeTracingCode, $@"TabbedText.WriteLine($""Byte {{writer.Position}}, Leaving {{lengthForLengths}} bytes to store lengths of child objects"");")}
+                            writer.Skip(lengthForLengths);{IIF(IncludeTracingCode, $@"TabbedText.WriteLine($""Byte {{writer.ActiveMemoryPosition}}, Leaving {{lengthForLengths}} bytes to store lengths of child objects"");")}
                             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, ref lengthsSpan);")}");
 
             if (IncludeTracingCode)
             {
-                sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}} (end of {NameIncludingGenerics}) "");");
+                sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.ActiveMemoryPosition}} (end of {NameIncludingGenerics}) "");");
             }
 
             if (ImplementsOnPropertiesWritten)
@@ -1406,7 +1406,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             }
 
             if (!isPrimitive && ContainsEndByteIndex)
-                AppendEndByteIndex(sb, propertiesToWrite, "writer.Position - startOfObjectPosition", true);
+                AppendEndByteIndex(sb, propertiesToWrite, "writer.ActiveMemoryPosition - startOfObjectPosition", true);
 
             sb.Append($@"}}
 ");
@@ -1418,18 +1418,18 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             {
                 if (property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (property.PropertyType == LazinatorPropertyType.LazinatorStructNullable) || (property.PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface))
                 {
-                    sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) (backing var null? {{{property.BackingFieldString} == null}}) "");");
+                    sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.ActiveMemoryPosition}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) (backing var null? {{{property.BackingFieldString} == null}}) "");");
                 }
                 else if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
                 {
-                    sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) "");");
+                    sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.ActiveMemoryPosition}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) "");");
                 }
                 else if (property.TrackDirtinessNonSerialized)
-                    sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) (dirty? {{{property.BackingDirtyFieldString}}})"");");
+                    sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.ActiveMemoryPosition}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) (dirty? {{{property.BackingDirtyFieldString}}})"");");
                 else if (property.PropertyType == LazinatorPropertyType.NonLazinator || property.PropertyType == LazinatorPropertyType.SupportedCollection || property.PropertyType == LazinatorPropertyType.SupportedTuple)
-                    sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")})"");");
+                    sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.ActiveMemoryPosition}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")})"");");
                 else
-                    sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.Position}}, {property.PropertyName} value {{{property.BackingFieldString}}}"");");
+                    sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.ActiveMemoryPosition}}, {property.PropertyName} value {{{property.BackingFieldString}}}"");");
                 sb.AppendLine($@"TabbedText.Tabs++;");
             }
             property.AppendPropertyWriteString(sb);

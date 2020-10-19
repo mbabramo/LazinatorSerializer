@@ -83,14 +83,14 @@ namespace Lazinator.Core
         /// <param name="action">The action to complete</param>
         public static void WriteToBinaryWithIntLengthPrefix(ref BinaryBufferWriter writer, WriteDelegate action)
         {
-            int lengthPosition = writer.Position;
+            int lengthPosition = writer.ActiveMemoryPosition;
             writer.Write((int)0);
             action(ref writer);
-            int afterPosition = writer.Position;
-            writer.Position = lengthPosition;
+            int afterPosition = writer.ActiveMemoryPosition;
+            writer.ActiveMemoryPosition = lengthPosition;
             int length = (afterPosition - lengthPosition - sizeof(uint));
             writer.Write(length);
-            writer.Position = afterPosition;
+            writer.ActiveMemoryPosition = afterPosition;
         }
 
         /// <summary>
@@ -110,16 +110,16 @@ namespace Lazinator.Core
         /// <param name="action">The action to complete</param>
         public static void WriteToBinaryWithByteLengthPrefix(ref BinaryBufferWriter writer, WriteDelegate action)
         {
-            int lengthPosition = writer.Position;
+            int lengthPosition = writer.ActiveMemoryPosition;
             writer.Write((byte)0);
             action(ref writer);
-            int afterPosition = writer.Position;
-            writer.Position = lengthPosition;
+            int afterPosition = writer.ActiveMemoryPosition;
+            writer.ActiveMemoryPosition = lengthPosition;
             int length = (afterPosition - lengthPosition - sizeof(byte));
             if (length > 250)
                 ThrowHelper.ThrowMoreThan255BytesException();
             writer.Write((byte)length);
-            writer.Position = afterPosition;
+            writer.ActiveMemoryPosition = afterPosition;
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace Lazinator.Core
             }
             if (!childCouldHaveChanged)
             {
-                int startPosition = writer.Position;
+                int startPosition = writer.ActiveMemoryPosition;
                 childStorage = WriteExistingChildStorage(ref writer, getChildSliceFn, restrictLengthTo255Bytes, skipLength, childStorage);
                 if (updateStoredBuffer)
                 {
@@ -408,9 +408,9 @@ namespace Lazinator.Core
             bool isBelievedDirty, bool isAccessed, ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceForFieldFn,
             bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction, ref Span<byte> lengthsSpan)
         {
-            int startPosition = writer.Position; 
+            int startPosition = writer.ActiveMemoryPosition; 
             WriteNonLazinatorObject_WithoutLengthPrefix(nonLazinatorObject, isBelievedDirty, isAccessed, ref writer, getChildSliceForFieldFn, verifyCleanness, binaryWriterAction);
-            WriteUncompressedPrimitives.WriteInt(lengthsSpan, writer.Position - startPosition);
+            WriteUncompressedPrimitives.WriteInt(lengthsSpan, writer.ActiveMemoryPosition - startPosition);
             lengthsSpan = lengthsSpan.Slice(sizeof(int));
         }
 

@@ -52,9 +52,9 @@ namespace Lazinator.Buffers
         public int Position
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => Writer.Position;
+            get => Writer.ActiveMemoryPosition;
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set => Writer.Position = value;
+            set => Writer.ActiveMemoryPosition = value;
         }
         public Span<byte> FreeSpan => Writer.FreeSpan;
         public Span<byte> ActiveMemoryWrittenSpan => Writer.ActiveMemoryWrittenSpan;
