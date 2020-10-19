@@ -1303,7 +1303,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             IEnumerable<PropertyDescription> childrenProperties = thisLevel.Where(x => !x.IsPrimitive);
             sb.AppendLine($@"
                             {IIF(primitiveProperties.Any() || IsDerivedFromNonAbstractLazinator, $@"WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);")}{IIF(childrenProperties.Any() || IsDerivedFromNonAbstractLazinator, $@"
-                            {GetLengthsCalculation(false)}Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
+                            {GetLengthsCalculation(false)}Span<byte> lengthsSpan = writer.GetFreeBytes(lengthForLengths);
                             writer.Skip(lengthForLengths);{IIF(IncludeTracingCode, $@"TabbedText.WriteLine($""Byte {{writer.ActiveMemoryPosition}}, Leaving {{lengthForLengths}} bytes to store lengths of child objects"");")}
                             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, ref lengthsSpan);")}");
 

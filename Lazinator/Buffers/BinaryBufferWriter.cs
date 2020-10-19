@@ -124,8 +124,14 @@ namespace Lazinator.Buffers
 
         public void EnsureMinFreeSize(int desiredFreeSize)
         {
-            if (ActiveSpan.Length < desiredFreeSize)
-                EnsureMinBufferSize(ActiveMemoryPosition + desiredFreeSize - ActiveSpan.Length);
+            if (FreeSpan.Length < desiredFreeSize)
+                EnsureMinBufferSize(ActiveMemoryPosition + desiredFreeSize);
+        }
+
+        public Span<byte> GetFreeBytes(int desiredSize)
+        {
+            EnsureMinFreeSize(desiredSize);
+            return FreeSpan.Slice(0, desiredSize);
         }
 
         /// <summary>
