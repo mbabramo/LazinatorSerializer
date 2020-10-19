@@ -27,7 +27,7 @@ namespace LazinatorTests.Tests
             e = e.CloneLazinatorTyped(); // now there is a memory buffer
             e.MyChild1.MyLong = -342356;
             e.LazinatorMemoryStorage.InitialOwnedMemory.Should().Be(e.MyChild1.LazinatorMemoryStorage.InitialOwnedMemory);
-            e.MyChild1.UpdateStoredBuffer();
+            e.MyChild1.SerializeLazinator();
             e.LazinatorMemoryStorage.InitialOwnedMemory.Should().NotBe(e.MyChild1.LazinatorMemoryStorage.InitialOwnedMemory);
             e.LazinatorMemoryStorage.Dispose();
             Action a = () =>
@@ -45,10 +45,10 @@ namespace LazinatorTests.Tests
             e = e.CloneLazinatorTyped(); // now there is a memory buffer
             var e2 = e.CloneLazinatorTyped();
             e.MyChild1.MyShort = 52;
-            e.MyChild1.UpdateStoredBuffer();
+            e.MyChild1.SerializeLazinator();
             var f = e.MyChild1.CloneLazinatorTyped();
             e.MyChild1.MyShort = 53;
-            e.MyChild1.UpdateStoredBuffer();
+            e.MyChild1.SerializeLazinator();
             Action a = () =>
             {
                 var m = f.LazinatorMemoryStorage.GetConsolidatedMemory();
@@ -156,10 +156,10 @@ namespace LazinatorTests.Tests
                 {
                     if (doNotAutomaticallyReturnToPool && e.MyChild1.LazinatorMemoryStorage.IsEmpty == false)
                         e.MyChild1.LazinatorMemoryStorage.LazinatorShouldNotReturnToPool();
-                    e.MyChild1.UpdateStoredBuffer();
+                    e.MyChild1.SerializeLazinator();
                 }
                 if (makeParentUpToDate)
-                    e.UpdateStoredBuffer();
+                    e.SerializeLazinator();
             }
             foreach (Example c in new Example[] { c1, c2 })
             {
@@ -184,7 +184,7 @@ namespace LazinatorTests.Tests
                     c1 = e.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.IndependentBuffers);
                 }
                 e.MyBool = !e.MyBool;
-                e.UpdateStoredBuffer();
+                e.SerializeLazinator();
             }
             c1.MyChild2.MyLong = -3; // make sure we can access it
         }
@@ -199,7 +199,7 @@ namespace LazinatorTests.Tests
             var l = new LazinatorList<WInt32>() { 1 };
             var l2 = l.CloneLazinatorTyped();
             var l3 = l.CloneLazinatorTyped();
-            l.UpdateStoredBuffer();
+            l.SerializeLazinator();
         }
 
         [Fact]
@@ -208,7 +208,7 @@ namespace LazinatorTests.Tests
             var l = new LazinatorList<Example>() { GetTypicalExample(), GetTypicalExample() };
             var l2 = l.CloneLazinatorTyped();
             var l3 = l.CloneLazinatorTyped();
-            l.UpdateStoredBuffer();
+            l.SerializeLazinator();
         }
 
         [Fact]
@@ -218,7 +218,7 @@ namespace LazinatorTests.Tests
             var d = GetDictionary();
             var d2 = d.CloneLazinatorTyped();
             var d3 = d.CloneLazinatorTyped();
-            d.UpdateStoredBuffer();
+            d.SerializeLazinator();
         }
 
         [Fact]
@@ -228,8 +228,8 @@ namespace LazinatorTests.Tests
             //same effect if both of the following lines are included
             //d.UpdateStoredBuffer();
             //d[0].MyChar = 'q';
-            d[0].UpdateStoredBuffer(); // OwnedMemory has allocation ID of 0. 
-            d.UpdateStoredBuffer(); // OwnedMemory for this and d[0] share allocation ID of 1
+            d[0].SerializeLazinator(); // OwnedMemory has allocation ID of 0. 
+            d.SerializeLazinator(); // OwnedMemory for this and d[0] share allocation ID of 1
             Example e = d[0];
             d[0] = GetTypicalExample();
             d.LazinatorMemoryStorage.Dispose();
@@ -241,11 +241,11 @@ namespace LazinatorTests.Tests
         public void ObjectDisposedExceptionAvoidedByCloneToIndependentBuffer()
         {
             LazinatorDictionary<WInt32, Example> d = GetDictionary();
-            d[0].UpdateStoredBuffer(); // OwnedMemory has allocation ID of 0. 
-            d.UpdateStoredBuffer(); // OwnedMemory for this and d[0] share allocation ID of 1
+            d[0].SerializeLazinator(); // OwnedMemory has allocation ID of 0. 
+            d.SerializeLazinator(); // OwnedMemory for this and d[0] share allocation ID of 1
             Example e = d[0].CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions.IndependentBuffers);
             d[0] = GetTypicalExample();
-            d.UpdateStoredBuffer(); // allocation ID 1 disposed.
+            d.SerializeLazinator(); // allocation ID 1 disposed.
             Action a = () => { var x = e.MyChild1; };
             a.Should().NotThrow<ObjectDisposedException>();
         }
@@ -254,10 +254,10 @@ namespace LazinatorTests.Tests
         public void CanAccessCopiedItemAfterEnsureUpToDate()
         {
             LazinatorDictionary<WInt32, Example> d = GetDictionary();
-            d.UpdateStoredBuffer(); // OwnedMemory for this and d[0] share allocation ID of 0. As the original source, this will not be automatically disposed. 
+            d.SerializeLazinator(); // OwnedMemory for this and d[0] share allocation ID of 0. As the original source, this will not be automatically disposed. 
             Example e = d[0];
             d[0] = GetTypicalExample();
-            d.UpdateStoredBuffer(); // allocation ID 0 is not disposed.
+            d.SerializeLazinator(); // allocation ID 0 is not disposed.
             var x = e.MyChild1;
         }
 
@@ -265,7 +265,7 @@ namespace LazinatorTests.Tests
         public void RemoveBufferWorks_Example()
         {
             Example e = GetTypicalExample();
-            e.UpdateStoredBuffer();
+            e.SerializeLazinator();
             e.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             var x = e.MyChild1.MyExampleGrandchild.MyInt;
             e.MyChild1.MyExampleGrandchild.MyInt++;
@@ -276,7 +276,7 @@ namespace LazinatorTests.Tests
             e.MyChild1.MyExampleGrandchild.MyInt.Should().Be(x + 1);
 
             var original = e.LazinatorMemoryStorage;
-            e.UpdateStoredBuffer();
+            e.SerializeLazinator();
             original.Dispose(); // make sure that attempting to access original will cause problems
 
             e.MyChild1.MyExampleGrandchild.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
@@ -365,7 +365,7 @@ namespace LazinatorTests.Tests
             recordLikeContainer.MyRecordLikeTypeWithLazinator.Example.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
             recordLikeContainer.MyRecordLikeTypeWithLazinator.ExampleStruct.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
             var x = recordLikeContainer.MyRecordLikeTypeWithLazinator.Example.MyChar;
-            recordLikeContainer.UpdateStoredBuffer(); // should remove the buffer within the struct
+            recordLikeContainer.SerializeLazinator(); // should remove the buffer within the struct
             recordLikeContainer.MyRecordLikeTypeWithLazinator.Example.MyDateTime.Should().Be(new DateTime(1972, 10, 22, 17, 36, 0));
             recordLikeContainer.MyRecordLikeTypeWithLazinator.ExampleStruct.MyInt.Should().Be(17);
             recordLikeContainer.LazinatorMemoryStorage.IsEmpty.Should().BeFalse(); 
@@ -373,7 +373,7 @@ namespace LazinatorTests.Tests
             recordLikeContainer.MyRecordLikeTypeWithLazinator.ExampleStruct.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
             recordLikeContainer = recordLikeContainer.CloneLazinatorTyped();
             recordLikeContainer.MyRecordLikeClass = new RecordLikeClass(3, GetTypicalExample()); // make outer class dirty
-            recordLikeContainer.UpdateStoredBuffer();
+            recordLikeContainer.SerializeLazinator();
             recordLikeContainer.MyRecordLikeTypeWithLazinator.Example.MyDateTime.Should().Be(new DateTime(1972, 10, 22, 17, 36, 0));
             recordLikeContainer.MyRecordLikeTypeWithLazinator.ExampleStruct.MyInt.Should().Be(17);
             recordLikeContainer.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
@@ -390,7 +390,7 @@ namespace LazinatorTests.Tests
             var x = e.ExampleStructWithoutClass;
             x.MyInt++;
             e.ExampleStructWithoutClass = x;
-            e.UpdateStoredBuffer();
+            e.SerializeLazinator();
             e.ExampleStructWithoutClass.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             x = e.ExampleStructWithoutClass;
             x.MyInt++;
@@ -402,7 +402,7 @@ namespace LazinatorTests.Tests
             e.ExampleStructWithoutClass.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
             e.ExampleStructWithoutClass.MyInt.Should().Be(y);
 
-            e.UpdateStoredBuffer();
+            e.SerializeLazinator();
             e.ExampleStructWithoutClass.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             e.ExampleStructWithoutClass.MyInt.Should().Be(y);
         }
@@ -419,7 +419,7 @@ namespace LazinatorTests.Tests
                     null
                 }
             };
-            lazinator.UpdateStoredBuffer();
+            lazinator.SerializeLazinator();
             lazinator.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             var x = lazinator.MyListSerialized[0].MyExampleGrandchild.MyInt;
             lazinator.MyListSerialized[0].MyExampleGrandchild.MyInt++;
@@ -431,18 +431,18 @@ namespace LazinatorTests.Tests
             lazinator.MyListSerialized[0].MyExampleGrandchild.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
             lazinator.MyListSerialized[0].MyExampleGrandchild.MyInt.Should().Be(x + 1);
 
-            lazinator.UpdateStoredBuffer();
+            lazinator.SerializeLazinator();
             lazinator.MyListSerialized[0].MyExampleGrandchild.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             lazinator.MyListSerialized[0].MyExampleGrandchild.MyInt.Should().Be(x + 1);
 
-            lazinator.UpdateStoredBuffer();
+            lazinator.SerializeLazinator();
             LazinatorMemory lazinatorMemoryStorage = lazinator.MyListSerialized[0].MyExampleGrandchild.LazinatorMemoryStorage;
             lazinatorMemoryStorage.Should().NotBeNull();
             lazinator.MyListSerialized[0].MyExampleGrandchild.MyInt.Should().Be(x + 1);
 
             lazinator.MyListSerialized[0].MyExampleGrandchild.MyInt++;
             lazinator.MyListSerialized_Dirty = true;
-            lazinator.UpdateStoredBuffer();
+            lazinator.SerializeLazinator();
             lazinator.MyListSerialized[0].MyExampleGrandchild.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             (lazinator.MyListSerialized[0].MyExampleGrandchild.LazinatorMemoryStorage.Equals(lazinatorMemoryStorage)).Should()
                 .BeFalse();
@@ -464,7 +464,7 @@ namespace LazinatorTests.Tests
                     5
                 }
             };
-            lazinator.UpdateStoredBuffer();
+            lazinator.SerializeLazinator();
             lazinator.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             var x = lazinator.MyStructList[0].WrappedValue;
             lazinator.MyStructList[0] = 6;
@@ -475,16 +475,16 @@ namespace LazinatorTests.Tests
             lazinator.MyStructList[0].LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
             lazinator.MyStructList[0].WrappedValue.Should().Be(6);
 
-            lazinator.UpdateStoredBuffer();
+            lazinator.SerializeLazinator();
             lazinator.MyStructList[0].LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
             lazinator.MyStructList[0].WrappedValue.Should().Be(6);
 
-            lazinator.UpdateStoredBuffer();
+            lazinator.SerializeLazinator();
             lazinator.MyStructList[0].LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
             lazinator.MyStructList[0].WrappedValue.Should().Be(6);
 
             lazinator.MyStructList[0] = 7;
-            lazinator.UpdateStoredBuffer();
+            lazinator.SerializeLazinator();
             lazinator.MyStructList[0].LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
             lazinator.MyStructList[0].WrappedValue.Should().Be(7);
 
@@ -496,7 +496,7 @@ namespace LazinatorTests.Tests
 
             lazinator.MyStructList[1] = w;
             lazinator.MyStructList[1].LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
-            lazinator.UpdateStoredBuffer();
+            lazinator.SerializeLazinator();
             lazinator.MyStructList[1].LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
 
             lazinator = new LazinatorListContainer()
@@ -531,7 +531,7 @@ namespace LazinatorTests.Tests
             };
             var x = lazinator.SpanList[0].MyReadOnlySpanByte[1];
             x.Should().Be(2);
-            lazinator.UpdateStoredBuffer();
+            lazinator.SerializeLazinator();
             var memoryStorage = lazinator.LazinatorMemoryStorage;
             lazinator.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             x = lazinator.SpanList[0].MyReadOnlySpanByte[1];
@@ -573,7 +573,7 @@ namespace LazinatorTests.Tests
                     GetExampleChild(2),
                 }
             };
-            lazinator.UpdateStoredBuffer();
+            lazinator.SerializeLazinator();
             lazinator.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             var x = lazinator.MyHashSetSerialized.First().MyExampleGrandchild.MyInt;
             lazinator.MyHashSetSerialized.First().MyExampleGrandchild.MyInt++;
@@ -584,17 +584,17 @@ namespace LazinatorTests.Tests
             lazinator.MyHashSetSerialized.First().MyExampleGrandchild.LazinatorMemoryStorage.IsEmpty.Should().BeTrue();
             lazinator.MyHashSetSerialized.First().MyExampleGrandchild.MyInt.Should().Be(x + 1);
 
-            lazinator.UpdateStoredBuffer();
+            lazinator.SerializeLazinator();
             lazinator.MyHashSetSerialized.First().MyExampleGrandchild.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             lazinator.MyHashSetSerialized.First().MyExampleGrandchild.MyInt.Should().Be(x + 1);
 
-            lazinator.UpdateStoredBuffer();
+            lazinator.SerializeLazinator();
             LazinatorMemory lazinatorMemoryStorage = lazinator.MyHashSetSerialized.First().MyExampleGrandchild.LazinatorMemoryStorage;
             lazinatorMemoryStorage.Should().NotBeNull();
             lazinator.MyHashSetSerialized.First().MyExampleGrandchild.MyInt.Should().Be(x + 1);
 
             lazinator.MyHashSetSerialized.First().MyExampleGrandchild.MyInt++;
-            lazinator.UpdateStoredBuffer();
+            lazinator.SerializeLazinator();
             lazinator.MyHashSetSerialized.First().MyExampleGrandchild.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             (lazinator.MyHashSetSerialized.First().MyExampleGrandchild.LazinatorMemoryStorage == lazinatorMemoryStorage).Should()
                 .BeFalse();
@@ -610,8 +610,8 @@ namespace LazinatorTests.Tests
             e = e.CloneLazinatorTyped();
             ((ExampleChildInherited)e.MyChild1).MyInt = 137;
             ((ExampleChildInherited)e.MyChild1).MyGrandchildInInherited.MyInt = 141;
-            e.MyChild1.UpdateStoredBuffer();
-            e.UpdateStoredBuffer();
+            e.MyChild1.SerializeLazinator();
+            e.SerializeLazinator();
             ((ExampleChildInherited)e.MyChild1).MyInt.Should().Be(137);
             ((ExampleChildInherited)e.MyChild1).MyGrandchildInInherited.MyInt.Should().Be(141);
         }
@@ -620,7 +620,7 @@ namespace LazinatorTests.Tests
         public void UpdateStoredBuffer_Struct()
         {
             WInt32 w = 3;
-            w.UpdateStoredBuffer();
+            w.SerializeLazinator();
             w.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             w.WrappedValue.Should().Be(3);
         }
@@ -632,7 +632,7 @@ namespace LazinatorTests.Tests
             e.MyChild1.MyShort = 5;
             e = e.CloneLazinatorTyped();
             e.MyChild1.MyShort = 6;
-            e.MyChild1.UpdateStoredBuffer();
+            e.MyChild1.SerializeLazinator();
             var f = e.MyChild1.CloneLazinatorTyped();
             e.MyChar = '5';
             var e2 = e.CloneLazinatorTyped();
@@ -647,7 +647,7 @@ namespace LazinatorTests.Tests
             e.MyChild1.MyShort = 5;
             e = e.CloneLazinatorTyped();
             e.MyChild1.MyShort = 6;
-            e.UpdateStoredBuffer();
+            e.SerializeLazinator();
             e.MyChar = '5';
             var e2 = e.CloneLazinatorTyped();
             var x = e2.MyChild1.MyShort;
@@ -700,7 +700,7 @@ namespace LazinatorTests.Tests
 
         private static void UpdateStoredBufferFromExisting(ILazinator e)
         {
-            e.UpdateStoredBuffer();
+            e.SerializeLazinator();
             var buffer = e.LazinatorMemoryStorage.GetConsolidatedMemory();
             BinaryBufferWriter b = new BinaryBufferWriter();
             b.Write(buffer.Span);
@@ -725,7 +725,7 @@ namespace LazinatorTests.Tests
             Example e = GetTypicalExample().CloneLazinatorTyped();
             e.MyChild1 = GetExampleChild(3); // inherited child
             ((ExampleChildInherited)e.MyChild1).MyGrandchildInInherited = new ExampleGrandchild() { MyInt = 139 };
-            e.MyChild1.UpdateStoredBuffer();
+            e.MyChild1.SerializeLazinator();
             ConfirmBuffersUpdateInTandem(e);
             ConfirmBuffersUpdateInTandem(e);
         }
@@ -768,7 +768,7 @@ namespace LazinatorTests.Tests
         {
             LazinatorListContainer e = GetLazinatorListContainer();
             e.MyList[1].MyExampleGrandchild.MyInt = 6;
-            e.MyList[1].UpdateStoredBuffer(); // generate a new buffer in a list member
+            e.MyList[1].SerializeLazinator(); // generate a new buffer in a list member
             ConfirmBuffersUpdateInTandem(e);
             e.MyInt = 17; // keep list clean while making container dirty
             ConfirmBuffersUpdateInTandem(e);
@@ -864,7 +864,7 @@ namespace LazinatorTests.Tests
             e = e.CloneLazinatorTyped();
             e.MyInt = 30;
             var deserialized = e.MyDictionaryWithRecordLikeContainers;
-            e.UpdateStoredBuffer();
+            e.SerializeLazinator();
             e = e.CloneLazinatorTyped();
             ConfirmBuffersUpdateInTandem(e);
             e.MyDictionaryWithRecordLikeTypeValues[0].Example.MyDateTime.Should().Be(expectedDateTime);
@@ -931,7 +931,7 @@ namespace LazinatorTests.Tests
 
         private static void ConfirmBuffersUpdateInTandem(ILazinator itemToUpdate)
         {
-            itemToUpdate.UpdateStoredBuffer();
+            itemToUpdate.SerializeLazinator();
             var allocationID = ((ExpandableBytes)itemToUpdate.LazinatorMemoryStorage.InitialOwnedMemory).AllocationID;
             itemToUpdate.ForEachLazinator(x => 
             {
@@ -963,7 +963,7 @@ namespace LazinatorTests.Tests
             e = e.CloneLazinatorTyped();
             e.MyChar = 'b';
             var x = e.MyChild1.MyExampleGrandchild.MyInt;
-            e.UpdateStoredBuffer();
+            e.SerializeLazinator();
             uint h = e.MyChild1.MyExampleGrandchild.GetBinaryHashCode32();
             uint h2 = (new ExampleGrandchild() { MyInt = 17 }).GetBinaryHashCode32();
             h.Should().Be(h2);

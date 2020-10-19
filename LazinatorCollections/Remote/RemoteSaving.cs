@@ -13,7 +13,7 @@ namespace LazinatorCollections.Remote
     {
         public async static Task SaveRemotes(ILazinator hierarchy, bool freeRemoteStorage = true, bool excludeTopOfHierarchy = false)
         {
-            hierarchy.UpdateStoredBuffer();
+            hierarchy.SerializeLazinator();
             foreach (ILazinator remoteLazinator in hierarchy.EnumerateLazinatorNodes(x => x is IRemote && (!excludeTopOfHierarchy || x != hierarchy), true, x => true, true, false))
             {
                 await SaveRemotes(remoteLazinator, freeRemoteStorage, true);

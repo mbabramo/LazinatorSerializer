@@ -598,7 +598,7 @@ namespace LazinatorTests.Tests
             v6item.DescendantIsDirty.Should().BeTrue();
             v6.DescendantIsDirty.Should().BeTrue();
             v7.MyList.Insert(0, null);
-            v7.MyList.UpdateStoredBuffer();
+            v7.MyList.SerializeLazinator();
             v7.MyList.IsDirty.Should().BeFalse();
             v7.MyList.DescendantIsDirty.Should().BeFalse();
             v7.MyList[1] = v6item;
@@ -615,7 +615,7 @@ namespace LazinatorTests.Tests
             {
                 new WInt32(3)
             };
-            l.UpdateStoredBuffer();
+            l.SerializeLazinator();
             var c = l.CloneLazinatorTyped();
             // consider original list, which should be clean
             l.IsDirty.Should().BeFalse();
@@ -634,7 +634,7 @@ namespace LazinatorTests.Tests
             {
                 new ExampleStructContainingStruct() { MyExampleStructContainingClasses = new ExampleStructContainingClasses() { MyChar = 'Q'} }
             };
-            l.UpdateStoredBuffer();
+            l.SerializeLazinator();
             var c = l.CloneLazinatorTyped();
             // consider original list, which should be clean
             l.IsDirty.Should().BeFalse();

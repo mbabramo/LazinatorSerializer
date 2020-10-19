@@ -80,7 +80,7 @@ namespace LazinatorTests.Tests
             cl[0].MyIntsAre3.Should().BeTrue();
 
             cl[0].MyInt = 2;
-            cl.UpdateStoredBuffer();
+            cl.SerializeLazinator();
             cl[0].MyIntsAre3.Should().BeFalse();
         }
     }

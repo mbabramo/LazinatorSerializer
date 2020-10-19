@@ -63,7 +63,7 @@ namespace LazinatorTests.Tests
         public void CloningShouldntChangeDirtiness()
         {
             DotNetList_Values v = new DotNetList_Values() { MyListInt2 = new List<int>() { 3, 4 } };
-            v.UpdateStoredBuffer();
+            v.SerializeLazinator();
             var c = v.CloneLazinatorTyped();
             c.IsDirty.Should().BeFalse();
             var list = c.MyListInt2; // note that this doesn't have a _Dirty property
@@ -72,7 +72,7 @@ namespace LazinatorTests.Tests
             var ctemp = c.CloneLazinatorTyped();
             c.IsDirty.Should().BeTrue(); // still true since the original hasn't changed
             c.HasChanged.Should().BeTrue();
-            c.UpdateStoredBuffer();
+            c.SerializeLazinator();
             var c2 = c.CloneLazinatorTyped();
             c.IsDirty.Should().BeFalse();
             c.HasChanged.Should().BeTrue();
@@ -82,7 +82,7 @@ namespace LazinatorTests.Tests
             c.MarkHierarchyUnchanged(); // reset HasChanged to false
             c.HasChanged.Should().BeFalse();
             c.DescendantIsDirty = true; // force serialization to test whether the serialization itself causes dirtiness
-            c.UpdateStoredBuffer();
+            c.SerializeLazinator();
             var c3 = c.CloneLazinatorTyped();
             c.IsDirty.Should().BeFalse(); // this is easy because SerializeToExistingBuffer resets Dirty
             c.HasChanged.Should().BeFalse(); // this is harder -- for it to work, CloneLazinatorTyped must not temporarily cause c to become dirty
@@ -120,7 +120,7 @@ namespace LazinatorTests.Tests
             hierarchy.MyChild1.DescendantIsDirty.Should().BeTrue();
             hierarchy.MyChild1.HasChanged.Should().BeTrue();
             hierarchy.MyChild1.DescendantHasChanged.Should().BeTrue();
-            hierarchy.MyChild1.MyWrapperContainer.UpdateStoredBuffer();
+            hierarchy.MyChild1.MyWrapperContainer.SerializeLazinator();
             hierarchy.MyChild1.IsDirty.Should().BeTrue();
             hierarchy.MyChild1.DescendantIsDirty.Should().BeTrue();
             hierarchy.MyChild1.HasChanged.Should().BeTrue();
@@ -156,7 +156,7 @@ namespace LazinatorTests.Tests
 
             var clone2 = hierarchy.CloneLazinatorTyped();
             clone2.MyChild1.MyWrapperContainer.WrappedInt = 25;
-            clone2.MyChild1.MyWrapperContainer.UpdateStoredBuffer();
+            clone2.MyChild1.MyWrapperContainer.SerializeLazinator();
             var clone3 = clone2.CloneLazinatorTyped();
             clone3.MyChild1.MyWrapperContainer.WrappedInt.Should().Be(25);
 
@@ -168,7 +168,7 @@ namespace LazinatorTests.Tests
             DotNetHashSet_Lazinator l = new DotNetHashSet_Lazinator();
             l.MyHashSetSerialized = new HashSet<ExampleChild>();
             l.MyHashSetSerialized.Add(new ExampleChild());
-            l.UpdateStoredBuffer();
+            l.SerializeLazinator();
             l.IsDirty.Should().BeFalse();
             l.DescendantIsDirty.Should().BeFalse();
             var firstItem = l.MyHashSetSerialized.First();
@@ -295,7 +295,7 @@ namespace LazinatorTests.Tests
             e.WrappedInt.IsDirty.Should().BeTrue();
             e.DescendantIsDirty.Should().BeTrue();
 
-            e.UpdateStoredBuffer();
+            e.SerializeLazinator();
             var c = e.CloneLazinatorTyped();
             // consider original, which should be clean
             e.IsDirty.Should().BeFalse();
@@ -318,7 +318,7 @@ namespace LazinatorTests.Tests
             e.Item1.IsDirty.Should().BeTrue();
             e.DescendantIsDirty.Should().BeTrue();
 
-            e.UpdateStoredBuffer();
+            e.SerializeLazinator();
             var c = e.CloneLazinatorTyped();
             // consider original, which should be clean
             e.IsDirty.Should().BeFalse();
@@ -341,7 +341,7 @@ namespace LazinatorTests.Tests
             e.Subcontainer.MyExampleStructContainingClasses.IsDirty.Should().BeTrue();
             e.DescendantIsDirty.Should().BeTrue();
 
-            e.UpdateStoredBuffer();
+            e.SerializeLazinator();
             var c = e.CloneLazinatorTyped();
             // consider original, which should be clean
             e.IsDirty.Should().BeFalse();
@@ -359,7 +359,7 @@ namespace LazinatorTests.Tests
         public void MarkHierarchyClean_Example()
         {
             Example e = GetTypicalExample();
-            e.UpdateStoredBuffer();
+            e.SerializeLazinator();
             e.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             e.MyChild1.MyExampleGrandchild.MyInt++;
             e.MyChild1.MyExampleGrandchild.IsDirty.Should().BeTrue();
@@ -377,7 +377,7 @@ namespace LazinatorTests.Tests
         public void MarkHierarchyClean_ExampleStructContainer()
         {
             var e = new ExampleContainerContainingClassesStructContainingClasses();
-            e.UpdateStoredBuffer();
+            e.SerializeLazinator();
             e.LazinatorMemoryStorage.IsEmpty.Should().BeFalse();
             e.IntWrapper++;
             e.IntWrapper.IsDirty.Should().BeTrue();

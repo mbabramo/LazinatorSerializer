@@ -35,7 +35,7 @@ namespace LazinatorTests.Tests
             results.Count().Should().Be(1);
             results = c.GetDirtyNodes(true).ToList();
             results.Count().Should().Be(1); // still 1
-            c.UpdateStoredBuffer();
+            c.SerializeLazinator();
             results = c.GetDirtyNodes(true).ToList();
             results.Count().Should().Be(0); // nothing is dirty now
 

@@ -252,7 +252,7 @@ namespace LazinatorTests.Examples.Abstract
             set;
         }
         
-        public override void UpdateStoredBuffer()
+        public override void SerializeLazinator()
         {
             if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {

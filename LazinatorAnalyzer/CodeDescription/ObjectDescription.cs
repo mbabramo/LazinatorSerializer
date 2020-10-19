@@ -361,7 +361,7 @@ namespace Lazinator.CodeDescription
             sb.AppendLine($@"
                 public {NameIncludingGenerics_RefStruct} ToRefStruct()
                 {{
-                    UpdateStoredBuffer();
+                    SerializeLazinator();
                     var clone = new {NameIncludingGenerics_RefStruct}(LazinatorMemoryStorage, null, OriginalIncludeChildrenMode, null);
                     return clone;
                 }}");
@@ -373,7 +373,7 @@ namespace Lazinator.CodeDescription
                 return;
             sb.AppendLine($@"public {NameIncludingGenerics} FromRefStruct()
                 {{
-                    UpdateStoredBuffer();
+                    SerializeLazinator();
                     var clone = new {NameIncludingGenerics}(LazinatorMemoryStorage);
                     return clone;
                 }}
@@ -453,7 +453,7 @@ namespace Lazinator.CodeDescription
                         }}
 
                         public abstract void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
-                        public abstract void UpdateStoredBuffer();
+                        public abstract void SerializeLazinator();
                         public abstract void FreeInMemoryObjects();
         
                 ";
@@ -606,7 +606,7 @@ namespace Lazinator.CodeDescription
                             set;
                         }}
 
-                        public {DerivationKeyword}void UpdateStoredBuffer()
+                        public {DerivationKeyword}void SerializeLazinator()
                         {{
                             if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                             {{
@@ -1173,7 +1173,7 @@ namespace Lazinator.CodeDescription
                     }}
                     else
                     {{
-                        ThrowHelper.ThrowCannotUpdateStoredBuffer();
+                        ThrowHelper.ThrowCannotSerializeLazinator();
                     }}");
         }
 

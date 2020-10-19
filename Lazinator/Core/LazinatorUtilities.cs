@@ -708,7 +708,7 @@ namespace Lazinator.Core
         /// <param name="hierarchy">The node containing the top of the hierarchy to mark as clean</param>
         public static void MarkHierarchyClean(this ILazinator hierarchy)
         {
-            hierarchy.UpdateStoredBuffer(); // we must actually convert it to bytes -- if we just mark things clean, then that will be misleading, and further serialization will be incorrect
+            hierarchy.SerializeLazinator(); // we must actually convert it to bytes -- if we just mark things clean, then that will be misleading, and further serialization will be incorrect
             MarkHierarchyUnchanged(hierarchy, true);
         }
 
@@ -815,7 +815,7 @@ namespace Lazinator.Core
         /// <returns></returns>
         public static byte[] CopyToArray(this ILazinator lazinator)
         {
-            lazinator.UpdateStoredBuffer();
+            lazinator.SerializeLazinator();
             byte[] array = new byte[lazinator.LazinatorMemoryStorage.Length];
             lazinator.LazinatorMemoryStorage.CopyToArray(array);
             return array;
@@ -947,7 +947,7 @@ namespace Lazinator.Core
         /// <returns></returns>
         public static MemoryStream GetMemoryStream(this ILazinator lazinator)
         {
-            lazinator.UpdateStoredBuffer();
+            lazinator.SerializeLazinator();
             return ((ReadOnlyMemory<byte>)lazinator.LazinatorMemoryStorage.GetConsolidatedMemory()).GetMemoryStream();
         }
 
@@ -958,7 +958,7 @@ namespace Lazinator.Core
         /// <returns></returns>
         public static (Pipe pipe, int bytes) GetPipe(this ILazinator lazinator)
         {
-            lazinator.UpdateStoredBuffer();
+            lazinator.SerializeLazinator();
             Pipe pipe = new Pipe();
             AddToPipe(lazinator, pipe);
             pipe.Writer.Complete();

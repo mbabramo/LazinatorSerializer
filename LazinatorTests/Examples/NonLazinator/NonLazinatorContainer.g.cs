@@ -359,7 +359,7 @@ namespace LazinatorTests.Examples
             set;
         }
         
-        public void UpdateStoredBuffer()
+        public void SerializeLazinator()
         {
             if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {

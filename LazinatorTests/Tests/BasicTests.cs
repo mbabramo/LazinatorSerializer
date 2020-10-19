@@ -36,7 +36,7 @@ namespace LazinatorTests.Tests
 
         private static LazinatorMemory GetLazinatorMemoryCopy(ILazinator e)
         {
-            e.UpdateStoredBuffer();
+            e.SerializeLazinator();
             var buffer = e.LazinatorMemoryStorage.GetConsolidatedMemory();
             BinaryBufferWriter b = new BinaryBufferWriter();
             b.Write(buffer.Span);
@@ -210,8 +210,8 @@ namespace LazinatorTests.Tests
                         2.0F
                     }
             };
-            e.UpdateStoredBuffer();
-            o.UpdateStoredBuffer();
+            e.SerializeLazinator();
+            o.SerializeLazinator();
             int lengthExample = e.CloneLazinator().LazinatorMemoryStorage.Length;
             int lengthOpenGeneric = o.CloneLazinator().LazinatorMemoryStorage.Length;
             int lengthSoFar = 0;

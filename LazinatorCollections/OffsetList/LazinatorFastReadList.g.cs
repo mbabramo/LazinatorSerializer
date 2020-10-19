@@ -234,7 +234,7 @@ namespace LazinatorCollections.OffsetList
             set;
         }
         
-        public virtual void UpdateStoredBuffer()
+        public virtual void SerializeLazinator()
         {
             if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
