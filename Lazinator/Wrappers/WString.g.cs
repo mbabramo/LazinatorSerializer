@@ -326,7 +326,6 @@ namespace Lazinator.Wrappers
         
         void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            TabbedText.WriteLine($"Reading WrappedValue at byte location {bytesSoFar}"); 
             _WrappedValue = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
         }
         
@@ -338,7 +337,6 @@ namespace Lazinator.Wrappers
         
         public void SerializeToExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of Lazinator.Wrappers.WString ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -379,9 +377,6 @@ namespace Lazinator.Wrappers
         
         void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Writing properties for Lazinator.Wrappers.WString starting at {writer.ActiveMemoryPosition}.");
-            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} False, IncludeChildrenMode {includeChildrenMode} False");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
             {
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
@@ -392,15 +387,11 @@ namespace Lazinator.Wrappers
             // write properties
             
             WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of WString) ");
         }
         
         void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, WrappedValue value {_WrappedValue}");
-            TabbedText.Tabs++;
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _WrappedValue);
-            TabbedText.Tabs--;
         }
         
         public WString_RefStruct ToRefStruct()
@@ -657,7 +648,6 @@ namespace Lazinator.Wrappers
             
             void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
             {
-                TabbedText.WriteLine($"Reading WrappedValue at byte location {bytesSoFar}"); 
                 _WrappedValue = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             }
             
@@ -669,7 +659,6 @@ namespace Lazinator.Wrappers
             
             public void SerializeToExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
             {
-                TabbedText.WriteLine($"Initiating serialization of Lazinator.Wrappers.WString ");
                 if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
                 {
                     updateStoredBuffer = false;
@@ -710,9 +699,6 @@ namespace Lazinator.Wrappers
             
             void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
             {
-                TabbedText.WriteLine($"Writing properties for Lazinator.Wrappers.WString starting at {writer.ActiveMemoryPosition}.");
-                TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} False, IncludeChildrenMode {includeChildrenMode} False");
-                TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
                 if (includeUniqueID)
                 {
                     CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
@@ -723,15 +709,11 @@ namespace Lazinator.Wrappers
                 // write properties
                 
                 WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
-                TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of WString) ");
             }
             
             void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
             {
-                TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, WrappedValue value {_WrappedValue}");
-                TabbedText.Tabs++;
                 EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _WrappedValue);
-                TabbedText.Tabs--;
             }
             
         }

@@ -309,7 +309,6 @@ namespace LazinatorTests.Examples.Subclasses
             
             protected virtual void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
             {
-                TabbedText.WriteLine($"Reading StringWithinSubclass at byte location {bytesSoFar}"); 
                 _StringWithinSubclass = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             }
             
@@ -321,7 +320,6 @@ namespace LazinatorTests.Examples.Subclasses
             
             public virtual void SerializeToExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
             {
-                TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass ");
                 if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
                 {
                     updateStoredBuffer = false;
@@ -362,9 +360,6 @@ namespace LazinatorTests.Examples.Subclasses
             
             protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
             {
-                TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass starting at {writer.ActiveMemoryPosition}.");
-                TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
-                TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
                 if (includeUniqueID)
                 {
                     if (!ContainsOpenGenericParameters)
@@ -382,15 +377,11 @@ namespace LazinatorTests.Examples.Subclasses
                 // write properties
                 
                 WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
-                TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of SubclassWithinClass) ");
             }
             
             protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
             {
-                TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, StringWithinSubclass value {_StringWithinSubclass}");
-                TabbedText.Tabs++;
                 EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _StringWithinSubclass);
-                TabbedText.Tabs--;
             }
             
             protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)

@@ -188,7 +188,6 @@ namespace LazinatorTests.Examples.Abstract
         protected override int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
         {
             int totalChildrenBytes = base.ConvertFromBytesForChildProperties(span, OriginalIncludeChildrenMode, serializedVersionNumber, indexOfFirstChild, ref bytesSoFar);
-            TabbedText.WriteLine($"Reading length of IntList6 at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
             _IntList6_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             _Concrete6_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
@@ -197,7 +196,6 @@ namespace LazinatorTests.Examples.Abstract
         
         public override void SerializeToExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
-            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Abstract.Concrete6 ");
             if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
             {
                 updateStoredBuffer = false;
@@ -244,9 +242,6 @@ namespace LazinatorTests.Examples.Abstract
         protected override void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
             int startPosition = writer.ActiveMemoryPosition;
-            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Abstract.Concrete6 starting at {writer.ActiveMemoryPosition}.");
-            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {includeChildrenMode} True");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
             {
                 if (!ContainsOpenGenericParameters)
@@ -271,10 +266,8 @@ namespace LazinatorTests.Examples.Abstract
             }
             
             int previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Leaving {lengthForLengths} bytes to store lengths of child objects");
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of Concrete6) ");
         }
         
         protected override void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
@@ -286,8 +279,6 @@ namespace LazinatorTests.Examples.Abstract
         {
             base.WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition);
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, IntList6 (accessed? {_IntList6_Accessed})");
-            TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_IntList6_Accessed)
             {
@@ -307,7 +298,6 @@ namespace LazinatorTests.Examples.Abstract
                 _IntList6_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
-            TabbedText.Tabs--;
             if (updateStoredBuffer)
             {
                 _Concrete6_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;

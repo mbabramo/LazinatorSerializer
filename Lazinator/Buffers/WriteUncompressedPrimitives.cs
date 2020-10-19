@@ -44,31 +44,11 @@ namespace Lazinator.Buffers
             return (byte)sizeof(ushort);
         }
 
-        // DEBUG -- consider getting rid of Span method here
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void WriteInt(Span<byte> span, int value)
-        {
-            if (BinaryBufferWriter.LittleEndianStorage)
-                WriteInt32LittleEndian(span, value);
-            else
-                WriteInt32BigEndian(span, value);
-        }
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte WriteInt(ref BinaryBufferWriter writer, int value)
         {
             writer.Write(value);
             return (byte)sizeof(int);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void WriteUInt(Span<byte> span, uint value)
-        {
-            if (BinaryBufferWriter.LittleEndianStorage)
-                WriteUInt32LittleEndian(span, value);
-            else
-                WriteUInt32BigEndian(span, value);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

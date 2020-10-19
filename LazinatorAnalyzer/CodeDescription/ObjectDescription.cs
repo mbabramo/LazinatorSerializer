@@ -133,29 +133,6 @@ namespace Lazinator.CodeDescription
         public bool ContainsOpenGenericParameters => IsGeneric && !AllGenericsAreNonlazinator;
         public List<PropertyDescription> PropertiesToDefineThisLevel => ExclusiveInterface?.PropertiesToDefineThisLevel;
         public IEnumerable<PropertyDescription> PropertiesIncludingInherited => ExclusiveInterface?.PropertiesIncludingInherited;
-        // DEBUG
-        //{
-        //    get
-        //    {
-        //        if (IsDerived)
-        //        {
-        //            HashSet<string> propertyStrings = new HashSet<string>();
-        //            foreach (var thisLevel in PropertiesToDefineThisLevel)
-        //            {
-        //                yield return thisLevel;
-        //                propertyStrings.Add(thisLevel.PropertyName);
-        //            }
-        //            foreach (var )
-        //        }
-        //        else
-        //        {
-        //            foreach (var thisLevel in PropertiesToDefineThisLevel)
-        //            {
-        //                yield return thisLevel;
-        //            }
-        //        }
-        //    }
-        //}
         public List<PropertyDescription> PropertiesInherited => ExclusiveInterface?.PropertiesInherited;
         public bool CanNeverHaveChildren => Version == -1 && IsSealedOrStruct && !ExclusiveInterface.PropertiesIncludingInherited.Any(x => x.PropertyType != LazinatorPropertyType.PrimitiveType && x.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable) && !IsGeneric;
         public bool UniqueIDCanBeSkipped => Version == -1 && IsSealedOrStruct && BaseLazinatorObject == null && !HasNonexclusiveInterfaces && !ContainsOpenGenericParameters;
@@ -165,7 +142,7 @@ namespace Lazinator.CodeDescription
         public bool SuppressLazinatorVersionByte => InterfaceTypeSymbol.HasAttributeOfType<CloneExcludeLazinatorVersionByteAttribute>();
         public bool GenerateRefStruct => InterfaceTypeSymbol.HasAttributeOfType<CloneGenerateRefStructAttribute>() && !GeneratingRefStruct;
         public bool GeneratingRefStruct = false;
-        public bool IncludeTracingCode => true; // DEBUG Config?.IncludeTracingCode ?? false;
+        public bool IncludeTracingCode => false;
         public bool StepThroughProperties => Config?.StepThroughProperties ?? true;
         public bool NonbinaryHash => InterfaceTypeSymbol.HasAttributeOfType<CloneNonbinaryHashAttribute>();
         private string IIF(bool x, string y) => x ? y : ""; // Include if function
@@ -731,7 +708,7 @@ namespace Lazinator.CodeDescription
                     property.PropertyType == LazinatorPropertyType.NonLazinator ||
                     property.PropertyType == LazinatorPropertyType.SupportedCollection ||
                     property.PropertyType == LazinatorPropertyType.SupportedTuple ||
-                    property.PropertyType == LazinatorPropertyType.OpenGenericParameter); // DEBUG must also add possibility that this is separable.
+                    property.PropertyType == LazinatorPropertyType.OpenGenericParameter); 
 
         private void AppendPropertyDefinitions(CodeStringBuilder sb)
         {

@@ -230,22 +230,6 @@ namespace Lazinator.Core
             }
         }
 
-        // DEBUG -- eliminate all lengthsSpan
-
-        public static void WriteNullChild(bool restrictLengthTo255Bytes, ref Span<byte> lengthsSpan)
-        {
-            if (restrictLengthTo255Bytes)
-            {
-                lengthsSpan[0] = (byte)0;
-                lengthsSpan = lengthsSpan.Slice(1);
-            }
-            else
-            {
-                WriteUncompressedPrimitives.WriteInt(lengthsSpan, 0);
-                lengthsSpan = lengthsSpan.Slice(sizeof(int));
-            }
-        }
-
         /// <summary>
         /// Writes a child to a binary buffer, where that child has not been previously accessed. This thus obtains the last version from storage (or stores a zer length if this
         /// is the first time saving the child and it really is empty).
@@ -381,28 +365,6 @@ namespace Lazinator.Core
         #endregion
 
         #region Nonlazinators
-
-        /// <summary>
-        /// Initiates the conversion to binary of a non-lazinator object, writing the length to a separate lengths span. Called in Lazinator code-behind.
-        /// </summary>
-        /// <param name="nonLazinatorObject">An object that does not implement ILazinator</param>
-        /// <param name="isBelievedDirty">An indication of whether the object to be converted to bytes is believed to be dirty, e.g. has had its dirty flag set.</param>
-        /// <param name="isAccessed">An indication of whether the object has been accessed.</param>
-        /// <param name="writer">The binary writer</param>
-        /// <param name="getChildSliceForFieldFn">A function to return the child slice of memory for the non-Lazinator object</param>
-        /// <param name="verifyCleanness">If true, then the dirty-conversion will always be performed unless we are sure it is clean, and if the object is not believed to be dirty, the results will be compared to the clean version. This allows for errors from failure to serialize objects that have been changed to be caught during development.</param>
-        /// <param name="binaryWriterAction">The action to complete the write to the binary buffer</param>
-        /// <param name="lengthSpan">A span containing exactly four bytes into which the length of the non-Lazinator object will be written, instead of placing the length as a prefix</param>
-        public static void WriteNonLazinatorObject(object nonLazinatorObject,
-            bool isBelievedDirty, bool isAccessed, ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceForFieldFn,
-            bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction, ref Span<byte> lengthsSpan)
-        {
-            int startPosition = writer.ActiveMemoryPosition; 
-            WriteNonLazinatorObject_WithoutLengthPrefix(nonLazinatorObject, isBelievedDirty, isAccessed, ref writer, getChildSliceForFieldFn, verifyCleanness, binaryWriterAction);
-            WriteUncompressedPrimitives.WriteInt(lengthsSpan, writer.ActiveMemoryPosition - startPosition);
-            lengthsSpan = lengthsSpan.Slice(sizeof(int));
-        }
-
 
         /// <summary>
         /// Initiates the conversion to binary of a non-lazinator object, writing the length to the appropriate spot earlier in the buffer.
@@ -1059,18 +1021,14 @@ namespace Lazinator.Core
         {
             if (!lazinator.IsDirty && !lazinator.DescendantIsDirty && lazinator.OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren && lazinator.LazinatorMemoryStorage.IsEmpty == false && lazinator.LazinatorMemoryStorage.Disposed == false)
             {
-                var DEBUG = String.Join(",", lazinator.LazinatorMemoryStorage.OnlyMemory.Span.ToArray());
                 var result = FarmhashByteSpans.Hash64(lazinator.LazinatorMemoryStorage.OnlyMemory.Span);
-                Debug.WriteLine(DEBUG);
                 return result;
             }
             else
             {
                 LazinatorMemory serialized =
                     lazinator.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
-                var DEBUG = String.Join(",", serialized.InitialMemory.Span.ToArray());
                 var result = FarmhashByteSpans.Hash64(serialized.InitialMemory.Span);
-                Debug.WriteLine(DEBUG);
                 serialized.Dispose();
                 return result;
             }
