@@ -746,15 +746,15 @@ namespace Lazinator.CodeDescription
                 }
                 else
                 {
-                    // DEBUG string derivationKeyword = GetDerivationKeywordForLengthProperty(lastPropertyToIndex);
                     if (ContainsEndByteIndex)
                     {
                         bool mustInitialize = ((ObjectType != LazinatorObjectType.Struct && !GeneratingRefStruct) && (lastPropertyToIndex.PropertyType == LazinatorPropertyType.OpenGenericParameter));  // initialization suppresses warning in case the open generic is never closed
                         sb.AppendLine(
                                 $"private int _{ObjectNameEncodable}_EndByteIndex{IIF(mustInitialize, " = 0")};");
+                        string derivationKeyword = IsDerivedFromNonAbstractLazinator && BaseLazinatorObject.ContainsEndByteIndex ? "override" : "virtual";
                         sb.AppendLine(
-                                $"{ProtectedIfApplicable}int {lastPropertyToIndex.BackingFieldByteLength} => _{ObjectNameEncodable}_EndByteIndex - {lastPropertyToIndex.BackingFieldByteIndex};");
-                        sb.AppendLine($@"{ProtectedIfApplicable}{(IsDerivedFromNonAbstractLazinator && BaseLazinatorObject.ContainsEndByteIndex ? "override" : "virtual")} int _OverallEndByteIndex => _{ObjectNameEncodable}_EndByteIndex;");
+                                $"{ProtectedIfApplicable}{derivationKeyword} int {lastPropertyToIndex.BackingFieldByteLength} => _{ObjectNameEncodable}_EndByteIndex - {lastPropertyToIndex.BackingFieldByteIndex};");
+                        sb.AppendLine($@"{ProtectedIfApplicable}{derivationKeyword} int _OverallEndByteIndex => _{ObjectNameEncodable}_EndByteIndex;");
                     }
                     else
                     {
