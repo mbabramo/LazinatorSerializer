@@ -468,7 +468,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 lengthForLengths += 4;
             }
-            Span<byte> lengthsSpan = writer.FreeSpan.Slice(0, lengthForLengths);
+            Span<byte> lengthsSpan = writer.GetFreeBytes(lengthForLengths);
             writer.Skip(lengthForLengths);TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Leaving {lengthForLengths} bytes to store lengths of child objects");
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition, ref lengthsSpan);
             TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of ContainerWithAbstract1) ");
