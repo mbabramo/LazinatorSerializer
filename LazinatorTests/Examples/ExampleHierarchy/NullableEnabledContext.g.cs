@@ -3866,7 +3866,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 if (_NullableStruct == null)
                 {
-                    WriteNullChild(ref writer, false, true, ref lengthsSpan);
+                    WriteNullChild(false, ref lengthsSpan);
                 }
                 else
                 {
