@@ -1580,8 +1580,8 @@ namespace Lazinator.CodeDescription
 
         private void AppendPropertyWriteString_NonLazinator(CodeStringBuilder sb)
         {
-            string lengthsSpanString = AllLengthsPrecedeChildren && !OmitLengthBecauseDefinitelyLast ? $@",
-                lengthsSpan: ref lengthsSpan" : "";
+            string byteLengthSpecification = AllLengthsPrecedeChildren && !OmitLengthBecauseDefinitelyLast ? $@",
+                writeLengthInByte: {(SingleByteLength ? "true" : "false")}" : "";
             string omitLengthSuffix = IIF(OmitLengthBecauseDefinitelyLast, "_WithoutLengthPrefix");
             string writeMethodName = PlaceholderMemoryWriteMethod == null ? $"ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}" : PlaceholderMemoryWriteMethod;
             if (PlaceholderMemoryWriteMethod == null)
@@ -1600,7 +1600,7 @@ namespace Lazinator.CodeDescription
                     verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                     binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
                         {DirectConverterTypeNamePrefix}{writeMethodName}(ref w, {BackingFieldStringOrContainedSpanWithPossibleException(null)},
-                            includeChildrenMode, v, updateStoredBuffer){lengthsSpanString});");
+                            includeChildrenMode, v, updateStoredBuffer){byteLengthSpecification});");
 
                 }
                 else
@@ -1627,7 +1627,7 @@ namespace Lazinator.CodeDescription
                         getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_{PropertyName}, byteIndexCopy_{PropertyName}, byteLengthCopy_{PropertyName}{ChildSliceLastParametersString}),
                         verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                         binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-                            {binaryWriterAction}{lengthsSpanString});");
+                            {binaryWriterAction}{byteLengthSpecification});");
 
                 }
             }
@@ -1639,7 +1639,7 @@ namespace Lazinator.CodeDescription
                         verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                         binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
                             {DirectConverterTypeNamePrefix}{writeMethodName}(ref w, default,
-                                includeChildrenMode, v, updateStoredBuffer){lengthsSpanString});");
+                                includeChildrenMode, v, updateStoredBuffer){byteLengthSpecification});");
         }
 
         private void AppendPropertyWriteString_Lazinator(CodeStringBuilder sb)
@@ -1658,16 +1658,14 @@ namespace Lazinator.CodeDescription
                         {{
                             ThrowHelper.ThrowMoreThan255BytesException();
                         }}
-                        lengthsSpan[0] = (byte) lengthValue;
-                        lengthsSpan = lengthsSpan.Slice(1);";
+                        writer.RecordLength((byte) lengthValue);";
                 }
                 else
                 {
                     lengthString = $@"lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
-                        WriteInt(lengthsSpan, lengthValue);
-                        lengthsSpan = lengthsSpan.Slice(sizeof(int));";
+                        writer.RecordLength((int) lengthValue);";
                 }
-                lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen($"{BackingFieldString}", $@"WriteNullChild({(SingleByteLength ? "true" : "false")}, ref lengthsSpan);", originalString) : originalString;
+                lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen($"{BackingFieldString}", $@"WriteNullChild_LengthsSeparate(ref writer, {(SingleByteLength ? "true" : "false")});", originalString) : originalString;
             }
             else
                 lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen($"{BackingFieldString}", $@"WriteNullChild(ref writer, {(SingleByteLength ? "true" : "false")}, {(AllLengthsPrecedeChildren || SkipLengthForThisProperty ? "true" : "false")});", originalString) : originalString;

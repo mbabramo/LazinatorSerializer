@@ -197,7 +197,7 @@ namespace Lazinator.Core
             {
                 if (child == null)
                 {
-                    WriteNullChild(ref writer, restrictLengthTo255Bytes, skipLength);
+                    WriteNullChild_WithLengthAsPrefix(ref writer, restrictLengthTo255Bytes, skipLength);
                 }
                 else
                 {
@@ -207,7 +207,7 @@ namespace Lazinator.Core
             AddParentToChildless(ref child, parent);
         }
 
-        public static void WriteNullChild(ref BinaryBufferWriter writer, bool restrictLengthTo255Bytes, bool skipLength)
+        public static void WriteNullChild_WithLengthAsPrefix(ref BinaryBufferWriter writer, bool restrictLengthTo255Bytes, bool skipLength)
         {
             if (!skipLength)
             {
@@ -217,6 +217,20 @@ namespace Lazinator.Core
                     writer.Write((int)0);
             }
         }
+
+        public static void WriteNullChild_LengthsSeparate(ref BinaryBufferWriter writer, bool restrictLengthTo255Bytes)
+        {
+            if (restrictLengthTo255Bytes)
+            {
+                writer.RecordLength((byte)0);
+            }
+            else
+            {
+                writer.RecordLength((int)0);
+            }
+        }
+
+        // DEBUG -- eliminate all lengthsSpan
 
         public static void WriteNullChild(bool restrictLengthTo255Bytes, ref Span<byte> lengthsSpan)
         {
@@ -386,12 +400,32 @@ namespace Lazinator.Core
             int startPosition = writer.ActiveMemoryPosition; 
             WriteNonLazinatorObject_WithoutLengthPrefix(nonLazinatorObject, isBelievedDirty, isAccessed, ref writer, getChildSliceForFieldFn, verifyCleanness, binaryWriterAction);
             WriteUncompressedPrimitives.WriteInt(lengthsSpan, writer.ActiveMemoryPosition - startPosition);
-            bool DEBUG = false;
-            if (DEBUG)
-            {
-                lengthsSpan[0] = 58;
-            }
             lengthsSpan = lengthsSpan.Slice(sizeof(int));
+        }
+
+
+        /// <summary>
+        /// Initiates the conversion to binary of a non-lazinator object, writing the length to the appropriate spot earlier in the buffer.
+        /// </summary>
+        /// <param name="nonLazinatorObject">An object that does not implement ILazinator</param>
+        /// <param name="isBelievedDirty">An indication of whether the object to be converted to bytes is believed to be dirty, e.g. has had its dirty flag set.</param>
+        /// <param name="isAccessed">An indication of whether the object has been accessed.</param>
+        /// <param name="writer">The binary writer</param>
+        /// <param name="getChildSliceForFieldFn">A function to return the child slice of memory for the non-Lazinator object</param>
+        /// <param name="verifyCleanness">If true, then the dirty-conversion will always be performed unless we are sure it is clean, and if the object is not believed to be dirty, the results will be compared to the clean version. This allows for errors from failure to serialize objects that have been changed to be caught during development.</param>
+        /// <param name="binaryWriterAction">The action to complete the write to the binary buffer</param>
+        /// <param name="writeLengthInByte">True if the length should be contained in a single byte</param>
+        public static void WriteNonLazinatorObject(object nonLazinatorObject,
+            bool isBelievedDirty, bool isAccessed, ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceForFieldFn,
+            bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction, bool writeLengthInByte)
+        {
+            int startPosition = writer.ActiveMemoryPosition;
+            WriteNonLazinatorObject_WithoutLengthPrefix(nonLazinatorObject, isBelievedDirty, isAccessed, ref writer, getChildSliceForFieldFn, verifyCleanness, binaryWriterAction);
+            long length = writer.ActiveMemoryPosition - startPosition;
+            if (writeLengthInByte)
+                writer.RecordLength((byte)length);
+            else
+                writer.RecordLength((int)length);
         }
 
         /// <summary>
