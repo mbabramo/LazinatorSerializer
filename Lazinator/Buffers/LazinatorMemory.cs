@@ -45,7 +45,7 @@ namespace Lazinator.Buffers
         /// <summary>
         /// The first chunk of the memory. To obtain all of the memory, use GetConsolidatedMemory(). 
         /// </summary>
-        public Memory<byte> Memory => InitialMemory; 
+        public Memory<byte> Memory => InitialMemory;
 
 
         public override string ToString()
@@ -180,7 +180,7 @@ namespace Lazinator.Buffers
             while (positionRemaining > 0)
             {
                 IMemoryOwner<byte> current = MemoryAtIndex(revisedStartIndex);
-                int remainingBytesThisMemory = GetMemoryOwnerLength(current) - revisedStartPosition; 
+                int remainingBytesThisMemory = GetMemoryOwnerLength(current) - revisedStartPosition;
                 if (remainingBytesThisMemory <= positionRemaining)
                 {
                     positionRemaining -= remainingBytesThisMemory;
@@ -194,7 +194,7 @@ namespace Lazinator.Buffers
                 }
             }
 
-            return new LazinatorMemory((MemoryReference) InitialOwnedMemory, MoreOwnedMemory, revisedStartIndex, revisedStartPosition, length);
+            return new LazinatorMemory((MemoryReference)InitialOwnedMemory, MoreOwnedMemory, revisedStartIndex, revisedStartPosition, length);
         }
 
         public override bool Equals(object obj) => obj == null ? throw new LazinatorSerializationException("Invalid comparison of LazinatorMemory to null") :
@@ -243,7 +243,7 @@ namespace Lazinator.Buffers
 
         public Memory<byte> OnlyMemory
         {
-            get 
+            get
             {
                 if (!SingleMemory)
                     throw new LazinatorCompoundMemoryException();
@@ -359,7 +359,7 @@ namespace Lazinator.Buffers
 
         public Memory<byte> GetMemoryAtBytesSegment(BytesSegment bytesSegment)
         {
-            var m = (MemoryReference) MemoryAtIndex(bytesSegment.MemoryChunkVersion);
+            var m = (MemoryReference)MemoryAtIndex(bytesSegment.MemoryChunkVersion);
             var underlyingChunk = m.ReferencedMemory.Memory.Slice(bytesSegment.IndexWithinMemoryChunk, bytesSegment.NumBytes);
             return underlyingChunk;
         }

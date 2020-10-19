@@ -3007,6 +3007,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition, ref Span<byte> lengthsSpan)
         {
+            var DEBUG = lengthsSpan;
             int startOfChildPosition = 0;
             int lengthValue = 0;
             TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, ByteReadOnlySpan (accessed? {_ByteReadOnlySpan_Accessed})");
@@ -3195,6 +3196,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             WriteChild(ref writer, ref _NonNullableLazinatorListNullable!, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableLazinatorListNullable_ByteIndex, _NonNullableLazinatorListNullable_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
             lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+
             WriteInt(lengthsSpan, lengthValue);
             lengthsSpan = lengthsSpan.Slice(sizeof(int));
             if (updateStoredBuffer)

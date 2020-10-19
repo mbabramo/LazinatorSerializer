@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace Lazinator.Support
 {
@@ -65,6 +66,48 @@ namespace Lazinator.Support
         public static void ResetAccumulated()
         {
             AccumulatedText = new StringBuilder();
+        }
+
+        public static void WriteBytesVertically(IEnumerable<byte> bytes, bool includeIndices, int startingIndex = 0)
+        {
+            var bytesList = bytes.ToList();
+            if (includeIndices)
+            {
+                WriteVerticalStrings(Enumerable.Range(startingIndex, bytesList.Count).Select(x => (ulong)x));
+                WriteLine("");
+            }
+            WriteVerticalStrings(bytes.Select(x => (ulong)x));
+        }
+
+        public static void WriteVerticalStrings(IEnumerable<ulong> numbers)
+        {
+            foreach (string horizontalLine in NumbersAsVerticalStrings(numbers))
+            {
+                WriteLine(horizontalLine);
+            }
+        }
+
+        private static IEnumerable<string> NumbersAsVerticalStrings(IEnumerable<ulong> numbers)
+        {
+            // convert the numbers into character arrays, beginning with spaces for digits that aren't needed
+            var charArrays = numbers
+                .Select(x => x.ToString())
+                .Select(x => x.ToCharArray(0, x.Length));
+            var maxLength = charArrays.Max(x => x.Length);
+            IEnumerable<char> WithLeadingSpaces(char[] charArray, int targetLength)
+            {
+                int numSpaces = targetLength - charArray.Length;
+                for (int s = 0; s < numSpaces; s++)
+                    yield return ' ';
+                foreach (char c in charArray)
+                    yield return c;
+            }
+            char[] CharArrayWithLeadingSpaces(char[] charArray, int targetLength) => WithLeadingSpaces(charArray, targetLength).ToArray();
+            charArrays = charArrays.Select(x => CharArrayWithLeadingSpaces(x, maxLength));
+            // Now, output the strings -- first taking all the first digits, then the second digits, etc.
+            string s = new string(charArrays.First());
+            for (int i = 0; i < maxLength; i++)
+                yield return new string(charArrays.Select(x => x.Skip(i).First()).ToArray());
         }
     }
 }
