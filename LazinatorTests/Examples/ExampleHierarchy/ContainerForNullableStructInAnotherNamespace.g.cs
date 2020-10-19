@@ -36,7 +36,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         protected int _MyNullableStruct_ByteIndex;
         private int _ContainerForNullableStructInAnotherNamespace_EndByteIndex;
-        protected int _MyNullableStruct_ByteLength => _ContainerForNullableStructInAnotherNamespace_EndByteIndex - _MyNullableStruct_ByteIndex;
+        protected virtual  int _MyNullableStruct_ByteLength => _ContainerForNullableStructInAnotherNamespace_EndByteIndex - _MyNullableStruct_ByteIndex;
         protected virtual int _OverallEndByteIndex => _ContainerForNullableStructInAnotherNamespace_EndByteIndex;
         
         

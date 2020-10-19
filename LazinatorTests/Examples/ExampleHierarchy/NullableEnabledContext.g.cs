@@ -130,7 +130,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected virtual int _NullableValueTupleWithNullable_ByteLength => _ValueTupleWithNonNullable_ByteIndex - _NullableValueTupleWithNullable_ByteIndex;
         protected virtual int _ValueTupleWithNonNullable_ByteLength => _ValueTupleWithNullable_ByteIndex - _ValueTupleWithNonNullable_ByteIndex;
         private int _NullableEnabledContext_EndByteIndex;
-        protected int _ValueTupleWithNullable_ByteLength => _NullableEnabledContext_EndByteIndex - _ValueTupleWithNullable_ByteIndex;
+        protected virtual  int _ValueTupleWithNullable_ByteLength => _NullableEnabledContext_EndByteIndex - _ValueTupleWithNullable_ByteIndex;
         protected virtual int _OverallEndByteIndex => _NullableEnabledContext_EndByteIndex;
         
         

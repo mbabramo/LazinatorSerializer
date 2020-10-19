@@ -35,7 +35,7 @@ namespace LazinatorTests.Examples
         
         protected int _ItemU_ByteIndex;
         private int _ClosedGenericWithoutBase_EndByteIndex;
-        protected int _ItemU_ByteLength => _ClosedGenericWithoutBase_EndByteIndex - _ItemU_ByteIndex;
+        protected virtual  int _ItemU_ByteLength => _ClosedGenericWithoutBase_EndByteIndex - _ItemU_ByteIndex;
         protected virtual int _OverallEndByteIndex => _ClosedGenericWithoutBase_EndByteIndex;
         
         

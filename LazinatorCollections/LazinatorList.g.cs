@@ -39,7 +39,7 @@ namespace LazinatorCollections
         protected int _Offsets_ByteIndex;
         protected virtual int _MainListSerialized_ByteLength => _Offsets_ByteIndex - _MainListSerialized_ByteIndex;
         private int _LazinatorList_T_EndByteIndex;
-        protected int _Offsets_ByteLength => _LazinatorList_T_EndByteIndex - _Offsets_ByteIndex;
+        protected virtual  int _Offsets_ByteLength => _LazinatorList_T_EndByteIndex - _Offsets_ByteIndex;
         protected virtual int _OverallEndByteIndex => _LazinatorList_T_EndByteIndex;
         
         

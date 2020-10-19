@@ -36,7 +36,7 @@ namespace LazinatorCollections
         
         protected int _FirstNode_ByteIndex;
         private int _LazinatorLinkedList_T_EndByteIndex;
-        protected int _FirstNode_ByteLength => _LazinatorLinkedList_T_EndByteIndex - _FirstNode_ByteIndex;
+        protected virtual  int _FirstNode_ByteLength => _LazinatorLinkedList_T_EndByteIndex - _FirstNode_ByteIndex;
         protected virtual int _OverallEndByteIndex => _LazinatorLinkedList_T_EndByteIndex;
         
         

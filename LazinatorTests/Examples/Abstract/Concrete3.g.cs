@@ -38,7 +38,7 @@ namespace LazinatorTests.Examples.Abstract
         protected override int _IntList1_ByteLength => _IntList2_ByteIndex - _IntList1_ByteIndex;
         protected override int _IntList2_ByteLength => _IntList3_ByteIndex - _IntList2_ByteIndex;
         private int _Concrete3_EndByteIndex;
-        protected int _IntList3_ByteLength => _Concrete3_EndByteIndex - _IntList3_ByteIndex;
+        protected virtual  int _IntList3_ByteLength => _Concrete3_EndByteIndex - _IntList3_ByteIndex;
         protected virtual int _OverallEndByteIndex => _Concrete3_EndByteIndex;
         
         

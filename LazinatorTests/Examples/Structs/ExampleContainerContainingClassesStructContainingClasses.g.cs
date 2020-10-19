@@ -46,7 +46,7 @@ namespace LazinatorTests.Examples
         protected virtual int _MyListExampleStruct_ByteLength => _MyListNullableExampleStruct_ByteIndex - _MyListExampleStruct_ByteIndex;
         protected virtual int _MyListNullableExampleStruct_ByteLength => _MyListUnwrappedNullableExampleStruct_ByteIndex - _MyListNullableExampleStruct_ByteIndex;
         private int _ExampleContainerContainingClassesStructContainingClasses_EndByteIndex;
-        protected int _MyListUnwrappedNullableExampleStruct_ByteLength => _ExampleContainerContainingClassesStructContainingClasses_EndByteIndex - _MyListUnwrappedNullableExampleStruct_ByteIndex;
+        protected virtual  int _MyListUnwrappedNullableExampleStruct_ByteLength => _ExampleContainerContainingClassesStructContainingClasses_EndByteIndex - _MyListUnwrappedNullableExampleStruct_ByteIndex;
         protected virtual int _OverallEndByteIndex => _ExampleContainerContainingClassesStructContainingClasses_EndByteIndex;
         
         

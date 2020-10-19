@@ -34,7 +34,7 @@ namespace LazinatorTests.Examples.Collections
         
         protected int _MyLevel2ListNestedNonLazinatorType_ByteIndex;
         private int _Derived_DotNetList_Nested_NonLazinator_EndByteIndex;
-        protected int _MyLevel2ListNestedNonLazinatorType_ByteLength => _Derived_DotNetList_Nested_NonLazinator_EndByteIndex - _MyLevel2ListNestedNonLazinatorType_ByteIndex;
+        protected virtual  int _MyLevel2ListNestedNonLazinatorType_ByteLength => _Derived_DotNetList_Nested_NonLazinator_EndByteIndex - _MyLevel2ListNestedNonLazinatorType_ByteIndex;
         protected override int _OverallEndByteIndex => _Derived_DotNetList_Nested_NonLazinator_EndByteIndex;
         
         

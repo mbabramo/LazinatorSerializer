@@ -46,7 +46,7 @@ namespace LazinatorTests.Examples.Tuples
         protected virtual int _MyTupleSerialized3_ByteLength => _MyTupleSerialized4_ByteIndex - _MyTupleSerialized3_ByteIndex;
         protected virtual int _MyTupleSerialized4_ByteLength => _MyTupleSerialized5_ByteIndex - _MyTupleSerialized4_ByteIndex;
         private int _RegularTuple_EndByteIndex;
-        protected int _MyTupleSerialized5_ByteLength => _RegularTuple_EndByteIndex - _MyTupleSerialized5_ByteIndex;
+        protected virtual  int _MyTupleSerialized5_ByteLength => _RegularTuple_EndByteIndex - _MyTupleSerialized5_ByteIndex;
         protected virtual int _OverallEndByteIndex => _RegularTuple_EndByteIndex;
         
         

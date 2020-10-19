@@ -41,7 +41,7 @@ namespace LazinatorTests.Examples
         protected virtual int _Example_ByteLength => _Example2_ByteIndex - _Example_ByteIndex;
         protected virtual int _Example2_ByteLength => _Example3_ByteIndex - _Example2_ByteIndex;
         private int _Simplifiable_EndByteIndex;
-        protected int _Example3_ByteLength => _Simplifiable_EndByteIndex - _Example3_ByteIndex;
+        protected virtual  int _Example3_ByteLength => _Simplifiable_EndByteIndex - _Example3_ByteIndex;
         protected virtual int _OverallEndByteIndex => _Simplifiable_EndByteIndex;
         
         

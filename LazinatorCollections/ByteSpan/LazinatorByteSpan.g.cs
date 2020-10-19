@@ -38,7 +38,7 @@ namespace LazinatorCollections.ByteSpan
         protected int _ReadOrWrite_ByteIndex;
         protected virtual int _ReadOnly_ByteLength => _ReadOrWrite_ByteIndex - _ReadOnly_ByteIndex;
         private int _LazinatorByteSpan_EndByteIndex;
-        protected int _ReadOrWrite_ByteLength => _LazinatorByteSpan_EndByteIndex - _ReadOrWrite_ByteIndex;
+        protected virtual  int _ReadOrWrite_ByteLength => _LazinatorByteSpan_EndByteIndex - _ReadOrWrite_ByteIndex;
         protected virtual int _OverallEndByteIndex => _LazinatorByteSpan_EndByteIndex;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

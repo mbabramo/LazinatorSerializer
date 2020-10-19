@@ -35,7 +35,7 @@ namespace LazinatorTests.Examples.Subclasses
         
         protected int _MyEnumList_ByteIndex;
         private int _ClassWithLocalEnum_EndByteIndex;
-        protected int _MyEnumList_ByteLength => _ClassWithLocalEnum_EndByteIndex - _MyEnumList_ByteIndex;
+        protected virtual  int _MyEnumList_ByteLength => _ClassWithLocalEnum_EndByteIndex - _MyEnumList_ByteIndex;
         protected virtual int _OverallEndByteIndex => _ClassWithLocalEnum_EndByteIndex;
         
         

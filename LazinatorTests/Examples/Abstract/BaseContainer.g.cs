@@ -35,7 +35,7 @@ namespace LazinatorTests.Examples.Abstract
         
         protected int _MyBase_ByteIndex;
         private int _BaseContainer_EndByteIndex;
-        protected int _MyBase_ByteLength => _BaseContainer_EndByteIndex - _MyBase_ByteIndex;
+        protected virtual  int _MyBase_ByteLength => _BaseContainer_EndByteIndex - _MyBase_ByteIndex;
         protected virtual int _OverallEndByteIndex => _BaseContainer_EndByteIndex;
         
         

@@ -39,7 +39,7 @@ namespace LazinatorCollections.Dictionary
         protected int _Values_ByteIndex;
         protected virtual int _Keys_ByteLength => _Values_ByteIndex - _Keys_ByteIndex;
         private int _DictionaryBucket_TKey_TValue_EndByteIndex;
-        protected int _Values_ByteLength => _DictionaryBucket_TKey_TValue_EndByteIndex - _Values_ByteIndex;
+        protected virtual  int _Values_ByteLength => _DictionaryBucket_TKey_TValue_EndByteIndex - _Values_ByteIndex;
         protected virtual int _OverallEndByteIndex => _DictionaryBucket_TKey_TValue_EndByteIndex;
         
         

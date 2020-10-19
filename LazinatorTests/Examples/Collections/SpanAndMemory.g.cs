@@ -55,7 +55,7 @@ namespace LazinatorTests.Examples.Collections
         protected virtual int _MyReadOnlySpanByte_ByteLength => _MyReadOnlySpanChar_ByteIndex - _MyReadOnlySpanByte_ByteIndex;
         protected virtual int _MyReadOnlySpanChar_ByteLength => _MyReadOnlySpanLong_ByteIndex - _MyReadOnlySpanChar_ByteIndex;
         private int _SpanAndMemory_EndByteIndex;
-        protected int _MyReadOnlySpanLong_ByteLength => _SpanAndMemory_EndByteIndex - _MyReadOnlySpanLong_ByteIndex;
+        protected virtual  int _MyReadOnlySpanLong_ByteLength => _SpanAndMemory_EndByteIndex - _MyReadOnlySpanLong_ByteIndex;
         protected virtual int _OverallEndByteIndex => _SpanAndMemory_EndByteIndex;
         
         

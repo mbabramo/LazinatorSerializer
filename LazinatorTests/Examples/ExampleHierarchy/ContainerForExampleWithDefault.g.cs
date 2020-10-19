@@ -35,7 +35,7 @@ namespace LazinatorTests.Examples
         
         protected int _Example_ByteIndex;
         private int _ContainerForExampleWithDefault_EndByteIndex;
-        protected int _Example_ByteLength => _ContainerForExampleWithDefault_EndByteIndex - _Example_ByteIndex;
+        protected virtual  int _Example_ByteLength => _ContainerForExampleWithDefault_EndByteIndex - _Example_ByteIndex;
         protected virtual int _OverallEndByteIndex => _ContainerForExampleWithDefault_EndByteIndex;
         
         

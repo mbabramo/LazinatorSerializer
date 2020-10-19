@@ -36,7 +36,7 @@ namespace LazinatorTests.Examples.Tuples
         
         protected int _MyNestedTuple_ByteIndex;
         private int _NestedTuple_EndByteIndex;
-        protected int _MyNestedTuple_ByteLength => _NestedTuple_EndByteIndex - _MyNestedTuple_ByteIndex;
+        protected virtual  int _MyNestedTuple_ByteLength => _NestedTuple_EndByteIndex - _MyNestedTuple_ByteIndex;
         protected virtual int _OverallEndByteIndex => _NestedTuple_EndByteIndex;
         
         

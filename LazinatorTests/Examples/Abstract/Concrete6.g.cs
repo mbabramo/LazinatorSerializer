@@ -33,7 +33,7 @@ namespace LazinatorTests.Examples.Abstract
         
         protected int _IntList6_ByteIndex;
         private int _Concrete6_EndByteIndex;
-        protected int _IntList6_ByteLength => _Concrete6_EndByteIndex - _IntList6_ByteIndex;
+        protected virtual  int _IntList6_ByteLength => _Concrete6_EndByteIndex - _IntList6_ByteIndex;
         protected override int _OverallEndByteIndex => _Concrete6_EndByteIndex;
         
         

@@ -40,7 +40,7 @@ namespace LazinatorTests.Examples
         protected virtual int _ByteSpan_ByteLength => _MyExampleGrandchild_ByteIndex - _ByteSpan_ByteIndex;
         protected virtual int _MyExampleGrandchild_ByteLength => _MyWrapperContainer_ByteIndex - _MyExampleGrandchild_ByteIndex;
         private int _ExampleChild_EndByteIndex;
-        protected int _MyWrapperContainer_ByteLength => _ExampleChild_EndByteIndex - _MyWrapperContainer_ByteIndex;
+        protected virtual  int _MyWrapperContainer_ByteLength => _ExampleChild_EndByteIndex - _MyWrapperContainer_ByteIndex;
         protected virtual int _OverallEndByteIndex => _ExampleChild_EndByteIndex;
         
         

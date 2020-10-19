@@ -36,7 +36,7 @@ namespace LazinatorTests.Examples.Collections
         
         protected int _MyListSerialized_ByteIndex;
         private int _DotNetList_Lazinator_EndByteIndex;
-        protected int _MyListSerialized_ByteLength => _DotNetList_Lazinator_EndByteIndex - _MyListSerialized_ByteIndex;
+        protected virtual  int _MyListSerialized_ByteLength => _DotNetList_Lazinator_EndByteIndex - _MyListSerialized_ByteIndex;
         protected virtual int _OverallEndByteIndex => _DotNetList_Lazinator_EndByteIndex;
         
         

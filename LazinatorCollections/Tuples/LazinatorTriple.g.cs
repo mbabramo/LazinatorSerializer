@@ -40,7 +40,7 @@ namespace LazinatorCollections.Tuples
         protected virtual int _Item1_ByteLength => _Item2_ByteIndex - _Item1_ByteIndex;
         protected virtual int _Item2_ByteLength => _Item3_ByteIndex - _Item2_ByteIndex;
         private int _LazinatorTriple_T_U_V_EndByteIndex = 0;
-        protected int _Item3_ByteLength => _LazinatorTriple_T_U_V_EndByteIndex - _Item3_ByteIndex;
+        protected virtual  int _Item3_ByteLength => _LazinatorTriple_T_U_V_EndByteIndex - _Item3_ByteIndex;
         protected virtual int _OverallEndByteIndex => _LazinatorTriple_T_U_V_EndByteIndex;
         
         

@@ -43,7 +43,7 @@ namespace LazinatorTests.Examples.Collections
         protected virtual int _MyDictionaryStructs_ByteLength => _MySortedDictionary_ByteIndex - _MyDictionaryStructs_ByteIndex;
         protected virtual int _MySortedDictionary_ByteLength => _MySortedList_ByteIndex - _MySortedDictionary_ByteIndex;
         private int _Dictionary_Values_Lazinator_EndByteIndex;
-        protected int _MySortedList_ByteLength => _Dictionary_Values_Lazinator_EndByteIndex - _MySortedList_ByteIndex;
+        protected virtual  int _MySortedList_ByteLength => _Dictionary_Values_Lazinator_EndByteIndex - _MySortedList_ByteIndex;
         protected virtual int _OverallEndByteIndex => _Dictionary_Values_Lazinator_EndByteIndex;
         
         

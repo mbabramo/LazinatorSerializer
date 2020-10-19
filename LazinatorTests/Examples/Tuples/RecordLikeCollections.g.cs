@@ -39,7 +39,7 @@ namespace LazinatorTests.Examples.Tuples
         protected int _MyDictionaryWithRecordLikeTypeValues_ByteIndex;
         protected virtual int _MyDictionaryWithRecordLikeContainers_ByteLength => _MyDictionaryWithRecordLikeTypeValues_ByteIndex - _MyDictionaryWithRecordLikeContainers_ByteIndex;
         private int _RecordLikeCollections_EndByteIndex;
-        protected int _MyDictionaryWithRecordLikeTypeValues_ByteLength => _RecordLikeCollections_EndByteIndex - _MyDictionaryWithRecordLikeTypeValues_ByteIndex;
+        protected virtual  int _MyDictionaryWithRecordLikeTypeValues_ByteLength => _RecordLikeCollections_EndByteIndex - _MyDictionaryWithRecordLikeTypeValues_ByteIndex;
         protected virtual int _OverallEndByteIndex => _RecordLikeCollections_EndByteIndex;
         
         

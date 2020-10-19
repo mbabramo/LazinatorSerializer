@@ -36,7 +36,7 @@ namespace LazinatorTests.Examples.Structs
         
         protected int _WrappedInt_ByteIndex;
         private int _WrapperContainer_EndByteIndex;
-        protected int _WrappedInt_ByteLength => _WrapperContainer_EndByteIndex - _WrappedInt_ByteIndex;
+        protected virtual  int _WrappedInt_ByteLength => _WrapperContainer_EndByteIndex - _WrappedInt_ByteIndex;
         protected virtual int _OverallEndByteIndex => _WrapperContainer_EndByteIndex;
         
         

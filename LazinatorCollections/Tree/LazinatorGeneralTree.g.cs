@@ -39,7 +39,7 @@ namespace LazinatorCollections.Tree
         protected int _Item_ByteIndex;
         protected virtual int _Children_ByteLength => _Item_ByteIndex - _Children_ByteIndex;
         private int _LazinatorGeneralTree_T_EndByteIndex = 0;
-        protected int _Item_ByteLength => _LazinatorGeneralTree_T_EndByteIndex - _Item_ByteIndex;
+        protected virtual  int _Item_ByteLength => _LazinatorGeneralTree_T_EndByteIndex - _Item_ByteIndex;
         protected virtual int _OverallEndByteIndex => _LazinatorGeneralTree_T_EndByteIndex;
         
         

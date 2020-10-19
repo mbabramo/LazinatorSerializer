@@ -36,7 +36,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         protected int _EagerExample_ByteIndex;
         private int _ContainerForEagerExample_EndByteIndex;
-        protected int _EagerExample_ByteLength => _ContainerForEagerExample_EndByteIndex - _EagerExample_ByteIndex;
+        protected virtual  int _EagerExample_ByteLength => _ContainerForEagerExample_EndByteIndex - _EagerExample_ByteIndex;
         protected virtual int _OverallEndByteIndex => _ContainerForEagerExample_EndByteIndex;
         
         

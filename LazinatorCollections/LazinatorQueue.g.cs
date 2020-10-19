@@ -36,7 +36,7 @@ namespace LazinatorCollections
         
         protected int _UnderlyingList_ByteIndex;
         private int _LazinatorQueue_T_EndByteIndex;
-        protected int _UnderlyingList_ByteLength => _LazinatorQueue_T_EndByteIndex - _UnderlyingList_ByteIndex;
+        protected virtual  int _UnderlyingList_ByteLength => _LazinatorQueue_T_EndByteIndex - _UnderlyingList_ByteIndex;
         protected virtual int _OverallEndByteIndex => _LazinatorQueue_T_EndByteIndex;
         
         

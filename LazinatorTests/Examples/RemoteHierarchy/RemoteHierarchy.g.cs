@@ -37,7 +37,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         
         protected int _RemoteLevel1Item_ByteIndex;
         private int _RemoteHierarchy_EndByteIndex;
-        protected int _RemoteLevel1Item_ByteLength => _RemoteHierarchy_EndByteIndex - _RemoteLevel1Item_ByteIndex;
+        protected virtual  int _RemoteLevel1Item_ByteLength => _RemoteHierarchy_EndByteIndex - _RemoteLevel1Item_ByteIndex;
         protected virtual int _OverallEndByteIndex => _RemoteHierarchy_EndByteIndex;
         
         

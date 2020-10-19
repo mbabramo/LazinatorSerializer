@@ -35,7 +35,7 @@ namespace LazinatorTests.Examples.Abstract
         
         protected int _Item_ByteIndex;
         private int _DerivedGenericContainer_T_EndByteIndex;
-        protected int _Item_ByteLength => _DerivedGenericContainer_T_EndByteIndex - _Item_ByteIndex;
+        protected virtual  int _Item_ByteLength => _DerivedGenericContainer_T_EndByteIndex - _Item_ByteIndex;
         protected virtual int _OverallEndByteIndex => _DerivedGenericContainer_T_EndByteIndex;
         
         

@@ -36,7 +36,7 @@ namespace LazinatorTests.Examples.Tuples
         
         protected int _MyKeyValuePairSerialized_ByteIndex;
         private int _KeyValuePairTuple_EndByteIndex;
-        protected int _MyKeyValuePairSerialized_ByteLength => _KeyValuePairTuple_EndByteIndex - _MyKeyValuePairSerialized_ByteIndex;
+        protected virtual  int _MyKeyValuePairSerialized_ByteLength => _KeyValuePairTuple_EndByteIndex - _MyKeyValuePairSerialized_ByteIndex;
         protected virtual int _OverallEndByteIndex => _KeyValuePairTuple_EndByteIndex;
         
         

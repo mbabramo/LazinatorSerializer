@@ -35,7 +35,7 @@ namespace LazinatorTests.Examples.Collections
         
         protected int _SpanList_ByteIndex;
         private int _SpanInDotNetList_EndByteIndex;
-        protected int _SpanList_ByteLength => _SpanInDotNetList_EndByteIndex - _SpanList_ByteIndex;
+        protected virtual  int _SpanList_ByteLength => _SpanInDotNetList_EndByteIndex - _SpanList_ByteIndex;
         protected virtual int _OverallEndByteIndex => _SpanInDotNetList_EndByteIndex;
         
         

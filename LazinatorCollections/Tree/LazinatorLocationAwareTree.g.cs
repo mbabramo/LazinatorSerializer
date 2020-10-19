@@ -36,7 +36,7 @@ namespace LazinatorCollections.Tree
         
         protected int _Locations_ByteIndex;
         private int _LazinatorLocationAwareTree_T_EndByteIndex;
-        protected int _Locations_ByteLength => _LazinatorLocationAwareTree_T_EndByteIndex - _Locations_ByteIndex;
+        protected virtual  int _Locations_ByteLength => _LazinatorLocationAwareTree_T_EndByteIndex - _Locations_ByteIndex;
         protected override int _OverallEndByteIndex => _LazinatorLocationAwareTree_T_EndByteIndex;
         
         

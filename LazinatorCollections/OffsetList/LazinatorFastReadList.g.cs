@@ -36,7 +36,7 @@ namespace LazinatorCollections.OffsetList
         
         protected int _ReadOnlyBytes_ByteIndex;
         private int _LazinatorFastReadList_T_EndByteIndex;
-        protected int _ReadOnlyBytes_ByteLength => _LazinatorFastReadList_T_EndByteIndex - _ReadOnlyBytes_ByteIndex;
+        protected virtual  int _ReadOnlyBytes_ByteLength => _LazinatorFastReadList_T_EndByteIndex - _ReadOnlyBytes_ByteIndex;
         protected virtual int _OverallEndByteIndex => _LazinatorFastReadList_T_EndByteIndex;
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

@@ -35,7 +35,7 @@ namespace LazinatorTests.Examples.Collections
         
         protected int _MyStackInt_ByteIndex;
         private int _DotNetStack_Values_EndByteIndex;
-        protected int _MyStackInt_ByteLength => _DotNetStack_Values_EndByteIndex - _MyStackInt_ByteIndex;
+        protected virtual  int _MyStackInt_ByteLength => _DotNetStack_Values_EndByteIndex - _MyStackInt_ByteIndex;
         protected virtual int _OverallEndByteIndex => _DotNetStack_Values_EndByteIndex;
         
         

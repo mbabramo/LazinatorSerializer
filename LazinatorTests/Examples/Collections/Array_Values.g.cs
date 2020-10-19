@@ -39,7 +39,7 @@ namespace LazinatorTests.Examples.Collections
         protected virtual int _MyArrayInt_ByteLength => _MyArrayNullableInt_ByteIndex - _MyArrayInt_ByteIndex;
         protected virtual int _MyArrayNullableInt_ByteLength => _MyJaggedArrayInt_ByteIndex - _MyArrayNullableInt_ByteIndex;
         private int _Array_Values_EndByteIndex;
-        protected int _MyJaggedArrayInt_ByteLength => _Array_Values_EndByteIndex - _MyJaggedArrayInt_ByteIndex;
+        protected virtual  int _MyJaggedArrayInt_ByteLength => _Array_Values_EndByteIndex - _MyJaggedArrayInt_ByteIndex;
         protected virtual int _OverallEndByteIndex => _Array_Values_EndByteIndex;
         
         

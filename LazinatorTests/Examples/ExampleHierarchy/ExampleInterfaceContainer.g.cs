@@ -38,7 +38,7 @@ namespace LazinatorTests.Examples.Hierarchy
         protected int _ExampleListByInterface_ByteIndex;
         protected virtual int _ExampleByInterface_ByteLength => _ExampleListByInterface_ByteIndex - _ExampleByInterface_ByteIndex;
         private int _ExampleInterfaceContainer_EndByteIndex;
-        protected int _ExampleListByInterface_ByteLength => _ExampleInterfaceContainer_EndByteIndex - _ExampleListByInterface_ByteIndex;
+        protected virtual  int _ExampleListByInterface_ByteLength => _ExampleInterfaceContainer_EndByteIndex - _ExampleListByInterface_ByteIndex;
         protected virtual int _OverallEndByteIndex => _ExampleInterfaceContainer_EndByteIndex;
         
         

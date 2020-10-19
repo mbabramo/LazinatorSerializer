@@ -36,7 +36,7 @@ namespace LazinatorTests.Examples.Structs
         
         protected int _Subcontainer_ByteIndex;
         private int _ExampleStructContainingStructContainer_EndByteIndex;
-        protected int _Subcontainer_ByteLength => _ExampleStructContainingStructContainer_EndByteIndex - _Subcontainer_ByteIndex;
+        protected virtual  int _Subcontainer_ByteLength => _ExampleStructContainingStructContainer_EndByteIndex - _Subcontainer_ByteIndex;
         protected virtual int _OverallEndByteIndex => _ExampleStructContainingStructContainer_EndByteIndex;
         
         

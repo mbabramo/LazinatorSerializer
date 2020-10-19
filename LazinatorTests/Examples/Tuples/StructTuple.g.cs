@@ -47,7 +47,7 @@ namespace LazinatorTests.Examples.Tuples
         protected virtual int _MyValueTupleNullableStructs_ByteLength => _MyValueTupleSerialized_ByteIndex - _MyValueTupleNullableStructs_ByteIndex;
         protected virtual int _MyValueTupleSerialized_ByteLength => _MyValueTupleStructs_ByteIndex - _MyValueTupleSerialized_ByteIndex;
         private int _StructTuple_EndByteIndex;
-        protected int _MyValueTupleStructs_ByteLength => _StructTuple_EndByteIndex - _MyValueTupleStructs_ByteIndex;
+        protected virtual  int _MyValueTupleStructs_ByteLength => _StructTuple_EndByteIndex - _MyValueTupleStructs_ByteIndex;
         protected virtual int _OverallEndByteIndex => _StructTuple_EndByteIndex;
         
         

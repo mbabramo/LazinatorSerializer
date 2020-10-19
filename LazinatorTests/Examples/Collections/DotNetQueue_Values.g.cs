@@ -35,7 +35,7 @@ namespace LazinatorTests.Examples.Collections
         
         protected int _MyQueueInt_ByteIndex;
         private int _DotNetQueue_Values_EndByteIndex;
-        protected int _MyQueueInt_ByteLength => _DotNetQueue_Values_EndByteIndex - _MyQueueInt_ByteIndex;
+        protected virtual  int _MyQueueInt_ByteLength => _DotNetQueue_Values_EndByteIndex - _MyQueueInt_ByteIndex;
         protected virtual int _OverallEndByteIndex => _DotNetQueue_Values_EndByteIndex;
         
         

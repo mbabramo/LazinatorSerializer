@@ -40,7 +40,7 @@ namespace LazinatorTests.Examples.Collections
         protected int _MyStructList_ByteIndex;
         protected virtual int _MyList_ByteLength => _MyStructList_ByteIndex - _MyList_ByteIndex;
         private int _LazinatorListContainer_EndByteIndex;
-        protected int _MyStructList_ByteLength => _LazinatorListContainer_EndByteIndex - _MyStructList_ByteIndex;
+        protected virtual  int _MyStructList_ByteLength => _LazinatorListContainer_EndByteIndex - _MyStructList_ByteIndex;
         protected virtual int _OverallEndByteIndex => _LazinatorListContainer_EndByteIndex;
         
         

@@ -35,7 +35,7 @@ namespace LazinatorTests.Examples.Abstract
         protected int _LazinatorExample_ByteIndex;
         protected override int _MyT_ByteLength => _LazinatorExample_ByteIndex - _MyT_ByteIndex;
         private int _ConcreteGeneric2b_EndByteIndex;
-        protected int _LazinatorExample_ByteLength => _ConcreteGeneric2b_EndByteIndex - _LazinatorExample_ByteIndex;
+        protected virtual  int _LazinatorExample_ByteLength => _ConcreteGeneric2b_EndByteIndex - _LazinatorExample_ByteIndex;
         protected virtual int _OverallEndByteIndex => _ConcreteGeneric2b_EndByteIndex;
         
         

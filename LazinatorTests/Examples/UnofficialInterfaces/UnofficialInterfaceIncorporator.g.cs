@@ -38,7 +38,7 @@ namespace LazinatorTests.Examples
         protected int _MyUnofficialObject_ByteIndex;
         protected virtual int _MyOfficialObject_ByteLength => _MyUnofficialObject_ByteIndex - _MyOfficialObject_ByteIndex;
         private int _UnofficialInterfaceIncorporator_EndByteIndex;
-        protected int _MyUnofficialObject_ByteLength => _UnofficialInterfaceIncorporator_EndByteIndex - _MyUnofficialObject_ByteIndex;
+        protected virtual  int _MyUnofficialObject_ByteLength => _UnofficialInterfaceIncorporator_EndByteIndex - _MyUnofficialObject_ByteIndex;
         protected virtual int _OverallEndByteIndex => _UnofficialInterfaceIncorporator_EndByteIndex;
         
         

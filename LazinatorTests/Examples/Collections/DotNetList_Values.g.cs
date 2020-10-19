@@ -44,7 +44,7 @@ namespace LazinatorTests.Examples.Collections
         protected virtual int _MyListInt2_ByteLength => _MyListNullableEnabledContext_ByteIndex - _MyListInt2_ByteIndex;
         protected virtual int _MyListNullableEnabledContext_ByteLength => _MySortedSetInt_ByteIndex - _MyListNullableEnabledContext_ByteIndex;
         private int _DotNetList_Values_EndByteIndex;
-        protected int _MySortedSetInt_ByteLength => _DotNetList_Values_EndByteIndex - _MySortedSetInt_ByteIndex;
+        protected virtual  int _MySortedSetInt_ByteLength => _DotNetList_Values_EndByteIndex - _MySortedSetInt_ByteIndex;
         protected virtual int _OverallEndByteIndex => _DotNetList_Values_EndByteIndex;
         
         

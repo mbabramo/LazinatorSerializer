@@ -36,7 +36,7 @@ namespace LazinatorTests.Examples.Collections
         
         protected int _MyHashSetSerialized_ByteIndex;
         private int _DotNetHashSet_Lazinator_EndByteIndex;
-        protected int _MyHashSetSerialized_ByteLength => _DotNetHashSet_Lazinator_EndByteIndex - _MyHashSetSerialized_ByteIndex;
+        protected virtual  int _MyHashSetSerialized_ByteLength => _DotNetHashSet_Lazinator_EndByteIndex - _MyHashSetSerialized_ByteIndex;
         protected virtual int _OverallEndByteIndex => _DotNetHashSet_Lazinator_EndByteIndex;
         
         

@@ -46,7 +46,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         protected virtual int _ClosedGenericFromBaseWithBase_ByteLength => _ClosedGenericInterface_ByteIndex - _ClosedGenericFromBaseWithBase_ByteIndex;
         protected virtual int _ClosedGenericInterface_ByteLength => _ClosedGenericNonexclusiveInterface_ByteIndex - _ClosedGenericInterface_ByteIndex;
         private int _OpenGenericStayingOpenContainer_EndByteIndex;
-        protected int _ClosedGenericNonexclusiveInterface_ByteLength => _OpenGenericStayingOpenContainer_EndByteIndex - _ClosedGenericNonexclusiveInterface_ByteIndex;
+        protected virtual  int _ClosedGenericNonexclusiveInterface_ByteLength => _OpenGenericStayingOpenContainer_EndByteIndex - _ClosedGenericNonexclusiveInterface_ByteIndex;
         protected virtual int _OverallEndByteIndex => _OpenGenericStayingOpenContainer_EndByteIndex;
         
         

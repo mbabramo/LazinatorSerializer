@@ -37,7 +37,7 @@ namespace LazinatorTests.Examples.Structs
         protected int _ExampleStructWithoutClass_ByteIndex;
         protected virtual int _ExampleNullableStruct_ByteLength => _ExampleStructWithoutClass_ByteIndex - _ExampleNullableStruct_ByteIndex;
         private int _ContainerForExampleStructWithoutClass_EndByteIndex;
-        protected int _ExampleStructWithoutClass_ByteLength => _ContainerForExampleStructWithoutClass_EndByteIndex - _ExampleStructWithoutClass_ByteIndex;
+        protected virtual  int _ExampleStructWithoutClass_ByteLength => _ContainerForExampleStructWithoutClass_EndByteIndex - _ExampleStructWithoutClass_ByteIndex;
         protected virtual int _OverallEndByteIndex => _ContainerForExampleStructWithoutClass_EndByteIndex;
         
         

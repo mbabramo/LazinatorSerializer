@@ -37,7 +37,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         protected int _MyT_ByteIndex;
         protected virtual int _MyListT_ByteLength => _MyT_ByteIndex - _MyListT_ByteIndex;
         private int _OpenGeneric_T_EndByteIndex = 0;
-        protected int _MyT_ByteLength => _OpenGeneric_T_EndByteIndex - _MyT_ByteIndex;
+        protected virtual  int _MyT_ByteLength => _OpenGeneric_T_EndByteIndex - _MyT_ByteIndex;
         protected virtual int _OverallEndByteIndex => _OpenGeneric_T_EndByteIndex;
         
         
