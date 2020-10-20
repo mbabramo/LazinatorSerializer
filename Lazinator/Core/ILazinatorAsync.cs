@@ -10,20 +10,26 @@ namespace Lazinator.Core
     public interface ILazinatorAsync
     {
         /// <summary>
-        /// Initiates serialization starting from here (and optionally including descendants), using the original bytes if the object is clean and manually writing bytes if necessary.
+        /// Serializes the Lazinator, if it has changed, into a new buffer, resetting dirtiness properties (but not HasChanged). This method will not create a new buffer if the 
+        /// existing buffer already represents the current state of the object. If a new buffer is created, then the old buffer is disposed. The new buffer is stored internally
+        /// in each in-memory Lazinator object.
+        /// </summary>
+        ValueTask SerializeLazinator();
+        /// <summary>
+        /// Initiates serialization starting from here (and optionally including descendants), returning a new buffer.
         /// </summary>
         /// <param name="includeChildrenMode">Whether child objects should be included. If false, the child objects will be skipped.</param>
         /// <param name="verifyCleanness">Whether double-checking is needed to ensure that objects thought to be clean really are clean</param>
         /// <param name="updateStoredBuffer">Whether the object being serialized should be updated to use the new buffer. This is ignored and treated as false if includeChildrenMode is not set to include all children. If false, then the returned memory will be wholly independent of the existing memory.</param>
         /// <returns></returns>
-        Task<LazinatorMemory> SerializeLazinatorAsync(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
+        ValueTask<LazinatorMemory> SerializeLazinatorAsync(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
         /// <summary>
         /// Clones the class/struct, possibly excluding some or all children or descendants
         /// </summary>
         /// <param name="includeChildrenMode">Whether some or all children should be included</param>
         /// <param name="cloneBufferOptions">How the clone's buffer should relate to the original's</param>
         /// <returns>A cloned copy of the class/struct</returns>
-        Task<ILazinator> CloneLazinatorAsync(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers);
+        ValueTask<ILazinator> CloneLazinatorAsync(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers);
 
         /// <summary>
         /// Enumerates nodes in the hierarchy, including the node at the top of the hierarchy, based on specified parameters.
@@ -56,7 +62,7 @@ namespace Lazinator.Core
         /// <param name="exploreOnlyDeserializedChildren">If true, children that have not been deserialized are ignored.</param>
         /// <param name="changeThisLevel">Whether the change function should be applied at this level or only at lower levels</param>
         /// <returns>The Lazinator object, as transformed. (This is necessary to support this operation on Lazinator structs.)</returns>
-        Task<ILazinator> ForEachLazinatorAsync(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel);
+        ValueTask<ILazinator> ForEachLazinatorAsync(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel);
 
         /// <summary>
         /// This is primarily used internally for communication between Lazinator objects. Continues serialization of this object and optionally its descendants by writing bytes into a pre-existing buffer. 
@@ -66,14 +72,5 @@ namespace Lazinator.Core
         /// <param name="verifyCleanness">Whether double-checking is needed to ensure that objects thought to be clean really are clean</param>
         /// <param name="updateStoredBuffer">Whether the object being serialized should be updated to use the new buffer. This is ignored and treated as false if includeChildrenMode is not set to include all children.</param>
         Task SerializeToExistingBufferAsync(BinaryBufferWriterContainer writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
-        /// <summary>
-        /// This updates the stored buffer. This may be used to obtain LazinatorMemoryStorage before making further changes to the object.
-        /// </summary>
-        /// <param name="writer">The BinaryBufferWriter containing the new stored buffer</param>
-        /// <param name="startPosition">The start position within the writer</param>
-        /// <param name="length">The length within the writer</param>
-        /// <param name="includeChildrenMode">Whether child objects should be included.</param>
-        /// <param name="updateDeserializedChildren">Whether deserialized children should also have buffers updated</param>
-        Task UpdateStoredBufferAsync(BinaryBufferWriterContainer writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
     }
 }
