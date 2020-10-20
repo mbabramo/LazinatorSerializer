@@ -11,7 +11,8 @@ namespace Lazinator.Core
     {
         /// <summary>
         /// Serializes the Lazinator, if it has changed, into a new buffer, resetting dirtiness properties (but not HasChanged). This method will not create a new buffer if the 
-        /// existing buffer already represents the current state of the object. If a new buffer is created, then the old buffer is disposed.
+        /// existing buffer already represents the current state of the object. If a new buffer is created, then the old buffer is disposed. The new buffer is stored internally
+        /// in each in-memory Lazinator object.
         /// </summary>
         void SerializeLazinator();
         /// <summary>
