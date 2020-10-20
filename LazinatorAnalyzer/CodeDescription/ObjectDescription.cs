@@ -148,6 +148,9 @@ namespace Lazinator.CodeDescription
         private string IIF(bool x, string y) => x ? y : ""; // Include if function
         private string IIF(bool x, Func<string> y) => x ? y() : ""; // Same but with a function to produce the string
 
+        private string ValueTaskIfAsync(bool async, string type) => async ? $"ValueTask<{type}>" : type;
+        private string AwaitIfAsync(bool async) => async ? "await " : "";
+
         /* Strings to hide fields or properties if applicable */
         internal string HideMainProperty => (Config?.HideMainProperties ?? false) ? $@"[DebuggerBrowsable(DebuggerBrowsableState.Never)]
                     " : "";
@@ -302,7 +305,7 @@ namespace Lazinator.CodeDescription
                 AppendEnumerateLazinatorDescendants(sb);
                 AppendEnumerateNonLazinatorProperties(sb);
                 AppendForEachLazinator(sb);
-                AppendResetProperties(sb);
+                AppendFreeInMemoryObjects(sb);
                 AppendConversionSectionStart(sb);
                 AppendConvertFromBytesAfterHeader(sb);
                 AppendSerializeToExistingBuffer(sb);
@@ -396,16 +399,20 @@ namespace Lazinator.CodeDescription
                 else if (IsAbstract && !GeneratingRefStruct)
                     boilerplate = $@"        /* Abstract declarations */
 			            public abstract LazinatorParentsCollection LazinatorParents {{ get; set; }}
-                    
-                        {ProtectedIfApplicable}abstract int Deserialize();
-                        
-                        public abstract LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
-                        
-                        public abstract {ILazinatorString} CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers);
 
-                        {IIF(!ImplementsAssignCloneProperties, $@"{ProtectedIfApplicable}abstract {ILazinatorString} AssignCloneProperties({ILazinatorStringWithoutQuestionMark} clone, IncludeChildrenMode includeChildrenMode);
+                        {HideILazinatorProperty}public abstract LazinatorMemory LazinatorMemoryStorage
+                        {{
+			                get;
+			                set;
+                        }}
 
-                        ")}{HideILazinatorProperty}public abstract bool HasChanged
+                        {HideILazinatorProperty}public abstract IncludeChildrenMode OriginalIncludeChildrenMode
+                        {{
+                            get;
+                            set;
+                        }}
+
+                        {HideILazinatorProperty}public abstract bool HasChanged
                         {{
 			                get;
 			                set;
@@ -433,27 +440,25 @@ namespace Lazinator.CodeDescription
                         {{
                             get;
                         }}
+		                
+                        {ProtectedIfApplicable}abstract void DeserializeLazinator(LazinatorMemory serializedBytes);
+                    
+                        {ProtectedIfApplicable}abstract int Deserialize();
+                        
+                        public abstract void SerializeLazinator();
+                        public abstract LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
+                        
+                        public abstract {ILazinatorString} CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers);
+
+                        {IIF(!ImplementsAssignCloneProperties, $@"{ProtectedIfApplicable}abstract {ILazinatorString} AssignCloneProperties({ILazinatorStringWithoutQuestionMark} clone, IncludeChildrenMode includeChildrenMode);
+
+                        ")}
                         public abstract IEnumerable<{ILazinatorString}> EnumerateLazinatorNodes(Func<{ILazinatorString}, bool>{QuestionMarkIfNullableModeEnabled} matchCriterion, bool stopExploringBelowMatch, Func<{ILazinatorString}, bool>{QuestionMarkIfNullableModeEnabled} exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);
                         public abstract IEnumerable<(string propertyName, {ILazinatorString} descendant)> EnumerateLazinatorDescendants(Func<{ILazinatorString}, bool>{QuestionMarkIfNullableModeEnabled} matchCriterion, bool stopExploringBelowMatch, Func<{ILazinatorString}, bool>{QuestionMarkIfNullableModeEnabled} exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);
                         public abstract IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties();
                         public abstract {ILazinatorString} ForEachLazinator(Func<{ILazinatorString}, {ILazinatorString}>{QuestionMarkIfNullableModeEnabled} changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel);
-		                
-                        {ProtectedIfApplicable}abstract void DeserializeLazinator(LazinatorMemory serializedBytes);
-
-                        {HideILazinatorProperty}public abstract LazinatorMemory LazinatorMemoryStorage
-                        {{
-			                get;
-			                set;
-                        }}
-
-                        {HideILazinatorProperty}public abstract IncludeChildrenMode OriginalIncludeChildrenMode
-                        {{
-                            get;
-                            set;
-                        }}
 
                         public abstract void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
-                        public abstract void SerializeLazinator();
                         public abstract void FreeInMemoryObjects();
         
                 ";
@@ -478,61 +483,13 @@ namespace Lazinator.CodeDescription
 
                         {constructors}{HideILazinatorProperty}public {DerivationKeyword}LazinatorParentsCollection LazinatorParents {{ get; set; }}
 
+                        {HideILazinatorProperty}public {DerivationKeyword}LazinatorMemory LazinatorMemoryStorage
+                        {{
+                            get;
+                            set;
+                        }}
+
                         {HideILazinatorProperty}public {DerivationKeyword}IncludeChildrenMode OriginalIncludeChildrenMode {{ get; set; }}
-
-                        {ProtectedIfApplicable}{DerivationKeyword}int Deserialize()
-                        {{
-                            FreeInMemoryObjects();
-                            int bytesSoFar = 0;
-                            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
-                            if (span.Length == 0)
-                            {{
-                                return 0;
-                            }}
-
-                            {readUniqueID}{(SuppressLazinatorVersionByte ? "" : $@"int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesSoFar);
-                            
-                        ")}int serializedVersionNumber = {(Version == -1 ? "-1; /* versioning disabled */" : $@"span.ToDecompressedInt32(ref bytesSoFar);")}
-
-                            OriginalIncludeChildrenMode = {(CanNeverHaveChildren ? "IncludeChildrenMode.IncludeAllChildren; /* cannot have children */" : $@"(IncludeChildrenMode)span.ToByte(ref bytesSoFar);")}
-
-                            ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);{
-                            IIF(ImplementsLazinatorObjectVersionUpgrade && Version != -1,
-                                $@"
-                            if (serializedVersionNumber < LazinatorObjectVersion)
-                            {{
-                                LazinatorObjectVersionUpgrade(serializedVersionNumber);
-                            }}")
-                        }{  String.Join("", ExclusiveInterface.PropertiesToDefineThisLevel.Where(x => x.HasEagerAttribute && !x.NonNullableThatRequiresInitialization).Select(x => $@"
-                                _ = {x.PropertyName};"))
-                        }{
-                            IIF(ImplementsPostDeserialization,
-                                $@"
-                            PostDeserialization();")
-                        }
-                            return {(ContainsEndByteIndex ? $"_OverallEndByteIndex" : "bytesSoFar")};
-                        }}
-
-                        public {DerivationKeyword}LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
-                        {{
-                            if (LazinatorMemoryStorage.IsEmpty || includeChildrenMode != OriginalIncludeChildrenMode || (verifyCleanness || IsDirty || (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && DescendantIsDirty)))
-                            {{
-                                return EncodeToNewBuffer(includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                            }}
-                            BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
-                            LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
-                            return writer.LazinatorMemory;
-                        }}
-
-                        {ProtectedIfApplicable}{DerivationKeyword}LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
-                        {{
-                            int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.Length;
-                            BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
-                            SerializeToExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                            return writer.LazinatorMemory;
-                        }}
-
-                        {cloneMethod}
 
                         {HideILazinatorProperty}public {DerivationKeyword}bool HasChanged {{ get; set; }}
 
@@ -589,6 +546,8 @@ namespace Lazinator.CodeDescription
                                 }}
                             }}
                         }}
+
+                        public {DerivationKeyword}bool NonBinaryHash32 => {(NonbinaryHash ? "true" : "false")};
         
                         {ProtectedIfApplicable}{DerivationKeyword}void DeserializeLazinator(LazinatorMemory serializedBytes)
                         {{
@@ -600,10 +559,37 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
 
-                        {HideILazinatorProperty}public {DerivationKeyword}LazinatorMemory LazinatorMemoryStorage
+                        {ProtectedIfApplicable}{DerivationKeyword}int Deserialize()
                         {{
-                            get;
-                            set;
+                            FreeInMemoryObjects();
+                            int bytesSoFar = 0;
+                            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
+                            if (span.Length == 0)
+                            {{
+                                return 0;
+                            }}
+
+                            {readUniqueID}{(SuppressLazinatorVersionByte ? "" : $@"int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesSoFar);
+                            
+                        ")}int serializedVersionNumber = {(Version == -1 ? "-1; /* versioning disabled */" : $@"span.ToDecompressedInt32(ref bytesSoFar);")}
+
+                            OriginalIncludeChildrenMode = {(CanNeverHaveChildren ? "IncludeChildrenMode.IncludeAllChildren; /* cannot have children */" : $@"(IncludeChildrenMode)span.ToByte(ref bytesSoFar);")}
+
+                            ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);{
+                            IIF(ImplementsLazinatorObjectVersionUpgrade && Version != -1,
+                                $@"
+                            if (serializedVersionNumber < LazinatorObjectVersion)
+                            {{
+                                LazinatorObjectVersionUpgrade(serializedVersionNumber);
+                            }}")
+                        }{  String.Join("", ExclusiveInterface.PropertiesToDefineThisLevel.Where(x => x.HasEagerAttribute && !x.NonNullableThatRequiresInitialization).Select(x => $@"
+                                _ = {x.PropertyName};"))
+                        }{
+                            IIF(ImplementsPostDeserialization,
+                                $@"
+                            PostDeserialization();")
+                        }
+                            return {(ContainsEndByteIndex ? $"_OverallEndByteIndex" : "bytesSoFar")};
                         }}
 
                         public {DerivationKeyword}void SerializeLazinator()
@@ -630,7 +616,26 @@ namespace Lazinator.CodeDescription
                             }}
                         }}
 
-                        public {DerivationKeyword}bool NonBinaryHash32 => {(NonbinaryHash ? "true" : "false")};
+                        public {DerivationKeyword}LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
+                        {{
+                            if (LazinatorMemoryStorage.IsEmpty || includeChildrenMode != OriginalIncludeChildrenMode || (verifyCleanness || IsDirty || (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && DescendantIsDirty)))
+                            {{
+                                return EncodeToNewBuffer(includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                            }}
+                            BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
+                            LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
+                            return writer.LazinatorMemory;
+                        }}
+
+                        {ProtectedIfApplicable}{DerivationKeyword}LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
+                        {{
+                            int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.Length;
+                            BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
+                            SerializeToExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                            return writer.LazinatorMemory;
+                        }}
+
+                        {cloneMethod}
         
                 ";
                 }
@@ -793,7 +798,7 @@ namespace Lazinator.CodeDescription
 ");
         }
 
-        private void AppendResetProperties(CodeStringBuilder sb)
+        private void AppendFreeInMemoryObjects(CodeStringBuilder sb)
         {
             string resetAccessed = "", resetStorage = "";
             foreach (var property in PropertiesToDefineThisLevel.Where(x => !x.IsPrimitive && x.PlaceholderMemoryWriteMethod == null)) // Note that we will free in memory objects even for non-nullables. We can do this because we have nullable backing properties for them. 
