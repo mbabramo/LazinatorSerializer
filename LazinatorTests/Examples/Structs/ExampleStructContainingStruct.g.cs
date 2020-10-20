@@ -198,7 +198,79 @@ namespace LazinatorTests.Examples
         
         public LazinatorParentsCollection LazinatorParents { get; set; }
         
+        public LazinatorMemory LazinatorMemoryStorage
+        {
+            get;
+            set;
+        }
+        
         public IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }
+        
+        public bool HasChanged { get; set; }
+        
+        bool _IsDirty;
+        public bool IsDirty
+        {
+            [DebuggerStepThrough]
+            get => _IsDirty;
+            [DebuggerStepThrough]
+            set
+            {
+                if (_IsDirty != value)
+                {
+                    _IsDirty = value;
+                    if (_IsDirty)
+                    {
+                        LazinatorParents.InformParentsOfDirtiness();
+                        HasChanged = true;
+                    }
+                }
+            }
+        }
+        
+        bool _DescendantHasChanged;
+        public bool DescendantHasChanged
+        {
+            [DebuggerStepThrough]
+            get => _DescendantHasChanged || (_MyExampleNullableStruct_Accessed && (MyExampleNullableStruct.Value.HasChanged || MyExampleNullableStruct.Value.DescendantHasChanged)) || (_MyExampleStructContainingClasses_Accessed && (MyExampleStructContainingClasses.HasChanged || MyExampleStructContainingClasses.DescendantHasChanged));
+            [DebuggerStepThrough]
+            set
+            {
+                _DescendantHasChanged = value;
+            }
+        }
+        
+        bool _DescendantIsDirty;
+        public bool DescendantIsDirty
+        {
+            [DebuggerStepThrough]
+            get => _DescendantIsDirty || (_MyExampleNullableStruct_Accessed && (MyExampleNullableStruct.Value.IsDirty || MyExampleNullableStruct.Value.DescendantIsDirty)) || (_MyExampleStructContainingClasses_Accessed && (MyExampleStructContainingClasses.IsDirty || MyExampleStructContainingClasses.DescendantIsDirty));
+            [DebuggerStepThrough]
+            set
+            {
+                if (_DescendantIsDirty != value)
+                {
+                    _DescendantIsDirty = value;
+                    if (_DescendantIsDirty)
+                    {
+                        LazinatorParents.InformParentsOfDirtiness();
+                        _DescendantHasChanged = true;
+                    }
+                }
+            }
+        }
+        
+        public bool NonBinaryHash32 => false;
+        
+        void DeserializeLazinator(LazinatorMemory serializedBytes)
+        {
+            LazinatorMemoryStorage = serializedBytes;
+            int length = Deserialize();
+            if (length != LazinatorMemoryStorage.Length)
+            {
+                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
+            }
+        }
         
         int Deserialize()
         {
@@ -224,6 +296,30 @@ namespace LazinatorTests.Examples
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             return bytesSoFar;
+        }
+        
+        public void SerializeLazinator()
+        {
+            if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
+            {
+                return;
+            }
+            var previousBuffer = LazinatorMemoryStorage;
+            if (LazinatorMemoryStorage.IsEmpty || IncludeChildrenMode.IncludeAllChildren != OriginalIncludeChildrenMode || (IsDirty || DescendantIsDirty))
+            {
+                LazinatorMemoryStorage = EncodeToNewBuffer(IncludeChildrenMode.IncludeAllChildren, false, true);
+            }
+            else
+            {
+                BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
+                LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
+                LazinatorMemoryStorage = writer.LazinatorMemory;
+            }
+            OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
+            if (!LazinatorParents.Any())
+            {
+                previousBuffer.Dispose();
+            }
         }
         
         public LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
@@ -285,102 +381,6 @@ namespace LazinatorTests.Examples
             typedClone.IsDirty = false;
             return typedClone;
         }
-        
-        public bool HasChanged { get; set; }
-        
-        bool _IsDirty;
-        public bool IsDirty
-        {
-            [DebuggerStepThrough]
-            get => _IsDirty;
-            [DebuggerStepThrough]
-            set
-            {
-                if (_IsDirty != value)
-                {
-                    _IsDirty = value;
-                    if (_IsDirty)
-                    {
-                        LazinatorParents.InformParentsOfDirtiness();
-                        HasChanged = true;
-                    }
-                }
-            }
-        }
-        
-        bool _DescendantHasChanged;
-        public bool DescendantHasChanged
-        {
-            [DebuggerStepThrough]
-            get => _DescendantHasChanged || (_MyExampleNullableStruct_Accessed && (MyExampleNullableStruct.Value.HasChanged || MyExampleNullableStruct.Value.DescendantHasChanged)) || (_MyExampleStructContainingClasses_Accessed && (MyExampleStructContainingClasses.HasChanged || MyExampleStructContainingClasses.DescendantHasChanged));
-            [DebuggerStepThrough]
-            set
-            {
-                _DescendantHasChanged = value;
-            }
-        }
-        
-        bool _DescendantIsDirty;
-        public bool DescendantIsDirty
-        {
-            [DebuggerStepThrough]
-            get => _DescendantIsDirty || (_MyExampleNullableStruct_Accessed && (MyExampleNullableStruct.Value.IsDirty || MyExampleNullableStruct.Value.DescendantIsDirty)) || (_MyExampleStructContainingClasses_Accessed && (MyExampleStructContainingClasses.IsDirty || MyExampleStructContainingClasses.DescendantIsDirty));
-            [DebuggerStepThrough]
-            set
-            {
-                if (_DescendantIsDirty != value)
-                {
-                    _DescendantIsDirty = value;
-                    if (_DescendantIsDirty)
-                    {
-                        LazinatorParents.InformParentsOfDirtiness();
-                        _DescendantHasChanged = true;
-                    }
-                }
-            }
-        }
-        
-        void DeserializeLazinator(LazinatorMemory serializedBytes)
-        {
-            LazinatorMemoryStorage = serializedBytes;
-            int length = Deserialize();
-            if (length != LazinatorMemoryStorage.Length)
-            {
-                LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
-            }
-        }
-        
-        public LazinatorMemory LazinatorMemoryStorage
-        {
-            get;
-            set;
-        }
-        
-        public void SerializeLazinator()
-        {
-            if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
-            {
-                return;
-            }
-            var previousBuffer = LazinatorMemoryStorage;
-            if (LazinatorMemoryStorage.IsEmpty || IncludeChildrenMode.IncludeAllChildren != OriginalIncludeChildrenMode || (IsDirty || DescendantIsDirty))
-            {
-                LazinatorMemoryStorage = EncodeToNewBuffer(IncludeChildrenMode.IncludeAllChildren, false, true);
-            }
-            else
-            {
-                BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
-                LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
-                LazinatorMemoryStorage = writer.LazinatorMemory;
-            }
-            OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
-            if (!LazinatorParents.Any())
-            {
-                previousBuffer.Dispose();
-            }
-        }
-        
-        public bool NonBinaryHash32 => false;
         
         
         public IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)

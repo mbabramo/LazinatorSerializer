@@ -48,13 +48,19 @@ namespace Lazinator.Wrappers
         /* Abstract declarations */
         public abstract LazinatorParentsCollection LazinatorParents { get; set; }
         
-        protected abstract int Deserialize();
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public abstract LazinatorMemory LazinatorMemoryStorage
+        {
+            get;
+            set;
+        }
         
-        public abstract LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
-        
-        public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers);
-        
-        protected abstract ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode);
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        public abstract IncludeChildrenMode OriginalIncludeChildrenMode
+        {
+            get;
+            set;
+        }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public abstract bool HasChanged
@@ -88,29 +94,25 @@ namespace Lazinator.Wrappers
         {
             get;
         }
+        
+        protected abstract void DeserializeLazinator(LazinatorMemory serializedBytes);
+        
+        protected abstract int Deserialize();
+        
+        public abstract void SerializeLazinator();
+        public abstract LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
+        
+        public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers);
+        
+        protected abstract ILazinator AssignCloneProperties(ILazinator clone, IncludeChildrenMode includeChildrenMode);
+        
+        
         public abstract IEnumerable<ILazinator> EnumerateLazinatorNodes(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);
         public abstract IEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorDescendants(Func<ILazinator, bool> matchCriterion, bool stopExploringBelowMatch, Func<ILazinator, bool> exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);
         public abstract IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties();
         public abstract ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel);
         
-        protected abstract void DeserializeLazinator(LazinatorMemory serializedBytes);
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public abstract LazinatorMemory LazinatorMemoryStorage
-        {
-            get;
-            set;
-        }
-        
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        public abstract IncludeChildrenMode OriginalIncludeChildrenMode
-        {
-            get;
-            set;
-        }
-        
         public abstract void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
-        public abstract void SerializeLazinator();
         public abstract void FreeInMemoryObjects();
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

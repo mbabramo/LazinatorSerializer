@@ -294,13 +294,7 @@ namespace Lazinator.CodeDescription
 
         private void AppendMiscMethods(CodeStringBuilder sb)
         {
-            if (IsAbstract && !GeneratingRefStruct)
-            {
-                if (!IsDerivedFromAbstractLazinator && !IsDerivedFromNonAbstractLazinator)
-                    AppendAbstractConversions(sb);
-                // otherwise, lower level has already defined these methods, so nothing more to do
-            }
-            else
+            if (!IsAbstract || GeneratingRefStruct)
             {
                 AppendEnumerateLazinatorDescendants(sb);
                 AppendEnumerateNonLazinatorProperties(sb);
@@ -393,11 +387,12 @@ namespace Lazinator.CodeDescription
 
             if (!IsDerivedFromNonAbstractLazinator)
             {
-                string boilerplate;
+                string generalDefinitions;
                 if (IsAbstract && BaseLazinatorObject?.IsAbstract == true) // abstract class inheriting from abstract class
-                    boilerplate = $@""; // everything is inherited from parent abstract class
+                    generalDefinitions = $@""; // everything is inherited from parent abstract class
                 else if (IsAbstract && !GeneratingRefStruct)
-                    boilerplate = $@"        /* Abstract declarations */
+                {
+                    generalDefinitions = $@"        /* Abstract declarations */
 			            public abstract LazinatorParentsCollection LazinatorParents {{ get; set; }}
 
                         {HideILazinatorProperty}public abstract LazinatorMemory LazinatorMemoryStorage
@@ -459,9 +454,25 @@ namespace Lazinator.CodeDescription
                         public abstract {ILazinatorString} ForEachLazinator(Func<{ILazinatorString}, {ILazinatorString}>{QuestionMarkIfNullableModeEnabled} changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel);
 
                         public abstract void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
-                        public abstract void FreeInMemoryObjects();
+                        public abstract void FreeInMemoryObjects();{IIF(!IsDerivedFromAbstractLazinator, $@"
+                        {HideILazinatorProperty}public abstract int LazinatorUniqueID {{ get; }}
+                        {HideILazinatorProperty}{ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(ContainsOpenGenericParameters ? "true" : "false")};
+                        {HideILazinatorProperty}public abstract LazinatorGenericIDType LazinatorGenericID {{ get; }}
+                        {HideILazinatorProperty}public abstract int LazinatorObjectVersion {{ get; set; }}
+                        {(ImplementsConvertFromBytesAfterHeader ? skipConvertFromBytesAfterHeaderString : $@"{ProtectedIfApplicable}abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
+                            {ProtectedIfApplicable}abstract void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
+                            {ProtectedIfApplicable}abstract int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar);")}
+                        public abstract void SerializeToExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
+                        {ProtectedIfApplicable}abstract LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
+                        {ProtectedIfApplicable}abstract void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition);
+                        {(ImplementsWritePropertiesIntoBuffer ? skipWritePropertiesIntoBufferString : $@"{ProtectedIfApplicable}abstract void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);
+                            {ProtectedIfApplicable}abstract void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);
+                            {ProtectedIfApplicable}abstract void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition);
+")}
+")}
         
-                ";
+                    ";
+                }
                 else
                 {
                     string readUniqueID;
@@ -478,7 +489,7 @@ namespace Lazinator.CodeDescription
 
                                     ";
 
-                    boilerplate = $@"
+                    generalDefinitions = $@"
                         /* Serialization, deserialization, and object relationships */
 
                         {constructors}{HideILazinatorProperty}public {DerivationKeyword}LazinatorParentsCollection LazinatorParents {{ get; set; }}
@@ -641,7 +652,7 @@ namespace Lazinator.CodeDescription
                 }
 
 
-                sb.Append(boilerplate);
+                sb.Append(generalDefinitions);
             }
             else if (!IsAbstract || GeneratingRefStruct)
             {
@@ -777,25 +788,6 @@ namespace Lazinator.CodeDescription
             {
                 property.AppendPropertyDefinitionString(sb);
             }
-        }
-
-        private void AppendAbstractConversions(CodeStringBuilder sb)
-        {
-            sb.Append($@"{HideILazinatorProperty}public abstract int LazinatorUniqueID {{ get; }}
-                        {HideILazinatorProperty}{ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(ContainsOpenGenericParameters ? "true" : "false")};
-                        {HideILazinatorProperty}public abstract LazinatorGenericIDType LazinatorGenericID {{ get; }}
-                        {HideILazinatorProperty}public abstract int LazinatorObjectVersion {{ get; set; }}
-                        {(ImplementsConvertFromBytesAfterHeader ? skipConvertFromBytesAfterHeaderString : $@"{ProtectedIfApplicable}abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
-                            {ProtectedIfApplicable}abstract void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
-                            {ProtectedIfApplicable}abstract int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar);")}
-                        public abstract void SerializeToExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
-                        {ProtectedIfApplicable}abstract LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
-                        {ProtectedIfApplicable}abstract void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition);
-                        {(ImplementsWritePropertiesIntoBuffer ? skipWritePropertiesIntoBufferString : $@"{ProtectedIfApplicable}abstract void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);
-                            {ProtectedIfApplicable}abstract void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);
-                            {ProtectedIfApplicable}abstract void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition);
-")}
-");
         }
 
         private void AppendFreeInMemoryObjects(CodeStringBuilder sb)
