@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -7,8 +8,11 @@ using System.Xml.Serialization;
 
 namespace LazinatorAnalyzer.Support
 {
-    public static class StringModifier
+    public class StringTemplates
     {
+        public string BeginCommandOpenDelimeter;
+        public string EndCommandOpenDelimeter;
+        public string CloseDelimeter;
 
         public class Tree<T> : List<Tree<T>>
         {
@@ -39,11 +43,13 @@ namespace LazinatorAnalyzer.Support
                 yield return this;
             }
 
-            public string StringProducer(Func<Tree<T>, string> leafContentsFunc, Func<Tree<T>, string, string> transformStringFunc)
+            public string StringProducer(Func<Tree<T>, string> leafContentsFunc, Func<Tree<T>, string, int> orderFunc, Func<Tree<T>, string, string> transformStringFunc)
             {
+                Debug; // we need to add an ordering here.
                 if (this.Any())
                 {
-                    IEnumerable<string> childStrings = this.Select(x => x.StringProducer(leafContentsFunc, transformStringFunc));
+                    List<int> order = this.Select(x => orderFunc(this, ))
+                    IEnumerable<string> childStrings = this.Select(x => x.StringProducer(leafContentsFunc, orderFunc, transformStringFunc));
                     StringBuilder sb = new StringBuilder();
                     foreach (var childString in childStrings)
                         sb.AppendLine(childString);
@@ -79,6 +85,7 @@ namespace LazinatorAnalyzer.Support
             {
 
             }
+            public virtual int Order => 0;
             public abstract (int startRange, int endRange) OverallRange { get; }
             public abstract (int startRange, int endRange)? ContentRange { get; }
             public abstract (int startRange, int endRange)? CommandRange { get; }
@@ -122,6 +129,8 @@ namespace LazinatorAnalyzer.Support
                 EndCommandLocation = endCommandLocation;
             }
 
+            Debug; // allow specification of order. move command range inward if the command begins with an order declaration.
+
             public CommandLocation StartCommandLocation;
             public CommandLocation EndCommandLocation;
             public override (int startRange, int endRange) OverallRange => (StartCommandLocation.OverallStart, EndCommandLocation.OverallEnd);
@@ -130,7 +139,7 @@ namespace LazinatorAnalyzer.Support
             public override (int startRange, int endRange)? ContentRange => EndCommandLocation.OverallStart == StartCommandLocation.OverallEnd + 1 ? null : (StartCommandLocation.OverallEnd + 1, EndCommandLocation.OverallStart - 1);
         }
 
-        private static List<int> AllIndexesOf(this string str, string value)
+        private static List<int> AllIndexesOf(string str, string value)
         {
             if (String.IsNullOrEmpty(value))
                 throw new ArgumentException("the string to find may not be empty", "value");
@@ -144,7 +153,7 @@ namespace LazinatorAnalyzer.Support
             }
         }
 
-        private static List<(int, int)> AllIndexRangesOf(this string str, string value) => AllIndexesOf(str, value).Select(x => (x, x + value.Length)).ToList();
+        private static List<(int, int)> AllIndexRangesOf(string str, string value) => AllIndexesOf(str, value).Select(x => (x, x + value.Length)).ToList();
 
         private static List<CommandLocation> GetCommandLocations(this string str, string openDelimeter, string closeDelimeter)
         {
@@ -158,7 +167,7 @@ namespace LazinatorAnalyzer.Support
                 .ToList();
         }
 
-        private static Tree<TextBlockBase> GetCommandTree(this string str, string beginCommandOpenDelimeter, string endCommandOpenDelimeter, string closeDelimeter)
+        private static Tree<TextBlockBase> GetCommandTree(string str, string beginCommandOpenDelimeter, string endCommandOpenDelimeter, string closeDelimeter)
         {
             // Assemble a list of begin and end commands
             var beginCommands = GetCommandLocations(str, beginCommandOpenDelimeter, closeDelimeter);
@@ -223,38 +232,123 @@ namespace LazinatorAnalyzer.Support
 
         }
 
-        public class TransformCommand
+        public class CommandBase
         {
-            public virtual string TransformRange(string stringToTransform, string commandContent, Tree<TextBlockBase> node)
-            {
-                return Transform(stringToTransform);
-            }
 
-            public virtual string Transform(string content) => content;
+            public virtual int Order => 0;
+
+            public virtual string TransformRange(string stringToTransform, string commandContent, Dictionary<string, string> variables, Func<string, Dictionary<string, string>, string> modifyFunc)
+            {
+                return stringToTransform;
+            }
         }
 
-        public static string ModifyString(this string str, string beginCommandOpenDelimeter, string endCommandOpenDelimeter, string closeDelimeter, Dictionary<string, TransformCommand> transformers)
+        public class OrderCommand : CommandBase
         {
-            Tree<TextBlockBase> tree = GetCommandTree(str, beginCommandOpenDelimeter, endCommandOpenDelimeter, closeDelimeter);
+            private int _Order;
+            public override int Order => _Order;
+
+            public override string TransformRange(string stringToTransform, string commandContent, Dictionary<string, string> variables, Func<string, Dictionary<string, string>, string> modifyFunc)
+            {
+                _Order = Int32.Parse(commandContent);
+                return stringToTransform; // If there are commands using the variable, the result will be processed again.
+            }
+        }
+
+        public class SetVariableCommand : CommandBase
+        {
+            public override string TransformRange(string stringToTransform, string commandContent, Dictionary<string, string> variables, Func<string, Dictionary<string, string>, string> modifyFunc)
+            {
+                var split = commandContent.Split(',').ToList();
+                string variableName = split[0];
+                string value = split[1];
+                variables[variableName] = value;
+                return stringToTransform; // If there are commands using the variable, the result will be processed again.
+            }
+        }
+
+        public class IfVariableCommand : CommandBase
+        {
+            public override string TransformRange(string stringToTransform, string commandContent, Dictionary<string, string> variables, Func<string, Dictionary<string, string>, string> modifyFunc)
+            {
+                var split = commandContent.Split(',').ToList();
+                string variableName = split[0];
+                string value = split[1];
+                if (variables.ContainsKey(variableName) && variables[variableName] == value)
+                    return stringToTransform; 
+                return "";
+            }
+        }
+
+        public class ForCommand : CommandBase
+        {
+            public override string TransformRange(string stringToTransform, string commandContent, Dictionary<string, string> variables, Func<string, Dictionary<string, string>, string> modifyFunc)
+            {
+                // Note that we require that the content be like 2,variableName or 3,4.
+                // We don't allow the content to consist of other commands that can be reduced to that.
+                var split = commandContent.Split(',').ToList();
+                string variableName = split[0];
+                int firstValueInclusive, secondValueExclusive;
+                if (!int.TryParse(split[1], out firstValueInclusive))
+                    firstValueInclusive = Int32.Parse(variables[split[1]]);
+                if (!int.TryParse(split[2], out secondValueExclusive))
+                    secondValueExclusive = Int32.Parse(variables[split[2]]);
+                StringBuilder sb = new StringBuilder();
+                for (int i = firstValueInclusive; i < secondValueExclusive; i++)
+                {
+                    variables[variableName] = i.ToString();
+                    sb.AppendLine(modifyFunc(stringToTransform, variables));
+                }
+                return sb.ToString();
+            }
+        }
+
+        public static Dictionary<string, CommandBase> Transformers = new Dictionary<string, CommandBase>()
+        {
+            { "", new CommandBase() },
+            { "set", new SetVariableCommand() },
+            { "if", new IfVariableCommand() },
+            { "for", new ForCommand() },
+            { "order", new OrderCommand() }
+        };
+
+        public string ModifyString( string str, Dictionary<string, string> variables)
+        {
+            Tree<TextBlockBase> tree = GetCommandTree(str, BeginCommandOpenDelimeter, EndCommandOpenDelimeter, CloseDelimeter);
             string result = tree.StringProducer(
-                treeNode => treeNode.Data.GetContent(str),
+                treeNode =>
+                {
+                    string content = treeNode.Data.GetContent(str);
+                    while (content.IndexOf(BeginCommandOpenDelimeter) >= 0)
+                        content = ModifyString(content, variables);
+                    return content;
+                },
                 (treeNode, originalString) =>
                 {
                     TextBlockBase block = treeNode.Data;
                     var command = block.GetCommand(str);
+                    return Transformers[command.commandName].Order;
+                },
+                (treeNode, originalString) =>
+                {
+                    TextBlockBase block = treeNode.Data;
+                    var command = block.GetCommand(str);
+                    string commandContent = command.commandContent;
+                    while (commandContent.IndexOf(BeginCommandOpenDelimeter) >= 0)
+                        commandContent = ModifyString(commandContent, variables);
                     if (command.commandName == "")
                         return originalString;
                     else
                     {
-                        if (transformers.ContainsKey(command.commandName))
+                        if (Transformers.ContainsKey(command.commandName))
                         {
-                            string transformedString = transformers[command.commandName].TransformRange(str, command.commandContent, treeNode);
+                            string transformedString = Transformers[command.commandName].TransformRange(str, commandContent, variables, ModifyString);
                             return transformedString;
                         }
                         else
                             throw new Exception("Transformer {command.commandName} not defined");
                     }
-                });
+                };
             return result;
         }
     }
