@@ -27,9 +27,37 @@ namespace LazinatorTests.Tests
         {
             StringTemplates templatesProcessor = new StringTemplates();
             string beginning = "The quick brown fox";
-            string template = $"{beginning}{templatesProcessor.CommandBlockString("if", "include,1", " jumps")}";
+            string template = $"{beginning}{templatesProcessor.IfBlockString("include", "1", " jumps")}";
             string result = templatesProcessor.Process(template, new Dictionary<string, string>() { { "include", "1" } });
             result.Should().Be(beginning + " jumps");
+        }
+
+        [Fact]
+        public void TemplateIfCommandWorks_Excluding()
+        {
+            StringTemplates templatesProcessor = new StringTemplates();
+            string beginning = "The quick brown fox";
+            string template = $"{beginning}{templatesProcessor.IfBlockString("include", "1", " jumps")}";
+            string result = templatesProcessor.Process(template, new Dictionary<string, string>() { { "include", "0" } });
+            result.Should().Be(beginning);
+        }
+
+        [Fact]
+        public void TemplateIfCommandWorks_Nested()
+        {
+            StringTemplates templatesProcessor = new StringTemplates();
+            string beginning = "The quick brown fox";
+            string middle = " jumps over";
+            string end = " the lazy dog";
+            string template = $"{beginning}{templatesProcessor.IfBlockString("outer", "1", $"{middle}{templatesProcessor.IfBlockString("inner", "1", end)}")}";
+            string result = templatesProcessor.Process(template, new Dictionary<string, string>() { { "outer", "0" }, { "inner", "0" } });
+            result.Should().Be(beginning); 
+            result = templatesProcessor.Process(template, new Dictionary<string, string>() { { "outer", "0" }, { "inner", "1" } });
+            result.Should().Be(beginning);
+            result = templatesProcessor.Process(template, new Dictionary<string, string>() { { "outer", "1" }, { "inner", "0" } });
+            result.Should().Be(beginning + middle);
+            result = templatesProcessor.Process(template, new Dictionary<string, string>() { { "outer", "1" }, { "inner", "1" } });
+            result.Should().Be(beginning + middle + end);
         }
 
 

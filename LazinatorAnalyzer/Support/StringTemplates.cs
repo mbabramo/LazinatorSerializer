@@ -23,6 +23,8 @@ namespace LazinatorAnalyzer.Support
             return $"{BeginCommandString(commandName, commandContent)}{textContent}{EndCommandString()}";
         }
 
+        public string IfBlockString(string variableName, string variableValue, string textContent) => CommandBlockString("if", $"{variableName},{variableValue}", textContent);
+
         private class Tree<T> : List<Tree<T>>
         {
             public T Data { get; set; }
@@ -252,7 +254,7 @@ namespace LazinatorAnalyzer.Support
                 if (treeNode.Any() && treeNode.Data.InnerContentRange != null)
                 {
                     int numChildren = treeNode.Count();
-                    int expectedNext = 0;
+                    int expectedNext = treeNode.Data.InnerContentRange.Value.startRange;
                     for (int childIndex = 0; childIndex < numChildren; childIndex++)
                     {
                         var child = treeNode[childIndex];
@@ -263,7 +265,7 @@ namespace LazinatorAnalyzer.Support
                             expectedNext = child.Data.OverallRange.endRange + 1;
                     }
                     int currentEnd = treeNode.Last().Data.OverallRange.endRange;
-                    int expectedEnd = treeNode.Data.OverallRange.endRange;
+                    int expectedEnd = treeNode.Data.InnerContentRange.Value.endRange;
                     if (currentEnd < expectedEnd)
                         treeNode.Add(new Tree<TextBlockBase>(new TextBlock(currentEnd + 1, expectedEnd)));
                 }
