@@ -289,7 +289,8 @@ namespace Lazinator.CodeDescription
             CodeStringBuilder sb = new CodeStringBuilder();
             AppendCodeBehindFile(sb);
             string result = sb.ToString();
-            return result;
+            string result2 = AsyncTemplate.Process(result);
+            return result2;
         }
 
         private void AppendCodeBehindFile(CodeStringBuilder sb)
