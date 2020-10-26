@@ -129,9 +129,8 @@ namespace LazinatorTests.Tests
         [Fact]
         public void TemplateAsync_WithoutAwaitCalls_MayBeAsync()
         {
-            AsyncStringTemplates t = new AsyncStringTemplates();
-            bool mayBeAsync = true;
-            string template = $"{t.NotAsyncAndMaybeAsync(mayBeAsync, $@"public {t.MaybeAsyncBlockReturnType(mayBeAsync, "int")} MyMethod{t.MaybeAsyncWordAsync(mayBeAsync)}() => {t.MaybeAsyncReturnValue(mayBeAsync, "3")};")}";
+            AsyncStringTemplates t = new AsyncStringTemplates() { MayBeAsync = true };
+            string template = $"{t.NotAsyncAndMaybeAsync($@"public {t.MaybeAsyncBlockReturnType("int")} MyMethod{t.MaybeAsyncWordAsync()}() => {t.MaybeAsyncReturnValue("3")};")}";
             string result = t.Process(template, new Dictionary<string, string>());
             string DEBUG = t.GetCommandTreeString(template);
             string expected = $@"public int MyMethod() => 3;
@@ -143,9 +142,8 @@ public ValueTask<int> MyMethodAsync() => ValueTask.FromResult(3);
         [Fact]
         public void TemplateAsync_WithoutAwaitCalls_MayNotBeAsync()
         {
-            AsyncStringTemplates t = new AsyncStringTemplates();
-            bool mayBeAsync = false;
-            string template = $"{t.NotAsyncAndMaybeAsync(mayBeAsync, $@"public {t.MaybeAsyncBlockReturnType(mayBeAsync, "int")} MyMethod() => {t.MaybeAsyncReturnValue(mayBeAsync, "3")};")}";
+            AsyncStringTemplates t = new AsyncStringTemplates() { MayBeAsync = false };
+            string template = $"{t.NotAsyncAndMaybeAsync($@"public {t.MaybeAsyncBlockReturnType("int")} MyMethod() => {t.MaybeAsyncReturnValue("3")};")}";
             string result = t.Process(template, new Dictionary<string, string>());
             string expected = $@"public int MyMethod() => 3;";
             result.Should().Be(expected);
@@ -154,12 +152,11 @@ public ValueTask<int> MyMethodAsync() => ValueTask.FromResult(3);
         [Fact]
         public void TemplateAsync_WithAwaitCalls_MayBeAsync()
         {
-            AsyncStringTemplates t = new AsyncStringTemplates();
-            bool mayBeAsync = true;
-            string template = $@"{t.NotAsyncAndMaybeAsync(mayBeAsync, $@"public {t.MaybeAsyncBlockReturnType(mayBeAsync, "int")} MyMethod{t.MaybeAsyncWordAsync(mayBeAsync)}()
+            AsyncStringTemplates t = new AsyncStringTemplates() { MayBeAsync = true };
+            string template = $@"{t.NotAsyncAndMaybeAsync($@"public {t.MaybeAsyncBlockReturnType("int")} MyMethod{t.MaybeAsyncWordAsync()}()
 {{
-    {t.MaybeAsyncWordAwait(mayBeAsync)}MyOtherMethod{t.MaybeAsyncWordAsync(mayBeAsync)}();
-    return {t.MaybeAsyncReturnValue(mayBeAsync, "3")};
+    {t.MaybeAsyncWordAwait()}MyOtherMethod{t.MaybeAsyncWordAsync()}();
+    return {t.MaybeAsyncReturnValue("3")};
 }}")}";
             string result = t.Process(template, new Dictionary<string, string>());
             string expected = $@"public int MyMethod()
