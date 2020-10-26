@@ -438,6 +438,13 @@ namespace LazinatorAnalyzer.Support
 
         private Dictionary<string, CommandBase> Transformers => _Transformers;
 
+        public string GetCommandTreeString(string str)
+        {
+            Tree<TextBlockBase> tree = GetCommandTree(str, BeginCommandOpenDelimeter, EndCommandOpenDelimeter, CloseDelimeter);
+            var treeString = tree.GetTreeString(textBlock => textBlock.ToString(str));
+            return treeString;
+        }
+
         public string Process(string str, Dictionary<string, string> variables = null)
         {
             if (variables == null)

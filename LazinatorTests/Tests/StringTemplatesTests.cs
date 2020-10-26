@@ -8,6 +8,7 @@ using System;
 using System.Security.Cryptography.X509Certificates;
 using LazinatorAnalyzer.Support;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace LazinatorTests.Tests
 {
@@ -123,6 +124,16 @@ namespace LazinatorTests.Tests
             template = templatesProcessor.CreateReprocessBlock(template);
             string result = templatesProcessor.Process(template, new Dictionary<string, string>() { });
             result.Should().Be($"{text}{additionalText}");
+        }
+
+        [Fact]
+        public void TemplateAsync_WithoutAwaitCalls()
+        {
+            AsyncStringTemplates t = new AsyncStringTemplates();
+            bool mayBeAsync = true;
+            string template = $"{t.NotAsyncAndMaybeAsync(mayBeAsync, $@"{t.MaybeAsyncBlockReturnType(mayBeAsync, "int")} MyMethod() => {t.MaybeAsyncReturnValue(mayBeAsync, "3")};")}";
+            string result = t.Process(template, new Dictionary<string, string>());
+            var DEBUG = t.GetCommandTreeString(template);
         }
 
 
