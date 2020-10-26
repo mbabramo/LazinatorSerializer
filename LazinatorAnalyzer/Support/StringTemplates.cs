@@ -15,9 +15,9 @@ namespace LazinatorAnalyzer.Support
     /// </summary>
     public class StringTemplates
     {
-        public string BeginCommandOpenDelimeter = "/*$$< ";
-        public string EndCommandOpenDelimeter = "/*$$> ";
-        public string CloseDelimeter = " $$*/";
+        public string BeginCommandOpenDelimeter = "/*$$B ";
+        public string EndCommandOpenDelimeter = "/*$$E ";
+        public string CloseDelimeter = " >$$*/";
 
         public string CreateBeginCommand(string commandName, string commandContent) => $"{BeginCommandOpenDelimeter}{commandName}={commandContent}{CloseDelimeter}";
 
@@ -158,7 +158,7 @@ namespace LazinatorAnalyzer.Support
 
             public virtual string ToString(string overallString)
             {
-                return $@"Overall {overallString.Substring(OverallRange.startRange, OverallRange.endRange - OverallRange.startRange + 1)} Command {(CommandRange == null ? "" : overallString.Substring(CommandRange.Value.startRange, CommandRange.Value.endRange - CommandRange.Value.startRange + 1))} Content {(InnerContentRange == null ? "" : overallString.Substring(InnerContentRange.Value.startRange, InnerContentRange.Value.endRange - InnerContentRange.Value.startRange + 1))}";
+                return $@"({OverallRange.startRange}, {OverallRange.endRange}): Command {(CommandRange == null ? "" : overallString.Substring(CommandRange.Value.startRange, CommandRange.Value.endRange - CommandRange.Value.startRange + 1))} Content {(InnerContentRange == null ? "" : overallString.Substring(InnerContentRange.Value.startRange, InnerContentRange.Value.endRange - InnerContentRange.Value.startRange + 1))}"; // Overall {overallString.Substring(OverallRange.startRange, OverallRange.endRange - OverallRange.startRange + 1)}";
             }
         }
 
@@ -275,6 +275,7 @@ namespace LazinatorAnalyzer.Support
                         {
                             treeNode.Insert(childIndex, new Tree<TextBlockBase>(new TextBlock(expectedNext, childStart - 1)));
                             expectedNext = childStart;
+                            numChildren++;
                         }
                         else
                             expectedNext = child.Data.OverallRange.endRange + 1;
