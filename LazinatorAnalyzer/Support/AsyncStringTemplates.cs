@@ -9,6 +9,10 @@ namespace LazinatorAnalyzer.Support
     {
         public string TaskKeyword = "ValueTask";
 
+        /// <summary>
+        /// If this is false, then the code will always be added in its synchronous form. If true, then it will be added in its
+        /// asynchronous form or, if NotAsyncAndMaybeAsync or MaybeAsyncConditional is used, then in both forms.
+        /// </summary>
         public bool MayBeAsync = true;
 
         /// <summary>
