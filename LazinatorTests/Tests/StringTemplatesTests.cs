@@ -60,6 +60,36 @@ namespace LazinatorTests.Tests
             result.Should().Be(beginning + middle + end);
         }
 
+        [Fact]
+        public void TemplateForCommand_NotUsingVariable()
+        {
+            StringTemplates templatesProcessor = new StringTemplates();
+            string text = "The quick brown fox";
+            string template = $"{templatesProcessor.ForBlockString("i", 0, 3, text)}";
+            string result = templatesProcessor.Process(template, new Dictionary<string, string>() {  });
+            result.Should().Be($"{text}{text}{text}");
+        }
+
+        [Fact]
+        public void TemplateForCommand_UsingVariable()
+        {
+            StringTemplates templatesProcessor = new StringTemplates();
+            string text = "The quick brown fox";
+            string template = $"{templatesProcessor.ForBlockString("i", 0, 3, text + templatesProcessor.VariableString("i"))}";
+            string result = templatesProcessor.Process(template, new Dictionary<string, string>() { });
+            result.Should().Be($"{text}0{text}1{text}2");
+        }
+
+        [Fact]
+        public void TemplateForCommand_IfVariable()
+        {
+            StringTemplates templatesProcessor = new StringTemplates();
+            string text = "The quick brown fox";
+            string template = $"{templatesProcessor.ForBlockString("i", 0, 3, text + templatesProcessor.IfBlockString("i", "1", "HERE"))}";
+            string result = templatesProcessor.Process(template, new Dictionary<string, string>() { });
+            result.Should().Be($"{text}{text}HERE{text}");
+        }
+
 
     }
 }
