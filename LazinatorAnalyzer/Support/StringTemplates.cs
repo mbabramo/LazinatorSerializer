@@ -19,21 +19,21 @@ namespace LazinatorAnalyzer.Support
         public string EndCommandOpenDelimeter = "/*$$> ";
         public string CloseDelimeter = " $$*/";
 
-        public string BeginCommandString(string commandName, string commandContent) => $"{BeginCommandOpenDelimeter}{commandName}={commandContent}{CloseDelimeter}";
+        public string CreateBeginCommand(string commandName, string commandContent) => $"{BeginCommandOpenDelimeter}{commandName}={commandContent}{CloseDelimeter}";
 
-        public string EndCommandString() => $"{EndCommandOpenDelimeter}{CloseDelimeter}";
+        public string CreateEndCommand() => $"{EndCommandOpenDelimeter}{CloseDelimeter}";
 
-        public string CommandBlockString(string commandName, string commandContent, string textContent)
+        public string CreateCommandBlock(string commandName, string commandContent, string textContent)
         {
-            return $"{BeginCommandString(commandName, commandContent)}{textContent}{EndCommandString()}";
+            return $"{CreateBeginCommand(commandName, commandContent)}{textContent}{CreateEndCommand()}";
         }
 
-        public string ReprocessBlockString(string textContent) => CommandBlockString("reprocess", "", textContent);
-        public string IfBlockString(string variableName, string variableValue, string textContent) => CommandBlockString("if", $"{variableName},{variableValue}", textContent);
-        public string ForBlockString(string variableName, int startValue, int endValueExclusive, string textContent) => CommandBlockString("for", $"{variableName},{startValue},{endValueExclusive}", textContent);
-        public string VariableString(string variableName) => CommandBlockString("var", variableName, null);
-        public string SetVariableString(string variableName, string value) => CommandBlockString("set", $"{variableName},{value}", null);
-        public string ContainsString(string variableName, string textToFind, string textContent) => CommandBlockString("contains", $"{variableName},{textToFind}", textContent);
+        public string CreateReprocessBlock(string textContent) => CreateCommandBlock("reprocess", "", textContent);
+        public string CreateIfBlock(string variableName, string variableValue, string textContent) => CreateCommandBlock("if", $"{variableName},{variableValue}", textContent);
+        public string CreateForBlock(string variableName, int startValue, int endValueExclusive, string textContent) => CreateCommandBlock("for", $"{variableName},{startValue},{endValueExclusive}", textContent);
+        public string CreateVariableBlock(string variableName) => CreateCommandBlock("var", variableName, null);
+        public string CreateSetVariableBlock(string variableName, string value) => CreateCommandBlock("set", value == null ? variableName : $"{variableName},{value}", null);
+        public string CreateContainsBlock(string variableName, string textToFind, string textContent) => CreateCommandBlock("contains", $"{variableName},{textToFind}", textContent);
 
         private class Tree<T> : List<Tree<T>>
         {
@@ -312,10 +312,19 @@ namespace LazinatorAnalyzer.Support
 
             public override string TransformRange(string stringToTransform, string commandContent, Dictionary<string, string> variables)
             {
-                var split = commandContent.Split(',').ToList();
-                string variableName = split[0];
-                string value = split[1];
-                variables[variableName] = value;
+                if (commandContent.Contains(','))
+                {
+                    var split = commandContent.Split(',').ToList();
+                    string variableName = split[0];
+                    string value = split[1];
+                    variables[variableName] = value;
+                }
+                else
+                {
+                    if (variables.ContainsKey(commandContent))
+                        variables.Remove(commandContent);
+                }
+
                 return stringToTransform; // If there are commands using the variable, the result will be processed again.
             }
         }
@@ -336,7 +345,7 @@ namespace LazinatorAnalyzer.Support
                 string variableName = split[0];
                 string textToSearchFor = split[1];
                 bool contained = stringToTransform.Contains(textToSearchFor);
-                return StringTemplate.SetVariableString(variableName, contained ? "1" : "0") + stringToTransform; // reprocess with this variable set at the beginning
+                return StringTemplate.CreateSetVariableBlock(variableName, contained ? "1" : "0") + stringToTransform; // reprocess with this variable set at the beginning
             }
         }
 
@@ -357,7 +366,7 @@ namespace LazinatorAnalyzer.Support
                         return stringToTransform;
                     return "";
                 }
-                return StringTemplate.IfBlockString(variableName, value, stringToTransform); // The variable is not set yet, so we need to keep the if command until it is ready to be processed.
+                return StringTemplate.CreateIfBlock(variableName, value, stringToTransform); // The variable is not set yet, so we need to keep the if command until it is ready to be processed.
             }
         }
 
@@ -372,7 +381,7 @@ namespace LazinatorAnalyzer.Support
                 string variableName = commandContent;
                 if (variables.ContainsKey(variableName))
                     return variables[variableName];
-                return StringTemplate.VariableString(variableName); // keep command intact by recreating it, so that it can be resolved based on variable at higher level in the tree (note that the higher levels in the tree are resolved afterward)
+                return StringTemplate.CreateVariableBlock(variableName); // keep command intact by recreating it, so that it can be resolved based on variable at higher level in the tree (note that the higher levels in the tree are resolved afterward)
             }
         }
 
@@ -399,6 +408,7 @@ namespace LazinatorAnalyzer.Support
                     variables[variableName] = i.ToString();
                     sb.Append(StringTemplate.Process(stringToTransform, variables));
                 }
+                variables.Remove(variableName);
                 return sb.ToString();
             }
         }

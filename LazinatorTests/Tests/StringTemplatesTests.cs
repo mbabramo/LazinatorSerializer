@@ -27,7 +27,7 @@ namespace LazinatorTests.Tests
         {
             StringTemplates templatesProcessor = new StringTemplates();
             string beginning = "The quick brown fox";
-            string template = $"{beginning}{templatesProcessor.IfBlockString("include", "1", " jumps")}";
+            string template = $"{beginning}{templatesProcessor.CreateIfBlock("include", "1", " jumps")}";
             string result = templatesProcessor.Process(template, new Dictionary<string, string>() { { "include", "1" } });
             result.Should().Be(beginning + " jumps");
         }
@@ -37,7 +37,7 @@ namespace LazinatorTests.Tests
         {
             StringTemplates templatesProcessor = new StringTemplates();
             string beginning = "The quick brown fox";
-            string template = $"{beginning}{templatesProcessor.IfBlockString("include", "1", " jumps")}";
+            string template = $"{beginning}{templatesProcessor.CreateIfBlock("include", "1", " jumps")}";
             string result = templatesProcessor.Process(template, new Dictionary<string, string>() { { "include", "0" } });
             result.Should().Be(beginning);
         }
@@ -49,7 +49,7 @@ namespace LazinatorTests.Tests
             string beginning = "The quick brown fox";
             string middle = " jumps over";
             string end = " the lazy dog";
-            string template = $"{beginning}{templatesProcessor.IfBlockString("outer", "1", $"{middle}{templatesProcessor.IfBlockString("inner", "1", end)}")}";
+            string template = $"{beginning}{templatesProcessor.CreateIfBlock("outer", "1", $"{middle}{templatesProcessor.CreateIfBlock("inner", "1", end)}")}";
             string result = templatesProcessor.Process(template, new Dictionary<string, string>() { { "outer", "0" }, { "inner", "0" } });
             result.Should().Be(beginning); 
             result = templatesProcessor.Process(template, new Dictionary<string, string>() { { "outer", "0" }, { "inner", "1" } });
@@ -65,7 +65,7 @@ namespace LazinatorTests.Tests
         {
             StringTemplates templatesProcessor = new StringTemplates();
             string text = "The quick brown fox";
-            string template = $"{templatesProcessor.ForBlockString("i", 0, 3, text)}";
+            string template = $"{templatesProcessor.CreateForBlock("i", 0, 3, text)}";
             string result = templatesProcessor.Process(template, new Dictionary<string, string>() {  });
             result.Should().Be($"{text}{text}{text}");
         }
@@ -75,7 +75,7 @@ namespace LazinatorTests.Tests
         {
             StringTemplates templatesProcessor = new StringTemplates();
             string text = "The quick brown fox";
-            string template = $"{templatesProcessor.ForBlockString("i", 0, 3, text + templatesProcessor.VariableString("i"))}";
+            string template = $"{templatesProcessor.CreateForBlock("i", 0, 3, text + templatesProcessor.CreateVariableBlock("i"))}";
             string result = templatesProcessor.Process(template, new Dictionary<string, string>() { });
             result.Should().Be($"{text}0{text}1{text}2");
         }
@@ -85,7 +85,7 @@ namespace LazinatorTests.Tests
         {
             StringTemplates templatesProcessor = new StringTemplates();
             string text = "The quick brown fox";
-            string template = $"{templatesProcessor.ForBlockString("i", 0, 3, text + templatesProcessor.IfBlockString("i", "1", "HERE"))}";
+            string template = $"{templatesProcessor.CreateForBlock("i", 0, 3, text + templatesProcessor.CreateIfBlock("i", "1", "HERE"))}";
             string result = templatesProcessor.Process(template, new Dictionary<string, string>() { });
             result.Should().Be($"{text}{text}HERE{text}");
         }
@@ -96,7 +96,7 @@ namespace LazinatorTests.Tests
             StringTemplates templatesProcessor = new StringTemplates();
             string text = "The quick brown fox";
             string additionalText = " jumps";
-            string template = $"{text}{templatesProcessor.SetVariableString("i", "1")}{templatesProcessor.IfBlockString("i", "1", additionalText)}";
+            string template = $"{text}{templatesProcessor.CreateSetVariableBlock("i", "1")}{templatesProcessor.CreateIfBlock("i", "1", additionalText)}";
             string result = templatesProcessor.Process(template, new Dictionary<string, string>() { });
             result.Should().Be($"{text}{additionalText}");
         }
@@ -108,7 +108,7 @@ namespace LazinatorTests.Tests
             StringTemplates templatesProcessor = new StringTemplates();
             string text = "The quick brown fox";
             string additionalText = " jumps";
-            string template = $"{text}{templatesProcessor.IfBlockString("i", "1", additionalText)}{templatesProcessor.SetVariableString("i", "1")}";
+            string template = $"{text}{templatesProcessor.CreateIfBlock("i", "1", additionalText)}{templatesProcessor.CreateSetVariableBlock("i", "1")}";
             string result = templatesProcessor.Process(template, new Dictionary<string, string>() { });
             result.Should().NotBe($"{text}{additionalText}");
         }
@@ -119,8 +119,8 @@ namespace LazinatorTests.Tests
             StringTemplates templatesProcessor = new StringTemplates();
             string text = "The quick brown fox";
             string additionalText = " jumps";
-            string template = $"{text}{templatesProcessor.IfBlockString("i", "1", additionalText)}{templatesProcessor.SetVariableString("i", "1")}";
-            template = templatesProcessor.ReprocessBlockString(template);
+            string template = $"{text}{templatesProcessor.CreateIfBlock("i", "1", additionalText)}{templatesProcessor.CreateSetVariableBlock("i", "1")}";
+            template = templatesProcessor.CreateReprocessBlock(template);
             string result = templatesProcessor.Process(template, new Dictionary<string, string>() { });
             result.Should().Be($"{text}{additionalText}");
         }
