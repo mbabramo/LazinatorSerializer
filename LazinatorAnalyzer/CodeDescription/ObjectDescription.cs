@@ -108,6 +108,7 @@ namespace Lazinator.CodeDescription
         internal bool AutoChangeParentAllThisLevel => ExclusiveInterface?.AutoChangeParentAll ?? false;
         public bool AutoChangeParentAll => AutoChangeParentAllThisLevel || GetBaseObjectDescriptions().Any(x => x.AutoChangeParentAllThisLevel);
 
+
         /* Implementations */
         public string[] ImplementedMethods { get; set; }
         public bool ImplementsLazinatorObjectVersionUpgrade => ImplementedMethods.Contains("LazinatorObjectVersionUpgrade");
@@ -137,10 +138,21 @@ namespace Lazinator.CodeDescription
         public bool CanNeverHaveChildren => Version == -1 && IsSealedOrStruct && !ExclusiveInterface.PropertiesIncludingInherited.Any(x => x.PropertyType != LazinatorPropertyType.PrimitiveType && x.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable) && !IsGeneric;
         public bool UniqueIDCanBeSkipped => Version == -1 && IsSealedOrStruct && BaseLazinatorObject == null && !HasNonexclusiveInterfaces && !ContainsOpenGenericParameters;
         public bool SuppressDate { get; set; }
-        public bool AsyncLazinatorMemory => InterfaceTypeSymbol.HasAttributeOfType<CloneAsyncLazinatorMemoryAttribute>();
-        public bool AllowNonlazinatorGenerics => InterfaceTypeSymbol.HasAttributeOfType<CloneAllowNonlazinatorOpenGenericsAttribute>();
-        public bool SuppressLazinatorVersionByte => InterfaceTypeSymbol.HasAttributeOfType<CloneExcludeLazinatorVersionByteAttribute>();
-        public bool GenerateRefStruct => InterfaceTypeSymbol.HasAttributeOfType<CloneGenerateRefStructAttribute>() && !GeneratingRefStruct;
+        public bool AsyncLazinatorMemory { get; set; }
+
+        public AsyncStringTemplates AsyncTemplate;
+        public string MaybeAsyncAndNot(string content) => AsyncTemplate.Process(AsyncTemplate.MaybeAsyncAndNot(content));
+        public string MaybeAsyncReturnType(string returnType) => AsyncTemplate.MaybeAsyncReturnType(returnType);
+        public string MaybeAsyncReturnValue(string returnValue) => AsyncTemplate.MaybeAsyncReturnValue(returnValue);
+        public string MaybeAwaitWord() => AsyncTemplate.MaybeAsyncWordAwait();
+        public string MaybeAsyncWord() => AsyncTemplate.MaybeAsyncWordAsync();
+
+
+        public bool AllowNonlazinatorGenerics { get; set; }
+        public bool SuppressLazinatorVersionByte { get; set; }
+        public bool GenerateRefStructIfNotGenerating { get; set; }
+        public bool GenerateRefStruct => GenerateRefStructIfNotGenerating && !GeneratingRefStruct;
+
         public bool GeneratingRefStruct = false;
         public bool IncludeTracingCode => false;
         public bool StepThroughProperties => Config?.StepThroughProperties ?? true;
@@ -218,6 +230,11 @@ namespace Lazinator.CodeDescription
             INamedTypeSymbol interfaceTypeSymbol = LazinatorCompilation.NameTypedSymbolFromString
                 [Compilation.TypeToExclusiveInterface[LazinatorCompilation.TypeSymbolToString(iLazinatorTypeSymbol.OriginalDefinition)]];
             InterfaceTypeSymbol = interfaceTypeSymbol;
+            AsyncLazinatorMemory = InterfaceTypeSymbol.HasAttributeOfType<CloneAsyncLazinatorMemoryAttribute>();
+            AsyncTemplate = new AsyncStringTemplates() { MayBeAsync = AsyncLazinatorMemory };
+            AllowNonlazinatorGenerics = InterfaceTypeSymbol.HasAttributeOfType<CloneAllowNonlazinatorOpenGenericsAttribute>();
+            SuppressLazinatorVersionByte = InterfaceTypeSymbol.HasAttributeOfType<CloneExcludeLazinatorVersionByteAttribute>();
+            GenerateRefStructIfNotGenerating = InterfaceTypeSymbol.HasAttributeOfType<CloneGenerateRefStructAttribute>();
             Hash = Compilation.InterfaceTextHash.ContainsKey(LazinatorCompilation.TypeSymbolToString(interfaceTypeSymbol)) ? Compilation.InterfaceTextHash[LazinatorCompilation.TypeSymbolToString(interfaceTypeSymbol)] : default;
             NullableContextSetting = interfaceTypeSymbol.GetNullableContextForSymbol(Compilation.Compilation);
             ExclusiveInterface = new ExclusiveInterfaceDescription(compilation.Compilation, interfaceTypeSymbol, NullableContextSetting, this);
@@ -436,7 +453,7 @@ namespace Lazinator.CodeDescription
                             get;
                         }}
 		                
-                        {ProtectedIfApplicable}abstract void DeserializeLazinator(LazinatorMemory serializedBytes);
+                        {ProtectedIfApplicable}{MaybeAsyncAndNot($@"abstract void DeserializeLazinator(LazinatorMemory serializedBytes);")}
                     
                         {ProtectedIfApplicable}abstract int Deserialize();
                         

@@ -21,7 +21,7 @@ namespace LazinatorAnalyzer.Support
         /// <param name="mayBeAsync"></param>
         /// <param name="contents"></param>
         /// <returns></returns>
-        public string NotAsyncAndMaybeAsync(string contents) => MayBeAsync ? CreateForBlock("async", 0, 2, MaybeAsyncMainBlock(contents + "\r\n")) : contents;
+        public string MaybeAsyncAndNot(string contents) => MayBeAsync ? CreateForBlock("async", 0, 2, MaybeAsyncMainBlock(contents + "\r\n")) : contents;
 
         /// <summary>
         /// Create code that will be conditional based on whether this is an async block or not. 
@@ -41,7 +41,7 @@ namespace LazinatorAnalyzer.Support
         /// <returns></returns>
         private string MaybeAsyncMainBlock(string contents) => MayBeAsync ? CreateReprocessBlock(MaybeAsyncWord_async() + CreateSetVariableBlock("awaitcalled", "0") + contents) + CreateSetVariableBlock("awaitcalled", null) : contents;
 
-        public string MaybeAsyncBlockReturnType(string ordinaryReturnType) => MaybeAsyncConditional(MaybeAsyncReturnType(ordinaryReturnType), ordinaryReturnType); 
+        public string MaybeAsyncReturnType(string ordinaryReturnType) => MaybeAsyncConditional(MaybeAsyncReturnType(ordinaryReturnType), ordinaryReturnType); 
 
         public string MaybeAsyncWordAwait() => MaybeAsyncConditional("await " + CreateSetVariableBlock("awaitcalled", "1"));
 

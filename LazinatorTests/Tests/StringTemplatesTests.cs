@@ -130,7 +130,7 @@ namespace LazinatorTests.Tests
         public void TemplateAsync_WithoutAwaitCalls_MayBeAsync()
         {
             AsyncStringTemplates t = new AsyncStringTemplates() { MayBeAsync = true };
-            string template = $"{t.NotAsyncAndMaybeAsync($@"public {t.MaybeAsyncBlockReturnType("int")} MyMethod{t.MaybeAsyncWordAsync()}() => {t.MaybeAsyncReturnValue("3")};")}";
+            string template = $"{t.MaybeAsyncAndNot($@"public {t.MaybeAsyncReturnType("int")} MyMethod{t.MaybeAsyncWordAsync()}() => {t.MaybeAsyncReturnValue("3")};")}";
             string result = t.Process(template, new Dictionary<string, string>());
             string DEBUG = t.GetCommandTreeString(template);
             string expected = $@"public int MyMethod() => 3;
@@ -143,7 +143,7 @@ public ValueTask<int> MyMethodAsync() => ValueTask.FromResult(3);
         public void TemplateAsync_WithoutAwaitCalls_MayNotBeAsync()
         {
             AsyncStringTemplates t = new AsyncStringTemplates() { MayBeAsync = false };
-            string template = $"{t.NotAsyncAndMaybeAsync($@"public {t.MaybeAsyncBlockReturnType("int")} MyMethod() => {t.MaybeAsyncReturnValue("3")};")}";
+            string template = $"{t.MaybeAsyncAndNot($@"public {t.MaybeAsyncReturnType("int")} MyMethod() => {t.MaybeAsyncReturnValue("3")};")}";
             string result = t.Process(template, new Dictionary<string, string>());
             string expected = $@"public int MyMethod() => 3;";
             result.Should().Be(expected);
@@ -153,7 +153,7 @@ public ValueTask<int> MyMethodAsync() => ValueTask.FromResult(3);
         public void TemplateAsync_WithAwaitCalls_MayBeAsync()
         {
             AsyncStringTemplates t = new AsyncStringTemplates() { MayBeAsync = true };
-            string template = $@"{t.NotAsyncAndMaybeAsync($@"public {t.MaybeAsyncBlockReturnType("int")} MyMethod{t.MaybeAsyncWordAsync()}()
+            string template = $@"{t.MaybeAsyncAndNot($@"public {t.MaybeAsyncReturnType("int")} MyMethod{t.MaybeAsyncWordAsync()}()
 {{
     {t.MaybeAsyncWordAwait()}MyOtherMethod{t.MaybeAsyncWordAsync()}();
     return {t.MaybeAsyncReturnValue("3")};
