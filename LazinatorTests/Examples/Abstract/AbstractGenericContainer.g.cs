@@ -107,7 +107,6 @@ namespace LazinatorTests.Examples.Abstract
         
         public abstract void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
         public abstract void FreeInMemoryObjects();
-        
         public abstract int LazinatorUniqueID { get; }
         protected virtual bool ContainsOpenGenericParameters => true;
         public abstract LazinatorGenericIDType LazinatorGenericID { get; }
@@ -121,6 +120,8 @@ namespace LazinatorTests.Examples.Abstract
         protected abstract void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);
         protected abstract void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);
         protected abstract void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition);
+        
+        
         
         
     }

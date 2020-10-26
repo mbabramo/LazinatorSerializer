@@ -114,7 +114,6 @@ namespace Lazinator.Wrappers
         
         public abstract void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
         public abstract void FreeInMemoryObjects();
-        
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public abstract int LazinatorUniqueID { get; }
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -132,6 +131,8 @@ namespace Lazinator.Wrappers
         protected abstract void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);
         protected abstract void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);
         protected abstract void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition);
+        
+        
         
         
     }
