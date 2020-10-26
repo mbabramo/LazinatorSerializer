@@ -90,6 +90,41 @@ namespace LazinatorTests.Tests
             result.Should().Be($"{text}{text}HERE{text}");
         }
 
+        [Fact]
+        public void TemplateSetVariableCommand()
+        {
+            StringTemplates templatesProcessor = new StringTemplates();
+            string text = "The quick brown fox";
+            string additionalText = " jumps";
+            string template = $"{text}{templatesProcessor.SetVariableString("i", "1")}{templatesProcessor.IfBlockString("i", "1", additionalText)}";
+            string result = templatesProcessor.Process(template, new Dictionary<string, string>() { });
+            result.Should().Be($"{text}{additionalText}");
+        }
+
+
+        [Fact]
+        public void TemplateSetVariableCommand_AfterSibling()
+        {
+            StringTemplates templatesProcessor = new StringTemplates();
+            string text = "The quick brown fox";
+            string additionalText = " jumps";
+            string template = $"{text}{templatesProcessor.IfBlockString("i", "1", additionalText)}{templatesProcessor.SetVariableString("i", "1")}";
+            string result = templatesProcessor.Process(template, new Dictionary<string, string>() { });
+            result.Should().NotBe($"{text}{additionalText}");
+        }
+
+        [Fact]
+        public void TemplateSetVariableCommand_AfterSiblingWithReprocessBlock()
+        {
+            StringTemplates templatesProcessor = new StringTemplates();
+            string text = "The quick brown fox";
+            string additionalText = " jumps";
+            string template = $"{text}{templatesProcessor.IfBlockString("i", "1", additionalText)}{templatesProcessor.SetVariableString("i", "1")}";
+            template = templatesProcessor.ReprocessBlockString(template);
+            string result = templatesProcessor.Process(template, new Dictionary<string, string>() { });
+            result.Should().Be($"{text}{additionalText}");
+        }
+
 
     }
 }

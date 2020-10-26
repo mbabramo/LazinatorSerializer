@@ -28,9 +28,12 @@ namespace LazinatorAnalyzer.Support
             return $"{BeginCommandString(commandName, commandContent)}{textContent}{EndCommandString()}";
         }
 
+        public string ReprocessBlockString(string textContent) => CommandBlockString("reprocess", "", textContent);
         public string IfBlockString(string variableName, string variableValue, string textContent) => CommandBlockString("if", $"{variableName},{variableValue}", textContent);
         public string ForBlockString(string variableName, int startValue, int endValueExclusive, string textContent) => CommandBlockString("for", $"{variableName},{startValue},{endValueExclusive}", textContent);
         public string VariableString(string variableName) => CommandBlockString("var", variableName, null);
+        public string SetVariableString(string variableName, string value) => CommandBlockString("set", $"{variableName},{value}", null);
+        public string ContainsString(string variableName, string textToFind, string textContent) => CommandBlockString("contains", $"{variableName},{textToFind}", textContent);
 
         private class Tree<T> : List<Tree<T>>
         {
@@ -139,6 +142,8 @@ namespace LazinatorAnalyzer.Support
                     return ("", null);
                 string overallCommand = overallString.Substring(CommandRange.Value.startRange, CommandRange.Value.endRange - CommandRange.Value.startRange + 1);
                 int index = overallCommand.IndexOf('=');
+                if (index == 0)
+                    return ("", "");
                 if (index > 0)
                 {
                     // e.g., a=b corresponds to indices 012 so we get commandName at 0 with length 1, and commandContent at 2 with length 2 - 1
@@ -214,11 +219,11 @@ namespace LazinatorAnalyzer.Support
                 .ToList();
         }
 
-        private static Tree<TextBlockBase> GetCommandTree(string str, string beginCommandOpenDelimeter, string endCommandOpenDelimeter, string closeDelimeter)
+        private static Tree<TextBlockBase> GetCommandTree(string templateString, string beginCommandOpenDelimeter, string endCommandOpenDelimeter, string closeDelimeter)
         {
             // Assemble a list of begin and end commands
-            var beginCommands = GetCommandLocations(str, beginCommandOpenDelimeter, closeDelimeter);
-            var endCommands = GetCommandLocations(str, endCommandOpenDelimeter, closeDelimeter);
+            var beginCommands = GetCommandLocations(templateString, beginCommandOpenDelimeter, closeDelimeter);
+            var endCommands = GetCommandLocations(templateString, endCommandOpenDelimeter, closeDelimeter);
             if (beginCommands.Count() != endCommands.Count)
                 throw new ArgumentException("Mismatched commands");
             // Order the commands based on their location in the document. 
@@ -230,7 +235,7 @@ namespace LazinatorAnalyzer.Support
             // Create a tree, where each tree is a list of its children and has data corresponding to the text block.
             // The base node of the tree will be the overall text block (without any corresponding command).
             Stack<Tree<TextBlockBase>> textBlockTreeStack = new Stack<Tree<TextBlockBase>>();
-            Tree<TextBlockBase> treeBase = new Tree<TextBlockBase>(new TextBlock(0, str.Length - 1));
+            Tree<TextBlockBase> treeBase = new Tree<TextBlockBase>(new TextBlock(0, templateString.Length - 1));
             textBlockTreeStack.Push(treeBase);
             Stack<CommandLocation> commandLocationStack = new Stack<CommandLocation>();
             foreach (var commandLocation in allCommandLocations)
@@ -267,7 +272,10 @@ namespace LazinatorAnalyzer.Support
                         var child = treeNode[childIndex];
                         int childStart = child.Data.OverallRange.startRange;
                         if (expectedNext != childStart)
+                        {
                             treeNode.Insert(childIndex, new Tree<TextBlockBase>(new TextBlock(expectedNext, childStart - 1)));
+                            expectedNext = childStart;
+                        }
                         else
                             expectedNext = child.Data.OverallRange.endRange + 1;
                     }
@@ -283,7 +291,14 @@ namespace LazinatorAnalyzer.Support
         private class CommandBase
         {
 
-            public virtual string TransformRange(string stringToTransform, string commandContent, Dictionary<string, string> variables, StringTemplates stringTemplates)
+            protected StringTemplates StringTemplate;
+
+            public CommandBase(StringTemplates stringTemplate)
+            {
+                StringTemplate = stringTemplate;
+            }
+
+            public virtual string TransformRange(string stringToTransform, string commandContent, Dictionary<string, string> variables)
             {
                 return stringToTransform;
             }
@@ -291,7 +306,11 @@ namespace LazinatorAnalyzer.Support
 
         private class SetVariableCommand : CommandBase
         {
-            public override string TransformRange(string stringToTransform, string commandContent, Dictionary<string, string> variables, StringTemplates stringTemplates)
+            public SetVariableCommand(StringTemplates stringTemplate) : base(stringTemplate)
+            {
+            }
+
+            public override string TransformRange(string stringToTransform, string commandContent, Dictionary<string, string> variables)
             {
                 var split = commandContent.Split(',').ToList();
                 string variableName = split[0];
@@ -301,9 +320,33 @@ namespace LazinatorAnalyzer.Support
             }
         }
 
+        /// <summary>
+        /// Sets a variable to 1 if and only if the content text contains a string. This is used in conjunction with one or more IF commands in the content
+        /// text set to that variable. 
+        /// </summary>
+        private class ContainsCommand : CommandBase
+        {
+            public ContainsCommand(StringTemplates stringTemplate) : base(stringTemplate)
+            {
+            }
+
+            public override string TransformRange(string stringToTransform, string commandContent, Dictionary<string, string> variables)
+            {
+                var split = commandContent.Split(',').ToList();
+                string variableName = split[0];
+                string textToSearchFor = split[1];
+                bool contained = stringToTransform.Contains(textToSearchFor);
+                return StringTemplate.SetVariableString(variableName, contained ? "1" : "0") + stringToTransform; // reprocess with this variable set at the beginning
+            }
+        }
+
         private class IfVariableCommand : CommandBase
         {
-            public override string TransformRange(string stringToTransform, string commandContent, Dictionary<string, string> variables, StringTemplates stringTemplates)
+            public IfVariableCommand(StringTemplates stringTemplate) : base(stringTemplate)
+            {
+            }
+
+            public override string TransformRange(string stringToTransform, string commandContent, Dictionary<string, string> variables)
             {
                 var split = commandContent.Split(',').ToList();
                 string variableName = split[0];
@@ -314,24 +357,32 @@ namespace LazinatorAnalyzer.Support
                         return stringToTransform;
                     return "";
                 }
-                return stringTemplates.IfBlockString(variableName, value, stringToTransform);
+                return StringTemplate.IfBlockString(variableName, value, stringToTransform); // The variable is not set yet, so we need to keep the if command until it is ready to be processed.
             }
         }
 
         private class VariableCommand : CommandBase
         {
-            public override string TransformRange(string stringToTransform, string commandContent, Dictionary<string, string> variables, StringTemplates stringTemplates)
+            public VariableCommand(StringTemplates stringTemplate) : base(stringTemplate)
+            {
+            }
+
+            public override string TransformRange(string stringToTransform, string commandContent, Dictionary<string, string> variables)
             {
                 string variableName = commandContent;
                 if (variables.ContainsKey(variableName))
                     return variables[variableName];
-                return stringTemplates.VariableString(variableName); // keep command intact by recreating it, so that it can be resolved based on variable at higher level in the tree (note that the higher levels in the tree are resolved afterward)
+                return StringTemplate.VariableString(variableName); // keep command intact by recreating it, so that it can be resolved based on variable at higher level in the tree (note that the higher levels in the tree are resolved afterward)
             }
         }
 
         private class ForCommand : CommandBase
         {
-            public override string TransformRange(string stringToTransform, string commandContent, Dictionary<string, string> variables, StringTemplates stringTemplates)
+            public ForCommand(StringTemplates stringTemplate) : base(stringTemplate)
+            {
+            }
+
+            public override string TransformRange(string stringToTransform, string commandContent, Dictionary<string, string> variables)
             {
                 // Note that we require that the content be like 2,variableName or 3,4.
                 // We don't allow the content to consist of other commands that can be reduced to that.
@@ -346,27 +397,43 @@ namespace LazinatorAnalyzer.Support
                 for (int i = firstValueInclusive; i < secondValueExclusive; i++)
                 {
                     variables[variableName] = i.ToString();
-                    sb.Append(stringTemplates.Process(stringToTransform, variables));
+                    sb.Append(StringTemplate.Process(stringToTransform, variables));
                 }
                 return sb.ToString();
             }
         }
 
-        private static Dictionary<string, CommandBase> Transformers = new Dictionary<string, CommandBase>()
+        private class ReprocessCommand : CommandBase
         {
-            { "", new CommandBase() },
-            { "set", new SetVariableCommand() },
-            { "if", new IfVariableCommand() },
-            { "var", new VariableCommand() },
-            { "for", new ForCommand() },
+            public ReprocessCommand(StringTemplates stringTemplate) : base(stringTemplate)
+            {
+            }
+
+            public override string TransformRange(string stringToTransform, string commandContent, Dictionary<string, string> variables)
+            {
+                return StringTemplate.Process(stringToTransform, variables);
+            }
+        }
+
+        private Dictionary<string, CommandBase> _Transformers => new Dictionary<string, CommandBase>()
+        {
+            { "", new CommandBase(this) },
+            { "set", new SetVariableCommand(this) },
+            { "if", new IfVariableCommand(this) },
+            { "var", new VariableCommand(this) },
+            { "contains", new ContainsCommand(this) },
+            { "for", new ForCommand(this) },
+            { "reprocess", new ReprocessCommand(this) }
         };
+
+        private Dictionary<string, CommandBase> Transformers => _Transformers;
 
         public string Process(string str, Dictionary<string, string> variables = null)
         {
             if (variables == null)
                 variables = new Dictionary<string, string>();
             Tree<TextBlockBase> tree = GetCommandTree(str, BeginCommandOpenDelimeter, EndCommandOpenDelimeter, CloseDelimeter);
-            //var treeString = tree.GetTreeString(textBlock => textBlock.ToString(str));
+            var treeString = tree.GetTreeString(textBlock => textBlock.ToString(str));
             string result = tree.StringProducer(
                 treeNode =>
                 {
@@ -388,7 +455,7 @@ namespace LazinatorAnalyzer.Support
                     {
                         if (Transformers.ContainsKey(command.commandName))
                         {
-                            string transformedString = Transformers[command.commandName].TransformRange(innerContent, commandContent, variables, this);
+                            string transformedString = Transformers[command.commandName].TransformRange(innerContent, commandContent, variables);
                             return transformedString;
                         }
                         else
