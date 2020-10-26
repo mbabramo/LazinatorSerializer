@@ -453,8 +453,7 @@ namespace Lazinator.CodeDescription
                             get;
                         }}
 		                
-                        {ProtectedIfApplicable}{MaybeAsyncAndNot($@"abstract void DeserializeLazinator(LazinatorMemory serializedBytes);
-                        ")}
+                        {ProtectedIfApplicable}{MaybeAsyncAndNot($@"abstract void DeserializeLazinator(LazinatorMemory serializedBytes);")}
                     
                         {ProtectedIfApplicable}abstract int Deserialize();
                         
