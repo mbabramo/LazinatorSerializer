@@ -464,20 +464,20 @@ namespace Lazinator.CodeDescription
                     
                         {ProtectedIfApplicable}abstract int Deserialize();
                         
-                        {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType("void")} SerializeLazinator();")}
-                        {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType("LazinatorMemory")} SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);")}
+                        {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType("void")} SerializeLazinator{MaybeAsyncWord()}();")}
+                        {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType("LazinatorMemory")} SerializeLazinator{MaybeAsyncWord()}(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);")}
                         
-                        {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType(ILazinatorString)} CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers);")}
+                        {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType(ILazinatorString)} CloneLazinator{MaybeAsyncWord()}(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers);")}
 
-                        {IIF(!ImplementsAssignCloneProperties, $@"{MaybeAsyncAndNot($@"{ProtectedIfApplicable}abstract {MaybeAsyncReturnType(ILazinatorString)} AssignCloneProperties({ILazinatorStringWithoutQuestionMark} clone, IncludeChildrenMode includeChildrenMode);")}
+                        {IIF(!ImplementsAssignCloneProperties, $@"{MaybeAsyncAndNot($@"{ProtectedIfApplicable}abstract {MaybeAsyncReturnType(ILazinatorString)} AssignCloneProperties{MaybeAsyncWord()}({ILazinatorStringWithoutQuestionMark} clone, IncludeChildrenMode includeChildrenMode);")}
 
                         ")}
-                        {MaybeAsyncAndNot($@"public abstract I{MaybeAsyncWord()}Enumerable<{ILazinatorString}> EnumerateLazinatorNodes(Func<{ILazinatorString}, bool>{QuestionMarkIfNullableModeEnabled} matchCriterion, bool stopExploringBelowMatch, Func<{ILazinatorString}, bool>{QuestionMarkIfNullableModeEnabled} exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);")}
-                        {MaybeAsyncAndNot($@"public abstract I{MaybeAsyncWord()}Enumerable<(string propertyName, {ILazinatorString} descendant)> EnumerateLazinatorDescendants(Func<{ILazinatorString}, bool>{QuestionMarkIfNullableModeEnabled} matchCriterion, bool stopExploringBelowMatch, Func<{ILazinatorString}, bool>{QuestionMarkIfNullableModeEnabled} exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);")}
-                        {MaybeAsyncAndNot($@"public abstract I{MaybeAsyncWord()}Enumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties();")}
-                        {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType(ILazinatorString)} ForEachLazinator(Func<{ILazinatorString}, {ILazinatorString}>{QuestionMarkIfNullableModeEnabled} changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel);")}
+                        {MaybeAsyncAndNot($@"public abstract I{MaybeAsyncWord()}Enumerable<{ILazinatorString}> EnumerateLazinatorNodes{MaybeAsyncWord()}(Func<{ILazinatorString}, bool>{QuestionMarkIfNullableModeEnabled} matchCriterion, bool stopExploringBelowMatch, Func<{ILazinatorString}, bool>{QuestionMarkIfNullableModeEnabled} exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);")}
+                        {MaybeAsyncAndNot($@"public abstract I{MaybeAsyncWord()}Enumerable<(string propertyName, {ILazinatorString} descendant)> EnumerateLazinatorDescendants{MaybeAsyncWord()}(Func<{ILazinatorString}, bool>{QuestionMarkIfNullableModeEnabled} matchCriterion, bool stopExploringBelowMatch, Func<{ILazinatorString}, bool>{QuestionMarkIfNullableModeEnabled} exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls);")}
+                        {MaybeAsyncAndNot($@"public abstract I{MaybeAsyncWord()}Enumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties{MaybeAsyncWord()}();")}
+                        {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType(ILazinatorString)} ForEachLazinator{MaybeAsyncWord()}(Func<{ILazinatorString}, {ILazinatorString}>{QuestionMarkIfNullableModeEnabled} changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel);")}
 
-                        {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType("void")} UpdateStoredBuffer({MaybeAsyncBinaryBufferWriterParameter()} writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);")}
+                        {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType("void")} UpdateStoredBuffer{MaybeAsyncWord()}({MaybeAsyncBinaryBufferWriterParameter()} writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);")}
                         public abstract void FreeInMemoryObjects();{IIF(!IsDerivedFromAbstractLazinator, $@"
                         {HideILazinatorProperty}public abstract int LazinatorUniqueID {{ get; }}
                         {HideILazinatorProperty}{ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(ContainsOpenGenericParameters ? "true" : "false")};
@@ -486,12 +486,12 @@ namespace Lazinator.CodeDescription
                         {(ImplementsConvertFromBytesAfterHeader ? skipConvertFromBytesAfterHeaderString : $@"{ProtectedIfApplicable}abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
                             {ProtectedIfApplicable}abstract void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
                             {ProtectedIfApplicable}abstract int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar);")}
-                        {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType("void")} SerializeToExistingBuffer({MaybeAsyncBinaryBufferWriterParameter()} writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);")}
-                        {MaybeAsyncAndNot($@"{ProtectedIfApplicable}abstract {MaybeAsyncReturnType("LazinatorMemory")} EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);")}
-                       {MaybeAsyncAndNot($@" {ProtectedIfApplicable}abstract {MaybeAsyncReturnType("void")} UpdateDeserializedChildren({MaybeAsyncBinaryBufferWriterParameter()} writer, int startPosition);")}
-                        {(ImplementsWritePropertiesIntoBuffer ? skipWritePropertiesIntoBufferString : $@"{MaybeAsyncAndNot($@"{ProtectedIfApplicable}abstract void WritePropertiesIntoBuffer({MaybeAsyncBinaryBufferWriterParameter()} writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);")}
-                            {ProtectedIfApplicable}abstract void WritePrimitivePropertiesIntoBuffer({MaybeAsyncBinaryBufferWriterParameter()} writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);
-                            {MaybeAsyncAndNot($@"{ProtectedIfApplicable}abstract {MaybeAsyncReturnType("void")} WriteChildrenPropertiesIntoBuffer({MaybeAsyncBinaryBufferWriterParameter()} writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition);")}
+                        {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType("void")} SerializeToExistingBuffer{MaybeAsyncWord()}({MaybeAsyncBinaryBufferWriterParameter()} writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);")}
+                        {MaybeAsyncAndNot($@"{ProtectedIfApplicable}abstract {MaybeAsyncReturnType("LazinatorMemory")} EncodeToNewBuffer{MaybeAsyncWord()}(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);")}
+                       {MaybeAsyncAndNot($@" {ProtectedIfApplicable}abstract {MaybeAsyncReturnType("void")} UpdateDeserializedChildren{MaybeAsyncWord()}({MaybeAsyncBinaryBufferWriterParameter()} writer, int startPosition);")}
+                        {(ImplementsWritePropertiesIntoBuffer ? skipWritePropertiesIntoBufferString : $@"{MaybeAsyncAndNot($@"{ProtectedIfApplicable}abstract void WritePropertiesIntoBuffer{MaybeAsyncWord()}({MaybeAsyncBinaryBufferWriterParameter()} writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);")}
+                            {ProtectedIfApplicable}abstract void WritePrimitivePropertiesIntoBuffer{MaybeAsyncWord()}({MaybeAsyncBinaryBufferWriterParameter()} writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);
+                            {MaybeAsyncAndNot($@"{ProtectedIfApplicable}abstract {MaybeAsyncReturnType("void")} WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord()}({MaybeAsyncBinaryBufferWriterParameter()} writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition);")}
 ")}
 ")}
         
@@ -627,7 +627,7 @@ namespace Lazinator.CodeDescription
                             return {(ContainsEndByteIndex ? $"_OverallEndByteIndex" : "bytesSoFar")};
                         }}
 
-                        {MaybeAsyncAndNot($@"public {DerivationKeyword}{MaybeAsyncReturnType("void")} SerializeLazinator()
+                        {MaybeAsyncAndNot($@"public {DerivationKeyword}{MaybeAsyncReturnType("void")} SerializeLazinator{MaybeAsyncWord()}()
                         {{
                             if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                             {{
@@ -651,18 +651,18 @@ namespace Lazinator.CodeDescription
                             }}
                         }}")}
 
-                        {MaybeAsyncAndNot($@"public {DerivationKeyword}{MaybeAsyncReturnType("LazinatorMemory")} SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
+                        {MaybeAsyncAndNot($@"public {DerivationKeyword}{MaybeAsyncReturnType("LazinatorMemory")} SerializeLazinator{MaybeAsyncWord()}(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
                         {{
                             if (LazinatorMemoryStorage.IsEmpty || includeChildrenMode != OriginalIncludeChildrenMode || (verifyCleanness || IsDirty || (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && DescendantIsDirty)))
                             {{
-                                return {MaybeAsyncReturnValue($"EncodeToNewBuffer(includeChildrenMode, verifyCleanness, updateStoredBuffer)")};
+                                return {MaybeAsyncReturnValue($"{MaybeAwaitWord()}EncodeToNewBuffer{MaybeAsyncWord()}(includeChildrenMode, verifyCleanness, updateStoredBuffer)")};
                             }}
                             BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
                             LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
                             return {MaybeAsyncReturnValue($"writer.LazinatorMemory")};
                         }}")}
 
-                        {MaybeAsyncAndNot($@"{ProtectedIfApplicable}{DerivationKeyword}{MaybeAsyncReturnType("LazinatorMemory")} EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
+                        {MaybeAsyncAndNot($@"{ProtectedIfApplicable}{DerivationKeyword}{MaybeAsyncReturnType("LazinatorMemory")} EncodeToNewBuffer{MaybeAsyncWord()}(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
                         {{
                             int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.Length;
                             BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
