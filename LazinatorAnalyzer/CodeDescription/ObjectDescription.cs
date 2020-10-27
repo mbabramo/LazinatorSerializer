@@ -141,7 +141,7 @@ namespace Lazinator.CodeDescription
         public bool AsyncLazinatorMemory { get; set; }
 
         public AsyncStringTemplates AsyncTemplate;
-        public string MaybeAsyncAndNot(string content) => AsyncTemplate.Process(AsyncTemplate.MaybeAsyncAndNot(content));
+        public string MaybeAsyncAndNot(string content) => AsyncTemplate.MaybeAsyncAndNot(content);
         public string MaybeAsyncReturnType(string returnType) => AsyncTemplate.MaybeAsyncReturnType(returnType);
         public string MaybeAsyncReturnValue(string returnValue) => AsyncTemplate.MaybeAsyncReturnValue(returnValue);
         public string MaybeAsyncVoidReturn(bool isAtEndOfMethod) => AsyncTemplate.MaybeAsyncVoidReturn(isAtEndOfMethod);
@@ -697,7 +697,7 @@ namespace Lazinator.CodeDescription
             var allPropertiesRequiringInitialization = ExclusiveInterface.PropertiesIncludingInherited.Where(x => x.NonNullableThatRequiresInitialization).ToList();
             if (allPropertiesRequiringInitialization.Any())
                 parametersToFirstConstructor = String.Join(", ", allPropertiesRequiringInitialization.Select(x => x.PropertyName)) + ", ";
-            return $@"public {DerivationKeyword}{ILazinatorString} CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
+            return $@"{MaybeAsyncAndNot($@"public {DerivationKeyword}{ILazinatorString} CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
                         {{
                             {NameIncludingGenerics} clone;
                             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
@@ -713,16 +713,16 @@ namespace Lazinator.CodeDescription
                             }}{IIF(ImplementsOnClone, $@"
             clone.OnCompleteClone(this);")}
                             return clone;
-                        }}{IIF(!ImplementsAssignCloneProperties, $@"
+                        }}")}{IIF(!ImplementsAssignCloneProperties, $@"
 
-                        {ProtectedIfApplicable}{DerivationKeyword}{ILazinatorString} AssignCloneProperties({ILazinatorStringWithoutQuestionMark} clone, IncludeChildrenMode includeChildrenMode)
+                        {MaybeAsyncAndNot($@"{ProtectedIfApplicable}{DerivationKeyword}{ILazinatorString} AssignCloneProperties({ILazinatorStringWithoutQuestionMark} clone, IncludeChildrenMode includeChildrenMode)
                         {{
                             {(IsDerivedFromNonAbstractLazinator ? $"base.AssignCloneProperties(clone, includeChildrenMode);" : $"clone.FreeInMemoryObjects();")}
                             {NameIncludingGenerics} typedClone = ({NameIncludingGenerics}) clone;
                             {AppendCloneProperties()}{IIF(ObjectType == LazinatorObjectType.Struct || GeneratingRefStruct, $@"
                             typedClone.IsDirty = false;")}
                             return typedClone;
-                        }}")}";
+                        }}")}")}";
 
         }
 

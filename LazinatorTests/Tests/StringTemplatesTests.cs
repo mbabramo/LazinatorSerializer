@@ -173,6 +173,23 @@ async public ValueTask<int> MyMethodAsync()
             result.Should().Be(expected);
         }
 
+        [Fact]
+        public void TemplateAsync_CanManuallyConstructMaybeAsyncBlock()
+        {
+            AsyncStringTemplates t = new AsyncStringTemplates() { MayBeAsync = true };
+            string template1 = $@"{t.MaybeAsyncAndNot($@"public {t.MaybeAsyncReturnType("int")} MyMethod{t.MaybeAsyncWordAsync()}()
+{{
+    {t.MaybeAsyncWordAwait()}MyOtherMethod{t.MaybeAsyncWordAsync()}();
+    return {t.MaybeAsyncReturnValue("3")};
+}}")}";
+            string template2 = $@"{t.MaybeAsyncAndNot_BeginOnly}public {t.MaybeAsyncReturnType("int")} MyMethod{t.MaybeAsyncWordAsync()}()
+{{
+    {t.MaybeAsyncWordAwait()}MyOtherMethod{t.MaybeAsyncWordAsync()}();
+    return {t.MaybeAsyncReturnValue("3")};
+}}{t.MaybeAsyncAndNot_EndOnly}";
+            template1.Should().Be(template2);
+        }
+
 
     }
 }
