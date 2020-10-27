@@ -51,7 +51,7 @@ namespace LazinatorAnalyzer.Support
         private string MaybeAsyncReturnTypeWrapper(string ordinaryReturnType) => ordinaryReturnType == "void" ? TaskKeyword : $"{TaskKeyword}<{ordinaryReturnType}>";
 
         public string MaybeAsyncReturnValue(string ordinaryReturnValue) => MaybeAsyncConditional(CreateIfBlock("awaitcalled", "0", $"{TaskKeyword}.FromResult({ordinaryReturnValue})") + CreateIfBlock("awaitcalled", "1", ordinaryReturnValue), ordinaryReturnValue);
-        public string MaybeAsyncVoidReturn() => MaybeAsyncConditional(CreateIfBlock("awaitcalled", "0", $"return {TaskKeyword}.CompletedTask;"));
+        public string MaybeAsyncVoidReturn(bool isAtEndOfMethod) => MaybeAsyncConditional(CreateIfBlock("awaitcalled", "0", $"return {TaskKeyword}.CompletedTask;") + (isAtEndOfMethod ? "" : CreateIfBlock("awaitcalled", "1", $"return;")));
 
     }
 }

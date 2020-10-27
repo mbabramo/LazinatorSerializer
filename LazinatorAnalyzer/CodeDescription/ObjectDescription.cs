@@ -144,10 +144,12 @@ namespace Lazinator.CodeDescription
         public string MaybeAsyncAndNot(string content) => AsyncTemplate.Process(AsyncTemplate.MaybeAsyncAndNot(content));
         public string MaybeAsyncReturnType(string returnType) => AsyncTemplate.MaybeAsyncReturnType(returnType);
         public string MaybeAsyncReturnValue(string returnValue) => AsyncTemplate.MaybeAsyncReturnValue(returnValue);
+        public string MaybeAsyncVoidReturn(bool isAtEndOfMethod) => AsyncTemplate.MaybeAsyncVoidReturn(isAtEndOfMethod);
         public string MaybeAwaitWord() => AsyncTemplate.MaybeAsyncWordAwait();
         public string MaybeAsyncWord() => AsyncTemplate.MaybeAsyncWordAsync();
         public string MaybeAsyncConditional(string ifAsync, string ifNotAsync) => AsyncTemplate.MaybeAsyncConditional(ifAsync, ifNotAsync);
         public string MaybeAsyncBinaryBufferWriterParameter() => $"{MaybeAsyncConditional("BinaryBufferWriterContainer", "ref BinaryBufferWriter")}";
+
 
 
         public bool AllowNonlazinatorGenerics { get; set; }
@@ -475,7 +477,7 @@ namespace Lazinator.CodeDescription
                         public {MaybeAsyncAndNot($@"abstract I{MaybeAsyncWord()}Enumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties();")}
                         public {MaybeAsyncAndNot($@"abstract {MaybeAsyncReturnType(ILazinatorString)} ForEachLazinator(Func<{ILazinatorString}, {ILazinatorString}>{QuestionMarkIfNullableModeEnabled} changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel);")}
 
-                        public {MaybeAsyncAndNot($@"abstract {MaybeAsyncReturnType("void")} UpdateStoredBuffer({MaybeAsyncBinaryBufferWriterParameter()}, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);")}
+                        public {MaybeAsyncAndNot($@"abstract {MaybeAsyncReturnType("void")} UpdateStoredBuffer({MaybeAsyncBinaryBufferWriterParameter()} writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);")}
                         public abstract void FreeInMemoryObjects();{IIF(!IsDerivedFromAbstractLazinator, $@"
                         {HideILazinatorProperty}public abstract int LazinatorUniqueID {{ get; }}
                         {HideILazinatorProperty}{ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(ContainsOpenGenericParameters ? "true" : "false")};
@@ -629,7 +631,7 @@ namespace Lazinator.CodeDescription
                         {{
                             if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                             {{
-                                return;
+                                {MaybeAsyncVoidReturn(false)}
                             }}
                             var previousBuffer = LazinatorMemoryStorage;
                             if (LazinatorMemoryStorage.IsEmpty || IncludeChildrenMode.IncludeAllChildren != OriginalIncludeChildrenMode || (IsDirty || DescendantIsDirty))
