@@ -451,7 +451,7 @@ namespace LazinatorAnalyzer.Support
             if (variables == null)
                 variables = new Dictionary<string, string>();
             Tree<TextBlockBase> tree = GetCommandTree(str, BeginCommandOpenDelimeter, EndCommandOpenDelimeter, CloseDelimeter);
-            var treeString = tree.GetTreeString(textBlock => textBlock.ToString(str));
+            // var treeString = tree.GetTreeString(textBlock => textBlock.ToString(str));
             string result = tree.StringProducer(
                 treeNode =>
                 {

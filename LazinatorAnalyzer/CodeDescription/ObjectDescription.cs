@@ -289,7 +289,9 @@ namespace Lazinator.CodeDescription
             CodeStringBuilder sb = new CodeStringBuilder();
             AppendCodeBehindFile(sb);
             string result = sb.ToString();
-            string result2 = AsyncTemplate.Process(result);
+            string result2 = result;
+            if (AsyncLazinatorMemory)
+                result2 = AsyncTemplate.Process(result);
             return result2;
         }
 
@@ -623,7 +625,7 @@ namespace Lazinator.CodeDescription
                             return {(ContainsEndByteIndex ? $"_OverallEndByteIndex" : "bytesSoFar")};
                         }}
 
-                        public {DerivationKeyword}void SerializeLazinator()
+                        public {DerivationKeyword}{MaybeAsyncAndNot($@"{MaybeAsyncReturnType("void")} SerializeLazinator()
                         {{
                             if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
                             {{
@@ -645,26 +647,26 @@ namespace Lazinator.CodeDescription
                             {{
                                 previousBuffer.Dispose();
                             }}
-                        }}
+                        }}")}
 
-                        public {DerivationKeyword}LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
+                        public {DerivationKeyword}{MaybeAsyncAndNot($@"{MaybeAsyncReturnType("LazinatorMemory")} SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
                         {{
                             if (LazinatorMemoryStorage.IsEmpty || includeChildrenMode != OriginalIncludeChildrenMode || (verifyCleanness || IsDirty || (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && DescendantIsDirty)))
                             {{
-                                return EncodeToNewBuffer(includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                                return {MaybeAsyncReturnValue($"EncodeToNewBuffer(includeChildrenMode, verifyCleanness, updateStoredBuffer)")};
                             }}
                             BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
                             LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
-                            return writer.LazinatorMemory;
-                        }}
+                            return {MaybeAsyncReturnValue($"writer.LazinatorMemory")};
+                        }}")}
 
-                        {ProtectedIfApplicable}{DerivationKeyword}LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
+                        {ProtectedIfApplicable}{DerivationKeyword}{MaybeAsyncAndNot($@"{MaybeAsyncReturnType("LazinatorMemory")} EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
                         {{
                             int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.Length;
                             BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
                             SerializeToExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                            return writer.LazinatorMemory;
-                        }}
+                            return {MaybeAsyncReturnValue($"writer.LazinatorMemory")};
+                        }}")}
 
                         {cloneMethod}
         
