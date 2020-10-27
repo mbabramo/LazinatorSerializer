@@ -33,7 +33,7 @@ namespace LazinatorAnalyzer.Support
         public string CreateIfBlock(string variableName, string variableValue, string textContent) => CreateCommandBlock("if", $"{variableName},{variableValue}", textContent);
         public string CreateForBlock(string variableName, int startValue, int endValueExclusive, string textContent) => CreateCommandBlock("for", $"{variableName},{startValue},{endValueExclusive}", textContent);
 
-        public string CreateForBlock_BeginOnly(string variableName, int startValue, int endValueExclusive) => CreateBeginCommand("for", $"{variableName},{startValue},{endValueExclusive}");
+        public string CreateForBlock_Begin(string variableName, int startValue, int endValueExclusive) => CreateBeginCommand("for", $"{variableName},{startValue},{endValueExclusive}");
         public string CreateVariableBlock(string variableName) => CreateCommandBlock("var", variableName, null);
         public string CreateSetVariableBlock(string variableName, string value) => CreateCommandBlock("set", value == null ? variableName : $"{variableName},{value}", null);
         public string CreateContainsBlock(string variableName, string textToFind, string textContent) => CreateCommandBlock("contains", $"{variableName},{textToFind}", textContent);

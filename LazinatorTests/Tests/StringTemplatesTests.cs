@@ -182,11 +182,11 @@ async public ValueTask<int> MyMethodAsync()
     {t.MaybeAsyncWordAwait()}MyOtherMethod{t.MaybeAsyncWordAsync()}();
     return {t.MaybeAsyncReturnValue("3")};
 }}")}";
-            string template2 = $@"{t.MaybeAsyncAndNot_BeginOnly}public {t.MaybeAsyncReturnType("int")} MyMethod{t.MaybeAsyncWordAsync()}()
+            string template2 = $@"{t.MaybeAsyncAndNot_Begin}public {t.MaybeAsyncReturnType("int")} MyMethod{t.MaybeAsyncWordAsync()}()
 {{
     {t.MaybeAsyncWordAwait()}MyOtherMethod{t.MaybeAsyncWordAsync()}();
     return {t.MaybeAsyncReturnValue("3")};
-}}{t.MaybeAsyncAndNot_EndOnly}";
+}}{t.MaybeAsyncAndNot_End}";
             template1.Should().Be(template2);
         }
 
