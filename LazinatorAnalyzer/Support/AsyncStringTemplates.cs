@@ -9,6 +9,12 @@ namespace LazinatorAnalyzer.Support
     {
         public string TaskKeyword = "ValueTask";
 
+        // The following options can be used to debug non matching uses of MaybeAsyncAndNot, by inserting numbered comments into the code.
+        public bool MatchMaybeAsyncAndNotNumerically = true; // DEBUG
+        public int MaybeAsyncBeginIndex = 0;
+        public int MaybeAsyncEndIndex = 0;
+        public string MaybeAsyncIndexStringForMatching(bool begin) => MatchMaybeAsyncAndNotNumerically ? $"/*{(begin ? MaybeAsyncBeginIndex++ : MaybeAsyncEndIndex++)} */" : "";
+
         /// <summary>
         /// If this is false, then the code will always be added in its synchronous form. If true, then it will be added in its
         /// asynchronous form or, if NotAsyncAndMaybeAsync or MaybeAsyncConditional is used, then in both forms.
@@ -22,8 +28,8 @@ namespace LazinatorAnalyzer.Support
         /// <param name="contents"></param>
         /// <returns></returns>
         public string MaybeAsyncAndNot(string contents) => MayBeAsync ? CreateForBlock("async", 0, 2, MaybeAsyncMainBlock(contents + "\r\n")) : contents;
-        public string MaybeAsyncAndNot_Begin => MayBeAsync ? CreateForBlock_Begin("async", 0, 2) + MaybeAsyncMainBlock_Begin : "";
-        public string MaybeAsyncAndNot_End => MayBeAsync ? "\r\n" + CreateEndCommand() + MaybeAsyncMainBlock_End : "";
+        public string MaybeAsyncAndNot_Begin => MayBeAsync ? MaybeAsyncIndexStringForMatching(true) + CreateForBlock_Begin("async", 0, 2) + MaybeAsyncMainBlock_Begin : "";
+        public string MaybeAsyncAndNot_End => MayBeAsync ? MaybeAsyncIndexStringForMatching(false) + "\r\n" + CreateEndCommand() + MaybeAsyncMainBlock_End : "";
 
         /// <summary>
         /// Create code that will be conditional based on whether this is an async block or not. 
