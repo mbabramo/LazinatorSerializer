@@ -700,7 +700,7 @@ namespace Lazinator.CodeDescription
             var allPropertiesRequiringInitialization = ExclusiveInterface.PropertiesIncludingInherited.Where(x => x.NonNullableThatRequiresInitialization).ToList();
             if (allPropertiesRequiringInitialization.Any())
                 parametersToFirstConstructor = String.Join(", ", allPropertiesRequiringInitialization.Select(x => x.PropertyName)) + ", ";
-            return $@"{MaybeAsyncAndNot($@"public {DerivationKeyword}{MaybeAsyncReturnType("{ILazinatorString}")} CloneLazinator{MaybeAsyncWord}(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
+            return $@"{MaybeAsyncAndNot($@"public {DerivationKeyword}{MaybeAsyncReturnType($"{ILazinatorString}")} CloneLazinator{MaybeAsyncWord}(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
                         {{
                             {NameIncludingGenerics} clone;
                             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
@@ -718,7 +718,7 @@ namespace Lazinator.CodeDescription
                             return {MaybeAsyncReturnValue($"clone")};
                         }}")}{IIF(!ImplementsAssignCloneProperties, $@"
 
-                        {MaybeAsyncAndNot($@"{ProtectedIfApplicable}{DerivationKeyword}{MaybeAsyncReturnType("{ILazinatorString}")} AssignCloneProperties({ILazinatorStringWithoutQuestionMark} clone, IncludeChildrenMode includeChildrenMode)
+                        {MaybeAsyncAndNot($@"{ProtectedIfApplicable}{DerivationKeyword}{MaybeAsyncReturnType($"{ILazinatorString}")} AssignCloneProperties({ILazinatorStringWithoutQuestionMark} clone, IncludeChildrenMode includeChildrenMode)
                         {{
                             {(IsDerivedFromNonAbstractLazinator ? $"{MaybeAwaitWord}base.AssignCloneProperties{MaybeAsyncWord}(clone, includeChildrenMode);" : $"clone.FreeInMemoryObjects();")}
                             {NameIncludingGenerics} typedClone = ({NameIncludingGenerics}) clone;
@@ -993,7 +993,7 @@ namespace Lazinator.CodeDescription
             if (IsAbstract || GeneratingRefStruct)
                 return;
             sb.Append($@"
-                    {MaybeAsyncAndNot_Begin}public {DerivationKeyword}{MaybeAsyncReturnType("{ILazinatorString}")} ForEachLazinator{MaybeAsyncWord}(Func<{ILazinatorString}, {ILazinatorString}>{QuestionMarkIfNullableModeEnabled} changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
+                    {MaybeAsyncAndNot_Begin}public {DerivationKeyword}{MaybeAsyncReturnType($"{ILazinatorString}")} ForEachLazinator{MaybeAsyncWord}(Func<{ILazinatorString}, {ILazinatorString}>{QuestionMarkIfNullableModeEnabled} changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
                     {{
                         {IIF(IsDerivedFromNonAbstractLazinator, $@"{MaybeAwaitWord}base.ForEachLazinator{MaybeAsyncWord}(changeFunc, exploreOnlyDeserializedChildren, false);
                         ")}");
