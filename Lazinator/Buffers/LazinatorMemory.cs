@@ -250,13 +250,6 @@ namespace Lazinator.Buffers
                 return InitialOwnedMemory.Memory.Slice(StartPosition, Length);
             }
         }
-
-        // DEBUG: Should we also add a ConsiderUnloadInitialMemoryAsync(), which would have the right to unload the initial memory
-        // if it no longer seems needed. Ideally, the implementation might decide to keep the n most recent pages in memory, so that
-        // we don't have to reload if we need the same page right away. 
-
-        Debug; // also we should allow unload memory chunks
-
         public async ValueTask<IMemoryOwner<byte>> LoadInitialMemoryAsync()
         {
             IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
@@ -383,6 +376,25 @@ namespace Lazinator.Buffers
             }
         }
 
+        public async IAsyncEnumerable<Memory<byte>> EnumerateMemoryChunksAsync(bool includeOutsideOfRange = false)
+        {
+            MemoryReference lastMemoryReferenceLoaded = null;
+            foreach (var rangeInfo in EnumerateMemoryChunkRanges(includeOutsideOfRange))
+            {
+                var m = MemoryAtIndex(rangeInfo.chunkIndex);
+                if (m is MemoryReference memoryReference && memoryReference.IsLoaded == false)
+                {
+                    if (lastMemoryReferenceLoaded != memoryReference)
+                    { // consider unloading the last memory reference, before loading this one, so that we don't have too many in memory at the same time
+                        await lastMemoryReferenceLoaded.ConsiderUnloadMemoryAsync();
+                        lastMemoryReferenceLoaded = memoryReference;
+                    }
+                    await memoryReference.LoadMemoryAsync();
+                }
+                yield return m.Memory.Slice(rangeInfo.startPosition, rangeInfo.numBytes);
+            }
+        }
+
 
         public IEnumerable<IMemoryOwner<byte>> EnumerateMemoryOwners()
         {
@@ -409,6 +421,12 @@ namespace Lazinator.Buffers
             if (MoreOwnedMemory != null)
                 foreach (var additional in MoreOwnedMemory)
                     yield return additional;
+        }
+
+        public async ValueTask WriteToBinaryBufferAsync(BinaryBufferWriterContainer writer, bool includeOutsideOfRange = false)
+        {
+            await foreach (Memory<byte> memory in EnumerateMemoryChunksAsync(includeOutsideOfRange))
+                writer.Write(memory.Span);
         }
 
         public void WriteToBinaryBuffer(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
