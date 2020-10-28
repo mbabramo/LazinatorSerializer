@@ -255,11 +255,21 @@ namespace Lazinator.Buffers
         // if it no longer seems needed. Ideally, the implementation might decide to keep the n most recent pages in memory, so that
         // we don't have to reload if we need the same page right away. 
 
+        Debug; // also we should allow unload memory chunks
+
         public async ValueTask<IMemoryOwner<byte>> LoadInitialMemoryAsync()
         {
             IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
             if (memoryOwner is MemoryReference memoryReference && memoryReference.IsLoaded == false)
                 await memoryReference.LoadMemoryAsync();
+            return memoryOwner;
+        }
+
+        public async ValueTask<IMemoryOwner<byte>> ConsiderUnloadInitialMemoryAsync()
+        {
+            IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
+            if (memoryOwner is MemoryReference memoryReference && memoryReference.IsLoaded == true)
+                await memoryReference.ConsiderUnloadMemoryAsync();
             return memoryOwner;
         }
 

@@ -40,12 +40,11 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// This method should be overridden for a MemoryReference subclass that saves memory lazily. This will be called
-        /// during the serialization of a splittable object after a page of memory has been completed. A subclass may 
-        /// choose not to unload memory, as this base class does.
+        /// This method may be overridden for a MemoryReference subclass that saves memory lazily. This will be called
+        /// after memory that is loaded is read and may no longer be necessary.  A subclass may, like this base class, 
+        /// choose not to unload memory.
         /// </summary>
-        /// <returns></returns>
-        public virtual ValueTask UnloadMemoryAsync()
+        public virtual ValueTask ConsiderUnloadMemoryAsync()
         {
             return ValueTask.CompletedTask;
         }
