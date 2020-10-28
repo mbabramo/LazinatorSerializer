@@ -643,8 +643,9 @@ namespace Lazinator.CodeDescription
                             }}
                             else
                             {{
-                                BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
-                                LazinatorMemoryStorage.WriteToBinaryBuffer({MaybeAsyncRefIfNot}writer);
+                                {MaybeAsyncConditional($@"BinaryBufferWriterContainer writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
+                                await LazinatorMemoryStorage.WriteToBinaryBufferAsync(writer);", $@"BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
+                                LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);")}
                                 LazinatorMemoryStorage = writer.LazinatorMemory;
                             }}
                             OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
@@ -660,8 +661,9 @@ namespace Lazinator.CodeDescription
                             {{
                                 return {MaybeAsyncReturnValue($"{MaybeAwaitWord}EncodeToNewBuffer{MaybeAsyncWord}(includeChildrenMode, verifyCleanness, updateStoredBuffer)")};
                             }}
-                            BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
-                            LazinatorMemoryStorage.WriteToBinaryBuffer({MaybeAsyncRefIfNot}writer);
+                            {MaybeAsyncConditional($@"BinaryBufferWriterContainer writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
+                                await LazinatorMemoryStorage.WriteToBinaryBufferAsync(writer);", $@"BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
+                                LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);")}
                             return {MaybeAsyncReturnValue($"writer.LazinatorMemory")};
                         }}")}
 

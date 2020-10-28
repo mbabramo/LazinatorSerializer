@@ -10,7 +10,7 @@ namespace LazinatorAnalyzer.Support
         public string TaskKeyword = "ValueTask";
 
         // The following options can be used to debug non matching uses of MaybeAsyncAndNot, by inserting numbered comments into the code.
-        public bool MatchMaybeAsyncAndNotNumerically = true; // DEBUG
+        public bool MatchMaybeAsyncAndNotNumerically = false;
         public int MaybeAsyncBeginIndex = 0;
         public int MaybeAsyncEndIndex = 0;
         public string MaybeAsyncIndexStringForMatching(bool begin) => MatchMaybeAsyncAndNotNumerically ? $"/*{(begin ? MaybeAsyncBeginIndex++ : MaybeAsyncEndIndex++)} */" : "";
