@@ -114,6 +114,9 @@ namespace LazinatorAnalyzer.Support
 
         }
 
+        /// <summary>
+        /// The location of either a begin command or an end command. The inner location means everything after the delimeter.
+        /// </summary>
         private struct CommandLocation
         {
             public CommandLocation(int overallStart, int overallEnd, int innerStart, int innerEnd)
@@ -127,33 +130,8 @@ namespace LazinatorAnalyzer.Support
             public int OverallEnd;
             public int InnerStart;
             public int InnerEnd;
-            public (int CommandStart, int CommandEnd) BeginStatement => (OverallStart, InnerStart - 1);
-            public (int CommandStart, int CommandEnd) EndStatement => (InnerEnd + 1, OverallEnd);
 
-            public string GetCommandName(string overallString, int openDelimiterLength, int closeDelimeterLength)
-            {
-                int commandNameStart = EndStatement.CommandStart + openDelimiterLength;
-                int commandNameEnd = EndStatement.CommandEnd - closeDelimeterLength;
-                string commandName = overallString.Substring(commandNameStart, commandNameEnd - commandNameStart + 1);
-                return commandName;
-            }
-
-            private string GetCommandName_FromBeginStatement(string overallString, int openDelimiterLength, int closeDelimeterLength)
-            {
-                int index = overallString.IndexOf('=', BeginStatement.CommandStart, BeginStatement.CommandEnd - BeginStatement.CommandStart + 1);
-                int commandNameStart = BeginStatement.CommandStart + openDelimiterLength;
-                int commandNameEnd = index - 1;
-                string commandName = overallString.Substring(commandNameStart, commandNameEnd - commandNameStart + 1);
-                return commandName;
-            }
-
-            public void VerifyNameMatch(string overallString, int openDelimiterLength, int closeDelimeterLength)
-            {
-                string fromEndStatement = GetCommandName(overallString, openDelimiterLength, closeDelimeterLength);
-                string fromBeginStatement = GetCommandName_FromBeginStatement(overallString, openDelimiterLength, closeDelimeterLength);
-                if (fromEndStatement != fromBeginStatement)
-                    throw new Exception("Invalidly formed template. Command names do not match.");
-            }
+            public string InnerString(string str) => str.Substring(InnerStart, InnerEnd - InnerStart + 1);
         }
 
         private abstract class TextBlockBase
@@ -207,10 +185,17 @@ namespace LazinatorAnalyzer.Support
 
         private class CommandWithTextBlock : TextBlockBase
         {
-            public CommandWithTextBlock(CommandLocation startCommandLocation, CommandLocation endCommandLocation)
+            public CommandWithTextBlock(CommandLocation startCommandLocation, CommandLocation endCommandLocation, string overallString = null)
             {
                 StartCommandLocation = startCommandLocation;
                 EndCommandLocation = endCommandLocation;
+                if (overallString != null)
+                {
+                    string commandNameFromEndCommand = endCommandLocation.InnerString(overallString);
+                    string commandNameFromStartCommand = startCommandLocation.InnerString(overallString);
+                    if (!commandNameFromStartCommand.StartsWith(commandNameFromEndCommand))
+                        throw new Exception($"Commands {commandNameFromStartCommand} and {commandNameFromEndCommand} are mismatched.");
+                }
             }
 
             public CommandLocation StartCommandLocation;
