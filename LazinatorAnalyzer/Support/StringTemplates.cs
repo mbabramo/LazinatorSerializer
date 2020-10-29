@@ -15,17 +15,17 @@ namespace LazinatorAnalyzer.Support
     /// </summary>
     public class StringTemplates
     {
-        public string BeginCommandOpenDelimeter = "/*$$B ";
-        public string EndCommandOpenDelimeter = "/*$$E ";
-        public string CloseDelimeter = " >$$*/";
+        public string BeginCommandOpenDelimeter = "/*<$$ ";
+        public string EndCommandOpenDelimeter = "/*<$$/";
+        public string CloseDelimeter = " $$>*/";
 
         public string CreateBeginCommand(string commandName, string commandContent) => $"{BeginCommandOpenDelimeter}{commandName}={commandContent}{CloseDelimeter}";
 
-        public string CreateEndCommand() => $"{EndCommandOpenDelimeter}{CloseDelimeter}";
+        public string CreateEndCommand(string commandName) => $"{EndCommandOpenDelimeter}{commandName}{CloseDelimeter}";
 
         public string CreateCommandBlock(string commandName, string commandContent, string textContent)
         {
-            return $"{CreateBeginCommand(commandName, commandContent)}{textContent}{CreateEndCommand()}";
+            return $"{CreateBeginCommand(commandName, commandContent)}{textContent}{CreateEndCommand(commandName)}";
         }
 
         public string CreateReprocessBlock(string textContent) => CreateCommandBlock("reprocess", "", textContent);
@@ -127,6 +127,33 @@ namespace LazinatorAnalyzer.Support
             public int OverallEnd;
             public int InnerStart;
             public int InnerEnd;
+            public (int CommandStart, int CommandEnd) BeginStatement => (OverallStart, InnerStart - 1);
+            public (int CommandStart, int CommandEnd) EndStatement => (InnerEnd + 1, OverallEnd);
+
+            public string GetCommandName(string overallString, int openDelimiterLength, int closeDelimeterLength)
+            {
+                int commandNameStart = EndStatement.CommandStart + openDelimiterLength;
+                int commandNameEnd = EndStatement.CommandEnd - closeDelimeterLength;
+                string commandName = overallString.Substring(commandNameStart, commandNameEnd - commandNameStart + 1);
+                return commandName;
+            }
+
+            private string GetCommandName_FromBeginStatement(string overallString, int openDelimiterLength, int closeDelimeterLength)
+            {
+                int index = overallString.IndexOf('=', BeginStatement.CommandStart, BeginStatement.CommandEnd - BeginStatement.CommandStart + 1);
+                int commandNameStart = BeginStatement.CommandStart + openDelimiterLength;
+                int commandNameEnd = index - 1;
+                string commandName = overallString.Substring(commandNameStart, commandNameEnd - commandNameStart + 1);
+                return commandName;
+            }
+
+            public void VerifyNameMatch(string overallString, int openDelimiterLength, int closeDelimeterLength)
+            {
+                string fromEndStatement = GetCommandName(overallString, openDelimiterLength, closeDelimeterLength);
+                string fromBeginStatement = GetCommandName_FromBeginStatement(overallString, openDelimiterLength, closeDelimeterLength);
+                if (fromEndStatement != fromBeginStatement)
+                    throw new Exception("Invalidly formed template. Command names do not match.");
+            }
         }
 
         private abstract class TextBlockBase

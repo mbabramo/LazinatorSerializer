@@ -187,7 +187,7 @@ async public ValueTask<int> MyMethodAsync()
     {t.MaybeAsyncWordAwait()}MyOtherMethod{t.MaybeAsyncWordAsync()}();
     return {t.MaybeAsyncReturnValue("3")};
 }}{t.MaybeAsyncAndNot_End}";
-            template1.Should().Be(template2);
+            template2.Should().Be(template1);
         }
 
 
