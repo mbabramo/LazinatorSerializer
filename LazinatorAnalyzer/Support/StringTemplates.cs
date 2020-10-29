@@ -264,7 +264,7 @@ namespace LazinatorAnalyzer.Support
                 {
                     var endCommandLocation = commandLocation.location;
                     var startCommandLocation = commandLocationStack.Pop();
-                    var commandWithTextBlock = new CommandWithTextBlock(startCommandLocation, endCommandLocation);
+                    var commandWithTextBlock = new CommandWithTextBlock(startCommandLocation, endCommandLocation, templateString);
                     var textBlockTreeNode = textBlockTreeStack.Pop();
                     textBlockTreeNode.Data = commandWithTextBlock;
                     FillInMissingRanges(textBlockTreeNode);
