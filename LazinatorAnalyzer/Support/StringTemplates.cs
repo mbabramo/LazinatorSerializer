@@ -185,25 +185,25 @@ namespace LazinatorAnalyzer.Support
 
         private class CommandWithTextBlock : TextBlockBase
         {
-            public CommandWithTextBlock(CommandLocation startCommandLocation, CommandLocation endCommandLocation, string overallString = null)
+            public CommandWithTextBlock(CommandLocation beginCommandLocation, CommandLocation endCommandLocation, string overallString = null)
             {
-                StartCommandLocation = startCommandLocation;
+                BeginCommandLocation = beginCommandLocation;
                 EndCommandLocation = endCommandLocation;
                 if (overallString != null)
                 {
                     string commandNameFromEndCommand = endCommandLocation.InnerString(overallString);
-                    string commandNameFromStartCommand = startCommandLocation.InnerString(overallString);
-                    if (!commandNameFromStartCommand.StartsWith(commandNameFromEndCommand))
-                        throw new Exception($"Commands {commandNameFromStartCommand} and {commandNameFromEndCommand} are mismatched.");
+                    string commandNameFromBeginCommand = beginCommandLocation.InnerString(overallString);
+                    if (!commandNameFromBeginCommand.StartsWith(commandNameFromEndCommand))
+                        throw new Exception($"Commands {commandNameFromBeginCommand} and {commandNameFromEndCommand} are mismatched.");
                 }
             }
 
-            public CommandLocation StartCommandLocation;
+            public CommandLocation BeginCommandLocation;
             public CommandLocation EndCommandLocation;
-            public override (int startRange, int endRange) OverallRange => (StartCommandLocation.OverallStart, EndCommandLocation.OverallEnd);
+            public override (int startRange, int endRange) OverallRange => (BeginCommandLocation.OverallStart, EndCommandLocation.OverallEnd);
 
-            public override (int startRange, int endRange)? CommandRange => (StartCommandLocation.InnerStart, StartCommandLocation.InnerEnd);
-            public override (int startRange, int endRange)? InnerContentRange => EndCommandLocation.OverallStart == StartCommandLocation.OverallEnd + 1 ? null : (StartCommandLocation.OverallEnd + 1, EndCommandLocation.OverallStart - 1);
+            public override (int startRange, int endRange)? CommandRange => (BeginCommandLocation.InnerStart, BeginCommandLocation.InnerEnd);
+            public override (int startRange, int endRange)? InnerContentRange => EndCommandLocation.OverallStart == BeginCommandLocation.OverallEnd + 1 ? null : (BeginCommandLocation.OverallEnd + 1, EndCommandLocation.OverallStart - 1);
         }
 
         private static List<int> AllIndexesOf(string str, string value)
