@@ -445,6 +445,17 @@ namespace LazinatorAnalyzer.Support
             }
         }
 
+        /// <summary>
+        /// The Reprocess command reprocesses all of its children. This will be useful if the result of an initial evaluation leaves an unprocessed command.
+        /// For example, the IF command will be left in command form if the variable is uninitialized, so a reprocess block can allow the IF command to be 
+        /// evaluated based on the value of the variable at the end of the block. This means that information will not only flow up the command hierarchy,
+        /// but can also flow backwards.
+        /// Meanwhile, the Reprocess command be used to delay any processing of its inner commands. To accomplish this, the text inside the inner Reprocess
+        /// command is encoded. The inner reprocess command simply outputs that text, within another Reprocess command, and on the last repetition, the inner
+        /// text is unencoded. Thus, if numCycles is 1, the inner text will be unencoded when initially run, and so the commands will then be executed when
+        /// the outer Reprocess command is executed. A numCycles value of greater than 1 can be used to delay reprocessing with multiple layers of Reprocess
+        /// embedding.
+        /// </summary>
         private class ReprocessCommand : CommandBase
         {
             public ReprocessCommand(StringTemplates stringTemplate) : base(stringTemplate)
