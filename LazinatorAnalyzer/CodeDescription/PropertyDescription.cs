@@ -1314,8 +1314,8 @@ namespace Lazinator.CodeDescription
             return $@"
             {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || NonNullableThatCanBeUninitialized, "LazinatorMemoryStorage.Length == 0", createDefault, $@"{IIF(defineChildData, "LazinatorMemory ")}childData = {ChildSliceString};
                 {IIF(async, $@"await childData.LoadInitialMemoryAsync();
-                ")}{recreation}")}{IIF(async, $@"
-                await childData.ConsiderUnloadInitialMemoryAsync();")}{IIF(BackingAccessFieldIncluded, $@"
+                ")}{recreation}{IIF(async, $@"
+                await childData.ConsiderUnloadInitialMemoryAsync();")}")}{IIF(BackingAccessFieldIncluded, $@"
             {BackingFieldAccessedString} = true;")}";
         }
 
