@@ -11,6 +11,7 @@ using LazinatorAnalyzer.Settings;
 using LazinatorAnalyzer.Support;
 using LazinatorCodeGen.Roslyn;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LazinatorCodeGen.Roslyn.RoslynHelpers;
 
 namespace Lazinator.CodeDescription
@@ -21,7 +22,8 @@ namespace Lazinator.CodeDescription
 
         /* Type and object information */
         private ObjectDescription ContainingObjectDescription { get; set; }
-        private Compilation Compilation => ContainingObjectDescription.Compilation.Compilation;
+        public LazinatorCompilation LazinatorCompilation => ContainingObjectDescription.Compilation;
+        private Compilation Compilation => LazinatorCompilation.Compilation;
         private bool ContainerIsClass => ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct;
         private bool ContainerIsStruct => ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct || ContainingObjectDescription.GeneratingRefStruct;
         private PropertyDescription ContainingPropertyDescription { get; set; }
@@ -95,7 +97,13 @@ namespace Lazinator.CodeDescription
                                         SupportedCollectionType ==
                                         LazinatorSupportedCollectionType.ReadOnlyMemory ||
                                         SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan);
-        internal bool IsLazinator => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable || PropertyType == LazinatorPropertyType.OpenGenericParameter;
+        internal bool IsNonGenericLazinator => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable;
+        internal bool IsLazinator => IsNonGenericLazinator || PropertyType == LazinatorPropertyType.OpenGenericParameter;
+
+        internal INamedTypeSymbol ExclusiveInterfaceSymbol => IsNonGenericLazinator ? LazinatorCompilation.GetExclusiveInterface(Symbol as INamedTypeSymbol) : null;
+
+        internal bool TypeHasLazinatorAsyncAttribute => ExclusiveInterfaceSymbol?.HasAttributeOfType<CloneAsyncLazinatorMemoryAttribute>() ?? false;
+        internal bool TypeImplementsILazinatorAsync => Symbol.Name == "Lazinator.Core.ILazinatorAsync" || ((Symbol as INamedTypeSymbol)?.AllInterfaces.Any(x => x.Name == "Lazinator.Core.ILazinatorAsync") ?? false);
         internal bool IsSupportedCollectionOrTuple => PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
 
         internal bool IsSupportedCollectionReferenceType => PropertyType == LazinatorPropertyType.SupportedCollection && SupportedCollectionType != LazinatorSupportedCollectionType.Memory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlyMemory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlySpan;

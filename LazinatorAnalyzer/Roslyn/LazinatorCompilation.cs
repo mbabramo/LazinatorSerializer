@@ -695,5 +695,14 @@ namespace LazinatorCodeGen.Roslyn
                 NameTypedSymbolFromString[name] = typeSymbol;
             return name;
         }
+
+        public INamedTypeSymbol GetExclusiveInterface(INamedTypeSymbol iLazinatorTypeSymbol)
+        {
+            string typeSymbolString = LazinatorCompilation.TypeSymbolToString(iLazinatorTypeSymbol.OriginalDefinition);
+            string exclusiveInterfaceString = TypeToExclusiveInterface[typeSymbolString];
+            INamedTypeSymbol interfaceTypeSymbol = LazinatorCompilation.NameTypedSymbolFromString
+                [exclusiveInterfaceString];
+            return interfaceTypeSymbol;
+        }
     }
 }

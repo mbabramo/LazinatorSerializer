@@ -138,25 +138,6 @@ namespace Lazinator.CodeDescription
         public bool CanNeverHaveChildren => Version == -1 && IsSealedOrStruct && !ExclusiveInterface.PropertiesIncludingInherited.Any(x => x.PropertyType != LazinatorPropertyType.PrimitiveType && x.PropertyType != LazinatorPropertyType.PrimitiveTypeNullable) && !IsGeneric;
         public bool UniqueIDCanBeSkipped => Version == -1 && IsSealedOrStruct && BaseLazinatorObject == null && !HasNonexclusiveInterfaces && !ContainsOpenGenericParameters;
         public bool SuppressDate { get; set; }
-        public bool AsyncLazinatorMemory { get; set; }
-
-        public AsyncStringTemplates AsyncTemplate;
-        public string MaybeAsyncAndNot(string content) => AsyncTemplate.MaybeAsyncAndNot(content);
-        public string MaybeAsyncAndNot_Begin => AsyncTemplate.MaybeAsyncAndNot_Begin;
-        public string MaybeAsyncAndNot_End => AsyncTemplate.MaybeAsyncAndNot_End;
-        public string MaybeAsyncReturnType(string returnType) => AsyncTemplate.MaybeAsyncReturnType(returnType);
-        public string MaybeAsyncReturnValue(string returnValue) => AsyncTemplate.MaybeAsyncReturnValue(returnValue);
-        public string MaybeAsyncVoidReturn(bool isAtEndOfMethod) => AsyncTemplate.MaybeAsyncVoidReturn(isAtEndOfMethod);
-        public string MaybeAwaitWord => AsyncTemplate.MaybeAsyncWordAwait();
-        public string AwaitAndNoteAsyncUsed => AsyncTemplate.AwaitAndNoteAsyncUsed();
-        public string NoteAsyncUsed => AsyncTemplate.NoteAsyncUsed();
-        public string MaybeAsyncWord => AsyncTemplate.MaybeAsyncWordAsync();
-        public string MaybeIAsyncEnumerable => AsyncTemplate.MaybeIAsyncEnumerable();
-        public string MaybeAsyncConditional(string ifAsync, string ifNotAsync) => AsyncTemplate.MaybeAsyncConditional(ifAsync, ifNotAsync);
-        public string MaybeAsyncBinaryBufferWriterParameter => $"{MaybeAsyncConditional("BinaryBufferWriterContainer", "ref BinaryBufferWriter")}";
-        public string MaybeAsyncRefIfNot => $"{MaybeAsyncConditional("", "ref ")}";
-
-
 
         public bool AllowNonlazinatorGenerics { get; set; }
         public bool SuppressLazinatorVersionByte { get; set; }
@@ -180,6 +161,30 @@ namespace Lazinator.CodeDescription
                     " : "";
         internal string HideILazinatorProperty => (Config?.HideILazinatorProperties ?? true) ? $@"[DebuggerBrowsable(DebuggerBrowsableState.Never)]
                     " : "";
+
+        /* Async support */
+
+        public bool AsyncLazinatorMemory { get; set; }
+
+        public AsyncStringTemplates AsyncTemplate;
+        public string MaybeAsyncAndNot(string content) => AsyncTemplate.MaybeAsyncAndNot(content);
+        public string MaybeAsyncAndNot_Begin => AsyncTemplate.MaybeAsyncAndNot_Begin;
+        public string MaybeAsyncAndNot_End => AsyncTemplate.MaybeAsyncAndNot_End;
+        public string MaybeAsyncReturnType(string returnType) => AsyncTemplate.MaybeAsyncReturnType(returnType);
+        public string MaybeAsyncReturnValue(string returnValue) => AsyncTemplate.MaybeAsyncReturnValue(returnValue);
+        public string MaybeAsyncVoidReturn(bool isAtEndOfMethod) => AsyncTemplate.MaybeAsyncVoidReturn(isAtEndOfMethod);
+        public string MaybeAwaitWord => AsyncTemplate.MaybeAsyncWordAwait();
+        public string AwaitAndNoteAsyncUsed => AsyncTemplate.AwaitAndNoteAsyncUsed();
+        public string NoteAsyncUsed => AsyncTemplate.NoteAsyncUsed();
+        public string MaybeAsyncWord => AsyncTemplate.MaybeAsyncWordAsync();
+        public string MaybeAwaitWordConditional(bool condition) => condition ? MaybeAwaitWord : "";
+        public string MaybeAsyncWordConditional(bool condition) => condition ? MaybeAsyncWord : "";
+        public string MaybeIAsyncEnumerable => AsyncTemplate.MaybeIAsyncEnumerable();
+        public string MaybeAsyncConditional(string ifAsync, string ifNotAsync) => AsyncTemplate.MaybeAsyncConditional(ifAsync, ifNotAsync);
+        public string MaybeAsyncBinaryBufferWriterParameter => $"{MaybeAsyncConditional("BinaryBufferWriterContainer", "ref BinaryBufferWriter")}";
+        public string MaybeAsyncRefIfNot => $"{MaybeAsyncConditional("", "ref ")}";
+
+        /* Construction */
 
         public ObjectDescription()
         {
@@ -231,14 +236,18 @@ namespace Lazinator.CodeDescription
                 }
             }
 
-            if (!Compilation.TypeToExclusiveInterface.ContainsKey(LazinatorCompilation.TypeSymbolToString(iLazinatorTypeSymbol.OriginalDefinition)))
+            string typeSymbolString = LazinatorCompilation.TypeSymbolToString(iLazinatorTypeSymbol.OriginalDefinition);
+            if (!Compilation.TypeToExclusiveInterface.ContainsKey(typeSymbolString))
             {
                 // This is a nonlazinator base class
                 IsNonLazinatorBaseClass = true;
                 return;
             }
+
+            string exclusiveInterfaceString = Compilation.TypeToExclusiveInterface[typeSymbolString];
             INamedTypeSymbol interfaceTypeSymbol = LazinatorCompilation.NameTypedSymbolFromString
-                [Compilation.TypeToExclusiveInterface[LazinatorCompilation.TypeSymbolToString(iLazinatorTypeSymbol.OriginalDefinition)]];
+                [exclusiveInterfaceString];
+
             InterfaceTypeSymbol = interfaceTypeSymbol;
             AsyncLazinatorMemory = InterfaceTypeSymbol.HasAttributeOfType<CloneAsyncLazinatorMemoryAttribute>();
             AsyncTemplate = new AsyncStringTemplates() { MayBeAsync = AsyncLazinatorMemory };
@@ -724,7 +733,7 @@ namespace Lazinator.CodeDescription
                                 clone = new {NameIncludingGenerics}(bytes);
                             }}{IIF(ImplementsOnClone, $@"
             clone.OnCompleteClone(this);")}
-                            return {MaybeAsyncReturnValue($"clone")};
+                            return {MaybeAsyncReturnValue($"{MaybeAsyncConditional($"({ILazinatorString})", "")}clone")};
                         }}")}{IIF(!ImplementsAssignCloneProperties, $@"
 
                         {MaybeAsyncAndNot($@"{ProtectedIfApplicable}{DerivationKeyword}{MaybeAsyncReturnType($"{ILazinatorString}")} AssignCloneProperties{MaybeAsyncWord}({ILazinatorStringWithoutQuestionMark} clone, IncludeChildrenMode includeChildrenMode)
@@ -733,7 +742,7 @@ namespace Lazinator.CodeDescription
                             {NameIncludingGenerics} typedClone = ({NameIncludingGenerics}) clone;
                             {AppendCloneProperties()}{IIF(ObjectType == LazinatorObjectType.Struct || GeneratingRefStruct, $@"
                             typedClone.IsDirty = false;")}
-                            return {MaybeAsyncReturnValue($"typedClone")};
+                            return {MaybeAsyncReturnValue($"{MaybeAsyncConditional($"({ILazinatorString})", "")}typedClone")};
                         }}")}")}";
 
         }
@@ -923,7 +932,7 @@ namespace Lazinator.CodeDescription
                                     }}
                                     if ((!stopExploringBelowMatch || !isMatch_{propertyName}) && shouldExplore_{propertyName})
                                     {{
-                                        {MaybeAwaitWord}foreach (var toYield in {propertyName}{property.NullForgiveness}.{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable || (property.IsDefinitelyStruct && property.Nullable), "Value.")}EnumerateLazinatorDescendants{MaybeAsyncWord}(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                                        {MaybeAwaitWordConditional(property.TypeImplementsILazinatorAsync)}foreach (var toYield in {propertyName}{property.NullForgiveness}.{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable || (property.IsDefinitelyStruct && property.Nullable), "Value.")}EnumerateLazinatorDescendants{MaybeAsyncWordConditional(property.TypeImplementsILazinatorAsync)}(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                                         {{
                                             yield return (""{propertyName}"" + ""."" + toYield.propertyName, toYield.descendant);
                                         }}
