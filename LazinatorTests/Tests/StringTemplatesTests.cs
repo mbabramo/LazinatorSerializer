@@ -104,7 +104,7 @@ namespace LazinatorTests.Tests
 
 
         [Fact]
-        public void TemplateSetVariableCommand_AfterSibling()
+        public void TemplateSetVariableCommand_EarlierIfCommandLeftUnevaluated()
         {
             StringTemplates templatesProcessor = new StringTemplates();
             string text = "The quick brown fox";
@@ -112,16 +112,32 @@ namespace LazinatorTests.Tests
             string template = $"{text}{templatesProcessor.CreateIfBlock("i", "1", additionalText)}{templatesProcessor.CreateSetVariableBlock("i", "1")}";
             string result = templatesProcessor.Process(template, new Dictionary<string, string>() { });
             result.Should().NotBe($"{text}{additionalText}");
+            // the result will be {text} plus the unevaluated IF command.
         }
 
         [Fact]
-        public void TemplateSetVariableCommand_AfterSiblingWithReprocessBlock()
+        public void TemplateSetVariableCommand_LaterChangeInInitiallyNullVariableRegistered()
         {
             StringTemplates templatesProcessor = new StringTemplates();
             string text = "The quick brown fox";
             string additionalText = " jumps";
+            // The initial If command will see that the variable i is null and it will not be processed initially. Then it will be processed within the 
+            // broader reprocess block after the variable i has been set.
             string template = $"{text}{templatesProcessor.CreateIfBlock("i", "1", additionalText)}{templatesProcessor.CreateSetVariableBlock("i", "1")}";
-            template = templatesProcessor.CreateReprocessBlock(template);
+            template = templatesProcessor.CreateReprocessBlock(template, 0);
+            string result = templatesProcessor.Process(template, new Dictionary<string, string>() { });
+            result.Should().Be($"{text}{additionalText}");
+        }
+
+        [Fact]
+        public void TemplateSetVariableCommand_LaterChangeInVariableRegisteredByEncoding()
+        {
+            StringTemplates templatesProcessor = new StringTemplates();
+            string text = "The quick brown fox";
+            string additionalText = " jumps";
+            // The variable is set to 0 before the If block and to 1 after the if block. We want the If block to reflect what happens afterward. So, We can use two reprocess blocks. The inner reprocess block has a cycle constraint, and the result is that its commands are encoded so that they won't be evaluated. The initial evaluation will reduce the cycle count and then unencode, so when we get to the outer reprocess block, the inner reprocess block will need to be executed.
+            string template = $"{text}{templatesProcessor.CreateSetVariableBlock("i", "0")}{templatesProcessor.CreateReprocessBlock(templatesProcessor.CreateIfBlock("i", "1", additionalText), 1)}{templatesProcessor.CreateSetVariableBlock("i", "1")}";
+            template = templatesProcessor.CreateReprocessBlock(template, 0); // this is the outer reprocess block -- by the time it runs, everything within it will have run, but the inner reprocess block will have merely been unencoded, so the if command will not have run
             string result = templatesProcessor.Process(template, new Dictionary<string, string>() { });
             result.Should().Be($"{text}{additionalText}");
         }

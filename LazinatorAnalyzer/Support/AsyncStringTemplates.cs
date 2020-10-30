@@ -47,13 +47,14 @@ namespace LazinatorAnalyzer.Support
         /// <param name="mayBeAsync"></param>
         /// <param name="contents"></param>
         /// <returns></returns>
-        private string MaybeAsyncMainBlock(string contents) => MayBeAsync ? CreateReprocessBlock(MaybeAsyncWord_async() + CreateSetVariableBlock("awaitcalled", "0") + contents) + CreateSetVariableBlock("awaitcalled", null) : contents;
-        private string MaybeAsyncMainBlock_Begin => MayBeAsync ? CreateReprocessBlock_BeginOnly() + MaybeAsyncWord_async() + CreateSetVariableBlock("awaitcalled", "0") : "";
+        private string MaybeAsyncMainBlock(string contents) => MayBeAsync ? CreateReprocessBlock(MaybeAsyncWord_async() + CreateSetVariableBlock("awaitcalled", "0") + contents, 0) + CreateSetVariableBlock("awaitcalled", null) : contents;
+        private string MaybeAsyncMainBlock_Begin => MayBeAsync ? CreateReprocessBlock_BeginOnly(0) + MaybeAsyncWord_async() + CreateSetVariableBlock("awaitcalled", "0") : "";
         private string MaybeAsyncMainBlock_End => CreateSetVariableBlock("awaitcalled", null) + CreateEndCommand("for");
 
         public string MaybeAsyncReturnType(string ordinaryReturnType) => MaybeAsyncConditional(MaybeAsyncReturnTypeWrapper(ordinaryReturnType), ordinaryReturnType); 
 
-        public string MaybeAsyncWordAwait() => MaybeAsyncConditional("await " + CreateSetVariableBlock("awaitcalled", "1"));
+        public string MaybeAsyncWordAwait() => MaybeAsyncConditional(DefinitelyAsyncWordAwait());
+        public string DefinitelyAsyncWordAwait() => "await " + CreateSetVariableBlock("awaitcalled", "1");
 
         public string MaybeAsyncWordAsync() => MaybeAsyncConditional("Async");
         public string MaybeAsyncWord_async() => MaybeAsyncConditional(CreateIfBlock("awaitcalled", "1", "async "));

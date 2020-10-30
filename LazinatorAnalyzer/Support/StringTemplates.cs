@@ -28,8 +28,24 @@ namespace LazinatorAnalyzer.Support
             return $"{CreateBeginCommand(commandName, commandContent)}{textContent}{CreateEndCommand(commandName)}";
         }
 
-        public string CreateReprocessBlock(string textContent) => CreateCommandBlock("reprocess", "", textContent);
-        public string CreateReprocessBlock_BeginOnly() => CreateBeginCommand("reprocess", "");
+        public string EncodeCommandBlock(string text, bool unencode = false)
+        {
+            string beginReplacement = "$$$$B";
+            string endReplacement = "$$$$E";
+            string closeReplacement = "$$$$>";
+            if (unencode)
+                return text
+                    .Replace(beginReplacement, BeginCommandOpenDelimeter)
+                    .Replace(endReplacement, EndCommandOpenDelimeter)
+                    .Replace(closeReplacement, CloseDelimeter);
+            return text
+                .Replace(BeginCommandOpenDelimeter, beginReplacement)
+                .Replace(EndCommandOpenDelimeter, endReplacement)
+                .Replace(CloseDelimeter, closeReplacement);
+        }
+
+        public string CreateReprocessBlock(string textContent, int numCyclesLeft) => CreateCommandBlock("reprocess", numCyclesLeft.ToString(), numCyclesLeft >= 1 ? EncodeCommandBlock(textContent) : textContent);
+        public string CreateReprocessBlock_BeginOnly(int numCyclesLeft) => CreateBeginCommand("reprocess", numCyclesLeft.ToString());
         public string CreateIfBlock(string variableName, string variableValue, string textContent) => CreateCommandBlock("if", $"{variableName},{variableValue}", textContent);
         public string CreateForBlock(string variableName, int startValue, int endValueExclusive, string textContent) => CreateCommandBlock("for", $"{variableName},{startValue},{endValueExclusive}", textContent);
 
@@ -437,6 +453,15 @@ namespace LazinatorAnalyzer.Support
 
             public override string TransformRange(string stringToTransform, string commandContent, Dictionary<string, string> variables)
             {
+                int numCyclesLeft = 0;
+                if (commandContent != null && commandContent != "")
+                    numCyclesLeft = Int32.Parse(commandContent);
+                // When there is exactly 1 cycle left, we unencode the command block. The result of this is that the contents will not be evaluated
+                // until the last cycle.
+                if (numCyclesLeft == 1)
+                    stringToTransform = StringTemplate.EncodeCommandBlock(stringToTransform, unencode: true);
+                if (numCyclesLeft > 0)
+                    return StringTemplate.CreateReprocessBlock(stringToTransform, numCyclesLeft - 1); // we are going to delay processing; this allows external variables to be set
                 return StringTemplate.Process(stringToTransform, variables);
             }
         }
