@@ -869,7 +869,7 @@ namespace Lazinator.CodeDescription
                         sb.Append($@"
                             {MaybeAsyncAndNot_Begin}public override {MaybeIAsyncEnumerable}<(string propertyName, {ILazinatorString} descendant)> EnumerateLazinatorDescendants{MaybeAsyncWord}(Func<{ILazinatorString}, bool>{QuestionMarkIfNullableModeEnabled} matchCriterion, bool stopExploringBelowMatch, Func<{ILazinatorString}, bool>{QuestionMarkIfNullableModeEnabled} exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
                             {{
-                                foreach (var inheritedYield in {MaybeAwaitWord}base.EnumerateLazinatorDescendants{MaybeAsyncWord}(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                                {MaybeAwaitWord}foreach (var inheritedYield in {MaybeAwaitWord}base.EnumerateLazinatorDescendants{MaybeAsyncWord}(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                                 {{
                                     yield return inheritedYield;
                                 }}
@@ -891,7 +891,7 @@ namespace Lazinator.CodeDescription
                                 }}
                                 if (explore)
                                 {{
-                                    foreach (var item in EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                                    {MaybeAwaitWord}foreach (var item in EnumerateLazinatorDescendants{MaybeAsyncWord}(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                                     {{
                                         yield return item.descendant;
                                     }}
@@ -923,7 +923,7 @@ namespace Lazinator.CodeDescription
                                     }}
                                     if ((!stopExploringBelowMatch || !isMatch_{propertyName}) && shouldExplore_{propertyName})
                                     {{
-                                        foreach (var toYield in {propertyName}{property.NullForgiveness}.{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable || (property.IsDefinitelyStruct && property.Nullable), "Value.")}EnumerateLazinatorDescendants(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                                        {MaybeAwaitWord}foreach (var toYield in {propertyName}{property.NullForgiveness}.{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable || (property.IsDefinitelyStruct && property.Nullable), "Value.")}EnumerateLazinatorDescendants{MaybeAsyncWord}(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                                         {{
                                             yield return (""{propertyName}"" + ""."" + toYield.propertyName, toYield.descendant);
                                         }}
