@@ -1360,7 +1360,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                             {GetLengthsCalculation(false)}
                             int previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);{IIF(IncludeTracingCode, $@"
                             TabbedText.WriteLine($""Byte {{writer.ActiveMemoryPosition}}, Leaving {{lengthForLengths}} bytes to store lengths of child objects"");")}
-                            WriteChildrenPropertiesIntoBuffer({MaybeAsyncRefIfNot}writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition);
+                            {MaybeAwaitWord}WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncRefIfNot}writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition);
                             writer.ResetLengthsPosition(previousLengthsPosition);")}");
 
             if (IncludeTracingCode)
@@ -1466,12 +1466,12 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                             {MaybeAsyncAndNot_Begin}{ProtectedIfApplicable}{DerivationKeyword}{MaybeAsyncReturnType("void")} WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
                             {{");
                 }
-            }
-            if (!isPrimitive && propertiesToWrite.Any())
-            {
-                sb.AppendLine($@"int startOfChildPosition = 0;");
-                if (propertiesToWrite.Any(x => x.UsesLengthValue))
-                    sb.AppendLine($@"int lengthValue = 0;");
+                if (propertiesToWrite.Any())
+                {
+                    sb.AppendLine($@"int startOfChildPosition = 0;");
+                    if (propertiesToWrite.Any(x => x.UsesLengthValue))
+                        sb.AppendLine($@"int lengthValue = 0;");
+                }
             }
 
 
@@ -1482,7 +1482,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 
             if (!isPrimitive && ContainsEndByteIndex)
                 AppendEndByteIndex(sb, propertiesToWrite, "writer.ActiveMemoryPosition - startOfObjectPosition", true);
-
+            sb.Append($@"{MaybeAsyncVoidReturn(true)}");
             sb.Append($@"}}{IIF(!isPrimitive, MaybeAsyncAndNot_End)}
 ");
         }
@@ -1507,7 +1507,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                     sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.ActiveMemoryPosition}}, {property.PropertyName} value {{{property.BackingFieldString}}}"");");
                 sb.AppendLine($@"TabbedText.Tabs++;");
             }
-            property.AppendPropertyWriteString(sb, MaybeAsyncConditional("writer.Writer", "writer"));
+            property.AppendPropertyWriteString(sb);
             if (IncludeTracingCode)
             {
                 sb.AppendLine($@"TabbedText.Tabs--;");

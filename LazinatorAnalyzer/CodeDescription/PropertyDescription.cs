@@ -1544,8 +1544,10 @@ namespace Lazinator.CodeDescription
             return sizeof(int);
         }
 
-        public void AppendPropertyWriteString(CodeStringBuilder sb, string writerParameter)
+        public void AppendPropertyWriteString(CodeStringBuilder sb)
         {
+            string writerParameter = IsPrimitive ? "writer" : ContainingObjectDescription.MaybeAsyncConditional("writer.Writer", "writer");
+
             // We remember the startOfChildPosition, and then update the stored buffer at the end,
             // because we can't change the _ByteIndex until after the write, since we may need
             // to read from storage during the write.
