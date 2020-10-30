@@ -643,9 +643,10 @@ namespace Lazinator.CodeDescription
                                 LazinatorMemoryStorage = EncodeToNewBuffer(IncludeChildrenMode.IncludeAllChildren, false, true);
                             }}
                             else
-                            {{
-                                {MaybeAsyncConditional($@"BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(LazinatorMemoryStorage.Length);
-                                {DefinitelyAwaitWord}LazinatorMemoryStorage.WriteToBinaryBufferAsync(writer);", $@"BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
+                            {{{MaybeAsyncConditional($@"
+                                BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(LazinatorMemoryStorage.Length);
+                                {DefinitelyAwaitWord}LazinatorMemoryStorage.WriteToBinaryBufferAsync(writer);", $@"
+                                BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
                                 LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);")}
                                 LazinatorMemoryStorage = writer.LazinatorMemory;
                             }}
@@ -661,18 +662,21 @@ namespace Lazinator.CodeDescription
                             if (LazinatorMemoryStorage.IsEmpty || includeChildrenMode != OriginalIncludeChildrenMode || (verifyCleanness || IsDirty || (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && DescendantIsDirty)))
                             {{
                                 return {MaybeAsyncReturnValue($"{MaybeAwaitWord}EncodeToNewBuffer{MaybeAsyncWord}(includeChildrenMode, verifyCleanness, updateStoredBuffer)")};
-                            }}
-                            {MaybeAsyncConditional($@"BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(LazinatorMemoryStorage.Length);
-                                {DefinitelyAwaitWord}LazinatorMemoryStorage.WriteToBinaryBufferAsync(writer);", $@"BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
+                            }}{MaybeAsyncConditional($@"
+                                BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(LazinatorMemoryStorage.Length);
+                                {DefinitelyAwaitWord}LazinatorMemoryStorage.WriteToBinaryBufferAsync(writer);", $@"
+                                BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
                                 LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);")}
                             return {MaybeAsyncReturnValue($"writer.LazinatorMemory")};
                         }}")}
 
                         {MaybeAsyncAndNot($@"{ProtectedIfApplicable}{DerivationKeyword}{MaybeAsyncReturnType("LazinatorMemory")} EncodeToNewBuffer{MaybeAsyncWord}(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
                         {{
-                            int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.Length;
+                            int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.Length;{MaybeAsyncConditional($@"
+                            BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(bufferSize);
+                            {DefinitelyAwaitWord}SerializeToExistingBufferAsync(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);", $@"
                             BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
-                            SerializeToExistingBuffer({MaybeAsyncRefIfNot}writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                            SerializeToExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);")}
                             return {MaybeAsyncReturnValue($"writer.LazinatorMemory")};
                         }}")}
 
@@ -721,7 +725,7 @@ namespace Lazinator.CodeDescription
                             return {MaybeAsyncReturnValue($"clone")};
                         }}")}{IIF(!ImplementsAssignCloneProperties, $@"
 
-                        {MaybeAsyncAndNot($@"{ProtectedIfApplicable}{DerivationKeyword}{MaybeAsyncReturnType($"{ILazinatorString}")} AssignCloneProperties({ILazinatorStringWithoutQuestionMark} clone, IncludeChildrenMode includeChildrenMode)
+                        {MaybeAsyncAndNot($@"{ProtectedIfApplicable}{DerivationKeyword}{MaybeAsyncReturnType($"{ILazinatorString}")} AssignCloneProperties{MaybeAsyncWord}({ILazinatorStringWithoutQuestionMark} clone, IncludeChildrenMode includeChildrenMode)
                         {{
                             {(IsDerivedFromNonAbstractLazinator ? $"{MaybeAwaitWord}base.AssignCloneProperties{MaybeAsyncWord}(clone, includeChildrenMode);" : $"clone.FreeInMemoryObjects();")}
                             {NameIncludingGenerics} typedClone = ({NameIncludingGenerics}) clone;
