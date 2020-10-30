@@ -1022,7 +1022,7 @@ namespace Lazinator.CodeDescription
                     ConditionsCodeGenerator.AndCombine(
                         "!exploreOnlyDeserializedChildren",
                         property.GetNonNullCheck(false, MaybeAsyncPropertyName(property))),
-                    property.GetNonNullCheck(true, MaybeAsyncPropertyName(property)));
+                    property.GetNonNullCheck(true, property.PropertyName));
             bool nonNullCheckDefinitelyTrue(PropertyDescription property) => property.GetNonNullCheck(false).ToString() == "true";
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator && x.PlaceholderMemoryWriteMethod == null))
             {
@@ -1274,7 +1274,7 @@ namespace Lazinator.CodeDescription
             foreach (var property in PropertiesToDefineThisLevel.Where(x => !x.IsPrimitive && !x.IsNonLazinatorType && x.PlaceholderMemoryWriteMethod == null))
             {
                 sb.AppendLine(new ConditionalCodeGenerator(property.GetNonNullCheck(true),
-$@"{MaybeAwaitWord}{property.PropertyName}{property.NullForgiveness}{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable || (property.IsDefinitelyStruct && property.Nullable), ".Value")}.UpdateStoredBuffer{MaybeAsyncWord}({MaybeAsyncRefIfNot}writer, startPosition + {property.BackingFieldByteIndex}, {property.BackingFieldByteLength}, IncludeChildrenMode.IncludeAllChildren, true);").ToString());
+$@"{MaybeAwaitWordConditional(property.TypeImplementsILazinatorAsync)}{property.PropertyName}{property.NullForgiveness}{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable || (property.IsDefinitelyStruct && property.Nullable), ".Value")}.UpdateStoredBuffer{MaybeAsyncWordConditional(property.TypeImplementsILazinatorAsync)}({MaybeAsyncRefIfNot}writer, startPosition + {property.BackingFieldByteIndex}, {property.BackingFieldByteLength}, IncludeChildrenMode.IncludeAllChildren, true);").ToString());
             }
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && x.PlaceholderMemoryWriteMethod == null))
             {

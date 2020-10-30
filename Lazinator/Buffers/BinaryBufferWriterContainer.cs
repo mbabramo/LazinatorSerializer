@@ -58,6 +58,7 @@ namespace Lazinator.Buffers
         }
         public Span<byte> FreeSpan => Writer.FreeSpan;
         public Span<byte> ActiveMemoryWrittenSpan => Writer.ActiveMemoryWrittenSpan;
+        public int ActiveMemoryPosition => Writer.ActiveMemoryPosition;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Clear() => Writer.Clear();
