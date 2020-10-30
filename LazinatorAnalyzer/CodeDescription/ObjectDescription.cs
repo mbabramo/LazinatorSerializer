@@ -969,7 +969,7 @@ namespace Lazinator.CodeDescription
                 {
                     sb.Append($@"
 
-                        public override IEnumerable<(string propertyName, object{QuestionMarkIfNullableModeEnabled} descendant)> EnumerateNonLazinatorProperties()
+                        {MaybeAsyncAndNot_Begin}public override {MaybeIAsyncEnumerable}<(string propertyName, object{QuestionMarkIfNullableModeEnabled} descendant)> EnumerateNonLazinatorProperties{MaybeAsyncWord}()
                         {{
                                 foreach (var inheritedYield in {MaybeAwaitWord}base.EnumerateNonLazinatorProperties())
                                 {{
@@ -983,7 +983,7 @@ namespace Lazinator.CodeDescription
                     sb.AppendLine(
                         $@"
 
-                        public {DerivationKeyword}IEnumerable<(string propertyName, object{QuestionMarkIfNullableModeEnabled} descendant)> EnumerateNonLazinatorProperties()
+                        {MaybeAsyncAndNot_Begin}public {DerivationKeyword}{MaybeIAsyncEnumerable}<(string propertyName, object{QuestionMarkIfNullableModeEnabled} descendant)> EnumerateNonLazinatorProperties{MaybeAsyncWord}()
                         {{");
                 }
 
@@ -1003,7 +1003,7 @@ namespace Lazinator.CodeDescription
                     }
                 }
                 sb.Append($@"yield break;
-                        }}
+                        }}{MaybeAsyncAndNot_End}
                     ");
             }
         }
