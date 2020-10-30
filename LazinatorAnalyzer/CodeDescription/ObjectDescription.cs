@@ -181,9 +181,10 @@ namespace Lazinator.CodeDescription
         public string MaybeAsyncWordConditional(bool condition) => condition ? MaybeAsyncWord : "";
         public string MaybeIAsyncEnumerable => AsyncTemplate.MaybeIAsyncEnumerable();
         public string MaybeAsyncPropertyName(PropertyDescription property) => MaybeAsyncConditional($"{NoteAsyncUsed}(await Get{property.PropertyName}Async())", property.PropertyName);
-        public string MaybeAsyncConditional(string ifAsync, string ifNotAsync) => AsyncTemplate.MaybeAsyncConditional(ifAsync, ifNotAsync);
+        public string MaybeAsyncConditional(string ifAsync, string ifNotAsync, bool additionalCondition = true) => additionalCondition ? AsyncTemplate.MaybeAsyncConditional(ifAsync, ifNotAsync) : ifNotAsync;
         public string MaybeAsyncBinaryBufferWriterParameter => $"{MaybeAsyncConditional("BinaryBufferWriterContainer", "ref BinaryBufferWriter")}";
         public string MaybeAsyncRefIfNot => $"{MaybeAsyncConditional("", "ref ")}";
+        public string MaybeAsyncRefWriterParameter => $"{MaybeAsyncConditional("ref writer.Writer", "ref writer")}";
 
         /* Construction */
 
@@ -506,7 +507,7 @@ namespace Lazinator.CodeDescription
                         {MaybeAsyncAndNot($@"{ProtectedIfApplicable}abstract {MaybeAsyncReturnType("LazinatorMemory")} EncodeToNewBuffer{MaybeAsyncWord}(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);")}
                        {MaybeAsyncAndNot($@" {ProtectedIfApplicable}abstract {MaybeAsyncReturnType("void")} UpdateDeserializedChildren{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, int startPosition);")}
                         {(ImplementsWritePropertiesIntoBuffer ? skipWritePropertiesIntoBufferString : $@"{MaybeAsyncAndNot($@"{ProtectedIfApplicable}abstract void WritePropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);")}
-                            {MaybeAsyncAndNot($@"{ProtectedIfApplicable}abstract {MaybeAsyncReturnType("void")} WritePrimitivePropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);")}
+                            {MaybeAsyncAndNot($@"{ProtectedIfApplicable}abstract {MaybeAsyncReturnType("void")} WritePrimitivePropertiesIntoBuffer(BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID);")}
                             {MaybeAsyncAndNot($@"{ProtectedIfApplicable}abstract {MaybeAsyncReturnType("void")} WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition);")}
 ")}
 ")}
@@ -1273,8 +1274,10 @@ namespace Lazinator.CodeDescription
                         {{");
             foreach (var property in PropertiesToDefineThisLevel.Where(x => !x.IsPrimitive && !x.IsNonLazinatorType && x.PlaceholderMemoryWriteMethod == null))
             {
+                // In passing the writer property, there are three possibilities: (1) the outer method is Async and the property is async (just pass "writer"), (2) the outer method is Async and the property is not async (pass "ref writer.Writer"); (3) the outer method is not async ("ref writer").
+                string writerReference = MaybeAsyncConditional(property.TypeImplementsILazinatorAsync ? "writer" : "ref writer.Writer", "ref writer");
                 sb.AppendLine(new ConditionalCodeGenerator(property.GetNonNullCheck(true),
-$@"{MaybeAwaitWordConditional(property.TypeImplementsILazinatorAsync)}{property.PropertyName}{property.NullForgiveness}{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable || (property.IsDefinitelyStruct && property.Nullable), ".Value")}.UpdateStoredBuffer{MaybeAsyncWordConditional(property.TypeImplementsILazinatorAsync)}({MaybeAsyncRefIfNot}writer, startPosition + {property.BackingFieldByteIndex}, {property.BackingFieldByteLength}, IncludeChildrenMode.IncludeAllChildren, true);").ToString());
+$@"{MaybeAwaitWordConditional(property.TypeImplementsILazinatorAsync)}{property.PropertyName}{property.NullForgiveness}{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable || (property.IsDefinitelyStruct && property.Nullable), ".Value")}.UpdateStoredBuffer{MaybeAsyncWordConditional(property.TypeImplementsILazinatorAsync)}({writerReference}, startPosition + {property.BackingFieldByteIndex}, {property.BackingFieldByteLength}, IncludeChildrenMode.IncludeAllChildren, true);").ToString());
             }
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && x.PlaceholderMemoryWriteMethod == null))
             {
@@ -1288,7 +1291,8 @@ $@"{MaybeAwaitWordConditional(property.TypeImplementsILazinatorAsync)}{property.
 $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{property.AppropriatelyQualifiedTypeNameEncodable}({property.BackingFieldWithPossibleValueDereferenceWithPossibleException}, l => l.RemoveBufferInHierarchy(), true);").ToString());
                 }
             }
-            sb.AppendLine($@"}}{MaybeAsyncAndNot_End}
+            sb.AppendLine($@"{MaybeAsyncVoidReturn(true)}
+                }}{MaybeAsyncAndNot_End}
                     ");
         }
 
@@ -1326,24 +1330,24 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                         {{
                             if (!ContainsOpenGenericParameters)
                             {{
-                                CompressedIntegralTypes.WriteCompressedInt({MaybeAsyncRefIfNot}writer, LazinatorUniqueID);
+                                CompressedIntegralTypes.WriteCompressedInt({MaybeAsyncRefWriterParameter}, LazinatorUniqueID);
                             }}
                             else
                             {{
-                                WriteLazinatorGenericID({MaybeAsyncRefIfNot}writer, LazinatorGenericID);
+                                WriteLazinatorGenericID({MaybeAsyncRefWriterParameter}, LazinatorGenericID);
                             }}
                         }}");
             else
                 sb.AppendLine(
                     $@"if (includeUniqueID)
                         {{
-                            CompressedIntegralTypes.WriteCompressedInt({MaybeAsyncRefIfNot}writer, LazinatorUniqueID);
+                            CompressedIntegralTypes.WriteCompressedInt({MaybeAsyncRefWriterParameter}, LazinatorUniqueID);
                         }}
                     ");
 
             sb.AppendLine(
-                    $@"{(SuppressLazinatorVersionByte ? "" : $@"CompressedIntegralTypes.WriteCompressedInt({MaybeAsyncRefIfNot}writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
-                    ")}{(Version == -1 ? "" : $@"CompressedIntegralTypes.WriteCompressedInt({MaybeAsyncRefIfNot}writer, LazinatorObjectVersion);
+                    $@"{(SuppressLazinatorVersionByte ? "" : $@"CompressedIntegralTypes.WriteCompressedInt({MaybeAsyncRefWriterParameter}, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
+                    ")}{(Version == -1 ? "" : $@"CompressedIntegralTypes.WriteCompressedInt({MaybeAsyncRefWriterParameter}, LazinatorObjectVersion);
                     ")}{(CanNeverHaveChildren ? "" : $@"writer.Write((byte)includeChildrenMode);")}");
 
             sb.AppendLine("// write properties");
@@ -1352,7 +1356,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             IEnumerable<PropertyDescription> primitiveProperties = thisLevel.Where(x => x.IsPrimitive);
             IEnumerable<PropertyDescription> childrenProperties = thisLevel.Where(x => !x.IsPrimitive);
             sb.AppendLine($@"
-                            {IIF(primitiveProperties.Any() || IsDerivedFromNonAbstractLazinator, $@"WritePrimitivePropertiesIntoBuffer({MaybeAsyncRefIfNot}writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);")}{IIF(childrenProperties.Any() || IsDerivedFromNonAbstractLazinator, $@"
+                            {IIF(primitiveProperties.Any() || IsDerivedFromNonAbstractLazinator, $@"WritePrimitivePropertiesIntoBuffer({MaybeAsyncRefWriterParameter}, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);")}{IIF(childrenProperties.Any() || IsDerivedFromNonAbstractLazinator, $@"
                             {GetLengthsCalculation(false)}
                             int previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);{IIF(IncludeTracingCode, $@"
                             TabbedText.WriteLine($""Byte {{writer.ActiveMemoryPosition}}, Leaving {{lengthForLengths}} bytes to store lengths of child objects"");")}
@@ -1368,7 +1372,9 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             {
                 sb.AppendLine($@"OnPropertiesWritten(updateStoredBuffer);");
             }
-            sb.Append($@"}}{MaybeAsyncAndNot_End}
+            sb.Append($@"{MaybeAsyncVoidReturn(true)}"); 
+            sb.Append($@"
+        }}{MaybeAsyncAndNot_End}
 ");
             if (primitiveProperties.Any() || !IsSealedOrStruct)
                 AppendWritePropertiesHelper(sb, primitiveProperties, true);
@@ -1429,20 +1435,37 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 
         private void AppendWritePropertiesHelper(CodeStringBuilder sb, IEnumerable<PropertyDescription> propertiesToWrite, bool isPrimitive)
         {
-            string methodName = isPrimitive ? "WritePrimitivePropertiesIntoBuffer" : "WriteChildrenPropertiesIntoBuffer";
-
-            if (IsDerivedFromNonAbstractLazinator)
-                sb.AppendLine(
-                        $@"
-                        {MaybeAsyncAndNot_Begin}{ProtectedIfApplicable}override {MaybeAsyncReturnType("void")} {methodName}{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID{IIF(!isPrimitive, $", int startOfObjectPosition")})
-                        {{
-                            {MaybeAwaitWord}base.{methodName}{MaybeAsyncWord}({MaybeAsyncRefIfNot}writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID{IIF(!isPrimitive, ", startOfObjectPosition")});");
+            if (isPrimitive)
+            {
+                if (IsDerivedFromNonAbstractLazinator)
+                    sb.AppendLine(
+                            $@"
+                            {ProtectedIfApplicable}override void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID{IIF(!isPrimitive, $", int startOfObjectPosition")})
+                            {{
+                                base.WritePrimitivePropertiesIntoBuffer(BinaryBufferWriter writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);");
+                else
+                {
+                    sb.AppendLine(
+                            $@"
+                            {ProtectedIfApplicable}{DerivationKeyword}void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID{IIF(!isPrimitive, $", int startOfObjectPosition")})
+                            {{");
+                }
+            }
             else
             {
-                sb.AppendLine(
-                        $@"
-                        {MaybeAsyncAndNot_Begin}{ProtectedIfApplicable}{DerivationKeyword}void {methodName}({MaybeAsyncBinaryBufferWriterParameter} writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID{IIF(!isPrimitive, $", int startOfObjectPosition")})
-                        {{");
+                if (IsDerivedFromNonAbstractLazinator)
+                    sb.AppendLine(
+                            $@"
+                            {MaybeAsyncAndNot_Begin}{ProtectedIfApplicable}override {MaybeAsyncReturnType("void")} WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID{IIF(!isPrimitive, $", int startOfObjectPosition")})
+                            {{
+                                {MaybeAwaitWord}base.WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncRefIfNot}writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID{IIF(!isPrimitive, ", startOfObjectPosition")});");
+                else
+                {
+                    sb.AppendLine(
+                            $@"
+                            {MaybeAsyncAndNot_Begin}{ProtectedIfApplicable}{DerivationKeyword}{MaybeAsyncReturnType("void")} WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
+                            {{");
+                }
             }
             if (!isPrimitive && propertiesToWrite.Any())
             {
@@ -1460,7 +1483,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             if (!isPrimitive && ContainsEndByteIndex)
                 AppendEndByteIndex(sb, propertiesToWrite, "writer.ActiveMemoryPosition - startOfObjectPosition", true);
 
-            sb.Append($@"}}{MaybeAsyncAndNot_End}
+            sb.Append($@"}}{IIF(!isPrimitive, MaybeAsyncAndNot_End)}
 ");
         }
 
@@ -1484,7 +1507,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                     sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.ActiveMemoryPosition}}, {property.PropertyName} value {{{property.BackingFieldString}}}"");");
                 sb.AppendLine($@"TabbedText.Tabs++;");
             }
-            property.AppendPropertyWriteString(sb);
+            property.AppendPropertyWriteString(sb, MaybeAsyncConditional("writer.Writer", "writer"));
             if (IncludeTracingCode)
             {
                 sb.AppendLine($@"TabbedText.Tabs--;");

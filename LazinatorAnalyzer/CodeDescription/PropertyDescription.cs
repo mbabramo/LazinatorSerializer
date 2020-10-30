@@ -1544,14 +1544,14 @@ namespace Lazinator.CodeDescription
             return sizeof(int);
         }
 
-        public void AppendPropertyWriteString(CodeStringBuilder sb)
+        public void AppendPropertyWriteString(CodeStringBuilder sb, string writerParameter)
         {
             // We remember the startOfChildPosition, and then update the stored buffer at the end,
             // because we can't change the _ByteIndex until after the write, since we may need
             // to read from storage during the write.
             if (!IsPrimitive)
             {
-                sb.AppendLine("startOfChildPosition = writer.ActiveMemoryPosition;");
+                sb.AppendLine($"startOfChildPosition = {writerParameter}.ActiveMemoryPosition;");
             }
             // Now, we have to consider the SkipCondition, from a SkipIf attribute. We don't write if the skip condition is
             // met (but still must update the byte index).
@@ -1561,7 +1561,7 @@ namespace Lazinator.CodeDescription
             // Now, we consider versioning information.
             if (IsPrimitive)
                 sb.AppendLine(
-                        new ConditionalCodeGenerator(WriteInclusionConditional, $"{WriteMethodName}(ref writer, {EnumEquivalentCastToEquivalentType}{BackingFieldString});").ToString());
+                        new ConditionalCodeGenerator(WriteInclusionConditional, $"{WriteMethodName}(ref {writerParameter}, {EnumEquivalentCastToEquivalentType}{BackingFieldString});").ToString());
             else
             {
                 // Finally, the main code for writing a serialized or non serialized object.
