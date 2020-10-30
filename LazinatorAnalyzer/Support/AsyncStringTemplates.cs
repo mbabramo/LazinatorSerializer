@@ -57,12 +57,15 @@ namespace LazinatorAnalyzer.Support
         public string DefinitelyAsyncWordAwait() => "await " + CreateSetVariableBlock("awaitcalled", "1");
 
         public string MaybeAsyncWordAsync() => MaybeAsyncConditional("Async");
-        public string MaybeAsyncWord_async() => MaybeAsyncConditional(CreateIfBlock("awaitcalled", "1", "async "));
+        public string MaybeAsyncWord_async() => MaybeAsyncConditional(OnlyIfAwaitCalledInBlock("async "));
 
         private string MaybeAsyncReturnTypeWrapper(string ordinaryReturnType) => ordinaryReturnType == "void" ? TaskKeyword : $"{TaskKeyword}<{ordinaryReturnType}>";
 
-        public string MaybeAsyncReturnValue(string ordinaryReturnValue) => MaybeAsyncConditional(CreateIfBlock("awaitcalled", "0", $"{TaskKeyword}.FromResult({ordinaryReturnValue})") + CreateIfBlock("awaitcalled", "1", ordinaryReturnValue), ordinaryReturnValue);
-        public string MaybeAsyncVoidReturn(bool isAtEndOfMethod) => MaybeAsyncConditional(CreateIfBlock("awaitcalled", "0", $"return {TaskKeyword}.CompletedTask;") + (isAtEndOfMethod ? "" : CreateIfBlock("awaitcalled", "1", $"return;")));
+        public string MaybeAsyncReturnValue(string ordinaryReturnValue) => MaybeAsyncConditional(OnlyIfAwaitNotCalledInBlock($"{TaskKeyword}.FromResult({ordinaryReturnValue})") + OnlyIfAwaitCalledInBlock(ordinaryReturnValue), ordinaryReturnValue);
+        public string MaybeAsyncVoidReturn(bool isAtEndOfMethod) => MaybeAsyncConditional(OnlyIfAwaitNotCalledInBlock($"return {TaskKeyword}.CompletedTask;") + (isAtEndOfMethod ? "" : OnlyIfAwaitCalledInBlock($"return;")));
+
+        public string OnlyIfAwaitCalledInBlock(string text) => CreateReprocessBlock(CreateIfBlock("awaitcalled", "1", text), 1);
+        public string OnlyIfAwaitNotCalledInBlock(string text) => CreateReprocessBlock(CreateIfBlock("awaitcalled", "0", text), 1);
 
     }
 }
