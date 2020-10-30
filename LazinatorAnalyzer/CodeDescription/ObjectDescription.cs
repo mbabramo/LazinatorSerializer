@@ -1021,14 +1021,15 @@ namespace Lazinator.CodeDescription
                 ConditionsCodeGenerator.OrCombine(
                     ConditionsCodeGenerator.AndCombine(
                         "!exploreOnlyDeserializedChildren",
-                        property.GetNonNullCheck(false)),
-                    property.GetNonNullCheck(true));
+                        property.GetNonNullCheck(false, MaybeAsyncPropertyName(property))),
+                    property.GetNonNullCheck(true, MaybeAsyncPropertyName(property)));
             bool nonNullCheckDefinitelyTrue(PropertyDescription property) => property.GetNonNullCheck(false).ToString() == "true";
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator && x.PlaceholderMemoryWriteMethod == null))
             {
                 string propertyName = property.PropertyName;
+                string loadProperty = MaybeAsyncPropertyName(property);
                 sb.AppendLine(new ConditionalCodeGenerator(getAntecedent(property),
-                        $@"{IIF(nonNullCheckDefinitelyTrue(property), $@"var deserialized_{propertyName} = {propertyName};
+                        $@"{IIF(nonNullCheckDefinitelyTrue(property), $@"var deserialized_{propertyName} = {loadProperty};
                             ")}_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) _{propertyName}{property.NullForgiveness}{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable || (property.IsDefinitelyStruct && property.Nullable), ".Value")}.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true);").ToString());
             }
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && !x.IsMemoryOrSpan))
@@ -1049,13 +1050,15 @@ namespace Lazinator.CodeDescription
 
             foreach (var property in PropertiesToDefineThisLevel.Where(x => ((!x.IsPrimitive && !x.IsLazinator && !x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && !x.IsNonLazinatorTypeWithoutInterchange) || x.IsMemoryOrSpan) && x.PlaceholderMemoryWriteMethod == null))
             {
+                string propertyName = property.PropertyName;
+                string loadProperty = MaybeAsyncPropertyName(property);
                 // we want to deserialize the memory. In case of ReadOnlySpan<byte>, we also want to duplicate the memory if it hasn't been set by the user, since we want to make sure that the property will work even if the buffer is removed (which might be the reason for the ForEachLazinator call)
                 sb.Append($@"if (!exploreOnlyDeserializedChildren)
                     {{
-                        var deserialized{property.BackingFieldString} = {property.PropertyName};{IIF(property.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan, $@"
+                        var deserialized{property.BackingFieldString} = {loadProperty};{IIF(property.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan, $@"
                         if ({property.BackingFieldNotAccessedString})
                         {{
-                            {property.PropertyName} = deserialized{property.BackingFieldString};
+                            {propertyName} = deserialized{property.BackingFieldString};
                         }}")}
                     }}
 ");
@@ -1064,9 +1067,9 @@ namespace Lazinator.CodeDescription
             sb.Append($@"{IIF(ImplementsOnForEachLazinator && (BaseLazinatorObject == null || !BaseLazinatorObject.ImplementsOnForEachLazinator), $@"OnForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, changeThisLevel);
                     ")}if (changeThisLevel && changeFunc != null)
                         {{
-                            return changeFunc(this);
+                            return {MaybeAsyncReturnValue($"{MaybeAsyncConditional($"({ILazinatorString})", "")}changeFunc(this)")};
                         }}
-                        return {MaybeAsyncReturnValue($"this")};
+                        return {MaybeAsyncReturnValue($"{MaybeAsyncConditional($"({ILazinatorString})", "")}this")};
                     }}{MaybeAsyncAndNot_End}
                 ");
         }
