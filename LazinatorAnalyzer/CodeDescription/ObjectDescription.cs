@@ -180,6 +180,7 @@ namespace Lazinator.CodeDescription
         public string MaybeAwaitWordConditional(bool condition) => condition ? MaybeAwaitWord : "";
         public string MaybeAsyncWordConditional(bool condition) => condition ? MaybeAsyncWord : "";
         public string MaybeIAsyncEnumerable => AsyncTemplate.MaybeIAsyncEnumerable();
+        public string MaybeAsyncPropertyName(PropertyDescription property) => MaybeAsyncConditional($"{NoteAsyncUsed}(await Get{property.PropertyName}Async())", property.PropertyName);
         public string MaybeAsyncConditional(string ifAsync, string ifNotAsync) => AsyncTemplate.MaybeAsyncConditional(ifAsync, ifNotAsync);
         public string MaybeAsyncBinaryBufferWriterParameter => $"{MaybeAsyncConditional("BinaryBufferWriterContainer", "ref BinaryBufferWriter")}";
         public string MaybeAsyncRefIfNot => $"{MaybeAsyncConditional("", "ref ")}";
@@ -918,21 +919,22 @@ namespace Lazinator.CodeDescription
                     foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsLazinator))
                     {
                         string propertyName = property.PropertyName;
+                        string loadProperty = MaybeAsyncPropertyName(property);
                         string elseConsequent = new ConditionalCodeGenerator(
                                     ConditionsCodeGenerator.OrCombine(
                                         ConditionsCodeGenerator.AndCombine(
                                             $"!exploreOnlyDeserializedChildren",
                                             property.GetNonNullCheck(false)),
                                         property.GetNonNullCheck(true)),
-                                   $@"bool isMatch_{propertyName} = matchCriterion == null || matchCriterion({propertyName});
-                                    bool shouldExplore_{propertyName} = exploreCriterion == null || exploreCriterion({propertyName});
+                                   $@"bool isMatch_{propertyName} = matchCriterion == null || matchCriterion({loadProperty});
+                                    bool shouldExplore_{propertyName} = exploreCriterion == null || exploreCriterion({loadProperty});
                                     if (isMatch_{propertyName})
                                     {{
-                                        yield return (""{propertyName}"", {propertyName});
+                                        yield return (""{propertyName}"", {loadProperty});
                                     }}
                                     if ((!stopExploringBelowMatch || !isMatch_{propertyName}) && shouldExplore_{propertyName})
                                     {{
-                                        {MaybeAwaitWordConditional(property.TypeImplementsILazinatorAsync)}foreach (var toYield in {propertyName}{property.NullForgiveness}.{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable || (property.IsDefinitelyStruct && property.Nullable), "Value.")}EnumerateLazinatorDescendants{MaybeAsyncWordConditional(property.TypeImplementsILazinatorAsync)}(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                                        {MaybeAwaitWordConditional(property.TypeImplementsILazinatorAsync)}foreach (var toYield in {loadProperty}{property.NullForgiveness}.{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable || (property.IsDefinitelyStruct && property.Nullable), "Value.")}EnumerateLazinatorDescendants{MaybeAsyncWordConditional(property.TypeImplementsILazinatorAsync)}(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                                         {{
                                             yield return (""{propertyName}"" + ""."" + toYield.propertyName, toYield.descendant);
                                         }}
@@ -943,7 +945,7 @@ namespace Lazinator.CodeDescription
                                     ConditionsCodeGenerator.OrCombine(
                                         "!exploreOnlyDeserializedChildren",
                                         property.BackingFieldAccessedString))
-                                , propertyName,
+                                , loadProperty,
                                 // CONSEQUENT
                                 $@"yield return (""{propertyName}"", default);",
                                 // ELSE CONSEQUENT -- another conditional
