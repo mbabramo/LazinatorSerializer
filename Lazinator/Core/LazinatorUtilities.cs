@@ -7,6 +7,7 @@ using System.IO;
 using System.IO.Pipelines;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Lazinator.Buffers;
 using Lazinator.Exceptions;
 using Lazinator.Support;
@@ -73,6 +74,46 @@ namespace Lazinator.Core
             int bufferSize = lazinatorObject.LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : lazinatorObject.LazinatorMemoryStorage.Length;
             BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
             lazinatorObject.SerializeToExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+            return writer.LazinatorMemory;
+        }
+
+        /// <summary>
+        /// Serializes from the top of the hierarchy, using the original storage if the item is not dirty and does not need its cleanness verified or, if dirty, creating a stream to manually serialize. 
+        /// </summary>
+        /// <param name="includeChildrenMode">Includes children (and thus descendants) when converting to bytes.</param>
+        /// <param name="originalIncludeChildrenMode">The original mode used to serialize this object.</param>
+        /// <param name="verifyCleanness">If true, then the dirty-conversion will always be performed unless we are sure it is clean, and if the object is not believed to be dirty, the results will be compared to the clean version. This allows for errors from failure to serialize objects that have been changed to be caught during development. Set this to false if you may wish to dispose of the memory backing the original while still using the new deserialized bytes.</param>
+        /// <param name="isBelievedDirty">An indication of whether the object to be converted to bytes is believed to be dirty, i.e. has had its dirty flag set.</param>
+        /// <param name="isDefinitelyClean">An indication whether any storage, if it exists, is definitely clean. If the storage has never been converted into bytes, then it is definitely clean. If the storage does not exist (it hasn't been serialized yet), then this is irrelevant, because there is no need to verify cleanliness.</param>
+        /// <param name="originalStorage">The storage of the item before any changes were made to it</param>
+        /// <param name="updateStoredBuffer">If true, the internal storage is updated</param>
+        /// <param name="lazinator">A Lazinator class (for a struct, the other overload of this function should be called).</param>
+        /// <returns></returns>
+        public async static ValueTask<LazinatorMemory> EncodeOrRecycleToNewBufferAsync<T>(IncludeChildrenMode includeChildrenMode, IncludeChildrenMode originalIncludeChildrenMode, bool verifyCleanness, bool isBelievedDirty, bool descendantIsBelievedDirty, bool isDefinitelyClean, LazinatorMemory originalStorage, bool updateStoredBuffer, T lazinator) where T : ILazinator, ILazinatorAsync
+        {
+            if (originalStorage.IsEmpty || 
+                includeChildrenMode != originalIncludeChildrenMode ||
+                    (!isDefinitelyClean
+                        &&
+                        (verifyCleanness ||
+                        isBelievedDirty ||
+                        (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && descendantIsBelievedDirty)
+                        )
+                     )
+                )
+                return await EncodeToNewBinaryBufferWriterAsync(lazinator, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+
+            // We can use the original storage. But we still have to copy it into a new buffer, as requested.
+            BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(originalStorage.Length);
+            await originalStorage.WriteToBinaryBufferAsync(writer);
+            return writer.LazinatorMemory;
+        }
+
+        private async static ValueTask<LazinatorMemory> EncodeToNewBinaryBufferWriterAsync<T>(T lazinatorObject, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) where T : ILazinator, ILazinatorAsync
+        {
+            int bufferSize = lazinatorObject.LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : lazinatorObject.LazinatorMemoryStorage.Length;
+            BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(bufferSize);
+            await lazinatorObject.SerializeToExistingBufferAsync(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
             return writer.LazinatorMemory;
         }
 

@@ -426,7 +426,7 @@ namespace Lazinator.Buffers
         public async ValueTask WriteToBinaryBufferAsync(BinaryBufferWriterContainer writer, bool includeOutsideOfRange = false)
         {
             await foreach (Memory<byte> memory in EnumerateMemoryChunksAsync(includeOutsideOfRange))
-                writer.Write(memory.Span);
+                writer.Write(memory.Span); // DEBUG -- after each write, we should check whether this is getting too large, and if so, move to the next chunk
         }
 
         public void WriteToBinaryBuffer(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
