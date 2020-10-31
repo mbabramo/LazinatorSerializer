@@ -1482,7 +1482,8 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 
             if (!isPrimitive && ContainsEndByteIndex)
                 AppendEndByteIndex(sb, propertiesToWrite, "writer.ActiveMemoryPosition - startOfObjectPosition", true);
-            sb.Append($@"{MaybeAsyncVoidReturn(true)}");
+            if (!isPrimitive)
+                sb.Append($@"{MaybeAsyncVoidReturn(true)}");
             sb.Append($@"}}{IIF(!isPrimitive, MaybeAsyncAndNot_End)}
 ");
         }

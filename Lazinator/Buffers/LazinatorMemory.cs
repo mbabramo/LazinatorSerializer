@@ -428,6 +428,18 @@ namespace Lazinator.Buffers
             await foreach (Memory<byte> memory in EnumerateMemoryChunksAsync(includeOutsideOfRange))
                 writer.Write(memory.Span); // DEBUG -- after each write, we should check whether this is getting too large, and if so, move to the next chunk
         }
+        public async ValueTask WriteToBinaryBuffer_WithBytePrefixAsync(BinaryBufferWriterContainer writer, bool includeOutsideOfRange = false)
+        {
+            if (Length > 250)
+                throw new LazinatorSerializationException("Span exceeded length of 250 bytes even though it was guaranteed to be no more than that.");
+            writer.Write((byte)Length);
+            await WriteToBinaryBufferAsync(writer, includeOutsideOfRange);
+        }
+        public async ValueTask WriteToBinaryBuffer_WithIntPrefixAsync(BinaryBufferWriterContainer writer, bool includeOutsideOfRange = false)
+        {
+            writer.Write((int)Length);
+            await WriteToBinaryBufferAsync(writer, includeOutsideOfRange);
+        }
 
         public void WriteToBinaryBuffer(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
         {

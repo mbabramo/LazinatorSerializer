@@ -27,11 +27,14 @@ namespace Lazinator.Core
         public delegate LazinatorMemory ReturnLazinatorMemoryDelegate();
 
         public delegate void WriteDelegate(ref BinaryBufferWriter writer);
+        public delegate ValueTask WriteDelegateAsync(BinaryBufferWriterContainer writer);
 
         public delegate void WritePossiblyVerifyingCleannessDelegate(ref BinaryBufferWriter writer, bool verifyCleanness);
 
+        public delegate ValueTask WritePossiblyVerifyingCleannessDelegateAsync(BinaryBufferWriterContainer writer, bool verifyCleanness);
+
         #endregion
-        
+
         #region Encoding
 
         /// <summary>
@@ -135,6 +138,23 @@ namespace Lazinator.Core
         }
 
         /// <summary>
+        /// Completes an action to write to binary, but then prefixes the binary writer with the total length of what was written, excluding the length itself
+        /// </summary>
+        /// <param name="writer">The binary writer</param>
+        /// <param name="action">The action to complete</param>
+        public async static ValueTask WriteToBinaryWithIntLengthPrefixAsync(BinaryBufferWriterContainer writer, WriteDelegateAsync action)
+        {
+            int lengthPosition = writer.ActiveMemoryPosition;
+            writer.Write((int)0);
+            await action(writer);
+            int afterPosition = writer.ActiveMemoryPosition;
+            writer.Writer.ActiveMemoryPosition = lengthPosition;
+            int length = (afterPosition - lengthPosition - sizeof(uint));
+            writer.Write(length);
+            writer.Writer.ActiveMemoryPosition = afterPosition;
+        }
+
+        /// <summary>
         /// Completes an action to write to binary, without any length prefix.
         /// </summary>
         /// <param name="writer">The binary writer</param>
@@ -142,6 +162,16 @@ namespace Lazinator.Core
         public static void WriteToBinaryWithoutLengthPrefix(ref BinaryBufferWriter writer, WriteDelegate action)
         {
             action(ref writer);
+        }
+
+        /// <summary>
+        /// Completes an action to write to binary, without any length prefix.
+        /// </summary>
+        /// <param name="writer">The binary writer</param>
+        /// <param name="action">The action to complete</param>
+        public async static ValueTask WriteToBinaryWithoutLengthPrefixAsync(BinaryBufferWriterContainer writer, WriteDelegateAsync action)
+        {
+            await action(writer);
         }
 
         /// <summary>
@@ -161,6 +191,25 @@ namespace Lazinator.Core
                 ThrowHelper.ThrowMoreThan255BytesException();
             writer.Write((byte)length);
             writer.ActiveMemoryPosition = afterPosition;
+        }
+
+        /// <summary>
+        /// Completes an action to write to binary, but then prefixes the binary writer with the total length of what was written, excluding the length itself
+        /// </summary>
+        /// <param name="writer">The binary writer</param>
+        /// <param name="action">The action to complete</param>
+        public async static ValueTask WriteToBinaryWithByteLengthPrefixAsync(BinaryBufferWriterContainer writer, WriteDelegateAsync action)
+        {
+            int lengthPosition = writer.ActiveMemoryPosition;
+            writer.Write((byte)0);
+            await action(writer);
+            int afterPosition = writer.ActiveMemoryPosition;
+            writer.Writer.ActiveMemoryPosition = lengthPosition;
+            int length = (afterPosition - lengthPosition - sizeof(byte));
+            if (length > 250)
+                ThrowHelper.ThrowMoreThan255BytesException();
+            writer.Write((byte)length);
+            writer.Writer.ActiveMemoryPosition = afterPosition;
         }
 
         /// <summary>
@@ -248,6 +297,74 @@ namespace Lazinator.Core
             AddParentToChildless(ref child, parent);
         }
 
+        /// <summary>
+        /// Initiates a binary write to a child of a Lazinator object, optionally including a length prefix, using existing storage if possible
+        /// </summary>
+        /// <param name="writer">The binary writer</param>
+        /// <param name="child">The child to be written. This child will be written regardless of includeChildrenMode.</param>
+        /// <param name="includeChildrenMode">An indication of which descendants of this child should be written.</param>
+        /// <param name="childHasBeenAccessed">True if the child's value has been accessed.</param>
+        /// <param name="getChildSliceFn">A function to return the child's original storage</param>
+        /// <param name="verifyCleanness">If true, cleanness of any nonserialized fields in the child will be verified if necessary</param>
+        /// <param name="updateStoredBuffer">If true, updates the child object's byte buffer to store the serialized information.</param>
+        /// <param name="restrictLengthTo255Bytes">If true, the length is stored in a single byte. If the length might be bigger then this, and length is not being skipped, set this to true.</param>
+        /// <param name="skipLength">If true, the length is omitted altogether.</param>
+        /// <param name="parent">The parent of the object being written</param>
+        public async static ValueTask WriteChildAsync<T>(BinaryBufferWriterContainer writer, T child,
+            IncludeChildrenMode includeChildrenMode, bool childHasBeenAccessed,
+            ReturnLazinatorMemoryDelegate getChildSliceFn, bool verifyCleanness, bool updateStoredBuffer, bool restrictLengthTo255Bytes, bool skipLength, ILazinator parent) where T : ILazinator, ILazinatorAsync
+        {
+            bool childCouldHaveChanged = childHasBeenAccessed || (child != null && includeChildrenMode != child.OriginalIncludeChildrenMode);
+            LazinatorMemory childStorage = default;
+            if (!childHasBeenAccessed && child != null)
+            {
+                childStorage = getChildSliceFn();
+                if (childStorage.IsEmpty)
+                    childCouldHaveChanged = true; // child might be an uninitialized struct and the object has not been previously deserialized. Thus, we treat this as an object that has been changed, so that we can serialize it. 
+            }
+            else
+            {
+                // check for a child that has been accessed (or otherwise could have changed) and that is in memory and totally clean. 
+                if (childCouldHaveChanged && child != null && !child.IsDirty && !child.DescendantIsDirty && includeChildrenMode == IncludeChildrenMode.IncludeAllChildren && includeChildrenMode == child.OriginalIncludeChildrenMode)
+                {
+                    // In this case, we update the childStorage to reflect the child's own storage, rather than a slice in the parent's storage. The reason is that the buffer may have been updated if the same object appears more than once in the object hierarchy, or the child may have updated its storage after a manual call to UpdateStoredBuffer.
+                    childStorage = child.LazinatorMemoryStorage;
+                    if (!childStorage.IsEmpty)
+                        childCouldHaveChanged = false;
+                }
+            }
+            if (!childCouldHaveChanged)
+            {
+                int startPosition = writer.ActiveMemoryPosition;
+                childStorage = await WriteExistingChildStorageAsync(writer, getChildSliceFn, restrictLengthTo255Bytes, skipLength, childStorage);
+                if (updateStoredBuffer)
+                {
+                    if (child != null)
+                    {
+                        int length = childStorage.Length;
+                        if (!skipLength)
+                        {
+                            startPosition += restrictLengthTo255Bytes ? 1 : 4;
+                            // note that the length is set correctly
+                        }
+                        await child.UpdateStoredBufferAsync(writer, startPosition, length, includeChildrenMode, true);
+                    }
+                }
+            }
+            else
+            {
+                if (child == null)
+                {
+                    WriteNullChild_WithLengthAsPrefix(ref writer.Writer, restrictLengthTo255Bytes, skipLength);
+                }
+                else
+                {
+                    await WriteChildToBinaryAsync(writer, child, includeChildrenMode, verifyCleanness, updateStoredBuffer, restrictLengthTo255Bytes, skipLength);
+                }
+            }
+            AddParentToChildless(ref child, parent);
+        }
+
         public static void WriteNullChild_WithLengthAsPrefix(ref BinaryBufferWriter writer, bool restrictLengthTo255Bytes, bool skipLength)
         {
             if (!skipLength)
@@ -296,6 +413,31 @@ namespace Lazinator.Core
             return childStorage;
         }
 
+        /// <summary>
+        /// Writes a child to a binary buffer, where that child has not been previously accessed. This thus obtains the last version from storage (or stores a zer length if this
+        /// is the first time saving the child and it really is empty).
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <param name="getChildSliceFn"></param>
+        /// <param name="restrictLengthTo255Bytes"></param>
+        /// <param name="skipLength"></param>
+        /// <param name="childStorage"></param>
+        /// <returns></returns>
+        public async static ValueTask<LazinatorMemory> WriteExistingChildStorageAsync(BinaryBufferWriterContainer writer, ReturnLazinatorMemoryDelegate getChildSliceFn, bool restrictLengthTo255Bytes, bool skipLength, LazinatorMemory childStorage)
+        {
+            if (childStorage.IsEmpty)
+                childStorage = getChildSliceFn(); // this is the storage holding the child, which has never been accessed
+            if (childStorage.InitialOwnedMemory == null)
+                ThrowHelper.ThrowChildStorageMissingException();
+            if (skipLength)
+                await childStorage.WriteToBinaryBufferAsync(writer);
+            else if (restrictLengthTo255Bytes)
+                await childStorage.WriteToBinaryBuffer_WithBytePrefixAsync(writer);
+            else
+                await childStorage.WriteToBinaryBuffer_WithIntPrefixAsync(writer);
+            return childStorage;
+        }
+
         private static void AddParentToChildless<T>(ref T child, ILazinator parent) where T : ILazinator
         {
             if (child != null && !child.LazinatorParents.Any())
@@ -329,6 +471,24 @@ namespace Lazinator.Core
                 LazinatorUtilities.WriteToBinaryWithByteLengthPrefix(ref writer, action);
             else
                 LazinatorUtilities.WriteToBinaryWithIntLengthPrefix(ref writer, action);
+        }
+
+        private async static ValueTask WriteChildToBinaryAsync<T>(BinaryBufferWriterContainer writer, T child, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool restrictLengthTo255Bytes, bool skipLength) where T : ILazinator, ILazinatorAsync
+        {
+            T childCopy = child;
+            async ValueTask action(BinaryBufferWriterContainer w)
+            {
+                if (childCopy.LazinatorMemoryStorage.IsEmpty || childCopy.IsDirty || childCopy.DescendantIsDirty || verifyCleanness || includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != childCopy.OriginalIncludeChildrenMode)
+                    await childCopy.SerializeToExistingBufferAsync(w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                else
+                    await childCopy.LazinatorMemoryStorage.WriteToBinaryBufferAsync(w); // the childCopy has been accessed, but is unchanged, so we can use the storage holding the childCopy
+            }
+            if (skipLength)
+                await LazinatorUtilities.WriteToBinaryWithoutLengthPrefixAsync(writer, action);
+            else if (restrictLengthTo255Bytes)
+                await LazinatorUtilities.WriteToBinaryWithByteLengthPrefixAsync(writer, action);
+            else
+                await LazinatorUtilities.WriteToBinaryWithIntLengthPrefixAsync(writer, action);
         }
 
         #endregion

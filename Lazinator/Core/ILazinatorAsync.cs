@@ -72,5 +72,14 @@ namespace Lazinator.Core
         /// <param name="verifyCleanness">Whether double-checking is needed to ensure that objects thought to be clean really are clean</param>
         /// <param name="updateStoredBuffer">Whether the object being serialized should be updated to use the new buffer. This is ignored and treated as false if includeChildrenMode is not set to include all children.</param>
         Task SerializeToExistingBufferAsync(BinaryBufferWriterContainer writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
+        /// <summary>
+        /// This updates the buffer in an in-memory Lazinator object to a specified range of bytes. 
+        /// </summary>
+        /// <param name="writer">The BinaryBufferWriter containing the new stored buffer</param>
+        /// <param name="startPosition">The start position within the writer</param>
+        /// <param name="length">The length within the writer</param>
+        /// <param name="includeChildrenMode">Whether child objects should be included.</param>
+        /// <param name="updateDeserializedChildren">Whether deserialized children should also have buffers updated</param>
+        ValueTask UpdateStoredBufferAsync(BinaryBufferWriterContainer writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
     }
 }
