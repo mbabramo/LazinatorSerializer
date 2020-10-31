@@ -935,7 +935,7 @@ namespace Lazinator.CodeDescription
                                     }}
                                     if ((!stopExploringBelowMatch || !isMatch_{propertyName}) && shouldExplore_{propertyName})
                                     {{
-                                        {MaybeAwaitWordConditional(property.TypeImplementsILazinatorAsync)}foreach (var toYield in {loadProperty}{property.NullForgiveness}.{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable || (property.IsDefinitelyStruct && property.Nullable), "Value.")}EnumerateLazinatorDescendants{MaybeAsyncWordConditional(property.TypeImplementsILazinatorAsync)}(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                                        {MaybeAwaitWordConditional(property.AsyncWithinAsync)}foreach (var toYield in {loadProperty}{property.NullForgiveness}.{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable || (property.IsDefinitelyStruct && property.Nullable), "Value.")}EnumerateLazinatorDescendants{MaybeAsyncWordConditional(property.AsyncWithinAsync)}(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                                         {{
                                             yield return (""{propertyName}"" + ""."" + toYield.propertyName, toYield.descendant);
                                         }}
@@ -1275,9 +1275,9 @@ namespace Lazinator.CodeDescription
             foreach (var property in PropertiesToDefineThisLevel.Where(x => !x.IsPrimitive && !x.IsNonLazinatorType && x.PlaceholderMemoryWriteMethod == null))
             {
                 // In passing the writer property, there are three possibilities: (1) the outer method is Async and the property is async (just pass "writer"), (2) the outer method is Async and the property is not async (pass "ref writer.Writer"); (3) the outer method is not async ("ref writer").
-                string writerReference = MaybeAsyncConditional(property.TypeImplementsILazinatorAsync ? "writer" : "ref writer.Writer", "ref writer");
+                string writerReference = MaybeAsyncConditional(property.AsyncWithinAsync ? "writer" : "ref writer.Writer", "ref writer");
                 sb.AppendLine(new ConditionalCodeGenerator(property.GetNonNullCheck(true),
-$@"{MaybeAwaitWordConditional(property.TypeImplementsILazinatorAsync)}{property.PropertyName}{property.NullForgiveness}{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable || (property.IsDefinitelyStruct && property.Nullable), ".Value")}.UpdateStoredBuffer{MaybeAsyncWordConditional(property.TypeImplementsILazinatorAsync)}({writerReference}, startPosition + {property.BackingFieldByteIndex}, {property.BackingFieldByteLength}, IncludeChildrenMode.IncludeAllChildren, true);").ToString());
+$@"{MaybeAwaitWordConditional(property.AsyncWithinAsync)}{property.PropertyName}{property.NullForgiveness}{IIF(property.PropertyType == LazinatorPropertyType.LazinatorStructNullable || (property.IsDefinitelyStruct && property.Nullable), ".Value")}.UpdateStoredBuffer{MaybeAsyncWordConditional(property.AsyncWithinAsync)}({writerReference}, startPosition + {property.BackingFieldByteIndex}, {property.BackingFieldByteLength}, IncludeChildrenMode.IncludeAllChildren, true);").ToString());
             }
             foreach (var property in PropertiesToDefineThisLevel.Where(x => x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && x.PlaceholderMemoryWriteMethod == null))
             {

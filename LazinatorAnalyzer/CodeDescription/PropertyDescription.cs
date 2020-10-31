@@ -104,6 +104,7 @@ namespace Lazinator.CodeDescription
 
         internal bool TypeHasLazinatorAsyncAttribute => ExclusiveInterfaceSymbol?.HasAttributeOfType<CloneAsyncLazinatorMemoryAttribute>() ?? false;
         internal bool TypeImplementsILazinatorAsync => Symbol.Name == "Lazinator.Core.ILazinatorAsync" || ((Symbol as INamedTypeSymbol)?.AllInterfaces.Any(x => x.Name == "Lazinator.Core.ILazinatorAsync") ?? false);
+        internal bool AsyncWithinAsync => ContainingObjectDescription.AsyncLazinatorMemory && TypeImplementsILazinatorAsync;
         internal bool IsSupportedCollectionOrTuple => PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
 
         internal bool IsSupportedCollectionReferenceType => PropertyType == LazinatorPropertyType.SupportedCollection && SupportedCollectionType != LazinatorSupportedCollectionType.Memory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlyMemory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlySpan;
@@ -1680,7 +1681,7 @@ namespace Lazinator.CodeDescription
             }
             else
                 lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen($"{BackingFieldString}", $@"WriteNullChild(ref writer, {(SingleByteLength ? "true" : "false")}, {(AllLengthsPrecedeChildren || SkipLengthForThisProperty ? "true" : "false")});", originalString) : originalString;
-            string callWriteChild = TypeImplementsILazinatorAsync ? ContainingObjectDescription.MaybeAsyncConditional($"await{ContainingObjectDescription.NoteAsyncUsed} WriteChildAsync(writer,", $"WriteChild(ref writer, ref") : ContainingObjectDescription.MaybeAsyncConditional($"WriteChild(ref writer.Writer, ref", $"WriteChild(ref writer, ref");
+            string callWriteChild = AsyncWithinAsync ? ContainingObjectDescription.MaybeAsyncConditional($"await{ContainingObjectDescription.NoteAsyncUsed} WriteChildAsync(writer,", $"WriteChild(ref writer, ref") : ContainingObjectDescription.MaybeAsyncConditional($"WriteChild(ref writer.Writer, ref", $"WriteChild(ref writer, ref");
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct)
             {
                 string mainWriteString = $@"{IIF(nullableStruct, $@"var copy = {BackingFieldString}.Value;
@@ -1721,10 +1722,12 @@ namespace Lazinator.CodeDescription
         public void AppendCopyPropertyToClone(CodeStringBuilder sb, string nameOfCloneVariable)
         {
             string copyInstruction = "";
-            string propertyAccess = ContainingObjectDescription.MaybeAsyncConditional($"await{ContainingObjectDescription.NoteAsyncUsed} Get{PropertyName}Async()", PropertyName);
+            string propertyAccess = ContainingObjectDescription.MaybeAsyncConditional($"(await{ContainingObjectDescription.NoteAsyncUsed} Get{PropertyName}Async())", PropertyName);
+            string cloneAsyncWord = AsyncWithinAsync ? ContainingObjectDescription.MaybeAsyncWord : "";
+            string cloneAwaitWord = AsyncWithinAsync ? ContainingObjectDescription.MaybeAwaitWord : "";
             if (IsLazinator)
             {
-                string nonNullStatement = $@"{nameOfCloneVariable}.{PropertyName} = ({AppropriatelyQualifiedTypeName}) {propertyAccess}{IIF(IsDefinitelyStruct && Nullable, ".Value")}.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);{CodeStringBuilder.GetNextLocationString()}";
+                string nonNullStatement = $@"{nameOfCloneVariable}.{PropertyName} = ({AppropriatelyQualifiedTypeName}) {cloneAwaitWord}{propertyAccess}{IIF(IsDefinitelyStruct && Nullable, ".Value")}.CloneLazinator{cloneAsyncWord}(includeChildrenMode, CloneBufferOptions.NoBuffer);{CodeStringBuilder.GetNextLocationString()}";
                 if (!Nullable)
                     copyInstruction = nonNullStatement;
                 else
