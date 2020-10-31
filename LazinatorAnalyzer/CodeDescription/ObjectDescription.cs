@@ -653,7 +653,7 @@ namespace Lazinator.CodeDescription
                             var previousBuffer = LazinatorMemoryStorage;
                             if (LazinatorMemoryStorage.IsEmpty || IncludeChildrenMode.IncludeAllChildren != OriginalIncludeChildrenMode || (IsDirty || DescendantIsDirty))
                             {{
-                                LazinatorMemoryStorage = EncodeToNewBuffer(IncludeChildrenMode.IncludeAllChildren, false, true);
+                                LazinatorMemoryStorage = {MaybeAwaitWord}EncodeToNewBuffer{MaybeAsyncWord}(IncludeChildrenMode.IncludeAllChildren, false, true);
                             }}
                             else
                             {{{MaybeAsyncConditional($@"
