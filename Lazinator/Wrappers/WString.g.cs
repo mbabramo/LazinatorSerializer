@@ -396,7 +396,6 @@ namespace Lazinator.Wrappers
         {
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _WrappedValue);
         }
-        
         public WString_RefStruct ToRefStruct()
         {
             SerializeLazinator();
@@ -721,7 +720,6 @@ namespace Lazinator.Wrappers
             {
                 EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _WrappedValue);
             }
-            
         }
         
     }

@@ -51,15 +51,6 @@ namespace Lazinator.Core
         /// Removes any native .Net objects, including those previously deserialized. Subsequent access to properties will thus be satisfied through the Lazinator memory storage. Typically, this is preceded by a call to UpdateStoredBuffer; otherwise, this has the effect of reverting to the last point at which the memory was up to date (e.g., initial deserialization or when a hash was obtained).
         /// </summary>
         void FreeInMemoryObjects();
-        /// <summary>
-        /// This updates the buffer in an in-memory Lazinator object to a specified range of bytes. 
-        /// </summary>
-        /// <param name="writer">The BinaryBufferWriter containing the new stored buffer</param>
-        /// <param name="startPosition">The start position within the writer</param>
-        /// <param name="length">The length within the writer</param>
-        /// <param name="includeChildrenMode">Whether child objects should be included.</param>
-        /// <param name="updateDeserializedChildren">Whether deserialized children should also have buffers updated</param>
-        void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
 
         /// <summary>
         /// Enumerates nodes in the hierarchy, including the node at the top of the hierarchy, based on specified parameters.
@@ -95,7 +86,16 @@ namespace Lazinator.Core
         ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel);
 
         /// <summary>
-        /// This is primarily used internally for communication between Lazinator objects. Continues serialization of this object and optionally its descendants by writing bytes into a pre-existing buffer. 
+        /// This is primarily used internally after serialization to update the buffer of an in-memory Lazinator object to a specified range of bytes. 
+        /// </summary>
+        /// <param name="writer">The BinaryBufferWriter containing the new stored buffer</param>
+        /// <param name="startPosition">The start position within the writer</param>
+        /// <param name="length">The length within the writer</param>
+        /// <param name="includeChildrenMode">Whether child objects should be included.</param>
+        /// <param name="updateDeserializedChildren">Whether deserialized children should also have buffers updated</param>
+        void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
+        /// <summary>
+        /// This is primarily used internally during serialization of Lazinator objects. Continues serialization of this object and optionally its descendants by writing bytes into a pre-existing buffer. 
         /// </summary>
         /// <param name="writer">The BinaryBufferWriter to stream bytes to</param>
         /// <param name="includeChildrenMode">Whether child objects should be included.  If false, the child objects will be skipped.</param>

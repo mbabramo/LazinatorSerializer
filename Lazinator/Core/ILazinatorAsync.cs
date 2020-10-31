@@ -65,15 +65,7 @@ namespace Lazinator.Core
         ValueTask<ILazinator> ForEachLazinatorAsync(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel);
 
         /// <summary>
-        /// This is primarily used internally for communication between Lazinator objects. Continues serialization of this object and optionally its descendants by writing bytes into a pre-existing buffer. 
-        /// </summary>
-        /// <param name="writer">The BinaryBufferWriter to stream bytes to</param>
-        /// <param name="includeChildrenMode">Whether child objects should be included.  If false, the child objects will be skipped.</param>
-        /// <param name="verifyCleanness">Whether double-checking is needed to ensure that objects thought to be clean really are clean</param>
-        /// <param name="updateStoredBuffer">Whether the object being serialized should be updated to use the new buffer. This is ignored and treated as false if includeChildrenMode is not set to include all children.</param>
-        ValueTask SerializeToExistingBufferAsync(BinaryBufferWriterContainer writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
-        /// <summary>
-        /// This updates the buffer in an in-memory Lazinator object to a specified range of bytes. 
+        /// This is primarily used internally after serialization to update the buffer of an in-memory Lazinator object to a specified range of bytes.
         /// </summary>
         /// <param name="writer">The BinaryBufferWriter containing the new stored buffer</param>
         /// <param name="startPosition">The start position within the writer</param>
@@ -81,5 +73,13 @@ namespace Lazinator.Core
         /// <param name="includeChildrenMode">Whether child objects should be included.</param>
         /// <param name="updateDeserializedChildren">Whether deserialized children should also have buffers updated</param>
         ValueTask UpdateStoredBufferAsync(BinaryBufferWriterContainer writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
+        /// <summary>
+        /// This is primarily used internally during serialization of Lazinator objects. Continues serialization of this object and optionally its descendants by writing bytes into a pre-existing buffer. 
+        /// </summary>
+        /// <param name="writer">The BinaryBufferWriter to stream bytes to</param>
+        /// <param name="includeChildrenMode">Whether child objects should be included.  If false, the child objects will be skipped.</param>
+        /// <param name="verifyCleanness">Whether double-checking is needed to ensure that objects thought to be clean really are clean</param>
+        /// <param name="updateStoredBuffer">Whether the object being serialized should be updated to use the new buffer. This is ignored and treated as false if includeChildrenMode is not set to include all children.</param>
+        ValueTask SerializeToExistingBufferAsync(BinaryBufferWriterContainer writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
     }
 }

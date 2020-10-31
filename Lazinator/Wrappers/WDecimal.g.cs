@@ -396,6 +396,5 @@ namespace Lazinator.Wrappers
         {
             CompressedDecimal.WriteCompressedDecimal(ref writer, _WrappedValue);
         }
-        
     }
 }

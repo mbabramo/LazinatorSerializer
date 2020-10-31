@@ -393,6 +393,5 @@ namespace Lazinator.Wrappers
         {
             CompressedIntegralTypes.WriteCompressedTimeSpan(ref writer, _WrappedValue);
         }
-        
     }
 }

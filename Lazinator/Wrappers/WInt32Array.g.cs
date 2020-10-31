@@ -458,8 +458,8 @@ namespace Lazinator.Wrappers
                 _WrappedValue_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
+            
         }
-        
         /* Conversion of supported collections and tuples */
         
         private static Int32[] ConvertFromBytes_int_B_b(LazinatorMemory storage)

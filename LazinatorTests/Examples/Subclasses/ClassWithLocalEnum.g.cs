@@ -445,7 +445,6 @@ namespace LazinatorTests.Examples.Subclasses
         {
             CompressedIntegralTypes.WriteCompressedInt(ref writer, (int) _MyEnum);
         }
-        
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
             int startOfChildPosition = 0;
@@ -472,8 +471,8 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 _ClassWithLocalEnum_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;
             }
+            
         }
-        
         /* Conversion of supported collections and tuples */
         
         private static List<EnumWithinClass> ConvertFromBytes_List_GEnumWithinClass_g(LazinatorMemory storage)

@@ -288,7 +288,6 @@ namespace LazinatorTests.Examples.Collections
             base.WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyLevel2Int);
         }
-        
         protected override void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
             base.WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition);
@@ -316,8 +315,8 @@ namespace LazinatorTests.Examples.Collections
             {
                 _Derived_DotNetList_Nested_NonLazinator_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;
             }
+            
         }
-        
         /* Conversion of supported collections and tuples */
         
         private static List<List<NonLazinatorClass>> ConvertFromBytes_List_GList_GNonLazinatorClass_g_g(LazinatorMemory storage)

@@ -785,7 +785,6 @@ namespace LazinatorTests.Examples
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
         }
-        
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
             int startOfChildPosition = 0;
@@ -905,8 +904,8 @@ namespace LazinatorTests.Examples
             {
                 _ExampleContainerContainingClassesStructContainingClasses_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;
             }
+            
         }
-        
         /* Conversion of supported collections and tuples */
         
         private static HashSet<ExampleStructContainingClasses> ConvertFromBytes_HashSet_GExampleStructContainingClasses_g(LazinatorMemory storage)

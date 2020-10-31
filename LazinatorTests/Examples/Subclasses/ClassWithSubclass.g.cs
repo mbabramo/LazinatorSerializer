@@ -593,7 +593,6 @@ namespace LazinatorTests.Examples.Subclasses
         {
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _IntWithinSuperclass);
         }
-        
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
             int startOfChildPosition = 0;
@@ -634,7 +633,7 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 _ClassWithSubclass_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;
             }
+            
         }
-        
     }
 }

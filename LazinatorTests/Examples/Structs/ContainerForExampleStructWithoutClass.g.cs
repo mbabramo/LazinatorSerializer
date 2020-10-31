@@ -633,7 +633,6 @@ namespace LazinatorTests.Examples.Structs
         {
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyInt);
         }
-        
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
             int startOfChildPosition = 0;
@@ -683,7 +682,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 _ContainerForExampleStructWithoutClass_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;
             }
+            
         }
-        
     }
 }

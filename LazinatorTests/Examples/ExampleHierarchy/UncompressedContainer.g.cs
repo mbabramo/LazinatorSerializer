@@ -726,10 +726,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             WriteUncompressedPrimitives.WriteULong(ref writer, _MyUncompressedULong);
             WriteUncompressedPrimitives.WriteUShort(ref writer, _MyUncompressedUShort);
         }
-        
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
+            
         }
-        
     }
 }

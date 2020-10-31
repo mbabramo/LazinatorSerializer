@@ -393,6 +393,5 @@ namespace Lazinator.Wrappers
         {
             EncodeCharAndString.WriteCharInTwoBytes(ref writer, _WrappedValue);
         }
-        
     }
 }

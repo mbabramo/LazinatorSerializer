@@ -384,10 +384,9 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         {
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _RemoteLevel2Int);
         }
-        
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
+            
         }
-        
     }
 }

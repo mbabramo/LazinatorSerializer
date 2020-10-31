@@ -499,7 +499,6 @@ namespace LazinatorTests.Examples.Tuples
         {
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyInt);
         }
-        
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
             int startOfChildPosition = 0;
@@ -551,8 +550,8 @@ namespace LazinatorTests.Examples.Tuples
             {
                 _RecordLikeCollections_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;
             }
+            
         }
-        
         /* Conversion of supported collections and tuples */
         
         private static Dictionary<Int32, RecordLikeContainer> ConvertFromBytes_Dictionary_Gint_c_C32RecordLikeContainer_g(LazinatorMemory storage)

@@ -1492,7 +1492,6 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 sb.AppendLine($@"{MaybeAsyncVoidReturn(true)}");
             sb.Append($@"}}");
             sb.Append($"{IIF(!isPrimitive, MaybeAsyncAndNot_End)}");
-");
         }
 
         private void AppendPropertyWrite(CodeStringBuilder sb, PropertyDescription property)

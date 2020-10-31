@@ -241,11 +241,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             base.WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _AnotherPropertyAdded);
         }
-        
         protected override void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
             base.WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startOfObjectPosition);
+            
         }
-        
     }
 }

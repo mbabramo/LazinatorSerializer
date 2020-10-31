@@ -393,6 +393,5 @@ namespace Lazinator.Wrappers
         {
             WriteUncompressedPrimitives.WriteNullableGuid(ref writer, _WrappedValue);
         }
-        
     }
 }

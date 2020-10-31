@@ -634,7 +634,7 @@ namespace LazinatorCollections.Tuples
                 _Value_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
+            
         }
-        
     }
 }

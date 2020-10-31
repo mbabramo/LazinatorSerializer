@@ -393,6 +393,5 @@ namespace Lazinator.Wrappers
         {
             WriteUncompressedPrimitives.WriteBool(ref writer, _WrappedValue);
         }
-        
     }
 }

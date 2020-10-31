@@ -499,7 +499,6 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         {
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _RemoteLevel1Int);
         }
-        
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
             int startOfChildPosition = 0;
@@ -524,7 +523,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             {
                 _RemoteLevel1_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;
             }
+            
         }
-        
     }
 }

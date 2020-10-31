@@ -393,6 +393,5 @@ namespace Lazinator.Wrappers
         {
             CompressedIntegralTypes.WriteCompressedNullableLong(ref writer, _WrappedValue);
         }
-        
     }
 }

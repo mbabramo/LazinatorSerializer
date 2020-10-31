@@ -613,7 +613,6 @@ namespace LazinatorTests.Examples
             CompressedIntegralTypes.WriteCompressedLong(ref writer, _MyOfficialLong);
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyUnofficialInt);
         }
-        
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
             int startOfChildPosition = 0;
@@ -654,7 +653,7 @@ namespace LazinatorTests.Examples
             {
                 _UnofficialInterfaceIncorporator_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;
             }
+            
         }
-        
     }
 }

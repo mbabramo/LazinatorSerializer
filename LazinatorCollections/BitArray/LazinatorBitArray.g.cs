@@ -476,7 +476,6 @@ namespace LazinatorCollections.BitArray
             CompressedIntegralTypes.WriteCompressedInt(ref writer, __version);
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _m_length);
         }
-        
         void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
             int startOfChildPosition = 0;
@@ -499,8 +498,8 @@ namespace LazinatorCollections.BitArray
                 _IntStorage_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
+            
         }
-        
         /* Conversion of supported collections and tuples */
         
         private static Memory<Int32> ConvertFromBytes_Memory_Gint_g(LazinatorMemory storage)

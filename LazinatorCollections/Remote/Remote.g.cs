@@ -639,7 +639,6 @@ namespace LazinatorCollections.Remote
         {
             WriteUncompressedPrimitives.WriteBool(ref writer, _StoreLocally);
         }
-        
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
             int startOfChildPosition = 0;
@@ -680,7 +679,7 @@ namespace LazinatorCollections.Remote
             {
                 _Remote_TKey_TValue_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;
             }
+            
         }
-        
     }
 }

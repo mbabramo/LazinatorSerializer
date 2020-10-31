@@ -403,10 +403,9 @@ namespace LazinatorTests.Examples
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _AString);
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyInt);
         }
-        
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
+            
         }
-        
     }
 }

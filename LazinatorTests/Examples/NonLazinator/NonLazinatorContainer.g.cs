@@ -660,8 +660,8 @@ namespace LazinatorTests.Examples
                 _NonLazinatorStruct_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
+            
         }
-        
         private static NonLazinatorInterchangeableClass ConvertFromBytes_NonLazinatorInterchangeableClass(LazinatorMemory storage)
         {
             if (storage.Length == 0)

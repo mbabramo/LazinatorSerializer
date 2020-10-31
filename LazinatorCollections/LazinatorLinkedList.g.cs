@@ -538,7 +538,6 @@ namespace LazinatorCollections
             WriteUncompressedPrimitives.WriteBool(ref writer, _AllowDuplicates);
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _Count);
         }
-        
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
             int startOfChildPosition = 0;
@@ -563,7 +562,7 @@ namespace LazinatorCollections
             {
                 _LazinatorLinkedList_T_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;
             }
+            
         }
-        
     }
 }

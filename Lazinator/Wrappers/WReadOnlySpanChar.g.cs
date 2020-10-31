@@ -442,8 +442,8 @@ namespace Lazinator.Wrappers
                 _Value_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
+            
         }
-        
         /* Conversion of supported collections and tuples */
         private static ReadOnlySpan<Char> CloneOrChange_ReadOnlySpan_Gchar_g(ReadOnlySpan<Char> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {

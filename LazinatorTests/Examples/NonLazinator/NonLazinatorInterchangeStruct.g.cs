@@ -412,6 +412,5 @@ namespace LazinatorTests.Examples
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyInt);
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _MyString);
         }
-        
     }
 }

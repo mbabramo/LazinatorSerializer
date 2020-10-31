@@ -386,11 +386,10 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _StringWithinSubclass);
             }
-            
             protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
             {
+                
             }
-            
         }
         
     }

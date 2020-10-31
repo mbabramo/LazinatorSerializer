@@ -481,7 +481,6 @@ namespace Lazinator.Wrappers
         {
             WriteUncompressedPrimitives.WriteBool(ref writer, _HasValue);
         }
-        
         void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
             int startOfChildPosition = 0;
@@ -503,7 +502,7 @@ namespace Lazinator.Wrappers
                 _NonNullValue_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
+            
         }
-        
     }
 }

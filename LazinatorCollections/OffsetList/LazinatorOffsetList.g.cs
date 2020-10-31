@@ -643,7 +643,7 @@ namespace LazinatorCollections.OffsetList
                 _TwoByteItems_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
+            
         }
-        
     }
 }

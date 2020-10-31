@@ -518,7 +518,6 @@ namespace LazinatorCollections.Dictionary
         {
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _Count);
         }
-        
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
             int startOfChildPosition = 0;
@@ -543,7 +542,7 @@ namespace LazinatorCollections.Dictionary
             {
                 _LazinatorDictionary_TKey_TValue_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;
             }
+            
         }
-        
     }
 }

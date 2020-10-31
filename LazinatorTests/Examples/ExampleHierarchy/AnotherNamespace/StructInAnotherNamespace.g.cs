@@ -393,6 +393,5 @@ namespace LazinatorTests.AnotherNamespace
         {
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyInt);
         }
-        
     }
 }

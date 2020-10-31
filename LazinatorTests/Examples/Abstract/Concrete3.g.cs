@@ -778,7 +778,6 @@ namespace LazinatorTests.Examples.Abstract
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _String2);
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _String3);
         }
-        
         protected override void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
             int startOfChildPosition = 0;
@@ -876,8 +875,8 @@ namespace LazinatorTests.Examples.Abstract
             {
                 _Concrete3_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;
             }
+            
         }
-        
         /* Conversion of supported collections and tuples */
         
         private static List<Int32> ConvertFromBytes_List_Gint_g(LazinatorMemory storage)

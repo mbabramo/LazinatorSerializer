@@ -427,7 +427,6 @@ namespace LazinatorTests.Examples.Collections
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
         {
         }
-        
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
             int startOfChildPosition = 0;
@@ -454,8 +453,8 @@ namespace LazinatorTests.Examples.Collections
             {
                 _DotNetQueue_Lazinator_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;
             }
+            
         }
-        
         /* Conversion of supported collections and tuples */
         
         private static Queue<ExampleChild> ConvertFromBytes_Queue_GExampleChild_g(LazinatorMemory storage)

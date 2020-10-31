@@ -393,6 +393,5 @@ namespace Lazinator.Wrappers
         {
             CompressedIntegralTypes.WriteCompressedNullableDateTime(ref writer, _WrappedValue);
         }
-        
     }
 }

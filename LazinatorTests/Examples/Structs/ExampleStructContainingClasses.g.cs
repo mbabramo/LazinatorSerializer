@@ -770,7 +770,6 @@ namespace LazinatorTests.Examples
             WriteUncompressedPrimitives.WriteBool(ref writer, _MyBool);
             EncodeCharAndString.WriteCharInTwoBytes(ref writer, _MyChar);
         }
-        
         void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
         {
             int startOfChildPosition = 0;
@@ -879,8 +878,8 @@ namespace LazinatorTests.Examples
                 _MyTuple_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
+            
         }
-        
         /* Conversion of supported collections and tuples */
         
         private static List<Example> ConvertFromBytes_List_GExample_g(LazinatorMemory storage)

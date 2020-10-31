@@ -393,6 +393,5 @@ namespace Lazinator.Wrappers
         {
             EncodeCharAndString.WriteNullableChar(ref writer, _WrappedValue);
         }
-        
     }
 }

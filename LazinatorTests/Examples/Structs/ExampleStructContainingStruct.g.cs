@@ -653,7 +653,7 @@ namespace LazinatorTests.Examples
                 _MyExampleStructContainingClasses_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
+            
         }
-        
     }
 }
