@@ -63,16 +63,6 @@ namespace Lazinator.Core
         /// <param name="changeThisLevel">Whether the change function should be applied at this level or only at lower levels</param>
         /// <returns>The Lazinator object, as transformed. (This is necessary to support this operation on Lazinator structs.)</returns>
         ValueTask<ILazinator> ForEachLazinatorAsync(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel);
-
-        /// <summary>
-        /// This is primarily used internally after serialization to update the buffer of an in-memory Lazinator object to a specified range of bytes.
-        /// </summary>
-        /// <param name="writer">The BinaryBufferWriter containing the new stored buffer</param>
-        /// <param name="startPosition">The start position within the writer</param>
-        /// <param name="length">The length within the writer</param>
-        /// <param name="includeChildrenMode">Whether child objects should be included.</param>
-        /// <param name="updateDeserializedChildren">Whether deserialized children should also have buffers updated</param>
-        ValueTask UpdateStoredBufferAsync(BinaryBufferWriterContainer writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
         /// <summary>
         /// This is primarily used internally during serialization of Lazinator objects. Continues serialization of this object and optionally its descendants by writing bytes into a pre-existing buffer. 
         /// </summary>

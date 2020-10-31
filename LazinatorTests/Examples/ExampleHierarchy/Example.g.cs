@@ -1923,7 +1923,7 @@ namespace LazinatorTests.Examples
             await WritePropertiesIntoBufferAsync(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
             if (updateStoredBuffer)
             {
-                await UpdateStoredBufferAsync(writer, startPosition, writer.ActiveMemoryPosition - startPosition, includeChildrenMode, false);
+                UpdateStoredBuffer(ref writer.Writer, startPosition, writer.ActiveMemoryPosition - startPosition, includeChildrenMode, false);
             }
         }
         
@@ -1937,27 +1937,6 @@ namespace LazinatorTests.Examples
                 if (updateDeserializedChildren)
                 {
                     UpdateDeserializedChildren(ref writer, startPosition);
-                }
-                
-                _WrappedInt_Accessed = false;
-            }
-            else
-            {
-                ThrowHelper.ThrowCannotUpdateStoredBuffer();
-            }
-            
-            var newBuffer = writer.Slice(startPosition, length);
-            LazinatorMemoryStorage = newBuffer;
-        }
-        async public virtual ValueTask UpdateStoredBufferAsync(BinaryBufferWriterContainer writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
-        {
-            _IsDirty = false;
-            if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
-            {
-                _DescendantIsDirty = false;
-                if (updateDeserializedChildren)
-                {
-                    await UpdateDeserializedChildrenAsync(writer, startPosition);
                 }
                 
                 _WrappedInt_Accessed = false;
@@ -1999,36 +1978,6 @@ namespace LazinatorTests.Examples
             {
                 ExcludableChild.UpdateStoredBuffer(ref writer, startPosition + _ExcludableChild_ByteIndex, _ExcludableChild_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
-            
-        }
-        protected virtual ValueTask UpdateDeserializedChildrenAsync(BinaryBufferWriterContainer writer, int startPosition)
-        {
-            if (_IncludableChild_Accessed && _IncludableChild != null)
-            {
-                IncludableChild.UpdateStoredBuffer(ref writer.Writer, startPosition + _IncludableChild_ByteIndex, _IncludableChild_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
-            }
-            if (_MyChild1_Accessed && _MyChild1 != null)
-            {
-                MyChild1.UpdateStoredBuffer(ref writer.Writer, startPosition + _MyChild1_ByteIndex, _MyChild1_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
-            }
-            if (_MyChild2_Accessed && _MyChild2 != null)
-            {
-                MyChild2.UpdateStoredBuffer(ref writer.Writer, startPosition + _MyChild2_ByteIndex, _MyChild2_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
-            }
-            if (_MyChild2Previous_Accessed && _MyChild2Previous != null)
-            {
-                MyChild2Previous.UpdateStoredBuffer(ref writer.Writer, startPosition + _MyChild2Previous_ByteIndex, _MyChild2Previous_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
-            }
-            if (_MyInterfaceImplementer_Accessed && _MyInterfaceImplementer != null)
-            {
-                MyInterfaceImplementer.UpdateStoredBuffer(ref writer.Writer, startPosition + _MyInterfaceImplementer_ByteIndex, _MyInterfaceImplementer_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
-            }
-            WrappedInt.UpdateStoredBuffer(ref writer.Writer, startPosition + _WrappedInt_ByteIndex, _WrappedInt_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
-            if (_ExcludableChild_Accessed && _ExcludableChild != null)
-            {
-                ExcludableChild.UpdateStoredBuffer(ref writer.Writer, startPosition + _ExcludableChild_ByteIndex, _ExcludableChild_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
-            }
-            return ValueTask.CompletedTask;
             
         }
         

@@ -30,6 +30,15 @@ namespace LazinatorAnalyzer.Support
         public string MaybeAsyncAndNot(string contents) => MayBeAsync ? CreateForBlock("async", 0, 2, MaybeAsyncMainBlock(contents + "\r\n")) : contents;
         public string MaybeAsyncAndNot_Begin => MayBeAsync ? MaybeAsyncIndexStringForMatching(true) + CreateForBlock_Begin("async", 0, 2) + MaybeAsyncMainBlock_Begin : "";
         public string MaybeAsyncAndNot_End => MayBeAsync ? MaybeAsyncIndexStringForMatching(false) + "\r\n" + CreateEndCommand("reprocess") + MaybeAsyncMainBlock_End : "";
+        /// <summary>
+        /// a block that should not be async. This is useful as a quick way of converting a maybe-async-and-not block into non-async code, without eliminating
+        /// all of the inner code checking for asyncness.
+        /// </summary>
+        public string NotAsync_Begin => MayBeAsync ? MaybeAsyncIndexStringForMatching(true) + CreateForBlock_Begin("async", 0, 1) + MaybeAsyncMainBlock_Begin : "";
+        public string NotAsync_End => MayBeAsync ? MaybeAsyncIndexStringForMatching(false) + "\r\n" + CreateEndCommand("reprocess") + MaybeAsyncMainBlock_End : "";
+
+        public string NotAsync(string contents) => MayBeAsync ? CreateForBlock("async", 0, 1, MaybeAsyncMainBlock(contents + "\r\n")) : contents;
+
 
         /// <summary>
         /// Create code that will be conditional based on whether this is an async block or not. 

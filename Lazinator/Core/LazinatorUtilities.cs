@@ -347,7 +347,7 @@ namespace Lazinator.Core
                             startPosition += restrictLengthTo255Bytes ? 1 : 4;
                             // note that the length is set correctly
                         }
-                        await child.UpdateStoredBufferAsync(writer, startPosition, length, includeChildrenMode, true);
+                        child.UpdateStoredBuffer(ref writer.Writer, startPosition, length, includeChildrenMode, true);
                     }
                 }
             }
