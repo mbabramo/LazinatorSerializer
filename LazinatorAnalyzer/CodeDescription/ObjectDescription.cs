@@ -998,8 +998,11 @@ namespace Lazinator.CodeDescription
                             sb.Append($@"yield return (""{property.PropertyName}"", (object{QuestionMarkIfNullableModeEnabled}){property.PropertyName}.ToString());
                                     ");
                         }
-                        else
+                        else if (property.IsPrimitive)
                             sb.Append($@"yield return (""{property.PropertyName}"", (object{QuestionMarkIfNullableModeEnabled}){property.PropertyName});
+                                    ");
+                        else
+                            sb.Append($@"yield return (""{property.PropertyName}"", (object{QuestionMarkIfNullableModeEnabled}){MaybeAsyncConditional($"await{NoteAsyncUsed} Get{property.PropertyName}Async()", property.PropertyName)});
                                     ");
                     }
                 }
@@ -1177,6 +1180,9 @@ namespace Lazinator.CodeDescription
             sb.AppendLine($@"{ IIF(ImplementsPreSerialization, $@"PreSerialization(verifyCleanness, updateStoredBuffer);
                             ")}int startPosition = writer.ActiveMemoryPosition;
                             {MaybeAwaitWord}WritePropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncRefIfNot}writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, {(UniqueIDCanBeSkipped ? "false" : "true")});");
+
+
+            // DEBUG do we need this and UpdateDeserializedChildrenAsync? 
 
             sb.AppendLine($@"if (updateStoredBuffer)
                         {{
@@ -1483,7 +1489,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             if (!isPrimitive && ContainsEndByteIndex)
                 AppendEndByteIndex(sb, propertiesToWrite, "writer.ActiveMemoryPosition - startOfObjectPosition", true);
             if (!isPrimitive)
-                sb.Append($@"{MaybeAsyncVoidReturn(true)}");
+                sb.AppendLine($@"{MaybeAsyncVoidReturn(true)}");
             sb.Append($@"}}");
             sb.Append($"{IIF(!isPrimitive, MaybeAsyncAndNot_End)}");
 ");

@@ -1715,7 +1715,7 @@ namespace Lazinator.CodeDescription
                 ConditionsCodeGenerator.AndCombine(
                     $"(includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode)",
                     $"{BackingFieldNotAccessedString}"),
-                $"var deserialized = {PropertyName};")}
+                $"var deserialized = {ContainingObjectDescription.MaybeAsyncConditional($"await{ContainingObjectDescription.NoteAsyncUsed} Get{PropertyName}Async()", PropertyName)};")}
                 ";
         }
 
