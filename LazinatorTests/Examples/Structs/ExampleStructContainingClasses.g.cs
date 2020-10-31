@@ -406,6 +406,7 @@ namespace LazinatorTests.Examples
             if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
+                
             }
             var previousBuffer = LazinatorMemoryStorage;
             if (LazinatorMemoryStorage.IsEmpty || IncludeChildrenMode.IncludeAllChildren != OriginalIncludeChildrenMode || (IsDirty || DescendantIsDirty))
@@ -734,6 +735,7 @@ namespace LazinatorTests.Examples
                 _MyListValues = (List<Int32>) CloneOrChange_List_Gint_g(_MyListValues, l => l.RemoveBufferInHierarchy(), true);
             }
             _MyTuple = ((NonLazinatorClass myitem1, Int32? myitem2)) CloneOrChange__PNonLazinatorClass_C32myitem1_c_C32int_n_C32myitem2_p(_MyTuple, l => l.RemoveBufferInHierarchy(), true);
+            
         }
         
         
@@ -760,6 +762,7 @@ namespace LazinatorTests.Examples
             int previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
+            
         }
         
         void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)

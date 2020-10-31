@@ -184,6 +184,7 @@ namespace Lazinator.Wrappers
             if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
+                
             }
             var previousBuffer = LazinatorMemoryStorage;
             if (LazinatorMemoryStorage.IsEmpty || IncludeChildrenMode.IncludeAllChildren != OriginalIncludeChildrenMode || (IsDirty || DescendantIsDirty))
@@ -372,6 +373,7 @@ namespace Lazinator.Wrappers
         
         void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
+            
         }
         
         
@@ -387,6 +389,7 @@ namespace Lazinator.Wrappers
             // write properties
             
             WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
+            
         }
         
         void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)

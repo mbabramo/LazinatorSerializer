@@ -303,6 +303,7 @@ namespace LazinatorTests.Examples
             if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
+                
             }
             var previousBuffer = LazinatorMemoryStorage;
             if (LazinatorMemoryStorage.IsEmpty || IncludeChildrenMode.IncludeAllChildren != OriginalIncludeChildrenMode || (IsDirty || DescendantIsDirty))
@@ -571,6 +572,7 @@ namespace LazinatorTests.Examples
                 MyExampleNullableStruct.Value.UpdateStoredBuffer(ref writer, startPosition + _MyExampleNullableStruct_ByteIndex, _MyExampleNullableStruct_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
             MyExampleStructContainingClasses.UpdateStoredBuffer(ref writer, startPosition + _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
+            
         }
         
         
@@ -597,6 +599,7 @@ namespace LazinatorTests.Examples
             int previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
+            
         }
         
         void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)

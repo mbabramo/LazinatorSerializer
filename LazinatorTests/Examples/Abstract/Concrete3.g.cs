@@ -409,6 +409,7 @@ namespace LazinatorTests.Examples.Abstract
             if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
+                
             }
             var previousBuffer = LazinatorMemoryStorage;
             if (LazinatorMemoryStorage.IsEmpty || IncludeChildrenMode.IncludeAllChildren != OriginalIncludeChildrenMode || (IsDirty || DescendantIsDirty))
@@ -735,6 +736,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 _IntList3 = (List<Int32>) CloneOrChange_List_Gint_g(_IntList3, l => l.RemoveBufferInHierarchy(), true);
             }
+            
         }
         
         
@@ -767,6 +769,7 @@ namespace LazinatorTests.Examples.Abstract
             int previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
+            
         }
         
         protected override void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)

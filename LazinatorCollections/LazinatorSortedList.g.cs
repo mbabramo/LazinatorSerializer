@@ -171,6 +171,7 @@ namespace LazinatorCollections
         protected override void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
             base.UpdateDeserializedChildren(ref writer, startPosition);
+            
         }
         
         
@@ -204,6 +205,7 @@ namespace LazinatorCollections
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
             OnPropertiesWritten(updateStoredBuffer);
+            
         }
         
         protected override void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)

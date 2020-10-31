@@ -248,6 +248,7 @@ namespace LazinatorCollections
             if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
                 return;
+                
             }
             var previousBuffer = LazinatorMemoryStorage;
             if (LazinatorMemoryStorage.IsEmpty || IncludeChildrenMode.IncludeAllChildren != OriginalIncludeChildrenMode || (IsDirty || DescendantIsDirty))
@@ -444,6 +445,7 @@ namespace LazinatorCollections
             {
                 Offsets.UpdateStoredBuffer(ref writer, startPosition + _Offsets_ByteIndex, _Offsets_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
+            
         }
         
         
@@ -477,6 +479,7 @@ namespace LazinatorCollections
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
             OnPropertiesWritten(updateStoredBuffer);
+            
         }
         
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)

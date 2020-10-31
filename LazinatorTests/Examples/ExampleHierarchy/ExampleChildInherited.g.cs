@@ -298,6 +298,7 @@ namespace LazinatorTests.Examples
             {
                 MyGrandchildInInherited.UpdateStoredBuffer(ref writer, startPosition + _MyGrandchildInInherited_ByteIndex, _MyGrandchildInInherited_ByteLength, IncludeChildrenMode.IncludeAllChildren, true);
             }
+            
         }
         
         
@@ -330,6 +331,7 @@ namespace LazinatorTests.Examples
             int previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
+            
         }
         
         protected override void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)

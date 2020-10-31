@@ -195,6 +195,7 @@ namespace LazinatorTests.Examples.Subclasses
         protected override void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
         {
             base.UpdateDeserializedChildren(ref writer, startPosition);
+            
         }
         
         
@@ -223,6 +224,7 @@ namespace LazinatorTests.Examples.Subclasses
             int previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
+            
         }
         
         protected override void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)

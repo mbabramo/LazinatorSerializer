@@ -69,7 +69,8 @@ namespace LazinatorAnalyzer.Support
         public string MaybeAsyncReturnValue(string ordinaryReturnValue) => MaybeAsyncConditional(OnlyIfAsyncNotUsedInBlock($"{TaskKeyword}.FromResult({ordinaryReturnValue})") + OnlyIfAsyncUsedInBlock(ordinaryReturnValue), ordinaryReturnValue);
         public string MaybeAsyncVoidReturn(bool isAtEndOfMethod) => MaybeAsyncConditional(OnlyIfAsyncNotUsedInBlock($@"return {TaskKeyword}.CompletedTask;
                     ") + (isAtEndOfMethod ? "" : OnlyIfAsyncUsedInBlock($@"return;
-                    ")));
+                    ")), isAtEndOfMethod ? "" : $@"return;
+                    ");
 
         public string OnlyIfAsyncUsedInBlock(string text) => CreateReprocessBlock(CreateIfBlock("asyncused", "1", text), 1);
         public string OnlyIfAsyncNotUsedInBlock(string text) => CreateReprocessBlock(CreateIfBlock("asyncused", "0", text), 1);

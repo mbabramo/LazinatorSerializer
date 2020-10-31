@@ -1000,6 +1000,7 @@ namespace LazinatorTests.Examples
         {
             if (!IsDirty && !DescendantIsDirty && LazinatorMemoryStorage.Length > 0 && OriginalIncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
+                return;
                 
             }
             var previousBuffer = LazinatorMemoryStorage;

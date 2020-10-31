@@ -236,6 +236,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 _IntList6 = (List<Int32>) CloneOrChange_List_Gint_g(_IntList6, l => l.RemoveBufferInHierarchy(), true);
             }
+            
         }
         
         
@@ -268,6 +269,7 @@ namespace LazinatorTests.Examples.Abstract
             int previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
+            
         }
         
         protected override void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
