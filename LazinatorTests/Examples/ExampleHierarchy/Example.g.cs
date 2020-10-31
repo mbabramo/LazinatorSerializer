@@ -1217,7 +1217,7 @@ namespace LazinatorTests.Examples
             
             return typedClone;
         }
-        protected virtual ValueTask<ILazinator> AssignClonePropertiesAsync(ILazinator clone, IncludeChildrenMode includeChildrenMode)
+        async protected virtual ValueTask<ILazinator> AssignClonePropertiesAsync(ILazinator clone, IncludeChildrenMode includeChildrenMode)
         {
             clone.FreeInMemoryObjects();
             Example typedClone = (Example) clone;
@@ -1242,77 +1242,77 @@ namespace LazinatorTests.Examples
             typedClone.MyUInt = MyUInt;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
             {
-                if (IncludableChild == null)
+                if ((await GetIncludableChildAsync()) == null)
                 {
                     typedClone.IncludableChild = null;
                 }
                 else
                 {
-                    typedClone.IncludableChild = (ExampleChild) IncludableChild.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.IncludableChild = (ExampleChild) (await GetIncludableChildAsync()).CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                if (MyChild1 == null)
+                if ((await GetMyChild1Async()) == null)
                 {
                     typedClone.MyChild1 = null;
                 }
                 else
                 {
-                    typedClone.MyChild1 = (ExampleChild) MyChild1.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.MyChild1 = (ExampleChild) (await GetMyChild1Async()).CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                if (MyChild2 == null)
+                if ((await GetMyChild2Async()) == null)
                 {
                     typedClone.MyChild2 = null;
                 }
                 else
                 {
-                    typedClone.MyChild2 = (ExampleChild) MyChild2.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.MyChild2 = (ExampleChild) (await GetMyChild2Async()).CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && LazinatorObjectVersion < 3)
             {
-                if (MyChild2Previous == null)
+                if ((await GetMyChild2PreviousAsync()) == null)
                 {
                     typedClone.MyChild2Previous = null;
                 }
                 else
                 {
-                    typedClone.MyChild2Previous = (ExampleChild) MyChild2Previous.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.MyChild2Previous = (ExampleChild) (await GetMyChild2PreviousAsync()).CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                if (MyInterfaceImplementer == null)
+                if ((await GetMyInterfaceImplementerAsync()) == null)
                 {
                     typedClone.MyInterfaceImplementer = null;
                 }
                 else
                 {
-                    typedClone.MyInterfaceImplementer = (IExampleNonexclusiveInterface) MyInterfaceImplementer.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.MyInterfaceImplementer = (IExampleNonexclusiveInterface) (await GetMyInterfaceImplementerAsync()).CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
             }
-            typedClone.MyNonLazinatorChild = NonLazinatorDirectConverter.CloneOrChange_NonLazinatorClass(MyNonLazinatorChild, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MyNonLazinatorChild = NonLazinatorDirectConverter.CloneOrChange_NonLazinatorClass((await GetMyNonLazinatorChildAsync()), l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                typedClone.WrappedInt = (WInt32) WrappedInt.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                typedClone.WrappedInt = (WInt32) (await GetWrappedIntAsync()).CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
             }
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren)
             {
-                if (ExcludableChild == null)
+                if ((await GetExcludableChildAsync()) == null)
                 {
                     typedClone.ExcludableChild = null;
                 }
                 else
                 {
-                    typedClone.ExcludableChild = (ExampleChild) ExcludableChild.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
+                    typedClone.ExcludableChild = (ExampleChild) (await GetExcludableChildAsync()).CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer);
                 }
             }
             
-            return ValueTask.FromResult((ILazinator)typedClone);
+            return (ILazinator)typedClone;
         }
         
         
