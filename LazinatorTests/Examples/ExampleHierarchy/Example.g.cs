@@ -1684,6 +1684,7 @@ namespace LazinatorTests.Examples
         }
         async public virtual IAsyncEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorPropertiesAsync()
         {
+            Debug; // must call Get...Async() for non=lazinator children
             yield return ("MyNullableDouble", (object)MyNullableDouble);
             yield return ("MyBool", (object)MyBool);
             yield return ("MyChar", (object)MyChar);
@@ -1697,7 +1698,7 @@ namespace LazinatorTests.Examples
             yield return ("MyTestEnum", (object)MyTestEnum);
             yield return ("MyTestEnumByteNullable", (object)MyTestEnumByteNullable);
             yield return ("MyUInt", (object)MyUInt);
-            yield return ("MyNonLazinatorChild", (object)MyNonLazinatorChild);
+            yield return ("MyNonLazinatorChild", (object)await GetMyNonLazinatorChildAsync());
             yield break;
         }
         
@@ -1951,6 +1952,7 @@ namespace LazinatorTests.Examples
         }
         async public virtual ValueTask UpdateStoredBufferAsync(BinaryBufferWriterContainer writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
         {
+            Debug; // do we need this and UpdateDeserializedChildrenAsync? 
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
             {
@@ -2294,7 +2296,7 @@ namespace LazinatorTests.Examples
             {
                 if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_IncludableChild_Accessed)
                 {
-                    var deserialized = IncludableChild;
+                    var deserialized = IncludableChild; Debug; // should use async
                 }
                 WriteChild(ref writer.Writer, ref _IncludableChild, includeChildrenMode, _IncludableChild_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _IncludableChild_ByteIndex, _IncludableChild_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
