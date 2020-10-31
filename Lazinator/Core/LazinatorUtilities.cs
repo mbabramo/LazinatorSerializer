@@ -1011,6 +1011,23 @@ namespace Lazinator.Core
         }
 
         /// <summary>
+        /// Clones a Lazinator object, returning the object as the generic type. The type of the object will be inferred by C#,
+        /// so this is a useful method to clone a Lazinator object and return a Lazinator object of the same type.
+        /// </summary>
+        /// <typeparam name="T">The type of the Lazinator object</typeparam>
+        /// <param name="lazinator">The lazinator object</param>
+        /// <param name="includeChildrenMode">Whether some or all children should be included</param>
+        /// <param name="cloneBufferOptions">How the clone's buffer should relate to the original's</param>
+        /// <returns>A clone of the Lazinator object</returns>
+        public async static ValueTask<T> CloneLazinatorTypedAsync<T>(this T lazinator, IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers) where T : ILazinator, ILazinatorAsync
+        {
+            if (EqualityComparer<T>.Default.Equals(lazinator, default(T)))
+                return default(T);
+            T clone = (T)await lazinator.CloneLazinatorAsync(includeChildrenMode, cloneBufferOptions);
+            return clone;
+        }
+
+        /// <summary>
         /// Updates the Lazinator's memory storage and then copies this to an array.
         /// </summary>
         /// <returns></returns>

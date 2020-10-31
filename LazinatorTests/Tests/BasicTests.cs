@@ -12,6 +12,8 @@ using LazinatorTests.Examples.NonAbstractGenerics;
 using LazinatorCollections.Tuples;
 using Lazinator.Buffers;
 using LazinatorTests.Examples.ExampleHierarchy;
+using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace LazinatorTests.Tests
 {
@@ -31,6 +33,16 @@ namespace LazinatorTests.Tests
             var original = GetTypicalExample();
             var copy = GetTypicalExample();
             var result = original.CloneLazinatorTyped();
+            ExampleEqual(copy, result).Should().BeTrue();
+        }
+
+        [Fact]
+        public async ValueTask AsynchronousSerializationWorks()
+        {
+
+            var original = GetTypicalExample();
+            var copy = GetTypicalExample();
+            var result = await original.CloneLazinatorTypedAsync(); 
             ExampleEqual(copy, result).Should().BeTrue();
         }
 
