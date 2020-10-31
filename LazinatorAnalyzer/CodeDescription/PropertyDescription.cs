@@ -1606,7 +1606,7 @@ namespace Lazinator.CodeDescription
                     sb.AppendLine(
                         $@"WriteNonLazinatorObject{omitLengthSuffix}(
                     nonLazinatorObject: {BackingFieldString}, isBelievedDirty: {isBelievedDirtyString},
-                    isAccessed: {BackingFieldAccessedString}, writer: ref writer,
+                    isAccessed: {BackingFieldAccessedString}, writer: ref writer{ContainingObjectDescription.MaybeAsyncConditional(".Writer", "")},
                     getChildSliceForFieldFn: () => {ChildSliceString},
                     verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                     binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
@@ -1634,7 +1634,7 @@ namespace Lazinator.CodeDescription
                         var copy_{PropertyName} = {BackingFieldString};
                         WriteNonLazinatorObject{omitLengthSuffix}(
                         nonLazinatorObject: {BackingFieldString}, isBelievedDirty: {isBelievedDirtyString},
-                        isAccessed: {BackingFieldAccessedString}, writer: ref writer,
+                        isAccessed: {BackingFieldAccessedString}, writer: ref writer{ContainingObjectDescription.MaybeAsyncConditional(".Writer", "")},
                         getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_{PropertyName}, byteIndexCopy_{PropertyName}, byteLengthCopy_{PropertyName}{ChildSliceLastParametersString}),
                         verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                         binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
