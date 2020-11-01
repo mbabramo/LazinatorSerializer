@@ -250,20 +250,53 @@ namespace Lazinator.Buffers
                 return InitialOwnedMemory.Memory.Slice(StartPosition, Length);
             }
         }
-        public async ValueTask<IMemoryOwner<byte>> LoadInitialMemoryAsync()
+
+        public void LoadInitialMemory()
         {
+            if (SingleMemory)
+                return;
+            IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
+            if (memoryOwner is MemoryReference memoryReference && memoryReference.IsLoaded == false)
+            {
+                // Unfortunately, we must call an async method synchronously. It would be better for the user
+                // to use an asynchronous method.
+                var loadMemory = memoryReference.LoadMemoryAsync();
+                var task = Task.Run(async () => await loadMemory);
+                task.Wait();
+            }
+        }
+
+        public void ConsiderUnloadInitialMemory()
+        {
+            if (SingleMemory)
+                return;
+            IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
+            if (memoryOwner is MemoryReference memoryReference && memoryReference.IsLoaded == true)
+            {
+                // Unfortunately, we must call an async method synchronously. It would be better for the user
+                // to use an asynchronous method.
+                var loadMemory = memoryReference.ConsiderUnloadMemoryAsync();
+                var task = Task.Run(async () => await loadMemory);
+                task.Wait();
+            }
+        }
+
+        public async ValueTask LoadInitialMemoryAsync()
+        {
+            if (SingleMemory)
+                return;
             IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
             if (memoryOwner is MemoryReference memoryReference && memoryReference.IsLoaded == false)
                 await memoryReference.LoadMemoryAsync();
-            return memoryOwner;
         }
 
-        public async ValueTask<IMemoryOwner<byte>> ConsiderUnloadInitialMemoryAsync()
+        public async ValueTask ConsiderUnloadInitialMemoryAsync()
         {
+            if (SingleMemory)
+                return;
             IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
             if (memoryOwner is MemoryReference memoryReference && memoryReference.IsLoaded == true)
                 await memoryReference.ConsiderUnloadMemoryAsync();
-            return memoryOwner;
         }
 
         public async ValueTask<Memory<byte>> GetInitialMemoryAsync()
