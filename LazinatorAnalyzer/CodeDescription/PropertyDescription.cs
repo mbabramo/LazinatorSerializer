@@ -62,7 +62,8 @@ namespace Lazinator.CodeDescription
         internal bool IsDefinedInLowerLevelInterface { get; set; }
         internal bool IsLast { get; set; }
         private bool OmitLengthBecauseDefinitelyLast => (IsLast && ContainingObjectDescription.IsSealedOrStruct && ContainingObjectDescription.Version == -1);
-        private string ChildSliceString => $"GetChildSlice(LazinatorMemoryStorage, {BackingFieldByteIndex}, {BackingFieldByteLength}{ChildSliceLastParametersString})";
+        private string ChildSliceString => $"GetChildSlice(LazinatorMemoryStorage, {BackingFieldByteIndex}, {BackingFieldByteLength}{ChildSliceLastParametersString})"; 
+        private string ChildSliceStringMaybeAsync => $"{ContainingObjectDescription.MaybeAwaitWord}GetChildSlice{ContainingObjectDescription.MaybeAsyncWord}(LazinatorMemoryStorage, {BackingFieldByteIndex}, {BackingFieldByteLength}{ChildSliceLastParametersString})";
         private bool AllLengthsPrecedeChildren => true;
         public bool SkipLengthForThisProperty => IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast;
         public bool UsesLengthValue => AllLengthsPrecedeChildren && !SkipLengthForThisProperty && IsLazinator;
@@ -1324,8 +1325,7 @@ namespace Lazinator.CodeDescription
         {
             return $@"
             {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || NonNullableThatCanBeUninitialized, "LazinatorMemoryStorage.Length == 0", createDefault, $@"{IIF(defineChildData, "LazinatorMemory ")}childData = {ChildSliceString};
-                {IIF(async, $@"await childData.LoadInitialMemoryAsync();
-                ")}{recreation}{IIF(async, $@"
+                {recreation}{IIF(async, $@"
                 await childData.ConsiderUnloadInitialMemoryAsync();")}")}{IIF(BackingAccessFieldIncluded, $@"
             {BackingFieldAccessedString} = true;")}";
         }

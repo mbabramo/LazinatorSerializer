@@ -251,10 +251,10 @@ namespace Lazinator.Buffers
             }
         }
 
-        public void LoadInitialMemory()
+        public IMemoryOwner<byte> LoadInitialMemory()
         {
             if (SingleMemory)
-                return;
+                return InitialOwnedMemory;
             IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
             if (memoryOwner is MemoryReference memoryReference && memoryReference.IsLoaded == false)
             {
@@ -264,6 +264,7 @@ namespace Lazinator.Buffers
                 var task = Task.Run(async () => await loadMemory);
                 task.Wait();
             }
+            return memoryOwner;
         }
 
         public void ConsiderUnloadInitialMemory()
@@ -281,13 +282,14 @@ namespace Lazinator.Buffers
             }
         }
 
-        public async ValueTask LoadInitialMemoryAsync()
+        public async ValueTask<IMemoryOwner<byte>> LoadInitialMemoryAsync()
         {
             if (SingleMemory)
-                return;
+                return InitialOwnedMemory;
             IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
             if (memoryOwner is MemoryReference memoryReference && memoryReference.IsLoaded == false)
                 await memoryReference.LoadMemoryAsync();
+            return memoryOwner;
         }
 
         public async ValueTask ConsiderUnloadInitialMemoryAsync()
