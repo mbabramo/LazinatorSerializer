@@ -345,12 +345,10 @@ namespace LazinatorCollections.ByteSpan
                 {
                     ReadOnly = deserialized_ReadOnly;
                 }
-            }
-            if (!exploreOnlyDeserializedChildren)
+            }if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized_ReadOrWrite = ReadOrWrite;
-            }
-            if (changeThisLevel && changeFunc != null)
+            }if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }
@@ -484,10 +482,6 @@ namespace LazinatorCollections.ByteSpan
         {
             int startOfChildPosition = 0;
             startOfChildPosition = writer.ActiveMemoryPosition;
-            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ReadOnly_Accessed)
-            {
-                var deserialized = ReadOnly;
-            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _ReadOnly, isBelievedDirty: _ReadOnly_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _ReadOnly_Accessed, writer: ref writer,

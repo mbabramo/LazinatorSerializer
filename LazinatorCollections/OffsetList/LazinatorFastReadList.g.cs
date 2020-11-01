@@ -300,8 +300,7 @@ namespace LazinatorCollections.OffsetList
                 {
                     ReadOnlyBytes = deserialized_ReadOnlyBytes;
                 }
-            }
-            if (changeThisLevel && changeFunc != null)
+            }if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }
@@ -435,10 +434,6 @@ namespace LazinatorCollections.OffsetList
         {
             int startOfChildPosition = 0;
             startOfChildPosition = writer.ActiveMemoryPosition;
-            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ReadOnlyBytes_Accessed)
-            {
-                var deserialized = ReadOnlyBytes;
-            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _ReadOnlyBytes, isBelievedDirty: _ReadOnlyBytes_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _ReadOnlyBytes_Accessed, writer: ref writer,

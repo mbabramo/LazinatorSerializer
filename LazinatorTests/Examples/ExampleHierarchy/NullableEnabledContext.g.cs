@@ -2540,24 +2540,19 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     ByteReadOnlySpan = deserialized_ByteReadOnlySpan;
                 }
-            }
-            if (!exploreOnlyDeserializedChildren)
+            }if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized_NonNullableMemoryOfBytes = NonNullableMemoryOfBytes;
-            }
-            if (!exploreOnlyDeserializedChildren)
+            }if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized_NonNullableReadOnlyMemoryOfBytes = NonNullableReadOnlyMemoryOfBytes;
-            }
-            if (!exploreOnlyDeserializedChildren)
+            }if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized_NullableMemoryOfBytes = NullableMemoryOfBytes;
-            }
-            if (!exploreOnlyDeserializedChildren)
+            }if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized_NullableReadOnlyMemoryOfBytes = NullableReadOnlyMemoryOfBytes;
-            }
-            if (changeThisLevel && changeFunc != null)
+            }if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }
@@ -2945,10 +2940,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             int startOfChildPosition = 0;
             int lengthValue = 0;
             startOfChildPosition = writer.ActiveMemoryPosition;
-            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ByteReadOnlySpan_Accessed)
-            {
-                var deserialized = ByteReadOnlySpan;
-            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _ByteReadOnlySpan, isBelievedDirty: _ByteReadOnlySpan_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _ByteReadOnlySpan_Accessed, writer: ref writer,

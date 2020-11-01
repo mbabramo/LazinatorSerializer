@@ -297,8 +297,7 @@ namespace Lazinator.Wrappers
                 {
                     Value = deserialized_Value;
                 }
-            }
-            if (changeThisLevel && changeFunc != null)
+            }if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }
@@ -422,10 +421,6 @@ namespace Lazinator.Wrappers
         {
             int startOfChildPosition = 0;
             startOfChildPosition = writer.ActiveMemoryPosition;
-            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_Value_Accessed)
-            {
-                var deserialized = Value;
-            }
             var serializedBytesCopy_Value = LazinatorMemoryStorage;
             var byteIndexCopy_Value = _Value_ByteIndex;
             var byteLengthCopy_Value = _Value_ByteLength;

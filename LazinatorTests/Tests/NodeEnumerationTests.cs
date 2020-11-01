@@ -195,7 +195,7 @@ $@"LazinatorTests.Examples.Example
     MyChild1: LazinatorTests.Examples.ExampleChild
         MyLong: 123123
         MyShort: 543
-        ByteSpan: System.ReadOnlySpan<Byte>[0]
+        ByteSpan: System.ReadOnlyMemory<Byte>[0]
         MyExampleGrandchild: LazinatorTests.Examples.ExampleGrandchild
             AString: hello
             MyInt: 123
@@ -203,7 +203,7 @@ $@"LazinatorTests.Examples.Example
     MyChild2: LazinatorTests.Examples.ExampleChild
         MyLong: 123123
         MyShort: 543
-        ByteSpan: System.ReadOnlySpan<Byte>[0]
+        ByteSpan: System.ReadOnlyMemory<Byte>[0]
         MyExampleGrandchild: LazinatorTests.Examples.ExampleGrandchild
             AString: hello
             MyInt: 123
@@ -276,7 +276,7 @@ $@"LazinatorTests.Examples.Example
     MyChild1: LazinatorTests.Examples.ExampleChild
         MyLong: 123123
         MyShort: 543
-        ByteSpan: System.ReadOnlySpan<Byte>[0]
+        ByteSpan: System.ReadOnlyMemory<Byte>[0]
         MyExampleGrandchild: LazinatorTests.Examples.ExampleGrandchild
             AString: hello
             MyInt: 123
@@ -286,7 +286,7 @@ $@"LazinatorTests.Examples.Example
     MyChild2: LazinatorTests.Examples.ExampleChild
         MyLong: 999888
         MyShort: -23
-        ByteSpan: System.ReadOnlySpan<Byte>[0]
+        ByteSpan: System.ReadOnlyMemory<Byte>[0]
         MyExampleGrandchild: LazinatorTests.Examples.ExampleGrandchild
             AString: x
             MyInt: 3456345

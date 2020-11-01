@@ -659,60 +659,49 @@ namespace LazinatorTests.Examples.Collections
             if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized_MyMemoryByte = MyMemoryByte;
-            }
-            if (!exploreOnlyDeserializedChildren)
+            }if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized_MyMemoryInt = MyMemoryInt;
-            }
-            if (!exploreOnlyDeserializedChildren)
+            }if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized_MyNullableMemoryByte = MyNullableMemoryByte;
-            }
-            if (!exploreOnlyDeserializedChildren)
+            }if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized_MyNullableMemoryInt = MyNullableMemoryInt;
-            }
-            if (!exploreOnlyDeserializedChildren)
+            }if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized_MyNullableReadOnlyMemoryInt = MyNullableReadOnlyMemoryInt;
-            }
-            if (!exploreOnlyDeserializedChildren)
+            }if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized_MyReadOnlyMemoryByte = MyReadOnlyMemoryByte;
-            }
-            if (!exploreOnlyDeserializedChildren)
+            }if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized_MyReadOnlyMemoryChar = MyReadOnlyMemoryChar;
-            }
-            if (!exploreOnlyDeserializedChildren)
+            }if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized_MyReadOnlyMemoryInt = MyReadOnlyMemoryInt;
-            }
-            if (!exploreOnlyDeserializedChildren)
+            }if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized_MyReadOnlySpanByte = MyReadOnlySpanByte;
                 if (!_MyReadOnlySpanByte_Accessed)
                 {
                     MyReadOnlySpanByte = deserialized_MyReadOnlySpanByte;
                 }
-            }
-            if (!exploreOnlyDeserializedChildren)
+            }if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized_MyReadOnlySpanChar = MyReadOnlySpanChar;
                 if (!_MyReadOnlySpanChar_Accessed)
                 {
                     MyReadOnlySpanChar = deserialized_MyReadOnlySpanChar;
                 }
-            }
-            if (!exploreOnlyDeserializedChildren)
+            }if (!exploreOnlyDeserializedChildren)
             {
                 var deserialized_MyReadOnlySpanLong = MyReadOnlySpanLong;
                 if (!_MyReadOnlySpanLong_Accessed)
                 {
                     MyReadOnlySpanLong = deserialized_MyReadOnlySpanLong;
                 }
-            }
-            if (changeThisLevel && changeFunc != null)
+            }if (changeThisLevel && changeFunc != null)
             {
                 return changeFunc(this);
             }
@@ -1020,10 +1009,6 @@ namespace LazinatorTests.Examples.Collections
                 
             }
             startOfChildPosition = writer.ActiveMemoryPosition;
-            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyReadOnlySpanByte_Accessed)
-            {
-                var deserialized = MyReadOnlySpanByte;
-            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyReadOnlySpanByte, isBelievedDirty: _MyReadOnlySpanByte_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyReadOnlySpanByte_Accessed, writer: ref writer,
@@ -1039,10 +1024,6 @@ namespace LazinatorTests.Examples.Collections
                 
             }
             startOfChildPosition = writer.ActiveMemoryPosition;
-            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyReadOnlySpanChar_Accessed)
-            {
-                var deserialized = MyReadOnlySpanChar;
-            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyReadOnlySpanChar, isBelievedDirty: _MyReadOnlySpanChar_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyReadOnlySpanChar_Accessed, writer: ref writer,
@@ -1058,10 +1039,6 @@ namespace LazinatorTests.Examples.Collections
                 
             }
             startOfChildPosition = writer.ActiveMemoryPosition;
-            if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_MyReadOnlySpanLong_Accessed)
-            {
-                var deserialized = MyReadOnlySpanLong;
-            }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyReadOnlySpanLong, isBelievedDirty: _MyReadOnlySpanLong_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyReadOnlySpanLong_Accessed, writer: ref writer,
