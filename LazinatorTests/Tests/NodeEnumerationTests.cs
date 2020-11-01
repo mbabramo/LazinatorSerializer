@@ -234,6 +234,22 @@ $@"LazinatorTests.Examples.Example
         }
 
         [Fact]
+        public async ValueTask EnumerateAllNodesAsyncWorks()
+        {
+            var hierarchy = GetTypicalExample();
+            var result = hierarchy.EnumerateAllNodes().ToList();
+            var resultAsync = await ToListAsync(hierarchy.EnumerateAllNodesAsync());
+            result.Should().ContainInOrder(resultAsync);
+        }
+        private async ValueTask<List<T>> ToListAsync<T>(IAsyncEnumerable<T> items)
+        {
+            var results = new List<T>();
+            await foreach (var item in items)
+                results.Add(item);
+            return results;
+        }
+
+        [Fact]
         public void HierarchyTreeWorks_Larger()
         {
             var hierarchy = GetHierarchy(0, 1, 2, 0, 0);
