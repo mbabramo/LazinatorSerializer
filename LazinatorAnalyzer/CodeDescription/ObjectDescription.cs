@@ -1000,17 +1000,17 @@ namespace Lazinator.CodeDescription
                 {
                     if (!property.DoNotEnumerate)
                     {
+                        string propertyNameAccess = property.PropertyName;
+
                         if (property.PropertyType == LazinatorPropertyType.SupportedCollection && property.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
                         {
-                            // because ReadOnlySpan is a ref struct, we can't enumerate it.
-                            sb.Append($@"yield return (""{property.PropertyName}"", (object{QuestionMarkIfNullableModeEnabled}){property.PropertyName}.ToString());
-                                    ");
+                            propertyNameAccess = property.BackingFieldString;
                         }
-                        else if (property.IsPrimitive)
-                            sb.Append($@"yield return (""{property.PropertyName}"", (object{QuestionMarkIfNullableModeEnabled}){property.PropertyName});
+                        if (property.IsPrimitive)
+                            sb.Append($@"yield return (""{property.PropertyName}"", (object{QuestionMarkIfNullableModeEnabled}){propertyNameAccess});
                                     ");
                         else
-                            sb.Append($@"yield return (""{property.PropertyName}"", (object{QuestionMarkIfNullableModeEnabled}){MaybeAsyncConditional($"await{NoteAsyncUsed} Get{property.PropertyName}Async()", property.PropertyName)});
+                            sb.Append($@"yield return (""{property.PropertyName}"", (object{QuestionMarkIfNullableModeEnabled}){MaybeAsyncConditional($"await{NoteAsyncUsed} Get{propertyNameAccess}Async()", propertyNameAccess)});
                                     ");
                     }
                 }

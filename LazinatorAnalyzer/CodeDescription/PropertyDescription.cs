@@ -1388,7 +1388,12 @@ namespace Lazinator.CodeDescription
             }}
         }}
         {IIF(BackingAccessFieldIncluded, $@"{ContainingObjectDescription.ProtectedIfApplicable}bool {BackingFieldAccessedString};
-")}");
+")}{IIF(IncludeAsyncCode, $@"public async ValueTask Ensure{PropertyName}LoadedAsync()
+        {{
+            LazinatorMemory childData = {ChildSliceString};
+            await childData.LoadInitialMemoryAsync();
+        }}
+        ")}"); /* A ReadOnlySpan cannot be asynchronously returned, but we can call a method to make sure that it is loaded, and then we can access the property synchronously. */
         }
 
         private string GetSpanCast(string type, bool toByte)
