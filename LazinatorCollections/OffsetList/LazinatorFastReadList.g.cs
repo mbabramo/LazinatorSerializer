@@ -287,7 +287,7 @@ namespace LazinatorCollections.OffsetList
         
         public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
         {
-            yield return ("ReadOnlyBytes", (object)ReadOnlyBytes.ToString());
+            yield return ("ReadOnlyBytes", (object)_ReadOnlyBytes);
             yield break;
         }
         

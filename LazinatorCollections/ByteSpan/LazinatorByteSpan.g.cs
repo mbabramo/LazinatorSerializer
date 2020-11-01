@@ -331,7 +331,7 @@ namespace LazinatorCollections.ByteSpan
         
         public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
         {
-            yield return ("ReadOnly", (object)ReadOnly.ToString());
+            yield return ("ReadOnly", (object)_ReadOnly);
             yield return ("ReadOrWrite", (object)ReadOrWrite);
             yield break;
         }

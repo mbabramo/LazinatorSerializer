@@ -2382,7 +2382,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             yield return ("MyNullableInt", (object?)MyNullableInt);
             yield return ("NonNullableString", (object?)NonNullableString);
             yield return ("NullableString", (object?)NullableString);
-            yield return ("ByteReadOnlySpan", (object?)ByteReadOnlySpan.ToString());
+            yield return ("ByteReadOnlySpan", (object?)_ByteReadOnlySpan);
             yield return ("NonNullableArrayOfNonNullables", (object?)NonNullableArrayOfNonNullables);
             yield return ("NonNullableArrayOfNullables", (object?)NonNullableArrayOfNullables);
             yield return ("NonNullableDictionaryWithNonNullable", (object?)NonNullableDictionaryWithNonNullable);

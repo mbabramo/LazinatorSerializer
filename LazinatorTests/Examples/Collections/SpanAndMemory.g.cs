@@ -648,9 +648,9 @@ namespace LazinatorTests.Examples.Collections
             yield return ("MyReadOnlyMemoryByte", (object)MyReadOnlyMemoryByte);
             yield return ("MyReadOnlyMemoryChar", (object)MyReadOnlyMemoryChar);
             yield return ("MyReadOnlyMemoryInt", (object)MyReadOnlyMemoryInt);
-            yield return ("MyReadOnlySpanByte", (object)MyReadOnlySpanByte.ToString());
-            yield return ("MyReadOnlySpanChar", (object)MyReadOnlySpanChar.ToString());
-            yield return ("MyReadOnlySpanLong", (object)MyReadOnlySpanLong.ToString());
+            yield return ("MyReadOnlySpanByte", (object)_MyReadOnlySpanByte);
+            yield return ("MyReadOnlySpanChar", (object)_MyReadOnlySpanChar);
+            yield return ("MyReadOnlySpanLong", (object)_MyReadOnlySpanLong);
             yield break;
         }
         

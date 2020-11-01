@@ -284,7 +284,7 @@ namespace Lazinator.Wrappers
         
         public IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
         {
-            yield return ("Value", (object)Value.ToString());
+            yield return ("Value", (object)_Value);
             yield break;
         }
         
