@@ -6,6 +6,7 @@ using System;
 namespace LazinatorTests.Examples
 {
     [Lazinator((int)ExampleUniqueIDs.ExampleChild)]
+    [AsyncLazinatorMemory]
     public interface IExampleChild : ILazinator
     {
         long MyLong { get; set; }

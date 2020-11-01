@@ -183,7 +183,7 @@ namespace Lazinator.CodeDescription
         public string MaybeAwaitWordConditional(bool condition) => condition ? MaybeAwaitWord : "";
         public string MaybeAsyncWordConditional(bool condition) => condition ? MaybeAsyncWord : "";
         public string MaybeIAsyncEnumerable => AsyncTemplate.MaybeIAsyncEnumerable();
-        public string MaybeAsyncPropertyName(PropertyDescription property) => MaybeAsyncConditional($"{NoteAsyncUsed}(await Get{property.PropertyName}Async())", property.PropertyName);
+        public string MaybeAsyncPropertyName(PropertyDescription property) => property.IsReadOnlySpan ? property.PropertyName : MaybeAsyncConditional($"{NoteAsyncUsed}(await Get{property.PropertyName}Async())", property.PropertyName);
         public string MaybeAsyncConditional(string ifAsync, string ifNotAsync, bool additionalCondition = true) => additionalCondition ? AsyncTemplate.MaybeAsyncConditional(ifAsync, ifNotAsync) : ifNotAsync;
         public string MaybeAsyncBinaryBufferWriterParameter => $"{MaybeAsyncConditional("BinaryBufferWriterContainer", "ref BinaryBufferWriter")}";
         public string MaybeAsyncRefIfNot => $"{MaybeAsyncConditional("", "ref ")}";
@@ -1000,7 +1000,7 @@ namespace Lazinator.CodeDescription
                 {
                     if (!property.DoNotEnumerate)
                     {
-                        string propertyNameAccess = property.PropertyName;
+                        string propertyNameAccess = property.IsPrimitive ? property.PropertyName : MaybeAsyncPropertyName(property);
 
                         if (property.PropertyType == LazinatorPropertyType.SupportedCollection && property.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
                         {
@@ -1010,7 +1010,7 @@ namespace Lazinator.CodeDescription
                             sb.Append($@"yield return (""{property.PropertyName}"", (object{QuestionMarkIfNullableModeEnabled}){propertyNameAccess});
                                     ");
                         else
-                            sb.Append($@"yield return (""{property.PropertyName}"", (object{QuestionMarkIfNullableModeEnabled}){MaybeAsyncConditional($"await{NoteAsyncUsed} Get{propertyNameAccess}Async()", propertyNameAccess)});
+                            sb.Append($@"yield return (""{property.PropertyName}"", (object{QuestionMarkIfNullableModeEnabled}){propertyNameAccess});
                                     ");
                     }
                 }
@@ -1062,19 +1062,30 @@ namespace Lazinator.CodeDescription
 
             foreach (var property in PropertiesToDefineThisLevel.Where(x => ((!x.IsPrimitive && !x.IsLazinator && !x.IsSupportedCollectionOrTupleOrNonLazinatorWithInterchangeType && !x.IsNonLazinatorTypeWithoutInterchange) || x.IsMemoryOrSpan) && x.PlaceholderMemoryWriteMethod == null))
             {
+                
                 string propertyName = property.PropertyName;
                 string loadProperty = MaybeAsyncPropertyName(property);
                 // we want to deserialize the memory. In case of ReadOnlySpan<byte>, we also want to duplicate the memory if it hasn't been set by the user, since we want to make sure that the property will work even if the buffer is removed (which might be the reason for the ForEachLazinator call)
-                sb.Append($@"if (!exploreOnlyDeserializedChildren)
+                if (property.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
+                {
+                    sb.Append($@"if (!exploreOnlyDeserializedChildren)
                     {{
-                        var deserialized{property.BackingFieldString} = {loadProperty};{IIF(property.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan, $@"
-                        if ({property.BackingFieldNotAccessedString})
-                        {{
-                            {propertyName} = deserialized{property.BackingFieldString};
-                        }}")}
-                    }}
-");
-            }
+                        {MaybeAsyncConditional($@"await{NoteAsyncUsed} Ensure{propertyName}LoadedAsync();
+                            ", $@"var deserialized{property.BackingFieldString} = {loadProperty};
+                            if ({property.BackingFieldNotAccessedString})
+                            {{
+                                {propertyName} = deserialized{property.BackingFieldString};
+                            }}")}
+                    }}");
+                }
+                else
+                {
+                    sb.Append($@"if (!exploreOnlyDeserializedChildren)
+                    {{
+                        var deserialized{property.BackingFieldString} = {loadProperty};
+                    }}");
+                }
+                }
 
             sb.Append($@"{IIF(ImplementsOnForEachLazinator && (BaseLazinatorObject == null || !BaseLazinatorObject.ImplementsOnForEachLazinator), $@"OnForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, changeThisLevel);
                     ")}if (changeThisLevel && changeFunc != null)

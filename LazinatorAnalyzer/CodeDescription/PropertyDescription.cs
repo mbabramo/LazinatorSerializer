@@ -97,6 +97,8 @@ namespace Lazinator.CodeDescription
                                         SupportedCollectionType ==
                                         LazinatorSupportedCollectionType.ReadOnlyMemory ||
                                         SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan);
+        internal bool IsReadOnlySpan => PropertyType == LazinatorPropertyType.SupportedCollection &&
+                                        SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan;
         internal bool IsNonGenericLazinator => PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface || PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable;
         internal bool IsLazinator => IsNonGenericLazinator || PropertyType == LazinatorPropertyType.OpenGenericParameter;
 
@@ -1716,18 +1718,20 @@ namespace Lazinator.CodeDescription
 
         private string EnsureDeserialized()
         {
+            if (PropertyType == LazinatorPropertyType.SupportedCollection && SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
+                return ""; // ReadOnlySpan gives direct memory access, so we don't need to deserialize anything
             return $@"{new ConditionalCodeGenerator(
                 ConditionsCodeGenerator.AndCombine(
                     $"(includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode)",
                     $"{BackingFieldNotAccessedString}"),
-                $"var deserialized = {ContainingObjectDescription.MaybeAsyncConditional($"await{ContainingObjectDescription.NoteAsyncUsed} Get{PropertyName}Async()", PropertyName)};")}
+                $"var deserialized = {ContainingObjectDescription.MaybeAsyncPropertyName(this)};")}
                 ";
         }
 
         public void AppendCopyPropertyToClone(CodeStringBuilder sb, string nameOfCloneVariable)
         {
             string copyInstruction = "";
-            string propertyAccess = ContainingObjectDescription.MaybeAsyncConditional($"(await{ContainingObjectDescription.NoteAsyncUsed} Get{PropertyName}Async())", PropertyName);
+            string propertyAccess = ContainingObjectDescription.MaybeAsyncPropertyName(this);
             string cloneAsyncWord = AsyncWithinAsync ? ContainingObjectDescription.MaybeAsyncWord : "";
             string cloneAwaitWord = AsyncWithinAsync ? ContainingObjectDescription.MaybeAwaitWord : "";
             if (IsLazinator)
