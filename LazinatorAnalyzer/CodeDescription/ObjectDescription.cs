@@ -255,6 +255,8 @@ namespace Lazinator.CodeDescription
 
             InterfaceTypeSymbol = interfaceTypeSymbol;
             AsyncLazinatorMemory = InterfaceTypeSymbol.HasAttributeOfType<CloneAsyncLazinatorMemoryAttribute>();
+            if (AsyncLazinatorMemory && IsDerivedFromNonAbstractLazinator && !BaseLazinatorObject.AsyncLazinatorMemory)
+                throw new LazinatorCodeGenException("A Lazinator whose interface has AsyncLazinatorMemory attribute may only derived from another Lazinator object that also has an exclusive interface with the same attribute.");
             AsyncTemplate = new AsyncStringTemplates() { MayBeAsync = AsyncLazinatorMemory };
             AllowNonlazinatorGenerics = InterfaceTypeSymbol.HasAttributeOfType<CloneAllowNonlazinatorOpenGenericsAttribute>();
             SuppressLazinatorVersionByte = InterfaceTypeSymbol.HasAttributeOfType<CloneExcludeLazinatorVersionByteAttribute>();
@@ -792,6 +794,9 @@ namespace Lazinator.CodeDescription
                     property.PropertyType == LazinatorPropertyType.SupportedTuple ||
                     property.PropertyType == LazinatorPropertyType.OpenGenericParameter)
                 .ToList();
+
+            if (!AsyncLazinatorMemory && thisLevel.Any(x => x.TypeImplementsILazinatorAsync))
+                throw new LazinatorCodeGenException("A non-async Lazinator cannot have an async Lazinator as a child property (i.e., include a child Lazinator whose exclusive interface contains an AsyncLazinatorMemory attribute.");
 
             var lastPropertyToIndex = withRecordedIndices.LastOrDefault();
             for (int i = 0; i < withRecordedIndices.Count(); i++)
