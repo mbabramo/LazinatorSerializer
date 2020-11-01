@@ -10,6 +10,7 @@ using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
 using System.Dynamic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LazinatorTests.Tests
 {
@@ -174,13 +175,7 @@ namespace LazinatorTests.Tests
 
         }
 
-        [Fact]
-        public void HierarchyTreeWorks_TwoLevel()
-        {
-            var hierarchy = GetTypicalExample();
-            HierarchyTree tree = new HierarchyTree(hierarchy);
-            string result = tree.ToString();
-            string expected = 
+        string twoLevelExpected =
 $@"LazinatorTests.Examples.Example
     MyNullableDouble: 4.2
     MyBool: False
@@ -219,7 +214,23 @@ $@"LazinatorTests.Examples.Example
         WrappedValue: 2
     ExcludableChild: NULL
 ";
-            result.Should().Be(expected);
+
+        [Fact]
+        public void HierarchyTreeWorks_TwoLevel()
+        {
+            var hierarchy = GetTypicalExample();
+            HierarchyTree tree = new HierarchyTree(hierarchy);
+            string result = tree.ToString();
+            result.Should().Be(twoLevelExpected);
+        }
+
+        [Fact]
+        public async ValueTask HierarchyTreeWorksAsync_TwoLevel()
+        {
+            var hierarchy = GetTypicalExample();
+            HierarchyTree tree = await HierarchyTree.ConstructAsync(hierarchy);
+            string result = tree.ToString();
+            result.Should().Be(twoLevelExpected);
         }
 
         [Fact]

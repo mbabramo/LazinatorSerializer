@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Lazinator.Core
 {
@@ -22,6 +23,37 @@ namespace Lazinator.Core
                 return;
             NonLazinatorProperties = node.EnumerateNonLazinatorProperties().ToList();
             Children = node.EnumerateLazinatorChildren().Select(x => (x.propertyName, new HierarchyTree(x.descendant))).ToList();
+        }
+
+        public static async ValueTask<HierarchyTree> ConstructAsync(ILazinatorAsync node)
+        {
+            HierarchyTree tree = new HierarchyTree();
+            await tree.InitializeAsync(node);
+            return tree;
+        }
+
+        public HierarchyTree()
+        {
+
+        }
+
+        public async ValueTask InitializeAsync(ILazinatorAsync node)
+        {
+            Node = node;
+            if (node == null)
+                return;
+            NonLazinatorProperties = await ToListAsync(node.EnumerateNonLazinatorPropertiesAsync());
+            ValueTask<List<(string propertyName, ILazinator descendant)>> taskToProduceLists = ToListAsync(node.EnumerateLazinatorChildrenAsync());
+            List<(string propertyName, ILazinator descendant)> lists = await taskToProduceLists;
+            Children = lists.Select(x => (x.propertyName, new HierarchyTree(x.descendant))).ToList();
+        }
+
+        private async ValueTask<List<T>> ToListAsync<T>(IAsyncEnumerable<T> items)
+        {
+            var results = new List<T>();
+            await foreach (var item in items)
+                results.Add(item);
+            return results;
         }
 
         public string ToString(Func<ILazinator, string> stringProducer = null)

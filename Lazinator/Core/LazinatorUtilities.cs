@@ -701,6 +701,15 @@ namespace Lazinator.Core
         }
 
         /// <summary>
+        /// Enumerates all nodes in the hierarchy asynchronously.
+        /// </summary>
+        /// <returns>The dirty nodes</returns>
+        public static IAsyncEnumerable<ILazinator> EnumerateAllNodesAsync(this ILazinatorAsync startNode)
+        {
+            return startNode.EnumerateLazinatorNodesAsync(x => true, false, x => true, false, false);
+        }
+
+        /// <summary>
         /// Enumerates the Lazinator children of a node, along with their names
         /// </summary>
         /// <param name="node">The node</param>
@@ -711,6 +720,17 @@ namespace Lazinator.Core
         }
 
         /// <summary>
+        /// Enumerates the Lazinator children of a node, along with their names
+        /// </summary>
+        /// <param name="node">The node</param>
+        /// <returns>The Lazinator children of the node along with their property names</returns>
+        public static IAsyncEnumerable<(string propertyName, ILazinator descendant)> EnumerateLazinatorChildrenAsync(this ILazinatorAsync node, bool deserializedOnly = false)
+        {
+            return node.EnumerateLazinatorDescendantsAsync(x => true, true, x => false, deserializedOnly, true);
+        }
+
+
+        /// <summary>
         /// Enumerates the descendants of a node that have already been deserialized.
         /// </summary>
         /// <param name="node">The node</param>
@@ -718,6 +738,16 @@ namespace Lazinator.Core
         public static IEnumerable<(string propertyName, ILazinator descendant)> EnumerateDeserializedDescendants(this ILazinator node)
         {
             return node.EnumerateLazinatorDescendants(x => true, true, x => true, true, false);
+        }
+
+        /// <summary>
+        /// Enumerates the descendants of a node that have already been deserialized asynchronously.
+        /// </summary>
+        /// <param name="node">The node</param>
+        /// <returns>The node and any deserialized descendants</returns>
+        public static IAsyncEnumerable<(string propertyName, ILazinator descendant)> EnumerateDeserializedDescendantsAsync(this ILazinatorAsync node)
+        {
+            return node.EnumerateLazinatorDescendantsAsync(x => true, true, x => true, true, false);
         }
 
         /// <summary>
