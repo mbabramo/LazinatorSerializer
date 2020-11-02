@@ -1394,8 +1394,7 @@ namespace Lazinator.CodeDescription
         {IIF(BackingAccessFieldIncluded, $@"{ContainingObjectDescription.ProtectedIfApplicable}bool {BackingFieldAccessedString};
 ")}{IIF(IncludeAsyncCode, $@"public async ValueTask Ensure{PropertyName}LoadedAsync()
         {{
-            LazinatorMemory childData = {ChildSliceStringMaybeAsync()};
-            await childData.LoadInitialMemoryAsync();
+            LazinatorMemory childData = {ChildSliceStringDefinitelyAsync};
         }}
         ")}"); /* A ReadOnlySpan cannot be asynchronously returned, but we can call a method to make sure that it is loaded, and then we can access the property synchronously. */
         }
@@ -1614,10 +1613,10 @@ namespace Lazinator.CodeDescription
                         TrackDirtinessNonSerialized ? $"{PropertyName}_Dirty" : $"{BackingFieldAccessedString}",
                         $"(includeChildrenMode != OriginalIncludeChildrenMode)");
                     sb.AppendLine(
-                        $@"WriteNonLazinatorObject{omitLengthSuffix}(
+                        $@"{ContainingObjectDescription.MaybeAwaitWord}WriteNonLazinatorObject{omitLengthSuffix}{ContainingObjectDescription.MaybeAsyncWord}(
                     nonLazinatorObject: {BackingFieldString}, isBelievedDirty: {isBelievedDirtyString},
-                    isAccessed: {BackingFieldAccessedString}, writer: ref writer{ContainingObjectDescription.MaybeAsyncConditional(".Writer", "")},
-                    getChildSliceForFieldFn: () => {ChildSliceStringMaybeAsync()},
+                    isAccessed: {BackingFieldAccessedString}, writer: {ContainingObjectDescription.MaybeAsyncConditional("writer", "ref writer")},
+                    getChildSliceForFieldFn: {ContainingObjectDescription.Maybe_asyncWord}() => {ChildSliceStringMaybeAsync()},
                     verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                     binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
                         {DirectConverterTypeNamePrefix}{writeMethodName}(ref w, {BackingFieldStringOrContainedSpanWithPossibleException(null)},
