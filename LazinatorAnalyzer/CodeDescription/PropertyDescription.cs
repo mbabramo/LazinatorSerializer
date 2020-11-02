@@ -261,7 +261,7 @@ namespace Lazinator.CodeDescription
         private bool IsGuaranteedFixedLength { get; set; }
         private int FixedLength { get; set; }
         private bool SingleByteLength { get; set; }
-        private string LengthPrefixTypeString => IsGuaranteedFixedLength ? "out" : (SingleByteLength ? "Byte" : "Int");
+        private string LengthPrefixTypeString => IsGuaranteedFixedLength ? "out" : (SingleByteLength ? "Byte" : "Int32");
         private string WriteDefaultLengthString =>
             !IsGuaranteedFixedLength || FixedLength == 1 ?
                 $"writer.Write(({(SingleByteLength || IsGuaranteedFixedLength ? "byte" : "int")})0);"
@@ -2605,11 +2605,11 @@ namespace Lazinator.CodeDescription
                             else
                             {{
                                 void action{itemName}(ref BinaryBufferWriter w) => {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref w, {itemToConvertItemName}, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                                WriteToBinaryWithIntLengthPrefix(ref writer, action{itemName});
+                                WriteToBinaryWithInt32LengthPrefix(ref writer, action{itemName});
                             }}");
                 else return $@"
                             void action{itemName}(ref BinaryBufferWriter w) => {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref w, {itemToConvertItemName}, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                            WriteToBinaryWithIntLengthPrefix(ref writer, action{itemName});";
+                            WriteToBinaryWithInt32LengthPrefix(ref writer, action{itemName});";
             }
             else
             {

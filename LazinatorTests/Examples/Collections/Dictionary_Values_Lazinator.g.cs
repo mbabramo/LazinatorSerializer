@@ -712,7 +712,7 @@ namespace LazinatorTests.Examples.Collections
             foreach (var item in itemToConvert)
             {
                 void action(ref BinaryBufferWriter w) => ConvertToBytes_KeyValuePair_Gint_c_C32ExampleChild_g(ref w, item, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                WriteToBinaryWithIntLengthPrefix(ref writer, action);
+                WriteToBinaryWithInt32LengthPrefix(ref writer, action);
             }
         }
         
@@ -770,7 +770,7 @@ namespace LazinatorTests.Examples.Collections
             else
             {
                 void actionValue(ref BinaryBufferWriter w) => itemToConvert.Value.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                WriteToBinaryWithIntLengthPrefix(ref writer, actionValue);
+                WriteToBinaryWithInt32LengthPrefix(ref writer, actionValue);
             };
         }
         
@@ -812,7 +812,7 @@ namespace LazinatorTests.Examples.Collections
             foreach (var item in itemToConvert)
             {
                 void action(ref BinaryBufferWriter w) => ConvertToBytes_KeyValuePair_GWInt32_c_C32WInt32_g(ref w, item, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                WriteToBinaryWithIntLengthPrefix(ref writer, action);
+                WriteToBinaryWithInt32LengthPrefix(ref writer, action);
             }
         }
         
@@ -869,10 +869,10 @@ namespace LazinatorTests.Examples.Collections
         {
             
             void actionKey(ref BinaryBufferWriter w) => itemToConvert.Key.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-            WriteToBinaryWithIntLengthPrefix(ref writer, actionKey);
+            WriteToBinaryWithInt32LengthPrefix(ref writer, actionKey);
             
             void actionValue(ref BinaryBufferWriter w) => itemToConvert.Value.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-            WriteToBinaryWithIntLengthPrefix(ref writer, actionValue);
+            WriteToBinaryWithInt32LengthPrefix(ref writer, actionValue);
         }
         
         private static KeyValuePair<WInt32, WInt32> CloneOrChange_KeyValuePair_GWInt32_c_C32WInt32_g(KeyValuePair<WInt32, WInt32> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
@@ -913,7 +913,7 @@ namespace LazinatorTests.Examples.Collections
             foreach (var item in itemToConvert)
             {
                 void action(ref BinaryBufferWriter w) => ConvertToBytes_KeyValuePair_Gint_c_C32ExampleChild_g(ref w, item, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                WriteToBinaryWithIntLengthPrefix(ref writer, action);
+                WriteToBinaryWithInt32LengthPrefix(ref writer, action);
             }
         }
         
@@ -966,7 +966,7 @@ namespace LazinatorTests.Examples.Collections
             foreach (var item in itemToConvert)
             {
                 void action(ref BinaryBufferWriter w) => ConvertToBytes_KeyValuePair_Gint_c_C32ExampleChild_g(ref w, item, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                WriteToBinaryWithIntLengthPrefix(ref writer, action);
+                WriteToBinaryWithInt32LengthPrefix(ref writer, action);
             }
         }
         

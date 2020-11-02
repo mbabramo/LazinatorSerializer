@@ -719,7 +719,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     
                     void action(ref BinaryBufferWriter w) => ConvertToBytes_int_B_c_c_b_B_c_c_c_b(ref w, itemToConvert[itemIndex], includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                    WriteToBinaryWithIntLengthPrefix(ref writer, action);
+                    WriteToBinaryWithInt32LengthPrefix(ref writer, action);
                 }
                 
             }
@@ -806,7 +806,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     
                     void action(ref BinaryBufferWriter w) => ConvertToBytes_int_B_c_c_c_b(ref w, itemToConvert[itemIndex0, itemIndex1, itemIndex2], includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                    WriteToBinaryWithIntLengthPrefix(ref writer, action);
+                    WriteToBinaryWithInt32LengthPrefix(ref writer, action);
                 }
                 
             }

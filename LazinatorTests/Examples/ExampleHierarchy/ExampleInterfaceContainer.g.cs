@@ -623,7 +623,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 {
                     
                     void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex].SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                    WriteToBinaryWithIntLengthPrefix(ref writer, action);
+                    WriteToBinaryWithInt32LengthPrefix(ref writer, action);
                 }
                 
             }

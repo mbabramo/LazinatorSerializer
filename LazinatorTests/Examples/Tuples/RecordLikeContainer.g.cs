@@ -1125,7 +1125,7 @@ namespace LazinatorTests.Examples.Tuples
             else
             {
                 void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
+                WriteToBinaryWithInt32LengthPrefix(ref writer, actionExample);
             };
             
             WriteUncompressedPrimitives.WriteDouble(ref writer, itemToConvert.DoubleValue);
@@ -1196,7 +1196,7 @@ namespace LazinatorTests.Examples.Tuples
             else
             {
                 void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
+                WriteToBinaryWithInt32LengthPrefix(ref writer, actionExample);
             };
             
             CompressedIntegralTypes.WriteCompressedNullableInt(ref writer, itemToConvert.NullableInt);
@@ -1265,7 +1265,7 @@ namespace LazinatorTests.Examples.Tuples
             else
             {
                 void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
+                WriteToBinaryWithInt32LengthPrefix(ref writer, actionExample);
             };
             
             WriteUncompressedPrimitives.WriteDouble(ref writer, itemToConvert.DoubleValue);
@@ -1343,7 +1343,7 @@ namespace LazinatorTests.Examples.Tuples
             else
             {
                 void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
+                WriteToBinaryWithInt32LengthPrefix(ref writer, actionExample);
             };
             
             CompressedIntegralTypes.WriteCompressedNullableInt(ref writer, itemToConvert.NullableInt);
@@ -1407,7 +1407,7 @@ namespace LazinatorTests.Examples.Tuples
             else
             {
                 void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
+                WriteToBinaryWithInt32LengthPrefix(ref writer, actionExample);
             };
         }
         
@@ -1503,11 +1503,11 @@ namespace LazinatorTests.Examples.Tuples
             else
             {
                 void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
+                WriteToBinaryWithInt32LengthPrefix(ref writer, actionExample);
             };
             
             void actionExampleStruct(ref BinaryBufferWriter w) => itemToConvert.ExampleStruct.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-            WriteToBinaryWithIntLengthPrefix(ref writer, actionExampleStruct);
+            WriteToBinaryWithInt32LengthPrefix(ref writer, actionExampleStruct);
         }
         
         private static RecordLikeTypeWithLazinator CloneOrChange_RecordLikeTypeWithLazinator(RecordLikeTypeWithLazinator itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)

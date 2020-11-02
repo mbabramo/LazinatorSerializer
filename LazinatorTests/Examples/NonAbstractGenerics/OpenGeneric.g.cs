@@ -642,7 +642,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                         copy.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                         itemToConvert[itemIndex] = copy;
                     }
-                    WriteToBinaryWithIntLengthPrefix(ref writer, action);
+                    WriteToBinaryWithInt32LengthPrefix(ref writer, action);
                 }
                 
             }

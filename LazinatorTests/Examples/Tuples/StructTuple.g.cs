@@ -932,13 +932,13 @@ namespace LazinatorTests.Examples.Tuples
         {
             
             void actionItem1(ref BinaryBufferWriter w) => itemToConvert.Item1?.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-            WriteToBinaryWithIntLengthPrefix(ref writer, actionItem1);
+            WriteToBinaryWithInt32LengthPrefix(ref writer, actionItem1);
             
             void actionItem2(ref BinaryBufferWriter w) => itemToConvert.Item2?.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-            WriteToBinaryWithIntLengthPrefix(ref writer, actionItem2);
+            WriteToBinaryWithInt32LengthPrefix(ref writer, actionItem2);
             
             void actionItem3(ref BinaryBufferWriter w) => itemToConvert.Item3?.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-            WriteToBinaryWithIntLengthPrefix(ref writer, actionItem3);
+            WriteToBinaryWithInt32LengthPrefix(ref writer, actionItem3);
         }
         
         private static (ExampleStructContainingClasses?, ExampleStructContainingClasses?, ExampleStructContainingClasses?) CloneOrChange__PExampleStructContainingClasses_n_c_C32ExampleStructContainingClasses_n_c_C32ExampleStructContainingClasses_n_p((ExampleStructContainingClasses?, ExampleStructContainingClasses?, ExampleStructContainingClasses?) itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
@@ -993,7 +993,7 @@ namespace LazinatorTests.Examples.Tuples
             else
             {
                 void actionItem2(ref BinaryBufferWriter w) => itemToConvert.Item2.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                WriteToBinaryWithIntLengthPrefix(ref writer, actionItem2);
+                WriteToBinaryWithInt32LengthPrefix(ref writer, actionItem2);
             };
             
             if (itemToConvert.Item3 == null)
@@ -1003,7 +1003,7 @@ namespace LazinatorTests.Examples.Tuples
             else
             {
                 void actionItem3(ref BinaryBufferWriter w) => NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(ref w, itemToConvert.Item3, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                WriteToBinaryWithIntLengthPrefix(ref writer, actionItem3);
+                WriteToBinaryWithInt32LengthPrefix(ref writer, actionItem3);
             }
         }
         
@@ -1049,10 +1049,10 @@ namespace LazinatorTests.Examples.Tuples
         {
             
             void actionItem1(ref BinaryBufferWriter w) => itemToConvert.Item1.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-            WriteToBinaryWithIntLengthPrefix(ref writer, actionItem1);
+            WriteToBinaryWithInt32LengthPrefix(ref writer, actionItem1);
             
             void actionItem2(ref BinaryBufferWriter w) => itemToConvert.Item2.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-            WriteToBinaryWithIntLengthPrefix(ref writer, actionItem2);
+            WriteToBinaryWithInt32LengthPrefix(ref writer, actionItem2);
         }
         
         private static (WInt32, WInt32) CloneOrChange__PWInt32_c_C32WInt32_p((WInt32, WInt32) itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)

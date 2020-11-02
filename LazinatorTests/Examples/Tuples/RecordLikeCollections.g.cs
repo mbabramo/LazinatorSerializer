@@ -585,7 +585,7 @@ namespace LazinatorTests.Examples.Tuples
             foreach (var item in itemToConvert)
             {
                 void action(ref BinaryBufferWriter w) => ConvertToBytes_KeyValuePair_Gint_c_C32RecordLikeContainer_g(ref w, item, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                WriteToBinaryWithIntLengthPrefix(ref writer, action);
+                WriteToBinaryWithInt32LengthPrefix(ref writer, action);
             }
         }
         
@@ -643,7 +643,7 @@ namespace LazinatorTests.Examples.Tuples
             else
             {
                 void actionValue(ref BinaryBufferWriter w) => itemToConvert.Value.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                WriteToBinaryWithIntLengthPrefix(ref writer, actionValue);
+                WriteToBinaryWithInt32LengthPrefix(ref writer, actionValue);
             };
         }
         
@@ -685,7 +685,7 @@ namespace LazinatorTests.Examples.Tuples
             foreach (var item in itemToConvert)
             {
                 void action(ref BinaryBufferWriter w) => ConvertToBytes_KeyValuePair_Gint_c_C32RecordLikeTypeWithLazinator_g(ref w, item, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                WriteToBinaryWithIntLengthPrefix(ref writer, action);
+                WriteToBinaryWithInt32LengthPrefix(ref writer, action);
             }
         }
         
@@ -737,7 +737,7 @@ namespace LazinatorTests.Examples.Tuples
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Key);
             
             void actionValue(ref BinaryBufferWriter w) => ConvertToBytes_RecordLikeTypeWithLazinator(ref w, itemToConvert.Value, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-            WriteToBinaryWithIntLengthPrefix(ref writer, actionValue);
+            WriteToBinaryWithInt32LengthPrefix(ref writer, actionValue);
         }
         
         private static KeyValuePair<Int32, RecordLikeTypeWithLazinator> CloneOrChange_KeyValuePair_Gint_c_C32RecordLikeTypeWithLazinator_g(KeyValuePair<Int32, RecordLikeTypeWithLazinator> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
@@ -796,11 +796,11 @@ namespace LazinatorTests.Examples.Tuples
             else
             {
                 void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                WriteToBinaryWithIntLengthPrefix(ref writer, actionExample);
+                WriteToBinaryWithInt32LengthPrefix(ref writer, actionExample);
             };
             
             void actionExampleStruct(ref BinaryBufferWriter w) => itemToConvert.ExampleStruct.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-            WriteToBinaryWithIntLengthPrefix(ref writer, actionExampleStruct);
+            WriteToBinaryWithInt32LengthPrefix(ref writer, actionExampleStruct);
         }
         
         private static RecordLikeTypeWithLazinator CloneOrChange_RecordLikeTypeWithLazinator(RecordLikeTypeWithLazinator itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)

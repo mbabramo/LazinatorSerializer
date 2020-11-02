@@ -489,7 +489,7 @@ namespace LazinatorTests.Examples.Tuples
             else
             {
                 void actionValue(ref BinaryBufferWriter w) => itemToConvert.Value.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-                WriteToBinaryWithIntLengthPrefix(ref writer, actionValue);
+                WriteToBinaryWithInt32LengthPrefix(ref writer, actionValue);
             };
         }
         
