@@ -112,7 +112,6 @@ namespace LazinatorCollections.Remote
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Key_ByteIndex, _Key_ByteLength, true, false, null);
-                
                 _Key = DeserializationFactory.Instance.CreateBasedOnType<TKey>(childData, this); 
             }
             _Key_Accessed = true;
@@ -165,7 +164,6 @@ namespace LazinatorCollections.Remote
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Local_ByteIndex, _Local_ByteLength, true, false, null);
-                
                 _Local = DeserializationFactory.Instance.CreateBasedOnType<TValue>(childData, this); 
             }
             _Local_Accessed = true;

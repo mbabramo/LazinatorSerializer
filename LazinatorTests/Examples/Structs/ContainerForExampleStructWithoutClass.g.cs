@@ -93,8 +93,7 @@ namespace LazinatorTests.Examples.Structs
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleNullableStruct_ByteIndex, _ExampleNullableStruct_ByteLength, true, false, null);
-                if (childData.Length == 0)
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleNullableStruct_ByteIndex, _ExampleNullableStruct_ByteLength, true, false, null);if (childData.Length == 0)
                 {
                     _ExampleNullableStruct = default;
                 }
@@ -172,8 +171,7 @@ namespace LazinatorTests.Examples.Structs
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleStructWithoutClass_ByteIndex, _ExampleStructWithoutClass_ByteLength, true, false, null);
-                _ExampleStructWithoutClass = new ExampleStructWithoutClass(childData)
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleStructWithoutClass_ByteIndex, _ExampleStructWithoutClass_ByteLength, true, false, null);_ExampleStructWithoutClass = new ExampleStructWithoutClass(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };

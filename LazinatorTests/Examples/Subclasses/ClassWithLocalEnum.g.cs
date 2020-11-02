@@ -84,8 +84,7 @@ namespace LazinatorTests.Examples.Subclasses
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyEnumList_ByteIndex, _MyEnumList_ByteLength, true, false, null);
-                _MyEnumList = ConvertFromBytes_List_GEnumWithinClass_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyEnumList_ByteIndex, _MyEnumList_ByteLength, true, false, null);_MyEnumList = ConvertFromBytes_List_GEnumWithinClass_g(childData);
             }
             _MyEnumList_Accessed = true;
         }

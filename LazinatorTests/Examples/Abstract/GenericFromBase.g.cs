@@ -102,7 +102,6 @@ namespace LazinatorTests.Examples.Abstract
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, true, false, null);
-                
                 _MyT = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
             }
             _MyT_Accessed = true;

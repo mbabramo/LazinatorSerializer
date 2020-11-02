@@ -255,7 +255,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExplicitlyNullable_ByteIndex, _ExplicitlyNullable_ByteLength, true, false, null);
-                
                 _ExplicitlyNullable = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, (c, p) => new Example(c, p), childData, this); 
             }
             _ExplicitlyNullable_Accessed = true;
@@ -301,7 +300,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExplicitlyNullableInterface_ByteIndex, _ExplicitlyNullableInterface_ByteLength, true, false, null);
-                
                 _ExplicitlyNullableInterface = DeserializationFactory.Instance.CreateBasedOnType<IExample?>(childData, this); 
             }
             _ExplicitlyNullableInterface_Accessed = true;
@@ -551,8 +549,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableMemoryOfBytes_ByteIndex, _NonNullableMemoryOfBytes_ByteLength, true, false, null);
-                _NonNullableMemoryOfBytes = ConvertFromBytes_Memory_Gbyte_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableMemoryOfBytes_ByteIndex, _NonNullableMemoryOfBytes_ByteLength, true, false, null);_NonNullableMemoryOfBytes = ConvertFromBytes_Memory_Gbyte_g(childData);
             }
             _NonNullableMemoryOfBytes_Accessed = true;
         }
@@ -625,8 +622,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableReadOnlyMemoryOfBytes_ByteIndex, _NonNullableReadOnlyMemoryOfBytes_ByteLength, true, false, null);
-                _NonNullableReadOnlyMemoryOfBytes = ConvertFromBytes_ReadOnlyMemory_Gbyte_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableReadOnlyMemoryOfBytes_ByteIndex, _NonNullableReadOnlyMemoryOfBytes_ByteLength, true, false, null);_NonNullableReadOnlyMemoryOfBytes = ConvertFromBytes_ReadOnlyMemory_Gbyte_g(childData);
             }
             _NonNullableReadOnlyMemoryOfBytes_Accessed = true;
         }
@@ -777,8 +773,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableStruct_ByteIndex, _NonNullableStruct_ByteLength, true, false, null);
-                _NonNullableStruct = new ExampleStructWithoutClass(childData)
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableStruct_ByteIndex, _NonNullableStruct_ByteLength, true, false, null);_NonNullableStruct = new ExampleStructWithoutClass(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
@@ -843,8 +838,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableArrayOfNonNullables_ByteIndex, _NullableArrayOfNonNullables_ByteLength, true, false, null);
-                _NullableArrayOfNonNullables = ConvertFromBytes_Example_B_b_n(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableArrayOfNonNullables_ByteIndex, _NullableArrayOfNonNullables_ByteLength, true, false, null);_NullableArrayOfNonNullables = ConvertFromBytes_Example_B_b_n(childData);
             }
             _NullableArrayOfNonNullables_Accessed = true;
         }
@@ -880,8 +874,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableArrayOfNullables_ByteIndex, _NullableArrayOfNullables_ByteLength, true, false, null);
-                _NullableArrayOfNullables = ConvertFromBytes_Example_n_B_b_n(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableArrayOfNullables_ByteIndex, _NullableArrayOfNullables_ByteLength, true, false, null);_NullableArrayOfNullables = ConvertFromBytes_Example_n_B_b_n(childData);
             }
             _NullableArrayOfNullables_Accessed = true;
         }
@@ -917,8 +910,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableDictionaryWithNonNullable_ByteIndex, _NullableDictionaryWithNonNullable_ByteLength, true, false, null);
-                _NullableDictionaryWithNonNullable = ConvertFromBytes_Dictionary_Gint_c_C32Example_g_n(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableDictionaryWithNonNullable_ByteIndex, _NullableDictionaryWithNonNullable_ByteLength, true, false, null);_NullableDictionaryWithNonNullable = ConvertFromBytes_Dictionary_Gint_c_C32Example_g_n(childData);
             }
             _NullableDictionaryWithNonNullable_Accessed = true;
         }
@@ -954,8 +946,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableDictionaryWithNullable_ByteIndex, _NullableDictionaryWithNullable_ByteLength, true, false, null);
-                _NullableDictionaryWithNullable = ConvertFromBytes_Dictionary_Gint_c_C32Example_n_g_n(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableDictionaryWithNullable_ByteIndex, _NullableDictionaryWithNullable_ByteLength, true, false, null);_NullableDictionaryWithNullable = ConvertFromBytes_Dictionary_Gint_c_C32Example_n_g_n(childData);
             }
             _NullableDictionaryWithNullable_Accessed = true;
         }
@@ -1000,7 +991,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableLazinatorListNonNullable_ByteIndex, _NullableLazinatorListNonNullable_ByteLength, true, false, null);
-                
                 _NullableLazinatorListNonNullable = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, (c, p) => new LazinatorList<Example>(c, p), childData, this); 
             }
             _NullableLazinatorListNonNullable_Accessed = true;
@@ -1046,7 +1036,6 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableLazinatorListNullable_ByteIndex, _NullableLazinatorListNullable_ByteLength, true, false, null);
-                
                 _NullableLazinatorListNullable = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, (c, p) => new LazinatorList<Example?>(c, p), childData, this); 
             }
             _NullableLazinatorListNullable_Accessed = true;
@@ -1083,8 +1072,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableListOfNonNullables_ByteIndex, _NullableListOfNonNullables_ByteLength, true, false, null);
-                _NullableListOfNonNullables = ConvertFromBytes_List_GExample_g_n(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableListOfNonNullables_ByteIndex, _NullableListOfNonNullables_ByteLength, true, false, null);_NullableListOfNonNullables = ConvertFromBytes_List_GExample_g_n(childData);
             }
             _NullableListOfNonNullables_Accessed = true;
         }
@@ -1120,8 +1108,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableListOfNullables_ByteIndex, _NullableListOfNullables_ByteLength, true, false, null);
-                _NullableListOfNullables = ConvertFromBytes_List_GExample_n_g_n(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableListOfNullables_ByteIndex, _NullableListOfNullables_ByteLength, true, false, null);_NullableListOfNullables = ConvertFromBytes_List_GExample_n_g_n(childData);
             }
             _NullableListOfNullables_Accessed = true;
         }
@@ -1157,8 +1144,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableMemoryOfBytes_ByteIndex, _NullableMemoryOfBytes_ByteLength, true, false, null);
-                _NullableMemoryOfBytes = ConvertFromBytes_Memory_Gbyte_g_n(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableMemoryOfBytes_ByteIndex, _NullableMemoryOfBytes_ByteLength, true, false, null);_NullableMemoryOfBytes = ConvertFromBytes_Memory_Gbyte_g_n(childData);
             }
             _NullableMemoryOfBytes_Accessed = true;
         }
@@ -1194,8 +1180,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableQueueOfNonNullables_ByteIndex, _NullableQueueOfNonNullables_ByteLength, true, false, null);
-                _NullableQueueOfNonNullables = ConvertFromBytes_Queue_GExample_g_n(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableQueueOfNonNullables_ByteIndex, _NullableQueueOfNonNullables_ByteLength, true, false, null);_NullableQueueOfNonNullables = ConvertFromBytes_Queue_GExample_g_n(childData);
             }
             _NullableQueueOfNonNullables_Accessed = true;
         }
@@ -1231,8 +1216,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableQueueOfNullables_ByteIndex, _NullableQueueOfNullables_ByteLength, true, false, null);
-                _NullableQueueOfNullables = ConvertFromBytes_Queue_GExample_n_g_n(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableQueueOfNullables_ByteIndex, _NullableQueueOfNullables_ByteLength, true, false, null);_NullableQueueOfNullables = ConvertFromBytes_Queue_GExample_n_g_n(childData);
             }
             _NullableQueueOfNullables_Accessed = true;
         }
@@ -1268,8 +1252,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableReadOnlyMemoryOfBytes_ByteIndex, _NullableReadOnlyMemoryOfBytes_ByteLength, true, false, null);
-                _NullableReadOnlyMemoryOfBytes = ConvertFromBytes_ReadOnlyMemory_Gbyte_g_n(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableReadOnlyMemoryOfBytes_ByteIndex, _NullableReadOnlyMemoryOfBytes_ByteLength, true, false, null);_NullableReadOnlyMemoryOfBytes = ConvertFromBytes_ReadOnlyMemory_Gbyte_g_n(childData);
             }
             _NullableReadOnlyMemoryOfBytes_Accessed = true;
         }
@@ -1305,8 +1288,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableRecordLikeClass_ByteIndex, _NullableRecordLikeClass_ByteLength, true, false, null);
-                _NullableRecordLikeClass = ConvertFromBytes_RecordLikeClass_n(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableRecordLikeClass_ByteIndex, _NullableRecordLikeClass_ByteLength, true, false, null);_NullableRecordLikeClass = ConvertFromBytes_RecordLikeClass_n(childData);
             }
             _NullableRecordLikeClass_Accessed = true;
         }
@@ -1342,8 +1324,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableRecordLikeStruct_ByteIndex, _NullableRecordLikeStruct_ByteLength, true, false, null);
-                _NullableRecordLikeStruct = ConvertFromBytes_RecordLikeStruct_n(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableRecordLikeStruct_ByteIndex, _NullableRecordLikeStruct_ByteLength, true, false, null);_NullableRecordLikeStruct = ConvertFromBytes_RecordLikeStruct_n(childData);
             }
             _NullableRecordLikeStruct_Accessed = true;
         }
@@ -1379,8 +1360,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableRegularTupleWithNonNullable_ByteIndex, _NullableRegularTupleWithNonNullable_ByteLength, true, false, null);
-                _NullableRegularTupleWithNonNullable = ConvertFromBytes_Tuple_GExample_c_C32int_g_n(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableRegularTupleWithNonNullable_ByteIndex, _NullableRegularTupleWithNonNullable_ByteLength, true, false, null);_NullableRegularTupleWithNonNullable = ConvertFromBytes_Tuple_GExample_c_C32int_g_n(childData);
             }
             _NullableRegularTupleWithNonNullable_Accessed = true;
         }
@@ -1416,8 +1396,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableRegularTupleWithNullable_ByteIndex, _NullableRegularTupleWithNullable_ByteLength, true, false, null);
-                _NullableRegularTupleWithNullable = ConvertFromBytes_Tuple_GExample_n_c_C32int_g_n(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableRegularTupleWithNullable_ByteIndex, _NullableRegularTupleWithNullable_ByteLength, true, false, null);_NullableRegularTupleWithNullable = ConvertFromBytes_Tuple_GExample_n_c_C32int_g_n(childData);
             }
             _NullableRegularTupleWithNullable_Accessed = true;
         }
@@ -1453,8 +1432,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableStackOfNonNullables_ByteIndex, _NullableStackOfNonNullables_ByteLength, true, false, null);
-                _NullableStackOfNonNullables = ConvertFromBytes_Stack_GExample_g_n(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableStackOfNonNullables_ByteIndex, _NullableStackOfNonNullables_ByteLength, true, false, null);_NullableStackOfNonNullables = ConvertFromBytes_Stack_GExample_g_n(childData);
             }
             _NullableStackOfNonNullables_Accessed = true;
         }
@@ -1490,8 +1468,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableStackOfNullables_ByteIndex, _NullableStackOfNullables_ByteLength, true, false, null);
-                _NullableStackOfNullables = ConvertFromBytes_Stack_GExample_n_g_n(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableStackOfNullables_ByteIndex, _NullableStackOfNullables_ByteLength, true, false, null);_NullableStackOfNullables = ConvertFromBytes_Stack_GExample_n_g_n(childData);
             }
             _NullableStackOfNullables_Accessed = true;
         }
@@ -1534,8 +1511,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableStruct_ByteIndex, _NullableStruct_ByteLength, true, false, null);
-                if (childData.Length == 0)
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableStruct_ByteIndex, _NullableStruct_ByteLength, true, false, null);if (childData.Length == 0)
                 {
                     _NullableStruct = default;
                 }
@@ -1611,8 +1587,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableValueTupleWithNonNullable_ByteIndex, _NullableValueTupleWithNonNullable_ByteLength, true, false, null);
-                _NullableValueTupleWithNonNullable = ConvertFromBytes__PExample_c_C32int_p_n(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableValueTupleWithNonNullable_ByteIndex, _NullableValueTupleWithNonNullable_ByteLength, true, false, null);_NullableValueTupleWithNonNullable = ConvertFromBytes__PExample_c_C32int_p_n(childData);
             }
             _NullableValueTupleWithNonNullable_Accessed = true;
         }
@@ -1648,8 +1623,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableValueTupleWithNullable_ByteIndex, _NullableValueTupleWithNullable_ByteLength, true, false, null);
-                _NullableValueTupleWithNullable = ConvertFromBytes__PExample_n_c_C32int_p_n(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NullableValueTupleWithNullable_ByteIndex, _NullableValueTupleWithNullable_ByteLength, true, false, null);_NullableValueTupleWithNullable = ConvertFromBytes__PExample_n_c_C32int_p_n(childData);
             }
             _NullableValueTupleWithNullable_Accessed = true;
         }
@@ -1685,8 +1659,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ValueTupleWithNonNullable_ByteIndex, _ValueTupleWithNonNullable_ByteLength, true, false, null);
-                _ValueTupleWithNonNullable = ConvertFromBytes__PExample_c_C32int_p(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ValueTupleWithNonNullable_ByteIndex, _ValueTupleWithNonNullable_ByteLength, true, false, null);_ValueTupleWithNonNullable = ConvertFromBytes__PExample_c_C32int_p(childData);
             }
             _ValueTupleWithNonNullable_Accessed = true;
         }
@@ -1722,8 +1695,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ValueTupleWithNullable_ByteIndex, _ValueTupleWithNullable_ByteLength, true, false, null);
-                _ValueTupleWithNullable = ConvertFromBytes__PExample_n_c_C32int_p(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ValueTupleWithNullable_ByteIndex, _ValueTupleWithNullable_ByteLength, true, false, null);_ValueTupleWithNullable = ConvertFromBytes__PExample_n_c_C32int_p(childData);
             }
             _ValueTupleWithNullable_Accessed = true;
         }
@@ -1831,46 +1803,28 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             HasChanged = false;
             DescendantHasChanged = false;LazinatorMemory childData;
             
-            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableArrayOfNonNullables_ByteIndex, _NonNullableArrayOfNonNullables_ByteLength, true, false, null);
-            _NonNullableArrayOfNonNullables = ConvertFromBytes_Example_B_b(childData);
-            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableArrayOfNullables_ByteIndex, _NonNullableArrayOfNullables_ByteLength, true, false, null);
-            _NonNullableArrayOfNullables = ConvertFromBytes_Example_n_B_b(childData);
+            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableArrayOfNonNullables_ByteIndex, _NonNullableArrayOfNonNullables_ByteLength, true, false, null);_NonNullableArrayOfNonNullables = ConvertFromBytes_Example_B_b(childData);
+            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableArrayOfNullables_ByteIndex, _NonNullableArrayOfNullables_ByteLength, true, false, null);_NonNullableArrayOfNullables = ConvertFromBytes_Example_n_B_b(childData);
             childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableClass_ByteIndex, _NonNullableClass_ByteLength, true, false, null);
-            
             _NonNullableClass = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, (c, p) => new Example(c, p), childData, this); 
-            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableDictionaryWithNonNullable_ByteIndex, _NonNullableDictionaryWithNonNullable_ByteLength, true, false, null);
-            _NonNullableDictionaryWithNonNullable = ConvertFromBytes_Dictionary_Gint_c_C32Example_g(childData);
-            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableDictionaryWithNullable_ByteIndex, _NonNullableDictionaryWithNullable_ByteLength, true, false, null);
-            _NonNullableDictionaryWithNullable = ConvertFromBytes_Dictionary_Gint_c_C32Example_n_g(childData);
+            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableDictionaryWithNonNullable_ByteIndex, _NonNullableDictionaryWithNonNullable_ByteLength, true, false, null);_NonNullableDictionaryWithNonNullable = ConvertFromBytes_Dictionary_Gint_c_C32Example_g(childData);
+            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableDictionaryWithNullable_ByteIndex, _NonNullableDictionaryWithNullable_ByteLength, true, false, null);_NonNullableDictionaryWithNullable = ConvertFromBytes_Dictionary_Gint_c_C32Example_n_g(childData);
             childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableInterface_ByteIndex, _NonNullableInterface_ByteLength, true, false, null);
-            
             _NonNullableInterface = DeserializationFactory.Instance.CreateBasedOnType<IExample>(childData, this); 
             childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableLazinatorListNonNullable_ByteIndex, _NonNullableLazinatorListNonNullable_ByteLength, true, false, null);
-            
             _NonNullableLazinatorListNonNullable = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, (c, p) => new LazinatorList<Example>(c, p), childData, this); 
             childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableLazinatorListNullable_ByteIndex, _NonNullableLazinatorListNullable_ByteLength, true, false, null);
-            
             _NonNullableLazinatorListNullable = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, (c, p) => new LazinatorList<Example?>(c, p), childData, this); 
-            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableListOfNonNullables_ByteIndex, _NonNullableListOfNonNullables_ByteLength, true, false, null);
-            _NonNullableListOfNonNullables = ConvertFromBytes_List_GExample_g(childData);
-            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableListOfNullables_ByteIndex, _NonNullableListOfNullables_ByteLength, true, false, null);
-            _NonNullableListOfNullables = ConvertFromBytes_List_GExample_n_g(childData);
-            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableQueueOfNonNullables_ByteIndex, _NonNullableQueueOfNonNullables_ByteLength, true, false, null);
-            _NonNullableQueueOfNonNullables = ConvertFromBytes_Queue_GExample_g(childData);
-            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableQueueOfNullables_ByteIndex, _NonNullableQueueOfNullables_ByteLength, true, false, null);
-            _NonNullableQueueOfNullables = ConvertFromBytes_Queue_GExample_n_g(childData);
-            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableRecordLikeClass_ByteIndex, _NonNullableRecordLikeClass_ByteLength, true, false, null);
-            _NonNullableRecordLikeClass = ConvertFromBytes_RecordLikeClass(childData);
-            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableRecordLikeStruct_ByteIndex, _NonNullableRecordLikeStruct_ByteLength, true, false, null);
-            _NonNullableRecordLikeStruct = ConvertFromBytes_RecordLikeStruct(childData);
-            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableRegularTupleWithNonNullable_ByteIndex, _NonNullableRegularTupleWithNonNullable_ByteLength, true, false, null);
-            _NonNullableRegularTupleWithNonNullable = ConvertFromBytes_Tuple_GExample_c_C32int_g(childData);
-            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableRegularTupleWithNullable_ByteIndex, _NonNullableRegularTupleWithNullable_ByteLength, true, false, null);
-            _NonNullableRegularTupleWithNullable = ConvertFromBytes_Tuple_GExample_n_c_C32int_g(childData);
-            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableStackOfNonNullables_ByteIndex, _NonNullableStackOfNonNullables_ByteLength, true, false, null);
-            _NonNullableStackOfNonNullables = ConvertFromBytes_Stack_GExample_g(childData);
-            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableStackOfNullables_ByteIndex, _NonNullableStackOfNullables_ByteLength, true, false, null);
-            _NonNullableStackOfNullables = ConvertFromBytes_Stack_GExample_n_g(childData);
+            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableListOfNonNullables_ByteIndex, _NonNullableListOfNonNullables_ByteLength, true, false, null);_NonNullableListOfNonNullables = ConvertFromBytes_List_GExample_g(childData);
+            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableListOfNullables_ByteIndex, _NonNullableListOfNullables_ByteLength, true, false, null);_NonNullableListOfNullables = ConvertFromBytes_List_GExample_n_g(childData);
+            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableQueueOfNonNullables_ByteIndex, _NonNullableQueueOfNonNullables_ByteLength, true, false, null);_NonNullableQueueOfNonNullables = ConvertFromBytes_Queue_GExample_g(childData);
+            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableQueueOfNullables_ByteIndex, _NonNullableQueueOfNullables_ByteLength, true, false, null);_NonNullableQueueOfNullables = ConvertFromBytes_Queue_GExample_n_g(childData);
+            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableRecordLikeClass_ByteIndex, _NonNullableRecordLikeClass_ByteLength, true, false, null);_NonNullableRecordLikeClass = ConvertFromBytes_RecordLikeClass(childData);
+            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableRecordLikeStruct_ByteIndex, _NonNullableRecordLikeStruct_ByteLength, true, false, null);_NonNullableRecordLikeStruct = ConvertFromBytes_RecordLikeStruct(childData);
+            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableRegularTupleWithNonNullable_ByteIndex, _NonNullableRegularTupleWithNonNullable_ByteLength, true, false, null);_NonNullableRegularTupleWithNonNullable = ConvertFromBytes_Tuple_GExample_c_C32int_g(childData);
+            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableRegularTupleWithNullable_ByteIndex, _NonNullableRegularTupleWithNullable_ByteLength, true, false, null);_NonNullableRegularTupleWithNullable = ConvertFromBytes_Tuple_GExample_n_c_C32int_g(childData);
+            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableStackOfNonNullables_ByteIndex, _NonNullableStackOfNonNullables_ByteLength, true, false, null);_NonNullableStackOfNonNullables = ConvertFromBytes_Stack_GExample_g(childData);
+            childData = GetChildSlice(LazinatorMemoryStorage, _NonNullableStackOfNullables_ByteIndex, _NonNullableStackOfNullables_ByteLength, true, false, null);_NonNullableStackOfNullables = ConvertFromBytes_Stack_GExample_n_g(childData);
         }
         
         public virtual LazinatorParentsCollection LazinatorParents { get; set; }

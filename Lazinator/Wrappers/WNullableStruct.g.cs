@@ -89,7 +89,6 @@ namespace Lazinator.Wrappers
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonNullValue_ByteIndex, _NonNullValue_ByteLength, true, false, null);
-                
                 _NonNullValue = DeserializationFactory.Instance.CreateBasedOnType<T>(childData); 
             }
             _NonNullValue_Accessed = true;

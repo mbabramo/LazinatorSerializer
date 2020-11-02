@@ -100,7 +100,6 @@ namespace LazinatorCollections.Dictionary
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Buckets_ByteIndex, _Buckets_ByteLength, true, false, null);
-                
                 _Buckets = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, (c, p) => new LazinatorList<DictionaryBucket<TKey, TValue>>(c, p), childData, this); 
             }
             _Buckets_Accessed = true;

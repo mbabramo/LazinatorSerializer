@@ -116,7 +116,6 @@ namespace LazinatorCollections
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _FirstNode_ByteIndex, _FirstNode_ByteLength, true, false, null);
-                
                 _FirstNode = DeserializationFactory.Instance.CreateBaseOrDerivedType(224, (c, p) => new LazinatorLinkedListNode<T>(c, p), childData, this); 
             }
             _FirstNode_Accessed = true;

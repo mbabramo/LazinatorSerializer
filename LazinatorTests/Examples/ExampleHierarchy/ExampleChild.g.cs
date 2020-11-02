@@ -142,7 +142,6 @@ namespace LazinatorTests.Examples
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleGrandchild_ByteIndex, _MyExampleGrandchild_ByteLength, true, false, null);
                 childData.LoadInitialMemory();
-                
                 _MyExampleGrandchild = DeserializationFactory.Instance.CreateBaseOrDerivedType(1079, (c, p) => new ExampleGrandchild(c, p), childData, this); 
                 childData.ConsiderUnloadInitialMemory();
             }
@@ -157,7 +156,6 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = await GetChildSliceAsync(LazinatorMemoryStorage, _MyExampleGrandchild_ByteIndex, _MyExampleGrandchild_ByteLength, true, false, null);
-                
                 _MyExampleGrandchild = DeserializationFactory.Instance.CreateBaseOrDerivedType(1079, (c, p) => new ExampleGrandchild(c, p), childData, this); 
                 await childData.ConsiderUnloadInitialMemoryAsync();
             }
@@ -213,7 +211,6 @@ namespace LazinatorTests.Examples
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyWrapperContainer_ByteIndex, _MyWrapperContainer_ByteLength, true, false, null);
                 childData.LoadInitialMemory();
-                
                 _MyWrapperContainer = DeserializationFactory.Instance.CreateBaseOrDerivedType(1048, (c, p) => new WrapperContainer(c, p), childData, this); 
                 childData.ConsiderUnloadInitialMemory();
             }
@@ -228,7 +225,6 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = await GetChildSliceAsync(LazinatorMemoryStorage, _MyWrapperContainer_ByteIndex, _MyWrapperContainer_ByteLength, true, false, null);
-                
                 _MyWrapperContainer = DeserializationFactory.Instance.CreateBaseOrDerivedType(1048, (c, p) => new WrapperContainer(c, p), childData, this); 
                 await childData.ConsiderUnloadInitialMemoryAsync();
             }

@@ -78,7 +78,6 @@ namespace LazinatorTests.Examples.Abstract
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _AbstractProperty_ByteIndex, _AbstractProperty_ByteLength, true, false, null);
-                
                 _AbstractProperty = DeserializationFactory.Instance.CreateAbstractType<Abstract1>(childData, this); 
             }
             _AbstractProperty_Accessed = true;

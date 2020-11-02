@@ -72,8 +72,7 @@ namespace LazinatorTests.Examples.Structs
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, true, false, null);
-                _WrappedInt = new WInt32(childData)
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, true, false, null);_WrappedInt = new WInt32(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };

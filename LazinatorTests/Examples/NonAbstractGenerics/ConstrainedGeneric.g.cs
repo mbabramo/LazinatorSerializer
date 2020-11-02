@@ -81,7 +81,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNullableT_ByteIndex, _MyNullableT_ByteLength, true, false, null);
-                
                 _MyNullableT = DeserializationFactory.Instance.CreateBasedOnType<T?>(childData, this); 
             }
             _MyNullableT_Accessed = true;
@@ -121,7 +120,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, true, false, null);
-                
                 _MyT = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
             }
             _MyT_Accessed = true;
@@ -178,7 +176,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyU_ByteIndex, _MyU_ByteLength, true, false, null);
-                
                 _MyU = DeserializationFactory.Instance.CreateBasedOnType<U>(childData, this); 
             }
             _MyU_Accessed = true;

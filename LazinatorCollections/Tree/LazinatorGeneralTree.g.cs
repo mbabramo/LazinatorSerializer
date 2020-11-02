@@ -85,7 +85,6 @@ namespace LazinatorCollections.Tree
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Children_ByteIndex, _Children_ByteLength, true, false, null);
-                
                 _Children = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, (c, p) => new LazinatorList<LazinatorGeneralTree<T>>(c, p), childData, this); 
             }
             _Children_Accessed = true;
@@ -145,7 +144,6 @@ namespace LazinatorCollections.Tree
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Item_ByteIndex, _Item_ByteLength, true, false, null);
-                
                 _Item = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
             }
             _Item_Accessed = true;

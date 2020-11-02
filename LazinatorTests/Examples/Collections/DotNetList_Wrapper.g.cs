@@ -75,8 +75,7 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListInt_ByteIndex, _MyListInt_ByteLength, true, false, null);
-                _MyListInt = ConvertFromBytes_List_GWInt32_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListInt_ByteIndex, _MyListInt_ByteLength, true, false, null);_MyListInt = ConvertFromBytes_List_GWInt32_g(childData);
             }
             _MyListInt_Accessed = true;
         }
@@ -130,8 +129,7 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableByte_ByteIndex, _MyListNullableByte_ByteLength, true, false, null);
-                _MyListNullableByte = ConvertFromBytes_List_GWNullableByte_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableByte_ByteIndex, _MyListNullableByte_ByteLength, true, false, null);_MyListNullableByte = ConvertFromBytes_List_GWNullableByte_g(childData);
             }
             _MyListNullableByte_Accessed = true;
         }
@@ -167,8 +165,7 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableInt_ByteIndex, _MyListNullableInt_ByteLength, true, false, null);
-                _MyListNullableInt = ConvertFromBytes_List_GWNullableInt32_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableInt_ByteIndex, _MyListNullableInt_ByteLength, true, false, null);_MyListNullableInt = ConvertFromBytes_List_GWNullableInt32_g(childData);
             }
             _MyListNullableInt_Accessed = true;
         }

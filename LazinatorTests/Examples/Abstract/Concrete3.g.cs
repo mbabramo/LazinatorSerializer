@@ -125,7 +125,6 @@ namespace LazinatorTests.Examples.Abstract
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Example2_ByteIndex, _Example2_ByteLength, true, false, null);
-                
                 _Example2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, (c, p) => new Example(c, p), childData, this); 
             }
             _Example2_Accessed = true;
@@ -170,7 +169,6 @@ namespace LazinatorTests.Examples.Abstract
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Example3_ByteIndex, _Example3_ByteLength, true, false, null);
-                
                 _Example3 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, (c, p) => new Example(c, p), childData, this); 
             }
             _Example3_Accessed = true;
@@ -206,8 +204,7 @@ namespace LazinatorTests.Examples.Abstract
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList1_ByteIndex, _IntList1_ByteLength, true, false, null);
-                _IntList1 = ConvertFromBytes_List_Gint_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList1_ByteIndex, _IntList1_ByteLength, true, false, null);_IntList1 = ConvertFromBytes_List_Gint_g(childData);
             }
             _IntList1_Accessed = true;
         }
@@ -242,8 +239,7 @@ namespace LazinatorTests.Examples.Abstract
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList2_ByteIndex, _IntList2_ByteLength, true, false, null);
-                _IntList2 = ConvertFromBytes_List_Gint_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList2_ByteIndex, _IntList2_ByteLength, true, false, null);_IntList2 = ConvertFromBytes_List_Gint_g(childData);
             }
             _IntList2_Accessed = true;
         }
@@ -279,8 +275,7 @@ namespace LazinatorTests.Examples.Abstract
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList3_ByteIndex, _IntList3_ByteLength, true, false, null);
-                _IntList3 = ConvertFromBytes_List_Gint_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList3_ByteIndex, _IntList3_ByteLength, true, false, null);_IntList3 = ConvertFromBytes_List_Gint_g(childData);
             }
             _IntList3_Accessed = true;
         }

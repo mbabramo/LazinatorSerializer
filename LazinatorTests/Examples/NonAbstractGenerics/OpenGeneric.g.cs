@@ -71,8 +71,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListT_ByteIndex, _MyListT_ByteLength, true, false, null);
-                _MyListT = ConvertFromBytes_List_GT_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListT_ByteIndex, _MyListT_ByteLength, true, false, null);_MyListT = ConvertFromBytes_List_GT_g(childData);
             }
             _MyListT_Accessed = true;
         }
@@ -128,7 +127,6 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, true, false, null);
-                
                 _MyT = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
             }
             _MyT_Accessed = true;

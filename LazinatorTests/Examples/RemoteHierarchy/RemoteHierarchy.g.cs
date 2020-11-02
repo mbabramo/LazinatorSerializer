@@ -95,7 +95,6 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _RemoteLevel1Item_ByteIndex, _RemoteLevel1Item_ByteLength, true, false, null);
-                
                 _RemoteLevel1Item = DeserializationFactory.Instance.CreateBaseOrDerivedType(254, (c, p) => new Remote<WGuid, RemoteLevel1>(c, p), childData, this); 
             }
             _RemoteLevel1Item_Accessed = true;

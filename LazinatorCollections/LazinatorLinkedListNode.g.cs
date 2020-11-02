@@ -84,7 +84,6 @@ namespace LazinatorCollections
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NextNode_ByteIndex, _NextNode_ByteLength, true, false, null);
-                
                 _NextNode = DeserializationFactory.Instance.CreateBaseOrDerivedType(224, (c, p) => new LazinatorLinkedListNode<T>(c, p), childData, this); 
             }
             _NextNode_Accessed = true;
@@ -144,7 +143,6 @@ namespace LazinatorCollections
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Value_ByteIndex, _Value_ByteLength, true, false, null);
-                
                 _Value = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
             }
             _Value_Accessed = true;

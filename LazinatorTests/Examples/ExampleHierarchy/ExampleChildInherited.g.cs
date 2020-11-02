@@ -91,7 +91,6 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyGrandchildInInherited_ByteIndex, _MyGrandchildInInherited_ByteLength, true, false, null);
-                
                 _MyGrandchildInInherited = DeserializationFactory.Instance.CreateBaseOrDerivedType(1079, (c, p) => new ExampleGrandchild(c, p), childData, this); 
             }
             _MyGrandchildInInherited_Accessed = true;

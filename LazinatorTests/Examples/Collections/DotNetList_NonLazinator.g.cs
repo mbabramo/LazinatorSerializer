@@ -73,8 +73,7 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType_ByteIndex, _MyListNonLazinatorType_ByteLength, true, false, null);
-                _MyListNonLazinatorType = ConvertFromBytes_List_GNonLazinatorClass_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType_ByteIndex, _MyListNonLazinatorType_ByteLength, true, false, null);_MyListNonLazinatorType = ConvertFromBytes_List_GNonLazinatorClass_g(childData);
             }
             _MyListNonLazinatorType_Accessed = true;
         }
@@ -128,8 +127,7 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType2_ByteIndex, _MyListNonLazinatorType2_ByteLength, true, false, null);
-                _MyListNonLazinatorType2 = ConvertFromBytes_List_GNonLazinatorClass_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType2_ByteIndex, _MyListNonLazinatorType2_ByteLength, true, false, null);_MyListNonLazinatorType2 = ConvertFromBytes_List_GNonLazinatorClass_g(childData);
             }
             _MyListNonLazinatorType2_Accessed = true;
         }

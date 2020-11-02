@@ -93,7 +93,6 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ItemU_ByteIndex, _ItemU_ByteLength, true, false, null);
-                
                 _ItemU = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, (c, p) => new ExampleChild(c, p), childData, this); 
             }
             _ItemU_Accessed = true;

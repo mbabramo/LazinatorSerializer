@@ -102,7 +102,6 @@ namespace LazinatorCollections.Dictionary
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Keys_ByteIndex, _Keys_ByteLength, true, false, null);
-                
                 _Keys = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, (c, p) => new LazinatorList<TKey>(c, p), childData, this); 
             }
             _Keys_Accessed = true;
@@ -151,7 +150,6 @@ namespace LazinatorCollections.Dictionary
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Values_ByteIndex, _Values_ByteLength, true, false, null);
-                
                 _Values = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, (c, p) => new LazinatorList<TValue>(c, p), childData, this); 
             }
             _Values_Accessed = true;

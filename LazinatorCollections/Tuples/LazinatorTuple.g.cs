@@ -95,7 +95,6 @@ namespace LazinatorCollections.Tuples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Item1_ByteIndex, _Item1_ByteLength, true, false, null);
-                
                 _Item1 = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
             }
             _Item1_Accessed = true;
@@ -155,7 +154,6 @@ namespace LazinatorCollections.Tuples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Item2_ByteIndex, _Item2_ByteLength, true, false, null);
-                
                 _Item2 = DeserializationFactory.Instance.CreateBasedOnType<U>(childData, this); 
             }
             _Item2_Accessed = true;

@@ -80,7 +80,6 @@ namespace LazinatorTests.Examples.Hierarchy
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _RecursiveClass_ByteIndex, _RecursiveClass_ByteLength, true, false, null);
-                
                 _RecursiveClass = DeserializationFactory.Instance.CreateBaseOrDerivedType(1047, (c, p) => new RecursiveExample(c, p), childData, this); 
             }
             _RecursiveClass_Accessed = true;
@@ -126,7 +125,6 @@ namespace LazinatorTests.Examples.Hierarchy
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _RecursiveInterface_ByteIndex, _RecursiveInterface_ByteLength, true, false, null);
-                
                 _RecursiveInterface = DeserializationFactory.Instance.CreateBasedOnType<IRecursiveExample>(childData, this); 
             }
             _RecursiveInterface_Accessed = true;

@@ -81,8 +81,7 @@ namespace LazinatorCollections.OffsetList
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _FourByteItems_ByteIndex, _FourByteItems_ByteLength, true, false, null);
-                if (childData.Length == 0)
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _FourByteItems_ByteIndex, _FourByteItems_ByteLength, true, false, null);if (childData.Length == 0)
                 {
                     _FourByteItems = default;
                 }
@@ -140,8 +139,7 @@ namespace LazinatorCollections.OffsetList
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _TwoByteItems_ByteIndex, _TwoByteItems_ByteLength, true, false, null);
-                if (childData.Length == 0)
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _TwoByteItems_ByteIndex, _TwoByteItems_ByteLength, true, false, null);if (childData.Length == 0)
                 {
                     _TwoByteItems = default;
                 }

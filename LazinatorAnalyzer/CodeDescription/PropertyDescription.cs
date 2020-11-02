@@ -1330,8 +1330,7 @@ namespace Lazinator.CodeDescription
         {
             return $@"
             {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || NonNullableThatCanBeUninitialized, "LazinatorMemoryStorage.Length == 0", createDefault, $@"{IIF(defineChildData, "LazinatorMemory ")}childData = {(async ? ChildSliceStringDefinitelyAsync : ChildSliceString)};{IIF(!async && WithinAsync, $@"
-                childData.LoadInitialMemory();")}
-                {recreation}{IIF(async, $@"
+                childData.LoadInitialMemory();")}{recreation}{IIF(async, $@"
                 await childData.ConsiderUnloadInitialMemoryAsync();")}{IIF(!async && WithinAsync, $@"
                 childData.ConsiderUnloadInitialMemory();")}")}{IIF(BackingAccessFieldIncluded, $@"
             {BackingFieldAccessedString} = true;")}";

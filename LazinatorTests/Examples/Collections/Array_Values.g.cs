@@ -74,8 +74,7 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyArrayInt_ByteIndex, _MyArrayInt_ByteLength, true, false, null);
-                _MyArrayInt = ConvertFromBytes_int_B_b(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyArrayInt_ByteIndex, _MyArrayInt_ByteLength, true, false, null);_MyArrayInt = ConvertFromBytes_int_B_b(childData);
             }
             _MyArrayInt_Accessed = true;
         }
@@ -129,8 +128,7 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyArrayNullableInt_ByteIndex, _MyArrayNullableInt_ByteLength, true, false, null);
-                _MyArrayNullableInt = ConvertFromBytes_int_n_B_b(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyArrayNullableInt_ByteIndex, _MyArrayNullableInt_ByteLength, true, false, null);_MyArrayNullableInt = ConvertFromBytes_int_n_B_b(childData);
             }
             _MyArrayNullableInt_Accessed = true;
         }
@@ -166,8 +164,7 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyJaggedArrayInt_ByteIndex, _MyJaggedArrayInt_ByteLength, true, false, null);
-                _MyJaggedArrayInt = ConvertFromBytes_int_B_b_B_b(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyJaggedArrayInt_ByteIndex, _MyJaggedArrayInt_ByteLength, true, false, null);_MyJaggedArrayInt = ConvertFromBytes_int_B_b_B_b(childData);
             }
             _MyJaggedArrayInt_Accessed = true;
         }

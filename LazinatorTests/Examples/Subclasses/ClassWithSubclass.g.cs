@@ -95,7 +95,6 @@ namespace LazinatorTests.Examples.Subclasses
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _SubclassInstance1_ByteIndex, _SubclassInstance1_ByteLength, true, false, null);
-                
                 _SubclassInstance1 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1058, (c, p) => new global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass(c, p), childData, this); 
             }
             _SubclassInstance1_Accessed = true;
@@ -141,7 +140,6 @@ namespace LazinatorTests.Examples.Subclasses
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _SubclassInstance2_ByteIndex, _SubclassInstance2_ByteLength, true, false, null);
-                
                 _SubclassInstance2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1058, (c, p) => new global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass(c, p), childData, this); 
             }
             _SubclassInstance2_Accessed = true;

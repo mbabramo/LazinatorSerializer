@@ -111,7 +111,6 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyOfficialObject_ByteIndex, _MyOfficialObject_ByteLength, true, false, null);
-                
                 _MyOfficialObject = DeserializationFactory.Instance.CreateBaseOrDerivedType(1039, (c, p) => new Concrete5(c, p), childData, this); 
             }
             _MyOfficialObject_Accessed = true;
@@ -157,7 +156,6 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyUnofficialObject_ByteIndex, _MyUnofficialObject_ByteLength, true, false, null);
-                
                 _MyUnofficialObject = DeserializationFactory.Instance.CreateBaseOrDerivedType(1037, (c, p) => new Concrete3(c, p), childData, this); 
             }
             _MyUnofficialObject_Accessed = true;

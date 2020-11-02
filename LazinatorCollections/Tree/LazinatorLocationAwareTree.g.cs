@@ -82,7 +82,6 @@ namespace LazinatorCollections.Tree
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Locations_ByteIndex, _Locations_ByteLength, true, false, null);
-                
                 _Locations = DeserializationFactory.Instance.CreateBaseOrDerivedType(211, (c, p) => new LazinatorDictionary<T, LazinatorList<WInt32>>(c, p), childData, this); 
             }
             _Locations_Accessed = true;

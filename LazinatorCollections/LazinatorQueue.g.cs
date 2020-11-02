@@ -82,7 +82,6 @@ namespace LazinatorCollections
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _UnderlyingList_ByteIndex, _UnderlyingList_ByteLength, true, false, null);
-                
                 _UnderlyingList = DeserializationFactory.Instance.CreateBasedOnType<ILazinatorListable<T>>(childData, this); 
             }
             _UnderlyingList_Accessed = true;
