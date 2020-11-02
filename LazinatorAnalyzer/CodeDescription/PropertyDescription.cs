@@ -704,6 +704,8 @@ namespace Lazinator.CodeDescription
 
                     CloneSizeOfLengthAttribute sizeOfLengthAttribute = ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneSizeOfLengthAttribute>(exclusiveInterface);
                     if (sizeOfLengthAttribute == null)
+                        SizeOfLength = 4;
+                    else
                     {
                         SizeOfLength = sizeOfLengthAttribute.SizeOfLength;
                         if (SizeOfLength == 1)
