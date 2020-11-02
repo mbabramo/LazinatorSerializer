@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Support
 {
-    public enum LazinatorLengthOption : byte
+    public enum SizeOfLength : byte
     {
         SkipLength,
         Byte,
