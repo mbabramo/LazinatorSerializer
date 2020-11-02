@@ -258,6 +258,16 @@ namespace Lazinator.CodeDescription
         private string CodeAfterSet { get; set; }
         private string CodeOnDeserialized { get; set; }
         private string CodeOnAccessed { get; set; }
+        private int SizeOfLength { get; set; }
+        private string SizeOfLengthString => SizeOfLength switch
+        {
+            0 => "SizeOfLength.SkipLength",
+            1 => "SizeOfLength.Byte",
+            2 => "SizeOfLength.Int16",
+            4 => "SizeOfLength.Int32",
+            8 => "SizeOfLength.Int64",
+            _ => "SizeOfLength.Int32"
+        };
         private bool IsGuaranteedFixedLength { get; set; }
         private int FixedLength { get; set; }
         private bool SingleByteLength { get; set; }
@@ -682,18 +692,33 @@ namespace Lazinator.CodeDescription
                         throw new LazinatorCodeGenException(
                             "Lazinator attribute is required for each interface implementing ILazinator, including inherited attributes.");
                     UniqueIDForLazinatorType = attribute.UniqueID;
-                    CloneSingleByteLengthAttribute smallAttribute =
-                        ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneSingleByteLengthAttribute>(exclusiveInterface);
-                    if (smallAttribute != null)
-                        SingleByteLength = true;
 
                     CloneFixedLengthLazinatorAttribute fixedLengthAttribute =
                         ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneFixedLengthLazinatorAttribute>(exclusiveInterface);
                     if (fixedLengthAttribute != null)
                     {
                         IsGuaranteedFixedLength = true;
+                        SizeOfLength = 0;
                         FixedLength = fixedLengthAttribute.FixedLength;
                     }
+
+                    CloneSizeOfLengthAttribute sizeOfLengthAttribute = ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneSizeOfLengthAttribute>(exclusiveInterface);
+                    if (sizeOfLengthAttribute == null)
+                    {
+                        SizeOfLength = sizeOfLengthAttribute.SizeOfLength;
+                        if (SizeOfLength == 1)
+                            SingleByteLength = true;
+                        if (SizeOfLength == 0 && !IsGuaranteedFixedLength)
+                            throw new Exception("SizeOfLengthAttribute should not have SizeOfLength set to 0 unless a FixedLengthAttribute is also included.");
+                    }
+
+                    // DEBUG -- delete
+                    CloneSingleByteLengthAttribute smallAttribute =
+                        ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneSingleByteLengthAttribute>(exclusiveInterface);
+                    if (smallAttribute != null)
+                        SingleByteLength = true;
+
+                    
                 }
 
                 if (t.IsGenericType)
