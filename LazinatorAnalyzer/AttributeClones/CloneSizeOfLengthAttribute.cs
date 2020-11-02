@@ -1,8 +1,7 @@
-﻿using Lazinator.Support;
-using System;
+﻿using System;
 using System.Diagnostics;
 
-namespace Lazinator.Attributes
+namespace LazinatorAnalyzer.AttributeClones
 {
     /// <summary>
     /// Allows specification of the size of the length for objects of a particular type. This can be 1, 2, 4, or 8, and
@@ -10,11 +9,11 @@ namespace Lazinator.Attributes
     /// is used as a default, as occurs if the attribute is omitted.
     /// </summary>
     [AttributeUsage(AttributeTargets.Interface, AllowMultiple = false)]
-    public class SizeOfLengthAttribute : Attribute
+    public class CloneSizeOfLengthAttribute : Attribute
     {
         public byte SizeOfLength { get; set; }
 
-        public SizeOfLengthAttribute(byte sizeOfLength)
+        public CloneSizeOfLengthAttribute(byte sizeOfLength)
         {
             if (sizeOfLength != 0 && sizeOfLength != 1 && sizeOfLength != 2 && sizeOfLength != 4 && sizeOfLength != 8)
                 sizeOfLength = 4;

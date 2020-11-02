@@ -81,6 +81,11 @@ namespace LazinatorCodeGen.Roslyn
                     if (codeAfterSet != null && !(codeAfterSet is string))
                         return null;
                     return new CloneOnSetAttribute((string)codeBeforeSet, (string)codeAfterSet);
+                case "SizeOfLengthAttribute":
+                    var sizeOfLength = attributeData.GetAttributeConstructorValueByParameterName("sizeOfLength");
+                    if (!(sizeOfLength is byte))
+                        return null;
+                    return new CloneSizeOfLengthAttribute((byte)sizeOfLength);
                 case "SkipIfAttribute":
                     var skipCondition = attributeData.GetAttributeConstructorValueByParameterName("skipCondition");
                     if (!(skipCondition is string))
