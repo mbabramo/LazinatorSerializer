@@ -713,7 +713,7 @@ namespace Lazinator.CodeDescription
                         if (SizeOfLength == 0 && !IsGuaranteedFixedLength)
                             throw new Exception("SizeOfLengthAttribute should not have SizeOfLength set to 0 unless a FixedLengthAttribute is also included.");
                     }
-                    
+
                 }
 
                 if (t.IsGenericType)
@@ -1573,9 +1573,7 @@ namespace Lazinator.CodeDescription
         {
             if (IsPrimitive || OmitLengthBecauseDefinitelyLast || IsGuaranteedFixedLength)
                 return 0;
-            if (SingleByteLength)
-                return sizeof(byte);
-            return sizeof(int);
+            return SizeOfLength;
         }
 
         public void AppendPropertyWriteString(CodeStringBuilder sb)

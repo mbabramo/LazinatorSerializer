@@ -441,7 +441,7 @@ namespace LazinatorTests.Examples.Collections
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            int lengthForLengths = 12;
+            int lengthForLengths = 0;
             int totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
             bytesSoFar += totalChildrenSize;
         }
@@ -536,7 +536,7 @@ namespace LazinatorTests.Examples.Collections
             // write properties
             
             
-            int lengthForLengths = 12;
+            int lengthForLengths = 0;
             
             int previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition);
@@ -628,7 +628,7 @@ namespace LazinatorTests.Examples.Collections
             List<WInt32> collection = new List<WInt32>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
+                int lengthCollectionMember = span.ToByte(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                 var item = new WInt32(childData);
                 collection.Add(item);
@@ -654,7 +654,7 @@ namespace LazinatorTests.Examples.Collections
                     copy.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     itemToConvert[itemIndex] = copy;
                 }
-                WriteToBinaryWithInt32LengthPrefix(ref writer, action);
+                WriteToBinaryWithByteLengthPrefix(ref writer, action);
             }
         }
         
@@ -696,7 +696,7 @@ namespace LazinatorTests.Examples.Collections
             List<WNullableByte> collection = new List<WNullableByte>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
+                int lengthCollectionMember = span.ToByte(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                 var item = new WNullableByte(childData);
                 collection.Add(item);
@@ -722,7 +722,7 @@ namespace LazinatorTests.Examples.Collections
                     copy.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     itemToConvert[itemIndex] = copy;
                 }
-                WriteToBinaryWithInt32LengthPrefix(ref writer, action);
+                WriteToBinaryWithByteLengthPrefix(ref writer, action);
             }
         }
         
@@ -764,7 +764,7 @@ namespace LazinatorTests.Examples.Collections
             List<WNullableInt32> collection = new List<WNullableInt32>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
+                int lengthCollectionMember = span.ToByte(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                 var item = new WNullableInt32(childData);
                 collection.Add(item);
@@ -790,7 +790,7 @@ namespace LazinatorTests.Examples.Collections
                     copy.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
                     itemToConvert[itemIndex] = copy;
                 }
-                WriteToBinaryWithInt32LengthPrefix(ref writer, action);
+                WriteToBinaryWithByteLengthPrefix(ref writer, action);
             }
         }
         

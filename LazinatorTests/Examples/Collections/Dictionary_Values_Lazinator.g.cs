@@ -468,7 +468,7 @@ namespace LazinatorTests.Examples.Collections
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            int lengthForLengths = 16;
+            int lengthForLengths = 0;
             int totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
             bytesSoFar += totalChildrenSize;
         }
@@ -569,7 +569,7 @@ namespace LazinatorTests.Examples.Collections
             // write properties
             
             
-            int lengthForLengths = 16;
+            int lengthForLengths = 0;
             
             int previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition);
@@ -843,7 +843,7 @@ namespace LazinatorTests.Examples.Collections
             int bytesSoFar = 0;
             
             WInt32 item1 = default(WInt32);
-            int lengthCollectionMember_item1 = span.ToInt32(ref bytesSoFar);
+            int lengthCollectionMember_item1 = span.ToByte(ref bytesSoFar);
             if (lengthCollectionMember_item1 != 0)
             {
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item1);
@@ -852,7 +852,7 @@ namespace LazinatorTests.Examples.Collections
             bytesSoFar += lengthCollectionMember_item1;
             
             WInt32 item2 = default(WInt32);
-            int lengthCollectionMember_item2 = span.ToInt32(ref bytesSoFar);
+            int lengthCollectionMember_item2 = span.ToByte(ref bytesSoFar);
             if (lengthCollectionMember_item2 != 0)
             {
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item2);
@@ -869,10 +869,10 @@ namespace LazinatorTests.Examples.Collections
         {
             
             void actionKey(ref BinaryBufferWriter w) => itemToConvert.Key.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-            WriteToBinaryWithInt32LengthPrefix(ref writer, actionKey);
+            WriteToBinaryWithByteLengthPrefix(ref writer, actionKey);
             
             void actionValue(ref BinaryBufferWriter w) => itemToConvert.Value.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
-            WriteToBinaryWithInt32LengthPrefix(ref writer, actionValue);
+            WriteToBinaryWithByteLengthPrefix(ref writer, actionValue);
         }
         
         private static KeyValuePair<WInt32, WInt32> CloneOrChange_KeyValuePair_GWInt32_c_C32WInt32_g(KeyValuePair<WInt32, WInt32> itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
