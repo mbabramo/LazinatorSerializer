@@ -180,6 +180,7 @@ namespace Lazinator.CodeDescription
         public string AwaitAndNoteAsyncUsed => AsyncTemplate.AwaitAndNoteAsyncUsed();
         public string NoteAsyncUsed => AsyncTemplate.NoteAsyncUsed();
         public string MaybeAsyncWord => AsyncTemplate.MaybeAsyncWordAsync();
+        public string Maybe_asyncWord => AsyncTemplate.MaybeAsyncWord_async();
         public string MaybeAwaitWordConditional(bool condition) => condition ? MaybeAwaitWord : "";
         public string MaybeAsyncWordConditional(bool condition) => condition ? MaybeAsyncWord : "";
         public string MaybeIAsyncEnumerable => AsyncTemplate.MaybeIAsyncEnumerable();

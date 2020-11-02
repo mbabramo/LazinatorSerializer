@@ -63,7 +63,9 @@ namespace Lazinator.CodeDescription
         internal bool IsLast { get; set; }
         private bool OmitLengthBecauseDefinitelyLast => (IsLast && ContainingObjectDescription.IsSealedOrStruct && ContainingObjectDescription.Version == -1);
         private string ChildSliceString => $"GetChildSlice(LazinatorMemoryStorage, {BackingFieldByteIndex}, {BackingFieldByteLength}{ChildSliceLastParametersString})"; 
-        private string ChildSliceStringMaybeAsync => $"{ContainingObjectDescription.MaybeAwaitWord}GetChildSlice{ContainingObjectDescription.MaybeAsyncWord}(LazinatorMemoryStorage, {BackingFieldByteIndex}, {BackingFieldByteLength}{ChildSliceLastParametersString})";
+        private string ChildSliceStringMaybeAsync(bool couldBeAsync = true) => couldBeAsync && ContainingObjectDescription.AsyncLazinatorMemory ? $"{ContainingObjectDescription.MaybeAwaitWord}GetChildSlice{ContainingObjectDescription.MaybeAsyncWord}(LazinatorMemoryStorage, {BackingFieldByteIndex}, {BackingFieldByteLength}{ChildSliceLastParametersString})" : ChildSliceString;
+        private string ChildSliceStringDefinitelyAsync => $"await GetChildSliceAsync(LazinatorMemoryStorage, {BackingFieldByteIndex}, {BackingFieldByteLength}{ChildSliceLastParametersString})";
+
         private bool AllLengthsPrecedeChildren => true;
         public bool SkipLengthForThisProperty => IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast;
         public bool UsesLengthValue => AllLengthsPrecedeChildren && !SkipLengthForThisProperty && IsLazinator;
@@ -1324,7 +1326,7 @@ namespace Lazinator.CodeDescription
         private string GetLazinateContents(string createDefault, string recreation, bool defineChildData, bool async)
         {
             return $@"
-            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || NonNullableThatCanBeUninitialized, "LazinatorMemoryStorage.Length == 0", createDefault, $@"{IIF(defineChildData, "LazinatorMemory ")}childData = {ChildSliceString};
+            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || NonNullableThatCanBeUninitialized, "LazinatorMemoryStorage.Length == 0", createDefault, $@"{IIF(defineChildData, "LazinatorMemory ")}childData = {(async ? ChildSliceStringDefinitelyAsync : ChildSliceString)};
                 {recreation}{IIF(async, $@"
                 await childData.ConsiderUnloadInitialMemoryAsync();")}")}{IIF(BackingAccessFieldIncluded, $@"
             {BackingFieldAccessedString} = true;")}";
@@ -1392,7 +1394,7 @@ namespace Lazinator.CodeDescription
         {IIF(BackingAccessFieldIncluded, $@"{ContainingObjectDescription.ProtectedIfApplicable}bool {BackingFieldAccessedString};
 ")}{IIF(IncludeAsyncCode, $@"public async ValueTask Ensure{PropertyName}LoadedAsync()
         {{
-            LazinatorMemory childData = {ChildSliceString};
+            LazinatorMemory childData = {ChildSliceStringMaybeAsync()};
             await childData.LoadInitialMemoryAsync();
         }}
         ")}"); /* A ReadOnlySpan cannot be asynchronously returned, but we can call a method to make sure that it is loaded, and then we can access the property synchronously. */
@@ -1615,7 +1617,7 @@ namespace Lazinator.CodeDescription
                         $@"WriteNonLazinatorObject{omitLengthSuffix}(
                     nonLazinatorObject: {BackingFieldString}, isBelievedDirty: {isBelievedDirtyString},
                     isAccessed: {BackingFieldAccessedString}, writer: ref writer{ContainingObjectDescription.MaybeAsyncConditional(".Writer", "")},
-                    getChildSliceForFieldFn: () => {ChildSliceString},
+                    getChildSliceForFieldFn: () => {ChildSliceStringMaybeAsync()},
                     verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                     binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
                         {DirectConverterTypeNamePrefix}{writeMethodName}(ref w, {BackingFieldStringOrContainedSpanWithPossibleException(null)},
@@ -1654,7 +1656,7 @@ namespace Lazinator.CodeDescription
                 sb.AppendLine($@"WriteNonLazinatorObject{omitLengthSuffix}(
                         nonLazinatorObject: default, isBelievedDirty: true,
                         isAccessed: true, writer: ref writer,
-                        getChildSliceForFieldFn: () => {ChildSliceString},
+                        getChildSliceForFieldFn: () => {ChildSliceStringMaybeAsync()},
                         verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                         binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
                             {DirectConverterTypeNamePrefix}{writeMethodName}(ref w, default,
@@ -1688,11 +1690,11 @@ namespace Lazinator.CodeDescription
             }
             else
                 lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen($"{BackingFieldString}", $@"WriteNullChild(ref writer, {(SingleByteLength ? "true" : "false")}, {(AllLengthsPrecedeChildren || SkipLengthForThisProperty ? "true" : "false")});", originalString) : originalString;
-            string callWriteChild = AsyncWithinAsync ? ContainingObjectDescription.MaybeAsyncConditional($"await{ContainingObjectDescription.NoteAsyncUsed} WriteChildAsync(writer,", $"WriteChild(ref writer, ref") : ContainingObjectDescription.MaybeAsyncConditional($"WriteChild(ref writer.Writer, ref", $"WriteChild(ref writer, ref");
+            string callWriteChild = AsyncWithinAsync ? ContainingObjectDescription.MaybeAsyncConditional($"await{ContainingObjectDescription.NoteAsyncUsed} WriteChildAsync(writer,", $"WriteChild(ref writer, ref") : ContainingObjectDescription.MaybeAsyncConditional($"await{ContainingObjectDescription.NoteAsyncUsed} WriteNonAsyncChildAsync(writer,", $"WriteChild(ref writer, ref");
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct)
             {
                 string mainWriteString = $@"{IIF(nullableStruct, $@"var copy = {BackingFieldString}.Value;
-                            ")}{callWriteChild} {propertyNameOrCopy}{NullForgivenessIfNonNullable}, includeChildrenMode, {BackingFieldAccessedString}, () => {ChildSliceString}, verifyCleanness, updateStoredBuffer, {(SingleByteLength ? "true" : "false")}, {(AllLengthsPrecedeChildren || SkipLengthForThisProperty ? "true" : "false")}, this);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
+                            ")}{callWriteChild} {propertyNameOrCopy}{NullForgivenessIfNonNullable}, includeChildrenMode, {BackingFieldAccessedString}, {ContainingObjectDescription.Maybe_asyncWord}() => {ChildSliceStringMaybeAsync()}, verifyCleanness, updateStoredBuffer, {(SingleByteLength ? "true" : "false")}, {(AllLengthsPrecedeChildren || SkipLengthForThisProperty ? "true" : "false")}, this);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
                                 {BackingFieldString} = copy;")}
                                 {lengthString}";
                 withInclusionConditional =
