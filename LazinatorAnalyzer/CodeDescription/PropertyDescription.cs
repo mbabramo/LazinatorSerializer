@@ -713,13 +713,6 @@ namespace Lazinator.CodeDescription
                         if (SizeOfLength == 0 && !IsGuaranteedFixedLength)
                             throw new Exception("SizeOfLengthAttribute should not have SizeOfLength set to 0 unless a FixedLengthAttribute is also included.");
                     }
-
-                    // DEBUG -- delete
-                    CloneSingleByteLengthAttribute smallAttribute =
-                        ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneSingleByteLengthAttribute>(exclusiveInterface);
-                    if (smallAttribute != null)
-                        SingleByteLength = true;
-
                     
                 }
 

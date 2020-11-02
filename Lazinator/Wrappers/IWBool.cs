@@ -5,7 +5,7 @@ namespace Lazinator.Wrappers
     /// <summary>
     /// A Lazinator interface for a Lazinator wrapper for a bool. A wrapper can be used as a generic type where the unwrapped object cannot be.
     /// </summary>
-    [SingleByteLength]
+    [SizeOfLength(1)]
     [FixedLengthLazinator(1)]
     [ExcludeLazinatorVersionByte]
     [NonbinaryHash]
