@@ -470,9 +470,19 @@ namespace Lazinator.Buffers
             writer.Write((byte)Length);
             await WriteToBinaryBufferAsync(writer, includeOutsideOfRange);
         }
-        public async ValueTask WriteToBinaryBuffer_WithIntPrefixAsync(BinaryBufferWriterContainer writer, bool includeOutsideOfRange = false)
+        public async ValueTask WriteToBinaryBuffer_WithInt16PrefixAsync(BinaryBufferWriterContainer writer, bool includeOutsideOfRange = false)
+        {
+            writer.Write((Int16)Length);
+            await WriteToBinaryBufferAsync(writer, includeOutsideOfRange);
+        }
+        public async ValueTask WriteToBinaryBuffer_WithInt32PrefixAsync(BinaryBufferWriterContainer writer, bool includeOutsideOfRange = false)
         {
             writer.Write((int)Length);
+            await WriteToBinaryBufferAsync(writer, includeOutsideOfRange);
+        }
+        public async ValueTask WriteToBinaryBuffer_WithInt64PrefixAsync(BinaryBufferWriterContainer writer, bool includeOutsideOfRange = false)
+        {
+            writer.Write((Int64)Length);
             await WriteToBinaryBufferAsync(writer, includeOutsideOfRange);
         }
 
@@ -488,9 +498,19 @@ namespace Lazinator.Buffers
             writer.Write((byte)Length);
             WriteToBinaryBuffer(ref writer, includeOutsideOfRange);
         }
-        public void WriteToBinaryBuffer_WithIntPrefix(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
+        public void WriteToBinaryBuffer_WithInt16Prefix(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
+        {
+            writer.Write((Int16)Length);
+            WriteToBinaryBuffer(ref writer, includeOutsideOfRange);
+        }
+        public void WriteToBinaryBuffer_WithInt32Prefix(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
         {
             writer.Write((int)Length);
+            WriteToBinaryBuffer(ref writer, includeOutsideOfRange);
+        }
+        public void WriteToBinaryBuffer_WithInt64Prefix(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
+        {
+            writer.Write((Int64)Length);
             WriteToBinaryBuffer(ref writer, includeOutsideOfRange);
         }
 

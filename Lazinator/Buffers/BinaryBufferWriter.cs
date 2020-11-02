@@ -402,6 +402,14 @@ namespace Lazinator.Buffers
             LengthsSpan[0] = length;
             _LengthsPosition++;
         }
+        public void RecordLength(Int16 length)
+        {
+            if (BinaryBufferWriter.LittleEndianStorage)
+                WriteInt16LittleEndian(LengthsSpan, length);
+            else
+                WriteInt16BigEndian(LengthsSpan, length);
+            _LengthsPosition += sizeof(Int16);
+        }
 
         public void RecordLength(int length)
         {
@@ -410,6 +418,14 @@ namespace Lazinator.Buffers
             else
                 WriteInt32BigEndian(LengthsSpan, length);
             _LengthsPosition += sizeof(int);
+        }
+        public void RecordLength(Int64 length)
+        {
+            if (BinaryBufferWriter.LittleEndianStorage)
+                WriteInt64LittleEndian(LengthsSpan, length);
+            else
+                WriteInt64BigEndian(LengthsSpan, length);
+            _LengthsPosition += sizeof(Int64);
         }
     }
 }

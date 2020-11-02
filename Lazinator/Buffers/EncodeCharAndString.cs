@@ -89,7 +89,7 @@ namespace Lazinator.Buffers
             if (s == null)
                 writer.Write((int) -1); // signify null
             else
-                LazinatorUtilities.WriteToBinaryWithIntLengthPrefix(ref writer, (ref BinaryBufferWriter w) => { WriteBrotliCompressed(ref w, s); });
+                LazinatorUtilities.WriteToBinaryWithInt32LengthPrefix(ref writer, (ref BinaryBufferWriter w) => { WriteBrotliCompressed(ref w, s); });
         }
 
         public static string ToString_BrotliCompressedWithLength(this ReadOnlySpan<byte> b, ref int index)
