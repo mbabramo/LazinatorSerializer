@@ -1147,9 +1147,11 @@ namespace Lazinator.CodeDescription
                                         }}
                                         else
                                         {{
-                                            LazinatorMemory childData = {ChildSliceString};
+                                            LazinatorMemory childData = {ChildSliceString};{IIF(ContainingObjectDescription.AsyncLazinatorMemory, $@"
+                                            childData.LoadInitialMemory();")}
                                             var toReturn = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}(childData);
-                                            toReturn.IsDirty = false;
+                                            toReturn.IsDirty = false;{IIF(ContainingObjectDescription.AsyncLazinatorMemory, $@"
+                                            childData.ConsiderUnloadInitialMemory();")}
                                             return toReturn;
                                         }}")}
                                     {IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"if ({BackingFieldString} == null)
@@ -1328,7 +1330,8 @@ namespace Lazinator.CodeDescription
             return $@"
             {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || NonNullableThatCanBeUninitialized, "LazinatorMemoryStorage.Length == 0", createDefault, $@"{IIF(defineChildData, "LazinatorMemory ")}childData = {(async ? ChildSliceStringDefinitelyAsync : ChildSliceString)};
                 {recreation}{IIF(async, $@"
-                await childData.ConsiderUnloadInitialMemoryAsync();")}")}{IIF(BackingAccessFieldIncluded, $@"
+                await childData.ConsiderUnloadInitialMemoryAsync();")}{IIF(!async && ContainingObjectDescription.AsyncLazinatorMemory, $@"
+                childData.ConsiderUnloadInitialMemory();")}")}{IIF(BackingAccessFieldIncluded, $@"
             {BackingFieldAccessedString} = true;")}";
         }
 
@@ -1379,7 +1382,8 @@ namespace Lazinator.CodeDescription
         {{{StepThroughPropertiesString}
             get
             {{
-                {ConditionalCodeGenerator.ElseConsequentPossibleOnlyIf(BackingAccessFieldIncluded, new ConditionCodeGenerator(BackingFieldNotAccessedString), $@"LazinatorMemory childData = {ChildSliceString};
+                {ConditionalCodeGenerator.ElseConsequentPossibleOnlyIf(BackingAccessFieldIncluded, new ConditionCodeGenerator(BackingFieldNotAccessedString), $@"LazinatorMemory childData = {ChildSliceString};{IIF(ContainingObjectDescription.AsyncLazinatorMemory, $@"
+                    childData.LoadInitialMemory();")}
                     {coreOfGet}")}
                 return {castToSpanOfCorrectType};
             }}{StepThroughPropertiesString}
