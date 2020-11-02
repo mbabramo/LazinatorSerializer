@@ -764,7 +764,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (itemToConvert[itemIndex] == default(Int32[]))
                 {
-                    writer.Write((uint)0);
+                    writer.Write((int)0);
                 }
                 else 
                 {

@@ -586,7 +586,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (itemToConvert[itemIndex] == default(NonLazinatorClass))
                 {
-                    writer.Write((uint)0);
+                    writer.Write((int)0);
                 }
                 else 
                 {

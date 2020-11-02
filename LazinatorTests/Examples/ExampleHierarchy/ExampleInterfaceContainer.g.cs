@@ -617,7 +617,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (itemToConvert[itemIndex] == null)
                 {
-                    writer.Write((uint)0);
+                    writer.Write((int)0);
                 }
                 else 
                 {

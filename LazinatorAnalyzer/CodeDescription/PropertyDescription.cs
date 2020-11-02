@@ -264,7 +264,7 @@ namespace Lazinator.CodeDescription
         private string LengthPrefixTypeString => IsGuaranteedFixedLength ? "out" : (SingleByteLength ? "Byte" : "Int");
         private string WriteDefaultLengthString =>
             !IsGuaranteedFixedLength || FixedLength == 1 ?
-                $"writer.Write(({(SingleByteLength || IsGuaranteedFixedLength ? "byte" : "uint")})0);"
+                $"writer.Write(({(SingleByteLength || IsGuaranteedFixedLength ? "byte" : "int")})0);"
             :
                 $@"for (int indexInFixedLength = 0; indexInFixedLength < {FixedLength}; indexInFixedLength++)
                     {{

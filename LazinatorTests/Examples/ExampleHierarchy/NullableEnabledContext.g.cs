@@ -3816,7 +3816,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (itemToConvert[itemIndex] == null)
                 {
-                    writer.Write((uint)0);
+                    writer.Write((int)0);
                 }
                 else 
                 {
@@ -3930,7 +3930,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             if (itemToConvert.Value == null)
             {
-                writer.Write((uint)0);
+                writer.Write((int)0);
             }
             else
             {
@@ -4022,7 +4022,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             if (itemToConvert.Value == null)
             {
-                writer.Write((uint)0);
+                writer.Write((int)0);
             }
             else
             {
@@ -4128,7 +4128,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (itemToConvert[itemIndex] == null)
                 {
-                    writer.Write((uint)0);
+                    writer.Write((int)0);
                 }
                 else 
                 {
@@ -4280,7 +4280,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (q[itemIndex] == null)
                 {
-                    writer.Write((uint)0);
+                    writer.Write((int)0);
                 }
                 else 
                 {
@@ -4428,7 +4428,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (stackReversed[itemIndex] == null)
                 {
-                    writer.Write((uint)0);
+                    writer.Write((int)0);
                 }
                 else 
                 {
@@ -4566,7 +4566,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (itemToConvert[itemIndex] == null)
                 {
-                    writer.Write((uint)0);
+                    writer.Write((int)0);
                 }
                 else 
                 {
@@ -4820,7 +4820,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (itemToConvert[itemIndex] == null)
                 {
-                    writer.Write((uint)0);
+                    writer.Write((int)0);
                 }
                 else 
                 {
@@ -5005,7 +5005,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (q[itemIndex] == null)
                 {
-                    writer.Write((uint)0);
+                    writer.Write((int)0);
                 }
                 else 
                 {
@@ -5186,7 +5186,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (stackReversed[itemIndex] == null)
                 {
-                    writer.Write((uint)0);
+                    writer.Write((int)0);
                 }
                 else 
                 {
@@ -5253,7 +5253,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             if (itemToConvert.Example == null)
             {
-                writer.Write((uint)0);
+                writer.Write((int)0);
             }
             else
             {
@@ -5322,7 +5322,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             if (itemToConvert.Item1 == null)
             {
-                writer.Write((uint)0);
+                writer.Write((int)0);
             }
             else
             {
@@ -5365,7 +5365,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             if (itemToConvert.Item1 == null)
             {
-                writer.Write((uint)0);
+                writer.Write((int)0);
             }
             else
             {
@@ -5418,7 +5418,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             if (itemToConvert.Example == null)
             {
-                writer.Write((uint)0);
+                writer.Write((int)0);
             }
             else
             {
@@ -5507,7 +5507,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             if (itemToConvert.Item1 == null)
             {
-                writer.Write((uint)0);
+                writer.Write((int)0);
             }
             else
             {
@@ -5562,7 +5562,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             if (itemToConvert.Item1 == null)
             {
-                writer.Write((uint)0);
+                writer.Write((int)0);
             }
             else
             {
@@ -5613,7 +5613,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             if (itemToConvert.Value.Item1 == null)
             {
-                writer.Write((uint)0);
+                writer.Write((int)0);
             }
             else
             {
@@ -5668,7 +5668,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             if (itemToConvert.Value.Item1 == null)
             {
-                writer.Write((uint)0);
+                writer.Write((int)0);
             }
             else
             {
@@ -5715,7 +5715,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             if (itemToConvert.Item1 == null)
             {
-                writer.Write((uint)0);
+                writer.Write((int)0);
             }
             else
             {
@@ -5762,7 +5762,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             if (itemToConvert.Item1 == null)
             {
-                writer.Write((uint)0);
+                writer.Write((int)0);
             }
             else
             {

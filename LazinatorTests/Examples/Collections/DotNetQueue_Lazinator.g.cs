@@ -498,7 +498,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (q[itemIndex] == null)
                 {
-                    writer.Write((uint)0);
+                    writer.Write((int)0);
                 }
                 else 
                 {
