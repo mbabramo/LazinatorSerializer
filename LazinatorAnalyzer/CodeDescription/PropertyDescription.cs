@@ -63,7 +63,7 @@ namespace Lazinator.CodeDescription
         internal bool IsLast { get; set; }
         private bool OmitLengthBecauseDefinitelyLast => (IsLast && ContainingObjectDescription.IsSealedOrStruct && ContainingObjectDescription.Version == -1);
         private string ChildSliceString => $"GetChildSlice(LazinatorMemoryStorage, {BackingFieldByteIndex}, {BackingFieldByteLength}{ChildSliceLastParametersString})"; 
-        private string ChildSliceStringMaybeAsync(bool couldBeAsync = true) => couldBeAsync && ContainingObjectDescription.AsyncLazinatorMemory ? $"{ContainingObjectDescription.MaybeAwaitWord}GetChildSlice{ContainingObjectDescription.MaybeAsyncWord}(LazinatorMemoryStorage, {BackingFieldByteIndex}, {BackingFieldByteLength}{ChildSliceLastParametersString})" : ChildSliceString;
+        private string ChildSliceStringMaybeAsync(bool couldBeAsync = true) => couldBeAsync && WithinAsync ? $"{ContainingObjectDescription.MaybeAwaitWord}GetChildSlice{ContainingObjectDescription.MaybeAsyncWord}(LazinatorMemoryStorage, {BackingFieldByteIndex}, {BackingFieldByteLength}{ChildSliceLastParametersString})" : ChildSliceString;
         private string ChildSliceStringDefinitelyAsync => $"await GetChildSliceAsync(LazinatorMemoryStorage, {BackingFieldByteIndex}, {BackingFieldByteLength}{ChildSliceLastParametersString})";
 
         private bool AllLengthsPrecedeChildren => true;
@@ -109,7 +109,7 @@ namespace Lazinator.CodeDescription
 
         internal bool TypeHasLazinatorAsyncAttribute => ExclusiveInterfaceSymbol?.HasAttributeOfType<CloneAsyncLazinatorMemoryAttribute>() ?? false;
         internal bool TypeImplementsILazinatorAsync => Symbol.Name == "Lazinator.Core.ILazinatorAsync" || ((Symbol as INamedTypeSymbol)?.AllInterfaces.Any(x => x.Name == "Lazinator.Core.ILazinatorAsync") ?? false);
-        internal bool AsyncWithinAsync => ContainingObjectDescription.AsyncLazinatorMemory && TypeImplementsILazinatorAsync;
+        internal bool AsyncWithinAsync => WithinAsync && TypeImplementsILazinatorAsync;
         internal bool IsSupportedCollectionOrTuple => PropertyType == LazinatorPropertyType.SupportedCollection || PropertyType == LazinatorPropertyType.SupportedTuple;
 
         internal bool IsSupportedCollectionReferenceType => PropertyType == LazinatorPropertyType.SupportedCollection && SupportedCollectionType != LazinatorSupportedCollectionType.Memory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlyMemory && SupportedCollectionType != LazinatorSupportedCollectionType.ReadOnlySpan;
@@ -213,9 +213,9 @@ namespace Lazinator.CodeDescription
         private string EnumEquivalentCastToEquivalentType => EnumEquivalentType != null ? $"({EnumEquivalentType}) " : $"";
         private string EnumEquivalentCastToEnum => EnumEquivalentType != null ? $"({AppropriatelyQualifiedTypeName})" : $"";
         /* Async */
-        private bool IncludeAsyncCode => ContainingObjectDescription.AsyncLazinatorMemory;
-        private string AsyncIfNeeded(bool async) => async && IncludeAsyncCode ? "Async" : "";
-        private string AwaitIfNeeded(bool async) => async && IncludeAsyncCode ? "await " : "";
+        private bool WithinAsync => ContainingObjectDescription.AsyncLazinatorMemory;
+        private string AsyncIfNeeded(bool async) => async && WithinAsync ? "Async" : "";
+        private string AwaitIfNeeded(bool async) => async && WithinAsync ? "await " : "";
 
         /* Inner properties */
         public List<PropertyDescription> InnerProperties { get; set; }
@@ -283,6 +283,7 @@ namespace Lazinator.CodeDescription
                             LazinatorUtilities.ConfirmDescendantDirtinessConsistency(this);";
         private string RepeatedCodeExecution => ""; // change to expose some action that should be repeated before and after each variable is set.
         private string IIF(bool x, string y) => x ? y : ""; // Include if function
+        private string IIFELSE(bool x, string y, string z) => x ? y : z; 
         private string IIF(bool x, Func<string> y) => x ? y() : ""; // Same but with a function to produce the string
 
         #endregion
@@ -1123,7 +1124,7 @@ namespace Lazinator.CodeDescription
         {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}bool {BackingFieldAccessedString};")}{IIF(BackingAccessFieldIncluded, $@"
         private void Lazinate{PropertyName}()
         {{{GetLazinateContents(createDefault, recreation, true, false)}
-        }}")}{IIF(BackingAccessFieldIncluded && IncludeAsyncCode, $@"
+        }}")}{IIF(BackingAccessFieldIncluded && WithinAsync, $@"
         private async Task Lazinate{PropertyName}Async()
         {{{GetLazinateContents(createDefault, recreation, true, true)}
         }}
@@ -1147,10 +1148,10 @@ namespace Lazinator.CodeDescription
                                         }}
                                         else
                                         {{
-                                            LazinatorMemory childData = {ChildSliceString};{IIF(ContainingObjectDescription.AsyncLazinatorMemory, $@"
+                                            LazinatorMemory childData = {ChildSliceString};{IIF(WithinAsync, $@"
                                             childData.LoadInitialMemory();")}
                                             var toReturn = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}(childData);
-                                            toReturn.IsDirty = false;{IIF(ContainingObjectDescription.AsyncLazinatorMemory, $@"
+                                            toReturn.IsDirty = false;{IIF(WithinAsync, $@"
                                             childData.ConsiderUnloadInitialMemory();")}
                                             return toReturn;
                                         }}")}
@@ -1328,9 +1329,10 @@ namespace Lazinator.CodeDescription
         private string GetLazinateContents(string createDefault, string recreation, bool defineChildData, bool async)
         {
             return $@"
-            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || NonNullableThatCanBeUninitialized, "LazinatorMemoryStorage.Length == 0", createDefault, $@"{IIF(defineChildData, "LazinatorMemory ")}childData = {(async ? ChildSliceStringDefinitelyAsync : ChildSliceString)};
+            {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || NonNullableThatCanBeUninitialized, "LazinatorMemoryStorage.Length == 0", createDefault, $@"{IIF(defineChildData, "LazinatorMemory ")}childData = {(async ? ChildSliceStringDefinitelyAsync : ChildSliceString)};{IIF(!async && WithinAsync, $@"
+                childData.LoadInitialMemory();")}
                 {recreation}{IIF(async, $@"
-                await childData.ConsiderUnloadInitialMemoryAsync();")}{IIF(!async && ContainingObjectDescription.AsyncLazinatorMemory, $@"
+                await childData.ConsiderUnloadInitialMemoryAsync();")}{IIF(!async && WithinAsync, $@"
                 childData.ConsiderUnloadInitialMemory();")}")}{IIF(BackingAccessFieldIncluded, $@"
             {BackingFieldAccessedString} = true;")}";
         }
@@ -1382,7 +1384,7 @@ namespace Lazinator.CodeDescription
         {{{StepThroughPropertiesString}
             get
             {{
-                {ConditionalCodeGenerator.ElseConsequentPossibleOnlyIf(BackingAccessFieldIncluded, new ConditionCodeGenerator(BackingFieldNotAccessedString), $@"LazinatorMemory childData = {ChildSliceString};{IIF(ContainingObjectDescription.AsyncLazinatorMemory, $@"
+                {ConditionalCodeGenerator.ElseConsequentPossibleOnlyIf(BackingAccessFieldIncluded, new ConditionCodeGenerator(BackingFieldNotAccessedString), $@"LazinatorMemory childData = {ChildSliceString};{IIF(WithinAsync, $@"
                     childData.LoadInitialMemory();")}
                     {coreOfGet}")}
                 return {castToSpanOfCorrectType};
@@ -1396,7 +1398,7 @@ namespace Lazinator.CodeDescription
             }}
         }}
         {IIF(BackingAccessFieldIncluded, $@"{ContainingObjectDescription.ProtectedIfApplicable}bool {BackingFieldAccessedString};
-")}{IIF(IncludeAsyncCode, $@"public async ValueTask Ensure{PropertyName}LoadedAsync()
+")}{IIF(WithinAsync, $@"public async ValueTask Ensure{PropertyName}LoadedAsync()
         {{
             LazinatorMemory childData = {ChildSliceStringDefinitelyAsync};
         }}

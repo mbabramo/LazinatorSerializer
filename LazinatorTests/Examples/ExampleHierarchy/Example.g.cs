@@ -311,8 +311,10 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IncludableChild_ByteIndex, _IncludableChild_ByteLength, true, false, null);
+                childData.LoadInitialMemory();
                 
                 _IncludableChild = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, (c, p) => new ExampleChild(c, p), childData, this); 
+                childData.ConsiderUnloadInitialMemory();
             }
             _IncludableChild_Accessed = true;
         }
@@ -381,9 +383,11 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild1_ByteIndex, _MyChild1_ByteLength, true, false, null);
+                childData.LoadInitialMemory();
                 
                 _MyChild1 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, (c, p) => new ExampleChild(c, p), childData, this); 
                 OnMyChild1Deserialized(_MyChild1);
+                childData.ConsiderUnloadInitialMemory();
             }
             _MyChild1_Accessed = true;
         }
@@ -453,8 +457,10 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild2_ByteIndex, _MyChild2_ByteLength, true, false, null);
+                childData.LoadInitialMemory();
                 
                 _MyChild2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, (c, p) => new ExampleChild(c, p), childData, this); 
+                childData.ConsiderUnloadInitialMemory();
             }
             _MyChild2_Accessed = true;
         }
@@ -522,8 +528,10 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild2Previous_ByteIndex, _MyChild2Previous_ByteLength, true, false, null);
+                childData.LoadInitialMemory();
                 
                 _MyChild2Previous = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, (c, p) => new ExampleChild(c, p), childData, this); 
+                childData.ConsiderUnloadInitialMemory();
             }
             _MyChild2Previous_Accessed = true;
         }
@@ -591,8 +599,10 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyInterfaceImplementer_ByteIndex, _MyInterfaceImplementer_ByteLength, true, false, null);
+                childData.LoadInitialMemory();
                 
                 _MyInterfaceImplementer = DeserializationFactory.Instance.CreateBasedOnType<IExampleNonexclusiveInterface>(childData, this); 
+                childData.ConsiderUnloadInitialMemory();
             }
             _MyInterfaceImplementer_Accessed = true;
         }
@@ -653,7 +663,9 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorChild_ByteIndex, _MyNonLazinatorChild_ByteLength, true, false, null);
+                childData.LoadInitialMemory();
                 _MyNonLazinatorChild = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData);
+                childData.ConsiderUnloadInitialMemory();
             }
             _MyNonLazinatorChild_Accessed = true;
         }
@@ -733,11 +745,13 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, true, false, null);
+                childData.LoadInitialMemory();
                 _WrappedInt = new WInt32(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
                 
+                childData.ConsiderUnloadInitialMemory();
             }
             _WrappedInt_Accessed = true;
         }
@@ -783,8 +797,10 @@ namespace LazinatorTests.Examples
                     else
                     {
                         LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, true, false, null);
+                        childData.LoadInitialMemory();
                         var toReturn = new WInt32(childData);
                         toReturn.IsDirty = false;
+                        childData.ConsiderUnloadInitialMemory();
                         return toReturn;
                     }
                 }
@@ -834,8 +850,10 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExcludableChild_ByteIndex, _ExcludableChild_ByteLength, true, false, null);
+                childData.LoadInitialMemory();
                 
                 _ExcludableChild = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, (c, p) => new ExampleChild(c, p), childData, this); 
+                childData.ConsiderUnloadInitialMemory();
             }
             _ExcludableChild_Accessed = true;
         }
