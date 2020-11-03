@@ -134,8 +134,10 @@ namespace Lazinator.Core
             action(ref writer);
             int afterPosition = writer.ActiveMemoryPosition;
             writer.ActiveMemoryPosition = lengthPosition;
-            Int16 length = (Int16) (afterPosition - lengthPosition - sizeof(Int16));
-            writer.Write(length);
+            Int32 length = (afterPosition - lengthPosition - sizeof(Int16));
+            if (length > Int16.MaxValue)
+                ThrowHelper.ThrowTooLargeException(Int16.MaxValue);
+            writer.Write((Int16) length);
             writer.ActiveMemoryPosition = afterPosition;
         }
         /// <summary>
@@ -150,8 +152,10 @@ namespace Lazinator.Core
             action(ref writer);
             int afterPosition = writer.ActiveMemoryPosition;
             writer.ActiveMemoryPosition = lengthPosition;
-            int length = (afterPosition - lengthPosition - sizeof(uint));
-            writer.Write(length);
+            long length = (afterPosition - lengthPosition - sizeof(uint));
+            if (length > Int32.MaxValue)
+                ThrowHelper.ThrowTooLargeException(Int32.MaxValue);
+            writer.Write((Int32)length);
             writer.ActiveMemoryPosition = afterPosition;
         }
         /// <summary>
@@ -183,8 +187,10 @@ namespace Lazinator.Core
             await action(writer);
             int afterPosition = writer.ActiveMemoryPosition;
             writer.Writer.ActiveMemoryPosition = lengthPosition;
-            Int16 length = (Int16) ((afterPosition - lengthPosition - sizeof(Int16)));
-            writer.Write(length);
+            Int32 length = (Int32) ((afterPosition - lengthPosition - sizeof(Int16)));
+            if (length > Int16.MaxValue)
+                ThrowHelper.ThrowTooLargeException(Int16.MaxValue);
+            writer.Write((Int16) length);
             writer.Writer.ActiveMemoryPosition = afterPosition;
         }
         /// <summary>
@@ -199,8 +205,10 @@ namespace Lazinator.Core
             await action(writer);
             int afterPosition = writer.ActiveMemoryPosition;
             writer.Writer.ActiveMemoryPosition = lengthPosition;
-            int length = (afterPosition - lengthPosition - sizeof(Int32));
-            writer.Write(length);
+            long length = (afterPosition - lengthPosition - sizeof(Int32));
+            if (length > Int32.MaxValue)
+                ThrowHelper.ThrowTooLargeException(Int32.MaxValue);
+            writer.Write((Int32) length);
             writer.Writer.ActiveMemoryPosition = afterPosition;
         }
         /// <summary>
@@ -253,8 +261,8 @@ namespace Lazinator.Core
             int afterPosition = writer.ActiveMemoryPosition;
             writer.ActiveMemoryPosition = lengthPosition;
             int length = (afterPosition - lengthPosition - sizeof(byte));
-            if (length > 250)
-                ThrowHelper.ThrowMoreThan255BytesException();
+            if (length > byte.MaxValue)
+                ThrowHelper.ThrowTooLargeException(byte.MaxValue);
             writer.Write((byte)length);
             writer.ActiveMemoryPosition = afterPosition;
         }
@@ -272,8 +280,8 @@ namespace Lazinator.Core
             int afterPosition = writer.ActiveMemoryPosition;
             writer.Writer.ActiveMemoryPosition = lengthPosition;
             int length = (afterPosition - lengthPosition - sizeof(byte));
-            if (length > 250)
-                ThrowHelper.ThrowMoreThan255BytesException();
+            if (length > byte.MaxValue)
+                ThrowHelper.ThrowTooLargeException(byte.MaxValue);
             writer.Write((byte)length);
             writer.Writer.ActiveMemoryPosition = afterPosition;
         }

@@ -178,8 +178,8 @@ namespace Lazinator.Buffers
 
         public static void Write_WithByteLengthPrefix(this ReadOnlySpan<byte> b, ref BinaryBufferWriter writer)
         {
-            if (b.Length > 250)
-                throw new LazinatorSerializationException("Span exceeded length of 250 bytes even though it was guaranteed to be no more than that.");
+            if (b.Length > byte.MaxValue)
+                ThrowHelper.ThrowTooLargeException(byte.MaxValue);
             writer.Write((byte)b.Length);
             writer.Write(b);
         }

@@ -34,7 +34,7 @@ namespace Lazinator.Buffers
         /// <summary>
         /// The total number of bytes in the referenced range, potentially spanning multiple chunks of memory.
         /// </summary>
-        public readonly int Length;
+        public readonly long Length;
 
         public bool IsEmpty => InitialOwnedMemory == null || Length == 0;
         public long? AllocationID => (InitialOwnedMemory as ExpandableBytes)?.AllocationID;
@@ -55,7 +55,7 @@ namespace Lazinator.Buffers
 
         #region Constructors
 
-        public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int startPosition, int length)
+        public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int startPosition, long length)
         {
             InitialOwnedMemory = ownedMemory;
             MoreOwnedMemory = null;
@@ -69,13 +69,13 @@ namespace Lazinator.Buffers
                 Length = length;
         }
 
-        public LazinatorMemory(MemoryReference ownedMemory, List<MemoryReference> moreOwnedMemory, int startIndex, int startPosition, int length) : this(ownedMemory, startPosition, length)
+        public LazinatorMemory(MemoryReference ownedMemory, List<MemoryReference> moreOwnedMemory, int startIndex, int startPosition, long length) : this(ownedMemory, startPosition, length)
         {
             MoreOwnedMemory = moreOwnedMemory;
             StartIndex = startIndex;
         }
 
-        public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int length) : this(ownedMemory, 0, length)
+        public LazinatorMemory(IMemoryOwner<byte> ownedMemory, long length) : this(ownedMemory, 0, length)
         {
         }
 
@@ -155,22 +155,22 @@ namespace Lazinator.Buffers
                 return memoryAtIndex.Memory.Length;
         }
 
-        private LazinatorMemory SliceInitial(int relativePositionOfSubrange) => Length - relativePositionOfSubrange is int revisedLength and > 0 ? SliceInitial(relativePositionOfSubrange, revisedLength) : LazinatorMemory.EmptyLazinatorMemory;
-        private LazinatorMemory SliceInitial(int relativePositionOfSubrange, int length) => length == 0 ? LazinatorMemory.EmptyLazinatorMemory : new LazinatorMemory(InitialOwnedMemory, StartPosition + relativePositionOfSubrange, length);
+        private LazinatorMemory SliceInitial(int relativePositionOfSubrange) => Length - relativePositionOfSubrange is long revisedLength and > 0 ? SliceInitial(relativePositionOfSubrange, revisedLength) : LazinatorMemory.EmptyLazinatorMemory;
+        private LazinatorMemory SliceInitial(int relativePositionOfSubrange, long length) => length == 0 ? LazinatorMemory.EmptyLazinatorMemory : new LazinatorMemory(InitialOwnedMemory, StartPosition + relativePositionOfSubrange, length);
 
-        public LazinatorMemory Slice(int relativePositionOfSubrange) => Slice(relativePositionOfSubrange, Length - relativePositionOfSubrange);
+        public LazinatorMemory Slice(long relativePositionOfSubrange) => Slice(relativePositionOfSubrange, Length - relativePositionOfSubrange);
 
-        public LazinatorMemory Slice(int relativePositionOfSubrange, int length)
+        public LazinatorMemory Slice(long relativePositionOfSubrange, long length)
         {
             if (Length == 0)
                 return EmptyLazinatorMemory;
 
             if (SingleMemory)
             {
-                return SliceInitial(relativePositionOfSubrange, length);
+                return SliceInitial((int) relativePositionOfSubrange, length);
             }
 
-            int positionRemaining = relativePositionOfSubrange;
+            long positionRemaining = relativePositionOfSubrange;
             // position is relative to StartPosition within memory chunk index StartIndex. 
             // We use up "positionRemaining" by advancing StartPosition up to the end of the Length of the starting index.
             // If we go all the way to the end, then we increment the starting index.
@@ -189,7 +189,7 @@ namespace Lazinator.Buffers
                 }
                 else
                 {
-                    revisedStartPosition += positionRemaining;
+                    revisedStartPosition += (int) positionRemaining;
                     positionRemaining = 0;
                 }
             }
@@ -227,7 +227,7 @@ namespace Lazinator.Buffers
                 if (IsEmpty)
                     return EmptyMemory;
                 if (SingleMemory)
-                    return InitialOwnedMemory.Memory.Slice(StartPosition, Length);
+                    return InitialOwnedMemory.Memory.Slice(StartPosition, (int) Length);
                 else
                 {
                     IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
@@ -247,7 +247,7 @@ namespace Lazinator.Buffers
             {
                 if (!SingleMemory)
                     throw new LazinatorCompoundMemoryException();
-                return InitialOwnedMemory.Memory.Slice(StartPosition, Length);
+                return InitialOwnedMemory.Memory.Slice(StartPosition, (int) Length);
             }
         }
 
@@ -306,7 +306,7 @@ namespace Lazinator.Buffers
             if (IsEmpty)
                 return EmptyMemory;
             if (SingleMemory)
-                return InitialOwnedMemory.Memory.Slice(StartPosition, Length);
+                return InitialOwnedMemory.Memory.Slice(StartPosition, (int) Length);
             else
             {
                 IMemoryOwner<byte> memoryOwner = await LoadInitialMemoryAsync();
@@ -325,7 +325,7 @@ namespace Lazinator.Buffers
                 yield break;
             int startIndexOrZero = includeOutsideOfRange ? 0 : StartIndex;
             int totalItems = NumMemoryChunks();
-            int lengthRemaining = Length;
+            long lengthRemaining = Length;
             for (int i = StartIndex; i < totalItems; i++)
             {
                 var m = MemoryAtIndex(i);
@@ -336,7 +336,7 @@ namespace Lazinator.Buffers
                     startPositionOrZero = 0;
                 int numBytes = GetMemoryOwnerLength(m) - startPositionOrZero;
                 if (numBytes > lengthRemaining)
-                    numBytes = lengthRemaining;
+                    numBytes = (int) lengthRemaining;
                 yield return (i, startPositionOrZero, numBytes);
                 lengthRemaining -= numBytes;
                 if (lengthRemaining == 0)
@@ -463,20 +463,26 @@ namespace Lazinator.Buffers
             await foreach (Memory<byte> memory in EnumerateMemoryChunksAsync(includeOutsideOfRange))
                 writer.Write(memory.Span); // DEBUG -- after each write, we should check whether this is getting too large, and if so, move to the next chunk
         }
+
+
         public async ValueTask WriteToBinaryBuffer_WithBytePrefixAsync(BinaryBufferWriterContainer writer, bool includeOutsideOfRange = false)
         {
-            if (Length > 250)
-                throw new LazinatorSerializationException("Span exceeded length of 250 bytes even though it was guaranteed to be no more than that.");
+            if (Length > byte.MaxValue)
+                ThrowHelper.ThrowTooLargeException(byte.MaxValue);
             writer.Write((byte)Length);
             await WriteToBinaryBufferAsync(writer, includeOutsideOfRange);
         }
         public async ValueTask WriteToBinaryBuffer_WithInt16PrefixAsync(BinaryBufferWriterContainer writer, bool includeOutsideOfRange = false)
         {
+            if (Length > Int16.MaxValue)
+                ThrowHelper.ThrowTooLargeException(Int16.MaxValue);
             writer.Write((Int16)Length);
             await WriteToBinaryBufferAsync(writer, includeOutsideOfRange);
         }
         public async ValueTask WriteToBinaryBuffer_WithInt32PrefixAsync(BinaryBufferWriterContainer writer, bool includeOutsideOfRange = false)
         {
+            if (Length > Int32.MaxValue)
+                ThrowHelper.ThrowTooLargeException(Int32.MaxValue);
             writer.Write((int)Length);
             await WriteToBinaryBufferAsync(writer, includeOutsideOfRange);
         }
@@ -493,18 +499,22 @@ namespace Lazinator.Buffers
         }
         public void WriteToBinaryBuffer_WithBytePrefix(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
         {
-            if (Length > 250)
-                throw new LazinatorSerializationException("Span exceeded length of 250 bytes even though it was guaranteed to be no more than that.");
+            if (Length > byte.MaxValue)
+                ThrowHelper.ThrowTooLargeException(byte.MaxValue);
             writer.Write((byte)Length);
             WriteToBinaryBuffer(ref writer, includeOutsideOfRange);
         }
         public void WriteToBinaryBuffer_WithInt16Prefix(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
         {
+            if (Length > Int16.MaxValue)
+                ThrowHelper.ThrowTooLargeException(Int16.MaxValue);
             writer.Write((Int16)Length);
             WriteToBinaryBuffer(ref writer, includeOutsideOfRange);
         }
         public void WriteToBinaryBuffer_WithInt32Prefix(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
         {
+            if (Length > Int32.MaxValue)
+                ThrowHelper.ThrowTooLargeException(Int32.MaxValue);
             writer.Write((int)Length);
             WriteToBinaryBuffer(ref writer, includeOutsideOfRange);
         }
@@ -576,10 +586,12 @@ namespace Lazinator.Buffers
                 if (includeOutsideOfRange)
                     return InitialOwnedMemory.Memory;
                 else
-                    return InitialOwnedMemory.Memory.Slice(StartPosition, Length);
+                    return InitialOwnedMemory.Memory.Slice(StartPosition, (int) Length);
             }
 
-            int totalLength = includeOutsideOfRange ? GetGrossLength() : Length;
+            if (Length > Int32.MaxValue)
+                ThrowHelper.ThrowTooLargeException(Int32.MaxValue);
+            int totalLength = includeOutsideOfRange ? GetGrossLength() : (int) Length;
             BinaryBufferWriter w = new BinaryBufferWriter(totalLength);
             foreach (byte b in EnumerateBytes(includeOutsideOfRange))
                 w.Write(b);

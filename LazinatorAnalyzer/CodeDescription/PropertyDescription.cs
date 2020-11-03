@@ -268,10 +268,19 @@ namespace Lazinator.CodeDescription
             8 => "SizeOfLength.Int64",
             _ => "SizeOfLength.Int32"
         };
+        private string SizeOfLengthTypeString => BytesUsedForLength() switch
+        {
+            0 => "",
+            1 => "byte",
+            2 => "Int16",
+            4 => "int",
+            8 => "int64",
+            _ => "int"
+        };
         private bool IsGuaranteedFixedLength { get; set; }
         private int FixedLength { get; set; }
         private bool SingleByteLength { get; set; }
-        private string LengthPrefixTypeString => IsGuaranteedFixedLength ? "out" : (SingleByteLength ? "Byte" : "Int32");
+        private string LengthPrefixTypeString => IsGuaranteedFixedLength ? "out" : SizeOfLengthTypeString;
         private string WriteDefaultLengthString =>
             !IsGuaranteedFixedLength || FixedLength == 1 ?
                 $"writer.Write(({(SingleByteLength || IsGuaranteedFixedLength ? "byte" : "int")})0);"
@@ -1695,19 +1704,19 @@ namespace Lazinator.CodeDescription
             string lengthString = "";
             if (AllLengthsPrecedeChildren && !SkipLengthForThisProperty)
             {
-                if (SingleByteLength)
+                if (SizeOfLength != 8)
                 {
                     lengthString = $@"lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
-                        if (lengthValue > byte.MaxValue)
+                        if (lengthValue > {SizeOfLengthTypeString}.MaxValue)
                         {{
-                            ThrowHelper.ThrowMoreThan255BytesException();
+                            ThrowHelper.ThrowTooLargeException({SizeOfLengthTypeString}.MaxValue);
                         }}
-                        writer.RecordLength((byte) lengthValue);";
+                        writer.RecordLength({SizeOfLengthTypeString} lengthValue);";
                 }
                 else
                 {
                     lengthString = $@"lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
-                        writer.RecordLength((int) lengthValue);";
+                        writer.RecordLength((long) lengthValue);";
                 }
                 lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen($"{BackingFieldString}", $@"WriteNullChild_LengthsSeparate(ref writer, {(SingleByteLength ? "true" : "false")});", originalString) : originalString;
             }
