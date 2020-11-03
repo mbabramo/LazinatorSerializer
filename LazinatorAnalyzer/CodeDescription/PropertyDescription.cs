@@ -258,8 +258,8 @@ namespace Lazinator.CodeDescription
         private string CodeAfterSet { get; set; }
         private string CodeOnDeserialized { get; set; }
         private string CodeOnAccessed { get; set; }
-        private int SizeOfLength { get; set; }
-        private string SizeOfLengthString => SizeOfLength switch
+        private int SizeOfLength { get; set; } = sizeof(int);
+        private string SizeOfLengthString => BytesUsedForLength() switch
         {
             0 => "SizeOfLength.SkipLength",
             1 => "SizeOfLength.Byte",
