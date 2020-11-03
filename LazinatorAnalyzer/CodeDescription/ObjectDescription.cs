@@ -44,6 +44,16 @@ namespace Lazinator.CodeDescription
         /* Derivation */
         public ObjectDescription BaseLazinatorObject { get; set; }
         public bool ClosesGeneric { get; set; }
+        public ObjectDescription ClosedGenericConstructedFrom { get; set; }
+        public IEnumerable<PropertyDescription> PropertiesIncludingInherited_OpeningClosedGenerics => PropertiesIncludingInherited.Select(x => OpeningClosedGenericProperty(x));
+        PropertyDescription OpeningClosedGenericProperty(PropertyDescription propertyDescription)
+        {
+            if (ClosesGeneric)
+            {
+                propertyDescription = ClosedGenericConstructedFrom.PropertiesIncludingInherited.FirstOrDefault(x => x.AppropriatelyQualifiedTypeName == propertyDescription.AppropriatelyQualifiedTypeName);
+            }
+            return propertyDescription;
+        }
         public bool IsDerived => BaseLazinatorObject != null;
         public bool IsDerivedFromNonAbstractLazinator => BaseLazinatorObject != null &&
                         (!BaseLazinatorObject.IsAbstract || BaseLazinatorObject.IsDerivedFromNonAbstractLazinator) && !GeneratingRefStruct;
@@ -237,7 +247,7 @@ namespace Lazinator.CodeDescription
 
                 ClosesGeneric = (!SymbolEqualityComparer.Default.Equals(baseILazinatorType.ConstructedFrom, baseILazinatorType));
                 if (ClosesGeneric)
-                    baseILazinatorType = baseILazinatorType.ConstructedFrom; // DEBUG
+                    ClosedGenericConstructedFrom = new ObjectDescription(baseILazinatorType.ConstructedFrom, compilation, baseILazinatorType.ConstructedFrom.Locations.Select(x => x?.SourceTree?.FilePath).FirstOrDefault()); // DEBUG
 
                 if (baseILazinatorType != null && baseILazinatorType.Name != "Object")
                 {
@@ -1415,7 +1425,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 
         public string GetLengthsCalculation(bool readVersion)
         {
-            var properties = PropertiesIncludingInherited.Where(x => !x.IsPrimitive && x.BytesUsedForLength() > 0).Select(x => (x.InclusionConditionalHelper(readVersion).ToString(), x.BytesUsedForLength()));
+            var properties = PropertiesIncludingInherited_OpeningClosedGenerics.Where(x => !x.IsPrimitive && x.BytesUsedForLength() > 0).Select(x => (x.InclusionConditionalHelper(readVersion).ToString(), x.BytesUsedForLength()));
             Dictionary<string, int> distinct = new Dictionary<string, int>();
             foreach (var property in properties)
             {
