@@ -50,7 +50,9 @@ namespace Lazinator.CodeDescription
         {
             if (ClosesGeneric)
             {
-                propertyDescription = ClosedGenericConstructedFrom.PropertiesIncludingInherited.FirstOrDefault(x => x.AppropriatelyQualifiedTypeName == propertyDescription.AppropriatelyQualifiedTypeName);
+                var replacement = ClosedGenericConstructedFrom.PropertiesIncludingInherited.FirstOrDefault(x => x.PropertyName == propertyDescription.PropertyName);
+                if (replacement != null)
+                    propertyDescription = replacement;
             }
             return propertyDescription;
         }

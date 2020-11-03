@@ -473,6 +473,7 @@ namespace Lazinator.CodeDescription
                 Nullable = !GenericConstrainedToStruct;
                 PropertyType = LazinatorPropertyType.OpenGenericParameter;
                 DerivationKeyword = "virtual ";
+                SizeOfLength = 4;
                 return;
             }
 
