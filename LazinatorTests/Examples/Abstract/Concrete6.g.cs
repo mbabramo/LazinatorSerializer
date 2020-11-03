@@ -170,7 +170,7 @@ namespace LazinatorTests.Examples.Abstract
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            int lengthForLengths = 0;
+            int lengthForLengths = 24;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 lengthForLengths += 8;
@@ -259,7 +259,7 @@ namespace LazinatorTests.Examples.Abstract
             // write properties
             
             WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
-            int lengthForLengths = 0;
+            int lengthForLengths = 24;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 lengthForLengths += 8;

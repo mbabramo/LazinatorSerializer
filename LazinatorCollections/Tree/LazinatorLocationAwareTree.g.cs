@@ -224,7 +224,7 @@ namespace LazinatorCollections.Tree
             int lengthForLengths = 0;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                lengthForLengths += 8;
+                lengthForLengths += 12;
             }
             int totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
             bytesSoFar += totalChildrenSize;
@@ -320,7 +320,7 @@ namespace LazinatorCollections.Tree
             int lengthForLengths = 0;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                lengthForLengths += 8;
+                lengthForLengths += 12;
             }
             
             int previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);

@@ -1806,13 +1806,13 @@ namespace LazinatorTests.Examples
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            int lengthForLengths = 0;
+            int lengthForLengths = 4;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
             {
                 lengthForLengths += 4;
                 if (includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
                 {
-                    lengthForLengths += 9;
+                    lengthForLengths += 13;
                     if (includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren)
                     {
                         lengthForLengths += 4;
@@ -1997,13 +1997,13 @@ namespace LazinatorTests.Examples
             // write properties
             
             WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
-            int lengthForLengths = 0;
+            int lengthForLengths = 4;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
             {
                 lengthForLengths += 4;
                 if (includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
                 {
-                    lengthForLengths += 9;
+                    lengthForLengths += 13;
                     if (includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren)
                     {
                         lengthForLengths += 4;
@@ -2040,13 +2040,13 @@ namespace LazinatorTests.Examples
             // write properties
             
             WritePrimitivePropertiesIntoBuffer(ref writer.Writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
-            int lengthForLengths = 0;
+            int lengthForLengths = 4;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
             {
                 lengthForLengths += 4;
                 if (includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
                 {
-                    lengthForLengths += 9;
+                    lengthForLengths += 13;
                     if (includeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren)
                     {
                         lengthForLengths += 4;

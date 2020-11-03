@@ -2566,10 +2566,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            int lengthForLengths = 12;
+            int lengthForLengths = 164;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                lengthForLengths += 20;
+                lengthForLengths += 24;
             }
             int totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
             bytesSoFar += totalChildrenSize;
@@ -2870,10 +2870,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             // write properties
             
             WritePrimitivePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID);
-            int lengthForLengths = 12;
+            int lengthForLengths = 164;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                lengthForLengths += 20;
+                lengthForLengths += 24;
             }
             
             int previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
