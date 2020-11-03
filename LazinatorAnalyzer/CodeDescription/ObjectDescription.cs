@@ -43,6 +43,7 @@ namespace Lazinator.CodeDescription
 
         /* Derivation */
         public ObjectDescription BaseLazinatorObject { get; set; }
+        public bool ClosesGeneric { get; set; }
         public bool IsDerived => BaseLazinatorObject != null;
         public bool IsDerivedFromNonAbstractLazinator => BaseLazinatorObject != null &&
                         (!BaseLazinatorObject.IsAbstract || BaseLazinatorObject.IsDerivedFromNonAbstractLazinator) && !GeneratingRefStruct;
@@ -233,6 +234,10 @@ namespace Lazinator.CodeDescription
             if (iLazinatorTypeSymbol.TypeKind != TypeKind.Struct)
             {
                 var baseILazinatorType = iLazinatorTypeSymbol.BaseType;
+
+                ClosesGeneric = (!SymbolEqualityComparer.Default.Equals(baseILazinatorType.ConstructedFrom, baseILazinatorType));
+                if (ClosesGeneric)
+                    baseILazinatorType = baseILazinatorType.ConstructedFrom; // DEBUG
 
                 if (baseILazinatorType != null && baseILazinatorType.Name != "Object")
                 {
