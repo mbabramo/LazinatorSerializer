@@ -69,7 +69,7 @@ namespace Lazinator.CodeDescription
         private bool AllLengthsPrecedeChildren => true;
         public bool SkipLengthForThisProperty => IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast;
         public bool UsesLengthValue => AllLengthsPrecedeChildren && !SkipLengthForThisProperty && IsLazinator;
-        private string ChildSliceLastParametersString => $", {(AllLengthsPrecedeChildren || OmitLengthBecauseDefinitelyLast ? "true" : "false")}, {(SingleByteLength ? "true" : "false")}, {(IsGuaranteedFixedLength ? $"{FixedLength}" : "null")}";
+        private string ChildSliceLastParametersString => $", {SizeOfLengthString}, {(IsGuaranteedFixedLength ? $"{FixedLength}" : "null")}";
         internal string IncrementChildStartBySizeOfLength => OmitLengthBecauseDefinitelyLast || IsGuaranteedFixedLength ? "" : (SingleByteLength ? " + sizeof(byte)" : " + sizeof(int)");
         internal string DecrementTotalLengthBySizeOfLength => OmitLengthBecauseDefinitelyLast || IsGuaranteedFixedLength ? "" : (SingleByteLength ? " - sizeof(byte)" : " - sizeof(int)");
 
@@ -259,6 +259,7 @@ namespace Lazinator.CodeDescription
         private string CodeOnDeserialized { get; set; }
         private string CodeOnAccessed { get; set; }
         private int SizeOfLength { get; set; } = sizeof(int);
+        private string SizeOfLengthIfIncludedString => AllLengthsPrecedeChildren || SkipLengthForThisProperty ? "SizeOfLength.SkipLength" : SizeOfLengthString;
         private string SizeOfLengthString => BytesUsedForLength() switch
         {
             0 => "SizeOfLength.SkipLength",
@@ -1642,8 +1643,6 @@ namespace Lazinator.CodeDescription
 
         private void AppendPropertyWriteString_NonLazinator(CodeStringBuilder sb)
         {
-            string byteLengthSpecification = AllLengthsPrecedeChildren && !OmitLengthBecauseDefinitelyLast ? $@",
-                writeLengthInByte: {(SingleByteLength ? "true" : "false")}" : "";
             string omitLengthSuffix = IIF(OmitLengthBecauseDefinitelyLast, "_WithoutLengthPrefix");
             string writeMethodName = PlaceholderMemoryWriteMethod == null ? $"ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}" : PlaceholderMemoryWriteMethod;
             if (PlaceholderMemoryWriteMethod == null)
@@ -1662,7 +1661,7 @@ namespace Lazinator.CodeDescription
                     verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                     binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
                         {DirectConverterTypeNamePrefix}{writeMethodName}(ref w, {BackingFieldStringOrContainedSpanWithPossibleException(null)},
-                            includeChildrenMode, v, updateStoredBuffer){byteLengthSpecification});");
+                            includeChildrenMode, v, updateStoredBuffer));");
 
                 }
                 else
@@ -1689,7 +1688,7 @@ namespace Lazinator.CodeDescription
                         getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_{PropertyName}, byteIndexCopy_{PropertyName}, byteLengthCopy_{PropertyName}{ChildSliceLastParametersString}),
                         verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                         binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
-                            {binaryWriterAction}{byteLengthSpecification});");
+                            {binaryWriterAction});");
 
                 }
             }
@@ -1701,7 +1700,7 @@ namespace Lazinator.CodeDescription
                         verifyCleanness: {(TrackDirtinessNonSerialized ? "verifyCleanness" : "false")},
                         binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
                             {DirectConverterTypeNamePrefix}{writeMethodName}(ref w, default,
-                                includeChildrenMode, v, updateStoredBuffer){byteLengthSpecification});");
+                                includeChildrenMode, v, updateStoredBuffer));");
         }
 
         private void AppendPropertyWriteString_Lazinator(CodeStringBuilder sb)
@@ -1730,12 +1729,12 @@ namespace Lazinator.CodeDescription
                 lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen($"{BackingFieldString}", $@"WriteNullChild_LengthsSeparate(ref writer, {(SingleByteLength ? "true" : "false")});", originalString) : originalString;
             }
             else
-                lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen($"{BackingFieldString}", $@"WriteNullChild(ref writer, {(SingleByteLength ? "true" : "false")}, {(AllLengthsPrecedeChildren || SkipLengthForThisProperty ? "true" : "false")});", originalString) : originalString;
+                lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen($"{BackingFieldString}", $@"WriteNullChild(ref writer, {SizeOfLengthIfIncludedString});", originalString) : originalString;
             string callWriteChild = AsyncWithinAsync ? ContainingObjectDescription.MaybeAsyncConditional($"await{ContainingObjectDescription.NoteAsyncUsed} WriteChildAsync(writer,", $"WriteChild(ref writer, ref") : ContainingObjectDescription.MaybeAsyncConditional($"await{ContainingObjectDescription.NoteAsyncUsed} WriteNonAsyncChildAsync(writer,", $"WriteChild(ref writer, ref");
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct)
             {
                 string mainWriteString = $@"{IIF(nullableStruct, $@"var copy = {BackingFieldString}.Value;
-                            ")}{callWriteChild} {propertyNameOrCopy}{NullForgivenessIfNonNullable}, includeChildrenMode, {BackingFieldAccessedString}, {ContainingObjectDescription.Maybe_asyncWord}() => {ChildSliceStringMaybeAsync()}, verifyCleanness, updateStoredBuffer, {(SingleByteLength ? "true" : "false")}, {(AllLengthsPrecedeChildren || SkipLengthForThisProperty ? "true" : "false")}, this);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
+                            ")}{callWriteChild} {propertyNameOrCopy}{NullForgivenessIfNonNullable}, includeChildrenMode, {BackingFieldAccessedString}, {ContainingObjectDescription.Maybe_asyncWord}() => {ChildSliceStringMaybeAsync()}, verifyCleanness, updateStoredBuffer, {SizeOfLengthString}, this);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
                                 {BackingFieldString} = copy;")}
                                 {lengthString}";
                 withInclusionConditional =
@@ -1748,7 +1747,7 @@ namespace Lazinator.CodeDescription
                             var byteIndexCopy = {BackingFieldByteIndex};
                             var byteLengthCopy = {BackingFieldByteLength};
                             {IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"var copy = {BackingFieldString}.Value;
-                            ")}{callWriteChild} {propertyNameOrCopy}{NullForgivenessIfNonNullable}, includeChildrenMode, {BackingFieldAccessedString}, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy{ChildSliceLastParametersString}), verifyCleanness, updateStoredBuffer, {(SingleByteLength ? "true" : "false")}, {(AllLengthsPrecedeChildren || SkipLengthForThisProperty ? "true" : "false")}, null);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
+                            ")}{callWriteChild} {propertyNameOrCopy}{NullForgivenessIfNonNullable}, includeChildrenMode, {BackingFieldAccessedString}, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy{ChildSliceLastParametersString}), verifyCleanness, updateStoredBuffer, {SizeOfLengthString}, null);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
                                 {BackingFieldString} = copy;")}
                                 {lengthString}";
                 withInclusionConditional =

@@ -1035,15 +1035,12 @@ namespace Lazinator.Core
         /// <param name="writeLengthInByte">True if the length should be contained in a single byte</param>
         public static void WriteNonLazinatorObject(object nonLazinatorObject,
             bool isBelievedDirty, bool isAccessed, ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceForFieldFn,
-            bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction, bool writeLengthInByte)
+            bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction, bool writeLengthInByte = false /* DEBUG -- eliminate */)
         {
             int startPosition = writer.ActiveMemoryPosition;
             WriteNonLazinatorObject_WithoutLengthPrefix(nonLazinatorObject, isBelievedDirty, isAccessed, ref writer, getChildSliceForFieldFn, verifyCleanness, binaryWriterAction);
             long length = writer.ActiveMemoryPosition - startPosition;
-            if (writeLengthInByte)
-                writer.RecordLength((byte)length);
-            else
-                writer.RecordLength((int)length);
+            writer.RecordLength((int)length);
         }
 
         /// <summary>
@@ -1659,6 +1656,30 @@ namespace Lazinator.Core
                 return serializedBytes.Slice(byteOffset + sizeof(byte), byteLength - sizeof(byte));
             return serializedBytes.Slice(byteOffset + sizeof(int), byteLength - sizeof(int));
         }
+        public static LazinatorMemory GetChildSlice(LazinatorMemory serializedBytes, int byteOffset, int byteLength, SizeOfLength sizeOfLength, int? fixedLength)
+        {
+            if (serializedBytes.IsEmpty)
+            {
+                return LazinatorMemory.EmptyLazinatorMemory;
+            }
+            if (fixedLength != null)
+                return serializedBytes.Slice(byteOffset, (int)fixedLength);
+            int sizeOfLengthBytes = GetSizeOfLengthBytes(sizeOfLength);
+            return serializedBytes.Slice(byteOffset + sizeOfLengthBytes, byteLength - sizeOfLengthBytes);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static int GetSizeOfLengthBytes(SizeOfLength sizeOfLength)
+        {
+            return sizeOfLength switch
+            {
+                SizeOfLength.SkipLength => 0,
+                SizeOfLength.Byte => 1,
+                SizeOfLength.Int16 => 2,
+                SizeOfLength.Int64 => 8,
+                _ => 4
+            };
+        }
 
         /// <summary>
         /// Returns a slice of serialized bytes corresponding to a child, excluding the length prefix.
@@ -1669,13 +1690,19 @@ namespace Lazinator.Core
         /// <param name="lengthInSingleByte">Indicates that only one byte of the serialized bytes is used to store the object</param>
         /// <param name="fixedLength"The fixed length of the child, if the length is not included in the serialized bytes
         /// <returns></returns>
+        public async static ValueTask<LazinatorMemory> GetChildSliceAsync(LazinatorMemory serializedBytes, int byteOffset, int byteLength, SizeOfLength sizeOfLength, int? fixedLength)
+        {
+            var result = GetChildSlice(serializedBytes, byteOffset, byteLength, sizeOfLength, fixedLength);
+            await result.LoadInitialMemoryAsync();
+            return result;
+        }
+
         public async static ValueTask<LazinatorMemory> GetChildSliceAsync(LazinatorMemory serializedBytes, int byteOffset, int byteLength, bool omitLength, bool lengthInSingleByte, int? fixedLength)
         {
             var result = GetChildSlice(serializedBytes, byteOffset, byteLength, omitLength, lengthInSingleByte, fixedLength);
             await result.LoadInitialMemoryAsync();
             return result;
-        }
-
+        } // DEBUG -- delete
 
         /// <summary>
         /// Fully deserialize the lazinator at this node and return the Lazinator object (or a copy if it is a struct).
