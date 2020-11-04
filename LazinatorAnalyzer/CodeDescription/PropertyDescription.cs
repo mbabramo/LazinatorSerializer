@@ -277,10 +277,19 @@ namespace Lazinator.CodeDescription
             8 => "int64",
             _ => "int"
         };
+        private string SizeOfLengthTypeStringCaps => BytesUsedForLength() switch
+        {
+            0 => "",
+            1 => "Byte",
+            2 => "Int16",
+            4 => "Int32",
+            8 => "int64",
+            _ => "Int32"
+        };
         private bool IsGuaranteedFixedLength { get; set; }
         private int FixedLength { get; set; }
         private bool SingleByteLength { get; set; }
-        private string LengthPrefixTypeString => IsGuaranteedFixedLength ? "out" : SizeOfLengthTypeString;
+        private string LengthPrefixTypeString => IsGuaranteedFixedLength ? "out" : SizeOfLengthTypeStringCaps;
         private string WriteDefaultLengthString =>
             !IsGuaranteedFixedLength || FixedLength == 1 ?
                 $"writer.Write(({(SingleByteLength || IsGuaranteedFixedLength ? "byte" : "int")})0);"
@@ -1711,7 +1720,7 @@ namespace Lazinator.CodeDescription
                         {{
                             ThrowHelper.ThrowTooLargeException({SizeOfLengthTypeString}.MaxValue);
                         }}
-                        writer.RecordLength({SizeOfLengthTypeString} lengthValue);";
+                        writer.RecordLength(({SizeOfLengthTypeString}) lengthValue);";
                 }
                 else
                 {
