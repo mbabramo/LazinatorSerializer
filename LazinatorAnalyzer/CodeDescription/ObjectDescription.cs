@@ -119,7 +119,7 @@ namespace Lazinator.CodeDescription
         public bool HasNonexclusiveInterfaces => NonexclusiveInterfaces != null && NonexclusiveInterfaces.Any();
         public int TotalNumProperties => ExclusiveInterface.TotalNumProperties;
         internal bool AutoChangeParentAllThisLevel => ExclusiveInterface?.AutoChangeParentAll ?? false;
-        public bool AutoChangeParentAll => AutoChangeParentAllThisLevel || GetBaseObjectDescriptions().Any(x => x.AutoChangeParentAllThisLevel);
+        public bool AutoChangeParentAll => AutoChangeParentAllThisLevel || GetBaseLazinatorObjects().Any(x => x.AutoChangeParentAllThisLevel);
 
 
         /* Implementations */
@@ -164,7 +164,7 @@ namespace Lazinator.CodeDescription
         public int SizeOfLength { get; set; }
         public bool RequiresLongLengths => SizeOfLength == sizeof(long);
         public string TypeForLengths => RequiresLongLengths ? "long" : "int";
-        public string CastLongToTypeForLengths(string code) => RequiresLongLengths ? code : $"((int) {code})";
+        public string CastLongToTypeForLengths(string code) => RequiresLongLengths ? code : $"(int) ({code})";
         private string IIF(bool x, string y) => x ? y : ""; // Include if function
         private string IIF(bool x, Func<string> y) => x ? y() : ""; // Same but with a function to produce the string
 
@@ -284,6 +284,9 @@ namespace Lazinator.CodeDescription
             var sizeOfLengthAttribute = InterfaceTypeSymbol.GetAttributesIncludingBase<CloneSizeOfLengthAttribute>().FirstOrDefault();
             if (sizeOfLengthAttribute != null)
                 SizeOfLength = sizeOfLengthAttribute.SizeOfLength;
+            foreach (var baseLazinator in GetBaseLazinatorObjects())
+                if (SizeOfLength != baseLazinator.SizeOfLength)
+                    throw new LazinatorCodeGenException($"{InterfaceTypeSymbol} cannot have different Length property from base.");
             AllowNonlazinatorGenerics = InterfaceTypeSymbol.HasAttributeOfType<CloneAllowNonlazinatorOpenGenericsAttribute>();
             SuppressLazinatorVersionByte = InterfaceTypeSymbol.HasAttributeOfType<CloneExcludeLazinatorVersionByteAttribute>();
             GenerateRefStructIfNotGenerating = InterfaceTypeSymbol.HasAttributeOfType<CloneGenerateRefStructAttribute>();
@@ -298,7 +301,7 @@ namespace Lazinator.CodeDescription
                 .Select(x => new NonexclusiveInterfaceDescription(Compilation, x, NullableContextSetting, this)).ToList();
         }
 
-        public IEnumerable<ObjectDescription> GetBaseObjectDescriptions()
+        public IEnumerable<ObjectDescription> GetBaseLazinatorObjects()
         {
             var b = BaseLazinatorObject;
             while (b != null)
@@ -314,7 +317,7 @@ namespace Lazinator.CodeDescription
         /// <returns></returns>
         public IEnumerable<ObjectDescription> GetAbstractBaseObjectDescriptions()
         {
-            foreach (ObjectDescription o in GetBaseObjectDescriptions())
+            foreach (ObjectDescription o in GetBaseLazinatorObjects())
             {
                 if (!o.IsAbstract)
                     yield break;

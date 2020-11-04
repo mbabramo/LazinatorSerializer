@@ -62,7 +62,7 @@ namespace Lazinator.CodeDescription
                 if (namedInterfaceType == null)
                     throw new LazinatorCodeGenException(
                         $"Unofficial type {a.OtherInterfaceFullyQualifiedTypeName} must exist and have a Lazinator attribute.");
-                var containerToUse = Container.GetBaseObjectDescriptions().LastOrDefault(x => x.InterfaceTypeSymbol != null && x.InterfaceTypeSymbol.GetKnownAttribute<CloneUnofficiallyIncorporateInterfaceAttribute>()?.OtherInterfaceFullyQualifiedTypeName == a.OtherInterfaceFullyQualifiedTypeName) ?? Container;
+                var containerToUse = Container.GetBaseLazinatorObjects().LastOrDefault(x => x.InterfaceTypeSymbol != null && x.InterfaceTypeSymbol.GetKnownAttribute<CloneUnofficiallyIncorporateInterfaceAttribute>()?.OtherInterfaceFullyQualifiedTypeName == a.OtherInterfaceFullyQualifiedTypeName) ?? Container;
                 ExclusiveInterfaceDescription d = new ExclusiveInterfaceDescription(Container.Compilation.Compilation, namedInterfaceType, NullableContextSetting, containerToUse, true);
                 foreach (var property in d.PropertiesToDefineThisLevel)
                 {
@@ -82,7 +82,7 @@ namespace Lazinator.CodeDescription
                 if (!propertiesWithLevel.Any(x => x.Property.MetadataName == unofficialProperty.PropertySymbol.MetadataName))
                     propertiesWithLevel.Add(new PropertyWithDefinitionInfo(unofficialProperty.PropertySymbol, PropertyWithDefinitionInfo.Level.IsDefinedThisLevel) { PropertyAccessibility = unofficialProperty.PropertyAccessibility });
             }
-            foreach (var baseType in Container.GetBaseObjectDescriptions())
+            foreach (var baseType in Container.GetBaseLazinatorObjects())
             {
                 List<IPropertySymbol> additionalProperties;
                 bool baseTypeIsIndexed = Container.Compilation.TypeToExclusiveInterface.ContainsKey(LazinatorCompilation.TypeSymbolToString(baseType.ILazinatorTypeSymbol));
@@ -147,7 +147,7 @@ namespace Lazinator.CodeDescription
                             (
                              !Container.IsAbstract // if we have two consecutive abstract classes, we don't want to repeat the abstract properties
                              &&
-                            !Container.GetBaseObjectDescriptions().Any(x => !x.IsAbstract && x.PropertiesToDefineThisLevel.Any(y => y.PropertyName == orderedProperty.description.PropertyName )))
+                            !Container.GetBaseLazinatorObjects().Any(x => !x.IsAbstract && x.PropertiesToDefineThisLevel.Any(y => y.PropertyName == orderedProperty.description.PropertyName )))
                         )
                     {
                         PropertiesToDefineThisLevel.Add(orderedProperty.description);
