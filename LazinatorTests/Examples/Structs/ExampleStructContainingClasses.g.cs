@@ -42,7 +42,7 @@ namespace LazinatorTests.Examples
         int _MyChild2_ByteLength => _MyLazinatorList_ByteIndex - _MyChild2_ByteIndex;
         int _MyLazinatorList_ByteLength => _MyListValues_ByteIndex - _MyLazinatorList_ByteIndex;
         int _MyListValues_ByteLength => _MyTuple_ByteIndex - _MyListValues_ByteIndex;
-        int _MyTuple_ByteLength => LazinatorMemoryStorage.Length - _MyTuple_ByteIndex;
+        int _MyTuple_ByteLength => (int) /* DEBUG */ LazinatorMemoryStorage.Length - _MyTuple_ByteIndex;
         
         
         bool _MyBool;
@@ -410,7 +410,7 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
+                BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
                 LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
                 LazinatorMemoryStorage = writer.LazinatorMemory;
             }
@@ -427,14 +427,14 @@ namespace LazinatorTests.Examples
             {
                 return EncodeToNewBuffer(includeChildrenMode, verifyCleanness, updateStoredBuffer);
             }
-            BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
+            BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
             LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
             return writer.LazinatorMemory;
         }
         
         LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
         {
-            int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.Length;
+            int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.LengthInt ?? ExpandableBytes.DefaultMinBufferSize;
             BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
             SerializeToExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
             return writer.LazinatorMemory;

@@ -35,6 +35,10 @@ namespace Lazinator.Buffers
         /// The total number of bytes in the referenced range, potentially spanning multiple chunks of memory.
         /// </summary>
         public readonly long Length;
+        /// <summary>
+        /// The number of bytes, as an integer, or null if the number is too large to be stored in an integer.
+        /// </summary>
+        public int? LengthInt => Length > int.MaxValue ? null : (int)Length;
 
         public bool IsEmpty => InitialOwnedMemory == null || Length == 0;
         public long? AllocationID => (InitialOwnedMemory as ExpandableBytes)?.AllocationID;

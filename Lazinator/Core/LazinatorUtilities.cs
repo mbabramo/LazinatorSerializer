@@ -69,14 +69,14 @@ namespace Lazinator.Core
                 return EncodeToNewBinaryBufferWriter(lazinator, includeChildrenMode, verifyCleanness, updateStoredBuffer);
 
             // We can use the original storage. But we still have to copy it into a new buffer, as requested.
-            BinaryBufferWriter writer = new BinaryBufferWriter(originalStorage.Length);
+            BinaryBufferWriter writer = new BinaryBufferWriter((int) /* DEBUG */ originalStorage.Length);
             originalStorage.WriteToBinaryBuffer(ref writer);
             return writer.LazinatorMemory;
         }
 
         private static LazinatorMemory EncodeToNewBinaryBufferWriter<T>(T lazinatorObject, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) where T : ILazinator
         {
-            int bufferSize = lazinatorObject.LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : lazinatorObject.LazinatorMemoryStorage.Length;
+            int bufferSize = lazinatorObject.LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : (int) /* DEBUG */ lazinatorObject.LazinatorMemoryStorage.Length;
             BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
             lazinatorObject.SerializeToExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
             return writer.LazinatorMemory;
@@ -109,14 +109,14 @@ namespace Lazinator.Core
                 return await EncodeToNewBinaryBufferWriterAsync(lazinator, includeChildrenMode, verifyCleanness, updateStoredBuffer);
 
             // We can use the original storage. But we still have to copy it into a new buffer, as requested.
-            BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(originalStorage.Length);
+            BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer((int) /* DEBUG */ originalStorage.Length);
             await originalStorage.WriteToBinaryBufferAsync(writer);
             return writer.LazinatorMemory;
         }
 
         private async static ValueTask<LazinatorMemory> EncodeToNewBinaryBufferWriterAsync<T>(T lazinatorObject, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) where T : ILazinator, ILazinatorAsync
         {
-            int bufferSize = lazinatorObject.LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : lazinatorObject.LazinatorMemoryStorage.Length;
+            int bufferSize = lazinatorObject.LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : (int) /* DEBUG */ lazinatorObject.LazinatorMemoryStorage.Length;
             BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(bufferSize);
             await lazinatorObject.SerializeToExistingBufferAsync(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
             return writer.LazinatorMemory;
@@ -347,7 +347,7 @@ namespace Lazinator.Core
                 {
                     if (child != null)
                     {
-                        int length = childStorage.Length;
+                        int length = (int)childStorage.Length; // DEBUG
                         if (!skipLength)
                         {
                             startPosition += restrictLengthTo255Bytes ? 1 : 4;
@@ -403,7 +403,7 @@ namespace Lazinator.Core
                 {
                     if (child != null)
                     {
-                        int length = childStorage.Length;
+                        int length = (int)childStorage.Length; // DEBUG
                         startPosition += sizeOfLength.LengthBytes();
                         child.UpdateStoredBuffer(ref writer, startPosition, length, includeChildrenMode, true);
                     }
@@ -467,7 +467,7 @@ namespace Lazinator.Core
                 {
                     if (child != null)
                     {
-                        int length = childStorage.Length;
+                        int length = (int)childStorage.Length; // DEBUG
                         if (!skipLength)
                         {
                             startPosition += restrictLengthTo255Bytes ? 1 : 4;
@@ -521,7 +521,7 @@ namespace Lazinator.Core
                 {
                     if (child != null)
                     {
-                        int length = childStorage.Length;
+                        int length = (int)childStorage.Length; // DEBUG
                         startPosition += sizeOfLength.LengthBytes();
                         child.UpdateStoredBuffer(ref writer.Writer, startPosition, length, includeChildrenMode, true);
                     }
@@ -585,7 +585,7 @@ namespace Lazinator.Core
                 {
                     if (child != null)
                     {
-                        int length = childStorage.Length;
+                        int length = (int)childStorage.Length; // DEBUG
                         if (!skipLength)
                         {
                             startPosition += restrictLengthTo255Bytes ? 1 : 4;
@@ -639,7 +639,7 @@ namespace Lazinator.Core
                 {
                     if (child != null)
                     {
-                        int length = childStorage.Length;
+                        int length = (int)childStorage.Length; // DEBUG
                         startPosition += sizeOfLength.LengthBytes();
                         child.UpdateStoredBuffer(ref writer.Writer, startPosition, length, includeChildrenMode, true);
                     }
@@ -1061,7 +1061,7 @@ namespace Lazinator.Core
             bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction)
         {
             LazinatorMemory original = getChildSliceForFieldFn();
-            int length = original.Length;
+            int length = (int) original.Length;
             if (!isAccessed && length > 0)
             {
                 // object has never been loaded into memory, so there is no need to verify cleanness
@@ -1124,7 +1124,7 @@ namespace Lazinator.Core
             bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction)
         {
             LazinatorMemory original = await getChildSliceForFieldFn();
-            int length = original.Length;
+            int length = (int) /* DEBUG */ original.Length;
             if (!isAccessed && length > 0)
             {
                 // object has never been loaded into memory, so there is no need to verify cleanness
@@ -1758,7 +1758,7 @@ namespace Lazinator.Core
             Pipe pipe = new Pipe();
             AddToPipe(lazinator, pipe);
             pipe.Writer.Complete();
-            return (pipe, lazinator.LazinatorMemoryStorage.Length);
+            return (pipe, (int) /* DEBUG */  lazinator.LazinatorMemoryStorage.Length);
         }
 
         /// <summary>

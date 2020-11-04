@@ -680,9 +680,9 @@ namespace Lazinator.CodeDescription
                             }}
                             else
                             {{{MaybeAsyncConditional($@"
-                                BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(LazinatorMemoryStorage.Length);
+                                BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(LazinatorMemoryStorage.LengthInt ?? 0);
                                 {AwaitAndNoteAsyncUsed}LazinatorMemoryStorage.WriteToBinaryBufferAsync(writer);", $@"
-                                BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
+                                BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
                                 LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);")}
                                 LazinatorMemoryStorage = writer.LazinatorMemory;
                             }}
@@ -699,16 +699,16 @@ namespace Lazinator.CodeDescription
                             {{
                                 return {MaybeAsyncReturnValue($"{MaybeAwaitWord}EncodeToNewBuffer{MaybeAsyncWord}(includeChildrenMode, verifyCleanness, updateStoredBuffer)")};
                             }}{MaybeAsyncConditional($@"
-                                BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(LazinatorMemoryStorage.Length);
+                                BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(LazinatorMemoryStorage.LengthInt ?? 0);
                                 {AwaitAndNoteAsyncUsed}LazinatorMemoryStorage.WriteToBinaryBufferAsync(writer);", $@"
-                                BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.Length);
+                                BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
                                 LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);")}
                             return {MaybeAsyncReturnValue($"writer.LazinatorMemory")};
                         }}")}
 
                         {MaybeAsyncAndNot($@"{ProtectedIfApplicable}{DerivationKeyword}{MaybeAsyncReturnType("LazinatorMemory")} EncodeToNewBuffer{MaybeAsyncWord}(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
                         {{
-                            int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.Length;{MaybeAsyncConditional($@"
+                            int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.LengthInt ?? ExpandableBytes.DefaultMinBufferSize;{MaybeAsyncConditional($@"
                             BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(bufferSize);
                             {AwaitAndNoteAsyncUsed}SerializeToExistingBufferAsync(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);", $@"
                             BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
@@ -851,7 +851,7 @@ namespace Lazinator.CodeDescription
                     else
                     {
                         sb.AppendLine(
-                                $"{ProtectedIfApplicable}int {lastPropertyToIndex.BackingFieldByteLength} => LazinatorMemoryStorage.Length - {lastPropertyToIndex.BackingFieldByteIndex};");
+                                $"{ProtectedIfApplicable}int {lastPropertyToIndex.BackingFieldByteLength} => (int) /* DEBUG */ LazinatorMemoryStorage.Length - {lastPropertyToIndex.BackingFieldByteIndex};");
                     }
                 }
             }

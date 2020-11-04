@@ -222,7 +222,7 @@ namespace Lazinator.Core
                 int bytesSoFar = 0;
                 int uniqueID = fixedUniqueID ?? ((ReadOnlySpan<byte>)storage.InitialMemory.Span).ToDecompressedInt32(ref bytesSoFar);
                 ILazinator itemToReturn = CreateKnownID(uniqueID, storage, null);
-                int bytes = itemToReturn.LazinatorMemoryStorage.Length;
+                int bytes = (int)itemToReturn.LazinatorMemoryStorage.Length;
                 storage = storage.Slice(bytes);
                 yield return itemToReturn;
             }
