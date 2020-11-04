@@ -75,7 +75,7 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListInt_ByteIndex, _MyListInt_ByteLength, true, false, null);_MyListInt = ConvertFromBytes_List_GWInt32_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListInt_ByteIndex, _MyListInt_ByteLength, SizeOfLength.Int32, null);_MyListInt = ConvertFromBytes_List_GWInt32_g(childData);
             }
             _MyListInt_Accessed = true;
         }
@@ -129,7 +129,7 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableByte_ByteIndex, _MyListNullableByte_ByteLength, true, false, null);_MyListNullableByte = ConvertFromBytes_List_GWNullableByte_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableByte_ByteIndex, _MyListNullableByte_ByteLength, SizeOfLength.Int32, null);_MyListNullableByte = ConvertFromBytes_List_GWNullableByte_g(childData);
             }
             _MyListNullableByte_Accessed = true;
         }
@@ -165,7 +165,7 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableInt_ByteIndex, _MyListNullableInt_ByteLength, true, false, null);_MyListNullableInt = ConvertFromBytes_List_GWNullableInt32_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableInt_ByteIndex, _MyListNullableInt_ByteLength, SizeOfLength.Int32, null);_MyListNullableInt = ConvertFromBytes_List_GWNullableInt32_g(childData);
             }
             _MyListNullableInt_Accessed = true;
         }
@@ -558,12 +558,11 @@ namespace LazinatorTests.Examples.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListInt, isBelievedDirty: MyListInt_Dirty || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyListInt_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListInt_ByteIndex, _MyListInt_ByteLength, true, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListInt_ByteIndex, _MyListInt_ByteLength, SizeOfLength.Int32, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_GWInt32_g(ref w, _MyListInt,
-            includeChildrenMode, v, updateStoredBuffer),
-            writeLengthInByte: false);
+            includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
                 _MyListInt_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -577,12 +576,11 @@ namespace LazinatorTests.Examples.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListNullableByte, isBelievedDirty: _MyListNullableByte_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyListNullableByte_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListNullableByte_ByteIndex, _MyListNullableByte_ByteLength, true, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListNullableByte_ByteIndex, _MyListNullableByte_ByteLength, SizeOfLength.Int32, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_GWNullableByte_g(ref w, _MyListNullableByte,
-            includeChildrenMode, v, updateStoredBuffer),
-            writeLengthInByte: false);
+            includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
                 _MyListNullableByte_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -596,12 +594,11 @@ namespace LazinatorTests.Examples.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListNullableInt, isBelievedDirty: _MyListNullableInt_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyListNullableInt_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListNullableInt_ByteIndex, _MyListNullableInt_ByteLength, true, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListNullableInt_ByteIndex, _MyListNullableInt_ByteLength, SizeOfLength.Int32, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_GWNullableInt32_g(ref w, _MyListNullableInt,
-            includeChildrenMode, v, updateStoredBuffer),
-            writeLengthInByte: false);
+            includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
                 _MyListNullableInt_ByteIndex = startOfChildPosition - startOfObjectPosition;

@@ -70,7 +70,7 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyStackInt_ByteIndex, _MyStackInt_ByteLength, true, false, null);_MyStackInt = ConvertFromBytes_Stack_Gint_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyStackInt_ByteIndex, _MyStackInt_ByteLength, SizeOfLength.Int32, null);_MyStackInt = ConvertFromBytes_Stack_Gint_g(childData);
             }
             _MyStackInt_Accessed = true;
         }
@@ -455,12 +455,11 @@ namespace LazinatorTests.Examples.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyStackInt, isBelievedDirty: MyStackInt_Dirty || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyStackInt_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyStackInt_ByteIndex, _MyStackInt_ByteLength, true, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyStackInt_ByteIndex, _MyStackInt_ByteLength, SizeOfLength.Int32, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Stack_Gint_g(ref w, _MyStackInt,
-            includeChildrenMode, v, updateStoredBuffer),
-            writeLengthInByte: false);
+            includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
                 _MyStackInt_ByteIndex = startOfChildPosition - startOfObjectPosition;

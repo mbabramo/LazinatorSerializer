@@ -97,7 +97,7 @@ namespace LazinatorTests.Examples.Abstract
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList4_ByteIndex, _IntList4_ByteLength, true, false, null);_IntList4 = ConvertFromBytes_List_Gint_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList4_ByteIndex, _IntList4_ByteLength, SizeOfLength.Int32, null);_IntList4 = ConvertFromBytes_List_Gint_g(childData);
             }
             _IntList4_Accessed = true;
         }
@@ -133,7 +133,7 @@ namespace LazinatorTests.Examples.Abstract
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList5_ByteIndex, _IntList5_ByteLength, true, false, null);_IntList5 = ConvertFromBytes_List_Gint_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList5_ByteIndex, _IntList5_ByteLength, SizeOfLength.Int32, null);_IntList5 = ConvertFromBytes_List_Gint_g(childData);
             }
             _IntList5_Accessed = true;
         }
@@ -384,12 +384,11 @@ namespace LazinatorTests.Examples.Abstract
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList4, isBelievedDirty: _IntList4_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _IntList4_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _IntList4_ByteIndex, _IntList4_ByteLength, true, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _IntList4_ByteIndex, _IntList4_ByteLength, SizeOfLength.Int32, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_Gint_g(ref w, _IntList4,
-            includeChildrenMode, v, updateStoredBuffer),
-            writeLengthInByte: false);
+            includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
                 _IntList4_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -403,12 +402,11 @@ namespace LazinatorTests.Examples.Abstract
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntList5, isBelievedDirty: _IntList5_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _IntList5_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _IntList5_ByteIndex, _IntList5_ByteLength, true, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _IntList5_ByteIndex, _IntList5_ByteLength, SizeOfLength.Int32, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_Gint_g(ref w, _IntList5,
-            includeChildrenMode, v, updateStoredBuffer),
-            writeLengthInByte: false);
+            includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
                 _IntList5_ByteIndex = startOfChildPosition - startOfObjectPosition;

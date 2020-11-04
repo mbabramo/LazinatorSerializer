@@ -71,7 +71,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListT_ByteIndex, _MyListT_ByteLength, true, false, null);_MyListT = ConvertFromBytes_List_GT_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListT_ByteIndex, _MyListT_ByteLength, SizeOfLength.Int32, null);_MyListT = ConvertFromBytes_List_GT_g(childData);
             }
             _MyListT_Accessed = true;
         }
@@ -126,7 +126,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, true, false, null);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, SizeOfLength.Int32, null);
                 _MyT = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
             }
             _MyT_Accessed = true;
@@ -555,12 +555,11 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListT, isBelievedDirty: _MyListT_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyListT_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListT_ByteIndex, _MyListT_ByteLength, true, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListT_ByteIndex, _MyListT_ByteLength, SizeOfLength.Int32, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_GT_g(ref w, _MyListT,
-            includeChildrenMode, v, updateStoredBuffer),
-            writeLengthInByte: false);
+            includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
                 _MyListT_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -573,7 +572,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 {
                     var deserialized = MyT;
                 }
-                WriteChild(ref writer, ref _MyT, includeChildrenMode, _MyT_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                WriteChild(ref writer, ref _MyT, includeChildrenMode, _MyT_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, SizeOfLength.Int32, null), verifyCleanness, updateStoredBuffer, SizeOfLength.Int32, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {

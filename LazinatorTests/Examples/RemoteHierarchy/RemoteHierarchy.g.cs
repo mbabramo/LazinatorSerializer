@@ -94,7 +94,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _RemoteLevel1Item_ByteIndex, _RemoteLevel1Item_ByteLength, true, false, null);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _RemoteLevel1Item_ByteIndex, _RemoteLevel1Item_ByteLength, SizeOfLength.Int32, null);
                 _RemoteLevel1Item = DeserializationFactory.Instance.CreateBaseOrDerivedType(254, (c, p) => new Remote<WGuid, RemoteLevel1>(c, p), childData, this); 
             }
             _RemoteLevel1Item_Accessed = true;
@@ -509,7 +509,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
                 {
                     var deserialized = RemoteLevel1Item;
                 }
-                WriteChild(ref writer, ref _RemoteLevel1Item, includeChildrenMode, _RemoteLevel1Item_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _RemoteLevel1Item_ByteIndex, _RemoteLevel1Item_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                WriteChild(ref writer, ref _RemoteLevel1Item, includeChildrenMode, _RemoteLevel1Item_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _RemoteLevel1Item_ByteIndex, _RemoteLevel1Item_ByteLength, SizeOfLength.Int32, null), verifyCleanness, updateStoredBuffer, SizeOfLength.Int32, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {

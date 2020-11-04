@@ -82,7 +82,7 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntWrapper_ByteIndex, _IntWrapper_ByteLength, true, true, null);_IntWrapper = new WInt32(childData)
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntWrapper_ByteIndex, _IntWrapper_ByteLength, SizeOfLength.Byte, null);_IntWrapper = new WInt32(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
@@ -104,7 +104,7 @@ namespace LazinatorTests.Examples
                     }
                     else
                     {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntWrapper_ByteIndex, _IntWrapper_ByteLength, true, true, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntWrapper_ByteIndex, _IntWrapper_ByteLength, SizeOfLength.Byte, null);
                         var toReturn = new WInt32(childData);
                         toReturn.IsDirty = false;
                         return toReturn;
@@ -149,7 +149,7 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, true, false, null);_MyExampleStructContainingClasses = new ExampleStructContainingClasses(childData)
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, SizeOfLength.Int32, null);_MyExampleStructContainingClasses = new ExampleStructContainingClasses(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
@@ -171,7 +171,7 @@ namespace LazinatorTests.Examples
                     }
                     else
                     {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, true, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, SizeOfLength.Int32, null);
                         var toReturn = new ExampleStructContainingClasses(childData);
                         toReturn.IsDirty = false;
                         return toReturn;
@@ -214,7 +214,7 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyHashSetExampleStruct_ByteIndex, _MyHashSetExampleStruct_ByteLength, true, false, null);_MyHashSetExampleStruct = ConvertFromBytes_HashSet_GExampleStructContainingClasses_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyHashSetExampleStruct_ByteIndex, _MyHashSetExampleStruct_ByteLength, SizeOfLength.Int32, null);_MyHashSetExampleStruct = ConvertFromBytes_HashSet_GExampleStructContainingClasses_g(childData);
             }
             _MyHashSetExampleStruct_Accessed = true;
         }
@@ -250,7 +250,7 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListExampleStruct_ByteIndex, _MyListExampleStruct_ByteLength, true, false, null);_MyListExampleStruct = ConvertFromBytes_List_GExampleStructContainingClasses_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListExampleStruct_ByteIndex, _MyListExampleStruct_ByteLength, SizeOfLength.Int32, null);_MyListExampleStruct = ConvertFromBytes_List_GExampleStructContainingClasses_g(childData);
             }
             _MyListExampleStruct_Accessed = true;
         }
@@ -286,7 +286,7 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableExampleStruct_ByteIndex, _MyListNullableExampleStruct_ByteLength, true, false, null);_MyListNullableExampleStruct = ConvertFromBytes_List_GWNullableStruct_GExampleStructContainingClasses_g_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableExampleStruct_ByteIndex, _MyListNullableExampleStruct_ByteLength, SizeOfLength.Int32, null);_MyListNullableExampleStruct = ConvertFromBytes_List_GWNullableStruct_GExampleStructContainingClasses_g_g(childData);
             }
             _MyListNullableExampleStruct_Accessed = true;
         }
@@ -322,7 +322,7 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListUnwrappedNullableExampleStruct_ByteIndex, _MyListUnwrappedNullableExampleStruct_ByteLength, true, false, null);_MyListUnwrappedNullableExampleStruct = ConvertFromBytes_List_GExampleStructContainingClasses_n_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListUnwrappedNullableExampleStruct_ByteIndex, _MyListUnwrappedNullableExampleStruct_ByteLength, SizeOfLength.Int32, null);_MyListUnwrappedNullableExampleStruct = ConvertFromBytes_List_GExampleStructContainingClasses_n_g(childData);
             }
             _MyListUnwrappedNullableExampleStruct_Accessed = true;
         }
@@ -790,7 +790,7 @@ namespace LazinatorTests.Examples
                 {
                     var deserialized = IntWrapper;
                 }
-                WriteChild(ref writer, ref _IntWrapper, includeChildrenMode, _IntWrapper_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _IntWrapper_ByteIndex, _IntWrapper_ByteLength, true, true, null), verifyCleanness, updateStoredBuffer, true, true, this);
+                WriteChild(ref writer, ref _IntWrapper, includeChildrenMode, _IntWrapper_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _IntWrapper_ByteIndex, _IntWrapper_ByteLength, SizeOfLength.Byte, null), verifyCleanness, updateStoredBuffer, SizeOfLength.Byte, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > byte.MaxValue)
                 {
@@ -810,7 +810,7 @@ namespace LazinatorTests.Examples
                 {
                     var deserialized = MyExampleStructContainingClasses;
                 }
-                WriteChild(ref writer, ref _MyExampleStructContainingClasses, includeChildrenMode, _MyExampleStructContainingClasses_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                WriteChild(ref writer, ref _MyExampleStructContainingClasses, includeChildrenMode, _MyExampleStructContainingClasses_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, SizeOfLength.Int32, null), verifyCleanness, updateStoredBuffer, SizeOfLength.Int32, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {
@@ -831,12 +831,11 @@ namespace LazinatorTests.Examples
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyHashSetExampleStruct, isBelievedDirty: _MyHashSetExampleStruct_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyHashSetExampleStruct_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyHashSetExampleStruct_ByteIndex, _MyHashSetExampleStruct_ByteLength, true, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyHashSetExampleStruct_ByteIndex, _MyHashSetExampleStruct_ByteLength, SizeOfLength.Int32, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_HashSet_GExampleStructContainingClasses_g(ref w, _MyHashSetExampleStruct,
-            includeChildrenMode, v, updateStoredBuffer),
-            writeLengthInByte: false);
+            includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
                 _MyHashSetExampleStruct_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -853,12 +852,11 @@ namespace LazinatorTests.Examples
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListExampleStruct, isBelievedDirty: _MyListExampleStruct_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyListExampleStruct_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListExampleStruct_ByteIndex, _MyListExampleStruct_ByteLength, true, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListExampleStruct_ByteIndex, _MyListExampleStruct_ByteLength, SizeOfLength.Int32, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_GExampleStructContainingClasses_g(ref w, _MyListExampleStruct,
-            includeChildrenMode, v, updateStoredBuffer),
-            writeLengthInByte: false);
+            includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
                 _MyListExampleStruct_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -872,12 +870,11 @@ namespace LazinatorTests.Examples
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListNullableExampleStruct, isBelievedDirty: _MyListNullableExampleStruct_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyListNullableExampleStruct_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListNullableExampleStruct_ByteIndex, _MyListNullableExampleStruct_ByteLength, true, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListNullableExampleStruct_ByteIndex, _MyListNullableExampleStruct_ByteLength, SizeOfLength.Int32, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_GWNullableStruct_GExampleStructContainingClasses_g_g(ref w, _MyListNullableExampleStruct,
-            includeChildrenMode, v, updateStoredBuffer),
-            writeLengthInByte: false);
+            includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
                 _MyListNullableExampleStruct_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -891,12 +888,11 @@ namespace LazinatorTests.Examples
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListUnwrappedNullableExampleStruct, isBelievedDirty: _MyListUnwrappedNullableExampleStruct_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyListUnwrappedNullableExampleStruct_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListUnwrappedNullableExampleStruct_ByteIndex, _MyListUnwrappedNullableExampleStruct_ByteLength, true, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListUnwrappedNullableExampleStruct_ByteIndex, _MyListUnwrappedNullableExampleStruct_ByteLength, SizeOfLength.Int32, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_GExampleStructContainingClasses_n_g(ref w, _MyListUnwrappedNullableExampleStruct,
-            includeChildrenMode, v, updateStoredBuffer),
-            writeLengthInByte: false);
+            includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
                 _MyListUnwrappedNullableExampleStruct_ByteIndex = startOfChildPosition - startOfObjectPosition;

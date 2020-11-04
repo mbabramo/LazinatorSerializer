@@ -70,7 +70,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyKeyValuePairSerialized_ByteIndex, _MyKeyValuePairSerialized_ByteLength, true, false, null);_MyKeyValuePairSerialized = ConvertFromBytes_KeyValuePair_Guint_c_C32ExampleChild_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyKeyValuePairSerialized_ByteIndex, _MyKeyValuePairSerialized_ByteLength, SizeOfLength.Int32, null);_MyKeyValuePairSerialized = ConvertFromBytes_KeyValuePair_Guint_c_C32ExampleChild_g(childData);
             }
             _MyKeyValuePairSerialized_Accessed = true;
         }
@@ -432,12 +432,11 @@ namespace LazinatorTests.Examples.Tuples
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyKeyValuePairSerialized, isBelievedDirty: _MyKeyValuePairSerialized_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyKeyValuePairSerialized_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyKeyValuePairSerialized_ByteIndex, _MyKeyValuePairSerialized_ByteLength, true, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyKeyValuePairSerialized_ByteIndex, _MyKeyValuePairSerialized_ByteLength, SizeOfLength.Int32, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_KeyValuePair_Guint_c_C32ExampleChild_g(ref w, _MyKeyValuePairSerialized,
-            includeChildrenMode, v, updateStoredBuffer),
-            writeLengthInByte: false);
+            includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
                 _MyKeyValuePairSerialized_ByteIndex = startOfChildPosition - startOfObjectPosition;

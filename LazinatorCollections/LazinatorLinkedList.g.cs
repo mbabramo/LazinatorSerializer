@@ -115,7 +115,7 @@ namespace LazinatorCollections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _FirstNode_ByteIndex, _FirstNode_ByteLength, true, false, null);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _FirstNode_ByteIndex, _FirstNode_ByteLength, SizeOfLength.Int32, null);
                 _FirstNode = DeserializationFactory.Instance.CreateBaseOrDerivedType(224, (c, p) => new LazinatorLinkedListNode<T>(c, p), childData, this); 
             }
             _FirstNode_Accessed = true;
@@ -548,7 +548,7 @@ namespace LazinatorCollections
                 {
                     var deserialized = FirstNode;
                 }
-                WriteChild(ref writer, ref _FirstNode, includeChildrenMode, _FirstNode_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _FirstNode_ByteIndex, _FirstNode_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                WriteChild(ref writer, ref _FirstNode, includeChildrenMode, _FirstNode_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _FirstNode_ByteIndex, _FirstNode_ByteLength, SizeOfLength.Int32, null), verifyCleanness, updateStoredBuffer, SizeOfLength.Int32, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {

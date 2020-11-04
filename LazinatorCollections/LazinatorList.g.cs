@@ -106,7 +106,7 @@ namespace LazinatorCollections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Offsets_ByteIndex, _Offsets_ByteLength, true, false, null);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Offsets_ByteIndex, _Offsets_ByteLength, SizeOfLength.Int32, null);
                 _Offsets = DeserializationFactory.Instance.CreateBaseOrDerivedType(200, (c, p) => new LazinatorOffsetList(c, p), childData, this); 
             }
             _Offsets_Accessed = true;
@@ -493,12 +493,11 @@ namespace LazinatorCollections
             WriteNonLazinatorObject(
             nonLazinatorObject: default, isBelievedDirty: true,
             isAccessed: true, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MainListSerialized_ByteIndex, _MainListSerialized_ByteLength, true, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MainListSerialized_ByteIndex, _MainListSerialized_ByteLength, SizeOfLength.Int32, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             WriteMainList(ref w, default,
-            includeChildrenMode, v, updateStoredBuffer),
-            writeLengthInByte: false);
+            includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
                 _MainListSerialized_ByteIndex = startOfChildPosition - startOfObjectPosition;
@@ -511,7 +510,7 @@ namespace LazinatorCollections
                 {
                     var deserialized = Offsets;
                 }
-                WriteChild(ref writer, ref _Offsets, includeChildrenMode, _Offsets_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Offsets_ByteIndex, _Offsets_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                WriteChild(ref writer, ref _Offsets, includeChildrenMode, _Offsets_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Offsets_ByteIndex, _Offsets_ByteLength, SizeOfLength.Int32, null), verifyCleanness, updateStoredBuffer, SizeOfLength.Int32, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {

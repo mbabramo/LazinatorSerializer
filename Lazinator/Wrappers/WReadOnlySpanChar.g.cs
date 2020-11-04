@@ -46,7 +46,7 @@ namespace Lazinator.Wrappers
             {
                 if (!_Value_Accessed)
                 {
-                    LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Value_ByteIndex, _Value_ByteLength, true, false, null);
+                    LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Value_ByteIndex, _Value_ByteLength, SizeOfLength.SkipLength, null);
                     return MemoryMarshal.Cast<byte, char>(childData.InitialMemory.Span);
                 }
                 return MemoryMarshal.Cast<byte, char>(_Value.Span);
@@ -428,7 +428,7 @@ namespace Lazinator.Wrappers
             WriteNonLazinatorObject_WithoutLengthPrefix(
             nonLazinatorObject: _Value, isBelievedDirty: _Value_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _Value_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_Value, byteIndexCopy_Value, byteLengthCopy_Value, true, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_Value, byteIndexCopy_Value, byteLengthCopy_Value, SizeOfLength.SkipLength, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             copy_Value.Write(ref w));

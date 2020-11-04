@@ -70,7 +70,7 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyQueueInt_ByteIndex, _MyQueueInt_ByteLength, true, false, null);_MyQueueInt = ConvertFromBytes_Queue_Gint_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyQueueInt_ByteIndex, _MyQueueInt_ByteLength, SizeOfLength.Int32, null);_MyQueueInt = ConvertFromBytes_Queue_Gint_g(childData);
             }
             _MyQueueInt_Accessed = true;
         }
@@ -455,12 +455,11 @@ namespace LazinatorTests.Examples.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyQueueInt, isBelievedDirty: MyQueueInt_Dirty || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyQueueInt_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyQueueInt_ByteIndex, _MyQueueInt_ByteLength, true, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyQueueInt_ByteIndex, _MyQueueInt_ByteLength, SizeOfLength.Int32, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Queue_Gint_g(ref w, _MyQueueInt,
-            includeChildrenMode, v, updateStoredBuffer),
-            writeLengthInByte: false);
+            includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
                 _MyQueueInt_ByteIndex = startOfChildPosition - startOfObjectPosition;

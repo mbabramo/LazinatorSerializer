@@ -77,7 +77,7 @@ namespace LazinatorTests.Examples.Abstract
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyBase_ByteIndex, _MyBase_ByteLength, true, false, null);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyBase_ByteIndex, _MyBase_ByteLength, SizeOfLength.Int32, null);
                 _MyBase = DeserializationFactory.Instance.CreateBaseOrDerivedType(1066, (c, p) => new Base(c, p), childData, this); 
             }
             _MyBase_Accessed = true;
@@ -488,7 +488,7 @@ namespace LazinatorTests.Examples.Abstract
                 {
                     var deserialized = MyBase;
                 }
-                WriteChild(ref writer, ref _MyBase, includeChildrenMode, _MyBase_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyBase_ByteIndex, _MyBase_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                WriteChild(ref writer, ref _MyBase, includeChildrenMode, _MyBase_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyBase_ByteIndex, _MyBase_ByteLength, SizeOfLength.Int32, null), verifyCleanness, updateStoredBuffer, SizeOfLength.Int32, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {

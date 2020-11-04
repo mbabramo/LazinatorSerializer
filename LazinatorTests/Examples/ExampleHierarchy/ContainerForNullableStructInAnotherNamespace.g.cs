@@ -77,7 +77,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNullableStruct_ByteIndex, _MyNullableStruct_ByteLength, true, false, null);if (childData.Length == 0)
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNullableStruct_ByteIndex, _MyNullableStruct_ByteLength, SizeOfLength.Int32, null);if (childData.Length == 0)
                 {
                     _MyNullableStruct = default;
                 }
@@ -106,7 +106,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     }
                     else
                     {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNullableStruct_ByteIndex, _MyNullableStruct_ByteLength, true, false, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNullableStruct_ByteIndex, _MyNullableStruct_ByteLength, SizeOfLength.Int32, null);
                         var toReturn = new StructInAnotherNamespace(childData);
                         toReturn.IsDirty = false;
                         return toReturn;
@@ -535,7 +535,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 else
                 {
                     var copy = _MyNullableStruct.Value;
-                    WriteChild(ref writer, ref copy, includeChildrenMode, _MyNullableStruct_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyNullableStruct_ByteIndex, _MyNullableStruct_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
+                    WriteChild(ref writer, ref copy, includeChildrenMode, _MyNullableStruct_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyNullableStruct_ByteIndex, _MyNullableStruct_ByteLength, SizeOfLength.Int32, null), verifyCleanness, updateStoredBuffer, SizeOfLength.Int32, this);
                     _MyNullableStruct = copy;
                     lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                     if (lengthValue > int.MaxValue)

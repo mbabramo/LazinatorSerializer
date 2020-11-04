@@ -48,7 +48,7 @@ namespace LazinatorCollections.OffsetList
             {
                 if (!_ReadOnlyBytes_Accessed)
                 {
-                    LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ReadOnlyBytes_ByteIndex, _ReadOnlyBytes_ByteLength, true, false, null);
+                    LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ReadOnlyBytes_ByteIndex, _ReadOnlyBytes_ByteLength, SizeOfLength.Int32, null);
                     return childData.InitialMemory.Span;
                 }
                 return _ReadOnlyBytes.Span;
@@ -437,12 +437,11 @@ namespace LazinatorCollections.OffsetList
             WriteNonLazinatorObject(
             nonLazinatorObject: _ReadOnlyBytes, isBelievedDirty: _ReadOnlyBytes_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _ReadOnlyBytes_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _ReadOnlyBytes_ByteIndex, _ReadOnlyBytes_ByteLength, true, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _ReadOnlyBytes_ByteIndex, _ReadOnlyBytes_ByteLength, SizeOfLength.Int32, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_ReadOnlySpan_Gbyte_g(ref w, _ReadOnlyBytes.Span,
-            includeChildrenMode, v, updateStoredBuffer),
-            writeLengthInByte: false);
+            includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
                 _ReadOnlyBytes_ByteIndex = startOfChildPosition - startOfObjectPosition;

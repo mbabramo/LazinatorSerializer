@@ -71,7 +71,7 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListSerialized_ByteIndex, _MyListSerialized_ByteLength, true, false, null);_MyListSerialized = ConvertFromBytes_List_GExampleChild_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListSerialized_ByteIndex, _MyListSerialized_ByteLength, SizeOfLength.Int32, null);_MyListSerialized = ConvertFromBytes_List_GExampleChild_g(childData);
             }
             _MyListSerialized_Accessed = true;
         }
@@ -456,12 +456,11 @@ namespace LazinatorTests.Examples.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListSerialized, isBelievedDirty: MyListSerialized_Dirty || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyListSerialized_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListSerialized_ByteIndex, _MyListSerialized_ByteLength, true, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListSerialized_ByteIndex, _MyListSerialized_ByteLength, SizeOfLength.Int32, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_GExampleChild_g(ref w, _MyListSerialized,
-            includeChildrenMode, v, updateStoredBuffer),
-            writeLengthInByte: false);
+            includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
                 _MyListSerialized_ByteIndex = startOfChildPosition - startOfObjectPosition;

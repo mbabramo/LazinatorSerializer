@@ -71,7 +71,7 @@ namespace Lazinator.Wrappers
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedValue_ByteIndex, _WrappedValue_ByteLength, true, false, null);_WrappedValue = ConvertFromBytes_decimal_B_b(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedValue_ByteIndex, _WrappedValue_ByteLength, SizeOfLength.SkipLength, null);_WrappedValue = ConvertFromBytes_decimal_B_b(childData);
             }
             _WrappedValue_Accessed = true;
         }
@@ -448,7 +448,7 @@ namespace Lazinator.Wrappers
             WriteNonLazinatorObject_WithoutLengthPrefix(
             nonLazinatorObject: _WrappedValue, isBelievedDirty: _WrappedValue_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _WrappedValue_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_WrappedValue, byteIndexCopy_WrappedValue, byteLengthCopy_WrappedValue, true, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_WrappedValue, byteIndexCopy_WrappedValue, byteLengthCopy_WrappedValue, SizeOfLength.SkipLength, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_decimal_B_b(ref w, copy_WrappedValue, includeChildrenMode, v, updateStoredBuffer));

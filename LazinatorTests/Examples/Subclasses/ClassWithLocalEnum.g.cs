@@ -84,7 +84,7 @@ namespace LazinatorTests.Examples.Subclasses
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyEnumList_ByteIndex, _MyEnumList_ByteLength, true, false, null);_MyEnumList = ConvertFromBytes_List_GEnumWithinClass_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyEnumList_ByteIndex, _MyEnumList_ByteLength, SizeOfLength.Int32, null);_MyEnumList = ConvertFromBytes_List_GEnumWithinClass_g(childData);
             }
             _MyEnumList_Accessed = true;
         }
@@ -455,12 +455,11 @@ namespace LazinatorTests.Examples.Subclasses
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyEnumList, isBelievedDirty: _MyEnumList_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyEnumList_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyEnumList_ByteIndex, _MyEnumList_ByteLength, true, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyEnumList_ByteIndex, _MyEnumList_ByteLength, SizeOfLength.Int32, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_GEnumWithinClass_g(ref w, _MyEnumList,
-            includeChildrenMode, v, updateStoredBuffer),
-            writeLengthInByte: false);
+            includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
                 _MyEnumList_ByteIndex = startOfChildPosition - startOfObjectPosition;

@@ -84,7 +84,7 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _SpanList_ByteIndex, _SpanList_ByteLength, true, false, null);_SpanList = ConvertFromBytes_List_GSpanAndMemory_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _SpanList_ByteIndex, _SpanList_ByteLength, SizeOfLength.Int32, null);_SpanList = ConvertFromBytes_List_GSpanAndMemory_g(childData);
             }
             _SpanList_Accessed = true;
         }
@@ -455,12 +455,11 @@ namespace LazinatorTests.Examples.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _SpanList, isBelievedDirty: _SpanList_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _SpanList_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _SpanList_ByteIndex, _SpanList_ByteLength, true, false, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _SpanList_ByteIndex, _SpanList_ByteLength, SizeOfLength.Int32, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_GSpanAndMemory_g(ref w, _SpanList,
-            includeChildrenMode, v, updateStoredBuffer),
-            writeLengthInByte: false);
+            includeChildrenMode, v, updateStoredBuffer));
             if (updateStoredBuffer)
             {
                 _SpanList_ByteIndex = startOfChildPosition - startOfObjectPosition;
