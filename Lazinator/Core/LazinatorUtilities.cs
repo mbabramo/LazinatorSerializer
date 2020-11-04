@@ -1095,7 +1095,7 @@ namespace Lazinator.Core
         /// <param name="writeLengthInByte">True if the length should be contained in a single byte</param>
         public async static ValueTask WriteNonLazinatorObjectAsync(object nonLazinatorObject,
             bool isBelievedDirty, bool isAccessed, BinaryBufferWriterContainer writer, ReturnLazinatorMemoryDelegateAsync getChildSliceForFieldFn,
-            bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction, bool writeLengthInByte)
+            bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction, bool writeLengthInByte = false /* DEBUG */)
         {
             int startPosition = writer.ActiveMemoryPosition;
             await WriteNonLazinatorObject_WithoutLengthPrefixAsync(nonLazinatorObject, isBelievedDirty, isAccessed, writer, getChildSliceForFieldFn, verifyCleanness, binaryWriterAction);
