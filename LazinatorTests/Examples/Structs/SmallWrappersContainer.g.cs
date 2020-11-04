@@ -1245,6 +1245,10 @@ namespace LazinatorTests.Examples.Structs
                 }
                 WriteChild(ref writer, ref _ListWrappedBytes, includeChildrenMode, _ListWrappedBytes_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ListWrappedBytes_ByteIndex, _ListWrappedBytes_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                if (lengthValue > int.MaxValue)
+                {
+                    ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                }
                 writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)
@@ -1323,7 +1327,7 @@ namespace LazinatorTests.Examples.Structs
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > byte.MaxValue)
                 {
-                    ThrowHelper.ThrowTooLargeException();
+                    ThrowHelper.ThrowTooLargeException(byte.MaxValue);
                 }
                 writer.RecordLength((byte) lengthValue);
             }
@@ -1343,7 +1347,7 @@ namespace LazinatorTests.Examples.Structs
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > byte.MaxValue)
                 {
-                    ThrowHelper.ThrowTooLargeException();
+                    ThrowHelper.ThrowTooLargeException(byte.MaxValue);
                 }
                 writer.RecordLength((byte) lengthValue);
             }
@@ -1363,7 +1367,7 @@ namespace LazinatorTests.Examples.Structs
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > byte.MaxValue)
                 {
-                    ThrowHelper.ThrowTooLargeException();
+                    ThrowHelper.ThrowTooLargeException(byte.MaxValue);
                 }
                 writer.RecordLength((byte) lengthValue);
             }

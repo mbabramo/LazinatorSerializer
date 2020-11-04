@@ -37,7 +37,7 @@ namespace LazinatorCollections.Tuples
         int _Key_ByteIndex;
         int _Value_ByteIndex;
         int _Key_ByteLength => _Value_ByteIndex - _Key_ByteIndex;
-        int _Value_ByteLength => (int) /* DEBUG */ LazinatorMemoryStorage.Length - _Value_ByteIndex;
+        int _Value_ByteLength => (int) (LazinatorMemoryStorage.Length - _Value_ByteIndex);
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -606,6 +606,10 @@ namespace LazinatorCollections.Tuples
                 var byteLengthCopy = _Key_ByteLength;
                 WriteChild(ref writer, ref _Key, includeChildrenMode, _Key_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, true, false, null), verifyCleanness, updateStoredBuffer, false, true, null);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                if (lengthValue > int.MaxValue)
+                {
+                    ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                }
                 writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)
@@ -625,6 +629,10 @@ namespace LazinatorCollections.Tuples
                 var byteLengthCopy = _Value_ByteLength;
                 WriteChild(ref writer, ref _Value, includeChildrenMode, _Value_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, true, false, null), verifyCleanness, updateStoredBuffer, false, true, null);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                if (lengthValue > int.MaxValue)
+                {
+                    ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                }
                 writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)

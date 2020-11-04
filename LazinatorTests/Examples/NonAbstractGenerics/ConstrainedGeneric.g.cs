@@ -653,6 +653,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 var copy = _MyNullableT.Value;
                 WriteChild(ref writer, ref copy, includeChildrenMode, _MyNullableT_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyNullableT_ByteIndex, _MyNullableT_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                if (lengthValue > int.MaxValue)
+                {
+                    ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                }
                 writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)
@@ -669,6 +673,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 }
                 WriteChild(ref writer, ref _MyT, includeChildrenMode, _MyT_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                if (lengthValue > int.MaxValue)
+                {
+                    ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                }
                 writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)
@@ -685,6 +693,10 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 }
                 WriteChild(ref writer, ref _MyU, includeChildrenMode, _MyU_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyU_ByteIndex, _MyU_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                if (lengthValue > int.MaxValue)
+                {
+                    ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                }
                 writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)

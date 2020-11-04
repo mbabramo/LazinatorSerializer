@@ -492,6 +492,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 WriteChild(ref writer, ref _EagerExample, includeChildrenMode, _EagerExample_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _EagerExample_ByteIndex, _EagerExample_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                if (lengthValue > int.MaxValue)
+                {
+                    ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                }
                 writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)

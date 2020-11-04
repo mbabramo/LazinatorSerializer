@@ -35,7 +35,7 @@ namespace LazinatorCollections.BitArray
         /* Property definitions */
         
         int _IntStorage_ByteIndex;
-        int _IntStorage_ByteLength => (int) /* DEBUG */ LazinatorMemoryStorage.Length - _IntStorage_ByteIndex;
+        int _IntStorage_ByteLength => (int) (LazinatorMemoryStorage.Length - _IntStorage_ByteIndex);
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

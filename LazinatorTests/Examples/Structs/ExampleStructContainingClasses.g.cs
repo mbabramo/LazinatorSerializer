@@ -42,7 +42,7 @@ namespace LazinatorTests.Examples
         int _MyChild2_ByteLength => _MyLazinatorList_ByteIndex - _MyChild2_ByteIndex;
         int _MyLazinatorList_ByteLength => _MyListValues_ByteIndex - _MyLazinatorList_ByteIndex;
         int _MyListValues_ByteLength => _MyTuple_ByteIndex - _MyListValues_ByteIndex;
-        int _MyTuple_ByteLength => (int) /* DEBUG */ LazinatorMemoryStorage.Length - _MyTuple_ByteIndex;
+        int _MyTuple_ByteLength => (int) (LazinatorMemoryStorage.Length - _MyTuple_ByteIndex);
         
         
         bool _MyBool;
@@ -781,6 +781,10 @@ namespace LazinatorTests.Examples
                 var byteLengthCopy = _MyChild1_ByteLength;
                 WriteChild(ref writer, ref _MyChild1, includeChildrenMode, _MyChild1_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, true, false, null), verifyCleanness, updateStoredBuffer, false, true, null);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                if (lengthValue > int.MaxValue)
+                {
+                    ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                }
                 writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)
@@ -800,6 +804,10 @@ namespace LazinatorTests.Examples
                 var byteLengthCopy = _MyChild2_ByteLength;
                 WriteChild(ref writer, ref _MyChild2, includeChildrenMode, _MyChild2_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, true, false, null), verifyCleanness, updateStoredBuffer, false, true, null);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                if (lengthValue > int.MaxValue)
+                {
+                    ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                }
                 writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)

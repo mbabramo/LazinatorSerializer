@@ -494,7 +494,7 @@ namespace LazinatorTests.Examples.Structs
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > byte.MaxValue)
                 {
-                    ThrowHelper.ThrowTooLargeException();
+                    ThrowHelper.ThrowTooLargeException(byte.MaxValue);
                 }
                 writer.RecordLength((byte) lengthValue);
             }

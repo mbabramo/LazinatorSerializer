@@ -941,6 +941,10 @@ namespace LazinatorTests.Examples
                 }
                 WriteChild(ref writer, ref _ANonSkippableEarlierExample, includeChildrenMode, _ANonSkippableEarlierExample_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ANonSkippableEarlierExample_ByteIndex, _ANonSkippableEarlierExample_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                if (lengthValue > int.MaxValue)
+                {
+                    ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                }
                 writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)
@@ -959,6 +963,10 @@ namespace LazinatorTests.Examples
                     }
                     WriteChild(ref writer, ref _Example, includeChildrenMode, _Example_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Example_ByteIndex, _Example_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                     lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                    if (lengthValue > int.MaxValue)
+                    {
+                        ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                    }
                     writer.RecordLength((int) lengthValue);
                 }
             }
@@ -978,6 +986,10 @@ namespace LazinatorTests.Examples
                     }
                     WriteChild(ref writer, ref _Example2, includeChildrenMode, _Example2_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Example2_ByteIndex, _Example2_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                     lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                    if (lengthValue > int.MaxValue)
+                    {
+                        ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                    }
                     writer.RecordLength((int) lengthValue);
                 }
             }
@@ -997,6 +1009,10 @@ namespace LazinatorTests.Examples
                     }
                     WriteChild(ref writer, ref _Example3, includeChildrenMode, _Example3_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Example3_ByteIndex, _Example3_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                     lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                    if (lengthValue > int.MaxValue)
+                    {
+                        ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                    }
                     writer.RecordLength((int) lengthValue);
                 }
             }

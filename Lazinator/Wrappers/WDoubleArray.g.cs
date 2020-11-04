@@ -35,7 +35,7 @@ namespace Lazinator.Wrappers
         /* Property definitions */
         
         int _WrappedValue_ByteIndex;
-        int _WrappedValue_ByteLength => (int) /* DEBUG */ LazinatorMemoryStorage.Length - _WrappedValue_ByteIndex;
+        int _WrappedValue_ByteLength => (int) (LazinatorMemoryStorage.Length - _WrappedValue_ByteIndex);
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]

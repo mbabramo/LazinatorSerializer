@@ -2917,6 +2917,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 WriteChild(ref writer, ref _ExplicitlyNullable, includeChildrenMode, _ExplicitlyNullable_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ExplicitlyNullable_ByteIndex, _ExplicitlyNullable_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                if (lengthValue > int.MaxValue)
+                {
+                    ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                }
                 writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)
@@ -2933,6 +2937,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 WriteChild(ref writer, ref _ExplicitlyNullableInterface, includeChildrenMode, _ExplicitlyNullableInterface_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ExplicitlyNullableInterface_ByteIndex, _ExplicitlyNullableInterface_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                if (lengthValue > int.MaxValue)
+                {
+                    ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                }
                 writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)
@@ -2976,6 +2984,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             WriteChild(ref writer, ref _NonNullableClass!, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableClass_ByteIndex, _NonNullableClass_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
             lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+            if (lengthValue > int.MaxValue)
+            {
+                ThrowHelper.ThrowTooLargeException(int.MaxValue);
+            }
             writer.RecordLength((int) lengthValue);
             if (updateStoredBuffer)
             {
@@ -3018,6 +3030,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             WriteChild(ref writer, ref _NonNullableInterface!, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableInterface_ByteIndex, _NonNullableInterface_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
             lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+            if (lengthValue > int.MaxValue)
+            {
+                ThrowHelper.ThrowTooLargeException(int.MaxValue);
+            }
             writer.RecordLength((int) lengthValue);
             if (updateStoredBuffer)
             {
@@ -3028,6 +3044,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             WriteChild(ref writer, ref _NonNullableLazinatorListNonNullable!, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableLazinatorListNonNullable_ByteIndex, _NonNullableLazinatorListNonNullable_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
             lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+            if (lengthValue > int.MaxValue)
+            {
+                ThrowHelper.ThrowTooLargeException(int.MaxValue);
+            }
             writer.RecordLength((int) lengthValue);
             if (updateStoredBuffer)
             {
@@ -3038,6 +3058,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
             WriteChild(ref writer, ref _NonNullableLazinatorListNullable!, includeChildrenMode, true, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableLazinatorListNullable_ByteIndex, _NonNullableLazinatorListNullable_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
             lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+            if (lengthValue > int.MaxValue)
+            {
+                ThrowHelper.ThrowTooLargeException(int.MaxValue);
+            }
             writer.RecordLength((int) lengthValue);
             if (updateStoredBuffer)
             {
@@ -3251,6 +3275,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 WriteChild(ref writer, ref _NonNullableStruct!, includeChildrenMode, _NonNullableStruct_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _NonNullableStruct_ByteIndex, _NonNullableStruct_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                if (lengthValue > int.MaxValue)
+                {
+                    ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                }
                 writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)
@@ -3349,6 +3377,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 WriteChild(ref writer, ref _NullableLazinatorListNonNullable, includeChildrenMode, _NullableLazinatorListNonNullable_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _NullableLazinatorListNonNullable_ByteIndex, _NullableLazinatorListNonNullable_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                if (lengthValue > int.MaxValue)
+                {
+                    ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                }
                 writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)
@@ -3365,6 +3397,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 }
                 WriteChild(ref writer, ref _NullableLazinatorListNullable, includeChildrenMode, _NullableLazinatorListNullable_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _NullableLazinatorListNullable_ByteIndex, _NullableLazinatorListNullable_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                if (lengthValue > int.MaxValue)
+                {
+                    ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                }
                 writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)
@@ -3617,6 +3653,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     WriteChild(ref writer, ref copy, includeChildrenMode, _NullableStruct_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _NullableStruct_ByteIndex, _NullableStruct_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                     _NullableStruct = copy;
                     lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                    if (lengthValue > int.MaxValue)
+                    {
+                        ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                    }
                     writer.RecordLength((int) lengthValue);
                 }
             }

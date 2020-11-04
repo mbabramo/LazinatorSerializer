@@ -36,7 +36,7 @@ namespace LazinatorTests.Examples
         int _MyExampleNullableStruct_ByteIndex;
         int _MyExampleStructContainingClasses_ByteIndex;
         int _MyExampleNullableStruct_ByteLength => _MyExampleStructContainingClasses_ByteIndex - _MyExampleNullableStruct_ByteIndex;
-        int _MyExampleStructContainingClasses_ByteLength => (int) /* DEBUG */ LazinatorMemoryStorage.Length - _MyExampleStructContainingClasses_ByteIndex;
+        int _MyExampleStructContainingClasses_ByteLength => (int) (LazinatorMemoryStorage.Length - _MyExampleStructContainingClasses_ByteIndex);
         
         
         ExampleStructContainingClasses? _MyExampleNullableStruct;
@@ -624,6 +624,10 @@ namespace LazinatorTests.Examples
                     WriteChild(ref writer, ref copy, includeChildrenMode, _MyExampleNullableStruct_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, true, false, null), verifyCleanness, updateStoredBuffer, false, true, null);
                     _MyExampleNullableStruct = copy;
                     lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                    if (lengthValue > int.MaxValue)
+                    {
+                        ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                    }
                     writer.RecordLength((int) lengthValue);
                 }
             }
@@ -644,6 +648,10 @@ namespace LazinatorTests.Examples
                 var byteLengthCopy = _MyExampleStructContainingClasses_ByteLength;
                 WriteChild(ref writer, ref _MyExampleStructContainingClasses, includeChildrenMode, _MyExampleStructContainingClasses_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, true, false, null), verifyCleanness, updateStoredBuffer, false, true, null);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                if (lengthValue > int.MaxValue)
+                {
+                    ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                }
                 writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)

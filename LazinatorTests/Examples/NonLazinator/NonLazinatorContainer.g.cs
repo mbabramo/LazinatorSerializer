@@ -40,7 +40,7 @@ namespace LazinatorTests.Examples
         int _NonLazinatorClass_ByteLength => _NonLazinatorInterchangeableClass_ByteIndex - _NonLazinatorClass_ByteIndex;
         int _NonLazinatorInterchangeableClass_ByteLength => _NonLazinatorInterchangeableStruct_ByteIndex - _NonLazinatorInterchangeableClass_ByteIndex;
         int _NonLazinatorInterchangeableStruct_ByteLength => _NonLazinatorStruct_ByteIndex - _NonLazinatorInterchangeableStruct_ByteIndex;
-        int _NonLazinatorStruct_ByteLength => (int) /* DEBUG */ LazinatorMemoryStorage.Length - _NonLazinatorStruct_ByteIndex;
+        int _NonLazinatorStruct_ByteLength => (int) (LazinatorMemoryStorage.Length - _NonLazinatorStruct_ByteIndex);
         
         
         NonLazinatorClass _NonLazinatorClass;

@@ -37,7 +37,7 @@ namespace LazinatorCollections.OffsetList
         int _FourByteItems_ByteIndex;
         int _TwoByteItems_ByteIndex;
         int _FourByteItems_ByteLength => _TwoByteItems_ByteIndex - _FourByteItems_ByteIndex;
-        int _TwoByteItems_ByteLength => (int) /* DEBUG */ LazinatorMemoryStorage.Length - _TwoByteItems_ByteIndex;
+        int _TwoByteItems_ByteLength => (int) (LazinatorMemoryStorage.Length - _TwoByteItems_ByteIndex);
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -618,6 +618,10 @@ namespace LazinatorCollections.OffsetList
                 }
                 WriteChild(ref writer, ref _FourByteItems, includeChildrenMode, _FourByteItems_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _FourByteItems_ByteIndex, _FourByteItems_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                if (lengthValue > int.MaxValue)
+                {
+                    ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                }
                 writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)
@@ -634,6 +638,10 @@ namespace LazinatorCollections.OffsetList
                 }
                 WriteChild(ref writer, ref _TwoByteItems, includeChildrenMode, _TwoByteItems_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _TwoByteItems_ByteIndex, _TwoByteItems_ByteLength, true, false, null), verifyCleanness, updateStoredBuffer, false, true, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                if (lengthValue > int.MaxValue)
+                {
+                    ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                }
                 writer.RecordLength((int) lengthValue);
             }
             if (updateStoredBuffer)

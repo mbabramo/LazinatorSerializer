@@ -161,6 +161,10 @@ namespace Lazinator.CodeDescription
         public bool IncludeTracingCode => false;
         public bool StepThroughProperties => Config?.StepThroughProperties ?? true;
         public bool NonbinaryHash => InterfaceTypeSymbol.HasAttributeOfType<CloneNonbinaryHashAttribute>();
+        public int SizeOfLength { get; set; }
+        public bool RequiresLongLengths => SizeOfLength == sizeof(long);
+        public string TypeForLengths => RequiresLongLengths ? "long" : "int";
+        public string CastLongToTypeForLengths(string code) => RequiresLongLengths ? code : $"((int) {code})";
         private string IIF(bool x, string y) => x ? y : ""; // Include if function
         private string IIF(bool x, Func<string> y) => x ? y() : ""; // Same but with a function to produce the string
 
@@ -276,6 +280,10 @@ namespace Lazinator.CodeDescription
             if (AsyncLazinatorMemory && IsDerivedFromNonAbstractLazinator && !BaseLazinatorObject.AsyncLazinatorMemory)
                 throw new LazinatorCodeGenException("A Lazinator whose interface has AsyncLazinatorMemory attribute may only derived from another Lazinator object that also has an exclusive interface with the same attribute.");
             AsyncTemplate = new AsyncStringTemplates() { MayBeAsync = AsyncLazinatorMemory };
+            SizeOfLength = 4;
+            var sizeOfLengthAttribute = InterfaceTypeSymbol.GetAttributesIncludingBase<CloneSizeOfLengthAttribute>().FirstOrDefault();
+            if (sizeOfLengthAttribute != null)
+                SizeOfLength = sizeOfLengthAttribute.SizeOfLength;
             AllowNonlazinatorGenerics = InterfaceTypeSymbol.HasAttributeOfType<CloneAllowNonlazinatorOpenGenericsAttribute>();
             SuppressLazinatorVersionByte = InterfaceTypeSymbol.HasAttributeOfType<CloneExcludeLazinatorVersionByteAttribute>();
             GenerateRefStructIfNotGenerating = InterfaceTypeSymbol.HasAttributeOfType<CloneGenerateRefStructAttribute>();
@@ -825,14 +833,14 @@ namespace Lazinator.CodeDescription
                 PropertyDescription propertyDescription = withRecordedIndices[i];
                 string propertyDerivationKeyword = GetDerivationKeywordForLengthProperty(propertyDescription);
                 sb.AppendLine(
-                        $"{ProtectedIfApplicable}{propertyDerivationKeyword}int {propertyDescription.BackingFieldByteLength} => {withRecordedIndices[i + 1].BackingFieldByteIndex} - {propertyDescription.BackingFieldByteIndex};");
+                        $"{ProtectedIfApplicable}{propertyDerivationKeyword}{TypeForLengths} {propertyDescription.BackingFieldByteLength} => {withRecordedIndices[i + 1].BackingFieldByteIndex} - {propertyDescription.BackingFieldByteIndex};");
             }
             if (lastPropertyToIndex != null)
             {
                 if (IsAbstract)
                 {
                     sb.AppendLine(
-                            $"{ProtectedIfApplicable}virtual int {lastPropertyToIndex.BackingFieldByteLength} {{ get; }}"); // defined as virtual so that it's not mandatory to override, since it won't be used if an open generic is redefined.
+                            $"{ProtectedIfApplicable}virtual {TypeForLengths} {lastPropertyToIndex.BackingFieldByteLength} {{ get; }}"); // defined as virtual so that it's not mandatory to override, since it won't be used if an open generic is redefined.
                 }
                 else
                 {
@@ -844,14 +852,14 @@ namespace Lazinator.CodeDescription
 
                         string propertyDerivationKeyword = GetDerivationKeywordForLengthProperty(lastPropertyToIndex);
                         sb.AppendLine(
-                                $"{ProtectedIfApplicable}{propertyDerivationKeyword} int {lastPropertyToIndex.BackingFieldByteLength} => _{ObjectNameEncodable}_EndByteIndex - {lastPropertyToIndex.BackingFieldByteIndex};");
+                                $"{ProtectedIfApplicable}{propertyDerivationKeyword} {TypeForLengths} {lastPropertyToIndex.BackingFieldByteLength} => _{ObjectNameEncodable}_EndByteIndex - {lastPropertyToIndex.BackingFieldByteIndex};");
                         string overallDerivationKeyword = DerivedFromObjectContainingEndByteIndex ? "override" : "virtual";
                         sb.AppendLine($@"{ProtectedIfApplicable}{overallDerivationKeyword} int _OverallEndByteIndex => _{ObjectNameEncodable}_EndByteIndex;");
                     }
                     else
                     {
                         sb.AppendLine(
-                                $"{ProtectedIfApplicable}int {lastPropertyToIndex.BackingFieldByteLength} => (int) /* DEBUG */ LazinatorMemoryStorage.Length - {lastPropertyToIndex.BackingFieldByteIndex};");
+                                $"{ProtectedIfApplicable}{TypeForLengths} {lastPropertyToIndex.BackingFieldByteLength} => {CastLongToTypeForLengths($"LazinatorMemoryStorage.Length - {lastPropertyToIndex.BackingFieldByteIndex}")};");
                     }
                 }
             }
