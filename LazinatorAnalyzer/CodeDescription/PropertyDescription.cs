@@ -69,7 +69,7 @@ namespace Lazinator.CodeDescription
         private bool AllLengthsPrecedeChildren => true;
         public bool SkipLengthForThisProperty => IsGuaranteedFixedLength || OmitLengthBecauseDefinitelyLast;
         public bool UsesLengthValue => AllLengthsPrecedeChildren && !SkipLengthForThisProperty && IsLazinator;
-        private string ChildSliceLastParametersString => $", {SizeOfLengthString}, {(IsGuaranteedFixedLength ? $"{FixedLength}" : "null")}";
+        private string ChildSliceLastParametersString => $", {SizeOfLengthIfIncludedString}, {(IsGuaranteedFixedLength ? $"{FixedLength}" : "null")}";
         internal string IncrementChildStartBySizeOfLength => OmitLengthBecauseDefinitelyLast || IsGuaranteedFixedLength ? "" : (SingleByteLength ? " + sizeof(byte)" : " + sizeof(int)");
         internal string DecrementTotalLengthBySizeOfLength => OmitLengthBecauseDefinitelyLast || IsGuaranteedFixedLength ? "" : (SingleByteLength ? " - sizeof(byte)" : " - sizeof(int)");
 

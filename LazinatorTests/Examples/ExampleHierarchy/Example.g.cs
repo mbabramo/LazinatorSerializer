@@ -652,8 +652,9 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorChild_ByteIndex, _MyNonLazinatorChild_ByteLength, SizeOfLength.Int32, null);
-                childData.LoadInitialMemory();_MyNonLazinatorChild = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorChild_ByteIndex, _MyNonLazinatorChild_ByteLength, SizeOfLength.SkipLength, null);
+                childData.LoadInitialMemory();
+                _MyNonLazinatorChild = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData);
                 childData.ConsiderUnloadInitialMemory();
             }
             _MyNonLazinatorChild_Accessed = true;
