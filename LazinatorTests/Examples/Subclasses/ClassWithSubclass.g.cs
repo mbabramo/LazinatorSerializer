@@ -94,7 +94,7 @@ namespace LazinatorTests.Examples.Subclasses
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _SubclassInstance1_ByteIndex, _SubclassInstance1_ByteLength, SizeOfLength.Int32, null);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _SubclassInstance1_ByteIndex, _SubclassInstance1_ByteLength, SizeOfLength.SkipLength, null);
                 _SubclassInstance1 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1058, (c, p) => new global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass(c, p), childData, this); 
             }
             _SubclassInstance1_Accessed = true;
@@ -139,7 +139,7 @@ namespace LazinatorTests.Examples.Subclasses
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _SubclassInstance2_ByteIndex, _SubclassInstance2_ByteLength, SizeOfLength.Int32, null);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _SubclassInstance2_ByteIndex, _SubclassInstance2_ByteLength, SizeOfLength.SkipLength, null);
                 _SubclassInstance2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1058, (c, p) => new global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass(c, p), childData, this); 
             }
             _SubclassInstance2_Accessed = true;
@@ -602,7 +602,7 @@ namespace LazinatorTests.Examples.Subclasses
                 {
                     var deserialized = SubclassInstance1;
                 }
-                WriteChild(ref writer, ref _SubclassInstance1, includeChildrenMode, _SubclassInstance1_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _SubclassInstance1_ByteIndex, _SubclassInstance1_ByteLength, SizeOfLength.Int32, null), verifyCleanness, updateStoredBuffer, SizeOfLength.Int32, this);
+                WriteChild(ref writer, ref _SubclassInstance1, includeChildrenMode, _SubclassInstance1_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _SubclassInstance1_ByteIndex, _SubclassInstance1_ByteLength, SizeOfLength.SkipLength, null), verifyCleanness, updateStoredBuffer, SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {
@@ -622,7 +622,7 @@ namespace LazinatorTests.Examples.Subclasses
                 {
                     var deserialized = SubclassInstance2;
                 }
-                WriteChild(ref writer, ref _SubclassInstance2, includeChildrenMode, _SubclassInstance2_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _SubclassInstance2_ByteIndex, _SubclassInstance2_ByteLength, SizeOfLength.Int32, null), verifyCleanness, updateStoredBuffer, SizeOfLength.Int32, this);
+                WriteChild(ref writer, ref _SubclassInstance2, includeChildrenMode, _SubclassInstance2_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _SubclassInstance2_ByteIndex, _SubclassInstance2_ByteLength, SizeOfLength.SkipLength, null), verifyCleanness, updateStoredBuffer, SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {

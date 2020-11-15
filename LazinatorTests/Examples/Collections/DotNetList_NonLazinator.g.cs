@@ -73,7 +73,7 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType_ByteIndex, _MyListNonLazinatorType_ByteLength, SizeOfLength.Int32, null);_MyListNonLazinatorType = ConvertFromBytes_List_GNonLazinatorClass_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType_ByteIndex, _MyListNonLazinatorType_ByteLength, SizeOfLength.SkipLength, null);_MyListNonLazinatorType = ConvertFromBytes_List_GNonLazinatorClass_g(childData);
             }
             _MyListNonLazinatorType_Accessed = true;
         }
@@ -127,7 +127,7 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType2_ByteIndex, _MyListNonLazinatorType2_ByteLength, SizeOfLength.Int32, null);_MyListNonLazinatorType2 = ConvertFromBytes_List_GNonLazinatorClass_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType2_ByteIndex, _MyListNonLazinatorType2_ByteLength, SizeOfLength.SkipLength, null);_MyListNonLazinatorType2 = ConvertFromBytes_List_GNonLazinatorClass_g(childData);
             }
             _MyListNonLazinatorType2_Accessed = true;
         }
@@ -507,7 +507,7 @@ namespace LazinatorTests.Examples.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListNonLazinatorType, isBelievedDirty: MyListNonLazinatorType_Dirty || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyListNonLazinatorType_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType_ByteIndex, _MyListNonLazinatorType_ByteLength, SizeOfLength.Int32, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType_ByteIndex, _MyListNonLazinatorType_ByteLength, SizeOfLength.SkipLength, null),
             verifyCleanness: verifyCleanness,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_GNonLazinatorClass_g(ref w, _MyListNonLazinatorType,
@@ -525,7 +525,7 @@ namespace LazinatorTests.Examples.Collections
             WriteNonLazinatorObject(
             nonLazinatorObject: _MyListNonLazinatorType2, isBelievedDirty: _MyListNonLazinatorType2_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _MyListNonLazinatorType2_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType2_ByteIndex, _MyListNonLazinatorType2_ByteLength, SizeOfLength.Int32, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType2_ByteIndex, _MyListNonLazinatorType2_ByteLength, SizeOfLength.SkipLength, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_List_GNonLazinatorClass_g(ref w, _MyListNonLazinatorType2,

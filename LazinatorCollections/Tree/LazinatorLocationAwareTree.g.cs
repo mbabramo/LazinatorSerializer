@@ -81,7 +81,7 @@ namespace LazinatorCollections.Tree
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Locations_ByteIndex, _Locations_ByteLength, SizeOfLength.Int32, null);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Locations_ByteIndex, _Locations_ByteLength, SizeOfLength.SkipLength, null);
                 _Locations = DeserializationFactory.Instance.CreateBaseOrDerivedType(211, (c, p) => new LazinatorDictionary<T, LazinatorList<WInt32>>(c, p), childData, this); 
             }
             _Locations_Accessed = true;
@@ -345,7 +345,7 @@ namespace LazinatorCollections.Tree
                 {
                     var deserialized = Locations;
                 }
-                WriteChild(ref writer, ref _Locations, includeChildrenMode, _Locations_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Locations_ByteIndex, _Locations_ByteLength, SizeOfLength.Int32, null), verifyCleanness, updateStoredBuffer, SizeOfLength.Int32, this);
+                WriteChild(ref writer, ref _Locations, includeChildrenMode, _Locations_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Locations_ByteIndex, _Locations_ByteLength, SizeOfLength.SkipLength, null), verifyCleanness, updateStoredBuffer, SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {

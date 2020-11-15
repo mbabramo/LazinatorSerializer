@@ -104,7 +104,7 @@ namespace LazinatorCollections.BitArray
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntStorage_ByteIndex, _IntStorage_ByteLength, SizeOfLength.Int32, null);_IntStorage = ConvertFromBytes_Memory_Gint_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntStorage_ByteIndex, _IntStorage_ByteLength, SizeOfLength.SkipLength, null);_IntStorage = ConvertFromBytes_Memory_Gint_g(childData);
             }
             _IntStorage_Accessed = true;
         }
@@ -485,7 +485,7 @@ namespace LazinatorCollections.BitArray
             WriteNonLazinatorObject(
             nonLazinatorObject: _IntStorage, isBelievedDirty: _IntStorage_Accessed || (includeChildrenMode != OriginalIncludeChildrenMode),
             isAccessed: _IntStorage_Accessed, writer: ref writer,
-            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _IntStorage_ByteIndex, _IntStorage_ByteLength, SizeOfLength.Int32, null),
+            getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _IntStorage_ByteIndex, _IntStorage_ByteLength, SizeOfLength.SkipLength, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
             ConvertToBytes_Memory_Gint_g(ref w, _IntStorage,
