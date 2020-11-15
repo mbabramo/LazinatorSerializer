@@ -1734,7 +1734,7 @@ namespace Lazinator.CodeDescription
             if (ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct)
             {
                 string mainWriteString = $@"{IIF(nullableStruct, $@"var copy = {BackingFieldString}.Value;
-                            ")}{callWriteChild} {propertyNameOrCopy}{NullForgivenessIfNonNullable}, includeChildrenMode, {BackingFieldAccessedString}, {ContainingObjectDescription.Maybe_asyncWord}() => {ChildSliceStringMaybeAsync()}, verifyCleanness, updateStoredBuffer, {SizeOfLengthString}, this);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
+                            ")}{callWriteChild} {propertyNameOrCopy}{NullForgivenessIfNonNullable}, includeChildrenMode, {BackingFieldAccessedString}, {ContainingObjectDescription.Maybe_asyncWord}() => {ChildSliceStringMaybeAsync()}, verifyCleanness, updateStoredBuffer, {SizeOfLengthIfIncludedString}, this);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
                                 {BackingFieldString} = copy;")}
                                 {lengthString}";
                 withInclusionConditional =
@@ -1747,7 +1747,7 @@ namespace Lazinator.CodeDescription
                             var byteIndexCopy = {BackingFieldByteIndex};
                             var byteLengthCopy = {BackingFieldByteLength};
                             {IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"var copy = {BackingFieldString}.Value;
-                            ")}{callWriteChild} {propertyNameOrCopy}{NullForgivenessIfNonNullable}, includeChildrenMode, {BackingFieldAccessedString}, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy{ChildSliceLastParametersString}), verifyCleanness, updateStoredBuffer, {SizeOfLengthString}, null);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
+                            ")}{callWriteChild} {propertyNameOrCopy}{NullForgivenessIfNonNullable}, includeChildrenMode, {BackingFieldAccessedString}, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy{ChildSliceLastParametersString}), verifyCleanness, updateStoredBuffer, {SizeOfLengthIfIncludedString}, null);{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
                                 {BackingFieldString} = copy;")}
                                 {lengthString}";
                 withInclusionConditional =
