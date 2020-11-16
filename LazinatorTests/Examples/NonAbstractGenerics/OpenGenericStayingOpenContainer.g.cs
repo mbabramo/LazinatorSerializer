@@ -403,7 +403,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             var previousBuffer = LazinatorMemoryStorage;
             if (LazinatorMemoryStorage.IsEmpty || IncludeChildrenMode.IncludeAllChildren != OriginalIncludeChildrenMode || (IsDirty || DescendantIsDirty))
             {
-                LazinatorMemoryStorage = EncodeToNewBuffer(IncludeChildrenMode.IncludeAllChildren, false, true);
+                LazinatorMemoryStorage = EncodeToNewBuffer(LazinatorSerializationOptions.Default);
             }
             else
             {
@@ -422,18 +422,18 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         {
             if (LazinatorMemoryStorage.IsEmpty || options.IncludeChildrenMode != OriginalIncludeChildrenMode || (options.VerifyCleanness || IsDirty || (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && DescendantIsDirty)))
             {
-                return EncodeToNewBuffer(options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer);
+                return EncodeToNewBuffer(options);
             }
             BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
             LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
             return writer.LazinatorMemory;
         }
         
-        protected virtual LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
+        protected virtual LazinatorMemory EncodeToNewBuffer(in LazinatorSerializationOptions options) 
         {
             int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.LengthInt ?? ExpandableBytes.DefaultMinBufferSize;
             BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
-            SerializeToExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+            SerializeToExistingBuffer(ref writer, options);
             return writer.LazinatorMemory;
         }
         
@@ -764,17 +764,13 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             return totalChildrenBytes;
         }
         
-        public virtual void SerializeToExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        public virtual void SerializeToExistingBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options)
         {
-            if (includeChildrenMode != IncludeChildrenMode.IncludeAllChildren)
-            {
-                updateStoredBuffer = false;
-            }
             int startPosition = writer.ActiveMemoryPosition;
-            WritePropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, true);
-            if (updateStoredBuffer)
+            WritePropertiesIntoBuffer(ref writer, options, true);
+            if (options.UpdateStoredBuffer)
             {
-                UpdateStoredBuffer(ref writer, startPosition, writer.ActiveMemoryPosition - startPosition, includeChildrenMode, false);
+                UpdateStoredBuffer(ref writer, startPosition, writer.ActiveMemoryPosition - startPosition, options.IncludeChildrenMode, false);
             }
         }
         
@@ -825,7 +821,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         }
         
         
-        protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
+        protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
             int startPosition = writer.ActiveMemoryPosition;
             if (includeUniqueID)
@@ -841,37 +837,37 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             CompressedIntegralTypes.WriteCompressedInt(ref writer, Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion);
             CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorObjectVersion);
-            writer.Write((byte)includeChildrenMode);
+            writer.Write((byte)options.IncludeChildrenMode);
             // write properties
             
             
             int lengthForLengths = 0;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
+            if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 lengthForLengths += 20;
             }
             
             int previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
-            WriteChildrenPropertiesIntoBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer, includeUniqueID, startPosition);
+            WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
             
         }
         
-        protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID)
+        protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
         }
-        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool includeUniqueID, int startOfObjectPosition)
+        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
         {
             int startOfChildPosition = 0;
             int lengthValue = 0;
             startOfChildPosition = writer.ActiveMemoryPosition;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
+            if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ClosedGenericBase_Accessed)
+                if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_ClosedGenericBase_Accessed)
                 {
                     var deserialized = ClosedGenericBase;
                 }
-                WriteChild(ref writer, ref _ClosedGenericBase, includeChildrenMode, _ClosedGenericBase_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ClosedGenericBase_ByteIndex, _ClosedGenericBase_ByteLength, SizeOfLength.SkipLength, null), verifyCleanness, updateStoredBuffer, SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _ClosedGenericBase, options.IncludeChildrenMode, _ClosedGenericBase_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ClosedGenericBase_ByteIndex, _ClosedGenericBase_ByteLength, SizeOfLength.SkipLength, null), options.VerifyCleanness, options.UpdateStoredBuffer, SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {
@@ -879,19 +875,19 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 }
                 writer.RecordLength((int) lengthValue);
             }
-            if (updateStoredBuffer)
+            if (options.UpdateStoredBuffer)
             {
                 _ClosedGenericBase_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             startOfChildPosition = writer.ActiveMemoryPosition;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
+            if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ClosedGenericFloat_Accessed)
+                if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_ClosedGenericFloat_Accessed)
                 {
                     var deserialized = ClosedGenericFloat;
                 }
-                WriteChild(ref writer, ref _ClosedGenericFloat, includeChildrenMode, _ClosedGenericFloat_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ClosedGenericFloat_ByteIndex, _ClosedGenericFloat_ByteLength, SizeOfLength.SkipLength, null), verifyCleanness, updateStoredBuffer, SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _ClosedGenericFloat, options.IncludeChildrenMode, _ClosedGenericFloat_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ClosedGenericFloat_ByteIndex, _ClosedGenericFloat_ByteLength, SizeOfLength.SkipLength, null), options.VerifyCleanness, options.UpdateStoredBuffer, SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {
@@ -899,19 +895,19 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 }
                 writer.RecordLength((int) lengthValue);
             }
-            if (updateStoredBuffer)
+            if (options.UpdateStoredBuffer)
             {
                 _ClosedGenericFloat_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             startOfChildPosition = writer.ActiveMemoryPosition;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
+            if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ClosedGenericFromBaseWithBase_Accessed)
+                if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_ClosedGenericFromBaseWithBase_Accessed)
                 {
                     var deserialized = ClosedGenericFromBaseWithBase;
                 }
-                WriteChild(ref writer, ref _ClosedGenericFromBaseWithBase, includeChildrenMode, _ClosedGenericFromBaseWithBase_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ClosedGenericFromBaseWithBase_ByteIndex, _ClosedGenericFromBaseWithBase_ByteLength, SizeOfLength.SkipLength, null), verifyCleanness, updateStoredBuffer, SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _ClosedGenericFromBaseWithBase, options.IncludeChildrenMode, _ClosedGenericFromBaseWithBase_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ClosedGenericFromBaseWithBase_ByteIndex, _ClosedGenericFromBaseWithBase_ByteLength, SizeOfLength.SkipLength, null), options.VerifyCleanness, options.UpdateStoredBuffer, SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {
@@ -919,19 +915,19 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 }
                 writer.RecordLength((int) lengthValue);
             }
-            if (updateStoredBuffer)
+            if (options.UpdateStoredBuffer)
             {
                 _ClosedGenericFromBaseWithBase_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             startOfChildPosition = writer.ActiveMemoryPosition;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
+            if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ClosedGenericInterface_Accessed)
+                if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_ClosedGenericInterface_Accessed)
                 {
                     var deserialized = ClosedGenericInterface;
                 }
-                WriteChild(ref writer, ref _ClosedGenericInterface, includeChildrenMode, _ClosedGenericInterface_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ClosedGenericInterface_ByteIndex, _ClosedGenericInterface_ByteLength, SizeOfLength.SkipLength, null), verifyCleanness, updateStoredBuffer, SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _ClosedGenericInterface, options.IncludeChildrenMode, _ClosedGenericInterface_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ClosedGenericInterface_ByteIndex, _ClosedGenericInterface_ByteLength, SizeOfLength.SkipLength, null), options.VerifyCleanness, options.UpdateStoredBuffer, SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {
@@ -939,19 +935,19 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 }
                 writer.RecordLength((int) lengthValue);
             }
-            if (updateStoredBuffer)
+            if (options.UpdateStoredBuffer)
             {
                 _ClosedGenericInterface_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
             startOfChildPosition = writer.ActiveMemoryPosition;
-            if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
+            if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                if ((includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != OriginalIncludeChildrenMode) && !_ClosedGenericNonexclusiveInterface_Accessed)
+                if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_ClosedGenericNonexclusiveInterface_Accessed)
                 {
                     var deserialized = ClosedGenericNonexclusiveInterface;
                 }
-                WriteChild(ref writer, ref _ClosedGenericNonexclusiveInterface, includeChildrenMode, _ClosedGenericNonexclusiveInterface_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ClosedGenericNonexclusiveInterface_ByteIndex, _ClosedGenericNonexclusiveInterface_ByteLength, SizeOfLength.SkipLength, null), verifyCleanness, updateStoredBuffer, SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _ClosedGenericNonexclusiveInterface, options.IncludeChildrenMode, _ClosedGenericNonexclusiveInterface_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ClosedGenericNonexclusiveInterface_ByteIndex, _ClosedGenericNonexclusiveInterface_ByteLength, SizeOfLength.SkipLength, null), options.VerifyCleanness, options.UpdateStoredBuffer, SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {
@@ -959,12 +955,12 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 }
                 writer.RecordLength((int) lengthValue);
             }
-            if (updateStoredBuffer)
+            if (options.UpdateStoredBuffer)
             {
                 _ClosedGenericNonexclusiveInterface_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
-            if (updateStoredBuffer)
+            if (options.UpdateStoredBuffer)
             {
                 _OpenGenericStayingOpenContainer_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;
             }

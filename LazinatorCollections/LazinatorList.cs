@@ -467,6 +467,47 @@ namespace LazinatorCollections
         /// <summary>
         /// Writes the main list to a binary buffer, using serialized data where possible so that items do not need to be deserialized unnecessarily.
         /// </summary>
+        private void WriteMainList(ref BinaryBufferWriter writer, ReadOnlyMemory<byte> itemToConvert, LazinatorSerializationOptions options)
+        {
+            int originalStartingPosition = writer.ActiveMemoryPosition;
+            if (IsDirty || DescendantIsDirty || options.IncludeChildrenMode != OriginalIncludeChildrenMode || LazinatorMemoryStorage.IsEmpty)
+            {
+                var offsetList = new LazinatorOffsetList();
+                LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(ref writer, (ref BinaryBufferWriter w) =>
+                {
+                    int startingPosition = w.ActiveMemoryPosition;
+                    if (_DeserializedItems == null && _CountWhenDeserialized > 0)
+                        SetupItemsTracker();
+                    for (int i = 0; i < (_ItemsTracker?.Count ?? 0); i++)
+                    {
+                        var itemIndex = i; // avoid closure problem
+                        var status = _ItemsTracker[itemIndex];
+                        if (status.IsDeserialized)
+                        {
+                            var underlyingItem = _DeserializedItems[status.DeserializedIndex];
+                            WriteChild(ref w, ref underlyingItem, options.IncludeChildrenMode, true, () => status.IsInOriginalItems ? GetListMemberSlice(status.OriginalIndex) : LazinatorMemory.EmptyLazinatorMemory, options.VerifyCleanness, options.UpdateStoredBuffer, SizeOfLength.SkipLength, this);
+                            if (underlyingItem != null && underlyingItem.IsStruct)
+                            { // the struct that was just written may be noted as dirty, but it's really clean. Cloning is the only safe way to get a clean hierarchy.
+                                underlyingItem = underlyingItem.CloneNoBuffer();
+                                _DeserializedItems[status.DeserializedIndex] = underlyingItem;
+                            }
+                        }
+                        else
+                            WriteExistingChildStorage(ref w, () => GetListMemberSlice(status.OriginalIndex), SizeOfLength.SkipLength, LazinatorMemory.EmptyLazinatorMemory);
+                        var offset = (int)(w.ActiveMemoryPosition - startingPosition);
+                        offsetList.AddOffset(offset);
+                    }
+                });
+                _Offsets_Accessed = true;
+                _Offsets = offsetList;
+                _Offsets.IsDirty = true;
+            }
+            else
+            {
+                LazinatorMemory mainListSerializedStorage = GetMainListSerializedWithoutDeserializing();
+                mainListSerializedStorage.WriteToBinaryBuffer(ref writer);
+            }
+        }
         private void WriteMainList(ref BinaryBufferWriter writer, ReadOnlyMemory<byte> itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             int originalStartingPosition = writer.ActiveMemoryPosition;
