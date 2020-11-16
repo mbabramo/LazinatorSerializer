@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lazinator.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,7 @@ namespace Lazinator.Core
         /// </summary>
         public readonly bool VerifyCleanness;
         /// <summary>
-        /// Whether the objects being serialized should be updated to use the new buffer. This is ignored and treated as false if includeChildrenMode is not set to include all children. If false, then the returned memory will be independent of the existing memory.
+        /// Whether the objects being serialized should be updated to use the new buffer. This must be false if includeChildrenMode is not set to include all children. If false, then the returned memory will be independent of the existing memory.
         /// </summary>
         public readonly bool UpdateStoredBuffer;
 
@@ -29,6 +30,8 @@ namespace Lazinator.Core
             IncludeChildrenMode = includeChildrenMode;
             VerifyCleanness = verifyCleanness;
             UpdateStoredBuffer = updateStoredBuffer;
+            if (IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren && updateStoredBuffer)
+                ThrowHelper.ThrowCannotUpdateStoredBuffer();
         }
 
         public static LazinatorSerializationOptions Default = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, true);
