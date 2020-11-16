@@ -233,6 +233,11 @@ namespace LazinatorTests.Examples.Subclasses
             }
         }
         
+        public virtual LazinatorMemory SerializeLazinator(in LazinatorSerializationOptions options) 
+        {
+            return SerializeLazinator(options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer);
+        }
+        
         public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
         {
             if (LazinatorMemoryStorage.IsEmpty || includeChildrenMode != OriginalIncludeChildrenMode || (verifyCleanness || IsDirty || (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && DescendantIsDirty)))

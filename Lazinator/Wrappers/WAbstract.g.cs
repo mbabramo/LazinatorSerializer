@@ -100,6 +100,7 @@ namespace Lazinator.Wrappers
         protected abstract int Deserialize();
         
         public abstract void SerializeLazinator();
+        public abstract LazinatorMemory SerializeLazinator(in LazinatorSerializationOptions options);
         public abstract LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
         
         public abstract ILazinator CloneLazinator(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers);
