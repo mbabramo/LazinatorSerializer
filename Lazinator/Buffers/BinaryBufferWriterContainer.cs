@@ -70,9 +70,9 @@ namespace Lazinator.Buffers
         public void EnsureMinBufferSize(int desiredBufferSize = 0) => Writer.EnsureMinBufferSize(desiredBufferSize);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WriteFromCompletedMemory(int startIndex, int numBytes) => Writer.WriteFromCompletedMemory(startIndex, numBytes);
+        public void InsertReferenceToCompletedMemory(int startIndex, int numBytes) => Writer.InsertReferenceToCompletedMemory(startIndex, numBytes);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void FinalizeBytesSegments() => Writer.FinalizeBytesSegments();
+        public void AddDiffsInfoToActiveMemory() => Writer.AddDiffsInfoToActiveMemory();
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal void RecordLastActiveMemoryBytesSegment() => Writer.RecordLastActiveMemoryBytesSegment();
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

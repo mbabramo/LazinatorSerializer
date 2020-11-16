@@ -545,7 +545,7 @@ namespace Lazinator.Buffers
                 var memoryOwner = MemoryAtIndex(chunkIndex);
                 if (memoryOwner is not MemoryReference memoryReference)
                     memoryReference = InitialOwnedMemoryReference;
-                yield return new BytesSegment(memoryReference.ReferencedMemoryNumber, memoryReference.StartIndex + startPosition, numBytes);
+                yield return new BytesSegment(memoryReference.ReferencedMemoryVersion, memoryReference.StartIndex + startPosition, numBytes);
             }
         }
 
@@ -556,7 +556,7 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public Memory<byte> GetMemoryAtBytesSegment(BytesSegment bytesSegment)
         {
-            var memoryOwner = MemoryAtIndex(bytesSegment.MemoryChunkNumber);
+            var memoryOwner = MemoryAtIndex(bytesSegment.MemoryChunkVersion);
             if (memoryOwner is not MemoryReference memoryReference)
                 memoryReference = InitialOwnedMemoryReference;
             var underlyingChunk = memoryReference.ReferencedMemory.Memory.Slice(bytesSegment.IndexWithinMemoryChunk, bytesSegment.NumBytes);

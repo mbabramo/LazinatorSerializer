@@ -21,10 +21,26 @@ namespace Lazinator.Buffers
             return ActiveMemory == null ? "" : "Position " + _ActiveMemoryPosition + " " + ActiveMemory.ToString();
         }
 
+        /// <summary>
+        /// Bytes that have been written by the current BinaryBufferWriter. These bytes do not necessarily occur logically after the CompletedMemory bytes.
+        /// When diffs are serialized, the ActiveMemory may consist of bytes that will replace bytes in CompletedMemory. The BytesSegments are then used
+        /// to indicate the order of reference of bytes in ActiveMemory and bytes in CompletedMemory. However, when serializing without diffs, ActiveMemory
+        /// does contain bytes that occur logically after the bytes in CompletedMemory. 
+        /// </summary>
         public ExpandableBytes ActiveMemory { get; set; }
+
+        /// <summary>
+        /// Bytes that were previously written. They may have been written in the same serialization pass (created when ExpandableBytes became full) or 
+        /// in a previous serialization pass (when serializing diffs).
+        /// </summary>
         public LazinatorMemory CompletedMemory { get; set; }
 
+        /// <summary>
+        /// When serializing diffs, these are non-null and will refer to various segments in CompletedMemory and ActiveMemory in order.
+        /// </summary>
         public List<BytesSegment> BytesSegments;
+
+        #region Construction and initialization
 
         public BinaryBufferWriter(int minimumSize, LazinatorMemory? completedMemory = null)
         {
@@ -67,6 +83,10 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public LazinatorMemory Slice(long position, long length) => LazinatorMemory.Slice(position, length);
 
+        #endregion
+
+        #region Active and completed memory
+
         /// <summary>
         /// Creates LazinatorMemory equal to the underlying memory through the current position.
         /// </summary>
@@ -75,6 +95,8 @@ namespace Lazinator.Buffers
             get
             {
                 InitializeIfNecessary();
+                if (!CompletedMemory.IsEmpty)
+                    return CompletedMemory.WithAppendedChunk(new MemoryReference(ActiveMemory, GetActiveMemoryVersion(), 0, ActiveMemoryPosition));
                 return new LazinatorMemory(ActiveMemory, 0, ActiveMemoryPosition);
             }
         }
@@ -124,7 +146,7 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// Ensures that the underlying memory is at least a specified size, copying the current memory if needed.
+        /// Ensures that the active memory is at least a specified size, copying the current memory if needed.
         /// </summary>
         /// <param name="desiredBufferSize"></param>
         public void EnsureMinBufferSize(int desiredBufferSize = 0)
@@ -133,12 +155,21 @@ namespace Lazinator.Buffers
             ActiveMemory.EnsureMinBufferSize(desiredBufferSize);
         }
 
+        /// <summary>
+        /// Ensures that the active memory contains at least the specified free size.
+        /// </summary>
+        /// <param name="desiredFreeSize"></param>
         public void EnsureMinFreeSize(int desiredFreeSize)
         {
             if (FreeSpan.Length < desiredFreeSize)
                 EnsureMinBufferSize(ActiveMemoryPosition + desiredFreeSize);
         }
 
+        /// <summary>
+        /// Returns a span containing the free bytes of the active memory span. 
+        /// </summary>
+        /// <param name="desiredSize"></param>
+        /// <returns></returns>
         public Span<byte> GetFreeBytes(int desiredSize)
         {
             EnsureMinFreeSize(desiredSize);
@@ -150,38 +181,60 @@ namespace Lazinator.Buffers
         /// </summary>
         /// <param name="startIndex"></param>
         /// <param name="numBytes"></param>
-        public void WriteFromCompletedMemory(int startIndex, int numBytes)
+        public void InsertReferenceToCompletedMemory(int startIndex, int numBytes)
         {
             if (CompletedMemory == null)
                 throw new ArgumentException();
-            RecordLastActiveMemoryBytesSegment();
             IEnumerable<BytesSegment> segmentsToAdd = CompletedMemory.EnumerateSubrangeAsSegments(startIndex, numBytes);
             BytesSegment.ExtendBytesSegmentList(BytesSegments, segmentsToAdd);
+            RecordLastActiveMemoryBytesSegment();
         }
 
-        public void FinalizeBytesSegments()
+
+        public void AddDiffsInfoToActiveMemory()
         {
             RecordLastActiveMemoryBytesSegment();
-            throw new NotImplementedException("DEBUG"); // Here, we need to add the list of bytes segments onto the end of the active memory, followed by the size. 
+            throw new NotImplementedException("DEBUG"); // Here, we need to add the list of bytes segments onto the end of the active memory, without changing the activememoryposition, followed by the size. 
         }
 
+        /// <summary>
+        /// Extends the bytes segment list to include the portion of active memory that is not included in active memory. 
+        /// </summary>
         internal void RecordLastActiveMemoryBytesSegment()
         {
             int activeMemoryLength = ActiveMemory.Memory.Length;
             if (activeMemoryLength == 0)
                 return;
-            int activeMemoryVersion = CompletedMemory.MoreOwnedMemory.Last().ReferencedMemoryNumber + 1;
+            int activeMemoryVersion = GetActiveMemoryVersion();
             int firstUnrecordedActiveMemoryByte = GetFirstUnrecordedActiveMemoryByte(activeMemoryVersion);
             if (firstUnrecordedActiveMemoryByte != activeMemoryLength)
-                BytesSegment.ExtendBytesSegmentList(BytesSegments, new BytesSegment(activeMemoryVersion, firstUnrecordedActiveMemoryByte, activeMemoryLength));
+                BytesSegment.ExtendBytesSegmentList(BytesSegments, new BytesSegment(activeMemoryVersion, firstUnrecordedActiveMemoryByte, activeMemoryLength - firstUnrecordedActiveMemoryByte));
         }
 
+        /// <summary>
+        /// Returns the version number for active memory (equal to the last version number for CompletedMemory plus one). 
+        /// </summary>
+        /// <returns></returns>
+        private int GetActiveMemoryVersion()
+        {
+            if (CompletedMemory.MoreOwnedMemory.Any())
+                return CompletedMemory.MoreOwnedMemory.Last().ReferencedMemoryVersion + 1;
+            if (CompletedMemory.IsEmpty)
+                return 0;
+            return CompletedMemory.InitialOwnedMemoryReference.ReferencedMemoryVersion + 1;
+        }
+
+        /// <summary>
+        /// Finds the index of the first byte in active memory not yet recorded in BytesSegments. It searches BytesSegments from the end to the beginning.
+        /// </summary>
+        /// <param name="memoryChunkVersion"></param>
+        /// <returns></returns>
         private int GetFirstUnrecordedActiveMemoryByte(int memoryChunkVersion)
         {
             for (int i = BytesSegments.Count - 1; i >= 0; i--)
             {
                 BytesSegment bytesSegment = BytesSegments[i];
-                if (bytesSegment.MemoryChunkNumber == memoryChunkVersion)
+                if (bytesSegment.MemoryChunkVersion == memoryChunkVersion)
                 {
                     return bytesSegment.IndexWithinMemoryChunk + bytesSegment.NumBytes;
                 }
@@ -189,10 +242,18 @@ namespace Lazinator.Buffers
             return 0;
         }
 
+        /// <summary>
+        /// Skips ahead the specified number of bytes
+        /// </summary>
+        /// <param name="length"></param>
         public void Skip(int length)
         {
             ActiveMemoryPosition += length;
         }
+
+        #endregion
+
+        #region Writing to active buffer
 
         public void Write(bool value)
         {
@@ -376,6 +437,10 @@ namespace Lazinator.Buffers
             ActiveMemoryPosition += sizeof(ulong);
         }
 
+        #endregion
+
+        #region Recording lengths
+
         /// <summary>
         /// Designates the current active memory position as the position at which to store length information. 
         /// </summary>
@@ -427,5 +492,7 @@ namespace Lazinator.Buffers
                 WriteInt64BigEndian(LengthsSpan, length);
             _LengthsPosition += sizeof(Int64);
         }
+
+        #endregion
     }
 }
