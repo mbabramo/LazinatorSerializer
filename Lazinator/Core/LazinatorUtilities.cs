@@ -78,10 +78,11 @@ namespace Lazinator.Core
         {
             int bufferSize = lazinatorObject.LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : (int) /* DEBUG */ lazinatorObject.LazinatorMemoryStorage.Length;
             BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
-            lazinatorObject.SerializeToExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+            lazinatorObject.SerializeToExistingBuffer(ref writer, options);
             return writer.LazinatorMemory;
         }
 
+        // DEBUG
         private static LazinatorMemory EncodeToNewBinaryBufferWriter<T>(T lazinatorObject, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) where T : ILazinator
         {
             int bufferSize = lazinatorObject.LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : (int) /* DEBUG */ lazinatorObject.LazinatorMemoryStorage.Length;
@@ -122,6 +123,15 @@ namespace Lazinator.Core
             return writer.LazinatorMemory;
         }
 
+        private async static ValueTask<LazinatorMemory> EncodeToNewBinaryBufferWriterAsync<T>(T lazinatorObject, LazinatorSerializationOptions options) where T : ILazinator, ILazinatorAsync
+        {
+            int bufferSize = lazinatorObject.LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : (int) /* DEBUG */ lazinatorObject.LazinatorMemoryStorage.Length;
+            BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(bufferSize);
+            await lazinatorObject.SerializeToExistingBufferAsync(writer, options);
+            return writer.LazinatorMemory;
+        }
+
+        // DEBUG
         private async static ValueTask<LazinatorMemory> EncodeToNewBinaryBufferWriterAsync<T>(T lazinatorObject, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) where T : ILazinator, ILazinatorAsync
         {
             int bufferSize = lazinatorObject.LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : (int) /* DEBUG */ lazinatorObject.LazinatorMemoryStorage.Length;
@@ -648,6 +658,72 @@ namespace Lazinator.Core
         /// <param name="updateStoredBuffer">If true, updates the child object's byte buffer to store the serialized information.</param>
         /// <param name="sizeOfLength">The number of bytes to write the length of the object</param>
         /// <param name="parent">The parent of the object being written</param>
+
+        private static void WriteChildToBinary<T>(ref BinaryBufferWriter writer, ref T child, LazinatorSerializationOptions options, SizeOfLength sizeOfLength) where T : ILazinator
+        {
+            T childCopy = child;
+            void action(ref BinaryBufferWriter w)
+            {
+                if (childCopy.LazinatorMemoryStorage.IsEmpty || childCopy.IsDirty || childCopy.DescendantIsDirty || options.VerifyCleanness || options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != childCopy.OriginalIncludeChildrenMode)
+                    childCopy.SerializeToExistingBuffer(ref w, options);
+                else
+                    childCopy.LazinatorMemoryStorage.WriteToBinaryBuffer(ref w); // the childCopy has been accessed, but is unchanged, so we can use the storage holding the childCopy
+            }
+            switch (sizeOfLength)
+            {
+                case SizeOfLength.SkipLength:
+                    LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(ref writer, action);
+                    break;
+                case SizeOfLength.Byte:
+                    LazinatorUtilities.WriteToBinaryWithByteLengthPrefix(ref writer, action);
+                    break;
+                case SizeOfLength.Int16:
+                    LazinatorUtilities.WriteToBinaryWithInt16LengthPrefix(ref writer, action);
+                    break;
+                case SizeOfLength.Int32:
+                    LazinatorUtilities.WriteToBinaryWithInt32LengthPrefix(ref writer, action);
+                    break;
+                case SizeOfLength.Int64:
+                    LazinatorUtilities.WriteToBinaryWithInt64LengthPrefix(ref writer, action);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private async static ValueTask WriteChildToBinaryAsync<T>(BinaryBufferWriterContainer writer, T child, LazinatorSerializationOptions options, SizeOfLength sizeOfLength) where T : ILazinator, ILazinatorAsync
+        {
+            T childCopy = child;
+            async ValueTask action(BinaryBufferWriterContainer w)
+            {
+                if (childCopy.LazinatorMemoryStorage.IsEmpty || childCopy.IsDirty || childCopy.DescendantIsDirty || options.VerifyCleanness || options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != childCopy.OriginalIncludeChildrenMode)
+                    await childCopy.SerializeToExistingBufferAsync(w, options);
+                else
+                    await childCopy.LazinatorMemoryStorage.WriteToBinaryBufferAsync(w); // the childCopy has been accessed, but is unchanged, so we can use the storage holding the childCopy
+            }
+            switch (sizeOfLength)
+            {
+                case SizeOfLength.SkipLength:
+                    await LazinatorUtilities.WriteToBinaryWithoutLengthPrefixAsync(writer, action);
+                    break;
+                case SizeOfLength.Byte:
+                    await LazinatorUtilities.WriteToBinaryWithByteLengthPrefixAsync(writer, action);
+                    break;
+                case SizeOfLength.Int16:
+                    await LazinatorUtilities.WriteToBinaryWithInt16LengthPrefixAsync(writer, action);
+                    break;
+                case SizeOfLength.Int32:
+                    await LazinatorUtilities.WriteToBinaryWithInt32LengthPrefixAsync(writer, action);
+                    break;
+                case SizeOfLength.Int64:
+                    await LazinatorUtilities.WriteToBinaryWithInt64LengthPrefixAsync(writer, action);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        // DEBUG
         private static void WriteChildToBinary<T>(ref BinaryBufferWriter writer, ref T child, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, SizeOfLength sizeOfLength) where T : ILazinator
         {
             T childCopy = child;
