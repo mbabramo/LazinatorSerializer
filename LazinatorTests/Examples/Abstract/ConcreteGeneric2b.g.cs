@@ -342,11 +342,6 @@ namespace LazinatorTests.Examples.Abstract
             return writer.LazinatorMemory;
         }
         
-        public override LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
-        {
-            return SerializeLazinator(new LazinatorSerializationOptions(includeChildrenMode, verifyCleanness, updateStoredBuffer));
-        }
-        
         protected override LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
         {
             int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.LengthInt ?? ExpandableBytes.DefaultMinBufferSize;

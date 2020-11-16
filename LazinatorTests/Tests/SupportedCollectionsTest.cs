@@ -1156,7 +1156,7 @@ namespace LazinatorTests.Tests
                 MyRecordLikeClass = new RecordLikeClass(23, new Example() { MyChar = 'q' }),
                 MyRecordLikeStruct = new RecordLikeStruct(12, "Sam")
             };
-            LazinatorMemory serialized = original.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+            LazinatorMemory serialized = original.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false));
             RecordLikeContainer s2 = new RecordLikeContainer(serialized);
             s2.MyRecordLikeClass.Age.Should().Be(23);
             s2.MyRecordLikeClass.Example.MyChar.Should().Be('q');
@@ -1183,7 +1183,7 @@ namespace LazinatorTests.Tests
                     NullableInt = 8
                 }
             };
-            LazinatorMemory serialized = original.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+            LazinatorMemory serialized = original.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false));
             RecordLikeContainer s2 = new RecordLikeContainer(serialized);
             s2.MyNonLazinatorRecordWithConstructor.Age.Should().Be(20);
             s2.MyNonLazinatorRecordWithConstructor.Example.MyChar.Should().Be('q');

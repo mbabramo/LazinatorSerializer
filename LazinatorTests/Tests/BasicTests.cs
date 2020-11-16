@@ -92,7 +92,7 @@ namespace LazinatorTests.Tests
             // Set to old version number. This should serialize as the old version number.
             original.LazinatorObjectVersion = 2;
             original.MyOldString = "Old string";
-            var bytes = original.SerializeLazinator(IncludeChildrenMode.ExcludeAllChildren, false, false); // serializes as version 3
+            var bytes = original.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.ExcludeAllChildren, false, false)); // serializes as version 3
 
             var upgraded = new Example(bytes);
             upgraded.LazinatorObjectVersion.Should().Be(3);
@@ -107,7 +107,7 @@ namespace LazinatorTests.Tests
             // Set to old version number. This should serialize as the old version number.
             original.LazinatorObjectVersion = 2;
             original.MyOldString = "Old string";
-            var bytes = original.SerializeLazinator(IncludeChildrenMode.ExcludeAllChildren, false, false); // serializes as version 3
+            var bytes = original.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.ExcludeAllChildren, false, false)); // serializes as version 3
 
             // Now, deserializing the version 3 bytes, but again setting to the old version.
             var stillOldVersion = new Example(bytes, null, IncludeChildrenMode.IncludeAllChildren, 2); // set back to version 2

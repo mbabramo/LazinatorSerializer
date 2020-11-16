@@ -517,7 +517,6 @@ namespace Lazinator.CodeDescription
                         
                         {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType("void")} SerializeLazinator{MaybeAsyncWord}();")}
                         {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType("LazinatorMemory")} SerializeLazinator{MaybeAsyncWord}(in LazinatorSerializationOptions options);")}
-                        {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType("LazinatorMemory")} SerializeLazinator{MaybeAsyncWord}(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);")}
                         
                         {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType(ILazinatorString)} CloneLazinator{MaybeAsyncWord}(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers);")}
 

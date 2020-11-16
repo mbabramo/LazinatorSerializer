@@ -21,7 +21,7 @@ namespace LazinatorTests.Tests
             s.Example.Should().BeNull();
             s.Example2.Should().BeNull();
             s.Example3.Should().BeNull();
-            var originalbytes = s.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+            var originalbytes = s.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false));
 
 
             // take advantage of simplifications
@@ -42,7 +42,7 @@ namespace LazinatorTests.Tests
             s.Example.MyString.Should().Be(Simplifiable.LongString);
             s.Example2.MyChar.Should().Be('Z');
             s.Example3.Should().BeNull();
-            var d = s.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+            var d = s.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false));
             d.Memory.Length.Should().BeLessOrEqualTo(originalbytes.Memory.Length); // shorter even though it is more complex once constructed
 
             // now use the values that are not simplified
