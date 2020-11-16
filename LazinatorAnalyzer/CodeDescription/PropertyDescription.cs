@@ -2421,7 +2421,7 @@ namespace Lazinator.CodeDescription
                         var copy = {itemString};{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
                         if (copy != null)
                         {{")}
-                        copy.{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, "Value.")}SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                        copy.{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, "Value.")}SerializeToExistingBuffer(ref w, options);
                         {itemString} = copy;{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
                         }}")}
                     }}
@@ -2430,7 +2430,7 @@ namespace Lazinator.CodeDescription
                 else
                 {
                     return ($@"
-                    void action(ref BinaryBufferWriter w) => {itemString}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, "?")}{NullForgiveness}.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    void action(ref BinaryBufferWriter w) => {itemString}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, "?")}{NullForgiveness}.SerializeToExistingBuffer(ref w, options);
                     WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(ref writer, action);");
                 }
             }
@@ -2651,7 +2651,7 @@ namespace Lazinator.CodeDescription
             {
                 if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable)
                     return ($@"
-                        void action{itemName}(ref BinaryBufferWriter w) => {itemToConvertItemName}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, "?")}.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                        void action{itemName}(ref BinaryBufferWriter w) => {itemToConvertItemName}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, "?")}.SerializeToExistingBuffer(ref w, options);
                         WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(ref writer, action{itemName});");
                 else
                     return ($@"
@@ -2661,7 +2661,7 @@ namespace Lazinator.CodeDescription
                         }}
                         else
                         {{
-                            void action{itemName}(ref BinaryBufferWriter w) => {itemToConvertItemName}.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                            void action{itemName}(ref BinaryBufferWriter w) => {itemToConvertItemName}.SerializeToExistingBuffer(ref w, options);
                             WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(ref writer, action{itemName});
                         }};");
             }
@@ -2731,7 +2731,7 @@ namespace Lazinator.CodeDescription
                         {{
                             {GetNullCheckIfThen("itemToConvert", $@"return;", "")}
                             {InterchangeTypeName} interchange = new {InterchangeTypeNameWithoutNullabilityIndicator}(itemToConvert);
-                            interchange.SerializeToExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                            interchange.SerializeToExistingBuffer(ref writer, options);
                         }}
 
 
