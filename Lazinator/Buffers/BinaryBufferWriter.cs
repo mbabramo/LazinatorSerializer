@@ -170,7 +170,7 @@ namespace Lazinator.Buffers
             int activeMemoryLength = ActiveMemory.Memory.Length;
             if (activeMemoryLength == 0)
                 return;
-            int activeMemoryVersion = CompletedMemory.MoreOwnedMemory.Last().VersionOfReferencedMemory + 1;
+            int activeMemoryVersion = CompletedMemory.MoreOwnedMemory.Last().ReferencedMemoryNumber + 1;
             int firstUnrecordedActiveMemoryByte = GetFirstUnrecordedActiveMemoryByte(activeMemoryVersion);
             if (firstUnrecordedActiveMemoryByte != activeMemoryLength)
                 BytesSegment.ExtendBytesSegmentList(BytesSegments, new BytesSegment(activeMemoryVersion, firstUnrecordedActiveMemoryByte, activeMemoryLength));
@@ -181,7 +181,7 @@ namespace Lazinator.Buffers
             for (int i = BytesSegments.Count - 1; i >= 0; i--)
             {
                 BytesSegment bytesSegment = BytesSegments[i];
-                if (bytesSegment.MemoryChunkVersion == memoryChunkVersion)
+                if (bytesSegment.MemoryChunkNumber == memoryChunkVersion)
                 {
                     return bytesSegment.IndexWithinMemoryChunk + bytesSegment.NumBytes;
                 }

@@ -11,7 +11,9 @@ using Lazinator.Support;
 namespace Lazinator.Buffers
 {
     /// <summary>
-    /// An immutable memory owner used by Lazinator to store unserialized Lazinator properties. 
+    /// An immutable memory owner used by Lazinator to store and reference serialized Lazinator data. The memory may be split across multiple memory chunks.
+    /// The memory referenced is defined by the index of the first memory chunk, the index of the first byte within that chunk, and the number of 
+    /// bytes altogether. 
     /// </summary>
     public readonly struct LazinatorMemory : IMemoryOwner<byte>
     {
@@ -95,6 +97,22 @@ namespace Lazinator.Buffers
         {
         }
 
+        /// <summary>
+        /// Returns a new LazinatorMemory with an appended memory chunk. If this LazinatorMemory references the last byte of the 
+        /// memory, then the referenced memory is extended to include this chunk.
+        /// </summary>
+        /// <param name="chunk"></param>
+        /// <returns></returns>
+        public LazinatorMemory WithAppendedChunk(MemoryReference chunk)
+        {
+            var evenMoreOwnedMemory = MoreOwnedMemory?.ToList() ?? new List<MemoryReference>();
+
+            evenMoreOwnedMemory.Add(chunk);
+            if (StartIndex == 0 && StartPosition == 0 && Length == GetGrossLength())
+                return new LazinatorMemory(InitialOwnedMemoryReference, evenMoreOwnedMemory, 0, 0, Length + chunk.Length);
+            return new LazinatorMemory(InitialOwnedMemoryReference, evenMoreOwnedMemory, StartIndex, StartPosition, Length);
+        }
+
         public bool Disposed => EnumerateReferencedMemoryOwners().Any(x => x != null && (x is ExpandableBytes e && e.Disposed) || (x is SimpleMemoryOwner<byte> s && s.Disposed));
 
         public void Dispose()
@@ -145,12 +163,22 @@ namespace Lazinator.Buffers
 
         private IMemoryOwner<byte> MemoryAtIndex(int i) => i == 0 ? InitialOwnedMemory : MoreOwnedMemory[i - 1];
 
+        /// <summary>
+        /// Gets the length of the specified memory chunk. It avoids loading the memory if possible.
+        /// </summary>
+        /// <param name="i"></param>
+        /// <returns></returns>
         private int LengthAtIndex(int i)
         {
             var memoryAtIndex = MemoryAtIndex(i);
             return GetMemoryOwnerLength(memoryAtIndex);
         }
 
+        /// <summary>
+        /// Returns the length of the specified memory owner, avoiding loading memory if possible.
+        /// </summary>
+        /// <param name="memoryAtIndex"></param>
+        /// <returns></returns>
         private static int GetMemoryOwnerLength(IMemoryOwner<byte> memoryAtIndex)
         {
             if (memoryAtIndex is MemoryReference memoryReference)
@@ -159,11 +187,36 @@ namespace Lazinator.Buffers
                 return memoryAtIndex.Memory.Length;
         }
 
+        /// <summary>
+        /// Slices the first referenced memory chunk only, producing a new LazinatorMemory.
+        /// </summary>
+        /// <param name="relativePositionOfSubrange"></param>
+        /// <returns></returns>
         private LazinatorMemory SliceInitial(int relativePositionOfSubrange) => Length - relativePositionOfSubrange is long revisedLength and > 0 ? SliceInitial(relativePositionOfSubrange, revisedLength) : LazinatorMemory.EmptyLazinatorMemory;
+
+        /// <summary>
+        /// Slices the first referenced memory chunk only, producing a new LazinatorMemory.
+        /// </summary>
+        /// <param name="relativePositionOfSubrange"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
         private LazinatorMemory SliceInitial(int relativePositionOfSubrange, long length) => length == 0 ? LazinatorMemory.EmptyLazinatorMemory : new LazinatorMemory(InitialOwnedMemory, StartPosition + relativePositionOfSubrange, length);
 
+        /// <summary>
+        /// Slices the memory, returning a new LazinatorMemory beginning at the specified index. The returned memory will include all of the same memory
+        /// chunks as this LazinatorMemory, but will refer to a subset of the bytes.
+        /// </summary>
+        /// <param name="relativePositionOfSubrange">The first byte of the sliced memory, relative to the first byte of this LazinatorMemory</param>
+        /// <returns></returns>
         public LazinatorMemory Slice(long relativePositionOfSubrange) => Slice(relativePositionOfSubrange, Length - relativePositionOfSubrange);
 
+        /// <summary>
+        /// Slices the memory, returning a new LazinatorMemory beginning at the specified index. The returned memory will include all of the same memory
+        /// chunks as this LazinatorMemory, but will refer to a subset of the bytes.
+        /// </summary>
+        /// <param name="relativePositionOfSubrange">The first byte of the sliced memory, relative to the first byte of this LazinatorMemory</param>
+        /// <param name="length">The number of bytes to include in the slice</param>
+        /// <returns></returns>
         public LazinatorMemory Slice(long relativePositionOfSubrange, long length)
         {
             if (Length == 0)
@@ -201,6 +254,10 @@ namespace Lazinator.Buffers
             return new LazinatorMemory((MemoryReference)InitialOwnedMemory, MoreOwnedMemory, revisedStartIndex, revisedStartPosition, length);
         }
 
+        #endregion
+
+        #region Equality
+
         public override bool Equals(object obj) => obj == null ? throw new LazinatorSerializationException("Invalid comparison of LazinatorMemory to null") :
             obj is LazinatorMemory lm && lm.InitialOwnedMemory.Equals(InitialOwnedMemory) && lm.StartPosition == StartPosition && lm.Length == Length;
 
@@ -221,9 +278,15 @@ namespace Lazinator.Buffers
 
         #endregion
 
-        #region Multiple memories management
+        #region Initial memory
 
+        /// <summary>
+        /// True if there is only a single memory chunk.
+        /// </summary>
         public bool SingleMemory => MoreOwnedMemory == null || MoreOwnedMemory.Count() == 0;
+        /// <summary>
+        /// The first referenced memory chunk
+        /// </summary>
         public Memory<byte> InitialMemory
         {
             get
@@ -243,8 +306,40 @@ namespace Lazinator.Buffers
             }
         }
 
+        /// <summary>
+        /// A read-only version of the first referenced memory chunk.
+        /// </summary>
         public ReadOnlyMemory<byte> InitialReadOnlyMemory => InitialMemory;
 
+
+        /// <summary>
+        /// Asynchronously returns the first referenced memory chunk.
+        /// </summary>
+        /// <returns></returns>
+        public async ValueTask<Memory<byte>> GetInitialMemoryAsync()
+        {
+            if (IsEmpty)
+                return EmptyMemory;
+            if (SingleMemory)
+                return InitialOwnedMemory.Memory.Slice(StartPosition, (int)Length);
+            else
+            {
+                IMemoryOwner<byte> memoryOwner = await LoadInitialMemoryAsync();
+                var memory = memoryOwner.Memory;
+                int overallMemoryLength = memory.Length;
+                int lengthOfMemoryChunkAfterStartPosition = overallMemoryLength - StartPosition;
+                return memoryOwner.Memory.Slice(StartPosition, lengthOfMemoryChunkAfterStartPosition);
+            }
+        }
+
+        /// <summary>
+        /// A read-only version of the first referenced memory chunk, returned asynchronously.
+        /// </summary>
+        public async ValueTask<ReadOnlyMemory<byte>> GetInitialReadOnlyMemoryAsync() => await GetInitialMemoryAsync();
+
+        /// <summary>
+        /// The only memory chunk. This will throw if there are multiple memory chunks.
+        /// </summary>
         public Memory<byte> OnlyMemory
         {
             get
@@ -255,6 +350,25 @@ namespace Lazinator.Buffers
             }
         }
 
+
+        /// <summary>
+        /// Returns a memory reference corresponding to the initial memory.
+        /// </summary>
+        public MemoryReference InitialOwnedMemoryReference
+        {
+            get
+            {
+                MemoryReference initialOwnedMemoryReference = InitialOwnedMemory as MemoryReference;
+                if (initialOwnedMemoryReference == null)
+                    initialOwnedMemoryReference = new MemoryReference(InitialOwnedMemory, 0, 0, InitialOwnedMemory.Memory.Length);
+                return initialOwnedMemoryReference;
+            }
+        }
+
+        /// <summary>
+        /// Loads the first referenced memory chunk synchronously if it is not loaded.
+        /// </summary>
+        /// <returns></returns>
         public IMemoryOwner<byte> LoadInitialMemory()
         {
             if (SingleMemory)
@@ -271,6 +385,10 @@ namespace Lazinator.Buffers
             return memoryOwner;
         }
 
+        /// <summary>
+        /// Allows for unloading the first referenced memory chunk, if it is loaded. The memory can be unloaded only if the owner of the first memory
+        /// chunk is a MemoryReference that supports this functionality.
+        /// </summary>
         public void ConsiderUnloadInitialMemory()
         {
             if (SingleMemory)
@@ -286,6 +404,10 @@ namespace Lazinator.Buffers
             }
         }
 
+        /// <summary>
+        /// Asynchronously loads the first referenced memory chunk, if not already loaded.
+        /// </summary>
+        /// <returns></returns>
         public async ValueTask<IMemoryOwner<byte>> LoadInitialMemoryAsync()
         {
             if (SingleMemory)
@@ -296,6 +418,11 @@ namespace Lazinator.Buffers
             return memoryOwner;
         }
 
+        /// <summary>
+        /// Allows for asynchronously unloading the first referenced memory chunk, if it is loaded. The memory can be unloaded only if the owner of the first memory
+        /// chunk is a MemoryReference that supports this functionality.
+        /// </summary>
+        /// <returns></returns>
         public async ValueTask ConsiderUnloadInitialMemoryAsync()
         {
             if (SingleMemory)
@@ -305,24 +432,37 @@ namespace Lazinator.Buffers
                 await memoryReference.ConsiderUnloadMemoryAsync();
         }
 
-        public async ValueTask<Memory<byte>> GetInitialMemoryAsync()
+        #endregion
+
+        #region Multiple memory chunks
+
+        /// <summary>
+        /// The number of memory chunks stored. Note that the referenced memory may span only some subset of these chunks.
+        /// </summary>
+        /// <returns></returns>
+        public int NumMemoryChunks()
         {
-            if (IsEmpty)
-                return EmptyMemory;
-            if (SingleMemory)
-                return InitialOwnedMemory.Memory.Slice(StartPosition, (int) Length);
-            else
-            {
-                IMemoryOwner<byte> memoryOwner = await LoadInitialMemoryAsync();
-                var memory = memoryOwner.Memory;
-                int overallMemoryLength = memory.Length;
-                int lengthOfMemoryChunkAfterStartPosition = overallMemoryLength - StartPosition;
-                return memoryOwner.Memory.Slice(StartPosition, lengthOfMemoryChunkAfterStartPosition);
-            }
+            return 1 + (MoreOwnedMemory == null ? 0 : MoreOwnedMemory.Count);
         }
 
-        public async ValueTask<ReadOnlyMemory<byte>> GetInitialReadOnlyMemoryAsync() => await GetInitialMemoryAsync();
+        /// <summary>
+        /// Returns the length of all memory chunks, including those outside the range of this LazinatorMemory.
+        /// </summary>
+        /// <returns></returns>
+        public long GetGrossLength()
+        {
+            int numMemoryChunks = NumMemoryChunks();
+            long total = 0;
+            for (int i = 0; i < numMemoryChunks; i++)
+                total += LengthAtIndex(i);
+            return total;
+        }
 
+        /// <summary>
+        /// Enumerates memory chunk ranges corresponding to this LazinatorMemory
+        /// </summary>
+        /// <param name="includeOutsideOfRange">If true, then the full range of bytes in all contained memory chunks is included; if false, only those bytes referenced by this LazinatorMemory are included</param>
+        /// <returns>An enumerable where each element consists of the chunk index, the start position, and the number of bytes</returns>
         public IEnumerable<(int chunkIndex, int startPosition, int numBytes)> EnumerateMemoryChunkRanges(bool includeOutsideOfRange = false)
         {
             if (!includeOutsideOfRange && Length == 0)
@@ -348,14 +488,21 @@ namespace Lazinator.Buffers
             }
         }
 
-        public IEnumerable<(int chunkIndex, int startPosition, int numBytes)> EnumerateMemoryChunkSubranges(int relativeStartPositionOfSubrange, int numBytesInSubrange)
+
+        /// <summary>
+        /// Enumerates memory chunk ranges corresponding to a subset of the bytes referenced by this LazinatorMemory
+        /// </summary>
+        /// <param name="relativeStartPositionOfSubrange">The byte index at which to start enumerating</param>
+        /// <param name="numBytesInSubrange">The number of bytes to include</param>
+        /// <returns>An enumerable where each element consists of the chunk index, the start position, and the number of bytes</returns>
+        public IEnumerable<(int chunkIndex, int startPosition, int numBytes)> EnumerateMemoryChunkSubranges(long relativeStartPositionOfSubrange, long numBytesInSubrange)
         {
-            int bytesBeforeSubrangeRemaining = relativeStartPositionOfSubrange;
-            int bytesOfSubrangeRemaining = numBytesInSubrange;
+            long bytesBeforeSubrangeRemaining = relativeStartPositionOfSubrange;
+            long bytesOfSubrangeRemaining = numBytesInSubrange;
             bool withinSubrange = false;
             foreach (var rangeInfo in EnumerateMemoryChunkRanges(false))
             {
-                int skipOverBytes = 0;
+                long skipOverBytes = 0;
                 if (!withinSubrange)
                 {
                     skipOverBytes = Math.Min(bytesBeforeSubrangeRemaining, rangeInfo.numBytes);
@@ -365,8 +512,8 @@ namespace Lazinator.Buffers
                 }
                 if (withinSubrange)
                 {
-                    int numBytesToInclude = Math.Min(bytesOfSubrangeRemaining, rangeInfo.numBytes - skipOverBytes);
-                    yield return (rangeInfo.chunkIndex, rangeInfo.startPosition + skipOverBytes, numBytesToInclude);
+                    int numBytesToInclude = (int) Math.Min(bytesOfSubrangeRemaining, rangeInfo.numBytes - skipOverBytes);
+                    yield return (rangeInfo.chunkIndex, (int) (rangeInfo.startPosition + skipOverBytes), numBytesToInclude);
                     bytesOfSubrangeRemaining -= numBytesToInclude;
                     if (bytesOfSubrangeRemaining == 0)
                         yield break;
@@ -385,27 +532,42 @@ namespace Lazinator.Buffers
         // The result is that we have a list of BytesSegments. We can save this list of BytesSegments at the end of the latest range of data that we have just written to (plus an indication of the size of this list).
         // That way, we can see what versions we need to have in memory (or lazy loadable) and we can create the large LazinatorMemory, then the next-generation cobbled-together LazinatorMemory.
 
-        public IEnumerable<BytesSegment> EnumerateSubrangeAsSegments(int relativeStartPositionOfSubrange, int numBytesInSubrange)
+        /// <summary>
+        /// Enumerates a subrange as BytesSegments. It is required that each memory owner be a MemoryReference.
+        /// </summary>
+        /// <param name="relativeStartPositionOfSubrange"></param>
+        /// <param name="numBytesInSubrange"></param>
+        /// <returns></returns>
+        public IEnumerable<BytesSegment> EnumerateSubrangeAsSegments(long relativeStartPositionOfSubrange, long numBytesInSubrange)
         {
             foreach ((int chunkIndex, int startPosition, int numBytes) in EnumerateMemoryChunkSubranges(relativeStartPositionOfSubrange, numBytesInSubrange))
             {
                 var memoryOwner = MemoryAtIndex(chunkIndex);
-                if (memoryOwner is MemoryReference memoryReference)
-                {
-                    yield return new BytesSegment(memoryReference.VersionOfReferencedMemory, memoryReference.StartIndex + startPosition, numBytes);
-                }
-                else
-                    throw new ArgumentException();
+                if (memoryOwner is not MemoryReference memoryReference)
+                    memoryReference = InitialOwnedMemoryReference;
+                yield return new BytesSegment(memoryReference.ReferencedMemoryNumber, memoryReference.StartIndex + startPosition, numBytes);
             }
         }
 
+        /// <summary>
+        /// Returns the Memory block of bytes corresponding to a BytesSegments. It is required that each memory owner be a MemoryReference.
+        /// </summary>
+        /// <param name="bytesSegment">The bytes segment</param>
+        /// <returns></returns>
         public Memory<byte> GetMemoryAtBytesSegment(BytesSegment bytesSegment)
         {
-            var m = (MemoryReference)MemoryAtIndex(bytesSegment.MemoryChunkVersion);
-            var underlyingChunk = m.ReferencedMemory.Memory.Slice(bytesSegment.IndexWithinMemoryChunk, bytesSegment.NumBytes);
+            var memoryOwner = MemoryAtIndex(bytesSegment.MemoryChunkNumber);
+            if (memoryOwner is not MemoryReference memoryReference)
+                memoryReference = InitialOwnedMemoryReference;
+            var underlyingChunk = memoryReference.ReferencedMemory.Memory.Slice(bytesSegment.IndexWithinMemoryChunk, bytesSegment.NumBytes);
             return underlyingChunk;
         }
 
+        /// <summary>
+        /// Enumerates all memory blocks.
+        /// </summary>
+        /// <param name="includeOutsideOfRange">If true, includes all memory blocks, including those beyond the range referenced in this LazinatorMemory; if false, includes only the portion of memory represented by the range referenced in this LazinatorMemory </param>
+        /// <returns></returns>
         public IEnumerable<Memory<byte>> EnumerateMemoryChunks(bool includeOutsideOfRange = false)
         {
             foreach (var rangeInfo in EnumerateMemoryChunkRanges(includeOutsideOfRange))
@@ -415,6 +577,11 @@ namespace Lazinator.Buffers
             }
         }
 
+        /// <summary>
+        /// Enumerates all memory blocks asynchronously, asynchronously loading and unloading blocks of memory as needed.
+        /// </summary>
+        /// <param name="includeOutsideOfRange">If true, includes all memory blocks, including those beyond the range referenced in this LazinatorMemory; if false, includes only the portion of memory represented by the range referenced in this LazinatorMemory </param>
+        /// <returns></returns>
         public async IAsyncEnumerable<Memory<byte>> EnumerateMemoryChunksAsync(bool includeOutsideOfRange = false)
         {
             MemoryReference lastMemoryReferenceLoaded = null;
@@ -434,7 +601,10 @@ namespace Lazinator.Buffers
             }
         }
 
-
+        /// <summary>
+        /// Enumerates each of the memory chunks, whether included within the referenced range or not.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<IMemoryOwner<byte>> EnumerateMemoryOwners()
         {
             if (InitialOwnedMemory != null)
@@ -444,6 +614,10 @@ namespace Lazinator.Buffers
                     yield return additional;
         }
 
+        /// <summary>
+        /// Enumerates the referenced memory chunks (including portions of a referenced memory chunk not referenced).
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<IMemoryOwner<byte>> EnumerateReferencedMemoryOwners()
         {
             foreach (var owner in EnumerateMemoryOwners())
@@ -453,6 +627,10 @@ namespace Lazinator.Buffers
                     yield return owner;
         }
 
+        /// <summary>
+        /// Enumerates all memory chunks, including not referenced memory chunks, as memory references.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<MemoryReference> EnumerateMemoryReferences()
         {
             if (InitialOwnedMemory != null)
@@ -462,13 +640,25 @@ namespace Lazinator.Buffers
                     yield return additional;
         }
 
+        /// <summary>
+        /// Writes the memory to the binary buffer writer asynchronously.
+        /// </summary>
+        /// <param name="writer">The binary buffer writer container</param>
+        /// <param name="includeOutsideOfRange">True if contained memory that is NOT written should be written.</param>
+        /// <returns></returns>
         public async ValueTask WriteToBinaryBufferAsync(BinaryBufferWriterContainer writer, bool includeOutsideOfRange = false)
         {
             await foreach (Memory<byte> memory in EnumerateMemoryChunksAsync(includeOutsideOfRange))
-                writer.Write(memory.Span); // DEBUG -- after each write, we should check whether this is getting too large, and if so, move to the next chunk
+                writer.Write(memory.Span);
         }
 
 
+        /// <summary>
+        /// Writes the memory to the binary buffer writer asynchronously, with a byte length prefix
+        /// </summary>
+        /// <param name="writer">The binary buffer writer container</param>
+        /// <param name="includeOutsideOfRange">True if contained memory that is NOT written should be written.</param>
+        /// <returns></returns>
         public async ValueTask WriteToBinaryBuffer_WithBytePrefixAsync(BinaryBufferWriterContainer writer, bool includeOutsideOfRange = false)
         {
             if (Length > byte.MaxValue)
@@ -476,6 +666,13 @@ namespace Lazinator.Buffers
             writer.Write((byte)Length);
             await WriteToBinaryBufferAsync(writer, includeOutsideOfRange);
         }
+
+        /// <summary>
+        /// Writes the memory to the binary buffer writer asynchronously, with an Int16 length prefix
+        /// </summary>
+        /// <param name="writer">The binary buffer writer container</param>
+        /// <param name="includeOutsideOfRange">True if contained memory that is NOT written should be written.</param>
+        /// <returns></returns>
         public async ValueTask WriteToBinaryBuffer_WithInt16PrefixAsync(BinaryBufferWriterContainer writer, bool includeOutsideOfRange = false)
         {
             if (Length > Int16.MaxValue)
@@ -483,6 +680,13 @@ namespace Lazinator.Buffers
             writer.Write((Int16)Length);
             await WriteToBinaryBufferAsync(writer, includeOutsideOfRange);
         }
+
+        /// <summary>
+        /// Writes the memory to the binary buffer writer asynchronously, with an Int32 length prefix
+        /// </summary>
+        /// <param name="writer">The binary buffer writer container</param>
+        /// <param name="includeOutsideOfRange">True if contained memory that is NOT written should be written.</param>
+        /// <returns></returns>
         public async ValueTask WriteToBinaryBuffer_WithInt32PrefixAsync(BinaryBufferWriterContainer writer, bool includeOutsideOfRange = false)
         {
             if (Length > Int32.MaxValue)
@@ -490,17 +694,37 @@ namespace Lazinator.Buffers
             writer.Write((int)Length);
             await WriteToBinaryBufferAsync(writer, includeOutsideOfRange);
         }
+
+        /// <summary>
+        /// Writes the memory to the binary buffer writer asynchronously, with a long length prefix
+        /// </summary>
+        /// <param name="writer">The binary buffer writer container</param>
+        /// <param name="includeOutsideOfRange">True if contained memory that is NOT written should be written.</param>
+        /// <returns></returns>
         public async ValueTask WriteToBinaryBuffer_WithInt64PrefixAsync(BinaryBufferWriterContainer writer, bool includeOutsideOfRange = false)
         {
             writer.Write((Int64)Length);
             await WriteToBinaryBufferAsync(writer, includeOutsideOfRange);
         }
 
+        /// <summary>
+        /// Writes the memory to the binary buffer writer 
+        /// </summary>
+        /// <param name="writer">The binary buffer writer </param>
+        /// <param name="includeOutsideOfRange">True if contained memory that is NOT written should be written.</param>
+        /// <returns></returns>
         public void WriteToBinaryBuffer(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
         {
             foreach (Memory<byte> memory in EnumerateMemoryChunks(includeOutsideOfRange))
                 writer.Write(memory.Span);
         }
+
+        /// <summary>
+        /// Writes the memory to the binary buffer writer, with a byte length prefix
+        /// </summary>
+        /// <param name="writer">The binary buffer writer </param>
+        /// <param name="includeOutsideOfRange">True if contained memory that is NOT written should be written.</param>
+        /// <returns></returns>
         public void WriteToBinaryBuffer_WithBytePrefix(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
         {
             if (Length > byte.MaxValue)
@@ -508,6 +732,13 @@ namespace Lazinator.Buffers
             writer.Write((byte)Length);
             WriteToBinaryBuffer(ref writer, includeOutsideOfRange);
         }
+
+        /// <summary>
+        /// Writes the memory to the binary buffer writer, with an Int16 length prefix
+        /// </summary>
+        /// <param name="writer">The binary buffer writer </param>
+        /// <param name="includeOutsideOfRange">True if contained memory that is NOT written should be written.</param>
+        /// <returns></returns>
         public void WriteToBinaryBuffer_WithInt16Prefix(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
         {
             if (Length > Int16.MaxValue)
@@ -515,6 +746,13 @@ namespace Lazinator.Buffers
             writer.Write((Int16)Length);
             WriteToBinaryBuffer(ref writer, includeOutsideOfRange);
         }
+
+        /// <summary>
+        /// Writes the memory to the binary buffer writer, with an Int32 length prefix
+        /// </summary>
+        /// <param name="writer">The binary buffer writer </param>
+        /// <param name="includeOutsideOfRange">True if contained memory that is NOT written should be written.</param>
+        /// <returns></returns>
         public void WriteToBinaryBuffer_WithInt32Prefix(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
         {
             if (Length > Int32.MaxValue)
@@ -522,12 +760,24 @@ namespace Lazinator.Buffers
             writer.Write((int)Length);
             WriteToBinaryBuffer(ref writer, includeOutsideOfRange);
         }
+
+        /// <summary>
+        /// Writes the memory to the binary buffer writer, with a long length prefix
+        /// </summary>
+        /// <param name="writer">The binary buffer writer </param>
+        /// <param name="includeOutsideOfRange">True if contained memory that is NOT written should be written.</param>
+        /// <returns></returns>
         public void WriteToBinaryBuffer_WithInt64Prefix(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
         {
             writer.Write((Int64)Length);
             WriteToBinaryBuffer(ref writer, includeOutsideOfRange);
         }
 
+        /// <summary>
+        /// Enumerates individual bytes referenced by this LazinatorMemory.
+        /// </summary>
+        /// <param name="includeOutsideOfRange">If true, bytes outside the referenced range are included.</param>
+        /// <returns></returns>
         public IEnumerable<byte> EnumerateBytes(bool includeOutsideOfRange = false)
         {
             if (!includeOutsideOfRange && Length == 0)
@@ -554,6 +804,11 @@ namespace Lazinator.Buffers
             }
         }
 
+        /// <summary>
+        /// Checks whether the referenced memory matches a span
+        /// </summary>
+        /// <param name="span"></param>
+        /// <returns></returns>
         public bool Matches(ReadOnlySpan<byte> span)
         {
             int i = 0;
@@ -562,6 +817,11 @@ namespace Lazinator.Buffers
                     return false;
             return true;
         }
+
+        /// <summary>
+        /// Copies the referenced memory to an array
+        /// </summary>
+        /// <param name="array"></param>
         public void CopyToArray(byte[] array)
         {
             int i = 0;
@@ -569,20 +829,12 @@ namespace Lazinator.Buffers
                 array[i++] = b;
         }
 
-        public int NumMemoryChunks()
-        {
-            return 1 + (MoreOwnedMemory == null ? 0 : MoreOwnedMemory.Count);
-        }
-
-        public int GetGrossLength()
-        {
-            int numMemoryChunks = NumMemoryChunks();
-            int total = 0;
-            for (int i = 0; i < numMemoryChunks; i++)
-                total += LengthAtIndex(i); 
-            return total;
-        }
-
+        /// <summary>
+        /// Returns a single memory block consolidating all of the memory from the LazinatorMemory. If there is only a single memory chunk, 
+        /// then the memory is not copied.
+        /// </summary>
+        /// <param name="includeOutsideOfRange"></param>
+        /// <returns></returns>
         public Memory<byte> GetConsolidatedMemory(bool includeOutsideOfRange = false)
         {
             if (SingleMemory)
@@ -593,34 +845,13 @@ namespace Lazinator.Buffers
                     return InitialOwnedMemory.Memory.Slice(StartPosition, (int) Length);
             }
 
-            if (Length > Int32.MaxValue)
+            long totalLength = includeOutsideOfRange ? GetGrossLength() : Length;
+            if (totalLength > Int32.MaxValue)
                 ThrowHelper.ThrowTooLargeException(Int32.MaxValue);
-            int totalLength = includeOutsideOfRange ? GetGrossLength() : (int) Length;
-            BinaryBufferWriter w = new BinaryBufferWriter(totalLength);
+            BinaryBufferWriter w = new BinaryBufferWriter((int) totalLength);
             foreach (byte b in EnumerateBytes(includeOutsideOfRange))
                 w.Write(b);
             return w.LazinatorMemory.InitialMemory;
-        }
-
-        public MemoryReference InitialOwnedMemoryReference
-        {
-            get
-            {
-                MemoryReference initialOwnedMemoryReference = InitialOwnedMemory as MemoryReference;
-                if (initialOwnedMemoryReference == null)
-                    initialOwnedMemoryReference = new MemoryReference(InitialOwnedMemory, 0, 0, InitialOwnedMemory.Memory.Length);
-                return initialOwnedMemoryReference;
-            }
-        }
-
-        public LazinatorMemory WithAppendedChunk(MemoryReference chunk)
-        {
-            var evenMoreOwnedMemory = MoreOwnedMemory?.ToList() ?? new List<MemoryReference>();
-
-            evenMoreOwnedMemory.Add(chunk);
-            if (StartIndex == 0 && StartPosition == 0 && Length == GetGrossLength())
-                return new LazinatorMemory(InitialOwnedMemoryReference, evenMoreOwnedMemory, 0, 0, Length + chunk.Length);
-            return new LazinatorMemory(InitialOwnedMemoryReference, evenMoreOwnedMemory, StartIndex, StartPosition, Length);
         }
 
         #endregion
