@@ -516,6 +516,7 @@ namespace Lazinator.CodeDescription
                         {ProtectedIfApplicable}abstract int Deserialize();
                         
                         {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType("void")} SerializeLazinator{MaybeAsyncWord}();")}
+                        {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType("LazinatorMemory")} SerializeLazinator{MaybeAsyncWord}(in LazinatorSerializationOptions options);")}
                         {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType("LazinatorMemory")} SerializeLazinator{MaybeAsyncWord}(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);")}
                         
                         {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType(ILazinatorString)} CloneLazinator{MaybeAsyncWord}(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers);")}
@@ -702,6 +703,11 @@ namespace Lazinator.CodeDescription
                             {{
                                 previousBuffer.Dispose();
                             }}
+                        }}")}
+
+                        {MaybeAsyncAndNot($@"public {DerivationKeyword}{MaybeAsyncReturnType("LazinatorMemory")} SerializeLazinator{MaybeAsyncWord}(in LazinatorSerializationOptions options) 
+                        {{
+                            return {MaybeAsyncReturnValue($"SerializeLazinator(options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer)")};
                         }}")}
 
                         {MaybeAsyncAndNot($@"public {DerivationKeyword}{MaybeAsyncReturnType("LazinatorMemory")} SerializeLazinator{MaybeAsyncWord}(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 

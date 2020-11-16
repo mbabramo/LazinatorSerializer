@@ -18,8 +18,8 @@ namespace Lazinator.Core
         /// <summary>
         /// Initiates serialization starting from here (and optionally including descendants), returning a new buffer.
         /// </summary>
-        /// <param name="includeChildrenMode">Whether child objects should be included. If false, the child objects will be skipped.</param>
-        /// <param name="verifyCleanness">Whether double-checking is needed to ensure that objects thought to be clean really are clean</param>
+        /// <param name="includeChildrenMode">Which child objects should be included.</param>
+        /// <param name="verifyCleanness">Whether double-checking is needed to ensure that non-Lazinator objects that have corresponding manual _Dirty properties and are thought to be clean really are clean. An UnexpectedDirtinessException is thrown if an object whose current status indicates that it is clean is in fact dirty. This is not recommended in production code, because it defeats the time-savings associated with having manual _Dirty properties</param>
         /// <param name="updateStoredBuffer">Whether the objects being serialized should be updated to use the new buffer. This is ignored and treated as false if includeChildrenMode is not set to include all children. If false, then the returned memory will be independent of the existing memory.</param>
         /// <returns></returns>
         LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer);
