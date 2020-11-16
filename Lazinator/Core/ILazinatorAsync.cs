@@ -20,7 +20,7 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="options">The serialization options</param>
         /// <returns></returns>
-        ValueTask<LazinatorMemory> SerializeLazinatorAsync(in LazinatorSerializationOptions options);
+        ValueTask<LazinatorMemory> SerializeLazinatorAsync(LazinatorSerializationOptions options);
         /// <summary>
         /// Initiates serialization starting from here (and optionally including descendants), returning a new buffer.
         /// </summary>

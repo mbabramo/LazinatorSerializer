@@ -705,7 +705,7 @@ namespace Lazinator.CodeDescription
                             }}
                         }}")}
 
-                        {MaybeAsyncAndNot($@"public {DerivationKeyword}{MaybeAsyncReturnType("LazinatorMemory")} SerializeLazinator{MaybeAsyncWord}(in LazinatorSerializationOptions options) 
+                        {MaybeAsyncAndNot($@"public {DerivationKeyword}{MaybeAsyncReturnType("LazinatorMemory")} SerializeLazinator{MaybeAsyncWord}({MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options) 
                         {{
                             if (LazinatorMemoryStorage.IsEmpty || options.IncludeChildrenMode != OriginalIncludeChildrenMode || (options.VerifyCleanness || IsDirty || (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && DescendantIsDirty)))
                             {{

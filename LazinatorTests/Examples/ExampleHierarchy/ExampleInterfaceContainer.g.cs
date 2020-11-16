@@ -268,18 +268,18 @@ namespace LazinatorTests.Examples.Hierarchy
         
         public virtual LazinatorMemory SerializeLazinator(in LazinatorSerializationOptions options) 
         {
-            return SerializeLazinator(options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer);
-        }
-        
-        public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
-        {
-            if (LazinatorMemoryStorage.IsEmpty || includeChildrenMode != OriginalIncludeChildrenMode || (verifyCleanness || IsDirty || (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && DescendantIsDirty)))
+            if (LazinatorMemoryStorage.IsEmpty || options.IncludeChildrenMode != OriginalIncludeChildrenMode || (options.VerifyCleanness || IsDirty || (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && DescendantIsDirty)))
             {
-                return EncodeToNewBuffer(includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                return EncodeToNewBuffer(options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer);
             }
             BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
             LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
             return writer.LazinatorMemory;
+        }
+        
+        public virtual LazinatorMemory SerializeLazinator(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
+        {
+            return SerializeLazinator(new LazinatorSerializationOptions(includeChildrenMode, verifyCleanness, updateStoredBuffer));
         }
         
         protected virtual LazinatorMemory EncodeToNewBuffer(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) 
