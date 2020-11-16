@@ -1362,7 +1362,7 @@ namespace Lazinator.Core
         /// <returns></returns>
         public static byte[] SerializeToArray(this ILazinator lazinator)
         {
-            LazinatorMemory memory = lazinator.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+            LazinatorMemory memory = lazinator.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false));
             byte[] array = new byte[memory.Length];
             memory.CopyToArray(array);
             memory.Dispose();
@@ -1590,7 +1590,7 @@ namespace Lazinator.Core
             else
             {
                 LazinatorMemory serialized =
-                    lazinator.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+                    lazinator.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false));
                 var result = FarmhashByteSpans.Hash32(serialized.InitialMemory.Span);
                 serialized.Dispose();
                 return result;
@@ -1608,7 +1608,7 @@ namespace Lazinator.Core
             else
             {
                 LazinatorMemory serialized =
-                    lazinator.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+                    lazinator.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false));
                 var result = FarmhashByteSpans.Hash64(serialized.InitialMemory.Span);
                 serialized.Dispose();
                 return result;
@@ -1623,7 +1623,7 @@ namespace Lazinator.Core
             else
             {
                 LazinatorMemory serialized =
-                    lazinator.SerializeLazinator(IncludeChildrenMode.IncludeAllChildren, false, false);
+                    lazinator.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false));
                 var result = FarmhashByteSpans.Hash128(serialized.InitialMemory.Span);
                 serialized.Dispose();
                 return result;
