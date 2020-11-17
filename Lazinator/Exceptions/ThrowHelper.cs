@@ -14,7 +14,7 @@ namespace Lazinator.Exceptions
 
         public static void ThrowVersioningDisabledException(string nameIncludingGenerics) => throw new LazinatorSerializationException($"Lazinator versioning disabled for {nameIncludingGenerics}.");
 
-        public static void ThrowTooLargeException(int maxValue = byte.MaxValue /* DEBUG -- eliminate default */) => throw new LazinatorSerializationException(tooLargeMessage(maxValue));
+        public static void ThrowTooLargeException(int maxValue) => throw new LazinatorSerializationException(tooLargeMessage(maxValue));
 
         private static string tooLargeMessage(int maxValue) => $"Contents exceeded maximum length of {maxValue} bytes.";
 

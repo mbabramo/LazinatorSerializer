@@ -180,7 +180,7 @@ namespace LazinatorCollections
 
         private LazinatorMemory GetMainListSerializedWithoutDeserializing()
         {
-            return GetChildSlice(LazinatorMemoryStorage, _MainListSerialized_ByteIndex, _MainListSerialized_ByteLength, true, false, null);
+            return GetChildSlice(LazinatorMemoryStorage, _MainListSerialized_ByteIndex, _MainListSerialized_ByteLength, SizeOfLength.SkipLength, null);
         }
 
         private int GetOffset(int index)

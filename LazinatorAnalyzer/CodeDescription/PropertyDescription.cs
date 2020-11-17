@@ -199,7 +199,6 @@ namespace Lazinator.CodeDescription
 
         internal string BackingFieldString => $"_{PropertyName}";
 
-        // DEBUG -- if any of these is true, then maybe we can't have async lazinator.
         internal bool BackingAccessFieldIncluded => PlaceholderMemoryWriteMethod == null && !IsNonNullableWithNonNullableBackingField && !IsNonNullableRecordLikeTypeInNullableEnabledContext;
         internal string BackingAccessFieldName => $"_{PropertyName}_Accessed";
         internal string BackingFieldAccessedString => BackingAccessFieldIncluded ? BackingAccessFieldName : "true";
@@ -727,6 +726,7 @@ namespace Lazinator.CodeDescription
                         FixedLength = fixedLengthAttribute.FixedLength;
                     }
 
+                    // Note: This is for Lazinators only. Nonlazinators will always have length 4 (for int).
                     CloneSizeOfLengthAttribute sizeOfLengthAttribute = ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneSizeOfLengthAttribute>(exclusiveInterface);
                     if (sizeOfLengthAttribute == null)
                         SizeOfLength = 4;
