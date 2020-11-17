@@ -457,7 +457,7 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, false, this);
+                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, false, false, OriginalIncludeChildrenMode, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, this);
                 clone = new ExampleChild(bytes);
             }
             return clone;
@@ -473,7 +473,7 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory bytes = await EncodeOrRecycleToNewBufferAsync(includeChildrenMode, OriginalIncludeChildrenMode, false, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, false, this);
+                LazinatorMemory bytes = await EncodeOrRecycleToNewBufferAsync(includeChildrenMode, false, false, OriginalIncludeChildrenMode, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, this);
                 clone = new ExampleChild(bytes);
             }
             return (ILazinator)clone;

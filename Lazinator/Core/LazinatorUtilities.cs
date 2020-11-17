@@ -51,7 +51,7 @@ namespace Lazinator.Core
         /// <param name="updateStoredBuffer">If true, the internal storage is updated</param>
         /// <param name="lazinator">A Lazinator class (for a struct, the other overload of this function should be called).</param>
         /// <returns></returns>
-        public static LazinatorMemory EncodeOrRecycleToNewBuffer<T>(IncludeChildrenMode includeChildrenMode, IncludeChildrenMode originalIncludeChildrenMode, bool verifyCleanness, bool isBelievedDirty, bool descendantIsBelievedDirty, bool isDefinitelyClean, LazinatorMemory originalStorage, bool updateStoredBuffer, T lazinator) where T : ILazinator
+        public static LazinatorMemory EncodeOrRecycleToNewBuffer<T>(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, IncludeChildrenMode originalIncludeChildrenMode, bool isBelievedDirty, bool descendantIsBelievedDirty, bool isDefinitelyClean, LazinatorMemory originalStorage, T lazinator) where T : ILazinator
         {
             // if item has never been serialized before, there will be no storage, so we must convert to bytes.
             // we also must convert to bytes if we have to verify cleanness or if this is believed to be dirty,
@@ -103,7 +103,7 @@ namespace Lazinator.Core
         /// <param name="updateStoredBuffer">If true, the internal storage is updated</param>
         /// <param name="lazinator">A Lazinator class (for a struct, the other overload of this function should be called).</param>
         /// <returns></returns>
-        public async static ValueTask<LazinatorMemory> EncodeOrRecycleToNewBufferAsync<T>(IncludeChildrenMode includeChildrenMode, IncludeChildrenMode originalIncludeChildrenMode, bool verifyCleanness, bool isBelievedDirty, bool descendantIsBelievedDirty, bool isDefinitelyClean, LazinatorMemory originalStorage, bool updateStoredBuffer, T lazinator) where T : ILazinator, ILazinatorAsync
+        public async static ValueTask<LazinatorMemory> EncodeOrRecycleToNewBufferAsync<T>(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, IncludeChildrenMode originalIncludeChildrenMode, bool isBelievedDirty, bool descendantIsBelievedDirty, bool isDefinitelyClean, LazinatorMemory originalStorage, T lazinator) where T : ILazinator, ILazinatorAsync
         {
             if (originalStorage.IsEmpty || 
                 includeChildrenMode != originalIncludeChildrenMode ||
@@ -495,7 +495,7 @@ namespace Lazinator.Core
                 }
                 else
                 {
-                    await WriteChildToBinaryAsync(writer, child, includeChildrenMode, verifyCleanness, updateStoredBuffer, sizeOfLength);
+                    await WriteChildToBinaryAsync(writer, child, new LazinatorSerializationOptions(includeChildrenMode, verifyCleanness, updateStoredBuffer), sizeOfLength);
                 }
             }
             AddParentToChildless(ref child, parent);
@@ -741,38 +741,6 @@ namespace Lazinator.Core
                     break;
                 case SizeOfLength.Int64:
                     LazinatorUtilities.WriteToBinaryWithInt64LengthPrefix(ref writer, action);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        private async static ValueTask WriteChildToBinaryAsync<T>(BinaryBufferWriterContainer writer, T child, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, SizeOfLength sizeOfLength) where T : ILazinator, ILazinatorAsync
-        {
-            T childCopy = child;
-            async ValueTask action(BinaryBufferWriterContainer w)
-            {
-                if (childCopy.LazinatorMemoryStorage.IsEmpty || childCopy.IsDirty || childCopy.DescendantIsDirty || verifyCleanness || includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != childCopy.OriginalIncludeChildrenMode)
-                    await childCopy.SerializeToExistingBufferAsync(w, new LazinatorSerializationOptions(includeChildrenMode, verifyCleanness, updateStoredBuffer)); // DEBUG
-                else
-                    await childCopy.LazinatorMemoryStorage.WriteToBinaryBufferAsync(w); // the childCopy has been accessed, but is unchanged, so we can use the storage holding the childCopy
-            }
-            switch (sizeOfLength)
-            {
-                case SizeOfLength.SkipLength:
-                    await LazinatorUtilities.WriteToBinaryWithoutLengthPrefixAsync(writer, action);
-                    break;
-                case SizeOfLength.Byte:
-                    await LazinatorUtilities.WriteToBinaryWithByteLengthPrefixAsync(writer, action);
-                    break;
-                case SizeOfLength.Int16:
-                    await LazinatorUtilities.WriteToBinaryWithInt16LengthPrefixAsync(writer, action);
-                    break;
-                case SizeOfLength.Int32:
-                    await LazinatorUtilities.WriteToBinaryWithInt32LengthPrefixAsync(writer, action);
-                    break;
-                case SizeOfLength.Int64:
-                    await LazinatorUtilities.WriteToBinaryWithInt64LengthPrefixAsync(writer, action);
                     break;
                 default:
                     break;
