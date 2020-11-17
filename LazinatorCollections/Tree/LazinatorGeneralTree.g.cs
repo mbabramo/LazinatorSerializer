@@ -521,7 +521,7 @@ namespace LazinatorCollections.Tree
             return totalChildrenBytes;
         }
         
-        public virtual void SerializeToExistingBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options)
+        public virtual void SerializeToExistingBuffer(ref BinaryBufferWriter writer, LazinatorSerializationOptions options)
         {
             int startPosition = writer.ActiveMemoryPosition;
             WritePropertiesIntoBuffer(ref writer, options, true);

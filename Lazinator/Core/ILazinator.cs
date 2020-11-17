@@ -98,8 +98,7 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="writer">The BinaryBufferWriter to stream bytes to</param>
         /// <param name="options">Serialization options</param>
-        void SerializeToExistingBuffer(ref BinaryBufferWriter writer, LazinatorSerializationOptions options) => SerializeToExistingBuffer(ref writer, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer);
-        void SerializeToExistingBuffer(ref BinaryBufferWriter writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) => SerializeToExistingBuffer(ref writer, new LazinatorSerializationOptions(includeChildrenMode, verifyCleanness, updateStoredBuffer)); // DEBUG
+        void SerializeToExistingBuffer(ref BinaryBufferWriter writer, LazinatorSerializationOptions options);
         /// <summary>
         /// The memory used to initialize a Lazinator class/struct during initial deserialization. Header information, fields and child ISerializeds can then be read from this. This is set automatically by the Lazinator framework, either from DeserializeLazinator or from the parent's memory storage.
         /// </summary>

@@ -65,11 +65,7 @@ namespace Lazinator.Core
         /// This is primarily used internally during serialization of Lazinator objects. Continues serialization of this object and optionally its descendants by writing bytes into a pre-existing buffer. 
         /// </summary>
         /// <param name="writer">The BinaryBufferWriter to stream bytes to</param>
-        /// <param name="includeChildrenMode">Whether child objects should be included.  If false, the child objects will be skipped.</param>
-        /// <param name="verifyCleanness">Whether double-checking is needed to ensure that objects thought to be clean really are clean</param>
-        /// <param name="updateStoredBuffer">Whether the object being serialized should be updated to use the new buffer. This is ignored and treated as false if includeChildrenMode is not set to include all children.</param>
-        ValueTask SerializeToExistingBufferAsync(BinaryBufferWriterContainer writer, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) => SerializeToExistingBufferAsync(writer, new LazinatorSerializationOptions(includeChildrenMode, verifyCleanness, updateStoredBuffer));
-
-        ValueTask SerializeToExistingBufferAsync(BinaryBufferWriterContainer writer, LazinatorSerializationOptions options) => SerializeToExistingBufferAsync(writer, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer);
+        /// <param name="options">Serialization options</param>
+        ValueTask SerializeToExistingBufferAsync(BinaryBufferWriterContainer writer, LazinatorSerializationOptions options);
     }
 }

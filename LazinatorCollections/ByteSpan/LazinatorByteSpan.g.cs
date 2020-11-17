@@ -404,7 +404,7 @@ namespace LazinatorCollections.ByteSpan
             return totalChildrenBytes;
         }
         
-        public virtual void SerializeToExistingBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options)
+        public virtual void SerializeToExistingBuffer(ref BinaryBufferWriter writer, LazinatorSerializationOptions options)
         {
             PreSerialization(options.VerifyCleanness, options.UpdateStoredBuffer);
             int startPosition = writer.ActiveMemoryPosition;

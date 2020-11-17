@@ -131,7 +131,7 @@ namespace LazinatorCollections
             return totalChildrenBytes;
         }
         
-        public override void SerializeToExistingBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options)
+        public override void SerializeToExistingBuffer(ref BinaryBufferWriter writer, LazinatorSerializationOptions options)
         {
             PreSerialization(options.VerifyCleanness, options.UpdateStoredBuffer);
             int startPosition = writer.ActiveMemoryPosition;

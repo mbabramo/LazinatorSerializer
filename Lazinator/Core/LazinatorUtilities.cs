@@ -87,7 +87,7 @@ namespace Lazinator.Core
         {
             int bufferSize = lazinatorObject.LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : (int) /* DEBUG */ lazinatorObject.LazinatorMemoryStorage.Length;
             BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
-            lazinatorObject.SerializeToExistingBuffer(ref writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+            lazinatorObject.SerializeToExistingBuffer(ref writer, new LazinatorSerializationOptions(includeChildrenMode, verifyCleanness, updateStoredBuffer));
             return writer.LazinatorMemory;
         }
 
@@ -115,7 +115,7 @@ namespace Lazinator.Core
                         )
                      )
                 )
-                return await EncodeToNewBinaryBufferWriterAsync(lazinator, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                return await EncodeToNewBinaryBufferWriterAsync(lazinator, new LazinatorSerializationOptions(includeChildrenMode, verifyCleanness, updateStoredBuffer));
 
             // We can use the original storage. But we still have to copy it into a new buffer, as requested.
             BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer((int) /* DEBUG */ originalStorage.Length);
@@ -128,15 +128,6 @@ namespace Lazinator.Core
             int bufferSize = lazinatorObject.LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : (int) /* DEBUG */ lazinatorObject.LazinatorMemoryStorage.Length;
             BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(bufferSize);
             await lazinatorObject.SerializeToExistingBufferAsync(writer, options);
-            return writer.LazinatorMemory;
-        }
-
-        // DEBUG
-        private async static ValueTask<LazinatorMemory> EncodeToNewBinaryBufferWriterAsync<T>(T lazinatorObject, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer) where T : ILazinator, ILazinatorAsync
-        {
-            int bufferSize = lazinatorObject.LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : (int) /* DEBUG */ lazinatorObject.LazinatorMemoryStorage.Length;
-            BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(bufferSize);
-            await lazinatorObject.SerializeToExistingBufferAsync(writer, includeChildrenMode, verifyCleanness, updateStoredBuffer);
             return writer.LazinatorMemory;
         }
 
@@ -730,7 +721,7 @@ namespace Lazinator.Core
             void action(ref BinaryBufferWriter w)
             {
                 if (childCopy.LazinatorMemoryStorage.IsEmpty || childCopy.IsDirty || childCopy.DescendantIsDirty || verifyCleanness || includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != childCopy.OriginalIncludeChildrenMode)
-                    childCopy.SerializeToExistingBuffer(ref w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    childCopy.SerializeToExistingBuffer(ref w, new LazinatorSerializationOptions(includeChildrenMode, verifyCleanness, updateStoredBuffer));
                 else
                     childCopy.LazinatorMemoryStorage.WriteToBinaryBuffer(ref w); // the childCopy has been accessed, but is unchanged, so we can use the storage holding the childCopy
             }
@@ -762,7 +753,7 @@ namespace Lazinator.Core
             async ValueTask action(BinaryBufferWriterContainer w)
             {
                 if (childCopy.LazinatorMemoryStorage.IsEmpty || childCopy.IsDirty || childCopy.DescendantIsDirty || verifyCleanness || includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != childCopy.OriginalIncludeChildrenMode)
-                    await childCopy.SerializeToExistingBufferAsync(w, includeChildrenMode, verifyCleanness, updateStoredBuffer);
+                    await childCopy.SerializeToExistingBufferAsync(w, new LazinatorSerializationOptions(includeChildrenMode, verifyCleanness, updateStoredBuffer)); // DEBUG
                 else
                     await childCopy.LazinatorMemoryStorage.WriteToBinaryBufferAsync(w); // the childCopy has been accessed, but is unchanged, so we can use the storage holding the childCopy
             }
