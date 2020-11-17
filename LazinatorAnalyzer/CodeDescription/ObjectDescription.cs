@@ -780,7 +780,6 @@ namespace Lazinator.CodeDescription
                             typedClone.IsDirty = false;")}
                             return {MaybeAsyncReturnValue($"{MaybeAsyncConditional($"({ILazinatorString})", "")}typedClone")};
                         }}")}")}";
-
         }
 
 
