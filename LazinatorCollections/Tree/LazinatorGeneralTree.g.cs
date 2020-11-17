@@ -333,7 +333,7 @@ namespace LazinatorCollections.Tree
             }
             else
             {
-                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, false, false, OriginalIncludeChildrenMode, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, this);
+                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, this);
                 clone = new LazinatorGeneralTree<T>(bytes);
             }
             return clone;

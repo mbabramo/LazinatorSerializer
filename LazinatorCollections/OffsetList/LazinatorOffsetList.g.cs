@@ -343,7 +343,7 @@ namespace LazinatorCollections.OffsetList
             }
             else
             {
-                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, false, false, OriginalIncludeChildrenMode, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, this);
+                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, this);
                 clone = new LazinatorOffsetList(bytes);
             }
             return clone;

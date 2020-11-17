@@ -297,7 +297,7 @@ namespace LazinatorCollections
             }
             else
             {
-                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, false, false, OriginalIncludeChildrenMode, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, this);
+                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, this);
                 clone = new LazinatorList<T>(bytes);
             }
             return clone;

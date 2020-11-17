@@ -568,7 +568,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, false, false, OriginalIncludeChildrenMode, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, this);
+                LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, this);
                 clone = new RecordLikeContainer(bytes);
             }
             return clone;

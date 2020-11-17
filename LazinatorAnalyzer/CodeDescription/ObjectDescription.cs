@@ -765,7 +765,7 @@ namespace Lazinator.CodeDescription
                             }}
                             else
                             {{
-                                LazinatorMemory bytes = {MaybeAwaitWord}EncodeOrRecycleToNewBuffer{MaybeAsyncWord}(includeChildrenMode, false, false, OriginalIncludeChildrenMode, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, this);
+                                LazinatorMemory bytes = {MaybeAwaitWord}EncodeOrRecycleToNewBuffer{MaybeAsyncWord}(includeChildrenMode, OriginalIncludeChildrenMode, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, this);
                                 clone = new {NameIncludingGenerics}(bytes);
                             }}{IIF(ImplementsOnClone, $@"
             clone.OnCompleteClone(this);")}

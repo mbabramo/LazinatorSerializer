@@ -225,7 +225,7 @@ namespace LazinatorTests.Examples.Subclasses
                 }
                 else
                 {
-                    LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, false, false, OriginalIncludeChildrenMode, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, this);
+                    LazinatorMemory bytes = EncodeOrRecycleToNewBuffer(includeChildrenMode, OriginalIncludeChildrenMode, IsDirty, DescendantIsDirty, false, LazinatorMemoryStorage, this);
                     clone = new SubclassWithinClass(bytes);
                 }
                 return clone;
