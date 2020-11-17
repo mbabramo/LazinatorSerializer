@@ -484,7 +484,7 @@ namespace LazinatorTests.Examples
                 {
                     var deserialized = Example;
                 }
-                WriteChild(ref writer, ref _Example, options.IncludeChildrenMode, _Example_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Example_ByteIndex, _Example_ByteLength, SizeOfLength.SkipLength, null), options.VerifyCleanness, options.UpdateStoredBuffer, SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _Example, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, _Example_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Example_ByteIndex, _Example_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {

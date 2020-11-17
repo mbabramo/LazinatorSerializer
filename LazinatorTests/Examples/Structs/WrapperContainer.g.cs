@@ -486,7 +486,7 @@ namespace LazinatorTests.Examples.Structs
                 {
                     var deserialized = WrappedInt;
                 }
-                WriteChild(ref writer, ref _WrappedInt, options.IncludeChildrenMode, _WrappedInt_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, SizeOfLength.SkipLength, null), options.VerifyCleanness, options.UpdateStoredBuffer, SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _WrappedInt, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, _WrappedInt_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > byte.MaxValue)
                 {

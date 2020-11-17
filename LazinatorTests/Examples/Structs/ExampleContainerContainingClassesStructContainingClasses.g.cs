@@ -786,7 +786,7 @@ namespace LazinatorTests.Examples
                 {
                     var deserialized = IntWrapper;
                 }
-                WriteChild(ref writer, ref _IntWrapper, options.IncludeChildrenMode, _IntWrapper_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _IntWrapper_ByteIndex, _IntWrapper_ByteLength, SizeOfLength.SkipLength, null), options.VerifyCleanness, options.UpdateStoredBuffer, SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _IntWrapper, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, _IntWrapper_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _IntWrapper_ByteIndex, _IntWrapper_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > byte.MaxValue)
                 {
@@ -806,7 +806,7 @@ namespace LazinatorTests.Examples
                 {
                     var deserialized = MyExampleStructContainingClasses;
                 }
-                WriteChild(ref writer, ref _MyExampleStructContainingClasses, options.IncludeChildrenMode, _MyExampleStructContainingClasses_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, SizeOfLength.SkipLength, null), options.VerifyCleanness, options.UpdateStoredBuffer, SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _MyExampleStructContainingClasses, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, _MyExampleStructContainingClasses_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {

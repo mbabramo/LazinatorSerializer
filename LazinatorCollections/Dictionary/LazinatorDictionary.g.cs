@@ -524,7 +524,7 @@ namespace LazinatorCollections.Dictionary
                 {
                     var deserialized = Buckets;
                 }
-                WriteChild(ref writer, ref _Buckets, options.IncludeChildrenMode, _Buckets_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Buckets_ByteIndex, _Buckets_ByteLength, SizeOfLength.SkipLength, null), options.VerifyCleanness, options.UpdateStoredBuffer, SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _Buckets, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, _Buckets_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Buckets_ByteIndex, _Buckets_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {

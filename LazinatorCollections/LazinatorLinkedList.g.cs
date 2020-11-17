@@ -544,7 +544,7 @@ namespace LazinatorCollections
                 {
                     var deserialized = FirstNode;
                 }
-                WriteChild(ref writer, ref _FirstNode, options.IncludeChildrenMode, _FirstNode_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _FirstNode_ByteIndex, _FirstNode_ByteLength, SizeOfLength.SkipLength, null), options.VerifyCleanness, options.UpdateStoredBuffer, SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _FirstNode, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, _FirstNode_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _FirstNode_ByteIndex, _FirstNode_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {

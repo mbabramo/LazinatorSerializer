@@ -600,7 +600,7 @@ namespace LazinatorCollections.Tuples
                 var serializedBytesCopy = LazinatorMemoryStorage;
                 var byteIndexCopy = _Key_ByteIndex;
                 var byteLengthCopy = _Key_ByteLength;
-                WriteChild(ref writer, ref _Key, options.IncludeChildrenMode, _Key_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, SizeOfLength.SkipLength, null), options.VerifyCleanness, options.UpdateStoredBuffer, SizeOfLength.SkipLength, null);
+                WriteChild(ref writer, ref _Key, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, _Key_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, null);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {
@@ -623,7 +623,7 @@ namespace LazinatorCollections.Tuples
                 var serializedBytesCopy = LazinatorMemoryStorage;
                 var byteIndexCopy = _Value_ByteIndex;
                 var byteLengthCopy = _Value_ByteLength;
-                WriteChild(ref writer, ref _Value, options.IncludeChildrenMode, _Value_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, SizeOfLength.SkipLength, null), options.VerifyCleanness, options.UpdateStoredBuffer, SizeOfLength.SkipLength, null);
+                WriteChild(ref writer, ref _Value, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, _Value_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, null);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {

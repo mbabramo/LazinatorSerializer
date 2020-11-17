@@ -485,7 +485,7 @@ namespace LazinatorCollections
                         if (status.IsDeserialized)
                         {
                             var underlyingItem = _DeserializedItems[status.DeserializedIndex];
-                            WriteChild(ref w, ref underlyingItem, options.IncludeChildrenMode, true, () => status.IsInOriginalItems ? GetListMemberSlice(status.OriginalIndex) : LazinatorMemory.EmptyLazinatorMemory, options.VerifyCleanness, options.UpdateStoredBuffer, SizeOfLength.SkipLength, this);
+                            WriteChild(ref w, ref underlyingItem, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, true, () => status.IsInOriginalItems ? GetListMemberSlice(status.OriginalIndex) : LazinatorMemory.EmptyLazinatorMemory, SizeOfLength.SkipLength, this);
                             if (underlyingItem != null && underlyingItem.IsStruct)
                             { // the struct that was just written may be noted as dirty, but it's really clean. Cloning is the only safe way to get a clean hierarchy.
                                 underlyingItem = underlyingItem.CloneNoBuffer();
@@ -526,7 +526,7 @@ namespace LazinatorCollections
                         if (status.IsDeserialized)
                         {
                             var underlyingItem = _DeserializedItems[status.DeserializedIndex];
-                            WriteChild(ref w, ref underlyingItem, includeChildrenMode, true, () => status.IsInOriginalItems ? GetListMemberSlice(status.OriginalIndex) : LazinatorMemory.EmptyLazinatorMemory, verifyCleanness, updateStoredBuffer, SizeOfLength.SkipLength, this);
+                            WriteChild(ref w, ref underlyingItem, includeChildrenMode, verifyCleanness, updateStoredBuffer, true, () => status.IsInOriginalItems ? GetListMemberSlice(status.OriginalIndex) : LazinatorMemory.EmptyLazinatorMemory, SizeOfLength.SkipLength, this);
                             if (underlyingItem != null && underlyingItem.IsStruct)
                             { // the struct that was just written may be noted as dirty, but it's really clean. Cloning is the only safe way to get a clean hierarchy.
                                 underlyingItem = underlyingItem.CloneNoBuffer();

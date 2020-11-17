@@ -620,7 +620,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     var deserialized = MyList;
                 }
-                WriteChild(ref writer, ref _MyList, options.IncludeChildrenMode, _MyList_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyList_ByteIndex, _MyList_ByteLength, SizeOfLength.SkipLength, null), options.VerifyCleanness, options.UpdateStoredBuffer, SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _MyList, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, _MyList_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyList_ByteIndex, _MyList_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {
@@ -640,7 +640,7 @@ namespace LazinatorTests.Examples.Collections
                 {
                     var deserialized = MyStructList;
                 }
-                WriteChild(ref writer, ref _MyStructList, options.IncludeChildrenMode, _MyStructList_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyStructList_ByteIndex, _MyStructList_ByteLength, SizeOfLength.SkipLength, null), options.VerifyCleanness, options.UpdateStoredBuffer, SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _MyStructList, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, _MyStructList_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyStructList_ByteIndex, _MyStructList_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {
