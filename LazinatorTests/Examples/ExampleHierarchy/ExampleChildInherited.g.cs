@@ -346,7 +346,7 @@ namespace LazinatorTests.Examples
                 {
                     var deserialized = MyGrandchildInInherited;
                 }
-                WriteChild(ref writer, ref _MyGrandchildInInherited, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, _MyGrandchildInInherited_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyGrandchildInInherited_ByteIndex, _MyGrandchildInInherited_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _MyGrandchildInInherited, options, _MyGrandchildInInherited_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyGrandchildInInherited_ByteIndex, _MyGrandchildInInherited_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {

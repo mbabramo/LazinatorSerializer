@@ -502,7 +502,7 @@ namespace LazinatorCollections
                 {
                     var deserialized = UnderlyingList;
                 }
-                WriteChild(ref writer, ref _UnderlyingList, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, _UnderlyingList_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _UnderlyingList_ByteIndex, _UnderlyingList_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _UnderlyingList, options, _UnderlyingList_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _UnderlyingList_ByteIndex, _UnderlyingList_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {

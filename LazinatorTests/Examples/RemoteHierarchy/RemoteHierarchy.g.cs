@@ -505,7 +505,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
                 {
                     var deserialized = RemoteLevel1Item;
                 }
-                WriteChild(ref writer, ref _RemoteLevel1Item, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, _RemoteLevel1Item_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _RemoteLevel1Item_ByteIndex, _RemoteLevel1Item_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _RemoteLevel1Item, options, _RemoteLevel1Item_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _RemoteLevel1Item_ByteIndex, _RemoteLevel1Item_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {

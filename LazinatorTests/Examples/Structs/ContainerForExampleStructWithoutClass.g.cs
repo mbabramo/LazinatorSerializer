@@ -645,7 +645,7 @@ namespace LazinatorTests.Examples.Structs
                 else
                 {
                     var copy = _ExampleNullableStruct.Value;
-                    WriteChild(ref writer, ref copy, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, _ExampleNullableStruct_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ExampleNullableStruct_ByteIndex, _ExampleNullableStruct_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
+                    WriteChild(ref writer, ref copy, options, _ExampleNullableStruct_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ExampleNullableStruct_ByteIndex, _ExampleNullableStruct_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
                     _ExampleNullableStruct = copy;
                     lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                     if (lengthValue > int.MaxValue)
@@ -667,7 +667,7 @@ namespace LazinatorTests.Examples.Structs
                 {
                     var deserialized = ExampleStructWithoutClass;
                 }
-                WriteChild(ref writer, ref _ExampleStructWithoutClass, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, _ExampleStructWithoutClass_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ExampleStructWithoutClass_ByteIndex, _ExampleStructWithoutClass_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _ExampleStructWithoutClass, options, _ExampleStructWithoutClass_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ExampleStructWithoutClass_ByteIndex, _ExampleStructWithoutClass_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {

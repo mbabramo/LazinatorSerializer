@@ -579,7 +579,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 {
                     var deserialized = RecursiveClass;
                 }
-                WriteChild(ref writer, ref _RecursiveClass, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, _RecursiveClass_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _RecursiveClass_ByteIndex, _RecursiveClass_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _RecursiveClass, options, _RecursiveClass_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _RecursiveClass_ByteIndex, _RecursiveClass_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {
@@ -599,7 +599,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 {
                     var deserialized = RecursiveInterface;
                 }
-                WriteChild(ref writer, ref _RecursiveInterface, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, _RecursiveInterface_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _RecursiveInterface_ByteIndex, _RecursiveInterface_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _RecursiveInterface, options, _RecursiveInterface_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _RecursiveInterface_ByteIndex, _RecursiveInterface_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {

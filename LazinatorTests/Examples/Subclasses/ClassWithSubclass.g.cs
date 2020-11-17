@@ -598,7 +598,7 @@ namespace LazinatorTests.Examples.Subclasses
                 {
                     var deserialized = SubclassInstance1;
                 }
-                WriteChild(ref writer, ref _SubclassInstance1, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, _SubclassInstance1_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _SubclassInstance1_ByteIndex, _SubclassInstance1_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _SubclassInstance1, options, _SubclassInstance1_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _SubclassInstance1_ByteIndex, _SubclassInstance1_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {
@@ -618,7 +618,7 @@ namespace LazinatorTests.Examples.Subclasses
                 {
                     var deserialized = SubclassInstance2;
                 }
-                WriteChild(ref writer, ref _SubclassInstance2, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, _SubclassInstance2_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _SubclassInstance2_ByteIndex, _SubclassInstance2_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _SubclassInstance2, options, _SubclassInstance2_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _SubclassInstance2_ByteIndex, _SubclassInstance2_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {

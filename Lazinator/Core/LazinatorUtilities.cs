@@ -303,18 +303,15 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="writer">The binary writer</param>
         /// <param name="child">The child to be written. This child will be written regardless of includeChildrenMode.</param>
-        /// <param name="includeChildrenMode">An indication of which descendants of this child should be written.</param>
-        /// <param name="verifyCleanness">If true, cleanness of any nonserialized fields in the child will be verified if necessary</param>
-        /// <param name="updateStoredBuffer">If true, updates the child object's byte buffer to store the serialized information.</param>
+        /// <param name="options">Serialization options</param>
         /// <param name="childHasBeenAccessed">True if the child's value has been accessed.</param>
         /// <param name="getChildSliceFn">A function to return the child's original storage</param>
         /// <param name="sizeOfLength">The number of bytes to write the length of the object</param>
         /// <param name="parent">The parent of the object being written</param>
         public static void WriteChild<T>(ref BinaryBufferWriter writer, ref T child,
-            IncludeChildrenMode includeChildrenMode, bool verifyCleanness,
-            bool updateStoredBuffer, bool childHasBeenAccessed, ReturnLazinatorMemoryDelegate getChildSliceFn, SizeOfLength sizeOfLength, ILazinator parent) where T : ILazinator
+            LazinatorSerializationOptions options, bool childHasBeenAccessed, ReturnLazinatorMemoryDelegate getChildSliceFn, SizeOfLength sizeOfLength, ILazinator parent) where T : ILazinator
         {
-            bool childCouldHaveChanged = childHasBeenAccessed || (child != null && includeChildrenMode != child.OriginalIncludeChildrenMode);
+            bool childCouldHaveChanged = childHasBeenAccessed || (child != null && options.IncludeChildrenMode != child.OriginalIncludeChildrenMode);
             LazinatorMemory childStorage = default;
             if (!childHasBeenAccessed && child != null)
             {
@@ -325,7 +322,7 @@ namespace Lazinator.Core
             else
             {
                 // check for a child that has been accessed (or otherwise could have changed) and that is in memory and totally clean. 
-                if (childCouldHaveChanged && child != null && !child.IsDirty && !child.DescendantIsDirty && includeChildrenMode == IncludeChildrenMode.IncludeAllChildren && includeChildrenMode == child.OriginalIncludeChildrenMode)
+                if (childCouldHaveChanged && child != null && !child.IsDirty && !child.DescendantIsDirty && options.IncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren && options.IncludeChildrenMode == child.OriginalIncludeChildrenMode)
                 {
                     // In this case, we update the childStorage to reflect the child's own storage, rather than a slice in the parent's storage. The reason is that the buffer may have been updated if the same object appears more than once in the object hierarchy, or the child may have updated its storage after a manual call to UpdateStoredBuffer.
                     childStorage = child.LazinatorMemoryStorage;
@@ -337,13 +334,13 @@ namespace Lazinator.Core
             {
                 int startPosition = writer.ActiveMemoryPosition;
                 childStorage = WriteExistingChildStorage(ref writer, getChildSliceFn, sizeOfLength, childStorage);
-                if (updateStoredBuffer)
+                if (options.UpdateStoredBuffer)
                 {
                     if (child != null)
                     {
                         int length = (int)childStorage.Length; // DEBUG
                         startPosition += sizeOfLength.LengthBytes();
-                        child.UpdateStoredBuffer(ref writer, startPosition, length, includeChildrenMode, true);
+                        child.UpdateStoredBuffer(ref writer, startPosition, length, options.IncludeChildrenMode, true);
                     }
                 }
             }
@@ -355,7 +352,7 @@ namespace Lazinator.Core
                 }
                 else
                 {
-                    WriteChildToBinary(ref writer, ref child, includeChildrenMode, verifyCleanness, updateStoredBuffer, sizeOfLength);
+                    WriteChildToBinary(ref writer, ref child, options, sizeOfLength);
                 }
             }
             AddParentToChildless(ref child, parent);
@@ -366,18 +363,15 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="writer">The binary writer</param>
         /// <param name="child">The child to be written. This child will be written regardless of includeChildrenMode.</param>
-        /// <param name="includeChildrenMode">An indication of which descendants of this child should be written.</param>
-        /// <param name="verifyCleanness">If true, cleanness of any nonserialized fields in the child will be verified if necessary</param>
-        /// <param name="updateStoredBuffer">If true, updates the child object's byte buffer to store the serialized information.</param>
+        /// <param name="options">Serialization options</param>
         /// <param name="childHasBeenAccessed">True if the child's value has been accessed.</param>
         /// <param name="getChildSliceFn">A function to return the child's original storage</param>
         /// <param name="sizeOfLength">The number of bytes to write the length of the object</param>
         /// <param name="parent">The parent of the object being written</param>
         public async static ValueTask WriteNonAsyncChildAsync<T>(BinaryBufferWriterContainer writer, T child,
-            IncludeChildrenMode includeChildrenMode, bool verifyCleanness,
-            bool updateStoredBuffer, bool childHasBeenAccessed, ReturnLazinatorMemoryDelegateAsync getChildSliceFn, SizeOfLength sizeOfLength, ILazinator parent) where T : ILazinator
+            LazinatorSerializationOptions options, bool childHasBeenAccessed, ReturnLazinatorMemoryDelegateAsync getChildSliceFn, SizeOfLength sizeOfLength, ILazinator parent) where T : ILazinator
         {
-            bool childCouldHaveChanged = childHasBeenAccessed || (child != null && includeChildrenMode != child.OriginalIncludeChildrenMode);
+            bool childCouldHaveChanged = childHasBeenAccessed || (child != null && options.IncludeChildrenMode != child.OriginalIncludeChildrenMode);
             LazinatorMemory childStorage = default;
             if (!childHasBeenAccessed && child != null)
             {
@@ -388,7 +382,7 @@ namespace Lazinator.Core
             else
             {
                 // check for a child that has been accessed (or otherwise could have changed) and that is in memory and totally clean. 
-                if (childCouldHaveChanged && child != null && !child.IsDirty && !child.DescendantIsDirty && includeChildrenMode == IncludeChildrenMode.IncludeAllChildren && includeChildrenMode == child.OriginalIncludeChildrenMode)
+                if (childCouldHaveChanged && child != null && !child.IsDirty && !child.DescendantIsDirty && options.IncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren && options.IncludeChildrenMode == child.OriginalIncludeChildrenMode)
                 {
                     // In this case, we update the childStorage to reflect the child's own storage, rather than a slice in the parent's storage. The reason is that the buffer may have been updated if the same object appears more than once in the object hierarchy, or the child may have updated its storage after a manual call to UpdateStoredBuffer.
                     childStorage = child.LazinatorMemoryStorage;
@@ -400,13 +394,13 @@ namespace Lazinator.Core
             {
                 int startPosition = writer.ActiveMemoryPosition;
                 childStorage = await WriteExistingChildStorageAsync(writer, getChildSliceFn, sizeOfLength, childStorage);
-                if (updateStoredBuffer)
+                if (options.UpdateStoredBuffer)
                 {
                     if (child != null)
                     {
                         int length = (int)childStorage.Length; // DEBUG
                         startPosition += sizeOfLength.LengthBytes();
-                        child.UpdateStoredBuffer(ref writer.Writer, startPosition, length, includeChildrenMode, true);
+                        child.UpdateStoredBuffer(ref writer.Writer, startPosition, length, options.IncludeChildrenMode, true);
                     }
                 }
             }
@@ -418,7 +412,7 @@ namespace Lazinator.Core
                 }
                 else
                 {
-                    WriteChildToBinary(ref writer.Writer, ref child, includeChildrenMode, verifyCleanness, updateStoredBuffer, sizeOfLength);
+                    WriteChildToBinary(ref writer.Writer, ref child, options, sizeOfLength);
                 }
             }
             AddParentToChildless(ref child, parent);
@@ -429,18 +423,15 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="writer">The binary writer</param>
         /// <param name="child">The child to be written. This child will be written regardless of includeChildrenMode.</param>
-        /// <param name="includeChildrenMode">An indication of which descendants of this child should be written.</param>
-        /// <param name="verifyCleanness">If true, cleanness of any nonserialized fields in the child will be verified if necessary</param>
-        /// <param name="updateStoredBuffer">If true, updates the child object's byte buffer to store the serialized information.</param>
+        /// <param name="options">Serialization options</param>
         /// <param name="childHasBeenAccessed">True if the child's value has been accessed.</param>
         /// <param name="getChildSliceFn">A function to return the child's original storage</param>
         /// <param name="sizeOfLength">The number of bytes to write the length of the object</param>
         /// <param name="parent">The parent of the object being written</param>
         public async static ValueTask WriteChildAsync<T>(BinaryBufferWriterContainer writer, T child,
-            IncludeChildrenMode includeChildrenMode, bool verifyCleanness,
-            bool updateStoredBuffer, bool childHasBeenAccessed, ReturnLazinatorMemoryDelegateAsync getChildSliceFn, SizeOfLength sizeOfLength, ILazinator parent) where T : ILazinator, ILazinatorAsync
+            LazinatorSerializationOptions options, bool childHasBeenAccessed, ReturnLazinatorMemoryDelegateAsync getChildSliceFn, SizeOfLength sizeOfLength, ILazinator parent) where T : ILazinator, ILazinatorAsync
         {
-            bool childCouldHaveChanged = childHasBeenAccessed || (child != null && includeChildrenMode != child.OriginalIncludeChildrenMode);
+            bool childCouldHaveChanged = childHasBeenAccessed || (child != null && options.IncludeChildrenMode != child.OriginalIncludeChildrenMode);
             LazinatorMemory childStorage = default;
             if (!childHasBeenAccessed && child != null)
             {
@@ -451,7 +442,7 @@ namespace Lazinator.Core
             else
             {
                 // check for a child that has been accessed (or otherwise could have changed) and that is in memory and totally clean. 
-                if (childCouldHaveChanged && child != null && !child.IsDirty && !child.DescendantIsDirty && includeChildrenMode == IncludeChildrenMode.IncludeAllChildren && includeChildrenMode == child.OriginalIncludeChildrenMode)
+                if (childCouldHaveChanged && child != null && !child.IsDirty && !child.DescendantIsDirty && options.IncludeChildrenMode == IncludeChildrenMode.IncludeAllChildren && options.IncludeChildrenMode == child.OriginalIncludeChildrenMode)
                 {
                     // In this case, we update the childStorage to reflect the child's own storage, rather than a slice in the parent's storage. The reason is that the buffer may have been updated if the same object appears more than once in the object hierarchy, or the child may have updated its storage after a manual call to UpdateStoredBuffer.
                     childStorage = child.LazinatorMemoryStorage;
@@ -463,13 +454,13 @@ namespace Lazinator.Core
             {
                 int startPosition = writer.ActiveMemoryPosition;
                 childStorage = await WriteExistingChildStorageAsync(writer, getChildSliceFn, sizeOfLength, childStorage);
-                if (updateStoredBuffer)
+                if (options.UpdateStoredBuffer)
                 {
                     if (child != null)
                     {
                         int length = (int)childStorage.Length; // DEBUG
                         startPosition += sizeOfLength.LengthBytes();
-                        child.UpdateStoredBuffer(ref writer.Writer, startPosition, length, includeChildrenMode, true);
+                        child.UpdateStoredBuffer(ref writer.Writer, startPosition, length, options.IncludeChildrenMode, true);
                     }
                 }
             }
@@ -481,7 +472,7 @@ namespace Lazinator.Core
                 }
                 else
                 {
-                    await WriteChildToBinaryAsync(writer, child, new LazinatorSerializationOptions(includeChildrenMode, verifyCleanness, updateStoredBuffer), sizeOfLength);
+                    await WriteChildToBinaryAsync(writer, child, options, sizeOfLength);
                 }
             }
             AddParentToChildless(ref child, parent);
@@ -692,39 +683,6 @@ namespace Lazinator.Core
                     break;
                 case SizeOfLength.Int64:
                     await LazinatorUtilities.WriteToBinaryWithInt64LengthPrefixAsync(writer, action);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        // DEBUG
-        private static void WriteChildToBinary<T>(ref BinaryBufferWriter writer, ref T child, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, SizeOfLength sizeOfLength) where T : ILazinator
-        {
-            T childCopy = child;
-            void action(ref BinaryBufferWriter w)
-            {
-                if (childCopy.LazinatorMemoryStorage.IsEmpty || childCopy.IsDirty || childCopy.DescendantIsDirty || verifyCleanness || includeChildrenMode != IncludeChildrenMode.IncludeAllChildren || includeChildrenMode != childCopy.OriginalIncludeChildrenMode)
-                    childCopy.SerializeToExistingBuffer(ref w, new LazinatorSerializationOptions(includeChildrenMode, verifyCleanness, updateStoredBuffer));
-                else
-                    childCopy.LazinatorMemoryStorage.WriteToBinaryBuffer(ref w); // the childCopy has been accessed, but is unchanged, so we can use the storage holding the childCopy
-            }
-            switch (sizeOfLength)
-            {
-                case SizeOfLength.SkipLength:
-                    LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(ref writer, action);
-                    break;
-                case SizeOfLength.Byte:
-                    LazinatorUtilities.WriteToBinaryWithByteLengthPrefix(ref writer, action);
-                    break;
-                case SizeOfLength.Int16:
-                    LazinatorUtilities.WriteToBinaryWithInt16LengthPrefix(ref writer, action);
-                    break;
-                case SizeOfLength.Int32:
-                    LazinatorUtilities.WriteToBinaryWithInt32LengthPrefix(ref writer, action);
-                    break;
-                case SizeOfLength.Int64:
-                    LazinatorUtilities.WriteToBinaryWithInt64LengthPrefix(ref writer, action);
                     break;
                 default:
                     break;

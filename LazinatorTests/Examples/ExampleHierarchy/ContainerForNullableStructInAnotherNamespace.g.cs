@@ -531,7 +531,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 else
                 {
                     var copy = _MyNullableStruct.Value;
-                    WriteChild(ref writer, ref copy, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, _MyNullableStruct_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyNullableStruct_ByteIndex, _MyNullableStruct_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
+                    WriteChild(ref writer, ref copy, options, _MyNullableStruct_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _MyNullableStruct_ByteIndex, _MyNullableStruct_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
                     _MyNullableStruct = copy;
                     lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                     if (lengthValue > int.MaxValue)

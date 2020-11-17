@@ -622,7 +622,7 @@ namespace LazinatorCollections.Dictionary
                 {
                     var deserialized = Keys;
                 }
-                WriteChild(ref writer, ref _Keys, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, _Keys_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Keys_ByteIndex, _Keys_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _Keys, options, _Keys_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Keys_ByteIndex, _Keys_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {
@@ -642,7 +642,7 @@ namespace LazinatorCollections.Dictionary
                 {
                     var deserialized = Values;
                 }
-                WriteChild(ref writer, ref _Values, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, _Values_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Values_ByteIndex, _Values_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _Values, options, _Values_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Values_ByteIndex, _Values_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {

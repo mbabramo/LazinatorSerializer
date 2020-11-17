@@ -486,7 +486,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 {
                     var deserialized = EagerExample;
                 }
-                WriteChild(ref writer, ref _EagerExample, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, _EagerExample_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _EagerExample_ByteIndex, _EagerExample_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _EagerExample, options, _EagerExample_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _EagerExample_ByteIndex, _EagerExample_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {

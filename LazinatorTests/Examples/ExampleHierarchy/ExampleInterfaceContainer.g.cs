@@ -536,7 +536,7 @@ namespace LazinatorTests.Examples.Hierarchy
                 {
                     var deserialized = ExampleByInterface;
                 }
-                WriteChild(ref writer, ref _ExampleByInterface, options.IncludeChildrenMode, options.VerifyCleanness, options.UpdateStoredBuffer, _ExampleByInterface_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _ExampleByInterface, options, _ExampleByInterface_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _ExampleByInterface_ByteIndex, _ExampleByInterface_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {
