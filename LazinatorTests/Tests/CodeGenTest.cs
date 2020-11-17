@@ -222,8 +222,8 @@ public class MyOtherClass
             // await CompleteGenerateCode(typeof(NullableEnabledContext), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             //await CompleteGenerateCode(typeof(RecordLikeContainer), "LazinatorTests", "/Examples/", "Tuples/", ws);
 
-            await CompleteGenerateCode(typeof(RegularTuple), "LazinatorTests", "/Examples/", "Tuples/", ws);
-            //await CompleteGenerateCode(typeof(ConcreteFromGenericFromBase), "LazinatorTests", "/Examples/", "Abstract/", ws); // DEBUG
+            //await CompleteGenerateCode(typeof(RegularTuple), "LazinatorTests", "/Examples/", "Tuples/", ws);
+            //await CompleteGenerateCode(typeof(ConcreteFromGenericFromBase), "LazinatorTests", "/Examples/", "Abstract/", ws); 
 
             // include some code so that we won't get a warning if not awaiting anything elsewhere
             Task GetT() { return Task.CompletedTask; };

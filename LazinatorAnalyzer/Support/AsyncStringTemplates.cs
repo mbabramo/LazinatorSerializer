@@ -56,15 +56,14 @@ namespace LazinatorAnalyzer.Support
         /// <param name="mayBeAsync"></param>
         /// <param name="contents"></param>
         /// <returns></returns>
-        private string MaybeAsyncMainBlock(string contents) => MayBeAsync ? CreateReprocessBlock(MaybeAsyncWord_async() + InitializeAsyncNotUsed() + contents, 0) + ResetAsyncNotUsed() : contents;
+        private string MaybeAsyncMainBlock(string contents) => MayBeAsync ? CreateReprocessBlock(MaybeAsyncWord_async() + InitializeAsyncNotUsed() + contents, 0)  : contents;
         private string MaybeAsyncMainBlock_Begin => MayBeAsync ? CreateReprocessBlock_BeginOnly(0) + MaybeAsyncWord_async() + InitializeAsyncNotUsed() : "";
-        private string MaybeAsyncMainBlock_End => ResetAsyncNotUsed() + CreateEndCommand("for");
+        private string MaybeAsyncMainBlock_End => CreateEndCommand("for");
 
         public string MaybeAsyncReturnType(string ordinaryReturnType) => MaybeAsyncConditional(MaybeAsyncReturnTypeWrapper(ordinaryReturnType), ordinaryReturnType);
 
         public string MaybeAsyncWordAwait() => MaybeAsyncConditional(AwaitAndNoteAsyncUsed());
         public string AwaitAndNoteAsyncUsed() => "await " + NoteAsyncUsed();
-        public string ResetAsyncNotUsed() => CreateSetVariableBlock("asyncused", null); // DEBUG -- still needed?
 
         public string InitializeAsyncNotUsed() => CreateSetVariableBlock("asyncused", "0");
         public string NoteAsyncUsed() => CreateSetVariableBlock("asyncused", "1");

@@ -148,7 +148,6 @@ namespace LazinatorTests.Tests
             AsyncStringTemplates t = new AsyncStringTemplates() { MayBeAsync = true };
             string template = $"{t.MaybeAsyncAndNot($@"public {t.MaybeAsyncReturnType("int")} MyMethod{t.MaybeAsyncWordAsync()}() => {t.MaybeAsyncReturnValue("3")};")}";
             string result = t.Process(template, new Dictionary<string, string>());
-            string DEBUG = t.GetCommandTreeString(template);
             string expected = $@"public int MyMethod() => 3;
 public ValueTask<int> MyMethodAsync() => ValueTask.FromResult(3);
 ";

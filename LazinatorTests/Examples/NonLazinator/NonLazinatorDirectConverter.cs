@@ -31,15 +31,6 @@ namespace LazinatorTests.Examples
             writer.WriteStringUtf8WithVarIntPrefix(itemToConvert.MyString);
         }
 
-        // DEBUG -- delete
-        public static void ConvertToBytes_NonLazinatorClass(ref BinaryBufferWriter writer, NonLazinatorClass itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
-        {
-            if (itemToConvert == null)
-                return;
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.MyInt);
-            writer.WriteStringUtf8WithVarIntPrefix(itemToConvert.MyString);
-        }
-
         public static NonLazinatorClass CloneOrChange_NonLazinatorClass(NonLazinatorClass itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             return itemToClone == null ? null : new NonLazinatorClass() { MyInt = itemToClone.MyInt, MyString = itemToClone.MyString };
@@ -63,14 +54,6 @@ namespace LazinatorTests.Examples
         }
 
         public static void ConvertToBytes_NonLazinatorStruct(ref BinaryBufferWriter writer, NonLazinatorStruct itemToConvert, LazinatorSerializationOptions options)
-        {
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.MyInt);
-            writer.WriteStringUtf8WithVarIntPrefix(itemToConvert.MyString);
-        }
-
-        // DEBUG
-
-        public static void ConvertToBytes_NonLazinatorStruct(ref BinaryBufferWriter writer, NonLazinatorStruct itemToConvert, IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
         {
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.MyInt);
             writer.WriteStringUtf8WithVarIntPrefix(itemToConvert.MyString);
