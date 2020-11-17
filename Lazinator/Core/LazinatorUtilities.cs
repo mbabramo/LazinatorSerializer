@@ -775,10 +775,10 @@ namespace Lazinator.Core
         /// <param name="getChildSliceForFieldFn">A function to return the child slice of memory for the non-Lazinator object</param>
         /// <param name="verifyCleanness">If true, then the dirty-conversion will always be performed unless we are sure it is clean, and if the object is not believed to be dirty, the results will be compared to the clean version. This allows for errors from failure to serialize objects that have been changed to be caught during development.</param>
         /// <param name="binaryWriterAction">The action to complete the write to the binary buffer</param>
-        /// <param name="writeLengthInByte">True if the length should be contained in a single byte</param>
+        /// 
         public static void WriteNonLazinatorObject(object nonLazinatorObject,
             bool isBelievedDirty, bool isAccessed, ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceForFieldFn,
-            bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction, bool writeLengthInByte = false /* DEBUG -- eliminate */)
+            bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction)
         {
             int startPosition = writer.ActiveMemoryPosition;
             WriteNonLazinatorObject_WithoutLengthPrefix(nonLazinatorObject, isBelievedDirty, isAccessed, ref writer, getChildSliceForFieldFn, verifyCleanness, binaryWriterAction);
