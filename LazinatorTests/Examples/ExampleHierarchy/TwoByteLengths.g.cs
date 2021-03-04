@@ -483,7 +483,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             _Inner_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                totalChildrenBytes += span.ToInt32(ref bytesSoFar); // DEBUG -- problem here.
+                totalChildrenBytes += span.ToInt16(ref bytesSoFar);
             }
             _TwoByteLengths_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;

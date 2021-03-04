@@ -149,6 +149,10 @@ namespace LazinatorTests.Tests
         [Fact]
         public void TwoByteLengthsWorks()
         {
+            var DEBUG = new byte[20];
+            System.Buffers.Binary.BinaryPrimitives.WriteInt16LittleEndian(DEBUG, 212);
+            Int16 result = System.Buffers.Binary.BinaryPrimitives.ReadInt16LittleEndian(DEBUG);
+
             // The generated code clearly records the lengths as two bytes. So, we need to make sure that works. 
             TwoByteLengths inner = new TwoByteLengths()
             {

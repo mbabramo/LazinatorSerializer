@@ -173,7 +173,7 @@ namespace Lazinator.Buffers
         public static short ToInt16(this ReadOnlySpan<byte> b, ref int index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
-            var result = BinaryBufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadInt16LittleEndian(b) : BinaryPrimitives.ReadInt16BigEndian(b);
+            var result = BinaryBufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadInt16LittleEndian(byteSpan) : BinaryPrimitives.ReadInt16BigEndian(byteSpan);
             index += sizeof(short);
             return result;
         }
