@@ -146,6 +146,23 @@ namespace LazinatorTests.Tests
             r2.RecursiveInterface.RecursiveClass.Should().NotBeNull();
         }
 
+        [Fact]
+        public void TwoByteLengthsWorks()
+        {
+            // The generated code clearly records the lengths as two bytes. So, we need to make sure that works. 
+            TwoByteLengths inner = new TwoByteLengths()
+            {
+                Example = GetExample(0)
+            };
+            TwoByteLengths outer = new TwoByteLengths()
+            {
+                Example = GetExample(1),
+                Inner = inner
+            };
+            var outer2 = outer.CloneLazinatorTyped();
+            outer2.Inner.Example.Should().NotBeNull();
+        }
+
 
         [Fact]
         public void DistantPropertiesSerialized()

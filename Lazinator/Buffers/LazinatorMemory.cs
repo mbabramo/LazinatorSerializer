@@ -73,6 +73,10 @@ namespace Lazinator.Buffers
                 Length = 0;
             else
                 Length = length;
+            if (Length > 10000)
+            {
+                var DEBUG = 0;
+            }
         }
 
         public LazinatorMemory(MemoryReference ownedMemory, List<MemoryReference> moreOwnedMemory, int startIndex, int startPosition, long length) : this(ownedMemory, startPosition, length)
@@ -522,15 +526,16 @@ namespace Lazinator.Buffers
         }
 
         // Explanation of how delta serialization works:
-        // Assume we have a large LazinatorMemory consisting of big ranges of bytes.
+        // Assume we have a large LazinatorMemory consisting of a set of MemoryReferences, each a lazy loadable long range of bytes. As we go from one version to the next, we will be adding additional ranges.
         // Then assume we have a cobbled-together LazinatorMemory with references to these big ranges. This is effectively the result of potentially multiple generations of delta serialization.
+        // Eventually, some parts of the large LazinatorMemory may be deleted, because the more recent delta serializations don't refer to them anymore.
         // Now, changes are made to this object graph, and the goal is to do another delta serialization. 
         // BinaryBufferWriter will be compiling a list of the ranges we are writing to in the large LazinatorMemory.
-        // When an object has changed, then BinaryBufferWriter writes to a new big range of bytes and can directly record a BytesSegment. 
+        // When an object has changed, then BinaryBufferWriter writes to new memory in the big range of bytes and can directly record a BytesSegment, which points to the location in this range of bytes. 
         // When an object has not changed, then BinaryBufferWriter has a reference to a range of bytes in the cobbled-together LazinatorMemory. 
-        // So it needs to translate this range to get a reference to the large LazinatorMemory as a BytesSegment. It does this by calling EnumerateSubrangeAsSegments.
+        // So BinaryBufferWriter needs to translate this range to get a reference to the large LazinatorMemory as a BytesSegment. It does this by calling EnumerateSubrangeAsSegments.
         // The result is that we have a list of BytesSegments. We can save this list of BytesSegments at the end of the latest range of data that we have just written to (plus an indication of the size of this list).
-        // That way, we can see what versions we need to have in memory (or lazy loadable) and we can create the large LazinatorMemory, then the next-generation cobbled-together LazinatorMemory.
+        // That way, we can see what versions we need to have in memory (or lazy loadable) and we can load the large LazinatorMemory, then the next-generation cobbled-together LazinatorMemory.
 
         /// <summary>
         /// Enumerates a subrange as BytesSegments. It is required that each memory owner be a MemoryReference.

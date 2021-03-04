@@ -1580,12 +1580,12 @@ namespace Lazinator.CodeDescription
                     else
                         sb.AppendLine($@"totalChildrenBytes += {FixedLength};");
                 }
-                else if (SingleByteLength)
-                    sb.AppendLine(new ConditionalCodeGenerator(ReadInclusionConditional,
-                            "totalChildrenBytes += span.ToByte(ref bytesSoFar);").ToString());
                 else
+                {
+                    string sizeOfLengthString = SizeOfLengthTypeStringCaps;
                     sb.AppendLine(new ConditionalCodeGenerator(ReadInclusionConditional,
-                            "totalChildrenBytes += span.ToInt32(ref bytesSoFar);").ToString());
+                            $"totalChildrenBytes += span.To{sizeOfLengthString}(ref bytesSoFar);").ToString());
+                }
 
             }
             if (SkipCondition != null)
