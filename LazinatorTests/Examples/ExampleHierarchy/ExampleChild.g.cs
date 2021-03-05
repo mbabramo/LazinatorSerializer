@@ -691,6 +691,7 @@ namespace LazinatorTests.Examples
             yield return ("ByteSpan", (object)_ByteSpan);
             yield break;
         }
+
         async public virtual IAsyncEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorPropertiesAsync()
         {
             yield return ("MyLong", (object)MyLong);

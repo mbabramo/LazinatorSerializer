@@ -1386,7 +1386,7 @@ namespace Lazinator.Core
         /// <param name="sizeOfLength">The number of bytes used to store the length at the beginning of the child, if length is not skipped</param>
         /// <param name="fixedLength"The fixed length of the child, if the length is not included in the serialized bytes
         /// <returns></returns>
-        public static LazinatorMemory GetChildSlice(LazinatorMemory serializedBytes, int byteOffset, int byteLength, SizeOfLength sizeOfLength, int? fixedLength)
+        public static LazinatorMemory GetChildSlice(LazinatorMemory serializedBytes, long byteOffset, long byteLength, SizeOfLength sizeOfLength, int? fixedLength)
         {
             if (serializedBytes.IsEmpty)
             {

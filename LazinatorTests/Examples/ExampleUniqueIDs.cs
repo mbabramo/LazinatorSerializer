@@ -98,5 +98,8 @@
         LazinatorRecordSubclass,
         UncompressedContainer,
         TwoByteLengths,
+        EightByteLengths,
+        EightByteLengthsContainer,
+        TwoByteLengthsContainer,
     }
 }

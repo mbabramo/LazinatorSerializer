@@ -158,13 +158,6 @@ namespace LazinatorTests.Tests
             {
                 Example = GetExample(0)
             };
-            TwoByteLengths outer = new TwoByteLengths()
-            {
-                Example = GetExample(1),
-                Inner = inner
-            };
-            var outer2 = outer.CloneLazinatorTyped();
-            outer2.Inner.Example.Should().NotBeNull();
         }
 
 
