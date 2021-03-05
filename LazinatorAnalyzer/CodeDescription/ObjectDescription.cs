@@ -513,7 +513,7 @@ namespace Lazinator.CodeDescription
 		                
                         {ProtectedIfApplicable}abstract void DeserializeLazinator(LazinatorMemory serializedBytes);
                     
-                        {ProtectedIfApplicable}abstract int Deserialize();
+                        {ProtectedIfApplicable}abstract {TypeForLengths} Deserialize();
                         
                         {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType("void")} SerializeLazinator{MaybeAsyncWord}();")}
                         {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType("LazinatorMemory")} SerializeLazinator{MaybeAsyncWord}(in LazinatorSerializationOptions options);")}
@@ -534,9 +534,9 @@ namespace Lazinator.CodeDescription
                         {HideILazinatorProperty}{ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(ContainsOpenGenericParameters ? "true" : "false")};
                         {HideILazinatorProperty}public abstract LazinatorGenericIDType LazinatorGenericID {{ get; }}
                         {HideILazinatorProperty}public abstract int LazinatorObjectVersion {{ get; set; }}
-                        {(ImplementsConvertFromBytesAfterHeader ? skipConvertFromBytesAfterHeaderString : $@"{ProtectedIfApplicable}abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
-                            {ProtectedIfApplicable}abstract void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
-                            {ProtectedIfApplicable}abstract int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar);")}
+                        {(ImplementsConvertFromBytesAfterHeader ? skipConvertFromBytesAfterHeaderString : $@"{ProtectedIfApplicable}abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref {TypeForLengths} bytesSoFar);
+                            {ProtectedIfApplicable}abstract void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref {TypeForLengths} bytesSoFar);
+                            {ProtectedIfApplicable}abstract int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref {TypeForLengths} bytesSoFar);")}
                         {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType("void")} SerializeToExistingBuffer{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, LazinatorSerializationOptions options);")}
                         {MaybeAsyncAndNot($@"{ProtectedIfApplicable}abstract {MaybeAsyncReturnType("LazinatorMemory")} EncodeToNewBuffer{MaybeAsyncWord}({MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options);")}
                        {NotAsync($@" {ProtectedIfApplicable}abstract {MaybeAsyncReturnType("void")} UpdateDeserializedChildren{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, long startPosition);")}
@@ -638,17 +638,17 @@ namespace Lazinator.CodeDescription
                         {ProtectedIfApplicable}{DerivationKeyword}void DeserializeLazinator(LazinatorMemory serializedBytes)
                         {{
                             LazinatorMemoryStorage = serializedBytes;
-                            int length = Deserialize();
+                            {TypeForLengths} length = Deserialize();
                             if (length != LazinatorMemoryStorage.Length)
                             {{
                                 LazinatorMemoryStorage = LazinatorMemoryStorage.Slice(0, length);
                             }}
                         }}
 
-                        {ProtectedIfApplicable}{DerivationKeyword}int Deserialize()
+                        {ProtectedIfApplicable}{DerivationKeyword}{TypeForLengths} Deserialize()
                         {{
                             FreeInMemoryObjects();
-                            int bytesSoFar = 0;
+                            {TypeForLengths} bytesSoFar = 0;
                             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
                             if (span.Length == 0)
                             {{
@@ -1575,7 +1575,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 return;
             }
 
-            sb.Append($@"{ProtectedIfApplicable}{DerivationKeyword}void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
+            sb.Append($@"{ProtectedIfApplicable}{DerivationKeyword}void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref {TypeForLengths} bytesSoFar)
                 {{
                     ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
                     ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
@@ -1586,7 +1586,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 ");
 
 
-            sb.Append($@"{ProtectedIfApplicable}{DerivationKeyword}void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
+            sb.Append($@"{ProtectedIfApplicable}{DerivationKeyword}void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref {TypeForLengths} bytesSoFar)
                 {{
                     {(!IsDerivedFromNonAbstractLazinator ? "" : $@"base.ConvertFromBytesForPrimitiveProperties(span, OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
                     ")}");
@@ -1601,7 +1601,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 
         ");
 
-            sb.Append($@"{ProtectedIfApplicable}{DerivationKeyword}int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
+            sb.Append($@"{ProtectedIfApplicable}{DerivationKeyword}int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref {TypeForLengths} bytesSoFar)
                 {{
                     {(!IsDerivedFromNonAbstractLazinator ? "int totalChildrenBytes = 0;" : $@"int totalChildrenBytes = base.ConvertFromBytesForChildProperties(span, OriginalIncludeChildrenMode, serializedVersionNumber, indexOfFirstChild, ref bytesSoFar);")}
                 ");
