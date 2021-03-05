@@ -850,13 +850,13 @@ namespace Lazinator.CodeDescription
                     { // not sealed or struct etc.
                         bool mustInitialize = ((ObjectType != LazinatorObjectType.Struct && !GeneratingRefStruct) && (lastPropertyToIndex.PropertyType == LazinatorPropertyType.OpenGenericParameter));  // initialization suppresses warning in case the open generic is never closed
                         sb.AppendLine(
-                                $"private int _{ObjectNameEncodable}_EndByteIndex{IIF(mustInitialize, " = 0")};");
+                                $"private {TypeForLengths} _{ObjectNameEncodable}_EndByteIndex{IIF(mustInitialize, " = 0")};");
 
                         string propertyDerivationKeyword = GetDerivationKeywordForLengthProperty(lastPropertyToIndex);
                         sb.AppendLine(
                                 $"{ProtectedIfApplicable}{propertyDerivationKeyword} {TypeForLengths} {lastPropertyToIndex.BackingFieldByteLength} => _{ObjectNameEncodable}_EndByteIndex - {lastPropertyToIndex.BackingFieldByteIndex};");
                         string overallDerivationKeyword = DerivedFromObjectContainingEndByteIndex ? "override" : "virtual";
-                        sb.AppendLine($@"{ProtectedIfApplicable}{overallDerivationKeyword} int _OverallEndByteIndex => _{ObjectNameEncodable}_EndByteIndex;");
+                        sb.AppendLine($@"{ProtectedIfApplicable}{overallDerivationKeyword} {TypeForLengths} _OverallEndByteIndex => _{ObjectNameEncodable}_EndByteIndex;");
                     }
                     else
                     {
