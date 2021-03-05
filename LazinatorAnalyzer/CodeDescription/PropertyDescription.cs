@@ -285,7 +285,7 @@ namespace Lazinator.CodeDescription
             1 => "Byte",
             2 => "Int16",
             4 => "Int32",
-            8 => "int64",
+            8 => "Int64",
             _ => "Int32"
         };
         private bool IsGuaranteedFixedLength { get; set; }

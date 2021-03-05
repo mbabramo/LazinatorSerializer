@@ -157,7 +157,7 @@ namespace LazinatorCollections
             }
         }
         
-        public override void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        public override void UpdateStoredBuffer(ref BinaryBufferWriter writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
         {
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
@@ -178,7 +178,7 @@ namespace LazinatorCollections
             LazinatorMemoryStorage = newBuffer;
         }
         
-        protected override void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        protected override void UpdateDeserializedChildren(ref BinaryBufferWriter writer, long startPosition)
         {
             base.UpdateDeserializedChildren(ref writer, startPosition);
             

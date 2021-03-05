@@ -442,7 +442,7 @@ namespace LazinatorCollections
         // If updateStoredBuffer is true, then after writing properties into buffer, we call UpdateStoredBuffer with updateDeserializedChildren = false. The expectation is that we'll update each child when writing the properties, so we do this in WriteMainList.  The WriteChild method there will do this assuming that the child is in memory, and the child will get the new buffer. 
         // But what happens if updateStoredBuffer is false? If that is so, WriteMainList still updates MainListSerialized and Offsets. But it then immediately switches them back after we update with updateStoredBuffer = false. This ensures that Offsets refers to the original LazinatorMemoryStorage. 
 
-        public void OnUpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        public void OnUpdateDeserializedChildren(ref BinaryBufferWriter writer, long startPosition)
         {
             if (_DeserializedItems == null)
                 return;

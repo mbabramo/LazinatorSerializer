@@ -465,7 +465,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
         }
         
-        public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
         {
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
@@ -490,7 +490,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             LazinatorMemoryStorage = newBuffer;
         }
         
-        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, long startPosition)
         {
             if (_MyT_Accessed && _MyT != null)
             {

@@ -218,7 +218,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        public override void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        public override void UpdateStoredBuffer(ref BinaryBufferWriter writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
         {
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
@@ -239,7 +239,7 @@ namespace LazinatorTests.Examples.Collections
             LazinatorMemoryStorage = newBuffer;
         }
         
-        protected override void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        protected override void UpdateDeserializedChildren(ref BinaryBufferWriter writer, long startPosition)
         {
             base.UpdateDeserializedChildren(ref writer, startPosition);
             if (_MyLevel2ListNestedNonLazinatorType_Accessed && _MyLevel2ListNestedNonLazinatorType != null)

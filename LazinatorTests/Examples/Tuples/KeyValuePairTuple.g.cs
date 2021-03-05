@@ -358,7 +358,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         
-        public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
         {
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
@@ -379,7 +379,7 @@ namespace LazinatorTests.Examples.Tuples
             LazinatorMemoryStorage = newBuffer;
         }
         
-        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, long startPosition)
         {
             _MyKeyValuePairSerialized = (KeyValuePair<UInt32, ExampleChild>) CloneOrChange_KeyValuePair_Guint_c_C32ExampleChild_g(_MyKeyValuePairSerialized, l => l.RemoveBufferInHierarchy(), true);
             

@@ -746,7 +746,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         
-        public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
         {
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
@@ -767,7 +767,7 @@ namespace LazinatorTests.Examples.Tuples
             LazinatorMemoryStorage = newBuffer;
         }
         
-        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, long startPosition)
         {
             _ExternalRecordLikeStruct = (Point) CloneOrChange_Point(_ExternalRecordLikeStruct, l => l.RemoveBufferInHierarchy(), true);
             _MyMismatchedRecordLikeType = (MismatchedRecordLikeType) CloneOrChange_MismatchedRecordLikeType(_MyMismatchedRecordLikeType, l => l.RemoveBufferInHierarchy(), true);

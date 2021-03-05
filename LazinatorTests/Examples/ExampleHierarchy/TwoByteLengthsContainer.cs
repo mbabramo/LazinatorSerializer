@@ -8,6 +8,5 @@ namespace LazinatorTests.Examples.ExampleHierarchy
 {
     public partial class TwoByteLengthsContainer : ITwoByteLengthsContainer
     {
-        public TwoByteLengths Contents { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 }

@@ -377,7 +377,7 @@ namespace Lazinator.Wrappers
             }
         }
         
-        public void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        public void UpdateStoredBuffer(ref BinaryBufferWriter writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
         {
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
@@ -398,7 +398,7 @@ namespace Lazinator.Wrappers
             LazinatorMemoryStorage = newBuffer;
         }
         
-        void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition)
+        void UpdateDeserializedChildren(ref BinaryBufferWriter writer, long startPosition)
         {
             if (_WrappedValue_Accessed && _WrappedValue != null)
             {

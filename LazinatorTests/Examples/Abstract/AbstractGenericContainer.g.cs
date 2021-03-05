@@ -105,7 +105,7 @@ namespace LazinatorTests.Examples.Abstract
         public abstract IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties();
         public abstract ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel);
         
-        public abstract void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
+        public abstract void UpdateStoredBuffer(ref BinaryBufferWriter writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
         public abstract void FreeInMemoryObjects();
         public abstract int LazinatorUniqueID { get; }
         protected virtual bool ContainsOpenGenericParameters => true;
@@ -116,7 +116,7 @@ namespace LazinatorTests.Examples.Abstract
         protected abstract int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar);
         public abstract void SerializeToExistingBuffer(ref BinaryBufferWriter writer, LazinatorSerializationOptions options);
         protected abstract LazinatorMemory EncodeToNewBuffer(in LazinatorSerializationOptions options);
-        protected abstract void UpdateDeserializedChildren(ref BinaryBufferWriter writer, int startPosition);
+        protected abstract void UpdateDeserializedChildren(ref BinaryBufferWriter writer, long startPosition);
         protected abstract void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID);
         protected abstract void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID);
         protected abstract void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition);
