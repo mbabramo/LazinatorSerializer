@@ -191,6 +191,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 return 0;
             }
+            
             ReadGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesToAdd);
             bytesSoFar += bytesToAdd;
             bytesToAdd = 0;
@@ -198,15 +199,15 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesToAdd);
             bytesSoFar += bytesToAdd;
             bytesToAdd = 0;
-
+            
             int serializedVersionNumber = span.ToDecompressedInt32(ref bytesToAdd);
             bytesSoFar += bytesToAdd;
             bytesToAdd = 0;
-
+            
             OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesToAdd);
             bytesSoFar += bytesToAdd;
             bytesToAdd = 0;
-
+            
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             return _OverallEndByteIndex;
         }
@@ -386,7 +387,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 lengthForLengths += 4;
             }
-            long totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
+            long totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, (int) (bytesSoFar + lengthForLengths), ref bytesSoFar);
             bytesSoFar += totalChildrenSize;
         }
         
@@ -394,14 +395,16 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
         }
         
-        protected virtual long ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, long indexOfFirstChild, ref long bytesSoFar)
+        protected virtual long ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref long bytesSoFar)
         {
-            int totalChildrenBytes = 0;
+            long totalChildrenBytes = 0;
+            int bytesToAdd = 0;
             _Example_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                int DEBUG = 0;
-                totalChildrenBytes += span.ToInt32(ref DEBUG);
+                totalChildrenBytes += span.ToInt32(ref bytesToAdd);
+                bytesSoFar += bytesToAdd;
+                bytesToAdd = 0;
             }
             _EightByteLengths_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
