@@ -91,7 +91,7 @@ namespace Lazinator.Core
         /// <param name="length">The length within the writer</param>
         /// <param name="includeChildrenMode">Whether child objects should be included.</param>
         /// <param name="updateDeserializedChildren">Whether deserialized children should also have buffers updated</param>
-        void UpdateStoredBuffer(ref BinaryBufferWriter writer, int startPosition, int length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
+        void UpdateStoredBuffer(ref BinaryBufferWriter writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
 
         /// <summary>
         /// This is primarily used internally during serialization of Lazinator objects. Continues serialization of this object and optionally its descendants by writing bytes into a pre-existing buffer. 
