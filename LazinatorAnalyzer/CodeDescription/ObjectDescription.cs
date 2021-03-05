@@ -164,6 +164,14 @@ namespace Lazinator.CodeDescription
         public int SizeOfLength { get; set; }
         public bool RequiresLongLengths => SizeOfLength == sizeof(long);
         public string TypeForLengths => RequiresLongLengths ? "long" : "int";
+
+        public string BytesSoFarInitialization => RequiresLongLengths ? $@"long bytesSoFar = 0;
+int bytesToAdd = 0;" : "int bytesSoFar = 0;";
+
+        public string BytesSoFarTallyUpdateReferenceParameterEtc => RequiresLongLengths ? $@"bytesToAdd);
+bytesSoFar += bytesToAdd;
+bytesToAdd = 0;" : "bytesSoFar);";
+
         public string CastLongToTypeForLengths(string code) => RequiresLongLengths ? code : $"(int) ({code})";
         private string IIF(bool x, string y) => x ? y : ""; // Include if function
         private string IIF(bool x, Func<string> y) => x ? y() : ""; // Same but with a function to produce the string
@@ -552,7 +560,7 @@ namespace Lazinator.CodeDescription
                 {
                     string readUniqueID;
                     if (!ContainsOpenGenericParameters && IsSealedOrStruct)
-                        readUniqueID = $@"{(UniqueIDCanBeSkipped ? "" : $@"int uniqueID = span.ToDecompressedInt32(ref bytesSoFar);
+                        readUniqueID = $@"{(UniqueIDCanBeSkipped ? "" : $@"int uniqueID = span.ToDecompressedInt32(ref {BytesSoFarTallyUpdateReferenceParameterEtc}
                             if (uniqueID != LazinatorUniqueID)
                             {{
                                 ThrowHelper.ThrowFormatException();
@@ -560,7 +568,7 @@ namespace Lazinator.CodeDescription
 
                             ")}";
                     else
-                        readUniqueID = $@"ReadGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
+                        readUniqueID = $@"ReadGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref {BytesSoFarTallyUpdateReferenceParameterEtc}
 
                                     ";
 
@@ -648,18 +656,18 @@ namespace Lazinator.CodeDescription
                         {ProtectedIfApplicable}{DerivationKeyword}{TypeForLengths} Deserialize()
                         {{
                             FreeInMemoryObjects();
-                            {TypeForLengths} bytesSoFar = 0;
+                            {BytesSoFarInitialization}
                             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
                             if (span.Length == 0)
                             {{
                                 return 0;
                             }}
 
-                            {readUniqueID}{(SuppressLazinatorVersionByte ? "" : $@"int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesSoFar);
+                            {readUniqueID}{(SuppressLazinatorVersionByte ? "" : $@"int lazinatorLibraryVersion = span.ToDecompressedInt32(ref {BytesSoFarTallyUpdateReferenceParameterEtc}
                             
-                        ")}int serializedVersionNumber = {(Version == -1 ? "-1; /* versioning disabled */" : $@"span.ToDecompressedInt32(ref bytesSoFar);")}
+                        ")}int serializedVersionNumber = {(Version == -1 ? "-1; /* versioning disabled */" : $@"span.ToDecompressedInt32(ref {BytesSoFarTallyUpdateReferenceParameterEtc}")}
 
-                            OriginalIncludeChildrenMode = {(CanNeverHaveChildren ? "IncludeChildrenMode.IncludeAllChildren; /* cannot have children */" : $@"(IncludeChildrenMode)span.ToByte(ref bytesSoFar);")}
+                            OriginalIncludeChildrenMode = {(CanNeverHaveChildren ? "IncludeChildrenMode.IncludeAllChildren; /* cannot have children */" : $@"(IncludeChildrenMode)span.ToByte(ref {BytesSoFarTallyUpdateReferenceParameterEtc}")}
 
                             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);{
                             IIF(ImplementsLazinatorObjectVersionUpgrade && Version != -1,
@@ -829,7 +837,7 @@ namespace Lazinator.CodeDescription
             var lastPropertyToIndex = withRecordedIndices.LastOrDefault();
             for (int i = 0; i < withRecordedIndices.Count(); i++)
                 if (withRecordedIndices[i].DerivationKeyword != "override ")
-                    sb.AppendLine($"        {ProtectedIfApplicable}int {withRecordedIndices[i].BackingFieldByteIndex};");
+                    sb.AppendLine($"        {ProtectedIfApplicable}{TypeForLengths} {withRecordedIndices[i].BackingFieldByteIndex};");
             for (int i = 0; i < withRecordedIndices.Count() - 1; i++)
             {
                 PropertyDescription propertyDescription = withRecordedIndices[i];
@@ -1579,7 +1587,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 {{
                     ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
                     ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-                    {GetLengthsCalculation(true, false)}int totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
+                    {GetLengthsCalculation(true, false)}{TypeForLengths} totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
                     bytesSoFar += totalChildrenSize;
                 }}
                     
@@ -1601,9 +1609,9 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 
         ");
 
-            sb.Append($@"{ProtectedIfApplicable}{DerivationKeyword}int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref {TypeForLengths} bytesSoFar)
+            sb.Append($@"{ProtectedIfApplicable}{DerivationKeyword}{TypeForLengths} ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref {TypeForLengths} bytesSoFar)
                 {{
-                    {(!IsDerivedFromNonAbstractLazinator ? "int totalChildrenBytes = 0;" : $@"int totalChildrenBytes = base.ConvertFromBytesForChildProperties(span, OriginalIncludeChildrenMode, serializedVersionNumber, indexOfFirstChild, ref bytesSoFar);")}
+                    {(!IsDerivedFromNonAbstractLazinator ? $"{TypeForLengths} totalChildrenBytes = 0;" : $@"{TypeForLengths} totalChildrenBytes = base.ConvertFromBytesForChildProperties(span, OriginalIncludeChildrenMode, serializedVersionNumber, indexOfFirstChild, ref bytesSoFar);")}
                 ");
 
             foreach (var property in thisLevel)
