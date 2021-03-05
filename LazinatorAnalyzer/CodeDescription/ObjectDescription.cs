@@ -166,7 +166,9 @@ namespace Lazinator.CodeDescription
         public string TypeForLengths => RequiresLongLengths ? "long" : "int";
 
         public string BytesSoFarInitialization => RequiresLongLengths ? $@"long bytesSoFar = 0;
-int bytesToAdd = 0;" : "int bytesSoFar = 0;";
+int bytesToAdd = 0;" : "int bytesSoFar = 0;"; 
+        public string TotalChildrenBytesInitialization => RequiresLongLengths ? $@"long totalChildrenBytes = 0;
+int bytesToAdd = 0;" : "int totalChildrenBytes = 0;";
 
         public string BytesSoFarTallyUpdateReferenceParameterEtc => RequiresLongLengths ? $@"bytesToAdd);
 bytesSoFar += bytesToAdd;
@@ -1587,7 +1589,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 {{
                     ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
                     ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-                    {GetLengthsCalculation(true, false)}{TypeForLengths} totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
+                    {GetLengthsCalculation(true, false)}{TypeForLengths} totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, {IIF(RequiresLongLengths, "(int) (")}bytesSoFar + lengthForLengths{IIF(RequiresLongLengths, ")")}, ref bytesSoFar);
                     bytesSoFar += totalChildrenSize;
                 }}
                     
@@ -1611,7 +1613,8 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 
             sb.Append($@"{ProtectedIfApplicable}{DerivationKeyword}{TypeForLengths} ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref {TypeForLengths} bytesSoFar)
                 {{
-                    {(!IsDerivedFromNonAbstractLazinator ? $"{TypeForLengths} totalChildrenBytes = 0;" : $@"{TypeForLengths} totalChildrenBytes = base.ConvertFromBytesForChildProperties(span, OriginalIncludeChildrenMode, serializedVersionNumber, indexOfFirstChild, ref bytesSoFar);")}
+                    {TotalChildrenBytesInitialization}{IIF(IsDerivedFromNonAbstractLazinator, $@"
+totalChildrenBytes = base.ConvertFromBytesForChildProperties(span, OriginalIncludeChildrenMode, serializedVersionNumber, indexOfFirstChild, ref bytesSoFar);")}
                 ");
 
             foreach (var property in thisLevel)

@@ -301,6 +301,8 @@ namespace Lazinator.CodeDescription
                         writer.Write((byte)0);
                     }}";
 
+        private string BytesSoFarTallyUpdateReferenceParameterEtc => ContainingObjectDescription.BytesSoFarTallyUpdateReferenceParameterEtc;
+
         private bool IncludableWhenExcludingMostChildren { get; set; }
         private bool ExcludableWhenIncludingMostChildren { get; set; }
         private bool AllowLazinatorInNonLazinator { get; set; }
@@ -1558,7 +1560,7 @@ namespace Lazinator.CodeDescription
                 if (includeTracingCode)
                     sb.AppendLine($"TabbedText.WriteLine($\"Reading {PropertyName} at byte location {{bytesSoFar}}\"); ");
                 sb.AppendLine(
-                        new ConditionalCodeGenerator(ReadInclusionConditional, $@"{BackingFieldString} = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref bytesSoFar);").ToString());
+                        new ConditionalCodeGenerator(ReadInclusionConditional, $@"{BackingFieldString} = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref {BytesSoFarTallyUpdateReferenceParameterEtc}").ToString());
             }
             else
             {
@@ -1584,7 +1586,7 @@ namespace Lazinator.CodeDescription
                 {
                     string sizeOfLengthString = SizeOfLengthTypeStringCaps;
                     sb.AppendLine(new ConditionalCodeGenerator(ReadInclusionConditional,
-                            $"totalChildrenBytes += span.To{sizeOfLengthString}(ref bytesSoFar);").ToString());
+                            $"totalChildrenBytes += span.To{sizeOfLengthString}(ref {BytesSoFarTallyUpdateReferenceParameterEtc}").ToString());
                 }
 
             }
@@ -2173,7 +2175,7 @@ namespace Lazinator.CodeDescription
                 StringBuilder arrayStringBuilder = new StringBuilder();
                 for (int i = 0; i < ArrayRank; i++)
                 {
-                    string rankLengthCommand = $"int collectionLength{i} = span.ToDecompressedInt32(ref bytesSoFar);";
+                    string rankLengthCommand = $"int collectionLength{i} = span.ToDecompressedInt32(ref {BytesSoFarTallyUpdateReferenceParameterEtc}";
                     if (i == ArrayRank - 1)
                         arrayStringBuilder.Append(rankLengthCommand);
                     else
@@ -2193,7 +2195,7 @@ namespace Lazinator.CodeDescription
             }
             else
             {
-                readCollectionLengthCommand = $"int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);";
+                readCollectionLengthCommand = $"int collectionLength = span.ToDecompressedInt32(ref {BytesSoFarTallyUpdateReferenceParameterEtc}";
                 forStatementCommand = $"for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)";
             }
 
@@ -2302,7 +2304,7 @@ namespace Lazinator.CodeDescription
 
             if (IsPrimitive)
                 return ($@"
-                        {AppropriatelyQualifiedTypeName} item = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref bytesSoFar);
+                        {AppropriatelyQualifiedTypeName} item = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref {BytesSoFarTallyUpdateReferenceParameterEtc}
                         {collectionAddItem}");
             else
             {
@@ -2312,14 +2314,14 @@ namespace Lazinator.CodeDescription
                 {
                     if (Nullable)
                         return ($@"
-                            int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
+                            int lengthCollectionMember = span.ToInt32(ref {BytesSoFarTallyUpdateReferenceParameterEtc}
                             {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(addNullPossible, "lengthCollectionMember == 0", collectionAddNull, $@"LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                                 var item = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);
                                 {collectionAddItem}")}bytesSoFar += lengthCollectionMember;");
                     else
                     {
                         return ($@"
-                            int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
+                            int lengthCollectionMember = span.ToInt32(ref {BytesSoFarTallyUpdateReferenceParameterEtc}
                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                             var item = {DirectConverterTypeNamePrefix}ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(childData);
                                 {collectionAddItem}
@@ -2582,11 +2584,11 @@ namespace Lazinator.CodeDescription
         {
             if (IsPrimitive)
                 return ($@"
-                        {AppropriatelyQualifiedTypeName} {itemName} = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref bytesSoFar);");
+                        {AppropriatelyQualifiedTypeName} {itemName} = {EnumEquivalentCastToEnum}span.{ReadMethodName}(ref {BytesSoFarTallyUpdateReferenceParameterEtc}");
             else if (IsNonLazinatorType)
                 return ($@"
                         {AppropriatelyQualifiedTypeName} {itemName}{DefaultInitializationIfPossible(AppropriatelyQualifiedTypeName)};
-                        int lengthCollectionMember_{itemName} = span.ToInt32(ref bytesSoFar);
+                        int lengthCollectionMember_{itemName} = span.ToInt32(ref {BytesSoFarTallyUpdateReferenceParameterEtc}
                         if (lengthCollectionMember_{itemName} != 0)
                         {{
                             LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_{itemName});
