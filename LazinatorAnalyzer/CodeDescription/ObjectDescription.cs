@@ -164,9 +164,6 @@ namespace Lazinator.CodeDescription
         public int SizeOfLength { get; set; }
         public bool RequiresLongLengths => SizeOfLength == sizeof(long);
         public string TypeForLengths => RequiresLongLengths ? "long" : "int";
-
-        public string BytesSoFarInitialization => RequiresLongLengths ? $@"long bytesSoFarIncludingChildren = 0;
-int bytesSoFar = 0;" : "int bytesSoFar = 0;"; 
         public string TotalChildrenBytesInitialization => RequiresLongLengths ? $@"long totalChildrenBytes = 0;
 int bytesToAdd = 0;" : "int totalChildrenBytes = 0;";
 
@@ -658,7 +655,7 @@ bytesToAdd = 0;" : "bytesSoFar);";
                         {ProtectedIfApplicable}{DerivationKeyword}{TypeForLengths} Deserialize()
                         {{
                             FreeInMemoryObjects();
-                            {BytesSoFarInitialization}
+                            int bytesSoFar = 0;
                             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
                             if (span.Length == 0)
                             {{
@@ -672,7 +669,7 @@ bytesToAdd = 0;" : "bytesSoFar);";
                             OriginalIncludeChildrenMode = {(CanNeverHaveChildren ? "IncludeChildrenMode.IncludeAllChildren; /* cannot have children */" : $@"(IncludeChildrenMode)span.ToByte(ref bytesSoFar);")}{IIF(RequiresLongLengths, $@"
 bytesSoFarIncludingChildren = bytesSoFar;")}                            
 
-                            ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar{IIF(RequiresLongLengths, "IncludingChildren")});{
+                            ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);{
                             IIF(ImplementsLazinatorObjectVersionUpgrade && Version != -1,
                                 $@"
                             if (serializedVersionNumber < LazinatorObjectVersion)
@@ -1591,7 +1588,6 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                     ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
                     ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
                     {GetLengthsCalculation(true, false)}{TypeForLengths} totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, {IIF(RequiresLongLengths, "(int) (")}bytesSoFar + lengthForLengths{IIF(RequiresLongLengths, ")")}, ref bytesSoFar);
-                    bytesSoFar += totalChildrenSize;
                 }}
                     
 ");
