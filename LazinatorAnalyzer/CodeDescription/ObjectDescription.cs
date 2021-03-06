@@ -541,7 +541,7 @@ bytesToAdd = 0;" : "bytesSoFar);";
                         {HideILazinatorProperty}{ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(ContainsOpenGenericParameters ? "true" : "false")};
                         {HideILazinatorProperty}public abstract LazinatorGenericIDType LazinatorGenericID {{ get; }}
                         {HideILazinatorProperty}public abstract int LazinatorObjectVersion {{ get; set; }}
-                        {(ImplementsConvertFromBytesAfterHeader ? skipConvertFromBytesAfterHeaderString : $@"{ProtectedIfApplicable}abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
+                        {(ImplementsConvertFromBytesAfterHeader ? skipConvertFromBytesAfterHeaderString : $@"{ProtectedIfApplicable}abstract {TypeForLengths} ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
                             {ProtectedIfApplicable}abstract void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
                             {ProtectedIfApplicable}abstract int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar);")}
                         {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType("void")} SerializeToExistingBuffer{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, LazinatorSerializationOptions options);")}
@@ -668,7 +668,7 @@ bytesToAdd = 0;" : "bytesSoFar);";
 
                             OriginalIncludeChildrenMode = {(CanNeverHaveChildren ? "IncludeChildrenMode.IncludeAllChildren; /* cannot have children */" : $@"(IncludeChildrenMode)span.ToByte(ref bytesSoFar);")}
 
-                            ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);{
+                            {TypeForLengths} totalBytes = ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);{
                             IIF(ImplementsLazinatorObjectVersionUpgrade && Version != -1,
                                 $@"
                             if (serializedVersionNumber < LazinatorObjectVersion)
@@ -682,7 +682,7 @@ bytesToAdd = 0;" : "bytesSoFar);";
                                 $@"
                             PostDeserialization();")
                         }
-                            return {(ContainsEndByteIndex ? $"_OverallEndByteIndex" : "bytesSoFar")};
+                            return {(ContainsEndByteIndex ? $"_OverallEndByteIndex" : "totalBytes")};
                         }}
 
                         {MaybeAsyncAndNot($@"public {DerivationKeyword}{MaybeAsyncReturnType("void")} SerializeLazinator{MaybeAsyncWord}()
@@ -1582,12 +1582,12 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 return;
             }
 
-            sb.Append($@"{ProtectedIfApplicable}{DerivationKeyword}void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
+            sb.Append($@"{ProtectedIfApplicable}{DerivationKeyword}{TypeForLengths} ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
                 {{
                     ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
                     ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-                    {GetLengthsCalculation(true, false)}{TypeForLengths} totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, {IIF(RequiresLongLengths, "(int) (")}bytesSoFar + lengthForLengths{IIF(RequiresLongLengths, ")")}, ref bytesSoFar);
-                    bytesSoFar += totalChildrenSize;
+                    {GetLengthsCalculation(true, false)}{TypeForLengths} totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
+                    return bytesSoFar + totalChildrenSize;
                 }}
                     
 ");
