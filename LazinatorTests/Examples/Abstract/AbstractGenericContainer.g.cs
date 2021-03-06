@@ -111,7 +111,7 @@ namespace LazinatorTests.Examples.Abstract
         protected virtual bool ContainsOpenGenericParameters => true;
         public abstract LazinatorGenericIDType LazinatorGenericID { get; }
         public abstract int LazinatorObjectVersion { get; set; }
-        protected abstract void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
+        protected abstract int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
         protected abstract void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
         protected abstract int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar);
         public abstract void SerializeToExistingBuffer(ref BinaryBufferWriter writer, LazinatorSerializationOptions options);

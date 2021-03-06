@@ -164,12 +164,6 @@ namespace Lazinator.CodeDescription
         public int SizeOfLength { get; set; }
         public bool RequiresLongLengths => SizeOfLength == sizeof(long);
         public string TypeForLengths => RequiresLongLengths ? "long" : "int";
-        public string TotalChildrenBytesInitialization => RequiresLongLengths ? $@"long totalChildrenBytes = 0;
-int bytesToAdd = 0;" : "int totalChildrenBytes = 0;";
-
-        public string BytesSoFarTallyUpdateReferenceParameterEtc => RequiresLongLengths ? $@"bytesToAdd);
-bytesSoFar += bytesToAdd;
-bytesToAdd = 0;" : "bytesSoFar);";
 
         public string CastLongToTypeForLengths(string code) => RequiresLongLengths ? code : $"(int) ({code})";
         private string IIF(bool x, string y) => x ? y : ""; // Include if function
@@ -1610,7 +1604,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 
             sb.Append($@"{ProtectedIfApplicable}{DerivationKeyword}{TypeForLengths} ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
                 {{
-                    {TotalChildrenBytesInitialization}{IIF(IsDerivedFromNonAbstractLazinator, $@"
+                    {TypeForLengths} totalChildrenBytes = 0;{IIF(IsDerivedFromNonAbstractLazinator, $@"
 totalChildrenBytes = base.ConvertFromBytesForChildProperties(span, OriginalIncludeChildrenMode, serializedVersionNumber, indexOfFirstChild, ref bytesSoFar);")}
                 ");
 

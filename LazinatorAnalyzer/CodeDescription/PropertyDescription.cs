@@ -301,8 +301,6 @@ namespace Lazinator.CodeDescription
                         writer.Write((byte)0);
                     }}";
 
-        private string BytesSoFarTallyUpdateReferenceParameterEtc => ContainingObjectDescription.BytesSoFarTallyUpdateReferenceParameterEtc;
-
         private bool IncludableWhenExcludingMostChildren { get; set; }
         private bool ExcludableWhenIncludingMostChildren { get; set; }
         private bool AllowLazinatorInNonLazinator { get; set; }
