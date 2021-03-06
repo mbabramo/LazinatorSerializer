@@ -1587,6 +1587,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                     ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
                     ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
                     {GetLengthsCalculation(true, false)}{TypeForLengths} totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, {IIF(RequiresLongLengths, "(int) (")}bytesSoFar + lengthForLengths{IIF(RequiresLongLengths, ")")}, ref bytesSoFar);
+                    bytesSoFar += totalChildrenSize;
                 }}
                     
 ");
