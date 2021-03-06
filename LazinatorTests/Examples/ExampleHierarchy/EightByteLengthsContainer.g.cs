@@ -401,9 +401,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             _Contents_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                totalChildrenBytes += span.ToInt64(ref bytesToAdd);
-                bytesSoFar += bytesToAdd;
-                bytesToAdd = 0;
+                totalChildrenBytes += span.ToInt64(ref bytesSoFar);
             }
             _EightByteLengthsContainer_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;

@@ -73,6 +73,10 @@ namespace Lazinator.Buffers
                 Length = 0;
             else
                 Length = length;
+            if (Length > 10000)
+            {
+                var DEBUG = 0;
+            }
         }
 
         public LazinatorMemory(MemoryReference ownedMemory, List<MemoryReference> moreOwnedMemory, int startIndex, int startPosition, long length) : this(ownedMemory, startPosition, length)

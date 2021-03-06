@@ -191,6 +191,13 @@ namespace Lazinator.Buffers
             index += sizeof(long);
             return result;
         }
+        public static long ToInt64(this ReadOnlySpan<byte> b, ref long index)
+        {
+            ReadOnlySpan<byte> byteSpan = b.Slice((int)index);
+            var result = BinaryBufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadInt64LittleEndian(byteSpan) : BinaryPrimitives.ReadInt64BigEndian(byteSpan);
+            index += sizeof(long);
+            return result;
+        }
         public static ushort ToUInt16(this ReadOnlySpan<byte> b, ref int index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);

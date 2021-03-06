@@ -147,17 +147,29 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void TwoByteLengthsWorks()
+        public void TwoByteAndEightByteLengthsWork()
         {
-            var DEBUG = new byte[20];
-            System.Buffers.Binary.BinaryPrimitives.WriteInt16LittleEndian(DEBUG, 212);
-            Int16 result = System.Buffers.Binary.BinaryPrimitives.ReadInt16LittleEndian(DEBUG);
-
-            // The generated code clearly records the lengths as two bytes. So, we need to make sure that works. 
-            TwoByteLengths inner = new TwoByteLengths()
+            TwoByteLengthsContainer container2 = new TwoByteLengthsContainer()
             {
-                Example = GetExample(0)
+                Contents = new TwoByteLengths()
+                {
+                    Example = GetExample(0)
+                }
             };
+            container2.SerializeLazinator();
+            EightByteLengthsContainer container8 = new EightByteLengthsContainer()
+            {
+                Contents = new EightByteLengths()
+                {
+                    Example = GetExample(0)
+                }
+            };
+            container8.SerializeLazinator();
+            container8.LazinatorMemoryStorage.Length.Should().Be(container2.LazinatorMemoryStorage.Length + 6);
+
+            container2 = container2.CloneLazinatorTyped();
+            container8 = container8.CloneLazinatorTyped();
+            container8.LazinatorMemoryStorage.Length.Should().Be(container2.LazinatorMemoryStorage.Length + 6);
         }
 
 
