@@ -184,29 +184,20 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected virtual long Deserialize()
         {
             FreeInMemoryObjects();
-            long bytesSoFar = 0;
-            int bytesToAdd = 0;
+            int bytesSoFar = 0;
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             if (span.Length == 0)
             {
                 return 0;
             }
             
-            ReadGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesToAdd);
-            bytesSoFar += bytesToAdd;
-            bytesToAdd = 0;
+            ReadGenericIDIfApplicable(ContainsOpenGenericParameters, LazinatorUniqueID, span, ref bytesSoFar);
             
-            int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesToAdd);
-            bytesSoFar += bytesToAdd;
-            bytesToAdd = 0;
+            int lazinatorLibraryVersion = span.ToDecompressedInt32(ref bytesSoFar);
             
-            int serializedVersionNumber = span.ToDecompressedInt32(ref bytesToAdd);
-            bytesSoFar += bytesToAdd;
-            bytesToAdd = 0;
+            int serializedVersionNumber = span.ToDecompressedInt32(ref bytesSoFar);
             
-            OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesToAdd);
-            bytesSoFar += bytesToAdd;
-            bytesToAdd = 0;
+            OriginalIncludeChildrenMode = (IncludeChildrenMode)span.ToByte(ref bytesSoFar);
             
             ConvertFromBytesAfterHeader(OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             return _OverallEndByteIndex;
@@ -378,7 +369,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         public virtual int LazinatorObjectVersion { get; set; } = 0;
         
         
-        protected virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref long bytesSoFar)
+        protected virtual void ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
@@ -388,23 +379,20 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 lengthForLengths += 4;
             }
             long totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, (int) (bytesSoFar + lengthForLengths), ref bytesSoFar);
-            bytesSoFar += totalChildrenSize;
         }
         
-        protected virtual void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref long bytesSoFar)
+        protected virtual void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
         }
         
-        protected virtual long ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref long bytesSoFar)
+        protected virtual long ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
         {
             long totalChildrenBytes = 0;
             int bytesToAdd = 0;
             _Example_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
-                totalChildrenBytes += span.ToInt32(ref bytesToAdd);
-                bytesSoFar += bytesToAdd;
-                bytesToAdd = 0;
+                totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
             _EightByteLengths_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
             return totalChildrenBytes;
