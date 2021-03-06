@@ -379,6 +379,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 lengthForLengths += 4;
             }
             long totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, (int) (bytesSoFar + lengthForLengths), ref bytesSoFar);
+            bytesSoFar += totalChildrenSize;
         }
         
         protected virtual void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
