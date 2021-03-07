@@ -1610,7 +1610,7 @@ namespace Lazinator.CodeDescription
             // to read from storage during the write.
             if (!IsPrimitive)
             {
-                sb.AppendLine($"startOfChildPosition = {writerParameter}.ActiveMemoryPosition;");
+                sb.AppendLine($"startOfChildPosition = {writerParameter}.{ContainingObjectDescription.ActiveOrOverallMemoryPosition};");
             }
             // Now, we have to consider the SkipCondition, from a SkipIf attribute. We don't write if the skip condition is
             // met (but still must update the byte index).
@@ -1719,7 +1719,7 @@ namespace Lazinator.CodeDescription
             {
                 if (SizeOfLength != 8)
                 {
-                    lengthString = $@"lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                    lengthString = $@"lengthValue = {ContainingObjectDescription.LengthValueExpression(true)};
                         if (lengthValue > {SizeOfLengthTypeString}.MaxValue)
                         {{
                             ThrowHelper.ThrowTooLargeException({SizeOfLengthTypeString}.MaxValue);
@@ -1728,8 +1728,8 @@ namespace Lazinator.CodeDescription
                 }
                 else
                 {
-                    lengthString = $@"lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
-                        writer.RecordLength((long) lengthValue);";
+                    lengthString = $@"lengthValue = {ContainingObjectDescription.LengthValueExpression(true)};
+                        writer.RecordLength(lengthValue);";
                 }
                 lazinatorNullableStructNullCheck = originalString => PropertyType == LazinatorPropertyType.LazinatorStructNullable ? GetNullCheckIfThen($"{BackingFieldString}", $@"WriteNullChild_LengthsSeparate(ref writer, {(SingleByteLength ? "true" : "false")});", originalString) : originalString;
             }

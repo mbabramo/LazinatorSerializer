@@ -164,10 +164,15 @@ namespace Lazinator.CodeDescription
         public int SizeOfLength { get; set; }
         public bool RequiresLongLengths => SizeOfLength == sizeof(long);
         public string TypeForLengths => RequiresLongLengths ? "long" : "int";
+        public bool UseOverallMemoryPosition => RequiresLongLengths; // DEBUG || IsSeparable
 
-        public string CastLongToTypeForLengths(string code) => RequiresLongLengths ? code : $"(int) ({code})";
-        private string IIF(bool x, string y) => x ? y : ""; // Include if function
-        private string IIF(bool x, Func<string> y) => x ? y() : ""; // Same but with a function to produce the string
+        public string ActiveOrOverallMemoryPosition => UseOverallMemoryPosition ? "OverallMemoryPosition" : "ActiveMemoryPosition";
+        public string TypeForPositions => UseOverallMemoryPosition ? "long" : "int";
+        public string LengthValueExpression(bool startOfChild) => $"writer.{ActiveOrOverallMemoryPosition} - start{IIF(startOfChild, "OfChild")}Position";
+        public string CastLongToTypeForLengths(string code) => CastToIntIfNecessary(code, !RequiresLongLengths);
+        public string CastToIntIfNecessary(string code, bool necessary) => !necessary ? code : $"(int) ({code})";
+        private string IIF(bool x, string y, string z ="") => x ? y : z; // Include if function
+        private string IIF(bool x, Func<string> y, Func<string> z = null) => x ? y() : (z == null ? "" : z()); // Same but with a function to produce the string
 
         private string ValueTaskIfAsync(bool async, string type) => async ? $"ValueTask<{type}>" : type;
         private string AwaitIfAsync(bool async) => async ? "await " : "";
@@ -1221,12 +1226,12 @@ namespace Lazinator.CodeDescription
             }
 
             sb.AppendLine($@"{ IIF(ImplementsPreSerialization, $@"PreSerialization(options.VerifyCleanness, options.UpdateStoredBuffer);
-                            ")}int startPosition = writer.ActiveMemoryPosition;
+                            ")}{TypeForPositions} startPosition = writer.{ActiveOrOverallMemoryPosition};
                             {MaybeAwaitWord}WritePropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncRefIfNot}writer, options, {(UniqueIDCanBeSkipped ? "false" : "true")});");
 
             sb.AppendLine($@"if (options.UpdateStoredBuffer)
                         {{
-                            UpdateStoredBuffer(ref writer{MaybeAsyncConditional(".Writer", "")}, startPosition, writer.ActiveMemoryPosition - startPosition, options.IncludeChildrenMode, false);");
+                            UpdateStoredBuffer(ref writer{MaybeAsyncConditional(".Writer", "")}, startPosition, {LengthValueExpression(false)}, options.IncludeChildrenMode, false);");
             sb.Append($@"}}
 ");
             sb.Append($@"}}{MaybeAsyncAndNot_End}
@@ -1358,7 +1363,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             var thisLevel = PropertiesToDefineThisLevel;
             bool hasChildrenThisLevel = thisLevel.Any(x => !x.IsPrimitive);
             string positionInitialization = !hasChildrenThisLevel && !IsDerived ? $@"" : $@"
-                    int startPosition = writer.ActiveMemoryPosition;";
+                    {TypeForPositions} startPosition = writer.{ActiveOrOverallMemoryPosition};";
 
             sb.AppendLine(
                         $@"
@@ -1504,21 +1509,21 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 if (IsDerivedFromNonAbstractLazinator)
                     sb.AppendLine(
                             $@"
-                            {MaybeAsyncAndNot_Begin}{ProtectedIfApplicable}override {MaybeAsyncReturnType("void")} WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, LazinatorSerializationOptions options, bool includeUniqueID{IIF(!isPrimitive, $", int startOfObjectPosition")})
+                            {MaybeAsyncAndNot_Begin}{ProtectedIfApplicable}override {MaybeAsyncReturnType("void")} WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, LazinatorSerializationOptions options, bool includeUniqueID{IIF(!isPrimitive, $", {TypeForPositions} startOfObjectPosition")})
                             {{
                                 {MaybeAwaitWord}base.WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncRefIfNot}writer, options, includeUniqueID{IIF(!isPrimitive, ", startOfObjectPosition")});");
                 else
                 {
                     sb.AppendLine(
                             $@"
-                            {MaybeAsyncAndNot_Begin}{ProtectedIfApplicable}{DerivationKeyword}{MaybeAsyncReturnType("void")} WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
+                            {MaybeAsyncAndNot_Begin}{ProtectedIfApplicable}{DerivationKeyword}{MaybeAsyncReturnType("void")} WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, LazinatorSerializationOptions options, bool includeUniqueID, {TypeForPositions} startOfObjectPosition)
                             {{");
                 }
                 if (propertiesToWrite.Any())
                 {
-                    sb.AppendLine($@"int startOfChildPosition = 0;");
+                    sb.AppendLine($@"{TypeForPositions} startOfChildPosition = 0;");
                     if (propertiesToWrite.Any(x => x.UsesLengthValue))
-                        sb.AppendLine($@"int lengthValue = 0;");
+                        sb.AppendLine($@"{TypeForPositions} lengthValue = 0;");
                 }
             }
 

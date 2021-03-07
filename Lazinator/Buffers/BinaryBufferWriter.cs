@@ -115,6 +115,8 @@ namespace Lazinator.Buffers
             }
         }
 
+        public long OverallMemoryPosition => ActiveMemoryPosition + (CompletedMemory.IsEmpty ? 0 : CompletedMemory.Length);
+
         /// <summary>
         /// An earlier position in the buffer, to which we can write information on the lengths that we are writing later in the buffer.
         /// </summary>
