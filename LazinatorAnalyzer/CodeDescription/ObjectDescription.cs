@@ -164,7 +164,8 @@ namespace Lazinator.CodeDescription
         public int SizeOfLength { get; set; }
         public bool RequiresLongLengths => SizeOfLength == sizeof(long);
         public string TypeForLengths => RequiresLongLengths ? "long" : "int";
-        public bool IsSeparable => RequiresLongLengths; // DEBUG
+
+        public bool Splittable; // DEBUG
         public bool UseOverallMemoryPosition => RequiresLongLengths; // DEBUG || IsSeparable
 
         public string ActiveOrOverallMemoryPosition => UseOverallMemoryPosition ? "OverallMemoryPosition" : "ActiveMemoryPosition";
@@ -294,6 +295,8 @@ namespace Lazinator.CodeDescription
             foreach (var baseLazinator in GetBaseLazinatorObjects())
                 if (SizeOfLength != baseLazinator.SizeOfLength)
                     throw new LazinatorCodeGenException($"{InterfaceTypeSymbol} cannot have different Length property from base.");
+
+            Splittable = InterfaceTypeSymbol.HasAttributeOfType<CloneSplittableAttribute>() || SizeOfLength == 8;
             AllowNonlazinatorGenerics = InterfaceTypeSymbol.HasAttributeOfType<CloneAllowNonlazinatorOpenGenericsAttribute>();
             SuppressLazinatorVersionByte = InterfaceTypeSymbol.HasAttributeOfType<CloneExcludeLazinatorVersionByteAttribute>();
             GenerateRefStructIfNotGenerating = InterfaceTypeSymbol.HasAttributeOfType<CloneGenerateRefStructAttribute>();
@@ -1586,7 +1589,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 {{
                     ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
                     ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-                    {GetLengthsCalculation(true, false)}{TypeForLengths} totalChildrenSize = ConvertFromBytesForChildProperties({IIF(IsSeparable, "LazinatorMemoryStorage", "span")}, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
+                    {GetLengthsCalculation(true, false)}{TypeForLengths} totalChildrenSize = ConvertFromBytesForChildProperties({IIF(Splittable, "LazinatorMemoryStorage", "span")}, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
                     return bytesSoFar + totalChildrenSize;
                 }}
                     
@@ -1608,10 +1611,10 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 
         ");
 
-            sb.Append($@"{ProtectedIfApplicable}{DerivationKeyword}{TypeForLengths} ConvertFromBytesForChildProperties({IIF(IsSeparable, "LazinatorMemory lazinatorMemory", "ReadOnlySpan<byte> span")}, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
+            sb.Append($@"{ProtectedIfApplicable}{DerivationKeyword}{TypeForLengths} ConvertFromBytesForChildProperties({IIF(Splittable, "LazinatorMemory lazinatorMemory", "ReadOnlySpan<byte> span")}, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
                 {{
-                    {IIF(IsSeparable, "ReadOnlySpan<byte> span = lazinatorMemory.InitialMemory.Span;" + Environment.NewLine)}{TypeForLengths} totalChildrenBytes = 0;{IIF(IsDerivedFromNonAbstractLazinator, $@"
-totalChildrenBytes = base.ConvertFromBytesForChildProperties({IIF(IsSeparable, "lazinatorMemory", "span")}, OriginalIncludeChildrenMode, serializedVersionNumber, indexOfFirstChild, ref bytesSoFar);")}
+                    {IIF(Splittable, "ReadOnlySpan<byte> span = lazinatorMemory.InitialMemory.Span;" + Environment.NewLine)}{TypeForLengths} totalChildrenBytes = 0;{IIF(IsDerivedFromNonAbstractLazinator, $@"
+totalChildrenBytes = base.ConvertFromBytesForChildProperties({IIF(Splittable, "lazinatorMemory", "span")}, OriginalIncludeChildrenMode, serializedVersionNumber, indexOfFirstChild, ref bytesSoFar);")}
                 ");
 
             foreach (var property in thisLevel)
