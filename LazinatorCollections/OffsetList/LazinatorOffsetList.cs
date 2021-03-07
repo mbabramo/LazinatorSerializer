@@ -5,7 +5,7 @@ using Lazinator.Core;
 namespace LazinatorCollections.OffsetList
 {
     /// <summary>
-    /// A list of progressively increasing integral values, used to store offsets into a stream. 
+    /// A list of progressively increasing integral values, used to store offsets into a stream (whose total length must be less than int.MaxValue).
     /// </summary>
     public sealed partial class LazinatorOffsetList : ILazinator, ILazinatorOffsetList
     {
@@ -13,7 +13,9 @@ namespace LazinatorCollections.OffsetList
         {
         }
 
-        //For space efficiency, we store these in two lists, one containing two-byte values and one containing four-byte values. (Adding one- and three-byte values would contain extra overhead.) More importantly, we don't want to deserialize these lists unnecessarily (that is, if we're not changing them). Thus, we deserialize the two lists into ReadOnlyMemory where we can access the offsets directly. We then create in-memory lists only if necessary.
+        //For space efficiency, we store these in two lists, one containing two-byte values and one containing four-byte values. (Adding one- and three-byte values would contain extra overhead.) More importantly, we don't want to deserialize these lists unnecessarily (that is, if we're not changing them). Thus, we deserialize the two lists into ReadOnlyMemory where we can access the offsets directly. We then create in-memory lists only if necessary. 
+        // Note that eight-byte items are not supported. The LazinatorList class's length itself must fit within int.MaxValue, and it isn't designed to extend over more than one buffer,
+        // so it can't store more than int.MaxValue of bytes anyway. To use eight bytes, special classes with appropriate attributes must be defined. 
 
         private int NumTwoByteItems => TwoByteItems?.Length ?? 0;
         private int NumFourByteItems => FourByteItems?.Length ?? 0;

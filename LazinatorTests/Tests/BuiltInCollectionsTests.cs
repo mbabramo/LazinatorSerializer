@@ -12,6 +12,7 @@ using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
 using LazinatorCollections.OffsetList;
 using LazinatorCollections.Tuples;
+using LazinatorTests.Examples.ExampleHierarchy;
 
 namespace LazinatorTests.Tests
 {
@@ -625,6 +626,33 @@ namespace LazinatorTests.Tests
             c.IsDirty.Should().BeFalse();
             c.DescendantIsDirty.Should().BeFalse();
             c[0].IsDirty.Should().BeFalse();
+        }
+
+        [Fact]
+        public void LazinatorListWithEightByteContainer()
+        {
+            LazinatorList<EightByteLengthsContainer> l = new LazinatorList<EightByteLengthsContainer>()
+            {
+                new EightByteLengthsContainer()
+                {
+                    Contents = new EightByteLengths()
+                    {
+                        Example = GetExample(0)
+                    }
+                },
+                new EightByteLengthsContainer()
+                {
+                    Contents = new EightByteLengths()
+                    {
+                        Example = GetExample(1)
+                    }
+                },
+                null
+            };
+            var l2 = l.CloneLazinatorTyped();
+            ExampleEqual(l[0].Contents.Example, l2[0].Contents.Example).Should().BeTrue();
+            ExampleEqual(l[1].Contents.Example, l2[1].Contents.Example).Should().BeTrue();
+            l2[2].Should().BeNull();
         }
 
         [Fact]
