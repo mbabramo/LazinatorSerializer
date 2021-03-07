@@ -378,7 +378,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 lengthForLengths += 4;
             }
-            long totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
+            long totalChildrenSize = ConvertFromBytesForChildProperties(LazinatorMemoryStorage, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
             return bytesSoFar + totalChildrenSize;
         }
         
@@ -386,8 +386,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
         }
         
-        protected virtual long ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
+        protected virtual long ConvertFromBytesForChildProperties(LazinatorMemory lazinatorMemory, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
         {
+            ReadOnlySpan<byte> span = lazinatorMemory.InitialMemory.Span;
             long totalChildrenBytes = 0;
             _Example_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)

@@ -1610,7 +1610,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 
             sb.Append($@"{ProtectedIfApplicable}{DerivationKeyword}{TypeForLengths} ConvertFromBytesForChildProperties({IIF(IsSeparable, "LazinatorMemory lazinatorMemory", "ReadOnlySpan<byte> span")}, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
                 {{
-                    {TypeForLengths} totalChildrenBytes = 0;{IIF(IsDerivedFromNonAbstractLazinator, $@"
+                    {IIF(IsSeparable, "ReadOnlySpan<byte> span = lazinatorMemory.InitialMemory.Span;" + Environment.NewLine)}{TypeForLengths} totalChildrenBytes = 0;{IIF(IsDerivedFromNonAbstractLazinator, $@"
 totalChildrenBytes = base.ConvertFromBytesForChildProperties({IIF(IsSeparable, "lazinatorMemory", "span")}, OriginalIncludeChildrenMode, serializedVersionNumber, indexOfFirstChild, ref bytesSoFar);")}
                 ");
 
