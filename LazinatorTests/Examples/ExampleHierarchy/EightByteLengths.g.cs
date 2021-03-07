@@ -400,11 +400,11 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         public virtual void SerializeToExistingBuffer(ref BinaryBufferWriter writer, LazinatorSerializationOptions options)
         {
-            int startPosition = writer.ActiveMemoryPosition;
+            long startPosition = writer.OverallMemoryPosition;
             WritePropertiesIntoBuffer(ref writer, options, true);
             if (options.UpdateStoredBuffer)
             {
-                UpdateStoredBuffer(ref writer, startPosition, writer.ActiveMemoryPosition - startPosition, options.IncludeChildrenMode, false);
+                UpdateStoredBuffer(ref writer, startPosition, writer.OverallMemoryPosition - startPosition, options.IncludeChildrenMode, false);
             }
         }
         
@@ -441,7 +441,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            int startPosition = writer.ActiveMemoryPosition;
+            long startPosition = writer.OverallMemoryPosition;
             if (includeUniqueID)
             {
                 if (!ContainsOpenGenericParameters)
@@ -474,11 +474,11 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
         }
-        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
+        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, long startOfObjectPosition)
         {
-            int startOfChildPosition = 0;
-            int lengthValue = 0;
-            startOfChildPosition = writer.ActiveMemoryPosition;
+            long startOfChildPosition = 0;
+            long lengthValue = 0;
+            startOfChildPosition = writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_Example_Accessed)
@@ -486,7 +486,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                     var deserialized = Example;
                 }
                 WriteChild(ref writer, ref _Example, options, _Example_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Example_ByteIndex, _Example_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
-                lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
+                lengthValue = writer.OverallMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {
                     ThrowHelper.ThrowTooLargeException(int.MaxValue);
