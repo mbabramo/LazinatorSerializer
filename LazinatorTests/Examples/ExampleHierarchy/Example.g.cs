@@ -2103,6 +2103,7 @@ namespace LazinatorTests.Examples
                 _IncludableChild_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
+
             startOfChildPosition = writer.ActiveMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {

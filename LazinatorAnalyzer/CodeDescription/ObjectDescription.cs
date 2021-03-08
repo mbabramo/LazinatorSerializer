@@ -1542,10 +1542,13 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 }
             }
 
-
-            foreach (var property in propertiesToWrite)
+            bool first = true;
+            foreach (PropertyDescription property in propertiesToWrite)
             {
+                if (!first && Splittable)
+                    sb.AppendLine($"writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);")
                 AppendPropertyWrite(sb, property);
+                first = false;
             }
 
             if (!isPrimitive && ContainsEndByteIndex)
@@ -1622,6 +1625,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 
         ");
 
+            // DEBUG -- much of the Splittable conditional code is not really necessary, since we can assume that the bytes for child properties are still in the initial memory. At the time, I thought we would need LazinatorMemory, but now I realize that we don't. However, if we add the option to have lengths at the end of an object, then we will need to put this back. So we might not want to change it yet.
             sb.Append($@"{ProtectedIfApplicable}{DerivationKeyword}{TypeForLengths} ConvertFromBytesForChildProperties({IIF(Splittable, "LazinatorMemory lazinatorMemory", "ReadOnlySpan<byte> span")}, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
                 {{
                     {IIF(Splittable, "ReadOnlySpan<byte> span = lazinatorMemory.InitialMemory.Span;" + Environment.NewLine)}{TypeForLengths} totalChildrenBytes = 0;{IIF(IsDerivedFromNonAbstractLazinator, $@"

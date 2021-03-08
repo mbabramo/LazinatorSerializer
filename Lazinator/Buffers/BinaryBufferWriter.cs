@@ -102,7 +102,7 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// The position within the buffer. This is changed by the client after writing to the buffer.
+        /// The position within the active memory buffer. This is changed by the client after writing to the buffer.
         /// </summary>
         private int _ActiveMemoryPosition;
         public int ActiveMemoryPosition
@@ -176,6 +176,22 @@ namespace Lazinator.Buffers
         {
             EnsureMinFreeSize(desiredSize);
             return FreeSpan.Slice(0, desiredSize);
+        }
+
+        public void ConsiderSwitchToNextBuffer(int newBufferThreshold)
+        {
+            if (ActiveMemoryPosition >= newBufferThreshold)
+                MoveActiveToCompletedMemory();
+        }
+
+        /// <summary>
+        /// Moves the active memory to completed memory
+        /// </summary>
+        /// <param name="minSizeofNewBuffer"></param>
+        public void MoveActiveToCompletedMemory(int minSizeofNewBuffer = ExpandableBytes.DefaultMinBufferSize)
+        {
+            CompletedMemory = CompletedMemory.WithAppendedChunk(new MemoryReference(ActiveMemory, GetActiveMemoryVersion(), 0, ActiveMemoryPosition));
+            ActiveMemory = new ExpandableBytes(minSizeofNewBuffer);
         }
 
         /// <summary>
