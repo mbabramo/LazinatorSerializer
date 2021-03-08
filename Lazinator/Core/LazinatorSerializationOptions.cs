@@ -24,12 +24,18 @@ namespace Lazinator.Core
         /// Whether the objects being serialized should be updated to use the new buffer. This must be false if includeChildrenMode is not set to include all children. If false, then the returned memory will be independent of the existing memory.
         /// </summary>
         public readonly bool UpdateStoredBuffer;
+        /// <summary>
+        /// If a Lazinator object is splittable across buffers, then, once the total number of bytes written crosses this value after serializing a child object, the next buffer is moved onto. This has no
+        /// effect in a Lazinator object not splittable across buffers.
+        /// </summary>
+        public readonly int NextBufferThreshold;
 
-        public LazinatorSerializationOptions(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer)
+        public LazinatorSerializationOptions(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, int nextBufferThreshold=int.MaxValue)
         {
             IncludeChildrenMode = includeChildrenMode;
             VerifyCleanness = verifyCleanness;
             UpdateStoredBuffer = updateStoredBuffer;
+            NextBufferThreshold = nextBufferThreshold;
             if (IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren && updateStoredBuffer)
                 ThrowHelper.ThrowCannotUpdateStoredBuffer();
         }
