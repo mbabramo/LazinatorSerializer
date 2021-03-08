@@ -165,9 +165,8 @@ namespace Lazinator.CodeDescription
         public bool RequiresLongLengths => SizeOfLength == sizeof(long);
         public string TypeForLengths => RequiresLongLengths ? "long" : "int";
 
-        public bool Splittable; // DEBUG
-        public bool UseOverallMemoryPosition => RequiresLongLengths; // DEBUG || IsSeparable
-
+        public bool Splittable; 
+        public bool UseOverallMemoryPosition => RequiresLongLengths || Splittable;
         public string ActiveOrOverallMemoryPosition => UseOverallMemoryPosition ? "OverallMemoryPosition" : "ActiveMemoryPosition";
         public string TypeForPositions => UseOverallMemoryPosition ? "long" : "int";
         public string LengthValueExpression(bool startOfChild) => $"writer.{ActiveOrOverallMemoryPosition} - start{IIF(startOfChild, "OfChild")}Position";
@@ -296,7 +295,7 @@ namespace Lazinator.CodeDescription
                 if (SizeOfLength != baseLazinator.SizeOfLength)
                     throw new LazinatorCodeGenException($"{InterfaceTypeSymbol} cannot have different Length property from base.");
 
-            Splittable = InterfaceTypeSymbol.HasAttributeOfType<CloneSplittableAttribute>() || SizeOfLength == 8;
+            Splittable = InterfaceTypeSymbol.HasAttributeOfType<CloneSplittableAttribute>() || RequiresLongLengths;
             AllowNonlazinatorGenerics = InterfaceTypeSymbol.HasAttributeOfType<CloneAllowNonlazinatorOpenGenericsAttribute>();
             SuppressLazinatorVersionByte = InterfaceTypeSymbol.HasAttributeOfType<CloneExcludeLazinatorVersionByteAttribute>();
             GenerateRefStructIfNotGenerating = InterfaceTypeSymbol.HasAttributeOfType<CloneGenerateRefStructAttribute>();
