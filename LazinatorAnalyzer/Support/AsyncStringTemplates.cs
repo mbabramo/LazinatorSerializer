@@ -71,6 +71,7 @@ namespace LazinatorAnalyzer.Support
         public string MaybeAsyncWordAsync() => MaybeAsyncConditional("Async");
         public string MaybeAsyncWord_async() => MaybeAsyncConditional(OnlyIfAsyncUsedInBlock("async "));
         public string MaybeIAsyncEnumerable() => MaybeAsyncConditional("IAsyncEnumerable" + NoteAsyncUsed(), "IEnumerable");
+        public string MaybeInIfNotAsync() => MaybeAsyncConditional("", "in ");
 
         private string MaybeAsyncReturnTypeWrapper(string ordinaryReturnType) => ordinaryReturnType == "void" ? TaskKeyword : $"{TaskKeyword}<{ordinaryReturnType}>";
 
