@@ -297,6 +297,14 @@ namespace Lazinator.CodeDescription
                     throw new LazinatorCodeGenException($"{InterfaceTypeSymbol} cannot have different Length property from base.");
 
             Splittable = InterfaceTypeSymbol.HasAttributeOfType<CloneSplittableAttribute>() || RequiresLongLengths;
+            if (InterfaceTypeSymbol.ToString().Contains("Example"))
+            {
+                var DEBUG = 0;
+            }
+            if (Splittable)
+            {
+                var DEBUG = 0;
+            }
             AllowNonlazinatorGenerics = InterfaceTypeSymbol.HasAttributeOfType<CloneAllowNonlazinatorOpenGenericsAttribute>();
             SuppressLazinatorVersionByte = InterfaceTypeSymbol.HasAttributeOfType<CloneExcludeLazinatorVersionByteAttribute>();
             GenerateRefStructIfNotGenerating = InterfaceTypeSymbol.HasAttributeOfType<CloneGenerateRefStructAttribute>();
@@ -1546,13 +1554,21 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             foreach (PropertyDescription property in propertiesToWrite)
             {
                 if (!first && Splittable)
-                    sb.AppendLine($"writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);")
+                    sb.AppendLine($"writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);");
                 AppendPropertyWrite(sb, property);
                 first = false;
             }
 
             if (!isPrimitive && ContainsEndByteIndex)
-                AppendEndByteIndex(sb, propertiesToWrite, "writer.ActiveMemoryPosition - startOfObjectPosition", true);
+            {
+                string castStart = "", castEnd = "";
+                if (Splittable && !RequiresLongLengths)
+                {
+                    castStart = "(int) (";
+                    castEnd = ")";
+                }
+                AppendEndByteIndex(sb, propertiesToWrite, castStart + "writer.ActiveMemoryPosition - startOfObjectPosition" + castEnd, true);
+            }
             if (!isPrimitive)
                 sb.AppendLine($@"{MaybeAsyncVoidReturn(true)}");
             sb.Append($@"}}");

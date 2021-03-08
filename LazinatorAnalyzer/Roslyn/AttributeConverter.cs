@@ -164,6 +164,8 @@ namespace LazinatorCodeGen.Roslyn
                     return new CloneExcludeLazinatorVersionByteAttribute();
                 case "UncompressedAttribute":
                     return new CloneUncompressedAttribute();
+                case "SplittableAttribute":
+                    return new CloneSplittableAttribute();
                 default:
                     return null;
             }

@@ -1638,9 +1638,10 @@ namespace Lazinator.CodeDescription
                 if (IsSupportedCollectionOrTuple && !IsSimpleListOrArray &&
                     InnerProperties.Any(x => x.IsPossiblyStruct))
                     removeBuffers = new ConditionalCodeGenerator(GetNonNullCheck(true), $" {BackingFieldString} = ({AppropriatelyQualifiedTypeName}) CloneOrChange_{AppropriatelyQualifiedTypeNameEncodable}({BackingFieldAccessWithPossibleException}, l => l.RemoveBufferInHierarchy(), true);").ToString();
+                bool mustCast = ContainingObjectDescription.Splittable && !ContainingObjectDescription.RequiresLongLengths; // we're using longs for startOfChildPosition but not for BackingFieldByteIndex
                 sb.AppendLine($@"if (options.UpdateStoredBuffer)
                                     {{
-                                        {BackingFieldByteIndex} = startOfChildPosition - startOfObjectPosition;
+                                        {BackingFieldByteIndex} = {IIF(mustCast, "(int) (")}startOfChildPosition - startOfObjectPosition{IIF(mustCast, ")")};
                                         {removeBuffers}
                                     }}");
             }
