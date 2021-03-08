@@ -1016,10 +1016,12 @@ namespace Lazinator.CodeDescription
                 // However, we always need the async word in this case, because we are returning IAsyncEnumerable. But this creates a problem: Warning CS1998 comes up if we don't call await.
                 // This seems to be a design flaw -- it should not be triggered in a virtual method. In this case, we need to suppress the warning.
                 bool suppressWarningIfAsync =  (IsDerived || !IsSealed) && !PropertiesToDefineThisLevel.Any(x => !x.IsLazinator && x.PlaceholderMemoryWriteMethod == null && !x.IsPrimitive && !(x.PropertyType == LazinatorPropertyType.SupportedCollection && x.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan));
-                string suppressionString = suppressWarningIfAsync ? MaybeAsyncConditional($@"#pragma warning disable CS1998 // await could be used in base or derived method, though not used here, and async is required with IAsyncEnumerable
-", "") : "";
-                string endSuppressionString = suppressWarningIfAsync ? MaybeAsyncConditional($@"
-#pragma warning restore CS1998", "") : "";
+                string suppressionString = suppressWarningIfAsync ?  MaybeAsyncConditional($@"await new ValueTask(); // suppresses CS1998
+", "") : ""; // would be better to use #pragma here, but it would be complicated to get that to appear before "async" // suppressWarningIfAsync ? MaybeAsyncAndNot_Begin + MaybeAsyncConditional($@"#pragma warning disable CS1998 // await could be used in base or derived method, though not used here, and async is required with IAsyncEnumerable
+//", "") + MaybeAsyncAndNot_End : "";
+//                string endSuppressionString = suppressWarningIfAsync ? MaybeAsyncAndNot_Begin + MaybeAsyncConditional($@"
+//#pragma warning restore CS1998
+//", "") + MaybeAsyncAndNot_End : "";
 
                 if (ILazinatorTypeSymbol.ToString().Contains("ExampleChild"))
                 {
@@ -1031,7 +1033,7 @@ namespace Lazinator.CodeDescription
                 {
                     sb.Append($@"
 
-                        {suppressionString}{MaybeAsyncAndNot_Begin}public override {MaybeIAsyncEnumerable}<(string propertyName, object{QuestionMarkIfNullableModeEnabled} descendant)> EnumerateNonLazinatorProperties{MaybeAsyncWord}()
+                        {MaybeAsyncAndNot_Begin}public override {MaybeIAsyncEnumerable}<(string propertyName, object{QuestionMarkIfNullableModeEnabled} descendant)> EnumerateNonLazinatorProperties{MaybeAsyncWord}()
                         {{
                                 foreach (var inheritedYield in {MaybeAwaitWord}base.EnumerateNonLazinatorProperties())
                                 {{
@@ -1045,7 +1047,7 @@ namespace Lazinator.CodeDescription
                     sb.AppendLine(
                         $@"
 
-                        {MaybeAsyncAndNot_Begin}{suppressionString}public {DerivationKeyword}{MaybeIAsyncEnumerable}<(string propertyName, object{QuestionMarkIfNullableModeEnabled} descendant)> EnumerateNonLazinatorProperties{MaybeAsyncWord}()
+                        {MaybeAsyncAndNot_Begin}public {DerivationKeyword}{MaybeIAsyncEnumerable}<(string propertyName, object{QuestionMarkIfNullableModeEnabled} descendant)> EnumerateNonLazinatorProperties{MaybeAsyncWord}()
                         {{");
                 }
 
@@ -1067,8 +1069,8 @@ namespace Lazinator.CodeDescription
                                     ");
                     }
                 }
-                sb.Append($@"yield break;
-                        }}{endSuppressionString}{MaybeAsyncAndNot_End}
+                sb.Append($@"{suppressionString}yield break;
+                        }}{MaybeAsyncAndNot_End}
                     ");
             }
         }
