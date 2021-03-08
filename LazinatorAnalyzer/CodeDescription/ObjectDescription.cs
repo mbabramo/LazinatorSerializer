@@ -1015,19 +1015,10 @@ namespace Lazinator.CodeDescription
                 // Note: If this is the async version, we will actually call "await" only if there is a non-Lazinator child, since the non-Lazinator primitive properties can be returned without await.
                 // However, we always need the async word in this case, because we are returning IAsyncEnumerable. But this creates a problem: Warning CS1998 comes up if we don't call await.
                 // This seems to be a design flaw -- it should not be triggered in a virtual method. In this case, we need to suppress the warning.
-                bool suppressWarningIfAsync =  (IsDerived || !IsSealed) && !PropertiesToDefineThisLevel.Any(x => !x.IsLazinator && x.PlaceholderMemoryWriteMethod == null && !x.IsPrimitive && !(x.PropertyType == LazinatorPropertyType.SupportedCollection && x.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan));
-                string suppressionString = suppressWarningIfAsync ?  MaybeAsyncConditional($@"await new ValueTask(); // suppresses CS1998
-", "") : ""; // would be better to use #pragma here, but it would be complicated to get that to appear before "async" // suppressWarningIfAsync ? MaybeAsyncAndNot_Begin + MaybeAsyncConditional($@"#pragma warning disable CS1998 // await could be used in base or derived method, though not used here, and async is required with IAsyncEnumerable
-//", "") + MaybeAsyncAndNot_End : "";
-//                string endSuppressionString = suppressWarningIfAsync ? MaybeAsyncAndNot_Begin + MaybeAsyncConditional($@"
-//#pragma warning restore CS1998
-//", "") + MaybeAsyncAndNot_End : "";
+                bool suppressWarning = AsyncLazinatorMemory && (IsDerived || !IsSealed) && !PropertiesToDefineThisLevel.Any(x => !x.IsLazinator && x.PlaceholderMemoryWriteMethod == null && !x.IsPrimitive && !(x.PropertyType == LazinatorPropertyType.SupportedCollection && x.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan));
 
-                if (ILazinatorTypeSymbol.ToString().Contains("ExampleChild"))
-                {
-                    var DEBUG = 0;
-                }
-
+                if (suppressWarning)
+                    sb.Append($@"#pragma warning disable CS1998"); // this will appear before both async and non-async versions of method -- not ideal, but hard to work around
 
                 if (IsDerivedFromNonAbstractLazinator)
                 {
@@ -1069,9 +1060,12 @@ namespace Lazinator.CodeDescription
                                     ");
                     }
                 }
-                sb.Append($@"{suppressionString}yield break;
+                sb.Append($@"yield break;
                         }}{MaybeAsyncAndNot_End}
                     ");
+
+                if (suppressWarning)
+                    sb.AppendLine($@"#pragma warning restore CS1998");
             }
         }
 

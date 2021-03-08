@@ -682,7 +682,7 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
-        
+        #pragma warning disable CS1998
         
         public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
         {
@@ -699,6 +699,7 @@ namespace LazinatorTests.Examples
             yield break;
         }
         
+        #pragma warning restore CS1998
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
