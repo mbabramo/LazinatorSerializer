@@ -117,7 +117,7 @@ namespace LazinatorTests.Examples.Hierarchy
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleListByInterface_ByteIndex, _ExampleListByInterface_ByteLength, null); _ExampleListByInterface = ConvertFromBytes_List_GIExample_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExampleListByInterface_ByteIndex, _ExampleListByInterface_ByteLength, null);_ExampleListByInterface = ConvertFromBytes_List_GIExample_g(childData);
             }
             _ExampleListByInterface_Accessed = true;
         }

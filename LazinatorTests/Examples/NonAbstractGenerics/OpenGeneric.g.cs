@@ -71,7 +71,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListT_ByteIndex, _MyListT_ByteLength, null); _MyListT = ConvertFromBytes_List_GT_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListT_ByteIndex, _MyListT_ByteLength, null);_MyListT = ConvertFromBytes_List_GT_g(childData);
             }
             _MyListT_Accessed = true;
         }

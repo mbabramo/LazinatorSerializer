@@ -84,7 +84,7 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _SpanList_ByteIndex, _SpanList_ByteLength, null); _SpanList = ConvertFromBytes_List_GSpanAndMemory_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _SpanList_ByteIndex, _SpanList_ByteLength, null);_SpanList = ConvertFromBytes_List_GSpanAndMemory_g(childData);
             }
             _SpanList_Accessed = true;
         }

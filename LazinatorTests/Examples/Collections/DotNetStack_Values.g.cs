@@ -70,7 +70,7 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyStackInt_ByteIndex, _MyStackInt_ByteLength, null); _MyStackInt = ConvertFromBytes_Stack_Gint_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyStackInt_ByteIndex, _MyStackInt_ByteLength, null);_MyStackInt = ConvertFromBytes_Stack_Gint_g(childData);
             }
             _MyStackInt_Accessed = true;
         }

@@ -70,7 +70,7 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyHashSetSerialized_ByteIndex, _MyHashSetSerialized_ByteLength, null); _MyHashSetSerialized = ConvertFromBytes_HashSet_GExampleChild_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyHashSetSerialized_ByteIndex, _MyHashSetSerialized_ByteLength, null);_MyHashSetSerialized = ConvertFromBytes_HashSet_GExampleChild_g(childData);
             }
             _MyHashSetSerialized_Accessed = true;
         }

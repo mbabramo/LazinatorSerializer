@@ -69,7 +69,7 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleNullableStruct_ByteIndex, _MyExampleNullableStruct_ByteLength, null); if (childData.Length == 0)
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleNullableStruct_ByteIndex, _MyExampleNullableStruct_ByteLength, null);if (childData.Length == 0)
                 {
                     _MyExampleNullableStruct = default;
                 }
@@ -142,7 +142,7 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, null); _MyExampleStructContainingClasses = new ExampleStructContainingClasses(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, null);_MyExampleStructContainingClasses = new ExampleStructContainingClasses(childData);
                 
             }
             _MyExampleStructContainingClasses_Accessed = true;

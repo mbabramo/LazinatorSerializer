@@ -68,7 +68,7 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyArrayInt_DerivedLevel_ByteIndex, _MyArrayInt_DerivedLevel_ByteLength, null); _MyArrayInt_DerivedLevel = ConvertFromBytes_int_B_b(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyArrayInt_DerivedLevel_ByteIndex, _MyArrayInt_DerivedLevel_ByteLength, null);_MyArrayInt_DerivedLevel = ConvertFromBytes_int_B_b(childData);
             }
             _MyArrayInt_DerivedLevel_Accessed = true;
         }

@@ -98,7 +98,7 @@ namespace LazinatorCollections.ByteSpan
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ReadOrWrite_ByteIndex, _ReadOrWrite_ByteLength, null); _ReadOrWrite = ConvertFromBytes_Memory_Gbyte_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ReadOrWrite_ByteIndex, _ReadOrWrite_ByteLength, null);_ReadOrWrite = ConvertFromBytes_Memory_Gbyte_g(childData);
             }
             _ReadOrWrite_Accessed = true;
         }

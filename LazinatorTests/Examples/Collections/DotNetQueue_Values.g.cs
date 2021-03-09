@@ -70,7 +70,7 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyQueueInt_ByteIndex, _MyQueueInt_ByteLength, null); _MyQueueInt = ConvertFromBytes_Queue_Gint_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyQueueInt_ByteIndex, _MyQueueInt_ByteLength, null);_MyQueueInt = ConvertFromBytes_Queue_Gint_g(childData);
             }
             _MyQueueInt_Accessed = true;
         }

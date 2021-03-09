@@ -71,7 +71,7 @@ namespace Lazinator.Wrappers
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedValue_ByteIndex, _WrappedValue_ByteLength, null); _WrappedValue = ConvertFromBytes_decimal_B_b(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedValue_ByteIndex, _WrappedValue_ByteLength, null);_WrappedValue = ConvertFromBytes_decimal_B_b(childData);
             }
             _WrappedValue_Accessed = true;
         }

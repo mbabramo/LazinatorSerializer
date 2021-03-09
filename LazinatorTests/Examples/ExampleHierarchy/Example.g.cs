@@ -667,7 +667,7 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = await GetChildSliceAsync(LazinatorMemoryStorage, _MyNonLazinatorChild_ByteIndex, _MyNonLazinatorChild_ByteLength, null); _MyNonLazinatorChild = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData);
+                LazinatorMemory childData = await GetChildSliceAsync(LazinatorMemoryStorage, _MyNonLazinatorChild_ByteIndex, _MyNonLazinatorChild_ByteLength, null);_MyNonLazinatorChild = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData);
                 await childData.ConsiderUnloadInitialMemoryAsync();
             }
             _MyNonLazinatorChild_Accessed = true;
@@ -751,7 +751,7 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = await GetChildSliceAsync(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, null); _WrappedInt = new WInt32(childData)
+                LazinatorMemory childData = await GetChildSliceAsync(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, null);_WrappedInt = new WInt32(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
