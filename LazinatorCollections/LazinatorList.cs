@@ -493,7 +493,7 @@ namespace LazinatorCollections
                             }
                         }
                         else
-                            WriteExistingChildStorage(ref w, () => GetListMemberSlice(status.OriginalIndex), SizeOfLength.SkipLength, LazinatorMemory.EmptyLazinatorMemory);
+                            WriteExistingChildStorage(ref w, () => GetListMemberSlice(status.OriginalIndex), LazinatorMemory.EmptyLazinatorMemory);
                         var offset = (int)(w.ActiveMemoryPosition - startingPosition);
                         offsetList.AddOffset(offset);
                     }
