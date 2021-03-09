@@ -6,30 +6,29 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Lazinator.Exceptions;
+using System.Reflection.Metadata;
 
 namespace Lazinator.Buffers
 {
     /// <summary>
-    /// Saves or loads memory references in consecutively numbered files. The initial file contains information on all the other files, so that these
-    /// can be asynchronously loaded if necessary.
+    /// Saves or loads memory references referring either to parts of a single file or to consecutively numbered files. The initial file contains information on all the other components, so that these can be asynchronously loaded if necessary.
     /// </summary>
     public class MemoryReferenceInFile : MemoryReference
     {
         string PathForFile;
+        IBlobReader BlobReader;
         bool IsIndexFile => Path.GetFileNameWithoutExtension(PathForFile).EndsWith("-0");
-        bool LengthDetermined;
-        public bool Persisted { get; private set; }
+
+        private long Offset = 0;
 
         /// <summary>
-        /// Creates a reference to the first of a set of existing files. This should be followed by a call to GetAdditionalReferences(Async).
+        /// Creates a reference to the index file (which may or may not contain all of the remaining data). This should be followed by a call to GetAdditionalReferences(Async).
         /// </summary>
         /// <param name="path"></param>
-        public MemoryReferenceInFile(string path)
+        public MemoryReferenceInFile(string path, IBlobReader blobReader)
         {
             PathForFile = path;
-            Persisted = true;
-            if (!IsIndexFile)
-                throw new ArgumentException("To use this overload to MemoryReferenceInFile, pass the name of a file ending in -0.");
+            BlobReader = blobReader;
         }
 
         /// <summary>
@@ -37,66 +36,21 @@ namespace Lazinator.Buffers
         /// </summary>
         /// <param name="path">The path, including a number referring to the specific file</param>
         /// <param name="length"></param>
-        public MemoryReferenceInFile(string path, int length)
+        public MemoryReferenceInFile(string path, IBlobReader blobReader, int length, long offset, int referencedMemoryVersion)
         {
             PathForFile = path;
+            BlobReader = blobReader;
             Length = length;
-            LengthDetermined = true;
-            Persisted = true;
+            Offset = offset;
+            ReferencedMemoryVersion = referencedMemoryVersion;
         }
 
-        /// <summary>
-        /// Creates a new file to serve as a memory reference.
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="referencedMemory"></param>
-        /// <param name="versionOfReferencedMemory"></param>
-        /// <param name="startIndex"></param>
-        /// <param name="length"></param>
-        public MemoryReferenceInFile(string path, IMemoryOwner<byte> referencedMemory, int versionOfReferencedMemory, int startIndex, int length) : base(referencedMemory, versionOfReferencedMemory, startIndex, length)
-        {
-            PathForFile = path;
-            LengthDetermined = true;
-            Persisted = false;
-        }
-
-        private int Offset = 0;
-
-        private int _Length;
-        public override int Length 
-        { 
-            get 
-            {
-                if (!LengthDetermined)
-                {
-                    FileInfo fi = new FileInfo(PathForFile);
-                    long longLength = fi.Length;
-                    if (longLength > int.MaxValue)
-                        ThrowHelper.ThrowTooLargeException(int.MaxValue);
-                    _Length = (int)longLength;
-                    LengthDetermined = true;
-                }
-                return _Length;
-            } 
-            set => _Length = value; 
-        }
-
-        public async ValueTask PersistIfNecessary()
-        {
-            if (Persisted)
-                return;
-            using FileStream fs = File.OpenWrite(PathForFile);
-            await fs.WriteAsync(ReferencedMemory.Memory);
-        }
+        #region Memory loading and unloading
 
         public async override ValueTask LoadMemoryAsync()
         {
-            using FileStream fs = File.OpenRead(PathForFile);
-            byte[] target = new byte[Length];
-            if (Offset != 0)
-                fs.Seek(Offset, SeekOrigin.Begin);
-            await fs.ReadAsync(target);
-            ReferencedMemory = new SimpleMemoryOwner<byte>(target);
+            Memory<byte> bytes = await BlobReader.ReadAsync(PathForFile, Offset, Length);
+            ReferencedMemory = new SimpleMemoryOwner<byte>(bytes);
         }
 
         public override ValueTask ConsiderUnloadMemoryAsync()
@@ -105,30 +59,22 @@ namespace Lazinator.Buffers
             return ValueTask.CompletedTask;
         }
 
-        #region Index file
+        #endregion
+
+        #region Index file management
 
         /// <summary>
         /// Uses information in an initial MemoryReferenceInFile to generate information on other MemoryReferenceInFiles. 
         /// This should be called immediately after the constructor. 
         /// </summary>
         /// <returns></returns>
-        public async Task<List<MemoryReferenceInFile>> GetAdditionalReferencesAsync()
+        public async Task<List<MemoryReferenceInFile>> GetAdditionalReferencesAsync(bool sameFile)
         {
-            List<int> fileLengths = new List<int>();
-            using FileStream reader = File.Open(PathForFile, FileMode.Open);
-            byte[] intHolder = new byte[4];
-            await reader.ReadAsync(intHolder, 0, 4);
+            Memory<byte> intHolder = await BlobReader.ReadAsync(PathForFile, 0, 4);
             int numBytesRead = 0;
-            int numItems = ReadUncompressedPrimitives.ToInt32(intHolder, ref numBytesRead);
-            Offset = 4 + numItems * 4;
-            for (int i = 1; i <= numItems; i++)
-            {
-                await reader.ReadAsync(intHolder, 4 * i, 4);
-                int fileLength = ReadUncompressedPrimitives.ToInt32(intHolder, ref numBytesRead);
-                fileLengths.Add(fileLength);
-            }
-            List<MemoryReferenceInFile> memoryReferences = GetMemoryReferences(fileLengths);
-            return memoryReferences;
+            int numItems = ReadUncompressedPrimitives.ToInt32(intHolder.Span, ref numBytesRead);
+            Memory<byte> bytesForLengths = await BlobReader.ReadAsync(PathForFile, 4, numItems * 4);
+            return CompleteGetAdditionalReferences(sameFile, numItems, bytesForLengths);
         }
 
         /// <summary>
@@ -136,35 +82,48 @@ namespace Lazinator.Buffers
         /// This should be called immediately after the constructor. 
         /// </summary>
         /// <returns></returns>
-        public List<MemoryReferenceInFile> GetAdditionalReferences()
+        public List<MemoryReferenceInFile> GetAdditionalReferences(bool sameFile)
         {
-            List<int> fileLengths = new List<int>();
-            using FileStream reader = File.Open(PathForFile, FileMode.Open);
-            byte[] intHolder = new byte[4];
-            reader.Read(intHolder, 0, 4);
+            Memory<byte> intHolder = BlobReader.Read(PathForFile, 0, 4);
             int numBytesRead = 0;
-            int numItems = ReadUncompressedPrimitives.ToInt32(intHolder, ref numBytesRead);
-            Offset = 4 + numItems * 4;
-            for (int i = 1; i <= numItems; i++)
-            {
-                reader.Read(intHolder, 4 * i, 4);
-                int fileLength = ReadUncompressedPrimitives.ToInt32(intHolder, ref numBytesRead);
-                fileLengths.Add(fileLength);
-            }
-            List<MemoryReferenceInFile> memoryReferences = GetMemoryReferences(fileLengths);
+            int numItems = ReadUncompressedPrimitives.ToInt32(intHolder.Span, ref numBytesRead);
+            Memory<byte> bytesForLengths = BlobReader.Read(PathForFile, 4, numItems * 4);
+            return CompleteGetAdditionalReferences(sameFile, numItems, bytesForLengths);
+        }
+
+        private List<MemoryReferenceInFile> CompleteGetAdditionalReferences(bool sameFile, int numItems, Memory<byte> bytesForLengths)
+        {
+            List<int> fileLengths = GetFileLengths(bytesForLengths, numItems);
+            List<MemoryReferenceInFile> memoryReferences = GetMemoryReferences(fileLengths, sameFile);
+            if (sameFile)
+                Offset = 4 + numItems * 4;
             return memoryReferences;
         }
 
-        private List<MemoryReferenceInFile> GetMemoryReferences(List<int> fileLengths)
+        private List<int> GetFileLengths(Memory<byte> bytesForLengths, int numItems)
+        {
+            ReadOnlySpan<byte> spanForLengths = bytesForLengths.Span; 
+            List<int> fileLengths = new List<int>();
+            int numBytesRead = 0;
+            for (int i = 1; i <= numItems; i++)
+            {
+                int fileLength = ReadUncompressedPrimitives.ToInt32(spanForLengths.Slice(numBytesRead), ref numBytesRead);
+                fileLengths.Add(fileLength);
+            }
+            return fileLengths;
+        }
+
+        private List<MemoryReferenceInFile> GetMemoryReferences(List<int> fileLengths, bool sameFile)
         {
             List<MemoryReferenceInFile> memoryReferences = new List<MemoryReferenceInFile>();
+            long numBytesProcessed = Offset;
             for (int i = 1; i <= fileLengths.Count; i++)
             {
                 int length = fileLengths[i];
-                string withExtension = GetPathWithNumber(PathForFile, i);
-                memoryReferences.Add(new MemoryReferenceInFile(withExtension, fileLengths[i - 1]));
+                string referencePath = sameFile ? PathForFile : GetPathWithNumber(PathForFile, i);
+                memoryReferences.Add(new MemoryReferenceInFile(referencePath, BlobReader, fileLengths[i - 1], sameFile ? numBytesProcessed : 0, i));
+                numBytesProcessed += length;
             }
-
             return memoryReferences;
         }
 

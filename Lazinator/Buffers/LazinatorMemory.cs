@@ -861,13 +861,33 @@ namespace Lazinator.Buffers
             return w.LazinatorMemory.InitialMemory;
         }
 
-        public async ValueTask<List<MemoryReferenceInFile>> GetFileReferencesAsync(string path, bool isIndexFile)
-        {
-            var references = EnumerateMemoryReferences();
-            if (!references.Any())
-                return new List<MemoryReferenceInFile>();
-            MemoryReferenceInFile first = new MemoryReferenceInFile(path, references.First()
-        }
+        //public async ValueTask<List<MemoryReferenceInFile>> GetFileReferencesAsync(string path, bool singleFile)
+        //{
+        //    var references = EnumerateMemoryReferences().ToList();
+        //    if (!references.Any())
+        //        return new List<MemoryReferenceInFile>();
+        //    BinaryBufferWriter writer = new BinaryBufferWriter(4 + references.Count() * 4);
+            
+        //    writer.Write(references.Count());
+        //    foreach (var reference in references)
+        //        writer.Write(reference.Length);
+
+        //    if (singleFile)
+        //    {
+        //        for (int i = 0; i < references.Count; i++)
+        //        {
+        //            MemoryReferenceInFile referenceInFile = null;
+        //            MemoryReference reference = references[i];
+        //            if (i == 0)
+        //                referenceInFile = new MemoryReferenceInFile(path, )
+        //        }
+        //    }
+        //    else
+        //    {
+
+        //    }
+        //    MemoryReferenceInFile first = new MemoryReferenceInFile(path, references.First()
+        //}
 
         #endregion
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LazinatorTests.Utilities
 {
-    public class InMemoryBlobStorage
+    public class InMemoryBlobStorage : IBlobReader
     {
         public Dictionary<string, Memory<byte>> Storage = new Dictionary<string, Memory<byte>>();
 
@@ -45,6 +45,17 @@ namespace LazinatorTests.Utilities
                 return Task.FromResult(result);
             }
             return Task.FromResult(default(TValue));
+        }
+
+        public Memory<byte> Read(string path, long offset, int length)
+        {
+            Memory<byte> bytes = Storage[path].Slice((int)offset, length);
+            return bytes;
+        }
+
+        public ValueTask<Memory<byte>> ReadAsync(string path, long offset, int length)
+        {
+            return ValueTask.FromResult(Read(path, offset, length));
         }
 
         public Task Set<TKey>(TKey key, ILazinator value) where TKey : ILazinator
