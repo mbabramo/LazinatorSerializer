@@ -847,7 +847,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 lengthForLengths += 20;
             }
             
-            int previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
+            long previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
             

@@ -408,7 +408,7 @@ namespace LazinatorTests.Examples.Tuples
             
             int lengthForLengths = 4;
             
-            int previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
+            long previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
             

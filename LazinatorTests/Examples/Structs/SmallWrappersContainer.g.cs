@@ -1219,7 +1219,7 @@ namespace LazinatorTests.Examples.Structs
                 lengthForLengths += 7;
             }
             
-            int previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
+            long previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
             

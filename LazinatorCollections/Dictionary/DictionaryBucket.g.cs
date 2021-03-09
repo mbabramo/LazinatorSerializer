@@ -601,7 +601,7 @@ namespace LazinatorCollections.Dictionary
                 lengthForLengths += 8;
             }
             
-            int previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
+            long previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
             

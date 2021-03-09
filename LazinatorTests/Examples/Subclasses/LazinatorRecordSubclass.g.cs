@@ -218,7 +218,7 @@ namespace LazinatorTests.Examples.Subclasses
             WritePrimitivePropertiesIntoBuffer(ref writer, options, includeUniqueID);
             int lengthForLengths = 0;
             
-            int previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
+            long previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
             

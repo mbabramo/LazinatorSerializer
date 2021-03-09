@@ -120,7 +120,7 @@ namespace Lazinator.Buffers
         /// <summary>
         /// An earlier position in the buffer, to which we can write information on the lengths that we are writing later in the buffer.
         /// </summary>
-        private int _LengthsPosition;
+        private long _LengthsPosition;
 
         Span<byte> ActiveSpan => ActiveMemory == null ? new Span<byte>() : ActiveMemory.Memory.Span;
 
@@ -137,7 +137,7 @@ namespace Lazinator.Buffers
         /// <summary>
         /// A span containing space reserved to write length values of what is written later in the buffer.
         /// </summary>
-        public Span<byte> LengthsSpan => CompletedMemory.IsEmpty ? ActiveSpan.Slice(_LengthsPosition) : CompletedMemory.InitialMemory.Span.Slice(_LengthsPosition);
+        public Span<byte> LengthsSpan => CompletedMemory.IsEmpty ? ActiveSpan.Slice((int) _LengthsPosition) : CompletedMemory.Slice(_LengthsPosition).InitialMemory.Span;
 
         /// <summary>
         /// Sets the position to the beginning of the buffer. It does not dispose the underlying memory, but prepares to rewrite it.
@@ -464,10 +464,10 @@ namespace Lazinator.Buffers
         /// Designates the current active memory position as the position at which to store length information. 
         /// </summary>
         /// <param name="bytesToReserve">The number of bytes to reserve</param>
-        public int SetLengthsPosition(int bytesToReserve)
+        public long SetLengthsPosition(int bytesToReserve)
         {
-            int previousPosition = _LengthsPosition;
-            _LengthsPosition = _ActiveMemoryPosition;
+            long previousPosition = _LengthsPosition;
+            _LengthsPosition = OverallMemoryPosition;
             Skip(bytesToReserve);
             return previousPosition;
         }
@@ -476,7 +476,7 @@ namespace Lazinator.Buffers
         /// Resets the lengths position to the previous position.
         /// </summary>
         /// <param name="previousPosition"></param>
-        public void ResetLengthsPosition(int previousPosition)
+        public void ResetLengthsPosition(long previousPosition)
         {
             _LengthsPosition = previousPosition;
         }
