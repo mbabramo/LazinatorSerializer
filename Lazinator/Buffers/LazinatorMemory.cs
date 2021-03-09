@@ -105,6 +105,9 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public LazinatorMemory WithAppendedChunk(MemoryReference chunk)
         {
+            if (IsEmpty)
+                return new LazinatorMemory(chunk);
+
             var evenMoreOwnedMemory = MoreOwnedMemory?.ToList() ?? new List<MemoryReference>();
 
             evenMoreOwnedMemory.Add(chunk);
@@ -442,6 +445,8 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public int NumMemoryChunks()
         {
+            if (InitialOwnedMemory == null)
+                return 0;
             return 1 + (MoreOwnedMemory == null ? 0 : MoreOwnedMemory.Count);
         }
 

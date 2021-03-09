@@ -17,8 +17,8 @@ namespace Lazinator.Buffers
         public bool LazinatorShouldNotReturnToPool;
 
         IMemoryOwner<byte> CurrentBuffer { get; set; }
-        public Memory<byte> Memory => CurrentBuffer.Memory;
-
+        public Memory<byte> Memory => Length == null ? CurrentBuffer.Memory : CurrentBuffer.Memory.Slice(0, (int) Length);
+        public int? Length { get; set; }
 
         public bool Disposed { get; protected internal set; }
         public static long NextAllocationID = 0; // we track all allocations to facilitate debugging of memory allocation and disposal

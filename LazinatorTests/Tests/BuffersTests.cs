@@ -968,5 +968,19 @@ namespace LazinatorTests.Tests
             uint h2 = (new ExampleGrandchild() { MyInt = 17 }).GetBinaryHashCode32();
             h.Should().Be(h2);
         }
+
+        [Fact]
+        public void SplittableEntitiesWork()
+        {
+            Example e = GetTypicalExample();
+            LazinatorMemory result_withoutSplitting = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false));
+            LazinatorMemory result = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, 10));
+            result.MoreOwnedMemory.Count().Should().BeGreaterThan(0);
+            LazinatorMemory consolidated = result.GetConsolidatedMemory();
+            consolidated.Matches(result_withoutSplitting.InitialMemory.Span).Should().BeTrue();
+
+            Example e2 = new Example(consolidated);
+            ExampleEqual(e, e2).Should().BeTrue();
+        }
     }
 }

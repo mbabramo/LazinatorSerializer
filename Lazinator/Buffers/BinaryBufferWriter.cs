@@ -137,7 +137,7 @@ namespace Lazinator.Buffers
         /// <summary>
         /// A span containing space reserved to write length values of what is written later in the buffer.
         /// </summary>
-        public Span<byte> LengthsSpan => ActiveSpan.Slice(_LengthsPosition);
+        public Span<byte> LengthsSpan => CompletedMemory.IsEmpty ? ActiveSpan.Slice(_LengthsPosition) : CompletedMemory.InitialMemory.Span.Slice(_LengthsPosition);
 
         /// <summary>
         /// Sets the position to the beginning of the buffer. It does not dispose the underlying memory, but prepares to rewrite it.
@@ -181,7 +181,7 @@ namespace Lazinator.Buffers
         public void ConsiderSwitchToNextBuffer(int newBufferThreshold)
         {
             if (ActiveMemoryPosition >= newBufferThreshold)
-                MoveActiveToCompletedMemory();
+                MoveActiveToCompletedMemory((int) (newBufferThreshold * 1.2));
         }
 
         /// <summary>
@@ -192,6 +192,7 @@ namespace Lazinator.Buffers
         {
             CompletedMemory = CompletedMemory.WithAppendedChunk(new MemoryReference(ActiveMemory, GetActiveMemoryVersion(), 0, ActiveMemoryPosition));
             ActiveMemory = new ExpandableBytes(minSizeofNewBuffer);
+            ActiveMemoryPosition = 0;
         }
 
         /// <summary>
@@ -235,7 +236,7 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         private int GetActiveMemoryVersion()
         {
-            if (CompletedMemory.MoreOwnedMemory.Any())
+            if (!CompletedMemory.IsEmpty && (CompletedMemory.MoreOwnedMemory?.Any() ?? false))
                 return CompletedMemory.MoreOwnedMemory.Last().ReferencedMemoryVersion + 1;
             if (CompletedMemory.IsEmpty)
                 return 0;
