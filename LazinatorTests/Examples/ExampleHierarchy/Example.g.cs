@@ -2061,35 +2061,23 @@ namespace LazinatorTests.Examples
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, /*<$$ if=async,0 $$>*/in /*<$$/if $$>*//*<$$ if=async,1 $$>*//*<$$/if $$>*/LazinatorSerializationOptions options, bool includeUniqueID)
         {
             WriteUncompressedPrimitives.WriteNullableDouble(ref writer, _MyNullableDouble);
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
             WriteUncompressedPrimitives.WriteBool(ref writer, _MyBool);
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
             EncodeCharAndString.WriteCharInTwoBytes(ref writer, _MyChar);
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
             CompressedIntegralTypes.WriteCompressedDateTime(ref writer, _MyDateTime);
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
             if (LazinatorObjectVersion >= 3)
             {
                 EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _MyNewString);
             }
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
             CompressedDecimal.WriteCompressedNullableDecimal(ref writer, _MyNullableDecimal);
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
             CompressedIntegralTypes.WriteCompressedNullableTimeSpan(ref writer, _MyNullableTimeSpan);
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
             if (LazinatorObjectVersion < 3)
             {
                 EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _MyOldString);
             }
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _MyString);
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _MyStringUncompressed);
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
             CompressedIntegralTypes.WriteCompressedInt(ref writer, (int) _MyTestEnum);
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
             CompressedIntegralTypes.WriteCompressedNullableByte(ref writer, (byte?) _MyTestEnumByteNullable);
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
             CompressedIntegralTypes.WriteCompressedUInt(ref writer, _MyUInt);
         }
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, long startOfObjectPosition)
