@@ -309,7 +309,7 @@ namespace Lazinator.Core
                 {
                     if (child != null)
                     {
-                        long length = childStorage.Length; // DEBUG
+                        long length = childStorage.Length;
                         child.UpdateStoredBuffer(ref writer, startPosition, length, options.IncludeChildrenMode, true);
                     }
                 }
@@ -696,7 +696,7 @@ namespace Lazinator.Core
             bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction)
         {
             LazinatorMemory original = await getChildSliceForFieldFn();
-            int length = (int) /* DEBUG */ original.Length;
+            long length = original.Length;
             if (!isAccessed && length > 0)
             {
                 // object has never been loaded into memory, so there is no need to verify cleanness
@@ -1314,7 +1314,9 @@ namespace Lazinator.Core
             Pipe pipe = new Pipe();
             AddToPipe(lazinator, pipe);
             pipe.Writer.Complete();
-            return (pipe, (int) /* DEBUG */  lazinator.LazinatorMemoryStorage.Length);
+            if (lazinator.LazinatorMemoryStorage.Length > int.MaxValue)
+                ThrowHelper.ThrowTooLargeException(int.MaxValue);
+            return (pipe, (int) lazinator.LazinatorMemoryStorage.Length);
         }
 
         /// <summary>

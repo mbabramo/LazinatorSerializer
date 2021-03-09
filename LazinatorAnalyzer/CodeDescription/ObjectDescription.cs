@@ -261,7 +261,7 @@ namespace Lazinator.CodeDescription
 
                 ClosesGeneric = (!SymbolEqualityComparer.Default.Equals(baseILazinatorType.ConstructedFrom, baseILazinatorType));
                 if (ClosesGeneric)
-                    ClosedGenericConstructedFrom = new ObjectDescription(baseILazinatorType.ConstructedFrom, compilation, baseILazinatorType.ConstructedFrom.Locations.Select(x => x?.SourceTree?.FilePath).FirstOrDefault()); // DEBUG
+                    ClosedGenericConstructedFrom = new ObjectDescription(baseILazinatorType.ConstructedFrom, compilation, baseILazinatorType.ConstructedFrom.Locations.Select(x => x?.SourceTree?.FilePath).FirstOrDefault());
 
                 if (baseILazinatorType != null && baseILazinatorType.Name != "Object")
                 {
@@ -297,14 +297,6 @@ namespace Lazinator.CodeDescription
                     throw new LazinatorCodeGenException($"{InterfaceTypeSymbol} cannot have different Length property from base.");
 
             Splittable = InterfaceTypeSymbol.HasAttributeOfType<CloneSplittableAttribute>() || RequiresLongLengths;
-            if (InterfaceTypeSymbol.ToString().Contains("Example"))
-            {
-                var DEBUG = 0;
-            }
-            if (Splittable)
-            {
-                var DEBUG = 0;
-            }
             AllowNonlazinatorGenerics = InterfaceTypeSymbol.HasAttributeOfType<CloneAllowNonlazinatorOpenGenericsAttribute>();
             SuppressLazinatorVersionByte = InterfaceTypeSymbol.HasAttributeOfType<CloneExcludeLazinatorVersionByteAttribute>();
             GenerateRefStructIfNotGenerating = InterfaceTypeSymbol.HasAttributeOfType<CloneGenerateRefStructAttribute>();
