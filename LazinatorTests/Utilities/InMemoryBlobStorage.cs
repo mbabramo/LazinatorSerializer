@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LazinatorTests.Utilities
 {
-    public class InMemoryBlobStorage : IBlobReader
+    public class InMemoryBlobStorage : IBlobManager
     {
         public Dictionary<string, Memory<byte>> Storage = new Dictionary<string, Memory<byte>>();
 
@@ -72,6 +72,34 @@ namespace LazinatorTests.Utilities
             Memory<byte> memory = value.SerializeToArray();
             Storage[stringKey] = memory;
             return Task.CompletedTask;
+        }
+
+        public void Write(string path, Memory<byte> bytes)
+        {
+            Storage[path] = bytes;
+        }
+
+        public ValueTask WriteAsync(string path, Memory<byte> bytes)
+        {
+            Write(path, bytes);
+            return ValueTask.CompletedTask;
+        }
+
+
+        public void Append(string path, Memory<byte> bytes)
+        {
+            Memory<byte> existingBytes = Storage[path];
+            byte[] allBytes = new byte[existingBytes.Length + bytes.Length];
+            for (int i = 0; i < existingBytes.Length; i++)
+                allBytes[i] = existingBytes.Span[i];
+            for (int i = 0; i < bytes.Length; i++)
+                allBytes[existingBytes.Length + i] = bytes.Span[i];
+        }
+
+        public ValueTask AppendAsync(string path, Memory<byte> bytes)
+        {
+            Append(path, bytes);
+            return ValueTask.CompletedTask;
         }
     }
 }

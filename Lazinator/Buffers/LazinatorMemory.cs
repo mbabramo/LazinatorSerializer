@@ -861,33 +861,42 @@ namespace Lazinator.Buffers
             return w.LazinatorMemory.InitialMemory;
         }
 
-        //public async ValueTask<List<MemoryReferenceInFile>> GetFileReferencesAsync(string path, bool singleFile)
-        //{
-        //    var references = EnumerateMemoryReferences().ToList();
-        //    if (!references.Any())
-        //        return new List<MemoryReferenceInFile>();
-        //    BinaryBufferWriter writer = new BinaryBufferWriter(4 + references.Count() * 4);
-            
-        //    writer.Write(references.Count());
-        //    foreach (var reference in references)
-        //        writer.Write(reference.Length);
+        public async ValueTask<List<MemoryReferenceInBlob>> WriteToBlobsAsync(string path, IBlobManager blobManager, bool singleFile)
+        {
+            var references = EnumerateMemoryReferences().ToList();
+            if (!references.Any())
+                return new List<MemoryReferenceInBlob>();
+            BinaryBufferWriter writer = new BinaryBufferWriter(4 + references.Count() * 4);
 
-        //    if (singleFile)
-        //    {
-        //        for (int i = 0; i < references.Count; i++)
-        //        {
-        //            MemoryReferenceInFile referenceInFile = null;
-        //            MemoryReference reference = references[i];
-        //            if (i == 0)
-        //                referenceInFile = new MemoryReferenceInFile(path, )
-        //        }
-        //    }
-        //    else
-        //    {
+            writer.Write(references.Count());
+            foreach (var reference in references)
+                writer.Write(reference.Length);
 
-        //    }
-        //    MemoryReferenceInFile first = new MemoryReferenceInFile(path, references.First()
-        //}
+            blobManager.Write(path, writer.ActiveMemory.Memory);
+            List<MemoryReferenceInBlob> result = new List<MemoryReferenceInBlob>();
+            MemoryReferenceInBlob indexFile = new MemoryReferenceInBlob(path, blobManager);
+            result.Add(indexFile);
+            int numBytesWritten = writer.ActiveMemory.Memory.Length;
+            for (int i = 1; i < references.Count; i++)
+            {
+                MemoryReference reference = references[i];
+                Memory<byte> memory = reference.Memory;
+                string revisedPath = singleFile ? MemoryReferenceInBlob.GetPathWithNumber(path, i) : path;
+                MemoryReferenceInBlob referenceInFile = new MemoryReferenceInBlob(revisedPath, blobManager, reference.Length, singleFile ? numBytesWritten : 0, i);
+                result.Add(referenceInFile);
+                if (singleFile)
+                    await blobManager.WriteAsync(revisedPath, memory);
+                else
+                    await blobManager.AppendAsync(revisedPath, memory);
+                numBytesWritten += reference.Length;
+            }
+            return result;
+        }
+
+        public List<MemoryReferenceInBlob> WriteToBlobs(string path, IBlobManager blobManager, bool singleFile)
+        {
+            throw new NotImplementedException(); // DEBUG
+        }
 
         #endregion
 

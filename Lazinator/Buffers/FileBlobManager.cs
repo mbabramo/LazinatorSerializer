@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Buffers
 {
-    public class FileBlobReader : IBlobReader
+    public class FileBlobManager : IBlobManager
     {
+
         public Memory<byte> Read(string path, long offset, int length)
         {
             using FileStream fs = File.OpenRead(path);
@@ -27,6 +28,25 @@ namespace Lazinator.Buffers
                 fs.Seek(offset, SeekOrigin.Begin);
             await fs.ReadAsync(target);
             return target;
+        }
+
+        public void Write(string path, Memory<byte> bytes)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ValueTask WriteAsync(string path, Memory<byte> bytes)
+        {
+            throw new NotImplementedException();
+        }
+        public void Append(string path, Memory<byte> bytes)
+        {
+            throw new NotImplementedException(); // DEBUG
+        }
+
+        public ValueTask AppendAsync(string path, Memory<byte> bytes)
+        {
+            throw new NotImplementedException();
         }
     }
 }
