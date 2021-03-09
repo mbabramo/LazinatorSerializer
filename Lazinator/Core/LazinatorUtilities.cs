@@ -67,14 +67,17 @@ namespace Lazinator.Core
                 return EncodeToNewBinaryBufferWriter(lazinator, includeChildrenMode);
 
             // We can use the original storage. But we still have to copy it into a new buffer, as requested.
-            BinaryBufferWriter writer = new BinaryBufferWriter((int) /* DEBUG */ originalStorage.Length);
+            BinaryBufferWriter writer = new BinaryBufferWriter(GetBufferSize(originalStorage.Length));
             originalStorage.WriteToBinaryBuffer(ref writer);
             return writer.LazinatorMemory;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static int GetBufferSize(long ultimatelyRequiredLength) => ultimatelyRequiredLength > int.MaxValue || ultimatelyRequiredLength == 0 ? ExpandableBytes.DefaultMinBufferSize : (int)ultimatelyRequiredLength;
+
         private static LazinatorMemory EncodeToNewBinaryBufferWriter<T>(T lazinatorObject, IncludeChildrenMode includeChildrenMode) where T : ILazinator
         {
-            int bufferSize = lazinatorObject.LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : (int) /* DEBUG */ lazinatorObject.LazinatorMemoryStorage.Length;
+            int bufferSize = GetBufferSize(lazinatorObject.LazinatorMemoryStorage.Length);
             BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
             lazinatorObject.SerializeToExistingBuffer(ref writer, new LazinatorSerializationOptions(includeChildrenMode, false, false));
             return writer.LazinatorMemory;
@@ -104,14 +107,14 @@ namespace Lazinator.Core
                 return await EncodeToNewBinaryBufferWriterAsync(lazinator, includeChildrenMode);
 
             // We can use the original storage. But we still have to copy it into a new buffer, as requested.
-            BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer((int) /* DEBUG */ originalStorage.Length);
+            BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(GetBufferSize(originalStorage.Length));
             await originalStorage.WriteToBinaryBufferAsync(writer);
             return writer.LazinatorMemory;
         }
 
         private async static ValueTask<LazinatorMemory> EncodeToNewBinaryBufferWriterAsync<T>(T lazinatorObject, IncludeChildrenMode includeChildrenMode) where T : ILazinator, ILazinatorAsync
         {
-            int bufferSize = lazinatorObject.LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : (int) /* DEBUG */ lazinatorObject.LazinatorMemoryStorage.Length;
+            int bufferSize = GetBufferSize(lazinatorObject.LazinatorMemoryStorage.Length);
             BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(bufferSize);
             await lazinatorObject.SerializeToExistingBufferAsync(writer, new LazinatorSerializationOptions(includeChildrenMode, false, false));
             return writer.LazinatorMemory;

@@ -973,14 +973,21 @@ namespace LazinatorTests.Tests
         public void SplittableEntitiesWork()
         {
             Example e = GetTypicalExample();
-            LazinatorMemory result_withoutSplitting = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false));
-            LazinatorMemory result = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, 10));
-            result.MoreOwnedMemory.Count().Should().BeGreaterThan(0);
-            LazinatorMemory consolidated = result.GetConsolidatedMemory();
-            consolidated.Matches(result_withoutSplitting.InitialMemory.Span).Should().BeTrue();
+            LazinatorMemory singleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false));
+            LazinatorMemory multipleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, 10));
+            multipleBufferResult.MoreOwnedMemory.Count().Should().BeGreaterThan(0);
+            LazinatorMemory consolidated = multipleBufferResult.GetConsolidatedMemory();
+            consolidated.Matches(singleBufferResult.InitialMemory.Span).Should().BeTrue();
 
             Example e2 = new Example(consolidated);
             ExampleEqual(e, e2).Should().BeTrue();
+
+            Example e3 = new Example(multipleBufferResult);
+            ExampleEqual(e, e3).Should().BeTrue();
+
+            Example e4 = new Example(multipleBufferResult);
+            Example e5 = e4.CloneLazinatorTyped();
+            ExampleEqual(e, e5).Should().BeTrue();
         }
     }
 }

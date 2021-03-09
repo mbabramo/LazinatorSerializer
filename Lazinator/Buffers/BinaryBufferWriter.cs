@@ -3,6 +3,7 @@ using static System.Buffers.Binary.BinaryPrimitives;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics;
 
 namespace Lazinator.Buffers
 {
@@ -137,7 +138,17 @@ namespace Lazinator.Buffers
         /// <summary>
         /// A span containing space reserved to write length values of what is written later in the buffer.
         /// </summary>
-        public Span<byte> LengthsSpan => CompletedMemory.IsEmpty ? ActiveSpan.Slice((int) _LengthsPosition) : CompletedMemory.Slice(_LengthsPosition).InitialMemory.Span;
+        public Span<byte> LengthsSpan
+        {
+            get
+            {
+                if (CompletedMemory.IsEmpty)
+                    return ActiveSpan.Slice((int)_LengthsPosition);
+                if (_LengthsPosition >= CompletedMemory.Length)
+                    return ActiveSpan.Slice((int)(_LengthsPosition - CompletedMemory.Length));
+                return CompletedMemory.Slice(_LengthsPosition).InitialMemory.Span; 
+            }
+        }
 
         /// <summary>
         /// Sets the position to the beginning of the buffer. It does not dispose the underlying memory, but prepares to rewrite it.
