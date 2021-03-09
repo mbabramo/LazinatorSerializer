@@ -861,11 +861,12 @@ namespace Lazinator.Buffers
             return w.LazinatorMemory.InitialMemory;
         }
 
-        public async ValueTask<List<MemoryReferenceInFile>> GetFileReferencesAsync()
+        public async ValueTask<List<MemoryReferenceInFile>> GetFileReferencesAsync(string path, bool isIndexFile)
         {
-            var memoryReferences = EnumerateMemoryReferences().ToList();
-            List<int> fileLengths = memoryReferences.Select(x => x.Length).ToList();
-            List<MemoryReferenceInFile>
+            var references = EnumerateMemoryReferences();
+            if (!references.Any())
+                return new List<MemoryReferenceInFile>();
+            MemoryReferenceInFile first = new MemoryReferenceInFile(path, references.First()
         }
 
         #endregion
