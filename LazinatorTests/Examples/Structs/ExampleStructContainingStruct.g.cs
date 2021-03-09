@@ -69,7 +69,7 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleNullableStruct_ByteIndex, _MyExampleNullableStruct_ByteLength, SizeOfLength.SkipLength, null);if (childData.Length == 0)
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleNullableStruct_ByteIndex, _MyExampleNullableStruct_ByteLength, null); if (childData.Length == 0)
                 {
                     _MyExampleNullableStruct = default;
                 }
@@ -95,7 +95,7 @@ namespace LazinatorTests.Examples
                     }
                     else
                     {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleNullableStruct_ByteIndex, _MyExampleNullableStruct_ByteLength, SizeOfLength.SkipLength, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleNullableStruct_ByteIndex, _MyExampleNullableStruct_ByteLength, null);
                         var toReturn = new ExampleStructContainingClasses(childData);
                         toReturn.IsDirty = false;
                         return toReturn;
@@ -142,7 +142,7 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, SizeOfLength.SkipLength, null);_MyExampleStructContainingClasses = new ExampleStructContainingClasses(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, null); _MyExampleStructContainingClasses = new ExampleStructContainingClasses(childData);
                 
             }
             _MyExampleStructContainingClasses_Accessed = true;
@@ -161,7 +161,7 @@ namespace LazinatorTests.Examples
                     }
                     else
                     {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, SizeOfLength.SkipLength, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, null);
                         var toReturn = new ExampleStructContainingClasses(childData);
                         toReturn.IsDirty = false;
                         return toReturn;
@@ -617,7 +617,7 @@ namespace LazinatorTests.Examples
                     var byteIndexCopy = _MyExampleNullableStruct_ByteIndex;
                     var byteLengthCopy = _MyExampleNullableStruct_ByteLength;
                     var copy = _MyExampleNullableStruct.Value;
-                    WriteChild(ref writer, ref copy, options, _MyExampleNullableStruct_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, null);
+                    WriteChild(ref writer, ref copy, options, _MyExampleNullableStruct_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, null), null);
                     _MyExampleNullableStruct = copy;
                     lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                     if (lengthValue > int.MaxValue)
@@ -642,7 +642,7 @@ namespace LazinatorTests.Examples
                 var serializedBytesCopy = LazinatorMemoryStorage;
                 var byteIndexCopy = _MyExampleStructContainingClasses_ByteIndex;
                 var byteLengthCopy = _MyExampleStructContainingClasses_ByteLength;
-                WriteChild(ref writer, ref _MyExampleStructContainingClasses, options, _MyExampleStructContainingClasses_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, null);
+                WriteChild(ref writer, ref _MyExampleStructContainingClasses, options, _MyExampleStructContainingClasses_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, null), null);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {

@@ -88,7 +88,7 @@ namespace Lazinator.Wrappers
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonNullValue_ByteIndex, _NonNullValue_ByteLength, SizeOfLength.SkipLength, null);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonNullValue_ByteIndex, _NonNullValue_ByteLength, null);
                 _NonNullValue = DeserializationFactory.Instance.CreateBasedOnType<T>(childData); 
             }
             _NonNullValue_Accessed = true;
@@ -489,7 +489,7 @@ namespace Lazinator.Wrappers
                 var serializedBytesCopy = LazinatorMemoryStorage;
                 var byteIndexCopy = _NonNullValue_ByteIndex;
                 var byteLengthCopy = _NonNullValue_ByteLength;
-                WriteChild(ref writer, ref _NonNullValue, options, _NonNullValue_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, null);
+                WriteChild(ref writer, ref _NonNullValue, options, _NonNullValue_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, null), null);
                 
             }
             if (options.UpdateStoredBuffer)

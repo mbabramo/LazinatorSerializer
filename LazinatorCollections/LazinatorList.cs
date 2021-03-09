@@ -180,7 +180,7 @@ namespace LazinatorCollections
 
         private LazinatorMemory GetMainListSerializedWithoutDeserializing()
         {
-            return GetChildSlice(LazinatorMemoryStorage, _MainListSerialized_ByteIndex, _MainListSerialized_ByteLength, SizeOfLength.SkipLength, null);
+            return GetChildSlice(LazinatorMemoryStorage, _MainListSerialized_ByteIndex, _MainListSerialized_ByteLength, null);
         }
 
         private int GetOffset(int index)
@@ -485,7 +485,7 @@ namespace LazinatorCollections
                         if (status.IsDeserialized)
                         {
                             var underlyingItem = _DeserializedItems[status.DeserializedIndex];
-                            WriteChild(ref w, ref underlyingItem, options, true, () => status.IsInOriginalItems ? GetListMemberSlice(status.OriginalIndex) : LazinatorMemory.EmptyLazinatorMemory, SizeOfLength.SkipLength, this);
+                            WriteChild(ref w, ref underlyingItem, options, true, () => status.IsInOriginalItems ? GetListMemberSlice(status.OriginalIndex) : LazinatorMemory.EmptyLazinatorMemory, this);
                             if (underlyingItem != null && underlyingItem.IsStruct)
                             { // the struct that was just written may be noted as dirty, but it's really clean. Cloning is the only safe way to get a clean hierarchy.
                                 underlyingItem = underlyingItem.CloneNoBuffer();

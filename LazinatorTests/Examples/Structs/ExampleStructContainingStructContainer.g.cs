@@ -72,7 +72,7 @@ namespace LazinatorTests.Examples.Structs
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, SizeOfLength.SkipLength, null);_Subcontainer = new ExampleStructContainingStruct(childData)
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, null); _Subcontainer = new ExampleStructContainingStruct(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
@@ -94,7 +94,7 @@ namespace LazinatorTests.Examples.Structs
                     }
                     else
                     {
-                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, SizeOfLength.SkipLength, null);
+                        LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, null);
                         var toReturn = new ExampleStructContainingStruct(childData);
                         toReturn.IsDirty = false;
                         return toReturn;
@@ -486,7 +486,7 @@ namespace LazinatorTests.Examples.Structs
                 {
                     var deserialized = Subcontainer;
                 }
-                WriteChild(ref writer, ref _Subcontainer, options, _Subcontainer_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, this);
+                WriteChild(ref writer, ref _Subcontainer, options, _Subcontainer_Accessed, () => GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, null), this);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {

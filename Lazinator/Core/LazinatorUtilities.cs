@@ -277,10 +277,10 @@ namespace Lazinator.Core
         /// <param name="options">Serialization options</param>
         /// <param name="childHasBeenAccessed">True if the child's value has been accessed.</param>
         /// <param name="getChildSliceFn">A function to return the child's original storage</param>
-        /// <param name="sizeOfLength">The number of bytes to write the length of the object</param>
         /// <param name="parent">The parent of the object being written</param>
+        /// 
         public static void WriteChild<T>(ref BinaryBufferWriter writer, ref T child,
-            LazinatorSerializationOptions options, bool childHasBeenAccessed, ReturnLazinatorMemoryDelegate getChildSliceFn, SizeOfLength sizeOfLength, ILazinator parent) where T : ILazinator
+            LazinatorSerializationOptions options, bool childHasBeenAccessed, ReturnLazinatorMemoryDelegate getChildSliceFn, ILazinator parent) where T : ILazinator
         {
             bool childCouldHaveChanged = childHasBeenAccessed || (child != null && options.IncludeChildrenMode != child.OriginalIncludeChildrenMode);
             LazinatorMemory childStorage = default;
@@ -332,10 +332,10 @@ namespace Lazinator.Core
         /// <param name="options">Serialization options</param>
         /// <param name="childHasBeenAccessed">True if the child's value has been accessed.</param>
         /// <param name="getChildSliceFn">A function to return the child's original storage</param>
-        /// <param name="sizeOfLength">The number of bytes to write the length of the object</param>
         /// <param name="parent">The parent of the object being written</param>
+        /// 
         public async static ValueTask WriteNonAsyncChildAsync<T>(BinaryBufferWriterContainer writer, T child,
-            LazinatorSerializationOptions options, bool childHasBeenAccessed, ReturnLazinatorMemoryDelegateAsync getChildSliceFn, SizeOfLength sizeOfLength, ILazinator parent) where T : ILazinator
+            LazinatorSerializationOptions options, bool childHasBeenAccessed, ReturnLazinatorMemoryDelegateAsync getChildSliceFn, ILazinator parent) where T : ILazinator
         {
             bool childCouldHaveChanged = childHasBeenAccessed || (child != null && options.IncludeChildrenMode != child.OriginalIncludeChildrenMode);
             LazinatorMemory childStorage = default;
@@ -387,10 +387,10 @@ namespace Lazinator.Core
         /// <param name="options">Serialization options</param>
         /// <param name="childHasBeenAccessed">True if the child's value has been accessed.</param>
         /// <param name="getChildSliceFn">A function to return the child's original storage</param>
-        /// <param name="sizeOfLength">The number of bytes to write the length of the object</param>
         /// <param name="parent">The parent of the object being written</param>
+        /// 
         public async static ValueTask WriteChildAsync<T>(BinaryBufferWriterContainer writer, T child,
-            LazinatorSerializationOptions options, bool childHasBeenAccessed, ReturnLazinatorMemoryDelegateAsync getChildSliceFn, SizeOfLength sizeOfLength, ILazinator parent) where T : ILazinator, ILazinatorAsync
+            LazinatorSerializationOptions options, bool childHasBeenAccessed, ReturnLazinatorMemoryDelegateAsync getChildSliceFn, ILazinator parent) where T : ILazinator, ILazinatorAsync
         {
             bool childCouldHaveChanged = childHasBeenAccessed || (child != null && options.IncludeChildrenMode != child.OriginalIncludeChildrenMode);
             LazinatorMemory childStorage = default;
@@ -1204,10 +1204,9 @@ namespace Lazinator.Core
         /// <param name="serializedBytes">The serialized bytes for the parent object</param>
         /// <param name="byteOffset">The byte offset into the parent object of the length prefix for the child object</param>
         /// <param name="byteLength">The byte length of the child, including the length (if applicable)</param>
-        /// <param name="sizeOfLength">The number of bytes used to store the length at the beginning of the child, if length is not skipped</param>
         /// <param name="fixedLength"The fixed length of the child, if the length is not included in the serialized bytes
         /// <returns></returns>
-        public static LazinatorMemory GetChildSlice(LazinatorMemory serializedBytes, long byteOffset, long byteLength, SizeOfLength sizeOfLength, int? fixedLength)
+        public static LazinatorMemory GetChildSlice(LazinatorMemory serializedBytes, long byteOffset, long byteLength, int? fixedLength)
         {
             if (serializedBytes.IsEmpty)
             {
@@ -1227,9 +1226,9 @@ namespace Lazinator.Core
         /// <param name="lengthInSingleByte">Indicates that only one byte of the serialized bytes is used to store the object</param>
         /// <param name="fixedLength"The fixed length of the child, if the length is not included in the serialized bytes
         /// <returns></returns>
-        public async static ValueTask<LazinatorMemory> GetChildSliceAsync(LazinatorMemory serializedBytes, int byteOffset, int byteLength, SizeOfLength sizeOfLength, int? fixedLength)
+        public async static ValueTask<LazinatorMemory> GetChildSliceAsync(LazinatorMemory serializedBytes, int byteOffset, int byteLength, int? fixedLength)
         {
-            var result = GetChildSlice(serializedBytes, byteOffset, byteLength, SizeOfLength.SkipLength, fixedLength);
+            var result = GetChildSlice(serializedBytes, byteOffset, byteLength, fixedLength);
             await result.LoadInitialMemoryAsync();
             return result;
         }

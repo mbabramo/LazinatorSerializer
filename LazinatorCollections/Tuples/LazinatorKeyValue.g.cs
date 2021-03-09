@@ -72,7 +72,7 @@ namespace LazinatorCollections.Tuples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Key_ByteIndex, _Key_ByteLength, SizeOfLength.SkipLength, null);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Key_ByteIndex, _Key_ByteLength, null);
                 _Key = DeserializationFactory.Instance.CreateBasedOnType<TKey>(childData); 
             }
             _Key_Accessed = true;
@@ -111,7 +111,7 @@ namespace LazinatorCollections.Tuples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Value_ByteIndex, _Value_ByteLength, SizeOfLength.SkipLength, null);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Value_ByteIndex, _Value_ByteLength, null);
                 _Value = DeserializationFactory.Instance.CreateBasedOnType<TValue>(childData); 
             }
             _Value_Accessed = true;
@@ -600,7 +600,7 @@ namespace LazinatorCollections.Tuples
                 var serializedBytesCopy = LazinatorMemoryStorage;
                 var byteIndexCopy = _Key_ByteIndex;
                 var byteLengthCopy = _Key_ByteLength;
-                WriteChild(ref writer, ref _Key, options, _Key_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, null);
+                WriteChild(ref writer, ref _Key, options, _Key_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, null), null);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {
@@ -623,7 +623,7 @@ namespace LazinatorCollections.Tuples
                 var serializedBytesCopy = LazinatorMemoryStorage;
                 var byteIndexCopy = _Value_ByteIndex;
                 var byteLengthCopy = _Value_ByteLength;
-                WriteChild(ref writer, ref _Value, options, _Value_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, SizeOfLength.SkipLength, null), SizeOfLength.SkipLength, null);
+                WriteChild(ref writer, ref _Value, options, _Value_Accessed, () => GetChildSlice(serializedBytesCopy, byteIndexCopy, byteLengthCopy, null), null);
                 lengthValue = writer.ActiveMemoryPosition - startOfChildPosition;
                 if (lengthValue > int.MaxValue)
                 {
