@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Lazinator.Exceptions;
 using Lazinator.Support;
+using Lazinator.Wrappers;
 
 namespace Lazinator.Buffers
 {
@@ -858,6 +859,13 @@ namespace Lazinator.Buffers
             foreach (byte b in EnumerateBytes(includeOutsideOfRange))
                 w.Write(b);
             return w.LazinatorMemory.InitialMemory;
+        }
+
+        public async ValueTask<List<MemoryReferenceInFile>> GetFileReferencesAsync()
+        {
+            var memoryReferences = EnumerateMemoryReferences().ToList();
+            List<int> fileLengths = memoryReferences.Select(x => x.Length).ToList();
+            List<MemoryReferenceInFile>
         }
 
         #endregion

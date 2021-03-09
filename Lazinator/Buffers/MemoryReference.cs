@@ -15,9 +15,14 @@ namespace Lazinator.Buffers
 
         public int StartIndex;
 
-        public int Length;
+        public virtual int Length { get; set; }
 
         public bool IsLoaded => ReferencedMemory != null;
+
+        public MemoryReference()
+        {
+
+        }
 
         public MemoryReference(IMemoryOwner<byte> referencedMemory, int versionOfReferencedMemory, int startIndex, int length)
         {
