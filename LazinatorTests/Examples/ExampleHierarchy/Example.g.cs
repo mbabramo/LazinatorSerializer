@@ -1823,7 +1823,7 @@ namespace LazinatorTests.Examples
                     }
                 }
             }
-            int totalChildrenSize = ConvertFromBytesForChildProperties(LazinatorMemoryStorage, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
+            int totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
             return bytesSoFar + totalChildrenSize;
         }
         
@@ -1850,9 +1850,8 @@ namespace LazinatorTests.Examples
             _MyUInt = span.ToDecompressedUInt32(ref bytesSoFar);
         }
         
-        protected virtual int ConvertFromBytesForChildProperties(LazinatorMemory lazinatorMemory, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
+        protected virtual int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = lazinatorMemory.InitialMemory.Span;
             int totalChildrenBytes = 0;
             _IncludableChild_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren)
