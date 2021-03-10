@@ -13,7 +13,7 @@ namespace Lazinator.Buffers
     /// <summary>
     /// Saves or loads memory references referring either to parts of a single file or to consecutively numbered files. The initial file contains information on all the other components, so that these can be asynchronously loaded if necessary.
     /// </summary>
-    public class MemoryReferenceInBlob : MemoryReference
+    public class BlobMemoryReference : MemoryReference
     {
         string BlobPath;
         IBlobManager BlobManager;
@@ -26,7 +26,7 @@ namespace Lazinator.Buffers
         /// Creates a reference to the index file (which may or may not contain all of the remaining data). This should be followed by a call to GetLazinatorMemory or GetLazinatorMemoryAsync
         /// </summary>
         /// <param name="path"></param>
-        public MemoryReferenceInBlob(string path, IBlobManager blobManager, bool containedInSingleBlob)
+        public BlobMemoryReference(string path, IBlobManager blobManager, bool containedInSingleBlob)
         {
             BlobPath = path;
             BlobManager = blobManager;
@@ -39,7 +39,7 @@ namespace Lazinator.Buffers
         /// </summary>
         /// <param name="path">The path, including a number referring to the specific file</param>
         /// <param name="length"></param>
-        public MemoryReferenceInBlob(string path, IBlobManager blobManager, int length, long offset, int referencedMemoryVersion)
+        public BlobMemoryReference(string path, IBlobManager blobManager, int length, long offset, int referencedMemoryVersion)
         {
             BlobPath = path;
             BlobManager = blobManager;
@@ -139,7 +139,7 @@ namespace Lazinator.Buffers
             {
                 int length = fileLengths[i-1];
                 string referencePath = sameFile ? BlobPath : GetPathWithNumber(BlobPath, i);
-                memoryReferences.Add(new MemoryReferenceInBlob(referencePath, BlobManager, fileLengths[i - 1], sameFile ? numBytesProcessed : 0, i));
+                memoryReferences.Add(new BlobMemoryReference(referencePath, BlobManager, fileLengths[i - 1], sameFile ? numBytesProcessed : 0, i));
                 numBytesProcessed += length;
             }
             return memoryReferences;

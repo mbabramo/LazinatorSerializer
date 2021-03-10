@@ -1017,7 +1017,7 @@ namespace LazinatorTests.Tests
             // Note: Index reference is first var indexReference = memoryReferenceInBlobs[0];
 
             // Read from one or more blobs
-            MemoryReferenceInBlob blob = new MemoryReferenceInBlob(path, blobStorage, containedInSingleBlob);
+            BlobMemoryReference blob = new BlobMemoryReference(path, blobStorage, containedInSingleBlob);
             var revisedMemory = blob.GetLazinatorMemory();
             
 
