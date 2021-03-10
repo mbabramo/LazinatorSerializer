@@ -995,8 +995,8 @@ namespace LazinatorTests.Tests
         [Fact]
         public void SplittableEntitiesSaveToMultipleBlobs()
         {
-            bool sameFile = false;
-            SplittableEntitiesSavedHelper(sameFile);
+            bool containedInSingleBlob = false;
+            SplittableEntitiesSavedHelper(containedInSingleBlob);
         }
 
         [Fact]
@@ -1006,31 +1006,11 @@ namespace LazinatorTests.Tests
             SplittableEntitiesSavedHelper(containedInSingleBlob);
         }
 
-        private void SplittableEntitiesSavedHelper(bool containedInSingleBlob)
-        {
-            Example e = GetTypicalExample();
-            LazinatorMemory multipleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, 10));
-
-            // Write to one or more blobs
-            InMemoryBlobStorage blobStorage = new InMemoryBlobStorage();
-            string path = "example";
-            var memoryReferenceInBlobs = multipleBufferResult.WriteToBlobs(path, blobStorage, containedInSingleBlob);
-            // Note: Index reference is first var indexReference = memoryReferenceInBlobs[0];
-
-            // Read from one or more blobs
-            BlobMemoryReference blob = new BlobMemoryReference(path, blobStorage, containedInSingleBlob);
-            var revisedMemory = blob.GetLazinatorMemory();
-            
-
-            Example e2 = new Example(revisedMemory);
-            ExampleEqual(e, e2).Should().BeTrue();
-        }
-
         [Fact]
         public async Task SplittableEntitiesSaveToMultipleBlobs_Async()
         {
-            bool sameFile = false;
-            await SplittableEntitiesSavedHelper_Async(sameFile);
+            bool containedInSingleBlob = false;
+            await SplittableEntitiesSavedHelper_Async(containedInSingleBlob);
         }
 
         [Fact]
@@ -1040,10 +1020,29 @@ namespace LazinatorTests.Tests
             await SplittableEntitiesSavedHelper_Async(containedInSingleBlob);
         }
 
-        private async Task SplittableEntitiesSavedHelper_Async(bool containedInSingleBlob)
+        private void SplittableEntitiesSavedHelper(bool containedInSingleBlob)
         {
             Example e = GetTypicalExample();
             LazinatorMemory multipleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, 10));
+
+            // Write to one or more blobs
+            InMemoryBlobStorage blobStorage = new InMemoryBlobStorage();
+            string path = @"C:\Users\Admin\Desktop\testfolder\example.fil";
+            var memoryReferenceInBlobs = multipleBufferResult.WriteToBlobs(path, blobStorage, containedInSingleBlob);
+            // Note: Index reference is first var indexReference = memoryReferenceInBlobs[0];
+
+            // Read from one or more blobs
+            BlobMemoryReference blob = new BlobMemoryReference(path, blobStorage, containedInSingleBlob);
+            var revisedMemory = blob.GetLazinatorMemory();
+
+            Example e2 = new Example(revisedMemory);
+            ExampleEqual(e, e2).Should().BeTrue();
+        }
+
+        private async Task SplittableEntitiesSavedHelper_Async(bool containedInSingleBlob)
+        {
+            Example e = GetTypicalExample();
+            LazinatorMemory multipleBufferResult = await e.SerializeLazinatorAsync(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, 10));
 
             // Write to one or more blobs
             InMemoryBlobStorage blobStorage = new InMemoryBlobStorage();

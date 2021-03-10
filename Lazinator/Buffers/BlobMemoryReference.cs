@@ -112,14 +112,14 @@ namespace Lazinator.Buffers
 
         private List<MemoryReference> CompleteGetAdditionalReferences(bool containedInSingleBlob, int numItems, Memory<byte> bytesForLengths)
         {
-            List<int> blobLengths = GetFileLengths(bytesForLengths, numItems);
+            List<int> blobLengths = GetBlobLengths(bytesForLengths, numItems);
             if (containedInSingleBlob)
                 Offset = 4 + numItems * 4;
             List<MemoryReference> memoryReferences = GetMemoryReferences(blobLengths, containedInSingleBlob);
             return memoryReferences;
         }
 
-        private List<int> GetFileLengths(Memory<byte> bytesForLengths, int numItems)
+        private List<int> GetBlobLengths(Memory<byte> bytesForLengths, int numItems)
         {
             ReadOnlySpan<byte> spanForLengths = bytesForLengths.Span; 
             List<int> fileLengths = new List<int>();
