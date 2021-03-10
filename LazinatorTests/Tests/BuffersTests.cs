@@ -994,18 +994,33 @@ namespace LazinatorTests.Tests
         [Fact]
         public void SplittableEntitiesSaveToMultipleBlobs()
         {
+            bool sameFile = false;
+            SplittableEntitiesSavedHelper(sameFile);
+        }
+
+        [Fact]
+        public void SplittableEntitiesSaveToSingleBlobWithIndex()
+        {
+            bool containedInSingleBlob = true;
+            SplittableEntitiesSavedHelper(containedInSingleBlob);
+        }
+
+        private void SplittableEntitiesSavedHelper(bool containedInSingleBlob)
+        {
             Example e = GetTypicalExample();
             LazinatorMemory multipleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, 10));
+
+            // Write to one or more blobs
             InMemoryBlobStorage blobStorage = new InMemoryBlobStorage();
             string path = "example";
-            bool sameFile = false;
-            var results = multipleBufferResult.WriteToBlobs(path, blobStorage, sameFile);
-            var indexFile = results[0];
-            MemoryReferenceInBlob blob = new MemoryReferenceInBlob(path, blobStorage);
-            var references = blob.GetAdditionalReferences(sameFile);
-            var firstAfterIndex = references.First();
-            LazinatorMemory revisedMemory = new LazinatorMemory(firstAfterIndex, references.Skip(1).ToList(), 0, 0, references.Sum(x => x.Length));
-            revisedMemory.LoadInitialMemory();
+            var memoryReferenceInBlobs = multipleBufferResult.WriteToBlobs(path, blobStorage, containedInSingleBlob);
+            // Note: Index reference is first var indexReference = memoryReferenceInBlobs[0];
+
+            // Read from one or more blobs
+            MemoryReferenceInBlob blob = new MemoryReferenceInBlob(path, blobStorage, containedInSingleBlob);
+            var revisedMemory = blob.GetLazinatorMemory();
+            
+
             Example e2 = new Example(revisedMemory);
             ExampleEqual(e, e2).Should().BeTrue();
         }

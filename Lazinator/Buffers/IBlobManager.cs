@@ -10,6 +10,7 @@ namespace Lazinator.Buffers
     {
         Memory<byte> Read(string path, long offset, int length);
         ValueTask<Memory<byte>> ReadAsync(string path, long offset, int length);
+        long GetLength(string path);
         void Write(string path, Memory<byte> bytes);
         ValueTask WriteAsync(string path, Memory<byte> bytes);
         void Append(string path, Memory<byte> bytes);

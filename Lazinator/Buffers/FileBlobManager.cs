@@ -48,5 +48,10 @@ namespace Lazinator.Buffers
         {
             throw new NotImplementedException();
         }
+
+        public long GetLength(string path)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

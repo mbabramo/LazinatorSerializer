@@ -861,7 +861,7 @@ namespace Lazinator.Buffers
             return w.LazinatorMemory.InitialMemory;
         }
 
-        public async ValueTask<List<MemoryReferenceInBlob>> WriteToBlobsAsync(string path, IBlobManager blobManager, bool singleFile)
+        public async ValueTask<List<MemoryReferenceInBlob>> WriteToBlobsAsync(string path, IBlobManager blobManager, bool containedInSingleBlob)
         {
             var references = EnumerateMemoryReferences().ToList();
             if (!references.Any())
@@ -873,7 +873,7 @@ namespace Lazinator.Buffers
                 writer.Write(reference.Length);
 
             List<MemoryReferenceInBlob> result = new List<MemoryReferenceInBlob>();
-            MemoryReferenceInBlob indexFile = new MemoryReferenceInBlob(path, blobManager);
+            MemoryReferenceInBlob indexFile = new MemoryReferenceInBlob(path, blobManager, containedInSingleBlob);
             result.Add(indexFile);
             await blobManager.WriteAsync(path, writer.ActiveMemory.Memory);
             int numBytesWritten = writer.ActiveMemory.Memory.Length;
@@ -881,10 +881,10 @@ namespace Lazinator.Buffers
             {
                 MemoryReference reference = references[i - 1];
                 Memory<byte> memory = reference.Memory;
-                string revisedPath = singleFile ? path : MemoryReferenceInBlob.GetPathWithNumber(path, i);
-                MemoryReferenceInBlob referenceInFile = new MemoryReferenceInBlob(revisedPath, blobManager, reference.Length, singleFile ? numBytesWritten : 0, i);
+                string revisedPath = containedInSingleBlob ? path : MemoryReferenceInBlob.GetPathWithNumber(path, i);
+                MemoryReferenceInBlob referenceInFile = new MemoryReferenceInBlob(revisedPath, blobManager, reference.Length, containedInSingleBlob ? numBytesWritten : 0, i);
                 result.Add(referenceInFile);
-                if (singleFile)
+                if (containedInSingleBlob)
                     await blobManager.AppendAsync(revisedPath, memory);
                 else
                     await blobManager.WriteAsync(revisedPath, memory);
@@ -893,7 +893,7 @@ namespace Lazinator.Buffers
             return result;
         }
 
-        public List<MemoryReferenceInBlob> WriteToBlobs(string path, IBlobManager blobManager, bool singleFile)
+        public List<MemoryReferenceInBlob> WriteToBlobs(string path, IBlobManager blobManager, bool containedInSingleBlob)
         {
             var references = EnumerateMemoryReferences().ToList();
             if (!references.Any())
@@ -905,7 +905,7 @@ namespace Lazinator.Buffers
                 writer.Write(reference.Length);
 
             List<MemoryReferenceInBlob> result = new List<MemoryReferenceInBlob>();
-            MemoryReferenceInBlob indexFile = new MemoryReferenceInBlob(path, blobManager);
+            MemoryReferenceInBlob indexFile = new MemoryReferenceInBlob(path, blobManager, containedInSingleBlob);
             result.Add(indexFile);
             blobManager.Write(path, writer.ActiveMemory.Memory);
             int numBytesWritten = writer.ActiveMemory.Memory.Length;
@@ -913,10 +913,10 @@ namespace Lazinator.Buffers
             {
                 MemoryReference reference = references[i - 1];
                 Memory<byte> memory = reference.Memory;
-                string revisedPath = singleFile ? path : MemoryReferenceInBlob.GetPathWithNumber(path, i);
-                MemoryReferenceInBlob referenceInFile = new MemoryReferenceInBlob(revisedPath, blobManager, reference.Length, singleFile ? numBytesWritten : 0, i);
+                string revisedPath = containedInSingleBlob ? path : MemoryReferenceInBlob.GetPathWithNumber(path, i);
+                MemoryReferenceInBlob referenceInFile = new MemoryReferenceInBlob(revisedPath, blobManager, reference.Length, containedInSingleBlob ? numBytesWritten : 0, i);
                 result.Add(referenceInFile);
-                if (singleFile)
+                if (containedInSingleBlob)
                     blobManager.Append(revisedPath, memory);
                 else
                     blobManager.Write(revisedPath, memory);

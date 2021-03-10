@@ -101,5 +101,10 @@ namespace LazinatorTests.Utilities
             Append(path, bytes);
             return ValueTask.CompletedTask;
         }
+
+        public long GetLength(string path)
+        {
+            return Storage[path].Length;
+        }
     }
 }

@@ -17,23 +17,25 @@ namespace Lazinator.Buffers
     {
         string BlobPath;
         IBlobManager BlobManager;
-        bool IsIndexFile;
+        bool IsIndexReference;
+        bool ContainedInSingleBlob;
 
         private long Offset = 0;
 
         /// <summary>
-        /// Creates a reference to the index file (which may or may not contain all of the remaining data). This should be followed by a call to GetAdditionalReferences(Async).
+        /// Creates a reference to the index file (which may or may not contain all of the remaining data). This should be followed by a call to GetLazinatorMemory or GetLazinatorMemoryAsync
         /// </summary>
         /// <param name="path"></param>
-        public MemoryReferenceInBlob(string path, IBlobManager blobManager)
+        public MemoryReferenceInBlob(string path, IBlobManager blobManager, bool containedInSingleBlob)
         {
             BlobPath = path;
             BlobManager = blobManager;
-            IsIndexFile = true;
+            IsIndexReference = true;
+            ContainedInSingleBlob = containedInSingleBlob;
         }
 
         /// <summary>
-        /// Creates a reference to an existing file. This is called internally by GetAdditionalReferences(Async), after a call to MemoryReferenceInFile.
+        /// Creates a reference to an existing file other than the index file. This is called internally by GetAdditionalReferences(Async), after a call to MemoryReferenceInFile.
         /// </summary>
         /// <param name="path">The path, including a number referring to the specific file</param>
         /// <param name="length"></param>
@@ -44,7 +46,7 @@ namespace Lazinator.Buffers
             Length = length;
             Offset = offset;
             ReferencedMemoryVersion = referencedMemoryVersion;
-            IsIndexFile = false;
+            IsIndexReference = false;
         }
 
         #region Memory loading and unloading
@@ -65,12 +67,26 @@ namespace Lazinator.Buffers
 
         #region Index file management
 
+        public LazinatorMemory GetLazinatorMemory()
+        {
+            var references = GetAdditionalReferences(ContainedInSingleBlob);
+            var firstAfterIndex = references.First();
+            LazinatorMemory lazinatorMemory = new LazinatorMemory(firstAfterIndex, references.Skip(1).ToList(), 0, 0, references.Sum(x => x.Length));
+            lazinatorMemory.LoadInitialMemory();
+            return lazinatorMemory;
+        }
+
+        public async ValueTask<LazinatorMemory> GetLazinatorMemoryAsync()
+        {
+            throw new NotImplementedException(); // DEBUG -- copy from above with two async calls
+        }
+
         /// <summary>
         /// Uses information in an initial MemoryReferenceInFile to generate information on other MemoryReferenceInFiles. 
         /// This should be called immediately after the constructor. 
         /// </summary>
         /// <returns></returns>
-        public async Task<List<MemoryReference>> GetAdditionalReferencesAsync(bool sameFile)
+        private async Task<List<MemoryReference>> GetAdditionalReferencesAsync(bool sameFile)
         {
             Memory<byte> intHolder = await BlobManager.ReadAsync(BlobPath, 0, 4);
             int numBytesRead = 0;
@@ -84,7 +100,7 @@ namespace Lazinator.Buffers
         /// This should be called immediately after the constructor. 
         /// </summary>
         /// <returns></returns>
-        public List<MemoryReference> GetAdditionalReferences(bool sameFile)
+        private List<MemoryReference> GetAdditionalReferences(bool sameFile)
         {
             Memory<byte> intHolder = BlobManager.Read(BlobPath, 0, 4);
             int numBytesRead = 0;
