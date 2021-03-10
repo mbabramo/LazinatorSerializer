@@ -14,6 +14,7 @@ using LazinatorTests.Examples.NonAbstractGenerics;
 using LazinatorTests.Examples.Abstract;
 using LazinatorTests.Examples.Collections;
 using LazinatorTests.Examples.Tuples;
+using LazinatorTests.Utilities;
 
 namespace LazinatorTests.Tests
 {
@@ -988,6 +989,25 @@ namespace LazinatorTests.Tests
             Example e4 = new Example(multipleBufferResult);
             Example e5 = e4.CloneLazinatorTyped();
             ExampleEqual(e, e5).Should().BeTrue();
+        }
+
+        [Fact]
+        public void SplittableEntitiesSaveToMultipleBlobs()
+        {
+            Example e = GetTypicalExample();
+            LazinatorMemory multipleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, 10));
+            InMemoryBlobStorage blobStorage = new InMemoryBlobStorage();
+            string path = "example";
+            bool sameFile = false;
+            var results = multipleBufferResult.WriteToBlobs(path, blobStorage, sameFile);
+            var indexFile = results[0];
+            MemoryReferenceInBlob blob = new MemoryReferenceInBlob(path, blobStorage);
+            var references = blob.GetAdditionalReferences(sameFile);
+            var firstAfterIndex = references.First();
+            LazinatorMemory revisedMemory = new LazinatorMemory(firstAfterIndex, references.Skip(1).ToList(), 0, 0, references.Sum(x => x.Length));
+            revisedMemory.LoadInitialMemory();
+            Example e2 = new Example(revisedMemory);
+            ExampleEqual(e, e2).Should().BeTrue();
         }
     }
 }

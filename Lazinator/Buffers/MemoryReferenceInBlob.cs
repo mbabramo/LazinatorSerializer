@@ -17,7 +17,7 @@ namespace Lazinator.Buffers
     {
         string BlobPath;
         IBlobManager BlobManager;
-        bool IsIndexFile => Path.GetFileNameWithoutExtension(BlobPath).EndsWith("-0");
+        bool IsIndexFile;
 
         private long Offset = 0;
 
@@ -29,6 +29,7 @@ namespace Lazinator.Buffers
         {
             BlobPath = path;
             BlobManager = blobManager;
+            IsIndexFile = true;
         }
 
         /// <summary>
@@ -43,6 +44,7 @@ namespace Lazinator.Buffers
             Length = length;
             Offset = offset;
             ReferencedMemoryVersion = referencedMemoryVersion;
+            IsIndexFile = false;
         }
 
         #region Memory loading and unloading
@@ -68,7 +70,7 @@ namespace Lazinator.Buffers
         /// This should be called immediately after the constructor. 
         /// </summary>
         /// <returns></returns>
-        public async Task<List<MemoryReferenceInBlob>> GetAdditionalReferencesAsync(bool sameFile)
+        public async Task<List<MemoryReference>> GetAdditionalReferencesAsync(bool sameFile)
         {
             Memory<byte> intHolder = await BlobManager.ReadAsync(BlobPath, 0, 4);
             int numBytesRead = 0;
@@ -82,7 +84,7 @@ namespace Lazinator.Buffers
         /// This should be called immediately after the constructor. 
         /// </summary>
         /// <returns></returns>
-        public List<MemoryReferenceInBlob> GetAdditionalReferences(bool sameFile)
+        public List<MemoryReference> GetAdditionalReferences(bool sameFile)
         {
             Memory<byte> intHolder = BlobManager.Read(BlobPath, 0, 4);
             int numBytesRead = 0;
@@ -91,10 +93,10 @@ namespace Lazinator.Buffers
             return CompleteGetAdditionalReferences(sameFile, numItems, bytesForLengths);
         }
 
-        private List<MemoryReferenceInBlob> CompleteGetAdditionalReferences(bool sameFile, int numItems, Memory<byte> bytesForLengths)
+        private List<MemoryReference> CompleteGetAdditionalReferences(bool sameFile, int numItems, Memory<byte> bytesForLengths)
         {
             List<int> fileLengths = GetFileLengths(bytesForLengths, numItems);
-            List<MemoryReferenceInBlob> memoryReferences = GetMemoryReferences(fileLengths, sameFile);
+            List<MemoryReference> memoryReferences = GetMemoryReferences(fileLengths, sameFile);
             if (sameFile)
                 Offset = 4 + numItems * 4;
             return memoryReferences;
@@ -107,19 +109,19 @@ namespace Lazinator.Buffers
             int numBytesRead = 0;
             for (int i = 1; i <= numItems; i++)
             {
-                int fileLength = ReadUncompressedPrimitives.ToInt32(spanForLengths.Slice(numBytesRead), ref numBytesRead);
+                int fileLength = ReadUncompressedPrimitives.ToInt32(spanForLengths, ref numBytesRead);
                 fileLengths.Add(fileLength);
             }
             return fileLengths;
         }
 
-        private List<MemoryReferenceInBlob> GetMemoryReferences(List<int> fileLengths, bool sameFile)
+        private List<MemoryReference> GetMemoryReferences(List<int> fileLengths, bool sameFile)
         {
-            List<MemoryReferenceInBlob> memoryReferences = new List<MemoryReferenceInBlob>();
+            List<MemoryReference> memoryReferences = new List<MemoryReference>();
             long numBytesProcessed = Offset;
             for (int i = 1; i <= fileLengths.Count; i++)
             {
-                int length = fileLengths[i];
+                int length = fileLengths[i-1];
                 string referencePath = sameFile ? BlobPath : GetPathWithNumber(BlobPath, i);
                 memoryReferences.Add(new MemoryReferenceInBlob(referencePath, BlobManager, fileLengths[i - 1], sameFile ? numBytesProcessed : 0, i));
                 numBytesProcessed += length;
