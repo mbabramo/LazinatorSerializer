@@ -15,6 +15,7 @@ using LazinatorTests.Examples.Abstract;
 using LazinatorTests.Examples.Collections;
 using LazinatorTests.Examples.Tuples;
 using LazinatorTests.Utilities;
+using System.Threading.Tasks;
 
 namespace LazinatorTests.Tests
 {
@@ -1020,6 +1021,40 @@ namespace LazinatorTests.Tests
             BlobMemoryReference blob = new BlobMemoryReference(path, blobStorage, containedInSingleBlob);
             var revisedMemory = blob.GetLazinatorMemory();
             
+
+            Example e2 = new Example(revisedMemory);
+            ExampleEqual(e, e2).Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task SplittableEntitiesSaveToMultipleBlobs_Async()
+        {
+            bool sameFile = false;
+            await SplittableEntitiesSavedHelper_Async(sameFile);
+        }
+
+        [Fact]
+        public async Task SplittableEntitiesSaveToSingleBlobWithIndex_Async()
+        {
+            bool containedInSingleBlob = true;
+            await SplittableEntitiesSavedHelper_Async(containedInSingleBlob);
+        }
+
+        private async Task SplittableEntitiesSavedHelper_Async(bool containedInSingleBlob)
+        {
+            Example e = GetTypicalExample();
+            LazinatorMemory multipleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, 10));
+
+            // Write to one or more blobs
+            InMemoryBlobStorage blobStorage = new InMemoryBlobStorage();
+            string path = "example";
+            var memoryReferenceInBlobs = await multipleBufferResult.WriteToBlobsAsync(path, blobStorage, containedInSingleBlob);
+            // Note: Index reference is first var indexReference = memoryReferenceInBlobs[0];
+
+            // Read from one or more blobs
+            BlobMemoryReference blob = new BlobMemoryReference(path, blobStorage, containedInSingleBlob);
+            var revisedMemory = await blob.GetLazinatorMemoryAsync();
+
 
             Example e2 = new Example(revisedMemory);
             ExampleEqual(e, e2).Should().BeTrue();

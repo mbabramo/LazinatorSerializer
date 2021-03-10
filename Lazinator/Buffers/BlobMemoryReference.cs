@@ -75,7 +75,11 @@ namespace Lazinator.Buffers
 
         public async ValueTask<LazinatorMemory> GetLazinatorMemoryAsync()
         {
-            throw new NotImplementedException(); // DEBUG -- copy from above with two async calls
+            var references = await GetAdditionalReferencesAsync(ContainedInSingleBlob);
+            var firstAfterIndex = references.First();
+            LazinatorMemory lazinatorMemory = new LazinatorMemory(firstAfterIndex, references.Skip(1).ToList(), 0, 0, references.Sum(x => x.Length));
+            await lazinatorMemory.LoadInitialMemoryAsync();
+            return lazinatorMemory;
         }
 
         /// <summary>
