@@ -992,66 +992,55 @@ namespace LazinatorTests.Tests
             ExampleEqual(e, e5).Should().BeTrue();
         }
 
-        [Fact]
-        public void SplittableEntitiesSaveToMultipleBlobs()
+        [Theory]
+        [InlineData(true, true, true)]
+        [InlineData(true, false, true)]
+        [InlineData(false, true, true)]
+        [InlineData(false, false, true)]
+        [InlineData(true, true, false)]
+        [InlineData(true, false, false)]
+        [InlineData(false, true, false)]
+        [InlineData(false, false, false)]
+        public async Task SplittableEntitiesSaveToBlobs(bool containedInSingleBlob, bool useFile, bool async)
         {
-            bool containedInSingleBlob = false;
-            SplittableEntitiesSavedHelper(containedInSingleBlob);
+            if (async)
+                await SplittableEntitiesSavedHelper_Async(containedInSingleBlob, useFile);
+            else
+                SplittableEntitiesSavedHelper(containedInSingleBlob, useFile);
         }
 
-        [Fact]
-        public void SplittableEntitiesSaveToSingleBlobWithIndex()
-        {
-            bool containedInSingleBlob = true;
-            SplittableEntitiesSavedHelper(containedInSingleBlob);
-        }
-
-        [Fact]
-        public async Task SplittableEntitiesSaveToMultipleBlobs_Async()
-        {
-            bool containedInSingleBlob = false;
-            await SplittableEntitiesSavedHelper_Async(containedInSingleBlob);
-        }
-
-        [Fact]
-        public async Task SplittableEntitiesSaveToSingleBlobWithIndex_Async()
-        {
-            bool containedInSingleBlob = true;
-            await SplittableEntitiesSavedHelper_Async(containedInSingleBlob);
-        }
-
-        private void SplittableEntitiesSavedHelper(bool containedInSingleBlob)
+        private void SplittableEntitiesSavedHelper(bool containedInSingleBlob, bool useFile)
         {
             Example e = GetTypicalExample();
             LazinatorMemory multipleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, 10));
 
             // Write to one or more blobs
-            InMemoryBlobStorage blobStorage = new InMemoryBlobStorage();
+            IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobStorage();
             string path = @"C:\Users\Admin\Desktop\testfolder\example.fil";
-            var memoryReferenceInBlobs = multipleBufferResult.WriteToBlobs(path, blobStorage, containedInSingleBlob);
+            var memoryReferenceInBlobs = multipleBufferResult.WriteToBlobs(path, blobManager, containedInSingleBlob);
             // Note: Index reference is first var indexReference = memoryReferenceInBlobs[0];
 
             // Read from one or more blobs
-            BlobMemoryReference blob = new BlobMemoryReference(path, blobStorage, containedInSingleBlob);
+            BlobMemoryReference blob = new BlobMemoryReference(path, blobManager, containedInSingleBlob);
             var revisedMemory = blob.GetLazinatorMemory();
 
             Example e2 = new Example(revisedMemory);
             ExampleEqual(e, e2).Should().BeTrue();
         }
 
-        private async Task SplittableEntitiesSavedHelper_Async(bool containedInSingleBlob)
+        private async Task SplittableEntitiesSavedHelper_Async(bool containedInSingleBlob, bool useFile)
         {
             Example e = GetTypicalExample();
             LazinatorMemory multipleBufferResult = await e.SerializeLazinatorAsync(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, 10));
 
             // Write to one or more blobs
-            InMemoryBlobStorage blobStorage = new InMemoryBlobStorage();
+            IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobStorage();
             string path = "example";
-            var memoryReferenceInBlobs = await multipleBufferResult.WriteToBlobsAsync(path, blobStorage, containedInSingleBlob);
+            var memoryReferenceInBlobs = await multipleBufferResult.WriteToBlobsAsync(path, blobManager, containedInSingleBlob);
             // Note: Index reference is first var indexReference = memoryReferenceInBlobs[0];
 
             // Read from one or more blobs
-            BlobMemoryReference blob = new BlobMemoryReference(path, blobStorage, containedInSingleBlob);
+            BlobMemoryReference blob = new BlobMemoryReference(path, blobManager, containedInSingleBlob);
             var revisedMemory = await blob.GetLazinatorMemoryAsync();
 
 
