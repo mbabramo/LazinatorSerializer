@@ -9,7 +9,6 @@ namespace Lazinator.Buffers
 {
     public class FileBlobManager : IBlobManager
     {
-
         public Memory<byte> Read(string path, long offset, int length)
         {
             using FileStream fs = File.OpenRead(path);
@@ -32,26 +31,36 @@ namespace Lazinator.Buffers
 
         public void Write(string path, Memory<byte> bytes)
         {
-            throw new NotImplementedException();
+            using FileStream fs = File.OpenWrite(path);
+            fs.Write(bytes.Span);
+            fs.Flush();
         }
 
-        public ValueTask WriteAsync(string path, Memory<byte> bytes)
+        public async ValueTask WriteAsync(string path, Memory<byte> bytes)
         {
-            throw new NotImplementedException();
+            using FileStream fs = File.OpenWrite(path);
+            await fs.WriteAsync(bytes);
+            await fs.FlushAsync();
         }
+
         public void Append(string path, Memory<byte> bytes)
         {
-            throw new NotImplementedException(); // DEBUG
+            using FileStream fs = File.OpenWrite(path);
+            fs.Seek(0, SeekOrigin.End);
+            fs.Write(bytes.Span);
         }
 
-        public ValueTask AppendAsync(string path, Memory<byte> bytes)
+        public async ValueTask AppendAsync(string path, Memory<byte> bytes)
         {
-            throw new NotImplementedException();
+            using FileStream fs = File.OpenWrite(path);
+            fs.Seek(0, SeekOrigin.End);
+            await fs.WriteAsync(bytes);
         }
 
         public long GetLength(string path)
         {
-            throw new NotImplementedException();
+            FileInfo f = new FileInfo(path);
+            return f.Length;
         }
     }
 }
