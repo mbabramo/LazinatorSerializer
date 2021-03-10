@@ -875,8 +875,8 @@ namespace Lazinator.Buffers
             List<BlobMemoryReference> result = new List<BlobMemoryReference>();
             BlobMemoryReference indexFile = new BlobMemoryReference(path, blobManager, containedInSingleBlob);
             result.Add(indexFile);
-            await blobManager.WriteAsync(path, writer.ActiveMemory.Memory);
-            int numBytesWritten = writer.ActiveMemory.Memory.Length;
+            await blobManager.WriteAsync(path, writer.ActiveMemoryWritten);
+            int numBytesWritten = writer.ActiveMemoryPosition;
             for (int i = 1; i <= references.Count; i++)
             {
                 MemoryReference reference = references[i - 1];
@@ -907,8 +907,8 @@ namespace Lazinator.Buffers
             List<BlobMemoryReference> result = new List<BlobMemoryReference>();
             BlobMemoryReference indexFile = new BlobMemoryReference(path, blobManager, containedInSingleBlob);
             result.Add(indexFile);
-            blobManager.Write(path, writer.ActiveMemory.Memory);
-            int numBytesWritten = writer.ActiveMemory.Memory.Length;
+            blobManager.Write(path, writer.ActiveMemoryWritten);
+            int numBytesWritten = writer.ActiveMemoryPosition;
             for (int i = 1; i <= references.Count; i++)
             {
                 MemoryReference reference = references[i - 1];

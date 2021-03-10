@@ -135,6 +135,12 @@ namespace Lazinator.Buffers
         /// </summary>
         public Span<byte> ActiveMemoryWrittenSpan => ActiveSpan.Slice(0, ActiveMemoryPosition);
 
+
+        /// <summary>
+        /// The bytes written through the current position. Note that the client can change the position within the buffer.
+        /// </summary>
+        public Memory<byte> ActiveMemoryWritten => ActiveMemory.Memory.Slice(0, ActiveMemoryPosition);
+
         /// <summary>
         /// A span containing space reserved to write length values of what is written later in the buffer.
         /// </summary>

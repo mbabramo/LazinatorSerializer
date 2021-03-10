@@ -94,6 +94,7 @@ namespace LazinatorTests.Utilities
                 allBytes[i] = existingBytes.Span[i];
             for (int i = 0; i < bytes.Length; i++)
                 allBytes[existingBytes.Length + i] = bytes.Span[i];
+            Storage[path] = allBytes;
         }
 
         public ValueTask AppendAsync(string path, Memory<byte> bytes)
