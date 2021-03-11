@@ -14,6 +14,7 @@ namespace Lazinator.CodeDescription
         public int Version;
         public ObjectDescription Container;
         public INamedTypeSymbol NamedTypeSymbol;
+        public INamedTypeSymbol BaseType => NamedTypeSymbol.BaseType;
         public List<PropertyDescription> PropertiesIncludingInherited;
         public List<PropertyDescription> PropertiesToDefineThisLevel;
         public List<PropertyDescription> PropertiesInherited;

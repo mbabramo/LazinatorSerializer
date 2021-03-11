@@ -309,6 +309,23 @@ namespace Lazinator.CodeDescription
                                 .Where(x => Compilation.ContainsAttributeOfType<CloneNonexclusiveLazinatorAttribute>(x));
             NonexclusiveInterfaces = nonexclusiveInterfaces
                 .Select(x => new NonexclusiveInterfaceDescription(Compilation, x, NullableContextSetting, this)).ToList();
+            VerifyExclusiveInterfaceInheritsFromBaseExclusiveInterface();
+        }
+
+        private void VerifyExclusiveInterfaceInheritsFromBaseExclusiveInterface()
+        {
+            if (BaseLazinatorObject != null && !BaseLazinatorObject.IsNonLazinatorBaseClass)
+            {
+                var interfaces = ExclusiveInterface.NamedTypeSymbol.Interfaces;
+                var interfacesConstructedFrom = interfaces.Select(x => x.ConstructedFrom);
+                var baseInterface = BaseLazinatorObject.ExclusiveInterface.NamedTypeSymbol;
+                var baseInterfaceConstructedFrom = baseInterface.ConstructedFrom;
+                bool match = interfacesConstructedFrom.Any(i => SymbolEqualityComparer.Default.Equals(i, baseInterfaceConstructedFrom)) || interfacesConstructedFrom.Any(i => i.ToString() == baseInterfaceConstructedFrom.ToString()); // string test seems to make a difference when we're generating many files at once and some of the generation seems to mess up the other tests.
+                if (!match)
+                {
+                    throw new LazinatorCodeGenException($"{NameIncludingGenerics} inherits from {BaseLazinatorObject.NameIncludingGenerics}, but {ExclusiveInterface.NamedTypeSymbol} does not inherit from {BaseLazinatorObject.ExclusiveInterface.NamedTypeSymbol}.");
+                }
+            }
         }
 
         public IEnumerable<ObjectDescription> GetBaseLazinatorObjects()

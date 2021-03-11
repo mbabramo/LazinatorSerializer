@@ -6,7 +6,7 @@ using Lazinator.Wrappers;
 namespace LazinatorCollections.Tree
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorLocationAwareTree)]
-    public interface ILazinatorLocationAwareTree<T> where T : ILazinator
+    public interface ILazinatorLocationAwareTree<T> : ILazinatorGeneralTree<T> where T : ILazinator
     {
         LazinatorDictionary<T, LazinatorList<WInt32>> Locations { get; set; }
     }

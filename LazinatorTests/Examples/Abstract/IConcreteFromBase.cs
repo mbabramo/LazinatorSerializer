@@ -3,7 +3,7 @@
 namespace LazinatorTests.Examples.Abstract
 {
     [Lazinator((int)ExampleUniqueIDs.ConcreteFromBase)]
-    internal interface IConcreteFromBase
+    internal interface IConcreteFromBase : IBase
     {
         int IntInConcreteFromBase { get; set; }
     }
