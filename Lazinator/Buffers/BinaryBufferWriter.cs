@@ -243,7 +243,7 @@ namespace Lazinator.Buffers
                 return;
             int activeMemoryVersion = GetActiveMemoryVersion();
             int firstUnrecordedActiveMemoryByte = GetFirstUnrecordedActiveMemoryByte(activeMemoryVersion);
-            if (firstUnrecordedActiveMemoryByte != activeMemoryLength)
+            if (activeMemoryLength > firstUnrecordedActiveMemoryByte)
                 BytesSegment.ExtendBytesSegmentList(BytesSegments, new BytesSegment(activeMemoryVersion, firstUnrecordedActiveMemoryByte, activeMemoryLength - firstUnrecordedActiveMemoryByte));
         }
 
