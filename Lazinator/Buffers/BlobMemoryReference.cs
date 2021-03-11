@@ -37,13 +37,13 @@ namespace Lazinator.Buffers
         /// </summary>
         /// <param name="path">The path, including a number referring to the specific file</param>
         /// <param name="length"></param>
-        public BlobMemoryReference(string path, IBlobManager blobManager, int length, long offset, int referencedMemoryVersion)
+        public BlobMemoryReference(string path, IBlobManager blobManager, int length, long offset, int referencedMemoryID)
         {
             BlobPath = path;
             BlobManager = blobManager;
             Length = length;
             Offset = offset;
-            ReferencedMemoryVersion = referencedMemoryVersion;
+            ReferencedMemoryChunkID = referencedMemoryID;
         }
 
         #region Memory loading and unloading

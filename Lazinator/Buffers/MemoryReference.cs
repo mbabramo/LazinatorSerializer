@@ -11,7 +11,7 @@ namespace Lazinator.Buffers
     {
         public IMemoryOwner<byte> ReferencedMemory { get; set; }
 
-        public int ReferencedMemoryVersion { get; set; }
+        public int ReferencedMemoryChunkID { get; set; }
 
         public int StartIndex;
 
@@ -24,10 +24,10 @@ namespace Lazinator.Buffers
 
         }
 
-        public MemoryReference(IMemoryOwner<byte> referencedMemory, int versionOfReferencedMemory, int startIndex, int length)
+        public MemoryReference(IMemoryOwner<byte> referencedMemory, int memoryChunkID, int startIndex, int length)
         {
             ReferencedMemory = referencedMemory;
-            ReferencedMemoryVersion = versionOfReferencedMemory;
+            ReferencedMemoryChunkID = memoryChunkID;
             StartIndex = startIndex;
             Length = length;
         }
@@ -62,7 +62,7 @@ namespace Lazinator.Buffers
             return Memory;
         }
 
-        public MemoryReference Slice(int startIndex, int length) => new MemoryReference(ReferencedMemory, ReferencedMemoryVersion, StartIndex + startIndex, length);
+        public MemoryReference Slice(int startIndex, int length) => new MemoryReference(ReferencedMemory, ReferencedMemoryChunkID, StartIndex + startIndex, length);
 
         public void Dispose()
         {

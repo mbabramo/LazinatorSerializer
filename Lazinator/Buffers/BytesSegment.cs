@@ -11,13 +11,13 @@ namespace Lazinator.Buffers
     /// </summary>
     public struct BytesSegment
     {
-        public int MemoryChunkVersion { get; private set; }
+        public int MemoryChunkID { get; private set; }
         public int IndexWithinMemoryChunk { get; private set; }
         public int NumBytes { get; private set; }
 
-        public BytesSegment(int memoryChunkVersion, int indexWithinMemoryChunk, int numBytes)
+        public BytesSegment(int memoryChunkID, int indexWithinMemoryChunk, int numBytes)
         {
-            MemoryChunkVersion = memoryChunkVersion;
+            MemoryChunkID = memoryChunkID;
             IndexWithinMemoryChunk = indexWithinMemoryChunk;
             NumBytes = numBytes;
         }
@@ -33,7 +33,7 @@ namespace Lazinator.Buffers
             if (bytesSegmentList.Any())
             {
                 BytesSegment last = bytesSegmentList.Last();
-                if (newSegment.MemoryChunkVersion == last.MemoryChunkVersion && newSegment.IndexWithinMemoryChunk == last.IndexWithinMemoryChunk + last.NumBytes)
+                if (newSegment.MemoryChunkID == last.MemoryChunkID && newSegment.IndexWithinMemoryChunk == last.IndexWithinMemoryChunk + last.NumBytes)
                 {
                     last.NumBytes += newSegment.NumBytes;
                     return;

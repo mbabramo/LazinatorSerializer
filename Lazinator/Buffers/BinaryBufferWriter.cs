@@ -97,7 +97,7 @@ namespace Lazinator.Buffers
             {
                 InitializeIfNecessary();
                 if (!CompletedMemory.IsEmpty)
-                    return CompletedMemory.WithAppendedChunk(new MemoryReference(ActiveMemory, GetActiveMemoryVersion(), 0, ActiveMemoryPosition));
+                    return CompletedMemory.WithAppendedChunk(new MemoryReference(ActiveMemory, GetActiveMemoryChunkID(), 0, ActiveMemoryPosition));
                 return new LazinatorMemory(ActiveMemory, 0, ActiveMemoryPosition);
             }
         }
@@ -207,7 +207,7 @@ namespace Lazinator.Buffers
         /// <param name="minSizeofNewBuffer"></param>
         public void MoveActiveToCompletedMemory(int minSizeofNewBuffer = ExpandableBytes.DefaultMinBufferSize)
         {
-            CompletedMemory = CompletedMemory.WithAppendedChunk(new MemoryReference(ActiveMemory, GetActiveMemoryVersion(), 0, ActiveMemoryPosition));
+            CompletedMemory = CompletedMemory.WithAppendedChunk(new MemoryReference(ActiveMemory, GetActiveMemoryChunkID(), 0, ActiveMemoryPosition));
             ActiveMemory = new ExpandableBytes(minSizeofNewBuffer);
             ActiveMemoryPosition = 0;
         }
@@ -241,7 +241,7 @@ namespace Lazinator.Buffers
             int activeMemoryLength = ActiveMemory.Memory.Length;
             if (activeMemoryLength == 0)
                 return;
-            int activeMemoryVersion = GetActiveMemoryVersion();
+            int activeMemoryVersion = GetActiveMemoryChunkID();
             int firstUnrecordedActiveMemoryByte = GetFirstUnrecordedActiveMemoryByte(activeMemoryVersion);
             if (activeMemoryLength > firstUnrecordedActiveMemoryByte)
                 BytesSegment.ExtendBytesSegmentList(BytesSegments, new BytesSegment(activeMemoryVersion, firstUnrecordedActiveMemoryByte, activeMemoryLength - firstUnrecordedActiveMemoryByte));
@@ -251,26 +251,26 @@ namespace Lazinator.Buffers
         /// Returns the version number for active memory (equal to the last version number for CompletedMemory plus one). 
         /// </summary>
         /// <returns></returns>
-        private int GetActiveMemoryVersion()
+        private int GetActiveMemoryChunkID()
         {
             if (!CompletedMemory.IsEmpty && (CompletedMemory.MoreOwnedMemory?.Any() ?? false))
-                return CompletedMemory.MoreOwnedMemory.Last().ReferencedMemoryVersion + 1;
+                return CompletedMemory.MoreOwnedMemory.Last().ReferencedMemoryChunkID + 1;
             if (CompletedMemory.IsEmpty)
                 return 0;
-            return CompletedMemory.InitialOwnedMemoryReference.ReferencedMemoryVersion + 1;
+            return CompletedMemory.InitialOwnedMemoryReference.ReferencedMemoryChunkID + 1;
         }
 
         /// <summary>
         /// Finds the index of the first byte in active memory not yet recorded in BytesSegments. It searches BytesSegments from the end to the beginning.
         /// </summary>
-        /// <param name="memoryChunkVersion"></param>
+        /// <param name="memoryChunkID"></param>
         /// <returns></returns>
-        private int GetFirstUnrecordedActiveMemoryByte(int memoryChunkVersion)
+        private int GetFirstUnrecordedActiveMemoryByte(int memoryChunkID)
         {
             for (int i = BytesSegments.Count - 1; i >= 0; i--)
             {
                 BytesSegment bytesSegment = BytesSegments[i];
-                if (bytesSegment.MemoryChunkVersion == memoryChunkVersion)
+                if (bytesSegment.MemoryChunkID == memoryChunkID)
                 {
                     return bytesSegment.IndexWithinMemoryChunk + bytesSegment.NumBytes;
                 }
