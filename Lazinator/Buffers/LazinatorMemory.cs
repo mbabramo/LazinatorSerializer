@@ -727,60 +727,6 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// Writes the memory to the binary buffer writer, with a byte length prefix
-        /// </summary>
-        /// <param name="writer">The binary buffer writer </param>
-        /// <param name="includeOutsideOfRange">True if contained memory that is NOT written should be written.</param>
-        /// <returns></returns>
-        public void WriteToBinaryBuffer_WithBytePrefix(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
-        {
-            if (Length > byte.MaxValue)
-                ThrowHelper.ThrowTooLargeException(byte.MaxValue);
-            writer.Write((byte)Length);
-            WriteToBinaryBuffer(ref writer, includeOutsideOfRange);
-        }
-
-        /// <summary>
-        /// Writes the memory to the binary buffer writer, with an Int16 length prefix
-        /// </summary>
-        /// <param name="writer">The binary buffer writer </param>
-        /// <param name="includeOutsideOfRange">True if contained memory that is NOT written should be written.</param>
-        /// <returns></returns>
-        public void WriteToBinaryBuffer_WithInt16Prefix(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
-        {
-            if (Length > Int16.MaxValue)
-                ThrowHelper.ThrowTooLargeException(Int16.MaxValue);
-            writer.Write((Int16)Length);
-            WriteToBinaryBuffer(ref writer, includeOutsideOfRange);
-        }
-
-        /// <summary>
-        /// Writes the memory to the binary buffer writer, with an Int32 length prefix
-        /// </summary>
-        /// <param name="writer">The binary buffer writer </param>
-        /// <param name="includeOutsideOfRange">True if contained memory that is NOT written should be written.</param>
-        /// <returns></returns>
-        public void WriteToBinaryBuffer_WithInt32Prefix(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
-        {
-            if (Length > Int32.MaxValue)
-                ThrowHelper.ThrowTooLargeException(Int32.MaxValue);
-            writer.Write((int)Length);
-            WriteToBinaryBuffer(ref writer, includeOutsideOfRange);
-        }
-
-        /// <summary>
-        /// Writes the memory to the binary buffer writer, with a long length prefix
-        /// </summary>
-        /// <param name="writer">The binary buffer writer </param>
-        /// <param name="includeOutsideOfRange">True if contained memory that is NOT written should be written.</param>
-        /// <returns></returns>
-        public void WriteToBinaryBuffer_WithInt64Prefix(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
-        {
-            writer.Write((Int64)Length);
-            WriteToBinaryBuffer(ref writer, includeOutsideOfRange);
-        }
-
-        /// <summary>
         /// Enumerates individual bytes referenced by this LazinatorMemory.
         /// </summary>
         /// <param name="includeOutsideOfRange">If true, bytes outside the referenced range are included.</param>
