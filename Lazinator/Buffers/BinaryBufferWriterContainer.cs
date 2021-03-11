@@ -32,12 +32,12 @@ namespace Lazinator.Buffers
             set => Writer.CompletedMemory = value;
         }
 
-        public List<BytesSegment> BytesSegments
+        public List<MemoryChunkReference> MemoryChunkReferences
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => Writer.BytesSegments;
+            get => Writer.MemoryChunkReferences;
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set => Writer.BytesSegments = value;
+            set => Writer.MemoryChunkReferences = value;
         }
 
         public BinaryBufferWriterContainer(int minimumSize, LazinatorMemory? completedMemory = null)

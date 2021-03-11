@@ -34,6 +34,7 @@ using LazinatorTests.Examples.RemoteHierarchy;
 using LazinatorTests.Examples.ExampleHierarchy;
 using System.Security.Cryptography.X509Certificates;
 using LazinatorTests.AnotherNamespace;
+using Lazinator.Buffers;
 
 namespace LazinatorTests.Tests
 {
@@ -202,6 +203,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(WInt64Array), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(WNullableGuid), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(WReadOnlySpanChar), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(MemoryChunkReference), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws);
         }
 
         //[Fact]

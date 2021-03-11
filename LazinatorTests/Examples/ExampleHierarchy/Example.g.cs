@@ -2056,7 +2056,6 @@ namespace LazinatorTests.Examples
             
         }
         
-        
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, /*<$$ if=async,0 $$>*/in /*<$$/if $$>*//*<$$ if=async,1 $$>*//*<$$/if $$>*/LazinatorSerializationOptions options, bool includeUniqueID)
         {
             WriteUncompressedPrimitives.WriteNullableDouble(ref writer, _MyNullableDouble);
@@ -2079,6 +2078,7 @@ namespace LazinatorTests.Examples
             CompressedIntegralTypes.WriteCompressedNullableByte(ref writer, (byte?) _MyTestEnumByteNullable);
             CompressedIntegralTypes.WriteCompressedUInt(ref writer, _MyUInt);
         }
+
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, long startOfObjectPosition)
         {
             long startOfChildPosition = 0;

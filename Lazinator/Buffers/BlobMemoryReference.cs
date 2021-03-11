@@ -13,7 +13,7 @@ namespace Lazinator.Buffers
     /// <summary>
     /// Saves or loads memory references referring either to parts of a single file or to consecutively numbered files. The initial file contains information on all the other components, so that these can be asynchronously loaded if necessary.
     /// </summary>
-    public class BlobMemoryReference : MemoryReference
+    public class BlobMemoryReference : MemoryChunk
     {
         string BlobPath;
         IBlobManager BlobManager;
@@ -43,7 +43,7 @@ namespace Lazinator.Buffers
             BlobManager = blobManager;
             Length = length;
             Offset = offset;
-            ReferencedMemoryChunkID = referencedMemoryID;
+            MemoryChunkID = referencedMemoryID;
         }
 
         #region Memory loading and unloading
@@ -87,7 +87,7 @@ namespace Lazinator.Buffers
         /// This should be called immediately after the constructor. 
         /// </summary>
         /// <returns></returns>
-        private async Task<List<MemoryReference>> GetAdditionalReferencesAsync(bool containedInSingleBlob)
+        private async Task<List<MemoryChunk>> GetAdditionalReferencesAsync(bool containedInSingleBlob)
         {
             Memory<byte> intHolder = await BlobManager.ReadAsync(BlobPath, 0, 4);
             int numBytesRead = 0;
@@ -101,7 +101,7 @@ namespace Lazinator.Buffers
         /// This should be called immediately after the constructor. 
         /// </summary>
         /// <returns></returns>
-        private List<MemoryReference> GetAdditionalReferences(bool containedInSingleBlob)
+        private List<MemoryChunk> GetAdditionalReferences(bool containedInSingleBlob)
         {
             Memory<byte> intHolder = BlobManager.Read(BlobPath, 0, 4);
             int numBytesRead = 0;
@@ -110,12 +110,12 @@ namespace Lazinator.Buffers
             return CompleteGetAdditionalReferences(containedInSingleBlob, numItems, bytesForLengths);
         }
 
-        private List<MemoryReference> CompleteGetAdditionalReferences(bool containedInSingleBlob, int numItems, Memory<byte> bytesForLengths)
+        private List<MemoryChunk> CompleteGetAdditionalReferences(bool containedInSingleBlob, int numItems, Memory<byte> bytesForLengths)
         {
             List<int> blobLengths = GetBlobLengths(bytesForLengths, numItems);
             if (containedInSingleBlob)
                 Offset = 4 + numItems * 4;
-            List<MemoryReference> memoryReferences = GetMemoryReferences(blobLengths, containedInSingleBlob);
+            List<MemoryChunk> memoryReferences = GetMemoryReferences(blobLengths, containedInSingleBlob);
             return memoryReferences;
         }
 
@@ -132,9 +132,9 @@ namespace Lazinator.Buffers
             return fileLengths;
         }
 
-        private List<MemoryReference> GetMemoryReferences(List<int> blobLengths, bool containedInSingleBlob)
+        private List<MemoryChunk> GetMemoryReferences(List<int> blobLengths, bool containedInSingleBlob)
         {
-            List<MemoryReference> memoryReferences = new List<MemoryReference>();
+            List<MemoryChunk> memoryReferences = new List<MemoryChunk>();
             long numBytesProcessed = Offset;
             for (int i = 1; i <= blobLengths.Count; i++)
             {

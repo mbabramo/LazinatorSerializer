@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Buffers
 {
-    public class MemoryReference : IMemoryOwner<byte>
+    public class MemoryChunk : IMemoryOwner<byte>
     {
         public IMemoryOwner<byte> ReferencedMemory { get; set; }
 
-        public int ReferencedMemoryChunkID { get; set; }
+        public int MemoryChunkID { get; set; }
 
         public int StartIndex;
 
@@ -19,15 +19,15 @@ namespace Lazinator.Buffers
 
         public bool IsLoaded => ReferencedMemory != null;
 
-        public MemoryReference()
+        public MemoryChunk()
         {
 
         }
 
-        public MemoryReference(IMemoryOwner<byte> referencedMemory, int memoryChunkID, int startIndex, int length)
+        public MemoryChunk(IMemoryOwner<byte> referencedMemory, int memoryChunkID, int startIndex, int length)
         {
             ReferencedMemory = referencedMemory;
-            ReferencedMemoryChunkID = memoryChunkID;
+            MemoryChunkID = memoryChunkID;
             StartIndex = startIndex;
             Length = length;
         }
@@ -62,7 +62,7 @@ namespace Lazinator.Buffers
             return Memory;
         }
 
-        public MemoryReference Slice(int startIndex, int length) => new MemoryReference(ReferencedMemory, ReferencedMemoryChunkID, StartIndex + startIndex, length);
+        public MemoryChunk Slice(int startIndex, int length) => new MemoryChunk(ReferencedMemory, MemoryChunkID, StartIndex + startIndex, length);
 
         public void Dispose()
         {
