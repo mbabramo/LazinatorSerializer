@@ -156,6 +156,17 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(LazinatorTriple<,,>), project: "LazinatorCollections", mainFolder: "/Tuples/", subfolder: "", ws);
         }
 
+
+        [Fact]
+        public async Task CodeGenerationProducesActualCode_MemoryChunkReferences()
+        {
+
+            AdhocWorkspace ws = GetAdhocWorkspace();
+            await CompleteGenerateCode(typeof(MemoryChunkReference), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws);
+
+            await CompleteGenerateCode(typeof(MemoryChunkReferenceList), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws);
+        }
+
         [Fact]
         public async Task CodeGenerationProducesActualCode_Wrappers()
         {
@@ -203,7 +214,6 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(WInt64Array), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(WNullableGuid), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(WReadOnlySpanChar), project: "Lazinator", mainFolder: "/Wrappers/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(MemoryChunkReference), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws);
         }
 
         //[Fact]
@@ -346,6 +356,7 @@ public class MyOtherClass
                 ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/Enumerators",
                 ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/OffsetList",
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Wrappers",
+                ReadCodeFile.GetCodeBasePath("Lazinator") + "/Buffers",
                 ReadCodeFile.GetCodeBasePath("LazinatorTests") + "/Examples",
             };
         }

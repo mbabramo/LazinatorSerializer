@@ -9,18 +9,14 @@ namespace Lazinator.Buffers
     /// <summary>
     /// A reference to a range of bytes, identified by a memory chunk number, the index of the first byte within that memory chunk, and the number of bytes.
     /// </summary>
-    public struct MemoryChunkReference : IMemoryChunkReference
+    public partial struct MemoryChunkReference : IMemoryChunkReference
     {
-        public MemoryChunkReference(int memoryChunkID, int indexWithinMemoryChunk, int numBytes)
+        public MemoryChunkReference(int memoryChunkID, int indexWithinMemoryChunk, int numBytes) : this()
         {
             MemoryChunkID = memoryChunkID;
             IndexWithinMemoryChunk = indexWithinMemoryChunk;
-            NumBytes = numBytes;
+            Length = numBytes;
         }
-
-        public int MemoryChunkID { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public int IndexWithinMemoryChunk { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public int NumBytes { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         /// <summary>
         /// Extends a byte segment list by adding a new segment. If the new segment is contiguous to the last existing segment,
@@ -33,9 +29,9 @@ namespace Lazinator.Buffers
             if (bytesSegmentList.Any())
             {
                 MemoryChunkReference last = bytesSegmentList.Last();
-                if (newSegment.MemoryChunkID == last.MemoryChunkID && newSegment.IndexWithinMemoryChunk == last.IndexWithinMemoryChunk + last.NumBytes)
+                if (newSegment.MemoryChunkID == last.MemoryChunkID && newSegment.IndexWithinMemoryChunk == last.IndexWithinMemoryChunk + last.Length)
                 {
-                    last.NumBytes += newSegment.NumBytes;
+                    last.Length += newSegment.Length;
                     return;
                 }
             }

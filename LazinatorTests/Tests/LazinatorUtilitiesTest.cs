@@ -61,7 +61,7 @@ namespace LazinatorTests.Tests
                 }
                 if (i == 0)
                     m = new LazinatorMemory(b);
-                else m = m.WithAppendedChunk(new MemoryChunk(new SimpleMemoryOwner<byte>(b), i, 0, b.Length));
+                else m = m.WithAppendedChunk(new MemoryChunk(new SimpleMemoryOwner<byte>(b), new MemoryChunkReference(i, 0, b.Length)));
             }
 
             const int numChecks = 15;
@@ -103,7 +103,7 @@ namespace LazinatorTests.Tests
                     continuousUnderlying[overallIndex++] = mainChunks[i][j];
                 }
                 overallMemoryOwners.Add(new SimpleMemoryOwner<byte>(mainChunks[i]));
-                overallMemoryReferences.Add(new MemoryChunk(overallMemoryOwners[i], i, 0, bytesPerChunk));
+                overallMemoryReferences.Add(new MemoryChunk(overallMemoryOwners[i], new MemoryChunkReference(i, 0, bytesPerChunk)));
             }
             LazinatorMemory overallLazinatorMemory = new LazinatorMemory(overallMemoryReferences.First(), overallMemoryReferences.Skip(1).ToList(), 0, 0, continuousUnderlying.Length);
             const int numRepetitions = 100;
@@ -121,14 +121,14 @@ namespace LazinatorTests.Tests
                     int mainChunkIndex = r.Next(0, numMainChunks);
                     int startPosition = r.Next(0, bytesPerChunk);
                     int numBytes = r.Next(0, bytesPerChunk - startPosition);
-                    referenceChunks.Add(new MemoryChunk(overallMemoryOwners[mainChunkIndex], mainChunkIndex, startPosition, numBytes));
+                    referenceChunks.Add(new MemoryChunk(overallMemoryOwners[mainChunkIndex], new MemoryChunkReference(mainChunkIndex, startPosition, numBytes)));
                     IEnumerable<byte> bytesToAdd = overallMemoryOwners[mainChunkIndex].Memory.ToArray().Skip(startPosition).Take(numBytes);
                     referencedBytes.AddRange(bytesToAdd);
                     //Debug.WriteLine($"Main chunk {mainChunkIndex} start {startPosition} numBytes {numBytes} bytes {String.Join(",", bytesToAdd)}");
                     //Debug.WriteLine($"Overall referenced bytes {String.Join(",", referencedBytes)}");
 
                 }
-                int totalBytesReferredTo = referenceChunks.Sum(x => x.Length);
+                int totalBytesReferredTo = referenceChunks.Sum(x => x.Reference.Length);
                 referencedBytes.Count().Should().Equals(totalBytesReferredTo);
                 LazinatorMemory cobbledMemory = new LazinatorMemory(referenceChunks.First(), referenceChunks.Skip(1).ToList(), 0, 0, totalBytesReferredTo);
 
@@ -138,7 +138,7 @@ namespace LazinatorTests.Tests
                 referencedBytes = referencedBytes.Skip(startingPositionWithinLazinatorMemorySubrange).Take(numBytesWithinLazinatorMemorySubrange).ToList();
                 //Debug.WriteLine($"startingPositionWithinLazinatorMemorySubrange {startingPositionWithinLazinatorMemorySubrange } numBytesWithinLazinatorMemorySubrange {numBytesWithinLazinatorMemorySubrange}");
                 List<MemoryChunkReference> byteSegments = cobbledMemory.EnumerateSubrangeAsSegments(startingPositionWithinLazinatorMemorySubrange, numBytesWithinLazinatorMemorySubrange).ToList();
-                byteSegments.Sum(x => x.NumBytes).Should().Equals(numBytesWithinLazinatorMemorySubrange);
+                byteSegments.Sum(x => x.Length).Should().Equals(numBytesWithinLazinatorMemorySubrange);
                 List<byte> bytesFound = new List<byte>();
                 foreach (var byteSegment in byteSegments)
                     bytesFound.AddRange(overallLazinatorMemory.GetMemoryAtBytesSegment(byteSegment).ToArray()); // The byte segments are indexes of the OVERALL memory, not of the cobbled-together memory. The goal is to have enough information to create the next generation of cobbled-together memory.

@@ -45,5 +45,6 @@ namespace Lazinator
         IWInt64Array,
         IPlaceholder,
         IMemoryChunkReference,
+        IMemoryChunkReferenceList,
     }
 }

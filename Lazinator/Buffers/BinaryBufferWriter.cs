@@ -97,7 +97,7 @@ namespace Lazinator.Buffers
             {
                 InitializeIfNecessary();
                 if (!CompletedMemory.IsEmpty)
-                    return CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, GetActiveMemoryChunkID(), 0, ActiveMemoryPosition));
+                    return CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, new MemoryChunkReference(GetActiveMemoryChunkID(), 0, ActiveMemoryPosition)));
                 return new LazinatorMemory(ActiveMemory, 0, ActiveMemoryPosition);
             }
         }
@@ -207,7 +207,7 @@ namespace Lazinator.Buffers
         /// <param name="minSizeofNewBuffer"></param>
         public void MoveActiveToCompletedMemory(int minSizeofNewBuffer = ExpandableBytes.DefaultMinBufferSize)
         {
-            CompletedMemory = CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, GetActiveMemoryChunkID(), 0, ActiveMemoryPosition));
+            CompletedMemory = CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, new MemoryChunkReference(GetActiveMemoryChunkID(), 0, ActiveMemoryPosition)));
             ActiveMemory = new ExpandableBytes(minSizeofNewBuffer);
             ActiveMemoryPosition = 0;
         }
@@ -254,10 +254,10 @@ namespace Lazinator.Buffers
         private int GetActiveMemoryChunkID()
         {
             if (!CompletedMemory.IsEmpty && (CompletedMemory.MoreOwnedMemory?.Any() ?? false))
-                return CompletedMemory.MoreOwnedMemory.Last().MemoryChunkID + 1;
+                return CompletedMemory.MoreOwnedMemory.Last().Reference.MemoryChunkID + 1;
             if (CompletedMemory.IsEmpty)
                 return 0;
-            return CompletedMemory.InitialOwnedMemoryReference.MemoryChunkID + 1;
+            return CompletedMemory.InitialOwnedMemoryReference.Reference.MemoryChunkID + 1;
         }
 
         /// <summary>
@@ -272,7 +272,7 @@ namespace Lazinator.Buffers
                 MemoryChunkReference bytesSegment = MemoryChunkReferences[i];
                 if (bytesSegment.MemoryChunkID == memoryChunkID)
                 {
-                    return bytesSegment.IndexWithinMemoryChunk + bytesSegment.NumBytes;
+                    return bytesSegment.IndexWithinMemoryChunk + bytesSegment.Length;
                 }
             }
             return 0;

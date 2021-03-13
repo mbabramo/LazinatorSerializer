@@ -19,8 +19,6 @@ namespace Lazinator.Buffers
         IBlobManager BlobManager;
         bool ContainedInSingleBlob;
 
-        private long Offset = 0;
-
         /// <summary>
         /// Creates a reference to the index file (which may or may not contain all of the remaining data). This should be followed by a call to GetLazinatorMemory or GetLazinatorMemoryAsync
         /// </summary>
@@ -37,20 +35,18 @@ namespace Lazinator.Buffers
         /// </summary>
         /// <param name="path">The path, including a number referring to the specific file</param>
         /// <param name="length"></param>
-        public BlobMemoryReference(string path, IBlobManager blobManager, int length, long offset, int referencedMemoryID)
+        public BlobMemoryReference(string path, IBlobManager blobManager, MemoryChunkReference reference)
         {
             BlobPath = path;
             BlobManager = blobManager;
-            Length = length;
-            Offset = offset;
-            MemoryChunkID = referencedMemoryID;
+            Reference = reference;
         }
 
         #region Memory loading and unloading
 
         public async override ValueTask LoadMemoryAsync()
         {
-            Memory<byte> bytes = await BlobManager.ReadAsync(BlobPath, Offset, Length);
+            Memory<byte> bytes = await BlobManager.ReadAsync(BlobPath, Reference.IndexWithinMemoryChunk, Reference.Length);
             ReferencedMemory = new SimpleMemoryOwner<byte>(bytes);
         }
 
@@ -68,7 +64,7 @@ namespace Lazinator.Buffers
         {
             var references = GetAdditionalReferences(ContainedInSingleBlob);
             var firstAfterIndex = references.First();
-            LazinatorMemory lazinatorMemory = new LazinatorMemory(firstAfterIndex, references.Skip(1).ToList(), 0, 0, references.Sum(x => x.Length));
+            LazinatorMemory lazinatorMemory = new LazinatorMemory(firstAfterIndex, references.Skip(1).ToList(), 0, 0, references.Sum(x => x.Reference.Length));
             lazinatorMemory.LoadInitialMemory();
             return lazinatorMemory;
         }
@@ -77,7 +73,7 @@ namespace Lazinator.Buffers
         {
             var references = await GetAdditionalReferencesAsync(ContainedInSingleBlob);
             var firstAfterIndex = references.First();
-            LazinatorMemory lazinatorMemory = new LazinatorMemory(firstAfterIndex, references.Skip(1).ToList(), 0, 0, references.Sum(x => x.Length));
+            LazinatorMemory lazinatorMemory = new LazinatorMemory(firstAfterIndex, references.Skip(1).ToList(), 0, 0, references.Sum(x => x.Reference.Length));
             await lazinatorMemory.LoadInitialMemoryAsync();
             return lazinatorMemory;
         }
@@ -114,7 +110,7 @@ namespace Lazinator.Buffers
         {
             List<int> blobLengths = GetBlobLengths(bytesForLengths, numItems);
             if (containedInSingleBlob)
-                Offset = 4 + numItems * 4;
+                Reference = new MemoryChunkReference(Reference.MemoryChunkID, 4 + numItems * 4, Reference.Length); // DEBUG -- not sure here
             List<MemoryChunk> memoryReferences = GetMemoryReferences(blobLengths, containedInSingleBlob);
             return memoryReferences;
         }
@@ -135,12 +131,12 @@ namespace Lazinator.Buffers
         private List<MemoryChunk> GetMemoryReferences(List<int> blobLengths, bool containedInSingleBlob)
         {
             List<MemoryChunk> memoryReferences = new List<MemoryChunk>();
-            long numBytesProcessed = Offset;
+            long numBytesProcessed = Reference.IndexWithinMemoryChunk;
             for (int i = 1; i <= blobLengths.Count; i++)
             {
                 int length = blobLengths[i-1];
                 string referencePath = containedInSingleBlob ? BlobPath : GetPathWithNumber(BlobPath, i);
-                memoryReferences.Add(new BlobMemoryReference(referencePath, BlobManager, blobLengths[i - 1], containedInSingleBlob ? numBytesProcessed : 0, i));
+                memoryReferences.Add(new BlobMemoryReference(referencePath, BlobManager, new MemoryChunkReference(i, containedInSingleBlob ? (int) numBytesProcessed : 0, blobLengths[i - 1])));
                 numBytesProcessed += length;
             }
             return memoryReferences;
