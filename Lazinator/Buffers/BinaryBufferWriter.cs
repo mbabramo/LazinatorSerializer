@@ -221,7 +221,7 @@ namespace Lazinator.Buffers
         {
             if (CompletedMemory == null)
                 throw new ArgumentException();
-            IEnumerable<MemoryChunkReference> segmentsToAdd = CompletedMemory.EnumerateSubrangeAsSegments(startIndex, numBytes);
+            IEnumerable<MemoryChunkReference> segmentsToAdd = CompletedMemory.EnumerateMemoryChunkReferences(startIndex, numBytes);
             MemoryChunkReference.ExtendBytesSegmentList(MemoryChunkReferences, segmentsToAdd);
             RecordLastActiveMemoryBytesSegment();
         }

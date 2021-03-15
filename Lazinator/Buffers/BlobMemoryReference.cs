@@ -19,8 +19,10 @@ namespace Lazinator.Buffers
         IBlobManager BlobManager;
         bool ContainedInSingleBlob;
 
+        // DEBUG -- maybe index file should not be a BlobMemoryReference, but a BlobIndexReference.
+
         /// <summary>
-        /// Creates a reference to the index file (which may or may not contain all of the remaining data). This should be followed by a call to GetLazinatorMemory or GetLazinatorMemoryAsync
+        /// Creates a reference to the index file (which may or may not contain all of the remaining data). This should be followed by a call to GetLazinatorMemory or GetLazinatorMemoryAsync.
         /// </summary>
         /// <param name="path"></param>
         public BlobMemoryReference(string path, IBlobManager blobManager, bool containedInSingleBlob)
@@ -78,6 +80,8 @@ namespace Lazinator.Buffers
             return lazinatorMemory;
         }
 
+        const int sizeForMemoryChunkReference = 12;
+
         /// <summary>
         /// Uses information in an initial MemoryReferenceInFile to generate information on other MemoryReferenceInFiles. 
         /// This should be called immediately after the constructor. 
@@ -88,7 +92,7 @@ namespace Lazinator.Buffers
             Memory<byte> intHolder = await BlobManager.ReadAsync(BlobPath, 0, 4);
             int numBytesRead = 0;
             int numItems = ReadUncompressedPrimitives.ToInt32(intHolder.Span, ref numBytesRead);
-            Memory<byte> bytesForLengths = await BlobManager.ReadAsync(BlobPath, 4, numItems * 4);
+            Memory<byte> bytesForLengths = await BlobManager.ReadAsync(BlobPath, 4, numItems * sizeForMemoryChunkReference);
             return CompleteGetAdditionalReferences(containedInSingleBlob, numItems, bytesForLengths);
         }
 
@@ -102,42 +106,41 @@ namespace Lazinator.Buffers
             Memory<byte> intHolder = BlobManager.Read(BlobPath, 0, 4);
             int numBytesRead = 0;
             int numItems = ReadUncompressedPrimitives.ToInt32(intHolder.Span, ref numBytesRead);
-            Memory<byte> bytesForLengths = BlobManager.Read(BlobPath, 4, numItems * 4);
+            Memory<byte> bytesForLengths = BlobManager.Read(BlobPath, 4, numItems * sizeForMemoryChunkReference);
             return CompleteGetAdditionalReferences(containedInSingleBlob, numItems, bytesForLengths);
         }
 
-        private List<MemoryChunk> CompleteGetAdditionalReferences(bool containedInSingleBlob, int numItems, Memory<byte> bytesForLengths)
+        private List<MemoryChunk> CompleteGetAdditionalReferences(bool containedInSingleBlob, int numItems, Memory<byte> memoryChunkReferencesStorage)
         {
-            List<int> blobLengths = GetBlobLengths(bytesForLengths, numItems);
-            if (containedInSingleBlob)
-                Reference = new MemoryChunkReference(Reference.MemoryChunkID, 4 + numItems * 4, Reference.Length); // DEBUG -- not sure here
-            List<MemoryChunk> memoryReferences = GetMemoryReferences(blobLengths, containedInSingleBlob);
+            List<MemoryChunkReference> memoryChunkReferences = GetMemoryChunkReferences(memoryChunkReferencesStorage, numItems);
+            List<MemoryChunk> memoryReferences = GetMemoryReferences(memoryChunkReferences, containedInSingleBlob);
             return memoryReferences;
         }
 
-        private List<int> GetBlobLengths(Memory<byte> bytesForLengths, int numItems)
+        private List<MemoryChunkReference> GetMemoryChunkReferences(Memory<byte> memoryChunkReferencesStorage, int numItems)
         {
-            ReadOnlySpan<byte> spanForLengths = bytesForLengths.Span; 
-            List<int> fileLengths = new List<int>();
+            List<MemoryChunkReference> memoryChunkReferences = new List<MemoryChunkReference>();
             int numBytesRead = 0;
             for (int i = 1; i <= numItems; i++)
             {
-                int fileLength = ReadUncompressedPrimitives.ToInt32(spanForLengths, ref numBytesRead);
-                fileLengths.Add(fileLength);
+                var memorySlice = memoryChunkReferencesStorage.Slice(numBytesRead, sizeForMemoryChunkReference);
+                var lazinatorMemory = new LazinatorMemory(new SimpleMemoryOwner<byte>(memorySlice));
+                MemoryChunkReference memoryChunkReference = new MemoryChunkReference(lazinatorMemory);
+                memoryChunkReferences.Add(memoryChunkReference);
             }
-            return fileLengths;
+            return memoryChunkReferences;
         }
 
-        private List<MemoryChunk> GetMemoryReferences(List<int> blobLengths, bool containedInSingleBlob)
+        private List<MemoryChunk> GetMemoryReferences(List<MemoryChunkReference> memoryChunkReferences, bool containedInSingleBlob)
         {
             List<MemoryChunk> memoryReferences = new List<MemoryChunk>();
             long numBytesProcessed = Reference.IndexWithinMemoryChunk;
-            for (int i = 1; i <= blobLengths.Count; i++)
+            for (int i = 0; i < memoryChunkReferences.Count; i++)
             {
-                int length = blobLengths[i-1];
-                string referencePath = containedInSingleBlob ? BlobPath : GetPathWithNumber(BlobPath, i);
-                memoryReferences.Add(new BlobMemoryReference(referencePath, BlobManager, new MemoryChunkReference(i, containedInSingleBlob ? (int) numBytesProcessed : 0, blobLengths[i - 1])));
-                numBytesProcessed += length;
+                MemoryChunkReference memoryChunkReference = memoryChunkReferences[i];
+                string referencePath = containedInSingleBlob ? BlobPath : GetPathWithNumber(BlobPath, memoryChunkReference.MemoryChunkID);
+                memoryReferences.Add(new BlobMemoryReference(referencePath, BlobManager, memoryChunkReference));
+                numBytesProcessed += memoryChunkReference.Length;
             }
             return memoryReferences;
         }

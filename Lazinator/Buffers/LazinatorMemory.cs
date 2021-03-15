@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Lazinator.Core;
 using Lazinator.Exceptions;
 using Lazinator.Support;
 using Lazinator.Wrappers;
@@ -465,11 +466,29 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// Enumerates memory chunk ranges corresponding to this LazinatorMemory
+        /// A reference to a portion of a stored memory chunk. Unlike MemoryChunkReference, each reference refers
+        /// to a particular memory chunk by index instead of memory chunk ID.
+        /// </summary>
+        private readonly struct MemoryChunkIndexReference
+        {
+            public readonly int MemoryChunkIndex;
+            public readonly int Offset;
+            public readonly int Length;
+
+            public MemoryChunkIndexReference(int memoryChunkIndex, int offset, int length)
+            {
+                this.MemoryChunkIndex = memoryChunkIndex;
+                this.Offset = offset;
+                this.Length = length;
+            }
+        }
+
+        /// <summary>
+        /// Enumerates memory chunk ranges corresponding to this LazinatorMemory. Note that memory chunks are referred to by index instead of by ID.
         /// </summary>
         /// <param name="includeOutsideOfRange">If true, then the full range of bytes in all contained memory chunks is included; if false, only those bytes referenced by this LazinatorMemory are included</param>
         /// <returns>An enumerable where each element consists of the chunk index, the start position, and the number of bytes</returns>
-        public IEnumerable<(int chunkIndex, int startPosition, int numBytes)> EnumerateMemoryChunkRanges(bool includeOutsideOfRange = false)
+        private IEnumerable<MemoryChunkIndexReference> EnumerateMemoryChunksByIndex(bool includeOutsideOfRange = false)
         {
             if (!includeOutsideOfRange && Length == 0)
                 yield break;
@@ -487,43 +506,10 @@ namespace Lazinator.Buffers
                 int numBytes = GetMemoryOwnerLength(m) - startPositionOrZero;
                 if (numBytes > lengthRemaining)
                     numBytes = (int) lengthRemaining;
-                yield return (i, startPositionOrZero, numBytes);
+                yield return new MemoryChunkIndexReference(i, startPositionOrZero, numBytes);
                 lengthRemaining -= numBytes;
                 if (lengthRemaining == 0)
                     yield break;
-            }
-        }
-
-
-        /// <summary>
-        /// Enumerates memory chunk ranges corresponding to a subset of the bytes referenced by this LazinatorMemory
-        /// </summary>
-        /// <param name="relativeStartPositionOfSubrange">The byte index at which to start enumerating</param>
-        /// <param name="numBytesInSubrange">The number of bytes to include</param>
-        /// <returns>An enumerable where each element consists of the chunk index, the start position, and the number of bytes</returns>
-        public IEnumerable<(int chunkIndex, int startPosition, int numBytes)> EnumerateMemoryChunkSubranges(long relativeStartPositionOfSubrange, long numBytesInSubrange)
-        {
-            long bytesBeforeSubrangeRemaining = relativeStartPositionOfSubrange;
-            long bytesOfSubrangeRemaining = numBytesInSubrange;
-            bool withinSubrange = false;
-            foreach (var rangeInfo in EnumerateMemoryChunkRanges(false))
-            {
-                long skipOverBytes = 0;
-                if (!withinSubrange)
-                {
-                    skipOverBytes = Math.Min(bytesBeforeSubrangeRemaining, rangeInfo.numBytes);
-                    bytesBeforeSubrangeRemaining -= skipOverBytes;
-                    if (bytesBeforeSubrangeRemaining == 0)
-                        withinSubrange = true;
-                }
-                if (withinSubrange)
-                {
-                    int numBytesToInclude = (int) Math.Min(bytesOfSubrangeRemaining, rangeInfo.numBytes - skipOverBytes);
-                    yield return (rangeInfo.chunkIndex, (int) (rangeInfo.startPosition + skipOverBytes), numBytesToInclude);
-                    bytesOfSubrangeRemaining -= numBytesToInclude;
-                    if (bytesOfSubrangeRemaining == 0)
-                        yield break;
-                }
             }
         }
 
@@ -539,34 +525,68 @@ namespace Lazinator.Buffers
         // The result is that we have a list of BytesSegments. We can save this list of BytesSegments at the end of the latest range of data that we have just written to (plus an indication of the size of this list).
         // That way, we can see what versions we need to have in memory (or lazy loadable) and we can load the large LazinatorMemory, then the next-generation cobbled-together LazinatorMemory.
 
+
         /// <summary>
-        /// Enumerates a subrange as BytesSegments. It is required that each memory owner be a MemoryReference.
+        /// Enumerates memory chunk ranges corresponding to a subset of the bytes referenced by this LazinatorMemory
         /// </summary>
-        /// <param name="relativeStartPositionOfSubrange"></param>
-        /// <param name="numBytesInSubrange"></param>
-        /// <returns></returns>
-        public IEnumerable<MemoryChunkReference> EnumerateSubrangeAsSegments(long relativeStartPositionOfSubrange, long numBytesInSubrange)
+        /// <param name="relativeStartPositionOfSubrange">The byte index at which to start enumerating</param>
+        /// <param name="numBytesInSubrange">The number of bytes to include</param>
+        /// <returns>An enumerable where each element consists of the chunk index, the start position, and the number of bytes</returns>
+        public IEnumerable<MemoryChunkReference> EnumerateMemoryChunkReferences(long relativeStartPositionOfSubrange, long numBytesInSubrange)
         {
-            foreach ((int chunkIndex, int startPosition, int numBytes) in EnumerateMemoryChunkSubranges(relativeStartPositionOfSubrange, numBytesInSubrange))
+            foreach (MemoryChunkIndexReference memoryChunkIndexReference in EnumerateMemoryChunkIndices(relativeStartPositionOfSubrange, numBytesInSubrange))
             {
-                var memoryOwner = MemoryAtIndex(chunkIndex);
+                var memoryOwner = MemoryAtIndex(memoryChunkIndexReference.MemoryChunkIndex);
                 if (memoryOwner is not MemoryChunk memoryReference)
                     memoryReference = InitialOwnedMemoryReference;
-                yield return new MemoryChunkReference(memoryReference.Reference.MemoryChunkID, memoryReference.Reference.IndexWithinMemoryChunk + startPosition, numBytes);
+                yield return new MemoryChunkReference(memoryReference.Reference.MemoryChunkID, memoryReference.Reference.IndexWithinMemoryChunk + memoryChunkIndexReference.Offset, memoryChunkIndexReference.Length);
             }
         }
 
         /// <summary>
-        /// Returns the Memory block of bytes corresponding to a BytesSegments. It is required that each memory owner be a MemoryReference.
+        /// Enumerate ranges of bytes, referring to each range by identifying a particular memory chunk by index instead of ID, as well as an offset and length.
         /// </summary>
-        /// <param name="bytesSegment">The bytes segment</param>
+        /// <param name="relativeStartPositionOfSubrange"></param>
+        /// <param name="numBytesInSubrange"></param>
         /// <returns></returns>
-        public Memory<byte> GetMemoryAtBytesSegment(MemoryChunkReference bytesSegment)
+        private IEnumerable<MemoryChunkIndexReference> EnumerateMemoryChunkIndices(long relativeStartPositionOfSubrange, long numBytesInSubrange)
         {
-            var memoryOwner = MemoryAtIndex(bytesSegment.MemoryChunkID);
+            long bytesBeforeSubrangeRemaining = relativeStartPositionOfSubrange;
+            long bytesOfSubrangeRemaining = numBytesInSubrange;
+            bool withinSubrange = false;
+            foreach (var rangeInfo in EnumerateMemoryChunksByIndex(false))
+            {
+                long skipOverBytes = 0;
+                if (!withinSubrange)
+                {
+                    skipOverBytes = Math.Min(bytesBeforeSubrangeRemaining, rangeInfo.Length);
+                    bytesBeforeSubrangeRemaining -= skipOverBytes;
+                    if (bytesBeforeSubrangeRemaining == 0)
+                        withinSubrange = true;
+                }
+                if (withinSubrange)
+                {
+                    int numBytesToInclude = (int)Math.Min(bytesOfSubrangeRemaining, rangeInfo.Length - skipOverBytes);
+                    yield return new MemoryChunkIndexReference(rangeInfo.MemoryChunkIndex, (int)(rangeInfo.Offset + skipOverBytes), numBytesToInclude);
+                    bytesOfSubrangeRemaining -= numBytesToInclude;
+                    if (bytesOfSubrangeRemaining == 0)
+                        yield break;
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Returns the Memory block of bytes corresponding to a memory chunk reference. It is required that each memory owner be a MemoryChunk.
+        /// </summary>
+        /// <param name="memoryChunkReference">The memory chunk reference</param>
+        /// <returns></returns>
+        public Memory<byte> GetMemoryAtMemoryChunkReference(MemoryChunkReference memoryChunkReference)
+        {
+            var memoryOwner = MemoryAtIndex(memoryChunkReference.MemoryChunkID);
             if (memoryOwner is not MemoryChunk memoryReference)
                 memoryReference = InitialOwnedMemoryReference;
-            var underlyingChunk = memoryReference.ReferencedMemory.Memory.Slice(bytesSegment.IndexWithinMemoryChunk, bytesSegment.Length);
+            var underlyingChunk = memoryReference.ReferencedMemory.Memory.Slice(memoryChunkReference.IndexWithinMemoryChunk, memoryChunkReference.Length);
             return underlyingChunk;
         }
 
@@ -575,12 +595,12 @@ namespace Lazinator.Buffers
         /// </summary>
         /// <param name="includeOutsideOfRange">If true, includes all memory blocks, including those beyond the range referenced in this LazinatorMemory; if false, includes only the portion of memory represented by the range referenced in this LazinatorMemory </param>
         /// <returns></returns>
-        public IEnumerable<Memory<byte>> EnumerateMemoryChunks(bool includeOutsideOfRange = false)
+        public IEnumerable<Memory<byte>> EnumerateRawMemory(bool includeOutsideOfRange = false)
         {
-            foreach (var rangeInfo in EnumerateMemoryChunkRanges(includeOutsideOfRange))
+            foreach (var rangeInfo in EnumerateMemoryChunksByIndex(includeOutsideOfRange))
             {
-                var m = MemoryAtIndex(rangeInfo.chunkIndex);
-                yield return m.Memory.Slice(rangeInfo.startPosition, rangeInfo.numBytes);
+                var m = MemoryAtIndex(rangeInfo.MemoryChunkIndex);
+                yield return m.Memory.Slice(rangeInfo.Offset, rangeInfo.Length);
             }
         }
 
@@ -589,12 +609,12 @@ namespace Lazinator.Buffers
         /// </summary>
         /// <param name="includeOutsideOfRange">If true, includes all memory blocks, including those beyond the range referenced in this LazinatorMemory; if false, includes only the portion of memory represented by the range referenced in this LazinatorMemory </param>
         /// <returns></returns>
-        public async IAsyncEnumerable<Memory<byte>> EnumerateMemoryChunksAsync(bool includeOutsideOfRange = false)
+        public async IAsyncEnumerable<Memory<byte>> EnumerateRawMemoryAsync(bool includeOutsideOfRange = false)
         {
             MemoryChunk lastMemoryReferenceLoaded = null;
-            foreach (var rangeInfo in EnumerateMemoryChunkRanges(includeOutsideOfRange))
+            foreach (var rangeInfo in EnumerateMemoryChunksByIndex(includeOutsideOfRange))
             {
-                var m = MemoryAtIndex(rangeInfo.chunkIndex);
+                var m = MemoryAtIndex(rangeInfo.MemoryChunkIndex);
                 if (m is MemoryChunk memoryReference && memoryReference.IsLoaded == false)
                 {
                     if (lastMemoryReferenceLoaded != memoryReference)
@@ -604,15 +624,15 @@ namespace Lazinator.Buffers
                     }
                     await memoryReference.LoadMemoryAsync();
                 }
-                yield return m.Memory.Slice(rangeInfo.startPosition, rangeInfo.numBytes);
+                yield return m.Memory.Slice(rangeInfo.MemoryChunkIndex, rangeInfo.Length);
             }
         }
 
         /// <summary>
-        /// Enumerates each of the memory chunks, whether included within the referenced range or not.
+        /// Enumerates each of the memory owners, whether included within the referenced range or not.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IMemoryOwner<byte>> EnumerateMemoryOwners()
+        private IEnumerable<IMemoryOwner<byte>> EnumerateMemoryOwners()
         {
             if (InitialOwnedMemory != null)
                 yield return InitialOwnedMemory;
@@ -622,10 +642,10 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// Enumerates the referenced memory chunks (including portions of a referenced memory chunk not referenced).
+        /// Enumerates the referenced memory owners (including portions of referenced memory chunks not referenced).
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<IMemoryOwner<byte>> EnumerateReferencedMemoryOwners()
+        private IEnumerable<IMemoryOwner<byte>> EnumerateReferencedMemoryOwners()
         {
             foreach (var owner in EnumerateMemoryOwners())
                 if (owner is MemoryChunk memoryReference)
@@ -638,7 +658,7 @@ namespace Lazinator.Buffers
         /// Enumerates all memory chunks, including not referenced memory chunks, as memory references.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<MemoryChunk> EnumerateMemoryReferences()
+        private IEnumerable<MemoryChunk> EnumerateMemoryChunks()
         {
             if (InitialOwnedMemory != null)
                 yield return InitialOwnedMemoryReference;
@@ -655,7 +675,7 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public async ValueTask WriteToBinaryBufferAsync(BinaryBufferWriterContainer writer, bool includeOutsideOfRange = false)
         {
-            await foreach (Memory<byte> memory in EnumerateMemoryChunksAsync(includeOutsideOfRange))
+            await foreach (Memory<byte> memory in EnumerateRawMemoryAsync(includeOutsideOfRange))
                 writer.Write(memory.Span);
         }
 
@@ -668,7 +688,7 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public void WriteToBinaryBuffer(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
         {
-            foreach (Memory<byte> memory in EnumerateMemoryChunks(includeOutsideOfRange))
+            foreach (Memory<byte> memory in EnumerateRawMemory(includeOutsideOfRange))
                 writer.Write(memory.Span);
         }
 
@@ -755,64 +775,68 @@ namespace Lazinator.Buffers
 
         public async ValueTask<List<BlobMemoryReference>> WriteToBlobsAsync(string path, IBlobManager blobManager, bool containedInSingleBlob)
         {
-            var references = EnumerateMemoryReferences().ToList();
-            if (!references.Any())
+            var chunks = EnumerateMemoryChunks().ToList();
+            if (!chunks.Any())
                 return new List<BlobMemoryReference>();
-            BinaryBufferWriter writer = new BinaryBufferWriter(4 + references.Count() * 4);
+            const int sizeForMemoryChunkReference = 12;
+            BinaryBufferWriter writer = new BinaryBufferWriter(4 + chunks.Count() * sizeForMemoryChunkReference);
 
-            writer.Write(references.Count());
-            foreach (var reference in references)
-                writer.Write(reference.Reference.Length);
+            writer.Write(chunks.Count());
+            foreach (var chunk in chunks)
+                chunk.Reference.SerializeToExistingBuffer(ref writer, LazinatorSerializationOptions.Default);
 
             List<BlobMemoryReference> result = new List<BlobMemoryReference>();
             BlobMemoryReference indexFile = new BlobMemoryReference(path, blobManager, containedInSingleBlob);
             result.Add(indexFile);
             await blobManager.WriteAsync(path, writer.ActiveMemoryWritten);
-            int numBytesWritten = writer.ActiveMemoryPosition;
-            for (int i = 1; i <= references.Count; i++)
+            long numBytesWritten = writer.ActiveMemoryPosition;
+            for (int i = 0; i < chunks.Count; i++)
             {
-                MemoryChunk reference = references[i - 1];
-                Memory<byte> memory = reference.Memory;
-                string revisedPath = containedInSingleBlob ? path : BlobMemoryReference.GetPathWithNumber(path, i);
-                BlobMemoryReference referenceInFile = new BlobMemoryReference(revisedPath, blobManager, new MemoryChunkReference(i, containedInSingleBlob ? numBytesWritten : 0, reference.Reference.Length));
-                result.Add(referenceInFile);
+                MemoryChunk chunk = chunks[i - 1];
+                MemoryChunkReference reference = chunk.Reference;
+                Memory<byte> memory = chunk.Memory;
+                string revisedPath = containedInSingleBlob ? path : BlobMemoryReference.GetPathWithNumber(path, reference.MemoryChunkID);
+                BlobMemoryReference blobReference = new BlobMemoryReference(revisedPath, blobManager, new MemoryChunkReference(i, containedInSingleBlob ? (int) numBytesWritten : 0, chunk.Reference.Length));
+                result.Add(blobReference);
                 if (containedInSingleBlob)
                     await blobManager.AppendAsync(revisedPath, memory);
                 else
                     await blobManager.WriteAsync(revisedPath, memory);
-                numBytesWritten += reference.Reference.Length;
+                numBytesWritten += chunk.Reference.Length;
             }
             return result;
         }
 
         public List<BlobMemoryReference> WriteToBlobs(string path, IBlobManager blobManager, bool containedInSingleBlob)
         {
-            var references = EnumerateMemoryReferences().ToList();
-            if (!references.Any())
+            var chunks = EnumerateMemoryChunks().ToList();
+            if (!chunks.Any())
                 return new List<BlobMemoryReference>();
-            BinaryBufferWriter writer = new BinaryBufferWriter(4 + references.Count() * 4);
+            const int sizeForMemoryChunkReference = 12;
+            BinaryBufferWriter writer = new BinaryBufferWriter(4 + chunks.Count() * sizeForMemoryChunkReference);
 
-            writer.Write(references.Count());
-            foreach (var reference in references)
-                writer.Write(reference.Reference.Length);
+            writer.Write(chunks.Count());
+            foreach (var chunk in chunks)
+                chunk.Reference.SerializeToExistingBuffer(ref writer, LazinatorSerializationOptions.Default);
 
             List<BlobMemoryReference> result = new List<BlobMemoryReference>();
             BlobMemoryReference indexFile = new BlobMemoryReference(path, blobManager, containedInSingleBlob);
             result.Add(indexFile);
             blobManager.Write(path, writer.ActiveMemoryWritten);
-            int numBytesWritten = writer.ActiveMemoryPosition;
-            for (int i = 1; i <= references.Count; i++)
+            long numBytesWritten = writer.ActiveMemoryPosition;
+            for (int i = 0; i < chunks.Count; i++)
             {
-                MemoryChunk reference = references[i - 1];
-                Memory<byte> memory = reference.Memory;
-                string revisedPath = containedInSingleBlob ? path : BlobMemoryReference.GetPathWithNumber(path, i);
-                BlobMemoryReference referenceInFile = new BlobMemoryReference(revisedPath, blobManager, new MemoryChunkReference(i, containedInSingleBlob ? numBytesWritten : 0, reference.Reference.Length));
-                result.Add(referenceInFile);
+                MemoryChunk chunk = chunks[i];
+                MemoryChunkReference reference = chunk.Reference;
+                Memory<byte> memory = chunk.Memory;
+                string revisedPath = containedInSingleBlob ? path : BlobMemoryReference.GetPathWithNumber(path, reference.MemoryChunkID);
+                BlobMemoryReference blobReference = new BlobMemoryReference(revisedPath, blobManager, new MemoryChunkReference(i, containedInSingleBlob ? (int)numBytesWritten : 0, chunk.Reference.Length));
+                result.Add(blobReference);
                 if (containedInSingleBlob)
                     blobManager.Append(revisedPath, memory);
                 else
                     blobManager.Write(revisedPath, memory);
-                numBytesWritten += reference.Reference.Length;
+                numBytesWritten += chunk.Reference.Length;
             }
             return result;
         }

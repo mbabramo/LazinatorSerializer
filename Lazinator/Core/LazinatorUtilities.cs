@@ -1326,7 +1326,7 @@ namespace Lazinator.Core
         /// <param name="pipe"></param>
         public static void AddToPipe(this ILazinator lazinator, Pipe pipe)
         {
-            foreach (Memory<byte> memoryChunk in lazinator.LazinatorMemoryStorage.EnumerateMemoryChunks())
+            foreach (Memory<byte> memoryChunk in lazinator.LazinatorMemoryStorage.EnumerateRawMemory())
                 pipe.Writer.Write(memoryChunk.Span);
         }
 
