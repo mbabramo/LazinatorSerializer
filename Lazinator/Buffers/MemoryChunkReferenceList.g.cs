@@ -480,7 +480,7 @@ namespace Lazinator.Buffers
             List<MemoryChunkReference> collection = new List<MemoryChunkReference>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
-                int lengthCollectionMember = 12;
+                int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
                 var item = new MemoryChunkReference(childData);
                 collection.Add(item);
@@ -506,7 +506,7 @@ namespace Lazinator.Buffers
                     copy.SerializeToExistingBuffer(ref w, options);
                     itemToConvert[itemIndex] = copy;
                 }
-                WriteToBinaryWithoutLengthPrefix(ref writer, action);
+                WriteToBinaryWithInt32LengthPrefix(ref writer, action);
             }
         }
         

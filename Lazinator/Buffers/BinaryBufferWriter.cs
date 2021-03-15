@@ -272,7 +272,7 @@ namespace Lazinator.Buffers
                 MemoryChunkReference bytesSegment = MemoryChunkReferences[i];
                 if (bytesSegment.MemoryChunkID == memoryChunkID)
                 {
-                    return bytesSegment.IndexWithinMemoryChunk + bytesSegment.Length;
+                    return bytesSegment.Offset + bytesSegment.Length;
                 }
             }
             return 0;

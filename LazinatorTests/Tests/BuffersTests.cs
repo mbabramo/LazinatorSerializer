@@ -1021,6 +1021,7 @@ namespace LazinatorTests.Tests
         {
             Example e = GetTypicalExample();
             LazinatorMemory multipleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, 10));
+            var consolidatedOriginalMemory = multipleBufferResult.GetConsolidatedMemory();
 
             // Write to one or more blobs
             IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobStorage();
@@ -1031,8 +1032,14 @@ namespace LazinatorTests.Tests
             // Read from one or more blobs
             BlobMemoryReference blob = recreateBlobMemoryReference ? new BlobMemoryReference(path, blobManager, containedInSingleBlob) : memoryReferenceInBlobs.First();
             var revisedMemory = blob.GetLazinatorMemory();
+            revisedMemory.LoadAllMemory(); // DEBUG -- delete this
+            var DEBUG2 = revisedMemory.GetConsolidatedMemory(); // DEBUG
 
-            Example e2 = new Example(revisedMemory);
+            consolidatedOriginalMemory.ToArray().SequenceEqual(DEBUG2.ToArray()).Should().BeTrue();
+
+            Example e2 = new Example(new LazinatorMemory(new SimpleMemoryOwner<byte>(consolidatedOriginalMemory.ToArray()))); 
+            ExampleEqual(e, e2).Should().BeTrue();
+            e2 = new Example(revisedMemory);
             ExampleEqual(e, e2).Should().BeTrue();
         }
 

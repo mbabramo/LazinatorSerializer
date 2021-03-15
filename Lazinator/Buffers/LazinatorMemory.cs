@@ -379,6 +379,12 @@ namespace Lazinator.Buffers
             if (SingleMemory)
                 return InitialOwnedMemory;
             IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
+            LoadMemoryOwner(memoryOwner);
+            return memoryOwner;
+        }
+
+        private static void LoadMemoryOwner(IMemoryOwner<byte> memoryOwner)
+        {
             if (memoryOwner is MemoryChunk memoryReference && memoryReference.IsLoaded == false)
             {
                 // Unfortunately, we must call an async method synchronously. It would be better for the user
@@ -387,7 +393,17 @@ namespace Lazinator.Buffers
                 var task = Task.Run(async () => await loadMemory);
                 task.Wait();
             }
-            return memoryOwner;
+        }
+
+        /// <summary>
+        /// Loads all memory.
+        /// </summary>
+        public void LoadAllMemory()
+        {
+            LoadInitialMemory();
+            if (MoreOwnedMemory != null)
+                foreach (var additional in MoreOwnedMemory)
+                    LoadMemoryOwner(additional);
         }
 
         /// <summary>
@@ -418,9 +434,14 @@ namespace Lazinator.Buffers
             if (SingleMemory)
                 return InitialOwnedMemory;
             IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
+            await LoadMemoryOwnerAsync(memoryOwner);
+            return memoryOwner;
+        }
+
+        private static async Task LoadMemoryOwnerAsync(IMemoryOwner<byte> memoryOwner)
+        {
             if (memoryOwner is MemoryChunk memoryReference && memoryReference.IsLoaded == false)
                 await memoryReference.LoadMemoryAsync();
-            return memoryOwner;
         }
 
         /// <summary>
@@ -539,7 +560,7 @@ namespace Lazinator.Buffers
                 var memoryOwner = MemoryAtIndex(memoryChunkIndexReference.MemoryChunkIndex);
                 if (memoryOwner is not MemoryChunk memoryReference)
                     memoryReference = InitialOwnedMemoryReference;
-                yield return new MemoryChunkReference(memoryReference.Reference.MemoryChunkID, memoryReference.Reference.IndexWithinMemoryChunk + memoryChunkIndexReference.Offset, memoryChunkIndexReference.Length);
+                yield return new MemoryChunkReference(memoryReference.Reference.MemoryChunkID, memoryReference.Reference.Offset + memoryChunkIndexReference.Offset, memoryChunkIndexReference.Length);
             }
         }
 
@@ -586,7 +607,7 @@ namespace Lazinator.Buffers
             var memoryOwner = MemoryAtIndex(memoryChunkReference.MemoryChunkID);
             if (memoryOwner is not MemoryChunk memoryReference)
                 memoryReference = InitialOwnedMemoryReference;
-            var underlyingChunk = memoryReference.ReferencedMemory.Memory.Slice(memoryChunkReference.IndexWithinMemoryChunk, memoryChunkReference.Length);
+            var underlyingChunk = memoryReference.ReferencedMemory.Memory.Slice(memoryChunkReference.Offset, memoryChunkReference.Length);
             return underlyingChunk;
         }
 
@@ -778,12 +799,13 @@ namespace Lazinator.Buffers
             var chunks = EnumerateMemoryChunks().ToList();
             if (!chunks.Any())
                 return new List<BlobMemoryReference>();
-            const int sizeForMemoryChunkReference = 12;
-            BinaryBufferWriter writer = new BinaryBufferWriter(4 + chunks.Count() * sizeForMemoryChunkReference);
-
-            writer.Write(chunks.Count());
-            foreach (var chunk in chunks)
-                chunk.Reference.SerializeToExistingBuffer(ref writer, LazinatorSerializationOptions.Default);
+            BinaryBufferWriter writer = new BinaryBufferWriter();
+            writer.SetLengthsPosition(0);
+            writer.Skip(4);
+            MemoryChunkReferenceList list = new MemoryChunkReferenceList() { MemoryChunkReferences = chunks.Select(x => x.Reference).ToList() };
+            list.SerializeToExistingBuffer(ref writer, LazinatorSerializationOptions.Default);
+            int memoryUsed = writer.ActiveMemoryPosition - 4;
+            writer.RecordLength(memoryUsed);
 
             List<BlobMemoryReference> result = new List<BlobMemoryReference>();
             BlobMemoryReference indexFile = new BlobMemoryReference(path, blobManager, containedInSingleBlob);
@@ -792,11 +814,11 @@ namespace Lazinator.Buffers
             long numBytesWritten = writer.ActiveMemoryPosition;
             for (int i = 0; i < chunks.Count; i++)
             {
-                MemoryChunk chunk = chunks[i - 1];
+                MemoryChunk chunk = chunks[i];
                 MemoryChunkReference reference = chunk.Reference;
                 Memory<byte> memory = chunk.Memory;
                 string revisedPath = containedInSingleBlob ? path : BlobMemoryReference.GetPathWithNumber(path, reference.MemoryChunkID);
-                BlobMemoryReference blobReference = new BlobMemoryReference(revisedPath, blobManager, new MemoryChunkReference(i, containedInSingleBlob ? (int) numBytesWritten : 0, chunk.Reference.Length));
+                BlobMemoryReference blobReference = new BlobMemoryReference(revisedPath, blobManager, containedInSingleBlob ? new MemoryChunkReference(reference.MemoryChunkID, (int) numBytesWritten, chunk.Reference.Length) : reference);
                 result.Add(blobReference);
                 if (containedInSingleBlob)
                     await blobManager.AppendAsync(revisedPath, memory);
@@ -812,25 +834,31 @@ namespace Lazinator.Buffers
             var chunks = EnumerateMemoryChunks().ToList();
             if (!chunks.Any())
                 return new List<BlobMemoryReference>();
-            const int sizeForMemoryChunkReference = 12;
-            BinaryBufferWriter writer = new BinaryBufferWriter(4 + chunks.Count() * sizeForMemoryChunkReference);
-
-            writer.Write(chunks.Count());
-            foreach (var chunk in chunks)
-                chunk.Reference.SerializeToExistingBuffer(ref writer, LazinatorSerializationOptions.Default);
+            BinaryBufferWriter writer = new BinaryBufferWriter();
+            writer.SetLengthsPosition(0);
+            writer.Skip(4);
+            MemoryChunkReferenceList list = new MemoryChunkReferenceList() { MemoryChunkReferences = chunks.Select(x => x.Reference).ToList() };
+            if (containedInSingleBlob)
+                list.CombineToSameChunk(0, true); // writing everything to a single blob, so always use MemoryChunkID of 0, but with multiple references to the blob
+            list.SerializeToExistingBuffer(ref writer, LazinatorSerializationOptions.Default);
+            int memoryUsed = writer.ActiveMemoryPosition - 4;
+            writer.RecordLength(memoryUsed);
 
             List<BlobMemoryReference> result = new List<BlobMemoryReference>();
             BlobMemoryReference indexFile = new BlobMemoryReference(path, blobManager, containedInSingleBlob);
             result.Add(indexFile);
             blobManager.Write(path, writer.ActiveMemoryWritten);
             long numBytesWritten = writer.ActiveMemoryPosition;
+            int firstChunkID = 0;
             for (int i = 0; i < chunks.Count; i++)
             {
                 MemoryChunk chunk = chunks[i];
                 MemoryChunkReference reference = chunk.Reference;
+                if (i == 0)
+                    firstChunkID = reference.MemoryChunkID;
                 Memory<byte> memory = chunk.Memory;
                 string revisedPath = containedInSingleBlob ? path : BlobMemoryReference.GetPathWithNumber(path, reference.MemoryChunkID);
-                BlobMemoryReference blobReference = new BlobMemoryReference(revisedPath, blobManager, new MemoryChunkReference(i, containedInSingleBlob ? (int)numBytesWritten : 0, chunk.Reference.Length));
+                BlobMemoryReference blobReference = new BlobMemoryReference(revisedPath, blobManager, containedInSingleBlob ? new MemoryChunkReference(firstChunkID, (int)numBytesWritten, chunk.Reference.Length) : reference);
                 result.Add(blobReference);
                 if (containedInSingleBlob)
                     blobManager.Append(revisedPath, memory);

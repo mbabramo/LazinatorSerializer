@@ -26,9 +26,9 @@ namespace Lazinator.Buffers
             Reference = reference;
         }
 
-        public Memory<byte> Memory => ReferencedMemory.Memory.Slice(Reference.IndexWithinMemoryChunk, Reference.Length);
+        public Memory<byte> Memory => ReferencedMemory.Memory.Slice(Reference.Offset, Reference.Length);
 
-        public MemoryChunk Slice(int startIndex, int length) => new MemoryChunk(ReferencedMemory, new MemoryChunkReference(Reference.MemoryChunkID, Reference.IndexWithinMemoryChunk + startIndex, length));
+        public MemoryChunk Slice(int startIndex, int length) => new MemoryChunk(ReferencedMemory, new MemoryChunkReference(Reference.MemoryChunkID, Reference.Offset + startIndex, length));
 
         /// <summary>
         /// This method should be overridden for a MemoryReference subclass that loads memory lazily. The subclass method

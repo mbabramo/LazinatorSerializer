@@ -151,7 +151,14 @@ namespace LazinatorTests.Tests
                 return true;
             if ((example1 == null) != (example2 == null))
                 return false;
-            return example1.MyBool == example2.MyBool && example1.MyString == example2.MyString && example1.MyStringUncompressed == example2.MyStringUncompressed && example1.MyNewString == example2.MyNewString && example1.MyOldString == example2.MyOldString && example1.MyUInt == example2.MyUInt && example1.MyNullableDouble == example2.MyNullableDouble && example1.MyNullableDecimal == example2.MyNullableDecimal && example1.MyDateTime == example2.MyDateTime && example1.MyNullableTimeSpan == example2.MyNullableTimeSpan && ExampleChildEqual(example1.MyChild1, example2.MyChild1) && ExampleChildEqual(example1.MyChild2, example2.MyChild2) && InterfaceImplementerEqual(example1.MyInterfaceImplementer, example2.MyInterfaceImplementer) && NonLazinatorTypeEqual(example1.MyNonLazinatorChild, example2.MyNonLazinatorChild);
+            bool basicFieldsEqual = example1.MyBool == example2.MyBool && example1.MyString == example2.MyString && example1.MyStringUncompressed == example2.MyStringUncompressed && example1.MyNewString == example2.MyNewString && example1.MyOldString == example2.MyOldString && example1.MyUInt == example2.MyUInt && example1.MyNullableDouble == example2.MyNullableDouble && example1.MyNullableDecimal == example2.MyNullableDecimal && example1.MyDateTime == example2.MyDateTime && example1.MyNullableTimeSpan == example2.MyNullableTimeSpan;
+            bool childrenEqual = ExampleChildEqual(example1.MyChild1, example2.MyChild1) && ExampleChildEqual(example1.MyChild2, example2.MyChild2);
+            bool interfaceEqual = InterfaceImplementerEqual(example1.MyInterfaceImplementer, example2.MyInterfaceImplementer);
+            bool nonLazinatorEqual = NonLazinatorTypeEqual(example1.MyNonLazinatorChild, example2.MyNonLazinatorChild);
+            bool result = basicFieldsEqual && childrenEqual && interfaceEqual && nonLazinatorEqual;
+            if (!result)
+                throw new Exception("DEBUG");
+            return result;
         }
 
         internal bool ExampleChildEqual(ExampleChild child1, ExampleChild child2)

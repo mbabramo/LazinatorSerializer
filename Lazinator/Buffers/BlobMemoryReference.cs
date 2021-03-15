@@ -48,8 +48,9 @@ namespace Lazinator.Buffers
 
         public async override ValueTask LoadMemoryAsync()
         {
-            Memory<byte> bytes = await BlobManager.ReadAsync(BlobPath, Reference.IndexWithinMemoryChunk, Reference.Length);
+            Memory<byte> bytes = await BlobManager.ReadAsync(BlobPath, Reference.Offset, Reference.Length);
             ReferencedMemory = new SimpleMemoryOwner<byte>(bytes);
+            Reference = new MemoryChunkReference(Reference.MemoryChunkID, 0, Reference.Length); debug; // this is causing problems when unloading -- maybe reference should look first to ReferencedMemory
         }
 
         public override ValueTask ConsiderUnloadMemoryAsync()
@@ -80,8 +81,6 @@ namespace Lazinator.Buffers
             return lazinatorMemory;
         }
 
-        const int sizeForMemoryChunkReference = 12;
-
         /// <summary>
         /// Uses information in an initial MemoryReferenceInFile to generate information on other MemoryReferenceInFiles. 
         /// This should be called immediately after the constructor. 
@@ -91,9 +90,9 @@ namespace Lazinator.Buffers
         {
             Memory<byte> intHolder = await BlobManager.ReadAsync(BlobPath, 0, 4);
             int numBytesRead = 0;
-            int numItems = ReadUncompressedPrimitives.ToInt32(intHolder.Span, ref numBytesRead);
-            Memory<byte> bytesForLengths = await BlobManager.ReadAsync(BlobPath, 4, numItems * sizeForMemoryChunkReference);
-            return CompleteGetAdditionalReferences(containedInSingleBlob, numItems, bytesForLengths);
+            int numBytes = ReadUncompressedPrimitives.ToInt32(intHolder.Span, ref numBytesRead);
+            Memory<byte> bytesForLengths = await BlobManager.ReadAsync(BlobPath, 4, numBytes);
+            return GetChunksFromChunkReferencesStorage(containedInSingleBlob, bytesForLengths);
         }
 
         /// <summary>
@@ -103,41 +102,41 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         private List<MemoryChunk> GetAdditionalReferences(bool containedInSingleBlob)
         {
-            Memory<byte> intHolder = BlobManager.Read(BlobPath, 0, 4);
+            const int bytesForLength = sizeof(int);
+            Memory<byte> intHolder = BlobManager.Read(BlobPath, 0, bytesForLength);
             int numBytesRead = 0;
-            int numItems = ReadUncompressedPrimitives.ToInt32(intHolder.Span, ref numBytesRead);
-            Memory<byte> bytesForLengths = BlobManager.Read(BlobPath, 4, numItems * sizeForMemoryChunkReference);
-            return CompleteGetAdditionalReferences(containedInSingleBlob, numItems, bytesForLengths);
+            int numBytes = ReadUncompressedPrimitives.ToInt32(intHolder.Span, ref numBytesRead);
+            Memory<byte> memoryChunkReferencesStorage = BlobManager.Read(BlobPath, numBytesRead, numBytes);
+            var chunks = GetChunksFromChunkReferencesStorage(containedInSingleBlob, memoryChunkReferencesStorage);
+            return chunks;
         }
 
-        private List<MemoryChunk> CompleteGetAdditionalReferences(bool containedInSingleBlob, int numItems, Memory<byte> memoryChunkReferencesStorage)
+        private List<MemoryChunk> GetChunksFromChunkReferencesStorage(bool containedInSingleBlob, Memory<byte> memoryChunkReferencesStorage)
         {
-            List<MemoryChunkReference> memoryChunkReferences = GetMemoryChunkReferences(memoryChunkReferencesStorage, numItems);
-            List<MemoryChunk> memoryReferences = GetMemoryReferences(memoryChunkReferences, containedInSingleBlob);
-            return memoryReferences;
+            List<MemoryChunkReference> memoryChunkReferences = GetMemoryChunkReferences(memoryChunkReferencesStorage);
+            List<MemoryChunk> memoryChunks = GetMemoryChunks(memoryChunkReferences, containedInSingleBlob, memoryChunkReferencesStorage.Length);
+            return memoryChunks;
         }
 
-        private List<MemoryChunkReference> GetMemoryChunkReferences(Memory<byte> memoryChunkReferencesStorage, int numItems)
+        private List<MemoryChunkReference> GetMemoryChunkReferences(Memory<byte> memoryChunkReferencesStorage)
         {
-            List<MemoryChunkReference> memoryChunkReferences = new List<MemoryChunkReference>();
-            int numBytesRead = 0;
-            for (int i = 1; i <= numItems; i++)
-            {
-                var memorySlice = memoryChunkReferencesStorage.Slice(numBytesRead, sizeForMemoryChunkReference);
-                var lazinatorMemory = new LazinatorMemory(new SimpleMemoryOwner<byte>(memorySlice));
-                MemoryChunkReference memoryChunkReference = new MemoryChunkReference(lazinatorMemory);
-                memoryChunkReferences.Add(memoryChunkReference);
-            }
-            return memoryChunkReferences;
+            MemoryChunkReferenceList list = new MemoryChunkReferenceList(memoryChunkReferencesStorage);
+            return list.MemoryChunkReferences;
         }
 
-        private List<MemoryChunk> GetMemoryReferences(List<MemoryChunkReference> memoryChunkReferences, bool containedInSingleBlob)
+        private List<MemoryChunk> GetMemoryChunks(List<MemoryChunkReference> memoryChunkReferences, bool containedInSingleBlob, int bytesForMemoryChunkReferencesStorage)
         {
             List<MemoryChunk> memoryReferences = new List<MemoryChunk>();
-            long numBytesProcessed = Reference.IndexWithinMemoryChunk;
+            long numBytesProcessed = sizeof(int) + bytesForMemoryChunkReferencesStorage;
             for (int i = 0; i < memoryChunkReferences.Count; i++)
             {
                 MemoryChunkReference memoryChunkReference = memoryChunkReferences[i];
+                if (containedInSingleBlob)
+                {
+                    if (numBytesProcessed > int.MaxValue)
+                        ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                    memoryChunkReference = new MemoryChunkReference(memoryChunkReferences[0].MemoryChunkID, (int)numBytesProcessed, memoryChunkReference.Length);
+                }
                 string referencePath = containedInSingleBlob ? BlobPath : GetPathWithNumber(BlobPath, memoryChunkReference.MemoryChunkID);
                 memoryReferences.Add(new BlobMemoryReference(referencePath, BlobManager, memoryChunkReference));
                 numBytesProcessed += memoryChunkReference.Length;
