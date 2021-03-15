@@ -18,6 +18,12 @@ namespace Lazinator.Buffers
         string BlobPath;
         IBlobManager BlobManager;
         bool ContainedInSingleBlob;
+        MemoryChunkReference OriginalReference;
+        public override MemoryChunkReference Reference 
+        { 
+            get => ReferencedMemory == null ? OriginalReference : new MemoryChunkReference(OriginalReference.MemoryChunkID, 0, ReferencedMemory.Memory.Length); 
+            set => base.Reference = value; 
+        }
 
         // DEBUG -- maybe index file should not be a BlobMemoryReference, but a BlobIndexReference.
 
@@ -41,7 +47,7 @@ namespace Lazinator.Buffers
         {
             BlobPath = path;
             BlobManager = blobManager;
-            Reference = reference;
+            OriginalReference = reference;
         }
 
         #region Memory loading and unloading
@@ -50,12 +56,11 @@ namespace Lazinator.Buffers
         {
             Memory<byte> bytes = await BlobManager.ReadAsync(BlobPath, Reference.Offset, Reference.Length);
             ReferencedMemory = new SimpleMemoryOwner<byte>(bytes);
-            Reference = new MemoryChunkReference(Reference.MemoryChunkID, 0, Reference.Length); debug; // this is causing problems when unloading -- maybe reference should look first to ReferencedMemory
         }
 
         public override ValueTask ConsiderUnloadMemoryAsync()
         {
-            ReferencedMemory = null;
+            ReferencedMemory = null; // Reference will now point to OriginalReference
             return ValueTask.CompletedTask;
         }
 

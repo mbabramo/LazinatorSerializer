@@ -11,7 +11,7 @@ namespace Lazinator.Buffers
     {
         public IMemoryOwner<byte> ReferencedMemory { get; set; }
 
-        public MemoryChunkReference Reference { get; set; }
+        public virtual MemoryChunkReference Reference { get; set; }
 
         public bool IsLoaded => ReferencedMemory != null;
 

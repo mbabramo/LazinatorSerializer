@@ -156,8 +156,6 @@ namespace LazinatorTests.Tests
             bool interfaceEqual = InterfaceImplementerEqual(example1.MyInterfaceImplementer, example2.MyInterfaceImplementer);
             bool nonLazinatorEqual = NonLazinatorTypeEqual(example1.MyNonLazinatorChild, example2.MyNonLazinatorChild);
             bool result = basicFieldsEqual && childrenEqual && interfaceEqual && nonLazinatorEqual;
-            if (!result)
-                throw new Exception("DEBUG");
             return result;
         }
 

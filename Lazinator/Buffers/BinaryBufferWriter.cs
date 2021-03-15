@@ -222,21 +222,21 @@ namespace Lazinator.Buffers
             if (CompletedMemory == null)
                 throw new ArgumentException();
             IEnumerable<MemoryChunkReference> segmentsToAdd = CompletedMemory.EnumerateMemoryChunkReferences(startIndex, numBytes);
-            MemoryChunkReference.ExtendBytesSegmentList(MemoryChunkReferences, segmentsToAdd);
-            RecordLastActiveMemoryBytesSegment();
+            MemoryChunkReference.ExtendMemoryChunkReferencesList(MemoryChunkReferences, segmentsToAdd);
+            RecordLastActiveMemoryChunkReference();
         }
 
 
         public void AddDiffsInfoToActiveMemory()
         {
-            RecordLastActiveMemoryBytesSegment();
+            RecordLastActiveMemoryChunkReference();
             throw new NotImplementedException("DEBUG"); // Here, we need to add the list of bytes segments onto the end of the active memory, without changing the activememoryposition, followed by the size. 
         }
 
         /// <summary>
         /// Extends the bytes segment list to include the portion of active memory that is not included in active memory. 
         /// </summary>
-        internal void RecordLastActiveMemoryBytesSegment()
+        internal void RecordLastActiveMemoryChunkReference()
         {
             int activeMemoryLength = ActiveMemory.Memory.Length;
             if (activeMemoryLength == 0)
@@ -244,7 +244,7 @@ namespace Lazinator.Buffers
             int activeMemoryVersion = GetActiveMemoryChunkID();
             int firstUnrecordedActiveMemoryByte = GetFirstUnrecordedActiveMemoryByte(activeMemoryVersion);
             if (activeMemoryLength > firstUnrecordedActiveMemoryByte)
-                MemoryChunkReference.ExtendBytesSegmentList(MemoryChunkReferences, new MemoryChunkReference(activeMemoryVersion, firstUnrecordedActiveMemoryByte, activeMemoryLength - firstUnrecordedActiveMemoryByte));
+                MemoryChunkReference.ExtendMemoryChunkReferencesList(MemoryChunkReferences, new MemoryChunkReference(activeMemoryVersion, firstUnrecordedActiveMemoryByte, activeMemoryLength - firstUnrecordedActiveMemoryByte));
         }
 
         /// <summary>

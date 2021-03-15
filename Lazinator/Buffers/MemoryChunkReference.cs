@@ -24,34 +24,34 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// Extends a byte segment list by adding a new segment. If the new segment is contiguous to the last existing segment,
+        /// Extends a memory chunk references list by adding a new reference. If the new reference is contiguous to the last existing reference,
         /// then the list size remains constant. 
         /// </summary>
-        /// <param name="bytesSegmentList"></param>
+        /// <param name="memoryChunkReferences"></param>
         /// <param name="newSegment"></param>
-        public static void ExtendBytesSegmentList(List<MemoryChunkReference> bytesSegmentList, MemoryChunkReference newSegment)
+        public static void ExtendMemoryChunkReferencesList(List<MemoryChunkReference> memoryChunkReferences, MemoryChunkReference newSegment)
         {
-            if (bytesSegmentList.Any())
+            if (memoryChunkReferences.Any())
             {
-                MemoryChunkReference last = bytesSegmentList.Last();
+                MemoryChunkReference last = memoryChunkReferences.Last();
                 if (newSegment.MemoryChunkID == last.MemoryChunkID && newSegment.Offset == last.Offset + last.Length)
                 {
                     last.Length += newSegment.Length;
                     return;
                 }
             }
-            bytesSegmentList.Add(newSegment);
+            memoryChunkReferences.Add(newSegment);
         }
 
         /// <summary>
-        /// Extends a byte segments list by adding new segments. The list is consolidated to avoid having consecutive entries for contiguous ranges.
+        /// Extends a memory chunk references list by adding new segments. The list is consolidated to avoid having consecutive entries for contiguous ranges.
         /// </summary>
-        /// <param name="bytesSegmentList"></param>
+        /// <param name="memoryChunkReferences"></param>
         /// <param name="newSegments"></param>
-        public static void ExtendBytesSegmentList(List<MemoryChunkReference> bytesSegmentList, IEnumerable<MemoryChunkReference> newSegments)
+        public static void ExtendMemoryChunkReferencesList(List<MemoryChunkReference> memoryChunkReferences, IEnumerable<MemoryChunkReference> newSegments)
         {
-            foreach (var newSegment in bytesSegmentList)
-                ExtendBytesSegmentList(bytesSegmentList, newSegment);
+            foreach (var newSegment in memoryChunkReferences)
+                ExtendMemoryChunkReferencesList(memoryChunkReferences, newSegment);
         }
     }
 }
