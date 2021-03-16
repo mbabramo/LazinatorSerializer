@@ -34,6 +34,7 @@ namespace Lazinator.Buffers
             using FileStream fs = File.OpenWrite(path);
             fs.Write(bytes.Span);
             fs.Flush();
+            fs.SetLength(bytes.Span.Length);
         }
 
         public async ValueTask WriteAsync(string path, Memory<byte> bytes)
@@ -41,20 +42,25 @@ namespace Lazinator.Buffers
             using FileStream fs = File.OpenWrite(path);
             await fs.WriteAsync(bytes);
             await fs.FlushAsync();
+            fs.SetLength(bytes.Span.Length);
         }
 
         public void Append(string path, Memory<byte> bytes)
         {
             using FileStream fs = File.OpenWrite(path);
             fs.Seek(0, SeekOrigin.End);
+            long length = fs.Length;
             fs.Write(bytes.Span);
+            fs.SetLength(length + bytes.Length);
         }
 
         public async ValueTask AppendAsync(string path, Memory<byte> bytes)
         {
             using FileStream fs = File.OpenWrite(path);
             fs.Seek(0, SeekOrigin.End);
+            long length = fs.Length;
             await fs.WriteAsync(bytes);
+            fs.SetLength(length + bytes.Length);
         }
 
         public long GetLength(string path)
