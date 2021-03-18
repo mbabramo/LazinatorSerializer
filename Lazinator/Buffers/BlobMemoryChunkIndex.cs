@@ -26,25 +26,42 @@ namespace Lazinator.Buffers
             IsPersisted = true;
         }
 
-        /// <summary>
-        /// Uses information in an initial MemoryReferenceInFile to generate information on other MemoryReferenceInBlobs. 
-        /// This should be called immediately after the constructor. 
-        /// </summary>
-        /// <returns></returns>
-        private async Task<List<MemoryChunk>> GetAdditionalReferencesAsync(bool containedInSingleBlob)
+        public static BlobMemoryChunkIndex ReadFromBlobWithIntPrefix(IBlobManager blobManager, string blobPath)
         {
-            Memory<byte> intHolder = await BlobManager.ReadAsync(BlobPath, 0, 4);
+            Memory<byte> intHolder = blobManager.Read(blobPath, 0, 4);
             int numBytesRead = 0;
             int numBytes = ReadUncompressedPrimitives.ToInt32(intHolder.Span, ref numBytesRead);
-            Memory<byte> bytesForLengths = await BlobManager.ReadAsync(BlobPath, 4, numBytes);
-            return GetChunksFromChunkReferencesStorage(containedInSingleBlob, bytesForLengths);
+            Memory<byte> mainBytes = blobManager.Read(blobPath, 4, numBytes);
+            return new BlobMemoryChunkIndex(new LazinatorMemory(new SimpleMemoryOwner<byte>(mainBytes)));
         }
 
-        /// <summary>
-        /// Uses information in an initial MemoryReferenceInFile to generate information on other MemoryReferenceInFiles. 
-        /// This should be called immediately after the constructor. 
-        /// </summary>
-        /// <returns></returns>
+        public static async ValueTask<BlobMemoryChunkIndex> ReadFromBlobWithIntPrefixAsync(IBlobManager blobManager, string blobPath)
+        {
+            Memory<byte> intHolder = await blobManager.ReadAsync(blobPath, 0, 4);
+            int numBytesRead = 0;
+            int numBytes = ReadUncompressedPrimitives.ToInt32(intHolder.Span, ref numBytesRead);
+            Memory<byte> mainBytes = await blobManager.ReadAsync(blobPath, 4, numBytes);
+            return new BlobMemoryChunkIndex(new LazinatorMemory(new SimpleMemoryOwner<byte>(mainBytes)));
+        }
+
+        public LazinatorMemory GetLazinatorMemory()
+        {
+            var references = GetAdditionalReferences(ContainedInSingleBlob);
+            var firstAfterIndex = references.First();
+            LazinatorMemory lazinatorMemory = new LazinatorMemory(firstAfterIndex, references.Skip(1).ToList(), 0, 0, references.Sum(x => x.Reference.Length));
+            lazinatorMemory.LoadInitialMemory();
+            return lazinatorMemory;
+        }
+
+        public async ValueTask<LazinatorMemory> GetLazinatorMemoryAsync()
+        {
+            var references = await GetAdditionalReferencesAsync(ContainedInSingleBlob);
+            var firstAfterIndex = references.First();
+            LazinatorMemory lazinatorMemory = new LazinatorMemory(firstAfterIndex, references.Skip(1).ToList(), 0, 0, references.Sum(x => x.Reference.Length));
+            await lazinatorMemory.LoadInitialMemoryAsync();
+            return lazinatorMemory;
+        }
+
         private List<MemoryChunk> GetAdditionalReferences(bool containedInSingleBlob)
         {
             const int bytesForLength = sizeof(int);
@@ -56,31 +73,34 @@ namespace Lazinator.Buffers
             return chunks;
         }
 
+        private async Task<List<MemoryChunk>> GetAdditionalReferencesAsync(bool containedInSingleBlob)
+        {
+            Memory<byte> intHolder = await BlobManager.ReadAsync(BlobPath, 0, 4);
+            int numBytesRead = 0;
+            int numBytes = ReadUncompressedPrimitives.ToInt32(intHolder.Span, ref numBytesRead);
+            Memory<byte> bytesForLengths = await BlobManager.ReadAsync(BlobPath, 4, numBytes);
+            return GetChunksFromChunkReferencesStorage(containedInSingleBlob, bytesForLengths);
+        }
+
         private List<MemoryChunk> GetChunksFromChunkReferencesStorage(bool containedInSingleBlob, Memory<byte> memoryChunkReferencesStorage)
         {
-            List<MemoryChunkReference> memoryChunkReferences = GetMemoryChunkReferences(memoryChunkReferencesStorage);
-            List<MemoryChunk> memoryChunks = GetMemoryChunks(memoryChunkReferences, containedInSingleBlob, memoryChunkReferencesStorage.Length);
+            DeserializeLazinator(new LazinatorMemory(new SimpleMemoryOwner<byte>(memoryChunkReferencesStorage)));
+            List<MemoryChunk> memoryChunks = GetMemoryChunks(containedInSingleBlob, memoryChunkReferencesStorage.Length);
             return memoryChunks;
         }
 
-        private List<MemoryChunkReference> GetMemoryChunkReferences(Memory<byte> memoryChunkReferencesStorage)
-        {
-            BlobMemoryChunkIndex list = new BlobMemoryChunkIndex(memoryChunkReferencesStorage);
-            return list.MemoryChunkReferences;
-        }
-
-        private List<MemoryChunk> GetMemoryChunks(List<MemoryChunkReference> memoryChunkReferences, bool containedInSingleBlob, int bytesForMemoryChunkReferencesStorage)
+        private List<MemoryChunk> GetMemoryChunks(bool containedInSingleBlob, int bytesForMemoryChunkReferencesStorage)
         {
             List<MemoryChunk> memoryReferences = new List<MemoryChunk>();
             long numBytesProcessed = sizeof(int) + bytesForMemoryChunkReferencesStorage;
-            for (int i = 0; i < memoryChunkReferences.Count; i++)
+            for (int i = 0; i < MemoryChunkReferences.Count; i++)
             {
-                MemoryChunkReference memoryChunkReference = memoryChunkReferences[i];
+                MemoryChunkReference memoryChunkReference = MemoryChunkReferences[i];
                 if (containedInSingleBlob)
                 {
                     if (numBytesProcessed > int.MaxValue)
                         ThrowHelper.ThrowTooLargeException(int.MaxValue);
-                    memoryChunkReference = new MemoryChunkReference(memoryChunkReferences[0].MemoryChunkID, (int)numBytesProcessed, memoryChunkReference.Length);
+                    memoryChunkReference = new MemoryChunkReference(MemoryChunkReferences[0].MemoryChunkID, (int)numBytesProcessed, memoryChunkReference.Length);
                 }
                 string referencePath = containedInSingleBlob ? BlobPath : GetPathForMemoryChunk(BlobPath, memoryChunkReference.MemoryChunkID);
                 memoryReferences.Add(new BlobMemoryChunk(referencePath, (IBlobManager)this.BlobManager, memoryChunkReference));
@@ -135,24 +155,6 @@ namespace Lazinator.Buffers
                 }
             }
             MemoryChunkReferences = revisedReferences;
-        }
-
-        public LazinatorMemory GetLazinatorMemory()
-        {
-            var references = GetAdditionalReferences(ContainedInSingleBlob);
-            var firstAfterIndex = references.First();
-            LazinatorMemory lazinatorMemory = new LazinatorMemory(firstAfterIndex, references.Skip(1).ToList(), 0, 0, references.Sum(x => x.Reference.Length));
-            lazinatorMemory.LoadInitialMemory();
-            return lazinatorMemory;
-        }
-
-        public async ValueTask<LazinatorMemory> GetLazinatorMemoryAsync()
-        {
-            var references = await GetAdditionalReferencesAsync(ContainedInSingleBlob);
-            var firstAfterIndex = references.First();
-            LazinatorMemory lazinatorMemory = new LazinatorMemory(firstAfterIndex, references.Skip(1).ToList(), 0, 0, references.Sum(x => x.Reference.Length));
-            await lazinatorMemory.LoadInitialMemoryAsync();
-            return lazinatorMemory;
         }
 
         public void Delete(bool memoryDroppedFromPreviousIndex, bool memoryUsedInThisIndex, bool indexItself)

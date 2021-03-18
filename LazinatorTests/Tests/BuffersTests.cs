@@ -1033,7 +1033,7 @@ namespace LazinatorTests.Tests
 
             // Read from one or more blobs
             if (recreateIndex)
-                index = new BlobMemoryChunkIndex(fullPath, blobManager, containedInSingleBlob);
+                index = BlobMemoryChunkIndex.ReadFromBlobWithIntPrefix(blobManager, fullPath);
             var revisedMemory = index.GetLazinatorMemory();
 
             var e2 = new Example(revisedMemory);
@@ -1056,7 +1056,7 @@ namespace LazinatorTests.Tests
 
             // Read from one or more blobs
             if (recreateIndex)
-                index = new BlobMemoryChunkIndex(fullPath, blobManager, containedInSingleBlob);
+                index = await BlobMemoryChunkIndex.ReadFromBlobWithIntPrefixAsync(blobManager, fullPath);
             var revisedMemory = await index.GetLazinatorMemoryAsync();
 
             Example e2 = new Example(revisedMemory);
