@@ -34,9 +34,7 @@ namespace Lazinator.Buffers
             int numBytesRead = 0;
             int numBytes = ReadUncompressedPrimitives.ToInt32(intHolder.Span, ref numBytesRead);
             Memory<byte> mainBytes = blobManager.Read(blobPath, 4, numBytes);
-            var index = new BlobMemoryChunkIndex(new LazinatorMemory(new SimpleMemoryOwner<byte>(mainBytes)));
-            index._BytesUsedForIndexWithPrefix = sizeof(int) + numBytes;
-            return index;
+            return CreateFromBytes(blobManager, mainBytes);
         }
 
         public static async ValueTask<BlobMemoryChunkIndex> ReadFromBlobWithIntPrefixAsync(IBlobManager blobManager, string blobPath)
@@ -45,8 +43,14 @@ namespace Lazinator.Buffers
             int numBytesRead = 0;
             int numBytes = ReadUncompressedPrimitives.ToInt32(intHolder.Span, ref numBytesRead);
             Memory<byte> mainBytes = await blobManager.ReadAsync(blobPath, 4, numBytes);
+            return CreateFromBytes(blobManager, mainBytes);
+        }
+
+        private static BlobMemoryChunkIndex CreateFromBytes(IBlobManager blobManager, Memory<byte> mainBytes)
+        {
             var index = new BlobMemoryChunkIndex(new LazinatorMemory(new SimpleMemoryOwner<byte>(mainBytes)));
-            index._BytesUsedForIndexWithPrefix = sizeof(int) + numBytes;
+            index._BytesUsedForIndexWithPrefix = sizeof(int) + mainBytes.Length;
+            index.BlobManager = blobManager;
             return index;
         }
 
@@ -148,6 +152,9 @@ namespace Lazinator.Buffers
 
         public IPersistentLazinator PersistLazinatorMemory(LazinatorMemory lazinatorMemory)
         {
+            bool originalIsPersisted = IsPersisted;
+            IsPersisted = true;
+
             var chunks = lazinatorMemory.EnumerateMemoryChunks().ToList();
             MemoryChunkReferences = chunks.Select(x => x.Reference).ToList();
             var writer = GetBinaryBufferWriterWithIndex();
@@ -168,6 +175,9 @@ namespace Lazinator.Buffers
 
         public async ValueTask<IPersistentLazinator> PersistLazinatorMemoryAsync(LazinatorMemory lazinatorMemory)
         {
+            bool originalIsPersisted = IsPersisted;
+            IsPersisted = true;
+
             var chunks = lazinatorMemory.EnumerateMemoryChunks().ToList();
             MemoryChunkReferences = chunks.Select(x => x.Reference).ToList();
             var writer = GetBinaryBufferWriterWithIndex();
