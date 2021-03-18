@@ -45,6 +45,7 @@ namespace Lazinator
         IWInt64Array,
         IPlaceholder,
         IMemoryChunkReference,
-        IMemoryChunkReferenceList,
+        IBlobMemoryChunkIndex,
+        IPersistentLazinator,
     }
 }

@@ -15,6 +15,8 @@ namespace Lazinator.Buffers
 
         public bool IsLoaded => ReferencedMemory != null;
 
+        public virtual bool IsPersisted { get; set; }
+
         public MemoryChunk()
         {
 

@@ -164,7 +164,7 @@ public class MyOtherClass
             AdhocWorkspace ws = GetAdhocWorkspace();
             await CompleteGenerateCode(typeof(MemoryChunkReference), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws);
 
-            await CompleteGenerateCode(typeof(MemoryChunkReferenceList), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(BlobMemoryChunkIndex), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws);
         }
 
         [Fact]

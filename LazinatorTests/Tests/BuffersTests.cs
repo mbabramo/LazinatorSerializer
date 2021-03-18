@@ -1017,45 +1017,59 @@ namespace LazinatorTests.Tests
                 SplittableEntitiesSavedHelper(containedInSingleBlob, useFile, recreateBlobMemoryReference);
         }
 
-        private void SplittableEntitiesSavedHelper(bool containedInSingleBlob, bool useFile, bool recreateBlobMemoryReference)
+        private void SplittableEntitiesSavedHelper(bool containedInSingleBlob, bool useFile, bool recreateIndex)
         {
             Example e = GetTypicalExample();
             LazinatorMemory multipleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, 10));
 
             // Write to one or more blobs
             IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobStorage();
-            string path = @"C:\Users\Admin\Desktop\testfolder";
-            if (useFile && !System.IO.Directory.Exists(path))
-                return; // ignore this error
-            string fullPath = path + @"\example.fil";
-            var memoryReferenceInBlobs = multipleBufferResult.WriteToBlobs(fullPath, blobManager, containedInSingleBlob);
+            string fullPath = GetPathForIndexAndBlobs(useFile);
+            if (fullPath == null)
+                return;
+            BlobMemoryChunkIndex index = new BlobMemoryChunkIndex(fullPath, blobManager, containedInSingleBlob); 
+            index.PersistLazinatorMemory(multipleBufferResult);
             // Note: Index reference is first var indexReference = memoryReferenceInBlobs[0];
 
             // Read from one or more blobs
-            BlobMemoryReference blob = recreateBlobMemoryReference ? new BlobMemoryReference(fullPath, blobManager, containedInSingleBlob) : memoryReferenceInBlobs.First();
-            var revisedMemory = blob.GetLazinatorMemory();
+            if (recreateIndex)
+                index = new BlobMemoryChunkIndex(fullPath, blobManager, containedInSingleBlob);
+            var revisedMemory = index.GetLazinatorMemory();
+
             var e2 = new Example(revisedMemory);
             ExampleEqual(e, e2).Should().BeTrue();
         }
 
-        private async Task SplittableEntitiesSavedHelper_Async(bool containedInSingleBlob, bool useFile, bool recreateBlobMemoryReference)
+        private async Task SplittableEntitiesSavedHelper_Async(bool containedInSingleBlob, bool useFile, bool recreateIndex)
         {
             Example e = GetTypicalExample();
             LazinatorMemory multipleBufferResult = await e.SerializeLazinatorAsync(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, 10));
 
             // Write to one or more blobs
             IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobStorage();
-            string path = "example";
-            var memoryReferenceInBlobs = await multipleBufferResult.WriteToBlobsAsync(path, blobManager, containedInSingleBlob);
+            string fullPath = GetPathForIndexAndBlobs(useFile);
+            if (fullPath == null)
+                return;
+            BlobMemoryChunkIndex index = new BlobMemoryChunkIndex(fullPath, blobManager, containedInSingleBlob);
+            await index.PersistLazinatorMemoryAsync(multipleBufferResult);
             // Note: Index reference is first var indexReference = memoryReferenceInBlobs[0];
 
             // Read from one or more blobs
-            BlobMemoryReference blob = recreateBlobMemoryReference ? new BlobMemoryReference(path, blobManager, containedInSingleBlob) : memoryReferenceInBlobs.First();
-            var revisedMemory = await blob.GetLazinatorMemoryAsync();
-
+            if (recreateIndex)
+                index = new BlobMemoryChunkIndex(fullPath, blobManager, containedInSingleBlob);
+            var revisedMemory = await index.GetLazinatorMemoryAsync();
 
             Example e2 = new Example(revisedMemory);
             ExampleEqual(e, e2).Should().BeTrue();
+        }
+
+        private string GetPathForIndexAndBlobs(bool useFile)
+        {
+            string path = @"C:\Users\Admin\Desktop\testfolder";
+            if (useFile && !System.IO.Directory.Exists(path))
+                return null; // ignore this error
+            string fullPath = path + @"\example.fil";
+            return fullPath;
         }
     }
 }

@@ -39,6 +39,7 @@ namespace Lazinator.Buffers
         /// The total number of bytes in the referenced range, potentially spanning multiple chunks of memory.
         /// </summary>
         public readonly long Length;
+
         /// <summary>
         /// The number of bytes, as an integer, or null if the number is too large to be stored in an integer.
         /// </summary>
@@ -46,6 +47,7 @@ namespace Lazinator.Buffers
 
         public bool IsEmpty => InitialOwnedMemory == null || Length == 0;
         public long? AllocationID => (InitialOwnedMemory as ExpandableBytes)?.AllocationID;
+
         public static Memory<byte> EmptyMemory = new Memory<byte>();
         public static ReadOnlyMemory<byte> EmptyReadOnlyMemory = new ReadOnlyMemory<byte>();
         public static LazinatorMemory EmptyLazinatorMemory = new LazinatorMemory(new Memory<byte>());
@@ -186,8 +188,8 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         private static int GetMemoryOwnerLength(IMemoryOwner<byte> memoryAtIndex)
         {
-            if (memoryAtIndex is MemoryChunk memoryReference)
-                return memoryReference.Reference.Length; // saves us from possibility of loading the memory (if using memory-mapped files)
+            if (memoryAtIndex is MemoryChunk memoryChunk)
+                return memoryChunk.Reference.Length; // saves us from possibility of loading the memory (if using memory-mapped files)
             else
                 return memoryAtIndex.Memory.Length;
         }
@@ -385,11 +387,11 @@ namespace Lazinator.Buffers
 
         private static void LoadMemoryOwner(IMemoryOwner<byte> memoryOwner)
         {
-            if (memoryOwner is MemoryChunk memoryReference && memoryReference.IsLoaded == false)
+            if (memoryOwner is MemoryChunk memoryChunk && memoryChunk.IsLoaded == false)
             {
                 // Unfortunately, we must call an async method synchronously. It would be better for the user
                 // to use an asynchronous method.
-                var loadMemory = memoryReference.LoadMemoryAsync();
+                var loadMemory = memoryChunk.LoadMemoryAsync();
                 var task = Task.Run(async () => await loadMemory);
                 task.Wait();
             }
@@ -415,11 +417,11 @@ namespace Lazinator.Buffers
             if (SingleMemory)
                 return;
             IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
-            if (memoryOwner is MemoryChunk memoryReference && memoryReference.IsLoaded == true)
+            if (memoryOwner is MemoryChunk memoryChunk && memoryChunk.IsLoaded == true)
             {
                 // Unfortunately, we must call an async method synchronously. It would be better for the user
                 // to use an asynchronous method.
-                var loadMemory = memoryReference.ConsiderUnloadMemoryAsync();
+                var loadMemory = memoryChunk.ConsiderUnloadMemoryAsync();
                 var task = Task.Run(async () => await loadMemory);
                 task.Wait();
             }
@@ -440,8 +442,8 @@ namespace Lazinator.Buffers
 
         private static async Task LoadMemoryOwnerAsync(IMemoryOwner<byte> memoryOwner)
         {
-            if (memoryOwner is MemoryChunk memoryReference && memoryReference.IsLoaded == false)
-                await memoryReference.LoadMemoryAsync();
+            if (memoryOwner is MemoryChunk memoryChunk && memoryChunk.IsLoaded == false)
+                await memoryChunk.LoadMemoryAsync();
         }
 
         /// <summary>
@@ -454,8 +456,8 @@ namespace Lazinator.Buffers
             if (SingleMemory)
                 return;
             IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
-            if (memoryOwner is MemoryChunk memoryReference && memoryReference.IsLoaded == true)
-                await memoryReference.ConsiderUnloadMemoryAsync();
+            if (memoryOwner is MemoryChunk memoryChunk && memoryChunk.IsLoaded == true)
+                await memoryChunk.ConsiderUnloadMemoryAsync();
         }
 
         #endregion
@@ -540,12 +542,11 @@ namespace Lazinator.Buffers
         // Eventually, some parts of the large LazinatorMemory may be deleted, because the more recent delta serializations don't refer to them anymore.
         // Now, changes are made to this object graph, and the goal is to do another delta serialization. 
         // BinaryBufferWriter will be compiling a list of the ranges we are writing to in the large LazinatorMemory.
-        // When an object has changed, then BinaryBufferWriter writes to new memory in the big range of bytes and can directly record a BytesSegment, which points to the location in this range of bytes. 
-        // When an object has not changed, then BinaryBufferWriter has a reference to a range of bytes in the cobbled-together LazinatorMemory. 
-        // So BinaryBufferWriter needs to translate this range to get a reference to the large LazinatorMemory as a BytesSegment. It does this by calling EnumerateSubrangeAsSegments.
-        // The result is that we have a list of BytesSegments. We can save this list of BytesSegments at the end of the latest range of data that we have just written to (plus an indication of the size of this list).
-        // That way, we can see what versions we need to have in memory (or lazy loadable) and we can load the large LazinatorMemory, then the next-generation cobbled-together LazinatorMemory.
-
+        // When an object has changed, then BinaryBufferWriter's action depends on whether it is writing some entirely new data or repeating previously serialized data.
+        // When writing previously serialized data, it simply records a new MemoryChunkReference, which points to the location in this range of bytes in some
+        // existing memory chunk from the original LazinatorMemory. When writing new data, it adds to its ActiveMemory but also adds a MemoryChunkReference
+        // (or extends an existing such reference) so that the set of MemoryChunkReferences will always encompass all of the data.
+        // Note that as usual, if BinaryBufferWriter needs to, it will append its active memory chunk to the LazinatorMemory and move to a new active chunk.
 
         /// <summary>
         /// Enumerates memory chunk ranges corresponding to a subset of the bytes referenced by this LazinatorMemory
@@ -636,14 +637,14 @@ namespace Lazinator.Buffers
             foreach (var rangeInfo in EnumerateMemoryChunksByIndex(includeOutsideOfRange))
             {
                 var m = MemoryAtIndex(rangeInfo.MemoryChunkIndex);
-                if (m is MemoryChunk memoryReference && memoryReference.IsLoaded == false)
+                if (m is MemoryChunk memoryChunk && memoryChunk.IsLoaded == false)
                 {
-                    if (lastMemoryReferenceLoaded != memoryReference)
+                    if (lastMemoryReferenceLoaded != memoryChunk)
                     { // consider unloading the last memory reference, before loading this one, so that we don't have too many in memory at the same time
                         await lastMemoryReferenceLoaded.ConsiderUnloadMemoryAsync();
-                        lastMemoryReferenceLoaded = memoryReference;
+                        lastMemoryReferenceLoaded = memoryChunk;
                     }
-                    await memoryReference.LoadMemoryAsync();
+                    await memoryChunk.LoadMemoryAsync();
                 }
                 yield return m.Memory.Slice(rangeInfo.MemoryChunkIndex, rangeInfo.Length);
             }
@@ -669,8 +670,8 @@ namespace Lazinator.Buffers
         private IEnumerable<IMemoryOwner<byte>> EnumerateReferencedMemoryOwners()
         {
             foreach (var owner in EnumerateMemoryOwners())
-                if (owner is MemoryChunk memoryReference)
-                    yield return memoryReference.ReferencedMemory;
+                if (owner is MemoryChunk memoryChunk)
+                    yield return memoryChunk.ReferencedMemory;
                 else
                     yield return owner;
         }
@@ -679,7 +680,7 @@ namespace Lazinator.Buffers
         /// Enumerates all memory chunks, including not referenced memory chunks, as memory references.
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<MemoryChunk> EnumerateMemoryChunks()
+        public IEnumerable<MemoryChunk> EnumerateMemoryChunks()
         {
             if (InitialOwnedMemory != null)
                 yield return InitialOwnedMemoryReference;
@@ -794,80 +795,6 @@ namespace Lazinator.Buffers
             return w.LazinatorMemory.InitialMemory;
         }
 
-        public async ValueTask<List<BlobMemoryReference>> WriteToBlobsAsync(string path, IBlobManager blobManager, bool containedInSingleBlob)
-        {
-            var chunks = EnumerateMemoryChunks().ToList();
-            if (!chunks.Any())
-                return new List<BlobMemoryReference>();
-            BinaryBufferWriter writer = new BinaryBufferWriter();
-            writer.SetLengthsPosition(0);
-            writer.Skip(4);
-            MemoryChunkReferenceList list = new MemoryChunkReferenceList() { MemoryChunkReferences = chunks.Select(x => x.Reference).ToList() };
-            list.SerializeToExistingBuffer(ref writer, LazinatorSerializationOptions.Default);
-            int memoryUsed = writer.ActiveMemoryPosition - 4;
-            writer.RecordLength(memoryUsed);
-
-            List<BlobMemoryReference> result = new List<BlobMemoryReference>();
-            BlobMemoryReference indexFile = new BlobMemoryReference(path, blobManager, containedInSingleBlob);
-            result.Add(indexFile);
-            await blobManager.WriteAsync(path, writer.ActiveMemoryWritten);
-            long numBytesWritten = writer.ActiveMemoryPosition;
-            for (int i = 0; i < chunks.Count; i++)
-            {
-                MemoryChunk chunk = chunks[i];
-                MemoryChunkReference reference = chunk.Reference;
-                Memory<byte> memory = chunk.Memory;
-                string revisedPath = containedInSingleBlob ? path : BlobMemoryReference.GetPathWithNumber(path, reference.MemoryChunkID);
-                BlobMemoryReference blobReference = new BlobMemoryReference(revisedPath, blobManager, containedInSingleBlob ? new MemoryChunkReference(reference.MemoryChunkID, (int) numBytesWritten, chunk.Reference.Length) : reference);
-                result.Add(blobReference);
-                if (containedInSingleBlob)
-                    await blobManager.AppendAsync(revisedPath, memory);
-                else
-                    await blobManager.WriteAsync(revisedPath, memory);
-                numBytesWritten += chunk.Reference.Length;
-            }
-            return result;
-        }
-
-        public List<BlobMemoryReference> WriteToBlobs(string path, IBlobManager blobManager, bool containedInSingleBlob)
-        {
-            var chunks = EnumerateMemoryChunks().ToList();
-            if (!chunks.Any())
-                return new List<BlobMemoryReference>();
-            BinaryBufferWriter writer = new BinaryBufferWriter();
-            writer.SetLengthsPosition(0);
-            writer.Skip(4);
-            MemoryChunkReferenceList list = new MemoryChunkReferenceList() { MemoryChunkReferences = chunks.Select(x => x.Reference).ToList() };
-            if (containedInSingleBlob)
-                list.CombineToSameChunk(0, true); // writing everything to a single blob, so always use MemoryChunkID of 0, but with multiple references to the blob
-            list.SerializeToExistingBuffer(ref writer, LazinatorSerializationOptions.Default);
-            int memoryUsed = writer.ActiveMemoryPosition - 4;
-            writer.RecordLength(memoryUsed);
-
-            List<BlobMemoryReference> result = new List<BlobMemoryReference>();
-            BlobMemoryReference indexFile = new BlobMemoryReference(path, blobManager, containedInSingleBlob);
-            result.Add(indexFile);
-            blobManager.Write(path, writer.ActiveMemoryWritten);
-            long numBytesWritten = writer.ActiveMemoryPosition;
-            int firstChunkID = 0;
-            for (int i = 0; i < chunks.Count; i++)
-            {
-                MemoryChunk chunk = chunks[i];
-                MemoryChunkReference reference = chunk.Reference;
-                if (i == 0)
-                    firstChunkID = reference.MemoryChunkID;
-                Memory<byte> memory = chunk.Memory;
-                string revisedPath = containedInSingleBlob ? path : BlobMemoryReference.GetPathWithNumber(path, reference.MemoryChunkID);
-                BlobMemoryReference blobReference = new BlobMemoryReference(revisedPath, blobManager, containedInSingleBlob ? new MemoryChunkReference(firstChunkID, (int)numBytesWritten, chunk.Reference.Length) : reference);
-                result.Add(blobReference);
-                if (containedInSingleBlob)
-                    blobManager.Append(revisedPath, memory);
-                else
-                    blobManager.Write(revisedPath, memory);
-                numBytesWritten += chunk.Reference.Length;
-            }
-            return result;
-        }
     }
 
      #endregion

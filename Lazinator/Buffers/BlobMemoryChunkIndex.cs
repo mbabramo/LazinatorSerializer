@@ -1,0 +1,244 @@
+﻿using Lazinator.Core;
+using Lazinator.Exceptions;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Lazinator.Buffers
+{
+    public partial class BlobMemoryChunkIndex : IBlobMemoryChunkIndex, IPersistentLazinator
+    {
+
+        IBlobManager BlobManager;
+
+        /// <summary>
+        /// Creates a reference to the index file (which may or may not contain all of the remaining data). This should be followed by a call to GetLazinatorMemory or GetLazinatorMemoryAsync.
+        /// </summary>
+        /// <param name="path"></param>
+        public BlobMemoryChunkIndex(string path, IBlobManager blobManager, bool containedInSingleBlob)
+        {
+            BlobPath = path;
+            BlobManager = blobManager;
+            ContainedInSingleBlob = containedInSingleBlob;
+            IsPersisted = true;
+        }
+
+        /// <summary>
+        /// Uses information in an initial MemoryReferenceInFile to generate information on other MemoryReferenceInBlobs. 
+        /// This should be called immediately after the constructor. 
+        /// </summary>
+        /// <returns></returns>
+        private async Task<List<MemoryChunk>> GetAdditionalReferencesAsync(bool containedInSingleBlob)
+        {
+            Memory<byte> intHolder = await BlobManager.ReadAsync(BlobPath, 0, 4);
+            int numBytesRead = 0;
+            int numBytes = ReadUncompressedPrimitives.ToInt32(intHolder.Span, ref numBytesRead);
+            Memory<byte> bytesForLengths = await BlobManager.ReadAsync(BlobPath, 4, numBytes);
+            return GetChunksFromChunkReferencesStorage(containedInSingleBlob, bytesForLengths);
+        }
+
+        /// <summary>
+        /// Uses information in an initial MemoryReferenceInFile to generate information on other MemoryReferenceInFiles. 
+        /// This should be called immediately after the constructor. 
+        /// </summary>
+        /// <returns></returns>
+        private List<MemoryChunk> GetAdditionalReferences(bool containedInSingleBlob)
+        {
+            const int bytesForLength = sizeof(int);
+            Memory<byte> intHolder = BlobManager.Read(BlobPath, 0, bytesForLength);
+            int numBytesRead = 0;
+            int numBytes = ReadUncompressedPrimitives.ToInt32(intHolder.Span, ref numBytesRead);
+            Memory<byte> memoryChunkReferencesStorage = BlobManager.Read(BlobPath, numBytesRead, numBytes);
+            var chunks = GetChunksFromChunkReferencesStorage(containedInSingleBlob, memoryChunkReferencesStorage);
+            return chunks;
+        }
+
+        private List<MemoryChunk> GetChunksFromChunkReferencesStorage(bool containedInSingleBlob, Memory<byte> memoryChunkReferencesStorage)
+        {
+            List<MemoryChunkReference> memoryChunkReferences = GetMemoryChunkReferences(memoryChunkReferencesStorage);
+            List<MemoryChunk> memoryChunks = GetMemoryChunks(memoryChunkReferences, containedInSingleBlob, memoryChunkReferencesStorage.Length);
+            return memoryChunks;
+        }
+
+        private List<MemoryChunkReference> GetMemoryChunkReferences(Memory<byte> memoryChunkReferencesStorage)
+        {
+            BlobMemoryChunkIndex list = new BlobMemoryChunkIndex(memoryChunkReferencesStorage);
+            return list.MemoryChunkReferences;
+        }
+
+        private List<MemoryChunk> GetMemoryChunks(List<MemoryChunkReference> memoryChunkReferences, bool containedInSingleBlob, int bytesForMemoryChunkReferencesStorage)
+        {
+            List<MemoryChunk> memoryReferences = new List<MemoryChunk>();
+            long numBytesProcessed = sizeof(int) + bytesForMemoryChunkReferencesStorage;
+            for (int i = 0; i < memoryChunkReferences.Count; i++)
+            {
+                MemoryChunkReference memoryChunkReference = memoryChunkReferences[i];
+                if (containedInSingleBlob)
+                {
+                    if (numBytesProcessed > int.MaxValue)
+                        ThrowHelper.ThrowTooLargeException(int.MaxValue);
+                    memoryChunkReference = new MemoryChunkReference(memoryChunkReferences[0].MemoryChunkID, (int)numBytesProcessed, memoryChunkReference.Length);
+                }
+                string referencePath = containedInSingleBlob ? BlobPath : GetPathForMemoryChunk(BlobPath, memoryChunkReference.MemoryChunkID);
+                memoryReferences.Add(new BlobMemoryChunk(referencePath, (IBlobManager)this.BlobManager, memoryChunkReference));
+                numBytesProcessed += memoryChunkReference.Length;
+            }
+            return memoryReferences;
+        }
+
+        public static string GetPathForMemoryChunk(string indexBlobPath, int i)
+        {
+            string withoutExtension = Path.GetFileNameWithoutExtension(indexBlobPath);
+            string withoutNumber = withoutExtension.EndsWith("-0") ? withoutExtension.Substring(0, withoutExtension.Length - 2) : withoutExtension;
+            string withNumber = withoutNumber + "-" + i.ToString();
+            string withExtension = withNumber + Path.GetExtension(indexBlobPath);
+            return withExtension;
+        }
+
+        public void CombineToSameChunk(int memoryChunkID, bool separateReferences) => CombineToSameChunk(0, MemoryChunkReferences.Count(), memoryChunkID, separateReferences);
+
+        /// <summary>
+        /// Combine entries in the memory chunk reference list, in preparation for writing multiple entries to a single blob. 
+        /// The entries can be renumbered to a new memory chunk ID. Meanwhile, the entries can be combined into a single 
+        /// reference only (if we want these separate chunks to be read into memory all at once) or their independence
+        /// can be maintained but sharing the same memory chunk ID, since they will be in the same blob file. 
+        /// </summary>
+        /// <param name="startingWithIndex"></param>
+        /// <param name="numEntriesToCompact"></param>
+        /// <param name="memoryChunkID"></param>
+        /// <param name="singleReferenceOnly"></param>
+        public void CombineToSameChunk(int startingWithIndex, int numEntriesToCompact, int memoryChunkID, bool separateReferences)
+        {
+            var revisedReferences = new List<MemoryChunkReference>();
+            int initialNumReferences = MemoryChunkReferences.Count();
+            for (int i = 0; i < initialNumReferences; i++)
+            {
+                if ((i <= startingWithIndex && separateReferences) || (i < startingWithIndex && !separateReferences) || i >= startingWithIndex + numEntriesToCompact)
+                    revisedReferences.Add(MemoryChunkReferences[i]);
+                else
+                {
+                    if (!separateReferences)
+                    {
+                        var original = revisedReferences[startingWithIndex];
+                        revisedReferences[startingWithIndex] = new MemoryChunkReference(memoryChunkID, original.Offset, original.Length + MemoryChunkReferences[i].Length);
+                    }
+                    else
+                    {
+                        var original = MemoryChunkReferences[i];
+                        var previous = revisedReferences[i - 1];
+                        MemoryChunkReference toAdd = new MemoryChunkReference(memoryChunkID, previous.Offset + previous.Length, original.Length);
+                        revisedReferences.Add(toAdd);
+                    }
+                }
+            }
+            MemoryChunkReferences = revisedReferences;
+        }
+
+        public LazinatorMemory GetLazinatorMemory()
+        {
+            var references = GetAdditionalReferences(ContainedInSingleBlob);
+            var firstAfterIndex = references.First();
+            LazinatorMemory lazinatorMemory = new LazinatorMemory(firstAfterIndex, references.Skip(1).ToList(), 0, 0, references.Sum(x => x.Reference.Length));
+            lazinatorMemory.LoadInitialMemory();
+            return lazinatorMemory;
+        }
+
+        public async ValueTask<LazinatorMemory> GetLazinatorMemoryAsync()
+        {
+            var references = await GetAdditionalReferencesAsync(ContainedInSingleBlob);
+            var firstAfterIndex = references.First();
+            LazinatorMemory lazinatorMemory = new LazinatorMemory(firstAfterIndex, references.Skip(1).ToList(), 0, 0, references.Sum(x => x.Reference.Length));
+            await lazinatorMemory.LoadInitialMemoryAsync();
+            return lazinatorMemory;
+        }
+
+        public void Delete(bool memoryDroppedFromPreviousIndex, bool memoryUsedInThisIndex, bool indexItself)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public ValueTask DeleteAsync(bool memoryDroppedFromPreviousIndex, bool memoryUsedInThisIndex, bool indexItself)
+        {
+
+            throw new NotImplementedException();
+        }
+
+        public IPersistentLazinator PersistLazinatorMemory(LazinatorMemory lazinatorMemory)
+        {
+            var chunks = lazinatorMemory.EnumerateMemoryChunks().ToList();
+            MemoryChunkReferences = chunks.Select(x => x.Reference).ToList();
+            var writer = GetBinaryBufferWriterWithIndex();
+
+            BlobManager.Write(BlobPath, writer.ActiveMemoryWritten);
+            long numBytesWritten = writer.ActiveMemoryPosition;
+            for (int i = 0; i < chunks.Count; i++)
+            {
+                GetBlobMemoryChunkAndInfo(chunks, numBytesWritten, i, out MemoryChunk chunk, out Memory<byte> memory, out string revisedPath, out BlobMemoryChunk blobMemoryChunk);
+                if (ContainedInSingleBlob)
+                    BlobManager.Append(revisedPath, memory);
+                else
+                    BlobManager.Write(revisedPath, memory);
+                numBytesWritten += chunk.Reference.Length;
+            }
+            return this;
+        }
+
+        public async ValueTask<IPersistentLazinator> PersistLazinatorMemoryAsync(LazinatorMemory lazinatorMemory)
+        {
+            var chunks = lazinatorMemory.EnumerateMemoryChunks().ToList();
+            MemoryChunkReferences = chunks.Select(x => x.Reference).ToList();
+            var writer = GetBinaryBufferWriterWithIndex();
+
+            await BlobManager.WriteAsync(BlobPath, writer.ActiveMemoryWritten);
+            long numBytesWritten = writer.ActiveMemoryPosition;
+            for (int i = 0; i < chunks.Count; i++)
+            {
+                GetBlobMemoryChunkAndInfo(chunks, numBytesWritten, i, out MemoryChunk chunk, out Memory<byte> memory, out string revisedPath, out BlobMemoryChunk blobMemoryChunk);
+                if (ContainedInSingleBlob)
+                    await BlobManager.AppendAsync(revisedPath, memory);
+                else
+                    await BlobManager.WriteAsync(revisedPath, memory);
+                numBytesWritten += chunk.Reference.Length;
+            }
+            return this;
+        }
+
+        private void GetBlobMemoryChunkAndInfo(List<MemoryChunk> chunks, long numBytesWritten, int i, out MemoryChunk chunk, out Memory<byte> memory, out string revisedPath, out BlobMemoryChunk blobMemoryChunk)
+        {
+            chunk = chunks[i];
+            MemoryChunkReference reference = chunk.Reference;
+            memory = chunk.Memory;
+            revisedPath = ContainedInSingleBlob ? BlobPath : GetPathForMemoryChunk(BlobPath, reference.MemoryChunkID);
+            blobMemoryChunk = new BlobMemoryChunk(revisedPath, (IBlobManager)this.BlobManager, this.ContainedInSingleBlob ? new MemoryChunkReference(reference.MemoryChunkID, (int)numBytesWritten, chunk.Reference.Length) : reference);
+        }
+
+        private BinaryBufferWriter GetBinaryBufferWriterWithIndex()
+        {
+            BinaryBufferWriter writer = new BinaryBufferWriter();
+            writer.SetLengthsPosition(0);
+            writer.Skip(4);
+            SerializeToExistingBuffer(ref writer, LazinatorSerializationOptions.Default);
+            int memoryUsed = writer.ActiveMemoryPosition - 4;
+            writer.RecordLength(memoryUsed);
+
+            return writer;
+        }
+
+        private BinaryBufferWriter RecordIndexInformation(BlobMemoryChunkIndex list, bool containedInSingleBlob)
+        {
+            BinaryBufferWriter writer = new BinaryBufferWriter();
+            writer.SetLengthsPosition(0);
+            writer.Skip(4);
+            if (containedInSingleBlob)
+                list.CombineToSameChunk(0, true); // writing everything to a single blob, so always use MemoryChunkID of 0, but with multiple references to the blob
+            list.SerializeToExistingBuffer(ref writer, LazinatorSerializationOptions.Default);
+            int memoryUsed = writer.ActiveMemoryPosition - 4;
+            writer.RecordLength(memoryUsed);
+            return writer;
+        }
+
+    }
+}

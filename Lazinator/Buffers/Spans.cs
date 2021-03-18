@@ -10,7 +10,7 @@ namespace Lazinator.Buffers
     /// </summary>
     public static class Spans
     {
-        public static ReadOnlySpan<Int16> CastSpanToInt3216(ReadOnlySpan<byte> s)
+        public static ReadOnlySpan<Int16> CastSpanToInt16(ReadOnlySpan<byte> s)
         {
             var cast = MemoryMarshal.Cast<byte, Int16>(s);
             if (BinaryBufferWriter.LittleEndianStorage == BitConverter.IsLittleEndian)

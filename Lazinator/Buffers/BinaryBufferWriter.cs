@@ -39,7 +39,7 @@ namespace Lazinator.Buffers
         /// <summary>
         /// When serializing diffs, these are non-null and will refer to various segments in CompletedMemory and ActiveMemory in order.
         /// </summary>
-        public List<MemoryChunkReference> MemoryChunkReferences;
+        public List<MemoryChunkReference> ActiveMemoryChunkReferences;
 
         #region Construction and initialization
 
@@ -51,11 +51,11 @@ namespace Lazinator.Buffers
             if (completedMemory == null)
             {
                 CompletedMemory = default;
-                MemoryChunkReferences = null;
+                ActiveMemoryChunkReferences = null;
             }
             else
             {
-                MemoryChunkReferences = new List<MemoryChunkReference>();
+                ActiveMemoryChunkReferences = new List<MemoryChunkReference>();
                 CompletedMemory = completedMemory.Value;
             }
             _ActiveMemoryPosition = 0;
@@ -222,7 +222,7 @@ namespace Lazinator.Buffers
             if (CompletedMemory == null)
                 throw new ArgumentException();
             IEnumerable<MemoryChunkReference> segmentsToAdd = CompletedMemory.EnumerateMemoryChunkReferences(startIndex, numBytes);
-            MemoryChunkReference.ExtendMemoryChunkReferencesList(MemoryChunkReferences, segmentsToAdd);
+            MemoryChunkReference.ExtendMemoryChunkReferencesList(ActiveMemoryChunkReferences, segmentsToAdd);
             RecordLastActiveMemoryChunkReference();
         }
 
@@ -244,7 +244,7 @@ namespace Lazinator.Buffers
             int activeMemoryVersion = GetActiveMemoryChunkID();
             int firstUnrecordedActiveMemoryByte = GetFirstUnrecordedActiveMemoryByte(activeMemoryVersion);
             if (activeMemoryLength > firstUnrecordedActiveMemoryByte)
-                MemoryChunkReference.ExtendMemoryChunkReferencesList(MemoryChunkReferences, new MemoryChunkReference(activeMemoryVersion, firstUnrecordedActiveMemoryByte, activeMemoryLength - firstUnrecordedActiveMemoryByte));
+                MemoryChunkReference.ExtendMemoryChunkReferencesList(ActiveMemoryChunkReferences, new MemoryChunkReference(activeMemoryVersion, firstUnrecordedActiveMemoryByte, activeMemoryLength - firstUnrecordedActiveMemoryByte));
         }
 
         /// <summary>
@@ -267,9 +267,9 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         private int GetFirstUnrecordedActiveMemoryByte(int memoryChunkID)
         {
-            for (int i = MemoryChunkReferences.Count - 1; i >= 0; i--)
+            for (int i = ActiveMemoryChunkReferences.Count - 1; i >= 0; i--)
             {
-                MemoryChunkReference bytesSegment = MemoryChunkReferences[i];
+                MemoryChunkReference bytesSegment = ActiveMemoryChunkReferences[i];
                 if (bytesSegment.MemoryChunkID == memoryChunkID)
                 {
                     return bytesSegment.Offset + bytesSegment.Length;
