@@ -17,7 +17,6 @@ namespace Lazinator.Buffers
     {
         string BlobPath;
         IBlobManager BlobManager;
-        bool ContainedInSingleBlob;
 
         MemoryChunkReference OriginalReference;
         public override MemoryChunkReference Reference
