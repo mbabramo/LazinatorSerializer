@@ -1046,7 +1046,7 @@ namespace LazinatorTests.Examples
             {
                 return EncodeToNewBuffer(options);
             }
-            BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
+            BinaryBufferWriter writer = options.SerializeDiffs ? new BinaryBufferWriter(0, LazinatorMemoryStorage) : new BinaryBufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
             LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
             return writer.LazinatorMemory;
         }
