@@ -372,6 +372,10 @@ namespace LazinatorTests.Examples.Abstract
         protected override void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
         {
             base.WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startOfObjectPosition);
+            if (options.SplittingPossible)
+            {
+                options = options.WithoutSplittingPossible();
+            }
             int startOfChildPosition = 0;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_IntList4_Accessed)

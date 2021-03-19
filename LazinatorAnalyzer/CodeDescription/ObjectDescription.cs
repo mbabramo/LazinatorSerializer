@@ -733,7 +733,7 @@ namespace Lazinator.CodeDescription
 
                         {MaybeAsyncAndNot($@"public {DerivationKeyword}{MaybeAsyncReturnType("LazinatorMemory")} SerializeLazinator{MaybeAsyncWord}({MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options) 
                         {{
-                            if (LazinatorMemoryStorage.IsEmpty || options.IncludeChildrenMode != OriginalIncludeChildrenMode || (options.VerifyCleanness || IsDirty || (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && DescendantIsDirty)))
+                            if (LazinatorMemoryStorage.IsEmpty || options.IncludeChildrenMode != OriginalIncludeChildrenMode || (options.SerializeDiffs || options.VerifyCleanness || IsDirty || (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && DescendantIsDirty)))
                             {{
                                 return {MaybeAsyncReturnValue($"{MaybeAwaitWord}EncodeToNewBuffer{MaybeAsyncWord}(options)")};
                             }}{MaybeAsyncConditional($@"
@@ -1553,7 +1553,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 }
                 if (propertiesToWrite.Any())
                 {
-                    if (!Splittable && propertiesToWrite.Any(x => !x.IsPrimitive && !x.IsMemoryOrSpan))
+                    if (!Splittable && IsGeneric || propertiesToWrite.Any(x => !x.IsPrimitive && !x.IsMemoryOrSpan))
                     {
                         sb.AppendLine($@"if (options.SplittingPossible)
 {{

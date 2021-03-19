@@ -2081,6 +2081,10 @@ namespace LazinatorTests.Examples
         }
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, long startOfObjectPosition)
         {
+            if (options.SplittingPossible)
+            {
+                options = options.WithoutSplittingPossible();
+            }
             long startOfChildPosition = 0;
             long lengthValue = 0;
             startOfChildPosition = writer.OverallMemoryPosition;
@@ -2256,6 +2260,10 @@ namespace LazinatorTests.Examples
         }
         async protected virtual ValueTask WriteChildrenPropertiesIntoBufferAsync(BinaryBufferWriterContainer writer, LazinatorSerializationOptions options, bool includeUniqueID, long startOfObjectPosition)
         {
+            if (options.SplittingPossible)
+            {
+                options = options.WithoutSplittingPossible();
+            }
             long startOfChildPosition = 0;
             long lengthValue = 0;
             startOfChildPosition = writer.Writer.OverallMemoryPosition;
