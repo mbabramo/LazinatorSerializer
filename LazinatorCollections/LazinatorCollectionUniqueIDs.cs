@@ -61,5 +61,6 @@
         IMultilevelReportReceiver,
         IRemote,
         ILazinatorComparer,
+        ILazinatorBinaryTree,
     }
 }
