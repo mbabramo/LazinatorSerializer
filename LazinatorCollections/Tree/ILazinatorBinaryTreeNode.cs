@@ -5,6 +5,7 @@ using System;
 namespace LazinatorCollections.Tree
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorBinaryTreeNode)]
+    [Splittable]
     public interface ILazinatorBinaryTreeNode<T> where T : ILazinator, IComparable<T>
     {
         LazinatorBinaryTreeNode<T> LeftNode { get; set; }

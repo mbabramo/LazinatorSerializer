@@ -1,5 +1,6 @@
 ﻿using Lazinator.Core;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LazinatorCollections.Tree
 {
-    public partial class LazinatorBinaryTree<T> : ILazinatorBinaryTree<T> where T : ILazinator, IComparable<T>
+    public partial class LazinatorBinaryTree<T> : ILazinatorBinaryTree<T>, IEnumerable<T>, IEnumerable where T : ILazinator, IComparable<T>
     {
 
         // code adapted from http://csharpexamples.com/c-binary-search-tree-implementation/
@@ -124,33 +125,52 @@ namespace LazinatorCollections.Tree
             return parent == null ? 0 : Math.Max(GetTreeDepth(parent.LeftNode), GetTreeDepth(parent.RightNode)) + 1;
         }
 
-        public void TraversePreOrder(LazinatorBinaryTreeNode<T> parent)
+        System.Collections.IEnumerator IEnumerable.GetEnumerator()
+        {
+            // uses the strongly typed IEnumerable<T> implementation
+            return this.GetEnumerator();
+        }
+
+        public IEnumerator<T> GetEnumerator()
+        {
+            if (Root != null)
+                foreach (T t in TraverseInOrder(Root))
+                    yield return t;
+        }
+
+        private IEnumerable<T> TraversePreOrder(LazinatorBinaryTreeNode<T> parent)
         {
             if (parent != null)
             {
-                Console.Write(parent.Data + " ");
-                TraversePreOrder(parent.LeftNode);
-                TraversePreOrder(parent.RightNode);
+                yield return parent.Data;
+                foreach (var item in TraversePreOrder(parent.LeftNode))
+                    yield return item;
+                foreach (var item in TraversePreOrder(parent.RightNode))
+                    yield return item;
             }
         }
 
-        public void TraverseInOrder(LazinatorBinaryTreeNode<T> parent)
+        private IEnumerable<T> TraverseInOrder(LazinatorBinaryTreeNode<T> parent)
         {
             if (parent != null)
             {
-                TraverseInOrder(parent.LeftNode);
-                Console.Write(parent.Data + " ");
-                TraverseInOrder(parent.RightNode);
+                foreach (var item in TraverseInOrder(parent.LeftNode))
+                    yield return item;
+                yield return parent.Data;
+                foreach (var item in TraverseInOrder(parent.RightNode))
+                    yield return item;
             }
         }
 
-        public void TraversePostOrder(LazinatorBinaryTreeNode<T> parent)
+        private IEnumerable<T> TraversePostOrder(LazinatorBinaryTreeNode<T> parent)
         {
             if (parent != null)
             {
-                TraversePostOrder(parent.LeftNode);
-                TraversePostOrder(parent.RightNode);
-                Console.Write(parent.Data + " ");
+                foreach (var item in TraversePostOrder(parent.LeftNode))
+                    yield return item;
+                foreach (var item in TraversePostOrder(parent.RightNode))
+                    yield return item;
+                yield return parent.Data;
             }
         }
     }
