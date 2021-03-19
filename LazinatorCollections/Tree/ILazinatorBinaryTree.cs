@@ -1,13 +1,12 @@
 ﻿using Lazinator.Attributes;
 using Lazinator.Core;
+using System;
 
 namespace LazinatorCollections.Tree
 {
     [Lazinator((int)LazinatorCollectionUniqueIDs.ILazinatorBinaryTree)]
-    public interface ILazinatorBinaryTree<T> where T : ILazinator
+    public interface ILazinatorBinaryTree<T> where T : ILazinator, IComparable<T>
     {
-        T Item { get; set; }
-        LazinatorBinaryTree<T> Left { get; set; }
-        LazinatorBinaryTree<T> Right { get; set; }
+        LazinatorBinaryTreeNode<T> Root { get; set; }
     }
 }

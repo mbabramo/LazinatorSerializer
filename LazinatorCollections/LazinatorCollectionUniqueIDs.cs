@@ -62,5 +62,6 @@
         IRemote,
         ILazinatorComparer,
         ILazinatorBinaryTree,
+        ILazinatorBinaryTreeNode,
     }
 }

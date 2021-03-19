@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LazinatorCollections.Tree
 {
-    public partial class LazinatorBinaryTree<T> : ILazinatorBinaryTree<T> where T : ILazinator, IComparable<T>
+    public partial class LazinatorBinaryTreeNode<T> : ILazinatorBinaryTreeNode<T> where T : ILazinator, IComparable<T>
     {
     }
 }

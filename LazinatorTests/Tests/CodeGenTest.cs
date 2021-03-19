@@ -146,6 +146,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(LazinatorQueue<>), project: "LazinatorCollections", mainFolder: "", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorStack<>), project: "LazinatorCollections", mainFolder: "", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorGeneralTree<>), project: "LazinatorCollections", mainFolder: "/Tree/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorBinaryTreeNode<>), project: "LazinatorCollections", mainFolder: "/Tree/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorBinaryTree<>), project: "LazinatorCollections", mainFolder: "/Tree/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorLocationAwareTree<>), project: "LazinatorCollections", mainFolder: "/Tree/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(LazinatorLocationAwareTree<>), project: "LazinatorCollections", mainFolder: "/Tree/", subfolder: "", ws);
