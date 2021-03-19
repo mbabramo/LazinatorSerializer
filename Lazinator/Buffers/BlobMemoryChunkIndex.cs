@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Buffers
 {
-    public partial class BlobMemoryChunkIndex : IBlobMemoryChunkIndex, IPersistentLazinator
+    public partial class PersistentIndex : IPersistentIndex, IPersistentLazinator
     {
 
         IBlobManager BlobManager;
@@ -20,7 +20,7 @@ namespace Lazinator.Buffers
         /// Creates a reference to an index file to be created (which may or may not contain all of the remaining data).
         /// </summary>
         /// <param name="path"></param>
-        public BlobMemoryChunkIndex(string path, IBlobManager blobManager, bool containedInSingleBlob)
+        public PersistentIndex(string path, IBlobManager blobManager, bool containedInSingleBlob)
         {
             BlobPath = path;
             BlobManager = blobManager;
@@ -28,7 +28,7 @@ namespace Lazinator.Buffers
             IsPersisted = false;
         }
 
-        public static BlobMemoryChunkIndex ReadFromBlobWithIntPrefix(IBlobManager blobManager, string blobPath)
+        public static PersistentIndex ReadFromBlobWithIntPrefix(IBlobManager blobManager, string blobPath)
         {
             Memory<byte> intHolder = blobManager.Read(blobPath, 0, 4);
             int numBytesRead = 0;
@@ -37,7 +37,7 @@ namespace Lazinator.Buffers
             return CreateFromBytes(blobManager, mainBytes);
         }
 
-        public static async ValueTask<BlobMemoryChunkIndex> ReadFromBlobWithIntPrefixAsync(IBlobManager blobManager, string blobPath)
+        public static async ValueTask<PersistentIndex> ReadFromBlobWithIntPrefixAsync(IBlobManager blobManager, string blobPath)
         {
             Memory<byte> intHolder = await blobManager.ReadAsync(blobPath, 0, 4);
             int numBytesRead = 0;
@@ -46,9 +46,9 @@ namespace Lazinator.Buffers
             return CreateFromBytes(blobManager, mainBytes);
         }
 
-        private static BlobMemoryChunkIndex CreateFromBytes(IBlobManager blobManager, Memory<byte> mainBytes)
+        private static PersistentIndex CreateFromBytes(IBlobManager blobManager, Memory<byte> mainBytes)
         {
-            var index = new BlobMemoryChunkIndex(new LazinatorMemory(new SimpleMemoryOwner<byte>(mainBytes)));
+            var index = new PersistentIndex(new LazinatorMemory(new SimpleMemoryOwner<byte>(mainBytes)));
             index._BytesUsedForIndexWithPrefix = sizeof(int) + mainBytes.Length;
             index.BlobManager = blobManager;
             return index;
@@ -218,7 +218,7 @@ namespace Lazinator.Buffers
             return writer;
         }
 
-        private BinaryBufferWriter RecordIndexInformation(BlobMemoryChunkIndex list, bool containedInSingleBlob)
+        private BinaryBufferWriter RecordIndexInformation(PersistentIndex list, bool containedInSingleBlob)
         {
             BinaryBufferWriter writer = new BinaryBufferWriter();
             writer.SetLengthsPosition(0);

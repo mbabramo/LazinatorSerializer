@@ -1027,13 +1027,13 @@ namespace LazinatorTests.Tests
             string fullPath = GetPathForIndexAndBlobs(useFile);
             if (fullPath == null)
                 return;
-            BlobMemoryChunkIndex index = new BlobMemoryChunkIndex(fullPath, blobManager, containedInSingleBlob); 
+            PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob); 
             index.PersistLazinatorMemory(multipleBufferResult);
             // Note: Index reference is first var indexReference = memoryReferenceInBlobs[0];
 
             // Read from one or more blobs
             if (recreateIndex)
-                index = BlobMemoryChunkIndex.ReadFromBlobWithIntPrefix(blobManager, fullPath);
+                index = PersistentIndex.ReadFromBlobWithIntPrefix(blobManager, fullPath);
             var revisedMemory = index.GetLazinatorMemory();
 
             var e2 = new Example(revisedMemory);
@@ -1050,13 +1050,13 @@ namespace LazinatorTests.Tests
             string fullPath = GetPathForIndexAndBlobs(useFile);
             if (fullPath == null)
                 return;
-            BlobMemoryChunkIndex index = new BlobMemoryChunkIndex(fullPath, blobManager, containedInSingleBlob);
+            PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob);
             await index.PersistLazinatorMemoryAsync(multipleBufferResult);
             // Note: Index reference is first var indexReference = memoryReferenceInBlobs[0];
 
             // Read from one or more blobs
             if (recreateIndex)
-                index = await BlobMemoryChunkIndex.ReadFromBlobWithIntPrefixAsync(blobManager, fullPath);
+                index = await PersistentIndex.ReadFromBlobWithIntPrefixAsync(blobManager, fullPath);
             var revisedMemory = await index.GetLazinatorMemoryAsync();
 
             Example e2 = new Example(revisedMemory);

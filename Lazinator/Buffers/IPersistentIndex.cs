@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Lazinator.Buffers
 {
     [Lazinator((int) LazinatorCoreUniqueIDs.IBlobMemoryChunkIndex)]
-    public interface IBlobMemoryChunkIndex
+    public interface IPersistentIndex
     {
         bool ContainedInSingleBlob { get; set; }
         bool MaintainOldVersions { get; set; }
