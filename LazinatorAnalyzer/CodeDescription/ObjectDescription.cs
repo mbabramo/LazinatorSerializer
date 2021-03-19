@@ -739,7 +739,7 @@ namespace Lazinator.CodeDescription
                             }}{MaybeAsyncConditional($@"
                                 BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(LazinatorMemoryStorage.LengthInt ?? 0);
                                 {AwaitAndNoteAsyncUsed}LazinatorMemoryStorage.WriteToBinaryBufferAsync(writer);", $@"
-                                BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
+                                BinaryBufferWriter writer = {IIF(Splittable, $"options.SerializeDiffs ? new BinaryBufferWriter(0, LazinatorMemoryStorage) : ")}new BinaryBufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
                                 LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);")}
                             return {MaybeAsyncReturnValue($"writer.LazinatorMemory")};
                         }}")}
