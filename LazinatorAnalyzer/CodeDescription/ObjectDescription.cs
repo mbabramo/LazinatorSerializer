@@ -1553,6 +1553,13 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 }
                 if (propertiesToWrite.Any())
                 {
+                    if (!Splittable && propertiesToWrite.Any(x => !x.IsPrimitive && !x.IsMemoryOrSpan))
+                    {
+                        sb.AppendLine($@"if (options.SplittingPossible)
+{{
+    options = options.WithoutSplittingPossible();
+}}");
+                    }
                     sb.AppendLine($@"{TypeForPositions} startOfChildPosition = 0;");
                     if (propertiesToWrite.Any(x => x.UsesLengthValue))
                         sb.AppendLine($@"{TypeForPositions} lengthValue = 0;");

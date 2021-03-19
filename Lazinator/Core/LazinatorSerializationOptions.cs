@@ -49,5 +49,10 @@ namespace Lazinator.Core
 
         public static LazinatorSerializationOptions Default = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, true, false);
         public static LazinatorSerializationOptions DefaultDiffSerialization = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, true, true, 65000);
+
+
+        public bool SplittingPossible => SerializeDiffs || NextBufferThreshold != int.MaxValue;
+
+        public LazinatorSerializationOptions WithoutSplittingPossible() => new LazinatorSerializationOptions(IncludeChildrenMode, VerifyCleanness, UpdateStoredBuffer, false, int.MaxValue);
     }
 }
