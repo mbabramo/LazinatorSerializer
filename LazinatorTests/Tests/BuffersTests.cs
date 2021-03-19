@@ -975,8 +975,8 @@ namespace LazinatorTests.Tests
         public void SplittableEntitiesWork()
         {
             Example e = GetTypicalExample();
-            LazinatorMemory singleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false));
-            LazinatorMemory multipleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, 10));
+            LazinatorMemory singleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false));
+            LazinatorMemory multipleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 10));
             multipleBufferResult.MoreOwnedMemory.Count().Should().BeGreaterThan(0);
             LazinatorMemory consolidated = multipleBufferResult.GetConsolidatedMemory();
             consolidated.Matches(singleBufferResult.InitialMemory.Span).Should().BeTrue();
@@ -1020,7 +1020,7 @@ namespace LazinatorTests.Tests
         private void SplittableEntitiesSavedHelper(bool containedInSingleBlob, bool useFile, bool recreateIndex)
         {
             Example e = GetTypicalExample();
-            LazinatorMemory multipleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, 10));
+            LazinatorMemory multipleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 10));
 
             // Write to one or more blobs
             IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobStorage();
@@ -1043,7 +1043,7 @@ namespace LazinatorTests.Tests
         private async Task SplittableEntitiesSavedHelper_Async(bool containedInSingleBlob, bool useFile, bool recreateIndex)
         {
             Example e = GetTypicalExample();
-            LazinatorMemory multipleBufferResult = await e.SerializeLazinatorAsync(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, 10));
+            LazinatorMemory multipleBufferResult = await e.SerializeLazinatorAsync(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 10));
 
             // Write to one or more blobs
             IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobStorage();

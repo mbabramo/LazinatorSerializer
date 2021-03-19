@@ -25,21 +25,29 @@ namespace Lazinator.Core
         /// </summary>
         public readonly bool UpdateStoredBuffer;
         /// <summary>
+        /// Whether to serialize only data that has changed from the previous serialization, instead of all the data in the object hierarchy. When serializing
+        /// diffs, if a previously serialized object has not changed, then the serializer may simply note the location of that object in memory rather than 
+        /// copying it. This works only with objects that are separable and is intended for large object graphs.
+        /// </summary>
+        public readonly bool SerializeDiffs;
+        /// <summary>
         /// If a Lazinator object is splittable across buffers, then, once the total number of bytes written crosses this value after serializing a child object, the next buffer is moved onto. This has no
         /// effect in a Lazinator object not splittable across buffers.
         /// </summary>
         public readonly int NextBufferThreshold;
 
-        public LazinatorSerializationOptions(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, int nextBufferThreshold=int.MaxValue)
+        public LazinatorSerializationOptions(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool serializeDiffs, int nextBufferThreshold=int.MaxValue)
         {
             IncludeChildrenMode = includeChildrenMode;
             VerifyCleanness = verifyCleanness;
             UpdateStoredBuffer = updateStoredBuffer;
+            SerializeDiffs = serializeDiffs;
             NextBufferThreshold = nextBufferThreshold;
             if (IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren && updateStoredBuffer)
                 ThrowHelper.ThrowCannotUpdateStoredBuffer();
         }
 
-        public static LazinatorSerializationOptions Default = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, true);
+        public static LazinatorSerializationOptions Default = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, true, false);
+        public static LazinatorSerializationOptions DefaultDiffSerialization = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, true, true, 65000);
     }
 }

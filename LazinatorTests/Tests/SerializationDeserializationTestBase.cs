@@ -12,7 +12,7 @@ namespace LazinatorTests.Tests
     {
         internal T CloneWithOptionalVerification<T>(T original, bool includeChildren, bool verifyCleanness) where T : ILazinator, new()
         {
-            var bytes = original.SerializeLazinator(new LazinatorSerializationOptions(includeChildren ? IncludeChildrenMode.IncludeAllChildren : IncludeChildrenMode.ExcludeAllChildren, verifyCleanness, false));
+            var bytes = original.SerializeLazinator(new LazinatorSerializationOptions(includeChildren ? IncludeChildrenMode.IncludeAllChildren : IncludeChildrenMode.ExcludeAllChildren, verifyCleanness, false, false));
             var result = original.CloneLazinatorTyped();
             return result;
         }
