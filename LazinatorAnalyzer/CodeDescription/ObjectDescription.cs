@@ -1553,7 +1553,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 }
                 if (propertiesToWrite.Any())
                 {
-                    if (!Splittable && IsGeneric || propertiesToWrite.Any(x => !x.IsPrimitive && !x.IsMemoryOrSpan))
+                    if (!Splittable && (IsGeneric || propertiesToWrite.Any(x => !x.IsPrimitive && !x.IsMemoryOrSpan)))
                     {
                         sb.AppendLine($@"if (options.SplittingPossible)
 {{
