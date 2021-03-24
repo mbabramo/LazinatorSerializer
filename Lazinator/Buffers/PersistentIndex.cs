@@ -195,8 +195,7 @@ namespace Lazinator.Buffers
                 await BlobManager.AppendAsync(BlobPath, writer.ActiveMemoryWritten);
             }
             else
-                BlobManager.OpenForWriting(BlobPath);
-            await BlobManager.WriteAsync(BlobPath, writer.ActiveMemoryWritten);
+                await BlobManager.WriteAsync(BlobPath, writer.ActiveMemoryWritten);
 
             long numBytesWritten = writer.ActiveMemoryPosition;
             for (int i = 0; i < chunks.Count; i++)

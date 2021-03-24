@@ -89,6 +89,18 @@ namespace LazinatorTests.Tests
             ConfirmSame();
         }
 
+        private async Task MultipleRoundsOfRandomChangesAsync(int numRounds, int numChangesPerRound, Func<ValueTask> postRoundAction)
+        {
+            Random r = new Random(0);
+            Initialize();
+            for (int i = 0; i < numRounds; i++)
+            {
+                RandomChanges(numChangesPerRound, r);
+                await postRoundAction();
+            }
+            ConfirmSame();
+        }
+
         [Fact]
         public void BinaryTreeTest()
         {
@@ -113,7 +125,7 @@ namespace LazinatorTests.Tests
         [InlineData(false, false, false)]
         public void BinaryTreeTest_ReloadingFromBlobs(bool useFile, bool containedInSingleBlob, bool recreateIndex)
         {
-            MultipleRoundsOfRandomChanges(10, 10, /* DEBUG */ () => 
+            MultipleRoundsOfRandomChanges(10, 10, () => 
             { 
                 LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 5));
 
@@ -128,6 +140,36 @@ namespace LazinatorTests.Tests
                 if (recreateIndex)
                     index = PersistentIndex.ReadFromBlobWithIntPrefix(blobManager, fullPath);
                 var revisedMemory = index.GetLazinatorMemory();
+                BinaryTree = new LazinatorBinaryTree<WDouble>(revisedMemory);
+            });
+        }
+
+        [Theory]
+        [InlineData(true, true, true)]
+        [InlineData(true, true, false)]
+        [InlineData(true, false, true)]
+        [InlineData(true, false, false)]
+        [InlineData(false, true, true)]
+        [InlineData(false, true, false)]
+        [InlineData(false, false, true)]
+        [InlineData(false, false, false)]
+        public async Task BinaryTreeTest_ReloadingFromBlobsAsync(bool useFile, bool containedInSingleBlob, bool recreateIndex)
+        {
+            await MultipleRoundsOfRandomChangesAsync(10, 10, async () =>
+            {
+                LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 5));
+
+                // Write to one or more blobs
+                IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobStorage();
+                string fullPath = GetPathForIndexAndBlobs(useFile);
+                if (fullPath == null)
+                    return;
+                PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob);
+                await index.PersistLazinatorMemoryAsync(multipleBufferResult);
+
+                if (recreateIndex)
+                    index = await PersistentIndex.ReadFromBlobWithIntPrefixAsync(blobManager, fullPath);
+                var revisedMemory = await index.GetLazinatorMemoryAsync();
                 BinaryTree = new LazinatorBinaryTree<WDouble>(revisedMemory);
             });
         }
