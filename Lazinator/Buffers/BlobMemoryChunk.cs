@@ -39,10 +39,21 @@ namespace Lazinator.Buffers
 
         #region Memory loading and unloading
 
+        public override void LoadMemory()
+        {
+            Memory<byte> bytes = BlobManager.Read(BlobPath, Reference.Offset, Reference.Length);
+            ReferencedMemory = new SimpleMemoryOwner<byte>(bytes);
+        }
+
         public async override ValueTask LoadMemoryAsync()
         {
             Memory<byte> bytes = await BlobManager.ReadAsync(BlobPath, Reference.Offset, Reference.Length);
             ReferencedMemory = new SimpleMemoryOwner<byte>(bytes);
+        }
+
+        public override void ConsiderUnloadMemory()
+        {
+            ReferencedMemory = null; // Reference will now point to OriginalReference
         }
 
         public override ValueTask ConsiderUnloadMemoryAsync()

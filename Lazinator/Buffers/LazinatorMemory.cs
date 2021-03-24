@@ -83,6 +83,8 @@ namespace Lazinator.Buffers
         {
             MoreOwnedMemory = moreOwnedMemory;
             StartIndex = startIndex;
+            if (StartIndex > MoreOwnedMemory.Count())
+                throw new Exception("DEBUG");
         }
 
         public LazinatorMemory(IMemoryOwner<byte> ownedMemory, long length) : this(ownedMemory, 0, length)
@@ -235,12 +237,17 @@ namespace Lazinator.Buffers
             }
 
             long positionRemaining = relativePositionOfSubrange;
-            // position is relative to StartPosition within memory chunk index StartIndex. 
+            // relativePositionOfSubrange is relative to StartPosition within memory chunk index StartIndex. 
             // We use up "positionRemaining" by advancing StartPosition up to the end of the Length of the starting index.
             // If we go all the way to the end, then we increment the starting index.
             // Note that we never change the Length (which is the Length of all combined).
             int revisedStartIndex = StartIndex;
             int revisedStartPosition = StartPosition;
+            if (revisedStartIndex == 177)
+            {
+                var DEBUG = 0;
+            }
+            int moreMemoryCount = MoreOwnedMemory?.Count() ?? 0;
             while (positionRemaining > 0)
             {
                 IMemoryOwner<byte> current = MemoryAtIndex(revisedStartIndex);
@@ -248,6 +255,8 @@ namespace Lazinator.Buffers
                 if (remainingBytesThisMemory <= positionRemaining)
                 {
                     positionRemaining -= remainingBytesThisMemory;
+                    if (positionRemaining == 0 && revisedStartIndex == moreMemoryCount)
+                        break; // we are at the very end of the last LazinatorMemory
                     revisedStartIndex++;
                     revisedStartPosition = 0;
                 }
@@ -256,6 +265,11 @@ namespace Lazinator.Buffers
                     revisedStartPosition += (int) positionRemaining;
                     positionRemaining = 0;
                 }
+            }
+
+            if (revisedStartIndex > 1 && revisedStartIndex == MoreOwnedMemory.Count() + 1)
+            {
+                var DEBUG = 0;
             }
 
             return new LazinatorMemory((MemoryChunk)InitialOwnedMemory, MoreOwnedMemory, revisedStartIndex, revisedStartPosition, length);
@@ -300,8 +314,9 @@ namespace Lazinator.Buffers
             {
                 if (IsEmpty)
                     return EmptyMemory;
+                LoadInitialMemory();
                 if (SingleMemory)
-                    return InitialOwnedMemory.Memory.Slice(StartPosition, (int) Length);
+                    return InitialOwnedMemory.Memory.Slice(StartPosition, (int)Length);
                 else
                 {
                     IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
@@ -327,11 +342,11 @@ namespace Lazinator.Buffers
         {
             if (IsEmpty)
                 return EmptyMemory;
+            IMemoryOwner<byte> memoryOwner = await LoadInitialMemoryAsync();
             if (SingleMemory)
                 return InitialOwnedMemory.Memory.Slice(StartPosition, (int)Length);
             else
             {
-                IMemoryOwner<byte> memoryOwner = await LoadInitialMemoryAsync();
                 var memory = memoryOwner.Memory;
                 int overallMemoryLength = memory.Length;
                 int lengthOfMemoryChunkAfterStartPosition = overallMemoryLength - StartPosition;
@@ -379,7 +394,10 @@ namespace Lazinator.Buffers
         public IMemoryOwner<byte> LoadInitialMemory()
         {
             if (SingleMemory)
+            {
+                LoadMemoryOwner(InitialOwnedMemory);
                 return InitialOwnedMemory;
+            }
             IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
             LoadMemoryOwner(memoryOwner);
             return memoryOwner;
@@ -389,11 +407,7 @@ namespace Lazinator.Buffers
         {
             if (memoryOwner is MemoryChunk memoryChunk && memoryChunk.IsLoaded == false)
             {
-                // Unfortunately, we must call an async method synchronously. It would be better for the user
-                // to use an asynchronous method.
-                var loadMemory = memoryChunk.LoadMemoryAsync();
-                var task = Task.Run(async () => await loadMemory);
-                task.Wait();
+                memoryChunk.LoadMemory();
             }
         }
 
@@ -434,7 +448,10 @@ namespace Lazinator.Buffers
         public async ValueTask<IMemoryOwner<byte>> LoadInitialMemoryAsync()
         {
             if (SingleMemory)
+            {
+                await LoadMemoryOwnerAsync(InitialOwnedMemory);
                 return InitialOwnedMemory;
+            }
             IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
             await LoadMemoryOwnerAsync(memoryOwner);
             return memoryOwner;
@@ -619,9 +636,19 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public IEnumerable<Memory<byte>> EnumerateRawMemory(bool includeOutsideOfRange = false)
         {
+            MemoryChunk lastMemoryReferenceLoaded = null;
             foreach (var rangeInfo in EnumerateMemoryChunksByIndex(includeOutsideOfRange))
             {
                 var m = MemoryAtIndex(rangeInfo.MemoryChunkIndex);
+                if (m is MemoryChunk memoryChunk && memoryChunk.IsLoaded == false)
+                {
+                    if (lastMemoryReferenceLoaded != null && lastMemoryReferenceLoaded != memoryChunk)
+                    { // consider unloading the last memory reference, before loading this one, so that we don't have too many in memory at the same time
+                        lastMemoryReferenceLoaded.ConsiderUnloadMemory();
+                        lastMemoryReferenceLoaded = memoryChunk;
+                    }
+                    memoryChunk.LoadMemory();
+                }
                 yield return m.Memory.Slice(rangeInfo.Offset, rangeInfo.Length);
             }
         }
@@ -639,7 +666,7 @@ namespace Lazinator.Buffers
                 var m = MemoryAtIndex(rangeInfo.MemoryChunkIndex);
                 if (m is MemoryChunk memoryChunk && memoryChunk.IsLoaded == false)
                 {
-                    if (lastMemoryReferenceLoaded != memoryChunk)
+                    if (lastMemoryReferenceLoaded != null && lastMemoryReferenceLoaded != memoryChunk)
                     { // consider unloading the last memory reference, before loading this one, so that we don't have too many in memory at the same time
                         await lastMemoryReferenceLoaded.ConsiderUnloadMemoryAsync();
                         lastMemoryReferenceLoaded = memoryChunk;

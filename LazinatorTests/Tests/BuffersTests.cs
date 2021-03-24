@@ -1063,7 +1063,7 @@ namespace LazinatorTests.Tests
             ExampleEqual(e, e2).Should().BeTrue();
         }
 
-        private string GetPathForIndexAndBlobs(bool useFile)
+       private static string GetPathForIndexAndBlobs(bool useFile)
         {
             string path = @"C:\Users\Admin\Desktop\testfolder";
             if (useFile && !System.IO.Directory.Exists(path))

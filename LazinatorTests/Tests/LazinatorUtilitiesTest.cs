@@ -136,7 +136,7 @@ namespace LazinatorTests.Tests
                 int startingPositionWithinLazinatorMemorySubrange = r.Next(0, totalBytesReferredTo);
                 int numBytesWithinLazinatorMemorySubrange = r.Next(0, totalBytesReferredTo - startingPositionWithinLazinatorMemorySubrange);
                 referencedBytes = referencedBytes.Skip(startingPositionWithinLazinatorMemorySubrange).Take(numBytesWithinLazinatorMemorySubrange).ToList();
-                Debug.WriteLine($"startingPositionWithinLazinatorMemorySubrange {startingPositionWithinLazinatorMemorySubrange } numBytesWithinLazinatorMemorySubrange {numBytesWithinLazinatorMemorySubrange}"); // DEBUG
+                // Debug.WriteLine($"startingPositionWithinLazinatorMemorySubrange {startingPositionWithinLazinatorMemorySubrange } numBytesWithinLazinatorMemorySubrange {numBytesWithinLazinatorMemorySubrange}");
 
                 List<MemoryChunkReference> memoryChunkReferences = cobbledMemory.EnumerateMemoryChunkReferences(startingPositionWithinLazinatorMemorySubrange, numBytesWithinLazinatorMemorySubrange).ToList();
                 memoryChunkReferences.Sum(x => x.Length).Should().Equals(numBytesWithinLazinatorMemorySubrange);

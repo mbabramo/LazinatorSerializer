@@ -37,6 +37,17 @@ namespace Lazinator.Buffers
         /// should set ReferencedMemory. The base class always has memory available and thus this method does nothing.
         /// </summary>
         /// <returns></returns>
+        public virtual void LoadMemory()
+        {
+            var task = Task.Run(async () => await LoadMemoryAsync());
+            task.Wait();
+        }
+
+        /// <summary>
+        /// This method should be overridden for a MemoryReference subclass that loads memory lazily. The subclass method
+        /// should set ReferencedMemory. The base class always has memory available and thus this method does nothing.
+        /// </summary>
+        /// <returns></returns>
         public virtual ValueTask LoadMemoryAsync()
         {
             return ValueTask.CompletedTask;
@@ -47,9 +58,26 @@ namespace Lazinator.Buffers
         /// after memory that is loaded is read and may no longer be necessary.  A subclass may, like this base class, 
         /// choose not to unload memory.
         /// </summary>
+        public virtual void ConsiderUnloadMemory()
+        {
+        }
+
+        /// <summary>
+        /// This method may be overridden for a MemoryReference subclass that saves memory lazily. This will be called
+        /// after memory that is loaded is read and may no longer be necessary.  A subclass may, like this base class, 
+        /// choose not to unload memory.
+        /// </summary>
         public virtual ValueTask ConsiderUnloadMemoryAsync()
         {
             return ValueTask.CompletedTask;
+        }
+
+        public virtual Memory<byte> GetMemory()
+        {
+            if (!IsLoaded)
+                LoadMemory();
+
+            return Memory;
         }
 
         public virtual async ValueTask<Memory<byte>> GetMemoryAsync()

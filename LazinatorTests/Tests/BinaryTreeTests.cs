@@ -16,6 +16,7 @@ using LazinatorTests.Examples.ExampleHierarchy;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using LazinatorCollections.Tree;
+using LazinatorTests.Utilities;
 
 namespace LazinatorTests.Tests
 {
@@ -99,6 +100,45 @@ namespace LazinatorTests.Tests
         public void BinaryTreeTest_Cloning()
         {
             MultipleRoundsOfRandomChanges(5, 100, () => { BinaryTree = BinaryTree.CloneLazinatorTyped(); });
+        }
+
+        [Theory]
+        [InlineData(true, true, true)]
+        [InlineData(true, true, false)]
+        [InlineData(true, false, true)]
+        [InlineData(true, false, false)]
+        [InlineData(false, true, true)]
+        [InlineData(false, true, false)]
+        [InlineData(false, false, true)]
+        [InlineData(false, false, false)]
+        public void BinaryTreeTest_ReloadingFromBlobs(bool useFile, bool containedInSingleBlob, bool recreateIndex)
+        {
+            MultipleRoundsOfRandomChanges(5 /* DEBUG */, 100, () => 
+            { 
+                LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 5));
+
+                // Write to one or more blobs
+                IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobStorage();
+                string fullPath = GetPathForIndexAndBlobs(useFile);
+                if (fullPath == null)
+                    return;
+                PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob);
+                index.PersistLazinatorMemory(multipleBufferResult);
+
+                if (recreateIndex)
+                    index = PersistentIndex.ReadFromBlobWithIntPrefix(blobManager, fullPath);
+                var revisedMemory = index.GetLazinatorMemory();
+                BinaryTree = new LazinatorBinaryTree<WDouble>(revisedMemory);
+            });
+        }
+
+        private static string GetPathForIndexAndBlobs(bool useFile)
+        {
+            string path = @"C:\Users\Admin\Desktop\testfolder";
+            if (useFile && !System.IO.Directory.Exists(path))
+                return null; // ignore this error
+            string fullPath = path + @"\bintree.fil";
+            return fullPath;
         }
     }
 }
