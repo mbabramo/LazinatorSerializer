@@ -236,17 +236,13 @@ namespace Lazinator.Buffers
                 return SliceInitial((int) relativePositionOfSubrange, length);
             }
 
-            long positionRemaining = relativePositionOfSubrange;
             // relativePositionOfSubrange is relative to StartPosition within memory chunk index StartIndex. 
             // We use up "positionRemaining" by advancing StartPosition up to the end of the Length of the starting index.
             // If we go all the way to the end, then we increment the starting index.
             // Note that we never change the Length (which is the Length of all combined).
+            long positionRemaining = relativePositionOfSubrange;
             int revisedStartIndex = StartIndex;
             int revisedStartPosition = StartPosition;
-            if (revisedStartIndex == 177)
-            {
-                var DEBUG = 0;
-            }
             int moreMemoryCount = MoreOwnedMemory?.Count() ?? 0;
             while (positionRemaining > 0)
             {
@@ -265,11 +261,6 @@ namespace Lazinator.Buffers
                     revisedStartPosition += (int) positionRemaining;
                     positionRemaining = 0;
                 }
-            }
-
-            if (revisedStartIndex > 1 && revisedStartIndex == MoreOwnedMemory.Count() + 1)
-            {
-                var DEBUG = 0;
             }
 
             return new LazinatorMemory((MemoryChunk)InitialOwnedMemory, MoreOwnedMemory, revisedStartIndex, revisedStartPosition, length);

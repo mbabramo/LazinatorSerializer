@@ -158,7 +158,14 @@ namespace Lazinator.Buffers
             List<MemoryChunk> chunks = GetMemoryChunksAndSetReferences(lazinatorMemory);
             var writer = GetBinaryBufferWriterWithIndex();
 
-            BlobManager.Write(BlobPath, writer.ActiveMemoryWritten);
+            if (ContainedInSingleBlob)
+            {
+                BlobManager.OpenForWriting(BlobPath);
+                BlobManager.Append(BlobPath, writer.ActiveMemoryWritten);
+            }
+            else
+                BlobManager.Write(BlobPath, writer.ActiveMemoryWritten);
+
             long numBytesWritten = writer.ActiveMemoryPosition;
             for (int i = 0; i < chunks.Count; i++)
             {
@@ -168,6 +175,8 @@ namespace Lazinator.Buffers
                 else
                     BlobManager.Write(revisedPath, memory);
                 numBytesWritten += chunk.Reference.Length;
+                if (ContainedInSingleBlob && i == chunks.Count - 1)
+                    BlobManager.CloseAfterWriting(revisedPath);
             }
             return this;
         }
@@ -180,7 +189,15 @@ namespace Lazinator.Buffers
             List<MemoryChunk> chunks = GetMemoryChunksAndSetReferences(lazinatorMemory);
             var writer = GetBinaryBufferWriterWithIndex();
 
+            if (ContainedInSingleBlob)
+            {
+                BlobManager.OpenForWriting(BlobPath);
+                await BlobManager.AppendAsync(BlobPath, writer.ActiveMemoryWritten);
+            }
+            else
+                BlobManager.OpenForWriting(BlobPath);
             await BlobManager.WriteAsync(BlobPath, writer.ActiveMemoryWritten);
+
             long numBytesWritten = writer.ActiveMemoryPosition;
             for (int i = 0; i < chunks.Count; i++)
             {
@@ -190,6 +207,8 @@ namespace Lazinator.Buffers
                 else
                     await BlobManager.WriteAsync(revisedPath, memory);
                 numBytesWritten += chunk.Reference.Length;
+                if (ContainedInSingleBlob && i == chunks.Count - 1)
+                    BlobManager.CloseAfterWriting(revisedPath);
             }
             return this;
         }

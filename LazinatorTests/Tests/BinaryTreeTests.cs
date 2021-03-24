@@ -113,7 +113,7 @@ namespace LazinatorTests.Tests
         [InlineData(false, false, false)]
         public void BinaryTreeTest_ReloadingFromBlobs(bool useFile, bool containedInSingleBlob, bool recreateIndex)
         {
-            MultipleRoundsOfRandomChanges(5 /* DEBUG */, 100, () => 
+            MultipleRoundsOfRandomChanges(10, 10, /* DEBUG */ () => 
             { 
                 LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 5));
 
@@ -137,7 +137,7 @@ namespace LazinatorTests.Tests
             string path = @"C:\Users\Admin\Desktop\testfolder";
             if (useFile && !System.IO.Directory.Exists(path))
                 return null; // ignore this error
-            string fullPath = path + @"\bintree.fil";
+            string fullPath = path + @"\binary-tree.fil";
             return fullPath;
         }
     }

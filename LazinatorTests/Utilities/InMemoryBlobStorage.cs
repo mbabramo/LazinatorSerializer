@@ -88,12 +88,12 @@ namespace LazinatorTests.Utilities
 
         public void Append(string path, Memory<byte> bytes)
         {
+            if (!Storage.ContainsKey(path))
+                Storage[path] = new byte[0];
             Memory<byte> existingBytes = Storage[path];
             byte[] allBytes = new byte[existingBytes.Length + bytes.Length];
-            for (int i = 0; i < existingBytes.Length; i++)
-                allBytes[i] = existingBytes.Span[i];
-            for (int i = 0; i < bytes.Length; i++)
-                allBytes[existingBytes.Length + i] = bytes.Span[i];
+            existingBytes.CopyTo(allBytes);
+            bytes.CopyTo(new Memory<byte>(allBytes).Slice(existingBytes.Length));
             Storage[path] = allBytes;
         }
 
@@ -106,6 +106,14 @@ namespace LazinatorTests.Utilities
         public long GetLength(string path)
         {
             return Storage[path].Length;
+        }
+
+        public void OpenForWriting(string path)
+        {
+        }
+
+        public void CloseAfterWriting(string path)
+        {
         }
     }
 }

@@ -9,6 +9,8 @@ namespace Lazinator.Buffers
 {
     public class FileBlobManager : IBlobManager
     {
+        Dictionary<string, FileStream> OpenFileStreams = new Dictionary<string, FileStream>();
+
         public Memory<byte> Read(string path, long offset, int length)
         {
             using FileStream fs = File.OpenRead(path);
@@ -32,35 +34,79 @@ namespace Lazinator.Buffers
         public void Write(string path, Memory<byte> bytes)
         {
             using FileStream fs = File.OpenWrite(path);
-            fs.Write(bytes.Span);
-            fs.Flush();
             fs.SetLength(bytes.Span.Length);
+            fs.Write(bytes.Span);
         }
 
         public async ValueTask WriteAsync(string path, Memory<byte> bytes)
         {
             using FileStream fs = File.OpenWrite(path);
-            await fs.WriteAsync(bytes);
-            await fs.FlushAsync();
             fs.SetLength(bytes.Span.Length);
+            await fs.WriteAsync(bytes);
+        }
+
+        public void OpenForWriting(string path)
+        {
+            FileStream fs = File.OpenWrite(path);
+            OpenFileStreams[path] = fs;
         }
 
         public void Append(string path, Memory<byte> bytes)
         {
-            using FileStream fs = File.OpenWrite(path);
-            fs.Seek(0, SeekOrigin.End);
+            FileStream fs;
+            bool fileStreamAlreadyOpen = false;
+            if (OpenFileStreams.ContainsKey(path))
+            {
+                fileStreamAlreadyOpen = true;
+                fs = OpenFileStreams[path];
+            }
+            else
+            {
+                fs = File.OpenWrite(path);
+                fs.Seek(0, SeekOrigin.End);
+            }
             long length = fs.Length;
             fs.Write(bytes.Span);
-            fs.SetLength(length + bytes.Length);
+            if (!fileStreamAlreadyOpen)
+                fs.SetLength(length + bytes.Length);
+
+            if (!fileStreamAlreadyOpen)
+            {
+                fs.Close();
+            }
         }
 
         public async ValueTask AppendAsync(string path, Memory<byte> bytes)
         {
-            using FileStream fs = File.OpenWrite(path);
-            fs.Seek(0, SeekOrigin.End);
+            FileStream fs;
+            bool fileStreamAlreadyOpen = false;
+            if (OpenFileStreams.ContainsKey(path))
+            {
+                fileStreamAlreadyOpen = true;
+                fs = OpenFileStreams[path];
+            }
+            else
+            {
+                fs = File.OpenWrite(path);
+                fs.Seek(0, SeekOrigin.End);
+            }
             long length = fs.Length;
             await fs.WriteAsync(bytes);
-            fs.SetLength(length + bytes.Length);
+            if (!fileStreamAlreadyOpen)
+                fs.SetLength(length + bytes.Length);
+
+            if (!fileStreamAlreadyOpen)
+            {
+                fs.Close();
+            }
+        }
+
+        public void CloseAfterWriting(string path)
+        {
+            var fs = OpenFileStreams[path];
+            fs.SetLength(fs.Position);
+            fs.Close();
+            OpenFileStreams.Remove(path);
         }
 
         public long GetLength(string path)

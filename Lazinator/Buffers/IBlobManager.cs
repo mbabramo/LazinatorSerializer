@@ -14,7 +14,9 @@ namespace Lazinator.Buffers
         long GetLength(string path);
         void Write(string path, Memory<byte> bytes);
         ValueTask WriteAsync(string path, Memory<byte> bytes);
+        void OpenForWriting(string path);
         void Append(string path, Memory<byte> bytes);
         ValueTask AppendAsync(string path, Memory<byte> bytes);
+        void CloseAfterWriting(string path);
     }
 }
