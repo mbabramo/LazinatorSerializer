@@ -187,10 +187,11 @@ namespace LazinatorTests.Tests
         {
             MultipleRoundsOfRandomChanges(100, 100, 1, () =>
             {
-                LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20));
+                LazinatorSerializationOptions options = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20);
+                LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(options);
 
                 // Write to one or more blobs
-                IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobStorage();
+                IBlobManager blobManager = useFile ? new global::Lazinator.Buffers.FileBlobManager() : new global::LazinatorTests.Utilities.InMemoryBlobStorage();
                 string fullPath = GetPathForIndexAndBlobs(useFile);
                 if (fullPath == null)
                     return;

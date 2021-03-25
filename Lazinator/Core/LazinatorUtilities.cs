@@ -304,7 +304,7 @@ namespace Lazinator.Core
             if (!childCouldHaveChanged)
             {
                 int startPosition = writer.ActiveMemoryPosition;
-                childStorage = WriteExistingChildStorage(ref writer, getChildSliceFn, childStorage);
+                childStorage = WriteExistingChildStorage(ref writer, getChildSliceFn, childStorage, options.SerializeDiffs);
                 if (options.UpdateStoredBuffer)
                 {
                     if (child != null)
@@ -359,7 +359,7 @@ namespace Lazinator.Core
             if (!childCouldHaveChanged)
             {
                 int startPosition = writer.ActiveMemoryPosition;
-                childStorage = await WriteExistingChildStorageAsync(writer, getChildSliceFn, childStorage);
+                childStorage = await WriteExistingChildStorageAsync(writer, getChildSliceFn, childStorage, options.SerializeDiffs);
                 if (options.UpdateStoredBuffer)
                 {
                     if (child != null)
@@ -414,7 +414,7 @@ namespace Lazinator.Core
             if (!childCouldHaveChanged)
             {
                 int startPosition = writer.ActiveMemoryPosition;
-                childStorage = await WriteExistingChildStorageAsync(writer, getChildSliceFn, childStorage);
+                childStorage = await WriteExistingChildStorageAsync(writer, getChildSliceFn, childStorage, options.SerializeDiffs);
                 if (options.UpdateStoredBuffer)
                 {
                     if (child != null)
@@ -448,20 +448,23 @@ namespace Lazinator.Core
 
 
         /// <summary>
-        /// Writes a child to a binary buffer, where that child has not been previously accessed. This thus obtains the last version from storage (or stores a zer length if this
+        /// Writes a child or a reference to a child to a binary buffer, where that child has not been previously accessed. This thus obtains the last version from storage (or stores a zero length if this
         /// is the first time saving the child and it really is empty).
         /// </summary>
         /// <param name="writer">The binary writer</param>
         /// <param name="getChildSliceFn">A function that returns the Lazinator memory containing the child</param>
         /// <param name="childStorage">The Lazinator memory containing the child, if such memory has been accessed</param>
         /// <returns></returns>
-        public static LazinatorMemory WriteExistingChildStorage(ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceFn, LazinatorMemory childStorage)
+        public static LazinatorMemory WriteExistingChildStorage(ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceFn, LazinatorMemory childStorage, bool writeReferenceOnly)
         {
             if (childStorage.IsEmpty)
                 childStorage = getChildSliceFn(); // this is the storage holding the child, which has never been accessed
             if (childStorage.InitialOwnedMemory == null)
                 ThrowHelper.ThrowChildStorageMissingException();
-            childStorage.WriteToBinaryBuffer(ref writer);
+            if (writeReferenceOnly && !childStorage.IsEmpty)
+                writer.InsertReferenceToCompletedMemory(childStorage.StartIndex, childStorage.StartPosition, childStorage.Length);
+            else
+                childStorage.WriteToBinaryBuffer(ref writer);
             return childStorage;
         }
 
@@ -473,14 +476,16 @@ namespace Lazinator.Core
         /// <param name="getChildSliceFn"></param>
         /// <param name="childStorage"></param>
         /// <returns></returns>
-        public async static ValueTask<LazinatorMemory> WriteExistingChildStorageAsync(BinaryBufferWriterContainer writer, ReturnLazinatorMemoryDelegateAsync getChildSliceFn, LazinatorMemory childStorage)
+        public async static ValueTask<LazinatorMemory> WriteExistingChildStorageAsync(BinaryBufferWriterContainer writer, ReturnLazinatorMemoryDelegateAsync getChildSliceFn, LazinatorMemory childStorage, bool writeReferenceOnly)
         {
             if (childStorage.IsEmpty)
                 childStorage = await getChildSliceFn(); // this is the storage holding the child, which has never been accessed
             if (childStorage.InitialOwnedMemory == null)
                 ThrowHelper.ThrowChildStorageMissingException();
-
-            await childStorage.WriteToBinaryBufferAsync(writer);
+            if (writeReferenceOnly && !childStorage.IsEmpty)
+                writer.InsertReferenceToCompletedMemory(childStorage.StartIndex, childStorage.StartPosition, childStorage.Length);
+            else
+                await childStorage.WriteToBinaryBufferAsync(writer);
             return childStorage;
         }
 

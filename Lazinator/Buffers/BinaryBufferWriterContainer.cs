@@ -77,7 +77,7 @@ namespace Lazinator.Buffers
         public void ConsiderSwitchToNextBuffer(int newBufferThreshold) => Writer.ConsiderSwitchToNextBuffer(newBufferThreshold);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void InsertReferenceToCompletedMemory(int startIndex, int numBytes) => Writer.InsertReferenceToCompletedMemory(startIndex, numBytes);
+        public void InsertReferenceToCompletedMemory(int memoryChunkIndex, int startPosition, long numBytes) => Writer.InsertReferenceToCompletedMemory(memoryChunkIndex, startPosition, numBytes);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void AddDiffsInfoToActiveMemory() => Writer.AddDiffsInfoToActiveMemory();
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -557,6 +557,29 @@ namespace Lazinator.Buffers
         // Note that as usual, if BinaryBufferWriter needs to, it will append its active memory chunk to the LazinatorMemory and move to a new active chunk.
 
         /// <summary>
+        /// Enumerates memory chunk references based on a memory chunk index (not an ID) and a position within an index.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<MemoryChunkReference> EnumerateMemoryChunkReferences(int initialMemoryChunkIndex, int positionWithinMemoryChunk, long numBytesInSubrange)
+        {
+            int memoryChunkIndex = initialMemoryChunkIndex;
+            long numBytesRemaining = numBytesInSubrange;
+            while (numBytesRemaining > 0)
+            {
+                var memoryOwner = MemoryAtIndex(memoryChunkIndex);
+                if (memoryOwner is not MemoryChunk memoryReference)
+                    memoryReference = InitialOwnedMemoryReference;
+                int numBytesThisChunk = memoryReference.Reference.Length;
+                if (numBytesRemaining < numBytesThisChunk)
+                    numBytesThisChunk = (int) numBytesRemaining;
+                yield return new MemoryChunkReference(memoryReference.Reference.MemoryChunkID, positionWithinMemoryChunk, numBytesThisChunk);
+                numBytesRemaining -= numBytesThisChunk;
+                memoryChunkIndex++;
+                positionWithinMemoryChunk = 0;
+            }
+        }
+
+        /// <summary>
         /// Enumerates memory chunk ranges corresponding to a subset of the bytes referenced by this LazinatorMemory
         /// </summary>
         /// <param name="relativeStartPositionOfSubrange">The byte index at which to start enumerating</param>

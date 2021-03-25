@@ -1069,6 +1069,10 @@ namespace LazinatorCollections.Tree
             }
             writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
             startOfChildPosition = writer.OverallMemoryPosition;
+            if (!_LeftNode_Accessed && _LeftNode_ByteLength > 0)
+            {
+                var DEBUG = 0;
+            }
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_LeftNode_Accessed)

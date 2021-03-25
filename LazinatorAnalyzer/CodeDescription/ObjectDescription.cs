@@ -167,6 +167,7 @@ namespace Lazinator.CodeDescription
 
         public bool Splittable; 
         public bool UseOverallMemoryPosition => RequiresLongLengths || Splittable;
+        public string SplittableCreateBinaryBufferWriter(bool async) => IIF(Splittable, $"options.SerializeDiffs ? new BinaryBufferWriter{IIF(async, "Container")}(0, LazinatorMemoryStorage) : ");
         public string ActiveOrOverallMemoryPosition => UseOverallMemoryPosition ? "OverallMemoryPosition" : "ActiveMemoryPosition";
         public string TypeForPositions => UseOverallMemoryPosition ? "long" : "int";
         public string LengthValueExpression(bool startOfChild) => $"writer.{ActiveOrOverallMemoryPosition} - start{IIF(startOfChild, "OfChild")}Position";
@@ -737,9 +738,9 @@ namespace Lazinator.CodeDescription
                             {{
                                 return {MaybeAsyncReturnValue($"{MaybeAwaitWord}EncodeToNewBuffer{MaybeAsyncWord}(options)")};
                             }}{MaybeAsyncConditional($@"
-                                BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(LazinatorMemoryStorage.LengthInt ?? 0);
+                                BinaryBufferWriterContainer writer = {SplittableCreateBinaryBufferWriter(true)}new BinaryBufferWriterContainer(LazinatorMemoryStorage.LengthInt ?? 0);
                                 {AwaitAndNoteAsyncUsed}LazinatorMemoryStorage.WriteToBinaryBufferAsync(writer);", $@"
-                                BinaryBufferWriter writer = {IIF(Splittable, $"options.SerializeDiffs ? new BinaryBufferWriter(0, LazinatorMemoryStorage) : ")}new BinaryBufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
+                                BinaryBufferWriter writer = {SplittableCreateBinaryBufferWriter(false)}new BinaryBufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
                                 LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);")}
                             return {MaybeAsyncReturnValue($"writer.LazinatorMemory")};
                         }}")}
@@ -747,9 +748,9 @@ namespace Lazinator.CodeDescription
                         {MaybeAsyncAndNot($@"{ProtectedIfApplicable}{DerivationKeyword}{MaybeAsyncReturnType("LazinatorMemory")} EncodeToNewBuffer{MaybeAsyncWord}({MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options) 
                         {{
                             int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.LengthInt ?? ExpandableBytes.DefaultMinBufferSize;{MaybeAsyncConditional($@"
-                            BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(bufferSize);
+                            BinaryBufferWriterContainer writer = {SplittableCreateBinaryBufferWriter(true)}new BinaryBufferWriterContainer(bufferSize);
                             {AwaitAndNoteAsyncUsed}SerializeToExistingBufferAsync(writer, options);", $@"
-                            BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
+                            BinaryBufferWriter writer = {SplittableCreateBinaryBufferWriter(false)}new BinaryBufferWriter(bufferSize);
                             SerializeToExistingBuffer(ref writer, options);")}
                             return {MaybeAsyncReturnValue($"writer.LazinatorMemory")};
                         }}")}
