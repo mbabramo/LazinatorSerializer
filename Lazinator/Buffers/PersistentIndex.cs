@@ -152,11 +152,7 @@ namespace Lazinator.Buffers
 
         public IPersistentLazinator PersistLazinatorMemory(LazinatorMemory lazinatorMemory)
         {
-            bool originalIsPersisted = IsPersisted;
-            IsPersisted = true;
-
-            List<MemoryChunk> chunks = GetMemoryChunksAndSetReferences(lazinatorMemory);
-            var writer = GetBinaryBufferWriterWithIndex();
+            GetChunksAndWriterAssumingSuccessfulPersistence(lazinatorMemory, out List<MemoryChunk> chunks, out List<bool> actuallyPersisted, out BinaryBufferWriter writer);
 
             if (ContainedInSingleBlob)
             {
@@ -166,28 +162,37 @@ namespace Lazinator.Buffers
             else
                 BlobManager.Write(BlobPath, writer.ActiveMemoryWritten);
 
-            long numBytesWritten = writer.ActiveMemoryPosition;
-            for (int i = 0; i < chunks.Count; i++)
+            try
             {
-                GetBlobMemoryChunkAndInfo(chunks, numBytesWritten, i, out MemoryChunk chunk, out Memory<byte> memory, out string revisedPath, out BlobMemoryChunk blobMemoryChunk);
-                if (ContainedInSingleBlob)
-                    BlobManager.Append(revisedPath, memory);
-                else
-                    BlobManager.Write(revisedPath, memory);
-                numBytesWritten += chunk.Reference.Length;
-                if (ContainedInSingleBlob && i == chunks.Count - 1)
-                    BlobManager.CloseAfterWriting(revisedPath);
+                long numBytesWritten = writer.ActiveMemoryPosition;
+                for (int i = 0; i < chunks.Count; i++)
+                {
+                    GetBlobMemoryChunkAndInfo(chunks, numBytesWritten, i, out MemoryChunk chunk, out Memory<byte> memory, out string revisedPath, out BlobMemoryChunk blobMemoryChunk);
+                    if (ContainedInSingleBlob)
+                        BlobManager.Append(revisedPath, memory);
+                    else if (!blobMemoryChunk.IsPersisted)
+                        BlobManager.Write(revisedPath, memory);
+                    numBytesWritten += chunk.Reference.Length;
+                    if (ContainedInSingleBlob && i == chunks.Count - 1)
+                        BlobManager.CloseAfterWriting(revisedPath);
+                    actuallyPersisted[i] = true;
+                }
+            }
+            catch
+            {
+                for (int i = 0; i < chunks.Count; i++)
+                {
+                    MemoryChunk chunk = chunks[i];
+                    chunk.IsPersisted = actuallyPersisted[i];
+                }
+                throw;
             }
             return this;
         }
 
         public async ValueTask<IPersistentLazinator> PersistLazinatorMemoryAsync(LazinatorMemory lazinatorMemory)
         {
-            bool originalIsPersisted = IsPersisted;
-            IsPersisted = true;
-
-            List<MemoryChunk> chunks = GetMemoryChunksAndSetReferences(lazinatorMemory);
-            var writer = GetBinaryBufferWriterWithIndex();
+            GetChunksAndWriterAssumingSuccessfulPersistence(lazinatorMemory, out List<MemoryChunk> chunks, out List<bool> actuallyPersisted, out BinaryBufferWriter writer);
 
             if (ContainedInSingleBlob)
             {
@@ -197,20 +202,48 @@ namespace Lazinator.Buffers
             else
                 await BlobManager.WriteAsync(BlobPath, writer.ActiveMemoryWritten);
 
-            long numBytesWritten = writer.ActiveMemoryPosition;
-            for (int i = 0; i < chunks.Count; i++)
+            try
             {
-                GetBlobMemoryChunkAndInfo(chunks, numBytesWritten, i, out MemoryChunk chunk, out Memory<byte> memory, out string revisedPath, out BlobMemoryChunk blobMemoryChunk);
-                if (ContainedInSingleBlob)
-                    await BlobManager.AppendAsync(revisedPath, memory);
-                else
-                    await BlobManager.WriteAsync(revisedPath, memory);
-                numBytesWritten += chunk.Reference.Length;
-                if (ContainedInSingleBlob && i == chunks.Count - 1)
-                    BlobManager.CloseAfterWriting(revisedPath);
+                long numBytesWritten = writer.ActiveMemoryPosition;
+                for (int i = 0; i < chunks.Count; i++)
+                {
+                    GetBlobMemoryChunkAndInfo(chunks, numBytesWritten, i, out MemoryChunk chunk, out Memory<byte> memory, out string revisedPath, out BlobMemoryChunk blobMemoryChunk);
+                    if (ContainedInSingleBlob)
+                        await BlobManager.AppendAsync(revisedPath, memory);
+                    else if (!blobMemoryChunk.IsPersisted)
+                        await BlobManager.WriteAsync(revisedPath, memory);
+                    numBytesWritten += chunk.Reference.Length;
+                    if (ContainedInSingleBlob && i == chunks.Count - 1)
+                        BlobManager.CloseAfterWriting(revisedPath);
+                    actuallyPersisted[i] = true;
+                }
+            }
+            catch
+            {
+                for (int i = 0; i < chunks.Count; i++)
+                {
+                    MemoryChunk chunk = chunks[i];
+                    chunk.IsPersisted = actuallyPersisted[i];
+                }
+                throw;
             }
             return this;
         }
+
+        /// <summary>
+        /// Gets memory chunks all set so that they are persisted, but remembering their actual persistence state
+        /// in case an error occurs. 
+        /// </summary>
+        private void GetChunksAndWriterAssumingSuccessfulPersistence(LazinatorMemory lazinatorMemory, out List<MemoryChunk> chunks, out List<bool> actuallyPersisted, out BinaryBufferWriter writer)
+        {
+            chunks = GetMemoryChunksAndSetReferences(lazinatorMemory);
+            actuallyPersisted = chunks.Select(x => x.IsPersisted).ToList();
+            foreach (var chunk in chunks)
+                chunk.IsPersisted = true;
+            writer = GetBinaryBufferWriterWithIndex();
+            IsPersisted = true;
+        }
+
 
         private List<MemoryChunk> GetMemoryChunksAndSetReferences(LazinatorMemory lazinatorMemory)
         {
@@ -230,6 +263,7 @@ namespace Lazinator.Buffers
 
         private BinaryBufferWriter GetBinaryBufferWriterWithIndex()
         {
+
             BinaryBufferWriter writer = new BinaryBufferWriter();
             writer.SetLengthsPosition(0);
             writer.Skip(4);
