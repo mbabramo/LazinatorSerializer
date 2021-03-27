@@ -185,10 +185,11 @@ namespace LazinatorTests.Tests
         [InlineData(false, false, false)]
         public void BinaryTreeTest_DiffSerialization(bool useFile, bool containedInSingleBlob, bool recreateIndex)
         {
-            MultipleRoundsOfRandomChanges(100, 100, 1, () =>
+            MultipleRoundsOfRandomChanges(2 /* DEBUG ALL SETTINGS MUST CHANGE*/, 1, 1, () =>
             {
                 LazinatorSerializationOptions options = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20);
                 LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(options);
+                // DEBUG -- with these settings should be 67 bytes
 
                 // Write to one or more blobs
                 IBlobManager blobManager = useFile ? new global::Lazinator.Buffers.FileBlobManager() : new global::LazinatorTests.Utilities.InMemoryBlobStorage();

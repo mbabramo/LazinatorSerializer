@@ -116,6 +116,8 @@ namespace Lazinator.Buffers
             }
         }
 
+
+        Debug; // the problem is here. If we have ActiveMemoryChunkReferences, then the overall memory must be concluded from that, plus the portion of active memory that has not yet been written to active memory chunk references. When we go to the next memory chunk, though, then active memory resets.
         public long OverallMemoryPosition => ActiveMemoryPosition + (CompletedMemory.IsEmpty ? 0 : CompletedMemory.Length);
 
         /// <summary>
@@ -220,9 +222,9 @@ namespace Lazinator.Buffers
         /// <param name="numBytes"></param>
         public void InsertReferenceToCompletedMemory(int memoryChunkIndex, int startPosition, long numBytes)
         {
+            RecordLastActiveMemoryChunkReference();
             IEnumerable<MemoryChunkReference> segmentsToAdd = CompletedMemory.EnumerateMemoryChunkReferences(memoryChunkIndex, startPosition, numBytes).ToList(); // DEBUG -- remove ToList()
             MemoryChunkReference.ExtendMemoryChunkReferencesList(ActiveMemoryChunkReferences, segmentsToAdd);
-            RecordLastActiveMemoryChunkReference();
         }
 
 
@@ -237,13 +239,13 @@ namespace Lazinator.Buffers
         /// </summary>
         internal void RecordLastActiveMemoryChunkReference()
         {
-            int activeMemoryLength = ActiveMemory.Memory.Length;
-            if (activeMemoryLength == 0)
+            int activeMemoryWrittenLength = ActiveMemoryWritten.Length;
+            if (activeMemoryWrittenLength == 0)
                 return;
             int activeMemoryVersion = GetActiveMemoryChunkID();
             int firstUnrecordedActiveMemoryByte = GetFirstUnrecordedActiveMemoryByte(activeMemoryVersion);
-            if (activeMemoryLength > firstUnrecordedActiveMemoryByte)
-                MemoryChunkReference.ExtendMemoryChunkReferencesList(ActiveMemoryChunkReferences, new MemoryChunkReference(activeMemoryVersion, firstUnrecordedActiveMemoryByte, activeMemoryLength - firstUnrecordedActiveMemoryByte));
+            if (activeMemoryWrittenLength > firstUnrecordedActiveMemoryByte)
+                MemoryChunkReference.ExtendMemoryChunkReferencesList(ActiveMemoryChunkReferences, new MemoryChunkReference(activeMemoryVersion, firstUnrecordedActiveMemoryByte, activeMemoryWrittenLength - firstUnrecordedActiveMemoryByte));
         }
 
         /// <summary>

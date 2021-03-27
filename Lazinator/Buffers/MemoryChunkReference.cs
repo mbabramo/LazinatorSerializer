@@ -50,7 +50,7 @@ namespace Lazinator.Buffers
         /// <param name="newSegments"></param>
         public static void ExtendMemoryChunkReferencesList(List<MemoryChunkReference> memoryChunkReferences, IEnumerable<MemoryChunkReference> newSegments)
         {
-            foreach (var newSegment in memoryChunkReferences)
+            foreach (var newSegment in newSegments)
                 ExtendMemoryChunkReferencesList(memoryChunkReferences, newSegment);
         }
     }

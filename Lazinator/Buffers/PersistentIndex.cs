@@ -164,17 +164,24 @@ namespace Lazinator.Buffers
 
             try
             {
-                long numBytesWritten = writer.ActiveMemoryPosition;
+                long totalBytes = writer.ActiveMemoryPosition;
                 for (int i = 0; i < chunks.Count; i++)
                 {
-                    GetBlobMemoryChunkAndInfo(chunks, numBytesWritten, i, out MemoryChunk chunk, out Memory<byte> memory, out string revisedPath, out BlobMemoryChunk blobMemoryChunk);
-                    if (ContainedInSingleBlob)
-                        BlobManager.Append(revisedPath, memory);
-                    else if (!blobMemoryChunk.IsPersisted)
-                        BlobManager.Write(revisedPath, memory);
-                    numBytesWritten += chunk.Reference.Length;
-                    if (ContainedInSingleBlob && i == chunks.Count - 1)
-                        BlobManager.CloseAfterWriting(revisedPath);
+                    MemoryChunk chunk = chunks[i];
+                    bool mustWriteChunk = ContainedInSingleBlob || !actuallyPersisted[i];
+                    if (mustWriteChunk)
+                    {
+                        if (!chunk.IsLoaded)
+                            chunk.LoadMemory();
+                        GetBlobMemoryChunkAndInfo(chunk, totalBytes, i, out Memory<byte> memory, out string revisedPath, out BlobMemoryChunk blobMemoryChunk);
+                        if (ContainedInSingleBlob)
+                            BlobManager.Append(revisedPath, memory);
+                        else if (!blobMemoryChunk.IsPersisted)
+                            BlobManager.Write(revisedPath, memory);
+                        if (ContainedInSingleBlob && i == chunks.Count - 1)
+                            BlobManager.CloseAfterWriting(revisedPath);
+                    }
+                    totalBytes += chunk.Reference.Length;
                     actuallyPersisted[i] = true;
                 }
             }
@@ -204,17 +211,24 @@ namespace Lazinator.Buffers
 
             try
             {
-                long numBytesWritten = writer.ActiveMemoryPosition;
+                long totalBytes = writer.ActiveMemoryPosition;
                 for (int i = 0; i < chunks.Count; i++)
                 {
-                    GetBlobMemoryChunkAndInfo(chunks, numBytesWritten, i, out MemoryChunk chunk, out Memory<byte> memory, out string revisedPath, out BlobMemoryChunk blobMemoryChunk);
-                    if (ContainedInSingleBlob)
-                        await BlobManager.AppendAsync(revisedPath, memory);
-                    else if (!blobMemoryChunk.IsPersisted)
-                        await BlobManager.WriteAsync(revisedPath, memory);
-                    numBytesWritten += chunk.Reference.Length;
-                    if (ContainedInSingleBlob && i == chunks.Count - 1)
-                        BlobManager.CloseAfterWriting(revisedPath);
+                    MemoryChunk chunk = chunks[i];
+                    bool mustWriteChunk = ContainedInSingleBlob || !actuallyPersisted[i];
+                    if (mustWriteChunk)
+                    {
+                        if (!chunk.IsLoaded)
+                            await chunk.LoadMemoryAsync();
+                        GetBlobMemoryChunkAndInfo(chunk, totalBytes, i, out Memory<byte> memory, out string revisedPath, out BlobMemoryChunk blobMemoryChunk);
+                        if (ContainedInSingleBlob)
+                            await BlobManager.AppendAsync(revisedPath, memory);
+                        else if (!blobMemoryChunk.IsPersisted)
+                            await BlobManager.WriteAsync(revisedPath, memory);
+                        if (ContainedInSingleBlob && i == chunks.Count - 1)
+                            BlobManager.CloseAfterWriting(revisedPath);
+                    }
+                    totalBytes += chunk.Reference.Length;
                     actuallyPersisted[i] = true;
                 }
             }
@@ -252,11 +266,13 @@ namespace Lazinator.Buffers
             return chunks;
         }
 
-        private void GetBlobMemoryChunkAndInfo(List<MemoryChunk> chunks, long numBytesWritten, int i, out MemoryChunk chunk, out Memory<byte> memory, out string revisedPath, out BlobMemoryChunk blobMemoryChunk)
+        private void GetBlobMemoryChunkAndInfo(MemoryChunk chunk, long numBytesWritten, int i, out Memory<byte> memory, out string revisedPath, out BlobMemoryChunk blobMemoryChunk)
         {
-            chunk = chunks[i];
             MemoryChunkReference reference = chunk.Reference;
-            memory = chunk.Memory;
+            if (chunk.IsLoaded)
+                memory = chunk.Memory;
+            else
+                memory = null;
             revisedPath = ContainedInSingleBlob ? BlobPath : GetPathForMemoryChunk(BlobPath, reference.MemoryChunkID);
             blobMemoryChunk = new BlobMemoryChunk(revisedPath, (IBlobManager)this.BlobManager, this.ContainedInSingleBlob ? new MemoryChunkReference(reference.MemoryChunkID, (int)numBytesWritten, chunk.Reference.Length) : reference);
         }

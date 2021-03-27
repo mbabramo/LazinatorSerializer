@@ -241,7 +241,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected virtual LazinatorMemory EncodeToNewBuffer(in LazinatorSerializationOptions options) 
         {
             int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.LengthInt ?? ExpandableBytes.DefaultMinBufferSize;
-            BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
+            BinaryBufferWriter writer = options.SerializeDiffs ? new BinaryBufferWriter(0, LazinatorMemoryStorage) : new BinaryBufferWriter(bufferSize);
             SerializeToExistingBuffer(ref writer, options);
             return writer.LazinatorMemory;
         }

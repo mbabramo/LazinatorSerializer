@@ -470,7 +470,7 @@ namespace LazinatorCollections.Tree
             {
                 return await EncodeToNewBufferAsync(options);
             }
-            BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(LazinatorMemoryStorage.LengthInt ?? 0);
+            BinaryBufferWriterContainer writer = options.SerializeDiffs ? new BinaryBufferWriterContainer(0, LazinatorMemoryStorage) : new BinaryBufferWriterContainer(LazinatorMemoryStorage.LengthInt ?? 0);
             await LazinatorMemoryStorage.WriteToBinaryBufferAsync(writer);
             return writer.LazinatorMemory;
         }
@@ -479,14 +479,14 @@ namespace LazinatorCollections.Tree
         protected virtual LazinatorMemory EncodeToNewBuffer(in LazinatorSerializationOptions options) 
         {
             int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.LengthInt ?? ExpandableBytes.DefaultMinBufferSize;
-            BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
+            BinaryBufferWriter writer = options.SerializeDiffs ? new BinaryBufferWriter(0, LazinatorMemoryStorage) : new BinaryBufferWriter(bufferSize);
             SerializeToExistingBuffer(ref writer, options);
             return writer.LazinatorMemory;
         }
         async protected virtual ValueTask<LazinatorMemory> EncodeToNewBufferAsync(LazinatorSerializationOptions options) 
         {
             int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.LengthInt ?? ExpandableBytes.DefaultMinBufferSize;
-            BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(bufferSize);
+            BinaryBufferWriterContainer writer = options.SerializeDiffs ? new BinaryBufferWriterContainer(0, LazinatorMemoryStorage) : new BinaryBufferWriterContainer(bufferSize);
             await SerializeToExistingBufferAsync(writer, options);
             return writer.LazinatorMemory;
         }
@@ -1069,10 +1069,6 @@ namespace LazinatorCollections.Tree
             }
             writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
             startOfChildPosition = writer.OverallMemoryPosition;
-            if (!_LeftNode_Accessed && _LeftNode_ByteLength > 0)
-            {
-                var DEBUG = 0;
-            }
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_LeftNode_Accessed)
