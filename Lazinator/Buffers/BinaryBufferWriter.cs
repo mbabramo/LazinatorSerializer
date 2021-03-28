@@ -39,7 +39,12 @@ namespace Lazinator.Buffers
         /// <summary>
         /// When serializing diffs, these are non-null and will refer to various segments in CompletedMemory and ActiveMemory in order.
         /// </summary>
-        public List<MemoryChunkReference> ActiveMemoryChunkReferences;
+        public List<MemoryChunkReference> RecycledMemoryChunkReferences;
+        /// <summary>
+        /// When serializing diffs, when a section of ActiveMemory is added to RecycledMemoryChunkReferences, this will equal the index
+        /// of the last byte added plus 1. 
+        /// </summary>
+        private int NumActiveMemoryBytesAddedToRecycling;
 
         #region Construction and initialization
 
@@ -51,15 +56,16 @@ namespace Lazinator.Buffers
             if (completedMemory == null)
             {
                 CompletedMemory = default;
-                ActiveMemoryChunkReferences = null;
+                RecycledMemoryChunkReferences = null;
             }
             else
             {
-                ActiveMemoryChunkReferences = new List<MemoryChunkReference>();
+                RecycledMemoryChunkReferences = new List<MemoryChunkReference>();
                 CompletedMemory = completedMemory.Value;
             }
             _ActiveMemoryPosition = 0;
-            _LengthsPosition = 0;
+            LengthsPosition = 0;
+            NumActiveMemoryBytesAddedToRecycling = 0;
         }
 
         private void InitializeIfNecessary()
@@ -116,14 +122,12 @@ namespace Lazinator.Buffers
             }
         }
 
-
-        Debug; // the problem is here. If we have ActiveMemoryChunkReferences, then the overall memory must be concluded from that, plus the portion of active memory that has not yet been written to active memory chunk references. When we go to the next memory chunk, though, then active memory resets.
-        public long OverallMemoryPosition => ActiveMemoryPosition + (CompletedMemory.IsEmpty ? 0 : CompletedMemory.Length);
+        public long OverallMemoryPosition => (ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling) + (CompletedMemory.IsEmpty ? 0 : CompletedMemory.Length);
 
         /// <summary>
         /// An earlier position in the buffer, to which we can write information on the lengths that we are writing later in the buffer.
         /// </summary>
-        private long _LengthsPosition;
+        private long LengthsPosition;
 
         Span<byte> ActiveSpan => ActiveMemory == null ? new Span<byte>() : ActiveMemory.Memory.Span;
 
@@ -151,10 +155,10 @@ namespace Lazinator.Buffers
             get
             {
                 if (CompletedMemory.IsEmpty)
-                    return ActiveSpan.Slice((int)_LengthsPosition);
-                if (_LengthsPosition >= CompletedMemory.Length)
-                    return ActiveSpan.Slice((int)(_LengthsPosition - CompletedMemory.Length));
-                return CompletedMemory.Slice(_LengthsPosition).InitialMemory.Span; 
+                    return ActiveSpan.Slice((int)LengthsPosition);
+                if (LengthsPosition >= CompletedMemory.Length)
+                    return ActiveSpan.Slice((int)(LengthsPosition - CompletedMemory.Length));
+                return CompletedMemory.Slice(LengthsPosition).InitialMemory.Span; 
             }
         }
 
@@ -224,7 +228,7 @@ namespace Lazinator.Buffers
         {
             RecordLastActiveMemoryChunkReference();
             IEnumerable<MemoryChunkReference> segmentsToAdd = CompletedMemory.EnumerateMemoryChunkReferences(memoryChunkIndex, startPosition, numBytes).ToList(); // DEBUG -- remove ToList()
-            MemoryChunkReference.ExtendMemoryChunkReferencesList(ActiveMemoryChunkReferences, segmentsToAdd);
+            MemoryChunkReference.ExtendMemoryChunkReferencesList(RecycledMemoryChunkReferences, segmentsToAdd);
         }
 
 
@@ -239,13 +243,9 @@ namespace Lazinator.Buffers
         /// </summary>
         internal void RecordLastActiveMemoryChunkReference()
         {
-            int activeMemoryWrittenLength = ActiveMemoryWritten.Length;
-            if (activeMemoryWrittenLength == 0)
-                return;
-            int activeMemoryVersion = GetActiveMemoryChunkID();
-            int firstUnrecordedActiveMemoryByte = GetFirstUnrecordedActiveMemoryByte(activeMemoryVersion);
-            if (activeMemoryWrittenLength > firstUnrecordedActiveMemoryByte)
-                MemoryChunkReference.ExtendMemoryChunkReferencesList(ActiveMemoryChunkReferences, new MemoryChunkReference(activeMemoryVersion, firstUnrecordedActiveMemoryByte, activeMemoryWrittenLength - firstUnrecordedActiveMemoryByte));
+            int activeMemoryChunkID = GetActiveMemoryChunkID();
+            if (ActiveMemoryPosition > NumActiveMemoryBytesAddedToRecycling)
+                MemoryChunkReference.ExtendMemoryChunkReferencesList(RecycledMemoryChunkReferences, new MemoryChunkReference(activeMemoryChunkID, NumActiveMemoryBytesAddedToRecycling, ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling));
         }
 
         /// <summary>
@@ -259,24 +259,6 @@ namespace Lazinator.Buffers
             if (CompletedMemory.IsEmpty)
                 return 0;
             return CompletedMemory.InitialOwnedMemoryReference.Reference.MemoryChunkID + 1;
-        }
-
-        /// <summary>
-        /// Finds the index of the first byte in active memory not yet recorded in BytesSegments. It searches BytesSegments from the end to the beginning.
-        /// </summary>
-        /// <param name="memoryChunkID"></param>
-        /// <returns></returns>
-        private int GetFirstUnrecordedActiveMemoryByte(int memoryChunkID)
-        {
-            for (int i = ActiveMemoryChunkReferences.Count - 1; i >= 0; i--)
-            {
-                MemoryChunkReference bytesSegment = ActiveMemoryChunkReferences[i];
-                if (bytesSegment.MemoryChunkID == memoryChunkID)
-                {
-                    return bytesSegment.Offset + bytesSegment.Length;
-                }
-            }
-            return 0;
         }
 
         /// <summary>
@@ -484,8 +466,8 @@ namespace Lazinator.Buffers
         /// <param name="bytesToReserve">The number of bytes to reserve</param>
         public long SetLengthsPosition(int bytesToReserve)
         {
-            long previousPosition = _LengthsPosition;
-            _LengthsPosition = OverallMemoryPosition;
+            long previousPosition = LengthsPosition;
+            LengthsPosition = OverallMemoryPosition;
             Skip(bytesToReserve);
             return previousPosition;
         }
@@ -496,13 +478,13 @@ namespace Lazinator.Buffers
         /// <param name="previousPosition"></param>
         public void ResetLengthsPosition(long previousPosition)
         {
-            _LengthsPosition = previousPosition;
+            LengthsPosition = previousPosition;
         }
 
         public void RecordLength(byte length)
         {
             LengthsSpan[0] = length;
-            _LengthsPosition++;
+            LengthsPosition++;
         }
         public void RecordLength(Int16 length)
         {
@@ -510,7 +492,7 @@ namespace Lazinator.Buffers
                 WriteInt16LittleEndian(LengthsSpan, length);
             else
                 WriteInt16BigEndian(LengthsSpan, length);
-            _LengthsPosition += sizeof(Int16);
+            LengthsPosition += sizeof(Int16);
         }
 
         public void RecordLength(int length)
@@ -519,7 +501,7 @@ namespace Lazinator.Buffers
                 WriteInt32LittleEndian(LengthsSpan, length);
             else
                 WriteInt32BigEndian(LengthsSpan, length);
-            _LengthsPosition += sizeof(int);
+            LengthsPosition += sizeof(int);
         }
         public void RecordLength(Int64 length)
         {
@@ -527,7 +509,7 @@ namespace Lazinator.Buffers
                 WriteInt64LittleEndian(LengthsSpan, length);
             else
                 WriteInt64BigEndian(LengthsSpan, length);
-            _LengthsPosition += sizeof(Int64);
+            LengthsPosition += sizeof(Int64);
         }
 
         #endregion

@@ -35,9 +35,9 @@ namespace Lazinator.Buffers
         public List<MemoryChunkReference> MemoryChunkReferences
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => Writer.ActiveMemoryChunkReferences;
+            get => Writer.RecycledMemoryChunkReferences;
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set => Writer.ActiveMemoryChunkReferences = value;
+            set => Writer.RecycledMemoryChunkReferences = value;
         }
 
         public BinaryBufferWriterContainer(int minimumSize, LazinatorMemory? completedMemory = null)
