@@ -79,8 +79,6 @@ namespace Lazinator.Buffers
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void InsertReferenceToCompletedMemory(int memoryChunkIndex, int startPosition, long numBytes) => Writer.InsertReferenceToCompletedMemory(memoryChunkIndex, startPosition, numBytes);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void AddDiffsInfoToActiveMemory() => Writer.AddDiffsInfoToActiveMemory();
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal void RecordLastActiveMemoryChunkReference() => Writer.RecordLastActiveMemoryChunkReference();
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(bool value) => Writer.Write(value);

@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
+using System.Buffers;
 
 namespace Lazinator.Buffers
 {
@@ -103,7 +104,11 @@ namespace Lazinator.Buffers
             {
                 InitializeIfNecessary();
                 if (!CompletedMemory.IsEmpty)
+                {
+                    if (ActiveMemoryPosition == 0)
+                        return CompletedMemory;
                     return CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, new MemoryChunkReference(GetActiveMemoryChunkID(), 0, ActiveMemoryPosition)));
+                }
                 return new LazinatorMemory(ActiveMemory, 0, ActiveMemoryPosition);
             }
         }
@@ -147,6 +152,8 @@ namespace Lazinator.Buffers
         /// </summary>
         public Memory<byte> ActiveMemoryWritten => ActiveMemory.Memory.Slice(0, ActiveMemoryPosition);
 
+        public static int DEBUG = 0;
+
         /// <summary>
         /// A span containing space reserved to write length values of what is written later in the buffer.
         /// </summary>
@@ -154,6 +161,8 @@ namespace Lazinator.Buffers
         {
             get
             {
+                if (RecycledMemoryChunkReferences != null)
+                    return GetLengthsSpanWithinRecycled();
                 if (CompletedMemory.IsEmpty)
                     return ActiveSpan.Slice((int)LengthsPosition);
                 if (LengthsPosition >= CompletedMemory.Length)
@@ -203,7 +212,7 @@ namespace Lazinator.Buffers
 
         public void ConsiderSwitchToNextBuffer(int newBufferThreshold)
         {
-            if (ActiveMemoryPosition >= newBufferThreshold)
+            if (ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling >= newBufferThreshold)
                 MoveActiveToCompletedMemory((int) (newBufferThreshold * 1.2));
         }
 
@@ -213,7 +222,7 @@ namespace Lazinator.Buffers
         /// <param name="minSizeofNewBuffer"></param>
         public void MoveActiveToCompletedMemory(int minSizeofNewBuffer = ExpandableBytes.DefaultMinBufferSize)
         {
-            CompletedMemory = CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, new MemoryChunkReference(GetActiveMemoryChunkID(), 0, ActiveMemoryPosition)));
+            CompletedMemory = CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, new MemoryChunkReference(GetActiveMemoryChunkID(), NumActiveMemoryBytesAddedToRecycling, ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling)));
             ActiveMemory = new ExpandableBytes(minSizeofNewBuffer);
             ActiveMemoryPosition = 0;
         }
@@ -231,13 +240,6 @@ namespace Lazinator.Buffers
             MemoryChunkReference.ExtendMemoryChunkReferencesList(RecycledMemoryChunkReferences, segmentsToAdd);
         }
 
-
-        public void AddDiffsInfoToActiveMemory()
-        {
-            RecordLastActiveMemoryChunkReference();
-            throw new NotImplementedException("DEBUG"); // Here, we need to add the list of bytes segments onto the end of the active memory, without changing the activememoryposition, followed by the size. 
-        }
-
         /// <summary>
         /// Extends the bytes segment list to include the portion of active memory that is not included in active memory. 
         /// </summary>
@@ -245,7 +247,42 @@ namespace Lazinator.Buffers
         {
             int activeMemoryChunkID = GetActiveMemoryChunkID();
             if (ActiveMemoryPosition > NumActiveMemoryBytesAddedToRecycling)
+            {
                 MemoryChunkReference.ExtendMemoryChunkReferencesList(RecycledMemoryChunkReferences, new MemoryChunkReference(activeMemoryChunkID, NumActiveMemoryBytesAddedToRecycling, ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling));
+                NumActiveMemoryBytesAddedToRecycling = ActiveMemoryPosition;
+            }
+        }
+
+        /// <summary>
+        /// Returns the Span beginning at position LengthsPosition, when recycled memory chunk references are being recorded.
+        /// </summary>
+        /// <returns></returns>
+        internal Span<byte> GetLengthsSpanWithinRecycled()
+        {
+            MemoryChunkReference? lengthsSpanMemoryChunkReference = null;
+            long lengthPositionRemaining = LengthsPosition;
+            if (RecycledMemoryChunkReferences.Any())
+            {
+                int i = 0;
+                int numRecycledMemoryChunkReferencesCount = RecycledMemoryChunkReferences.Count;
+                while (lengthPositionRemaining > 0 && numRecycledMemoryChunkReferencesCount > i)
+                {
+                    MemoryChunkReference reference = RecycledMemoryChunkReferences[i];
+                    if (lengthPositionRemaining < reference.Length)
+                        lengthsSpanMemoryChunkReference =  new MemoryChunkReference(reference.MemoryChunkID, (int) (reference.Offset + lengthPositionRemaining), (int) (reference.Length - lengthPositionRemaining));
+                }
+            }
+            if (lengthsSpanMemoryChunkReference == null)
+            {
+                // We've exhausted the recycled memory chunk references. So, it must be within the non-recycled portion of active memory.
+                return ActiveMemory.Memory.Slice((int)(NumActiveMemoryBytesAddedToRecycling + lengthPositionRemaining)).Span;
+            }
+            else
+            {
+                // We need to find the MemoryChunkID.
+                IMemoryOwner<byte> memoryOwner = CompletedMemory.GetMemoryChunkWithID(lengthsSpanMemoryChunkReference.Value.MemoryChunkID);
+                return memoryOwner.Memory.Slice((int) lengthPositionRemaining).Span;
+            }
         }
 
         /// <summary>
@@ -468,6 +505,10 @@ namespace Lazinator.Buffers
         {
             long previousPosition = LengthsPosition;
             LengthsPosition = OverallMemoryPosition;
+            if (LengthsPosition == 65)
+            {
+                var DEBUG = 0;
+            }
             Skip(bytesToReserve);
             return previousPosition;
         }
@@ -485,6 +526,10 @@ namespace Lazinator.Buffers
         {
             LengthsSpan[0] = length;
             LengthsPosition++;
+            if (LengthsPosition == 65)
+            {
+                var DEBUGSSDF = 0;
+            }
         }
         public void RecordLength(Int16 length)
         {
@@ -493,6 +538,10 @@ namespace Lazinator.Buffers
             else
                 WriteInt16BigEndian(LengthsSpan, length);
             LengthsPosition += sizeof(Int16);
+            if (LengthsPosition == 65)
+            {
+                var DEBUGSSDF = 0;
+            }
         }
 
         public void RecordLength(int length)
@@ -502,6 +551,10 @@ namespace Lazinator.Buffers
             else
                 WriteInt32BigEndian(LengthsSpan, length);
             LengthsPosition += sizeof(int);
+            if (LengthsPosition == 65)
+            {
+                var DEBUGSSDF = 0;
+            }
         }
         public void RecordLength(Int64 length)
         {
@@ -510,6 +563,10 @@ namespace Lazinator.Buffers
             else
                 WriteInt64BigEndian(LengthsSpan, length);
             LengthsPosition += sizeof(Int64);
+            if (LengthsPosition == 65)
+            {
+                var DEBUGSSDF = 0;
+            }
         }
 
         #endregion

@@ -183,6 +183,26 @@ namespace Lazinator.Buffers
             return GetMemoryOwnerLength(memoryAtIndex);
         }
 
+        public IMemoryOwner<byte> GetMemoryChunkWithID(int memoryChunkID)
+        {
+            int? index = GetIndexOfMemoryChunkID(memoryChunkID);
+            if (index == null)
+                return null;
+            return MemoryAtIndex((int)index);
+        }
+
+        public int? GetIndexOfMemoryChunkID(int memoryChunkID)
+        {
+            int numMemoryChunks = MoreOwnedMemory == null ? 1 : MoreOwnedMemory.Count() + 1;
+            for (int i = 0; i < numMemoryChunks; i++)
+            {
+                IMemoryOwner<byte> memoryOwner = MemoryAtIndex(i);
+                if (memoryOwner is MemoryChunk memoryChunk && memoryChunk.Reference.MemoryChunkID == memoryChunkID)
+                    return i;
+            }
+            return null;
+        }
+
         /// <summary>
         /// Returns the length of the specified memory owner, avoiding loading memory if possible.
         /// </summary>
