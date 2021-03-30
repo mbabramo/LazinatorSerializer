@@ -2103,7 +2103,7 @@ namespace LazinatorTests.Examples
                 _IncludableChild_ByteIndex = (int) (startOfChildPosition - startOfObjectPosition);
                 
             }
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
+            writer.ConsiderSwitchToNextBuffer(ref options);
             startOfChildPosition = writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -2124,7 +2124,7 @@ namespace LazinatorTests.Examples
                 _MyChild1_ByteIndex = (int) (startOfChildPosition - startOfObjectPosition);
                 
             }
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
+            writer.ConsiderSwitchToNextBuffer(ref options);
             startOfChildPosition = writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -2145,7 +2145,7 @@ namespace LazinatorTests.Examples
                 _MyChild2_ByteIndex = (int) (startOfChildPosition - startOfObjectPosition);
                 
             }
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
+            writer.ConsiderSwitchToNextBuffer(ref options);
             startOfChildPosition = writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && LazinatorObjectVersion < 3)
             {
@@ -2166,7 +2166,7 @@ namespace LazinatorTests.Examples
                 _MyChild2Previous_ByteIndex = (int) (startOfChildPosition - startOfObjectPosition);
                 
             }
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
+            writer.ConsiderSwitchToNextBuffer(ref options);
             startOfChildPosition = writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -2187,7 +2187,7 @@ namespace LazinatorTests.Examples
                 _MyInterfaceImplementer_ByteIndex = (int) (startOfChildPosition - startOfObjectPosition);
                 
             }
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
+            writer.ConsiderSwitchToNextBuffer(ref options);
             startOfChildPosition = writer.OverallMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyNonLazinatorChild_Accessed)
             {
@@ -2206,7 +2206,7 @@ namespace LazinatorTests.Examples
                 _MyNonLazinatorChild_ByteIndex = (int) (startOfChildPosition - startOfObjectPosition);
                 
             }
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
+            writer.ConsiderSwitchToNextBuffer(ref options);
             startOfChildPosition = writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -2227,7 +2227,7 @@ namespace LazinatorTests.Examples
                 _WrappedInt_ByteIndex = (int) (startOfChildPosition - startOfObjectPosition);
                 
             }
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
+            writer.ConsiderSwitchToNextBuffer(ref options);
             startOfChildPosition = writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && options.IncludeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren)
             {
@@ -2278,7 +2278,7 @@ namespace LazinatorTests.Examples
                 _IncludableChild_ByteIndex = (int) (startOfChildPosition - startOfObjectPosition);
                 
             }
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
+            writer.ConsiderSwitchToNextBuffer(ref options);
             startOfChildPosition = writer.Writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -2299,7 +2299,7 @@ namespace LazinatorTests.Examples
                 _MyChild1_ByteIndex = (int) (startOfChildPosition - startOfObjectPosition);
                 
             }
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
+            writer.ConsiderSwitchToNextBuffer(ref options);
             startOfChildPosition = writer.Writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -2320,7 +2320,7 @@ namespace LazinatorTests.Examples
                 _MyChild2_ByteIndex = (int) (startOfChildPosition - startOfObjectPosition);
                 
             }
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
+            writer.ConsiderSwitchToNextBuffer(ref options);
             startOfChildPosition = writer.Writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && LazinatorObjectVersion < 3)
             {
@@ -2341,7 +2341,7 @@ namespace LazinatorTests.Examples
                 _MyChild2Previous_ByteIndex = (int) (startOfChildPosition - startOfObjectPosition);
                 
             }
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
+            writer.ConsiderSwitchToNextBuffer(ref options);
             startOfChildPosition = writer.Writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -2362,7 +2362,7 @@ namespace LazinatorTests.Examples
                 _MyInterfaceImplementer_ByteIndex = (int) (startOfChildPosition - startOfObjectPosition);
                 
             }
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
+            writer.ConsiderSwitchToNextBuffer(ref options);
             startOfChildPosition = writer.Writer.OverallMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyNonLazinatorChild_Accessed)
             {
@@ -2381,7 +2381,7 @@ namespace LazinatorTests.Examples
                 _MyNonLazinatorChild_ByteIndex = (int) (startOfChildPosition - startOfObjectPosition);
                 
             }
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
+            writer.ConsiderSwitchToNextBuffer(ref options);
             startOfChildPosition = writer.Writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -2402,7 +2402,7 @@ namespace LazinatorTests.Examples
                 _WrappedInt_ByteIndex = (int) (startOfChildPosition - startOfObjectPosition);
                 
             }
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
+            writer.ConsiderSwitchToNextBuffer(ref options);
             startOfChildPosition = writer.Writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren && options.IncludeChildrenMode != IncludeChildrenMode.ExcludeOnlyExcludableChildren)
             {

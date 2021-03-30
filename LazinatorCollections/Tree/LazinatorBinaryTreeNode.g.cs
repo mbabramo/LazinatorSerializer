@@ -1048,10 +1048,6 @@ namespace LazinatorCollections.Tree
             long startOfChildPosition = 0;
             long lengthValue = 0;
             startOfChildPosition = writer.OverallMemoryPosition;
-            if (_Data.ToString() == "2")
-            {
-                var DEBUG = 0;
-            }
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_Data_Accessed)
@@ -1071,7 +1067,7 @@ namespace LazinatorCollections.Tree
                 _Data_ByteIndex = (int) (startOfChildPosition - startOfObjectPosition);
                 
             }
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
+            writer.ConsiderSwitchToNextBuffer(ref options);
             startOfChildPosition = writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -1092,7 +1088,7 @@ namespace LazinatorCollections.Tree
                 _LeftNode_ByteIndex = (int) (startOfChildPosition - startOfObjectPosition);
                 
             }
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
+            writer.ConsiderSwitchToNextBuffer(ref options);
             startOfChildPosition = writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -1143,7 +1139,7 @@ namespace LazinatorCollections.Tree
                 _Data_ByteIndex = (int) (startOfChildPosition - startOfObjectPosition);
                 
             }
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
+            writer.ConsiderSwitchToNextBuffer(ref options);
             startOfChildPosition = writer.Writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -1164,7 +1160,7 @@ namespace LazinatorCollections.Tree
                 _LeftNode_ByteIndex = (int) (startOfChildPosition - startOfObjectPosition);
                 
             }
-            writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);
+            writer.ConsiderSwitchToNextBuffer(ref options);
             startOfChildPosition = writer.Writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {

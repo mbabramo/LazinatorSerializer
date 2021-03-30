@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lazinator.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -74,7 +75,7 @@ namespace Lazinator.Buffers
         public void EnsureMinBufferSize(int desiredBufferSize = 0) => Writer.EnsureMinBufferSize(desiredBufferSize);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ConsiderSwitchToNextBuffer(int newBufferThreshold) => Writer.ConsiderSwitchToNextBuffer(newBufferThreshold);
+        public void ConsiderSwitchToNextBuffer(ref LazinatorSerializationOptions options) => Writer.ConsiderSwitchToNextBuffer(ref options);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void InsertReferenceToCompletedMemory(int memoryChunkIndex, int startPosition, long numBytes) => Writer.InsertReferenceToCompletedMemory(memoryChunkIndex, startPosition, numBytes);

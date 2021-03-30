@@ -222,11 +222,6 @@ namespace Lazinator.Buffers
             }
         }
 
-        public void ConsiderSwitchToNextBuffer(int newBufferThreshold)
-        {
-            throw new Exception("DEBUG");
-        }
-
         /// <summary>
         /// Moves the active memory to completed memory
         /// </summary>
@@ -514,10 +509,6 @@ namespace Lazinator.Buffers
         {
             long previousPosition = LengthsPosition;
             LengthsPosition = OverallMemoryPosition;
-            if (LengthsPosition == 65)
-            {
-                var DEBUG = 0;
-            }
             Skip(bytesToReserve);
             return previousPosition;
         }
@@ -535,10 +526,6 @@ namespace Lazinator.Buffers
         {
             LengthsSpan[0] = length;
             LengthsPosition++;
-            if (LengthsPosition == 65)
-            {
-                var DEBUGSSDF = 0;
-            }
         }
         public void RecordLength(Int16 length)
         {
@@ -547,10 +534,6 @@ namespace Lazinator.Buffers
             else
                 WriteInt16BigEndian(LengthsSpan, length);
             LengthsPosition += sizeof(Int16);
-            if (LengthsPosition == 65)
-            {
-                var DEBUGSSDF = 0;
-            }
         }
 
         public void RecordLength(int length)
@@ -560,10 +543,6 @@ namespace Lazinator.Buffers
             else
                 WriteInt32BigEndian(LengthsSpan, length);
             LengthsPosition += sizeof(int);
-            if (LengthsPosition == 65)
-            {
-                var DEBUGSSDF = 0;
-            }
         }
         public void RecordLength(Int64 length)
         {
@@ -572,10 +551,6 @@ namespace Lazinator.Buffers
             else
                 WriteInt64BigEndian(LengthsSpan, length);
             LengthsPosition += sizeof(Int64);
-            if (LengthsPosition == 65)
-            {
-                var DEBUGSSDF = 0;
-            }
         }
 
         #endregion

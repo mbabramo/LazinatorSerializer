@@ -1571,7 +1571,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             foreach (PropertyDescription property in propertiesToWrite)
             {
                 if (!isPrimitive && !first && Splittable)
-                    sb.AppendLine($"writer.ConsiderSwitchToNextBuffer(options.NextBufferThreshold);");
+                    sb.AppendLine($"writer.ConsiderSwitchToNextBuffer(ref options);");
                 AppendPropertyWrite(sb, property);
                 first = false;
             }

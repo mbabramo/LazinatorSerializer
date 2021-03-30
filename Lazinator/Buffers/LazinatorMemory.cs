@@ -129,17 +129,11 @@ namespace Lazinator.Buffers
                 evenMoreOwnedMemory.Add(chunk);
                 return new LazinatorMemory(InitialOwnedMemoryReference, evenMoreOwnedMemory, 0, 0, Length + chunk.Reference.Length);
             }
-            // DEBUG DEBUG
+
             // We can't just return the existing memory plus the new memory, because the existing memory might include
             // some memory that isn't referenced. If, for example, that memory is at the end of the range, then adding
             // an additional chunk will not allow us to reference that memory. 
 
-            // DEBUG. Remove most of rest. 
-            // The reason that we use StartIndex is to enable easier slicing. We can just create an exact copy and just change the StartIndex,
-            // without creating an entire new list. But if we're appending a chunk, and the last chunk or chunks include parts that extend
-            // beyond the range of StartPosition + Length, that is a problem. Note that it's NOT a problem if the last chunk is a MemoryChunk
-            // that references part of some broader memory. It's only a problem if the LazinatorMemory itself references past the end of the
-            // last chunk. 
             var memoryChunkIndexReferences = EnumerateMemoryChunksByIndex().ToList();
             var initialMemoryChunk = GetMemoryChunkFromMemoryChunkIndexReference(memoryChunkIndexReferences[0]);
             var additionalMemoryChunks = new List<MemoryChunk>();
