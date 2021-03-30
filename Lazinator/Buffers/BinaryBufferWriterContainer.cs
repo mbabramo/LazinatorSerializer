@@ -69,9 +69,6 @@ namespace Lazinator.Buffers
         public void RecordLength(Int64 length) => Writer.RecordLength(length);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Clear() => Writer.Clear();
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void EnsureMinBufferSize(int desiredBufferSize = 0) => Writer.EnsureMinBufferSize(desiredBufferSize);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

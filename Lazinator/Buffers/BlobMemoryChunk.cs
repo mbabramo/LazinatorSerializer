@@ -42,6 +42,7 @@ namespace Lazinator.Buffers
         public override void LoadMemory()
         {
             Memory<byte> bytes = BlobManager.Read(BlobPath, Reference.Offset, Reference.Length);
+            // DEBUG -- what we really need to do here (and in file manager) is cache this in the blob manager. That way, there is just one memory blob for a memory chunk, even if we have references to many pieces of that chunk. Then, it can be unloaded or not. 
             ReferencedMemory = new SimpleMemoryOwner<byte>(bytes);
         }
 

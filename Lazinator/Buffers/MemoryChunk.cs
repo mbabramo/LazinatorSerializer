@@ -30,6 +30,8 @@ namespace Lazinator.Buffers
 
         public Memory<byte> Memory => ReferencedMemory.Memory.Slice(Reference.Offset, Reference.Length);
 
+        public MemoryChunk SliceReferencedMemory(int startIndex, int length) => new MemoryChunk(ReferencedMemory, new MemoryChunkReference(Reference.MemoryChunkID, startIndex, length));
+
         public MemoryChunk Slice(int startIndex, int length) => new MemoryChunk(ReferencedMemory, new MemoryChunkReference(Reference.MemoryChunkID, Reference.Offset + startIndex, length));
 
         /// <summary>

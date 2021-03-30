@@ -41,7 +41,8 @@ namespace Lazinator.Buffers
         /// <summary>
         /// When serializing diffs, these are non-null and will refer to various segments in CompletedMemory and ActiveMemory in order.
         /// </summary>
-        public List<MemoryChunkReference> RecycledMemoryChunkReferences;
+        internal List<MemoryChunkReference> RecycledMemoryChunkReferences;
+
         /// <summary>
         /// When serializing diffs, when a section of ActiveMemory is added to RecycledMemoryChunkReferences, this will equal the index
         /// of the last byte added plus 1. 
@@ -76,6 +77,33 @@ namespace Lazinator.Buffers
                 ActiveMemory = new ExpandableBytes();
         }
 
+        #endregion
+
+        #region LazinatorMemory access
+
+        /// <summary>
+        /// Creates LazinatorMemory equal to the underlying memory through the current position.
+        /// </summary>
+        public LazinatorMemory LazinatorMemory
+        {
+            get
+            {
+                InitializeIfNecessary();
+                if (RecycledMemoryChunkReferences is not null)
+                {
+                    asdf;
+                }
+                if (!CompletedMemory.IsEmpty)
+                {
+                    if (ActiveMemoryPosition == 0)
+                        return CompletedMemory;
+                    Debug.WriteLine($"Appending {ActiveMemoryPosition} bytes to {CompletedMemory}"); // DEBUG
+                    return CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, new MemoryChunkReference(GetActiveMemoryChunkID(), 0, ActiveMemoryPosition)));
+                }
+                return new LazinatorMemory(ActiveMemory, 0, ActiveMemoryPosition);
+            }
+        }
+
         /// <summary>
         /// Returns the memory in the buffer beginning at the specified position.
         /// </summary>
@@ -96,24 +124,6 @@ namespace Lazinator.Buffers
 
         #region Active and completed memory
 
-        /// <summary>
-        /// Creates LazinatorMemory equal to the underlying memory through the current position.
-        /// </summary>
-        public LazinatorMemory LazinatorMemory
-        {
-            get
-            {
-                InitializeIfNecessary();
-                if (!CompletedMemory.IsEmpty)
-                {
-                    if (ActiveMemoryPosition == 0)
-                        return CompletedMemory;
-                    Debug.WriteLine($"Appending {ActiveMemoryPosition} bytes to {CompletedMemory}"); // DEBUG
-                    return CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, new MemoryChunkReference(GetActiveMemoryChunkID(), 0, ActiveMemoryPosition)));
-                }
-                return new LazinatorMemory(ActiveMemory, 0, ActiveMemoryPosition);
-            }
-        }
 
         /// <summary>
         /// The position within the active memory buffer. This is changed by the client after writing to the buffer.
@@ -129,7 +139,29 @@ namespace Lazinator.Buffers
             }
         }
 
-        public long OverallMemoryPosition => (ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling) + (CompletedMemory.IsEmpty ? 0 : CompletedMemory.Length);
+        /// <summary>
+        /// Skips ahead the specified number of bytes
+        /// </summary>
+        /// <param name="length"></param>
+        public void Skip(int length)
+        {
+            ActiveMemoryPosition += length;
+        }
+
+        public long OverallMemoryPosition
+        {
+            get
+            {
+                if (RecycledMemoryChunkReferences is null)
+                {
+                    return ActiveMemoryPosition + (CompletedMemory.IsEmpty ? 0 : CompletedMemory.Length);
+                }
+                else
+                {
+                    return ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling + RecycledMemoryChunkReferences.Sum(x => x.Length);
+                }
+            }
+        }
 
         /// <summary>
         /// An earlier position in the buffer, to which we can write information on the lengths that we are writing later in the buffer.
@@ -153,33 +185,6 @@ namespace Lazinator.Buffers
         /// The bytes written through the current position. Note that the client can change the position within the buffer.
         /// </summary>
         public Memory<byte> ActiveMemoryWritten => ActiveMemory.Memory.Slice(0, ActiveMemoryPosition);
-
-        public static int DEBUG = 0;
-
-        /// <summary>
-        /// A span containing space reserved to write length values of what is written later in the buffer.
-        /// </summary>
-        public Span<byte> LengthsSpan
-        {
-            get
-            {
-                if (RecycledMemoryChunkReferences != null)
-                    return GetLengthsSpanWithinRecycled();
-                if (CompletedMemory.IsEmpty)
-                    return ActiveSpan.Slice((int)LengthsPosition);
-                if (LengthsPosition >= CompletedMemory.Length)
-                    return ActiveSpan.Slice((int)(LengthsPosition - CompletedMemory.Length));
-                return CompletedMemory.Slice(LengthsPosition).InitialMemory.Span; 
-            }
-        }
-
-        /// <summary>
-        /// Sets the position to the beginning of the buffer. It does not dispose the underlying memory, but prepares to rewrite it.
-        /// </summary>
-        public void Clear()
-        {
-            ActiveMemoryPosition = 0;
-        }
 
         /// <summary>
         /// Ensures that the active memory is at least a specified size, copying the current memory if needed.
@@ -212,6 +217,10 @@ namespace Lazinator.Buffers
             return FreeSpan.Slice(0, desiredSize);
         }
 
+        #endregion
+
+        #region Multiple buffers management
+
         public void ConsiderSwitchToNextBuffer(ref LazinatorSerializationOptions options)
         {
             if (ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling >= options.NextBufferThreshold)
@@ -228,10 +237,14 @@ namespace Lazinator.Buffers
         /// <param name="minSizeofNewBuffer"></param>
         public void MoveActiveToCompletedMemory(int minSizeofNewBuffer = ExpandableBytes.DefaultMinBufferSize)
         {
-            CompletedMemory = CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, new MemoryChunkReference(GetActiveMemoryChunkID(), NumActiveMemoryBytesAddedToRecycling, ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling)));
-            ActiveMemory = new ExpandableBytes(minSizeofNewBuffer);
-            ActiveMemoryPosition = 0;
-            Debug.WriteLine($"Active memory moved to completed memory. Completed now: {CompletedMemory}"); // DEBUG
+            if (ActiveMemoryPosition > NumActiveMemoryBytesAddedToRecycling)
+            {
+                CompletedMemory = CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, new MemoryChunkReference(GetActiveMemoryChunkID(), NumActiveMemoryBytesAddedToRecycling, ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling)));
+                ActiveMemory = new ExpandableBytes(minSizeofNewBuffer);
+                ActiveMemoryPosition = 0;
+                NumActiveMemoryBytesAddedToRecycling = 0;
+                Debug.WriteLine($"Active memory moved to completed memory. Completed now: {CompletedMemory}"); // DEBUG
+            }
         }
 
         /// <summary>
@@ -261,6 +274,32 @@ namespace Lazinator.Buffers
             }
         }
 
+        internal LazinatorMemory PatchLazinatorMemoryFromRecycled()
+        {
+            if (RecycledMemoryChunkReferences == null || !RecycledMemoryChunkReferences.Any())
+                return LazinatorMemory.EmptyLazinatorMemory;
+            RecordLastActiveMemoryChunkReference();
+            MoveActiveToCompletedMemory();
+            var byID = CompletedMemory.GetMemoryChunksByID();
+            MemoryChunk initialMemoryChunk = null;
+            List<MemoryChunk> moreMemory = null;
+            long length = 0;
+            for (int i = 0; i < RecycledMemoryChunkReferences.Count; i++)
+            {
+                if (i == 1)
+                    moreMemory = new List<MemoryChunk>();
+                MemoryChunkReference reference = RecycledMemoryChunkReferences[i];
+                length += reference.Length;
+                MemoryChunk memoryChunk = byID[reference.MemoryChunkID];
+                MemoryChunk resliced = memoryChunk.SliceReferencedMemory(reference.Offset, reference.Length);
+                if (i == 0)
+                    initialMemoryChunk = resliced;
+                else
+                    moreMemory.Add(resliced);
+            }
+            return new LazinatorMemory(initialMemoryChunk, moreMemory, 0, 0, length);
+        }
+
         /// <summary>
         /// Returns the Span beginning at position LengthsPosition, when recycled memory chunk references are being recorded.
         /// </summary>
@@ -277,7 +316,13 @@ namespace Lazinator.Buffers
                 {
                     MemoryChunkReference reference = RecycledMemoryChunkReferences[i];
                     if (lengthPositionRemaining < reference.Length)
-                        lengthsSpanMemoryChunkReference =  new MemoryChunkReference(reference.MemoryChunkID, (int) (reference.Offset + lengthPositionRemaining), (int) (reference.Length - lengthPositionRemaining));
+                    {
+                        lengthsSpanMemoryChunkReference = new MemoryChunkReference(reference.MemoryChunkID, (int)(reference.Offset + lengthPositionRemaining), (int)(reference.Length - lengthPositionRemaining));
+                        lengthPositionRemaining = 0;
+                    }
+                    else
+                        lengthPositionRemaining -= reference.Length;
+                    i++;
                 }
             }
             if (lengthsSpanMemoryChunkReference == null)
@@ -300,15 +345,6 @@ namespace Lazinator.Buffers
         private int GetActiveMemoryChunkID()
         {
             return CompletedMemory.GetNextMemoryChunkID();
-        }
-
-        /// <summary>
-        /// Skips ahead the specified number of bytes
-        /// </summary>
-        /// <param name="length"></param>
-        public void Skip(int length)
-        {
-            ActiveMemoryPosition += length;
         }
 
         #endregion
@@ -502,6 +538,23 @@ namespace Lazinator.Buffers
         #region Recording lengths
 
         /// <summary>
+        /// A span containing space reserved to write length values of what is written later in the buffer.
+        /// </summary>
+        private Span<byte> LengthsSpan
+        {
+            get
+            {
+                if (RecycledMemoryChunkReferences != null)
+                    return GetLengthsSpanWithinRecycled();
+                if (CompletedMemory.IsEmpty)
+                    return ActiveSpan.Slice((int)LengthsPosition);
+                if (LengthsPosition >= CompletedMemory.Length)
+                    return ActiveSpan.Slice((int)(LengthsPosition - CompletedMemory.Length));
+                return CompletedMemory.Slice(LengthsPosition).InitialMemory.Span;
+            }
+        }
+
+        /// <summary>
         /// Designates the current active memory position as the position at which to store length information. 
         /// </summary>
         /// <param name="bytesToReserve">The number of bytes to reserve</param>
@@ -527,6 +580,7 @@ namespace Lazinator.Buffers
             LengthsSpan[0] = length;
             LengthsPosition++;
         }
+
         public void RecordLength(Int16 length)
         {
             if (BinaryBufferWriter.LittleEndianStorage)

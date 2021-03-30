@@ -796,6 +796,18 @@ namespace Lazinator.Buffers
                     yield return additional;
         }
 
+        public Dictionary<int, MemoryChunk> GetMemoryChunksByID()
+        {
+            Dictionary<int, MemoryChunk> d = new Dictionary<int, MemoryChunk>();
+            foreach (MemoryChunk memoryChunk in EnumerateMemoryChunks())
+            {
+                int chunkID = memoryChunk.Reference.MemoryChunkID;
+                if (!d.ContainsKey(chunkID))
+                    d[chunkID] = memoryChunk;
+            }
+            return d;
+        }
+
         /// <summary>
         /// Writes the memory to the binary buffer writer asynchronously.
         /// </summary>
