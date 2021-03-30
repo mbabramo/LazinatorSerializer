@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
 using System.Buffers;
+using Lazinator.Core;
 
 namespace Lazinator.Buffers
 {
@@ -20,7 +21,7 @@ namespace Lazinator.Buffers
 
         public override string ToString()
         {
-            return ActiveMemory == null ? "" : "Position " + _ActiveMemoryPosition + " " + ActiveMemory.ToString();
+            return ActiveMemory == null ? "" : String.Join(",", ActiveMemoryWrittenSpan.ToArray()) + " " + CompletedMemory.ToString();
         }
 
         /// <summary>
@@ -107,6 +108,7 @@ namespace Lazinator.Buffers
                 {
                     if (ActiveMemoryPosition == 0)
                         return CompletedMemory;
+                    Debug.WriteLine($"Appending {ActiveMemoryPosition} bytes to {CompletedMemory}"); // DEBUG
                     return CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, new MemoryChunkReference(GetActiveMemoryChunkID(), 0, ActiveMemoryPosition)));
                 }
                 return new LazinatorMemory(ActiveMemory, 0, ActiveMemoryPosition);
@@ -210,10 +212,19 @@ namespace Lazinator.Buffers
             return FreeSpan.Slice(0, desiredSize);
         }
 
+        public void ConsiderSwitchToNextBuffer(ref LazinatorSerializationOptions options)
+        {
+            if (ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling >= options.NextBufferThreshold)
+            {
+                if (options.SerializeDiffs)
+                    RecordLastActiveMemoryChunkReference();
+                MoveActiveToCompletedMemory((int)(options.NextBufferThreshold * 1.2));
+            }
+        }
+
         public void ConsiderSwitchToNextBuffer(int newBufferThreshold)
         {
-            if (ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling >= newBufferThreshold)
-                MoveActiveToCompletedMemory((int) (newBufferThreshold * 1.2));
+            throw new Exception("DEBUG");
         }
 
         /// <summary>
@@ -225,6 +236,7 @@ namespace Lazinator.Buffers
             CompletedMemory = CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, new MemoryChunkReference(GetActiveMemoryChunkID(), NumActiveMemoryBytesAddedToRecycling, ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling)));
             ActiveMemory = new ExpandableBytes(minSizeofNewBuffer);
             ActiveMemoryPosition = 0;
+            Debug.WriteLine($"Active memory moved to completed memory. Completed now: {CompletedMemory}"); // DEBUG
         }
 
         /// <summary>
@@ -238,6 +250,7 @@ namespace Lazinator.Buffers
             RecordLastActiveMemoryChunkReference();
             IEnumerable<MemoryChunkReference> segmentsToAdd = CompletedMemory.EnumerateMemoryChunkReferences(memoryChunkIndex, startPosition, numBytes).ToList(); // DEBUG -- remove ToList()
             MemoryChunkReference.ExtendMemoryChunkReferencesList(RecycledMemoryChunkReferences, segmentsToAdd);
+            Debug.WriteLine($"Reference to completed memory added. Last reference is {RecycledMemoryChunkReferences.Last()}"); // DEBUG
         }
 
         /// <summary>
@@ -281,7 +294,7 @@ namespace Lazinator.Buffers
             {
                 // We need to find the MemoryChunkID.
                 IMemoryOwner<byte> memoryOwner = CompletedMemory.GetMemoryChunkWithID(lengthsSpanMemoryChunkReference.Value.MemoryChunkID);
-                return memoryOwner.Memory.Slice((int) lengthPositionRemaining).Span;
+                return memoryOwner.Memory.Slice(lengthsSpanMemoryChunkReference.Value.Offset).Span;
             }
         }
 
@@ -291,11 +304,7 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         private int GetActiveMemoryChunkID()
         {
-            if (!CompletedMemory.IsEmpty && (CompletedMemory.MoreOwnedMemory?.Any() ?? false))
-                return CompletedMemory.MoreOwnedMemory.Last().Reference.MemoryChunkID + 1;
-            if (CompletedMemory.IsEmpty)
-                return 0;
-            return CompletedMemory.InitialOwnedMemoryReference.Reference.MemoryChunkID + 1;
+            return CompletedMemory.GetNextMemoryChunkID();
         }
 
         /// <summary>

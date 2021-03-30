@@ -60,7 +60,7 @@ namespace Lazinator.Buffers
 
         public override string ToString()
         {
-            return $@"{(AllocationID != null ? $"Allocation {AllocationID} " : "")}Length {Length} Bytes {String.Join(",", InitialMemory.Span.Slice(0, Math.Min(InitialMemory.Span.Length, 100)).ToArray())}";
+            return $@"{(AllocationID != null ? $"Allocation {AllocationID} " : "")}Length {Length} Bytes {String.Join(",", EnumerateBytes().Take(2000))}";
         }
 
         #region Constructors
@@ -72,19 +72,27 @@ namespace Lazinator.Buffers
             StartIndex = 0;
             if (startPosition < 0)
                 throw new ArgumentException();
-            StartPosition = startPosition;
-            if (length < 0)
-                Length = 0;
-            else
+            if (InitialOwnedMemory is MemoryChunk memoryChunk && startPosition < memoryChunk.Reference.Length && false /* DEBUG -- this doesn't work at least when called by other constructor with StartIndex */)
+            {
+                int afterStart = memoryChunk.Reference.Length - startPosition;
+                InitialOwnedMemory = memoryChunk.Slice(startPosition, (int)Math.Min(afterStart, length));
                 Length = length;
+                StartPosition = 0;
+            }
+            else
+            {
+                StartPosition = startPosition;
+                if (length < 0)
+                    Length = 0;
+                else
+                    Length = length;
+            }
         }
 
         public LazinatorMemory(MemoryChunk ownedMemory, List<MemoryChunk> moreOwnedMemory, int startIndex, int startPosition, long length) : this(ownedMemory, startPosition, length)
         {
             MoreOwnedMemory = moreOwnedMemory;
             StartIndex = startIndex;
-            if (StartIndex > MoreOwnedMemory.Count())
-                throw new Exception("DEBUG");
         }
 
         public LazinatorMemory(IMemoryOwner<byte> ownedMemory, long length) : this(ownedMemory, 0, length)
@@ -104,8 +112,7 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// Returns a new LazinatorMemory with an appended memory chunk. If this LazinatorMemory references the last byte of the 
-        /// memory, then the referenced memory is extended to include this chunk.
+        /// Returns a new LazinatorMemory with an appended memory chunk.
         /// </summary>
         /// <param name="chunk"></param>
         /// <returns></returns>
@@ -114,12 +121,32 @@ namespace Lazinator.Buffers
             if (IsEmpty)
                 return new LazinatorMemory(chunk);
 
-            var evenMoreOwnedMemory = MoreOwnedMemory?.ToList() ?? new List<MemoryChunk>();
+            bool extendExisting = StartIndex == 0 && StartPosition == 0 && Length == GetGrossLength();
 
-            evenMoreOwnedMemory.Add(chunk);
-            if (StartIndex == 0 && StartPosition == 0 && Length == GetGrossLength())
+            if (extendExisting)
+            {
+                var evenMoreOwnedMemory = MoreOwnedMemory?.ToList() ?? new List<MemoryChunk>();
+                evenMoreOwnedMemory.Add(chunk);
                 return new LazinatorMemory(InitialOwnedMemoryReference, evenMoreOwnedMemory, 0, 0, Length + chunk.Reference.Length);
-            return new LazinatorMemory(InitialOwnedMemoryReference, evenMoreOwnedMemory, StartIndex, StartPosition, Length);
+            }
+            // DEBUG DEBUG
+            // We can't just return the existing memory plus the new memory, because the existing memory might include
+            // some memory that isn't referenced. If, for example, that memory is at the end of the range, then adding
+            // an additional chunk will not allow us to reference that memory. 
+
+            // DEBUG. Remove most of rest. 
+            // The reason that we use StartIndex is to enable easier slicing. We can just create an exact copy and just change the StartIndex,
+            // without creating an entire new list. But if we're appending a chunk, and the last chunk or chunks include parts that extend
+            // beyond the range of StartPosition + Length, that is a problem. Note that it's NOT a problem if the last chunk is a MemoryChunk
+            // that references part of some broader memory. It's only a problem if the LazinatorMemory itself references past the end of the
+            // last chunk. 
+            var memoryChunkIndexReferences = EnumerateMemoryChunksByIndex().ToList();
+            var initialMemoryChunk = GetMemoryChunkFromMemoryChunkIndexReference(memoryChunkIndexReferences[0]);
+            var additionalMemoryChunks = new List<MemoryChunk>();
+            foreach (var indexReference in memoryChunkIndexReferences.Skip(1))
+                additionalMemoryChunks.Add(GetMemoryChunkFromMemoryChunkIndexReference(indexReference));
+            additionalMemoryChunks.Add(chunk);
+            return new LazinatorMemory(initialMemoryChunk, additionalMemoryChunks, StartIndex, StartPosition, Length);
         }
 
         public bool Disposed => EnumerateReferencedMemoryOwners().Any(x => x != null && (x is ExpandableBytes e && e.Disposed) || (x is SimpleMemoryOwner<byte> s && s.Disposed));
@@ -532,6 +559,31 @@ namespace Lazinator.Buffers
                 this.Offset = offset;
                 this.Length = length;
             }
+        }
+
+        private MemoryChunk GetMemoryChunkFromMemoryChunkIndexReference(MemoryChunkIndexReference memoryChunkIndexReference)
+        {
+            IMemoryOwner<byte> memoryOwner = MemoryAtIndex(memoryChunkIndexReference.MemoryChunkIndex);
+            if (memoryOwner is MemoryChunk memoryChunk)
+            {
+                if (memoryChunkIndexReference.Offset == 0 && memoryChunkIndexReference.Length == memoryChunk.Reference.Length)
+                    return memoryChunk;
+                return new MemoryChunk(memoryChunk.ReferencedMemory, new MemoryChunkReference(memoryChunk.Reference.MemoryChunkID, memoryChunk.Reference.Offset + memoryChunkIndexReference.Offset, memoryChunkIndexReference.Length));
+            }
+            else
+            {
+                return new MemoryChunk(memoryOwner, new MemoryChunkReference(GetNextMemoryChunkID(), memoryChunkIndexReference.Offset, memoryChunkIndexReference.Length));
+            }
+        }
+
+        internal int GetNextMemoryChunkID()
+        {
+            // DEBUG -- should this be some kind of provider?
+            if (!IsEmpty && (MoreOwnedMemory?.Any() ?? false))
+                return MoreOwnedMemory.Last().Reference.MemoryChunkID + 1;
+            if (IsEmpty)
+                return 0;
+            return InitialOwnedMemoryReference.Reference.MemoryChunkID + 1;
         }
 
         /// <summary>

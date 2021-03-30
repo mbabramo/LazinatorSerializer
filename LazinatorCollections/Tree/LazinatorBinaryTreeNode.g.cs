@@ -1048,6 +1048,10 @@ namespace LazinatorCollections.Tree
             long startOfChildPosition = 0;
             long lengthValue = 0;
             startOfChildPosition = writer.OverallMemoryPosition;
+            if (_Data.ToString() == "2")
+            {
+                var DEBUG = 0;
+            }
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_Data_Accessed)

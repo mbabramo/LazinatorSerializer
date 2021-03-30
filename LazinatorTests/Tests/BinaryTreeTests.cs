@@ -174,6 +174,46 @@ namespace LazinatorTests.Tests
             });
         }
 
+
+        [Theory]
+        [InlineData(true, true, true)]
+        [InlineData(true, true, false)]
+        [InlineData(true, false, true)]
+        [InlineData(true, false, false)]
+        [InlineData(false, true, true)]
+        [InlineData(false, true, false)]
+        [InlineData(false, false, true)]
+        [InlineData(false, false, false)]
+        public void BinaryTreeTest_DiffSerialization_RewritingAll(bool useFile, bool containedInSingleBlob, bool recreateIndex)
+        {
+            // Here, we test making a change that in fact requires rewriting the entire Lazinator object. The change will be to the 
+            // only node's Data, and the node has no Left or Right, so no references to the original data can be made. 
+
+            var tree1 = new LazinatorBinaryTree<WByte>();
+            tree1.Add(1);
+            LazinatorMemory initialResult = tree1.SerializeLazinator(LazinatorSerializationOptions.Default);
+            
+            var tree2 = new LazinatorBinaryTree<WByte>(initialResult);
+            tree2.Root.Data = 2;
+            LazinatorSerializationOptions options = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20);
+            LazinatorMemory afterChange = tree2.SerializeLazinator(options);
+
+            IBlobManager blobManager = useFile ? new global::Lazinator.Buffers.FileBlobManager() : new global::LazinatorTests.Utilities.InMemoryBlobStorage();
+            string fullPath = GetPathForIndexAndBlobs(useFile);
+            PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob);
+            index.PersistLazinatorMemory(afterChange);
+
+            if (recreateIndex)
+                index = PersistentIndex.ReadFromBlobWithIntPrefix(blobManager, fullPath);
+            var afterChangeReloaded = index.GetLazinatorMemory();
+            var tree3 = new LazinatorBinaryTree<WByte>(afterChangeReloaded); // DEBUG -- what happens if we just do afterChange? Either it should work or we should throw. 
+            tree3.Root.Data.Should().Be(2);
+
+            // DEBUG -- should also have an async version of this
+
+            // DEBUG -- next step is to change something where there is still some child that will remain untouched.
+        }
+
         [Theory]
         [InlineData(true, true, true)]
         [InlineData(true, true, false)]

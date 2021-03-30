@@ -45,8 +45,8 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorMemoryAggregationAndSlicing()
         {
-            int numChunks = 5;
-            int memoryPerChunk = 100;
+            int numChunks = 2; // DEBUG 5;
+            int memoryPerChunk = 10; // DEBUG 100;
             // build a single combined chunk and many individual chunks -- then see if the whole and slices match
             byte[] c = new byte[memoryPerChunk * numChunks];
             LazinatorMemory m = default;
