@@ -207,7 +207,7 @@ namespace LazinatorTests.Tests
                 index = PersistentIndex.ReadFromBlobWithIntPrefix(blobManager, fullPath);
             var afterChangeReloaded = index.GetLazinatorMemory();
             var tree3 = new LazinatorBinaryTree<WByte>(afterChangeReloaded); // DEBUG -- what happens if we just do afterChange? Either it should work or we should throw. 
-            tree3.Root.Data.Should().Be(2);
+            tree3.Root.Data.WrappedValue.Should().Be((byte) 2);
 
             // DEBUG -- should also have an async version of this
 

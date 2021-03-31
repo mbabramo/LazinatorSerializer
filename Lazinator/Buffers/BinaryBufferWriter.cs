@@ -91,7 +91,7 @@ namespace Lazinator.Buffers
                 InitializeIfNecessary();
                 if (RecycledMemoryChunkReferences is not null)
                 {
-                    asdf;
+                    return PatchLazinatorMemoryFromRecycled();
                 }
                 if (!CompletedMemory.IsEmpty)
                 {
@@ -237,9 +237,9 @@ namespace Lazinator.Buffers
         /// <param name="minSizeofNewBuffer"></param>
         public void MoveActiveToCompletedMemory(int minSizeofNewBuffer = ExpandableBytes.DefaultMinBufferSize)
         {
-            if (ActiveMemoryPosition > NumActiveMemoryBytesAddedToRecycling)
+            if (ActiveMemoryPosition > 0)
             {
-                CompletedMemory = CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, new MemoryChunkReference(GetActiveMemoryChunkID(), NumActiveMemoryBytesAddedToRecycling, ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling)));
+                CompletedMemory = CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, new MemoryChunkReference(GetActiveMemoryChunkID(), 0, ActiveMemoryPosition)));
                 ActiveMemory = new ExpandableBytes(minSizeofNewBuffer);
                 ActiveMemoryPosition = 0;
                 NumActiveMemoryBytesAddedToRecycling = 0;
@@ -333,8 +333,16 @@ namespace Lazinator.Buffers
             else
             {
                 // We need to find the MemoryChunkID.
-                IMemoryOwner<byte> memoryOwner = CompletedMemory.GetMemoryChunkWithID(lengthsSpanMemoryChunkReference.Value.MemoryChunkID);
-                return memoryOwner.Memory.Slice(lengthsSpanMemoryChunkReference.Value.Offset).Span;
+                int memoryChunkID = lengthsSpanMemoryChunkReference.Value.MemoryChunkID;
+                if (GetActiveMemoryChunkID() == memoryChunkID)
+                {
+                    return ActiveMemoryWritten.Slice(lengthsSpanMemoryChunkReference.Value.Offset).Span;
+                }
+                else
+                {
+                    IMemoryOwner<byte> memoryOwner = CompletedMemory.GetMemoryChunkWithID(memoryChunkID);
+                    return memoryOwner.Memory.Slice(lengthsSpanMemoryChunkReference.Value.Offset).Span;
+                }
             }
         }
 

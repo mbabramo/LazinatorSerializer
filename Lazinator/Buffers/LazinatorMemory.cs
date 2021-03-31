@@ -566,7 +566,12 @@ namespace Lazinator.Buffers
             }
             else
             {
-                return new MemoryChunk(memoryOwner, new MemoryChunkReference(GetNextMemoryChunkID(), memoryChunkIndexReference.Offset, memoryChunkIndexReference.Length));
+                int memoryChunkID;
+                if (memoryChunkIndexReference.MemoryChunkIndex == 0)
+                    memoryChunkID = InitialOwnedMemoryReference.Reference.MemoryChunkID;
+                else
+                    memoryChunkID = GetNextMemoryChunkID();
+                return new MemoryChunk(memoryOwner, new MemoryChunkReference(memoryChunkID, memoryChunkIndexReference.Offset, memoryChunkIndexReference.Length));
             }
         }
 
