@@ -93,6 +93,7 @@ namespace Lazinator.Buffers
                 {
                     return PatchLazinatorMemoryFromRecycled();
                 }
+                ActiveMemory.LengthUsed = ActiveMemoryPosition;
                 if (!CompletedMemory.IsEmpty)
                 {
                     if (ActiveMemoryPosition == 0)
@@ -135,6 +136,7 @@ namespace Lazinator.Buffers
             set
             {
                 EnsureMinBufferSize(value);
+                ActiveMemory.LengthUsed = null; // since we're changing the position, let's undo the ActiveMemory.Length // DEBUG -- can we just use ActiveMemory.Length instead of _ActiveMemoryPosition?
                 _ActiveMemoryPosition = value;
             }
         }

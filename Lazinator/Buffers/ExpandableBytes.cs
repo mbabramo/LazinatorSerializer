@@ -17,12 +17,13 @@ namespace Lazinator.Buffers
         public bool LazinatorShouldNotReturnToPool;
 
         IMemoryOwner<byte> CurrentBuffer { get; set; }
-        public Memory<byte> Memory => Length == null ? CurrentBuffer.Memory : CurrentBuffer.Memory.Slice(0, (int) Length);
-        public int? Length { get; set; }
+        public Memory<byte> Memory => LengthUsed == null ? CurrentBuffer.Memory : CurrentBuffer.Memory.Slice(0, (int) LengthUsed);
+        public int? LengthUsed { get; set; }
 
         public bool Disposed { get; protected internal set; }
         public static long NextAllocationID = 0; // we track all allocations to facilitate debugging of memory allocation and disposal
         public long AllocationID;
+
         public static bool UseMemoryPooling = true;
         public static bool TrackMemoryAllocations = false;
         public static List<WeakReference<IMemoryOwner<byte>>> MemoryAllocations = new List<WeakReference<IMemoryOwner<byte>>>();
@@ -64,8 +65,24 @@ namespace Lazinator.Buffers
             CurrentBuffer = initialBuffer;
         }
 
+        // DEBUG -- delete this
+        public ExpandableBytes TruncateTo(int length)
+        {
+            LazinatorShouldNotReturnToPool = true; // now that there are two copies, we don't want the original to cause the memory to be returned to the pool
+            var returnVal = new ExpandableBytes()
+            {
+                LazinatorShouldNotReturnToPool = LazinatorShouldNotReturnToPool,
+                CurrentBuffer = CurrentBuffer,
+                LengthUsed = length,
+                Disposed = Disposed,
+                AllocationID = AllocationID
+            };
+            return returnVal;
+        }
+
         public void EnsureMinBufferSize(int desiredBufferSize = 0)
         {
+            LengthUsed = null;
             if (desiredBufferSize <= 0)
             {
                 desiredBufferSize = CurrentBuffer.Memory.Length * 2;
@@ -97,7 +114,7 @@ namespace Lazinator.Buffers
             if (TrackMemoryAllocations)
                 MemoryAllocationsManuallyReturned[(int)AllocationID] = true;
             if (LazinatorShouldNotReturnToPool)
-                return; // no need to dispose -- garbage collection will handle it
+                return; // no need to dispose current buffer -- garbage collection will handle it
             if (!UseMemoryPooling)
                 return;
             if (!(CurrentBuffer is SimpleMemoryOwner<byte>)) // SimpleMemoryOwner manages its own memory and should thus not be disposed

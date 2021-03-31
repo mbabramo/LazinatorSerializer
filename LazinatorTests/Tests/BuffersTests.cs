@@ -16,6 +16,7 @@ using LazinatorTests.Examples.Collections;
 using LazinatorTests.Examples.Tuples;
 using LazinatorTests.Utilities;
 using System.Threading.Tasks;
+using System.Buffers;
 
 namespace LazinatorTests.Tests
 {
@@ -934,7 +935,9 @@ namespace LazinatorTests.Tests
         private static void ConfirmBuffersUpdateInTandem(ILazinator itemToUpdate)
         {
             itemToUpdate.SerializeLazinator();
-            var allocationID = ((ExpandableBytes)itemToUpdate.LazinatorMemoryStorage.InitialOwnedMemory).AllocationID;
+            var initialOwnedMemory = itemToUpdate.LazinatorMemoryStorage.InitialOwnedMemory;
+            IMemoryOwner<byte> initialMemoryOwner = (IMemoryOwner<byte>)initialOwnedMemory;
+            var allocationID = ((ExpandableBytes)initialMemoryOwner).AllocationID;
             itemToUpdate.ForEachLazinator(x => 
             {
                 if (x.LazinatorMemoryStorage.IsEmpty == false)
