@@ -20,8 +20,100 @@ using LazinatorTests.Utilities;
 
 namespace LazinatorTests.Tests
 {
-    public class BinaryTreeTests
+    public class MultipleBuffersTests : SerializationDeserializationTestBase
     {
+        [Fact]
+        public void SplittableEntitiesWork()
+        {
+            Example e = GetTypicalExample();
+            LazinatorMemory singleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false));
+            LazinatorMemory multipleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 10));
+            multipleBufferResult.MoreOwnedMemory.Count().Should().BeGreaterThan(0);
+            LazinatorMemory consolidated = multipleBufferResult.GetConsolidatedMemory();
+            consolidated.Matches(singleBufferResult.InitialMemory.Span).Should().BeTrue();
+
+            Example e2 = new Example(consolidated);
+            ExampleEqual(e, e2).Should().BeTrue();
+
+            Example e3 = new Example(multipleBufferResult);
+            ExampleEqual(e, e3).Should().BeTrue();
+
+            Example e4 = new Example(multipleBufferResult);
+            Example e5 = e4.CloneLazinatorTyped();
+            ExampleEqual(e, e5).Should().BeTrue();
+        }
+
+        [Theory]
+        [InlineData(true, true, true, true)]
+        [InlineData(true, false, true, true)]
+        [InlineData(false, true, true, true)]
+        [InlineData(false, false, true, true)]
+        [InlineData(true, true, false, true)]
+        [InlineData(true, false, false, true)]
+        [InlineData(false, true, false, true)]
+        [InlineData(false, false, false, true)]
+        [InlineData(true, true, true, false)]
+        [InlineData(true, false, true, false)]
+        [InlineData(false, true, true, false)]
+        [InlineData(false, false, true, false)]
+        [InlineData(true, true, false, false)]
+        [InlineData(true, false, false, false)]
+        [InlineData(false, true, false, false)]
+        [InlineData(false, false, false, false)]
+        public async Task SplittableEntitiesSaveToBlobs(bool containedInSingleBlob, bool useFile, bool async, bool recreateBlobMemoryReference)
+        {
+            if (async)
+                await SplittableEntitiesSavedHelper_Async(containedInSingleBlob, useFile, recreateBlobMemoryReference);
+            else
+                SplittableEntitiesSavedHelper(containedInSingleBlob, useFile, recreateBlobMemoryReference);
+        }
+
+        private void SplittableEntitiesSavedHelper(bool containedInSingleBlob, bool useFile, bool recreateIndex)
+        {
+            Example e = GetTypicalExample();
+            LazinatorMemory multipleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 10));
+
+            // Write to one or more blobs
+            IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobStorage();
+            string fullPath = GetPathForIndexAndBlobs(useFile, false);
+            if (fullPath == null)
+                return;
+            PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob);
+            index.PersistLazinatorMemory(multipleBufferResult);
+            // Note: Index reference is first var indexReference = memoryReferenceInBlobs[0];
+
+            // Read from one or more blobs
+            if (recreateIndex)
+                index = PersistentIndex.ReadFromBlobWithIntPrefix(blobManager, fullPath);
+            var revisedMemory = index.GetLazinatorMemory();
+
+            var e2 = new Example(revisedMemory);
+            ExampleEqual(e, e2).Should().BeTrue();
+        }
+
+        private async Task SplittableEntitiesSavedHelper_Async(bool containedInSingleBlob, bool useFile, bool recreateIndex)
+        {
+            Example e = GetTypicalExample();
+            LazinatorMemory multipleBufferResult = await e.SerializeLazinatorAsync(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 10));
+
+            // Write to one or more blobs
+            IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobStorage();
+            string fullPath = GetPathForIndexAndBlobs(useFile, false);
+            if (fullPath == null)
+                return;
+            PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob);
+            await index.PersistLazinatorMemoryAsync(multipleBufferResult);
+            // Note: Index reference is first var indexReference = memoryReferenceInBlobs[0];
+
+            // Read from one or more blobs
+            if (recreateIndex)
+                index = await PersistentIndex.ReadFromBlobWithIntPrefixAsync(blobManager, fullPath);
+            var revisedMemory = await index.GetLazinatorMemoryAsync();
+
+            Example e2 = new Example(revisedMemory);
+            ExampleEqual(e, e2).Should().BeTrue();
+        }
+
         private SortedList<double, string> RegularSortedList;
         private List<double> MainListValues => RegularSortedList.Select(x => x.Key).ToList();
         private void AddToMainList(double d) => RegularSortedList.Add(d, "");
@@ -131,7 +223,7 @@ namespace LazinatorTests.Tests
 
                 // Write to one or more blobs
                 IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobStorage();
-                string fullPath = GetPathForIndexAndBlobs(useFile);
+                string fullPath = GetPathForIndexAndBlobs(useFile, true);
                 if (fullPath == null)
                     return;
                 PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob);
@@ -161,7 +253,7 @@ namespace LazinatorTests.Tests
 
                 // Write to one or more blobs
                 IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobStorage();
-                string fullPath = GetPathForIndexAndBlobs(useFile);
+                string fullPath = GetPathForIndexAndBlobs(useFile, true);
                 if (fullPath == null)
                     return;
                 PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob);
@@ -199,7 +291,7 @@ namespace LazinatorTests.Tests
             LazinatorMemory afterChange = tree2.SerializeLazinator(options);
 
             IBlobManager blobManager = useFile ? new global::Lazinator.Buffers.FileBlobManager() : new global::LazinatorTests.Utilities.InMemoryBlobStorage();
-            string fullPath = GetPathForIndexAndBlobs(useFile);
+            string fullPath = GetPathForIndexAndBlobs(useFile, true);
             PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob);
             index.PersistLazinatorMemory(afterChange);
 
@@ -237,7 +329,7 @@ namespace LazinatorTests.Tests
             LazinatorMemory afterChange = tree2.SerializeLazinator(options);
 
             IBlobManager blobManager = useFile ? new global::Lazinator.Buffers.FileBlobManager() : new global::LazinatorTests.Utilities.InMemoryBlobStorage();
-            string fullPath = GetPathForIndexAndBlobs(useFile);
+            string fullPath = GetPathForIndexAndBlobs(useFile, true);
             PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob);
             index.PersistLazinatorMemory(afterChange);
 
@@ -270,7 +362,7 @@ namespace LazinatorTests.Tests
 
                 // Write to one or more blobs
                 IBlobManager blobManager = useFile ? new global::Lazinator.Buffers.FileBlobManager() : new global::LazinatorTests.Utilities.InMemoryBlobStorage();
-                string fullPath = GetPathForIndexAndBlobs(useFile);
+                string fullPath = GetPathForIndexAndBlobs(useFile, true);
                 if (fullPath == null)
                     return;
                 PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob);
@@ -297,12 +389,12 @@ namespace LazinatorTests.Tests
             throw new Exception();
         }
 
-        private static string GetPathForIndexAndBlobs(bool useFile)
+        private static string GetPathForIndexAndBlobs(bool useFile, bool binaryTree)
         {
             string path = @"C:\Users\Admin\Desktop\testfolder";
             if (useFile && !System.IO.Directory.Exists(path))
                 return null; // ignore this error
-            string fullPath = path + @"\binary-tree.fil";
+            string fullPath = path + (binaryTree ? @"\binary-tree.fil" : @"\example.fil");
             return fullPath;
         }
     }
