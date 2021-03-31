@@ -93,7 +93,7 @@ namespace Lazinator.Buffers
                 {
                     return PatchLazinatorMemoryFromRecycled();
                 }
-                ActiveMemory.LengthUsed = ActiveMemoryPosition;
+                ActiveMemory.UsedBytesInCurrentBuffer = ActiveMemoryPosition;
                 if (!CompletedMemory.IsEmpty)
                 {
                     if (ActiveMemoryPosition == 0)
@@ -136,7 +136,7 @@ namespace Lazinator.Buffers
             set
             {
                 EnsureMinBufferSize(value);
-                ActiveMemory.LengthUsed = null; // since we're changing the position, let's undo the ActiveMemory.Length // DEBUG -- can we just use ActiveMemory.Length instead of _ActiveMemoryPosition?
+                ActiveMemory.UsedBytesInCurrentBuffer = null; // since we're changing the position, let's undo the ActiveMemory.Length // DEBUG -- can we just use ActiveMemory.Length instead of _ActiveMemoryPosition?
                 _ActiveMemoryPosition = value;
             }
         }
@@ -170,7 +170,7 @@ namespace Lazinator.Buffers
         /// </summary>
         private long LengthsPosition;
 
-        Span<byte> ActiveSpan => ActiveMemory == null ? new Span<byte>() : ActiveMemory.Memory.Span;
+        Span<byte> ActiveSpan => ActiveMemory == null ? new Span<byte>() : ActiveMemory.CurrentBuffer.Memory.Span;
 
         /// <summary>
         /// Free bytes that have not been written to. The client can attempt to write to these bytes directly, calling EnsureMinBufferSize if the operation fails and trying again. Then, the client must update the position.
