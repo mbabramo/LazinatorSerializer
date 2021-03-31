@@ -37,6 +37,7 @@ namespace LazinatorTests.Tests
                 {
                     bufferSize *= 2;
                     e.EnsureMinBufferSize(bufferSize);
+                    e.UsedBytesInCurrentBuffer = bufferSize;
                     e.Memory.Span[bufferSize - 1] = 1;
                 }
             }

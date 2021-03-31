@@ -66,7 +66,7 @@ namespace Lazinator.Buffers
                 RecycledMemoryChunkReferences = new List<MemoryChunkReference>();
                 CompletedMemory = completedMemory.Value;
             }
-            _ActiveMemoryPosition = 0;
+            ActiveMemory.UsedBytesInCurrentBuffer = 0;
             LengthsPosition = 0;
             NumActiveMemoryBytesAddedToRecycling = 0;
         }
@@ -129,15 +129,13 @@ namespace Lazinator.Buffers
         /// <summary>
         /// The position within the active memory buffer. This is changed by the client after writing to the buffer.
         /// </summary>
-        private int _ActiveMemoryPosition;
         public int ActiveMemoryPosition
         {
-            get => _ActiveMemoryPosition;
+            get => ActiveMemory?.UsedBytesInCurrentBuffer ?? 0;
             set
             {
                 EnsureMinBufferSize(value);
-                ActiveMemory.UsedBytesInCurrentBuffer = null; // since we're changing the position, let's undo the ActiveMemory.Length // DEBUG -- can we just use ActiveMemory.Length instead of _ActiveMemoryPosition?
-                _ActiveMemoryPosition = value;
+                ActiveMemory.UsedBytesInCurrentBuffer = value;
             }
         }
 

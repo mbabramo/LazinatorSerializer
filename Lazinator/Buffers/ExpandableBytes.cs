@@ -16,8 +16,8 @@ namespace Lazinator.Buffers
         public const int DefaultMinBufferSize = 1024; 
         public bool LazinatorShouldNotReturnToPool;
         public IMemoryOwner<byte> CurrentBuffer { get; set; }
-        public int? UsedBytesInCurrentBuffer { get; set; }
-        public Memory<byte> Memory => UsedBytesInCurrentBuffer == null ? CurrentBuffer.Memory : CurrentBuffer.Memory.Slice(0, (int) UsedBytesInCurrentBuffer);
+        public int UsedBytesInCurrentBuffer { get; set; }
+        public Memory<byte> Memory => CurrentBuffer.Memory.Slice(0, UsedBytesInCurrentBuffer);
 
         public bool Disposed { get; protected internal set; }
         public static long NextAllocationID = 0; // we track all allocations to facilitate debugging of memory allocation and disposal
