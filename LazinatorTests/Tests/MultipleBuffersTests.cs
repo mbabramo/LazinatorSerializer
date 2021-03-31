@@ -376,11 +376,56 @@ namespace LazinatorTests.Tests
             if (recreateIndex)
                 index = PersistentIndex.ReadFromBlobWithIntPrefix(blobManager, fullPath);
             var afterChangeReloaded = index.GetLazinatorMemory();
-            var tree3 = new LazinatorBinaryTree<WByte>(afterChangeReloaded); // DEBUG -- what happens if we just do afterChange? Either it should work or we should throw. 
+            var tree3 = new LazinatorBinaryTree<WByte>(afterChangeReloaded);
             tree3.Root.Data.WrappedValue.Should().Be((byte)2);
             tree3.Root.RightNode.Data.WrappedValue.Should().Be((byte)3);
 
-            // DEBUG -- should also have an async version of this
+
+            var tree4 = new LazinatorBinaryTree<WByte>(afterChange);
+            tree4.Root.Data.WrappedValue.Should().Be((byte)2);
+            tree4.Root.RightNode.Data.WrappedValue.Should().Be((byte)3);
+        }
+
+        [Theory]
+        [InlineData(true, true, true)]
+        [InlineData(true, true, false)]
+        [InlineData(true, false, true)]
+        [InlineData(true, false, false)]
+        [InlineData(false, true, true)]
+        [InlineData(false, true, false)]
+        [InlineData(false, false, true)]
+        [InlineData(false, false, false)]
+        public async Task BinaryTreeTest_DiffSerialization_KeepingSomeInformation_Async(bool useFile, bool containedInSingleBlob, bool recreateIndex)
+        {
+            // Here, we test making a change that in fact requires rewriting the entire Lazinator object. The change will be to the 
+            // only node's Data, and the node has no Left or Right, so no references to the original data can be made. 
+
+            var tree1 = new LazinatorBinaryTree<WByte>();
+            tree1.Add(1);
+            tree1.Add(3); // right node to above
+            LazinatorMemory initialResult = await tree1.SerializeLazinatorAsync(LazinatorSerializationOptions.Default);
+
+            var tree2 = new LazinatorBinaryTree<WByte>(initialResult);
+            tree2.Root.Data = 2; // should now be 2 and 3
+            LazinatorSerializationOptions options = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20);
+            LazinatorMemory afterChange = await tree2.SerializeLazinatorAsync(options);
+
+            IBlobManager blobManager = useFile ? new global::Lazinator.Buffers.FileBlobManager() : new global::LazinatorTests.Utilities.InMemoryBlobStorage();
+            string fullPath = GetPathForIndexAndBlobs(useFile, true);
+            PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob);
+            await index.PersistLazinatorMemoryAsync(afterChange);
+
+            if (recreateIndex)
+                index = await PersistentIndex.ReadFromBlobWithIntPrefixAsync(blobManager, fullPath);
+            var afterChangeReloaded = await index.GetLazinatorMemoryAsync();
+            var tree3 = new LazinatorBinaryTree<WByte>(afterChangeReloaded);
+            tree3.Root.Data.WrappedValue.Should().Be((byte)2);
+            tree3.Root.RightNode.Data.WrappedValue.Should().Be((byte)3);
+
+
+            var tree4 = new LazinatorBinaryTree<WByte>(afterChange);
+            tree4.Root.Data.WrappedValue.Should().Be((byte)2);
+            tree4.Root.RightNode.Data.WrappedValue.Should().Be((byte)3);
         }
 
         [Theory]
