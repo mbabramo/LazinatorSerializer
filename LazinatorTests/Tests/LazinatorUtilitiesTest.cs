@@ -166,7 +166,7 @@ namespace LazinatorTests.Tests
             { // same as above; higher iterations causes no memory leak
                 BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
                 var rented = writer.LazinatorMemory;
-                rented.InitialOwnedMemory.Memory.Length.Should().BeGreaterOrEqualTo(bufferSize);
+                ((ExpandableBytes)rented.InitialOwnedMemory).CurrentBuffer.Memory.Length.Should().BeGreaterOrEqualTo(bufferSize);
             }
         }
 

@@ -9,11 +9,11 @@ namespace Lazinator.Buffers
 {
     public class MemoryChunk : IMemoryOwner<byte>
     {
-        public IMemoryOwner<byte> ReferencedMemory { get; set; }
+        public IMemoryOwner<byte> MemoryContainingChunk { get; set; }
 
         public virtual MemoryChunkReference Reference { get; set; }
 
-        public bool IsLoaded => ReferencedMemory != null;
+        public bool IsLoaded => MemoryContainingChunk != null;
 
         public virtual bool IsPersisted { get; set; }
 
@@ -24,15 +24,15 @@ namespace Lazinator.Buffers
 
         public MemoryChunk(IMemoryOwner<byte> referencedMemory, MemoryChunkReference reference)
         {
-            ReferencedMemory = referencedMemory;
+            MemoryContainingChunk = referencedMemory;
             Reference = reference;
         }
 
-        public Memory<byte> Memory => ReferencedMemory.Memory.Slice(Reference.Offset, Reference.Length);
+        public Memory<byte> Memory => MemoryContainingChunk.Memory.Slice(Reference.Offset, Reference.Length);
 
-        public MemoryChunk SliceReferencedMemory(int startIndex, int length) => new MemoryChunk(ReferencedMemory, new MemoryChunkReference(Reference.MemoryChunkID, startIndex, length));
+        public MemoryChunk SliceReferencedMemory(int startIndex, int length) => new MemoryChunk(MemoryContainingChunk, new MemoryChunkReference(Reference.MemoryChunkID, startIndex, length));
 
-        public MemoryChunk Slice(int startIndex, int length) => new MemoryChunk(ReferencedMemory, new MemoryChunkReference(Reference.MemoryChunkID, Reference.Offset + startIndex, length));
+        public MemoryChunk Slice(int startIndex, int length) => new MemoryChunk(MemoryContainingChunk, new MemoryChunkReference(Reference.MemoryChunkID, Reference.Offset + startIndex, length));
 
         /// <summary>
         /// This method should be overridden for a MemoryReference subclass that loads memory lazily. The subclass method

@@ -21,7 +21,7 @@ namespace Lazinator.Buffers
         MemoryChunkReference OriginalReference;
         public override MemoryChunkReference Reference
         {
-            get => ReferencedMemory == null ? OriginalReference : new MemoryChunkReference(OriginalReference.MemoryChunkID, 0, ReferencedMemory.Memory.Length);
+            get => MemoryContainingChunk == null ? OriginalReference : new MemoryChunkReference(OriginalReference.MemoryChunkID, 0, MemoryContainingChunk.Memory.Length);
             set => base.Reference = value;
         }
 
@@ -43,23 +43,23 @@ namespace Lazinator.Buffers
         {
             Memory<byte> bytes = BlobManager.Read(BlobPath, Reference.Offset, Reference.Length);
             // DEBUG -- what we really need to do here (and in file manager) is cache this in the blob manager. That way, there is just one memory blob for a memory chunk, even if we have references to many pieces of that chunk. Then, it can be unloaded or not. 
-            ReferencedMemory = new SimpleMemoryOwner<byte>(bytes);
+            MemoryContainingChunk = new SimpleMemoryOwner<byte>(bytes);
         }
 
         public async override ValueTask LoadMemoryAsync()
         {
             Memory<byte> bytes = await BlobManager.ReadAsync(BlobPath, Reference.Offset, Reference.Length);
-            ReferencedMemory = new SimpleMemoryOwner<byte>(bytes);
+            MemoryContainingChunk = new SimpleMemoryOwner<byte>(bytes);
         }
 
         public override void ConsiderUnloadMemory()
         {
-            ReferencedMemory = null; // Reference will now point to OriginalReference
+            MemoryContainingChunk = null; // Reference will now point to OriginalReference
         }
 
         public override ValueTask ConsiderUnloadMemoryAsync()
         {
-            ReferencedMemory = null; // Reference will now point to OriginalReference
+            MemoryContainingChunk = null; // Reference will now point to OriginalReference
             return ValueTask.CompletedTask;
         }
 

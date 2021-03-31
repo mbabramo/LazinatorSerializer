@@ -173,7 +173,7 @@ namespace Lazinator.Buffers
                     {
                         if (!chunk.IsLoaded)
                             chunk.LoadMemory();
-                        GetBlobMemoryChunkAndInfo(chunk, totalBytes, i, out Memory<byte> memory, out string revisedPath, out BlobMemoryChunk blobMemoryChunk);
+                        GetBlobMemoryChunkAndInfo(chunk, totalBytes, i, !ContainedInSingleBlob, out Memory<byte> memory, out string revisedPath, out BlobMemoryChunk blobMemoryChunk);
                         if (ContainedInSingleBlob)
                             BlobManager.Append(revisedPath, memory);
                         else if (!blobMemoryChunk.IsPersisted)
@@ -220,7 +220,7 @@ namespace Lazinator.Buffers
                     {
                         if (!chunk.IsLoaded)
                             await chunk.LoadMemoryAsync();
-                        GetBlobMemoryChunkAndInfo(chunk, totalBytes, i, out Memory<byte> memory, out string revisedPath, out BlobMemoryChunk blobMemoryChunk);
+                        GetBlobMemoryChunkAndInfo(chunk, totalBytes, i, !ContainedInSingleBlob, out Memory<byte> memory, out string revisedPath, out BlobMemoryChunk blobMemoryChunk);
                         if (ContainedInSingleBlob)
                             await BlobManager.AppendAsync(revisedPath, memory);
                         else if (!blobMemoryChunk.IsPersisted)
@@ -266,11 +266,11 @@ namespace Lazinator.Buffers
             return chunks;
         }
 
-        private void GetBlobMemoryChunkAndInfo(MemoryChunk chunk, long numBytesWritten, int i, out Memory<byte> memory, out string revisedPath, out BlobMemoryChunk blobMemoryChunk)
+        private void GetBlobMemoryChunkAndInfo(MemoryChunk chunk, long numBytesWritten, int i, bool includeMemoryContainingChunk, out Memory<byte> memory, out string revisedPath, out BlobMemoryChunk blobMemoryChunk)
         {
             MemoryChunkReference reference = chunk.Reference;
             if (chunk.IsLoaded)
-                memory = chunk.Memory;
+                memory = includeMemoryContainingChunk ? chunk.MemoryContainingChunk.Memory : chunk.Memory ;
             else
                 memory = null;
             revisedPath = ContainedInSingleBlob ? BlobPath : GetPathForMemoryChunk(BlobPath, reference.MemoryChunkID);

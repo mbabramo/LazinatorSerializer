@@ -562,7 +562,7 @@ namespace Lazinator.Buffers
             {
                 if (memoryChunkIndexReference.Offset == 0 && memoryChunkIndexReference.Length == memoryChunk.Reference.Length)
                     return memoryChunk;
-                return new MemoryChunk(memoryChunk.ReferencedMemory, new MemoryChunkReference(memoryChunk.Reference.MemoryChunkID, memoryChunk.Reference.Offset + memoryChunkIndexReference.Offset, memoryChunkIndexReference.Length));
+                return new MemoryChunk(memoryChunk.MemoryContainingChunk, new MemoryChunkReference(memoryChunk.Reference.MemoryChunkID, memoryChunk.Reference.Offset + memoryChunkIndexReference.Offset, memoryChunkIndexReference.Length));
             }
             else
             {
@@ -710,7 +710,7 @@ namespace Lazinator.Buffers
             var memoryOwner = MemoryAtIndex(memoryChunkReference.MemoryChunkID);
             if (memoryOwner is not MemoryChunk memoryReference)
                 memoryReference = InitialOwnedMemoryReference;
-            var underlyingChunk = memoryReference.ReferencedMemory.Memory.Slice(memoryChunkReference.Offset, memoryChunkReference.Length);
+            var underlyingChunk = memoryReference.MemoryContainingChunk.Memory.Slice(memoryChunkReference.Offset, memoryChunkReference.Length);
             return underlyingChunk;
         }
 
@@ -783,7 +783,7 @@ namespace Lazinator.Buffers
         {
             foreach (var owner in EnumerateMemoryOwners())
                 if (owner is MemoryChunk memoryChunk)
-                    yield return memoryChunk.ReferencedMemory;
+                    yield return memoryChunk.MemoryContainingChunk;
                 else
                     yield return owner;
         }
