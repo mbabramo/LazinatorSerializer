@@ -853,6 +853,8 @@ namespace Lazinator.Buffers
             for (int i = StartIndex; i < totalItems; i++)
             {
                 var m = MemoryAtIndex(i);
+                if (m is MemoryChunk memoryChunk)
+                    memoryChunk.LoadMemory();
                 int startPositionOrZero;
                 if (i == StartIndex && !includeOutsideOfRange)
                     startPositionOrZero = StartPosition;

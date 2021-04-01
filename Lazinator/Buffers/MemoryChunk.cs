@@ -28,7 +28,7 @@ namespace Lazinator.Buffers
             Reference = reference;
         }
 
-        public Memory<byte> Memory => MemoryContainingChunk.Memory.Slice(Reference.Offset, Reference.Length);
+        public Memory<byte> Memory => MemoryContainingChunk == null ? LazinatorMemory.EmptyMemory : MemoryContainingChunk.Memory.Slice(Reference.Offset, Reference.Length);
 
         public MemoryChunk SliceReferencedMemory(int startIndex, int length) => new MemoryChunk(MemoryContainingChunk, new MemoryChunkReference(Reference.MemoryChunkID, startIndex, length));
 
