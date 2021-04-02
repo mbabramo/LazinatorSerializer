@@ -462,7 +462,7 @@ namespace Lazinator.Core
             if (childStorage.InitialOwnedMemory == null)
                 ThrowHelper.ThrowChildStorageMissingException();
             if (writeReferenceOnly && !childStorage.IsEmpty)
-                writer.InsertReferenceToCompletedMemory(childStorage.StartIndex, childStorage.StartPosition, childStorage.Length);
+                writer.InsertReferenceToCompletedMemory(childStorage.StartIndex, childStorage.Offset, childStorage.Length);
             else
                 childStorage.WriteToBinaryBuffer(ref writer);
             return childStorage;
@@ -483,7 +483,7 @@ namespace Lazinator.Core
             if (childStorage.InitialOwnedMemory == null)
                 ThrowHelper.ThrowChildStorageMissingException();
             if (writeReferenceOnly && !childStorage.IsEmpty)
-                writer.InsertReferenceToCompletedMemory(childStorage.StartIndex, childStorage.StartPosition, childStorage.Length);
+                writer.InsertReferenceToCompletedMemory(childStorage.StartIndex, childStorage.Offset, childStorage.Length);
             else
                 await childStorage.WriteToBinaryBufferAsync(writer);
             return childStorage;
