@@ -634,7 +634,8 @@ namespace Lazinator.Buffers
                 int numBytesThisChunk = memoryReference.ReferenceForLoading.Length;
                 if (numBytesRemaining < numBytesThisChunk)
                     numBytesThisChunk = (int) numBytesRemaining;
-                yield return new MemoryChunkReference(memoryReference.ReferenceOnceLoaded.MemoryChunkID, memoryReference.ReferenceOnceLoaded.Offset + positionWithinMemoryChunk, numBytesThisChunk);                 numBytesRemaining -= numBytesThisChunk;
+                yield return new MemoryChunkReference(memoryReference.ReferenceForLoading.MemoryChunkID, memoryReference.ReferenceForLoading.Offset + positionWithinMemoryChunk, numBytesThisChunk);
+                numBytesRemaining -= numBytesThisChunk;
                 memoryChunkIndex++;
                 positionWithinMemoryChunk = 0;
             }
