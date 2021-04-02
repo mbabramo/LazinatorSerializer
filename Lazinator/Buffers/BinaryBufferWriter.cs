@@ -288,7 +288,7 @@ namespace Lazinator.Buffers
             {
                 if (i == 1)
                     moreMemory = new List<MemoryChunk>();
-                MemoryChunkReference reference = RecycledMemoryChunkReferences[i]; Debug;
+                MemoryChunkReference reference = RecycledMemoryChunkReferences[i];
                 length += reference.Length;
                 MemoryChunk memoryChunk = byID[reference.MemoryChunkID];
                 MemoryChunk resliced = memoryChunk.SliceReferenceForLoading(reference.Offset, reference.Length);

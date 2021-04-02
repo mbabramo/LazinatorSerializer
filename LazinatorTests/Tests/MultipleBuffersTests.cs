@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using LazinatorCollections.Tree;
 using LazinatorTests.Utilities;
+using System.Buffers;
 
 namespace LazinatorTests.Tests
 {
@@ -426,6 +427,54 @@ namespace LazinatorTests.Tests
             var tree4 = new LazinatorBinaryTree<WByte>(afterChange);
             tree4.Root.Data.WrappedValue.Should().Be((byte)2);
             tree4.Root.RightNode.Data.WrappedValue.Should().Be((byte)3);
+        }
+
+        [Theory]
+        [InlineData(true, true, true)]
+        [InlineData(true, true, false)]
+        [InlineData(true, false, true)]
+        [InlineData(true, false, false)]
+        [InlineData(false, true, true)]
+        [InlineData(false, true, false)]
+        [InlineData(false, false, true)]
+        [InlineData(false, false, false)]
+        public void PersistentIndexTest(bool useFile, bool containedInSingleBlob, bool recreateIndex)
+        {
+            List<byte> fullSequence = new List<byte>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            IMemoryOwner<byte> initialBytes = new SimpleMemoryOwner<byte>(new byte[3] { 1, 2, 3 });
+            IMemoryOwner<byte> nextBytes = new SimpleMemoryOwner<byte>(new byte[3] { 4, 5, 6 });
+            MemoryChunk nextBytesAsChunk = new MemoryChunk(nextBytes, new MemoryChunkReference(1, 0, 3));
+            IMemoryOwner<byte> lastBytes = new SimpleMemoryOwner<byte>(new byte[4] { 7, 8, 9, 10 });
+            MemoryChunk lastBytesAsChunk = new MemoryChunk(lastBytes, new MemoryChunkReference(2, 0, 4));
+            LazinatorMemory initialMemory = new LazinatorMemory(initialBytes);
+            LazinatorMemory memory1 = initialMemory.WithAppendedChunk(nextBytesAsChunk).WithAppendedChunk(lastBytesAsChunk);
+
+            IBlobManager blobManager = useFile ? new global::Lazinator.Buffers.FileBlobManager() : new global::LazinatorTests.Utilities.InMemoryBlobStorage(); 
+            string fullPath = GetPathForIndexAndBlobs(useFile, true);
+            if (fullPath == null)
+                return;
+            PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob);
+            index.PersistLazinatorMemory(memory1);
+
+            if (recreateIndex)
+                index = PersistentIndex.ReadFromBlobWithIntPrefix(blobManager, fullPath);
+            var memory2 = index.GetLazinatorMemory();
+            var memory2List = memory2.GetConsolidatedMemory().ToArray().ToList();
+            memory2List.SequenceEqual(fullSequence).Should().BeTrue();
+
+            BinaryBufferWriter writer = new BinaryBufferWriter(0, memory2);
+            writer.Write((byte)11);
+            writer.Write((byte)12);
+            writer.InsertReferenceToCompletedMemory(2, 1, 2); // 8, 9
+            writer.InsertReferenceToCompletedMemory(0, 0, 3); // 1, 2, 3
+            writer.InsertReferenceToCompletedMemory(1, 1, 1); // 5
+            writer.InsertReferenceToCompletedMemory(2, 0, 2); // 7, 8
+            writer.Write((byte)13);
+            var memory3 = writer.LazinatorMemory;
+            var memory3List = memory3.GetConsolidatedMemory().ToArray().ToList();
+            List<byte> expected = new List<byte>() { 11, 12, 8, 9, 1, 2, 3, 5, 7, 8, 13 };
+            memory3List.SequenceEqual(expected).Should().BeTrue();
+
         }
 
         [Theory]

@@ -14,17 +14,31 @@ namespace Lazinator.Buffers
 
         private MemoryChunkReference _ReferenceForLoading;
         public override MemoryChunkReference ReferenceForLoading => _ReferenceForLoading;
+        public int MemoryChunkID => ReferenceForLoading.MemoryChunkID;
+        public int Length => ReferenceForLoading.Length;
         public override MemoryChunkReference ReferenceOnceLoaded
         {
-            get => new MemoryChunkReference(ReferenceForLoading.MemoryChunkID, 0, MemoryContainingChunk.Memory.Length);
+            get => new MemoryChunkReference(MemoryChunkID, 0, Length);
             set => base.ReferenceOnceLoaded = value;
+        }
+
+        public bool LoadedMemoryIsLarger => MemoryContainingChunk != null && MemoryContainingChunk.Memory.Length > ReferenceForLoading.Length;
+
+        public override Memory<byte> Memory
+        {
+            get
+            {
+                if (MemoryContainingChunk == null)
+                    return LazinatorMemory.EmptyMemory;
+                if (LoadedMemoryIsLarger)
+                    return MemoryContainingChunk.Memory.Slice(ReferenceForLoading.Offset, ReferenceForLoading.Length);
+                return MemoryContainingChunk.Memory;
+            }
         }
 
         /// <summary>
         /// Creates a reference to an existing file other than the index file. This is called internally by GetAdditionalReferences(Async), after a call to MemoryReferenceInFile.
         /// </summary>
-        /// <param name="path">The path, including a number referring to the specific file</param>
-        /// <param name="length"></param>
         public BlobMemoryChunk(string path, IBlobManager blobManager, MemoryChunkReference reference, IMemoryOwner<byte> memoryContainingChunk)
         {
             BlobPath = path;
