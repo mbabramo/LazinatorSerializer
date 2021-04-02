@@ -64,21 +64,6 @@ namespace Lazinator.Buffers
             CurrentBuffer = initialBuffer;
         }
 
-        // DEBUG -- delete this
-        public ExpandableBytes TruncateTo(int length)
-        {
-            LazinatorShouldNotReturnToPool = true; // now that there are two copies, we don't want the original to cause the memory to be returned to the pool
-            var returnVal = new ExpandableBytes()
-            {
-                LazinatorShouldNotReturnToPool = LazinatorShouldNotReturnToPool,
-                CurrentBuffer = CurrentBuffer,
-                UsedBytesInCurrentBuffer = length,
-                Disposed = Disposed,
-                AllocationID = AllocationID
-            };
-            return returnVal;
-        }
-
         public void EnsureMinBufferSize(int desiredBufferSize = 0)
         {
             if (desiredBufferSize <= 0)

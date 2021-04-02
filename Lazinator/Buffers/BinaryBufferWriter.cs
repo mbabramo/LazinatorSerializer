@@ -258,7 +258,7 @@ namespace Lazinator.Buffers
             RecordLastActiveMemoryChunkReference();
             IEnumerable<MemoryChunkReference> segmentsToAdd = CompletedMemory.EnumerateMemoryChunkReferences(memoryChunkIndex, startPosition, numBytes).ToList(); // DEBUG -- remove ToList()
             MemoryChunkReference.ExtendMemoryChunkReferencesList(RecycledMemoryChunkReferences, segmentsToAdd);
-            Debug.WriteLine($"Reference to completed memory added. Last reference is {RecycledMemoryChunkReferences.Last()}"); // DEBUG
+            Debug.WriteLine($"Reference to completed memory added. References are {String.Join(", ", RecycledMemoryChunkReferences)}"); // DEBUG
         }
 
         /// <summary>
@@ -288,10 +288,10 @@ namespace Lazinator.Buffers
             {
                 if (i == 1)
                     moreMemory = new List<MemoryChunk>();
-                MemoryChunkReference reference = RecycledMemoryChunkReferences[i];
+                MemoryChunkReference reference = RecycledMemoryChunkReferences[i]; Debug;
                 length += reference.Length;
                 MemoryChunk memoryChunk = byID[reference.MemoryChunkID];
-                MemoryChunk resliced = memoryChunk.SliceReferencedMemory(reference.Offset, reference.Length);
+                MemoryChunk resliced = memoryChunk.SliceReferenceForLoading(reference.Offset, reference.Length);
                 if (i == 0)
                     initialMemoryChunk = resliced;
                 else

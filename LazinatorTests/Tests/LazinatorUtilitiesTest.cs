@@ -129,7 +129,7 @@ namespace LazinatorTests.Tests
                     Debug.WriteLine($"Overall referenced bytes {String.Join(",", referencedBytes)}"); // DEBUG
 
                 }
-                int totalBytesReferredTo = memoryChunks.Sum(x => x.Reference.Length);
+                int totalBytesReferredTo = memoryChunks.Sum(x => x.ReferenceOnceLoaded.Length);
                 referencedBytes.Count().Should().Equals(totalBytesReferredTo);
                 LazinatorMemory cobbledMemory = new LazinatorMemory(memoryChunks.First(), memoryChunks.Skip(1).ToList(), 0, 0, totalBytesReferredTo);
 

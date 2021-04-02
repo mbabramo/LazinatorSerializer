@@ -9,9 +9,19 @@ namespace Lazinator.Buffers
 {
     public class MemoryChunk : IMemoryOwner<byte>
     {
+        static int DEBUGCount = 0;
+        public int DEBUGCount2 = 0;
         public IMemoryOwner<byte> MemoryContainingChunk { get; set; }
 
-        public virtual MemoryChunkReference Reference { get; set; }
+        /// <summary>
+        /// A reference to the memory being referred to once the memory is loaded.
+        /// </summary>
+        public virtual MemoryChunkReference ReferenceOnceLoaded { get; set; }
+
+        /// <summary>
+        /// A reference to the memory to be loaded. 
+        /// </summary>
+        public virtual MemoryChunkReference ReferenceForLoading => ReferenceOnceLoaded;
 
         public bool IsLoaded => MemoryContainingChunk != null;
 
@@ -24,15 +34,18 @@ namespace Lazinator.Buffers
 
         public MemoryChunk(IMemoryOwner<byte> referencedMemory, MemoryChunkReference reference)
         {
+            DEBUGCount2 = DEBUGCount++;
+            if (DEBUGCount2 == 6)
+            {
+                var DEBUGSDF = 23;
+            }
             MemoryContainingChunk = referencedMemory;
-            Reference = reference;
+            ReferenceOnceLoaded = reference;
         }
 
-        public Memory<byte> Memory => MemoryContainingChunk == null ? LazinatorMemory.EmptyMemory : MemoryContainingChunk.Memory.Slice(Reference.Offset, Reference.Length);
+        public Memory<byte> Memory => MemoryContainingChunk == null ? LazinatorMemory.EmptyMemory : MemoryContainingChunk.Memory.Slice(ReferenceOnceLoaded.Offset, ReferenceOnceLoaded.Length);
 
-        public MemoryChunk SliceReferencedMemory(int startIndex, int length) => new MemoryChunk(MemoryContainingChunk, new MemoryChunkReference(Reference.MemoryChunkID, startIndex, length));
-
-        public MemoryChunk Slice(int startIndex, int length) => new MemoryChunk(MemoryContainingChunk, new MemoryChunkReference(Reference.MemoryChunkID, Reference.Offset + startIndex, length));
+        public virtual MemoryChunk SliceReferenceForLoading(int startIndexRelativeToBroaderMemory, int length) => new MemoryChunk(MemoryContainingChunk, new MemoryChunkReference(ReferenceForLoading.MemoryChunkID, startIndexRelativeToBroaderMemory, length));
 
         /// <summary>
         /// This method should be overridden for a MemoryReference subclass that loads memory lazily. The subclass method
@@ -41,6 +54,8 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public virtual void LoadMemory()
         {
+            if (IsLoaded)
+                return;
             var task = Task.Run(async () => await LoadMemoryAsync());
             task.Wait();
         }
@@ -72,22 +87,6 @@ namespace Lazinator.Buffers
         public virtual ValueTask ConsiderUnloadMemoryAsync()
         {
             return ValueTask.CompletedTask;
-        }
-
-        public virtual Memory<byte> GetMemory()
-        {
-            if (!IsLoaded)
-                LoadMemory();
-
-            return Memory;
-        }
-
-        public virtual async ValueTask<Memory<byte>> GetMemoryAsync()
-        {
-            if (!IsLoaded)
-                await LoadMemoryAsync();
-
-            return Memory;
         }
 
         public void Dispose()

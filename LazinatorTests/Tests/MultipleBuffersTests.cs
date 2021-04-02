@@ -458,7 +458,7 @@ namespace LazinatorTests.Tests
                     index = PersistentIndex.ReadFromBlobWithIntPrefix(blobManager, fullPath);
                 var revisedMemory = index.GetLazinatorMemory();
 
-                var DEBUG2 = String.Join(",", multipleBufferResult.GetConsolidatedMemory().ToArray());
+                var DEBUG2 = String.Join(",", revisedMemory.GetConsolidatedMemory().ToArray());
                 Debug.WriteLine(DEBUG);
                 Debug.WriteLine(DEBUG2);
 
