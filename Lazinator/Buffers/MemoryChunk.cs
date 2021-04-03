@@ -9,9 +9,15 @@ namespace Lazinator.Buffers
 {
     public class MemoryChunk : IMemoryOwner<byte>
     {
+        public int DEBUGQ;
         static int DEBUGCount = 0;
         public int DEBUGCount2 = 0;
-        public IMemoryOwner<byte> MemoryContainingChunk { get; set; }
+        private IMemoryOwner<byte> DEBUGJKL;
+        public IMemoryOwner<byte> MemoryContainingChunk 
+        {
+            get => DEBUGJKL;
+            set => DEBUGJKL = value;
+        }
 
         /// <summary>
         /// A reference to the memory being referred to once the memory is loaded.
@@ -45,7 +51,7 @@ namespace Lazinator.Buffers
 
         public virtual Memory<byte> Memory => MemoryContainingChunk == null ? LazinatorMemory.EmptyMemory : MemoryContainingChunk.Memory.Slice(ReferenceOnceLoaded.Offset, ReferenceOnceLoaded.Length);
 
-        public virtual MemoryChunk SliceReferenceForLoading(int startIndexRelativeToBroaderMemory, int length) => new MemoryChunk(MemoryContainingChunk, new MemoryChunkReference(ReferenceForLoading.MemoryChunkID, startIndexRelativeToBroaderMemory, length));
+        public virtual MemoryChunk Slice(int startPosition, int length) => new MemoryChunk(MemoryContainingChunk, new MemoryChunkReference(ReferenceForLoading.MemoryChunkID, startPosition, length));
 
         /// <summary>
         /// This method should be overridden for a MemoryReference subclass that loads memory lazily. The subclass method

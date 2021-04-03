@@ -291,7 +291,7 @@ namespace Lazinator.Buffers
                 MemoryChunkReference reference = RecycledMemoryChunkReferences[i];
                 length += reference.Length;
                 MemoryChunk memoryChunk = byID[reference.MemoryChunkID];
-                MemoryChunk resliced = memoryChunk.SliceReferenceForLoading(reference.Offset, reference.Length);
+                MemoryChunk resliced = memoryChunk.Slice(reference.Offset, reference.Length);
                 if (i == 0)
                     initialMemoryChunk = resliced;
                 else
