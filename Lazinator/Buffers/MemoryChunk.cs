@@ -9,27 +9,14 @@ namespace Lazinator.Buffers
 {
     public class MemoryChunk : IMemoryOwner<byte>
     {
-        public int DEBUGQ;
-        static int DEBUGCount = 0;
-        public int DEBUGCount2 = 0;
-        private IMemoryOwner<byte> DEBUGJKL;
-        public IMemoryOwner<byte> MemoryContainingChunk 
-        {
-            get => DEBUGJKL;
-            set => DEBUGJKL = value;
-        }
+        public IMemoryOwner<byte> MemoryAsLoaded { get; set; }
 
-        /// <summary>
-        /// A reference to the memory being referred to once the memory is loaded.
-        /// </summary>
-        public virtual MemoryChunkReference ReferenceOnceLoaded { get; set; }
+        public MemoryChunkReference Reference { get; set; }
 
-        /// <summary>
-        /// A reference to the memory to be loaded. 
-        /// </summary>
-        public virtual MemoryChunkReference ReferenceForLoading => ReferenceOnceLoaded;
+        public int MemoryChunkID => Reference.MemoryChunkID;
+        public int Length => Reference.FinalLength;
 
-        public bool IsLoaded => MemoryContainingChunk != null;
+        public bool IsLoaded => MemoryAsLoaded != null;
 
         public virtual bool IsPersisted { get; set; }
 
@@ -40,18 +27,38 @@ namespace Lazinator.Buffers
 
         public MemoryChunk(IMemoryOwner<byte> referencedMemory, MemoryChunkReference reference)
         {
-            DEBUGCount2 = DEBUGCount++;
-            if (DEBUGCount2 == 6)
-            {
-                var DEBUGSDF = 23;
-            }
-            MemoryContainingChunk = referencedMemory;
-            ReferenceOnceLoaded = reference;
+            MemoryAsLoaded = referencedMemory;
+            Reference = reference;
         }
 
-        public virtual Memory<byte> Memory => MemoryContainingChunk == null ? LazinatorMemory.EmptyMemory : MemoryContainingChunk.Memory.Slice(ReferenceOnceLoaded.OffsetForLoading, ReferenceOnceLoaded.LengthForLoading);
+        /// <summary>
+        /// Returns the memory being referred to, taking into account the additional offset to be applied after loading.
+        /// If the memory hasn't been loaded, empty memory will be returned.
+        /// </summary>
+        public virtual Memory<byte> Memory => MemoryAsLoaded == null ? LazinatorMemory.EmptyMemory : MemoryAsLoaded.Memory.Slice(Reference.AdditionalOffset, Reference.FinalLength);
 
-        public virtual MemoryChunk Slice(int startPosition, int length) => new MemoryChunk(MemoryContainingChunk, new MemoryChunkReference(ReferenceForLoading.MemoryChunkID, startPosition, length));
+        /// <summary>
+        /// Slices the memory being referred to. The information for loading remains the same.
+        /// </summary>
+        /// <param name="offset">An additional offset to be applied, in addition to the existing additional offset</param>
+        /// <param name="length">The final length of the slice</param>
+        /// <returns></returns>
+        public virtual MemoryChunk Slice(int offset, int length) => new MemoryChunk(MemoryAsLoaded, Reference.Slice(offset, length));
+
+        /// <summary>
+        /// Slices the memory chunk relative to the memory as originally loaded. The original additional offset and final length are ignored.
+        /// </summary>
+        /// <param name="replacementAdditionalOffset"></param>
+        /// <param name="finalLength"></param>
+        /// <returns></returns>
+        public virtual MemoryChunk Resliced(int replacementAdditionalOffset, int finalLength) => new MemoryChunk(MemoryAsLoaded, Reference.Resliced(replacementAdditionalOffset, finalLength));
+
+        /// <summary>
+        /// Returns a MemoryChunk with the specified reference.
+        /// </summary>
+        /// <param name="replacementReference"></param>
+        /// <returns></returns>
+        public virtual MemoryChunk WithReference(MemoryChunkReference replacementReference) => new MemoryChunk(MemoryAsLoaded, replacementReference);
 
         /// <summary>
         /// This method should be overridden for a MemoryReference subclass that loads memory lazily. The subclass method

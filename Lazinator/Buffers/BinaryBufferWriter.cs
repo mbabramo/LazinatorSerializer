@@ -158,7 +158,7 @@ namespace Lazinator.Buffers
                 }
                 else
                 {
-                    return ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling + RecycledMemoryChunkReferences.Sum(x => x.LengthForLoading);
+                    return ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling + RecycledMemoryChunkReferences.Sum(x => x.LengthAsLoaded);
                 }
             }
         }
@@ -289,9 +289,9 @@ namespace Lazinator.Buffers
                 if (i == 1)
                     moreMemory = new List<MemoryChunk>();
                 MemoryChunkReference reference = RecycledMemoryChunkReferences[i];
-                length += reference.LengthForLoading;
+                length += reference.LengthAsLoaded;
                 MemoryChunk memoryChunk = byID[reference.MemoryChunkID];
-                MemoryChunk resliced = memoryChunk.Slice(reference.OffsetForLoading, reference.LengthForLoading);
+                MemoryChunk resliced = memoryChunk.Slice(reference.OffsetForLoading, reference.LengthAsLoaded);
                 if (i == 0)
                     initialMemoryChunk = resliced;
                 else
@@ -306,8 +306,39 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         internal Span<byte> GetLengthsSpanWithinRecycled()
         {
-            MemoryChunkReference? lengthsSpanMemoryChunkReference = null;
-            long lengthPositionRemaining = LengthsPosition;
+            MemoryChunkReference? lengthsSpanMemoryChunkReference;
+            long lengthPositionRemaining;
+            TryToGetReferenceToLengthSpanWithinRecycled(out lengthsSpanMemoryChunkReference, out lengthPositionRemaining);
+            if (lengthsSpanMemoryChunkReference is MemoryChunkReference nonNullLengthsSpanReference)
+            {
+                // We need to find the MemoryChunkID.
+                int memoryChunkID = nonNullLengthsSpanReference.MemoryChunkID;
+                if (GetActiveMemoryChunkID() == memoryChunkID)
+                {
+                    return ActiveMemoryWritten.Slice(nonNullLengthsSpanReference.AdditionalOffset).Span;
+                }
+                else
+                {
+                    IMemoryOwner<byte> memoryOwner = CompletedMemory.GetFirstMemoryChunkWithID(memoryChunkID);
+                    if (memoryOwner is MemoryChunk memoryChunk)
+                    {
+                        memoryChunk.LoadMemory();
+                        var resliced = memoryChunk.WithReference(nonNullLengthsSpanReference);
+                    }
+                    return memoryOwner.Memory.Slice(nonNullLengthsSpanReference.AdditionalOffset).Span;
+                }
+            }
+            else
+            {
+                // We've exhausted the recycled memory chunk references. So, it must be within the non-recycled portion of active memory.
+                return ActiveMemory.Memory.Slice((int)(NumActiveMemoryBytesAddedToRecycling + lengthPositionRemaining)).Span;
+            }
+        }
+
+        private readonly void TryToGetReferenceToLengthSpanWithinRecycled(out MemoryChunkReference? lengthsSpanMemoryChunkReference, out long lengthPositionRemaining)
+        {
+            lengthsSpanMemoryChunkReference = null;
+            lengthPositionRemaining = LengthsPosition;
             if (RecycledMemoryChunkReferences.Any())
             {
                 int i = 0;
@@ -315,33 +346,14 @@ namespace Lazinator.Buffers
                 while (lengthPositionRemaining > 0 && numRecycledMemoryChunkReferencesCount > i)
                 {
                     MemoryChunkReference reference = RecycledMemoryChunkReferences[i];
-                    if (lengthPositionRemaining < reference.LengthForLoading)
+                    if (lengthPositionRemaining < reference.FinalLength)
                     {
-                        lengthsSpanMemoryChunkReference = new MemoryChunkReference(reference.MemoryChunkID, (int)(reference.OffsetForLoading + lengthPositionRemaining), (int)(reference.LengthForLoading - lengthPositionRemaining));
+                        lengthsSpanMemoryChunkReference = reference.Slice((int)lengthPositionRemaining, sizeof(int));
                         lengthPositionRemaining = 0;
                     }
                     else
-                        lengthPositionRemaining -= reference.LengthForLoading;
+                        lengthPositionRemaining -= reference.FinalLength;
                     i++;
-                }
-            }
-            if (lengthsSpanMemoryChunkReference == null)
-            {
-                // We've exhausted the recycled memory chunk references. So, it must be within the non-recycled portion of active memory.
-                return ActiveMemory.Memory.Slice((int)(NumActiveMemoryBytesAddedToRecycling + lengthPositionRemaining)).Span;
-            }
-            else
-            {
-                // We need to find the MemoryChunkID.
-                int memoryChunkID = lengthsSpanMemoryChunkReference.Value.MemoryChunkID;
-                if (GetActiveMemoryChunkID() == memoryChunkID)
-                {
-                    return ActiveMemoryWritten.Slice(lengthsSpanMemoryChunkReference.Value.OffsetForLoading).Span;
-                }
-                else
-                {
-                    IMemoryOwner<byte> memoryOwner = CompletedMemory.GetMemoryChunkWithID(memoryChunkID);
-                    return memoryOwner.Memory.Slice(lengthsSpanMemoryChunkReference.Value.OffsetForLoading).Span;
                 }
             }
         }

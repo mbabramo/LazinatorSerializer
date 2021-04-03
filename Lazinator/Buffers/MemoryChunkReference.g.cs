@@ -71,7 +71,7 @@ namespace Lazinator.Buffers
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         int _LengthForLoading;
-        public int LengthForLoading
+        public int LengthAsLoaded
         {
             [DebuggerStepThrough]
             get
@@ -319,7 +319,7 @@ namespace Lazinator.Buffers
             MemoryChunkReference typedClone = (MemoryChunkReference) clone;
             typedClone.AdditionalOffset = AdditionalOffset;
             typedClone.FinalLength = FinalLength;
-            typedClone.LengthForLoading = LengthForLoading;
+            typedClone.LengthAsLoaded = LengthAsLoaded;
             typedClone.MemoryChunkID = MemoryChunkID;
             typedClone.OffsetForLoading = OffsetForLoading;
             
@@ -355,7 +355,7 @@ namespace Lazinator.Buffers
         {
             yield return ("AdditionalOffset", (object)AdditionalOffset);
             yield return ("FinalLength", (object)FinalLength);
-            yield return ("LengthForLoading", (object)LengthForLoading);
+            yield return ("LengthForLoading", (object)LengthAsLoaded);
             yield return ("MemoryChunkID", (object)MemoryChunkID);
             yield return ("OffsetForLoading", (object)OffsetForLoading);
             yield break;
