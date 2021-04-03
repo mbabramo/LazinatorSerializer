@@ -158,7 +158,7 @@ namespace Lazinator.Buffers
                 }
                 else
                 {
-                    return ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling + RecycledMemoryChunkReferences.Sum(x => x.Length);
+                    return ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling + RecycledMemoryChunkReferences.Sum(x => x.LengthForLoading);
                 }
             }
         }
@@ -289,9 +289,9 @@ namespace Lazinator.Buffers
                 if (i == 1)
                     moreMemory = new List<MemoryChunk>();
                 MemoryChunkReference reference = RecycledMemoryChunkReferences[i];
-                length += reference.Length;
+                length += reference.LengthForLoading;
                 MemoryChunk memoryChunk = byID[reference.MemoryChunkID];
-                MemoryChunk resliced = memoryChunk.Slice(reference.Offset, reference.Length);
+                MemoryChunk resliced = memoryChunk.Slice(reference.OffsetForLoading, reference.LengthForLoading);
                 if (i == 0)
                     initialMemoryChunk = resliced;
                 else
@@ -315,13 +315,13 @@ namespace Lazinator.Buffers
                 while (lengthPositionRemaining > 0 && numRecycledMemoryChunkReferencesCount > i)
                 {
                     MemoryChunkReference reference = RecycledMemoryChunkReferences[i];
-                    if (lengthPositionRemaining < reference.Length)
+                    if (lengthPositionRemaining < reference.LengthForLoading)
                     {
-                        lengthsSpanMemoryChunkReference = new MemoryChunkReference(reference.MemoryChunkID, (int)(reference.Offset + lengthPositionRemaining), (int)(reference.Length - lengthPositionRemaining));
+                        lengthsSpanMemoryChunkReference = new MemoryChunkReference(reference.MemoryChunkID, (int)(reference.OffsetForLoading + lengthPositionRemaining), (int)(reference.LengthForLoading - lengthPositionRemaining));
                         lengthPositionRemaining = 0;
                     }
                     else
-                        lengthPositionRemaining -= reference.Length;
+                        lengthPositionRemaining -= reference.LengthForLoading;
                     i++;
                 }
             }
@@ -336,12 +336,12 @@ namespace Lazinator.Buffers
                 int memoryChunkID = lengthsSpanMemoryChunkReference.Value.MemoryChunkID;
                 if (GetActiveMemoryChunkID() == memoryChunkID)
                 {
-                    return ActiveMemoryWritten.Slice(lengthsSpanMemoryChunkReference.Value.Offset).Span;
+                    return ActiveMemoryWritten.Slice(lengthsSpanMemoryChunkReference.Value.OffsetForLoading).Span;
                 }
                 else
                 {
                     IMemoryOwner<byte> memoryOwner = CompletedMemory.GetMemoryChunkWithID(memoryChunkID);
-                    return memoryOwner.Memory.Slice(lengthsSpanMemoryChunkReference.Value.Offset).Span;
+                    return memoryOwner.Memory.Slice(lengthsSpanMemoryChunkReference.Value.OffsetForLoading).Span;
                 }
             }
         }

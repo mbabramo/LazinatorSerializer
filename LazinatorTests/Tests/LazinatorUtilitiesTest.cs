@@ -129,7 +129,7 @@ namespace LazinatorTests.Tests
                     Debug.WriteLine($"Overall referenced bytes {String.Join(",", referencedBytes)}"); // DEBUG
 
                 }
-                int totalBytesReferredTo = memoryChunks.Sum(x => x.ReferenceOnceLoaded.Length);
+                int totalBytesReferredTo = memoryChunks.Sum(x => x.ReferenceOnceLoaded.LengthForLoading);
                 referencedBytes.Count().Should().Equals(totalBytesReferredTo);
                 LazinatorMemory cobbledMemory = new LazinatorMemory(memoryChunks.First(), memoryChunks.Skip(1).ToList(), 0, 0, totalBytesReferredTo);
 
@@ -140,7 +140,7 @@ namespace LazinatorTests.Tests
                 // Debug.WriteLine($"startingPositionWithinLazinatorMemorySubrange {startingPositionWithinLazinatorMemorySubrange } numBytesWithinLazinatorMemorySubrange {numBytesWithinLazinatorMemorySubrange}");
 
                 List<MemoryChunkReference> memoryChunkReferences = cobbledMemory.EnumerateMemoryChunkReferences(startingPositionWithinLazinatorMemorySubrange, numBytesWithinLazinatorMemorySubrange).ToList();
-                memoryChunkReferences.Sum(x => x.Length).Should().Equals(numBytesWithinLazinatorMemorySubrange);
+                memoryChunkReferences.Sum(x => x.LengthForLoading).Should().Equals(numBytesWithinLazinatorMemorySubrange);
                 List<byte> bytesFound = new List<byte>();
                 foreach (var memoryChunkReference in memoryChunkReferences)
                     bytesFound.AddRange(overallLazinatorMemory.GetMemoryAtMemoryChunkReference(memoryChunkReference).ToArray()); // The byte segments are indexes of the OVERALL memory, not of the cobbled-together memory. The goal is to have enough information to create the next generation of cobbled-together memory.

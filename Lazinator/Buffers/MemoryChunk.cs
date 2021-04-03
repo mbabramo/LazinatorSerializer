@@ -49,7 +49,7 @@ namespace Lazinator.Buffers
             ReferenceOnceLoaded = reference;
         }
 
-        public virtual Memory<byte> Memory => MemoryContainingChunk == null ? LazinatorMemory.EmptyMemory : MemoryContainingChunk.Memory.Slice(ReferenceOnceLoaded.Offset, ReferenceOnceLoaded.Length);
+        public virtual Memory<byte> Memory => MemoryContainingChunk == null ? LazinatorMemory.EmptyMemory : MemoryContainingChunk.Memory.Slice(ReferenceOnceLoaded.OffsetForLoading, ReferenceOnceLoaded.LengthForLoading);
 
         public virtual MemoryChunk Slice(int startPosition, int length) => new MemoryChunk(MemoryContainingChunk, new MemoryChunkReference(ReferenceForLoading.MemoryChunkID, startPosition, length));
 

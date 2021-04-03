@@ -16,7 +16,7 @@ namespace Lazinator.Buffers
         private bool MemoryAlreadyTruncated;
         public override MemoryChunkReference ReferenceForLoading => LoadingReference;
         public int MemoryChunkID => LoadingReference.MemoryChunkID;
-        public int Length => LoadingReference.Length;
+        public int Length => LoadingReference.LengthForLoading;
         public override MemoryChunkReference ReferenceOnceLoaded
         {
             get => new MemoryChunkReference(MemoryChunkID, 0, Length);
@@ -31,7 +31,7 @@ namespace Lazinator.Buffers
                     return LazinatorMemory.EmptyMemory;
                 if (MemoryAlreadyTruncated)
                     return MemoryContainingChunk.Memory;
-                return MemoryContainingChunk.Memory.Slice(ReferenceForLoading.Offset, ReferenceForLoading.Length);
+                return MemoryContainingChunk.Memory.Slice(ReferenceForLoading.OffsetForLoading, ReferenceForLoading.LengthForLoading);
             }
         }
 
@@ -59,8 +59,8 @@ namespace Lazinator.Buffers
             if (MemoryAlreadyTruncated)
                 memoryOwner = new SimpleMemoryOwner<byte>(MemoryContainingChunk.Memory.Slice(startPosition, length));
             else
-                memoryOwner = new SimpleMemoryOwner<byte>(MemoryContainingChunk.Memory.Slice(startPosition + ReferenceForLoading.Offset, length));
-            var revisedReferenceForLoading = new MemoryChunkReference(ReferenceForLoading.MemoryChunkID, ReferenceForLoading.Offset + startPosition, length);
+                memoryOwner = new SimpleMemoryOwner<byte>(MemoryContainingChunk.Memory.Slice(startPosition + ReferenceForLoading.OffsetForLoading, length));
+            var revisedReferenceForLoading = new MemoryChunkReference(ReferenceForLoading.MemoryChunkID, ReferenceForLoading.OffsetForLoading + startPosition, length);
             return new BlobMemoryChunk(BlobPath, BlobManager, revisedReferenceForLoading, memoryOwner, true);
         }
 
@@ -70,7 +70,7 @@ namespace Lazinator.Buffers
         {
             if (IsLoaded)
                 return;
-            Memory<byte> bytes = BlobManager.Read(BlobPath, ReferenceForLoading.Offset, ReferenceForLoading.Length);
+            Memory<byte> bytes = BlobManager.Read(BlobPath, ReferenceForLoading.OffsetForLoading, ReferenceForLoading.LengthForLoading);
             // DEBUG -- what we really need to do here (and in file manager) is cache this in the blob manager. That way, there is just one memory blob for a memory chunk, even if we have references to many pieces of that chunk. Then, it can be unloaded or not. 
             MemoryContainingChunk = new SimpleMemoryOwner<byte>(bytes);
             MemoryAlreadyTruncated = true;
@@ -80,7 +80,7 @@ namespace Lazinator.Buffers
         {
             if (IsLoaded)
                 return;
-            Memory<byte> bytes = await BlobManager.ReadAsync(BlobPath, ReferenceForLoading.Offset, ReferenceForLoading.Length);
+            Memory<byte> bytes = await BlobManager.ReadAsync(BlobPath, ReferenceForLoading.OffsetForLoading, ReferenceForLoading.LengthForLoading);
             MemoryContainingChunk = new SimpleMemoryOwner<byte>(bytes);
             MemoryAlreadyTruncated = true;
         }

@@ -11,16 +11,17 @@ namespace Lazinator.Buffers
     /// </summary>
     public partial struct MemoryChunkReference : IMemoryChunkReference
     {
-        public MemoryChunkReference(int memoryChunkID, int offset, int length) : this()
+
+        public MemoryChunkReference(int memoryChunkID, int offsetForLoading, int lengthForLoading) : this()
         {
             MemoryChunkID = memoryChunkID;
-            Offset = offset;
-            Length = length;
+            OffsetForLoading = offsetForLoading;
+            LengthForLoading = lengthForLoading;
         }
 
         public override string ToString()
         {
-            return $"MemoryChunkID: {MemoryChunkID}; Offset: {Offset}; Length: {Length}";
+            return $"MemoryChunkID: {MemoryChunkID}; Offset: {OffsetForLoading}; Length: {LengthForLoading}";
         }
 
         /// <summary>
@@ -34,9 +35,9 @@ namespace Lazinator.Buffers
             if (memoryChunkReferences.Any())
             {
                 MemoryChunkReference last = memoryChunkReferences.Last();
-                if (newSegment.MemoryChunkID == last.MemoryChunkID && newSegment.Offset == last.Offset + last.Length)
+                if (newSegment.MemoryChunkID == last.MemoryChunkID && newSegment.OffsetForLoading == last.OffsetForLoading + last.LengthForLoading)
                 {
-                    last.Length += newSegment.Length;
+                    last.LengthForLoading += newSegment.LengthForLoading;
                     return;
                 }
             }

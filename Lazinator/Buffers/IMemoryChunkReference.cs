@@ -6,7 +6,9 @@ namespace Lazinator.Buffers
     public interface IMemoryChunkReference
     {
         int MemoryChunkID { get; set; }
-        int Offset { get; set; }
-        int Length { get; set; }
+        int OffsetForLoading { get; set; }
+        int LengthForLoading { get; set; }
+        int AdditionalOffset { get; set; }
+        int FinalLength { get; set; }
     }
 }
