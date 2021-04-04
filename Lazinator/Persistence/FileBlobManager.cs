@@ -4,8 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Lazinator.Buffers;
 
-namespace Lazinator.Buffers
+namespace Lazinator.Persistence
 {
     public class FileBlobManager : IBlobManager
     {
@@ -113,6 +114,11 @@ namespace Lazinator.Buffers
         {
             FileInfo f = new FileInfo(path);
             return f.Length;
+        }
+
+        public void Delete(string path)
+        {
+            File.Delete(path);
         }
     }
 }

@@ -35,6 +35,7 @@ using LazinatorTests.Examples.ExampleHierarchy;
 using System.Security.Cryptography.X509Certificates;
 using LazinatorTests.AnotherNamespace;
 using Lazinator.Buffers;
+using Lazinator.Persistence;
 
 namespace LazinatorTests.Tests
 {
@@ -160,13 +161,13 @@ public class MyOtherClass
 
 
         [Fact]
-        public async Task CodeGenerationProducesActualCode_MemoryChunkReferences()
+        public async Task CodeGenerationProducesActualCode_BuffersAndPersistence()
         {
 
-            AdhocWorkspace ws = GetAdhocWorkspace();
+            AdhocWorkspace ws = GetAdhocWorkspace(); // must make sure that GetDirectories includes all folders here
             await CompleteGenerateCode(typeof(MemoryChunkReference), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws);
 
-            await CompleteGenerateCode(typeof(PersistentIndex), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(PersistentIndex), project: "Lazinator", mainFolder: "/Persistence/", subfolder: "", ws);
         }
 
         [Fact]
@@ -359,6 +360,7 @@ public class MyOtherClass
                 ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/OffsetList",
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Wrappers",
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Buffers",
+                ReadCodeFile.GetCodeBasePath("Lazinator") + "/Persistence",
                 ReadCodeFile.GetCodeBasePath("LazinatorTests") + "/Examples",
             };
         }

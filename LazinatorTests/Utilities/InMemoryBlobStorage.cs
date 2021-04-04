@@ -1,6 +1,7 @@
 ﻿using Lazinator.Buffers;
 using Lazinator.Core;
 using Lazinator.Exceptions;
+using Lazinator.Persistence;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -114,6 +115,11 @@ namespace LazinatorTests.Utilities
 
         public void CloseAfterWriting(string path)
         {
+        }
+
+        public void Delete(string path)
+        {
+            Storage.Remove(path);
         }
     }
 }

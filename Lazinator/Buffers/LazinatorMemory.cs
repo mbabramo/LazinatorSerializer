@@ -825,6 +825,23 @@ namespace Lazinator.Buffers
             return d;
         }
 
+        public List<MemoryChunk> GetUnpersistedMemoryChunks()
+        {
+            List<MemoryChunk> memoryChunks = new List<MemoryChunk>();
+            HashSet<int> ids = new HashSet<int>();
+            foreach (MemoryChunk memoryChunk in EnumerateMemoryChunks())
+            {
+                if (memoryChunk.IsPersisted)
+                    continue;
+                int chunkID = memoryChunk.Reference.MemoryChunkID;
+                if (ids.Contains(chunkID))
+                    throw new Exception("There should be at most one unpersisted memory chunk with a particular ID.");
+                ids.Add(chunkID);
+                memoryChunks.Add(memoryChunk);
+            }
+            return memoryChunks;
+        }
+
         /// <summary>
         /// Writes the memory to the binary buffer writer asynchronously.
         /// </summary>

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Buffers;
 using System.Threading.Tasks;
+using Lazinator.Buffers;
 
-namespace Lazinator.Buffers
+namespace Lazinator.Persistence
 {
     /// <summary>
     /// Saves or loads memory references referring either to parts of a single file or to consecutively numbered files. The initial file contains information on all the other components, so that these can be asynchronously loaded if necessary.
