@@ -12,28 +12,29 @@ namespace Lazinator.Buffers
     public partial struct MemoryChunkReference : IMemoryChunkReference
     {
 
+        debug; // should offsetForLoading be a long?
+
         public MemoryChunkReference(int memoryChunkID, int offsetForLoading, int lengthAsLoaded, int additionalOffset, int finalLength) : this()
         {
             MemoryChunkID = memoryChunkID;
             OffsetForLoading = offsetForLoading;
-            LengthAsLoaded = lengthAsLoaded;
+            PreTruncationLength = lengthAsLoaded;
             AdditionalOffset = additionalOffset;
             FinalLength = finalLength;
         }
 
         public MemoryChunkReference(int memoryChunkID, int offsetForLoading, int lengthAsLoaded) : this()
         {
-            debug; // check all references to this
             MemoryChunkID = memoryChunkID;
             OffsetForLoading = offsetForLoading;
-            LengthAsLoaded = lengthAsLoaded;
+            PreTruncationLength = lengthAsLoaded;
             AdditionalOffset = 0;
             FinalLength = lengthAsLoaded;
         }
 
         public override string ToString()
         {
-            return $"MemoryChunkID: {MemoryChunkID}; OffsetForLoading: {OffsetForLoading}; LengthAsLoaded: {LengthAsLoaded}; AdditionalOffset: {AdditionalOffset}; FinalLength {FinalLength}";
+            return $"MemoryChunkID: {MemoryChunkID}; OffsetForLoading: {OffsetForLoading}; LengthAsLoaded: {PreTruncationLength}; AdditionalOffset: {AdditionalOffset}; FinalLength {FinalLength}";
         }
 
         /// <summary>
@@ -43,7 +44,7 @@ namespace Lazinator.Buffers
         /// <param name="offset"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public MemoryChunkReference Slice(int offset, int length) => new MemoryChunkReference(MemoryChunkID, OffsetForLoading, LengthAsLoaded, AdditionalOffset + offset, length);
+        public MemoryChunkReference Slice(int offset, int length) => new MemoryChunkReference(MemoryChunkID, OffsetForLoading, PreTruncationLength, AdditionalOffset + offset, length);
 
         /// <summary>
         /// Slices the reference relative to the memory as originally loaded. The original additional offset and final length are ignored.
@@ -51,9 +52,9 @@ namespace Lazinator.Buffers
         /// <param name="replacementAdditionalOffset"></param>
         /// <param name="finalLength"></param>
         /// <returns></returns>
-        public MemoryChunkReference Resliced(int replacementAdditionalOffset, int finalLength) => new MemoryChunkReference(MemoryChunkID, OffsetForLoading, LengthAsLoaded, replacementAdditionalOffset, finalLength);
+        public MemoryChunkReference Resliced(int replacementAdditionalOffset, int finalLength) => new MemoryChunkReference(MemoryChunkID, OffsetForLoading, PreTruncationLength, replacementAdditionalOffset, finalLength);
 
-        public bool SameLoadingInformation(in MemoryChunkReference other) => MemoryChunkID == other.MemoryChunkID && OffsetForLoading == other.OffsetForLoading && LengthAsLoaded == other.LengthAsLoaded;
+        public bool SameLoadingInformation(in MemoryChunkReference other) => MemoryChunkID == other.MemoryChunkID && OffsetForLoading == other.OffsetForLoading && PreTruncationLength == other.PreTruncationLength;
 
         /// <summary>
         /// Extends a memory chunk references list by adding a new reference. If the new reference is contiguous to the last existing reference,
@@ -84,6 +85,11 @@ namespace Lazinator.Buffers
         {
             foreach (var newSegment in newSegments)
                 ExtendMemoryChunkReferencesList(memoryChunkReferences, newSegment);
+        }
+
+        internal MemoryChunkReference WithMemoryChunkID(int memoryChunkID)
+        {
+            throw new NotImplementedException();
         }
     }
 }

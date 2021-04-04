@@ -7,6 +7,7 @@ namespace Lazinator.Buffers
     public interface IPersistentIndex
     {
         bool ContainedInSingleBlob { get; set; }
+        bool OneMemoryChunkIDForSingleBlob { get; set; }
         bool MaintainOldVersions { get; set; }
         bool IsPersisted { get; set; }
         string BlobPath { get; set; }

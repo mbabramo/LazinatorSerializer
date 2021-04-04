@@ -7,7 +7,7 @@ namespace Lazinator.Buffers
     {
         int MemoryChunkID { get; set; }
         int OffsetForLoading { get; set; }
-        int LengthAsLoaded { get; set; }
+        int PreTruncationLength { get; set; }
         int AdditionalOffset { get; set; }
         int FinalLength { get; set; }
     }

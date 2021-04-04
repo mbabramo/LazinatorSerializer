@@ -25,9 +25,9 @@ namespace Lazinator.Buffers
 
         }
 
-        public MemoryChunk(IMemoryOwner<byte> referencedMemory, MemoryChunkReference reference)
+        public MemoryChunk(IMemoryOwner<byte> memoryAsLoaded, MemoryChunkReference reference)
         {
-            MemoryAsLoaded = referencedMemory;
+            MemoryAsLoaded = memoryAsLoaded;
             Reference = reference;
         }
 

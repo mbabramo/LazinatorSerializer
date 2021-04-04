@@ -16,6 +16,8 @@ namespace Lazinator.Buffers
 
         int _BytesUsedForIndexWithPrefix;
 
+        public bool OneMemoryChunkIDForSingleBlob { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         /// <summary>
         /// Creates a reference to an index file to be created (which may or may not contain all of the remaining data).
         /// </summary>
@@ -57,7 +59,7 @@ namespace Lazinator.Buffers
         public LazinatorMemory GetLazinatorMemory()
         {
             var memoryChunks = GetMemoryChunks();
-            LazinatorMemory lazinatorMemory = new LazinatorMemory(memoryChunks.First(), memoryChunks.Skip(1).ToList(), 0, 0, memoryChunks.Sum(x => x.ReferenceForLoading.LengthAsLoaded));
+            LazinatorMemory lazinatorMemory = new LazinatorMemory(memoryChunks.First(), memoryChunks.Skip(1).ToList(), 0, 0, memoryChunks.Sum(x => x.Reference.FinalLength));
             lazinatorMemory.LoadInitialMemory();
             return lazinatorMemory;
         }
@@ -65,7 +67,7 @@ namespace Lazinator.Buffers
         public async ValueTask<LazinatorMemory> GetLazinatorMemoryAsync()
         {
             var memoryChunks = GetMemoryChunks();
-            LazinatorMemory lazinatorMemory = new LazinatorMemory(memoryChunks.First(), memoryChunks.Skip(1).ToList(), 0, 0, memoryChunks.Sum(x => x.ReferenceForLoading.LengthAsLoaded));
+            LazinatorMemory lazinatorMemory = new LazinatorMemory(memoryChunks.First(), memoryChunks.Skip(1).ToList(), 0, 0, memoryChunks.Sum(x => x.Reference.FinalLength));
             await lazinatorMemory.LoadInitialMemoryAsync();
             return lazinatorMemory;
         }
@@ -78,15 +80,9 @@ namespace Lazinator.Buffers
             for (int i = 0; i < MemoryChunkReferences.Count; i++)
             {
                 MemoryChunkReference memoryChunkReference = MemoryChunkReferences[i];
-                if (ContainedInSingleBlob)
-                {
-                    if (numBytesProcessed > int.MaxValue)
-                        ThrowHelper.ThrowTooLargeException(int.MaxValue);
-                    memoryChunkReference = new MemoryChunkReference(MemoryChunkReferences[0].MemoryChunkID, (int)numBytesProcessed, memoryChunkReference.LengthAsLoaded);
-                }
                 string referencePath = ContainedInSingleBlob ? BlobPath : GetPathForMemoryChunk(BlobPath, memoryChunkReference.MemoryChunkID);
-                memoryChunks.Add(new BlobMemoryChunk(referencePath, (IBlobManager)this.BlobManager, memoryChunkReference, null, false));
-                numBytesProcessed += memoryChunkReference.LengthAsLoaded;
+                memoryChunks.Add(new BlobMemoryChunk(referencePath, (IBlobManager)this.BlobManager, memoryChunkReference));
+                numBytesProcessed += memoryChunkReference.FinalLength;
             }
             return memoryChunks;
         }
@@ -100,6 +96,8 @@ namespace Lazinator.Buffers
             return withExtension;
         }
 
+
+        // DEBUG -- unused
         public void CombineToSameChunk(int memoryChunkID, bool separateReferences) => CombineToSameChunk(0, MemoryChunkReferences.Count(), memoryChunkID, separateReferences);
 
         /// <summary>
@@ -111,28 +109,30 @@ namespace Lazinator.Buffers
         /// <param name="startingWithIndex"></param>
         /// <param name="numEntriesToCompact"></param>
         /// <param name="memoryChunkID"></param>
-        /// <param name="singleReferenceOnly"></param>
-        public void CombineToSameChunk(int startingWithIndex, int numEntriesToCompact, int memoryChunkID, bool separateReferences)
+        /// <param name="keepMemoryChunksDistinct"></param>
+        public void CombineToSameChunk(int startingWithIndex, int numEntriesToCompact, int memoryChunkID, bool keepMemoryChunksDistinct)
         {
+            // DEBUG -- unused
+            throw new Exception("DEBUG");
             var revisedReferences = new List<MemoryChunkReference>();
             int initialNumReferences = MemoryChunkReferences.Count();
             for (int i = 0; i < initialNumReferences; i++)
             {
-                if ((i <= startingWithIndex && separateReferences) || (i < startingWithIndex && !separateReferences) || i >= startingWithIndex + numEntriesToCompact)
+                if ((i <= startingWithIndex && keepMemoryChunksDistinct) || (i < startingWithIndex && !keepMemoryChunksDistinct) || i >= startingWithIndex + numEntriesToCompact)
                     revisedReferences.Add(MemoryChunkReferences[i]);
                 else
                 {
-                    if (!separateReferences)
-                    {
-                        var original = revisedReferences[startingWithIndex];
-                        revisedReferences[startingWithIndex] = new MemoryChunkReference(memoryChunkID, original.OffsetForLoading, original.LengthAsLoaded + MemoryChunkReferences[i].LengthAsLoaded);
-                    }
-                    else
+                    if (keepMemoryChunksDistinct)
                     {
                         var original = MemoryChunkReferences[i];
                         var previous = revisedReferences[i - 1];
-                        MemoryChunkReference toAdd = new MemoryChunkReference(memoryChunkID, previous.OffsetForLoading + previous.LengthAsLoaded, original.LengthAsLoaded);
+                        MemoryChunkReference toAdd = new MemoryChunkReference(memoryChunkID, previous.OffsetForLoading + previous.FinalLength, original.FinalLength);
                         revisedReferences.Add(toAdd);
+                    }
+                    else
+                    {
+                        var original = revisedReferences[startingWithIndex];
+                        revisedReferences[startingWithIndex] = new MemoryChunkReference(memoryChunkID, original.OffsetForLoading, original.FinalLength + MemoryChunkReferences[i].FinalLength);
                     }
                 }
             }
@@ -181,7 +181,7 @@ namespace Lazinator.Buffers
                         if (ContainedInSingleBlob && i == chunks.Count - 1)
                             BlobManager.CloseAfterWriting(revisedPath);
                     }
-                    totalBytes += chunk.Reference.LengthAsLoaded;
+                    totalBytes += chunk.Reference.PreTruncationLength;
                     actuallyPersisted[i] = true;
                 }
             }
@@ -228,7 +228,7 @@ namespace Lazinator.Buffers
                         if (ContainedInSingleBlob && i == chunks.Count - 1)
                             BlobManager.CloseAfterWriting(revisedPath);
                     }
-                    totalBytes += chunk.Reference.LengthAsLoaded;
+                    totalBytes += chunk.Reference.PreTruncationLength;
                     actuallyPersisted[i] = true;
                 }
             }
@@ -262,6 +262,29 @@ namespace Lazinator.Buffers
         private List<MemoryChunk> GetMemoryChunksAndSetReferences(LazinatorMemory lazinatorMemory)
         {
             var chunks = lazinatorMemory.EnumerateMemoryChunks().ToList();
+            if (ContainedInSingleBlob)
+            {
+                // We need to specify the range of bytes to load. Unfortunately, we don't yet know the length of this information,
+                // and the bytes to load follow the information. This is a Catch-22, because the length of this information depends
+                // on what the information is. So, what we do is we start the numbering at zero. 
+                if (OneMemoryChunkIDForSingleBlob)
+                {
+                    int memoryChunkID = chunks[0].MemoryChunkID;
+                    int totalBytes = 0;
+                    foreach (var chunk in chunks)
+                        totalBytes += chunk.Reference.FinalLength;
+                    int bytesSoFar = 0;
+                    foreach (var chunk in chunks)
+                    {
+                        chunk.Reference = new MemoryChunkReference(memoryChunkID, 0, totalBytes, bytesSoFar, chunk.Reference.FinalLength);
+                        bytesSoFar += chunk.Reference.FinalLength;
+                    }
+                }
+                else
+                { 
+                    debug;
+                }
+            }
             MemoryChunkReferences = chunks.Select(x => x.Reference).ToList();
             return chunks;
         }
@@ -274,7 +297,7 @@ namespace Lazinator.Buffers
             else
                 memory = null;
             revisedPath = ContainedInSingleBlob ? BlobPath : GetPathForMemoryChunk(BlobPath, reference.MemoryChunkID);
-            blobMemoryChunk = new BlobMemoryChunk(revisedPath, (IBlobManager)this.BlobManager, this.ContainedInSingleBlob ? new MemoryChunkReference(reference.MemoryChunkID, (int)numBytesWritten, chunk.Reference.LengthAsLoaded) : reference, null, !ContainedInSingleBlob);
+            blobMemoryChunk = new BlobMemoryChunk(revisedPath, (IBlobManager)this.BlobManager, this.ContainedInSingleBlob ? new MemoryChunkReference(reference.MemoryChunkID, (int)numBytesWritten, chunk.Reference.FinalLength) : reference);
         }
 
         private BinaryBufferWriter GetBinaryBufferWriterWithIndex()
@@ -293,6 +316,7 @@ namespace Lazinator.Buffers
 
         private BinaryBufferWriter RecordIndexInformation(PersistentIndex list, bool containedInSingleBlob)
         {
+            // DEBUG -- unused
             BinaryBufferWriter writer = new BinaryBufferWriter();
             writer.SetLengthsPosition(0);
             writer.Skip(4);

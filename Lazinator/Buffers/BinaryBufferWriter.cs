@@ -158,7 +158,7 @@ namespace Lazinator.Buffers
                 }
                 else
                 {
-                    return ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling + RecycledMemoryChunkReferences.Sum(x => x.LengthAsLoaded);
+                    return ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling + RecycledMemoryChunkReferences.Sum(x => x.PreTruncationLength);
                 }
             }
         }
@@ -269,7 +269,7 @@ namespace Lazinator.Buffers
             int activeMemoryChunkID = GetActiveMemoryChunkID();
             if (ActiveMemoryPosition > NumActiveMemoryBytesAddedToRecycling)
             {
-                MemoryChunkReference.ExtendMemoryChunkReferencesList(RecycledMemoryChunkReferences, new MemoryChunkReference(activeMemoryChunkID, NumActiveMemoryBytesAddedToRecycling, ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling));
+                MemoryChunkReference.ExtendMemoryChunkReferencesList(RecycledMemoryChunkReferences, new MemoryChunkReference(activeMemoryChunkID, 0,  ActiveMemoryPosition, NumActiveMemoryBytesAddedToRecycling, ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling));
                 NumActiveMemoryBytesAddedToRecycling = ActiveMemoryPosition;
             }
         }
@@ -279,8 +279,13 @@ namespace Lazinator.Buffers
             if (RecycledMemoryChunkReferences == null || !RecycledMemoryChunkReferences.Any())
                 return LazinatorMemory.EmptyLazinatorMemory;
             RecordLastActiveMemoryChunkReference();
+            int activeMemoryChunkID = GetActiveMemoryChunkID();
+            int activeLength = NumActiveMemoryBytesAddedToRecycling;
             MoveActiveToCompletedMemory();
             var byID = CompletedMemory.GetMemoryChunksByID();
+            var activeMemoryChunk = byID[activeMemoryChunkID];
+            activeMemoryChunk.Reference = new MemoryChunkReference(activeMemoryChunkID, 0, activeLength, 0, 0);
+            byID[activeMemoryChunkID] = activeMemoryChunk;
             MemoryChunk initialMemoryChunk = null;
             List<MemoryChunk> moreMemory = null;
             long length = 0;
@@ -289,9 +294,9 @@ namespace Lazinator.Buffers
                 if (i == 1)
                     moreMemory = new List<MemoryChunk>();
                 MemoryChunkReference reference = RecycledMemoryChunkReferences[i];
-                length += reference.LengthAsLoaded;
                 MemoryChunk memoryChunk = byID[reference.MemoryChunkID];
-                MemoryChunk resliced = memoryChunk.Slice(reference.OffsetForLoading, reference.LengthAsLoaded);
+                MemoryChunk resliced = memoryChunk.Slice(reference.AdditionalOffset, reference.FinalLength);
+                length += reference.FinalLength;
                 if (i == 0)
                     initialMemoryChunk = resliced;
                 else

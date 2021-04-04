@@ -111,26 +111,34 @@ namespace Lazinator.Buffers
             if (IsEmpty)
                 return new LazinatorMemory(chunk);
 
-            bool extendExisting = StartIndex == 0 && Offset == 0 && Length == GetGrossLength();
-
-            if (extendExisting)
+            if (SpansLastChunk)
             {
                 var evenMoreOwnedMemory = MoreOwnedMemory?.ToList() ?? new List<MemoryChunk>();
                 evenMoreOwnedMemory.Add(chunk);
-                return new LazinatorMemory(InitialOwnedMemoryChunk, evenMoreOwnedMemory, 0, 0, Length + chunk.Reference.LengthAsLoaded);
+                return new LazinatorMemory(InitialOwnedMemoryChunk, evenMoreOwnedMemory, StartIndex, Offset, Length + chunk.Reference.FinalLength);
             }
+
+            // The current LazinatorMemory does not terminate at the end of the last chunk. If we just added a chunk, then
+            // the range would include the chunks at the end that we do not reference.
 
             // We can't just return the existing memory plus the new memory, because the existing memory might include
             // some memory that isn't referenced. If, for example, that memory is at the end of the range, then adding
             // an additional chunk will not allow us to reference that memory. 
 
-            var memoryChunkIndexReferences = EnumerateMemoryChunksByIndex().ToList();
-            var initialMemoryChunk = GetMemoryChunkFromMemoryChunkIndexReference(memoryChunkIndexReferences[0]);
-            var additionalMemoryChunks = new List<MemoryChunk>();
-            foreach (var indexReference in memoryChunkIndexReferences.Skip(1))
-                additionalMemoryChunks.Add(GetMemoryChunkFromMemoryChunkIndexReference(indexReference));
+            MemoryChunk initialMemoryChunk;
+            List<MemoryChunk> additionalMemoryChunks;
+            GetReferencedMemoryChunks(out initialMemoryChunk, out additionalMemoryChunks);
             additionalMemoryChunks.Add(chunk);
             return new LazinatorMemory(initialMemoryChunk, additionalMemoryChunks, StartIndex, Offset, Length);
+        }
+
+        private void GetReferencedMemoryChunks(out MemoryChunk initialMemoryChunk, out List<MemoryChunk> additionalMemoryChunks)
+        {
+            List<MemoryChunkIndexReference> memoryChunkIndexReferences = EnumerateMemoryChunksByIndex().ToList();
+            initialMemoryChunk = GetMemoryChunkFromMemoryChunkIndexReference(memoryChunkIndexReferences[0]);
+            additionalMemoryChunks = new List<MemoryChunk>();
+            foreach (var indexReference in memoryChunkIndexReferences.Skip(1))
+                additionalMemoryChunks.Add(GetMemoryChunkFromMemoryChunkIndexReference(indexReference));
         }
 
         public bool Disposed => EnumerateReferencedMemoryOwners().Any(x => x != null && (x is ExpandableBytes e && e.Disposed) || (x is SimpleMemoryOwner<byte> s && s.Disposed));
@@ -197,6 +205,7 @@ namespace Lazinator.Buffers
             var memoryAtIndex = MemoryAtIndex(i);
             return GetMemoryOwnerFinalLength(memoryAtIndex);
         }
+
 
         /// <summary>
         /// Returns the length of the specified memory owner, without loading the memory if it is unloaded.
@@ -538,6 +547,10 @@ namespace Lazinator.Buffers
             return total;
         }
 
+        public bool SpansAllIncludedChunks => StartIndex == 0 && Offset == 0 && Length == GetGrossLength();
+
+        public bool SpansLastChunk => Offset + Length == GetGrossLength();
+
         /// <summary>
         /// A reference to a portion of a stored memory chunk. Unlike MemoryChunkReference, each reference refers
         /// to a particular memory chunk by index instead of memory chunk ID.
@@ -561,10 +574,7 @@ namespace Lazinator.Buffers
             IMemoryOwner<byte> memoryOwner = MemoryAtIndex(memoryChunkIndexReference.MemoryChunkIndex);
             if (memoryOwner is MemoryChunk memoryChunk)
             {
-                memoryChunk.LoadMemory();
-                if (memoryChunkIndexReference.Offset == 0 && memoryChunkIndexReference.Length == memoryChunk.Reference.LengthAsLoaded)
-                    return memoryChunk;
-                return new MemoryChunk(memoryChunk.MemoryAsLoaded, new MemoryChunkReference(memoryChunk.Reference.MemoryChunkID, memoryChunk.Reference.OffsetForLoading + memoryChunkIndexReference.Offset, memoryChunkIndexReference.Length));
+                return memoryChunk.Slice(memoryChunkIndexReference.Offset, memoryChunkIndexReference.Length);
             }
             else
             {
@@ -573,13 +583,12 @@ namespace Lazinator.Buffers
                     memoryChunkID = InitialOwnedMemoryChunk.Reference.MemoryChunkID;
                 else
                     memoryChunkID = GetNextMemoryChunkID();
-                return new MemoryChunk(memoryOwner, new MemoryChunkReference(memoryChunkID, memoryChunkIndexReference.Offset, memoryChunkIndexReference.Length));
+                return new MemoryChunk(memoryOwner, new MemoryChunkReference(memoryChunkID, 0, memoryOwner.Memory.Length, memoryChunkIndexReference.Offset, memoryChunkIndexReference.Length));
             }
         }
 
         internal int GetNextMemoryChunkID()
         {
-            // DEBUG -- should this be some kind of provider?
             if (!IsEmpty && (MoreOwnedMemory?.Any() ?? false))
                 return MoreOwnedMemory.Last().Reference.MemoryChunkID + 1;
             if (IsEmpty)
@@ -630,47 +639,45 @@ namespace Lazinator.Buffers
         // Note that as usual, if BinaryBufferWriter needs to, it will append its active memory chunk to the LazinatorMemory and move to a new active chunk.
 
         /// <summary>
-        /// Enumerates memory chunk references based on a memory chunk index (not an ID) and a position within an index.
+        /// Enumerates memory chunk references based on an initial memory chunk index (not an ID), an offset into that memory chunk, and a length.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<MemoryChunkReference> EnumerateMemoryChunkReferences(int initialMemoryChunkIndex, int positionWithinMemoryChunk, long numBytesInSubrange)
+        public IEnumerable<MemoryChunkReference> EnumerateMemoryChunkReferences(int initialMemoryChunkIndex, int offset, long length)
         {
             int memoryChunkIndex = initialMemoryChunkIndex;
-            long numBytesRemaining = numBytesInSubrange;
-            while (numBytesRemaining > 0)
+            long numBytesOfLengthRemaining=length;
+            while (numBytesOfLengthRemaining > 0)
             {
                 var memoryOwner = MemoryAtIndex(memoryChunkIndex);
                 if (memoryOwner is not MemoryChunk memoryChunk)
                     memoryChunk = InitialOwnedMemoryChunk;
 
                 int numBytesThisChunk = memoryChunk.Reference.FinalLength;
-                if (numBytesRemaining < numBytesThisChunk)
-                {
-                    numBytesThisChunk = (int)numBytesRemaining;
-                    yield return memoryChunk.Reference.Slice(0, numBytesThisChunk);
-                }
-                else
-                    yield return memoryChunk.Reference;
-                numBytesRemaining -= numBytesThisChunk;
+                int bytesToUseThisChunk = (int)Math.Min(numBytesThisChunk - offset, numBytesOfLengthRemaining);
+                yield return memoryChunk.Reference.Slice(offset, bytesToUseThisChunk);
+
+                numBytesOfLengthRemaining -= bytesToUseThisChunk;
                 memoryChunkIndex++;
-                positionWithinMemoryChunk = 0;
+                offset = 0;
             }
         }
 
         /// <summary>
         /// Enumerates memory chunk ranges corresponding to a subset of the bytes referenced by this LazinatorMemory
         /// </summary>
-        /// <param name="relativeStartPositionOfSubrange">The byte index at which to start enumerating</param>
-        /// <param name="numBytesInSubrange">The number of bytes to include</param>
+        /// <param name="offset">The byte index at which to start enumerating</param>
+        /// <param name="length">The number of bytes to include</param>
         /// <returns>An enumerable where each element consists of the chunk index, the start position, and the number of bytes</returns>
-        public IEnumerable<MemoryChunkReference> EnumerateMemoryChunkReferences(long relativeStartPositionOfSubrange, long numBytesInSubrange)
+        public IEnumerable<MemoryChunkReference> EnumerateMemoryChunkReferences(long offset, long length)
         {
-            foreach (MemoryChunkIndexReference memoryChunkIndexReference in EnumerateMemoryChunkIndices(relativeStartPositionOfSubrange, numBytesInSubrange))
+            foreach (MemoryChunkIndexReference memoryChunkIndexReference in EnumerateMemoryChunkIndices(offset, length))
             {
-                var memoryOwner = MemoryAtIndex(memoryChunkIndexReference.MemoryChunkIndex);
-                if (memoryOwner is not MemoryChunk memoryReference)
-                    memoryReference = InitialOwnedMemoryChunk;
-                yield return new MemoryChunkReference(memoryReference.Reference.MemoryChunkID, memoryReference.Reference.OffsetForLoading + memoryChunkIndexReference.Offset, memoryChunkIndexReference.Length);
+                MemoryChunk memoryChunk;
+                if (memoryChunkIndexReference.MemoryChunkIndex == 0)
+                    memoryChunk = InitialOwnedMemoryChunk;
+                else
+                    memoryChunk = (MemoryChunk) MemoryAtIndex(memoryChunkIndexReference.MemoryChunkIndex);
+                yield return memoryChunk.Reference.Slice(memoryChunkIndexReference.Offset, memoryChunkIndexReference.Length);
             }
         }
 
@@ -706,7 +713,6 @@ namespace Lazinator.Buffers
             }
         }
 
-
         /// <summary>
         /// Returns the Memory block of bytes corresponding to a memory chunk reference. It is required that each memory owner be a MemoryChunk.
         /// </summary>
@@ -714,10 +720,9 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public Memory<byte> GetMemoryAtMemoryChunkReference(MemoryChunkReference memoryChunkReference)
         {
-            var memoryOwner = MemoryAtIndex(memoryChunkReference.MemoryChunkID);
-            if (memoryOwner is not MemoryChunk memoryReference)
-                memoryReference = InitialOwnedMemoryChunk;
-            var underlyingChunk = memoryReference.MemoryAsLoaded.Memory.Slice(memoryChunkReference.OffsetForLoading, memoryChunkReference.LengthAsLoaded);
+            var memoryChunk = GetFirstMemoryChunkWithID(memoryChunkReference.MemoryChunkID);
+            memoryChunk.LoadMemory();
+            var underlyingChunk = memoryChunk.MemoryAsLoaded.Memory.Slice(memoryChunkReference.AdditionalOffset, memoryChunkReference.FinalLength);
             return underlyingChunk;
         }
 

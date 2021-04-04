@@ -27,7 +27,7 @@ namespace Lazinator.Buffers
         {
             if (IsLoaded)
                 return;
-            Memory<byte> bytes = BlobManager.Read(BlobPath, Reference.OffsetForLoading, Reference.LengthAsLoaded);
+            Memory<byte> bytes = BlobManager.Read(BlobPath, Reference.OffsetForLoading, Reference.PreTruncationLength);
             MemoryAsLoaded = new SimpleMemoryOwner<byte>(bytes);
         }
 
@@ -35,7 +35,7 @@ namespace Lazinator.Buffers
         {
             if (IsLoaded)
                 return;
-            Memory<byte> bytes = await BlobManager.ReadAsync(BlobPath, Reference.OffsetForLoading, Reference.LengthAsLoaded);
+            Memory<byte> bytes = await BlobManager.ReadAsync(BlobPath, Reference.OffsetForLoading, Reference.PreTruncationLength);
             MemoryAsLoaded = new SimpleMemoryOwner<byte>(bytes);
         }
 
