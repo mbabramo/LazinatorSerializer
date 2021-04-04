@@ -281,11 +281,17 @@ namespace Lazinator.Buffers
             RecordLastActiveMemoryChunkReference();
             int activeMemoryChunkID = GetActiveMemoryChunkID();
             int activeLength = NumActiveMemoryBytesAddedToRecycling;
-            MoveActiveToCompletedMemory();
+            if (activeLength > 0)
+            {
+                MoveActiveToCompletedMemory();
+            }
             var byID = CompletedMemory.GetMemoryChunksByID();
-            var activeMemoryChunk = byID[activeMemoryChunkID];
-            activeMemoryChunk.Reference = new MemoryChunkReference(activeMemoryChunkID, 0, activeLength, 0, 0);
-            byID[activeMemoryChunkID] = activeMemoryChunk;
+            if (activeLength > 0)
+            { 
+                var activeMemoryChunk = byID[activeMemoryChunkID];
+                activeMemoryChunk.Reference = new MemoryChunkReference(activeMemoryChunkID, 0, activeLength, 0, 0);
+                byID[activeMemoryChunkID] = activeMemoryChunk;
+            }
             MemoryChunk initialMemoryChunk = null;
             List<MemoryChunk> moreMemory = null;
             long length = 0;

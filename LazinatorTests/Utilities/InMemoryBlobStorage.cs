@@ -77,6 +77,10 @@ namespace LazinatorTests.Utilities
 
         public void Write(string path, Memory<byte> bytes)
         {
+            if (bytes.Length == 20)
+            {
+                var DEBUG = 0;
+            }
             Storage[path] = bytes;
         }
 

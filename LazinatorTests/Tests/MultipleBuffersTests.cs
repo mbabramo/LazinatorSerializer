@@ -489,12 +489,10 @@ namespace LazinatorTests.Tests
         [InlineData(false, false, false)]
         public void BinaryTreeTest_DiffSerialization(bool useFile, bool containedInSingleBlob, bool recreateIndex)
         {
-            MultipleRoundsOfRandomChanges(2, 2, 1, () => // DEBUG -- try higher numbers
+            MultipleRoundsOfRandomChanges(3, 2, 1, () => // DEBUG -- try higher numbers
             {
                 LazinatorSerializationOptions options = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20);
                 LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(options);
-
-                var DEBUG = String.Join(",", multipleBufferResult.GetConsolidatedMemory().ToArray());
 
                 // Write to one or more blobs
                 IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobStorage();
@@ -507,10 +505,6 @@ namespace LazinatorTests.Tests
                 if (recreateIndex)
                     index = PersistentIndex.ReadFromBlob(blobManager, fullPath, null, 0);
                 var revisedMemory = index.GetLazinatorMemory();
-
-                var DEBUG2 = String.Join(",", revisedMemory.GetConsolidatedMemory().ToArray());
-                Debug.WriteLine(DEBUG);
-                Debug.WriteLine(DEBUG2);
 
                 BinaryTree = new LazinatorBinaryTree<WDouble>(revisedMemory);
             });
