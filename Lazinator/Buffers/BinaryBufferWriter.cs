@@ -243,7 +243,7 @@ namespace Lazinator.Buffers
                 ActiveMemory = new ExpandableBytes(minSizeofNewBuffer);
                 ActiveMemoryPosition = 0;
                 NumActiveMemoryBytesAddedToRecycling = 0;
-                Debug.WriteLine($"Active memory moved to completed memory. Completed now: {CompletedMemory}"); // DEBUG
+                // Debug.WriteLine($"Active memory moved to completed memory. Completed now: {CompletedMemory}"); // DEBUG
             }
         }
 
@@ -276,8 +276,6 @@ namespace Lazinator.Buffers
 
         internal LazinatorMemory PatchLazinatorMemoryFromRecycled()
         {
-            if (RecycledMemoryChunkReferences == null || !RecycledMemoryChunkReferences.Any())
-                return LazinatorMemory.EmptyLazinatorMemory;
             RecordLastActiveMemoryChunkReference();
             int activeMemoryChunkID = GetActiveMemoryChunkID();
             int activeLength = NumActiveMemoryBytesAddedToRecycling;
@@ -621,8 +619,15 @@ namespace Lazinator.Buffers
             LengthsPosition += sizeof(Int16);
         }
 
+        static int DEBUGCount = 0;
+
         public void RecordLength(int length)
         {
+            if (DEBUGCount == 8)
+            {
+                var DEBUGSEF = 0;
+            }
+            Debug.WriteLine(DEBUGCount++ + ": " + length);
             if (BinaryBufferWriter.LittleEndianStorage)
                 WriteInt32LittleEndian(LengthsSpan, length);
             else

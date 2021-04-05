@@ -102,5 +102,13 @@ namespace Lazinator.Buffers
         public void Dispose()
         {
         }
+
+        public override string ToString()
+        {
+            LoadMemory();
+            var bytes = MemoryAsLoaded.Memory.ToArray();
+            string result = String.Join(",", bytes.Select(x => x.ToString().PadLeft(3, '0')));
+            return $"Chunk {MemoryChunkID.ToString().PadLeft(3, '0')}: {result}";
+        }
     }
 }

@@ -304,7 +304,7 @@ namespace Lazinator.Core
             if (!childCouldHaveChanged)
             {
                 int startPosition = writer.ActiveMemoryPosition;
-                childStorage = WriteExistingChildStorage(ref writer, getChildSliceFn, childStorage, options.SerializeDiffs);
+                childStorage = WriteExistingChildStorage(ref writer, getChildSliceFn, childStorage, options.SerializeDiffs, options.SerializeDiffsThreshold);
                 if (options.UpdateStoredBuffer)
                 {
                     if (child != null)
@@ -455,13 +455,13 @@ namespace Lazinator.Core
         /// <param name="getChildSliceFn">A function that returns the Lazinator memory containing the child</param>
         /// <param name="childStorage">The Lazinator memory containing the child, if such memory has been accessed</param>
         /// <returns></returns>
-        public static LazinatorMemory WriteExistingChildStorage(ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceFn, LazinatorMemory childStorage, bool writeReferenceOnly)
+        public static LazinatorMemory WriteExistingChildStorage(ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceFn, LazinatorMemory childStorage, bool considerWriteReferenceOnly, int serializeDiffsThreshold)
         {
             if (childStorage.IsEmpty)
                 childStorage = getChildSliceFn(); // this is the storage holding the child, which has never been accessed
             if (childStorage.InitialOwnedMemory == null)
                 ThrowHelper.ThrowChildStorageMissingException();
-            if (writeReferenceOnly && !childStorage.IsEmpty && childStorage.Length > )
+            if (considerWriteReferenceOnly && !childStorage.IsEmpty && childStorage.Length > serializeDiffsThreshold)
                 writer.InsertReferenceToCompletedMemory(childStorage.StartIndex, childStorage.Offset, childStorage.Length);
             else
                 childStorage.WriteToBinaryBuffer(ref writer);

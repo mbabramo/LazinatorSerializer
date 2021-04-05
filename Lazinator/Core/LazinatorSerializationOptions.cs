@@ -35,14 +35,21 @@ namespace Lazinator.Core
         /// effect in a Lazinator object not splittable across buffers.
         /// </summary>
         public readonly int NextBufferThreshold;
+        /// <summary>
+        /// When serializing diffs, the minimum number of bytes that an untouched section of memory must be to record a reference to this memory instead of putting the memory into a new buffer.
+        /// </summary>
+        public readonly int SerializeDiffsThreshold;
 
-        public LazinatorSerializationOptions(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool serializeDiffs, int nextBufferThreshold=int.MaxValue)
+        const int DefaultSerializeDiffsThreshold = 1024;
+
+        public LazinatorSerializationOptions(IncludeChildrenMode includeChildrenMode, bool verifyCleanness, bool updateStoredBuffer, bool serializeDiffs, int nextBufferThreshold=int.MaxValue, int serializeDiffsThreshold=DefaultSerializeDiffsThreshold)
         {
             IncludeChildrenMode = includeChildrenMode;
             VerifyCleanness = verifyCleanness;
             UpdateStoredBuffer = updateStoredBuffer;
             SerializeDiffs = serializeDiffs;
             NextBufferThreshold = nextBufferThreshold;
+            SerializeDiffsThreshold = serializeDiffsThreshold;
             if (IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren && updateStoredBuffer)
                 ThrowHelper.ThrowCannotUpdateStoredBuffer();
         }

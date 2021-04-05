@@ -46,22 +46,7 @@ namespace LazinatorTests.Tests
         }
 
         [Theory]
-        [InlineData(true, true, true, true)]
-        [InlineData(true, false, true, true)]
-        [InlineData(false, true, true, true)]
-        [InlineData(false, false, true, true)]
-        [InlineData(true, true, false, true)]
-        [InlineData(true, false, false, true)]
-        [InlineData(false, true, false, true)]
-        [InlineData(false, false, false, true)]
-        [InlineData(true, true, true, false)]
-        [InlineData(true, false, true, false)]
-        [InlineData(false, true, true, false)]
-        [InlineData(false, false, true, false)]
-        [InlineData(true, true, false, false)]
-        [InlineData(true, false, false, false)]
-        [InlineData(false, true, false, false)]
-        [InlineData(false, false, false, false)]
+        [ClassData(typeof(BoolPermutations_4))]
         public async Task SplittableEntitiesSaveToBlobs(bool containedInSingleBlob, bool useFile, bool async, bool recreateBlobMemoryReference)
         {
             if (async)
@@ -208,15 +193,26 @@ namespace LazinatorTests.Tests
             MultipleRoundsOfRandomChanges(5, 100, 100, () => { BinaryTree = BinaryTree.CloneLazinatorTyped(); });
         }
 
+
+
+        [Fact]
+        public void BinaryTreeTest_RecreatingManually()
+        {
+            // This test both confirms that binary trees work without diff serialization and also helps show what the memory should look like
+            // at each stage. This makes it easier to find problems if tests using diff serialization fail.
+            List<PersistentIndex> indices = new List<PersistentIndex>();
+            MultipleRoundsOfRandomChanges(3, 2, 1, () => // DEBUG -- try higher numbers
+            {
+                LazinatorMemory lazinatorMemory = BinaryTree.SerializeLazinator(LazinatorSerializationOptions.Default);
+
+                Debug.WriteLine("Consolidated: " + lazinatorMemory.ToStringConsolidated());
+
+                BinaryTree = new LazinatorBinaryTree<WDouble>(lazinatorMemory);
+            });
+        }
+
         [Theory]
-        [InlineData(true, true, true)]
-        [InlineData(true, true, false)]
-        [InlineData(true, false, true)]
-        [InlineData(true, false, false)]
-        [InlineData(false, true, true)]
-        [InlineData(false, true, false)]
-        [InlineData(false, false, true)]
-        [InlineData(false, false, false)]
+        [ClassData(typeof(BoolPermutations_3))]
         public void BinaryTreeTest_ReloadingFromBlobs(bool useFile, bool containedInSingleBlob, bool recreateIndex)
         {
             MultipleRoundsOfRandomChanges(10, 10, 10, () =>
@@ -431,14 +427,7 @@ namespace LazinatorTests.Tests
         }
 
         [Theory]
-        [InlineData(true, true, true)]
-        [InlineData(true, true, false)]
-        [InlineData(true, false, true)]
-        [InlineData(true, false, false)]
-        [InlineData(false, true, true)]
-        [InlineData(false, true, false)]
-        [InlineData(false, false, true)]
-        [InlineData(false, false, false)]
+        [ClassData(typeof(BoolPermutations_3))]
         public void PersistentIndexTest(bool useFile, bool containedInSingleBlob, bool recreateIndex)
         {
             List<byte> fullSequence = new List<byte>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
@@ -479,20 +468,13 @@ namespace LazinatorTests.Tests
         }
 
         [Theory]
-        [InlineData(true, true, true)]
-        [InlineData(true, true, false)]
-        [InlineData(true, false, true)]
-        [InlineData(true, false, false)]
-        [InlineData(false, true, true)]
-        [InlineData(false, true, false)]
-        [InlineData(false, false, true)]
-        [InlineData(false, false, false)]
-        public void BinaryTreeTest_DiffSerialization(bool useFile, bool containedInSingleBlob, bool recreateIndex)
+        [ClassData(typeof(BoolPermutations_5))]
+        public void BinaryTreeTest_DiffSerialization(bool useFile, bool containedInSingleBlob, bool recreateIndex, bool alwaysCopyPreviousBuffer_ProducingFakeDiff, bool useConsolidatedMemory)
         {
             List<PersistentIndex> indices = new List<PersistentIndex>();
             MultipleRoundsOfRandomChanges(3, 2, 1, () => // DEBUG -- try higher numbers
             {
-                LazinatorSerializationOptions options = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, int.MaxValue); // DEBUG new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20);
+                LazinatorSerializationOptions options = alwaysCopyPreviousBuffer_ProducingFakeDiff ?  new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, int.MaxValue, int.MaxValue) : new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20, 5); // DEBUG
                 LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(options);
 
                 // Write to one or more blobs
@@ -501,16 +483,22 @@ namespace LazinatorTests.Tests
                 if (fullPath == null)
                     return;
                 var index = (indices == null || !indices.Any()) ? new PersistentIndex(fullPath, blobManager, containedInSingleBlob) : new PersistentIndex(indices.Last());
+                Debug.WriteLine("Persisting"); // DEBUG
                 index.PersistLazinatorMemory(multipleBufferResult);
                 indices.Add(index);
 
                 if (recreateIndex)
                     index = PersistentIndex.ReadFromBlob(blobManager, fullPath, null, 0);
                 var revisedMemory = index.GetLazinatorMemory();
+                if (useConsolidatedMemory)
+                {
+                    var consolidatedMemory = revisedMemory.GetConsolidatedMemory();
+                    revisedMemory = new LazinatorMemory(consolidatedMemory);
+                    indices.RemoveAt(0); // with consolidated memory, we're not using diff serialization
+                }
 
-                var DEBUG = revisedMemory.GetConsolidatedMemory().ToArray();
-                var DEBUG2 = String.Join(",", DEBUG);
-                Debug.WriteLine(DEBUG2);
+                Debug.WriteLine(revisedMemory.ToStringByChunk());
+                Debug.WriteLine("Consolidated: " + revisedMemory.ToStringConsolidated());
 
                 BinaryTree = new LazinatorBinaryTree<WDouble>(revisedMemory);
             });

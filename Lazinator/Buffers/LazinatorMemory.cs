@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Lazinator.Core;
 using Lazinator.Exceptions;
@@ -948,6 +949,22 @@ namespace Lazinator.Buffers
             foreach (byte b in EnumerateBytes(includeOutsideOfRange))
                 w.Write(b);
             return w.LazinatorMemory.InitialMemory;
+        }
+
+        public string ToStringByChunk()
+        {
+            var chunks = EnumerateMemoryChunks().ToList();
+            StringBuilder sb = new StringBuilder();
+            foreach (var chunk in chunks)
+            {
+                sb.AppendLine(chunk.ToString());
+            }
+            return sb.ToString();
+        }
+
+        public string ToStringConsolidated()
+        {
+            return String.Join(",", EnumerateBytes().Select(x => x.ToString().PadLeft(3, '0')));
         }
 
     }
