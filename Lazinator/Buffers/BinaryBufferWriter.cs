@@ -269,7 +269,7 @@ namespace Lazinator.Buffers
             int activeMemoryChunkID = GetActiveMemoryChunkID();
             if (ActiveMemoryPosition > NumActiveMemoryBytesAddedToRecycling)
             {
-                MemoryChunkReference.ExtendMemoryChunkReferencesList(RecycledMemoryChunkReferences, new MemoryChunkReference(activeMemoryChunkID, 0,  ActiveMemoryPosition, NumActiveMemoryBytesAddedToRecycling, ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling));
+                MemoryChunkReference.ExtendMemoryChunkReferencesList(RecycledMemoryChunkReferences, new MemoryChunkReference(activeMemoryChunkID, 0,  ActiveMemoryPosition, NumActiveMemoryBytesAddedToRecycling, ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling), true);
                 NumActiveMemoryBytesAddedToRecycling = ActiveMemoryPosition;
             }
         }
@@ -309,12 +309,19 @@ namespace Lazinator.Buffers
             return new LazinatorMemory(initialMemoryChunk, moreMemory, 0, 0, length);
         }
 
+        static int DEBUG = 0;
+
         /// <summary>
         /// Returns the Span beginning at position LengthsPosition, when recycled memory chunk references are being recorded.
         /// </summary>
         /// <returns></returns>
         internal Span<byte> GetLengthsSpanWithinRecycled()
         {
+            DEBUG++;
+            if (DEBUG == 11)
+            {
+                var DEBUG2 = 0;
+            }
             MemoryChunkReference? lengthsSpanMemoryChunkReference;
             long lengthPositionRemaining;
             TryToGetReferenceToLengthSpanWithinRecycled(out lengthsSpanMemoryChunkReference, out lengthPositionRemaining);
@@ -357,7 +364,7 @@ namespace Lazinator.Buffers
                     MemoryChunkReference reference = RecycledMemoryChunkReferences[i];
                     if (lengthPositionRemaining < reference.FinalLength)
                     {
-                        lengthsSpanMemoryChunkReference = reference.Slice((int)lengthPositionRemaining, sizeof(int));
+                        lengthsSpanMemoryChunkReference = reference.Slice((int)lengthPositionRemaining);
                         lengthPositionRemaining = 0;
                     }
                     else

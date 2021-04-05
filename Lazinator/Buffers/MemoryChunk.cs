@@ -57,6 +57,13 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public virtual MemoryChunk WithReference(MemoryChunkReference replacementReference) => new MemoryChunk(MemoryAsLoaded, replacementReference, IsPersisted);
 
+        internal MemoryChunk WithPreTruncationLengthIncreasedIfNecessary(IMemoryOwner<byte> otherMemoryOwner)
+        {
+            if (otherMemoryOwner is MemoryChunk otherMemoryChunk && (otherMemoryChunk.MemoryChunkID == MemoryChunkID) && Reference.PreTruncationLength < otherMemoryChunk.Reference.PreTruncationLength)
+                Reference = Reference.WithPreTruncationLength(otherMemoryChunk.Reference.PreTruncationLength);
+            return this;
+        }
+
         /// <summary>
         /// This method should be overridden for a MemoryReference subclass that loads memory lazily. The subclass method
         /// should set ReferencedMemory. The base class always has memory available and thus this method does nothing.

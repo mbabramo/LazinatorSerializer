@@ -114,9 +114,9 @@ namespace Lazinator.Buffers
 
             if (SpansLastChunk)
             {
-                var evenMoreOwnedMemory = MoreOwnedMemory?.ToList() ?? new List<MemoryChunk>();
+                var evenMoreOwnedMemory = MoreOwnedMemory?.Select(x => x.WithPreTruncationLengthIncreasedIfNecessary(chunk)).ToList() ?? new List<MemoryChunk>();
                 evenMoreOwnedMemory.Add(chunk);
-                return new LazinatorMemory(InitialOwnedMemoryChunk, evenMoreOwnedMemory, StartIndex, Offset, Length + chunk.Reference.FinalLength);
+                return new LazinatorMemory(InitialOwnedMemoryChunk.WithPreTruncationLengthIncreasedIfNecessary(chunk), evenMoreOwnedMemory, StartIndex, Offset, Length + chunk.Reference.FinalLength);
             }
 
             // The current LazinatorMemory does not terminate at the end of the last chunk. If we just added a chunk, then
@@ -128,18 +128,18 @@ namespace Lazinator.Buffers
 
             MemoryChunk initialMemoryChunk;
             List<MemoryChunk> additionalMemoryChunks;
-            GetReferencedMemoryChunks(out initialMemoryChunk, out additionalMemoryChunks);
+            GetReferencedMemoryChunks(chunk, out initialMemoryChunk, out additionalMemoryChunks);
             additionalMemoryChunks.Add(chunk);
             return new LazinatorMemory(initialMemoryChunk, additionalMemoryChunks, StartIndex, Offset, Length);
         }
 
-        private void GetReferencedMemoryChunks(out MemoryChunk initialMemoryChunk, out List<MemoryChunk> additionalMemoryChunks)
+        private void GetReferencedMemoryChunks(MemoryChunk chunkBeingAdded, out MemoryChunk initialMemoryChunk, out List<MemoryChunk> additionalMemoryChunks)
         {
             List<MemoryChunkIndexReference> memoryChunkIndexReferences = EnumerateMemoryChunksByIndex().ToList();
-            initialMemoryChunk = GetMemoryChunkFromMemoryChunkIndexReference(memoryChunkIndexReferences[0]);
+            initialMemoryChunk = GetMemoryChunkFromMemoryChunkIndexReference(memoryChunkIndexReferences[0]).WithPreTruncationLengthIncreasedIfNecessary(chunkBeingAdded);
             additionalMemoryChunks = new List<MemoryChunk>();
             foreach (var indexReference in memoryChunkIndexReferences.Skip(1))
-                additionalMemoryChunks.Add(GetMemoryChunkFromMemoryChunkIndexReference(indexReference));
+                additionalMemoryChunks.Add(GetMemoryChunkFromMemoryChunkIndexReference(indexReference).WithPreTruncationLengthIncreasedIfNecessary(chunkBeingAdded));
         }
 
         public bool Disposed => EnumerateReferencedMemoryOwners().Any(x => x != null && (x is ExpandableBytes e && e.Disposed) || (x is SimpleMemoryOwner<byte> s && s.Disposed));

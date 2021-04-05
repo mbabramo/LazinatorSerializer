@@ -19,6 +19,10 @@ namespace Lazinator.Buffers
             MemoryChunkID = memoryChunkID;
             OffsetForLoading = offsetForLoading;
             PreTruncationLength = lengthAsLoaded;
+            if (memoryChunkID == 2 && lengthAsLoaded == 58)
+            {
+                var DEBUG = 0;
+            }
             AdditionalOffset = additionalOffset;
             FinalLength = finalLength;
         }
@@ -27,6 +31,10 @@ namespace Lazinator.Buffers
         {
             MemoryChunkID = memoryChunkID;
             OffsetForLoading = offsetForLoading;
+            if (memoryChunkID == 2 && lengthAsLoaded == 58)
+            {
+                var DEBUG = 0;
+            }
             PreTruncationLength = lengthAsLoaded;
             AdditionalOffset = 0;
             FinalLength = lengthAsLoaded;
@@ -47,6 +55,13 @@ namespace Lazinator.Buffers
         public MemoryChunkReference Slice(int offset, int length) => new MemoryChunkReference(MemoryChunkID, OffsetForLoading, PreTruncationLength, AdditionalOffset + offset, length);
 
         /// <summary>
+        /// Slices the reference relative to the existing offset. 
+        /// </summary>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        public MemoryChunkReference Slice(int offset) => new MemoryChunkReference(MemoryChunkID, OffsetForLoading, PreTruncationLength, AdditionalOffset + offset, FinalLength - offset);
+
+        /// <summary>
         /// Slices the reference relative to the memory as originally loaded. The original additional offset and final length are ignored.
         /// </summary>
         /// <param name="replacementAdditionalOffset"></param>
@@ -62,10 +77,21 @@ namespace Lazinator.Buffers
         /// </summary>
         /// <param name="memoryChunkReferences"></param>
         /// <param name="newSegment"></param>
-        public static void ExtendMemoryChunkReferencesList(List<MemoryChunkReference> memoryChunkReferences, MemoryChunkReference newSegment)
+        public static void ExtendMemoryChunkReferencesList(List<MemoryChunkReference> memoryChunkReferences, MemoryChunkReference newSegment, bool extendEarlierReferencesForSameChunk)
         {
             if (memoryChunkReferences.Any())
             {
+                if (extendEarlierReferencesForSameChunk)
+                {
+                    for (int i = 0; i < memoryChunkReferences.Count; i++)
+                    {
+                        MemoryChunkReference memoryChunkReference = memoryChunkReferences[i];
+                        if (memoryChunkReference.MemoryChunkID == newSegment.MemoryChunkID && memoryChunkReference.PreTruncationLength != newSegment.PreTruncationLength)
+                        {
+                            memoryChunkReferences[i] = memoryChunkReference.WithPreTruncationLength(newSegment.PreTruncationLength);
+                        }
+                    }
+                }
                 MemoryChunkReference last = memoryChunkReferences.Last();
                 if (last.SameLoadingInformation(newSegment) && newSegment.AdditionalOffset == last.AdditionalOffset + last.FinalLength)
                 {
@@ -84,7 +110,7 @@ namespace Lazinator.Buffers
         public static void ExtendMemoryChunkReferencesList(List<MemoryChunkReference> memoryChunkReferences, IEnumerable<MemoryChunkReference> newSegments)
         {
             foreach (var newSegment in newSegments)
-                ExtendMemoryChunkReferencesList(memoryChunkReferences, newSegment);
+                ExtendMemoryChunkReferencesList(memoryChunkReferences, newSegment, false);
         }
 
         internal MemoryChunkReference WithMemoryChunkID(int memoryChunkID)
@@ -95,6 +121,11 @@ namespace Lazinator.Buffers
         internal MemoryChunkReference WithLoadingOffset(long offset)
         {
             return new MemoryChunkReference(MemoryChunkID, (int) /* DEBUG -- should be long */ offset, PreTruncationLength, AdditionalOffset, FinalLength);
+        }
+
+        internal MemoryChunkReference WithPreTruncationLength(int preTruncationLength)
+        {
+            return new MemoryChunkReference(MemoryChunkID, OffsetForLoading, preTruncationLength, AdditionalOffset, FinalLength);
         }
     }
 }
