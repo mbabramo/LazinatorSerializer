@@ -835,10 +835,11 @@ namespace Lazinator.Buffers
                 if (memoryChunk.IsPersisted)
                     continue;
                 int chunkID = memoryChunk.Reference.MemoryChunkID;
-                if (ids.Contains(chunkID))
-                    throw new Exception("There should be at most one unpersisted memory chunk with a particular ID.");
-                ids.Add(chunkID);
-                memoryChunks.Add(memoryChunk);
+                if (!ids.Contains(chunkID))
+                {
+                    ids.Add(chunkID);
+                    memoryChunks.Add(memoryChunk);
+                }
             }
             return memoryChunks;
         }

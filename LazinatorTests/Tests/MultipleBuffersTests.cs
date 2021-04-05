@@ -501,7 +501,7 @@ namespace LazinatorTests.Tests
                     indices.RemoveAt(0); // with consolidated memory, we're not using diff serialization
                 }
 
-               // Debug.WriteLine(revisedMemory.ToStringByChunk());
+                Debug.WriteLine(revisedMemory.ToStringByChunk());
                 Debug.WriteLine($"Consolidated{round}: " + revisedMemory.ToStringConsolidated());
 
                 BinaryTree = new LazinatorBinaryTree<WDouble>(revisedMemory);

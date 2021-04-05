@@ -591,7 +591,6 @@ namespace Lazinator.Buffers
         public long SetLengthsPosition(int bytesToReserve)
         {
             long previousPosition = LengthsPosition;
-            Debug.WriteLine($"Set lengths position from {LengthsPosition} to {OverallMemoryPosition}"); // DEBUG
             LengthsPosition = OverallMemoryPosition;
             Skip(bytesToReserve);
             return previousPosition;
@@ -604,7 +603,6 @@ namespace Lazinator.Buffers
         /// <param name="previousPosition"></param>
         public void ResetLengthsPosition(long previousPosition)
         {
-            Debug.WriteLine($"Reset lengths position from {LengthsPosition} to {previousPosition}"); // DEBUG
             LengthsPosition = previousPosition;
         }
 
@@ -625,11 +623,6 @@ namespace Lazinator.Buffers
 
         public void RecordLength(int length)
         {
-            Debug.WriteLine($"Recording length of {length}"); // DEBUG
-            if (length == 28 || length == 67)
-            {
-                var DEBUG = 0;
-            }
             if (BinaryBufferWriter.LittleEndianStorage)
                 WriteInt32LittleEndian(LengthsSpan, length);
             else
