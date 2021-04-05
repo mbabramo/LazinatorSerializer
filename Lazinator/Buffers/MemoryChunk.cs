@@ -25,10 +25,11 @@ namespace Lazinator.Buffers
 
         }
 
-        public MemoryChunk(IMemoryOwner<byte> memoryAsLoaded, MemoryChunkReference reference)
+        public MemoryChunk(IMemoryOwner<byte> memoryAsLoaded, MemoryChunkReference reference, bool isPersisted)
         {
             MemoryAsLoaded = memoryAsLoaded;
             Reference = reference;
+            IsPersisted = isPersisted;
         }
 
         /// <summary>
@@ -43,22 +44,18 @@ namespace Lazinator.Buffers
         /// <param name="offset">An additional offset to be applied, in addition to the existing additional offset</param>
         /// <param name="length">The final length of the slice</param>
         /// <returns></returns>
-        public virtual MemoryChunk Slice(int offset, int length) => new MemoryChunk(MemoryAsLoaded, Reference.Slice(offset, length));
-
-        /// <summary>
-        /// Slices the memory chunk relative to the memory as originally loaded. The original additional offset and final length are ignored.
-        /// </summary>
-        /// <param name="replacementAdditionalOffset"></param>
-        /// <param name="finalLength"></param>
-        /// <returns></returns>
-        public virtual MemoryChunk Resliced(int replacementAdditionalOffset, int finalLength) => new MemoryChunk(MemoryAsLoaded, Reference.Resliced(replacementAdditionalOffset, finalLength));
+        public virtual MemoryChunk Slice(int offset, int length)
+        {
+            var chunk = new MemoryChunk(MemoryAsLoaded, Reference.Slice(offset, length), IsPersisted);
+            return chunk;
+        }
 
         /// <summary>
         /// Returns a MemoryChunk with the specified reference.
         /// </summary>
         /// <param name="replacementReference"></param>
         /// <returns></returns>
-        public virtual MemoryChunk WithReference(MemoryChunkReference replacementReference) => new MemoryChunk(MemoryAsLoaded, replacementReference);
+        public virtual MemoryChunk WithReference(MemoryChunkReference replacementReference) => new MemoryChunk(MemoryAsLoaded, replacementReference, IsPersisted);
 
         /// <summary>
         /// This method should be overridden for a MemoryReference subclass that loads memory lazily. The subclass method

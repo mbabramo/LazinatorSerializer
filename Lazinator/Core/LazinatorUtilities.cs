@@ -461,7 +461,7 @@ namespace Lazinator.Core
                 childStorage = getChildSliceFn(); // this is the storage holding the child, which has never been accessed
             if (childStorage.InitialOwnedMemory == null)
                 ThrowHelper.ThrowChildStorageMissingException();
-            if (writeReferenceOnly && !childStorage.IsEmpty)
+            if (writeReferenceOnly && !childStorage.IsEmpty && childStorage.Length > )
                 writer.InsertReferenceToCompletedMemory(childStorage.StartIndex, childStorage.Offset, childStorage.Length);
             else
                 childStorage.WriteToBinaryBuffer(ref writer);

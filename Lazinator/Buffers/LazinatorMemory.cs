@@ -423,7 +423,7 @@ namespace Lazinator.Buffers
                 if (initialOwnedMemoryChunk == null)
                 {
                     int length = InitialOwnedMemory.Memory.Length;
-                    initialOwnedMemoryChunk = new MemoryChunk(InitialOwnedMemory, new MemoryChunkReference(0, 0, length, 0, length));
+                    initialOwnedMemoryChunk = new MemoryChunk(InitialOwnedMemory, new MemoryChunkReference(0, 0, length, 0, length), false);
                 }
                 return initialOwnedMemoryChunk;
             }
@@ -583,7 +583,7 @@ namespace Lazinator.Buffers
                     memoryChunkID = InitialOwnedMemoryChunk.Reference.MemoryChunkID;
                 else
                     memoryChunkID = GetNextMemoryChunkID();
-                return new MemoryChunk(memoryOwner, new MemoryChunkReference(memoryChunkID, 0, memoryOwner.Memory.Length, memoryChunkIndexReference.Offset, memoryChunkIndexReference.Length));
+                return new MemoryChunk(memoryOwner, new MemoryChunkReference(memoryChunkID, 0, memoryOwner.Memory.Length, memoryChunkIndexReference.Offset, memoryChunkIndexReference.Length), false);
             }
         }
 

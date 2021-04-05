@@ -444,9 +444,9 @@ namespace LazinatorTests.Tests
             List<byte> fullSequence = new List<byte>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             IMemoryOwner<byte> initialBytes = new SimpleMemoryOwner<byte>(new byte[3] { 1, 2, 3 });
             IMemoryOwner<byte> nextBytes = new SimpleMemoryOwner<byte>(new byte[3] { 4, 5, 6 });
-            MemoryChunk nextBytesAsChunk = new MemoryChunk(nextBytes, new MemoryChunkReference(1, 0, 3));
+            MemoryChunk nextBytesAsChunk = new MemoryChunk(nextBytes, new MemoryChunkReference(1, 0, 3), false);
             IMemoryOwner<byte> lastBytes = new SimpleMemoryOwner<byte>(new byte[4] { 7, 8, 9, 10 });
-            MemoryChunk lastBytesAsChunk = new MemoryChunk(lastBytes, new MemoryChunkReference(2, 0, 4));
+            MemoryChunk lastBytesAsChunk = new MemoryChunk(lastBytes, new MemoryChunkReference(2, 0, 4), false);
             LazinatorMemory initialMemory = new LazinatorMemory(initialBytes);
             LazinatorMemory memory1 = initialMemory.WithAppendedChunk(nextBytesAsChunk).WithAppendedChunk(lastBytesAsChunk);
 
@@ -489,9 +489,10 @@ namespace LazinatorTests.Tests
         [InlineData(false, false, false)]
         public void BinaryTreeTest_DiffSerialization(bool useFile, bool containedInSingleBlob, bool recreateIndex)
         {
+            List<PersistentIndex> indices = new List<PersistentIndex>();
             MultipleRoundsOfRandomChanges(3, 2, 1, () => // DEBUG -- try higher numbers
             {
-                LazinatorSerializationOptions options = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20);
+                LazinatorSerializationOptions options = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, int.MaxValue); // DEBUG new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20);
                 LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(options);
 
                 // Write to one or more blobs
@@ -499,12 +500,17 @@ namespace LazinatorTests.Tests
                 string fullPath = GetPathForIndexAndBlobs(useFile, true);
                 if (fullPath == null)
                     return;
-                PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob);
+                var index = (indices == null || !indices.Any()) ? new PersistentIndex(fullPath, blobManager, containedInSingleBlob) : new PersistentIndex(indices.Last());
                 index.PersistLazinatorMemory(multipleBufferResult);
+                indices.Add(index);
 
                 if (recreateIndex)
                     index = PersistentIndex.ReadFromBlob(blobManager, fullPath, null, 0);
                 var revisedMemory = index.GetLazinatorMemory();
+
+                var DEBUG = revisedMemory.GetConsolidatedMemory().ToArray();
+                var DEBUG2 = String.Join(",", DEBUG);
+                Debug.WriteLine(DEBUG2);
 
                 BinaryTree = new LazinatorBinaryTree<WDouble>(revisedMemory);
             });
@@ -523,6 +529,8 @@ namespace LazinatorTests.Tests
         {
             throw new Exception();
         }
+
+        // DEBUG -- we also need to have an index updated over multiple rounds and try at different times.
 
         private static string GetPathForIndexAndBlobs(bool useFile, bool binaryTree)
         {

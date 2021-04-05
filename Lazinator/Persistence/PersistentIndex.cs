@@ -169,7 +169,9 @@ namespace Lazinator.Persistence
             {
                 MemoryChunkReference memoryChunkReference = MemoryChunkReferences[i];
                 string referencePath = GetPathForMemoryChunk(memoryChunkReference.MemoryChunkID);
-                memoryChunks.Add(new BlobMemoryChunk(referencePath, (IBlobManager)this.BlobManager, memoryChunkReference));
+                var blobMemoryChunk = new BlobMemoryChunk(referencePath, (IBlobManager)this.BlobManager, memoryChunkReference);
+                blobMemoryChunk.IsPersisted = GetMemoryChunkStatus(blobMemoryChunk.MemoryChunkID) != PersistentIndexMemoryChunkStatus.NotYetUsed;
+                memoryChunks.Add(blobMemoryChunk);
                 numBytesProcessed += memoryChunkReference.FinalLength;
             }
             return memoryChunks;
@@ -225,7 +227,7 @@ namespace Lazinator.Persistence
                 string path = GetPathForMemoryChunk(memoryChunkID);
                 var status = GetMemoryChunkStatus(memoryChunkID);
                 if (status != PersistentIndexMemoryChunkStatus.NotYetUsed)
-                    throw new Exception($"There is or was previously memory persisted at {path}");
+                    throw new Exception($"There is or was previously memory persisted for chunk ID {memoryChunkID}");
                 if (ContainedInSingleBlob)
                 {
                     BlobManager.Append(path, memoryChunkToPersist.MemoryAsLoaded.Memory);
@@ -263,7 +265,7 @@ namespace Lazinator.Persistence
                 string path = GetPathForMemoryChunk(memoryChunkID);
                 var status = GetMemoryChunkStatus(memoryChunkID);
                 if (status != PersistentIndexMemoryChunkStatus.NotYetUsed)
-                    throw new Exception($"There is or was previously memory persisted at {path}");
+                    throw new Exception($"There is or was previously memory persisted for chunk ID {memoryChunkID}");
                 if (ContainedInSingleBlob)
                 {
                     await BlobManager.AppendAsync(path, memoryChunkToPersist.MemoryAsLoaded.Memory);
