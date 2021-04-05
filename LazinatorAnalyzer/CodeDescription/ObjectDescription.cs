@@ -158,7 +158,7 @@ namespace Lazinator.CodeDescription
         public bool GenerateRefStruct => GenerateRefStructIfNotGenerating && !GeneratingRefStruct;
 
         public bool GeneratingRefStruct = false;
-        public bool IncludeTracingCode => false;
+        public bool IncludeTracingCode => false; // DEBUG
         public bool StepThroughProperties => Config?.StepThroughProperties ?? true;
         public bool NonbinaryHash => InterfaceTypeSymbol.HasAttributeOfType<CloneNonbinaryHashAttribute>();
         public int SizeOfLength { get; set; }

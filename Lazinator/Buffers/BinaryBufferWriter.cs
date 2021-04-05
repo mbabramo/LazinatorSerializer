@@ -158,7 +158,7 @@ namespace Lazinator.Buffers
                 }
                 else
                 {
-                    return ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling + RecycledMemoryChunkReferences.Sum(x => x.PreTruncationLength);
+                    return ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling + RecycledMemoryChunkReferences.Sum(x => x.FinalLength);
                 }
             }
         }
@@ -584,23 +584,27 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// Designates the current active memory position as the position at which to store length information. 
+        /// Designates the current active memory position as the position at which to store length information.
+        /// If there are multiple child objects, the lengths will be stored consecutively.
         /// </summary>
         /// <param name="bytesToReserve">The number of bytes to reserve</param>
         public long SetLengthsPosition(int bytesToReserve)
         {
             long previousPosition = LengthsPosition;
+            Debug.WriteLine($"Set lengths position from {LengthsPosition} to {OverallMemoryPosition}"); // DEBUG
             LengthsPosition = OverallMemoryPosition;
             Skip(bytesToReserve);
             return previousPosition;
         }
 
         /// <summary>
-        /// Resets the lengths position to the previous position.
+        /// Resets the lengths position to the previous position. This is called at the beginning of an object,
+        /// so that a child object has a different span for lengths from the parent.
         /// </summary>
         /// <param name="previousPosition"></param>
         public void ResetLengthsPosition(long previousPosition)
         {
+            Debug.WriteLine($"Reset lengths position from {LengthsPosition} to {previousPosition}"); // DEBUG
             LengthsPosition = previousPosition;
         }
 
@@ -619,15 +623,13 @@ namespace Lazinator.Buffers
             LengthsPosition += sizeof(Int16);
         }
 
-        static int DEBUGCount = 0;
-
         public void RecordLength(int length)
         {
-            if (DEBUGCount == 8)
+            Debug.WriteLine($"Recording length of {length}"); // DEBUG
+            if (length == 28 || length == 67)
             {
-                var DEBUGSEF = 0;
+                var DEBUG = 0;
             }
-            Debug.WriteLine(DEBUGCount++ + ": " + length);
             if (BinaryBufferWriter.LittleEndianStorage)
                 WriteInt32LittleEndian(LengthsSpan, length);
             else
