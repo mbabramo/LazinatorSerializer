@@ -162,8 +162,7 @@ namespace Lazinator.Buffers
 
         public void LazinatorShouldNotReturnToPool()
         {
-            IMemoryOwner<byte> ownedMemory = InitialMemoryChunk;
-            Helper(ownedMemory);
+            Helper(InitialMemoryChunk);
 
             if (MoreMemoryChunks != null)
                 foreach (var additional in MoreMemoryChunks)
@@ -171,9 +170,9 @@ namespace Lazinator.Buffers
                     Helper(additional);
                 }
 
-            static void Helper(IMemoryOwner<byte> ownedMemory)
+            static void Helper(MemoryChunk memoryChunk)
             {
-                if (ownedMemory is ExpandableBytes e)
+                if (memoryChunk.MemoryAsLoaded is ExpandableBytes e)
                 {
                     e.LazinatorShouldNotReturnToPool = true;
                     if (ExpandableBytes.TrackMemoryAllocations)

@@ -113,6 +113,7 @@ namespace Lazinator.Buffers
 
         public void Dispose()
         {
+            MemoryAsLoaded?.Dispose();
         }
 
         public override string ToString()
