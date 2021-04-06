@@ -121,10 +121,7 @@ namespace Lazinator.Persistence
                     memoryChunkStatus[i] = (byte)MemoryChunkStatus.Span[i];
                 MemoryChunkStatus = memoryChunkStatus;
             }
-            else
-            {
-                MemoryChunkStatus.Span[memoryChunkID] = (byte)status;
-            }
+            MemoryChunkStatus.Span[memoryChunkID] = (byte)status;
         }
 
         private void InitializeMemoryChunkStatusFromPrevious()

@@ -99,7 +99,8 @@ namespace Lazinator.Buffers
                     if (ActiveMemoryPosition == 0)
                         return CompletedMemory;
                     Debug.WriteLine($"Appending {ActiveMemoryPosition} bytes to {CompletedMemory}"); // DEBUG
-                    return CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, new MemoryChunkReference(GetActiveMemoryChunkID(), 0, ActiveMemoryPosition), false));
+                    var withAppended = CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, new MemoryChunkReference(GetActiveMemoryChunkID(), 0, ActiveMemoryPosition), false));
+                    return withAppended;
                 }
                 return new LazinatorMemory(new MemoryChunk(ActiveMemory), 0, ActiveMemoryPosition);
             }

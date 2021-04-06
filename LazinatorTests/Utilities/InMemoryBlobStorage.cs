@@ -77,7 +77,7 @@ namespace LazinatorTests.Utilities
 
         public void Write(string path, Memory<byte> bytes)
         {
-            if (bytes.Length == 11)
+            if (path.Contains("Chunk 2"))
             {
                 var DEBUG = 0;
             }
