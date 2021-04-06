@@ -722,7 +722,6 @@ namespace LazinatorCollections.Tree
                     ThrowHelper.ThrowTooLargeException(int.MaxValue);
                 }
                 writer.RecordLength((int) lengthValue);
-                var DEBUG = writer.OverallMemoryPosition;
             }
             if (options.UpdateStoredBuffer)
             {

@@ -935,9 +935,8 @@ namespace LazinatorTests.Tests
         private static void ConfirmBuffersUpdateInTandem(ILazinator itemToUpdate)
         {
             itemToUpdate.SerializeLazinator();
-            var initialOwnedMemory = itemToUpdate.LazinatorMemoryStorage.InitialMemoryChunk;
-            IMemoryOwner<byte> initialMemoryOwner = (IMemoryOwner<byte>)initialOwnedMemory;
-            var allocationID = ((ExpandableBytes)initialMemoryOwner).AllocationID;
+            var initialMemoryChunk = itemToUpdate.LazinatorMemoryStorage.InitialMemoryChunk;
+            var allocationID = ((ExpandableBytes)initialMemoryChunk.MemoryAsLoaded).AllocationID;
             itemToUpdate.ForEachLazinator(x => 
             {
                 if (x.LazinatorMemoryStorage.IsEmpty == false)
