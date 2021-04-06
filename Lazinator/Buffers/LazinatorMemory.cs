@@ -23,11 +23,11 @@ namespace Lazinator.Buffers
         /// <summary>
         /// The first chunk of owned memory (and in ordinary usage, the only chunk).
         /// </summary>
-        public readonly IMemoryOwner<byte> InitialOwnedMemory;
+        public readonly MemoryChunk InitialMemoryChunk;
         /// <summary>
         /// Additional chunks of owned memory, where the memory storage is split across chunks.
         /// </summary>
-        public readonly List<MemoryChunk> MoreOwnedMemory;
+        public readonly List<MemoryChunk> MoreMemoryChunks;
         /// <summary>
         /// The starting index from the set consisting of InitialOwnedMemory and MoreOwnedMemory for the referenced range.
         /// </summary>
@@ -46,8 +46,8 @@ namespace Lazinator.Buffers
         /// </summary>
         public int? LengthInt => Length > int.MaxValue ? null : (int)Length;
 
-        public bool IsEmpty => InitialOwnedMemory == null || Length == 0;
-        public long? AllocationID => (InitialOwnedMemory as ExpandableBytes)?.AllocationID;
+        public bool IsEmpty => InitialMemoryChunk == null || Length == 0;
+        public long? AllocationID => (InitialMemoryChunk.MemoryAsLoaded as ExpandableBytes)?.AllocationID;
 
         public static Memory<byte> EmptyMemory = new Memory<byte>();
         public static ReadOnlyMemory<byte> EmptyReadOnlyMemory = new ReadOnlyMemory<byte>();
@@ -66,10 +66,10 @@ namespace Lazinator.Buffers
 
         #region Construction
 
-        public LazinatorMemory(IMemoryOwner<byte> ownedMemory, int startPosition, long length)
+        public LazinatorMemory(MemoryChunk memoryChunk, int startPosition, long length)
         {
-            InitialOwnedMemory = ownedMemory;
-            MoreOwnedMemory = null;
+            InitialMemoryChunk = memoryChunk;
+            MoreMemoryChunks = null;
             StartIndex = 0;
             if (startPosition < 0)
                 throw new ArgumentException();
@@ -80,25 +80,29 @@ namespace Lazinator.Buffers
                 Length = length;
         }
 
-        public LazinatorMemory(MemoryChunk ownedMemory, List<MemoryChunk> moreOwnedMemory, int startIndex, int startPosition, long length) : this(ownedMemory, startPosition, length)
+        public LazinatorMemory(MemoryChunk memoryChunk, List<MemoryChunk> moreMemoryChunks, int startIndex, int startPosition, long length) : this(memoryChunk, startPosition, length)
         {
-            MoreOwnedMemory = moreOwnedMemory;
+            MoreMemoryChunks = moreMemoryChunks;
             StartIndex = startIndex;
         }
 
-        public LazinatorMemory(IMemoryOwner<byte> ownedMemory, long length) : this(ownedMemory, 0, length)
+        public LazinatorMemory(MemoryChunk memoryChunk, long length) : this(memoryChunk, 0, length)
         {
         }
 
-        public LazinatorMemory(IMemoryOwner<byte> ownedMemory) : this(ownedMemory, 0, ownedMemory.Memory.Length)
+        public LazinatorMemory(MemoryChunk memoryChunk) : this(memoryChunk, 0, memoryChunk.Memory.Length)
         {
         }
 
-        public LazinatorMemory(Memory<byte> memory) : this(new SimpleMemoryOwner<byte>(memory), memory.Length)
+        public LazinatorMemory(IMemoryOwner<byte> memoryOwner) : this(new MemoryChunk(memoryOwner))
         {
         }
 
-        public LazinatorMemory(byte[] array) : this(new SimpleMemoryOwner<byte>(new Memory<byte>(array)), array.Length)
+        public LazinatorMemory(Memory<byte> memory) : this(new MemoryChunk(new SimpleMemoryOwner<byte>(memory)))
+        {
+        }
+
+        public LazinatorMemory(byte[] array) : this(new MemoryChunk(new SimpleMemoryOwner<byte>(array)))
         {
         }
 
@@ -114,9 +118,9 @@ namespace Lazinator.Buffers
 
             if (SpansLastChunk)
             {
-                var evenMoreOwnedMemory = MoreOwnedMemory?.Select(x => x.WithPreTruncationLengthIncreasedIfNecessary(chunk)).ToList() ?? new List<MemoryChunk>();
+                var evenMoreOwnedMemory = MoreMemoryChunks?.Select(x => x.WithPreTruncationLengthIncreasedIfNecessary(chunk)).ToList() ?? new List<MemoryChunk>();
                 evenMoreOwnedMemory.Add(chunk);
-                return new LazinatorMemory(InitialOwnedMemoryChunk.WithPreTruncationLengthIncreasedIfNecessary(chunk), evenMoreOwnedMemory, StartIndex, Offset, Length + chunk.Reference.FinalLength);
+                return new LazinatorMemory(InitialMemoryChunk.WithPreTruncationLengthIncreasedIfNecessary(chunk), evenMoreOwnedMemory, StartIndex, Offset, Length + chunk.Reference.FinalLength);
             }
 
             // The current LazinatorMemory does not terminate at the end of the last chunk. If we just added a chunk, then
@@ -150,19 +154,19 @@ namespace Lazinator.Buffers
 
         public void Dispose()
         {
-            InitialOwnedMemory?.Dispose();
-            if (MoreOwnedMemory != null)
-                foreach (var additional in MoreOwnedMemory)
+            InitialMemoryChunk?.Dispose();
+            if (MoreMemoryChunks != null)
+                foreach (var additional in MoreMemoryChunks)
                     additional?.Dispose();
         }
 
         public void LazinatorShouldNotReturnToPool()
         {
-            IMemoryOwner<byte> ownedMemory = InitialOwnedMemory;
+            IMemoryOwner<byte> ownedMemory = InitialMemoryChunk;
             Helper(ownedMemory);
 
-            if (MoreOwnedMemory != null)
-                foreach (var additional in MoreOwnedMemory)
+            if (MoreMemoryChunks != null)
+                foreach (var additional in MoreMemoryChunks)
                 {
                     Helper(additional);
                 }
@@ -194,7 +198,7 @@ namespace Lazinator.Buffers
             return new LazinatorMemory(array);
         }
 
-        private IMemoryOwner<byte> MemoryAtIndex(int i) => i == 0 ? InitialOwnedMemory : MoreOwnedMemory[i - 1];
+        private MemoryChunk MemoryAtIndex(int i) => i == 0 ? InitialMemoryChunk : MoreMemoryChunks[i - 1];
 
         /// <summary>
         /// Gets the final length of the specified memory chunk. It avoids loading the memory if possible.
@@ -204,20 +208,7 @@ namespace Lazinator.Buffers
         private int LengthAtIndex(int i)
         {
             var memoryAtIndex = MemoryAtIndex(i);
-            return GetMemoryOwnerFinalLength(memoryAtIndex);
-        }
-
-
-        /// <summary>
-        /// Returns the length of the specified memory owner, without loading the memory if it is unloaded.
-        /// </summary>
-        /// <param name="memoryAtIndex"></param>
-        /// <returns></returns>
-        private static int GetMemoryOwnerFinalLength(IMemoryOwner<byte> memoryAtIndex)
-        {
-            if (memoryAtIndex is MemoryChunk memoryChunk)
-                return memoryChunk.Reference.FinalLength;
-            return memoryAtIndex.Memory.Length;
+            return memoryAtIndex.Reference.FinalLength;
         }
 
         public MemoryChunk GetFirstMemoryChunkWithID(int memoryChunkID)
@@ -230,11 +221,11 @@ namespace Lazinator.Buffers
 
         public int? GetFirstIndexOfMemoryChunkID(int memoryChunkID)
         {
-            int numMemoryChunks = MoreOwnedMemory == null ? 1 : MoreOwnedMemory.Count() + 1;
+            int numMemoryChunks = MoreMemoryChunks == null ? 1 : MoreMemoryChunks.Count() + 1;
             for (int i = 0; i < numMemoryChunks; i++)
             {
-                IMemoryOwner<byte> memoryOwner = MemoryAtIndex(i);
-                if (memoryOwner is MemoryChunk memoryChunk && memoryChunk.Reference.MemoryChunkID == memoryChunkID)
+                var memoryChunk = MemoryAtIndex(i);
+                if (memoryChunk.Reference.MemoryChunkID == memoryChunkID)
                     return i;
             }
             return null;
@@ -253,7 +244,7 @@ namespace Lazinator.Buffers
         /// <param name="offset">An offset relative to the existing Offset, which must refer to the initial memory</param>
         /// <param name="length"></param>
         /// <returns></returns>
-        private LazinatorMemory SliceInitial(int offset, long length) => length == 0 ? LazinatorMemory.EmptyLazinatorMemory : new LazinatorMemory(InitialOwnedMemory, Offset + offset, length);
+        private LazinatorMemory SliceInitial(int offset, long length) => length == 0 ? LazinatorMemory.EmptyLazinatorMemory : new LazinatorMemory(InitialMemoryChunk, Offset + offset, length);
 
         /// <summary>
         /// Slices the memory, returning a new LazinatorMemory beginning at the specified index. The returned memory will include all of the same memory
@@ -287,11 +278,11 @@ namespace Lazinator.Buffers
             long positionRemaining = offset;
             int revisedStartIndex = StartIndex;
             int revisedStartPosition = Offset;
-            int moreMemoryCount = MoreOwnedMemory?.Count() ?? 0;
+            int moreMemoryCount = MoreMemoryChunks?.Count() ?? 0;
             while (positionRemaining > 0)
             {
-                IMemoryOwner<byte> current = MemoryAtIndex(revisedStartIndex);
-                int remainingBytesThisMemory = GetMemoryOwnerFinalLength(current) - revisedStartPosition;
+                MemoryChunk current = MemoryAtIndex(revisedStartIndex);
+                int remainingBytesThisMemory = current.Reference.FinalLength - revisedStartPosition;
                 if (remainingBytesThisMemory <= positionRemaining)
                 {
                     positionRemaining -= remainingBytesThisMemory;
@@ -307,7 +298,7 @@ namespace Lazinator.Buffers
                 }
             }
 
-            return new LazinatorMemory((MemoryChunk)InitialOwnedMemory, MoreOwnedMemory, revisedStartIndex, revisedStartPosition, length);
+            return new LazinatorMemory((MemoryChunk)InitialMemoryChunk, MoreMemoryChunks, revisedStartIndex, revisedStartPosition, length);
         }
 
         #endregion
@@ -315,7 +306,7 @@ namespace Lazinator.Buffers
         #region Equality
 
         public override bool Equals(object obj) => obj == null ? throw new LazinatorSerializationException("Invalid comparison of LazinatorMemory to null") :
-            obj is LazinatorMemory lm && lm.InitialOwnedMemory.Equals(InitialOwnedMemory) && lm.Offset == Offset && lm.Length == Length;
+            obj is LazinatorMemory lm && lm.InitialMemoryChunk.Equals(InitialMemoryChunk) && lm.Offset == Offset && lm.Length == Length;
 
         public override int GetHashCode()
         {
@@ -339,7 +330,7 @@ namespace Lazinator.Buffers
         /// <summary>
         /// True if there is only a single memory chunk.
         /// </summary>
-        public bool SingleMemory => MoreOwnedMemory == null || MoreOwnedMemory.Count() == 0;
+        public bool SingleMemory => MoreMemoryChunks == null || MoreMemoryChunks.Count() == 0;
         /// <summary>
         /// The first referenced memory chunk
         /// </summary>
@@ -351,7 +342,7 @@ namespace Lazinator.Buffers
                     return EmptyMemory;
                 LoadInitialMemory();
                 if (SingleMemory)
-                    return InitialOwnedMemory.Memory.Slice(Offset, (int)Length);
+                    return InitialMemoryChunk.Memory.Slice(Offset, (int)Length);
                 else
                 {
                     IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
@@ -379,7 +370,7 @@ namespace Lazinator.Buffers
                 return EmptyMemory;
             IMemoryOwner<byte> memoryOwner = await LoadInitialMemoryAsync();
             if (SingleMemory)
-                return InitialOwnedMemory.Memory.Slice(Offset, (int)Length);
+                return InitialMemoryChunk.Memory.Slice(Offset, (int)Length);
             else
             {
                 var memory = memoryOwner.Memory;
@@ -408,25 +399,7 @@ namespace Lazinator.Buffers
             {
                 if (!SingleMemory)
                     throw new LazinatorCompoundMemoryException();
-                return InitialOwnedMemory.Memory.Slice(Offset, (int) Length);
-            }
-        }
-
-
-        /// <summary>
-        /// Returns a memory chunk corresponding to the initial memory.
-        /// </summary>
-        public MemoryChunk InitialOwnedMemoryChunk
-        {
-            get
-            {
-                MemoryChunk initialOwnedMemoryChunk = InitialOwnedMemory as MemoryChunk;
-                if (initialOwnedMemoryChunk == null)
-                {
-                    int length = InitialOwnedMemory.Memory.Length;
-                    initialOwnedMemoryChunk = new MemoryChunk(InitialOwnedMemory, new MemoryChunkReference(0, 0, length, 0, length), false);
-                }
-                return initialOwnedMemoryChunk;
+                return InitialMemoryChunk.Memory.Slice(Offset, (int) Length);
             }
         }
 
@@ -438,17 +411,17 @@ namespace Lazinator.Buffers
         {
             if (SingleMemory)
             {
-                LoadMemoryOwner(InitialOwnedMemory);
-                return InitialOwnedMemory;
+                LoadMemoryChunk(InitialMemoryChunk);
+                return InitialMemoryChunk;
             }
-            IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
-            LoadMemoryOwner(memoryOwner);
-            return memoryOwner;
+            MemoryChunk memoryChunk = MemoryAtIndex(StartIndex);
+            LoadMemoryChunk(memoryChunk);
+            return memoryChunk;
         }
 
-        private static void LoadMemoryOwner(IMemoryOwner<byte> memoryOwner)
+        private static void LoadMemoryChunk(MemoryChunk memoryChunk)
         {
-            if (memoryOwner is MemoryChunk memoryChunk && memoryChunk.IsLoaded == false)
+            if (memoryChunk.IsLoaded == false)
             {
                 memoryChunk.LoadMemory();
             }
@@ -460,9 +433,9 @@ namespace Lazinator.Buffers
         public void LoadAllMemory()
         {
             LoadInitialMemory();
-            if (MoreOwnedMemory != null)
-                foreach (var additional in MoreOwnedMemory)
-                    LoadMemoryOwner(additional);
+            if (MoreMemoryChunks != null)
+                foreach (var additional in MoreMemoryChunks)
+                    LoadMemoryChunk(additional);
         }
 
         /// <summary>
@@ -473,8 +446,8 @@ namespace Lazinator.Buffers
         {
             if (SingleMemory)
                 return;
-            IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
-            if (memoryOwner is MemoryChunk memoryChunk && memoryChunk.IsLoaded == true)
+            MemoryChunk memoryChunk = MemoryAtIndex(StartIndex);
+            if (memoryChunk.IsLoaded == true)
             {
                 // Unfortunately, we must call an async method synchronously. It would be better for the user
                 // to use an asynchronous method.
@@ -492,17 +465,17 @@ namespace Lazinator.Buffers
         {
             if (SingleMemory)
             {
-                await LoadMemoryOwnerAsync(InitialOwnedMemory);
-                return InitialOwnedMemory;
+                await LoadMemoryChunkAsync(InitialMemoryChunk);
+                return InitialMemoryChunk;
             }
-            IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
-            await LoadMemoryOwnerAsync(memoryOwner);
-            return memoryOwner;
+            MemoryChunk memoryChunk = MemoryAtIndex(StartIndex);
+            await LoadMemoryChunkAsync(memoryChunk);
+            return memoryChunk;
         }
 
-        private static async Task LoadMemoryOwnerAsync(IMemoryOwner<byte> memoryOwner)
+        private static async Task LoadMemoryChunkAsync(MemoryChunk memoryChunk)
         {
-            if (memoryOwner is MemoryChunk memoryChunk && memoryChunk.IsLoaded == false)
+            if (memoryChunk.IsLoaded == false)
                 await memoryChunk.LoadMemoryAsync();
         }
 
@@ -515,8 +488,8 @@ namespace Lazinator.Buffers
         {
             if (SingleMemory)
                 return;
-            IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
-            if (memoryOwner is MemoryChunk memoryChunk && memoryChunk.IsLoaded == true)
+            MemoryChunk memoryChunk = MemoryAtIndex(StartIndex);
+            if (memoryChunk.IsLoaded == true)
                 await memoryChunk.ConsiderUnloadMemoryAsync();
         }
 
@@ -530,9 +503,9 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public int NumMemoryChunks()
         {
-            if (InitialOwnedMemory == null)
+            if (InitialMemoryChunk == null)
                 return 0;
-            return 1 + (MoreOwnedMemory == null ? 0 : MoreOwnedMemory.Count);
+            return 1 + (MoreMemoryChunks == null ? 0 : MoreMemoryChunks.Count);
         }
 
         /// <summary>
@@ -570,31 +543,15 @@ namespace Lazinator.Buffers
             }
         }
 
-        private MemoryChunk GetMemoryChunkFromMemoryChunkIndexReference(MemoryChunkIndexReference memoryChunkIndexReference)
-        {
-            IMemoryOwner<byte> memoryOwner = MemoryAtIndex(memoryChunkIndexReference.MemoryChunkIndex);
-            if (memoryOwner is MemoryChunk memoryChunk)
-            {
-                return memoryChunk.Slice(memoryChunkIndexReference.Offset, memoryChunkIndexReference.Length);
-            }
-            else
-            {
-                int memoryChunkID;
-                if (memoryChunkIndexReference.MemoryChunkIndex == 0)
-                    memoryChunkID = InitialOwnedMemoryChunk.Reference.MemoryChunkID;
-                else
-                    memoryChunkID = GetNextMemoryChunkID();
-                return new MemoryChunk(memoryOwner, new MemoryChunkReference(memoryChunkID, 0, memoryOwner.Memory.Length, memoryChunkIndexReference.Offset, memoryChunkIndexReference.Length), false);
-            }
-        }
+        private MemoryChunk GetMemoryChunkFromMemoryChunkIndexReference(MemoryChunkIndexReference memoryChunkIndexReference) => MemoryAtIndex(memoryChunkIndexReference.MemoryChunkIndex);
 
         internal int GetNextMemoryChunkID()
         {
-            if (!IsEmpty && (MoreOwnedMemory?.Any() ?? false))
-                return MoreOwnedMemory.Last().Reference.MemoryChunkID + 1;
+            if (!IsEmpty && (MoreMemoryChunks?.Any() ?? false))
+                return MoreMemoryChunks.Last().Reference.MemoryChunkID + 1;
             if (IsEmpty)
                 return 0;
-            return InitialOwnedMemoryChunk.Reference.MemoryChunkID + 1;
+            return InitialMemoryChunk.Reference.MemoryChunkID + 1;
         }
 
         /// <summary>
@@ -617,7 +574,7 @@ namespace Lazinator.Buffers
                     startPositionOrZero = Offset;
                 else
                     startPositionOrZero = 0;
-                int numBytes = GetMemoryOwnerFinalLength(m) - startPositionOrZero;
+                int numBytes = m.Reference.FinalLength - startPositionOrZero;
                 if (numBytes > lengthRemaining)
                     numBytes = (int) lengthRemaining;
                 yield return new MemoryChunkIndexReference(i, startPositionOrZero, numBytes);
@@ -649,9 +606,7 @@ namespace Lazinator.Buffers
             long numBytesOfLengthRemaining=length;
             while (numBytesOfLengthRemaining > 0)
             {
-                var memoryOwner = MemoryAtIndex(memoryChunkIndex);
-                if (memoryOwner is not MemoryChunk memoryChunk)
-                    memoryChunk = InitialOwnedMemoryChunk;
+                var memoryChunk = MemoryAtIndex(memoryChunkIndex);
 
                 int numBytesThisChunk = memoryChunk.Reference.FinalLength;
                 int bytesToUseThisChunk = (int)Math.Min(numBytesThisChunk - offset, numBytesOfLengthRemaining);
@@ -673,11 +628,7 @@ namespace Lazinator.Buffers
         {
             foreach (MemoryChunkIndexReference memoryChunkIndexReference in EnumerateMemoryChunkIndices(offset, length))
             {
-                MemoryChunk memoryChunk;
-                if (memoryChunkIndexReference.MemoryChunkIndex == 0)
-                    memoryChunk = InitialOwnedMemoryChunk;
-                else
-                    memoryChunk = (MemoryChunk) MemoryAtIndex(memoryChunkIndexReference.MemoryChunkIndex);
+                MemoryChunk memoryChunk = MemoryAtIndex(memoryChunkIndexReference.MemoryChunkIndex);
                 yield return memoryChunk.Reference.Slice(memoryChunkIndexReference.Offset, memoryChunkIndexReference.Length);
             }
         }
@@ -737,8 +688,8 @@ namespace Lazinator.Buffers
             MemoryChunk lastMemoryReferenceLoaded = null;
             foreach (var rangeInfo in EnumerateMemoryChunksByIndex(includeOutsideOfRange))
             {
-                var m = MemoryAtIndex(rangeInfo.MemoryChunkIndex);
-                if (m is MemoryChunk memoryChunk && memoryChunk.IsLoaded == false)
+                var memoryChunk = MemoryAtIndex(rangeInfo.MemoryChunkIndex);
+                if (memoryChunk.IsLoaded == false)
                 {
                     if (lastMemoryReferenceLoaded != null && lastMemoryReferenceLoaded != memoryChunk)
                     { // consider unloading the last memory reference, before loading this one, so that we don't have too many in memory at the same time
@@ -747,7 +698,7 @@ namespace Lazinator.Buffers
                     }
                     memoryChunk.LoadMemory();
                 }
-                yield return m.Memory.Slice(rangeInfo.Offset, rangeInfo.Length);
+                yield return memoryChunk.Memory.Slice(rangeInfo.Offset, rangeInfo.Length);
             }
         }
 
@@ -779,12 +730,12 @@ namespace Lazinator.Buffers
         /// Enumerates each of the memory owners, whether included within the referenced range or not.
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<IMemoryOwner<byte>> EnumerateMemoryOwners()
+        public IEnumerable<MemoryChunk> EnumerateMemoryChunks()
         {
-            if (InitialOwnedMemory != null)
-                yield return InitialOwnedMemory;
-            if (MoreOwnedMemory != null)
-                foreach (var additional in MoreOwnedMemory)
+            if (InitialMemoryChunk != null)
+                yield return InitialMemoryChunk;
+            if (MoreMemoryChunks != null)
+                foreach (var additional in MoreMemoryChunks)
                     yield return additional;
         }
 
@@ -794,24 +745,8 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         private IEnumerable<IMemoryOwner<byte>> EnumerateReferencedMemoryOwners()
         {
-            foreach (var owner in EnumerateMemoryOwners())
-                if (owner is MemoryChunk memoryChunk)
-                    yield return memoryChunk.MemoryAsLoaded;
-                else
-                    yield return owner;
-        }
-
-        /// <summary>
-        /// Enumerates all memory chunks, including not referenced memory chunks, as memory references.
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<MemoryChunk> EnumerateMemoryChunks()
-        {
-            if (InitialOwnedMemory != null)
-                yield return InitialOwnedMemoryChunk;
-            if (MoreOwnedMemory != null)
-                foreach (var additional in MoreOwnedMemory)
-                    yield return additional;
+            foreach (var memoryChunk in EnumerateMemoryChunks())
+                yield return memoryChunk.MemoryAsLoaded;
         }
 
         public Dictionary<int, MemoryChunk> GetMemoryChunksByID()
@@ -883,18 +818,17 @@ namespace Lazinator.Buffers
             int numYielded = 0;
             for (int i = StartIndex; i < totalItems; i++)
             {
-                var m = MemoryAtIndex(i);
-                if (m is MemoryChunk memoryChunk)
-                    memoryChunk.LoadMemory();
+                var memoryChunk = MemoryAtIndex(i);
+                memoryChunk.LoadMemory();
                 int startPositionOrZero;
                 if (i == StartIndex && !includeOutsideOfRange)
                     startPositionOrZero = Offset;
                 else
                     startPositionOrZero = 0;
-                int memoryOwnerLength = GetMemoryOwnerFinalLength(m);
-                for (int j = startPositionOrZero; j < memoryOwnerLength; j++)
+                int memoryChunkLength = memoryChunk.Reference.FinalLength;
+                for (int j = startPositionOrZero; j < memoryChunkLength; j++)
                 {
-                    yield return m.Memory.Span[j];
+                    yield return memoryChunk.Memory.Span[j];
                     numYielded++;
                     if (!includeOutsideOfRange && numYielded == Length)
                         yield break;
@@ -938,9 +872,9 @@ namespace Lazinator.Buffers
             if (SingleMemory)
             {
                 if (includeOutsideOfRange)
-                    return InitialOwnedMemory.Memory;
+                    return InitialMemoryChunk.Memory;
                 else
-                    return InitialOwnedMemory.Memory.Slice(Offset, (int) Length);
+                    return InitialMemoryChunk.Memory.Slice(Offset, (int) Length);
             }
 
             long totalLength = includeOutsideOfRange ? GetGrossLength() : Length;

@@ -61,7 +61,7 @@ namespace Lazinator.Persistence
 
         private static PersistentIndex CreateFromBytes(IBlobManager blobManager, Memory<byte> bytes)
         {
-            var index = new PersistentIndex(new LazinatorMemory(new SimpleMemoryOwner<byte>(bytes)));
+            var index = new PersistentIndex(new LazinatorMemory(bytes));
             index.BlobManager = blobManager;
             return index;
         }

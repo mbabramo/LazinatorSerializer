@@ -30,7 +30,7 @@ namespace LazinatorTests.Tests
             Example e = GetTypicalExample();
             LazinatorMemory singleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false));
             LazinatorMemory multipleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 10));
-            multipleBufferResult.MoreOwnedMemory.Count().Should().BeGreaterThan(0);
+            multipleBufferResult.MoreMemoryChunks.Count().Should().BeGreaterThan(0);
             LazinatorMemory consolidated = multipleBufferResult.GetConsolidatedMemory();
             consolidated.Matches(singleBufferResult.InitialMemory.Span).Should().BeTrue();
 

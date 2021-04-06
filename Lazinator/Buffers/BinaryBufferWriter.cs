@@ -101,7 +101,7 @@ namespace Lazinator.Buffers
                     Debug.WriteLine($"Appending {ActiveMemoryPosition} bytes to {CompletedMemory}"); // DEBUG
                     return CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, new MemoryChunkReference(GetActiveMemoryChunkID(), 0, ActiveMemoryPosition), false));
                 }
-                return new LazinatorMemory(ActiveMemory, 0, ActiveMemoryPosition);
+                return new LazinatorMemory(new MemoryChunk(ActiveMemory), 0, ActiveMemoryPosition);
             }
         }
 
@@ -317,11 +317,6 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         internal Span<byte> GetLengthsSpanWithinRecycled()
         {
-            DEBUG++;
-            if (DEBUG == 11)
-            {
-                var DEBUG2 = 0;
-            }
             MemoryChunkReference? lengthsSpanMemoryChunkReference;
             long lengthPositionRemaining;
             TryToGetReferenceToLengthSpanWithinRecycled(out lengthsSpanMemoryChunkReference, out lengthPositionRemaining);
@@ -335,13 +330,9 @@ namespace Lazinator.Buffers
                 }
                 else
                 {
-                    IMemoryOwner<byte> memoryOwner = CompletedMemory.GetFirstMemoryChunkWithID(memoryChunkID);
-                    if (memoryOwner is MemoryChunk memoryChunk)
-                    {
-                        memoryChunk.LoadMemory();
-                        var resliced = memoryChunk.WithReference(nonNullLengthsSpanReference);
-                    }
-                    return memoryOwner.Memory.Slice(nonNullLengthsSpanReference.AdditionalOffset).Span;
+                    MemoryChunk memoryChunk = CompletedMemory.GetFirstMemoryChunkWithID(memoryChunkID);
+                    memoryChunk.LoadMemory();
+                    return memoryChunk.Memory.Slice(nonNullLengthsSpanReference.AdditionalOffset).Span;
                 }
             }
             else

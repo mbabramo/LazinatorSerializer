@@ -25,6 +25,11 @@ namespace Lazinator.Buffers
 
         }
 
+        public MemoryChunk(IMemoryOwner<byte> memoryAsLoaded) : this(memoryAsLoaded, new MemoryChunkReference(0, 0, memoryAsLoaded.Memory.Length, 0, memoryAsLoaded.Memory.Length), false)
+        {
+
+        }
+
         public MemoryChunk(IMemoryOwner<byte> memoryAsLoaded, MemoryChunkReference reference, bool isPersisted)
         {
             MemoryAsLoaded = memoryAsLoaded;
@@ -57,9 +62,9 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public virtual MemoryChunk WithReference(MemoryChunkReference replacementReference) => new MemoryChunk(MemoryAsLoaded, replacementReference, IsPersisted);
 
-        internal MemoryChunk WithPreTruncationLengthIncreasedIfNecessary(IMemoryOwner<byte> otherMemoryOwner)
+        internal MemoryChunk WithPreTruncationLengthIncreasedIfNecessary(MemoryChunk otherMemoryChunk)
         {
-            if (otherMemoryOwner is MemoryChunk otherMemoryChunk && (otherMemoryChunk.MemoryChunkID == MemoryChunkID) && Reference.PreTruncationLength < otherMemoryChunk.Reference.PreTruncationLength)
+            if ((otherMemoryChunk.MemoryChunkID == MemoryChunkID) && Reference.PreTruncationLength < otherMemoryChunk.Reference.PreTruncationLength)
                 Reference = Reference.WithPreTruncationLength(otherMemoryChunk.Reference.PreTruncationLength);
             return this;
         }
