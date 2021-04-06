@@ -82,7 +82,8 @@ namespace LazinatorCollections.BitArray
                 if (!_IntStorage_Accessed)
                 {
                     LazinateIntStorage();
-                } 
+                }
+                IsDirty = true; 
                 return _IntStorage;
             }
             [DebuggerStepThrough]

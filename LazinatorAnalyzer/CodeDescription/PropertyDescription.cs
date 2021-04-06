@@ -95,6 +95,8 @@ namespace Lazinator.CodeDescription
                                              (SupportedCollectionType == LazinatorSupportedCollectionType.LinkedList ||
                                               SupportedCollectionType == LazinatorSupportedCollectionType.List ||
                                               (SupportedCollectionType == LazinatorSupportedCollectionType.Array && ArrayRank == 1));
+        internal bool IsMemory => PropertyType == LazinatorPropertyType.SupportedCollection &&
+                                        (SupportedCollectionType == LazinatorSupportedCollectionType.Memory);
         internal bool IsMemoryOrSpan => PropertyType == LazinatorPropertyType.SupportedCollection &&
                                         (SupportedCollectionType == LazinatorSupportedCollectionType.Memory ||
                                         SupportedCollectionType ==
@@ -1145,7 +1147,7 @@ namespace Lazinator.CodeDescription
                 {IIF(BackingAccessFieldIncluded, $@"if ({BackingFieldNotAccessedString})
                 {{
                     {AwaitIfNeeded(async)}Lazinate{PropertyName}{AsyncIfNeeded(async)}();
-                }}")}{IIF(IsNonLazinatorType && !TrackDirtinessNonSerialized && (!RoslynHelpers.IsReadOnlyStruct(Symbol) || ContainsLazinatorInnerProperty || ContainsOpenGenericInnerProperty), $@"
+                }}")}{IIF(IsMemory || (IsNonLazinatorType && !TrackDirtinessNonSerialized && (!RoslynHelpers.IsReadOnlyStruct(Symbol) || ContainsLazinatorInnerProperty || ContainsOpenGenericInnerProperty)), $@"
                     IsDirty = true;")} {IIF(CodeOnAccessed != "", $@"
                 {CodeOnAccessed}")}
                 return {BackingFieldAccessWithPossibleException};";

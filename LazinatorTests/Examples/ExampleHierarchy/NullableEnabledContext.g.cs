@@ -529,7 +529,8 @@ namespace LazinatorTests.Examples.ExampleHierarchy
                 if (!_NonNullableMemoryOfBytes_Accessed)
                 {
                     LazinateNonNullableMemoryOfBytes();
-                } 
+                }
+                IsDirty = true; 
                 return _NonNullableMemoryOfBytes;
             }
             set

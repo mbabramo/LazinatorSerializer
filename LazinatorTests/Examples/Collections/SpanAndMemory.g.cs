@@ -68,7 +68,8 @@ namespace LazinatorTests.Examples.Collections
                 if (!_MyMemoryByte_Accessed)
                 {
                     LazinateMyMemoryByte();
-                } 
+                }
+                IsDirty = true; 
                 return _MyMemoryByte;
             }
             set
@@ -103,7 +104,8 @@ namespace LazinatorTests.Examples.Collections
                 if (!_MyMemoryInt_Accessed)
                 {
                     LazinateMyMemoryInt();
-                } 
+                }
+                IsDirty = true; 
                 return _MyMemoryInt;
             }
             set

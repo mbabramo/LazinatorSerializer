@@ -200,7 +200,8 @@ namespace Lazinator.Persistence
                 if (!_MemoryChunkStatus_Accessed)
                 {
                     LazinateMemoryChunkStatus();
-                } 
+                }
+                IsDirty = true; 
                 return _MemoryChunkStatus;
             }
             [DebuggerStepThrough]
