@@ -248,6 +248,10 @@ namespace LazinatorTests.Tests
             span[2].Should().Be(6);
             var result = copy.CloneLazinatorTyped();
             SequenceEqual(copy.MyMemoryInt, result.MyMemoryInt).Should().BeTrue();
+
+            SetIndex(result.MyMemoryInt, 2, 3);
+            var result2 = result.CloneLazinatorTyped();
+            result2.MyMemoryInt.Span[2].Should().Be(3);
         }
 
         [Fact]
