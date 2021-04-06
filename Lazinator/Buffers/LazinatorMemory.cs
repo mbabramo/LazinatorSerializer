@@ -546,11 +546,10 @@ namespace Lazinator.Buffers
 
         internal int GetNextMemoryChunkID()
         {
-            if (!IsEmpty && (MoreMemoryChunks?.Any() ?? false))
-                return MoreMemoryChunks.Last().Reference.MemoryChunkID + 1;
             if (IsEmpty)
                 return 0;
-            return InitialMemoryChunk.Reference.MemoryChunkID + 1;
+            int maxMemoryChunkID = EnumerateMemoryChunks().Max(x => x.MemoryChunkID); // not always the ID of the last chunk, because patching may reassemble into a different order. We are guaranteed, however, that if we're doing versioning, the most recent memory chunk ID will be included.
+            return maxMemoryChunkID + 1;
         }
 
         /// <summary>

@@ -332,7 +332,7 @@ namespace Lazinator.Buffers
                 {
                     MemoryChunk memoryChunk = CompletedMemory.GetFirstMemoryChunkWithID(memoryChunkID);
                     memoryChunk.LoadMemory();
-                    return memoryChunk.Memory.Slice(nonNullLengthsSpanReference.AdditionalOffset).Span;
+                    return memoryChunk.WithReference(nonNullLengthsSpanReference).Memory.Span;
                 }
             }
             else

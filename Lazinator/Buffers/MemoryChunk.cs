@@ -65,7 +65,10 @@ namespace Lazinator.Buffers
         internal MemoryChunk WithPreTruncationLengthIncreasedIfNecessary(MemoryChunk otherMemoryChunk)
         {
             if ((otherMemoryChunk.MemoryChunkID == MemoryChunkID) && Reference.PreTruncationLength < otherMemoryChunk.Reference.PreTruncationLength)
+            {
                 Reference = Reference.WithPreTruncationLength(otherMemoryChunk.Reference.PreTruncationLength);
+                MemoryAsLoaded = otherMemoryChunk.MemoryAsLoaded;
+            }
             return this;
         }
 
@@ -119,7 +122,7 @@ namespace Lazinator.Buffers
         public override string ToString()
         {
             LoadMemory();
-            var bytes = MemoryAsLoaded.Memory.ToArray();
+            var bytes = Memory.ToArray();
             string result = String.Join(",", bytes.Select(x => x.ToString().PadLeft(3, '0')));
             return $"Chunk {MemoryChunkID.ToString().PadLeft(3, '0')}: {result}";
         }
