@@ -77,10 +77,6 @@ namespace LazinatorTests.Utilities
 
         public void Write(string path, Memory<byte> bytes)
         {
-            if (path.Contains("Chunk 2"))
-            {
-                var DEBUG = 0;
-            }
             Storage[path] = bytes;
         }
 
@@ -93,7 +89,7 @@ namespace LazinatorTests.Utilities
 
         public void Append(string path, Memory<byte> bytes)
         {
-            if (!Storage.ContainsKey(path))
+            if (!Exists(path))
                 Storage[path] = new byte[0];
             Memory<byte> existingBytes = Storage[path];
             byte[] allBytes = new byte[existingBytes.Length + bytes.Length];
@@ -115,6 +111,12 @@ namespace LazinatorTests.Utilities
 
         public void OpenForWriting(string path)
         {
+        }
+
+
+        public bool Exists(string path)
+        {
+            return Storage.ContainsKey(path);
         }
 
         public void CloseAfterWriting(string path)

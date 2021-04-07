@@ -22,5 +22,6 @@ namespace Lazinator.Persistence
         ValueTask AppendAsync(string path, Memory<byte> bytes);
         void CloseAfterWriting(string path);
         void Delete(string path);
+        bool Exists(string path);
     }
 }

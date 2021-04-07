@@ -120,5 +120,10 @@ namespace Lazinator.Persistence
         {
             File.Delete(path);
         }
+
+        public bool Exists(string path)
+        {
+            return File.Exists(path);
+        }
     }
 }

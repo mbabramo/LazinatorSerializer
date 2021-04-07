@@ -469,6 +469,13 @@ namespace LazinatorTests.Tests
 
         }
 
+        [Fact]
+        public void BinaryTreeTest_DiffSerialization_DEBUG()
+        {
+            BinaryTreeTest_DiffSerialization(false, true, false, false, false); // passes
+            BinaryTreeTest_DiffSerialization(true, true, false, false, false); // passes
+        }
+
         [Theory]
         [ClassData(typeof(BoolPermutations_5))]
         public void BinaryTreeTest_DiffSerialization(bool useFile, bool containedInSingleBlob, bool recreateIndex, bool alwaysCopyPreviousBuffer_ProducingFakeDiff, bool useConsolidatedMemory)
@@ -487,7 +494,7 @@ namespace LazinatorTests.Tests
                 string fullPath = GetPathForIndexAndBlobs(useFile, true);
                 if (fullPath == null)
                     return;
-                var index = (indices == null || !indices.Any()) ? new PersistentIndex(fullPath, blobManager, containedInSingleBlob) : new PersistentIndex(indices.Last());
+                var index = (useConsolidatedMemory || indices == null || !indices.Any()) ? new PersistentIndex(fullPath, blobManager, containedInSingleBlob) : new PersistentIndex(indices.Last());
                 index.PersistLazinatorMemory(multipleBufferResult);
                 indices.Add(index);
 
