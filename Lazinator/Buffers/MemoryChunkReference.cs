@@ -19,7 +19,7 @@ namespace Lazinator.Buffers
             MemoryChunkID = memoryChunkID;
             OffsetForLoading = offsetForLoading;
             PreTruncationLength = lengthAsLoaded;
-            if (memoryChunkID == 2 && lengthAsLoaded == 58)
+            if (additionalOffset == 38)
             {
                 var DEBUG = 0;
             }

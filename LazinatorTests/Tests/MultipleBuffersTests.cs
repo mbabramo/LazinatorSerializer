@@ -478,16 +478,16 @@ namespace LazinatorTests.Tests
 
         [Theory]
         [ClassData(typeof(BoolPermutations_5))]
-        public void BinaryTreeTest_DiffSerialization(bool useFile, bool containedInSingleBlob, bool recreateIndex, bool alwaysCopyPreviousBuffer_ProducingFakeDiff, bool useConsolidatedMemory)
+        public void BinaryTreeTest_DiffSerialization(bool useFile, bool containedInSingleBlob, bool recreateIndex, bool neverIncludeReferenceToPreviousBuffer, bool useConsolidatedMemory)
         {
             List<PersistentIndex> indices = new List<PersistentIndex>();
             IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobStorage();
             int round = 0;
-            MultipleRoundsOfRandomChanges(3, 2, 1, () => // DEBUG -- try higher numbers
+            MultipleRoundsOfRandomChanges(3, 2, 2, () => // DEBUG -- try higher numbers
             {
                 Debug.WriteLine($"Round {round}");
 
-                LazinatorSerializationOptions options = alwaysCopyPreviousBuffer_ProducingFakeDiff ?  new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, int.MaxValue, int.MaxValue) : new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20, 5); // DEBUG
+                LazinatorSerializationOptions options = neverIncludeReferenceToPreviousBuffer ?  new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, int.MaxValue, int.MaxValue) : new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20, 5); // DEBUG
                 LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(options);
 
                 // Write to one or more blobs
