@@ -495,6 +495,7 @@ namespace LazinatorTests.Tests
                 if (fullPath == null)
                     return;
                 var index = (useConsolidatedMemory || indices == null || !indices.Any()) ? new PersistentIndex(fullPath, blobManager, containedInSingleBlob) : new PersistentIndex(indices.Last());
+                // DEBUG -- we are recreating the index, but not erasing MemoryChunk1. If index version is 0, we should not append.
                 index.PersistLazinatorMemory(multipleBufferResult);
                 indices.Add(index);
 

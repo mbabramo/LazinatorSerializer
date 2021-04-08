@@ -239,7 +239,7 @@ namespace Lazinator.Persistence
                 {
                     BlobManager.Append(path, memoryChunkToPersist.MemoryAsLoaded.Memory);
                     UpdateMemoryChunkReferenceToLoadingOffset(memoryChunkToPersist.MemoryChunkID, offset);
-                    offset += memoryChunkToPersist.Memory.Length;
+                    offset += memoryChunkToPersist.Reference.PreTruncationLength;
                 }
                 else
                     BlobManager.Write(path, memoryChunkToPersist.MemoryAsLoaded.Memory);
