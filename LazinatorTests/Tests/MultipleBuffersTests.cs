@@ -469,13 +469,6 @@ namespace LazinatorTests.Tests
 
         }
 
-        [Fact]
-        public void BinaryTreeTest_DiffSerialization_DEBUG()
-        {
-            BinaryTreeTest_DiffSerialization(false, true, false, false, false); // passes
-            BinaryTreeTest_DiffSerialization(true, true, false, false, false); // passes
-        }
-
         [Theory]
         [ClassData(typeof(BoolPermutations_5))]
         public void BinaryTreeTest_DiffSerialization(bool useFile, bool containedInSingleBlob, bool recreateIndex, bool neverIncludeReferenceToPreviousBuffer, bool useConsolidatedMemory)
@@ -483,7 +476,7 @@ namespace LazinatorTests.Tests
             List<PersistentIndex> indices = new List<PersistentIndex>();
             IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobManager();
             int round = 0;
-            MultipleRoundsOfRandomChanges(3, 2, 2, () => // DEBUG -- try higher numbers
+            MultipleRoundsOfRandomChanges(3, 20, 10, () => // DEBUG -- try higher numbers
             {
                 Debug.WriteLine($"Round {round}");
 
