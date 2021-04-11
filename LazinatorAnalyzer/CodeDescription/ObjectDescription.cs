@@ -158,7 +158,7 @@ namespace Lazinator.CodeDescription
         public bool GenerateRefStruct => GenerateRefStructIfNotGenerating && !GeneratingRefStruct;
 
         public bool GeneratingRefStruct = false;
-        public bool IncludeTracingCode => false; // DEBUG
+        public bool IncludeTracingCode => false; 
         public bool StepThroughProperties => Config?.StepThroughProperties ?? true;
         public bool NonbinaryHash => InterfaceTypeSymbol.HasAttributeOfType<CloneNonbinaryHashAttribute>();
         public int SizeOfLength { get; set; }
@@ -1657,7 +1657,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 
         ");
 
-            // DEBUG -- much of the Splittable conditional code is not really necessary, since we can assume that the bytes for child properties are still in the initial memory. At the time, I thought we would need LazinatorMemory, but now I realize that we don't. However, if we add the option to have lengths at the end of an object, then we will need to put this back. So we might not want to change it yet.
+            
             sb.Append($@"{ProtectedIfApplicable}{DerivationKeyword}{TypeForLengths} ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
                 {{
                     {TypeForLengths} totalChildrenBytes = 0;{IIF(IsDerivedFromNonAbstractLazinator, $@"

@@ -98,7 +98,6 @@ namespace Lazinator.Buffers
                 {
                     if (ActiveMemoryPosition == 0)
                         return CompletedMemory;
-                    Debug.WriteLine($"Appending {ActiveMemoryPosition} bytes to {CompletedMemory}"); // DEBUG
                     var withAppended = CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, new MemoryChunkReference(GetActiveMemoryChunkID(), 0, ActiveMemoryPosition), false));
                     return withAppended;
                 }
@@ -244,7 +243,6 @@ namespace Lazinator.Buffers
                 ActiveMemory = new ExpandableBytes(minSizeofNewBuffer);
                 ActiveMemoryPosition = 0;
                 NumActiveMemoryBytesAddedToRecycling = 0;
-                // Debug.WriteLine($"Active memory moved to completed memory. Completed now: {CompletedMemory}"); // DEBUG
             }
         }
 
@@ -257,7 +255,7 @@ namespace Lazinator.Buffers
         public void InsertReferenceToCompletedMemory(int memoryChunkIndex, int startPosition, long numBytes)
         {
             RecordLastActiveMemoryChunkReference();
-            IEnumerable<MemoryChunkReference> segmentsToAdd = CompletedMemory.EnumerateMemoryChunkReferences(memoryChunkIndex, startPosition, numBytes).ToList(); // DEBUG -- remove ToList()
+            IEnumerable<MemoryChunkReference> segmentsToAdd = CompletedMemory.EnumerateMemoryChunkReferences(memoryChunkIndex, startPosition, numBytes);
             MemoryChunkReference.ExtendMemoryChunkReferencesList(RecycledMemoryChunkReferences, segmentsToAdd);
             // Debug.WriteLine($"Reference to completed memory added. References are {String.Join(", ", RecycledMemoryChunkReferences)}");
         }
@@ -309,8 +307,6 @@ namespace Lazinator.Buffers
             }
             return new LazinatorMemory(initialMemoryChunk, moreMemory, 0, 0, length);
         }
-
-        static int DEBUG = 0;
 
         /// <summary>
         /// Returns the Span beginning at position LengthsPosition, when recycled memory chunk references are being recorded.

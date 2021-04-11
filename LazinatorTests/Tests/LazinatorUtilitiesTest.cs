@@ -46,8 +46,8 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorMemoryAggregationAndSlicing()
         {
-            int numChunks = 2; // DEBUG 5;
-            int memoryPerChunk = 10; // DEBUG 100;
+            int numChunks = 5;
+            int memoryPerChunk = 100; 
             // build a single combined chunk and many individual chunks -- then see if the whole and slices match
             byte[] c = new byte[memoryPerChunk * numChunks];
             LazinatorMemory m = default;
@@ -127,8 +127,8 @@ namespace LazinatorTests.Tests
                     memoryChunks.Add(new MemoryChunk(overallMemoryOwnerLoaded, new MemoryChunkReference(mainChunkIndex, 0, overallMemoryOwner.Memory.Length, startPosition, numBytes), false));
                     IEnumerable<byte> bytesToAdd = overallMemoryOwners[mainChunkIndex].Memory.ToArray().Skip(startPosition).Take(numBytes);
                     referencedBytes.AddRange(bytesToAdd);
-                    Debug.WriteLine($"Main chunk {mainChunkIndex} start {startPosition} numBytes {numBytes} bytes {String.Join(",", bytesToAdd)}"); // DEBUG
-                    Debug.WriteLine($"Overall referenced bytes {String.Join(",", referencedBytes)}"); // DEBUG
+                    // Debug.WriteLine($"Main chunk {mainChunkIndex} start {startPosition} numBytes {numBytes} bytes {String.Join(",", bytesToAdd)}");
+                    // Debug.WriteLine($"Overall referenced bytes {String.Join(",", referencedBytes)}");
                 }
                 int totalBytesReferredTo = memoryChunks.Sum(x => x.Reference.PreTruncationLength);
                 referencedBytes.Count().Should().Equals(totalBytesReferredTo);

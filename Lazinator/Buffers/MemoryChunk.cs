@@ -9,12 +9,7 @@ namespace Lazinator.Buffers
 {
     public class MemoryChunk : IMemoryOwner<byte>
     {
-        private IMemoryOwner<byte> _MemoryAsLoaded; // DEBUG -- not needed
-        public IMemoryOwner<byte> MemoryAsLoaded 
-        {
-            get => _MemoryAsLoaded;
-            set => _MemoryAsLoaded = value;
-        }
+        public IMemoryOwner<byte> MemoryAsLoaded { get; set; }
 
         public MemoryChunkReference Reference { get; set; }
 
@@ -40,10 +35,6 @@ namespace Lazinator.Buffers
             MemoryAsLoaded = memoryAsLoaded;
             Reference = reference;
             IsPersisted = isPersisted;
-            if (memoryAsLoaded != null && Reference.AdditionalOffset > memoryAsLoaded.Memory.Length)
-            {
-                var DEBUG = 0;
-            }
         }
 
         /// <summary>

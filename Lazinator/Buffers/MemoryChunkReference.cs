@@ -19,10 +19,6 @@ namespace Lazinator.Buffers
             MemoryChunkID = memoryChunkID;
             OffsetForLoading = offsetForLoading;
             PreTruncationLength = lengthAsLoaded;
-            if (additionalOffset > lengthAsLoaded)
-            {
-                var DEBUG = 0;
-            }
             AdditionalOffset = additionalOffset;
             FinalLength = finalLength;
         }
@@ -31,10 +27,6 @@ namespace Lazinator.Buffers
         {
             MemoryChunkID = memoryChunkID;
             OffsetForLoading = offsetForLoading;
-            if (memoryChunkID == 2 && lengthAsLoaded == 58)
-            {
-                var DEBUG = 0;
-            }
             PreTruncationLength = lengthAsLoaded;
             AdditionalOffset = 0;
             FinalLength = lengthAsLoaded;

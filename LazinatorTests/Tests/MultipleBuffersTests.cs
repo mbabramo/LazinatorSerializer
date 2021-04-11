@@ -202,7 +202,7 @@ namespace LazinatorTests.Tests
             // at each stage. This makes it easier to find problems if tests using diff serialization fail.
             List<PersistentIndex> indices = new List<PersistentIndex>();
             int round = 0;
-            MultipleRoundsOfRandomChanges(3, 2, 1, () => // DEBUG -- try higher numbers
+            MultipleRoundsOfRandomChanges(10, 10, 5, () => 
             {
                 Debug.WriteLine($"Round {round}");
                 LazinatorMemory lazinatorMemory = BinaryTree.SerializeLazinator(LazinatorSerializationOptions.Default);
@@ -552,6 +552,7 @@ namespace LazinatorTests.Tests
         // DEBUG -- we also need to have an index updated over multiple rounds and try at different times.
         // DEBUG -- we need to test progressive deleting. 
         // DEBUG -- we need to test forking.
+        // DEBUG -- we need to test defragmenting
 
         private static string GetPathForIndexAndBlobs(bool useFile, bool binaryTree)
         {
