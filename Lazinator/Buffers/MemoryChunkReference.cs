@@ -11,10 +11,7 @@ namespace Lazinator.Buffers
     /// </summary>
     public partial struct MemoryChunkReference : IMemoryChunkReference
     {
-
-        // DEBUG -- OffsetForLoading should be a long, since we could have a chunk in a large file.
-
-        public MemoryChunkReference(int memoryChunkID, int offsetForLoading, int lengthAsLoaded, int additionalOffset, int finalLength) : this()
+        public MemoryChunkReference(int memoryChunkID, long offsetForLoading, int lengthAsLoaded, int additionalOffset, int finalLength) : this()
         {
             MemoryChunkID = memoryChunkID;
             OffsetForLoading = offsetForLoading;
@@ -23,7 +20,7 @@ namespace Lazinator.Buffers
             FinalLength = finalLength;
         }
 
-        public MemoryChunkReference(int memoryChunkID, int offsetForLoading, int lengthAsLoaded) : this()
+        public MemoryChunkReference(int memoryChunkID, long offsetForLoading, int lengthAsLoaded) : this()
         {
             MemoryChunkID = memoryChunkID;
             OffsetForLoading = offsetForLoading;
@@ -113,7 +110,7 @@ namespace Lazinator.Buffers
 
         internal MemoryChunkReference WithLoadingOffset(long offset)
         {
-            return new MemoryChunkReference(MemoryChunkID, (int) /* DEBUG -- should be long */ offset, PreTruncationLength, AdditionalOffset, FinalLength);
+            return new MemoryChunkReference(MemoryChunkID, offset, PreTruncationLength, AdditionalOffset, FinalLength);
         }
 
         internal MemoryChunkReference WithPreTruncationLength(int preTruncationLength)
