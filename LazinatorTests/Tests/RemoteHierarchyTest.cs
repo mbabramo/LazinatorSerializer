@@ -16,7 +16,7 @@ namespace LazinatorTests.Tests
 {
     public class RemoteHierarchyTest
     {
-        private InMemoryBlobStorage Storage = new InMemoryBlobStorage();
+        private InMemoryBlobManager Storage = new InMemoryBlobManager();
 
         private void ClearAllSetup()
         {

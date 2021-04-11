@@ -61,7 +61,7 @@ namespace LazinatorTests.Tests
             LazinatorMemory multipleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 10));
 
             // Write to one or more blobs
-            IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobStorage();
+            IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobManager();
             string fullPath = GetPathForIndexAndBlobs(useFile, false);
             if (fullPath == null)
                 return;
@@ -84,7 +84,7 @@ namespace LazinatorTests.Tests
             LazinatorMemory multipleBufferResult = await e.SerializeLazinatorAsync(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 10));
 
             // Write to one or more blobs
-            IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobStorage();
+            IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobManager();
             string fullPath = GetPathForIndexAndBlobs(useFile, false);
             if (fullPath == null)
                 return;
@@ -217,7 +217,7 @@ namespace LazinatorTests.Tests
         [ClassData(typeof(BoolPermutations_3))]
         public void BinaryTreeTest_ReloadingFromBlobs(bool useFile, bool containedInSingleBlob, bool recreateIndex)
         {
-            IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobStorage();
+            IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobManager();
             MultipleRoundsOfRandomChanges(10, 10, 10, () =>
             {
                 LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 5));
@@ -252,7 +252,7 @@ namespace LazinatorTests.Tests
                 LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 5));
 
                 // Write to one or more blobs
-                IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobStorage();
+                IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobManager();
                 string fullPath = GetPathForIndexAndBlobs(useFile, true);
                 if (fullPath == null)
                     return;
@@ -290,7 +290,7 @@ namespace LazinatorTests.Tests
             LazinatorSerializationOptions options = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20);
             LazinatorMemory afterChange = tree2.SerializeLazinator(options);
 
-            IBlobManager blobManager = useFile ? new FileBlobManager() : new global::LazinatorTests.Utilities.InMemoryBlobStorage();
+            IBlobManager blobManager = useFile ? new FileBlobManager() : new global::LazinatorTests.Utilities.InMemoryBlobManager();
             string fullPath = GetPathForIndexAndBlobs(useFile, true);
             PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob);
             index.PersistLazinatorMemory(afterChange);
@@ -328,7 +328,7 @@ namespace LazinatorTests.Tests
             LazinatorSerializationOptions options = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20);
             LazinatorMemory afterChange = await tree2.SerializeLazinatorAsync(options);
 
-            IBlobManager blobManager = useFile ? new FileBlobManager() : new global::LazinatorTests.Utilities.InMemoryBlobStorage();
+            IBlobManager blobManager = useFile ? new FileBlobManager() : new global::LazinatorTests.Utilities.InMemoryBlobManager();
             string fullPath = GetPathForIndexAndBlobs(useFile, true);
             PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob);
             await index.PersistLazinatorMemoryAsync(afterChange);
@@ -368,7 +368,7 @@ namespace LazinatorTests.Tests
             LazinatorSerializationOptions options = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20);
             LazinatorMemory afterChange = tree2.SerializeLazinator(options);
 
-            IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobStorage();
+            IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobManager();
             string fullPath = GetPathForIndexAndBlobs(useFile, true);
             PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob);
             index.PersistLazinatorMemory(afterChange);
@@ -410,7 +410,7 @@ namespace LazinatorTests.Tests
             LazinatorSerializationOptions options = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20);
             LazinatorMemory afterChange = await tree2.SerializeLazinatorAsync(options);
 
-            IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobStorage();
+            IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobManager();
             string fullPath = GetPathForIndexAndBlobs(useFile, true);
             PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob);
             await index.PersistLazinatorMemoryAsync(afterChange);
@@ -441,7 +441,7 @@ namespace LazinatorTests.Tests
             LazinatorMemory initialMemory = new LazinatorMemory(initialBytes);
             LazinatorMemory memory1 = initialMemory.WithAppendedChunk(nextBytesAsChunk).WithAppendedChunk(lastBytesAsChunk);
 
-            IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobStorage();
+            IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobManager();
             string fullPath = GetPathForIndexAndBlobs(useFile, true);
             if (fullPath == null)
                 return;
@@ -481,7 +481,7 @@ namespace LazinatorTests.Tests
         public void BinaryTreeTest_DiffSerialization(bool useFile, bool containedInSingleBlob, bool recreateIndex, bool neverIncludeReferenceToPreviousBuffer, bool useConsolidatedMemory)
         {
             List<PersistentIndex> indices = new List<PersistentIndex>();
-            IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobStorage();
+            IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobManager();
             int round = 0;
             MultipleRoundsOfRandomChanges(3, 2, 2, () => // DEBUG -- try higher numbers
             {
@@ -532,6 +532,8 @@ namespace LazinatorTests.Tests
         }
 
         // DEBUG -- we also need to have an index updated over multiple rounds and try at different times.
+        // DEBUG -- we need to test progressive deleting. 
+        // DEBUG -- we need to test forking.
 
         private static string GetPathForIndexAndBlobs(bool useFile, bool binaryTree)
         {

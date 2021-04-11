@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LazinatorTests.Utilities
 {
-    public class InMemoryBlobStorage : IBlobManager
+    public class InMemoryBlobManager : IBlobManager
     {
         public Dictionary<string, Memory<byte>> Storage = new Dictionary<string, Memory<byte>>();
 

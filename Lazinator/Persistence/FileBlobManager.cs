@@ -64,8 +64,8 @@ namespace Lazinator.Persistence
             else
             {
                 fs = File.OpenWrite(path);
-                fs.Seek(0, SeekOrigin.End);
             }
+            fs.Seek(0, SeekOrigin.End);
             long length = fs.Length;
             fs.Write(bytes.Span);
             if (!fileStreamAlreadyOpen)
