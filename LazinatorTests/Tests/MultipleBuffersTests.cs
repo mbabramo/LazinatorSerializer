@@ -487,7 +487,7 @@ namespace LazinatorTests.Tests
             {
                 Debug.WriteLine($"Round {round}");
 
-                LazinatorSerializationOptions options = neverIncludeReferenceToPreviousBuffer ?  new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, int.MaxValue, int.MaxValue) : new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20, 5); // DEBUG
+                LazinatorSerializationOptions options = neverIncludeReferenceToPreviousBuffer ?  new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, int.MaxValue, int.MaxValue) : new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20, 5);
                 LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(options);
 
                 // Write to one or more blobs

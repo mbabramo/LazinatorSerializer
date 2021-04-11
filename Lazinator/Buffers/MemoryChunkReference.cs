@@ -19,7 +19,7 @@ namespace Lazinator.Buffers
             MemoryChunkID = memoryChunkID;
             OffsetForLoading = offsetForLoading;
             PreTruncationLength = lengthAsLoaded;
-            if (additionalOffset == 38)
+            if (additionalOffset > lengthAsLoaded)
             {
                 var DEBUG = 0;
             }
@@ -126,6 +126,11 @@ namespace Lazinator.Buffers
         internal MemoryChunkReference WithPreTruncationLength(int preTruncationLength)
         {
             return new MemoryChunkReference(MemoryChunkID, OffsetForLoading, preTruncationLength, AdditionalOffset, FinalLength);
+        }
+
+        internal MemoryChunkReference WithAdditionalOffsetAndFinalLength(int additionalOffset, int finalLength)
+        {
+            return new MemoryChunkReference(MemoryChunkID, OffsetForLoading, PreTruncationLength, additionalOffset, finalLength);
         }
     }
 }
