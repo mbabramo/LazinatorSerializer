@@ -262,7 +262,14 @@ namespace Lazinator.Persistence
             string pathForSingleBlob = ContainedInSingleBlob ? GetPathForMemoryChunk(0) : null;
             if (ContainedInSingleBlob)
             {
-                offset = IndexVersion == 0 ? 0 : BlobManager.GetLength(pathForSingleBlob);
+                if (IndexVersion == 0)
+                {
+                    if (BlobManager.Exists(pathForSingleBlob))
+                        BlobManager.Delete(pathForSingleBlob);
+                    offset = 0;
+                }
+                else
+                    offset = BlobManager.GetLength(pathForSingleBlob);
                 BlobManager.OpenForWriting(pathForSingleBlob);
             }
             foreach (var memoryChunkToPersist in memoryChunksToPersist)
@@ -277,7 +284,7 @@ namespace Lazinator.Persistence
                 {
                     await BlobManager.AppendAsync(path, memoryChunkToPersist.MemoryAsLoaded.Memory);
                     UpdateMemoryChunkReferenceToLoadingOffset(memoryChunkToPersist.MemoryChunkID, offset);
-                    offset += memoryChunkToPersist.Memory.Length;
+                    offset += memoryChunkToPersist.Reference.PreTruncationLength;
                 }
                 else
                     await BlobManager.WriteAsync(path, memoryChunkToPersist.MemoryAsLoaded.Memory);
@@ -287,7 +294,7 @@ namespace Lazinator.Persistence
             if (ContainedInSingleBlob)
                 BlobManager.CloseAfterWriting(pathForSingleBlob);
 
-            await PersistSelfAsync();
+            PersistSelf();
         }
 
         private void PersistSelf()

@@ -96,6 +96,7 @@ namespace Lazinator.Buffers
                 if (last.SameLoadingInformation(newSegment) && newSegment.AdditionalOffset == last.AdditionalOffset + last.FinalLength)
                 {
                     last.FinalLength += newSegment.FinalLength;
+                    memoryChunkReferences[memoryChunkReferences.Count - 1] = last;
                     return;
                 }
             }

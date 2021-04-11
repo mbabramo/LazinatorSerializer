@@ -418,11 +418,31 @@ namespace Lazinator.Buffers
             return memoryChunk;
         }
 
+        public async ValueTask<IMemoryOwner<byte>> LoadInitialMemoryAsync()
+        {
+            if (SingleMemory)
+            {
+                await LoadMemoryChunkAsync(InitialMemoryChunk);
+                return InitialMemoryChunk;
+            }
+            MemoryChunk memoryChunk = MemoryAtIndex(StartIndex);
+            await LoadMemoryChunkAsync(memoryChunk);
+            return memoryChunk;
+        }
+
         private static void LoadMemoryChunk(MemoryChunk memoryChunk)
         {
             if (memoryChunk.IsLoaded == false)
             {
                 memoryChunk.LoadMemory();
+            }
+        }
+
+        private static async ValueTask LoadMemoryChunkAsync(MemoryChunk memoryChunk)
+        {
+            if (memoryChunk.IsLoaded == false)
+            {
+                await memoryChunk.LoadMemoryAsync();
             }
         }
 
@@ -437,6 +457,14 @@ namespace Lazinator.Buffers
                     LoadMemoryChunk(additional);
         }
 
+        public async ValueTask LoadAllMemoryAsync()
+        {
+            await LoadInitialMemoryAsync();
+            if (MoreMemoryChunks != null)
+                foreach (var additional in MoreMemoryChunks)
+                    await LoadMemoryChunkAsync(additional);
+        }
+
         /// <summary>
         /// Allows for unloading the first referenced memory chunk, if it is loaded. The memory can be unloaded only if the owner of the first memory
         /// chunk is a MemoryReference that supports this functionality.
@@ -448,34 +476,8 @@ namespace Lazinator.Buffers
             MemoryChunk memoryChunk = MemoryAtIndex(StartIndex);
             if (memoryChunk.IsLoaded == true)
             {
-                // Unfortunately, we must call an async method synchronously. It would be better for the user
-                // to use an asynchronous method.
-                var loadMemory = memoryChunk.ConsiderUnloadMemoryAsync();
-                var task = Task.Run(async () => await loadMemory);
-                task.Wait();
+                memoryChunk.ConsiderUnloadMemory();
             }
-        }
-
-        /// <summary>
-        /// Asynchronously loads the first referenced memory chunk, if not already loaded.
-        /// </summary>
-        /// <returns></returns>
-        public async ValueTask<IMemoryOwner<byte>> LoadInitialMemoryAsync()
-        {
-            if (SingleMemory)
-            {
-                await LoadMemoryChunkAsync(InitialMemoryChunk);
-                return InitialMemoryChunk;
-            }
-            MemoryChunk memoryChunk = MemoryAtIndex(StartIndex);
-            await LoadMemoryChunkAsync(memoryChunk);
-            return memoryChunk;
-        }
-
-        private static async Task LoadMemoryChunkAsync(MemoryChunk memoryChunk)
-        {
-            if (memoryChunk.IsLoaded == false)
-                await memoryChunk.LoadMemoryAsync();
         }
 
         /// <summary>
@@ -869,6 +871,7 @@ namespace Lazinator.Buffers
         {
             if (SingleMemory)
             {
+                InitialMemoryChunk.LoadMemory();
                 if (includeOutsideOfRange)
                     return InitialMemoryChunk.Memory;
                 else
@@ -879,6 +882,26 @@ namespace Lazinator.Buffers
             if (totalLength > Int32.MaxValue)
                 ThrowHelper.ThrowTooLargeException(Int32.MaxValue);
             BinaryBufferWriter w = new BinaryBufferWriter((int) totalLength);
+            foreach (byte b in EnumerateBytes(includeOutsideOfRange))
+                w.Write(b);
+            return w.LazinatorMemory.InitialMemory;
+        }
+
+        public async ValueTask<Memory<byte>> GetConsolidatedMemoryAsync(bool includeOutsideOfRange = false)
+        {
+            if (SingleMemory)
+            {
+                await InitialMemoryChunk.LoadMemoryAsync();
+                if (includeOutsideOfRange)
+                    return InitialMemoryChunk.Memory;
+                else
+                    return InitialMemoryChunk.Memory.Slice(Offset, (int)Length);
+            }
+            await LoadAllMemoryAsync();
+            long totalLength = includeOutsideOfRange ? GetGrossLength() : Length;
+            if (totalLength > Int32.MaxValue)
+                ThrowHelper.ThrowTooLargeException(Int32.MaxValue);
+            BinaryBufferWriter w = new BinaryBufferWriter((int)totalLength);
             foreach (byte b in EnumerateBytes(includeOutsideOfRange))
                 w.Write(b);
             return w.LazinatorMemory.InitialMemory;

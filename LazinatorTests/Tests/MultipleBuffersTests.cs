@@ -476,9 +476,9 @@ namespace LazinatorTests.Tests
             List<PersistentIndex> indices = new List<PersistentIndex>();
             IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobManager();
             int round = 0;
-            MultipleRoundsOfRandomChanges(3, 20, 10, () => // DEBUG -- try higher numbers
+            MultipleRoundsOfRandomChanges(10, 10, 3, () => 
             {
-                Debug.WriteLine($"Round {round}");
+                //Debug.WriteLine($"Round {round}");
 
                 LazinatorSerializationOptions options = neverIncludeReferenceToPreviousBuffer ?  new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, int.MaxValue, int.MaxValue) : new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20, 5);
                 LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(options);
@@ -488,7 +488,6 @@ namespace LazinatorTests.Tests
                 if (fullPath == null)
                     return;
                 var index = (useConsolidatedMemory || indices == null || !indices.Any()) ? new PersistentIndex(fullPath, blobManager, containedInSingleBlob) : new PersistentIndex(indices.Last());
-                // DEBUG -- we are recreating the index, but not erasing MemoryChunk1. If index version is 0, we should not append.
                 index.PersistLazinatorMemory(multipleBufferResult);
                 indices.Add(index);
 
@@ -502,8 +501,8 @@ namespace LazinatorTests.Tests
                     indices.RemoveAt(0); // with consolidated memory, we're not using diff serialization
                 }
 
-                Debug.WriteLine(revisedMemory.ToStringByChunk());
-                Debug.WriteLine($"Consolidated{round}: " + revisedMemory.ToStringConsolidated());
+                //Debug.WriteLine(revisedMemory.ToStringByChunk());
+                //Debug.WriteLine($"Consolidated{round}: " + revisedMemory.ToStringConsolidated());
 
                 BinaryTree = new LazinatorBinaryTree<WDouble>(revisedMemory);
                 round++;
@@ -511,17 +510,43 @@ namespace LazinatorTests.Tests
         }
 
         [Theory]
-        [InlineData(true, true, true)]
-        [InlineData(true, true, false)]
-        [InlineData(true, false, true)]
-        [InlineData(true, false, false)]
-        [InlineData(false, true, true)]
-        [InlineData(false, true, false)]
-        [InlineData(false, false, true)]
-        [InlineData(false, false, false)]
-        public async Task BinaryTreeTest_DiffSerializationAsync(bool useFile, bool containedInSingleBlob, bool recreateIndex)
+        [ClassData(typeof(BoolPermutations_5))]
+        public async Task BinaryTreeTest_DiffSerializationAsync(bool useFile, bool containedInSingleBlob, bool recreateIndex, bool neverIncludeReferenceToPreviousBuffer, bool useConsolidatedMemory)
         {
-            throw new Exception();
+            List<PersistentIndex> indices = new List<PersistentIndex>();
+            IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobManager();
+            int round = 0;
+            await MultipleRoundsOfRandomChangesAsync(10, 10, 3, async () => 
+            {
+                //Debug.WriteLine($"Round {round}");
+
+                LazinatorSerializationOptions options = neverIncludeReferenceToPreviousBuffer ? new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, int.MaxValue, int.MaxValue) : new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20, 5);
+                LazinatorMemory multipleBufferResult = await BinaryTree.SerializeLazinatorAsync(options);
+
+                // Write to one or more blobs
+                string fullPath = GetPathForIndexAndBlobs(useFile, true);
+                if (fullPath == null)
+                    return;
+                var index = (useConsolidatedMemory || indices == null || !indices.Any()) ? new PersistentIndex(fullPath, blobManager, containedInSingleBlob) : new PersistentIndex(indices.Last());
+                await index.PersistLazinatorMemoryAsync(multipleBufferResult);
+                indices.Add(index);
+
+                if (recreateIndex)
+                    index = await PersistentIndex.ReadFromBlobAsync(blobManager, fullPath, null, index.IndexVersion);
+                var revisedMemory = index.GetLazinatorMemory();
+                if (useConsolidatedMemory)
+                {
+                    var consolidatedMemory = await revisedMemory.GetConsolidatedMemoryAsync();
+                    revisedMemory = new LazinatorMemory(consolidatedMemory);
+                    indices.RemoveAt(0); // with consolidated memory, we're not using diff serialization
+                }
+
+                //Debug.WriteLine(revisedMemory.ToStringByChunk());
+                //Debug.WriteLine($"Consolidated{round}: " + revisedMemory.ToStringConsolidated());
+
+                BinaryTree = new LazinatorBinaryTree<WDouble>(revisedMemory);
+                round++;
+            });
         }
 
         // DEBUG -- we also need to have an index updated over multiple rounds and try at different times.

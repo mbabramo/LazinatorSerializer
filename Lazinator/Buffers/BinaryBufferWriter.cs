@@ -259,7 +259,7 @@ namespace Lazinator.Buffers
             RecordLastActiveMemoryChunkReference();
             IEnumerable<MemoryChunkReference> segmentsToAdd = CompletedMemory.EnumerateMemoryChunkReferences(memoryChunkIndex, startPosition, numBytes).ToList(); // DEBUG -- remove ToList()
             MemoryChunkReference.ExtendMemoryChunkReferencesList(RecycledMemoryChunkReferences, segmentsToAdd);
-            Debug.WriteLine($"Reference to completed memory added. References are {String.Join(", ", RecycledMemoryChunkReferences)}"); // DEBUG
+            // Debug.WriteLine($"Reference to completed memory added. References are {String.Join(", ", RecycledMemoryChunkReferences)}");
         }
 
         /// <summary>
