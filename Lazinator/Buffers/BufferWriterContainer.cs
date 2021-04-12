@@ -18,29 +18,6 @@ namespace Lazinator.Buffers
         {
             return Writer.ToString();
         }
-        public ExpandableBytes ActiveMemory
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => Writer.ActiveMemory;
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set => Writer.ActiveMemory = value;
-        }
-        public LazinatorMemory CompletedMemory
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => Writer.CompletedMemory;
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set => Writer.CompletedMemory = value;
-        }
-
-        public List<MemoryChunkReference> MemoryChunkReferences
-        {
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            get => Writer.RecycledMemoryChunkReferences;
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set => Writer.RecycledMemoryChunkReferences = value;
-        }
-
         public BufferWriterContainer(int minimumSize, LazinatorMemory? completedMemory = null)
         {
             Writer = new BufferWriter(minimumSize, completedMemory);

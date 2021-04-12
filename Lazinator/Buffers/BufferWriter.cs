@@ -21,7 +21,7 @@ namespace Lazinator.Buffers
 
         public override string ToString()
         {
-            return ActiveMemory == null ? "" : String.Join(",", ActiveMemoryWrittenSpan.ToArray()) + " " + CompletedMemory.ToString();
+            return ActiveMemory == null ? "" : String.Join(",", ActiveMemoryWrittenSpan.ToArray()) + " " + MultipleBufferInfo?.ToString();
         }
 
         /// <summary>
@@ -33,21 +33,17 @@ namespace Lazinator.Buffers
         public ExpandableBytes ActiveMemory { get; set; }
 
         /// <summary>
-        /// Bytes that were previously written. They may have been written in the same serialization pass (created when ExpandableBytes became full) or 
-        /// in a previous serialization pass (when serializing diffs).
+        /// Information related to writing multiple buffers.
         /// </summary>
-        public LazinatorMemory CompletedMemory { get; set; }
+        public MultipleBufferInfo MultipleBufferInfo { get; set; }
 
-        /// <summary>
-        /// When serializing diffs, these are non-null and will refer to various segments in CompletedMemory and ActiveMemory in order.
-        /// </summary>
-        internal List<MemoryChunkReference> RecycledMemoryChunkReferences;
+        // Note: MultipleBufferWriter is a separate class to lower the size of the BufferWriter struct in the usual case of a single buffer. The key methods are provided here, because the logic of BufferWriter and MultipleBufferWriter are closely intertwined.
 
-        /// <summary>
-        /// When serializing diffs, when a section of ActiveMemory is added to RecycledMemoryChunkReferences, this will equal the index
-        /// of the last byte added plus 1. 
-        /// </summary>
-        private int NumActiveMemoryBytesAddedToRecycling;
+        internal LazinatorMemory CompletedMemory => MultipleBufferInfo?.CompletedMemory ?? LazinatorMemory.EmptyLazinatorMemory;
+
+        internal List<MemoryChunkReference> RecycledMemoryChunkReferences => MultipleBufferInfo?.RecycledMemoryChunkReferences;
+
+        internal int NumActiveMemoryBytesAddedToRecycling => MultipleBufferInfo?.NumActiveMemoryBytesAddedToRecycling ?? 0;
 
         #region Construction and initialization
 
@@ -56,19 +52,17 @@ namespace Lazinator.Buffers
             if (minimumSize == 0)
                 minimumSize = ExpandableBytes.DefaultMinBufferSize;
             ActiveMemory = new ExpandableBytes(minimumSize);
-            if (completedMemory == null)
+            if (completedMemory != null)
             {
-                CompletedMemory = default;
-                RecycledMemoryChunkReferences = null;
+                MultipleBufferInfo = new MultipleBufferInfo();
+                MultipleBufferInfo.RecycledMemoryChunkReferences = new List<MemoryChunkReference>();
+                MultipleBufferInfo.CompletedMemory = completedMemory.Value;
+                MultipleBufferInfo.NumActiveMemoryBytesAddedToRecycling = 0;
             }
             else
-            {
-                RecycledMemoryChunkReferences = new List<MemoryChunkReference>();
-                CompletedMemory = completedMemory.Value;
-            }
+                MultipleBufferInfo = null;
             ActiveMemory.UsedBytesInCurrentBuffer = 0;
             LengthsPosition = 0;
-            NumActiveMemoryBytesAddedToRecycling = 0;
         }
 
         private void InitializeIfNecessary()
@@ -152,13 +146,15 @@ namespace Lazinator.Buffers
         {
             get
             {
+                if (MultipleBufferInfo is null)
+                    return ActiveMemoryPosition;
                 if (RecycledMemoryChunkReferences is null)
                 {
                     return ActiveMemoryPosition + (CompletedMemory.IsEmpty ? 0 : CompletedMemory.Length);
                 }
                 else
                 {
-                    return ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling + RecycledMemoryChunkReferences.Sum(x => x.FinalLength);
+                    return ActiveMemoryPosition - MultipleBufferInfo.NumActiveMemoryBytesAddedToRecycling + MultipleBufferInfo.RecycledMemoryChunkReferences.Sum(x => x.FinalLength);
                 }
             }
         }
@@ -239,10 +235,12 @@ namespace Lazinator.Buffers
         {
             if (ActiveMemoryPosition > 0)
             {
-                CompletedMemory = CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, new MemoryChunkReference(GetActiveMemoryChunkID(), 0, ActiveMemoryPosition), false));
+                if (MultipleBufferInfo == null)
+                    MultipleBufferInfo = new MultipleBufferInfo();
+                MultipleBufferInfo.CompletedMemory = CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, new MemoryChunkReference(GetActiveMemoryChunkID(), 0, ActiveMemoryPosition), false));
                 ActiveMemory = new ExpandableBytes(minSizeofNewBuffer);
                 ActiveMemoryPosition = 0;
-                NumActiveMemoryBytesAddedToRecycling = 0;
+                MultipleBufferInfo.NumActiveMemoryBytesAddedToRecycling = 0;
             }
         }
 
@@ -269,7 +267,7 @@ namespace Lazinator.Buffers
             if (ActiveMemoryPosition > NumActiveMemoryBytesAddedToRecycling)
             {
                 MemoryChunkReference.ExtendMemoryChunkReferencesList(RecycledMemoryChunkReferences, new MemoryChunkReference(activeMemoryChunkID, 0,  ActiveMemoryPosition, NumActiveMemoryBytesAddedToRecycling, ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling), true);
-                NumActiveMemoryBytesAddedToRecycling = ActiveMemoryPosition;
+                MultipleBufferInfo.NumActiveMemoryBytesAddedToRecycling = ActiveMemoryPosition;
             }
         }
 
