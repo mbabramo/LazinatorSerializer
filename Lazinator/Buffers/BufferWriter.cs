@@ -466,13 +466,9 @@ namespace Lazinator.Buffers
         {
             get
             {
-                if (RecycledMemoryChunkReferences != null)
-                    return MultipleBufferInfo.GetLengthsSpanWithinRecycled(ActiveMemory, ActiveMemoryPosition, LengthsPosition);
-                if (CompletedMemory.IsEmpty)
+                if (MultipleBufferInfo == null)
                     return ActiveSpan.Slice((int)LengthsPosition);
-                if (LengthsPosition >= CompletedMemory.Length)
-                    return ActiveSpan.Slice((int)(LengthsPosition - CompletedMemory.Length));
-                return CompletedMemory.Slice(LengthsPosition).InitialMemory.Span;
+                return MultipleBufferInfo.GetLengthsSpan(ActiveMemory, ActiveMemoryPosition, LengthsPosition);
             }
         }
 

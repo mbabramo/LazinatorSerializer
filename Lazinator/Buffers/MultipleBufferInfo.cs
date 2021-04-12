@@ -90,6 +90,17 @@ namespace Lazinator.Buffers
             return new LazinatorMemory(initialMemoryChunk, moreMemory, 0, 0, length);
         }
 
+        internal Span<byte> GetLengthsSpan(ExpandableBytes activeMemory, int activeMemoryPosition, long lengthsPosition)
+        {
+            if (RecycledMemoryChunkReferences is not null)
+                return GetLengthsSpanWithinRecycled(activeMemory, activeMemoryPosition, lengthsPosition);
+            if (lengthsPosition >= CompletedMemory.Length)
+            {
+                return activeMemory.CurrentBuffer.Memory.Span.Slice((int)(lengthsPosition - CompletedMemory.Length));
+            }
+            return CompletedMemory.Slice(lengthsPosition).InitialMemory.Span;
+        }
+
         /// <summary>
         /// Returns the Span beginning at position LengthsPosition, when recycled memory chunk references are being recorded.
         /// </summary>
