@@ -27,7 +27,7 @@ namespace Lazinator.Buffers
         /// <summary>
         /// Additional chunks of owned memory, where the memory storage is split across chunks.
         /// </summary>
-        public readonly List<MemoryChunk> MoreMemoryChunks; // DEBUG -- make loadable 
+        public readonly IMemoryChunkCollection MoreMemoryChunks; 
         /// <summary>
         /// The starting index from the set consisting of InitialOwnedMemory and MoreOwnedMemory for the referenced range.
         /// </summary>
@@ -82,7 +82,8 @@ namespace Lazinator.Buffers
 
         public LazinatorMemory(MemoryChunk memoryChunk, List<MemoryChunk> moreMemoryChunks, int startIndex, int startPosition, long length) : this(memoryChunk, startPosition, length)
         {
-            MoreMemoryChunks = moreMemoryChunks;
+            MoreMemoryChunks = new MemoryChunkCollection();
+            MoreMemoryChunks.SetContents(moreMemoryChunks);
             StartIndex = startIndex;
         }
 
@@ -197,7 +198,7 @@ namespace Lazinator.Buffers
             return new LazinatorMemory(array);
         }
 
-        private MemoryChunk MemoryAtIndex(int i) => i == 0 ? InitialMemoryChunk : MoreMemoryChunks[i - 1];
+        private MemoryChunk MemoryAtIndex(int i) => i == 0 ? InitialMemoryChunk : MoreMemoryChunks.MemoryAtIndex(i - 1);
 
         /// <summary>
         /// Gets the final length of the specified memory chunk. It avoids loading the memory if possible.
@@ -220,14 +221,14 @@ namespace Lazinator.Buffers
 
         public int? GetFirstIndexOfMemoryChunkID(int memoryChunkID)
         {
-            int numMemoryChunks = MoreMemoryChunks == null ? 1 : MoreMemoryChunks.Count() + 1;
-            for (int i = 0; i < numMemoryChunks; i++)
-            {
-                var memoryChunk = MemoryAtIndex(i);
-                if (memoryChunk.Reference.MemoryChunkID == memoryChunkID)
-                    return i;
-            }
-            return null;
+            if (MemoryAtIndex(0).Reference.MemoryChunkID == memoryChunkID)
+                return 0;
+            if (MoreMemoryChunks == null)
+                return null;
+            var index = MoreMemoryChunks.GetFirstIndexOfMemoryChunkID(memoryChunkID);
+            if (index == null)
+                return null;
+            return index + 1;
         }
 
         /// <summary>
@@ -277,7 +278,7 @@ namespace Lazinator.Buffers
             long positionRemaining = offset;
             int revisedStartIndex = StartIndex;
             int revisedStartPosition = Offset;
-            int moreMemoryCount = MoreMemoryChunks?.Count() ?? 0;
+            int moreMemoryCount = MoreMemoryChunks?.Count ?? 0;
             while (positionRemaining > 0)
             {
                 MemoryChunk current = MemoryAtIndex(revisedStartIndex);
@@ -297,7 +298,7 @@ namespace Lazinator.Buffers
                 }
             }
 
-            return new LazinatorMemory((MemoryChunk)InitialMemoryChunk, MoreMemoryChunks, revisedStartIndex, revisedStartPosition, length);
+            return new LazinatorMemory((MemoryChunk)InitialMemoryChunk, MoreMemoryChunks.ToList(), revisedStartIndex, revisedStartPosition, length);
         }
 
         #endregion
@@ -550,7 +551,7 @@ namespace Lazinator.Buffers
         {
             if (IsEmpty)
                 return 0;
-            int maxMemoryChunkID = EnumerateMemoryChunks().Max(x => x.MemoryChunkID); // not always the ID of the last chunk, because patching may reassemble into a different order. We are guaranteed, however, that if we're doing versioning, the most recent memory chunk ID will be included.
+            int maxMemoryChunkID = Math.Max(InitialMemoryChunk.MemoryChunkID, MoreMemoryChunks?.MaxMemoryChunkID ?? 0); // not always the ID of the last chunk, because patching may reassemble into a different order. We are guaranteed, however, that if we're doing versioning, the most recent memory chunk ID will be included.
             return maxMemoryChunkID + 1;
         }
 

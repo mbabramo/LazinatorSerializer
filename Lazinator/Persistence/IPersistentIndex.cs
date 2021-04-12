@@ -8,6 +8,7 @@ namespace Lazinator.Persistence
     [Lazinator((int) LazinatorCoreUniqueIDs.IPersistentIndex)]
     public interface IPersistentIndex
     {
+        [Uncompressed]
         string BaseBlobPath { get; set; }
         [SetterAccessibility("private")]
         int IndexVersion { get; }
