@@ -8,10 +8,11 @@ namespace Lazinator.Buffers
 {
     public class MultipleBufferInfo
     {
-        public MultipleBufferInfo(LazinatorMemory completedMemory)
+        public MultipleBufferInfo(LazinatorMemory completedMemory, bool recycle)
         {
             CompletedMemory = completedMemory;
-            RecycledMemoryChunkReferences = new List<MemoryChunkReference>();
+            if (recycle)
+                RecycledMemoryChunkReferences = new List<MemoryChunkReference>();
         }
 
         /// <summary>

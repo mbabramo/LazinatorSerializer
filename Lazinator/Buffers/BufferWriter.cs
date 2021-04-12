@@ -54,7 +54,7 @@ namespace Lazinator.Buffers
             ActiveMemory = new ExpandableBytes(minimumSize);
             if (completedMemory != null)
             {
-                MultipleBufferInfo = new MultipleBufferInfo(completedMemory.Value);
+                MultipleBufferInfo = new MultipleBufferInfo(completedMemory.Value, true);
             }
             else
                 MultipleBufferInfo = null;
@@ -232,9 +232,10 @@ namespace Lazinator.Buffers
         {
             if (ActiveMemoryPosition > 0)
             {
-                var withAppendedChunk = CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, new MemoryChunkReference(GetActiveMemoryChunkID(), 0, ActiveMemoryPosition), false));
+                var chunkToAppend = new MemoryChunk(ActiveMemory, new MemoryChunkReference(GetActiveMemoryChunkID(), 0, ActiveMemoryPosition), false);
+                var withAppendedChunk = CompletedMemory.WithAppendedChunk(chunkToAppend);
                 if (MultipleBufferInfo == null)
-                    MultipleBufferInfo = new MultipleBufferInfo(withAppendedChunk);
+                    MultipleBufferInfo = new MultipleBufferInfo(withAppendedChunk, false);
                 else
                     MultipleBufferInfo.CompletedMemory = withAppendedChunk;
                 ActiveMemory = new ExpandableBytes(minSizeofNewBuffer);
