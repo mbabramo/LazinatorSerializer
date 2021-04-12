@@ -9,7 +9,32 @@ namespace Lazinator.Buffers
 {
     public class MemoryChunkCollection : IMemoryChunkCollection
     {
+        public MemoryChunkCollection()
+        {
+
+        }
+
+        public MemoryChunkCollection(List<MemoryChunk> memoryChunks)
+        {
+            MemoryChunks = memoryChunks;
+        }
+
         List<MemoryChunk> MemoryChunks = new List<MemoryChunk>();
+        public MemoryChunkCollection DeepCopy()
+        {
+            var collection = new MemoryChunkCollection();
+            collection.SetContents(MemoryChunks);
+            return collection;
+        }
+        public MemoryChunkCollection WithAppendedMemoryChunk(MemoryChunk memoryChunk)
+        {
+            List<MemoryChunk> memoryChunks = MemoryChunks.Select(x => x.WithPreTruncationLengthIncreasedIfNecessary(memoryChunk)).ToList();
+            memoryChunks.Add(memoryChunk);
+            var collection = new MemoryChunkCollection();
+            collection.SetContents(memoryChunks);
+            return collection;
+        }
+
         public int MaxMemoryChunkID { get; private set; }
 
         public IEnumerable<MemoryChunk> EnumerateMemoryChunks()
@@ -54,6 +79,12 @@ namespace Lazinator.Buffers
         {
             return GetEnumerator();
         }
+
+        /// <summary>
+        /// Returns the first index within the memory chunk collection of the specified memory chunk ID, or null if not found. This will be one less than the index within a LazinatorMemory containing this collection.
+        /// </summary>
+        /// <param name="memoryChunkID"></param>
+        /// <returns></returns>
         public int? GetFirstIndexOfMemoryChunkID(int memoryChunkID)
         {
             int count = Count;

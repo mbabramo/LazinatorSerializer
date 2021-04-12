@@ -9,6 +9,8 @@ namespace Lazinator.Buffers
     public interface IMemoryChunkCollection : IEnumerable<MemoryChunk>
     {
         MemoryChunk MemoryAtIndex(int i);
+        MemoryChunkCollection DeepCopy();
+        MemoryChunkCollection WithAppendedMemoryChunk(MemoryChunk memoryChunk);
         void SetContents(IEnumerable<MemoryChunk> chunks);
         public int Count { get; }
         int? GetFirstIndexOfMemoryChunkID(int memoryChunkID); 
