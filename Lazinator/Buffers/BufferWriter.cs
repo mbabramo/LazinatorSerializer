@@ -37,8 +37,6 @@ namespace Lazinator.Buffers
         /// </summary>
         public MultipleBufferInfo MultipleBufferInfo { get; set; }
 
-        // Note: MultipleBufferWriter is a separate class to lower the size of the BufferWriter struct in the usual case of a single buffer. The key methods are provided here, because the logic of BufferWriter and MultipleBufferWriter are closely intertwined.
-
         internal LazinatorMemory CompletedMemory => MultipleBufferInfo?.CompletedMemory ?? LazinatorMemory.EmptyLazinatorMemory;
 
         internal List<MemoryChunkReference> RecycledMemoryChunkReferences => MultipleBufferInfo?.RecycledMemoryChunkReferences;
@@ -89,7 +87,7 @@ namespace Lazinator.Buffers
                 {
                     if (ActiveMemoryPosition == 0)
                         return CompletedMemory;
-                    var withAppended = CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, new MemoryChunkReference(GetActiveMemoryChunkID(), 0, ActiveMemoryPosition), false));
+                    var withAppended = CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, new MemoryChunkReference(MultipleBufferInfo.GetActiveMemoryChunkID(), 0, ActiveMemoryPosition), false));
                     return withAppended;
                 }
                 return new LazinatorMemory(new MemoryChunk(ActiveMemory), 0, ActiveMemoryPosition);
@@ -219,9 +217,22 @@ namespace Lazinator.Buffers
             if (ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling >= options.NextBufferThreshold)
             {
                 if (options.SerializeDiffs)
-                    RecordLastActiveMemoryChunkReference();
+                    RecordLastActiveMemoryChunkReferenceIfAny();
                 MoveActiveToCompletedMemory((int)(options.NextBufferThreshold * 1.2));
             }
+        }
+
+        public void InsertReferenceToCompletedMemory(int memoryChunkIndex, int startPosition, long numBytes)
+        {
+            MultipleBufferInfo?.InsertReferenceToCompletedMemory(memoryChunkIndex, startPosition, numBytes, ActiveMemoryPosition);
+        }
+
+        /// <summary>
+        /// Extends the bytes segment list to include the portion of active memory that is not included in active memory. 
+        /// </summary>
+        internal void RecordLastActiveMemoryChunkReferenceIfAny()
+        {
+            MultipleBufferInfo?.RecordLastActiveMemoryChunkReference(ActiveMemoryPosition);
         }
 
         /// <summary>
@@ -232,7 +243,7 @@ namespace Lazinator.Buffers
         {
             if (ActiveMemoryPosition > 0)
             {
-                var chunkToAppend = new MemoryChunk(ActiveMemory, new MemoryChunkReference(GetActiveMemoryChunkID(), 0, ActiveMemoryPosition), false);
+                var chunkToAppend = new MemoryChunk(ActiveMemory, new MemoryChunkReference(MultipleBufferInfo?.GetActiveMemoryChunkID() ?? 0, 0, ActiveMemoryPosition), false);
                 var withAppendedChunk = CompletedMemory.WithAppendedChunk(chunkToAppend);
                 if (MultipleBufferInfo == null)
                     MultipleBufferInfo = new MultipleBufferInfo(withAppendedChunk, false);
@@ -244,129 +255,18 @@ namespace Lazinator.Buffers
             }
         }
 
-        /// <summary>
-        /// Writes from CompletedMemory. Instead of copying the bytes, it simply adds a BytesSegment reference to where those bytes are in the overall sets of bytes.
-        /// </summary>
-        /// <param name="memoryChunkIndex">The index of the memory chunk</param>
-        /// <param name="startPosition">The position of the first byte of the memory within the indexed memory chunk</param>
-        /// <param name="numBytes"></param>
-        public void InsertReferenceToCompletedMemory(int memoryChunkIndex, int startPosition, long numBytes)
+        public LazinatorMemory PatchLazinatorMemoryFromRecycled()
         {
-            RecordLastActiveMemoryChunkReference();
-            IEnumerable<MemoryChunkReference> segmentsToAdd = CompletedMemory.EnumerateMemoryChunkReferences(memoryChunkIndex, startPosition, numBytes);
-            MemoryChunkReference.ExtendMemoryChunkReferencesList(RecycledMemoryChunkReferences, segmentsToAdd);
-            // Debug.WriteLine($"Reference to completed memory added. References are {String.Join(", ", RecycledMemoryChunkReferences)}");
-        }
-
-        /// <summary>
-        /// Extends the bytes segment list to include the portion of active memory that is not included in active memory. 
-        /// </summary>
-        internal void RecordLastActiveMemoryChunkReference()
-        {
-            int activeMemoryChunkID = GetActiveMemoryChunkID();
-            if (ActiveMemoryPosition > NumActiveMemoryBytesAddedToRecycling)
-            {
-                MemoryChunkReference.ExtendMemoryChunkReferencesList(RecycledMemoryChunkReferences, new MemoryChunkReference(activeMemoryChunkID, 0,  ActiveMemoryPosition, NumActiveMemoryBytesAddedToRecycling, ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling), true);
-                MultipleBufferInfo.NumActiveMemoryBytesAddedToRecycling = ActiveMemoryPosition;
-            }
-        }
-
-        internal LazinatorMemory PatchLazinatorMemoryFromRecycled()
-        {
-            RecordLastActiveMemoryChunkReference();
-            int activeMemoryChunkID = GetActiveMemoryChunkID();
+            if (MultipleBufferInfo is null)
+                throw new Exception("No LazinatorMemory to patch");
+            MultipleBufferInfo.RecordLastActiveMemoryChunkReference(ActiveMemoryPosition);
+            int activeMemoryChunkID = MultipleBufferInfo.GetActiveMemoryChunkID();
             int activeLength = NumActiveMemoryBytesAddedToRecycling;
             if (activeLength > 0)
             {
                 MoveActiveToCompletedMemory();
             }
-            var byID = CompletedMemory.GetMemoryChunksByID();
-            if (activeLength > 0)
-            { 
-                var activeMemoryChunk = byID[activeMemoryChunkID];
-                activeMemoryChunk.Reference = new MemoryChunkReference(activeMemoryChunkID, 0, activeLength, 0, 0);
-                byID[activeMemoryChunkID] = activeMemoryChunk;
-            }
-            MemoryChunk initialMemoryChunk = null;
-            List<MemoryChunk> moreMemory = null;
-            long length = 0;
-            for (int i = 0; i < RecycledMemoryChunkReferences.Count; i++)
-            {
-                if (i == 1)
-                    moreMemory = new List<MemoryChunk>();
-                MemoryChunkReference reference = RecycledMemoryChunkReferences[i];
-                MemoryChunk memoryChunk = byID[reference.MemoryChunkID];
-                MemoryChunk resliced = memoryChunk.WithReference(reference.WithAdditionalOffsetAndFinalLength(reference.AdditionalOffset, reference.FinalLength));
-                length += reference.FinalLength;
-                if (i == 0)
-                    initialMemoryChunk = resliced;
-                else
-                    moreMemory.Add(resliced);
-            }
-            return new LazinatorMemory(initialMemoryChunk, moreMemory, 0, 0, length);
-        }
-
-        /// <summary>
-        /// Returns the Span beginning at position LengthsPosition, when recycled memory chunk references are being recorded.
-        /// </summary>
-        /// <returns></returns>
-        internal Span<byte> GetLengthsSpanWithinRecycled()
-        {
-            MemoryChunkReference? lengthsSpanMemoryChunkReference;
-            long lengthPositionRemaining;
-            TryToGetReferenceToLengthSpanWithinRecycled(out lengthsSpanMemoryChunkReference, out lengthPositionRemaining);
-            if (lengthsSpanMemoryChunkReference is MemoryChunkReference nonNullLengthsSpanReference)
-            {
-                // We need to find the MemoryChunkID.
-                int memoryChunkID = nonNullLengthsSpanReference.MemoryChunkID;
-                if (GetActiveMemoryChunkID() == memoryChunkID)
-                {
-                    return ActiveMemoryWritten.Slice(nonNullLengthsSpanReference.AdditionalOffset).Span;
-                }
-                else
-                {
-                    MemoryChunk memoryChunk = CompletedMemory.GetFirstMemoryChunkWithID(memoryChunkID);
-                    memoryChunk.LoadMemory();
-                    return memoryChunk.WithReference(nonNullLengthsSpanReference).Memory.Span;
-                }
-            }
-            else
-            {
-                // We've exhausted the recycled memory chunk references. So, it must be within the non-recycled portion of active memory.
-                return ActiveMemory.Memory.Slice((int)(NumActiveMemoryBytesAddedToRecycling + lengthPositionRemaining)).Span;
-            }
-        }
-
-        private readonly void TryToGetReferenceToLengthSpanWithinRecycled(out MemoryChunkReference? lengthsSpanMemoryChunkReference, out long lengthPositionRemaining)
-        {
-            lengthsSpanMemoryChunkReference = null;
-            lengthPositionRemaining = LengthsPosition;
-            if (RecycledMemoryChunkReferences.Any())
-            {
-                int i = 0;
-                int numRecycledMemoryChunkReferencesCount = RecycledMemoryChunkReferences.Count;
-                while (lengthPositionRemaining > 0 && numRecycledMemoryChunkReferencesCount > i)
-                {
-                    MemoryChunkReference reference = RecycledMemoryChunkReferences[i];
-                    if (lengthPositionRemaining < reference.FinalLength)
-                    {
-                        lengthsSpanMemoryChunkReference = reference.Slice((int)lengthPositionRemaining);
-                        lengthPositionRemaining = 0;
-                    }
-                    else
-                        lengthPositionRemaining -= reference.FinalLength;
-                    i++;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Returns the version number for active memory (equal to the last version number for CompletedMemory plus one). 
-        /// </summary>
-        /// <returns></returns>
-        private int GetActiveMemoryChunkID()
-        {
-            return CompletedMemory.GetNextMemoryChunkID();
+            return MultipleBufferInfo.CompletePatchLazinatorMemory(activeLength, activeMemoryChunkID);
         }
 
         #endregion
@@ -567,7 +467,7 @@ namespace Lazinator.Buffers
             get
             {
                 if (RecycledMemoryChunkReferences != null)
-                    return GetLengthsSpanWithinRecycled();
+                    return MultipleBufferInfo.GetLengthsSpanWithinRecycled(ActiveMemory, ActiveMemoryPosition, LengthsPosition);
                 if (CompletedMemory.IsEmpty)
                     return ActiveSpan.Slice((int)LengthsPosition);
                 if (LengthsPosition >= CompletedMemory.Length)
