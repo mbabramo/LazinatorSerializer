@@ -60,49 +60,6 @@ namespace Lazinator.Buffers
 
         public bool SameLoadingInformation(in MemoryChunkReference other) => MemoryChunkID == other.MemoryChunkID && OffsetForLoading == other.OffsetForLoading && PreTruncationLength == other.PreTruncationLength;
 
-        /// <summary>
-        /// Extends a memory chunk references list by adding a new reference. If the new reference is contiguous to the last existing reference,
-        /// then the list size remains constant. 
-        /// </summary>
-        /// <param name="memoryChunkReferences"></param>
-        /// <param name="newSegment"></param>
-        public static void ExtendMemoryChunkReferencesList(List<MemoryChunkReference> memoryChunkReferences, MemoryChunkReference newSegment, bool extendEarlierReferencesForSameChunk)
-        {
-            if (memoryChunkReferences.Any())
-            {
-                if (extendEarlierReferencesForSameChunk)
-                {
-                    for (int i = 0; i < memoryChunkReferences.Count; i++)
-                    {
-                        MemoryChunkReference memoryChunkReference = memoryChunkReferences[i];
-                        if (memoryChunkReference.MemoryChunkID == newSegment.MemoryChunkID && memoryChunkReference.PreTruncationLength != newSegment.PreTruncationLength)
-                        {
-                            memoryChunkReferences[i] = memoryChunkReference.WithPreTruncationLength(newSegment.PreTruncationLength);
-                        }
-                    }
-                }
-                MemoryChunkReference last = memoryChunkReferences.Last();
-                if (last.SameLoadingInformation(newSegment) && newSegment.AdditionalOffset == last.AdditionalOffset + last.FinalLength)
-                {
-                    last.FinalLength += newSegment.FinalLength;
-                    memoryChunkReferences[memoryChunkReferences.Count - 1] = last;
-                    return;
-                }
-            }
-            memoryChunkReferences.Add(newSegment);
-        }
-
-        /// <summary>
-        /// Extends a memory chunk references list by adding new segments. The list is consolidated to avoid having consecutive entries for contiguous ranges.
-        /// </summary>
-        /// <param name="memoryChunkReferences"></param>
-        /// <param name="newSegments"></param>
-        public static void ExtendMemoryChunkReferencesList(List<MemoryChunkReference> memoryChunkReferences, IEnumerable<MemoryChunkReference> newSegments)
-        {
-            foreach (var newSegment in newSegments)
-                ExtendMemoryChunkReferencesList(memoryChunkReferences, newSegment, false);
-        }
-
         internal MemoryChunkReference WithMemoryChunkID(int memoryChunkID)
         {
             return new MemoryChunkReference(memoryChunkID, OffsetForLoading, PreTruncationLength, AdditionalOffset, FinalLength);

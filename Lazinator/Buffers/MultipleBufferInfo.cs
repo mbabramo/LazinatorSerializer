@@ -24,15 +24,64 @@ namespace Lazinator.Buffers
         /// <summary>
         /// When serializing diffs, these are non-null and will refer to various segments in CompletedMemory and ActiveMemory in order.
         /// </summary>
-        internal List<MemoryChunkReference> RecycledMemoryChunkReferences;
+        private List<MemoryChunkReference> RecycledMemoryChunkReferences;
 
-        internal long RecycledTotalLength;
+        public bool Recycling => RecycledMemoryChunkReferences != null;
+
+        internal long RecycledTotalLength { get; set; }
 
         /// <summary>
         /// When serializing diffs, when a section of ActiveMemory is added to RecycledMemoryChunkReferences, this will equal the index
         /// of the last byte added plus 1. 
         /// </summary>
         internal int NumActiveMemoryBytesAddedToRecycling;
+
+
+
+        /// <summary>
+        /// Extends a memory chunk references list by adding a new reference. If the new reference is contiguous to the last existing reference,
+        /// then the list size remains constant. 
+        /// </summary>
+        /// <param name="memoryChunkReferences"></param>
+        /// <param name="newSegment"></param>
+        public void ExtendMemoryChunkReferencesList(MemoryChunkReference newSegment, bool extendEarlierReferencesForSameChunk)
+        {
+            if (RecycledMemoryChunkReferences.Any())
+            {
+                if (extendEarlierReferencesForSameChunk)
+                {
+                    for (int i = 0; i < RecycledMemoryChunkReferences.Count; i++)
+                    {
+                        MemoryChunkReference memoryChunkReference = RecycledMemoryChunkReferences[i];
+                        if (memoryChunkReference.MemoryChunkID == newSegment.MemoryChunkID && memoryChunkReference.PreTruncationLength != newSegment.PreTruncationLength)
+                        {
+                            RecycledMemoryChunkReferences[i] = memoryChunkReference.WithPreTruncationLength(newSegment.PreTruncationLength);
+                        }
+                    }
+                }
+                MemoryChunkReference last = RecycledMemoryChunkReferences.Last();
+                if (last.SameLoadingInformation(newSegment) && newSegment.AdditionalOffset == last.AdditionalOffset + last.FinalLength)
+                {
+                    last.FinalLength += newSegment.FinalLength;
+                    RecycledMemoryChunkReferences[RecycledMemoryChunkReferences.Count - 1] = last;
+                    RecycledTotalLength += newSegment.FinalLength;
+                    return;
+                }
+            }
+            RecycledMemoryChunkReferences.Add(newSegment);
+            RecycledTotalLength += newSegment.FinalLength;
+        }
+
+        /// <summary>
+        /// Extends a memory chunk references list by adding new segments. The list is consolidated to avoid having consecutive entries for contiguous ranges.
+        /// </summary>
+        /// <param name="memoryChunkReferences"></param>
+        /// <param name="newSegments"></param>
+        public void ExtendMemoryChunkReferencesList(IEnumerable<MemoryChunkReference> newSegments)
+        {
+            foreach (var newSegment in newSegments)
+                ExtendMemoryChunkReferencesList(newSegment, false);
+        }
 
 
         /// <summary>
@@ -45,7 +94,7 @@ namespace Lazinator.Buffers
         {
             RecordLastActiveMemoryChunkReference(activeMemoryPosition);
             IEnumerable<MemoryChunkReference> segmentsToAdd = CompletedMemory.EnumerateMemoryChunkReferences(memoryChunkIndex, startPosition, numBytes);
-            MemoryChunkReference.ExtendMemoryChunkReferencesList(RecycledMemoryChunkReferences, segmentsToAdd);
+            ExtendMemoryChunkReferencesList(segmentsToAdd);
             // Debug.WriteLine($"Reference to completed memory added. References are {String.Join(", ", RecycledMemoryChunkReferences)}");
         }
 
@@ -57,7 +106,7 @@ namespace Lazinator.Buffers
             if (activeMemoryPosition > NumActiveMemoryBytesAddedToRecycling)
             {
                 int activeMemoryChunkID = GetActiveMemoryChunkID();
-                MemoryChunkReference.ExtendMemoryChunkReferencesList(RecycledMemoryChunkReferences, new MemoryChunkReference(activeMemoryChunkID, 0, activeMemoryPosition, NumActiveMemoryBytesAddedToRecycling, activeMemoryPosition - NumActiveMemoryBytesAddedToRecycling), true);
+                ExtendMemoryChunkReferencesList(new MemoryChunkReference(activeMemoryChunkID, 0, activeMemoryPosition, NumActiveMemoryBytesAddedToRecycling, activeMemoryPosition - NumActiveMemoryBytesAddedToRecycling), true);
                 NumActiveMemoryBytesAddedToRecycling = activeMemoryPosition;
             }
         }

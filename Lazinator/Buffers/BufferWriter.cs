@@ -39,7 +39,7 @@ namespace Lazinator.Buffers
 
         internal LazinatorMemory CompletedMemory => MultipleBufferInfo?.CompletedMemory ?? LazinatorMemory.EmptyLazinatorMemory;
 
-        internal List<MemoryChunkReference> RecycledMemoryChunkReferences => MultipleBufferInfo?.RecycledMemoryChunkReferences;
+        private bool Recycling => MultipleBufferInfo?.Recycling ?? false;
 
         internal int NumActiveMemoryBytesAddedToRecycling => MultipleBufferInfo?.NumActiveMemoryBytesAddedToRecycling ?? 0;
 
@@ -78,7 +78,7 @@ namespace Lazinator.Buffers
             get
             {
                 InitializeIfNecessary();
-                if (RecycledMemoryChunkReferences is not null)
+                if (Recycling)
                 {
                     return PatchLazinatorMemoryFromRecycled();
                 }
@@ -143,13 +143,13 @@ namespace Lazinator.Buffers
             {
                 if (MultipleBufferInfo is null)
                     return ActiveMemoryPosition;
-                if (RecycledMemoryChunkReferences is null)
+                if (!Recycling)
                 {
                     return ActiveMemoryPosition + (CompletedMemory.IsEmpty ? 0 : CompletedMemory.Length);
                 }
                 else
                 {
-                    return ActiveMemoryPosition - MultipleBufferInfo.NumActiveMemoryBytesAddedToRecycling + MultipleBufferInfo.RecycledMemoryChunkReferences.Sum(x => x.FinalLength);
+                    return ActiveMemoryPosition - MultipleBufferInfo.NumActiveMemoryBytesAddedToRecycling + MultipleBufferInfo.RecycledTotalLength;
                 }
             }
         }
