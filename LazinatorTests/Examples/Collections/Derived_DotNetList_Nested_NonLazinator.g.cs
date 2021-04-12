@@ -209,7 +209,7 @@ namespace LazinatorTests.Examples.Collections
             return totalChildrenBytes;
         }
         
-        public override void SerializeToExistingBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options)
+        public override void SerializeToExistingBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options)
         {
             int startPosition = writer.ActiveMemoryPosition;
             WritePropertiesIntoBuffer(ref writer, options, true);
@@ -219,7 +219,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        public override void UpdateStoredBuffer(ref BinaryBufferWriter writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        public override void UpdateStoredBuffer(ref BufferWriter writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
         {
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
@@ -240,7 +240,7 @@ namespace LazinatorTests.Examples.Collections
             LazinatorMemoryStorage = newBuffer;
         }
         
-        protected override void UpdateDeserializedChildren(ref BinaryBufferWriter writer, long startPosition)
+        protected override void UpdateDeserializedChildren(ref BufferWriter writer, long startPosition)
         {
             base.UpdateDeserializedChildren(ref writer, startPosition);
             if (_MyLevel2ListNestedNonLazinatorType_Accessed && _MyLevel2ListNestedNonLazinatorType != null)
@@ -251,7 +251,7 @@ namespace LazinatorTests.Examples.Collections
         }
         
         
-        protected override void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
+        protected override void WritePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
             int startPosition = writer.ActiveMemoryPosition;
             if (includeUniqueID)
@@ -279,12 +279,12 @@ namespace LazinatorTests.Examples.Collections
             
         }
         
-        protected override void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
+        protected override void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
             base.WritePrimitivePropertiesIntoBuffer(ref writer, options, includeUniqueID);
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyLevel2Int);
         }
-        protected override void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
+        protected override void WriteChildrenPropertiesIntoBuffer(ref BufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
         {
             base.WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startOfObjectPosition);
             if (options.SplittingPossible)
@@ -302,7 +302,7 @@ namespace LazinatorTests.Examples.Collections
             isAccessed: _MyLevel2ListNestedNonLazinatorType_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyLevel2ListNestedNonLazinatorType_ByteIndex, _MyLevel2ListNestedNonLazinatorType_ByteLength, null),
             verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            binaryWriterAction: (ref BufferWriter w, bool v) =>
             ConvertToBytes_List_GList_GNonLazinatorClass_g_g(ref w, _MyLevel2ListNestedNonLazinatorType,
             options));
             if (options.UpdateStoredBuffer)
@@ -347,7 +347,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_List_GList_GNonLazinatorClass_g_g(ref BinaryBufferWriter writer, List<List<NonLazinatorClass>> itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_List_GList_GNonLazinatorClass_g_g(ref BufferWriter writer, List<List<NonLazinatorClass>> itemToConvert, LazinatorSerializationOptions options)
         {
             if (itemToConvert == default(List<List<NonLazinatorClass>>))
             {
@@ -364,7 +364,7 @@ namespace LazinatorTests.Examples.Collections
                 else 
                 {
                     
-                    void action(ref BinaryBufferWriter w) => ConvertToBytes_List_GNonLazinatorClass_g(ref w, itemToConvert[itemIndex], options);
+                    void action(ref BufferWriter w) => ConvertToBytes_List_GNonLazinatorClass_g(ref w, itemToConvert[itemIndex], options);
                     WriteToBinaryWithInt32LengthPrefix(ref writer, action);
                 }
                 
@@ -424,7 +424,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_List_GNonLazinatorClass_g(ref BinaryBufferWriter writer, List<NonLazinatorClass> itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_List_GNonLazinatorClass_g(ref BufferWriter writer, List<NonLazinatorClass> itemToConvert, LazinatorSerializationOptions options)
         {
             if (itemToConvert == default(List<NonLazinatorClass>))
             {
@@ -441,7 +441,7 @@ namespace LazinatorTests.Examples.Collections
                 else 
                 {
                     
-                    void action(ref BinaryBufferWriter w) => NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(ref w, itemToConvert[itemIndex], options);
+                    void action(ref BufferWriter w) => NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(ref w, itemToConvert[itemIndex], options);
                     WriteToBinaryWithInt32LengthPrefix(ref writer, action);
                 }
                 

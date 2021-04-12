@@ -454,7 +454,7 @@ namespace LazinatorTests.Tests
             var memory2List = memory2.GetConsolidatedMemory().ToArray().ToList();
             memory2List.SequenceEqual(fullSequence).Should().BeTrue();
 
-            BinaryBufferWriter writer = new BinaryBufferWriter(0, memory2);
+            BufferWriter writer = new BufferWriter(0, memory2);
             writer.Write((byte)11);
             writer.Write((byte)12);
             writer.InsertReferenceToCompletedMemory(2, 1, 2); // 8, 9

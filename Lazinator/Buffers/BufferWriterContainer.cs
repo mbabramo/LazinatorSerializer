@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 namespace Lazinator.Buffers
 {
     /// <summary>
-    /// This contains a container for BinaryBufferWriter. This can be used in async methods, where we cannot pass BinaryBufferWriter by reference.
+    /// This contains a container for BufferWriter. This can be used in async methods, where we cannot pass BufferWriter by reference.
     /// </summary>
-    public class BinaryBufferWriterContainer
+    public class BufferWriterContainer
     {
-        public BinaryBufferWriter Writer;
+        public BufferWriter Writer;
         public override string ToString()
         {
             return Writer.ToString();
@@ -41,9 +41,9 @@ namespace Lazinator.Buffers
             set => Writer.RecycledMemoryChunkReferences = value;
         }
 
-        public BinaryBufferWriterContainer(int minimumSize, LazinatorMemory? completedMemory = null)
+        public BufferWriterContainer(int minimumSize, LazinatorMemory? completedMemory = null)
         {
-            Writer = new BinaryBufferWriter(minimumSize, completedMemory);
+            Writer = new BufferWriter(minimumSize, completedMemory);
         }
         public LazinatorMemory LazinatorMemory => Writer.LazinatorMemory;
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

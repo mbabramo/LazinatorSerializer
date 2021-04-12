@@ -452,7 +452,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             else
             {
-                BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
+                BufferWriter writer = new BufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
                 LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
                 LazinatorMemoryStorage = writer.LazinatorMemory;
             }
@@ -469,7 +469,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 return EncodeToNewBuffer(options);
             }
-            BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
+            BufferWriter writer = new BufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
             LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
             return writer.LazinatorMemory;
         }
@@ -477,7 +477,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected virtual LazinatorMemory EncodeToNewBuffer(in LazinatorSerializationOptions options) 
         {
             int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.LengthInt ?? ExpandableBytes.DefaultMinBufferSize;
-            BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
+            BufferWriter writer = new BufferWriter(bufferSize);
             SerializeToExistingBuffer(ref writer, options);
             return writer.LazinatorMemory;
         }
@@ -641,7 +641,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             return totalChildrenBytes;
         }
         
-        public virtual void SerializeToExistingBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options)
+        public virtual void SerializeToExistingBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options)
         {
             int startPosition = writer.ActiveMemoryPosition;
             WritePropertiesIntoBuffer(ref writer, options, true);
@@ -651,7 +651,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
         }
         
-        public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        public virtual void UpdateStoredBuffer(ref BufferWriter writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
         {
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
@@ -672,13 +672,13 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             LazinatorMemoryStorage = newBuffer;
         }
         
-        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, long startPosition)
+        protected virtual void UpdateDeserializedChildren(ref BufferWriter writer, long startPosition)
         {
             
         }
         
         
-        protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
+        protected virtual void WritePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
             if (includeUniqueID)
             {
@@ -700,7 +700,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             
         }
         
-        protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
+        protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _MyUncompressed);
             WriteUncompressedPrimitives.WriteDateTime(ref writer, _MyUncompressedDateTime);
@@ -722,7 +722,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             WriteUncompressedPrimitives.WriteULong(ref writer, _MyUncompressedULong);
             WriteUncompressedPrimitives.WriteUShort(ref writer, _MyUncompressedUShort);
         }
-        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
+        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
         {
             
         }

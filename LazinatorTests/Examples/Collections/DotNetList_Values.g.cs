@@ -417,7 +417,7 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
+                BufferWriter writer = new BufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
                 LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
                 LazinatorMemoryStorage = writer.LazinatorMemory;
             }
@@ -434,7 +434,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return EncodeToNewBuffer(options);
             }
-            BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
+            BufferWriter writer = new BufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
             LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
             return writer.LazinatorMemory;
         }
@@ -442,7 +442,7 @@ namespace LazinatorTests.Examples.Collections
         protected virtual LazinatorMemory EncodeToNewBuffer(in LazinatorSerializationOptions options) 
         {
             int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.LengthInt ?? ExpandableBytes.DefaultMinBufferSize;
-            BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
+            BufferWriter writer = new BufferWriter(bufferSize);
             SerializeToExistingBuffer(ref writer, options);
             return writer.LazinatorMemory;
         }
@@ -595,7 +595,7 @@ namespace LazinatorTests.Examples.Collections
             return totalChildrenBytes;
         }
         
-        public virtual void SerializeToExistingBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options)
+        public virtual void SerializeToExistingBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options)
         {
             int startPosition = writer.ActiveMemoryPosition;
             WritePropertiesIntoBuffer(ref writer, options, true);
@@ -605,7 +605,7 @@ namespace LazinatorTests.Examples.Collections
             }
         }
         
-        public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        public virtual void UpdateStoredBuffer(ref BufferWriter writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
         {
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
@@ -626,7 +626,7 @@ namespace LazinatorTests.Examples.Collections
             LazinatorMemoryStorage = newBuffer;
         }
         
-        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, long startPosition)
+        protected virtual void UpdateDeserializedChildren(ref BufferWriter writer, long startPosition)
         {
             if (_MyLinkedListInt_Accessed && _MyLinkedListInt != null)
             {
@@ -652,7 +652,7 @@ namespace LazinatorTests.Examples.Collections
         }
         
         
-        protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
+        protected virtual void WritePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
             int startPosition = writer.ActiveMemoryPosition;
             if (includeUniqueID)
@@ -680,10 +680,10 @@ namespace LazinatorTests.Examples.Collections
             
         }
         
-        protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
+        protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
         }
-        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
+        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
         {
             if (options.SplittingPossible)
             {
@@ -700,7 +700,7 @@ namespace LazinatorTests.Examples.Collections
             isAccessed: _MyLinkedListInt_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyLinkedListInt_ByteIndex, _MyLinkedListInt_ByteLength, null),
             verifyCleanness: options.VerifyCleanness,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            binaryWriterAction: (ref BufferWriter w, bool v) =>
             ConvertToBytes_LinkedList_Gint_g(ref w, _MyLinkedListInt,
             options));
             if (options.UpdateStoredBuffer)
@@ -718,7 +718,7 @@ namespace LazinatorTests.Examples.Collections
             isAccessed: _MyListInt_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListInt_ByteIndex, _MyListInt_ByteLength, null),
             verifyCleanness: options.VerifyCleanness,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            binaryWriterAction: (ref BufferWriter w, bool v) =>
             ConvertToBytes_List_Gint_g(ref w, _MyListInt,
             options));
             if (options.UpdateStoredBuffer)
@@ -736,7 +736,7 @@ namespace LazinatorTests.Examples.Collections
             isAccessed: _MyListInt2_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListInt2_ByteIndex, _MyListInt2_ByteLength, null),
             verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            binaryWriterAction: (ref BufferWriter w, bool v) =>
             ConvertToBytes_List_Gint_g(ref w, _MyListInt2,
             options));
             if (options.UpdateStoredBuffer)
@@ -754,7 +754,7 @@ namespace LazinatorTests.Examples.Collections
             isAccessed: _MyListNullableEnabledContext_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListNullableEnabledContext_ByteIndex, _MyListNullableEnabledContext_ByteLength, null),
             verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            binaryWriterAction: (ref BufferWriter w, bool v) =>
             ConvertToBytes_List_GNullableEnabledContext_g(ref w, _MyListNullableEnabledContext,
             options));
             if (options.UpdateStoredBuffer)
@@ -772,7 +772,7 @@ namespace LazinatorTests.Examples.Collections
             isAccessed: _MySortedSetInt_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MySortedSetInt_ByteIndex, _MySortedSetInt_ByteLength, null),
             verifyCleanness: options.VerifyCleanness,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            binaryWriterAction: (ref BufferWriter w, bool v) =>
             ConvertToBytes_SortedSet_Gint_g(ref w, _MySortedSetInt,
             options));
             if (options.UpdateStoredBuffer)
@@ -808,7 +808,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_LinkedList_Gint_g(ref BinaryBufferWriter writer, LinkedList<Int32> itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_LinkedList_Gint_g(ref BufferWriter writer, LinkedList<Int32> itemToConvert, LazinatorSerializationOptions options)
         {
             if (itemToConvert == default(LinkedList<Int32>))
             {
@@ -859,7 +859,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_List_Gint_g(ref BinaryBufferWriter writer, List<Int32> itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_List_Gint_g(ref BufferWriter writer, List<Int32> itemToConvert, LazinatorSerializationOptions options)
         {
             if (itemToConvert == default(List<Int32>))
             {
@@ -919,7 +919,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_List_GNullableEnabledContext_g(ref BinaryBufferWriter writer, List<NullableEnabledContext> itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_List_GNullableEnabledContext_g(ref BufferWriter writer, List<NullableEnabledContext> itemToConvert, LazinatorSerializationOptions options)
         {
             if (itemToConvert == default(List<NullableEnabledContext>))
             {
@@ -936,7 +936,7 @@ namespace LazinatorTests.Examples.Collections
                 else 
                 {
                     
-                    void action(ref BinaryBufferWriter w) => itemToConvert[itemIndex].SerializeToExistingBuffer(ref w, options);
+                    void action(ref BufferWriter w) => itemToConvert[itemIndex].SerializeToExistingBuffer(ref w, options);
                     WriteToBinaryWithInt32LengthPrefix(ref writer, action);
                 }
                 
@@ -995,7 +995,7 @@ namespace LazinatorTests.Examples.Collections
             return collection;
         }
         
-        private static void ConvertToBytes_SortedSet_Gint_g(ref BinaryBufferWriter writer, SortedSet<Int32> itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_SortedSet_Gint_g(ref BufferWriter writer, SortedSet<Int32> itemToConvert, LazinatorSerializationOptions options)
         {
             if (itemToConvert == default(SortedSet<Int32>))
             {

@@ -398,7 +398,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
+                BufferWriter writer = new BufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
                 LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
                 LazinatorMemoryStorage = writer.LazinatorMemory;
             }
@@ -415,7 +415,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 return EncodeToNewBuffer(options);
             }
-            BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
+            BufferWriter writer = new BufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
             LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
             return writer.LazinatorMemory;
         }
@@ -423,7 +423,7 @@ namespace LazinatorTests.Examples.Tuples
         protected virtual LazinatorMemory EncodeToNewBuffer(in LazinatorSerializationOptions options) 
         {
             int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.LengthInt ?? ExpandableBytes.DefaultMinBufferSize;
-            BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
+            BufferWriter writer = new BufferWriter(bufferSize);
             SerializeToExistingBuffer(ref writer, options);
             return writer.LazinatorMemory;
         }
@@ -585,7 +585,7 @@ namespace LazinatorTests.Examples.Tuples
             return totalChildrenBytes;
         }
         
-        public virtual void SerializeToExistingBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options)
+        public virtual void SerializeToExistingBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options)
         {
             int startPosition = writer.ActiveMemoryPosition;
             WritePropertiesIntoBuffer(ref writer, options, true);
@@ -595,7 +595,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         
-        public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        public virtual void UpdateStoredBuffer(ref BufferWriter writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
         {
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
@@ -616,7 +616,7 @@ namespace LazinatorTests.Examples.Tuples
             LazinatorMemoryStorage = newBuffer;
         }
         
-        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, long startPosition)
+        protected virtual void UpdateDeserializedChildren(ref BufferWriter writer, long startPosition)
         {
             if (_MyListTuple_Accessed && _MyListTuple != null)
             {
@@ -646,7 +646,7 @@ namespace LazinatorTests.Examples.Tuples
         }
         
         
-        protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
+        protected virtual void WritePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
             int startPosition = writer.ActiveMemoryPosition;
             if (includeUniqueID)
@@ -674,10 +674,10 @@ namespace LazinatorTests.Examples.Tuples
             
         }
         
-        protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
+        protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
         }
-        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
+        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
         {
             if (options.SplittingPossible)
             {
@@ -694,7 +694,7 @@ namespace LazinatorTests.Examples.Tuples
             isAccessed: _MyListTuple_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyListTuple_ByteIndex, _MyListTuple_ByteLength, null),
             verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            binaryWriterAction: (ref BufferWriter w, bool v) =>
             ConvertToBytes_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(ref w, _MyListTuple,
             options));
             if (options.UpdateStoredBuffer)
@@ -712,7 +712,7 @@ namespace LazinatorTests.Examples.Tuples
             isAccessed: _MyTupleSerialized_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized_ByteIndex, _MyTupleSerialized_ByteLength, null),
             verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            binaryWriterAction: (ref BufferWriter w, bool v) =>
             ConvertToBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(ref w, _MyTupleSerialized,
             options));
             if (options.UpdateStoredBuffer)
@@ -730,7 +730,7 @@ namespace LazinatorTests.Examples.Tuples
             isAccessed: _MyTupleSerialized2_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized2_ByteIndex, _MyTupleSerialized2_ByteLength, null),
             verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            binaryWriterAction: (ref BufferWriter w, bool v) =>
             ConvertToBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(ref w, _MyTupleSerialized2,
             options));
             if (options.UpdateStoredBuffer)
@@ -748,7 +748,7 @@ namespace LazinatorTests.Examples.Tuples
             isAccessed: _MyTupleSerialized3_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized3_ByteIndex, _MyTupleSerialized3_ByteLength, null),
             verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            binaryWriterAction: (ref BufferWriter w, bool v) =>
             ConvertToBytes_Tuple_Guint_n_c_C32ExampleChild_c_C32NonLazinatorClass_g(ref w, _MyTupleSerialized3,
             options));
             if (options.UpdateStoredBuffer)
@@ -766,7 +766,7 @@ namespace LazinatorTests.Examples.Tuples
             isAccessed: _MyTupleSerialized4_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized4_ByteIndex, _MyTupleSerialized4_ByteLength, null),
             verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            binaryWriterAction: (ref BufferWriter w, bool v) =>
             ConvertToBytes_Tuple_Gint_c_C32ExampleStructContainingClasses_g(ref w, _MyTupleSerialized4,
             options));
             if (options.UpdateStoredBuffer)
@@ -787,7 +787,7 @@ namespace LazinatorTests.Examples.Tuples
             isAccessed: _MyTupleSerialized5_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyTupleSerialized5_ByteIndex, _MyTupleSerialized5_ByteLength, null),
             verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            binaryWriterAction: (ref BufferWriter w, bool v) =>
             ConvertToBytes_Tuple_Gint_c_C32ExampleStructContainingClasses_n_g(ref w, _MyTupleSerialized5,
             options));
             if (options.UpdateStoredBuffer)
@@ -835,7 +835,7 @@ namespace LazinatorTests.Examples.Tuples
             return collection;
         }
         
-        private static void ConvertToBytes_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(ref BinaryBufferWriter writer, List<Tuple<UInt32, ExampleChild, NonLazinatorClass>> itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_List_GTuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g_g(ref BufferWriter writer, List<Tuple<UInt32, ExampleChild, NonLazinatorClass>> itemToConvert, LazinatorSerializationOptions options)
         {
             if (itemToConvert == default(List<Tuple<UInt32, ExampleChild, NonLazinatorClass>>))
             {
@@ -852,7 +852,7 @@ namespace LazinatorTests.Examples.Tuples
                 else 
                 {
                     
-                    void action(ref BinaryBufferWriter w) => ConvertToBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(ref w, itemToConvert[itemIndex], options);
+                    void action(ref BufferWriter w) => ConvertToBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(ref w, itemToConvert[itemIndex], options);
                     WriteToBinaryWithInt32LengthPrefix(ref writer, action);
                 }
                 
@@ -918,7 +918,7 @@ namespace LazinatorTests.Examples.Tuples
             return itemToCreate;
         }
         
-        private static void ConvertToBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(ref BinaryBufferWriter writer, Tuple<UInt32, ExampleChild, NonLazinatorClass> itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_Tuple_Guint_c_C32ExampleChild_c_C32NonLazinatorClass_g(ref BufferWriter writer, Tuple<UInt32, ExampleChild, NonLazinatorClass> itemToConvert, LazinatorSerializationOptions options)
         {
             if (itemToConvert == null)
             {
@@ -933,7 +933,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                void actionItem2(ref BinaryBufferWriter w) => itemToConvert.Item2.SerializeToExistingBuffer(ref w, options);
+                void actionItem2(ref BufferWriter w) => itemToConvert.Item2.SerializeToExistingBuffer(ref w, options);
                 WriteToBinaryWithInt32LengthPrefix(ref writer, actionItem2);
             };
             
@@ -943,7 +943,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                void actionItem3(ref BinaryBufferWriter w) => NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(ref w, itemToConvert.Item3, options);
+                void actionItem3(ref BufferWriter w) => NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(ref w, itemToConvert.Item3, options);
                 WriteToBinaryWithInt32LengthPrefix(ref writer, actionItem3);
             }
         }
@@ -992,7 +992,7 @@ namespace LazinatorTests.Examples.Tuples
             return itemToCreate;
         }
         
-        private static void ConvertToBytes_Tuple_Guint_n_c_C32ExampleChild_c_C32NonLazinatorClass_g(ref BinaryBufferWriter writer, Tuple<UInt32?, ExampleChild, NonLazinatorClass> itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_Tuple_Guint_n_c_C32ExampleChild_c_C32NonLazinatorClass_g(ref BufferWriter writer, Tuple<UInt32?, ExampleChild, NonLazinatorClass> itemToConvert, LazinatorSerializationOptions options)
         {
             if (itemToConvert == null)
             {
@@ -1007,7 +1007,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                void actionItem2(ref BinaryBufferWriter w) => itemToConvert.Item2.SerializeToExistingBuffer(ref w, options);
+                void actionItem2(ref BufferWriter w) => itemToConvert.Item2.SerializeToExistingBuffer(ref w, options);
                 WriteToBinaryWithInt32LengthPrefix(ref writer, actionItem2);
             };
             
@@ -1017,7 +1017,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                void actionItem3(ref BinaryBufferWriter w) => NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(ref w, itemToConvert.Item3, options);
+                void actionItem3(ref BufferWriter w) => NonLazinatorDirectConverter.ConvertToBytes_NonLazinatorClass(ref w, itemToConvert.Item3, options);
                 WriteToBinaryWithInt32LengthPrefix(ref writer, actionItem3);
             }
         }
@@ -1057,7 +1057,7 @@ namespace LazinatorTests.Examples.Tuples
             return itemToCreate;
         }
         
-        private static void ConvertToBytes_Tuple_Gint_c_C32ExampleStructContainingClasses_g(ref BinaryBufferWriter writer, Tuple<Int32, ExampleStructContainingClasses> itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_Tuple_Gint_c_C32ExampleStructContainingClasses_g(ref BufferWriter writer, Tuple<Int32, ExampleStructContainingClasses> itemToConvert, LazinatorSerializationOptions options)
         {
             if (itemToConvert == null)
             {
@@ -1066,7 +1066,7 @@ namespace LazinatorTests.Examples.Tuples
             
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Item1);
             
-            void actionItem2(ref BinaryBufferWriter w) => itemToConvert.Item2.SerializeToExistingBuffer(ref w, options);
+            void actionItem2(ref BufferWriter w) => itemToConvert.Item2.SerializeToExistingBuffer(ref w, options);
             WriteToBinaryWithInt32LengthPrefix(ref writer, actionItem2);
         }
         
@@ -1105,7 +1105,7 @@ namespace LazinatorTests.Examples.Tuples
             return itemToCreate;
         }
         
-        private static void ConvertToBytes_Tuple_Gint_c_C32ExampleStructContainingClasses_n_g(ref BinaryBufferWriter writer, Tuple<Int32, ExampleStructContainingClasses?> itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_Tuple_Gint_c_C32ExampleStructContainingClasses_n_g(ref BufferWriter writer, Tuple<Int32, ExampleStructContainingClasses?> itemToConvert, LazinatorSerializationOptions options)
         {
             if (itemToConvert == null)
             {
@@ -1114,7 +1114,7 @@ namespace LazinatorTests.Examples.Tuples
             
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Item1);
             
-            void actionItem2(ref BinaryBufferWriter w) => itemToConvert.Item2?.SerializeToExistingBuffer(ref w, options);
+            void actionItem2(ref BufferWriter w) => itemToConvert.Item2?.SerializeToExistingBuffer(ref w, options);
             WriteToBinaryWithInt32LengthPrefix(ref writer, actionItem2);
         }
         

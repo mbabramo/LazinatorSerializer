@@ -527,7 +527,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
+                BufferWriter writer = new BufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
                 LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
                 LazinatorMemoryStorage = writer.LazinatorMemory;
             }
@@ -544,7 +544,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 return EncodeToNewBuffer(options);
             }
-            BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
+            BufferWriter writer = new BufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
             LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
             return writer.LazinatorMemory;
         }
@@ -552,7 +552,7 @@ namespace LazinatorTests.Examples.Tuples
         protected virtual LazinatorMemory EncodeToNewBuffer(in LazinatorSerializationOptions options) 
         {
             int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.LengthInt ?? ExpandableBytes.DefaultMinBufferSize;
-            BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
+            BufferWriter writer = new BufferWriter(bufferSize);
             SerializeToExistingBuffer(ref writer, options);
             return writer.LazinatorMemory;
         }
@@ -736,7 +736,7 @@ namespace LazinatorTests.Examples.Tuples
             return totalChildrenBytes;
         }
         
-        public virtual void SerializeToExistingBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options)
+        public virtual void SerializeToExistingBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options)
         {
             int startPosition = writer.ActiveMemoryPosition;
             WritePropertiesIntoBuffer(ref writer, options, true);
@@ -746,7 +746,7 @@ namespace LazinatorTests.Examples.Tuples
             }
         }
         
-        public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        public virtual void UpdateStoredBuffer(ref BufferWriter writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
         {
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
@@ -767,7 +767,7 @@ namespace LazinatorTests.Examples.Tuples
             LazinatorMemoryStorage = newBuffer;
         }
         
-        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, long startPosition)
+        protected virtual void UpdateDeserializedChildren(ref BufferWriter writer, long startPosition)
         {
             _ExternalRecordLikeStruct = (Point) CloneOrChange_Point(_ExternalRecordLikeStruct, l => l.RemoveBufferInHierarchy(), true);
             _MyMismatchedRecordLikeType = (MismatchedRecordLikeType) CloneOrChange_MismatchedRecordLikeType(_MyMismatchedRecordLikeType, l => l.RemoveBufferInHierarchy(), true);
@@ -797,7 +797,7 @@ namespace LazinatorTests.Examples.Tuples
         }
         
         
-        protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
+        protected virtual void WritePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
             int startPosition = writer.ActiveMemoryPosition;
             if (includeUniqueID)
@@ -825,11 +825,11 @@ namespace LazinatorTests.Examples.Tuples
             
         }
         
-        protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
+        protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyInt);
         }
-        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
+        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
         {
             if (options.SplittingPossible)
             {
@@ -846,7 +846,7 @@ namespace LazinatorTests.Examples.Tuples
             isAccessed: _ExternalRecordLikeStruct_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _ExternalRecordLikeStruct_ByteIndex, _ExternalRecordLikeStruct_ByteLength, null),
             verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            binaryWriterAction: (ref BufferWriter w, bool v) =>
             ConvertToBytes_Point(ref w, _ExternalRecordLikeStruct,
             options));
             if (options.UpdateStoredBuffer)
@@ -864,7 +864,7 @@ namespace LazinatorTests.Examples.Tuples
             isAccessed: _MyMismatchedRecordLikeType_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyMismatchedRecordLikeType_ByteIndex, _MyMismatchedRecordLikeType_ByteLength, null),
             verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            binaryWriterAction: (ref BufferWriter w, bool v) =>
             ConvertToBytes_MismatchedRecordLikeType(ref w, _MyMismatchedRecordLikeType,
             options));
             if (options.UpdateStoredBuffer)
@@ -882,7 +882,7 @@ namespace LazinatorTests.Examples.Tuples
             isAccessed: _MyNonLazinatorRecordWithConstructor_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorRecordWithConstructor_ByteIndex, _MyNonLazinatorRecordWithConstructor_ByteLength, null),
             verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            binaryWriterAction: (ref BufferWriter w, bool v) =>
             ConvertToBytes_NonLazinatorRecordWithConstructor(ref w, _MyNonLazinatorRecordWithConstructor,
             options));
             if (options.UpdateStoredBuffer)
@@ -900,7 +900,7 @@ namespace LazinatorTests.Examples.Tuples
             isAccessed: _MyNonLazinatorRecordWithoutConstructor_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorRecordWithoutConstructor_ByteIndex, _MyNonLazinatorRecordWithoutConstructor_ByteLength, null),
             verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            binaryWriterAction: (ref BufferWriter w, bool v) =>
             ConvertToBytes_NonLazinatorRecordWithoutConstructor(ref w, _MyNonLazinatorRecordWithoutConstructor,
             options));
             if (options.UpdateStoredBuffer)
@@ -918,7 +918,7 @@ namespace LazinatorTests.Examples.Tuples
             isAccessed: _MyNonLazinatorSubrecordWithConstructor_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorSubrecordWithConstructor_ByteIndex, _MyNonLazinatorSubrecordWithConstructor_ByteLength, null),
             verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            binaryWriterAction: (ref BufferWriter w, bool v) =>
             ConvertToBytes_NonLazinatorSubrecordWithConstructor(ref w, _MyNonLazinatorSubrecordWithConstructor,
             options));
             if (options.UpdateStoredBuffer)
@@ -936,7 +936,7 @@ namespace LazinatorTests.Examples.Tuples
             isAccessed: _MyNonLazinatorSubrecordWithoutConstructor_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorSubrecordWithoutConstructor_ByteIndex, _MyNonLazinatorSubrecordWithoutConstructor_ByteLength, null),
             verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            binaryWriterAction: (ref BufferWriter w, bool v) =>
             ConvertToBytes_NonLazinatorSubrecordWithoutConstructor(ref w, _MyNonLazinatorSubrecordWithoutConstructor,
             options));
             if (options.UpdateStoredBuffer)
@@ -954,7 +954,7 @@ namespace LazinatorTests.Examples.Tuples
             isAccessed: _MyRecordLikeClass_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeClass_ByteIndex, _MyRecordLikeClass_ByteLength, null),
             verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            binaryWriterAction: (ref BufferWriter w, bool v) =>
             ConvertToBytes_RecordLikeClass(ref w, _MyRecordLikeClass,
             options));
             if (options.UpdateStoredBuffer)
@@ -972,7 +972,7 @@ namespace LazinatorTests.Examples.Tuples
             isAccessed: _MyRecordLikeStruct_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeStruct_ByteIndex, _MyRecordLikeStruct_ByteLength, null),
             verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            binaryWriterAction: (ref BufferWriter w, bool v) =>
             ConvertToBytes_RecordLikeStruct(ref w, _MyRecordLikeStruct,
             options));
             if (options.UpdateStoredBuffer)
@@ -990,7 +990,7 @@ namespace LazinatorTests.Examples.Tuples
             isAccessed: _MyRecordLikeTypeWithLazinator_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeTypeWithLazinator_ByteIndex, _MyRecordLikeTypeWithLazinator_ByteLength, null),
             verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            binaryWriterAction: (ref BufferWriter w, bool v) =>
             ConvertToBytes_RecordLikeTypeWithLazinator(ref w, _MyRecordLikeTypeWithLazinator,
             options));
             if (options.UpdateStoredBuffer)
@@ -1025,7 +1025,7 @@ namespace LazinatorTests.Examples.Tuples
             return itemToCreate;
         }
         
-        private static void ConvertToBytes_Point(ref BinaryBufferWriter writer, Point itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_Point(ref BufferWriter writer, Point itemToConvert, LazinatorSerializationOptions options)
         {
             
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.X);
@@ -1057,7 +1057,7 @@ namespace LazinatorTests.Examples.Tuples
             return itemToCreate;
         }
         
-        private static void ConvertToBytes_MismatchedRecordLikeType(ref BinaryBufferWriter writer, MismatchedRecordLikeType itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_MismatchedRecordLikeType(ref BufferWriter writer, MismatchedRecordLikeType itemToConvert, LazinatorSerializationOptions options)
         {
             
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
@@ -1100,7 +1100,7 @@ namespace LazinatorTests.Examples.Tuples
             return itemToCreate;
         }
         
-        private static void ConvertToBytes_NonLazinatorRecordWithConstructor(ref BinaryBufferWriter writer, NonLazinatorRecordWithConstructor itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_NonLazinatorRecordWithConstructor(ref BufferWriter writer, NonLazinatorRecordWithConstructor itemToConvert, LazinatorSerializationOptions options)
         {
             if (itemToConvert == null)
             {
@@ -1115,7 +1115,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, options);
+                void actionExample(ref BufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, options);
                 WriteToBinaryWithInt32LengthPrefix(ref writer, actionExample);
             };
             
@@ -1169,7 +1169,7 @@ namespace LazinatorTests.Examples.Tuples
             return itemToCreate;
         }
         
-        private static void ConvertToBytes_NonLazinatorRecordWithoutConstructor(ref BinaryBufferWriter writer, NonLazinatorRecordWithoutConstructor itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_NonLazinatorRecordWithoutConstructor(ref BufferWriter writer, NonLazinatorRecordWithoutConstructor itemToConvert, LazinatorSerializationOptions options)
         {
             if (itemToConvert == null)
             {
@@ -1186,7 +1186,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, options);
+                void actionExample(ref BufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, options);
                 WriteToBinaryWithInt32LengthPrefix(ref writer, actionExample);
             };
             
@@ -1240,7 +1240,7 @@ namespace LazinatorTests.Examples.Tuples
             return itemToCreate;
         }
         
-        private static void ConvertToBytes_NonLazinatorSubrecordWithConstructor(ref BinaryBufferWriter writer, NonLazinatorSubrecordWithConstructor itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_NonLazinatorSubrecordWithConstructor(ref BufferWriter writer, NonLazinatorSubrecordWithConstructor itemToConvert, LazinatorSerializationOptions options)
         {
             if (itemToConvert == null)
             {
@@ -1255,7 +1255,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, options);
+                void actionExample(ref BufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, options);
                 WriteToBinaryWithInt32LengthPrefix(ref writer, actionExample);
             };
             
@@ -1314,7 +1314,7 @@ namespace LazinatorTests.Examples.Tuples
             return itemToCreate;
         }
         
-        private static void ConvertToBytes_NonLazinatorSubrecordWithoutConstructor(ref BinaryBufferWriter writer, NonLazinatorSubrecordWithoutConstructor itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_NonLazinatorSubrecordWithoutConstructor(ref BufferWriter writer, NonLazinatorSubrecordWithoutConstructor itemToConvert, LazinatorSerializationOptions options)
         {
             if (itemToConvert == null)
             {
@@ -1333,7 +1333,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, options);
+                void actionExample(ref BufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, options);
                 WriteToBinaryWithInt32LengthPrefix(ref writer, actionExample);
             };
             
@@ -1382,7 +1382,7 @@ namespace LazinatorTests.Examples.Tuples
             return itemToCreate;
         }
         
-        private static void ConvertToBytes_RecordLikeClass(ref BinaryBufferWriter writer, RecordLikeClass itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_RecordLikeClass(ref BufferWriter writer, RecordLikeClass itemToConvert, LazinatorSerializationOptions options)
         {
             if (itemToConvert == null)
             {
@@ -1397,7 +1397,7 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, options);
+                void actionExample(ref BufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, options);
                 WriteToBinaryWithInt32LengthPrefix(ref writer, actionExample);
             };
         }
@@ -1430,7 +1430,7 @@ namespace LazinatorTests.Examples.Tuples
             return itemToCreate;
         }
         
-        private static void ConvertToBytes_RecordLikeStruct(ref BinaryBufferWriter writer, RecordLikeStruct itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_RecordLikeStruct(ref BufferWriter writer, RecordLikeStruct itemToConvert, LazinatorSerializationOptions options)
         {
             
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
@@ -1480,7 +1480,7 @@ namespace LazinatorTests.Examples.Tuples
             return itemToCreate;
         }
         
-        private static void ConvertToBytes_RecordLikeTypeWithLazinator(ref BinaryBufferWriter writer, RecordLikeTypeWithLazinator itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_RecordLikeTypeWithLazinator(ref BufferWriter writer, RecordLikeTypeWithLazinator itemToConvert, LazinatorSerializationOptions options)
         {
             
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Age);
@@ -1493,11 +1493,11 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                void actionExample(ref BinaryBufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, options);
+                void actionExample(ref BufferWriter w) => itemToConvert.Example.SerializeToExistingBuffer(ref w, options);
                 WriteToBinaryWithInt32LengthPrefix(ref writer, actionExample);
             };
             
-            void actionExampleStruct(ref BinaryBufferWriter w) => itemToConvert.ExampleStruct.SerializeToExistingBuffer(ref w, options);
+            void actionExampleStruct(ref BufferWriter w) => itemToConvert.ExampleStruct.SerializeToExistingBuffer(ref w, options);
             WriteToBinaryWithInt32LengthPrefix(ref writer, actionExampleStruct);
         }
         

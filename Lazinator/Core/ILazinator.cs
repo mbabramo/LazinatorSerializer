@@ -86,19 +86,19 @@ namespace Lazinator.Core
         /// <summary>
         /// This is primarily used internally after serialization to update the buffer of an in-memory Lazinator object to a specified range of bytes. 
         /// </summary>
-        /// <param name="writer">The BinaryBufferWriter containing the new stored buffer</param>
+        /// <param name="writer">The BufferWriter containing the new stored buffer</param>
         /// <param name="startPosition">The start position within the writer</param>
         /// <param name="length">The length within the writer</param>
         /// <param name="includeChildrenMode">Whether child objects should be included.</param>
         /// <param name="updateDeserializedChildren">Whether deserialized children should also have buffers updated</param>
-        void UpdateStoredBuffer(ref BinaryBufferWriter writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
+        void UpdateStoredBuffer(ref BufferWriter writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
 
         /// <summary>
         /// This is primarily used internally during serialization of Lazinator objects. Continues serialization of this object and optionally its descendants by writing bytes into a pre-existing buffer. 
         /// </summary>
-        /// <param name="writer">The BinaryBufferWriter to stream bytes to</param>
+        /// <param name="writer">The BufferWriter to stream bytes to</param>
         /// <param name="options">Serialization options</param>
-        void SerializeToExistingBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options);
+        void SerializeToExistingBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options);
         /// <summary>
         /// The memory used to initialize a Lazinator class/struct during initial deserialization. Header information, fields and child ISerializeds can then be read from this. This is set automatically by the Lazinator framework, either from DeserializeLazinator or from the parent's memory storage.
         /// </summary>

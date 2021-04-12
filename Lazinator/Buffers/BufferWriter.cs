@@ -12,7 +12,7 @@ namespace Lazinator.Buffers
     /// <summary>
     /// Used internally by Lazinator to write data into a binary buffer.
     /// </summary>
-    public struct BinaryBufferWriter
+    public struct BufferWriter
     {
         /// <summary>
         /// Indicates whether storage should be in little Endian format. This should be true unless the intent is to use software primarily on big Endian computers, which are comparatively rarer.
@@ -25,7 +25,7 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// Bytes that have been written by the current BinaryBufferWriter. These bytes do not necessarily occur logically after the CompletedMemory bytes.
+        /// Bytes that have been written by the current BufferWriter. These bytes do not necessarily occur logically after the CompletedMemory bytes.
         /// When diffs are serialized, the ActiveMemory may consist of bytes that will replace bytes in CompletedMemory. The BytesSegments are then used
         /// to indicate the order of reference of bytes in ActiveMemory and bytes in CompletedMemory. However, when serializing without diffs, ActiveMemory
         /// does contain bytes that occur logically after the bytes in CompletedMemory. 
@@ -51,7 +51,7 @@ namespace Lazinator.Buffers
 
         #region Construction and initialization
 
-        public BinaryBufferWriter(int minimumSize, LazinatorMemory? completedMemory = null)
+        public BufferWriter(int minimumSize, LazinatorMemory? completedMemory = null)
         {
             if (minimumSize == 0)
                 minimumSize = ExpandableBytes.DefaultMinBufferSize;
@@ -609,7 +609,7 @@ namespace Lazinator.Buffers
 
         public void RecordLength(Int16 length)
         {
-            if (BinaryBufferWriter.LittleEndianStorage)
+            if (BufferWriter.LittleEndianStorage)
                 WriteInt16LittleEndian(LengthsSpan, length);
             else
                 WriteInt16BigEndian(LengthsSpan, length);
@@ -618,7 +618,7 @@ namespace Lazinator.Buffers
 
         public void RecordLength(int length)
         {
-            if (BinaryBufferWriter.LittleEndianStorage)
+            if (BufferWriter.LittleEndianStorage)
                 WriteInt32LittleEndian(LengthsSpan, length);
             else
                 WriteInt32BigEndian(LengthsSpan, length);
@@ -626,7 +626,7 @@ namespace Lazinator.Buffers
         }
         public void RecordLength(Int64 length)
         {
-            if (BinaryBufferWriter.LittleEndianStorage)
+            if (BufferWriter.LittleEndianStorage)
                 WriteInt64LittleEndian(LengthsSpan, length);
             else
                 WriteInt64BigEndian(LengthsSpan, length);

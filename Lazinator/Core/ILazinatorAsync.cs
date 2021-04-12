@@ -64,8 +64,8 @@ namespace Lazinator.Core
         /// <summary>
         /// This is primarily used internally during serialization of Lazinator objects. Continues serialization of this object and optionally its descendants by writing bytes into a pre-existing buffer. 
         /// </summary>
-        /// <param name="writer">The BinaryBufferWriter to stream bytes to</param>
+        /// <param name="writer">The BufferWriter to stream bytes to</param>
         /// <param name="options">Serialization options</param>
-        ValueTask SerializeToExistingBufferAsync(BinaryBufferWriterContainer writer, LazinatorSerializationOptions options);
+        ValueTask SerializeToExistingBufferAsync(BufferWriterContainer writer, LazinatorSerializationOptions options);
     }
 }

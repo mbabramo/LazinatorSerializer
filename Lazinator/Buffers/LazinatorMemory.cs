@@ -27,7 +27,7 @@ namespace Lazinator.Buffers
         /// <summary>
         /// Additional chunks of owned memory, where the memory storage is split across chunks.
         /// </summary>
-        public readonly List<MemoryChunk> MoreMemoryChunks;
+        public readonly List<MemoryChunk> MoreMemoryChunks; // DEBUG -- make loadable 
         /// <summary>
         /// The starting index from the set consisting of InitialOwnedMemory and MoreOwnedMemory for the referenced range.
         /// </summary>
@@ -589,12 +589,12 @@ namespace Lazinator.Buffers
         // Then assume we have a cobbled-together LazinatorMemory with references to these big ranges. This is effectively the result of potentially multiple generations of delta serialization.
         // Eventually, some parts of the large LazinatorMemory may be deleted, because the more recent delta serializations don't refer to them anymore.
         // Now, changes are made to this object graph, and the goal is to do another delta serialization. 
-        // BinaryBufferWriter will be compiling a list of the ranges we are writing to in the large LazinatorMemory.
-        // When an object has changed, then BinaryBufferWriter's action depends on whether it is writing some entirely new data or repeating previously serialized data.
+        // BufferWriter will be compiling a list of the ranges we are writing to in the large LazinatorMemory.
+        // When an object has changed, then BufferWriter's action depends on whether it is writing some entirely new data or repeating previously serialized data.
         // When writing previously serialized data, it simply records a new MemoryChunkReference, which points to the location in this range of bytes in some
         // existing memory chunk from the original LazinatorMemory. When writing new data, it adds to its ActiveMemory but also adds a MemoryChunkReference
         // (or extends an existing such reference) so that the set of MemoryChunkReferences will always encompass all of the data.
-        // Note that as usual, if BinaryBufferWriter needs to, it will append its active memory chunk to the LazinatorMemory and move to a new active chunk.
+        // Note that as usual, if BufferWriter needs to, it will append its active memory chunk to the LazinatorMemory and move to a new active chunk.
 
         /// <summary>
         /// Enumerates memory chunk references based on an initial memory chunk index (not an ID), an offset into that memory chunk, and a length.
@@ -785,7 +785,7 @@ namespace Lazinator.Buffers
         /// <param name="writer">The binary buffer writer container</param>
         /// <param name="includeOutsideOfRange">True if contained memory that is NOT written should be written.</param>
         /// <returns></returns>
-        public async ValueTask WriteToBinaryBufferAsync(BinaryBufferWriterContainer writer, bool includeOutsideOfRange = false)
+        public async ValueTask WriteToBinaryBufferAsync(BufferWriterContainer writer, bool includeOutsideOfRange = false)
         {
             await foreach (Memory<byte> memory in EnumerateRawMemoryAsync(includeOutsideOfRange))
                 writer.Write(memory.Span);
@@ -798,7 +798,7 @@ namespace Lazinator.Buffers
         /// <param name="writer">The binary buffer writer </param>
         /// <param name="includeOutsideOfRange">True if contained memory that is NOT written should be written.</param>
         /// <returns></returns>
-        public void WriteToBinaryBuffer(ref BinaryBufferWriter writer, bool includeOutsideOfRange = false)
+        public void WriteToBinaryBuffer(ref BufferWriter writer, bool includeOutsideOfRange = false)
         {
             foreach (Memory<byte> memory in EnumerateRawMemory(includeOutsideOfRange))
                 writer.Write(memory.Span);
@@ -881,7 +881,7 @@ namespace Lazinator.Buffers
             long totalLength = includeOutsideOfRange ? GetGrossLength() : Length;
             if (totalLength > Int32.MaxValue)
                 ThrowHelper.ThrowTooLargeException(Int32.MaxValue);
-            BinaryBufferWriter w = new BinaryBufferWriter((int) totalLength);
+            BufferWriter w = new BufferWriter((int) totalLength);
             foreach (byte b in EnumerateBytes(includeOutsideOfRange))
                 w.Write(b);
             return w.LazinatorMemory.InitialMemory;
@@ -901,7 +901,7 @@ namespace Lazinator.Buffers
             long totalLength = includeOutsideOfRange ? GetGrossLength() : Length;
             if (totalLength > Int32.MaxValue)
                 ThrowHelper.ThrowTooLargeException(Int32.MaxValue);
-            BinaryBufferWriter w = new BinaryBufferWriter((int)totalLength);
+            BufferWriter w = new BufferWriter((int)totalLength);
             foreach (byte b in EnumerateBytes(includeOutsideOfRange))
                 w.Write(b);
             return w.LazinatorMemory.InitialMemory;

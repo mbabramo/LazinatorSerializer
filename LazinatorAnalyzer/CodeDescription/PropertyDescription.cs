@@ -1667,7 +1667,7 @@ namespace Lazinator.CodeDescription
                     isAccessed: {BackingFieldAccessedString}, writer: {ContainingObjectDescription.MaybeAsyncConditional("writer", "ref writer")},
                     getChildSliceForFieldFn: {ContainingObjectDescription.Maybe_asyncWord}() => {ChildSliceStringMaybeAsync()},
                     verifyCleanness: {(TrackDirtinessNonSerialized ? "options.VerifyCleanness" : "false")},
-                    binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+                    binaryWriterAction: (ref BufferWriter w, bool v) =>
                         {DirectConverterTypeNamePrefix}{writeMethodName}(ref w, {BackingFieldStringOrContainedSpanWithPossibleException(null)},
                             options));");
 
@@ -1695,7 +1695,7 @@ namespace Lazinator.CodeDescription
                         isAccessed: {BackingFieldAccessedString}, writer: ref writer{ContainingObjectDescription.MaybeAsyncConditional(".Writer", "")},
                         getChildSliceForFieldFn: () => GetChildSlice(serializedBytesCopy_{PropertyName}, byteIndexCopy_{PropertyName}, byteLengthCopy_{PropertyName}{ChildSliceLastParametersString}),
                         verifyCleanness: {(TrackDirtinessNonSerialized ? "options.VerifyCleanness" : "false")},
-                        binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+                        binaryWriterAction: (ref BufferWriter w, bool v) =>
                             {binaryWriterAction});");
 
                 }
@@ -1706,7 +1706,7 @@ namespace Lazinator.CodeDescription
                         isAccessed: true, writer: ref writer,
                         getChildSliceForFieldFn: () => {ChildSliceStringMaybeAsync()},
                         verifyCleanness: {(TrackDirtinessNonSerialized ? "options.VerifyCleanness" : "false")},
-                        binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+                        binaryWriterAction: (ref BufferWriter w, bool v) =>
                             {DirectConverterTypeNamePrefix}{writeMethodName}(ref w, default,
                                 options));");
         }
@@ -1863,7 +1863,7 @@ namespace Lazinator.CodeDescription
             string innerTypeEncodable = InnerProperties[0].AppropriatelyQualifiedTypeNameEncodable;
 
             sb.Append($@"
-                         private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, LazinatorSerializationOptions options)
+                         private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, LazinatorSerializationOptions options)
                         {{
                             ReadOnlySpan<byte> toConvert = {GetSpanCast(innerFullType, true)}(itemToConvert{(isSpan ? "" : ".Span")});
                             for (int i = 0; i < toConvert.Length; i++)
@@ -1892,7 +1892,7 @@ namespace Lazinator.CodeDescription
                 // but call the inner method.
                 sb.Append($@"
 
-                    private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, LazinatorSerializationOptions options)
+                    private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, LazinatorSerializationOptions options)
                     {{
                         if (itemToConvert == null)
                         {{
@@ -1927,7 +1927,7 @@ namespace Lazinator.CodeDescription
                 {
                     sb.AppendLine($@"
 
-                    private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, LazinatorSerializationOptions options)
+                    private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, LazinatorSerializationOptions options)
                     {{");
                     if (Nullable)
                         sb.Append($@"if (itemToConvert == null)
@@ -1947,7 +1947,7 @@ namespace Lazinator.CodeDescription
                 else
                     sb.Append($@"
 
-                    private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, LazinatorSerializationOptions options)
+                    private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, LazinatorSerializationOptions options)
                     {{
                         {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory ? "" : $@"if (itemToConvert == {DefaultExpression})
                         {{
@@ -2419,12 +2419,12 @@ namespace Lazinator.CodeDescription
                     {WriteMethodName}(ref writer, {EnumEquivalentCastToEquivalentType}{itemString});");
                 else if (IsNonLazinatorType)
                     return ($@"
-                    void action(ref BinaryBufferWriter w) => {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref w, {BackingFieldStringOrContainedSpan(itemString)}, options);
+                    void action(ref BufferWriter w) => {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref w, {BackingFieldStringOrContainedSpan(itemString)}, options);
                     WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(ref writer, action);");
                 else if (IsPossiblyStruct && outerPropertyIsSimpleListOrArray)
                 {
                     return ($@"
-                    void action(ref BinaryBufferWriter w) 
+                    void action(ref BufferWriter w) 
                     {{
                         var copy = {itemString};{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"
                         if (copy != null)
@@ -2438,7 +2438,7 @@ namespace Lazinator.CodeDescription
                 else
                 {
                     return ($@"
-                    void action(ref BinaryBufferWriter w) => {itemString}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, "?")}{NullForgiveness}.SerializeToExistingBuffer(ref w, options);
+                    void action(ref BufferWriter w) => {itemString}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, "?")}{NullForgiveness}.SerializeToExistingBuffer(ref w, options);
                     WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(ref writer, action);");
                 }
             }
@@ -2525,7 +2525,7 @@ namespace Lazinator.CodeDescription
                     }}
 
                     ");
-            sb.Append($@"private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, LazinatorSerializationOptions options)
+            sb.Append($@"private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BufferWriter writer, {AppropriatelyQualifiedTypeName} itemToConvert, LazinatorSerializationOptions options)
                         {{
                         ");
 
@@ -2648,18 +2648,18 @@ namespace Lazinator.CodeDescription
                             }}
                             else
                             {{
-                                void action{itemName}(ref BinaryBufferWriter w) => {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref w, {itemToConvertItemName}, options);
+                                void action{itemName}(ref BufferWriter w) => {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref w, {itemToConvertItemName}, options);
                                 WriteToBinaryWithInt32LengthPrefix(ref writer, action{itemName});
                             }}");
                 else return $@"
-                            void action{itemName}(ref BinaryBufferWriter w) => {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref w, {itemToConvertItemName}, options);
+                            void action{itemName}(ref BufferWriter w) => {DirectConverterTypeNamePrefix}ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref w, {itemToConvertItemName}, options);
                             WriteToBinaryWithInt32LengthPrefix(ref writer, action{itemName});";
             }
             else
             {
                 if (PropertyType == LazinatorPropertyType.LazinatorStruct || PropertyType == LazinatorPropertyType.LazinatorStructNullable)
                     return ($@"
-                        void action{itemName}(ref BinaryBufferWriter w) => {itemToConvertItemName}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, "?")}.SerializeToExistingBuffer(ref w, options);
+                        void action{itemName}(ref BufferWriter w) => {itemToConvertItemName}{IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, "?")}.SerializeToExistingBuffer(ref w, options);
                         WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(ref writer, action{itemName});");
                 else
                     return ($@"
@@ -2669,7 +2669,7 @@ namespace Lazinator.CodeDescription
                         }}
                         else
                         {{
-                            void action{itemName}(ref BinaryBufferWriter w) => {itemToConvertItemName}.SerializeToExistingBuffer(ref w, options);
+                            void action{itemName}(ref BufferWriter w) => {itemToConvertItemName}.SerializeToExistingBuffer(ref w, options);
                             WriteToBinaryWith{LengthPrefixTypeString}LengthPrefix(ref writer, action{itemName});
                         }};");
             }
@@ -2733,7 +2733,7 @@ namespace Lazinator.CodeDescription
                             return interchange.Interchange_{AppropriatelyQualifiedTypeNameEncodable}(false);
                         }}
 
-                        private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BinaryBufferWriter writer,
+                        private static void ConvertToBytes_{AppropriatelyQualifiedTypeNameEncodable}(ref BufferWriter writer,
                             {AppropriatelyQualifiedTypeName} itemToConvert, LazinatorSerializationOptions options)
                         {{
                             {GetNullCheckIfThen("itemToConvert", $@"return;", "")}

@@ -14,7 +14,7 @@ namespace LazinatorTests.Tests
             decimal? valueRead = 0;
             int numBytesWritten = 0, numBytesRead = 0;
             ReadOnlyMemory<byte> bytes;
-            BinaryBufferWriter writer = new BinaryBufferWriter();
+            BufferWriter writer = new BufferWriter();
             {
                 numBytesWritten = CompressedDecimal.WriteCompressedNullableDecimal(ref writer, valueToWrite);
                 numBytesWritten.Should().Be((int) writer.ActiveMemoryPosition);

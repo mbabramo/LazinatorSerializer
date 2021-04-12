@@ -82,7 +82,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorMemorySubranges()
         {
-            // See LazinatorMemory for an explanation of how delta serialization works. This test ignores BinaryBufferWriter and makes sure that LazinatorMemory returns the correct data.
+            // See LazinatorMemory for an explanation of how delta serialization works. This test ignores BufferWriter and makes sure that LazinatorMemory returns the correct data.
 
             Random r = new Random(1);
             int numMainChunks = 5;
@@ -161,12 +161,12 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void BinaryBufferWriterCanBeCreated()
+        public void BufferWriterCanBeCreated()
         {
             const int bufferSize = 64 * 1024;
             for (int i = 0; i < 1; i++)
             { // same as above; higher iterations causes no memory leak
-                BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
+                BufferWriter writer = new BufferWriter(bufferSize);
                 var rented = writer.LazinatorMemory;
                 ((ExpandableBytes)rented.InitialMemoryChunk.MemoryAsLoaded).CurrentBuffer.Memory.Length.Should().BeGreaterOrEqualTo(bufferSize);
             }
@@ -176,7 +176,7 @@ namespace LazinatorTests.Tests
         public void CanWriteBeyondInitialBufferSize()
         {
             const int bufferSize = 1024;
-            BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
+            BufferWriter writer = new BufferWriter(bufferSize);
             for (int j = 0; j < 5000; j++)
                 writer.Write(j);
             var written = writer.ActiveMemoryWrittenSpan;

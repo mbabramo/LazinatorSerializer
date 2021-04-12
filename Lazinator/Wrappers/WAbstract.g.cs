@@ -112,7 +112,7 @@ namespace Lazinator.Wrappers
         public abstract IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties();
         public abstract ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel);
         
-        public abstract void UpdateStoredBuffer(ref BinaryBufferWriter writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
+        public abstract void UpdateStoredBuffer(ref BufferWriter writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);
         public abstract void FreeInMemoryObjects();
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public abstract int LazinatorUniqueID { get; }
@@ -125,12 +125,12 @@ namespace Lazinator.Wrappers
         protected abstract int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
         protected abstract void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
         protected abstract int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar);
-        public abstract void SerializeToExistingBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options);
+        public abstract void SerializeToExistingBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options);
         protected abstract LazinatorMemory EncodeToNewBuffer(in LazinatorSerializationOptions options);
-        protected abstract void UpdateDeserializedChildren(ref BinaryBufferWriter writer, long startPosition);
-        protected abstract void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID);
-        protected abstract void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID);
-        protected abstract void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition);
+        protected abstract void UpdateDeserializedChildren(ref BufferWriter writer, long startPosition);
+        protected abstract void WritePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID);
+        protected abstract void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID);
+        protected abstract void WriteChildrenPropertiesIntoBuffer(ref BufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition);
         
         
         

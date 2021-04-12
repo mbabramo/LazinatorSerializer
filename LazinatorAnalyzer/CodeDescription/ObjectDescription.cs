@@ -167,7 +167,7 @@ namespace Lazinator.CodeDescription
 
         public bool Splittable; 
         public bool UseOverallMemoryPosition => RequiresLongLengths || Splittable;
-        public string SplittableCreateBinaryBufferWriter(bool async) => IIF(Splittable, $"options.SerializeDiffs ? new BinaryBufferWriter{IIF(async, "Container")}(0, LazinatorMemoryStorage) : ");
+        public string SplittableCreateBufferWriter(bool async) => IIF(Splittable, $"options.SerializeDiffs ? new BufferWriter{IIF(async, "Container")}(0, LazinatorMemoryStorage) : ");
         public string ActiveOrOverallMemoryPosition => UseOverallMemoryPosition ? "OverallMemoryPosition" : "ActiveMemoryPosition";
         public string TypeForPositions => UseOverallMemoryPosition ? "long" : "int";
         public string LengthValueExpression(bool startOfChild) => $"writer.{ActiveOrOverallMemoryPosition} - start{IIF(startOfChild, "OfChild")}Position";
@@ -212,7 +212,7 @@ namespace Lazinator.CodeDescription
         public string MaybeIAsyncEnumerable => AsyncTemplate.MaybeIAsyncEnumerable();
         public string MaybeAsyncPropertyName(PropertyDescription property) => property.IsReadOnlySpan ? property.PropertyName : MaybeAsyncConditional($"{NoteAsyncUsed}(await Get{property.PropertyName}Async())", property.PropertyName);
         public string MaybeAsyncConditional(string ifAsync, string ifNotAsync, bool additionalCondition = true) => additionalCondition ? AsyncTemplate.MaybeAsyncConditional(ifAsync, ifNotAsync) : ifNotAsync;
-        public string MaybeAsyncBinaryBufferWriterParameter => $"{MaybeAsyncConditional("BinaryBufferWriterContainer", "ref BinaryBufferWriter")}";
+        public string MaybeAsyncBufferWriterParameter => $"{MaybeAsyncConditional("BufferWriterContainer", "ref BufferWriter")}";
         public string MaybeAsyncRefIfNot => $"{MaybeAsyncConditional("", "ref ")}";
         public string MaybeAsyncRefWriterParameter => $"{MaybeAsyncConditional("ref writer.Writer", "ref writer")}";
 
@@ -555,7 +555,7 @@ namespace Lazinator.CodeDescription
                         {MaybeAsyncAndNot($@"public abstract {MaybeIAsyncEnumerable}<(string propertyName, object descendant)> EnumerateNonLazinatorProperties{MaybeAsyncWord}();")}
                         {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType(ILazinatorString)} ForEachLazinator{MaybeAsyncWord}(Func<{ILazinatorString}, {ILazinatorString}>{QuestionMarkIfNullableModeEnabled} changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel);")}
 
-                        {NotAsync($@"public abstract {MaybeAsyncReturnType("void")} UpdateStoredBuffer{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);")}
+                        {NotAsync($@"public abstract {MaybeAsyncReturnType("void")} UpdateStoredBuffer{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren);")}
                         public abstract void FreeInMemoryObjects();{IIF(!IsDerivedFromAbstractLazinator, $@"
                         {HideILazinatorProperty}public abstract int LazinatorUniqueID {{ get; }}
                         {HideILazinatorProperty}{ProtectedIfApplicable}{DerivationKeyword}bool ContainsOpenGenericParameters => {(ContainsOpenGenericParameters ? "true" : "false")};
@@ -564,12 +564,12 @@ namespace Lazinator.CodeDescription
                         {(ImplementsConvertFromBytesAfterHeader ? skipConvertFromBytesAfterHeaderString : $@"{ProtectedIfApplicable}abstract {TypeForLengths} ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
                             {ProtectedIfApplicable}abstract void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
                             {ProtectedIfApplicable}abstract int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar);")}
-                        {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType("void")} SerializeToExistingBuffer{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, {MaybeInIfNotAsync}LazinatorSerializationOptions options);")}
+                        {MaybeAsyncAndNot($@"public abstract {MaybeAsyncReturnType("void")} SerializeToExistingBuffer{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, {MaybeInIfNotAsync}LazinatorSerializationOptions options);")}
                         {MaybeAsyncAndNot($@"{ProtectedIfApplicable}abstract {MaybeAsyncReturnType("LazinatorMemory")} EncodeToNewBuffer{MaybeAsyncWord}({MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options);")}
-                       {NotAsync($@" {ProtectedIfApplicable}abstract {MaybeAsyncReturnType("void")} UpdateDeserializedChildren{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, long startPosition);")}
-                        {(ImplementsWritePropertiesIntoBuffer ? skipWritePropertiesIntoBufferString : $@"{MaybeAsyncAndNot($@"{ProtectedIfApplicable}abstract void WritePropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, {MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options, bool includeUniqueID);")}
-                            {MaybeAsyncAndNot($@"{ProtectedIfApplicable}abstract {MaybeAsyncReturnType("void")} WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, {MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options, bool includeUniqueID);")}
-                            {MaybeAsyncAndNot($@"{ProtectedIfApplicable}abstract {MaybeAsyncReturnType("void")} WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition);")}
+                       {NotAsync($@" {ProtectedIfApplicable}abstract {MaybeAsyncReturnType("void")} UpdateDeserializedChildren{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, long startPosition);")}
+                        {(ImplementsWritePropertiesIntoBuffer ? skipWritePropertiesIntoBufferString : $@"{MaybeAsyncAndNot($@"{ProtectedIfApplicable}abstract void WritePropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, {MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options, bool includeUniqueID);")}
+                            {MaybeAsyncAndNot($@"{ProtectedIfApplicable}abstract {MaybeAsyncReturnType("void")} WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, {MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options, bool includeUniqueID);")}
+                            {MaybeAsyncAndNot($@"{ProtectedIfApplicable}abstract {MaybeAsyncReturnType("void")} WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition);")}
 ")}
 ")}
         
@@ -718,9 +718,9 @@ namespace Lazinator.CodeDescription
                             }}
                             else
                             {{{MaybeAsyncConditional($@"
-                                BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(LazinatorMemoryStorage.LengthInt ?? 0);
+                                BufferWriterContainer writer = new BufferWriterContainer(LazinatorMemoryStorage.LengthInt ?? 0);
                                 {AwaitAndNoteAsyncUsed}LazinatorMemoryStorage.WriteToBinaryBufferAsync(writer);", $@"
-                                BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
+                                BufferWriter writer = new BufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
                                 LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);")}
                                 LazinatorMemoryStorage = writer.LazinatorMemory;
                             }}
@@ -737,9 +737,9 @@ namespace Lazinator.CodeDescription
                             {{
                                 return {MaybeAsyncReturnValue($"{MaybeAwaitWord}EncodeToNewBuffer{MaybeAsyncWord}(options)")};
                             }}{MaybeAsyncConditional($@"
-                                BinaryBufferWriterContainer writer = {SplittableCreateBinaryBufferWriter(true)}new BinaryBufferWriterContainer(LazinatorMemoryStorage.LengthInt ?? 0);
+                                BufferWriterContainer writer = {SplittableCreateBufferWriter(true)}new BufferWriterContainer(LazinatorMemoryStorage.LengthInt ?? 0);
                                 {AwaitAndNoteAsyncUsed}LazinatorMemoryStorage.WriteToBinaryBufferAsync(writer);", $@"
-                                BinaryBufferWriter writer = {SplittableCreateBinaryBufferWriter(false)}new BinaryBufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
+                                BufferWriter writer = {SplittableCreateBufferWriter(false)}new BufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
                                 LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);")}
                             return {MaybeAsyncReturnValue($"writer.LazinatorMemory")};
                         }}")}
@@ -747,9 +747,9 @@ namespace Lazinator.CodeDescription
                         {MaybeAsyncAndNot($@"{ProtectedIfApplicable}{DerivationKeyword}{MaybeAsyncReturnType("LazinatorMemory")} EncodeToNewBuffer{MaybeAsyncWord}({MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options) 
                         {{
                             int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.LengthInt ?? ExpandableBytes.DefaultMinBufferSize;{MaybeAsyncConditional($@"
-                            BinaryBufferWriterContainer writer = {SplittableCreateBinaryBufferWriter(true)}new BinaryBufferWriterContainer(bufferSize);
+                            BufferWriterContainer writer = {SplittableCreateBufferWriter(true)}new BufferWriterContainer(bufferSize);
                             {AwaitAndNoteAsyncUsed}SerializeToExistingBufferAsync(writer, options);", $@"
-                            BinaryBufferWriter writer = {SplittableCreateBinaryBufferWriter(false)}new BinaryBufferWriter(bufferSize);
+                            BufferWriter writer = {SplittableCreateBufferWriter(false)}new BufferWriter(bufferSize);
                             SerializeToExistingBuffer(ref writer, options);")}
                             return {MaybeAsyncReturnValue($"writer.LazinatorMemory")};
                         }}")}
@@ -1245,11 +1245,11 @@ namespace Lazinator.CodeDescription
 
             if (IsDerivedFromNonAbstractLazinator)
                 sb.AppendLine(
-                        $@"{MaybeAsyncAndNot_Begin}public override {MaybeAsyncReturnType("void")} SerializeToExistingBuffer{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, {MaybeInIfNotAsync}LazinatorSerializationOptions options)
+                        $@"{MaybeAsyncAndNot_Begin}public override {MaybeAsyncReturnType("void")} SerializeToExistingBuffer{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, {MaybeInIfNotAsync}LazinatorSerializationOptions options)
                         {{");
             else
                 sb.AppendLine(
-                        $@"{MaybeAsyncAndNot_Begin}public {DerivationKeyword}{MaybeAsyncReturnType("void")} SerializeToExistingBuffer{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, {MaybeInIfNotAsync}LazinatorSerializationOptions options)
+                        $@"{MaybeAsyncAndNot_Begin}public {DerivationKeyword}{MaybeAsyncReturnType("void")} SerializeToExistingBuffer{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, {MaybeInIfNotAsync}LazinatorSerializationOptions options)
                         {{");
 
             if (IncludeTracingCode)
@@ -1274,7 +1274,7 @@ namespace Lazinator.CodeDescription
         private void AppendUpdateStoredBufferMethod(CodeStringBuilder sb)
         {
             sb.AppendLine($@"
-            {NotAsync_Begin}public {DerivationKeyword}{MaybeAsyncReturnType("void")} UpdateStoredBuffer{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+            {NotAsync_Begin}public {DerivationKeyword}{MaybeAsyncReturnType("void")} UpdateStoredBuffer{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
             {{");
             GetCodeBeforeBufferIsUpdated(sb);
             sb.AppendLine($@"
@@ -1348,13 +1348,13 @@ namespace Lazinator.CodeDescription
             if (IsDerivedFromNonAbstractLazinator)
                 sb.AppendLine(
                     $@"
-                        {NotAsync_Begin}{ProtectedIfApplicable}override {MaybeAsyncReturnType("void")} UpdateDeserializedChildren{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, long startPosition)
+                        {NotAsync_Begin}{ProtectedIfApplicable}override {MaybeAsyncReturnType("void")} UpdateDeserializedChildren{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, long startPosition)
                         {{
                             {MaybeAwaitWord}base.UpdateDeserializedChildren{MaybeAsyncWord}({MaybeAsyncRefIfNot}writer, startPosition);");
             else
                 sb.AppendLine(
                     $@"
-                        {NotAsync_Begin}{ProtectedIfApplicable}{DerivationKeyword}{MaybeAsyncReturnType("void")} UpdateDeserializedChildren{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, long startPosition)
+                        {NotAsync_Begin}{ProtectedIfApplicable}{DerivationKeyword}{MaybeAsyncReturnType("void")} UpdateDeserializedChildren{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, long startPosition)
                         {{");
             foreach (var property in PropertiesToDefineThisLevel.Where(x => !x.IsPrimitive && !x.IsNonLazinatorType && x.PlaceholderMemoryWriteMethod == null))
             {
@@ -1399,7 +1399,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 
             sb.AppendLine(
                         $@"
-                        {MaybeAsyncAndNot_Begin}{ProtectedIfApplicable}{DerivationKeyword}{MaybeAsyncReturnType("void")} WritePropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, {MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options, bool includeUniqueID)
+                        {MaybeAsyncAndNot_Begin}{ProtectedIfApplicable}{DerivationKeyword}{MaybeAsyncReturnType("void")} WritePropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, {MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options, bool includeUniqueID)
                         {{{positionInitialization}");
 
 
@@ -1525,14 +1525,14 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 if (IsDerivedFromNonAbstractLazinator)
                     sb.AppendLine(
                             $@"
-                            {ProtectedIfApplicable}override void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, {MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options, bool includeUniqueID{IIF(!isPrimitive, $", int startOfObjectPosition")})
+                            {ProtectedIfApplicable}override void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, {MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options, bool includeUniqueID{IIF(!isPrimitive, $", int startOfObjectPosition")})
                             {{
                                 base.WritePrimitivePropertiesIntoBuffer(ref writer, options, includeUniqueID);");
                 else
                 {
                     sb.AppendLine(
                             $@"
-                            {ProtectedIfApplicable}{DerivationKeyword}void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, {MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options, bool includeUniqueID{IIF(!isPrimitive, $", int startOfObjectPosition")})
+                            {ProtectedIfApplicable}{DerivationKeyword}void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, {MaybeAsyncConditional("", "in ")}LazinatorSerializationOptions options, bool includeUniqueID{IIF(!isPrimitive, $", int startOfObjectPosition")})
                             {{");
                 }
             }
@@ -1541,14 +1541,14 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 if (IsDerivedFromNonAbstractLazinator)
                     sb.AppendLine(
                             $@"
-                            {MaybeAsyncAndNot_Begin}{ProtectedIfApplicable}override {MaybeAsyncReturnType("void")} WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, LazinatorSerializationOptions options, bool includeUniqueID{IIF(!isPrimitive, $", {TypeForPositions} startOfObjectPosition")})
+                            {MaybeAsyncAndNot_Begin}{ProtectedIfApplicable}override {MaybeAsyncReturnType("void")} WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, LazinatorSerializationOptions options, bool includeUniqueID{IIF(!isPrimitive, $", {TypeForPositions} startOfObjectPosition")})
                             {{
                                 {MaybeAwaitWord}base.WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncRefIfNot}writer, options, includeUniqueID{IIF(!isPrimitive, ", startOfObjectPosition")});");
                 else
                 {
                     sb.AppendLine(
                             $@"
-                            {MaybeAsyncAndNot_Begin}{ProtectedIfApplicable}{DerivationKeyword}{MaybeAsyncReturnType("void")} WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBinaryBufferWriterParameter} writer, LazinatorSerializationOptions options, bool includeUniqueID, {TypeForPositions} startOfObjectPosition)
+                            {MaybeAsyncAndNot_Begin}{ProtectedIfApplicable}{DerivationKeyword}{MaybeAsyncReturnType("void")} WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, LazinatorSerializationOptions options, bool includeUniqueID, {TypeForPositions} startOfObjectPosition)
                             {{");
                 }
                 if (propertiesToWrite.Any())

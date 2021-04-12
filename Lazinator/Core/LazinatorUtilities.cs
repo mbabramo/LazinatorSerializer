@@ -28,12 +28,12 @@ namespace Lazinator.Core
         public delegate LazinatorMemory ReturnLazinatorMemoryDelegate();
         public delegate ValueTask<LazinatorMemory> ReturnLazinatorMemoryDelegateAsync();
 
-        public delegate void WriteDelegate(ref BinaryBufferWriter writer);
-        public delegate ValueTask WriteDelegateAsync(BinaryBufferWriterContainer writer);
+        public delegate void WriteDelegate(ref BufferWriter writer);
+        public delegate ValueTask WriteDelegateAsync(BufferWriterContainer writer);
 
-        public delegate void WritePossiblyVerifyingCleannessDelegate(ref BinaryBufferWriter writer, bool verifyCleanness);
+        public delegate void WritePossiblyVerifyingCleannessDelegate(ref BufferWriter writer, bool verifyCleanness);
 
-        public delegate ValueTask WritePossiblyVerifyingCleannessDelegateAsync(BinaryBufferWriterContainer writer, bool verifyCleanness);
+        public delegate ValueTask WritePossiblyVerifyingCleannessDelegateAsync(BufferWriterContainer writer, bool verifyCleanness);
 
         #endregion
 
@@ -64,10 +64,10 @@ namespace Lazinator.Core
                         )
                      )
                 )
-                return EncodeToNewBinaryBufferWriter(lazinator, includeChildrenMode);
+                return EncodeToNewBufferWriter(lazinator, includeChildrenMode);
 
             // We can use the original storage. But we still have to copy it into a new buffer, as requested.
-            BinaryBufferWriter writer = new BinaryBufferWriter(GetBufferSize(originalStorage.Length));
+            BufferWriter writer = new BufferWriter(GetBufferSize(originalStorage.Length));
             originalStorage.WriteToBinaryBuffer(ref writer);
             return writer.LazinatorMemory;
         }
@@ -75,10 +75,10 @@ namespace Lazinator.Core
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static int GetBufferSize(long ultimatelyRequiredLength) => ultimatelyRequiredLength > int.MaxValue || ultimatelyRequiredLength == 0 ? ExpandableBytes.DefaultMinBufferSize : (int)ultimatelyRequiredLength;
 
-        private static LazinatorMemory EncodeToNewBinaryBufferWriter<T>(T lazinatorObject, IncludeChildrenMode includeChildrenMode) where T : ILazinator
+        private static LazinatorMemory EncodeToNewBufferWriter<T>(T lazinatorObject, IncludeChildrenMode includeChildrenMode) where T : ILazinator
         {
             int bufferSize = GetBufferSize(lazinatorObject.LazinatorMemoryStorage.Length);
-            BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
+            BufferWriter writer = new BufferWriter(bufferSize);
             lazinatorObject.SerializeToExistingBuffer(ref writer, new LazinatorSerializationOptions(includeChildrenMode, false, false, false));
             return writer.LazinatorMemory;
         }
@@ -104,18 +104,18 @@ namespace Lazinator.Core
                         )
                      )
                 )
-                return await EncodeToNewBinaryBufferWriterAsync(lazinator, includeChildrenMode);
+                return await EncodeToNewBufferWriterAsync(lazinator, includeChildrenMode);
 
             // We can use the original storage. But we still have to copy it into a new buffer, as requested.
-            BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(GetBufferSize(originalStorage.Length));
+            BufferWriterContainer writer = new BufferWriterContainer(GetBufferSize(originalStorage.Length));
             await originalStorage.WriteToBinaryBufferAsync(writer);
             return writer.LazinatorMemory;
         }
 
-        private async static ValueTask<LazinatorMemory> EncodeToNewBinaryBufferWriterAsync<T>(T lazinatorObject, IncludeChildrenMode includeChildrenMode) where T : ILazinator, ILazinatorAsync
+        private async static ValueTask<LazinatorMemory> EncodeToNewBufferWriterAsync<T>(T lazinatorObject, IncludeChildrenMode includeChildrenMode) where T : ILazinator, ILazinatorAsync
         {
             int bufferSize = GetBufferSize(lazinatorObject.LazinatorMemoryStorage.Length);
-            BinaryBufferWriterContainer writer = new BinaryBufferWriterContainer(bufferSize);
+            BufferWriterContainer writer = new BufferWriterContainer(bufferSize);
             await lazinatorObject.SerializeToExistingBufferAsync(writer, new LazinatorSerializationOptions(includeChildrenMode, false, false, false));
             return writer.LazinatorMemory;
         }
@@ -125,7 +125,7 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="writer">The binary writer</param>
         /// <param name="action">The action to complete</param>
-        public static void WriteToBinaryWithInt16LengthPrefix(ref BinaryBufferWriter writer, WriteDelegate action)
+        public static void WriteToBinaryWithInt16LengthPrefix(ref BufferWriter writer, WriteDelegate action)
         {
             int lengthPosition = writer.ActiveMemoryPosition;
             writer.Write((Int16)0);
@@ -143,7 +143,7 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="writer">The binary writer</param>
         /// <param name="action">The action to complete</param>
-        public static void WriteToBinaryWithInt32LengthPrefix(ref BinaryBufferWriter writer, WriteDelegate action)
+        public static void WriteToBinaryWithInt32LengthPrefix(ref BufferWriter writer, WriteDelegate action)
         {
             int lengthPosition = writer.ActiveMemoryPosition;
             writer.Write((Int32)0);
@@ -162,7 +162,7 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="writer">The binary writer</param>
         /// <param name="action">The action to complete</param>
-        public async static ValueTask WriteToBinaryWithInt16LengthPrefixAsync(BinaryBufferWriterContainer writer, WriteDelegateAsync action)
+        public async static ValueTask WriteToBinaryWithInt16LengthPrefixAsync(BufferWriterContainer writer, WriteDelegateAsync action)
         {
             int lengthPosition = writer.ActiveMemoryPosition;
             writer.Write((Int16)0);
@@ -180,7 +180,7 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="writer">The binary writer</param>
         /// <param name="action">The action to complete</param>
-        public async static ValueTask WriteToBinaryWithInt32LengthPrefixAsync(BinaryBufferWriterContainer writer, WriteDelegateAsync action)
+        public async static ValueTask WriteToBinaryWithInt32LengthPrefixAsync(BufferWriterContainer writer, WriteDelegateAsync action)
         {
             int lengthPosition = writer.ActiveMemoryPosition;
             writer.Write((int)0);
@@ -199,7 +199,7 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="writer">The binary writer</param>
         /// <param name="action">The action to complete</param>
-        public static void WriteToBinaryWithoutLengthPrefix(ref BinaryBufferWriter writer, WriteDelegate action)
+        public static void WriteToBinaryWithoutLengthPrefix(ref BufferWriter writer, WriteDelegate action)
         {
             action(ref writer);
         }
@@ -209,7 +209,7 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="writer">The binary writer</param>
         /// <param name="action">The action to complete</param>
-        public async static ValueTask WriteToBinaryWithoutLengthPrefixAsync(BinaryBufferWriterContainer writer, WriteDelegateAsync action)
+        public async static ValueTask WriteToBinaryWithoutLengthPrefixAsync(BufferWriterContainer writer, WriteDelegateAsync action)
         {
             await action(writer);
         }
@@ -219,7 +219,7 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="writer">The binary writer</param>
         /// <param name="action">The action to complete</param>
-        public static void WriteToBinaryWithByteLengthPrefix(ref BinaryBufferWriter writer, WriteDelegate action)
+        public static void WriteToBinaryWithByteLengthPrefix(ref BufferWriter writer, WriteDelegate action)
         {
             int lengthPosition = writer.ActiveMemoryPosition;
             writer.Write((byte)0);
@@ -238,7 +238,7 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="writer">The binary writer</param>
         /// <param name="action">The action to complete</param>
-        public async static ValueTask WriteToBinaryWithByteLengthPrefixAsync(BinaryBufferWriterContainer writer, WriteDelegateAsync action)
+        public async static ValueTask WriteToBinaryWithByteLengthPrefixAsync(BufferWriterContainer writer, WriteDelegateAsync action)
         {
             int lengthPosition = writer.ActiveMemoryPosition;
             writer.Write((byte)0);
@@ -255,19 +255,19 @@ namespace Lazinator.Core
         /// <summary>
         /// Writes a byte value to a span, returning true if the span is at least one byte long.
         /// </summary>
-        public static bool WriteValueToSpan(Span<byte> targetSpan, byte value) => BinaryBufferWriter.LittleEndianStorage ? TryWriteUInt16LittleEndian(targetSpan, (byte)value) : TryWriteUInt16BigEndian(targetSpan, (byte)value);
+        public static bool WriteValueToSpan(Span<byte> targetSpan, byte value) => BufferWriter.LittleEndianStorage ? TryWriteUInt16LittleEndian(targetSpan, (byte)value) : TryWriteUInt16BigEndian(targetSpan, (byte)value);
         /// <summary>
         /// Writes a byte value to a span, returning true if the span is at least two bytes long.
         /// </summary>
-        public static bool WriteValueToSpan(Span<byte> targetSpan, ushort value) => BinaryBufferWriter.LittleEndianStorage ? TryWriteUInt16LittleEndian(targetSpan, (ushort)value) : TryWriteUInt16BigEndian(targetSpan, (ushort)value);
+        public static bool WriteValueToSpan(Span<byte> targetSpan, ushort value) => BufferWriter.LittleEndianStorage ? TryWriteUInt16LittleEndian(targetSpan, (ushort)value) : TryWriteUInt16BigEndian(targetSpan, (ushort)value);
         /// <summary>
         /// Writes a byte value to a span, returning true if the span is at least four bytes long.
         /// </summary>
-        public static bool WriteValueToSpan(Span<byte> targetSpan, uint value) => BinaryBufferWriter.LittleEndianStorage ? TryWriteUInt32LittleEndian(targetSpan, (uint)value) : TryWriteUInt32BigEndian(targetSpan, (uint)value);
+        public static bool WriteValueToSpan(Span<byte> targetSpan, uint value) => BufferWriter.LittleEndianStorage ? TryWriteUInt32LittleEndian(targetSpan, (uint)value) : TryWriteUInt32BigEndian(targetSpan, (uint)value);
         /// <summary>
         /// Writes a byte value to a span, returning true if the span is at least eight bytes long.
         /// </summary>
-        public static bool WriteValueToSpan(Span<byte> targetSpan, ulong value) => BinaryBufferWriter.LittleEndianStorage ? TryWriteUInt64LittleEndian(targetSpan, (ulong)value) : TryWriteUInt64BigEndian(targetSpan, (ulong)value);
+        public static bool WriteValueToSpan(Span<byte> targetSpan, ulong value) => BufferWriter.LittleEndianStorage ? TryWriteUInt64LittleEndian(targetSpan, (ulong)value) : TryWriteUInt64BigEndian(targetSpan, (ulong)value);
 
         /// <summary>
         /// Initiates a binary write to a child of a Lazinator object, optionally including a length prefix, using existing storage if possible
@@ -279,7 +279,7 @@ namespace Lazinator.Core
         /// <param name="getChildSliceFn">A function to return the child's original storage</param>
         /// <param name="parent">The parent of the object being written</param>
         /// 
-        public static void WriteChild<T>(ref BinaryBufferWriter writer, ref T child,
+        public static void WriteChild<T>(ref BufferWriter writer, ref T child,
             LazinatorSerializationOptions options, bool childHasBeenAccessed, ReturnLazinatorMemoryDelegate getChildSliceFn, ILazinator parent) where T : ILazinator
         {
             bool childCouldHaveChanged = childHasBeenAccessed || (child != null && options.IncludeChildrenMode != child.OriginalIncludeChildrenMode);
@@ -334,7 +334,7 @@ namespace Lazinator.Core
         /// <param name="getChildSliceFn">A function to return the child's original storage</param>
         /// <param name="parent">The parent of the object being written</param>
         /// 
-        public async static ValueTask WriteNonAsyncChildAsync<T>(BinaryBufferWriterContainer writer, T child,
+        public async static ValueTask WriteNonAsyncChildAsync<T>(BufferWriterContainer writer, T child,
             LazinatorSerializationOptions options, bool childHasBeenAccessed, ReturnLazinatorMemoryDelegateAsync getChildSliceFn, ILazinator parent) where T : ILazinator
         {
             bool childCouldHaveChanged = childHasBeenAccessed || (child != null && options.IncludeChildrenMode != child.OriginalIncludeChildrenMode);
@@ -389,7 +389,7 @@ namespace Lazinator.Core
         /// <param name="getChildSliceFn">A function to return the child's original storage</param>
         /// <param name="parent">The parent of the object being written</param>
         /// 
-        public async static ValueTask WriteChildAsync<T>(BinaryBufferWriterContainer writer, T child,
+        public async static ValueTask WriteChildAsync<T>(BufferWriterContainer writer, T child,
             LazinatorSerializationOptions options, bool childHasBeenAccessed, ReturnLazinatorMemoryDelegateAsync getChildSliceFn, ILazinator parent) where T : ILazinator, ILazinatorAsync
         {
             bool childCouldHaveChanged = childHasBeenAccessed || (child != null && options.IncludeChildrenMode != child.OriginalIncludeChildrenMode);
@@ -434,7 +434,7 @@ namespace Lazinator.Core
             AddParentToChildless(ref child, parent);
         }
 
-        public static void WriteNullChild_LengthsSeparate(ref BinaryBufferWriter writer, bool restrictLengthTo255Bytes)
+        public static void WriteNullChild_LengthsSeparate(ref BufferWriter writer, bool restrictLengthTo255Bytes)
         {
             if (restrictLengthTo255Bytes)
             {
@@ -455,7 +455,7 @@ namespace Lazinator.Core
         /// <param name="getChildSliceFn">A function that returns the Lazinator memory containing the child</param>
         /// <param name="childStorage">The Lazinator memory containing the child, if such memory has been accessed</param>
         /// <returns></returns>
-        public static LazinatorMemory WriteExistingChildStorage(ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceFn, LazinatorMemory childStorage, bool considerWriteReferenceOnly, int serializeDiffsThreshold)
+        public static LazinatorMemory WriteExistingChildStorage(ref BufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceFn, LazinatorMemory childStorage, bool considerWriteReferenceOnly, int serializeDiffsThreshold)
         {
             if (childStorage.IsEmpty)
                 childStorage = getChildSliceFn(); // this is the storage holding the child, which has never been accessed
@@ -476,7 +476,7 @@ namespace Lazinator.Core
         /// <param name="getChildSliceFn"></param>
         /// <param name="childStorage"></param>
         /// <returns></returns>
-        public async static ValueTask<LazinatorMemory> WriteExistingChildStorageAsync(BinaryBufferWriterContainer writer, ReturnLazinatorMemoryDelegateAsync getChildSliceFn, LazinatorMemory childStorage, bool writeReferenceOnly)
+        public async static ValueTask<LazinatorMemory> WriteExistingChildStorageAsync(BufferWriterContainer writer, ReturnLazinatorMemoryDelegateAsync getChildSliceFn, LazinatorMemory childStorage, bool writeReferenceOnly)
         {
             if (childStorage.IsEmpty)
                 childStorage = await getChildSliceFn(); // this is the storage holding the child, which has never been accessed
@@ -503,10 +503,10 @@ namespace Lazinator.Core
         /// <param name="options">Serialization options</param>
         /// <param name="parent">The parent of the object being written</param>
 
-        private static void WriteChildToBinary<T>(ref BinaryBufferWriter writer, ref T child, LazinatorSerializationOptions options) where T : ILazinator
+        private static void WriteChildToBinary<T>(ref BufferWriter writer, ref T child, LazinatorSerializationOptions options) where T : ILazinator
         {
             T childCopy = child;
-            void action(ref BinaryBufferWriter w)
+            void action(ref BufferWriter w)
             {
                 if (childCopy.LazinatorMemoryStorage.IsEmpty || childCopy.IsDirty || childCopy.DescendantIsDirty || options.VerifyCleanness || options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != childCopy.OriginalIncludeChildrenMode)
                     childCopy.SerializeToExistingBuffer(ref w, options);
@@ -516,10 +516,10 @@ namespace Lazinator.Core
             LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(ref writer, action);
         }
 
-        private async static ValueTask WriteChildToBinaryAsync<T>(BinaryBufferWriterContainer writer, T child, LazinatorSerializationOptions options) where T : ILazinator, ILazinatorAsync
+        private async static ValueTask WriteChildToBinaryAsync<T>(BufferWriterContainer writer, T child, LazinatorSerializationOptions options) where T : ILazinator, ILazinatorAsync
         {
             T childCopy = child;
-            async ValueTask action(BinaryBufferWriterContainer w)
+            async ValueTask action(BufferWriterContainer w)
             {
                 if (childCopy.LazinatorMemoryStorage.IsEmpty || childCopy.IsDirty || childCopy.DescendantIsDirty || options.VerifyCleanness || options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != childCopy.OriginalIncludeChildrenMode)
                     await childCopy.SerializeToExistingBufferAsync(w, options);
@@ -571,7 +571,7 @@ namespace Lazinator.Core
         /// </summary>
         /// <param name="writer"></param>
         /// <param name="lazinatorGenericID"></param>
-        public static void WriteLazinatorGenericID(ref BinaryBufferWriter writer, LazinatorGenericIDType lazinatorGenericID)
+        public static void WriteLazinatorGenericID(ref BufferWriter writer, LazinatorGenericIDType lazinatorGenericID)
         {
             // We write the first component before the total count to be consistent with non-generic items.
             CompressedIntegralTypes.WriteCompressedInt(ref writer, lazinatorGenericID.TypeAndInnerTypeIDs[0]);
@@ -617,7 +617,7 @@ namespace Lazinator.Core
         /// <param name="binaryWriterAction">The action to complete the write to the binary buffer</param>
         /// 
         public static void WriteNonLazinatorObject(object nonLazinatorObject,
-            bool isBelievedDirty, bool isAccessed, ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceForFieldFn,
+            bool isBelievedDirty, bool isAccessed, ref BufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceForFieldFn,
             bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction)
         {
             int startPosition = writer.ActiveMemoryPosition;
@@ -637,7 +637,7 @@ namespace Lazinator.Core
         /// <param name="verifyCleanness">If true, then the dirty-conversion will always be performed unless we are sure it is clean, and if the object is not believed to be dirty, the results will be compared to the clean version. This allows for errors from failure to serialize objects that have been changed to be caught during development.</param>
         /// <param name="binaryWriterAction">The action to complete the write to the binary buffer</param>
         public static void WriteNonLazinatorObject_WithoutLengthPrefix(object nonLazinatorObject,
-            bool isBelievedDirty, bool isAccessed, ref BinaryBufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceForFieldFn,
+            bool isBelievedDirty, bool isAccessed, ref BufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceForFieldFn,
             bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction)
         {
             LazinatorMemory original = getChildSliceForFieldFn();
@@ -651,7 +651,7 @@ namespace Lazinator.Core
             else if (isBelievedDirty || length == 0)
             {
                 // We definitely need to write to binary, because either the dirty flag has been set or the original storage doesn't have anything to help us.
-                void action(ref BinaryBufferWriter w) => binaryWriterAction(ref w, verifyCleanness);
+                void action(ref BufferWriter w) => binaryWriterAction(ref w, verifyCleanness);
                 WriteToBinaryWithoutLengthPrefix(ref writer, action);
             }
             else
@@ -677,7 +677,7 @@ namespace Lazinator.Core
         /// <param name="binaryWriterAction">The action to complete the write to the binary buffer</param>
         /// 
         public async static ValueTask WriteNonLazinatorObjectAsync(object nonLazinatorObject,
-            bool isBelievedDirty, bool isAccessed, BinaryBufferWriterContainer writer, ReturnLazinatorMemoryDelegateAsync getChildSliceForFieldFn,
+            bool isBelievedDirty, bool isAccessed, BufferWriterContainer writer, ReturnLazinatorMemoryDelegateAsync getChildSliceForFieldFn,
             bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction)
         {
             int startPosition = writer.ActiveMemoryPosition;
@@ -697,7 +697,7 @@ namespace Lazinator.Core
         /// <param name="verifyCleanness">If true, then the dirty-conversion will always be performed unless we are sure it is clean, and if the object is not believed to be dirty, the results will be compared to the clean version. This allows for errors from failure to serialize objects that have been changed to be caught during development.</param>
         /// <param name="binaryWriterAction">The action to complete the write to the binary buffer</param>
         public async static ValueTask WriteNonLazinatorObject_WithoutLengthPrefixAsync(object nonLazinatorObject,
-            bool isBelievedDirty, bool isAccessed, BinaryBufferWriterContainer writer, ReturnLazinatorMemoryDelegateAsync getChildSliceForFieldFn,
+            bool isBelievedDirty, bool isAccessed, BufferWriterContainer writer, ReturnLazinatorMemoryDelegateAsync getChildSliceForFieldFn,
             bool verifyCleanness, WritePossiblyVerifyingCleannessDelegate binaryWriterAction)
         {
             LazinatorMemory original = await getChildSliceForFieldFn();
@@ -711,7 +711,7 @@ namespace Lazinator.Core
             else if (isBelievedDirty || length == 0)
             {
                 // We definitely need to write to binary, because either the dirty flag has been set or the original storage doesn't have anything to help us.
-                void action(ref BinaryBufferWriter w) => binaryWriterAction(ref w, verifyCleanness);
+                void action(ref BufferWriter w) => binaryWriterAction(ref w, verifyCleanness);
                 WriteToBinaryWithoutLengthPrefix(ref writer.Writer, action);
             }
             else
@@ -737,7 +737,7 @@ namespace Lazinator.Core
             if (nonLazinatorObject == null)
                 return new ReadOnlyMemory<byte>();
 
-            BinaryBufferWriter writer = new BinaryBufferWriter();
+            BufferWriter writer = new BufferWriter();
             binaryWriterAction(ref writer, true);
             var memory = writer.LazinatorMemory;
             byte[] bytes = new byte[memory.Length];

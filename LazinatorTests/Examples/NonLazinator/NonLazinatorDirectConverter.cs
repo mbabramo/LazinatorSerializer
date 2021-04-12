@@ -23,7 +23,7 @@ namespace LazinatorTests.Examples
             return new NonLazinatorClass() { MyInt = myInt, MyString = myString };
         }
 
-        public static void ConvertToBytes_NonLazinatorClass(ref BinaryBufferWriter writer, NonLazinatorClass itemToConvert, LazinatorSerializationOptions options)
+        public static void ConvertToBytes_NonLazinatorClass(ref BufferWriter writer, NonLazinatorClass itemToConvert, LazinatorSerializationOptions options)
         {
             if (itemToConvert == null)
                 return;
@@ -53,7 +53,7 @@ namespace LazinatorTests.Examples
             return new NonLazinatorStruct() { MyInt = myInt, MyString = myString };
         }
 
-        public static void ConvertToBytes_NonLazinatorStruct(ref BinaryBufferWriter writer, NonLazinatorStruct itemToConvert, LazinatorSerializationOptions options)
+        public static void ConvertToBytes_NonLazinatorStruct(ref BufferWriter writer, NonLazinatorStruct itemToConvert, LazinatorSerializationOptions options)
         {
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.MyInt);
             writer.WriteStringUtf8WithVarIntPrefix(itemToConvert.MyString);

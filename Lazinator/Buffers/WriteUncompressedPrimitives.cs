@@ -10,112 +10,112 @@ namespace Lazinator.Buffers
     public static class WriteUncompressedPrimitives
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteBool(ref BinaryBufferWriter writer, bool value)
+        public static byte WriteBool(ref BufferWriter writer, bool value)
         {
             writer.Write(value);
             return (byte)sizeof(byte);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteByte(ref BinaryBufferWriter writer, byte value)
+        public static byte WriteByte(ref BufferWriter writer, byte value)
         {
             writer.Write(value);
             return (byte)sizeof(byte);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteSByte(ref BinaryBufferWriter writer, sbyte value)
+        public static byte WriteSByte(ref BufferWriter writer, sbyte value)
         {
             writer.Write(value);
             return (byte)sizeof(sbyte);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteShort(ref BinaryBufferWriter writer, short value)
+        public static byte WriteShort(ref BufferWriter writer, short value)
         {
             writer.Write(value);
             return (byte)sizeof(short);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteUShort(ref BinaryBufferWriter writer, ushort value)
+        public static byte WriteUShort(ref BufferWriter writer, ushort value)
         {
             writer.Write(value);
             return (byte)sizeof(ushort);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteInt(ref BinaryBufferWriter writer, int value)
+        public static byte WriteInt(ref BufferWriter writer, int value)
         {
             writer.Write(value);
             return (byte)sizeof(int);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteUInt(ref BinaryBufferWriter writer, uint value)
+        public static byte WriteUInt(ref BufferWriter writer, uint value)
         {
             writer.Write(value);
             return (byte)sizeof(uint);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteLong(ref BinaryBufferWriter writer, long value)
+        public static byte WriteLong(ref BufferWriter writer, long value)
         {
             writer.Write(value);
             return (byte)sizeof(long);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteULong(ref BinaryBufferWriter writer, ulong value)
+        public static byte WriteULong(ref BufferWriter writer, ulong value)
         {
             writer.Write(value);
             return (byte)sizeof(ulong);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteSingle(ref BinaryBufferWriter writer, float value)
+        public static byte WriteSingle(ref BufferWriter writer, float value)
         {
             writer.Write(value);
             return (byte)sizeof(float);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteDouble(ref BinaryBufferWriter writer, double value)
+        public static byte WriteDouble(ref BufferWriter writer, double value)
         {
             writer.Write(value);
             return (byte)sizeof(double);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteDecimal(ref BinaryBufferWriter writer, decimal value)
+        public static byte WriteDecimal(ref BufferWriter writer, decimal value)
         {
             writer.Write(value);
             return (byte)sizeof(decimal);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteDateTime(ref BinaryBufferWriter writer, DateTime value)
+        public static byte WriteDateTime(ref BufferWriter writer, DateTime value)
         {
             writer.Write(value.Ticks);
             return (byte)sizeof(long);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteTimeSpan(ref BinaryBufferWriter writer, TimeSpan value)
+        public static byte WriteTimeSpan(ref BufferWriter writer, TimeSpan value)
         {
             writer.Write(value.Ticks);
             return (byte)sizeof(long);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteGuid(ref BinaryBufferWriter writer, Guid value)
+        public static byte WriteGuid(ref BufferWriter writer, Guid value)
         {
             writer.Write(value);
             return (byte)16;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteNullableBool(ref BinaryBufferWriter writer, bool? value)
+        public static byte WriteNullableBool(ref BufferWriter writer, bool? value)
         {
             if (value == null)
             {
@@ -128,7 +128,7 @@ namespace Lazinator.Buffers
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteNullableByte(ref BinaryBufferWriter writer, byte? value)
+        public static byte WriteNullableByte(ref BufferWriter writer, byte? value)
         {
             if (value == null)
             {
@@ -141,7 +141,7 @@ namespace Lazinator.Buffers
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteNullableSByte(ref BinaryBufferWriter writer, byte? value)
+        public static byte WriteNullableSByte(ref BufferWriter writer, byte? value)
         {
             if (value == null)
             {
@@ -154,7 +154,7 @@ namespace Lazinator.Buffers
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteNullableShort(ref BinaryBufferWriter writer, short? value)
+        public static byte WriteNullableShort(ref BufferWriter writer, short? value)
         {
             if (value == null)
             {
@@ -167,7 +167,7 @@ namespace Lazinator.Buffers
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteNullableUShort(ref BinaryBufferWriter writer, ushort? value)
+        public static byte WriteNullableUShort(ref BufferWriter writer, ushort? value)
         {
             if (value == null)
             {
@@ -180,7 +180,7 @@ namespace Lazinator.Buffers
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteNullableInt(ref BinaryBufferWriter writer, int? value)
+        public static byte WriteNullableInt(ref BufferWriter writer, int? value)
         {
             if (value == null)
             {
@@ -193,7 +193,7 @@ namespace Lazinator.Buffers
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteNullableUInt(ref BinaryBufferWriter writer, uint? value)
+        public static byte WriteNullableUInt(ref BufferWriter writer, uint? value)
         {
             if (value == null)
             {
@@ -206,7 +206,7 @@ namespace Lazinator.Buffers
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteNullableLong(ref BinaryBufferWriter writer, long? value)
+        public static byte WriteNullableLong(ref BufferWriter writer, long? value)
         {
             if (value == null)
             {
@@ -219,7 +219,7 @@ namespace Lazinator.Buffers
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteNullableULong(ref BinaryBufferWriter writer, ulong? value)
+        public static byte WriteNullableULong(ref BufferWriter writer, ulong? value)
         {
             if (value == null)
             {
@@ -232,7 +232,7 @@ namespace Lazinator.Buffers
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteNullableSingle(ref BinaryBufferWriter writer, float? value)
+        public static byte WriteNullableSingle(ref BufferWriter writer, float? value)
         {
             if (value == null)
             {
@@ -245,7 +245,7 @@ namespace Lazinator.Buffers
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteNullableDouble(ref BinaryBufferWriter writer, double? value)
+        public static byte WriteNullableDouble(ref BufferWriter writer, double? value)
         {
             if (value == null)
             {
@@ -258,7 +258,7 @@ namespace Lazinator.Buffers
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteNullableDecimal(ref BinaryBufferWriter writer, decimal? value)
+        public static byte WriteNullableDecimal(ref BufferWriter writer, decimal? value)
         {
             if (value == null)
             {
@@ -271,7 +271,7 @@ namespace Lazinator.Buffers
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteNullableDateTime(ref BinaryBufferWriter writer, DateTime? value)
+        public static byte WriteNullableDateTime(ref BufferWriter writer, DateTime? value)
         {
             if (value == null)
             {
@@ -284,7 +284,7 @@ namespace Lazinator.Buffers
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteNullableTimeSpan(ref BinaryBufferWriter writer, TimeSpan? value)
+        public static byte WriteNullableTimeSpan(ref BufferWriter writer, TimeSpan? value)
         {
             if (value == null)
             {
@@ -297,7 +297,7 @@ namespace Lazinator.Buffers
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static byte WriteNullableGuid(ref BinaryBufferWriter writer, Guid? value)
+        public static byte WriteNullableGuid(ref BufferWriter writer, Guid? value)
         {
             if (value == null)
             {

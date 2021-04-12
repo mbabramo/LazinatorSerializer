@@ -371,7 +371,7 @@ namespace Lazinator.Persistence
             }
             else
             {
-                BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
+                BufferWriter writer = new BufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
                 LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
                 LazinatorMemoryStorage = writer.LazinatorMemory;
             }
@@ -388,7 +388,7 @@ namespace Lazinator.Persistence
             {
                 return EncodeToNewBuffer(options);
             }
-            BinaryBufferWriter writer = new BinaryBufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
+            BufferWriter writer = new BufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
             LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
             return writer.LazinatorMemory;
         }
@@ -396,7 +396,7 @@ namespace Lazinator.Persistence
         protected virtual LazinatorMemory EncodeToNewBuffer(in LazinatorSerializationOptions options) 
         {
             int bufferSize = LazinatorMemoryStorage.Length == 0 ? ExpandableBytes.DefaultMinBufferSize : LazinatorMemoryStorage.LengthInt ?? ExpandableBytes.DefaultMinBufferSize;
-            BinaryBufferWriter writer = new BinaryBufferWriter(bufferSize);
+            BufferWriter writer = new BufferWriter(bufferSize);
             SerializeToExistingBuffer(ref writer, options);
             return writer.LazinatorMemory;
         }
@@ -546,7 +546,7 @@ namespace Lazinator.Persistence
             return totalChildrenBytes;
         }
         
-        public virtual void SerializeToExistingBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options)
+        public virtual void SerializeToExistingBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options)
         {
             int startPosition = writer.ActiveMemoryPosition;
             WritePropertiesIntoBuffer(ref writer, options, true);
@@ -556,7 +556,7 @@ namespace Lazinator.Persistence
             }
         }
         
-        public virtual void UpdateStoredBuffer(ref BinaryBufferWriter writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
+        public virtual void UpdateStoredBuffer(ref BufferWriter writer, long startPosition, long length, IncludeChildrenMode includeChildrenMode, bool updateDeserializedChildren)
         {
             _IsDirty = false;
             if (includeChildrenMode == IncludeChildrenMode.IncludeAllChildren)
@@ -577,7 +577,7 @@ namespace Lazinator.Persistence
             LazinatorMemoryStorage = newBuffer;
         }
         
-        protected virtual void UpdateDeserializedChildren(ref BinaryBufferWriter writer, long startPosition)
+        protected virtual void UpdateDeserializedChildren(ref BufferWriter writer, long startPosition)
         {
             if (_ForkInformation_Accessed && _ForkInformation != null)
             {
@@ -591,7 +591,7 @@ namespace Lazinator.Persistence
         }
         
         
-        protected virtual void WritePropertiesIntoBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
+        protected virtual void WritePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
             int startPosition = writer.ActiveMemoryPosition;
             if (includeUniqueID)
@@ -619,14 +619,14 @@ namespace Lazinator.Persistence
             
         }
         
-        protected virtual void WritePrimitivePropertiesIntoBuffer(ref BinaryBufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
+        protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _BaseBlobPath);
             WriteUncompressedPrimitives.WriteBool(ref writer, _ContainedInSingleBlob);
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _IndexVersion);
             WriteUncompressedPrimitives.WriteBool(ref writer, _IsPersisted);
         }
-        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BinaryBufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
+        protected virtual void WriteChildrenPropertiesIntoBuffer(ref BufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
         {
             if (options.SplittingPossible)
             {
@@ -643,7 +643,7 @@ namespace Lazinator.Persistence
             isAccessed: _ForkInformation_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _ForkInformation_ByteIndex, _ForkInformation_ByteLength, null),
             verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            binaryWriterAction: (ref BufferWriter w, bool v) =>
             ConvertToBytes_List_G_Pint_C32lastMemoryChunkBeforeFork_c_C32int_C32forkNumber_p_g(ref w, _ForkInformation,
             options));
             if (options.UpdateStoredBuffer)
@@ -661,7 +661,7 @@ namespace Lazinator.Persistence
             isAccessed: _MemoryChunkReferences_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MemoryChunkReferences_ByteIndex, _MemoryChunkReferences_ByteLength, null),
             verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            binaryWriterAction: (ref BufferWriter w, bool v) =>
             ConvertToBytes_List_GMemoryChunkReference_g(ref w, _MemoryChunkReferences,
             options));
             if (options.UpdateStoredBuffer)
@@ -679,7 +679,7 @@ namespace Lazinator.Persistence
             isAccessed: _MemoryChunkStatus_Accessed, writer: ref writer,
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _MemoryChunkStatus_ByteIndex, _MemoryChunkStatus_ByteLength, null),
             verifyCleanness: false,
-            binaryWriterAction: (ref BinaryBufferWriter w, bool v) =>
+            binaryWriterAction: (ref BufferWriter w, bool v) =>
             ConvertToBytes_Memory_Gbyte_g(ref w, _MemoryChunkStatus,
             options));
             if (options.UpdateStoredBuffer)
@@ -718,7 +718,7 @@ namespace Lazinator.Persistence
             return collection;
         }
         
-        private static void ConvertToBytes_List_G_Pint_C32lastMemoryChunkBeforeFork_c_C32int_C32forkNumber_p_g(ref BinaryBufferWriter writer, List<(Int32 lastMemoryChunkBeforeFork, Int32 forkNumber)> itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_List_G_Pint_C32lastMemoryChunkBeforeFork_c_C32int_C32forkNumber_p_g(ref BufferWriter writer, List<(Int32 lastMemoryChunkBeforeFork, Int32 forkNumber)> itemToConvert, LazinatorSerializationOptions options)
         {
             if (itemToConvert == default(List<(Int32 lastMemoryChunkBeforeFork, Int32 forkNumber)>))
             {
@@ -728,7 +728,7 @@ namespace Lazinator.Persistence
             int itemToConvertCount = itemToConvert.Count;
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
-                void action(ref BinaryBufferWriter w) => ConvertToBytes__Pint_C32lastMemoryChunkBeforeFork_c_C32int_C32forkNumber_p(ref w, itemToConvert[itemIndex], options);
+                void action(ref BufferWriter w) => ConvertToBytes__Pint_C32lastMemoryChunkBeforeFork_c_C32int_C32forkNumber_p(ref w, itemToConvert[itemIndex], options);
                 WriteToBinaryWithInt32LengthPrefix(ref writer, action);
             }
         }
@@ -769,7 +769,7 @@ namespace Lazinator.Persistence
             return itemToCreate;
         }
         
-        private static void ConvertToBytes__Pint_C32lastMemoryChunkBeforeFork_c_C32int_C32forkNumber_p(ref BinaryBufferWriter writer, (Int32 lastMemoryChunkBeforeFork, Int32 forkNumber) itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes__Pint_C32lastMemoryChunkBeforeFork_c_C32int_C32forkNumber_p(ref BufferWriter writer, (Int32 lastMemoryChunkBeforeFork, Int32 forkNumber) itemToConvert, LazinatorSerializationOptions options)
         {
             
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Item1);
@@ -805,7 +805,7 @@ namespace Lazinator.Persistence
             return collection;
         }
         
-        private static void ConvertToBytes_List_GMemoryChunkReference_g(ref BinaryBufferWriter writer, List<MemoryChunkReference> itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_List_GMemoryChunkReference_g(ref BufferWriter writer, List<MemoryChunkReference> itemToConvert, LazinatorSerializationOptions options)
         {
             if (itemToConvert == default(List<MemoryChunkReference>))
             {
@@ -815,7 +815,7 @@ namespace Lazinator.Persistence
             int itemToConvertCount = itemToConvert.Count;
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
-                void action(ref BinaryBufferWriter w) 
+                void action(ref BufferWriter w) 
                 {
                     var copy = itemToConvert[itemIndex];
                     copy.SerializeToExistingBuffer(ref w, options);
@@ -855,7 +855,7 @@ namespace Lazinator.Persistence
             return storage.Memory.ToArray();
         }
         
-        private static void ConvertToBytes_Memory_Gbyte_g(ref BinaryBufferWriter writer, Memory<Byte> itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_Memory_Gbyte_g(ref BufferWriter writer, Memory<Byte> itemToConvert, LazinatorSerializationOptions options)
         {
             writer.Write(itemToConvert.Span);
         }

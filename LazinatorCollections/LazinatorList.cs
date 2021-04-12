@@ -437,12 +437,12 @@ namespace LazinatorCollections
         }
 
         // How do we ensure that after serialization occurs, the child items get updated?
-        // If the list is clean, then the entire storage of the LazinatorList is written in one fell swoop. But UpdateStoredBuffer will be called if the list is instantiated. Then, OnUpdateDeserializedChildren will be called, and the active BinaryBufferWriter can be used.
+        // If the list is clean, then the entire storage of the LazinatorList is written in one fell swoop. But UpdateStoredBuffer will be called if the list is instantiated. Then, OnUpdateDeserializedChildren will be called, and the active BufferWriter can be used.
         // If the list is dirty or has a dirty descendant, then the writing of properties will work as follows: 
         // If updateStoredBuffer is true, then after writing properties into buffer, we call UpdateStoredBuffer with updateDeserializedChildren = false. The expectation is that we'll update each child when writing the properties, so we do this in WriteMainList.  The WriteChild method there will do this assuming that the child is in memory, and the child will get the new buffer. 
         // But what happens if updateStoredBuffer is false? If that is so, WriteMainList still updates MainListSerialized and Offsets. But it then immediately switches them back after we update with updateStoredBuffer = false. This ensures that Offsets refers to the original LazinatorMemoryStorage. 
 
-        public void OnUpdateDeserializedChildren(ref BinaryBufferWriter writer, long startPosition)
+        public void OnUpdateDeserializedChildren(ref BufferWriter writer, long startPosition)
         {
             if (_DeserializedItems == null)
                 return;
@@ -467,13 +467,13 @@ namespace LazinatorCollections
         /// <summary>
         /// Writes the main list to a binary buffer, using serialized data where possible so that items do not need to be deserialized unnecessarily.
         /// </summary>
-        private void WriteMainList(ref BinaryBufferWriter writer, ReadOnlyMemory<byte> itemToConvert, LazinatorSerializationOptions options)
+        private void WriteMainList(ref BufferWriter writer, ReadOnlyMemory<byte> itemToConvert, LazinatorSerializationOptions options)
         {
             int originalStartingPosition = writer.ActiveMemoryPosition;
             if (IsDirty || DescendantIsDirty || options.IncludeChildrenMode != OriginalIncludeChildrenMode || LazinatorMemoryStorage.IsEmpty)
             {
                 var offsetList = new LazinatorOffsetList();
-                LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(ref writer, (ref BinaryBufferWriter w) =>
+                LazinatorUtilities.WriteToBinaryWithoutLengthPrefix(ref writer, (ref BufferWriter w) =>
                 {
                     int startingPosition = w.ActiveMemoryPosition;
                     if (_DeserializedItems == null && _CountWhenDeserialized > 0)

@@ -705,7 +705,7 @@ namespace LazinatorTests.Tests
         {
             e.SerializeLazinator();
             var buffer = e.LazinatorMemoryStorage.GetConsolidatedMemory();
-            BinaryBufferWriter b = new BinaryBufferWriter();
+            BufferWriter b = new BufferWriter();
             b.Write(buffer.Span);
             e.UpdateStoredBuffer(ref b, 0, buffer.Span.Length, IncludeChildrenMode.IncludeAllChildren, true);
         }

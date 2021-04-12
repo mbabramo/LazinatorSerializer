@@ -50,7 +50,7 @@ namespace LazinatorTests.Tests
         {
             e.SerializeLazinator();
             var buffer = e.LazinatorMemoryStorage.GetConsolidatedMemory();
-            BinaryBufferWriter b = new BinaryBufferWriter();
+            BufferWriter b = new BufferWriter();
             b.Write(buffer.Span);
             return b.LazinatorMemory;
         }

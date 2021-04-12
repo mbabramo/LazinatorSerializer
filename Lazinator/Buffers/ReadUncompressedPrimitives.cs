@@ -159,63 +159,63 @@ namespace Lazinator.Buffers
         public static float ToSingle(this ReadOnlySpan<byte> b, ref int index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
-            var result = BitConverter.Int32BitsToSingle(BinaryBufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadInt32LittleEndian(byteSpan) : BinaryPrimitives.ReadInt32BigEndian(byteSpan));
+            var result = BitConverter.Int32BitsToSingle(BufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadInt32LittleEndian(byteSpan) : BinaryPrimitives.ReadInt32BigEndian(byteSpan));
             index += sizeof(float);
             return result;
         }
         public static double ToDouble(this ReadOnlySpan<byte> b, ref int index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
-            var result = BitConverter.Int64BitsToDouble(BinaryBufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadInt64LittleEndian(byteSpan) : BinaryPrimitives.ReadInt64BigEndian(byteSpan));
+            var result = BitConverter.Int64BitsToDouble(BufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadInt64LittleEndian(byteSpan) : BinaryPrimitives.ReadInt64BigEndian(byteSpan));
             index += sizeof(double);
             return result;
         }
         public static short ToInt16(this ReadOnlySpan<byte> b, ref int index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
-            var result = BinaryBufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadInt16LittleEndian(byteSpan) : BinaryPrimitives.ReadInt16BigEndian(byteSpan);
+            var result = BufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadInt16LittleEndian(byteSpan) : BinaryPrimitives.ReadInt16BigEndian(byteSpan);
             index += sizeof(short);
             return result;
         }
         public static int ToInt32(this ReadOnlySpan<byte> b, ref int index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
-            var result = BinaryBufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadInt32LittleEndian(byteSpan) : BinaryPrimitives.ReadInt32BigEndian(byteSpan);
+            var result = BufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadInt32LittleEndian(byteSpan) : BinaryPrimitives.ReadInt32BigEndian(byteSpan);
             index += sizeof(int);
             return result;
         }
         public static long ToInt64(this ReadOnlySpan<byte> b, ref int index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
-            var result = BinaryBufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadInt64LittleEndian(byteSpan) : BinaryPrimitives.ReadInt64BigEndian(byteSpan);
+            var result = BufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadInt64LittleEndian(byteSpan) : BinaryPrimitives.ReadInt64BigEndian(byteSpan);
             index += sizeof(long);
             return result;
         }
         public static long ToInt64(this ReadOnlySpan<byte> b, ref long index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice((int)index);
-            var result = BinaryBufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadInt64LittleEndian(byteSpan) : BinaryPrimitives.ReadInt64BigEndian(byteSpan);
+            var result = BufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadInt64LittleEndian(byteSpan) : BinaryPrimitives.ReadInt64BigEndian(byteSpan);
             index += sizeof(long);
             return result;
         }
         public static ushort ToUInt16(this ReadOnlySpan<byte> b, ref int index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
-            var result = BinaryBufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadUInt16LittleEndian(byteSpan) : BinaryPrimitives.ReadUInt16BigEndian(byteSpan);
+            var result = BufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadUInt16LittleEndian(byteSpan) : BinaryPrimitives.ReadUInt16BigEndian(byteSpan);
             index += sizeof(ushort);
             return result;
         }
         public static uint ToUInt32(this ReadOnlySpan<byte> b, ref int index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
-            var result = BinaryBufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadUInt32LittleEndian(byteSpan) : BinaryPrimitives.ReadUInt32BigEndian(byteSpan);
+            var result = BufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadUInt32LittleEndian(byteSpan) : BinaryPrimitives.ReadUInt32BigEndian(byteSpan);
             index += sizeof(uint);
             return result;
         }
         public static ulong ToUInt64(this ReadOnlySpan<byte> b, ref int index)
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
-            var result = BinaryBufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadUInt64LittleEndian(byteSpan) : BinaryPrimitives.ReadUInt64BigEndian(byteSpan);
+            var result = BufferWriter.LittleEndianStorage ? BinaryPrimitives.ReadUInt64LittleEndian(byteSpan) : BinaryPrimitives.ReadUInt64BigEndian(byteSpan);
             index += sizeof(ulong);
             return result;
         }
@@ -246,7 +246,7 @@ namespace Lazinator.Buffers
         {
             ReadOnlySpan<byte> byteSpan = b.Slice(index);
             decimal result;
-            if (BinaryBufferWriter.LittleEndianStorage)
+            if (BufferWriter.LittleEndianStorage)
                 result = new decimal(
                 BinaryPrimitives.ReadInt32LittleEndian(byteSpan),
                 BinaryPrimitives.ReadInt32LittleEndian(byteSpan.Slice(sizeof(int))),
