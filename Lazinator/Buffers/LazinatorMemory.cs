@@ -89,7 +89,7 @@ namespace Lazinator.Buffers
         public LazinatorMemory(MemoryChunk memoryChunk, IEnumerable<MemoryChunk> moreMemoryChunks, int startIndex, int startPosition, long length) : this(memoryChunk, startPosition, length)
         {
             MoreMemoryChunks = new MemoryChunkCollection();
-            MoreMemoryChunks.SetContents(MoreMemoryChunks);
+            MoreMemoryChunks.SetContents(moreMemoryChunks);
             StartIndex = startIndex;
         }
 
@@ -125,7 +125,7 @@ namespace Lazinator.Buffers
 
             if (SpansLastChunk)
             {
-                var evenMoreOwnedMemory = MoreMemoryChunks?.WithAppendedMemoryChunk(chunk) ?? new MemoryChunkCollection(new List<MemoryChunk>());
+                var evenMoreOwnedMemory = MoreMemoryChunks?.WithAppendedMemoryChunk(chunk) ?? new MemoryChunkCollection(new List<MemoryChunk>() { chunk });
                 return new LazinatorMemory(InitialMemoryChunk.WithPreTruncationLengthIncreasedIfNecessary(chunk), evenMoreOwnedMemory, StartIndex, Offset, Length + chunk.Reference.FinalLength);
             }
 
