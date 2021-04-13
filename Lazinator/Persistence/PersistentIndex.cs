@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Lazinator.Buffers;
+using System.Diagnostics;
 
 namespace Lazinator.Persistence
 {
@@ -145,11 +146,21 @@ namespace Lazinator.Persistence
             MemoryChunkStatus = updated;
         }
 
+        static int DEBUGCount = 0;
         public LazinatorMemory GetLazinatorMemory()
         {
             var memoryChunks = GetMemoryChunks();
             LazinatorMemory lazinatorMemory = new LazinatorMemory(memoryChunks.First(), memoryChunks.Skip(1).ToList(), 0, 0, memoryChunks.Sum(x => x.Reference.FinalLength));
+            if (DEBUGCount == 2)
+            {
+                var DEBUG234 = 0;
+            }
             lazinatorMemory.LoadInitialMemory();
+            lazinatorMemory.LoadAllMemory(); // DEBUG -- must delete
+            foreach (var memoryChunk in memoryChunks)
+                Debug.WriteLine("Y" + String.Join(",", memoryChunk.Memory.ToArray()));
+            var DEBUG = $"X{DEBUGCount++}:" + String.Join(",", lazinatorMemory.EnumerateBytes());
+            Debug.WriteLine(DEBUG);
             return lazinatorMemory;
         }
 

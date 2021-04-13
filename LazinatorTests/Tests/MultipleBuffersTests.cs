@@ -217,22 +217,36 @@ namespace LazinatorTests.Tests
         [ClassData(typeof(BoolPermutations_3))]
         public void BinaryTreeTest_ReloadingFromBlobs(bool useFile, bool containedInSingleBlob, bool recreateIndex)
         {
+            int round = 0;
             IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobManager();
-            MultipleRoundsOfRandomChanges(10, 10, 10, () =>
+            MultipleRoundsOfRandomChanges(3, 3, 1, () => // DEBUG 10, 10, 10
             {
                 LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 5));
+
+                var DEBUG = String.Join(",", multipleBufferResult.EnumerateBytes());
+                Debug.WriteLine(DEBUG);
 
                 // Write to one or more blobs
                 string fullPath = GetPathForIndexAndBlobs(useFile, true);
                 if (fullPath == null)
                     return;
-                PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob);
+                PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob); 
+                if (round == 2)
+                {
+                    var DEBUG2 = 0;
+                }
                 index.PersistLazinatorMemory(multipleBufferResult);
+
+                
 
                 if (recreateIndex)
                     index = PersistentIndex.ReadFromBlob(blobManager, fullPath, null, index.IndexVersion);
                 var revisedMemory = index.GetLazinatorMemory();
+
+                DEBUG = String.Join(",", revisedMemory.EnumerateBytes());
+                Debug.WriteLine(DEBUG);
                 BinaryTree = new LazinatorBinaryTree<WDouble>(revisedMemory);
+                round++;
             });
         }
 

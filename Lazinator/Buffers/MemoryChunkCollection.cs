@@ -17,6 +17,7 @@ namespace Lazinator.Buffers
         public MemoryChunkCollection(List<MemoryChunk> memoryChunks)
         {
             MemoryChunks = memoryChunks;
+            MaxMemoryChunkID = MemoryChunks.Any() ? MemoryChunks.Max(x => x.MemoryChunkID) : 0;
         }
 
         List<MemoryChunk> MemoryChunks = new List<MemoryChunk>();
