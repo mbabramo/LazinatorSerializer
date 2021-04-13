@@ -80,25 +80,14 @@ namespace Lazinator.Buffers
                 Length = length;
         }
 
-        static int DEBUGC = 0;
         public LazinatorMemory(MemoryChunk memoryChunk, IMemoryChunkCollection moreMemoryChunks, int startIndex, int startPosition, long length) : this(memoryChunk, startPosition, length)
         {
-            DEBUGC++;
-            if (DEBUGC == 15)
-            {
-                var DEBUGD = 0;
-            }
             MoreMemoryChunks = moreMemoryChunks;
             StartIndex = startIndex;
         }
 
         public LazinatorMemory(MemoryChunk memoryChunk, IEnumerable<MemoryChunk> moreMemoryChunks, int startIndex, int startPosition, long length) : this(memoryChunk, startPosition, length)
         {
-            DEBUGC++;
-            if (DEBUGC == 15)
-            {
-                var DEBUGD = 0;
-            }
             MoreMemoryChunks = new MemoryChunkCollection();
             MoreMemoryChunks.SetContents(moreMemoryChunks);
             StartIndex = startIndex;
@@ -130,13 +119,6 @@ namespace Lazinator.Buffers
         /// <param name="chunk"></param>
         /// <returns></returns>
         public LazinatorMemory WithAppendedChunk(MemoryChunk chunk)
-        {
-            var result = WithAppendedChunkDEBUG(chunk);
-            var DEBUG = String.Join(",", result.EnumerateBytes());
-            Debug.WriteLine(DEBUG);
-            return result;
-        }
-        public LazinatorMemory WithAppendedChunkDEBUG(MemoryChunk chunk)
         {
             if (IsEmpty)
                 return new LazinatorMemory(chunk);
