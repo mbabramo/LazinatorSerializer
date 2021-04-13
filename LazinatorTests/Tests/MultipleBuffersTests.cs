@@ -481,11 +481,12 @@ namespace LazinatorTests.Tests
             List<PersistentIndex> indices = new List<PersistentIndex>();
             IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobManager();
             int round = 0;
-            MultipleRoundsOfRandomChanges(10, 10, 3, () => 
+            int numRounds = 10;
+            MultipleRoundsOfRandomChanges(numRounds, 10, 3, () =>
             {
                 //Debug.WriteLine($"Round {round}");
 
-                LazinatorSerializationOptions options = neverIncludeReferenceToPreviousBuffer ?  new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, int.MaxValue, int.MaxValue) : new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20, 5);
+                LazinatorSerializationOptions options = neverIncludeReferenceToPreviousBuffer ? new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, int.MaxValue, int.MaxValue) : new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20, 5);
                 LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(options);
 
                 // Write to one or more blobs
@@ -503,7 +504,10 @@ namespace LazinatorTests.Tests
                 {
                     var consolidatedMemory = revisedMemory.GetConsolidatedMemory();
                     revisedMemory = new LazinatorMemory(consolidatedMemory);
-                    indices.RemoveAt(0); // with consolidated memory, we're not using diff serialization
+                    if (round != numRounds - 1)
+                    {
+                        indices.RemoveAt(0); // with consolidated memory, we're not using diff serialization
+                    }
                 }
 
                 //Debug.WriteLine(revisedMemory.ToStringByChunk());
@@ -512,6 +516,27 @@ namespace LazinatorTests.Tests
                 BinaryTree = new LazinatorBinaryTree<WDouble>(revisedMemory);
                 round++;
             });
+            DeleteChunksAndIndex(useConsolidatedMemory, indices, blobManager);
+        }
+
+        private static void DeleteChunksAndIndex(bool useConsolidatedMemory, List<PersistentIndex> indices, IBlobManager blobManager)
+        {
+            for (int i = 0; i < indices.Count(); i++)
+            {
+                var indexToDelete = indices[i];
+                indexToDelete.Delete(PersistentIndexMemoryChunkStatus.NewlyOmitted, true);
+                if (i == indices.Count() - 1)
+                {
+                    indexToDelete.Delete(PersistentIndexMemoryChunkStatus.PreviouslyIncluded, true);
+                    indexToDelete.Delete(PersistentIndexMemoryChunkStatus.NewlyIncluded, true);
+                }
+                indexToDelete.DeleteIndex();
+            }
+            if (blobManager is InMemoryBlobManager inMemoryBlobManager && !useConsolidatedMemory) // if using consolidated memory, the memory chunks from the previous version will not be in the next, so we won't be deleting everything.
+            {
+                if (inMemoryBlobManager.Storage.Any())
+                    throw new Exception("Blob storage should be empty.");
+            }
         }
 
         [Theory]
@@ -521,7 +546,8 @@ namespace LazinatorTests.Tests
             List<PersistentIndex> indices = new List<PersistentIndex>();
             IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobManager();
             int round = 0;
-            await MultipleRoundsOfRandomChangesAsync(10, 10, 3, async () => 
+            int numRounds = 10;
+            await MultipleRoundsOfRandomChangesAsync(numRounds, 10, 3, async () => 
             {
                 //Debug.WriteLine($"Round {round}");
 
@@ -543,7 +569,10 @@ namespace LazinatorTests.Tests
                 {
                     var consolidatedMemory = await revisedMemory.GetConsolidatedMemoryAsync();
                     revisedMemory = new LazinatorMemory(consolidatedMemory);
-                    indices.RemoveAt(0); // with consolidated memory, we're not using diff serialization
+                    if (round != numRounds - 1)
+                    {
+                        indices.RemoveAt(0); // with consolidated memory, we're not using diff serialization
+                    }
                 }
 
                 //Debug.WriteLine(revisedMemory.ToStringByChunk());
@@ -552,10 +581,10 @@ namespace LazinatorTests.Tests
                 BinaryTree = new LazinatorBinaryTree<WDouble>(revisedMemory);
                 round++;
             });
+            DeleteChunksAndIndex(useConsolidatedMemory, indices, blobManager); // note that there is no DeleteAsync, so we use the same methods here
         }
 
         // DEBUG -- we also need to have an index updated over multiple rounds and try at different times.
-        // DEBUG -- we need to test progressive deleting. 
         // DEBUG -- we need to test forking.
         // DEBUG -- we need to test defragmenting
 

@@ -182,6 +182,7 @@ namespace Lazinator.Persistence
         {
             foreach (string path in GetPathsOfMemoryChunksToDelete(statusToDelete, includeChunksFromEarlierForks))
             {
+                Debug.WriteLine($"Deleting {path}"); // DEBUG
                 BlobManager.Delete(path);
             }
         }
