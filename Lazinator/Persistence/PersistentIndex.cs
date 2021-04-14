@@ -16,7 +16,7 @@ namespace Lazinator.Persistence
 
         IBlobManager BlobManager;
 
-        private PersistentIndex PreviousPersistentIndex = null;
+        public PersistentIndex PreviousPersistentIndex = null;
 
         /// <summary>
         /// Prepares for index file to be created, not based on any previous index
@@ -35,7 +35,7 @@ namespace Lazinator.Persistence
         /// Prepares for new version of index file to be created, based on previous version of the index
         /// </summary>
         /// <param name="previousPersistentIndex"></param>
-        public PersistentIndex(PersistentIndex previousPersistentIndex)
+        public PersistentIndex(PersistentIndex previousPersistentIndex, int? additionalFork = null)
         {
             PreviousPersistentIndex = previousPersistentIndex;
             BaseBlobPath = previousPersistentIndex.BaseBlobPath;
@@ -44,6 +44,11 @@ namespace Lazinator.Persistence
             IsPersisted = false;
             IndexVersion = previousPersistentIndex.IndexVersion + 1;
             InitializeMemoryChunkStatusFromPrevious();
+            if (additionalFork is int forkToAdd)
+            {
+                ForkInformation = previousPersistentIndex.ForkInformation?.ToList() ?? new List<(int lastMemoryChunkBeforeFork, int forkNumber)>();
+                ForkInformation.Add((PreviousPersistentIndex.GetLastMemoryChunkID(), forkToAdd));
+            }
         }
 
         public static PersistentIndex ReadFromBlob(IBlobManager blobManager, string baseBlobPath, IEnumerable<int> forkInformation, int versionNumber)
@@ -146,6 +151,14 @@ namespace Lazinator.Persistence
             MemoryChunkStatus = updated;
         }
 
+        public int GetLastMemoryChunkID()
+        {
+            int memoryChunkID = MemoryChunkStatus.Length;
+            while (GetMemoryChunkStatus(memoryChunkID) == PersistentIndexMemoryChunkStatus.NotYetUsed)
+                memoryChunkID--;
+            return memoryChunkID;
+        }
+
         public LazinatorMemory GetLazinatorMemory()
         {
             var memoryChunks = GetMemoryChunks();
@@ -182,7 +195,6 @@ namespace Lazinator.Persistence
         {
             foreach (string path in GetPathsOfMemoryChunksToDelete(statusToDelete, includeChunksFromEarlierForks))
             {
-                Debug.WriteLine($"Deleting {path}"); // DEBUG
                 BlobManager.Delete(path);
             }
         }

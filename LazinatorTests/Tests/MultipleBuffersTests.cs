@@ -19,6 +19,7 @@ using LazinatorCollections.Tree;
 using LazinatorTests.Utilities;
 using System.Buffers;
 using Lazinator.Persistence;
+using LazinatorCollections;
 
 namespace LazinatorTests.Tests
 {
@@ -584,8 +585,160 @@ namespace LazinatorTests.Tests
             DeleteChunksAndIndex(useConsolidatedMemory, indices, blobManager); // note that there is no DeleteAsync, so we use the same methods here
         }
 
-        // DEBUG -- we also need to have an index updated over multiple rounds and try at different times.
-        // DEBUG -- we need to test forking.
+        [Fact]
+        public void PersistentIndexVersionsWorkSimultaneously()
+        {
+            IBlobManager blobManager = new InMemoryBlobManager();
+            LazinatorSerializationOptions options = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20, 5);
+            BinaryTree = new LazinatorBinaryTree<WDouble>();
+            BinaryTree.Add(1.0);
+            BinaryTree.Add(2.0);
+            LazinatorMemory serialized0 = BinaryTree.SerializeLazinator(options);
+            PersistentIndex index0 = new PersistentIndex("simultest", blobManager, false);
+            index0.PersistLazinatorMemory(serialized0);
+
+            var loadedFrom0 = index0.GetLazinatorMemory();
+            BinaryTree = new LazinatorBinaryTree<WDouble>(loadedFrom0);
+            BinaryTree.Add(3.0);
+            LazinatorMemory serialized1 = BinaryTree.SerializeLazinator(options);
+            PersistentIndex index1 = new PersistentIndex(index0);
+            index1.PersistLazinatorMemory(serialized1);
+
+            // reload both indices
+            index0 = PersistentIndex.ReadFromBlob(blobManager, "simultest", null, 0);
+            index1 = PersistentIndex.ReadFromBlob(blobManager, "simultest", null, 1);
+            var tree0Reloaded = new LazinatorBinaryTree<WDouble>(index0.GetLazinatorMemory());
+            var tree1Reloaded = new LazinatorBinaryTree<WDouble>(index1.GetLazinatorMemory());
+            tree0Reloaded.Count().Should().Be(2);
+            tree1Reloaded.Count().Should().Be(3);
+        }
+
+        internal class ForkPlan : List<ForkPlan>
+        {
+            public List<int> ForkNumbers;
+            public List<double> DataToAdd;
+            public ForkPlan Parent;
+
+            public ForkPlan(ForkPlan parent, List<int> forkNumbers, List<double> dataToAdd)
+            {
+                this.ForkNumbers = forkNumbers;
+                this.DataToAdd = dataToAdd;
+                this.Parent = parent;
+            }
+
+            public List<double> OverallData()
+            {
+                List<double> overall = new List<double>();
+                if (Parent != null)
+                    overall.AddRange(Parent.OverallData());
+                overall.AddRange(DataToAdd);
+                return overall;
+            }
+
+        }
+
+        [Fact]
+        public void PersistentIndexForking()
+        {
+            InMemoryBlobManager blobManager = new InMemoryBlobManager();
+            LazinatorSerializationOptions options = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20, 5);
+
+            // let's make a plan of what data should be added to a list of doubles at each point of our persistent index fork
+            ForkPlan root = new ForkPlan(null, null, new List<double> { 1.0, 2.0 });
+            ForkPlan child1 = new ForkPlan(root, new List<int> { 1 }, new List<double>() { 3.0 });
+            ForkPlan child2 = new ForkPlan(root, new List<int> { 2 }, new List<double>() { 4.0, 5.0 });
+            ForkPlan child3 = new ForkPlan(root, new List<int> { 3 }, new List<double>() { 6.0, 7.0 });
+            ForkPlan child2_1 = new ForkPlan(child2, new List<int> { 2, 1 }, new List<double>() { 8.0, 9.0 });
+            ForkPlan child2_2 = new ForkPlan(child2, new List<int> { 2, 2 }, new List<double>() { 8.0, 9.0, 10.0 });
+            ForkPlan child2_2_1 = new ForkPlan(child2_2, new List<int> { 2, 2, 1 }, new List<double>() { 11.0 });
+
+
+            void PersistAccordingToPlan(PersistentIndex index, ForkPlan plan)
+            {
+                if (index.PreviousPersistentIndex == null)
+                {
+                    BinaryTree = new LazinatorBinaryTree<WDouble>();
+                }
+                else
+                {
+                    var loadedFromPrevious = index.PreviousPersistentIndex.GetLazinatorMemory();
+                    BinaryTree = new LazinatorBinaryTree<WDouble>(loadedFromPrevious);
+                }
+                foreach (var item in plan.DataToAdd)
+                    BinaryTree.Add(item);
+                LazinatorMemory serialized = BinaryTree.SerializeLazinator(options);
+                var DEBUG = new LazinatorBinaryTree<WDouble>(serialized);
+                index.PersistLazinatorMemory(serialized);
+            }
+
+            PersistentIndex index_root = new PersistentIndex("forktest", blobManager, false);
+            PersistAccordingToPlan(index_root, root);
+            PersistentIndex index_child1 = new PersistentIndex(index_root, 1);
+            PersistAccordingToPlan(index_child1, child1);
+            PersistentIndex index_child2 = new PersistentIndex(index_root, 2);
+            PersistAccordingToPlan(index_child2, child2);
+            PersistentIndex index_child3 = new PersistentIndex(index_root, 3);
+            PersistAccordingToPlan(index_child3, child3);
+            PersistentIndex index_child2_1 = new PersistentIndex(index_child2, 1);
+            PersistAccordingToPlan(index_child2_1, child2_1);
+            PersistentIndex index_child2_2 = new PersistentIndex(index_child2, 2);
+            PersistAccordingToPlan(index_child2_2, child2_2);
+            PersistentIndex index_child2_2_1 = new PersistentIndex(index_child2_2, 1);
+            PersistAccordingToPlan(index_child2_2_1, child2_2_1);
+
+            void VerifyProperPersistence(PersistentIndex index, ForkPlan plan)
+            {
+                var loaded = index.GetLazinatorMemory();
+                BinaryTree = new LazinatorBinaryTree<WDouble>(loaded);
+                var treeContents = BinaryTree.Select(x => (double)x).ToList();
+                var expectedContents = plan.OverallData().ToList();
+                treeContents.SequenceEqual(expectedContents).Should().BeTrue();
+            }
+
+            // verify contents
+            VerifyProperPersistence(index_root, root);
+            VerifyProperPersistence(index_child1, child1);
+            VerifyProperPersistence(index_child2, child2);
+            VerifyProperPersistence(index_child3, child3);
+            VerifyProperPersistence(index_child2_1, child2_1);
+            VerifyProperPersistence(index_child2_2, child2_2);
+            VerifyProperPersistence(index_child2_2_1, child2_2_1);
+
+            // now verify contents after progressive deletion. When an index has forks from it, we will only delete things that we know are safe to delete.
+            // This illustrates the proper approach. When we are done with a version from which there are forks, we can delete newly omitted memory chunks (not relevant for root), plus the index itself. When we are done with a version that has no forks, but is itself forked from something else, we can delete previously included, newly omitted, and newly included, but not before the last fork. If it's the last one, though, we make it so that all previously included chunks are deleted, including those preceding the last fork.
+
+            index_root.DeleteIndex();
+            VerifyProperPersistence(index_child1, child1);
+            index_child1.Delete(PersistentIndexMemoryChunkStatus.PreviouslyIncluded, false);
+            index_child1.Delete(PersistentIndexMemoryChunkStatus.NewlyOmitted, false);
+            index_child1.Delete(PersistentIndexMemoryChunkStatus.NewlyIncluded, false);
+            index_child1.DeleteIndex();
+            VerifyProperPersistence(index_child2, child2);
+            index_child2.Delete(PersistentIndexMemoryChunkStatus.NewlyOmitted, true); // only newly omitted, because there are forks
+            index_child2.DeleteIndex();
+            VerifyProperPersistence(index_child3, child3);
+            index_child3.Delete(PersistentIndexMemoryChunkStatus.PreviouslyIncluded, false);
+            index_child3.Delete(PersistentIndexMemoryChunkStatus.NewlyOmitted, false);
+            index_child3.Delete(PersistentIndexMemoryChunkStatus.NewlyIncluded, false);
+            index_child3.DeleteIndex();
+            VerifyProperPersistence(index_child2_1, child2_1);
+            index_child2_1.Delete(PersistentIndexMemoryChunkStatus.PreviouslyIncluded, false);
+            index_child2_1.Delete(PersistentIndexMemoryChunkStatus.NewlyOmitted, false);
+            index_child2_1.Delete(PersistentIndexMemoryChunkStatus.NewlyIncluded, false);
+            index_child2_1.DeleteIndex();
+            VerifyProperPersistence(index_child2_2, child2_2);
+            index_child2_2.Delete(PersistentIndexMemoryChunkStatus.NewlyOmitted, true); // only newly omitted, because there are forks
+            index_child2_2.DeleteIndex();
+            VerifyProperPersistence(index_child2_2_1, child2_2_1);
+            index_child2_2_1.Delete(PersistentIndexMemoryChunkStatus.PreviouslyIncluded, true);
+            index_child2_2_1.Delete(PersistentIndexMemoryChunkStatus.NewlyOmitted, false);
+            index_child2_2_1.Delete(PersistentIndexMemoryChunkStatus.NewlyIncluded, false);
+            index_child2_2_1.DeleteIndex();
+
+            blobManager.Storage.Any().Should().BeFalse();
+
+        }
+
         // DEBUG -- we need to test defragmenting
 
         private static string GetPathForIndexAndBlobs(bool useFile, bool binaryTree)
