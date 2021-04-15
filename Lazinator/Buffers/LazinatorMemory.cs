@@ -154,7 +154,7 @@ namespace Lazinator.Buffers
                 additionalMemoryChunks.Add(GetMemoryChunkFromMemoryChunkIndexReference(indexReference).WithPreTruncationLengthIncreasedIfNecessary(chunkBeingAdded));
         }
 
-        public bool Disposed => EnumerateReferencedMemoryOwners().Any(x => x != null && (x is ExpandableBytes e && e.Disposed) || (x is SimpleMemoryOwner<byte> s && s.Disposed));
+        public bool Disposed => EnumerateReferencedMemoryOwners(true).Any(x => x != null && (x is ExpandableBytes e && e.Disposed) || (x is SimpleMemoryOwner<byte> s && s.Disposed));
 
         #endregion
 
@@ -738,29 +738,54 @@ namespace Lazinator.Buffers
         /// Enumerates each of the memory owners, whether included within the referenced range or not.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<MemoryChunk> EnumerateMemoryChunks()
+        public IEnumerable<MemoryChunk> EnumerateMemoryChunks(bool includeOutsideOfRange = false)
         {
-            if (InitialMemoryChunk != null)
-                yield return InitialMemoryChunk;
-            if (MoreMemoryChunks != null)
-                foreach (var additional in MoreMemoryChunks)
-                    yield return additional;
+            if (includeOutsideOfRange)
+            {
+                if (InitialMemoryChunk != null)
+                    yield return InitialMemoryChunk;
+                if (MoreMemoryChunks != null)
+                    foreach (var additional in MoreMemoryChunks)
+                        yield return additional;
+            }
+            else
+            {
+                int index = 0;
+                long bytesRemaining = Length;
+                foreach (var memoryChunk in EnumerateMemoryChunks(true))
+                {
+                    if (index == StartIndex)
+                    {
+                        int lengthToInclude = (int)Math.Min(memoryChunk.Length - Offset, bytesRemaining);
+                        var toInclude = memoryChunk.Slice(Offset, lengthToInclude);
+                        bytesRemaining -= lengthToInclude;
+                        yield return toInclude;
+                    }
+                    else if (index > StartIndex && bytesRemaining > 0)
+                    {
+                        int lengthToInclude = (int)Math.Min(memoryChunk.Length, bytesRemaining);
+                        var toInclude = memoryChunk.Slice(Offset, lengthToInclude);
+                        bytesRemaining -= lengthToInclude;
+                        yield return toInclude;
+                    }
+                }
+            }
         }
 
         /// <summary>
         /// Enumerates the referenced memory owners (including portions of referenced memory chunks not referenced).
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<IMemoryOwner<byte>> EnumerateReferencedMemoryOwners()
+        private IEnumerable<IMemoryOwner<byte>> EnumerateReferencedMemoryOwners(bool includeOutsideOfRange = false)
         {
-            foreach (var memoryChunk in EnumerateMemoryChunks())
+            foreach (var memoryChunk in EnumerateMemoryChunks(false))
                 yield return memoryChunk.MemoryAsLoaded;
         }
 
         public Dictionary<int, MemoryChunk> GetMemoryChunksByID()
         {
             Dictionary<int, MemoryChunk> d = new Dictionary<int, MemoryChunk>();
-            foreach (MemoryChunk memoryChunk in EnumerateMemoryChunks())
+            foreach (MemoryChunk memoryChunk in EnumerateMemoryChunks(true))
             {
                 int chunkID = memoryChunk.Reference.MemoryChunkID;
                 if (!d.ContainsKey(chunkID))
@@ -773,7 +798,7 @@ namespace Lazinator.Buffers
         {
             List<MemoryChunk> memoryChunks = new List<MemoryChunk>();
             HashSet<int> ids = new HashSet<int>();
-            foreach (MemoryChunk memoryChunk in EnumerateMemoryChunks())
+            foreach (MemoryChunk memoryChunk in EnumerateMemoryChunks(true))
             {
                 if (memoryChunk.IsPersisted)
                     continue;
@@ -917,7 +942,7 @@ namespace Lazinator.Buffers
 
         public string ToStringByChunk()
         {
-            var chunks = EnumerateMemoryChunks().ToList();
+            var chunks = EnumerateMemoryChunks(true).ToList();
             StringBuilder sb = new StringBuilder();
             foreach (var chunk in chunks)
             {
@@ -931,7 +956,108 @@ namespace Lazinator.Buffers
             return String.Join(",", EnumerateBytes().Select(x => x.ToString().PadLeft(3, '0')));
         }
 
-    }
+        #endregion
 
-     #endregion
+        #region Defragmenting
+
+
+        internal List<(int memoryChunkID, int totalBytesReferenced)> GetTotalBytesReferencedByMemoryChunk(int maxTotalBytesReference = int.MaxValue)
+        {
+            return EnumerateMemoryChunks(false)
+                .Select(x => x.Reference)
+                .GroupBy(x => x.MemoryChunkID)
+                .Select(x => (x.Key, x.Sum(y => y.FinalLength)))
+                .Where(x => x.Item2 <= maxTotalBytesReference)
+                .OrderBy(x => x.Item2)
+                .ToList();
+        }
+
+        public LazinatorMemory WithConsolidatedMemoryRanges(int maxTotalBytesReferenced, int maxBytesPerChunk, int maxNumNewChunks)
+        {
+            List<List<int>> packingPlan = new List<List<int>>(); // lists the set of chunks to be added to new memory chunks. 
+            Dictionary<int, int> memoryChunkIDMap = new Dictionary<int, int>();
+            Dictionary<int, int> totalBytesInTargetMemoryChunkID = new Dictionary<int, int>();
+            var candidateChunks = GetTotalBytesReferencedByMemoryChunk(maxTotalBytesReferenced);
+            int firstPlannedMemoryChunkID = GetNextMemoryChunkID();
+            int currentPlannedMemoryChunkID = firstPlannedMemoryChunkID;
+            int bytesInCurrentChunk = 0;
+            packingPlan.Add(new List<int>());
+            int numChunksAdded = 0;
+            foreach (var candidateChunk in candidateChunks)
+            {
+                // See if the candidate chunk can fit in the current chunk. If not, move to the next chunk, or return if max new chunks is hit.
+                int bytesRemainingInCurrentChunk = maxBytesPerChunk - bytesInCurrentChunk;
+                if (candidateChunk.totalBytesReferenced > bytesRemainingInCurrentChunk)
+                {
+                    if (numChunksAdded == maxNumNewChunks)
+                        break;
+                    packingPlan.Add(new List<int>());
+                    bytesInCurrentChunk = 0;
+                    currentPlannedMemoryChunkID++;
+                    numChunksAdded++;
+                }
+                // Plan to add the candidate chunk.
+                packingPlan.Last().Add(candidateChunk.memoryChunkID);
+                bytesInCurrentChunk += candidateChunk.totalBytesReferenced;
+                int targetChunkID = firstPlannedMemoryChunkID + numChunksAdded;
+                memoryChunkIDMap[candidateChunk.memoryChunkID] = targetChunkID;
+                totalBytesInTargetMemoryChunkID[targetChunkID] = bytesInCurrentChunk;
+            }
+
+            if (!packingPlan.Any() || (packingPlan.Count() == 1 && packingPlan[0].Count() == 1 && packingPlan[0][0] == InitialMemoryChunk.MemoryChunkID))
+                return this; // avoid repacking the initial memory chunk without anything else, since that accomplishes nothing.
+
+            Dictionary<int, int> memoryChunkIDsToPack = new Dictionary<int, int>();
+            for (int i = 0; i < packingPlan.Count; i++)
+            {
+                int targetChunkID = firstPlannedMemoryChunkID + i;
+                List<int> existingChunks = packingPlan[i];
+                foreach (var existingChunk in existingChunks)
+                    memoryChunkIDMap[existingChunk] = targetChunkID;
+            }
+
+            List<MemoryChunk> sourceMemoryChunksToInclude = new List<MemoryChunk>();
+            List<MemoryChunk> targetMemoryChunksToInclude = new List<MemoryChunk>();
+            Dictionary<int, MemoryChunk> memoryChunksIncludedByID = new Dictionary<int, MemoryChunk>();
+            Dictionary<int, int> bytesSoFarInTargetMemoryChunkID = new Dictionary<int, int>();
+            foreach (var sourceMemoryChunk in EnumerateMemoryChunks(false))
+            {
+                if (memoryChunkIDMap.ContainsKey(sourceMemoryChunk.MemoryChunkID))
+                {
+                    int targetMemoryChunkID = memoryChunkIDMap[sourceMemoryChunk.MemoryChunkID];
+                    int totalBytesInTarget = totalBytesInTargetMemoryChunkID[targetMemoryChunkID];
+                    int bytesInTargetSoFar = bytesSoFarInTargetMemoryChunkID.GetValueOrDefault(targetMemoryChunkID, 0);
+                    int bytesToCopyToTarget = sourceMemoryChunk.Reference.FinalLength;
+                    MemoryChunkReference reference = new MemoryChunkReference(targetMemoryChunkID, 0, totalBytesInTarget, bytesInTargetSoFar, bytesToCopyToTarget);
+                    MemoryChunk chunk;
+                    if (!memoryChunksIncludedByID.ContainsKey(targetMemoryChunkID))
+                    {
+                        chunk = memoryChunksIncludedByID[targetMemoryChunkID] = new MemoryChunk(new SimpleMemoryOwner<byte>(new byte[totalBytesInTarget]));
+                        targetMemoryChunksToInclude.Add(sourceMemoryChunk);
+                    }
+                    else
+                        chunk = memoryChunksIncludedByID[targetMemoryChunkID];
+                    Memory<byte> targetBytes = chunk.Memory.Slice(bytesInTargetSoFar, bytesToCopyToTarget);
+                    sourceMemoryChunk.Memory.CopyTo(targetBytes);
+                    bytesSoFarInTargetMemoryChunkID[targetMemoryChunkID] = bytesInTargetSoFar + bytesToCopyToTarget;
+                }
+                else
+                {
+                    if (!memoryChunksIncludedByID.ContainsKey(sourceMemoryChunk.MemoryChunkID))
+                    {
+                        sourceMemoryChunksToInclude.Add(sourceMemoryChunk);
+                        memoryChunksIncludedByID[sourceMemoryChunk.MemoryChunkID] = sourceMemoryChunk;
+                    }
+                }
+            }
+            List<MemoryChunk> moreMemoryChunks = new List<MemoryChunk>();
+            moreMemoryChunks.AddRange(sourceMemoryChunksToInclude.Skip(1));
+            moreMemoryChunks.AddRange(targetMemoryChunksToInclude);
+            LazinatorMemory replacement = new LazinatorMemory(sourceMemoryChunksToInclude.First(), moreMemoryChunks, 0, 0, Length);
+            return replacement;
+        }
+
+        #endregion
+
+    }
 }

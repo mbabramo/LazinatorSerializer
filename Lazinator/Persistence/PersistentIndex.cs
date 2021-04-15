@@ -223,7 +223,7 @@ namespace Lazinator.Persistence
 
         public void PersistLazinatorMemory(LazinatorMemory lazinatorMemory)
         {
-            var memoryChunks = lazinatorMemory.EnumerateMemoryChunks().ToList();
+            var memoryChunks = lazinatorMemory.EnumerateMemoryChunks(false).ToList();
             var memoryChunksToPersist = lazinatorMemory.GetUnpersistedMemoryChunks();
             MemoryChunkReferences = memoryChunks.Select(x => x.Reference).ToList();
 
@@ -268,7 +268,7 @@ namespace Lazinator.Persistence
 
         public async ValueTask PersistLazinatorMemoryAsync(LazinatorMemory lazinatorMemory)
         {
-            var memoryChunks = lazinatorMemory.EnumerateMemoryChunks().ToList();
+            var memoryChunks = lazinatorMemory.EnumerateMemoryChunks(false).ToList();
             var memoryChunksToPersist = lazinatorMemory.GetUnpersistedMemoryChunks();
             MemoryChunkReferences = memoryChunks.Select(x => x.Reference).ToList();
 

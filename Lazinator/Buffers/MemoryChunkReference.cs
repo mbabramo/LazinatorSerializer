@@ -29,6 +29,18 @@ namespace Lazinator.Buffers
             FinalLength = lengthAsLoaded;
         }
 
+        public override bool Equals(object obj)
+        {
+            if (obj is not MemoryChunkReference other)
+                return false;
+            return MemoryChunkID == other.MemoryChunkID && OffsetForLoading == other.OffsetForLoading && PreTruncationLength == other.PreTruncationLength && AdditionalOffset == other.AdditionalOffset && FinalLength == other.FinalLength;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(MemoryChunkID, OffsetForLoading, PreTruncationLength, AdditionalOffset, FinalLength);
+        }
+
         public override string ToString()
         {
             return $"MemoryChunkID: {MemoryChunkID}; OffsetForLoading: {OffsetForLoading}; LengthAsLoaded: {PreTruncationLength}; AdditionalOffset: {AdditionalOffset}; FinalLength {FinalLength}";

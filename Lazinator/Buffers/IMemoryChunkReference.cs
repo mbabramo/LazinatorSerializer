@@ -3,6 +3,7 @@
 namespace Lazinator.Buffers
 {
     [Lazinator((int)LazinatorCoreUniqueIDs.IMemoryChunkReference)]
+    [NonbinaryHash]
     public interface IMemoryChunkReference
     {
         int MemoryChunkID { get; set; }
