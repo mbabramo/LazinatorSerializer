@@ -9,6 +9,9 @@ namespace Lazinator.Buffers
 {
     public class MemoryChunkCollection : IMemoryChunkCollection
     {
+
+        List<MemoryChunk> MemoryChunks = new List<MemoryChunk>();
+
         public MemoryChunkCollection()
         {
 
@@ -20,7 +23,6 @@ namespace Lazinator.Buffers
             MaxMemoryChunkID = MemoryChunks.Any() ? MemoryChunks.Max(x => x.MemoryChunkID) : 0;
         }
 
-        List<MemoryChunk> MemoryChunks = new List<MemoryChunk>();
         public MemoryChunkCollection DeepCopy()
         {
             var collection = new MemoryChunkCollection();

@@ -961,7 +961,7 @@ namespace Lazinator.Buffers
         #region Defragmenting
 
 
-        internal List<(int memoryChunkID, int totalBytesReferenced)> GetTotalBytesReferencedByMemoryChunk(int maxTotalBytesReference = int.MaxValue)
+        internal List<(int memoryChunkID, int totalBytesReferenced)> GetMemoryChunksByUsedSize(int maxTotalBytesReference = int.MaxValue)
         {
             return EnumerateMemoryChunks(false)
                 .Select(x => x.Reference)
@@ -972,26 +972,35 @@ namespace Lazinator.Buffers
                 .ToList();
         }
 
-        public LazinatorMemory WithConsolidatedMemoryRanges(int maxTotalBytesReferenced, int maxBytesPerChunk, int maxNumNewChunks)
+        public LazinatorMemory WithConsolidatedMemoryRanges(int maxUsedSizeOldChunk, int maxSizePerNewChunk, int maxNumNewChunks)
         {
             List<List<int>> packingPlan = new List<List<int>>(); // lists the set of chunks to be added to new memory chunks. 
-            Dictionary<int, int> memoryChunkIDMap = new Dictionary<int, int>();
-            Dictionary<int, int> totalBytesInTargetMemoryChunkID = new Dictionary<int, int>();
-            var candidateChunks = GetTotalBytesReferencedByMemoryChunk(maxTotalBytesReferenced);
+            Dictionary<int, int> memoryChunkIDMap = new Dictionary<int, int>(); // maps the source memory chunk ID to a new target memory chunk ID
+            Dictionary<int, int> totalBytesInTargetMemoryChunkID = new Dictionary<int, int>(); // tracks the total bytes in each target memory chunk ID
+            var candidateChunks = GetMemoryChunksByUsedSize(maxUsedSizeOldChunk); // chunks where there are sufficiently few bytes referenced so that we might be able to combine them
             int firstPlannedMemoryChunkID = GetNextMemoryChunkID();
             int currentPlannedMemoryChunkID = firstPlannedMemoryChunkID;
             int bytesInCurrentChunk = 0;
             packingPlan.Add(new List<int>());
-            int numChunksAdded = 0;
+            int numChunksAdded = 1;
             foreach (var candidateChunk in candidateChunks)
             {
                 // See if the candidate chunk can fit in the current chunk. If not, move to the next chunk, or return if max new chunks is hit.
-                int bytesRemainingInCurrentChunk = maxBytesPerChunk - bytesInCurrentChunk;
+                int bytesRemainingInCurrentChunk = maxSizePerNewChunk - bytesInCurrentChunk;
                 if (candidateChunk.totalBytesReferenced > bytesRemainingInCurrentChunk)
-                {
-                    if (numChunksAdded == maxNumNewChunks)
-                        break;
-                    packingPlan.Add(new List<int>());
+                { // too big
+                    bool chunkIsEmpty = bytesRemainingInCurrentChunk == maxSizePerNewChunk;
+                    if (numChunksAdded == maxNumNewChunks || chunkIsEmpty)
+                    {
+                        if (chunkIsEmpty)
+                        {
+                            numChunksAdded--;
+                            packingPlan.RemoveAt(packingPlan.Count - 1);
+                        }
+                        break; // can't add anything else
+                    }
+                    // prepare for next chunk
+                    packingPlan.Add(new List<int>()); 
                     bytesInCurrentChunk = 0;
                     currentPlannedMemoryChunkID++;
                     numChunksAdded++;
