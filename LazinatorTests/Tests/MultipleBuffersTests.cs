@@ -47,22 +47,22 @@ namespace LazinatorTests.Tests
         }
 
         [Theory]
-        [ClassData(typeof(BoolPermutations_4))]
-        public async Task SplittableEntitiesSaveToBlobs(bool containedInSingleBlob, bool useFile, bool async, bool recreateBlobMemoryReference)
+        [ClassData(typeof(BoolPermutations_5))]
+        public async Task SplittableEntitiesSaveToBlobs(bool containedInSingleBlob, bool useFile, bool async, bool recreateBlobMemoryReference, bool poolMemory)
         {
             if (async)
-                await SplittableEntitiesSavedHelper_Async(containedInSingleBlob, useFile, recreateBlobMemoryReference);
+                await SplittableEntitiesSavedHelper_Async(containedInSingleBlob, useFile, recreateBlobMemoryReference, poolMemory);
             else
-                SplittableEntitiesSavedHelper(containedInSingleBlob, useFile, recreateBlobMemoryReference);
+                SplittableEntitiesSavedHelper(containedInSingleBlob, useFile, recreateBlobMemoryReference, poolMemory);
         }
 
-        private void SplittableEntitiesSavedHelper(bool containedInSingleBlob, bool useFile, bool recreateIndex)
+        private void SplittableEntitiesSavedHelper(bool containedInSingleBlob, bool useFile, bool recreateIndex, bool poolMemory)
         {
             Example e = GetTypicalExample();
             LazinatorMemory multipleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 10));
 
             // Write to one or more blobs
-            IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobManager();
+            IBlobManager blobManager = GetBlobManager(useFile, poolMemory);
             string fullPath = GetPathForIndexAndBlobs(useFile, false);
             if (fullPath == null)
                 return;
@@ -77,15 +77,17 @@ namespace LazinatorTests.Tests
 
             var e2 = new Example(revisedMemory);
             ExampleEqual(e, e2).Should().BeTrue();
+            if (poolMemory)
+                blobManager.MemoryAllocator.FreeMemory(fullPath);
         }
 
-        private async Task SplittableEntitiesSavedHelper_Async(bool containedInSingleBlob, bool useFile, bool recreateIndex)
+        private async Task SplittableEntitiesSavedHelper_Async(bool containedInSingleBlob, bool useFile, bool recreateIndex, bool poolMemory)
         {
             Example e = GetTypicalExample();
             LazinatorMemory multipleBufferResult = await e.SerializeLazinatorAsync(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 10));
 
             // Write to one or more blobs
-            IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobManager();
+            IBlobManager blobManager = GetBlobManager(useFile, poolMemory);
             string fullPath = GetPathForIndexAndBlobs(useFile, false);
             if (fullPath == null)
                 return;
@@ -100,6 +102,8 @@ namespace LazinatorTests.Tests
 
             Example e2 = new Example(revisedMemory);
             ExampleEqual(e, e2).Should().BeTrue();
+            if (poolMemory)
+                blobManager.MemoryAllocator.FreeMemory(fullPath);
         }
 
         private SortedList<double, string> RegularSortedList;
@@ -215,19 +219,19 @@ namespace LazinatorTests.Tests
         }
 
         [Theory]
-        [ClassData(typeof(BoolPermutations_3))]
-        public void BinaryTreeTest_ReloadingFromBlobs(bool useFile, bool containedInSingleBlob, bool recreateIndex)
+        [ClassData(typeof(BoolPermutations_4))]
+        public void BinaryTreeTest_ReloadingFromBlobs(bool useFile, bool containedInSingleBlob, bool recreateIndex, bool poolMemory)
         {
             int round = 0;
-            IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobManager();
+            IBlobManager blobManager = GetBlobManager(useFile, poolMemory);
+            string fullPath = GetPathForIndexAndBlobs(useFile, true);
+            if (fullPath == null)
+                return;
             MultipleRoundsOfRandomChanges(10, 10, 10, () => 
             {
                 LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 5));
 
                 // Write to one or more blobs
-                string fullPath = GetPathForIndexAndBlobs(useFile, true);
-                if (fullPath == null)
-                    return;
                 PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob); 
                 index.PersistLazinatorMemory(multipleBufferResult);
 
@@ -240,28 +244,23 @@ namespace LazinatorTests.Tests
                 BinaryTree = new LazinatorBinaryTree<WDouble>(revisedMemory);
                 round++;
             });
+            if (poolMemory)
+                blobManager.MemoryAllocator.FreeMemory(fullPath);
         }
 
         [Theory]
-        [InlineData(true, true, true)]
-        [InlineData(true, true, false)]
-        [InlineData(true, false, true)]
-        [InlineData(true, false, false)]
-        [InlineData(false, true, true)]
-        [InlineData(false, true, false)]
-        [InlineData(false, false, true)]
-        [InlineData(false, false, false)]
-        public async Task BinaryTreeTest_ReloadingFromBlobsAsync(bool useFile, bool containedInSingleBlob, bool recreateIndex)
+        [ClassData(typeof(BoolPermutations_4))]
+        public async Task BinaryTreeTest_ReloadingFromBlobsAsync(bool useFile, bool containedInSingleBlob, bool recreateIndex, bool poolMemory)
         {
+            IBlobManager blobManager = GetBlobManager(useFile, poolMemory);
+            string fullPath = GetPathForIndexAndBlobs(useFile, true);
+            if (fullPath == null)
+                return;
             await MultipleRoundsOfRandomChangesAsync(10, 10, 10, async () =>
             {
                 LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 5));
 
                 // Write to one or more blobs
-                IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobManager();
-                string fullPath = GetPathForIndexAndBlobs(useFile, true);
-                if (fullPath == null)
-                    return;
                 PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob);
                 await index.PersistLazinatorMemoryAsync(multipleBufferResult);
 
@@ -270,19 +269,14 @@ namespace LazinatorTests.Tests
                 var revisedMemory = await index.GetLazinatorMemoryAsync();
                 BinaryTree = new LazinatorBinaryTree<WDouble>(revisedMemory);
             });
+            if (poolMemory)
+                blobManager.MemoryAllocator.FreeMemory(fullPath);
         }
 
 
         [Theory]
-        [InlineData(true, true, true)]
-        [InlineData(true, true, false)]
-        [InlineData(true, false, true)]
-        [InlineData(true, false, false)]
-        [InlineData(false, true, true)]
-        [InlineData(false, true, false)]
-        [InlineData(false, false, true)]
-        [InlineData(false, false, false)]
-        public void BinaryTreeTest_DiffSerialization_RewritingAll(bool useFile, bool containedInSingleBlob, bool recreateIndex)
+        [ClassData(typeof(BoolPermutations_4))]
+        public void BinaryTreeTest_DiffSerialization_RewritingAll(bool useFile, bool containedInSingleBlob, bool recreateIndex, bool poolMemory)
         {
             // Here, we test making a change that in fact requires rewriting the entire Lazinator object. The change will be to the 
             // only node's Data, and the node has no Left or Right, so no references to the original data can be made. 
@@ -296,7 +290,7 @@ namespace LazinatorTests.Tests
             LazinatorSerializationOptions options = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20);
             LazinatorMemory afterChange = tree2.SerializeLazinator(options);
 
-            IBlobManager blobManager = useFile ? new FileBlobManager() : new global::LazinatorTests.Utilities.InMemoryBlobManager();
+            IBlobManager blobManager = GetBlobManager(useFile, poolMemory);
             string fullPath = GetPathForIndexAndBlobs(useFile, true);
             PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob);
             index.PersistLazinatorMemory(afterChange);
@@ -309,18 +303,13 @@ namespace LazinatorTests.Tests
 
             var tree4 = new LazinatorBinaryTree<WByte>(afterChange);
             tree4.Root.Data.WrappedValue.Should().Be((byte)2);
+            if (poolMemory)
+                blobManager.MemoryAllocator.FreeMemory(fullPath);
         }
 
         [Theory]
-        [InlineData(true, true, true)]
-        [InlineData(true, true, false)]
-        [InlineData(true, false, true)]
-        [InlineData(true, false, false)]
-        [InlineData(false, true, true)]
-        [InlineData(false, true, false)]
-        [InlineData(false, false, true)]
-        [InlineData(false, false, false)]
-        public async Task BinaryTreeTest_DiffSerialization_RewritingAll_Async(bool useFile, bool containedInSingleBlob, bool recreateIndex)
+        [ClassData(typeof(BoolPermutations_4))]
+        public async Task BinaryTreeTest_DiffSerialization_RewritingAll_Async(bool useFile, bool containedInSingleBlob, bool recreateIndex, bool poolMemory)
         {
             // Here, we test making a change that in fact requires rewriting the entire Lazinator object. The change will be to the 
             // only node's Data, and the node has no Left or Right, so no references to the original data can be made. 
@@ -334,7 +323,7 @@ namespace LazinatorTests.Tests
             LazinatorSerializationOptions options = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20);
             LazinatorMemory afterChange = await tree2.SerializeLazinatorAsync(options);
 
-            IBlobManager blobManager = useFile ? new FileBlobManager() : new global::LazinatorTests.Utilities.InMemoryBlobManager();
+            IBlobManager blobManager = GetBlobManager(useFile, poolMemory);
             string fullPath = GetPathForIndexAndBlobs(useFile, true);
             PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob);
             await index.PersistLazinatorMemoryAsync(afterChange);
@@ -347,6 +336,8 @@ namespace LazinatorTests.Tests
 
             var tree4 = new LazinatorBinaryTree<WByte>(afterChange);
             tree4.Root.Data.WrappedValue.Should().Be((byte)2);
+            if (poolMemory)
+                blobManager.MemoryAllocator.FreeMemory(fullPath);
         }
 
 
@@ -481,6 +472,9 @@ namespace LazinatorTests.Tests
         {
             List<PersistentIndex> indices = new List<PersistentIndex>();
             IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobManager();
+            string fullPath = GetPathForIndexAndBlobs(useFile, true);
+            if (fullPath == null)
+                return;
             int round = 0;
             int numRounds = 10;
             MultipleRoundsOfRandomChanges(numRounds, 10, 3, () =>
@@ -491,9 +485,6 @@ namespace LazinatorTests.Tests
                 LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(options);
 
                 // Write to one or more blobs
-                string fullPath = GetPathForIndexAndBlobs(useFile, true);
-                if (fullPath == null)
-                    return;
                 var index = (useConsolidatedMemory || indices == null || !indices.Any()) ? new PersistentIndex(fullPath, blobManager, containedInSingleBlob) : new PersistentIndex(indices.Last());
                 index.PersistLazinatorMemory(multipleBufferResult);
                 indices.Add(index);
@@ -546,6 +537,9 @@ namespace LazinatorTests.Tests
         {
             List<PersistentIndex> indices = new List<PersistentIndex>();
             IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobManager();
+            string fullPath = GetPathForIndexAndBlobs(useFile, true);
+            if (fullPath == null)
+                return;
             int round = 0;
             int numRounds = 10;
             await MultipleRoundsOfRandomChangesAsync(numRounds, 10, 3, async () => 
@@ -556,9 +550,6 @@ namespace LazinatorTests.Tests
                 LazinatorMemory multipleBufferResult = await BinaryTree.SerializeLazinatorAsync(options);
 
                 // Write to one or more blobs
-                string fullPath = GetPathForIndexAndBlobs(useFile, true);
-                if (fullPath == null)
-                    return;
                 var index = (useConsolidatedMemory || indices == null || !indices.Any()) ? new PersistentIndex(fullPath, blobManager, containedInSingleBlob) : new PersistentIndex(indices.Last());
                 await index.PersistLazinatorMemoryAsync(multipleBufferResult);
                 indices.Add(index);
@@ -748,6 +739,14 @@ namespace LazinatorTests.Tests
                 return null; // ignore this error
             string fullPath = path + (binaryTree ? @"\binary-tree.fil" : @"\example.fil");
             return fullPath;
+        }
+
+        private static IBlobManager GetBlobManager(bool useFile, bool poolMemory)
+        {
+            IBlobManager manager = useFile ? new FileBlobManager() : new InMemoryBlobManager();
+            if (poolMemory)
+                manager.MemoryAllocator = new PooledBlobMemoryAllocator();
+            return manager;
         }
     }
 }

@@ -16,6 +16,8 @@ namespace LazinatorTests.Utilities
         IBlobManager firstStorageType = new FileBlobManager();
         IBlobManager secondStorageType = new InMemoryBlobManager();
 
+        public IBlobMemoryAllocator MemoryAllocator { get; set; } // this is ignored, because we just use the two specific types
+
         public void Append(string path, Memory<byte> bytes)
         {
             Debug.WriteLine($"Appending to {path}: {String.Join(",", bytes.ToArray())}");

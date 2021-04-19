@@ -12,6 +12,7 @@ namespace LazinatorTests.Utilities
     public class InMemoryBlobManager : IBlobManager
     {
         public Dictionary<string, Memory<byte>> Storage = new Dictionary<string, Memory<byte>>();
+        public IBlobMemoryAllocator MemoryAllocator { get; set; } = new DefaultBlobMemoryAllocator();
 
         public Task<ILazinator> Get<TKey>(ILazinator key) where TKey : ILazinator
         {
@@ -50,8 +51,10 @@ namespace LazinatorTests.Utilities
 
         public Memory<byte> Read(string path, long offset, int length)
         {
-            Memory<byte> bytes = Storage[path].Slice((int)offset, length);
-            return bytes;
+            var storedMemory = Storage[path].Slice((int)offset, length);
+            var copy = MemoryAllocator.Allocate(path, offset, length);
+            storedMemory.CopyTo(copy);
+            return storedMemory;
         }
 
         public ValueTask<Memory<byte>> ReadAsync(string path, long offset, int length)
@@ -78,6 +81,7 @@ namespace LazinatorTests.Utilities
         public void Write(string path, Memory<byte> bytes)
         {
             Storage[path] = bytes;
+            MemoryAllocator.FreeMemory(path);
         }
 
         public ValueTask WriteAsync(string path, Memory<byte> bytes)
@@ -111,6 +115,7 @@ namespace LazinatorTests.Utilities
 
         public void OpenForWriting(string path)
         {
+            MemoryAllocator.FreeMemory(path);
         }
 
 
@@ -121,11 +126,13 @@ namespace LazinatorTests.Utilities
 
         public void CloseAfterWriting(string path)
         {
+            MemoryAllocator.FreeMemory(path);
         }
 
         public void Delete(string path)
         {
             Storage.Remove(path);
+            MemoryAllocator.FreeMemory(path);
         }
     }
 }

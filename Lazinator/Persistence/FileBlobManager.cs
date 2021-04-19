@@ -12,20 +12,23 @@ namespace Lazinator.Persistence
     {
         Dictionary<string, FileStream> OpenFileStreams = new Dictionary<string, FileStream>();
 
+        public IBlobMemoryAllocator MemoryAllocator { get; set; } = new DefaultBlobMemoryAllocator();
+
+
         public Memory<byte> Read(string path, long offset, int length)
         {
             using FileStream fs = File.OpenRead(path);
-            byte[] target = new byte[length];
+            var target = MemoryAllocator.Allocate(path, offset, length);
             if (offset != 0)
                 fs.Seek(offset, SeekOrigin.Begin);
-            fs.Read(target);
+            fs.Read(target.Span);
             return target;
         }
 
         public async ValueTask<Memory<byte>> ReadAsync(string path, long offset, int length)
         {
             using FileStream fs = File.OpenRead(path);
-            byte[] target = new byte[length];
+            var target = MemoryAllocator.Allocate(path, offset, length);
             if (offset != 0)
                 fs.Seek(offset, SeekOrigin.Begin);
             await fs.ReadAsync(target);
@@ -37,6 +40,7 @@ namespace Lazinator.Persistence
             using FileStream fs = File.OpenWrite(path);
             fs.SetLength(bytes.Span.Length);
             fs.Write(bytes.Span);
+            MemoryAllocator.FreeMemory(path);
         }
 
         public async ValueTask WriteAsync(string path, Memory<byte> bytes)
@@ -44,12 +48,14 @@ namespace Lazinator.Persistence
             using FileStream fs = File.OpenWrite(path);
             fs.SetLength(bytes.Span.Length);
             await fs.WriteAsync(bytes);
+            MemoryAllocator.FreeMemory(path);
         }
 
         public void OpenForWriting(string path)
         {
             FileStream fs = File.OpenWrite(path);
             OpenFileStreams[path] = fs;
+            MemoryAllocator.FreeMemory(path);
         }
 
         public void Append(string path, Memory<byte> bytes)
@@ -108,6 +114,7 @@ namespace Lazinator.Persistence
             fs.SetLength(fs.Position);
             fs.Close();
             OpenFileStreams.Remove(path);
+            MemoryAllocator.FreeMemory(path);
         }
 
         public long GetLength(string path)
@@ -119,6 +126,7 @@ namespace Lazinator.Persistence
         public void Delete(string path)
         {
             File.Delete(path);
+            MemoryAllocator.FreeMemory(path);
         }
 
         public bool Exists(string path)
