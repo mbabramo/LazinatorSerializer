@@ -28,7 +28,7 @@ namespace Lazinator.Persistence
         {
             if (IsLoaded)
                 return;
-            Memory<byte> bytes = BlobManager.Read(BlobPath, Reference.OffsetForLoading, Reference.PreTruncationLength);
+            ReadOnlyMemory<byte> bytes = BlobManager.Read(BlobPath, Reference.OffsetForLoading, Reference.PreTruncationLength);
             MemoryAsLoaded = new SimpleMemoryOwner<byte>(bytes);
         }
 
@@ -36,7 +36,7 @@ namespace Lazinator.Persistence
         {
             if (IsLoaded)
                 return;
-            Memory<byte> bytes = await BlobManager.ReadAsync(BlobPath, Reference.OffsetForLoading, Reference.PreTruncationLength);
+            ReadOnlyMemory<byte> bytes = await BlobManager.ReadAsync(BlobPath, Reference.OffsetForLoading, Reference.PreTruncationLength);
             MemoryAsLoaded = new SimpleMemoryOwner<byte>(bytes);
         }
 

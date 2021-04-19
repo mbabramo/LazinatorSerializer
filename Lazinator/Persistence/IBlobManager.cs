@@ -11,10 +11,10 @@ namespace Lazinator.Persistence
     public interface IBlobManager
     {
         IBlobMemoryAllocator MemoryAllocator { get; set; }
-        Memory<byte> ReadAll(string path) => Read(path, 0, (int)GetLength(path));
-        async ValueTask<Memory<byte>> ReadAllAsync(string path) => await ReadAsync(path, 0, (int)GetLength(path));
-        Memory<byte> Read(string path, long offset, int length);
-        ValueTask<Memory<byte>> ReadAsync(string path, long offset, int length);
+        ReadOnlyMemory<byte> ReadAll(string path) => Read(path, 0, (int)GetLength(path));
+        async ValueTask<ReadOnlyMemory<byte>> ReadAllAsync(string path) => await ReadAsync(path, 0, (int)GetLength(path));
+        ReadOnlyMemory<byte> Read(string path, long offset, int length);
+        ValueTask<ReadOnlyMemory<byte>> ReadAsync(string path, long offset, int length);
         long GetLength(string path);
         void Write(string path, Memory<byte> bytes);
         ValueTask WriteAsync(string path, Memory<byte> bytes);

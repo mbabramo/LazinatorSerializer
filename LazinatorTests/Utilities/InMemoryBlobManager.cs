@@ -49,7 +49,7 @@ namespace LazinatorTests.Utilities
             return Task.FromResult(default(TValue));
         }
 
-        public Memory<byte> Read(string path, long offset, int length)
+        public ReadOnlyMemory<byte> Read(string path, long offset, int length)
         {
             var storedMemory = Storage[path].Slice((int)offset, length);
             var copy = MemoryAllocator.Allocate(path, offset, length);
@@ -57,7 +57,7 @@ namespace LazinatorTests.Utilities
             return storedMemory;
         }
 
-        public ValueTask<Memory<byte>> ReadAsync(string path, long offset, int length)
+        public ValueTask<ReadOnlyMemory<byte>> ReadAsync(string path, long offset, int length)
         {
             return ValueTask.FromResult(Read(path, offset, length));
         }

@@ -69,19 +69,19 @@ namespace LazinatorTests.Utilities
             secondStorageType.OpenForWriting(path);
         }
 
-        public Memory<byte> Read(string path, long offset, int length)
+        public ReadOnlyMemory<byte> Read(string path, long offset, int length)
         {
-            Memory<byte> firstResult = firstStorageType.Read(path, offset, length);
-            Memory<byte> secondResult = secondStorageType.Read(path, offset, length);
+            ReadOnlyMemory<byte> firstResult = firstStorageType.Read(path, offset, length);
+            ReadOnlyMemory<byte> secondResult = secondStorageType.Read(path, offset, length);
             if (firstResult.ToArray().SequenceEqual(secondResult.ToArray()) == false)
                 throw new Exception();
             return firstResult;
         }
 
-        public async ValueTask<Memory<byte>> ReadAsync(string path, long offset, int length)
+        public async ValueTask<ReadOnlyMemory<byte>> ReadAsync(string path, long offset, int length)
         {
-            Memory<byte> firstResult = await firstStorageType.ReadAsync(path, offset, length);
-            Memory<byte> secondResult = await secondStorageType.ReadAsync(path, offset, length);
+            ReadOnlyMemory<byte> firstResult = await firstStorageType.ReadAsync(path, offset, length);
+            ReadOnlyMemory<byte> secondResult = await secondStorageType.ReadAsync(path, offset, length);
             if (firstResult.ToArray().SequenceEqual(secondResult.ToArray()) == false)
                 throw new Exception();
             return firstResult;

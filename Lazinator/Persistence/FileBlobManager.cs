@@ -15,7 +15,7 @@ namespace Lazinator.Persistence
         public IBlobMemoryAllocator MemoryAllocator { get; set; } = new DefaultBlobMemoryAllocator();
 
 
-        public Memory<byte> Read(string path, long offset, int length)
+        public ReadOnlyMemory<byte> Read(string path, long offset, int length)
         {
             using FileStream fs = File.OpenRead(path);
             var target = MemoryAllocator.Allocate(path, offset, length);
@@ -25,7 +25,7 @@ namespace Lazinator.Persistence
             return target;
         }
 
-        public async ValueTask<Memory<byte>> ReadAsync(string path, long offset, int length)
+        public async ValueTask<ReadOnlyMemory<byte>> ReadAsync(string path, long offset, int length)
         {
             using FileStream fs = File.OpenRead(path);
             var target = MemoryAllocator.Allocate(path, offset, length);
