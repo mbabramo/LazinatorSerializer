@@ -29,14 +29,14 @@ namespace LazinatorTests.Tests
             Example e = GetTypicalExample(); // no memory backing yet
             e = e.CloneLazinatorTyped(); // now there is a memory buffer
             e.MyChild1.MyLong = -342356;
-            e.LazinatorMemoryStorage.InitialMemoryChunk.Should().Be(e.MyChild1.LazinatorMemoryStorage.InitialMemoryChunk);
+            e.LazinatorMemoryStorage.ReadOnlyMemoryChunk.Should().Be(e.MyChild1.LazinatorMemoryStorage.ReadOnlyMemoryChunk);
             e.MyChild1.SerializeLazinator();
-            e.LazinatorMemoryStorage.InitialMemoryChunk.Should().NotBe(e.MyChild1.LazinatorMemoryStorage.InitialMemoryChunk);
+            e.LazinatorMemoryStorage.ReadOnlyMemoryChunk.Should().NotBe(e.MyChild1.LazinatorMemoryStorage.ReadOnlyMemoryChunk);
             e.LazinatorMemoryStorage.Dispose();
             Action a = () =>
             {
                 var m = e.MyChild1.LazinatorMemoryStorage.GetConsolidatedMemory();
-                m.Span[0] = 1;
+                var indexed = m.Span[0];
             };
             a.Should().NotThrow<ObjectDisposedException>();
         }
@@ -55,7 +55,7 @@ namespace LazinatorTests.Tests
             Action a = () =>
             {
                 var m = f.LazinatorMemoryStorage.GetConsolidatedMemory();
-                m.Span[0] = 1;
+                var indexed = m.Span[0];
             };
             a.Should().NotThrow<ObjectDisposedException>();
         }
@@ -70,7 +70,7 @@ namespace LazinatorTests.Tests
             Action a = () =>
             {
                 var m = e2.LazinatorMemoryStorage.GetConsolidatedMemory();
-                m.Span[0] = 1;
+                var indexed = m.Span[0];
             };
             a.Should().NotThrow<ObjectDisposedException>();
         }
@@ -106,13 +106,12 @@ namespace LazinatorTests.Tests
                 foreach (bool makeParentUpToDate in new bool[] { true, false })
                     foreach (RepetitionsToMutate mutateParent in new RepetitionsToMutate[] { RepetitionsToMutate.All, RepetitionsToMutate.None, RepetitionsToMutate.Even, RepetitionsToMutate.Odd })
                         foreach (RepetitionsToMutate mutateChild in new RepetitionsToMutate[] { RepetitionsToMutate.All, RepetitionsToMutate.None, RepetitionsToMutate.Even, RepetitionsToMutate.Odd })
-                            foreach (bool doNotAutomaticallyReturnToPool in new bool[] { true, false })
-                                yield return new object[] { makeChildUpToDate, makeParentUpToDate, mutateParent, mutateChild, doNotAutomaticallyReturnToPool };
+                            yield return new object[] { makeChildUpToDate, makeParentUpToDate, mutateParent, mutateChild };
         }
 
         [Theory]
         [MemberData(nameof(CanRepeatedlyData))]
-        public void CanRepeatedlyEnsureMemoryUpToDate(bool makeChildUpToDate, bool makeParentUpToDate, RepetitionsToMutate mutateParent, RepetitionsToMutate mutateChild, bool doNotAutomaticallyReturnToPool)
+        public void CanRepeatedlyEnsureMemoryUpToDate(bool makeChildUpToDate, bool makeParentUpToDate, RepetitionsToMutate mutateParent, RepetitionsToMutate mutateChild)
         {
             Example e = GetTypicalExample();
             e.MyChild1 = new ExampleChildInherited() { MyInt = 25 };
@@ -123,8 +122,8 @@ namespace LazinatorTests.Tests
             short randShort = 0;
             for (int i = 0; i < repetitions; i++)
             {
-                if (doNotAutomaticallyReturnToPool && e.LazinatorMemoryStorage.IsEmpty == false)
-                    e.LazinatorMemoryStorage.LazinatorShouldNotReturnToPool();
+                //if (doNotAutomaticallyReturnToPool && e.LazinatorMemoryStorage.IsEmpty == false)
+                //    e.LazinatorMemoryStorage.LazinatorShouldNotReturnToPool();
                 if (i == 0)
                 {
                     e.MyChild1.MyLong = 0;
@@ -157,8 +156,8 @@ namespace LazinatorTests.Tests
                 }
                 if (makeChildUpToDate)
                 {
-                    if (doNotAutomaticallyReturnToPool && e.MyChild1.LazinatorMemoryStorage.IsEmpty == false)
-                        e.MyChild1.LazinatorMemoryStorage.LazinatorShouldNotReturnToPool();
+                    //if (doNotAutomaticallyReturnToPool && e.MyChild1.LazinatorMemoryStorage.IsEmpty == false)
+                    //    e.MyChild1.LazinatorMemoryStorage.LazinatorShouldNotReturnToPool();
                     e.MyChild1.SerializeLazinator();
                 }
                 if (makeParentUpToDate)
@@ -236,7 +235,7 @@ namespace LazinatorTests.Tests
             Example e = d[0];
             d[0] = GetTypicalExample();
             d.LazinatorMemoryStorage.Dispose();
-            Action a = () => { var x = e.MyChild1.LazinatorMemoryStorage.InitialMemoryChunk.ReadOnlyMemory; }; // note that error occurs only when looking at underlying memory
+            Action a = () => { var x = e.MyChild1.LazinatorMemoryStorage.ReadOnlyMemoryChunk.ReadOnlyMemory; }; // note that error occurs only when looking at underlying memory
             a.Should().Throw<ObjectDisposedException>();
         }
 
@@ -693,8 +692,8 @@ namespace LazinatorTests.Tests
             var x = c.MyStructList[0];
             c.MyInt = -234;
             UpdateStoredBufferFromExisting(c);
-            var storageOverall = c.LazinatorMemoryStorage.InitialMemoryChunk.MemoryAsLoaded as ExpandableBytes;
-            var storageItem = c.MyStructList[0].LazinatorMemoryStorage.InitialMemoryChunk.MemoryAsLoaded as ExpandableBytes;
+            var storageOverall = c.LazinatorMemoryStorage.ReadOnlyMemoryChunk.ReadOnlyLoadedMemory as ExpandableBytes;
+            var storageItem = c.MyStructList[0].LazinatorMemoryStorage.ReadOnlyMemoryChunk.ReadOnlyLoadedMemory as ExpandableBytes;
             storageOverall.AllocationID.Should().Be(storageItem.AllocationID);
             var item = c.MyStructList[0].CloneLazinatorTyped();
             var c2 = c.CloneLazinatorTyped();
@@ -935,13 +934,13 @@ namespace LazinatorTests.Tests
         private static void ConfirmBuffersUpdateInTandem(ILazinator itemToUpdate)
         {
             itemToUpdate.SerializeLazinator();
-            var initialMemoryChunk = itemToUpdate.LazinatorMemoryStorage.InitialMemoryChunk;
-            var allocationID = ((ExpandableBytes)initialMemoryChunk.MemoryAsLoaded).AllocationID;
+            var initialMemoryChunk = itemToUpdate.LazinatorMemoryStorage.ReadOnlyMemoryChunk;
+            var allocationID = ((ExpandableBytes)initialMemoryChunk.ReadOnlyLoadedMemory).AllocationID;
             itemToUpdate.ForEachLazinator(x => 
             {
                 if (x.LazinatorMemoryStorage.IsEmpty == false)
                 {
-                    ExpandableBytes b = x.LazinatorMemoryStorage.InitialMemoryChunk.MemoryAsLoaded as ExpandableBytes;
+                    ExpandableBytes b = x.LazinatorMemoryStorage.ReadOnlyMemoryChunk.ReadOnlyLoadedMemory as ExpandableBytes;
                     if (b != null)
                         b.AllocationID.Should().Be(allocationID);
                 }

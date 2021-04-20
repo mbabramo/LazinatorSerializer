@@ -35,7 +35,7 @@ namespace Lazinator.Persistence
             return target;
         }
 
-        public void Write(string path, Memory<byte> bytes)
+        public void Write(string path, ReadOnlyMemory<byte> bytes)
         {
             using FileStream fs = File.OpenWrite(path);
             fs.SetLength(bytes.Span.Length);
@@ -43,7 +43,7 @@ namespace Lazinator.Persistence
             MemoryAllocator.FreeMemory(path);
         }
 
-        public async ValueTask WriteAsync(string path, Memory<byte> bytes)
+        public async ValueTask WriteAsync(string path, ReadOnlyMemory<byte> bytes)
         {
             using FileStream fs = File.OpenWrite(path);
             fs.SetLength(bytes.Span.Length);
@@ -58,7 +58,7 @@ namespace Lazinator.Persistence
             MemoryAllocator.FreeMemory(path);
         }
 
-        public void Append(string path, Memory<byte> bytes)
+        public void Append(string path, ReadOnlyMemory<byte> bytes)
         {
             FileStream fs;
             bool fileStreamAlreadyOpen = false;
@@ -83,7 +83,7 @@ namespace Lazinator.Persistence
             }
         }
 
-        public async ValueTask AppendAsync(string path, Memory<byte> bytes)
+        public async ValueTask AppendAsync(string path, ReadOnlyMemory<byte> bytes)
         {
             FileStream fs;
             bool fileStreamAlreadyOpen = false;

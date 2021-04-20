@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -147,7 +148,8 @@ namespace Lazinator.Buffers
             {
                 return activeMemory.CurrentBuffer.Memory.Span.Slice((int)(lengthsPosition - CompletedMemory.Length));
             }
-            return CompletedMemory.Slice(lengthsPosition).ReadOnlyMemory.Span;
+            var span = CompletedMemory.Slice(lengthsPosition).ReadWriteMemory.Span;
+            return span;
         }
 
         /// <summary>
@@ -171,7 +173,7 @@ namespace Lazinator.Buffers
                 {
                     MemoryChunk memoryChunk = CompletedMemory.GetFirstMemoryChunkWithID(memoryChunkID);
                     memoryChunk.LoadMemory();
-                    return memoryChunk.WithReference(nonNullLengthsSpanReference).ReadOnlyMemory.Span;
+                    return memoryChunk.WithReference(nonNullLengthsSpanReference).ReadWriteMemory.Span;
                 }
             }
             else

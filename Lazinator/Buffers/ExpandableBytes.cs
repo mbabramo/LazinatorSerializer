@@ -20,6 +20,7 @@ namespace Lazinator.Buffers
         public Memory<byte> Memory => CurrentBuffer.Memory.Slice(0, UsedBytesInCurrentBuffer);
         public ReadOnlyMemory<byte> ReadOnlyMemory => Memory;
         public ReadOnlyBytes ReadOnlyBytes => new ReadOnlyBytes(ReadOnlyMemory);
+        public ReadWriteBytes ReadWriteBytes => new ReadWriteBytes(Memory);
 
         public bool Disposed { get; protected internal set; }
         public static long NextAllocationID = 0; // we track all allocations to facilitate debugging of memory allocation and disposal
@@ -97,8 +98,6 @@ namespace Lazinator.Buffers
                 return; // no need to dispose current buffer -- garbage collection will handle it
             if (!UseMemoryPooling)
                 return;
-            if (!(CurrentBuffer is ReadOnlyBytes)) // SimpleMemoryOwner manages its own memory and should thus not be disposed
-                CurrentBuffer.Dispose();
         }
 
         /// <summary>

@@ -10,7 +10,7 @@ namespace Lazinator.Buffers
     public struct ReadWriteBytes : IMemoryOwner<byte>
     {
         private Memory<byte> _Memory;
-        public Memory<byte> Memory { get => Disposed ? throw new ObjectDisposedException("SimpleMemoryOwner") : _Memory; set => _Memory = value; }
+        public Memory<byte> Memory { get => Disposed ? throw new ObjectDisposedException("ReadWriteBytes") : _Memory; set => _Memory = value; }
         public bool Disposed { get; set; }
 
         public ReadWriteBytes(Memory<byte> memory)
@@ -18,6 +18,8 @@ namespace Lazinator.Buffers
             _Memory = memory;
             Disposed = false;
         }
+
+        public ReadOnlyBytes ToReadOnlyBytes() => new ReadOnlyBytes(Memory);
 
         public void Dispose()
         {

@@ -32,7 +32,7 @@ namespace LazinatorTests.Tests
             LazinatorMemory singleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false));
             LazinatorMemory multipleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 10));
             multipleBufferResult.MoreMemoryChunks.Count().Should().BeGreaterThan(0);
-            LazinatorMemory consolidated = multipleBufferResult.GetConsolidatedMemory();
+            LazinatorMemory consolidated = new LazinatorMemory(multipleBufferResult.GetConsolidatedMemory());
             consolidated.Matches(singleBufferResult.ReadOnlyMemory.Span).Should().BeTrue();
 
             Example e2 = new Example(consolidated);
@@ -430,10 +430,10 @@ namespace LazinatorTests.Tests
         public void PersistentIndexTest(bool useFile, bool containedInSingleBlob, bool recreateIndex)
         {
             List<byte> fullSequence = new List<byte>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-            IMemoryOwner<byte> initialBytes = new ReadOnlyBytes(new byte[3] { 1, 2, 3 });
-            IMemoryOwner<byte> nextBytes = new ReadOnlyBytes(new byte[3] { 4, 5, 6 });
+            var initialBytes = new ReadOnlyBytes(new byte[3] { 1, 2, 3 });
+            var nextBytes = new ReadOnlyBytes(new byte[3] { 4, 5, 6 });
             MemoryChunk nextBytesAsChunk = new MemoryChunk(nextBytes, new MemoryChunkReference(1, 0, 3), false);
-            IMemoryOwner<byte> lastBytes = new ReadOnlyBytes(new byte[4] { 7, 8, 9, 10 });
+            var lastBytes = new ReadOnlyBytes(new byte[4] { 7, 8, 9, 10 });
             MemoryChunk lastBytesAsChunk = new MemoryChunk(lastBytes, new MemoryChunkReference(2, 0, 4), false);
             LazinatorMemory initialMemory = new LazinatorMemory(initialBytes);
             LazinatorMemory memory1 = initialMemory.WithAppendedChunk(nextBytesAsChunk).WithAppendedChunk(lastBytesAsChunk);

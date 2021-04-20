@@ -83,7 +83,7 @@ namespace LazinatorTests.Examples
                 if (!_ByteSpan_Accessed)
                 {
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ByteSpan_ByteIndex, _ByteSpan_ByteLength, null);
-                    childData.LoadInitialMemory();
+                    childData.LoadReadOnlyMemory();
                     return childData.ReadOnlyMemory.Span;
                 }
                 return _ByteSpan.Span;
@@ -141,9 +141,9 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleGrandchild_ByteIndex, _MyExampleGrandchild_ByteLength, null);
-                childData.LoadInitialMemory();
+                childData.LoadReadOnlyMemory();
                 _MyExampleGrandchild = DeserializationFactory.Instance.CreateBaseOrDerivedType(1079, (c, p) => new ExampleGrandchild(c, p), childData, this); 
-                childData.ConsiderUnloadInitialMemory();
+                childData.ConsiderUnloadReadOnlyMemory();
             }
             _MyExampleGrandchild_Accessed = true;
         }
@@ -157,7 +157,7 @@ namespace LazinatorTests.Examples
             {
                 LazinatorMemory childData = await GetChildSliceAsync(LazinatorMemoryStorage, _MyExampleGrandchild_ByteIndex, _MyExampleGrandchild_ByteLength, null);
                 _MyExampleGrandchild = DeserializationFactory.Instance.CreateBaseOrDerivedType(1079, (c, p) => new ExampleGrandchild(c, p), childData, this); 
-                await childData.ConsiderUnloadInitialMemoryAsync();
+                await childData.ConsiderUnloadReadOnlyMemoryAsync();
             }
             _MyExampleGrandchild_Accessed = true;
         }
@@ -210,9 +210,9 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyWrapperContainer_ByteIndex, _MyWrapperContainer_ByteLength, null);
-                childData.LoadInitialMemory();
+                childData.LoadReadOnlyMemory();
                 _MyWrapperContainer = DeserializationFactory.Instance.CreateBaseOrDerivedType(1048, (c, p) => new WrapperContainer(c, p), childData, this); 
-                childData.ConsiderUnloadInitialMemory();
+                childData.ConsiderUnloadReadOnlyMemory();
             }
             _MyWrapperContainer_Accessed = true;
         }
@@ -226,7 +226,7 @@ namespace LazinatorTests.Examples
             {
                 LazinatorMemory childData = await GetChildSliceAsync(LazinatorMemoryStorage, _MyWrapperContainer_ByteIndex, _MyWrapperContainer_ByteLength, null);
                 _MyWrapperContainer = DeserializationFactory.Instance.CreateBaseOrDerivedType(1048, (c, p) => new WrapperContainer(c, p), childData, this); 
-                await childData.ConsiderUnloadInitialMemoryAsync();
+                await childData.ConsiderUnloadReadOnlyMemoryAsync();
             }
             _MyWrapperContainer_Accessed = true;
         }

@@ -18,14 +18,14 @@ namespace LazinatorTests.Utilities
 
         public IBlobMemoryAllocator MemoryAllocator { get; set; } // this is ignored, because we just use the two specific types
 
-        public void Append(string path, Memory<byte> bytes)
+        public void Append(string path, ReadOnlyMemory<byte> bytes)
         {
             Debug.WriteLine($"Appending to {path}: {String.Join(",", bytes.ToArray())}");
             firstStorageType.Append(path, bytes);
             secondStorageType.Append(path, bytes);
         }
 
-        public async ValueTask AppendAsync(string path, Memory<byte> bytes)
+        public async ValueTask AppendAsync(string path, ReadOnlyMemory<byte> bytes)
         {
             Debug.WriteLine($"Appending to {path}: {String.Join(",", bytes.ToArray())}");
             await firstStorageType.AppendAsync(path, bytes);
@@ -87,14 +87,14 @@ namespace LazinatorTests.Utilities
             return firstResult;
         }
 
-        public void Write(string path, Memory<byte> bytes)
+        public void Write(string path, ReadOnlyMemory<byte> bytes)
         {
             Debug.WriteLine($"Writing at {path}: {String.Join(",", bytes.ToArray())}");
             firstStorageType.Write(path, bytes);
             secondStorageType.Write(path, bytes);
         }
 
-        public async ValueTask WriteAsync(string path, Memory<byte> bytes)
+        public async ValueTask WriteAsync(string path, ReadOnlyMemory<byte> bytes)
         {
             Debug.WriteLine($"Writing at {path}: {String.Join(",", bytes.ToArray())}");
             await firstStorageType.WriteAsync(path, bytes);

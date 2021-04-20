@@ -1196,10 +1196,10 @@ namespace Lazinator.CodeDescription
                                         else
                                         {{
                                             LazinatorMemory childData = {ChildSliceString};{IIF(WithinAsync, $@"
-                                            childData.LoadInitialMemory();")}
+                                            childData.LoadReadOnlyMemory();")}
                                             var toReturn = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}(childData);
                                             toReturn.IsDirty = false;{IIF(WithinAsync, $@"
-                                            childData.ConsiderUnloadInitialMemory();")}
+                                            childData.ConsiderUnloadReadOnlyMemory();")}
                                             return toReturn;
                                         }}")}
                                     {IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"if ({BackingFieldString} == null)
@@ -1377,9 +1377,9 @@ namespace Lazinator.CodeDescription
         {
             return $@"
             {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || NonNullableThatCanBeUninitialized, "LazinatorMemoryStorage.Length == 0", createDefault, $@"{IIF(defineChildData, "LazinatorMemory ")}childData = {(async ? ChildSliceStringDefinitelyAsync : ChildSliceString)};{IIF(!async && WithinAsync, $@"
-                childData.LoadInitialMemory();")}{recreation}{IIF(async, $@"
-                await childData.ConsiderUnloadInitialMemoryAsync();")}{IIF(!async && WithinAsync, $@"
-                childData.ConsiderUnloadInitialMemory();")}")}{IIF(BackingAccessFieldIncluded, $@"
+                childData.LoadReadOnlyMemory();")}{recreation}{IIF(async, $@"
+                await childData.ConsiderUnloadReadOnlyMemoryAsync();")}{IIF(!async && WithinAsync, $@"
+                childData.ConsiderUnloadReadOnlyMemory();")}")}{IIF(BackingAccessFieldIncluded, $@"
             {BackingFieldAccessedString} = true;")}";
         }
 
@@ -1431,7 +1431,7 @@ namespace Lazinator.CodeDescription
             get
             {{
                 {ConditionalCodeGenerator.ElseConsequentPossibleOnlyIf(BackingAccessFieldIncluded, new ConditionCodeGenerator(BackingFieldNotAccessedString), $@"LazinatorMemory childData = {ChildSliceString};{IIF(WithinAsync, $@"
-                    childData.LoadInitialMemory();")}
+                    childData.LoadReadOnlyMemory();")}
                     {coreOfGet}")}
                 return {castToSpanOfCorrectType};
             }}{StepThroughPropertiesString}
@@ -1466,7 +1466,7 @@ namespace Lazinator.CodeDescription
             if (propertyName == null)
                 propertyName = "_" + PropertyName;
             var innerFullType = InnerProperties[0].AppropriatelyQualifiedTypeName;
-            string spanAccessor = IIF(SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan, initialSpan ? ".InitialMemory.Span" : ".Span");
+            string spanAccessor = IIF(SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan, initialSpan ? ".ReadOnlyMemory.Span" : ".Span");
             string castToSpanOfCorrectType;
             if (innerFullType == "byte")
                 castToSpanOfCorrectType = $"{propertyName}{spanAccessor}";
@@ -2158,7 +2158,7 @@ namespace Lazinator.CodeDescription
                             {{
                                 return null;
                             }}
-                            ReadOnlySpan<byte> span = storage.InitialMemory.Span.Slice(1);
+                            ReadOnlySpan<byte> span = storage.ReadOnlyMemory.Span.Slice(1);
                             return span.ToArray();
                         }}");
                 else
@@ -2212,7 +2212,7 @@ namespace Lazinator.CodeDescription
                         {{
                             return null;
                         }}
-                        ReadOnlySpan<byte> span = storage.InitialMemory.Span.Slice(1);";
+                        ReadOnlySpan<byte> span = storage.ReadOnlyMemory.Span.Slice(1);";
             }
             else
             {
@@ -2220,7 +2220,7 @@ namespace Lazinator.CodeDescription
                         {{
                             return {DefaultExpression};
                         }}
-                        ")}ReadOnlySpan<byte> span = storage.InitialMemory.Span;";
+                        ")}ReadOnlySpan<byte> span = storage.ReadOnlyMemory.Span;";
             }
             sb.Append($@"
                     private static {AppropriatelyQualifiedTypeName} ConvertFromBytes_{AppropriatelyQualifiedTypeNameEncodable}(LazinatorMemory storage)

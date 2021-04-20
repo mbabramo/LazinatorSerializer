@@ -16,11 +16,11 @@ namespace Lazinator.Persistence
         ReadOnlyMemory<byte> Read(string path, long offset, int length);
         ValueTask<ReadOnlyMemory<byte>> ReadAsync(string path, long offset, int length);
         long GetLength(string path);
-        void Write(string path, Memory<byte> bytes);
-        ValueTask WriteAsync(string path, Memory<byte> bytes);
+        void Write(string path, ReadOnlyMemory<byte> bytes);
+        ValueTask WriteAsync(string path, ReadOnlyMemory<byte> bytes);
         void OpenForWriting(string path);
-        void Append(string path, Memory<byte> bytes);
-        ValueTask AppendAsync(string path, Memory<byte> bytes);
+        void Append(string path, ReadOnlyMemory<byte> bytes);
+        ValueTask AppendAsync(string path, ReadOnlyMemory<byte> bytes);
         void CloseAfterWriting(string path);
         void Delete(string path);
         bool Exists(string path);

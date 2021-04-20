@@ -459,7 +459,7 @@ namespace Lazinator.Core
         {
             if (childStorage.IsEmpty)
                 childStorage = getChildSliceFn(); // this is the storage holding the child, which has never been accessed
-            if (childStorage.InitialMemoryChunk == null)
+            if (childStorage.ReadOnlyMemoryChunk == null)
                 ThrowHelper.ThrowChildStorageMissingException();
             if (considerWriteReferenceOnly && !childStorage.IsEmpty && childStorage.Length > serializeDiffsThreshold)
                 writer.InsertReferenceToCompletedMemory(childStorage.StartIndex, childStorage.Offset, childStorage.Length);
@@ -480,7 +480,7 @@ namespace Lazinator.Core
         {
             if (childStorage.IsEmpty)
                 childStorage = await getChildSliceFn(); // this is the storage holding the child, which has never been accessed
-            if (childStorage.InitialMemoryChunk == null)
+            if (childStorage.ReadOnlyMemoryChunk == null)
                 ThrowHelper.ThrowChildStorageMissingException();
             if (writeReferenceOnly && !childStorage.IsEmpty)
                 writer.InsertReferenceToCompletedMemory(childStorage.StartIndex, childStorage.Offset, childStorage.Length);
@@ -1234,7 +1234,7 @@ namespace Lazinator.Core
         public async static ValueTask<LazinatorMemory> GetChildSliceAsync(LazinatorMemory serializedBytes, int byteOffset, int byteLength, int? fixedLength)
         {
             var result = GetChildSlice(serializedBytes, byteOffset, byteLength, fixedLength);
-            await result.LoadInitialMemoryAsync();
+            await result.LoadReadOnlyMemoryAsync();
             return result;
         }
 
@@ -1331,7 +1331,7 @@ namespace Lazinator.Core
         /// <param name="pipe"></param>
         public static void AddToPipe(this ILazinator lazinator, Pipe pipe)
         {
-            foreach (Memory<byte> memoryChunk in lazinator.LazinatorMemoryStorage.EnumerateRawMemory())
+            foreach (ReadOnlyMemory<byte> memoryChunk in lazinator.LazinatorMemoryStorage.EnumerateRawMemory())
                 pipe.Writer.Write(memoryChunk.Span);
         }
 

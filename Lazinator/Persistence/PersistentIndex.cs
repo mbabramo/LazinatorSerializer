@@ -54,18 +54,18 @@ namespace Lazinator.Persistence
         public static PersistentIndex ReadFromBlob(IBlobManager blobManager, string baseBlobPath, IEnumerable<int> forkInformation, int versionNumber)
         {
             string path = GetPathForIndex(baseBlobPath, forkInformation, versionNumber);
-            Memory<byte> bytes = blobManager.ReadAll(path);
+            ReadOnlyMemory<byte> bytes = blobManager.ReadAll(path);
             return CreateFromBytes(blobManager, bytes);
         }
 
         public static async ValueTask<PersistentIndex> ReadFromBlobAsync(IBlobManager blobManager, string baseBlobPath, IEnumerable<int> forkInformation, int versionNumber)
         {
             string path = GetPathForIndex(baseBlobPath, forkInformation, versionNumber);
-            Memory<byte> bytes = await blobManager.ReadAllAsync(path);
+            ReadOnlyMemory<byte> bytes = await blobManager.ReadAllAsync(path);
             return CreateFromBytes(blobManager, bytes);
         }
 
-        private static PersistentIndex CreateFromBytes(IBlobManager blobManager, Memory<byte> bytes)
+        private static PersistentIndex CreateFromBytes(IBlobManager blobManager, ReadOnlyMemory<byte> bytes)
         {
             var index = new PersistentIndex(new LazinatorMemory(bytes));
             index.BlobManager = blobManager;
@@ -163,7 +163,7 @@ namespace Lazinator.Persistence
         {
             var memoryChunks = GetMemoryChunks();
             LazinatorMemory lazinatorMemory = new LazinatorMemory(memoryChunks.First(), memoryChunks.Skip(1).ToList(), 0, 0, memoryChunks.Sum(x => x.Reference.FinalLength));
-            lazinatorMemory.LoadInitialMemory();
+            lazinatorMemory.LoadReadOnlyMemory();
             return lazinatorMemory;
         }
 
@@ -171,7 +171,7 @@ namespace Lazinator.Persistence
         {
             var memoryChunks = GetMemoryChunks();
             LazinatorMemory lazinatorMemory = new LazinatorMemory(memoryChunks.First(), memoryChunks.Skip(1).ToList(), 0, 0, memoryChunks.Sum(x => x.Reference.FinalLength));
-            await lazinatorMemory.LoadInitialMemoryAsync();
+            await lazinatorMemory.LoadReadOnlyMemoryAsync();
             return lazinatorMemory;
         }
 
@@ -251,12 +251,12 @@ namespace Lazinator.Persistence
                     throw new Exception($"There is or was previously memory persisted for chunk ID {memoryChunkID}");
                 if (ContainedInSingleBlob)
                 {
-                    BlobManager.Append(path, memoryChunkToPersist.MemoryAsLoaded.Memory);
+                    BlobManager.Append(path, memoryChunkToPersist.ReadOnlyLoadedMemory.ReadOnlyMemory);
                     UpdateMemoryChunkReferenceToLoadingOffset(memoryChunkToPersist.MemoryChunkID, offset);
                     offset += memoryChunkToPersist.Reference.PreTruncationLength;
                 }
                 else
-                    BlobManager.Write(path, memoryChunkToPersist.MemoryAsLoaded.Memory);
+                    BlobManager.Write(path, memoryChunkToPersist.ReadOnlyLoadedMemory.ReadOnlyMemory);
                 memoryChunkToPersist.IsPersisted = true;
                 SetMemoryChunkStatus(memoryChunkID, PersistentIndexMemoryChunkStatus.NewlyIncluded);
             }
@@ -296,12 +296,12 @@ namespace Lazinator.Persistence
                     throw new Exception($"There is or was previously memory persisted for chunk ID {memoryChunkID}");
                 if (ContainedInSingleBlob)
                 {
-                    await BlobManager.AppendAsync(path, memoryChunkToPersist.MemoryAsLoaded.Memory);
+                    await BlobManager.AppendAsync(path, memoryChunkToPersist.ReadOnlyLoadedMemory.ReadOnlyMemory);
                     UpdateMemoryChunkReferenceToLoadingOffset(memoryChunkToPersist.MemoryChunkID, offset);
                     offset += memoryChunkToPersist.Reference.PreTruncationLength;
                 }
                 else
-                    await BlobManager.WriteAsync(path, memoryChunkToPersist.MemoryAsLoaded.Memory);
+                    await BlobManager.WriteAsync(path, memoryChunkToPersist.ReadOnlyLoadedMemory.ReadOnlyMemory);
                 memoryChunkToPersist.IsPersisted = true;
                 SetMemoryChunkStatus(memoryChunkID, PersistentIndexMemoryChunkStatus.NewlyIncluded);
             }
@@ -315,7 +315,7 @@ namespace Lazinator.Persistence
         {
             string indexPath = GetPathForIndex();
             SerializeLazinator();
-            Memory<byte> bytes = LazinatorMemoryStorage.ReadOnlyMemory;
+            ReadOnlyMemory<byte> bytes = LazinatorMemoryStorage.ReadOnlyMemory;
             BlobManager.Write(indexPath, bytes);
         }
 
@@ -323,7 +323,7 @@ namespace Lazinator.Persistence
         {
             string indexPath = GetPathForIndex();
             SerializeLazinator();
-            Memory<byte> bytes = LazinatorMemoryStorage.ReadOnlyMemory; // this is not separable (currently), so it will all be together
+            ReadOnlyMemory<byte> bytes = LazinatorMemoryStorage.ReadOnlyMemory; // this is not separable (currently), so it will all be together
             await BlobManager.WriteAsync(indexPath, bytes);
         }
 

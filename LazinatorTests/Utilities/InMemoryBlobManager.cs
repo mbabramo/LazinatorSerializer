@@ -11,7 +11,7 @@ namespace LazinatorTests.Utilities
 {
     public class InMemoryBlobManager : IBlobManager
     {
-        public Dictionary<string, Memory<byte>> Storage = new Dictionary<string, Memory<byte>>();
+        public Dictionary<string, ReadOnlyMemory<byte>> Storage = new Dictionary<string, ReadOnlyMemory<byte>>();
         public IBlobMemoryAllocator MemoryAllocator { get; set; } = new DefaultBlobMemoryAllocator();
 
         public Task<ILazinator> Get<TKey>(ILazinator key) where TKey : ILazinator
@@ -19,7 +19,7 @@ namespace LazinatorTests.Utilities
             string stringKey = key.ToString();
             if (Storage.ContainsKey(stringKey))
             {
-                Memory<byte> memory = Storage[stringKey];
+                ReadOnlyMemory<byte> memory = Storage[stringKey];
                 LazinatorMemory lazinatorMemory = new LazinatorMemory(memory);
                 ILazinator result;
                 result = DeserializationFactory.Instance.CreateFromBytesIncludingID(lazinatorMemory);
@@ -33,7 +33,7 @@ namespace LazinatorTests.Utilities
             string stringKey = key.ToString();
             if (Storage.ContainsKey(stringKey))
             {
-                Memory<byte> memory = Storage[stringKey];
+                ReadOnlyMemory<byte> memory = Storage[stringKey];
                 LazinatorMemory lazinatorMemory = new LazinatorMemory(memory);
                 TValue result;
                 try
@@ -65,7 +65,7 @@ namespace LazinatorTests.Utilities
         public Task Set<TKey>(TKey key, ILazinator value) where TKey : ILazinator
         {
             string stringKey = key.ToString();
-            Memory<byte> memory = value.SerializeToArray();
+            ReadOnlyMemory<byte> memory = value.SerializeToArray();
             Storage[stringKey] = memory;
             return Task.CompletedTask;
         }
@@ -73,36 +73,36 @@ namespace LazinatorTests.Utilities
         public Task Set<TKey, TValue>(TKey key, TValue value) where TKey : ILazinator where TValue : ILazinator
         {
             string stringKey = key.ToString();
-            Memory<byte> memory = value.SerializeToArray();
+            ReadOnlyMemory<byte> memory = value.SerializeToArray();
             Storage[stringKey] = memory;
             return Task.CompletedTask;
         }
 
-        public void Write(string path, Memory<byte> bytes)
+        public void Write(string path, ReadOnlyMemory<byte> bytes)
         {
             Storage[path] = bytes;
             MemoryAllocator.FreeMemory(path);
         }
 
-        public ValueTask WriteAsync(string path, Memory<byte> bytes)
+        public ValueTask WriteAsync(string path, ReadOnlyMemory<byte> bytes)
         {
             Write(path, bytes);
             return ValueTask.CompletedTask;
         }
 
 
-        public void Append(string path, Memory<byte> bytes)
+        public void Append(string path, ReadOnlyMemory<byte> bytes)
         {
             if (!Exists(path))
                 Storage[path] = new byte[0];
-            Memory<byte> existingBytes = Storage[path];
+            ReadOnlyMemory<byte> existingBytes = Storage[path];
             byte[] allBytes = new byte[existingBytes.Length + bytes.Length];
             existingBytes.CopyTo(allBytes);
             bytes.CopyTo(new Memory<byte>(allBytes).Slice(existingBytes.Length));
             Storage[path] = allBytes;
         }
 
-        public ValueTask AppendAsync(string path, Memory<byte> bytes)
+        public ValueTask AppendAsync(string path, ReadOnlyMemory<byte> bytes)
         {
             Append(path, bytes);
             return ValueTask.CompletedTask;

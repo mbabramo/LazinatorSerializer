@@ -21,5 +21,6 @@ namespace Lazinator.Exceptions
         internal static void ThrowChildStorageMissingException() => throw new LazinatorSerializationException("Internal error. Child storage missing.");
 
         public static void ThrowUnsetNonnullableLazinatorException() => throw new UnsetNonnullableLazinatorException();
+        public static void ThrowMemoryNotWritableException() => throw new Exception("Memory chunk is not writable");
     }
 }
