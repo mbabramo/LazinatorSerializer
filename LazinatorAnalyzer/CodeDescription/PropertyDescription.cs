@@ -2162,7 +2162,7 @@ namespace Lazinator.CodeDescription
                             return span.ToArray();
                         }}");
                 else
-                    sb.Append($@"return storage.Memory.ToArray();
+                    sb.Append($@"return storage.ReadOnlyMemory.ToArray();
                     }}"
                     );
                 return;
