@@ -62,7 +62,7 @@ namespace LazinatorTests.Tests
                 }
                 if (i == 0)
                     m = new LazinatorMemory(b);
-                else m = m.WithAppendedChunk(new MemoryChunk(new SimpleMemoryOwner<byte>(b), new MemoryChunkReference(i, 0, b.Length), false));
+                else m = m.WithAppendedChunk(new MemoryChunk(new ReadOnlyBytes(b), new MemoryChunkReference(i, 0, b.Length), false));
             }
 
             const int numChecks = 15;
@@ -89,7 +89,7 @@ namespace LazinatorTests.Tests
             int bytesPerChunk = 100;
             byte[][] mainChunks = new byte[numMainChunks][];
             byte[] continuousUnderlying = new byte[numMainChunks * bytesPerChunk];
-            List<SimpleMemoryOwner<byte>> overallMemoryOwners = new List<SimpleMemoryOwner<byte>>();
+            List<ReadOnlyBytes> overallMemoryOwners = new List<ReadOnlyBytes>();
             List<MemoryChunk> overallMemoryChunks = new List<MemoryChunk>();
             int overallIndex = 0;
             // record some values (it doesn't really matter what) in mainChunks and in continuousUnderlying,
@@ -103,7 +103,7 @@ namespace LazinatorTests.Tests
                     mainChunks[i][j] = (byte) (overallIndex % 256);
                     continuousUnderlying[overallIndex++] = mainChunks[i][j];
                 }
-                overallMemoryOwners.Add(new SimpleMemoryOwner<byte>(mainChunks[i]));
+                overallMemoryOwners.Add(new ReadOnlyBytes(mainChunks[i]));
                 overallMemoryChunks.Add(new MemoryChunk(overallMemoryOwners[i], new MemoryChunkReference(i, 0, bytesPerChunk), false));
             }
             LazinatorMemory overallLazinatorMemory = new LazinatorMemory(overallMemoryChunks.First(), overallMemoryChunks.Skip(1).ToList(), 0, 0, continuousUnderlying.Length);
@@ -123,9 +123,9 @@ namespace LazinatorTests.Tests
                     int startPosition = r.Next(0, bytesPerChunk);
                     int numBytes = r.Next(0, bytesPerChunk - startPosition);
                     var overallMemoryOwner = overallMemoryOwners[mainChunkIndex];
-                    var overallMemoryOwnerLoaded = new SimpleMemoryOwner<byte>(overallMemoryOwner.Memory);
-                    memoryChunks.Add(new MemoryChunk(overallMemoryOwnerLoaded, new MemoryChunkReference(mainChunkIndex, 0, overallMemoryOwner.Memory.Length, startPosition, numBytes), false));
-                    IEnumerable<byte> bytesToAdd = overallMemoryOwners[mainChunkIndex].Memory.ToArray().Skip(startPosition).Take(numBytes);
+                    var overallMemoryOwnerLoaded = new ReadOnlyBytes(overallMemoryOwner.ReadOnlyMemory);
+                    memoryChunks.Add(new MemoryChunk(overallMemoryOwnerLoaded, new MemoryChunkReference(mainChunkIndex, 0, overallMemoryOwner.ReadOnlyMemory.Length, startPosition, numBytes), false));
+                    IEnumerable<byte> bytesToAdd = overallMemoryOwners[mainChunkIndex].ReadOnlyMemory.ToArray().Skip(startPosition).Take(numBytes);
                     referencedBytes.AddRange(bytesToAdd);
                     // Debug.WriteLine($"Main chunk {mainChunkIndex} start {startPosition} numBytes {numBytes} bytes {String.Join(",", bytesToAdd)}");
                     // Debug.WriteLine($"Overall referenced bytes {String.Join(",", referencedBytes)}");

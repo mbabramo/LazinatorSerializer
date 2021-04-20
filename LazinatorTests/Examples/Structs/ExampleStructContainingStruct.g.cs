@@ -274,7 +274,7 @@ namespace LazinatorTests.Examples
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.ReadOnlyMemory.Span;
             if (span.Length == 0)
             {
                 return 0;
@@ -495,7 +495,7 @@ namespace LazinatorTests.Examples
         
         int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.ReadOnlyMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             int lengthForLengths = 0;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)

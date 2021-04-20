@@ -236,7 +236,7 @@ namespace LazinatorTests.Tests
             Example e = d[0];
             d[0] = GetTypicalExample();
             d.LazinatorMemoryStorage.Dispose();
-            Action a = () => { var x = e.MyChild1.LazinatorMemoryStorage.InitialMemoryChunk.Memory; }; // note that error occurs only when looking at underlying memory
+            Action a = () => { var x = e.MyChild1.LazinatorMemoryStorage.InitialMemoryChunk.ReadOnlyMemory; }; // note that error occurs only when looking at underlying memory
             a.Should().Throw<ObjectDisposedException>();
         }
 

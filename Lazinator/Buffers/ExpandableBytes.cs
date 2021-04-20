@@ -18,6 +18,8 @@ namespace Lazinator.Buffers
         public IMemoryOwner<byte> CurrentBuffer { get; set; }
         public int UsedBytesInCurrentBuffer { get; set; }
         public Memory<byte> Memory => CurrentBuffer.Memory.Slice(0, UsedBytesInCurrentBuffer);
+        public ReadOnlyMemory<byte> ReadOnlyMemory => Memory;
+        public ReadOnlyBytes ReadOnlyBytes => new ReadOnlyBytes(ReadOnlyMemory);
 
         public bool Disposed { get; protected internal set; }
         public static long NextAllocationID = 0; // we track all allocations to facilitate debugging of memory allocation and disposal
@@ -46,7 +48,7 @@ namespace Lazinator.Buffers
                 CurrentBuffer = LazinatorUtilities.GetRentedMemory(minimumSize);
             }
             else
-                CurrentBuffer = new SimpleMemoryOwner<byte>(new Memory<byte>(new byte[minimumSize]));
+                CurrentBuffer = new ReadWriteBytes(new Memory<byte>(new byte[minimumSize]));
 
             unchecked
             {
@@ -57,11 +59,6 @@ namespace Lazinator.Buffers
                 MemoryAllocations.Add(new WeakReference<IMemoryOwner<byte>>(CurrentBuffer));
                 MemoryAllocationsManuallyReturned.Add(false);
             }
-        }
-
-        public ExpandableBytes(IMemoryOwner<byte> initialBuffer)
-        {
-            CurrentBuffer = initialBuffer;
         }
 
         public void EnsureMinBufferSize(int desiredBufferSize = 0)
@@ -80,7 +77,7 @@ namespace Lazinator.Buffers
                 newBuffer = LazinatorUtilities.GetRentedMemory(desiredBufferSize);
             }
             else
-                newBuffer = new SimpleMemoryOwner<byte>(new Memory<byte>(new byte[desiredBufferSize]));
+                newBuffer = new ReadWriteBytes(new Memory<byte>(new byte[desiredBufferSize]));
             if (TrackMemoryAllocations)
                 MemoryAllocations[(int) AllocationID].SetTarget(newBuffer);
             CurrentBuffer.Memory.Span.CopyTo(newBuffer.Memory.Span);
@@ -100,7 +97,7 @@ namespace Lazinator.Buffers
                 return; // no need to dispose current buffer -- garbage collection will handle it
             if (!UseMemoryPooling)
                 return;
-            if (!(CurrentBuffer is SimpleMemoryOwner<byte>)) // SimpleMemoryOwner manages its own memory and should thus not be disposed
+            if (!(CurrentBuffer is ReadOnlyBytes)) // SimpleMemoryOwner manages its own memory and should thus not be disposed
                 CurrentBuffer.Dispose();
         }
 

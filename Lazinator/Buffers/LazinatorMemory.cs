@@ -18,7 +18,7 @@ namespace Lazinator.Buffers
     /// The memory referenced is defined by the index of the first memory chunk, the index of the first byte within that chunk, and the number of 
     /// bytes altogether. 
     /// </summary>
-    public readonly struct LazinatorMemory : IMemoryOwner<byte>
+    public readonly struct LazinatorMemory : IReadOnlyBytes
     {
         /// <summary>
         /// The first chunk of owned memory (and in ordinary usage, the only chunk).
@@ -52,11 +52,6 @@ namespace Lazinator.Buffers
         public static Memory<byte> EmptyMemory = new Memory<byte>();
         public static ReadOnlyMemory<byte> EmptyReadOnlyMemory = new ReadOnlyMemory<byte>();
         public static LazinatorMemory EmptyLazinatorMemory = new LazinatorMemory(new Memory<byte>());
-
-        /// <summary>
-        /// The first chunk of the memory. To obtain all of the memory, use GetConsolidatedMemory(). 
-        /// </summary>
-        public Memory<byte> Memory => InitialMemory;
 
 
         public override string ToString()
@@ -97,19 +92,19 @@ namespace Lazinator.Buffers
         {
         }
 
-        public LazinatorMemory(MemoryChunk memoryChunk) : this(memoryChunk, 0, memoryChunk.Memory.Length)
+        public LazinatorMemory(MemoryChunk memoryChunk) : this(memoryChunk, 0, memoryChunk.ReadOnlyMemory.Length)
         {
         }
 
-        public LazinatorMemory(IMemoryOwner<byte> memoryOwner) : this(new MemoryChunk(memoryOwner))
+        public LazinatorMemory(IReadOnlyBytes readOnlyBytes) : this(new MemoryChunk(readOnlyBytes))
         {
         }
 
-        public LazinatorMemory(Memory<byte> memory) : this(new MemoryChunk(new SimpleMemoryOwner<byte>(memory)))
+        public LazinatorMemory(Memory<byte> memory) : this(new MemoryChunk(new ReadOnlyBytes(memory)))
         {
         }
 
-        public LazinatorMemory(byte[] array) : this(new MemoryChunk(new SimpleMemoryOwner<byte>(array)))
+        public LazinatorMemory(byte[] array) : this(new MemoryChunk(new ReadOnlyBytes(array)))
         {
         }
 
@@ -154,7 +149,7 @@ namespace Lazinator.Buffers
                 additionalMemoryChunks.Add(GetMemoryChunkFromMemoryChunkIndexReference(indexReference).WithPreTruncationLengthIncreasedIfNecessary(chunkBeingAdded));
         }
 
-        public bool Disposed => EnumerateReferencedMemoryOwners(true).Any(x => x != null && (x is ExpandableBytes e && e.Disposed) || (x is SimpleMemoryOwner<byte> s && s.Disposed));
+        public bool Disposed => EnumerateReadOnlyBytesSegments(true).Any(x => x != null && (x is ExpandableBytes e && e.Disposed) || (x is ReadOnlyBytes s && s.Disposed));
 
         #endregion
 
@@ -182,6 +177,7 @@ namespace Lazinator.Buffers
             {
                 if (memoryChunk.MemoryAsLoaded is ExpandableBytes e)
                 {
+                    throw new Exception("DEBUG");
                     e.LazinatorShouldNotReturnToPool = true;
                     if (ExpandableBytes.TrackMemoryAllocations)
                     {
@@ -341,22 +337,22 @@ namespace Lazinator.Buffers
         /// <summary>
         /// The first referenced memory chunk
         /// </summary>
-        public Memory<byte> InitialMemory
+        public ReadOnlyMemory<byte> ReadOnlyMemory
         {
             get
             {
                 if (IsEmpty)
-                    return EmptyMemory;
+                    return EmptyReadOnlyMemory;
                 LoadInitialMemory();
                 if (SingleMemory)
-                    return InitialMemoryChunk.Memory.Slice(Offset, (int)Length);
+                    return InitialMemoryChunk.ReadOnlyMemory.Slice(Offset, (int)Length);
                 else
                 {
-                    IMemoryOwner<byte> memoryOwner = MemoryAtIndex(StartIndex);
-                    var memory = memoryOwner.Memory;
+                    MemoryChunk memoryOwner = MemoryAtIndex(StartIndex);
+                    var memory = memoryOwner.ReadOnlyMemory;
                     int overallMemoryLength = memory.Length;
                     int lengthOfMemoryChunkAfterStartPosition = overallMemoryLength - Offset;
-                    return memoryOwner.Memory.Slice(Offset, lengthOfMemoryChunkAfterStartPosition);
+                    return memoryOwner.ReadOnlyMemory.Slice(Offset, lengthOfMemoryChunkAfterStartPosition);
                 }
             }
         }
@@ -364,33 +360,33 @@ namespace Lazinator.Buffers
         /// <summary>
         /// A read-only version of the first referenced memory chunk.
         /// </summary>
-        public ReadOnlyMemory<byte> InitialReadOnlyMemory => InitialMemory;
+        public ReadOnlyMemory<byte> InitialReadOnlyMemory => ReadOnlyMemory;
 
 
         /// <summary>
         /// Asynchronously returns the first referenced memory chunk.
         /// </summary>
         /// <returns></returns>
-        public async ValueTask<Memory<byte>> GetInitialMemoryAsync()
+        public async ValueTask<ReadOnlyMemory<byte>> GetInitialMemoryAsync()
         {
             if (IsEmpty)
                 return EmptyMemory;
-            IMemoryOwner<byte> memoryOwner = await LoadInitialMemoryAsync();
+            await LoadInitialMemoryAsync();
             if (SingleMemory)
-                return InitialMemoryChunk.Memory.Slice(Offset, (int)Length);
+                return InitialMemoryChunk.ReadOnlyMemory.Slice(Offset, (int)Length);
             else
             {
-                var memory = memoryOwner.Memory;
-                int overallMemoryLength = memory.Length;
+                var readOnlyMemory = InitialMemoryChunk.ReadOnlyMemory;
+                int overallMemoryLength = readOnlyMemory.Length;
                 int lengthOfMemoryChunkAfterStartPosition = overallMemoryLength - Offset;
-                return memoryOwner.Memory.Slice(Offset, lengthOfMemoryChunkAfterStartPosition);
+                return readOnlyMemory.Slice(Offset, lengthOfMemoryChunkAfterStartPosition);
             }
         }
 
         /// <summary>
         /// A read-only version of the first referenced memory chunk, returned asynchronously.
         /// </summary>
-        public ReadOnlyMemory<byte> GetInitialReadOnlyMemory() => InitialMemory;
+        public ReadOnlyMemory<byte> GetInitialReadOnlyMemory() => ReadOnlyMemory;
 
         /// <summary>
         /// A read-only version of the first referenced memory chunk, returned asynchronously.
@@ -400,13 +396,13 @@ namespace Lazinator.Buffers
         /// <summary>
         /// The only memory chunk. This will throw if there are multiple memory chunks.
         /// </summary>
-        public Memory<byte> OnlyMemory
+        public ReadOnlyMemory<byte> OnlyMemory
         {
             get
             {
                 if (!SingleMemory)
                     throw new LazinatorCompoundMemoryException();
-                return InitialMemoryChunk.Memory.Slice(Offset, (int) Length);
+                return InitialMemoryChunk.ReadOnlyMemory.Slice(Offset, (int) Length);
             }
         }
 
@@ -414,28 +410,26 @@ namespace Lazinator.Buffers
         /// Loads the first referenced memory chunk synchronously if it is not loaded.
         /// </summary>
         /// <returns></returns>
-        public IMemoryOwner<byte> LoadInitialMemory()
+        public void LoadInitialMemory()
         {
             if (SingleMemory)
             {
                 LoadMemoryChunk(InitialMemoryChunk);
-                return InitialMemoryChunk;
+                return;
             }
             MemoryChunk memoryChunk = MemoryAtIndex(StartIndex);
             LoadMemoryChunk(memoryChunk);
-            return memoryChunk;
         }
 
-        public async ValueTask<IMemoryOwner<byte>> LoadInitialMemoryAsync()
+        public async ValueTask LoadInitialMemoryAsync()
         {
             if (SingleMemory)
             {
                 await LoadMemoryChunkAsync(InitialMemoryChunk);
-                return InitialMemoryChunk;
+                return;
             }
             MemoryChunk memoryChunk = MemoryAtIndex(StartIndex);
             await LoadMemoryChunkAsync(memoryChunk);
-            return memoryChunk;
         }
 
         private static void LoadMemoryChunk(MemoryChunk memoryChunk)
@@ -678,12 +672,12 @@ namespace Lazinator.Buffers
         /// </summary>
         /// <param name="memoryChunkReference">The memory chunk reference</param>
         /// <returns></returns>
-        public Memory<byte> GetMemoryAtMemoryChunkReference(MemoryChunkReference memoryChunkReference)
+        public ReadOnlyMemory<byte> GetMemoryAtMemoryChunkReference(MemoryChunkReference memoryChunkReference)
         {
             var memoryChunk = GetFirstMemoryChunkWithID(memoryChunkReference.MemoryChunkID);
             memoryChunk.LoadMemory();
-            var underlyingChunk = memoryChunk.MemoryAsLoaded.Memory.Slice(memoryChunkReference.AdditionalOffset, memoryChunkReference.FinalLength);
-            return underlyingChunk;
+            var underlyingReadOnlyMemory = memoryChunk.MemoryAsLoaded.ReadOnlyMemory.Slice(memoryChunkReference.AdditionalOffset, memoryChunkReference.FinalLength);
+            return underlyingReadOnlyMemory;
         }
 
         /// <summary>
@@ -691,7 +685,7 @@ namespace Lazinator.Buffers
         /// </summary>
         /// <param name="includeOutsideOfRange">If true, includes all memory blocks, including those beyond the range referenced in this LazinatorMemory; if false, includes only the portion of memory represented by the range referenced in this LazinatorMemory </param>
         /// <returns></returns>
-        public IEnumerable<Memory<byte>> EnumerateRawMemory(bool includeOutsideOfRange = false)
+        public IEnumerable<ReadOnlyMemory<byte>> EnumerateRawMemory(bool includeOutsideOfRange = false)
         {
             MemoryChunk lastMemoryReferenceLoaded = null;
             foreach (var rangeInfo in EnumerateMemoryChunksByIndex(includeOutsideOfRange))
@@ -706,7 +700,7 @@ namespace Lazinator.Buffers
                     }
                     memoryChunk.LoadMemory();
                 }
-                yield return memoryChunk.Memory.Slice(rangeInfo.Offset, rangeInfo.Length);
+                yield return memoryChunk.ReadOnlyMemory.Slice(rangeInfo.Offset, rangeInfo.Length);
             }
         }
 
@@ -715,7 +709,7 @@ namespace Lazinator.Buffers
         /// </summary>
         /// <param name="includeOutsideOfRange">If true, includes all memory blocks, including those beyond the range referenced in this LazinatorMemory; if false, includes only the portion of memory represented by the range referenced in this LazinatorMemory </param>
         /// <returns></returns>
-        public async IAsyncEnumerable<Memory<byte>> EnumerateRawMemoryAsync(bool includeOutsideOfRange = false)
+        public async IAsyncEnumerable<ReadOnlyMemory<byte>> EnumerateRawMemoryAsync(bool includeOutsideOfRange = false)
         {
             MemoryChunk lastMemoryReferenceLoaded = null;
             foreach (var rangeInfo in EnumerateMemoryChunksByIndex(includeOutsideOfRange))
@@ -730,7 +724,7 @@ namespace Lazinator.Buffers
                     }
                     await memoryChunk.LoadMemoryAsync();
                 }
-                yield return m.Memory.Slice(rangeInfo.MemoryChunkIndex, rangeInfo.Length);
+                yield return m.ReadOnlyMemory.Slice(rangeInfo.MemoryChunkIndex, rangeInfo.Length);
             }
         }
 
@@ -776,7 +770,7 @@ namespace Lazinator.Buffers
         /// Enumerates the referenced memory owners (including portions of referenced memory chunks not referenced).
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<IMemoryOwner<byte>> EnumerateReferencedMemoryOwners(bool includeOutsideOfRange = false)
+        private IEnumerable<IReadOnlyBytes> EnumerateReadOnlyBytesSegments(bool includeOutsideOfRange = false)
         {
             foreach (var memoryChunk in EnumerateMemoryChunks(false))
                 yield return memoryChunk.MemoryAsLoaded;
@@ -820,7 +814,7 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public async ValueTask WriteToBinaryBufferAsync(BufferWriterContainer writer, bool includeOutsideOfRange = false)
         {
-            await foreach (Memory<byte> memory in EnumerateRawMemoryAsync(includeOutsideOfRange))
+            await foreach (ReadOnlyMemory<byte> memory in EnumerateRawMemoryAsync(includeOutsideOfRange))
                 writer.Write(memory.Span);
         }
 
@@ -833,7 +827,7 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public void WriteToBinaryBuffer(ref BufferWriter writer, bool includeOutsideOfRange = false)
         {
-            foreach (Memory<byte> memory in EnumerateRawMemory(includeOutsideOfRange))
+            foreach (ReadOnlyMemory<byte> memory in EnumerateRawMemory(includeOutsideOfRange))
                 writer.Write(memory.Span);
         }
 
@@ -861,7 +855,7 @@ namespace Lazinator.Buffers
                 int memoryChunkLength = memoryChunk.Reference.FinalLength;
                 for (int j = startPositionOrZero; j < memoryChunkLength; j++)
                 {
-                    yield return memoryChunk.Memory.Span[j];
+                    yield return memoryChunk.ReadOnlyMemory.Span[j];
                     numYielded++;
                     if (!includeOutsideOfRange && numYielded == Length)
                         yield break;
@@ -900,15 +894,15 @@ namespace Lazinator.Buffers
         /// </summary>
         /// <param name="includeOutsideOfRange"></param>
         /// <returns></returns>
-        public Memory<byte> GetConsolidatedMemory(bool includeOutsideOfRange = false)
+        public ReadOnlyMemory<byte> GetConsolidatedMemory(bool includeOutsideOfRange = false)
         {
             if (SingleMemory)
             {
                 InitialMemoryChunk.LoadMemory();
                 if (includeOutsideOfRange)
-                    return InitialMemoryChunk.Memory;
+                    return InitialMemoryChunk.ReadOnlyMemory;
                 else
-                    return InitialMemoryChunk.Memory.Slice(Offset, (int) Length);
+                    return InitialMemoryChunk.ReadOnlyMemory.Slice(Offset, (int) Length);
             }
 
             long totalLength = includeOutsideOfRange ? GetGrossLength() : Length;
@@ -917,18 +911,18 @@ namespace Lazinator.Buffers
             BufferWriter w = new BufferWriter((int) totalLength);
             foreach (byte b in EnumerateBytes(includeOutsideOfRange))
                 w.Write(b);
-            return w.LazinatorMemory.InitialMemory;
+            return w.LazinatorMemory.ReadOnlyMemory;
         }
 
-        public async ValueTask<Memory<byte>> GetConsolidatedMemoryAsync(bool includeOutsideOfRange = false)
+        public async ValueTask<ReadOnlyMemory<byte>> GetConsolidatedMemoryAsync(bool includeOutsideOfRange = false)
         {
             if (SingleMemory)
             {
                 await InitialMemoryChunk.LoadMemoryAsync();
                 if (includeOutsideOfRange)
-                    return InitialMemoryChunk.Memory;
+                    return InitialMemoryChunk.ReadOnlyMemory;
                 else
-                    return InitialMemoryChunk.Memory.Slice(Offset, (int)Length);
+                    return InitialMemoryChunk.ReadOnlyMemory.Slice(Offset, (int)Length);
             }
             await LoadAllMemoryAsync();
             long totalLength = includeOutsideOfRange ? GetGrossLength() : Length;
@@ -937,7 +931,7 @@ namespace Lazinator.Buffers
             BufferWriter w = new BufferWriter((int)totalLength);
             foreach (byte b in EnumerateBytes(includeOutsideOfRange))
                 w.Write(b);
-            return w.LazinatorMemory.InitialMemory;
+            return w.LazinatorMemory.ReadOnlyMemory;
         }
 
         public string ToStringByChunk()
@@ -1041,13 +1035,13 @@ namespace Lazinator.Buffers
                     MemoryChunk chunk;
                     if (!memoryChunksIncludedByID.ContainsKey(targetMemoryChunkID))
                     {
-                        chunk = memoryChunksIncludedByID[targetMemoryChunkID] = new MemoryChunk(new SimpleMemoryOwner<byte>(new byte[totalBytesInTarget]));
+                        chunk = memoryChunksIncludedByID[targetMemoryChunkID] = new MemoryChunk(new ReadOnlyBytes(new byte[totalBytesInTarget]));
                         targetMemoryChunksToInclude.Add(sourceMemoryChunk);
                     }
                     else
                         chunk = memoryChunksIncludedByID[targetMemoryChunkID];
-                    Memory<byte> targetBytes = chunk.Memory.Slice(bytesInTargetSoFar, bytesToCopyToTarget);
-                    sourceMemoryChunk.Memory.CopyTo(targetBytes);
+                    Memory<byte> targetBytes = chunk.ReadOnlyMemory.Slice(bytesInTargetSoFar, bytesToCopyToTarget);
+                    sourceMemoryChunk.ReadOnlyMemory.CopyTo(targetBytes);
                     bytesSoFarInTargetMemoryChunkID[targetMemoryChunkID] = bytesInTargetSoFar + bytesToCopyToTarget;
                 }
                 else

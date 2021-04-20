@@ -87,10 +87,10 @@ namespace Lazinator.Buffers
                 {
                     if (ActiveMemoryPosition == 0)
                         return CompletedMemory;
-                    var withAppended = CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory, new MemoryChunkReference(MultipleBufferInfo.GetActiveMemoryChunkID(), 0, ActiveMemoryPosition), false));
+                    var withAppended = CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory.ReadOnlyBytes, new MemoryChunkReference(MultipleBufferInfo.GetActiveMemoryChunkID(), 0, ActiveMemoryPosition), false));
                     return withAppended;
                 }
-                return new LazinatorMemory(new MemoryChunk(ActiveMemory), 0, ActiveMemoryPosition);
+                return new LazinatorMemory(new MemoryChunk(ActiveMemory.ReadOnlyBytes), 0, ActiveMemoryPosition);
             }
         }
 
@@ -243,7 +243,7 @@ namespace Lazinator.Buffers
         {
             if (ActiveMemoryPosition > 0)
             {
-                var chunkToAppend = new MemoryChunk(ActiveMemory, new MemoryChunkReference(MultipleBufferInfo?.GetActiveMemoryChunkID() ?? 0, 0, ActiveMemoryPosition), false);
+                var chunkToAppend = new MemoryChunk(ActiveMemory.ReadOnlyBytes, new MemoryChunkReference(MultipleBufferInfo?.GetActiveMemoryChunkID() ?? 0, 0, ActiveMemoryPosition), false);
                 var withAppendedChunk = CompletedMemory.WithAppendedChunk(chunkToAppend);
                 if (MultipleBufferInfo == null)
                     MultipleBufferInfo = new MultipleBufferInfo(withAppendedChunk, false);

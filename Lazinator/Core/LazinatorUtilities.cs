@@ -1198,7 +1198,7 @@ namespace Lazinator.Core
         /// <returns></returns>
         public static IMemoryOwner<byte> GetRentedMemory(int minimumSize)
         {
-            // The following code could alternatively be used if array pooling is not needed: return new SimpleMemoryOwner<byte>(new byte[minimumSize * 2]);
+            // The following code could alternatively be used if array pooling is not needed: return new SimpleMemoryOwner(new byte[minimumSize * 2]);
             var toRent = LazinatorMemoryPool.Rent(minimumSize);
             return toRent;
         }
@@ -1369,7 +1369,7 @@ namespace Lazinator.Core
             {
                 LazinatorMemory serialized =
                     lazinator.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false));
-                var result = FarmhashByteSpans.Hash32(serialized.InitialMemory.Span);
+                var result = FarmhashByteSpans.Hash32(serialized.ReadOnlyMemory.Span);
                 serialized.Dispose();
                 return result;
             }
@@ -1387,7 +1387,7 @@ namespace Lazinator.Core
             {
                 LazinatorMemory serialized =
                     lazinator.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false));
-                var result = FarmhashByteSpans.Hash64(serialized.InitialMemory.Span);
+                var result = FarmhashByteSpans.Hash64(serialized.ReadOnlyMemory.Span);
                 serialized.Dispose();
                 return result;
             }
@@ -1402,7 +1402,7 @@ namespace Lazinator.Core
             {
                 LazinatorMemory serialized =
                     lazinator.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false));
-                var result = FarmhashByteSpans.Hash128(serialized.InitialMemory.Span);
+                var result = FarmhashByteSpans.Hash128(serialized.ReadOnlyMemory.Span);
                 serialized.Dispose();
                 return result;
             }

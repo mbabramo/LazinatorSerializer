@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Buffers
 {
-    public class MemoryChunk : IMemoryOwner<byte>
+    public class MemoryChunk : IReadOnlyBytes
     {
-        public IMemoryOwner<byte> MemoryAsLoaded { get; set; }
+        public IReadOnlyBytes MemoryAsLoaded { get; set; }
 
         public MemoryChunkReference Reference { get; set; }
 
@@ -25,12 +25,12 @@ namespace Lazinator.Buffers
 
         }
 
-        public MemoryChunk(IMemoryOwner<byte> memoryAsLoaded) : this(memoryAsLoaded, new MemoryChunkReference(0, 0, memoryAsLoaded.Memory.Length, 0, memoryAsLoaded.Memory.Length), false)
+        public MemoryChunk(IReadOnlyBytes memoryAsLoaded) : this(memoryAsLoaded, new MemoryChunkReference(0, 0, memoryAsLoaded.ReadOnlyMemory.Length, 0, memoryAsLoaded.ReadOnlyMemory.Length), false)
         {
 
         }
 
-        public MemoryChunk(IMemoryOwner<byte> memoryAsLoaded, MemoryChunkReference reference, bool isPersisted)
+        public MemoryChunk(IReadOnlyBytes memoryAsLoaded, MemoryChunkReference reference, bool isPersisted)
         {
             MemoryAsLoaded = memoryAsLoaded;
             Reference = reference;
@@ -41,7 +41,7 @@ namespace Lazinator.Buffers
         /// Returns the memory being referred to, taking into account the additional offset to be applied after loading.
         /// If the memory hasn't been loaded, empty memory will be returned.
         /// </summary>
-        public virtual Memory<byte> Memory => MemoryAsLoaded == null ? LazinatorMemory.EmptyMemory : MemoryAsLoaded.Memory.Slice(Reference.AdditionalOffset, Reference.FinalLength);
+        public virtual ReadOnlyMemory<byte> ReadOnlyMemory => MemoryAsLoaded == null ? LazinatorMemory.EmptyMemory : MemoryAsLoaded.ReadOnlyMemory.Slice(Reference.AdditionalOffset, Reference.FinalLength);
 
         /// <summary>
         /// Slices the memory being referred to. The information for loading remains the same.
@@ -122,7 +122,7 @@ namespace Lazinator.Buffers
         public override string ToString()
         {
             LoadMemory();
-            var bytes = Memory.ToArray();
+            var bytes = ReadOnlyMemory.ToArray();
             string result = String.Join(",", bytes.Select(x => x.ToString().PadLeft(3, '0')));
             return $"Chunk {MemoryChunkID.ToString().PadLeft(3, '0')}: {result}";
         }

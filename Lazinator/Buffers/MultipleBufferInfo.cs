@@ -147,7 +147,7 @@ namespace Lazinator.Buffers
             {
                 return activeMemory.CurrentBuffer.Memory.Span.Slice((int)(lengthsPosition - CompletedMemory.Length));
             }
-            return CompletedMemory.Slice(lengthsPosition).InitialMemory.Span;
+            return CompletedMemory.Slice(lengthsPosition).ReadOnlyMemory.Span;
         }
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace Lazinator.Buffers
                 {
                     MemoryChunk memoryChunk = CompletedMemory.GetFirstMemoryChunkWithID(memoryChunkID);
                     memoryChunk.LoadMemory();
-                    return memoryChunk.WithReference(nonNullLengthsSpanReference).Memory.Span;
+                    return memoryChunk.WithReference(nonNullLengthsSpanReference).ReadOnlyMemory.Span;
                 }
             }
             else

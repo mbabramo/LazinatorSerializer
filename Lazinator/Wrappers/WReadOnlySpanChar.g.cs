@@ -47,7 +47,7 @@ namespace Lazinator.Wrappers
                 if (!_Value_Accessed)
                 {
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Value_ByteIndex, _Value_ByteLength, null);
-                    return MemoryMarshal.Cast<byte, char>(childData.InitialMemory.Span);
+                    return MemoryMarshal.Cast<byte, char>(childData.ReadOnlyMemory.Span);
                 }
                 return MemoryMarshal.Cast<byte, char>(_Value.Span);
             }
@@ -172,7 +172,7 @@ namespace Lazinator.Wrappers
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.ReadOnlyMemory.Span;
             if (span.Length == 0)
             {
                 return 0;
@@ -335,7 +335,7 @@ namespace Lazinator.Wrappers
         
         int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialMemory.Span;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.ReadOnlyMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             int lengthForLengths = 0;
             int totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
