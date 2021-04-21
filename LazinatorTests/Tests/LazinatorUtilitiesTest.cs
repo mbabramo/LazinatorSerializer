@@ -167,8 +167,7 @@ namespace LazinatorTests.Tests
             for (int i = 0; i < 1; i++)
             { // same as above; higher iterations causes no memory leak
                 BufferWriter writer = new BufferWriter(bufferSize);
-                var rented = writer.LazinatorMemory;
-                ((ExpandableBytes)rented.ReadOnlyMemoryChunk.MemoryAsLoaded).CurrentBuffer.Memory.Length.Should().BeGreaterOrEqualTo(bufferSize);
+                writer.ActiveMemory.CurrentBuffer.Memory.Length.Should().BeGreaterOrEqualTo(bufferSize);
             }
         }
 

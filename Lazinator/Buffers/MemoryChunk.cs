@@ -13,6 +13,8 @@ namespace Lazinator.Buffers
 
         public IReadableBytes MemoryAsLoaded { get; set; }
 
+        public IMemoryOwner<byte> MemoryOwner => MemoryAsLoaded?.MemoryOwner;
+
         public bool IsReadOnly => MemoryAsLoaded is not ReadWriteBytes;
 
         public ReadWriteBytes WritableMemory
@@ -34,6 +36,13 @@ namespace Lazinator.Buffers
 
         public virtual bool IsPersisted { get; set; }
 
+        public long AllocationID => MemoryAsLoaded switch
+        {
+            ReadWriteBytes rw => rw.AllocationID,
+            ReadOnlyBytes ro => ro.AllocationID,
+            _ => throw new NotImplementedException()
+        };
+
         public MemoryChunk()
         {
 
@@ -54,6 +63,10 @@ namespace Lazinator.Buffers
             MemoryAsLoaded = memoryAsLoaded;
             Reference = reference;
             IsPersisted = isPersisted;
+            if (reference.MemoryChunkID == 2)
+            {
+                var DEBUG = 0;
+            }
         }
 
         /// <summary>
@@ -62,7 +75,19 @@ namespace Lazinator.Buffers
         /// </summary>
         public virtual ReadOnlyMemory<byte> ReadOnlyMemory => MemoryAsLoaded == null ? LazinatorMemory.EmptyReadOnlyMemory : MemoryAsLoaded.ReadOnlyMemory.Slice(Reference.AdditionalOffset, Reference.FinalLength);
 
-        public virtual Memory<byte> ReadWriteMemory => IsReadOnly ? LazinatorMemory.EmptyMemory : WritableMemory.Memory.Slice(Reference.AdditionalOffset, Reference.FinalLength);
+        public virtual Memory<byte> ReadWriteMemory
+        {
+            get
+            {
+                if (IsReadOnly)
+                {
+                    ThrowHelper.ThrowMemoryNotWritableException();
+                    return null; // will not execute
+                }
+                else
+                    return WritableMemory.Memory.Slice(Reference.AdditionalOffset, Reference.FinalLength);
+            }
+        }
 
         /// <summary>
         /// Slices the memory being referred to. The information for loading remains the same.

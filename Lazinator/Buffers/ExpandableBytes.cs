@@ -19,8 +19,8 @@ namespace Lazinator.Buffers
         public int UsedBytesInCurrentBuffer { get; set; }
         public Memory<byte> Memory => CurrentBuffer.Memory.Slice(0, UsedBytesInCurrentBuffer);
         public ReadOnlyMemory<byte> ReadOnlyMemory => Memory;
-        public ReadOnlyBytes ReadOnlyBytes => new ReadOnlyBytes(ReadOnlyMemory);
-        public ReadWriteBytes ReadWriteBytes => new ReadWriteBytes(Memory);
+        public ReadOnlyBytes ReadOnlyBytes => new ReadOnlyBytes(ReadOnlyMemory, this) { AllocationID = AllocationID };
+        public ReadWriteBytes ReadWriteBytes => new ReadWriteBytes(Memory, this) { AllocationID = AllocationID };
 
         public bool Disposed { get; protected internal set; }
         public static long NextAllocationID = 0; // we track all allocations to facilitate debugging of memory allocation and disposal

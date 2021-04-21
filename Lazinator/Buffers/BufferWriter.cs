@@ -243,7 +243,7 @@ namespace Lazinator.Buffers
         {
             if (ActiveMemoryPosition > 0)
             {
-                var chunkToAppend = new MemoryChunk(ActiveMemory.ReadOnlyBytes, new MemoryChunkReference(MultipleBufferInfo?.GetActiveMemoryChunkID() ?? 0, 0, ActiveMemoryPosition), false);
+                var chunkToAppend = new MemoryChunk(ActiveMemory.ReadWriteBytes, new MemoryChunkReference(MultipleBufferInfo?.GetActiveMemoryChunkID() ?? 0, 0, ActiveMemoryPosition), false);
                 var withAppendedChunk = CompletedMemory.WithAppendedChunk(chunkToAppend);
                 if (MultipleBufferInfo == null)
                     MultipleBufferInfo = new MultipleBufferInfo(withAppendedChunk, false);
@@ -510,8 +510,15 @@ namespace Lazinator.Buffers
             LengthsPosition += sizeof(Int16);
         }
 
+        public static int DEBUG = 0;
+
         public void RecordLength(int length)
         {
+            DEBUG++;
+            if (DEBUG == 4)
+            {
+                var DEBUG2 = 0;
+            }
             if (BufferWriter.LittleEndianStorage)
                 WriteInt32LittleEndian(LengthsSpan, length);
             else

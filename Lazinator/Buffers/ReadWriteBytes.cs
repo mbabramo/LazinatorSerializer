@@ -12,12 +12,16 @@ namespace Lazinator.Buffers
         private Memory<byte> _Memory;
         public Memory<byte> Memory { get => Disposed ? throw new ObjectDisposedException("ReadWriteBytes") : _Memory; set => _Memory = value; }
         public bool Disposed { get; set; }
+        public long AllocationID { get; set; }
+        public IMemoryOwner<byte> MemoryOwner { get; set; }
 
         public ReadOnlyMemory<byte> ReadOnlyMemory => Memory;
-        public ReadWriteBytes(Memory<byte> memory)
+        public ReadWriteBytes(Memory<byte> memory, IMemoryOwner<byte> memoryOwner = null)
         {
             _Memory = memory;
             Disposed = false;
+            MemoryOwner = memoryOwner;
+            AllocationID = -1;
         }
 
         public ReadOnlyBytes ToReadOnlyBytes() => new ReadOnlyBytes(Memory);
@@ -25,7 +29,7 @@ namespace Lazinator.Buffers
         public void Dispose()
         {
             Disposed = true;
-            // Note: This doesn't actually dispose of the underlying memory, since Memory<T> does not define Dispose. In general, you should not manually call Dispose() on SimpleMemoryOwner. The memory will be automatically garbage collected.
+            MemoryOwner?.Dispose();
         }
     }
 }

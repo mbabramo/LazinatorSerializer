@@ -41,6 +41,7 @@ namespace Lazinator.Buffers
         /// </summary>
         public readonly long Length;
 
+        public IMemoryOwner<byte> MemoryOwner => ReadOnlyMemoryChunk?.MemoryOwner;
         /// <summary>
         /// The number of bytes, as an integer, or null if the number is too large to be stored in an integer.
         /// </summary>
