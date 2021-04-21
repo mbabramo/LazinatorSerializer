@@ -12,15 +12,14 @@ namespace Lazinator.Buffers
         private ReadOnlyMemory<byte> _Memory;
         public ReadOnlyMemory<byte> ReadOnlyMemory { get => Disposed ? throw new ObjectDisposedException("ReadOnlyBytes") : _Memory; set => _Memory = value; }
         public bool Disposed { get; set; }
-        public long AllocationID { get; set; }
         public IMemoryOwner<byte> MemoryOwner { get; set; }
+        public long AllocationID => MemoryOwner is ExpandableBytes e ? e.AllocationID : -1;
 
         public ReadOnlyBytes(ReadOnlyMemory<byte> memory, IMemoryOwner<byte> memoryOwner = null)
         {
             _Memory = memory;
             Disposed = false;
             MemoryOwner = memoryOwner;
-            AllocationID = -1;
         }
 
         public void Dispose()
