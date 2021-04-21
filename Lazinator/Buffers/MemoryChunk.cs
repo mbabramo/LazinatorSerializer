@@ -14,6 +14,7 @@ namespace Lazinator.Buffers
         public IReadableBytes MemoryAsLoaded { get; set; }
 
         public IMemoryOwner<byte> MemoryOwner => MemoryAsLoaded?.MemoryOwner;
+        public bool Disposed => (MemoryOwner as IMemoryAllocationInfo)?.Disposed ?? false;
 
         public bool IsReadOnly => MemoryAsLoaded is not ReadWriteBytes;
 
@@ -63,10 +64,6 @@ namespace Lazinator.Buffers
             MemoryAsLoaded = memoryAsLoaded;
             Reference = reference;
             IsPersisted = isPersisted;
-            if (reference.MemoryChunkID == 2)
-            {
-                var DEBUG = 0;
-            }
         }
 
         /// <summary>

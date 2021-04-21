@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Buffers
 {
-    public interface IReadableBytes
+    public interface IReadableBytes : IMemoryAllocationInfo
     {
         ReadOnlyMemory<byte> ReadOnlyMemory { get; }
         IMemoryOwner<byte> MemoryOwner { get; }

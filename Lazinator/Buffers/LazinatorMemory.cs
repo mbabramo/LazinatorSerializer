@@ -48,7 +48,7 @@ namespace Lazinator.Buffers
         public int? LengthInt => Length > int.MaxValue ? null : (int)Length;
 
         public bool IsEmpty => ReadOnlyMemoryChunk == null || Length == 0;
-        public long? AllocationID => (ReadOnlyMemoryChunk.MemoryAsLoaded as ExpandableBytes)?.AllocationID;
+        public long AllocationID => (ReadOnlyMemoryChunk.MemoryAsLoaded as ExpandableBytes)?.AllocationID ?? -1;
 
         public static Memory<byte> EmptyMemory = new Memory<byte>();
         public static ReadOnlyMemory<byte> EmptyReadOnlyMemory = new ReadOnlyMemory<byte>();
@@ -57,7 +57,7 @@ namespace Lazinator.Buffers
 
         public override string ToString()
         {
-            return $@"{(AllocationID != null ? $"Allocation {AllocationID} " : "")}Length {Length} Bytes {String.Join(",", EnumerateBytes().Take(2000))}";
+            return $@"{(AllocationID != -1 ? $"Allocation {AllocationID} " : "")}Length {Length} Bytes {String.Join(",", EnumerateBytes().Take(2000))}";
         }
 
         #region Construction
@@ -154,7 +154,7 @@ namespace Lazinator.Buffers
                 additionalMemoryChunks.Add(GetMemoryChunkFromMemoryChunkIndexReference(indexReference).WithPreTruncationLengthIncreasedIfNecessary(chunkBeingAdded));
         }
 
-        public bool Disposed => EnumerateReadOnlyBytesSegments(true).Any(x => x != null && (x is ExpandableBytes e && e.Disposed) || (x is ReadOnlyBytes s && s.Disposed));
+        public bool Disposed => EnumerateReadOnlyBytesSegments(true).Any(x => x != null && (x is IMemoryAllocationInfo info && info.Disposed) || (x is ReadOnlyBytes s && s.Disposed));
 
         #endregion
 

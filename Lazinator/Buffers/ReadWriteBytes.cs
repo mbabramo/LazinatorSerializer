@@ -10,9 +10,9 @@ namespace Lazinator.Buffers
     public struct ReadWriteBytes : IMemoryOwner<byte>, IReadableBytes
     {
         private Memory<byte> _Memory;
-        public Memory<byte> Memory { get => Disposed ? throw new ObjectDisposedException("ReadWriteBytes") : _Memory; set => _Memory = value; }
+        public Memory<byte> Memory { get => Disposed || (MemoryOwner is IMemoryAllocationInfo info && info.Disposed) ? throw new ObjectDisposedException("ReadWriteBytes") : _Memory; set => _Memory = value; }
         public bool Disposed { get; set; }
-        public long AllocationID => MemoryOwner is ExpandableBytes e ? e.AllocationID : -1;
+        public long AllocationID => MemoryOwner is IMemoryAllocationInfo info ? info.AllocationID : -1;
         public IMemoryOwner<byte> MemoryOwner { get; set; }
 
         public ReadOnlyMemory<byte> ReadOnlyMemory => Memory;

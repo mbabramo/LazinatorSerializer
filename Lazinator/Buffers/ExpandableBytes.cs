@@ -11,7 +11,7 @@ namespace Lazinator.Buffers
     /// This memory owner rents memory and later returns it and rents more. If, when writing, it realizes that it needs more, then it 
     /// rents a bigger buffer and copies the existing buffer into it and returns the original. 
     /// </summary>
-    public class ExpandableBytes : IMemoryOwner<byte>
+    public class ExpandableBytes : IMemoryOwner<byte>, IMemoryAllocationInfo
     {
         public const int DefaultMinBufferSize = 1024; 
         public bool LazinatorShouldNotReturnToPool;
@@ -24,7 +24,7 @@ namespace Lazinator.Buffers
 
         public bool Disposed { get; protected internal set; }
         public static long NextAllocationID = 0; // we track all allocations to facilitate debugging of memory allocation and disposal
-        public long AllocationID;
+        public long AllocationID { get; private set; }
 
         public static bool UseMemoryPooling = true;
         public static bool TrackMemoryAllocations = false;
