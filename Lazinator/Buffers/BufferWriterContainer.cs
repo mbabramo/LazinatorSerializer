@@ -38,6 +38,9 @@ namespace Lazinator.Buffers
         public Span<byte> ActiveMemoryWrittenSpan => Writer.ActiveMemoryWrittenSpan;
         public int ActiveMemoryPosition => Writer.ActiveMemoryPosition;
         public long OverallMemoryPosition => Writer.OverallMemoryPosition;
+        public (int index, int offset) IndexedMemoryPosition => Writer.IndexedMemoryPosition;
+        public (int index, int offset) SetIndexedLengthsPosition(int bytesToReserve) => Writer.SetIndexedLengthsPosition(bytesToReserve);
+        public void ResetIndexedLengthsPosition((int index, int offset) previousPosition) => Writer.ResetIndexedLengthsPosition(previousPosition);
         public long SetLengthsPosition(int bytesToReserve) => Writer.SetLengthsPosition(bytesToReserve);
         public void ResetLengthsPosition(long previousPosition) => Writer.ResetLengthsPosition(previousPosition);
         public void RecordLength(byte length) => Writer.RecordLength(length);

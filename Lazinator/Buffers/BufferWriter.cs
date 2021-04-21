@@ -58,6 +58,7 @@ namespace Lazinator.Buffers
                 MultipleBufferInfo = null;
             ActiveMemory.UsedBytesInCurrentBuffer = 0;
             LengthsPosition = 0;
+            IndexedLengthsPosition = (0, 0);
         }
 
         private void InitializeIfNecessary()
@@ -153,6 +154,22 @@ namespace Lazinator.Buffers
                 }
             }
         }
+
+        // DEBUG
+        public (int index, int offset) IndexedMemoryPosition
+        {
+            get
+            {
+                if (MultipleBufferInfo is null)
+                    return (0, ActiveMemoryPosition);
+                int completedMemoryChunks = CompletedMemory.IsEmpty ? 0 : CompletedMemory.NumMemoryChunks();
+                int index = completedMemoryChunks + 1;
+                return (index, ActiveMemoryPosition);
+            }
+        }
+
+        //DEBUG
+        private (int index, int offset) IndexedLengthsPosition;
 
         /// <summary>
         /// An earlier position in the buffer, to which we can write information on the lengths that we are writing later in the buffer.
@@ -462,6 +479,7 @@ namespace Lazinator.Buffers
         /// <summary>
         /// A span containing space reserved to write length values of what is written later in the buffer.
         /// </summary>
+        /// 
         private Span<byte> LengthsSpan
         {
             get
@@ -469,6 +487,16 @@ namespace Lazinator.Buffers
                 if (MultipleBufferInfo == null)
                     return ActiveSpan.Slice((int)LengthsPosition);
                 return MultipleBufferInfo.GetLengthsSpan(ActiveMemory, ActiveMemoryPosition, LengthsPosition);
+            }
+        }
+        // DEBUG
+        private Span<byte> IndexedLengthsSpan
+        {
+            get
+            {
+                if (MultipleBufferInfo == null || IndexedLengthsPosition.index == 0)
+                    return ActiveSpan.Slice(IndexedLengthsPosition.offset);
+                return MultipleBufferInfo.CompletedMemory.MemoryAtIndex(IndexedLengthsPosition.index - 1).Slice(IndexedLengthsPosition.offset).ReadWriteMemory.Span;
             }
         }
 
@@ -485,6 +513,14 @@ namespace Lazinator.Buffers
             return previousPosition;
         }
 
+        public (int index, int offset) SetIndexedLengthsPosition(int bytesToReserve)
+        {
+            (int index, int offset) previousPosition = IndexedLengthsPosition;
+            IndexedLengthsPosition = IndexedMemoryPosition;
+            Skip(bytesToReserve);
+            return previousPosition;
+        }
+
         /// <summary>
         /// Resets the lengths position to the previous position. This is called at the beginning of an object,
         /// so that a child object has a different span for lengths from the parent.
@@ -493,6 +529,12 @@ namespace Lazinator.Buffers
         public void ResetLengthsPosition(long previousPosition)
         {
             LengthsPosition = previousPosition;
+        }
+
+        // DEBUG
+        public void ResetIndexedLengthsPosition((int index, int offset) indexedPosition)
+        {
+            IndexedLengthsPosition = indexedPosition;
         }
 
         public void RecordLength(byte length)

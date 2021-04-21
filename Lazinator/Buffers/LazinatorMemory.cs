@@ -182,7 +182,7 @@ namespace Lazinator.Buffers
             return new LazinatorMemory(array);
         }
 
-        private MemoryChunk MemoryAtIndex(int i) => i == 0 ? ReadOnlyMemoryChunk : MoreMemoryChunks.MemoryAtIndex(i - 1);
+        public MemoryChunk MemoryAtIndex(int i) => i == 0 ? ReadOnlyMemoryChunk : MoreMemoryChunks.MemoryAtIndex(i - 1);
 
         /// <summary>
         /// Gets the final length of the specified memory chunk. It avoids loading the memory if possible.

@@ -98,6 +98,12 @@ namespace Lazinator.Buffers
             return chunk;
         }
 
+        public virtual MemoryChunk Slice(int offset)
+        {
+            var chunk = new MemoryChunk(MemoryAsLoaded, Reference.Slice(offset), IsPersisted);
+            return chunk;
+        }
+
         /// <summary>
         /// Returns a MemoryChunk with the specified reference.
         /// </summary>
