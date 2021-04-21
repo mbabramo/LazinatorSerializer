@@ -251,12 +251,12 @@ namespace Lazinator.Persistence
                     throw new Exception($"There is or was previously memory persisted for chunk ID {memoryChunkID}");
                 if (ContainedInSingleBlob)
                 {
-                    BlobManager.Append(path, memoryChunkToPersist.ReadOnlyLoadedMemory.ReadOnlyMemory);
+                    BlobManager.Append(path, memoryChunkToPersist.MemoryAsLoaded.ReadOnlyMemory);
                     UpdateMemoryChunkReferenceToLoadingOffset(memoryChunkToPersist.MemoryChunkID, offset);
                     offset += memoryChunkToPersist.Reference.PreTruncationLength;
                 }
                 else
-                    BlobManager.Write(path, memoryChunkToPersist.ReadOnlyLoadedMemory.ReadOnlyMemory);
+                    BlobManager.Write(path, memoryChunkToPersist.MemoryAsLoaded.ReadOnlyMemory);
                 memoryChunkToPersist.IsPersisted = true;
                 SetMemoryChunkStatus(memoryChunkID, PersistentIndexMemoryChunkStatus.NewlyIncluded);
             }
@@ -296,12 +296,12 @@ namespace Lazinator.Persistence
                     throw new Exception($"There is or was previously memory persisted for chunk ID {memoryChunkID}");
                 if (ContainedInSingleBlob)
                 {
-                    await BlobManager.AppendAsync(path, memoryChunkToPersist.ReadOnlyLoadedMemory.ReadOnlyMemory);
+                    await BlobManager.AppendAsync(path, memoryChunkToPersist.MemoryAsLoaded.ReadOnlyMemory);
                     UpdateMemoryChunkReferenceToLoadingOffset(memoryChunkToPersist.MemoryChunkID, offset);
                     offset += memoryChunkToPersist.Reference.PreTruncationLength;
                 }
                 else
-                    await BlobManager.WriteAsync(path, memoryChunkToPersist.ReadOnlyLoadedMemory.ReadOnlyMemory);
+                    await BlobManager.WriteAsync(path, memoryChunkToPersist.MemoryAsLoaded.ReadOnlyMemory);
                 memoryChunkToPersist.IsPersisted = true;
                 SetMemoryChunkStatus(memoryChunkID, PersistentIndexMemoryChunkStatus.NewlyIncluded);
             }

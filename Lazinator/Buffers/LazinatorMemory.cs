@@ -18,7 +18,7 @@ namespace Lazinator.Buffers
     /// The memory referenced is defined by the index of the first memory chunk, the index of the first byte within that chunk, and the number of 
     /// bytes altogether. 
     /// </summary>
-    public readonly struct LazinatorMemory : IReadOnlyBytes
+    public readonly struct LazinatorMemory : IReadableBytes
     {
         /// <summary>
         /// The first chunk of owned memory (and in ordinary usage, the only chunk).
@@ -47,7 +47,7 @@ namespace Lazinator.Buffers
         public int? LengthInt => Length > int.MaxValue ? null : (int)Length;
 
         public bool IsEmpty => ReadOnlyMemoryChunk == null || Length == 0;
-        public long? AllocationID => (ReadOnlyMemoryChunk.ReadOnlyLoadedMemory as ExpandableBytes)?.AllocationID;
+        public long? AllocationID => (ReadOnlyMemoryChunk.MemoryAsLoaded as ExpandableBytes)?.AllocationID;
 
         public static Memory<byte> EmptyMemory = new Memory<byte>();
         public static ReadOnlyMemory<byte> EmptyReadOnlyMemory = new ReadOnlyMemory<byte>();
@@ -96,7 +96,7 @@ namespace Lazinator.Buffers
         {
         }
 
-        public LazinatorMemory(IReadOnlyBytes readOnlyBytes) : this(new MemoryChunk(readOnlyBytes))
+        public LazinatorMemory(IReadableBytes readOnlyBytes) : this(new MemoryChunk(readOnlyBytes))
         {
         }
 
@@ -680,7 +680,7 @@ namespace Lazinator.Buffers
         {
             var memoryChunk = GetFirstMemoryChunkWithID(memoryChunkReference.MemoryChunkID);
             memoryChunk.LoadMemory();
-            var underlyingReadOnlyMemory = memoryChunk.ReadOnlyLoadedMemory.ReadOnlyMemory.Slice(memoryChunkReference.AdditionalOffset, memoryChunkReference.FinalLength);
+            var underlyingReadOnlyMemory = memoryChunk.MemoryAsLoaded.ReadOnlyMemory.Slice(memoryChunkReference.AdditionalOffset, memoryChunkReference.FinalLength);
             return underlyingReadOnlyMemory;
         }
 
@@ -774,10 +774,10 @@ namespace Lazinator.Buffers
         /// Enumerates the referenced memory owners (including portions of referenced memory chunks not referenced).
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<IReadOnlyBytes> EnumerateReadOnlyBytesSegments(bool includeOutsideOfRange = false)
+        private IEnumerable<IReadableBytes> EnumerateReadOnlyBytesSegments(bool includeOutsideOfRange = false)
         {
             foreach (var memoryChunk in EnumerateMemoryChunks(false))
-                yield return memoryChunk.ReadOnlyLoadedMemory;
+                yield return memoryChunk.MemoryAsLoaded;
         }
 
         public Dictionary<int, MemoryChunk> GetMemoryChunksByID()
@@ -1044,7 +1044,7 @@ namespace Lazinator.Buffers
                     }
                     else
                         chunk = memoryChunksIncludedByID[targetMemoryChunkID]; // problem -- how do we know this is writable?
-                    Memory<byte> targetBytes = chunk.ReadWriteLoadedMemory.Memory.Slice(bytesInTargetSoFar, bytesToCopyToTarget);
+                    Memory<byte> targetBytes = chunk.WritableMemory.Memory.Slice(bytesInTargetSoFar, bytesToCopyToTarget);
                     sourceMemoryChunk.ReadOnlyMemory.CopyTo(targetBytes);
                     bytesSoFarInTargetMemoryChunkID[targetMemoryChunkID] = bytesInTargetSoFar + bytesToCopyToTarget;
                 }

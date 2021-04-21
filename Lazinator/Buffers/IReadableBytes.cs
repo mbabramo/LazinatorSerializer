@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Buffers
 {
-    public interface IReadOnlyBytes
+    public interface IReadableBytes
     {
         ReadOnlyMemory<byte> ReadOnlyMemory { get;  }
         void Dispose();

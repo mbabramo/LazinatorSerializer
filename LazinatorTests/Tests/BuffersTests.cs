@@ -692,8 +692,8 @@ namespace LazinatorTests.Tests
             var x = c.MyStructList[0];
             c.MyInt = -234;
             UpdateStoredBufferFromExisting(c);
-            var storageOverall = c.LazinatorMemoryStorage.ReadOnlyMemoryChunk.ReadOnlyLoadedMemory as ExpandableBytes;
-            var storageItem = c.MyStructList[0].LazinatorMemoryStorage.ReadOnlyMemoryChunk.ReadOnlyLoadedMemory as ExpandableBytes;
+            var storageOverall = c.LazinatorMemoryStorage.ReadOnlyMemoryChunk.MemoryAsLoaded as ExpandableBytes;
+            var storageItem = c.MyStructList[0].LazinatorMemoryStorage.ReadOnlyMemoryChunk.MemoryAsLoaded as ExpandableBytes;
             storageOverall.AllocationID.Should().Be(storageItem.AllocationID);
             var item = c.MyStructList[0].CloneLazinatorTyped();
             var c2 = c.CloneLazinatorTyped();
@@ -935,12 +935,12 @@ namespace LazinatorTests.Tests
         {
             itemToUpdate.SerializeLazinator();
             var initialMemoryChunk = itemToUpdate.LazinatorMemoryStorage.ReadOnlyMemoryChunk;
-            var allocationID = ((ExpandableBytes)initialMemoryChunk.ReadOnlyLoadedMemory).AllocationID;
+            var allocationID = ((ExpandableBytes)initialMemoryChunk.MemoryAsLoaded).AllocationID;
             itemToUpdate.ForEachLazinator(x => 
             {
                 if (x.LazinatorMemoryStorage.IsEmpty == false)
                 {
-                    ExpandableBytes b = x.LazinatorMemoryStorage.ReadOnlyMemoryChunk.ReadOnlyLoadedMemory as ExpandableBytes;
+                    ExpandableBytes b = x.LazinatorMemoryStorage.ReadOnlyMemoryChunk.MemoryAsLoaded as ExpandableBytes;
                     if (b != null)
                         b.AllocationID.Should().Be(allocationID);
                 }

@@ -8,26 +8,20 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Buffers
 {
-    public class MemoryChunk : IReadOnlyBytes
+    public class MemoryChunk : IReadableBytes
     {
-        private IReadOnlyBytes MemoryStoredReadOnly;
-        private ReadWriteBytes MemoryStoredAsWritable;
 
-        public IReadOnlyBytes ReadOnlyLoadedMemory 
-        {
-            get => IsReadOnly ? MemoryStoredReadOnly : MemoryStoredAsWritable.ToReadOnlyBytes();
-            set => MemoryStoredReadOnly = value; 
-        }
+        public IReadableBytes MemoryAsLoaded { get; set; }
 
-        public bool IsReadOnly => MemoryStoredReadOnly != null;
+        public bool IsReadOnly => MemoryAsLoaded is not ReadWriteBytes;
 
-        public ReadWriteBytes ReadWriteLoadedMemory
+        public ReadWriteBytes WritableMemory
         {
             get
             {
                 if (IsReadOnly)
                     ThrowHelper.ThrowMemoryNotWritableException();
-                return MemoryStoredAsWritable;
+                return (ReadWriteBytes)MemoryAsLoaded;
             }
         }
 
@@ -36,7 +30,7 @@ namespace Lazinator.Buffers
         public int MemoryChunkID => Reference.MemoryChunkID;
         public int Length => Reference.FinalLength;
 
-        public bool IsLoaded => ReadOnlyLoadedMemory != null;
+        public bool IsLoaded => MemoryAsLoaded != null;
 
         public virtual bool IsPersisted { get; set; }
 
@@ -45,7 +39,7 @@ namespace Lazinator.Buffers
 
         }
 
-        public MemoryChunk(IReadOnlyBytes memoryAsLoaded) : this(memoryAsLoaded, new MemoryChunkReference(0, 0, memoryAsLoaded.ReadOnlyMemory.Length, 0, memoryAsLoaded.ReadOnlyMemory.Length), false)
+        public MemoryChunk(IReadableBytes memoryAsLoaded) : this(memoryAsLoaded, new MemoryChunkReference(0, 0, memoryAsLoaded.ReadOnlyMemory.Length, 0, memoryAsLoaded.ReadOnlyMemory.Length), false)
         {
 
         }
@@ -55,16 +49,9 @@ namespace Lazinator.Buffers
 
         }
 
-        public MemoryChunk(IReadOnlyBytes memoryAsLoaded, MemoryChunkReference reference, bool isPersisted)
+        public MemoryChunk(IReadableBytes memoryAsLoaded, MemoryChunkReference reference, bool isPersisted)
         {
-            MemoryStoredReadOnly = memoryAsLoaded;
-            Reference = reference;
-            IsPersisted = isPersisted;
-        }
-
-        public MemoryChunk(ReadWriteBytes memoryAsLoaded, MemoryChunkReference reference, bool isPersisted)
-        {
-            MemoryStoredAsWritable = memoryAsLoaded;
+            MemoryAsLoaded = memoryAsLoaded;
             Reference = reference;
             IsPersisted = isPersisted;
         }
@@ -73,9 +60,9 @@ namespace Lazinator.Buffers
         /// Returns the memory being referred to, taking into account the additional offset to be applied after loading.
         /// If the memory hasn't been loaded, empty memory will be returned.
         /// </summary>
-        public virtual ReadOnlyMemory<byte> ReadOnlyMemory => ReadOnlyLoadedMemory == null ? LazinatorMemory.EmptyReadOnlyMemory : ReadOnlyLoadedMemory.ReadOnlyMemory.Slice(Reference.AdditionalOffset, Reference.FinalLength);
+        public virtual ReadOnlyMemory<byte> ReadOnlyMemory => MemoryAsLoaded == null ? LazinatorMemory.EmptyReadOnlyMemory : MemoryAsLoaded.ReadOnlyMemory.Slice(Reference.AdditionalOffset, Reference.FinalLength);
 
-        public virtual Memory<byte> ReadWriteMemory => IsReadOnly ? LazinatorMemory.EmptyMemory : ReadWriteLoadedMemory.Memory.Slice(Reference.AdditionalOffset, Reference.FinalLength);
+        public virtual Memory<byte> ReadWriteMemory => IsReadOnly ? LazinatorMemory.EmptyMemory : WritableMemory.Memory.Slice(Reference.AdditionalOffset, Reference.FinalLength);
 
         /// <summary>
         /// Slices the memory being referred to. The information for loading remains the same.
@@ -85,7 +72,7 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public virtual MemoryChunk Slice(int offset, int length)
         {
-            var chunk = new MemoryChunk(ReadOnlyLoadedMemory, Reference.Slice(offset, length), IsPersisted);
+            var chunk = new MemoryChunk(MemoryAsLoaded, Reference.Slice(offset, length), IsPersisted);
             return chunk;
         }
 
@@ -94,14 +81,14 @@ namespace Lazinator.Buffers
         /// </summary>
         /// <param name="replacementReference"></param>
         /// <returns></returns>
-        public virtual MemoryChunk WithReference(MemoryChunkReference replacementReference) => new MemoryChunk(ReadOnlyLoadedMemory, replacementReference, IsPersisted);
+        public virtual MemoryChunk WithReference(MemoryChunkReference replacementReference) => new MemoryChunk(MemoryAsLoaded, replacementReference, IsPersisted);
 
         internal MemoryChunk WithPreTruncationLengthIncreasedIfNecessary(MemoryChunk otherMemoryChunk)
         {
             if ((otherMemoryChunk.MemoryChunkID == MemoryChunkID) && Reference.PreTruncationLength < otherMemoryChunk.Reference.PreTruncationLength)
             {
                 Reference = Reference.WithPreTruncationLength(otherMemoryChunk.Reference.PreTruncationLength);
-                ReadOnlyLoadedMemory = otherMemoryChunk.ReadOnlyLoadedMemory;
+                MemoryAsLoaded = otherMemoryChunk.MemoryAsLoaded;
             }
             return this;
         }
@@ -150,7 +137,7 @@ namespace Lazinator.Buffers
 
         public void Dispose()
         {
-            ReadOnlyLoadedMemory?.Dispose();
+            MemoryAsLoaded?.Dispose();
         }
 
         public override string ToString()

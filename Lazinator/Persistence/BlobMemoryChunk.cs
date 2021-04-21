@@ -29,7 +29,7 @@ namespace Lazinator.Persistence
             if (IsLoaded)
                 return;
             ReadOnlyMemory<byte> bytes = BlobManager.Read(BlobPath, Reference.OffsetForLoading, Reference.PreTruncationLength);
-            ReadOnlyLoadedMemory = new ReadOnlyBytes(bytes);
+            MemoryAsLoaded = new ReadOnlyBytes(bytes);
         }
 
         public async override ValueTask LoadMemoryAsync()
@@ -37,17 +37,17 @@ namespace Lazinator.Persistence
             if (IsLoaded)
                 return;
             ReadOnlyMemory<byte> bytes = await BlobManager.ReadAsync(BlobPath, Reference.OffsetForLoading, Reference.PreTruncationLength);
-            ReadOnlyLoadedMemory = new ReadOnlyBytes(bytes);
+            MemoryAsLoaded = new ReadOnlyBytes(bytes);
         }
 
         public override void ConsiderUnloadMemory()
         {
-            ReadOnlyLoadedMemory = null; // Reference will now point to OriginalReference
+            MemoryAsLoaded = null; // Reference will now point to OriginalReference
         }
 
         public override ValueTask ConsiderUnloadMemoryAsync()
         {
-            ReadOnlyLoadedMemory = null; // Reference will now point to OriginalReference
+            MemoryAsLoaded = null; // Reference will now point to OriginalReference
             return ValueTask.CompletedTask;
         }
 
