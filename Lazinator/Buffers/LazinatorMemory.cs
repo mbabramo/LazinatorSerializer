@@ -817,7 +817,7 @@ namespace Lazinator.Buffers
         /// <param name="writer">The binary buffer writer container</param>
         /// <param name="includeOutsideOfRange">True if contained memory that is NOT written should be written.</param>
         /// <returns></returns>
-        public async ValueTask WriteToBinaryBufferAsync(BufferWriterContainer writer, bool includeOutsideOfRange = false)
+        public async ValueTask WriteToBufferAsync(BufferWriterContainer writer, bool includeOutsideOfRange = false)
         {
             await foreach (ReadOnlyMemory<byte> memory in EnumerateRawMemoryAsync(includeOutsideOfRange))
                 writer.Write(memory.Span);
@@ -830,7 +830,7 @@ namespace Lazinator.Buffers
         /// <param name="writer">The binary buffer writer </param>
         /// <param name="includeOutsideOfRange">True if contained memory that is NOT written should be written.</param>
         /// <returns></returns>
-        public void WriteToBinaryBuffer(ref BufferWriter writer, bool includeOutsideOfRange = false)
+        public void WriteToBuffer(ref BufferWriter writer, bool includeOutsideOfRange = false)
         {
             foreach (ReadOnlyMemory<byte> memory in EnumerateRawMemory(includeOutsideOfRange))
                 writer.Write(memory.Span);

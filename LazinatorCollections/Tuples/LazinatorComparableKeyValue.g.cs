@@ -261,7 +261,7 @@ namespace LazinatorCollections.Tuples
             else
             {
                 BufferWriter writer = new BufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
-                LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
+                LazinatorMemoryStorage.WriteToBuffer(ref writer);
                 LazinatorMemoryStorage = writer.LazinatorMemory;
             }
             OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
@@ -278,7 +278,7 @@ namespace LazinatorCollections.Tuples
                 return EncodeToNewBuffer(options);
             }
             BufferWriter writer = new BufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
-            LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
+            LazinatorMemoryStorage.WriteToBuffer(ref writer);
             return writer.LazinatorMemory;
         }
         

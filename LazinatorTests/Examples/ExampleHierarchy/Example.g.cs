@@ -1005,7 +1005,7 @@ namespace LazinatorTests.Examples
             else
             {
                 BufferWriter writer = new BufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
-                LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
+                LazinatorMemoryStorage.WriteToBuffer(ref writer);
                 LazinatorMemoryStorage = writer.LazinatorMemory;
             }
             OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
@@ -1029,7 +1029,7 @@ namespace LazinatorTests.Examples
             else
             {
                 BufferWriterContainer writer = new BufferWriterContainer(LazinatorMemoryStorage.LengthInt ?? 0);
-                await LazinatorMemoryStorage.WriteToBinaryBufferAsync(writer);
+                await LazinatorMemoryStorage.WriteToBufferAsync(writer);
                 LazinatorMemoryStorage = writer.LazinatorMemory;
             }
             OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
@@ -1047,7 +1047,7 @@ namespace LazinatorTests.Examples
                 return EncodeToNewBuffer(options);
             }
             BufferWriter writer = options.SerializeDiffs ? new BufferWriter(0, LazinatorMemoryStorage) : new BufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
-            LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);
+            LazinatorMemoryStorage.WriteToBuffer(ref writer);
             return writer.LazinatorMemory;
         }
         async public virtual ValueTask<LazinatorMemory> SerializeLazinatorAsync(LazinatorSerializationOptions options) 
@@ -1057,7 +1057,7 @@ namespace LazinatorTests.Examples
                 return await EncodeToNewBufferAsync(options);
             }
             BufferWriterContainer writer = options.SerializeDiffs ? new BufferWriterContainer(0, LazinatorMemoryStorage) : new BufferWriterContainer(LazinatorMemoryStorage.LengthInt ?? 0);
-            await LazinatorMemoryStorage.WriteToBinaryBufferAsync(writer);
+            await LazinatorMemoryStorage.WriteToBufferAsync(writer);
             return writer.LazinatorMemory;
         }
         

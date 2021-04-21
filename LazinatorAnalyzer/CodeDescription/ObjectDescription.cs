@@ -719,9 +719,9 @@ namespace Lazinator.CodeDescription
                             else
                             {{{MaybeAsyncConditional($@"
                                 BufferWriterContainer writer = new BufferWriterContainer(LazinatorMemoryStorage.LengthInt ?? 0);
-                                {AwaitAndNoteAsyncUsed}LazinatorMemoryStorage.WriteToBinaryBufferAsync(writer);", $@"
+                                {AwaitAndNoteAsyncUsed}LazinatorMemoryStorage.WriteToBufferAsync(writer);", $@"
                                 BufferWriter writer = new BufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
-                                LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);")}
+                                LazinatorMemoryStorage.WriteToBuffer(ref writer);")}
                                 LazinatorMemoryStorage = writer.LazinatorMemory;
                             }}
                             OriginalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren;
@@ -738,9 +738,9 @@ namespace Lazinator.CodeDescription
                                 return {MaybeAsyncReturnValue($"{MaybeAwaitWord}EncodeToNewBuffer{MaybeAsyncWord}(options)")};
                             }}{MaybeAsyncConditional($@"
                                 BufferWriterContainer writer = {SplittableCreateBufferWriter(true)}new BufferWriterContainer(LazinatorMemoryStorage.LengthInt ?? 0);
-                                {AwaitAndNoteAsyncUsed}LazinatorMemoryStorage.WriteToBinaryBufferAsync(writer);", $@"
+                                {AwaitAndNoteAsyncUsed}LazinatorMemoryStorage.WriteToBufferAsync(writer);", $@"
                                 BufferWriter writer = {SplittableCreateBufferWriter(false)}new BufferWriter(LazinatorMemoryStorage.LengthInt ?? 0);
-                                LazinatorMemoryStorage.WriteToBinaryBuffer(ref writer);")}
+                                LazinatorMemoryStorage.WriteToBuffer(ref writer);")}
                             return {MaybeAsyncReturnValue($"writer.LazinatorMemory")};
                         }}")}
 

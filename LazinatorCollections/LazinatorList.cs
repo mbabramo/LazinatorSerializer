@@ -505,7 +505,7 @@ namespace LazinatorCollections
             else
             {
                 LazinatorMemory mainListSerializedStorage = GetMainListSerializedWithoutDeserializing();
-                mainListSerializedStorage.WriteToBinaryBuffer(ref writer);
+                mainListSerializedStorage.WriteToBuffer(ref writer);
             }
         }
 
