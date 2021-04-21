@@ -480,7 +480,7 @@ namespace Lazinator.Buffers
         /// A span containing space reserved to write length values of what is written later in the buffer.
         /// </summary>
         /// 
-        private Span<byte> LengthsSpan
+        private Span<byte> OldLengthsSpan
         {
             get
             {
@@ -490,7 +490,7 @@ namespace Lazinator.Buffers
             }
         }
         // DEBUG
-        private Span<byte> IndexedLengthsSpan
+        private Span<byte> LengthsSpan
         {
             get
             {

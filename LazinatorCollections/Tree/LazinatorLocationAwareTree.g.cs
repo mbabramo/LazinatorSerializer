@@ -320,9 +320,9 @@ namespace LazinatorCollections.Tree
                 lengthForLengths += 12;
             }
             
-            long previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
+            var previousLengthsPosition = writer.SetIndexedLengthsPosition(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startPosition);
-            writer.ResetLengthsPosition(previousLengthsPosition);
+            writer.ResetIndexedLengthsPosition(previousLengthsPosition);
             
         }
         

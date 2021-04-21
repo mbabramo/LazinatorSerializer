@@ -417,9 +417,9 @@ namespace LazinatorCollections.OffsetList
             
             int lengthForLengths = 4;
             
-            long previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
+            var previousLengthsPosition = writer.SetIndexedLengthsPosition(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startPosition);
-            writer.ResetLengthsPosition(previousLengthsPosition);
+            writer.ResetIndexedLengthsPosition(previousLengthsPosition);
             
         }
         
