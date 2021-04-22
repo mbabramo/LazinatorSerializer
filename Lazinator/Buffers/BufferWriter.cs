@@ -83,7 +83,7 @@ namespace Lazinator.Buffers
                     return PatchLazinatorMemoryFromRecycled();
                 }
                 ActiveMemory.UsedBytesInCurrentBuffer = ActiveMemoryPosition;
-                if (!CompletedMemory.IsEmpty)
+                if (MultipleBufferInfo != null)
                 {
                     if (ActiveMemoryPosition == 0)
                         return CompletedMemory;
@@ -145,7 +145,7 @@ namespace Lazinator.Buffers
                     return ActiveMemoryPosition;
                 if (!Recycling)
                 {
-                    return ActiveMemoryPosition + (CompletedMemory.IsEmpty ? 0 : CompletedMemory.Length);
+                    return ActiveMemoryPosition + (MultipleBufferInfo?.Length ?? 0);
                 }
                 else
                 {
@@ -158,9 +158,9 @@ namespace Lazinator.Buffers
         {
             get
             {
-                if (MultipleBufferInfo is null || CompletedMemory.IsEmpty)
+                if (MultipleBufferInfo is null)
                     return (0, ActiveMemoryPosition);
-                int completedMemoryChunks = CompletedMemory.NumMemoryChunks();
+                int completedMemoryChunks = MultipleBufferInfo.NumMemoryChunks();
                 return (completedMemoryChunks, ActiveMemoryPosition);
             }
         }
@@ -251,12 +251,11 @@ namespace Lazinator.Buffers
         {
             if (ActiveMemoryPosition > 0)
             {
-                var chunkToAppend = new MemoryChunk(ActiveMemory.ReadWriteBytes, new MemoryChunkReference(MultipleBufferInfo?.GetActiveMemoryChunkID() ?? 0, 0, ActiveMemoryPosition), false);
-                var withAppendedChunk = CompletedMemory.WithAppendedChunk(chunkToAppend);
+                var chunk = new MemoryChunk(ActiveMemory.ReadWriteBytes, new MemoryChunkReference(MultipleBufferInfo?.GetActiveMemoryChunkID() ?? 0, 0, ActiveMemoryPosition), false);
                 if (MultipleBufferInfo == null)
-                    MultipleBufferInfo = new MultipleBufferInfo(withAppendedChunk, false);
+                    MultipleBufferInfo = new MultipleBufferInfo(chunk, false);
                 else
-                    MultipleBufferInfo.CompletedMemory = withAppendedChunk;
+                    MultipleBufferInfo.AppendChunk(chunk);
                 ActiveMemory = new ExpandableBytes(minSizeofNewBuffer);
                 ActiveMemoryPosition = 0;
                 MultipleBufferInfo.NumActiveMemoryBytesAddedToRecycling = 0;
@@ -475,9 +474,9 @@ namespace Lazinator.Buffers
         {
             get
             {
-                if (MultipleBufferInfo == null || LengthsPosition.index == (MultipleBufferInfo?.CompletedMemory.NumMemoryChunks() ?? 0))
+                if (MultipleBufferInfo == null || LengthsPosition.index == (MultipleBufferInfo?.NumMemoryChunks() ?? 0))
                     return ActiveSpan.Slice(LengthsPosition.offset);
-                return MultipleBufferInfo.CompletedMemory.MemoryAtIndex(LengthsPosition.index).Slice(LengthsPosition.offset).ReadWriteMemory.Span;
+                return MultipleBufferInfo.MemoryAtIndex(LengthsPosition.index).Slice(LengthsPosition.offset).ReadWriteMemory.Span;
             }
         }
 

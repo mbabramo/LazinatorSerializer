@@ -603,27 +603,6 @@ namespace Lazinator.Buffers
         // (or extends an existing such reference) so that the set of MemoryChunkReferences will always encompass all of the data.
         // Note that as usual, if BufferWriter needs to, it will append its active memory chunk to the LazinatorMemory and move to a new active chunk.
 
-        /// <summary>
-        /// Enumerates memory chunk references based on an initial memory chunk index (not an ID), an offset into that memory chunk, and a length.
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<MemoryChunkReference> EnumerateMemoryChunkReferences(int initialMemoryChunkIndex, int offset, long length)
-        {
-            int memoryChunkIndex = initialMemoryChunkIndex;
-            long numBytesOfLengthRemaining=length;
-            while (numBytesOfLengthRemaining > 0)
-            {
-                var memoryChunk = MemoryAtIndex(memoryChunkIndex);
-
-                int numBytesThisChunk = memoryChunk.Reference.FinalLength;
-                int bytesToUseThisChunk = (int)Math.Min(numBytesThisChunk - offset, numBytesOfLengthRemaining);
-                yield return memoryChunk.Reference.Slice(offset, bytesToUseThisChunk);
-
-                numBytesOfLengthRemaining -= bytesToUseThisChunk;
-                memoryChunkIndex++;
-                offset = 0;
-            }
-        }
 
         /// <summary>
         /// Enumerates memory chunk ranges corresponding to a subset of the bytes referenced by this LazinatorMemory

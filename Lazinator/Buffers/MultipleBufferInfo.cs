@@ -16,11 +16,23 @@ namespace Lazinator.Buffers
                 RecycledMemoryChunkReferences = new List<MemoryChunkReference>();
         }
 
+        public MultipleBufferInfo(MemoryChunk chunk, bool recycle)
+        {
+            CompletedMemory = new LazinatorMemory(chunk);
+            if (recycle)
+                RecycledMemoryChunkReferences = new List<MemoryChunkReference>();
+        }
+
         /// <summary>
         /// Bytes that were previously written. They may have been written in the same serialization pass (created when ExpandableBytes became full) or 
         /// in a previous serialization pass (when serializing diffs).
         /// </summary>
         public LazinatorMemory CompletedMemory { get; internal set; }
+
+        public int NumMemoryChunks() => CompletedMemory.NumMemoryChunks();
+
+        public MemoryChunk MemoryAtIndex(int i) => CompletedMemory.MemoryAtIndex(i);
+        public long Length => CompletedMemory.Length;
 
         /// <summary>
         /// When serializing diffs, these are non-null and will refer to various segments in CompletedMemory and ActiveMemory in order.
@@ -37,7 +49,10 @@ namespace Lazinator.Buffers
         /// </summary>
         internal int NumActiveMemoryBytesAddedToRecycling;
 
-
+        public void AppendChunk(MemoryChunk chunk)
+        {
+            CompletedMemory = CompletedMemory.WithAppendedChunk(chunk);
+        }
 
         /// <summary>
         /// Extends a memory chunk references list by adding a new reference. If the new reference is contiguous to the last existing reference,
@@ -94,9 +109,32 @@ namespace Lazinator.Buffers
         internal void InsertReferenceToCompletedMemory(int memoryChunkIndex, int startPosition, long numBytes, int activeMemoryPosition)
         {
             RecordLastActiveMemoryChunkReference(activeMemoryPosition);
-            IEnumerable<MemoryChunkReference> segmentsToAdd = CompletedMemory.EnumerateMemoryChunkReferences(memoryChunkIndex, startPosition, numBytes);
+            IEnumerable<MemoryChunkReference> segmentsToAdd = EnumerateMemoryChunkReferences(memoryChunkIndex, startPosition, numBytes);
             ExtendMemoryChunkReferencesList(segmentsToAdd);
             // Debug.WriteLine($"Reference to completed memory added. References are {String.Join(", ", RecycledMemoryChunkReferences)}");
+        }
+
+
+        /// <summary>
+        /// Enumerates memory chunk references based on an initial memory chunk index (not an ID), an offset into that memory chunk, and a length.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<MemoryChunkReference> EnumerateMemoryChunkReferences(int initialMemoryChunkIndex, int offset, long length)
+        {
+            int memoryChunkIndex = initialMemoryChunkIndex;
+            long numBytesOfLengthRemaining = length;
+            while (numBytesOfLengthRemaining > 0)
+            {
+                var memoryChunk = MemoryAtIndex(memoryChunkIndex);
+
+                int numBytesThisChunk = memoryChunk.Reference.FinalLength;
+                int bytesToUseThisChunk = (int)Math.Min(numBytesThisChunk - offset, numBytesOfLengthRemaining);
+                yield return memoryChunk.Reference.Slice(offset, bytesToUseThisChunk);
+
+                numBytesOfLengthRemaining -= bytesToUseThisChunk;
+                memoryChunkIndex++;
+                offset = 0;
+            }
         }
 
         /// <summary>
