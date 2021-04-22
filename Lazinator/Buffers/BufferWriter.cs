@@ -155,7 +155,6 @@ namespace Lazinator.Buffers
             }
         }
 
-        // DEBUG
         public (int index, int offset) IndexedMemoryPosition
         {
             get
@@ -167,7 +166,6 @@ namespace Lazinator.Buffers
             }
         }
 
-        //DEBUG
         private (int index, int offset) IndexedLengthsPosition;
 
         /// <summary>
@@ -479,17 +477,6 @@ namespace Lazinator.Buffers
         /// A span containing space reserved to write length values of what is written later in the buffer.
         /// </summary>
         /// 
-        private Span<byte> OldLengthsSpan
-        // DEBUG
-        {
-            get
-            {
-                if (MultipleBufferInfo == null)
-                    return ActiveSpan.Slice((int)LengthsPosition);
-                return MultipleBufferInfo.GetLengthsSpan(ActiveMemory, ActiveMemoryPosition, LengthsPosition);
-            }
-        }
-
         private Span<byte> LengthsSpan
         {
             get
@@ -506,14 +493,6 @@ namespace Lazinator.Buffers
         /// If there are multiple child objects, the lengths will be stored consecutively.
         /// </summary>
         /// <param name="bytesToReserve">The number of bytes to reserve</param>
-        public long SetLengthsPosition(int bytesToReserve)
-        {
-            long previousPosition = LengthsPosition;
-            LengthsPosition = OverallMemoryPosition;
-            Skip(bytesToReserve); 
-            return previousPosition;
-        }
-
         public (int index, int offset) SetIndexedLengthsPosition(int bytesToReserve)
         {
             (int index, int offset) previousPosition = IndexedLengthsPosition;
@@ -527,12 +506,6 @@ namespace Lazinator.Buffers
         /// so that a child object has a different span for lengths from the parent.
         /// </summary>
         /// <param name="previousPosition"></param>
-        public void ResetLengthsPosition(long previousPosition)
-        {
-            LengthsPosition = previousPosition;
-        }
-
-        // DEBUG
         public void ResetIndexedLengthsPosition((int index, int offset) indexedPosition)
         {
             IndexedLengthsPosition = indexedPosition;
