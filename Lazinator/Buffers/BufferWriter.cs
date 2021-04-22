@@ -160,11 +160,10 @@ namespace Lazinator.Buffers
         {
             get
             {
-                if (MultipleBufferInfo is null)
+                if (MultipleBufferInfo is null || CompletedMemory.IsEmpty)
                     return (0, ActiveMemoryPosition);
-                int completedMemoryChunks = CompletedMemory.IsEmpty ? 0 : CompletedMemory.NumMemoryChunks();
-                int index = completedMemoryChunks + 1;
-                return (index, ActiveMemoryPosition);
+                int completedMemoryChunks = CompletedMemory.NumMemoryChunks();
+                return (completedMemoryChunks, ActiveMemoryPosition);
             }
         }
 
@@ -481,6 +480,7 @@ namespace Lazinator.Buffers
         /// </summary>
         /// 
         private Span<byte> OldLengthsSpan
+        // DEBUG
         {
             get
             {
@@ -489,7 +489,7 @@ namespace Lazinator.Buffers
                 return MultipleBufferInfo.GetLengthsSpan(ActiveMemory, ActiveMemoryPosition, LengthsPosition);
             }
         }
-        // DEBUG
+
         private Span<byte> LengthsSpan
         {
             get
@@ -509,7 +509,7 @@ namespace Lazinator.Buffers
         {
             long previousPosition = LengthsPosition;
             LengthsPosition = OverallMemoryPosition;
-            Skip(bytesToReserve);
+            Skip(bytesToReserve); 
             return previousPosition;
         }
 
@@ -541,6 +541,7 @@ namespace Lazinator.Buffers
         {
             LengthsSpan[0] = length;
             LengthsPosition++;
+            IndexedLengthsPosition = (IndexedLengthsPosition.index, IndexedLengthsPosition.offset + 1);
         }
 
         public void RecordLength(Int16 length)
@@ -550,6 +551,7 @@ namespace Lazinator.Buffers
             else
                 WriteInt16BigEndian(LengthsSpan, length);
             LengthsPosition += sizeof(Int16);
+            IndexedLengthsPosition = (IndexedLengthsPosition.index, IndexedLengthsPosition.offset + sizeof(Int16));
         }
 
         public void RecordLength(int length)
@@ -559,6 +561,7 @@ namespace Lazinator.Buffers
             else
                 WriteInt32BigEndian(LengthsSpan, length);
             LengthsPosition += sizeof(int);
+            IndexedLengthsPosition = (IndexedLengthsPosition.index, IndexedLengthsPosition.offset + sizeof(int));
         }
         public void RecordLength(Int64 length)
         {
@@ -567,6 +570,7 @@ namespace Lazinator.Buffers
             else
                 WriteInt64BigEndian(LengthsSpan, length);
             LengthsPosition += sizeof(Int64);
+            IndexedLengthsPosition = (IndexedLengthsPosition.index, IndexedLengthsPosition.offset + sizeof(Int64));
         }
 
         #endregion
