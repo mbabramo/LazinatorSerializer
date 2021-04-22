@@ -52,7 +52,7 @@ namespace Lazinator.Buffers
 
         public static Memory<byte> EmptyMemory = new Memory<byte>();
         public static ReadOnlyMemory<byte> EmptyReadOnlyMemory = new ReadOnlyMemory<byte>();
-        public static LazinatorMemory EmptyLazinatorMemory = new LazinatorMemory(new Memory<byte>());
+        public static LazinatorMemory EmptyLazinatorMemory = new LazinatorMemory(EmptyMemory);
 
 
         public override string ToString()
@@ -74,6 +74,17 @@ namespace Lazinator.Buffers
                 Length = 0;
             else
                 Length = length;
+        }
+
+        public LazinatorMemory(IMemoryChunkCollection memoryChunkCollection)
+        {
+            var first = memoryChunkCollection.FirstOrDefault() ?? new MemoryChunk(new ReadOnlyBytes(EmptyMemory));
+            var afterFirst = memoryChunkCollection.Skip(1);
+            MoreMemoryChunks = afterFirst.Any() ? new MemoryChunkCollection(afterFirst.ToList()) : null;
+            ReadOnlyMemoryChunk = first;
+            StartIndex = 0;
+            Offset = 0;
+            Length = memoryChunkCollection.Length;
         }
 
         public LazinatorMemory(MemoryChunk memoryChunk, IMemoryChunkCollection moreMemoryChunks, int startIndex, int startPosition, long length) : this(memoryChunk, startPosition, length)
@@ -262,7 +273,7 @@ namespace Lazinator.Buffers
             long positionRemaining = offset;
             int revisedStartIndex = StartIndex;
             int revisedStartPosition = Offset;
-            int moreMemoryCount = MoreMemoryChunks?.Count ?? 0;
+            int moreMemoryCount = MoreMemoryChunks?.NumMemoryChunks ?? 0;
             while (positionRemaining > 0)
             {
                 MemoryChunk current = MemoryAtIndex(revisedStartIndex);
@@ -513,7 +524,7 @@ namespace Lazinator.Buffers
         {
             if (ReadOnlyMemoryChunk == null)
                 return 0;
-            return 1 + (MoreMemoryChunks == null ? 0 : MoreMemoryChunks.Count);
+            return 1 + (MoreMemoryChunks == null ? 0 : MoreMemoryChunks.NumMemoryChunks);
         }
 
         /// <summary>
@@ -760,17 +771,7 @@ namespace Lazinator.Buffers
                 yield return memoryChunk.MemoryAsLoaded;
         }
 
-        public Dictionary<int, MemoryChunk> GetMemoryChunksByID()
-        {
-            Dictionary<int, MemoryChunk> d = new Dictionary<int, MemoryChunk>();
-            foreach (MemoryChunk memoryChunk in EnumerateMemoryChunks(true))
-            {
-                int chunkID = memoryChunk.Reference.MemoryChunkID;
-                if (!d.ContainsKey(chunkID))
-                    d[chunkID] = memoryChunk;
-            }
-            return d;
-        }
+        
 
         public List<MemoryChunk> GetUnpersistedMemoryChunks()
         {

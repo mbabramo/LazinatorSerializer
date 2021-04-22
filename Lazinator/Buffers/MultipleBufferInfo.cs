@@ -9,30 +9,33 @@ namespace Lazinator.Buffers
 {
     public class MultipleBufferInfo
     {
-        public MultipleBufferInfo(LazinatorMemory completedMemory, bool recycle)
+        public MultipleBufferInfo(LazinatorMemory lazinatorMemory, bool recycle) : this(new MemoryChunkCollection(lazinatorMemory), recycle)
         {
-            CompletedMemory = completedMemory;
+        }
+
+        public MultipleBufferInfo(MemoryChunk chunk, bool recycle) : this(new MemoryChunkCollection(chunk), recycle)
+        {
+        }
+
+        public MultipleBufferInfo(IMemoryChunkCollection memoryChunkCollection, bool recycle)
+        {
+            MemoryChunks = memoryChunkCollection;
             if (recycle)
                 RecycledMemoryChunkReferences = new List<MemoryChunkReference>();
         }
 
-        public MultipleBufferInfo(MemoryChunk chunk, bool recycle)
-        {
-            CompletedMemory = new LazinatorMemory(chunk);
-            if (recycle)
-                RecycledMemoryChunkReferences = new List<MemoryChunkReference>();
-        }
+        public MultipleBufferInfo WithAppendedMemoryChunk(MemoryChunk memoryChunk) => new MultipleBufferInfo(MemoryChunks.WithAppendedMemoryChunk(memoryChunk), RecycledMemoryChunkReferences != null);
 
         /// <summary>
         /// Bytes that were previously written. They may have been written in the same serialization pass (created when ExpandableBytes became full) or 
         /// in a previous serialization pass (when serializing diffs).
         /// </summary>
-        public LazinatorMemory CompletedMemory { get; internal set; }
+        public IMemoryChunkCollection MemoryChunks { get; internal set; }
 
-        public int NumMemoryChunks() => CompletedMemory.NumMemoryChunks();
+        public int NumMemoryChunks => MemoryChunks.NumMemoryChunks;
 
-        public MemoryChunk MemoryAtIndex(int i) => CompletedMemory.MemoryAtIndex(i);
-        public long Length => CompletedMemory.Length;
+        public MemoryChunk MemoryAtIndex(int i) => MemoryChunks.MemoryAtIndex(i);
+        public long Length => MemoryChunks.Length;
 
         /// <summary>
         /// When serializing diffs, these are non-null and will refer to various segments in CompletedMemory and ActiveMemory in order.
@@ -51,7 +54,7 @@ namespace Lazinator.Buffers
 
         public void AppendChunk(MemoryChunk chunk)
         {
-            CompletedMemory = CompletedMemory.WithAppendedChunk(chunk);
+            MemoryChunks.AppendMemoryChunk(chunk);
         }
 
         /// <summary>
@@ -152,7 +155,7 @@ namespace Lazinator.Buffers
 
         internal LazinatorMemory CompletePatchLazinatorMemory(int activeLength, int activeMemoryChunkID)
         {
-            var byID = CompletedMemory.GetMemoryChunksByID();
+            var byID = MemoryChunks.GetMemoryChunksByID();
             if (activeLength > 0)
             {
                 var activeMemoryChunk = byID[activeMemoryChunkID];
@@ -184,8 +187,10 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         internal int GetActiveMemoryChunkID()
         {
-            return CompletedMemory.GetNextMemoryChunkID();
+            return MemoryChunks.GetNextMemoryChunkID();
         }
+
+        public LazinatorMemory ToLazinatorMemory() => new LazinatorMemory(MemoryChunks);
 
 
     }

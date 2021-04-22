@@ -37,8 +37,6 @@ namespace Lazinator.Buffers
         /// </summary>
         public MultipleBufferInfo MultipleBufferInfo { get; set; }
 
-        internal LazinatorMemory CompletedMemory => MultipleBufferInfo?.CompletedMemory ?? LazinatorMemory.EmptyLazinatorMemory;
-
         private bool Recycling => MultipleBufferInfo?.Recycling ?? false;
 
         internal int NumActiveMemoryBytesAddedToRecycling => MultipleBufferInfo?.NumActiveMemoryBytesAddedToRecycling ?? 0;
@@ -86,9 +84,9 @@ namespace Lazinator.Buffers
                 if (MultipleBufferInfo != null)
                 {
                     if (ActiveMemoryPosition == 0)
-                        return CompletedMemory;
-                    var withAppended = CompletedMemory.WithAppendedChunk(new MemoryChunk(ActiveMemory.ReadOnlyBytes, new MemoryChunkReference(MultipleBufferInfo.GetActiveMemoryChunkID(), 0, ActiveMemoryPosition), false));
-                    return withAppended;
+                        return MultipleBufferInfo.ToLazinatorMemory();
+                    var withAppended = MultipleBufferInfo.WithAppendedMemoryChunk(new MemoryChunk(ActiveMemory.ReadOnlyBytes, new MemoryChunkReference(MultipleBufferInfo.GetActiveMemoryChunkID(), 0, ActiveMemoryPosition), false));
+                    return withAppended.ToLazinatorMemory();
                 }
                 return new LazinatorMemory(new MemoryChunk(ActiveMemory.ReadOnlyBytes), 0, ActiveMemoryPosition);
             }
@@ -160,7 +158,7 @@ namespace Lazinator.Buffers
             {
                 if (MultipleBufferInfo is null)
                     return (0, ActiveMemoryPosition);
-                int completedMemoryChunks = MultipleBufferInfo.NumMemoryChunks();
+                int completedMemoryChunks = MultipleBufferInfo.NumMemoryChunks;
                 return (completedMemoryChunks, ActiveMemoryPosition);
             }
         }
@@ -474,7 +472,7 @@ namespace Lazinator.Buffers
         {
             get
             {
-                if (MultipleBufferInfo == null || LengthsPosition.index == (MultipleBufferInfo?.NumMemoryChunks() ?? 0))
+                if (MultipleBufferInfo == null || LengthsPosition.index == (MultipleBufferInfo?.NumMemoryChunks ?? 0))
                     return ActiveSpan.Slice(LengthsPosition.offset);
                 return MultipleBufferInfo.MemoryAtIndex(LengthsPosition.index).Slice(LengthsPosition.offset).ReadWriteMemory.Span;
             }

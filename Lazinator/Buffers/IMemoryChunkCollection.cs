@@ -10,10 +10,14 @@ namespace Lazinator.Buffers
     {
         MemoryChunk MemoryAtIndex(int i);
         MemoryChunkCollection DeepCopy();
+        void AppendMemoryChunk(MemoryChunk memoryChunk);
         MemoryChunkCollection WithAppendedMemoryChunk(MemoryChunk memoryChunk);
         void SetContents(IEnumerable<MemoryChunk> chunks);
-        public int Count { get; }
-        int? GetFirstIndexOfMemoryChunkID(int memoryChunkID); 
+        int? GetFirstIndexOfMemoryChunkID(int memoryChunkID);
+        Dictionary<int, MemoryChunk> GetMemoryChunksByID();
+        int GetNextMemoryChunkID();
+        public int NumMemoryChunks { get; }
         int MaxMemoryChunkID { get; }
+        public long Length { get; }
     }
 }

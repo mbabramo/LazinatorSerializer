@@ -11,16 +11,34 @@ namespace Lazinator.Buffers
     {
 
         List<MemoryChunk> MemoryChunks = new List<MemoryChunk>();
+        public long Length { get; private set; }
 
         public MemoryChunkCollection()
         {
 
         }
 
+        public MemoryChunkCollection(MemoryChunk memoryChunk)
+        {
+            MemoryChunks = new List<MemoryChunk>() { memoryChunk };
+            MaxMemoryChunkID = memoryChunk.MemoryChunkID;
+            Length = memoryChunk.Length;
+        }
+
         public MemoryChunkCollection(List<MemoryChunk> memoryChunks)
         {
             MemoryChunks = memoryChunks;
             MaxMemoryChunkID = MemoryChunks.Any() ? MemoryChunks.Max(x => x.MemoryChunkID) : 0;
+            Length = MemoryChunks.Sum(x => (long) x.Length);
+        }
+
+        public MemoryChunkCollection(LazinatorMemory lazinatorMemory) : this(lazinatorMemory.EnumerateMemoryChunks().ToList())
+        {
+        }
+
+        public LazinatorMemory ToLazinatorMemory()
+        {
+            return new LazinatorMemory(this);
         }
 
         public MemoryChunkCollection DeepCopy()
@@ -29,12 +47,20 @@ namespace Lazinator.Buffers
             collection.SetContents(MemoryChunks);
             return collection;
         }
+
+        public void AppendMemoryChunk(MemoryChunk memoryChunk)
+        {
+            MemoryChunks.Add(memoryChunk);
+            if (memoryChunk.MemoryChunkID > MaxMemoryChunkID)
+                MaxMemoryChunkID = memoryChunk.MemoryChunkID;
+            Length += (long)memoryChunk.Length;
+        }
+
         public MemoryChunkCollection WithAppendedMemoryChunk(MemoryChunk memoryChunk)
         {
             List<MemoryChunk> memoryChunks = MemoryChunks.Select(x => x.WithPreTruncationLengthIncreasedIfNecessary(memoryChunk)).ToList();
-            memoryChunks.Add(memoryChunk);
-            var collection = new MemoryChunkCollection();
-            collection.SetContents(memoryChunks);
+            var collection = new MemoryChunkCollection(memoryChunks);
+            collection.AppendMemoryChunk(memoryChunk);
             return collection;
         }
 
@@ -55,6 +81,7 @@ namespace Lazinator.Buffers
         public void SetContents(IEnumerable<MemoryChunk> chunks)
         {
             MemoryChunks = new List<MemoryChunk>();
+            Length = 0;
             int i = 0;
             if (chunks == null)
             {
@@ -66,6 +93,7 @@ namespace Lazinator.Buffers
                 if (i == 0 || chunk.MemoryChunkID > MaxMemoryChunkID)
                     MaxMemoryChunkID = chunk.MemoryChunkID;
                 MemoryChunks.Add(chunk);
+                Length += (long)chunk.Length;
                 i++;
             }
 
@@ -90,7 +118,7 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public int? GetFirstIndexOfMemoryChunkID(int memoryChunkID)
         {
-            int count = Count;
+            int count = NumMemoryChunks;
             for (int i = 0; i < count; i++)
             {
                 var memoryChunk = MemoryAtIndex(i);
@@ -100,6 +128,20 @@ namespace Lazinator.Buffers
             return null;
         }
 
-        public int Count => MemoryChunks?.Count ?? 0;
+        public Dictionary<int, MemoryChunk> GetMemoryChunksByID()
+        {
+            Dictionary<int, MemoryChunk> d = new Dictionary<int, MemoryChunk>();
+            foreach (MemoryChunk memoryChunk in MemoryChunks)
+            {
+                int chunkID = memoryChunk.Reference.MemoryChunkID;
+                if (!d.ContainsKey(chunkID))
+                    d[chunkID] = memoryChunk;
+            }
+            return d;
+        }
+
+        public int GetNextMemoryChunkID() => MaxMemoryChunkID + 1;
+
+        public int NumMemoryChunks => MemoryChunks?.Count ?? 0;
     }
 }
