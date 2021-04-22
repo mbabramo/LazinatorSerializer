@@ -483,9 +483,9 @@ namespace LazinatorTests.Examples.Tuples
             WritePrimitivePropertiesIntoBuffer(ref writer, options, includeUniqueID);
             int lengthForLengths = 8;
             
-            var previousLengthsPosition = writer.SetIndexedLengthsPosition(lengthForLengths);
+            var previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startPosition);
-            writer.ResetIndexedLengthsPosition(previousLengthsPosition);
+            writer.ResetLengthsPosition(previousLengthsPosition);
             
         }
         

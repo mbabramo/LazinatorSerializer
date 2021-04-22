@@ -466,9 +466,9 @@ namespace LazinatorTests.Examples.Structs
                 lengthForLengths += 1;
             }
             
-            var previousLengthsPosition = writer.SetIndexedLengthsPosition(lengthForLengths);
+            var previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startPosition);
-            writer.ResetIndexedLengthsPosition(previousLengthsPosition);
+            writer.ResetLengthsPosition(previousLengthsPosition);
             
         }
         

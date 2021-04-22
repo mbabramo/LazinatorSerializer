@@ -39,8 +39,8 @@ namespace Lazinator.Buffers
         public int ActiveMemoryPosition => Writer.ActiveMemoryPosition;
         public long OverallMemoryPosition => Writer.OverallMemoryPosition;
         public (int index, int offset) IndexedMemoryPosition => Writer.IndexedMemoryPosition;
-        public (int index, int offset) SetIndexedLengthsPosition(int bytesToReserve) => Writer.SetIndexedLengthsPosition(bytesToReserve);
-        public void ResetIndexedLengthsPosition((int index, int offset) previousPosition) => Writer.ResetIndexedLengthsPosition(previousPosition);
+        public (int index, int offset) SetLengthsPosition(int bytesToReserve) => Writer.SetLengthsPosition(bytesToReserve);
+        public void ResetLengthsPosition((int index, int offset) previousPosition) => Writer.ResetLengthsPosition(previousPosition);
         public void RecordLength(byte length) => Writer.RecordLength(length);
         public void RecordLength(Int16 length) => Writer.RecordLength(length);
         public void RecordLength(int length) => Writer.RecordLength(length);

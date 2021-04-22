@@ -2007,9 +2007,9 @@ namespace LazinatorTests.Examples
                 }
             }
             
-            var previousLengthsPosition = writer.SetIndexedLengthsPosition(lengthForLengths);
+            var previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
             WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startPosition);
-            writer.ResetIndexedLengthsPosition(previousLengthsPosition);
+            writer.ResetLengthsPosition(previousLengthsPosition);
             
         }
         async protected virtual ValueTask WritePropertiesIntoBufferAsync(BufferWriterContainer writer, LazinatorSerializationOptions options, bool includeUniqueID)
@@ -2050,9 +2050,9 @@ namespace LazinatorTests.Examples
                 }
             }
             
-            var previousLengthsPosition = writer.SetIndexedLengthsPosition(lengthForLengths);
+            var previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
             await WriteChildrenPropertiesIntoBufferAsync(writer, options, includeUniqueID, startPosition);
-            writer.ResetIndexedLengthsPosition(previousLengthsPosition);
+            writer.ResetLengthsPosition(previousLengthsPosition);
             
         }
         

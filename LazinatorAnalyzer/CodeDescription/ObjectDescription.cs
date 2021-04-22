@@ -1443,10 +1443,10 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             sb.AppendLine($@"
                             {IIF(primitiveProperties.Any() || IsDerivedFromNonAbstractLazinator, $@"WritePrimitivePropertiesIntoBuffer({MaybeAsyncRefWriterParameter}, options, includeUniqueID);")}{IIF(childrenProperties.Any() || IsDerivedFromNonAbstractLazinator, $@"
                             {GetLengthsCalculation(false, true)}
-                            var previousLengthsPosition = writer.SetIndexedLengthsPosition(lengthForLengths);{IIF(IncludeTracingCode, $@"
+                            var previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);{IIF(IncludeTracingCode, $@"
                             TabbedText.WriteLine($""Byte {{writer.ActiveMemoryPosition}}, Leaving {{lengthForLengths}} bytes to store lengths of child objects"");")}
                             {MaybeAwaitWord}WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncRefIfNot}writer, options, includeUniqueID, startPosition);
-                            writer.ResetIndexedLengthsPosition(previousLengthsPosition);")}");
+                            writer.ResetLengthsPosition(previousLengthsPosition);")}");
 
             if (IncludeTracingCode)
             {
