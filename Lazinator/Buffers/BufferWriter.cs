@@ -494,9 +494,10 @@ namespace Lazinator.Buffers
         {
             get
             {
-                if (MultipleBufferInfo == null || IndexedLengthsPosition.index == 0)
+                Debug.WriteLine($"Indexed: {IndexedLengthsPosition}; CompletedMemoryLength: {MultipleBufferInfo?.CompletedMemory.Length ?? 0}"); // DEBUG
+                if (MultipleBufferInfo == null || IndexedLengthsPosition.index == (MultipleBufferInfo?.CompletedMemory.NumMemoryChunks() ?? 0))
                     return ActiveSpan.Slice(IndexedLengthsPosition.offset);
-                return MultipleBufferInfo.CompletedMemory.MemoryAtIndex(IndexedLengthsPosition.index - 1).Slice(IndexedLengthsPosition.offset).ReadWriteMemory.Span;
+                return MultipleBufferInfo.CompletedMemory.MemoryAtIndex(IndexedLengthsPosition.index).Slice(IndexedLengthsPosition.offset).ReadWriteMemory.Span;
             }
         }
 
@@ -556,6 +557,11 @@ namespace Lazinator.Buffers
 
         public void RecordLength(int length)
         {
+            if (length == 20)
+            {
+                var DEBUG = 0;
+            }
+            Debug.WriteLine($"Recording length {length}"); // DEBUG
             if (BufferWriter.LittleEndianStorage)
                 WriteInt32LittleEndian(LengthsSpan, length);
             else
@@ -565,6 +571,7 @@ namespace Lazinator.Buffers
         }
         public void RecordLength(Int64 length)
         {
+            Debug.WriteLine($"Recording length {length}"); // DEBUG
             if (BufferWriter.LittleEndianStorage)
                 WriteInt64LittleEndian(LengthsSpan, length);
             else

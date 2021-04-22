@@ -46,6 +46,39 @@ namespace LazinatorTests.Tests
             ExampleEqual(e, e5).Should().BeTrue();
         }
 
+        [Fact]
+        public void SplittableEntitiesWork_SmallestTree()
+        {
+            BinaryTree = new LazinatorBinaryTree<WDouble>();
+            BinaryTree.Add(0);
+            BinaryTree.Add(1);
+            LazinatorMemory singleBufferResult = BinaryTree.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false));
+            LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 1));
+            multipleBufferResult.MoreMemoryChunks.Count().Should().BeGreaterThan(0);
+            LazinatorMemory multipleConsolidated = new LazinatorMemory(multipleBufferResult.GetConsolidatedMemory());
+            string mString = multipleConsolidated.ToString();
+            string sString = singleBufferResult.ToString();
+            mString.Should().Be(sString);
+            multipleConsolidated.Matches(singleBufferResult.ReadOnlyMemory.Span).Should().BeTrue();
+        }
+
+        [Fact]
+        public void SplittableEntitiesWork_SingleSplit()
+        {
+            var node = new LazinatorBinaryTreeNode<WByte>() { Data = 1 };
+            // node.LeftNode = new LazinatorBinaryTreeNode<WByte>() { Data = 0 };
+            node.RightNode = new LazinatorBinaryTreeNode<WByte>() { Data = 2 };
+            LazinatorMemory singleBufferResult = node.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false));
+            LazinatorMemory multipleBufferResult = node.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 1));
+            multipleBufferResult.MoreMemoryChunks.Count().Should().BeGreaterThan(0);
+            LazinatorMemory multipleConsolidated = new LazinatorMemory(multipleBufferResult.GetConsolidatedMemory());
+            string mString = multipleConsolidated.ToString();
+            string sString = singleBufferResult.ToString();
+            mString.Should().Be(sString);
+            multipleConsolidated.Matches(singleBufferResult.ReadOnlyMemory.Span).Should().BeTrue();
+        }
+
+
         [Theory]
         [ClassData(typeof(BoolPermutations_5))]
         public async Task SplittableEntitiesSaveToBlobs(bool containedInSingleBlob, bool useFile, bool async, bool recreateBlobMemoryReference, bool poolMemory)
