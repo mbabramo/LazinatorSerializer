@@ -691,7 +691,6 @@ namespace LazinatorTests.Tests
                 foreach (var item in plan.DataToAdd)
                     BinaryTree.Add(item);
                 LazinatorMemory serialized = BinaryTree.SerializeLazinator(options);
-                var DEBUG = new LazinatorBinaryTree<WDouble>(serialized);
                 index.PersistLazinatorMemory(serialized);
             }
 
