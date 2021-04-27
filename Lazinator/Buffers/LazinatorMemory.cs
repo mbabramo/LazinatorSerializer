@@ -18,7 +18,7 @@ namespace Lazinator.Buffers
     /// The memory referenced is defined by the index of the first memory chunk, the index of the first byte within that chunk, and the number of 
     /// bytes altogether. 
     /// </summary>
-    public readonly struct LazinatorMemory : IReadableBytes
+    public readonly struct LazinatorMemory
     {
         /// <summary>
         /// The first chunk of owned memory (and in ordinary usage, the only chunk).
