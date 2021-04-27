@@ -116,7 +116,7 @@ namespace Lazinator.Buffers
             Dictionary<int, MemoryChunk> d = new Dictionary<int, MemoryChunk>();
             foreach (MemoryChunk memoryChunk in MemoryChunks)
             {
-                int chunkID = memoryChunk.Reference.MemoryChunkID;
+                int chunkID = memoryChunk.MemoryChunkID;
                 if (!d.ContainsKey(chunkID))
                     d[chunkID] = memoryChunk;
             }

@@ -750,7 +750,7 @@ namespace Lazinator.Buffers
             {
                 if (memoryChunk.IsPersisted)
                     continue;
-                int chunkID = memoryChunk.Reference.MemoryChunkID;
+                int chunkID = memoryChunk.MemoryChunkID;
                 if (!ids.Contains(chunkID))
                 {
                     ids.Add(chunkID);
