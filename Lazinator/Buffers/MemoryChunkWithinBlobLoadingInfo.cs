@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Buffers
 {
-    public class MemoryChunkWithinBlobLoadingInfo : MemoryChunkLoadingInfo, IMemoryChunkWithinBlobLoadingInfo
+    public partial class MemoryChunkWithinBlobLoadingInfo : MemoryChunkLoadingInfo, IMemoryChunkWithinBlobLoadingInfo
     {
-        public long OffsetWhenLoading { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
     }
 }

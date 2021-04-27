@@ -166,6 +166,8 @@ public class MyOtherClass
 
             AdhocWorkspace ws = GetAdhocWorkspace(); // must make sure that GetDirectories includes all folders here
             await CompleteGenerateCode(typeof(MemoryChunkReference), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(MemoryChunkLoadingInfo), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(MemoryChunkWithinBlobLoadingInfo), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws);
 
             await CompleteGenerateCode(typeof(PersistentIndex), project: "Lazinator", mainFolder: "/Persistence/", subfolder: "", ws);
         }
