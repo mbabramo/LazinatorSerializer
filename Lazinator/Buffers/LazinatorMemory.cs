@@ -137,7 +137,7 @@ namespace Lazinator.Buffers
             if (SpansLastChunk)
             {
                 var evenMoreOwnedMemory = MoreMemoryChunks?.WithAppendedMemoryChunk(chunk) ?? new MemoryChunkCollection(new List<MemoryChunk>() { chunk });
-                return new LazinatorMemory(ReadOnlyMemoryChunk.WithPreTruncationLengthIncreasedIfNecessary(chunk), evenMoreOwnedMemory, StartIndex, Offset, Length + chunk.Reference.FinalLength);
+                return new LazinatorMemory(ReadOnlyMemoryChunk.WithPreTruncationLengthIncreasedIfNecessary(chunk), evenMoreOwnedMemory, StartIndex, Offset, Length + chunk.Length);
             }
 
             // The current LazinatorMemory does not terminate at the end of the last chunk. If we just added a chunk, then
@@ -203,7 +203,7 @@ namespace Lazinator.Buffers
         private int LengthAtIndex(int i)
         {
             var memoryAtIndex = MemoryAtIndex(i);
-            return memoryAtIndex.Reference.FinalLength;
+            return memoryAtIndex.Length;
         }
 
         /// <summary>
@@ -257,7 +257,7 @@ namespace Lazinator.Buffers
             while (positionRemaining > 0)
             {
                 MemoryChunk current = MemoryAtIndex(revisedStartIndex);
-                int remainingBytesThisMemory = current.Reference.FinalLength - revisedStartPosition;
+                int remainingBytesThisMemory = current.Length - revisedStartPosition;
                 if (remainingBytesThisMemory <= positionRemaining)
                 {
                     positionRemaining -= remainingBytesThisMemory;
@@ -572,7 +572,7 @@ namespace Lazinator.Buffers
                     startPositionOrZero = Offset;
                 else
                     startPositionOrZero = 0;
-                int numBytes = m.Reference.FinalLength - startPositionOrZero;
+                int numBytes = m.Length - startPositionOrZero;
                 if (numBytes > lengthRemaining)
                     numBytes = (int) lengthRemaining;
                 yield return new MemoryChunkIndexReference(i, startPositionOrZero, numBytes);
@@ -806,7 +806,7 @@ namespace Lazinator.Buffers
                     startPositionOrZero = Offset;
                 else
                     startPositionOrZero = 0;
-                int memoryChunkLength = memoryChunk.Reference.FinalLength;
+                int memoryChunkLength = memoryChunk.Length;
                 for (int j = startPositionOrZero; j < memoryChunkLength; j++)
                 {
                     yield return memoryChunk.ReadOnlyMemory.Span[j];
@@ -984,7 +984,7 @@ namespace Lazinator.Buffers
                     int targetMemoryBlockID = memoryBlockIDMap[sourceMemoryChunk.MemoryBlockID];
                     int totalBytesInTarget = totalBytesInTargetMemoryBlockID[targetMemoryBlockID];
                     int bytesInTargetSoFar = bytesSoFarInTargetMemoryBlockID.GetValueOrDefault(targetMemoryBlockID, 0);
-                    int bytesToCopyToTarget = sourceMemoryChunk.Reference.FinalLength;
+                    int bytesToCopyToTarget = sourceMemoryChunk.Length;
                     MemoryChunkReference reference = new MemoryChunkReference(targetMemoryBlockID, 0, totalBytesInTarget, bytesInTargetSoFar, bytesToCopyToTarget);
                     MemoryChunk chunk;
                     if (!memoryChunksIncludedByID.ContainsKey(targetMemoryBlockID))

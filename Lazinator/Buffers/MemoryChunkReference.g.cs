@@ -88,7 +88,7 @@ namespace Lazinator.Buffers
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         long _OffsetForLoading;
-        public long OffsetForLoading
+        public long LoadingOffset
         {
             [DebuggerStepThrough]
             get
@@ -320,7 +320,7 @@ namespace Lazinator.Buffers
             typedClone.AdditionalOffset = AdditionalOffset;
             typedClone.FinalLength = FinalLength;
             typedClone.MemoryBlockID = MemoryBlockID;
-            typedClone.OffsetForLoading = OffsetForLoading;
+            typedClone.LoadingOffset = LoadingOffset;
             typedClone.PreTruncationLength = PreTruncationLength;
             
             typedClone.IsDirty = false;
@@ -356,7 +356,7 @@ namespace Lazinator.Buffers
             yield return ("AdditionalOffset", (object)AdditionalOffset);
             yield return ("FinalLength", (object)FinalLength);
             yield return ("MemoryBlockID", (object)MemoryBlockID);
-            yield return ("OffsetForLoading", (object)OffsetForLoading);
+            yield return ("OffsetForLoading", (object)LoadingOffset);
             yield return ("PreTruncationLength", (object)PreTruncationLength);
             yield break;
         }

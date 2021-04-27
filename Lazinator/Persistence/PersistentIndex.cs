@@ -162,7 +162,7 @@ namespace Lazinator.Persistence
         public LazinatorMemory GetLazinatorMemory()
         {
             var memoryChunks = GetMemoryChunks();
-            LazinatorMemory lazinatorMemory = new LazinatorMemory(memoryChunks.First(), memoryChunks.Skip(1).ToList(), 0, 0, memoryChunks.Sum(x => x.Reference.FinalLength));
+            LazinatorMemory lazinatorMemory = new LazinatorMemory(memoryChunks.First(), memoryChunks.Skip(1).ToList(), 0, 0, memoryChunks.Sum(x => x.Length));
             lazinatorMemory.LoadReadOnlyMemory();
             return lazinatorMemory;
         }
@@ -170,7 +170,7 @@ namespace Lazinator.Persistence
         public async ValueTask<LazinatorMemory> GetLazinatorMemoryAsync()
         {
             var memoryChunks = GetMemoryChunks();
-            LazinatorMemory lazinatorMemory = new LazinatorMemory(memoryChunks.First(), memoryChunks.Skip(1).ToList(), 0, 0, memoryChunks.Sum(x => x.Reference.FinalLength));
+            LazinatorMemory lazinatorMemory = new LazinatorMemory(memoryChunks.First(), memoryChunks.Skip(1).ToList(), 0, 0, memoryChunks.Sum(x => x.Length));
             await lazinatorMemory.LoadReadOnlyMemoryAsync();
             return lazinatorMemory;
         }

@@ -130,7 +130,7 @@ namespace Lazinator.Buffers
             {
                 var memoryChunk = MemoryAtIndex(memoryChunkIndex);
 
-                int numBytesThisChunk = memoryChunk.Reference.FinalLength;
+                int numBytesThisChunk = memoryChunk.Length;
                 int bytesToUseThisChunk = (int)Math.Min(numBytesThisChunk - offset, numBytesOfLengthRemaining);
                 yield return memoryChunk.Reference.Slice(offset, bytesToUseThisChunk);
 

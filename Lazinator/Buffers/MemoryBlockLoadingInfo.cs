@@ -8,5 +8,10 @@ namespace Lazinator.Buffers
 {
     public partial class MemoryBlockLoadingInfo : IMemoryBlockLoadingInfo
     {
+        public MemoryBlockLoadingInfo(int memoryBlockID, int preTruncationLength)
+        {
+            MemoryBlockID = memoryBlockID;
+            PreTruncationLength = preTruncationLength;
+        }
     }
 }

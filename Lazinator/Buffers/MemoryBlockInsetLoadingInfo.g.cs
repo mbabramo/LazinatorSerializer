@@ -34,7 +34,7 @@ namespace Lazinator.Buffers
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected long _OffsetWhenLoading;
-        public long OffsetWhenLoading
+        public long LoadingOffset
         {
             [DebuggerStepThrough]
             get
@@ -79,7 +79,7 @@ namespace Lazinator.Buffers
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
             MemoryBlockInsetLoadingInfo typedClone = (MemoryBlockInsetLoadingInfo) clone;
-            typedClone.OffsetWhenLoading = OffsetWhenLoading;
+            typedClone.LoadingOffset = LoadingOffset;
             
             return typedClone;
         }
@@ -102,7 +102,7 @@ namespace Lazinator.Buffers
             {
                 yield return inheritedYield;
             }
-            yield return ("OffsetWhenLoading", (object)OffsetWhenLoading);
+            yield return ("OffsetWhenLoading", (object)LoadingOffset);
             yield break;
         }
         

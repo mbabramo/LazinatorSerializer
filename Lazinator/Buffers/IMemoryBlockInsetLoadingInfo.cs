@@ -5,6 +5,6 @@ namespace Lazinator.Buffers
     [Lazinator((int)LazinatorCoreUniqueIDs.IMemoryBlockInsetLoadingInfo)]
     public interface IMemoryBlockInsetLoadingInfo : IMemoryBlockLoadingInfo
     {
-        long OffsetWhenLoading { get; set; }
+        long LoadingOffset { get; set; }
     }
 }

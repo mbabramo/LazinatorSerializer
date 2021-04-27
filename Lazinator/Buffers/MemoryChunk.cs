@@ -28,10 +28,13 @@ namespace Lazinator.Buffers
             }
         }
 
+        public MemoryBlockLoadingInfo LoadingInfo => new MemoryBlockInsetLoadingInfo(Reference.MemoryBlockID, Reference.PreTruncationLength, Reference.LoadingOffset);
+        public MemoryBlockSlice SliceInfo => new MemoryBlockSlice(Reference.MemoryBlockID, Reference.AdditionalOffset);
+
         public MemoryChunkReference Reference { get; set; }
 
         public int MemoryBlockID => Reference.MemoryBlockID;
-        public int Length => Reference.FinalLength;
+        public int Length => Length;
 
         public bool IsLoaded => MemoryAsLoaded != null;
 
@@ -70,7 +73,7 @@ namespace Lazinator.Buffers
         /// Returns the memory being referred to, taking into account the additional offset to be applied after loading.
         /// If the memory hasn't been loaded, empty memory will be returned.
         /// </summary>
-        public virtual ReadOnlyMemory<byte> ReadOnlyMemory => MemoryAsLoaded == null ? LazinatorMemory.EmptyReadOnlyMemory : MemoryAsLoaded.ReadOnlyMemory.Slice(Reference.AdditionalOffset, Reference.FinalLength);
+        public virtual ReadOnlyMemory<byte> ReadOnlyMemory => MemoryAsLoaded == null ? LazinatorMemory.EmptyReadOnlyMemory : MemoryAsLoaded.ReadOnlyMemory.Slice(Reference.AdditionalOffset, Length);
 
         public virtual Memory<byte> ReadWriteMemory
         {
@@ -82,7 +85,7 @@ namespace Lazinator.Buffers
                     return null; // will not execute
                 }
                 else
-                    return WritableMemory.Memory.Slice(Reference.AdditionalOffset, Reference.FinalLength);
+                    return WritableMemory.Memory.Slice(Reference.AdditionalOffset, Length);
             }
         }
 
