@@ -16,5 +16,10 @@ namespace Lazinator.Buffers
             Offset = offset;
             Length = length;
         }
+
+        public MemoryBlockSlice Slice(int furtherOffset, int finalLength)
+        {
+            return new MemoryBlockSlice(Offset + furtherOffset, finalLength);
+        }
     }
 }

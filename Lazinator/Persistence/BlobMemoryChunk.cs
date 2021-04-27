@@ -28,7 +28,8 @@ namespace Lazinator.Persistence
         {
             if (IsLoaded)
                 return;
-            ReadOnlyMemory<byte> bytes = BlobManager.Read(BlobPath, LoadingInfo.LoadingOffset, LoadingInfo.PreTruncationLength);
+            
+            ReadOnlyMemory<byte> bytes = BlobManager.Read(BlobPath, LoadingOffset, LoadingInfo.PreTruncationLength);
             MemoryAsLoaded = new ReadOnlyBytes(bytes);
         }
 
@@ -36,8 +37,19 @@ namespace Lazinator.Persistence
         {
             if (IsLoaded)
                 return;
-            ReadOnlyMemory<byte> bytes = await BlobManager.ReadAsync(BlobPath, LoadingInfo.LoadingOffset, LoadingInfo.PreTruncationLength);
+            ReadOnlyMemory<byte> bytes = await BlobManager.ReadAsync(BlobPath, LoadingOffset, LoadingInfo.PreTruncationLength);
             MemoryAsLoaded = new ReadOnlyBytes(bytes);
+        }
+
+        private long LoadingOffset
+        {
+            get
+            {
+                long loadingOffset = 0;
+                if (LoadingInfo is MemoryBlockInsetLoadingInfo insetLoadingInfo)
+                    loadingOffset = insetLoadingInfo.LoadingOffset;
+                return loadingOffset;
+            }
         }
 
         public override void ConsiderUnloadMemory()
