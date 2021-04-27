@@ -144,11 +144,60 @@ namespace LazinatorTests.Tests
                 memoryChunkReferences.Sum(x => x.PreTruncationLength).Should().Equals(numBytesWithinLazinatorMemorySubrange);
                 List<byte> bytesFound = new List<byte>();
                 foreach (var memoryChunkReference in memoryChunkReferences)
-                    bytesFound.AddRange(cobbledMemory.GetMemoryAtMemoryChunkReference(memoryChunkReference).ToArray());
+                    bytesFound.AddRange(GetMemoryAtMemoryChunkReference(cobbledMemory, memoryChunkReference).ToArray());
                 bytesFound.SequenceEqual(referencedBytes).Should().BeTrue();
             }
         }
 
+        /// <summary>
+        /// Returns the Memory block of bytes corresponding to a memory chunk reference. It is required that each memory owner be a MemoryChunk.
+        /// </summary>
+        /// <param name="memoryChunkReference">The memory chunk reference</param>
+        /// <returns></returns>
+        private ReadOnlyMemory<byte> GetMemoryAtMemoryChunkReference(LazinatorMemory lazinatorMemory, MemoryChunkReference memoryChunkReference)
+        {
+            var memoryChunk = GetFirstMemoryChunkWithID(lazinatorMemory, memoryChunkReference.MemoryChunkID);
+            memoryChunk.LoadMemory();
+            var underlyingReadOnlyMemory = memoryChunk.MemoryAsLoaded.ReadOnlyMemory.Slice(memoryChunkReference.AdditionalOffset, memoryChunkReference.FinalLength);
+            return underlyingReadOnlyMemory;
+        }
+
+        private MemoryChunk GetFirstMemoryChunkWithID(LazinatorMemory lazinatorMemory, int memoryChunkID)
+        {
+            int? index = GetFirstIndexOfMemoryChunkID(lazinatorMemory, memoryChunkID);
+            if (index == null)
+                return null;
+            return (MemoryChunk)lazinatorMemory.MemoryAtIndex((int)index);
+        }
+
+        private int? GetFirstIndexOfMemoryChunkID(LazinatorMemory lazinatorMemory, int memoryChunkID)
+        {
+            if (lazinatorMemory.MemoryAtIndex(0).Reference.MemoryChunkID == memoryChunkID)
+                return 0;
+            if (lazinatorMemory.MoreMemoryChunks == null)
+                return null;
+            var index = GetFirstIndexOfMemoryChunkID(lazinatorMemory.MoreMemoryChunks, memoryChunkID);
+            if (index == null)
+                return null;
+            return index + 1;
+        }
+
+        /// <summary>
+        /// Returns the first index within the memory chunk collection of the specified memory chunk ID, or null if not found. This will be one less than the index within a LazinatorMemory containing this collection.
+        /// </summary>
+        /// <param name="memoryChunkID"></param>
+        /// <returns></returns>
+        private int? GetFirstIndexOfMemoryChunkID(IMemoryChunkCollection memoryChunkCollection, int memoryChunkID)
+        {
+            int count = memoryChunkCollection.NumMemoryChunks;
+            for (int i = 0; i < count; i++)
+            {
+                var memoryChunk = memoryChunkCollection.MemoryAtIndex(i);
+                if (memoryChunk.Reference.MemoryChunkID == memoryChunkID)
+                    return i;
+            }
+            return null;
+        }
 
         [Fact]
         public void UsingReturnedMemoryTriggersException()

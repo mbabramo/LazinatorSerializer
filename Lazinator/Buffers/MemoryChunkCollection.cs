@@ -111,23 +111,6 @@ namespace Lazinator.Buffers
             return GetEnumerator();
         }
 
-        /// <summary>
-        /// Returns the first index within the memory chunk collection of the specified memory chunk ID, or null if not found. This will be one less than the index within a LazinatorMemory containing this collection.
-        /// </summary>
-        /// <param name="memoryChunkID"></param>
-        /// <returns></returns>
-        public int? GetFirstIndexOfMemoryChunkID(int memoryChunkID)
-        {
-            int count = NumMemoryChunks;
-            for (int i = 0; i < count; i++)
-            {
-                var memoryChunk = MemoryAtIndex(i);
-                if (memoryChunk.Reference.MemoryChunkID == memoryChunkID)
-                    return i;
-            }
-            return null;
-        }
-
         public Dictionary<int, MemoryChunk> GetMemoryChunksByID()
         {
             Dictionary<int, MemoryChunk> d = new Dictionary<int, MemoryChunk>();

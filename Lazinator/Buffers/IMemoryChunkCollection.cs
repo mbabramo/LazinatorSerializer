@@ -13,7 +13,6 @@ namespace Lazinator.Buffers
         void AppendMemoryChunk(MemoryChunk memoryChunk);
         MemoryChunkCollection WithAppendedMemoryChunk(MemoryChunk memoryChunk);
         void SetContents(IEnumerable<MemoryChunk> chunks);
-        int? GetFirstIndexOfMemoryChunkID(int memoryChunkID);
         Dictionary<int, MemoryChunk> GetMemoryChunksByID();
         int GetNextMemoryChunkID();
         public int NumMemoryChunks { get; }

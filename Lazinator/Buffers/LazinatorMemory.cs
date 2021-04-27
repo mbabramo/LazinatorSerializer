@@ -206,26 +206,6 @@ namespace Lazinator.Buffers
             return memoryAtIndex.Reference.FinalLength;
         }
 
-        public MemoryChunk GetFirstMemoryChunkWithID(int memoryChunkID)
-        {
-            int? index = GetFirstIndexOfMemoryChunkID(memoryChunkID);
-            if (index == null)
-                return null;
-            return (MemoryChunk) MemoryAtIndex((int)index);
-        }
-
-        public int? GetFirstIndexOfMemoryChunkID(int memoryChunkID)
-        {
-            if (MemoryAtIndex(0).Reference.MemoryChunkID == memoryChunkID)
-                return 0;
-            if (MoreMemoryChunks == null)
-                return null;
-            var index = MoreMemoryChunks.GetFirstIndexOfMemoryChunkID(memoryChunkID);
-            if (index == null)
-                return null;
-            return index + 1;
-        }
-
         /// <summary>
         /// Slices the initial referenced memory chunk only, producing a new LazinatorMemory.
         /// </summary>
@@ -662,18 +642,7 @@ namespace Lazinator.Buffers
             }
         }
 
-        /// <summary>
-        /// Returns the Memory block of bytes corresponding to a memory chunk reference. It is required that each memory owner be a MemoryChunk.
-        /// </summary>
-        /// <param name="memoryChunkReference">The memory chunk reference</param>
-        /// <returns></returns>
-        public ReadOnlyMemory<byte> GetMemoryAtMemoryChunkReference(MemoryChunkReference memoryChunkReference)
-        {
-            var memoryChunk = GetFirstMemoryChunkWithID(memoryChunkReference.MemoryChunkID);
-            memoryChunk.LoadMemory();
-            var underlyingReadOnlyMemory = memoryChunk.MemoryAsLoaded.ReadOnlyMemory.Slice(memoryChunkReference.AdditionalOffset, memoryChunkReference.FinalLength);
-            return underlyingReadOnlyMemory;
-        }
+        
 
         /// <summary>
         /// Enumerates all memory blocks.
