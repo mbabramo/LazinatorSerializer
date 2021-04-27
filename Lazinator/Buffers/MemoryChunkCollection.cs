@@ -21,14 +21,14 @@ namespace Lazinator.Buffers
         public MemoryChunkCollection(MemoryChunk memoryChunk)
         {
             MemoryChunks = new List<MemoryChunk>() { memoryChunk };
-            MaxMemoryChunkID = memoryChunk.MemoryChunkID;
+            MaxMemoryBlockID = memoryChunk.MemoryBlockID;
             Length = memoryChunk.Length;
         }
 
         public MemoryChunkCollection(List<MemoryChunk> memoryChunks)
         {
             MemoryChunks = memoryChunks;
-            MaxMemoryChunkID = MemoryChunks.Any() ? MemoryChunks.Max(x => x.MemoryChunkID) : 0;
+            MaxMemoryBlockID = MemoryChunks.Any() ? MemoryChunks.Max(x => x.MemoryBlockID) : 0;
             Length = MemoryChunks.Sum(x => (long) x.Length);
         }
 
@@ -51,8 +51,8 @@ namespace Lazinator.Buffers
         public void AppendMemoryChunk(MemoryChunk memoryChunk)
         {
             MemoryChunks.Add(memoryChunk);
-            if (memoryChunk.MemoryChunkID > MaxMemoryChunkID)
-                MaxMemoryChunkID = memoryChunk.MemoryChunkID;
+            if (memoryChunk.MemoryBlockID > MaxMemoryBlockID)
+                MaxMemoryBlockID = memoryChunk.MemoryBlockID;
             Length += (long)memoryChunk.Length;
         }
 
@@ -64,7 +64,7 @@ namespace Lazinator.Buffers
             return collection;
         }
 
-        public int MaxMemoryChunkID { get; private set; }
+        public int MaxMemoryBlockID { get; private set; }
 
         public IEnumerable<MemoryChunk> EnumerateMemoryChunks()
         {
@@ -85,13 +85,13 @@ namespace Lazinator.Buffers
             int i = 0;
             if (chunks == null)
             {
-                MaxMemoryChunkID = -1;
+                MaxMemoryBlockID = -1;
                 return;
             }
             foreach (var chunk in chunks)
             {
-                if (i == 0 || chunk.MemoryChunkID > MaxMemoryChunkID)
-                    MaxMemoryChunkID = chunk.MemoryChunkID;
+                if (i == 0 || chunk.MemoryBlockID > MaxMemoryBlockID)
+                    MaxMemoryBlockID = chunk.MemoryBlockID;
                 MemoryChunks.Add(chunk);
                 Length += (long)chunk.Length;
                 i++;
@@ -116,14 +116,14 @@ namespace Lazinator.Buffers
             Dictionary<int, MemoryChunk> d = new Dictionary<int, MemoryChunk>();
             foreach (MemoryChunk memoryChunk in MemoryChunks)
             {
-                int chunkID = memoryChunk.MemoryChunkID;
+                int chunkID = memoryChunk.MemoryBlockID;
                 if (!d.ContainsKey(chunkID))
                     d[chunkID] = memoryChunk;
             }
             return d;
         }
 
-        public int GetNextMemoryChunkID() => MaxMemoryChunkID + 1;
+        public int GetNextMemoryBlockID() => MaxMemoryBlockID + 1;
 
         public int NumMemoryChunks => MemoryChunks?.Count ?? 0;
     }

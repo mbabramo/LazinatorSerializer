@@ -72,7 +72,7 @@ namespace Lazinator.Buffers
                     for (int i = 0; i < RecycledMemoryChunkReferences.Count; i++)
                     {
                         MemoryChunkReference memoryChunkReference = RecycledMemoryChunkReferences[i];
-                        if (memoryChunkReference.MemoryChunkID == newSegment.MemoryChunkID && memoryChunkReference.PreTruncationLength != newSegment.PreTruncationLength)
+                        if (memoryChunkReference.MemoryBlockID == newSegment.MemoryBlockID && memoryChunkReference.PreTruncationLength != newSegment.PreTruncationLength)
                         {
                             RecycledMemoryChunkReferences[i] = memoryChunkReference.WithPreTruncationLength(newSegment.PreTruncationLength);
                         }
@@ -147,20 +147,20 @@ namespace Lazinator.Buffers
         {
             if (activeMemoryPosition > NumActiveMemoryBytesAddedToRecycling)
             {
-                int activeMemoryChunkID = GetActiveMemoryChunkID();
-                ExtendMemoryChunkReferencesList(new MemoryChunkReference(activeMemoryChunkID, 0, activeMemoryPosition, NumActiveMemoryBytesAddedToRecycling, activeMemoryPosition - NumActiveMemoryBytesAddedToRecycling), true);
+                int activeMemoryBlockID = GetActiveMemoryBlockID();
+                ExtendMemoryChunkReferencesList(new MemoryChunkReference(activeMemoryBlockID, 0, activeMemoryPosition, NumActiveMemoryBytesAddedToRecycling, activeMemoryPosition - NumActiveMemoryBytesAddedToRecycling), true);
                 NumActiveMemoryBytesAddedToRecycling = activeMemoryPosition;
             }
         }
 
-        internal LazinatorMemory CompletePatchLazinatorMemory(int activeLength, int activeMemoryChunkID)
+        internal LazinatorMemory CompletePatchLazinatorMemory(int activeLength, int activeMemoryBlockID)
         {
             var byID = MemoryChunks.GetMemoryChunksByID();
             if (activeLength > 0)
             {
-                var activeMemoryChunk = byID[activeMemoryChunkID];
-                activeMemoryChunk.Reference = new MemoryChunkReference(activeMemoryChunkID, 0, activeLength, 0, 0);
-                byID[activeMemoryChunkID] = activeMemoryChunk;
+                var activeMemoryChunk = byID[activeMemoryBlockID];
+                activeMemoryChunk.Reference = new MemoryChunkReference(activeMemoryBlockID, 0, activeLength, 0, 0);
+                byID[activeMemoryBlockID] = activeMemoryChunk;
             }
             MemoryChunk initialMemoryChunk = null;
             List<MemoryChunk> moreMemory = null;
@@ -170,7 +170,7 @@ namespace Lazinator.Buffers
                 if (i == 1)
                     moreMemory = new List<MemoryChunk>();
                 MemoryChunkReference reference = RecycledMemoryChunkReferences[i];
-                MemoryChunk memoryChunk = byID[reference.MemoryChunkID];
+                MemoryChunk memoryChunk = byID[reference.MemoryBlockID];
                 MemoryChunk resliced = memoryChunk.WithReference(reference.WithAdditionalOffsetAndFinalLength(reference.AdditionalOffset, reference.FinalLength));
                 length += reference.FinalLength;
                 if (i == 0)
@@ -185,9 +185,9 @@ namespace Lazinator.Buffers
         /// Returns the version number for active memory (equal to the last version number for CompletedMemory plus one). 
         /// </summary>
         /// <returns></returns>
-        internal int GetActiveMemoryChunkID()
+        internal int GetActiveMemoryBlockID()
         {
-            return MemoryChunks.GetNextMemoryChunkID();
+            return MemoryChunks.GetNextMemoryBlockID();
         }
 
         public LazinatorMemory ToLazinatorMemory() => new LazinatorMemory(MemoryChunks);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Buffers
 {
-    public partial class MemoryChunkLoadingInfo : IMemoryChunkLoadingInfo
+    public partial class MemoryBlockLoadingInfo : IMemoryBlockLoadingInfo
     {
     }
 }

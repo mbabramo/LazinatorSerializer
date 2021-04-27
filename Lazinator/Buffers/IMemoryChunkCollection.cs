@@ -14,9 +14,9 @@ namespace Lazinator.Buffers
         MemoryChunkCollection WithAppendedMemoryChunk(MemoryChunk memoryChunk);
         void SetContents(IEnumerable<MemoryChunk> chunks);
         Dictionary<int, MemoryChunk> GetMemoryChunksByID();
-        int GetNextMemoryChunkID();
+        int GetNextMemoryBlockID();
         public int NumMemoryChunks { get; }
-        int MaxMemoryChunkID { get; }
+        int MaxMemoryBlockID { get; }
         public long Length { get; }
     }
 }

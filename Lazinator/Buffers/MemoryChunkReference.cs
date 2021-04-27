@@ -11,39 +11,39 @@ namespace Lazinator.Buffers
     /// </summary>
     public partial struct MemoryChunkReference : IMemoryChunkReference
     {
-        public MemoryChunkReference(int memoryChunkID, long offsetForLoading, int lengthAsLoaded, int additionalOffset, int finalLength) : this()
+        public MemoryChunkReference(int memoryBlockID, long offsetForLoading, int preTruncationLength, int additionalOffset, int finalLength) : this()
         {
-            MemoryChunkID = memoryChunkID;
+            MemoryBlockID = memoryBlockID;
             OffsetForLoading = offsetForLoading;
-            PreTruncationLength = lengthAsLoaded;
+            PreTruncationLength = preTruncationLength;
             AdditionalOffset = additionalOffset;
             FinalLength = finalLength;
         }
 
-        public MemoryChunkReference(int memoryChunkID, long offsetForLoading, int lengthAsLoaded) : this()
+        public MemoryChunkReference(int memoryBlockID, long offsetForLoading, int preTruncationLength) : this()
         {
-            MemoryChunkID = memoryChunkID;
+            MemoryBlockID = memoryBlockID;
             OffsetForLoading = offsetForLoading;
-            PreTruncationLength = lengthAsLoaded;
+            PreTruncationLength = preTruncationLength;
             AdditionalOffset = 0;
-            FinalLength = lengthAsLoaded;
+            FinalLength = preTruncationLength;
         }
 
         public override bool Equals(object obj)
         {
             if (obj is not MemoryChunkReference other)
                 return false;
-            return MemoryChunkID == other.MemoryChunkID && OffsetForLoading == other.OffsetForLoading && PreTruncationLength == other.PreTruncationLength && AdditionalOffset == other.AdditionalOffset && FinalLength == other.FinalLength;
+            return MemoryBlockID == other.MemoryBlockID && OffsetForLoading == other.OffsetForLoading && PreTruncationLength == other.PreTruncationLength && AdditionalOffset == other.AdditionalOffset && FinalLength == other.FinalLength;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(MemoryChunkID, OffsetForLoading, PreTruncationLength, AdditionalOffset, FinalLength);
+            return HashCode.Combine(MemoryBlockID, OffsetForLoading, PreTruncationLength, AdditionalOffset, FinalLength);
         }
 
         public override string ToString()
         {
-            return $"MemoryChunkID: {MemoryChunkID}; OffsetForLoading: {OffsetForLoading}; LengthAsLoaded: {PreTruncationLength}; AdditionalOffset: {AdditionalOffset}; FinalLength {FinalLength}";
+            return $"MemoryBlockID: {MemoryBlockID}; OffsetForLoading: {OffsetForLoading}; LengthAsLoaded: {PreTruncationLength}; AdditionalOffset: {AdditionalOffset}; FinalLength {FinalLength}";
         }
 
         /// <summary>
@@ -53,14 +53,14 @@ namespace Lazinator.Buffers
         /// <param name="offset"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public MemoryChunkReference Slice(int offset, int length) => new MemoryChunkReference(MemoryChunkID, OffsetForLoading, PreTruncationLength, AdditionalOffset + offset, length);
+        public MemoryChunkReference Slice(int offset, int length) => new MemoryChunkReference(MemoryBlockID, OffsetForLoading, PreTruncationLength, AdditionalOffset + offset, length);
 
         /// <summary>
         /// Slices the reference relative to the existing offset. 
         /// </summary>
         /// <param name="offset"></param>
         /// <returns></returns>
-        public MemoryChunkReference Slice(int offset) => new MemoryChunkReference(MemoryChunkID, OffsetForLoading, PreTruncationLength, AdditionalOffset + offset, FinalLength - offset);
+        public MemoryChunkReference Slice(int offset) => new MemoryChunkReference(MemoryBlockID, OffsetForLoading, PreTruncationLength, AdditionalOffset + offset, FinalLength - offset);
 
         /// <summary>
         /// Slices the reference relative to the memory as originally loaded. The original additional offset and final length are ignored.
@@ -68,28 +68,28 @@ namespace Lazinator.Buffers
         /// <param name="replacementAdditionalOffset"></param>
         /// <param name="finalLength"></param>
         /// <returns></returns>
-        public MemoryChunkReference Resliced(int replacementAdditionalOffset, int finalLength) => new MemoryChunkReference(MemoryChunkID, OffsetForLoading, PreTruncationLength, replacementAdditionalOffset, finalLength);
+        public MemoryChunkReference Resliced(int replacementAdditionalOffset, int finalLength) => new MemoryChunkReference(MemoryBlockID, OffsetForLoading, PreTruncationLength, replacementAdditionalOffset, finalLength);
 
-        public bool SameLoadingInformation(in MemoryChunkReference other) => MemoryChunkID == other.MemoryChunkID && OffsetForLoading == other.OffsetForLoading && PreTruncationLength == other.PreTruncationLength;
+        public bool SameLoadingInformation(in MemoryChunkReference other) => MemoryBlockID == other.MemoryBlockID && OffsetForLoading == other.OffsetForLoading && PreTruncationLength == other.PreTruncationLength;
 
-        internal MemoryChunkReference WithMemoryChunkID(int memoryChunkID)
+        internal MemoryChunkReference WithMemoryBlockID(int memoryBlockID)
         {
-            return new MemoryChunkReference(memoryChunkID, OffsetForLoading, PreTruncationLength, AdditionalOffset, FinalLength);
+            return new MemoryChunkReference(memoryBlockID, OffsetForLoading, PreTruncationLength, AdditionalOffset, FinalLength);
         }
 
         internal MemoryChunkReference WithLoadingOffset(long offset)
         {
-            return new MemoryChunkReference(MemoryChunkID, offset, PreTruncationLength, AdditionalOffset, FinalLength);
+            return new MemoryChunkReference(MemoryBlockID, offset, PreTruncationLength, AdditionalOffset, FinalLength);
         }
 
         internal MemoryChunkReference WithPreTruncationLength(int preTruncationLength)
         {
-            return new MemoryChunkReference(MemoryChunkID, OffsetForLoading, preTruncationLength, AdditionalOffset, FinalLength);
+            return new MemoryChunkReference(MemoryBlockID, OffsetForLoading, preTruncationLength, AdditionalOffset, FinalLength);
         }
 
         internal MemoryChunkReference WithAdditionalOffsetAndFinalLength(int additionalOffset, int finalLength)
         {
-            return new MemoryChunkReference(MemoryChunkID, OffsetForLoading, PreTruncationLength, additionalOffset, finalLength);
+            return new MemoryChunkReference(MemoryBlockID, OffsetForLoading, PreTruncationLength, additionalOffset, finalLength);
         }
     }
 }

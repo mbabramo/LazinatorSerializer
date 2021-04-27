@@ -156,27 +156,27 @@ namespace LazinatorTests.Tests
         /// <returns></returns>
         private ReadOnlyMemory<byte> GetMemoryAtMemoryChunkReference(LazinatorMemory lazinatorMemory, MemoryChunkReference memoryChunkReference)
         {
-            var memoryChunk = GetFirstMemoryChunkWithID(lazinatorMemory, memoryChunkReference.MemoryChunkID);
+            var memoryChunk = GetFirstMemoryChunkWithID(lazinatorMemory, memoryChunkReference.MemoryBlockID);
             memoryChunk.LoadMemory();
             var underlyingReadOnlyMemory = memoryChunk.MemoryAsLoaded.ReadOnlyMemory.Slice(memoryChunkReference.AdditionalOffset, memoryChunkReference.FinalLength);
             return underlyingReadOnlyMemory;
         }
 
-        private MemoryChunk GetFirstMemoryChunkWithID(LazinatorMemory lazinatorMemory, int memoryChunkID)
+        private MemoryChunk GetFirstMemoryChunkWithID(LazinatorMemory lazinatorMemory, int memoryBlockID)
         {
-            int? index = GetFirstIndexOfMemoryChunkID(lazinatorMemory, memoryChunkID);
+            int? index = GetFirstIndexOfMemoryBlockID(lazinatorMemory, memoryBlockID);
             if (index == null)
                 return null;
             return (MemoryChunk)lazinatorMemory.MemoryAtIndex((int)index);
         }
 
-        private int? GetFirstIndexOfMemoryChunkID(LazinatorMemory lazinatorMemory, int memoryChunkID)
+        private int? GetFirstIndexOfMemoryBlockID(LazinatorMemory lazinatorMemory, int memoryBlockID)
         {
-            if (lazinatorMemory.MemoryAtIndex(0).Reference.MemoryChunkID == memoryChunkID)
+            if (lazinatorMemory.MemoryAtIndex(0).Reference.MemoryBlockID == memoryBlockID)
                 return 0;
             if (lazinatorMemory.MoreMemoryChunks == null)
                 return null;
-            var index = GetFirstIndexOfMemoryChunkID(lazinatorMemory.MoreMemoryChunks, memoryChunkID);
+            var index = GetFirstIndexOfMemoryBlockID(lazinatorMemory.MoreMemoryChunks, memoryBlockID);
             if (index == null)
                 return null;
             return index + 1;
@@ -185,15 +185,15 @@ namespace LazinatorTests.Tests
         /// <summary>
         /// Returns the first index within the memory chunk collection of the specified memory chunk ID, or null if not found. This will be one less than the index within a LazinatorMemory containing this collection.
         /// </summary>
-        /// <param name="memoryChunkID"></param>
+        /// <param name="memoryBlockID"></param>
         /// <returns></returns>
-        private int? GetFirstIndexOfMemoryChunkID(IMemoryChunkCollection memoryChunkCollection, int memoryChunkID)
+        private int? GetFirstIndexOfMemoryBlockID(IMemoryChunkCollection memoryChunkCollection, int memoryBlockID)
         {
             int count = memoryChunkCollection.NumMemoryChunks;
             for (int i = 0; i < count; i++)
             {
                 var memoryChunk = memoryChunkCollection.MemoryAtIndex(i);
-                if (memoryChunk.Reference.MemoryChunkID == memoryChunkID)
+                if (memoryChunk.Reference.MemoryBlockID == memoryBlockID)
                     return i;
             }
             return null;

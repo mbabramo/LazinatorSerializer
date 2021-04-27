@@ -85,7 +85,7 @@ namespace Lazinator.Buffers
                 {
                     if (ActiveMemoryPosition == 0)
                         return MultipleBufferInfo.ToLazinatorMemory();
-                    var withAppended = MultipleBufferInfo.WithAppendedMemoryChunk(new MemoryChunk(ActiveMemory.ReadOnlyBytes, new MemoryChunkReference(MultipleBufferInfo.GetActiveMemoryChunkID(), 0, ActiveMemoryPosition), false));
+                    var withAppended = MultipleBufferInfo.WithAppendedMemoryChunk(new MemoryChunk(ActiveMemory.ReadOnlyBytes, new MemoryChunkReference(MultipleBufferInfo.GetActiveMemoryBlockID(), 0, ActiveMemoryPosition), false));
                     return withAppended.ToLazinatorMemory();
                 }
                 return new LazinatorMemory(new MemoryChunk(ActiveMemory.ReadOnlyBytes), 0, ActiveMemoryPosition);
@@ -249,7 +249,7 @@ namespace Lazinator.Buffers
         {
             if (ActiveMemoryPosition > 0)
             {
-                var chunk = new MemoryChunk(ActiveMemory.ReadWriteBytes, new MemoryChunkReference(MultipleBufferInfo?.GetActiveMemoryChunkID() ?? 0, 0, ActiveMemoryPosition), false);
+                var chunk = new MemoryChunk(ActiveMemory.ReadWriteBytes, new MemoryChunkReference(MultipleBufferInfo?.GetActiveMemoryBlockID() ?? 0, 0, ActiveMemoryPosition), false);
                 if (MultipleBufferInfo == null)
                     MultipleBufferInfo = new MultipleBufferInfo(chunk, false);
                 else
@@ -265,13 +265,13 @@ namespace Lazinator.Buffers
             if (MultipleBufferInfo is null)
                 throw new Exception("No LazinatorMemory to patch");
             MultipleBufferInfo.RecordLastActiveMemoryChunkReference(ActiveMemoryPosition);
-            int activeMemoryChunkID = MultipleBufferInfo.GetActiveMemoryChunkID();
+            int activeMemoryBlockID = MultipleBufferInfo.GetActiveMemoryBlockID();
             int activeLength = NumActiveMemoryBytesAddedToRecycling;
             if (activeLength > 0)
             {
                 MoveActiveToCompletedMemory();
             }
-            return MultipleBufferInfo.CompletePatchLazinatorMemory(activeLength, activeMemoryChunkID);
+            return MultipleBufferInfo.CompletePatchLazinatorMemory(activeLength, activeMemoryBlockID);
         }
 
         #endregion

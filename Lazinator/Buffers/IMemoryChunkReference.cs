@@ -6,7 +6,7 @@ namespace Lazinator.Buffers
     [NonbinaryHash]
     public interface IMemoryChunkReference
     {
-        int MemoryChunkID { get; set; }
+        int MemoryBlockID { get; set; }
         long OffsetForLoading { get; set; }
         int PreTruncationLength { get; set; }
         int AdditionalOffset { get; set; }
