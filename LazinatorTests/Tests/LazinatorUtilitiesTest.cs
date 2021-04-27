@@ -130,7 +130,7 @@ namespace LazinatorTests.Tests
                     // Debug.WriteLine($"Main chunk {mainChunkIndex} start {startPosition} numBytes {numBytes} bytes {String.Join(",", bytesToAdd)}");
                     // Debug.WriteLine($"Overall referenced bytes {String.Join(",", referencedBytes)}");
                 }
-                int totalBytesReferredTo = memoryChunks.Sum(x => x.Reference.PreTruncationLength);
+                int totalBytesReferredTo = memoryChunks.Sum(x => x.LoadingInfo.PreTruncationLength);
                 referencedBytes.Count().Should().Equals(totalBytesReferredTo);
                 LazinatorMemory cobbledMemory = new LazinatorMemory(memoryChunks.First(), memoryChunks.Skip(1).ToList(), 0, 0, totalBytesReferredTo);
 
@@ -172,7 +172,7 @@ namespace LazinatorTests.Tests
 
         private int? GetFirstIndexOfMemoryBlockID(LazinatorMemory lazinatorMemory, int memoryBlockID)
         {
-            if (lazinatorMemory.MemoryAtIndex(0).Reference.MemoryBlockID == memoryBlockID)
+            if (lazinatorMemory.MemoryAtIndex(0).LoadingInfo.MemoryBlockID == memoryBlockID)
                 return 0;
             if (lazinatorMemory.MoreMemoryChunks == null)
                 return null;
@@ -193,7 +193,7 @@ namespace LazinatorTests.Tests
             for (int i = 0; i < count; i++)
             {
                 var memoryChunk = memoryChunkCollection.MemoryAtIndex(i);
-                if (memoryChunk.Reference.MemoryBlockID == memoryBlockID)
+                if (memoryChunk.LoadingInfo.MemoryBlockID == memoryBlockID)
                     return i;
             }
             return null;

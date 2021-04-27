@@ -28,13 +28,13 @@ namespace Lazinator.Buffers
             }
         }
 
-        public MemoryBlockLoadingInfo LoadingInfo => new MemoryBlockInsetLoadingInfo(Reference.MemoryBlockID, Reference.PreTruncationLength, Reference.LoadingOffset);
-        public MemoryBlockSlice SliceInfo => new MemoryBlockSlice(Reference.MemoryBlockID, Reference.AdditionalOffset);
+        public MemoryBlockInsetLoadingInfo LoadingInfo => new MemoryBlockInsetLoadingInfo(Reference.MemoryBlockID, Reference.PreTruncationLength, Reference.LoadingOffset);
+        public MemoryBlockSlice SliceInfo => new MemoryBlockSlice(Reference.AdditionalOffset, Reference.FinalLength);
 
         public MemoryChunkReference Reference { get; set; }
 
-        public int MemoryBlockID => Reference.MemoryBlockID;
-        public int Length => Length;
+        public int MemoryBlockID => LoadingInfo.MemoryBlockID;
+        public int Length => SliceInfo.Length;
 
         public bool IsLoaded => MemoryAsLoaded != null;
 
@@ -116,9 +116,9 @@ namespace Lazinator.Buffers
 
         internal MemoryChunk WithPreTruncationLengthIncreasedIfNecessary(MemoryChunk otherMemoryChunk)
         {
-            if ((otherMemoryChunk.MemoryBlockID == MemoryBlockID) && Reference.PreTruncationLength < otherMemoryChunk.Reference.PreTruncationLength)
+            if ((otherMemoryChunk.MemoryBlockID == MemoryBlockID) && LoadingInfo.PreTruncationLength < otherMemoryChunk.LoadingInfo.PreTruncationLength)
             {
-                Reference = Reference.WithPreTruncationLength(otherMemoryChunk.Reference.PreTruncationLength);
+                Reference = Reference.WithPreTruncationLength(otherMemoryChunk.LoadingInfo.PreTruncationLength);
                 MemoryAsLoaded = otherMemoryChunk.MemoryAsLoaded;
             }
             return this;
