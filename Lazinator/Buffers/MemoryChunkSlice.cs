@@ -8,13 +8,13 @@ namespace Lazinator.Buffers
 {
     public readonly struct MemoryChunkSlice
     {
-        public readonly int AdditionalOffset;
-        public readonly int FinalLength;
+        public readonly int Offset;
+        public readonly int Length;
 
-        public MemoryChunkSlice(int additionalOffset, int finalLength)
+        public MemoryChunkSlice(int offset, int length)
         {
-            AdditionalOffset = additionalOffset;
-            FinalLength = finalLength;
+            Offset = offset;
+            Length = length;
         }
     }
 }

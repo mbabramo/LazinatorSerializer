@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Buffers
 {
-    public class MemoryChunk : IReadableBytes
+    public class MemoryChunk
     {
 
         public IReadableBytes MemoryAsLoaded { get; set; }
