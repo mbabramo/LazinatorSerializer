@@ -325,6 +325,8 @@ namespace LazinatorTests.Tests
 
             IBlobManager blobManager = GetBlobManager(useFile, poolMemory);
             string fullPath = GetPathForIndexAndBlobs(useFile, true);
+            if (fullPath == null)
+                return;
             PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob);
             index.PersistLazinatorMemory(afterChange);
 
@@ -358,6 +360,8 @@ namespace LazinatorTests.Tests
 
             IBlobManager blobManager = GetBlobManager(useFile, poolMemory);
             string fullPath = GetPathForIndexAndBlobs(useFile, true);
+            if (fullPath == null)
+                return;
             PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob);
             await index.PersistLazinatorMemoryAsync(afterChange);
 
