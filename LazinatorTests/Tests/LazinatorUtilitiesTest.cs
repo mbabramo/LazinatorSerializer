@@ -62,7 +62,7 @@ namespace LazinatorTests.Tests
                 }
                 if (i == 0)
                     m = new LazinatorMemory(b);
-                else m = m.WithAppendedChunk(new MemoryChunk(new ReadOnlyBytes(b), new MemoryChunkReference(i, 0, b.Length), false));
+                else m = m.WithAppendedChunk(new MemoryChunk(new ReadOnlyBytes(b), new MemoryBlockLoadingInfo(i, b.Length), new MemoryBlockSlice(0, b.Length), false));
             }
 
             const int numChecks = 15;
@@ -104,7 +104,7 @@ namespace LazinatorTests.Tests
                     continuousUnderlying[overallIndex++] = mainChunks[i][j];
                 }
                 overallMemoryOwners.Add(new ReadOnlyBytes(mainChunks[i]));
-                overallMemoryChunks.Add(new MemoryChunk(overallMemoryOwners[i], new MemoryChunkReference(i, 0, bytesPerChunk), false));
+                overallMemoryChunks.Add(new MemoryChunk(overallMemoryOwners[i], new MemoryBlockLoadingInfo(i, bytesPerChunk), new MemoryBlockSlice(0, bytesPerChunk), false));
             }
             LazinatorMemory overallLazinatorMemory = new LazinatorMemory(overallMemoryChunks.First(), overallMemoryChunks.Skip(1).ToList(), 0, 0, continuousUnderlying.Length);
             const int numRepetitions = 100;
@@ -124,7 +124,7 @@ namespace LazinatorTests.Tests
                     int numBytes = r.Next(0, bytesPerChunk - startPosition);
                     var overallMemoryOwner = overallMemoryOwners[mainChunkIndex];
                     var overallMemoryOwnerLoaded = new ReadOnlyBytes(overallMemoryOwner.ReadOnlyMemory);
-                    memoryChunks.Add(new MemoryChunk(overallMemoryOwnerLoaded, new MemoryChunkReference(mainChunkIndex, 0, overallMemoryOwner.ReadOnlyMemory.Length, startPosition, numBytes), false));
+                    memoryChunks.Add(new MemoryChunk(overallMemoryOwnerLoaded, new MemoryBlockLoadingInfo(mainChunkIndex, overallMemoryOwner.ReadOnlyMemory.Length), new MemoryBlockSlice(startPosition, numBytes), false));
                     IEnumerable<byte> bytesToAdd = overallMemoryOwners[mainChunkIndex].ReadOnlyMemory.ToArray().Skip(startPosition).Take(numBytes);
                     referencedBytes.AddRange(bytesToAdd);
                     // Debug.WriteLine($"Main chunk {mainChunkIndex} start {startPosition} numBytes {numBytes} bytes {String.Join(",", bytesToAdd)}");

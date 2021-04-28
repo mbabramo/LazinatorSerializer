@@ -159,7 +159,7 @@ namespace Lazinator.Buffers
             if (activeLength > 0)
             {
                 var activeMemoryChunk = byID[activeMemoryBlockID];
-                activeMemoryChunk.Reference = new MemoryChunkReference(activeMemoryBlockID, 0, activeLength, 0, 0);
+                activeMemoryChunk.SliceInfo = new MemoryBlockSlice(0, activeLength);
                 byID[activeMemoryBlockID] = activeMemoryChunk;
             }
             MemoryChunk initialMemoryChunk = null;
@@ -171,7 +171,7 @@ namespace Lazinator.Buffers
                     moreMemory = new List<MemoryChunk>();
                 MemoryChunkReference reference = RecycledMemoryChunkReferences[i];
                 MemoryChunk memoryChunk = byID[reference.MemoryBlockID];
-                MemoryChunk resliced = memoryChunk.WithReference(reference.WithAdditionalOffsetAndFinalLength(reference.AdditionalOffset, reference.FinalLength));
+                MemoryChunk resliced = memoryChunk.Slice(reference.AdditionalOffset, reference.FinalLength);
                 length += reference.FinalLength;
                 if (i == 0)
                     initialMemoryChunk = resliced;

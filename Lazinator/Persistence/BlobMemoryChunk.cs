@@ -16,7 +16,7 @@ namespace Lazinator.Persistence
         /// <summary>
         /// Creates a reference to an existing blob. This is called internally by GetAdditionalReferences(Async), after a call to MemoryReferenceInFile.
         /// </summary>
-        public BlobMemoryChunk(string path, IBlobManager blobManager, MemoryChunkReference reference) : base(null, reference, true)
+        public BlobMemoryChunk(string path, IBlobManager blobManager, MemoryBlockLoadingInfo loadingInfo, MemoryBlockSlice sliceInfo) : base(null, loadingInfo, sliceInfo, true)
         {
             BlobPath = path;
             BlobManager = blobManager;

@@ -91,5 +91,9 @@ namespace Lazinator.Buffers
         {
             return new MemoryChunkReference(MemoryBlockID, LoadingOffset, PreTruncationLength, additionalOffset, finalLength);
         }
+
+        internal MemoryBlockLoadingInfo LoadingInfo => LoadingOffset == 0 ? new MemoryBlockLoadingInfo(MemoryBlockID, PreTruncationLength) : new MemoryBlockInsetLoadingInfo(MemoryBlockID, PreTruncationLength, LoadingOffset);
+
+        internal MemoryBlockSlice SliceInfo => new MemoryBlockSlice(AdditionalOffset, FinalLength);
     }
 }

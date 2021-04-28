@@ -28,10 +28,10 @@ namespace Lazinator.Buffers
             }
         }
 
-        public MemoryBlockLoadingInfo LoadingInfo => new MemoryBlockInsetLoadingInfo(Reference.MemoryBlockID, Reference.PreTruncationLength, Reference.LoadingOffset);
-        public MemoryBlockSlice SliceInfo => new MemoryBlockSlice(Reference.AdditionalOffset, Reference.FinalLength);
+        public MemoryBlockLoadingInfo LoadingInfo { get; set; } // DEBUG => new MemoryBlockInsetLoadingInfo(Reference.MemoryBlockID, Reference.PreTruncationLength, Reference.LoadingOffset);
+        public MemoryBlockSlice SliceInfo { get; set; } // DEBUG => new MemoryBlockSlice(Reference.AdditionalOffset, Reference.FinalLength);
 
-        public MemoryChunkReference Reference { get; set; }
+        public MemoryChunkReference Reference => new MemoryChunkReference(LoadingInfo.MemoryBlockID, (LoadingInfo as IMemoryBlockInsetLoadingInfo)?.LoadingOffset ?? 0, LoadingInfo.PreTruncationLength, SliceInfo.Offset, SliceInfo.Length);
 
         public int MemoryBlockID => LoadingInfo.MemoryBlockID;
         public int Length => SliceInfo.Length;
@@ -52,20 +52,21 @@ namespace Lazinator.Buffers
 
         }
 
-        public MemoryChunk(IReadableBytes memoryAsLoaded) : this(memoryAsLoaded, new MemoryChunkReference(0, 0, memoryAsLoaded.ReadOnlyMemory.Length, 0, memoryAsLoaded.ReadOnlyMemory.Length), false)
+        public MemoryChunk(IReadableBytes memoryAsLoaded) : this(memoryAsLoaded, null, new MemoryBlockSlice(0, memoryAsLoaded.ReadOnlyMemory.Length), false)
         {
 
         }
 
-        public MemoryChunk(ReadWriteBytes memoryAsLoaded) : this(memoryAsLoaded, new MemoryChunkReference(0, 0, memoryAsLoaded.Memory.Length, 0, memoryAsLoaded.Memory.Length), false)
+        public MemoryChunk(ReadWriteBytes memoryAsLoaded) : this(memoryAsLoaded, null, new MemoryBlockSlice(0, memoryAsLoaded.Memory.Length), false)
         {
 
         }
 
-        public MemoryChunk(IReadableBytes memoryAsLoaded, MemoryChunkReference reference, bool isPersisted)
+        public MemoryChunk(IReadableBytes memoryAsLoaded, MemoryBlockLoadingInfo loadingInfo, MemoryBlockSlice sliceInfo, bool isPersisted)
         {
             MemoryAsLoaded = memoryAsLoaded;
-            Reference = reference;
+            LoadingInfo = loadingInfo ?? new MemoryBlockLoadingInfo(0, memoryAsLoaded.ReadOnlyMemory.Length);
+            SliceInfo = sliceInfo;
             IsPersisted = isPersisted;
         }
 
@@ -73,7 +74,7 @@ namespace Lazinator.Buffers
         /// Returns the memory being referred to, taking into account the additional offset to be applied after loading.
         /// If the memory hasn't been loaded, empty memory will be returned.
         /// </summary>
-        public virtual ReadOnlyMemory<byte> ReadOnlyMemory => MemoryAsLoaded == null ? LazinatorMemory.EmptyReadOnlyMemory : MemoryAsLoaded.ReadOnlyMemory.Slice(Reference.AdditionalOffset, Length);
+        public virtual ReadOnlyMemory<byte> ReadOnlyMemory => MemoryAsLoaded == null ? LazinatorMemory.EmptyReadOnlyMemory : MemoryAsLoaded.ReadOnlyMemory.Slice(SliceInfo.Offset, Length);
 
         public virtual Memory<byte> ReadWriteMemory
         {
@@ -85,7 +86,7 @@ namespace Lazinator.Buffers
                     return null; // will not execute
                 }
                 else
-                    return WritableMemory.Memory.Slice(Reference.AdditionalOffset, Length);
+                    return WritableMemory.Memory.Slice(SliceInfo.Offset, Length);
             }
         }
 
@@ -97,28 +98,21 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public virtual MemoryChunk Slice(int offset, int length)
         {
-            var chunk = new MemoryChunk(MemoryAsLoaded, Reference.Slice(offset, length), IsPersisted);
+            var chunk = new MemoryChunk(MemoryAsLoaded, LoadingInfo, SliceInfo.Slice(offset, length), IsPersisted);
             return chunk;
         }
 
         public virtual MemoryChunk Slice(int offset)
         {
-            var chunk = new MemoryChunk(MemoryAsLoaded, Reference.Slice(offset), IsPersisted);
+            var chunk = new MemoryChunk(MemoryAsLoaded, LoadingInfo, SliceInfo.Slice(offset), IsPersisted);
             return chunk;
         }
-
-        /// <summary>
-        /// Returns a MemoryChunk with the specified reference.
-        /// </summary>
-        /// <param name="replacementReference"></param>
-        /// <returns></returns>
-        public virtual MemoryChunk WithReference(MemoryChunkReference replacementReference) => new MemoryChunk(MemoryAsLoaded, replacementReference, IsPersisted);
 
         internal MemoryChunk WithPreTruncationLengthIncreasedIfNecessary(MemoryChunk otherMemoryChunk)
         {
             if ((otherMemoryChunk.MemoryBlockID == MemoryBlockID) && LoadingInfo.PreTruncationLength < otherMemoryChunk.LoadingInfo.PreTruncationLength)
             {
-                Reference = Reference.WithPreTruncationLength(otherMemoryChunk.LoadingInfo.PreTruncationLength);
+                LoadingInfo.PreTruncationLength = otherMemoryChunk.LoadingInfo.PreTruncationLength;
                 MemoryAsLoaded = otherMemoryChunk.MemoryAsLoaded;
             }
             return this;

@@ -183,7 +183,7 @@ namespace Lazinator.Persistence
             {
                 MemoryChunkReference memoryChunkReference = MemoryChunkReferences[i];
                 string referencePath = GetPathForMemoryChunk(memoryChunkReference.MemoryBlockID);
-                var blobMemoryChunk = new BlobMemoryChunk(referencePath, (IBlobManager)this.BlobManager, memoryChunkReference);
+                var blobMemoryChunk = new BlobMemoryChunk(referencePath, (IBlobManager)this.BlobManager, memoryChunkReference.LoadingInfo, memoryChunkReference.SliceInfo);
                 blobMemoryChunk.IsPersisted = GetMemoryChunkStatus(blobMemoryChunk.MemoryBlockID) != PersistentIndexMemoryChunkStatus.NotYetUsed;
                 memoryChunks.Add(blobMemoryChunk);
                 numBytesProcessed += memoryChunkReference.FinalLength;
