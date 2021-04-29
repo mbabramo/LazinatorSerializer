@@ -2,6 +2,7 @@
 using System;
 using System.Buffers;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -62,13 +63,22 @@ namespace Lazinator.Buffers
 
         }
 
+        static int DEBUG = 0;
+
         public MemoryChunk(IReadableBytes memoryAsLoaded, MemoryBlockLoadingInfo loadingInfo, MemoryBlockSlice sliceInfo, bool isPersisted)
         {
             MemoryAsLoaded = memoryAsLoaded;
             LoadingInfo = loadingInfo ?? new MemoryBlockLoadingInfo(0, memoryAsLoaded.ReadOnlyMemory.Length);
             SliceInfo = sliceInfo;
             IsPersisted = isPersisted;
+            Debug.WriteLine(SliceInfo); // DEBUG
+            if (++DEBUG == 161)
+            {
+                var DEBUG2 = 0;
+            }
         }
+
+        public virtual MemoryChunk DeepCopy() => new MemoryChunk(MemoryAsLoaded, LoadingInfo, SliceInfo, IsPersisted);
 
         /// <summary>
         /// Returns the memory being referred to, taking into account the additional offset to be applied after loading.

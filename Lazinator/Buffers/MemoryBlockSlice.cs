@@ -26,5 +26,10 @@ namespace Lazinator.Buffers
         {
             return new MemoryBlockSlice(Offset + furtherOffset, Length - furtherOffset);
         }
+
+        public override string ToString()
+        {
+            return $"Offset: {Offset}; Length: {Length}";
+        }
     }
 }
