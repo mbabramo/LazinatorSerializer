@@ -180,7 +180,7 @@ namespace LazinatorTests.Tests
             var index = GetFirstIndexOfMemoryBlockID(lazinatorMemory.MultipleMemoryChunks, memoryBlockID);
             if (index == null)
                 return null;
-            return index + 1;
+            return index;
         }
 
         /// <summary>

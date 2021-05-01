@@ -27,7 +27,7 @@ namespace Lazinator.Buffers
         /// <summary>
         /// Multiple chunks of memory
         /// </summary>
-        public readonly IMemoryChunkCollection MultipleMemoryChunks; 
+        public readonly IMemoryChunkCollection MultipleMemoryChunks;
         /// <summary>
         /// The starting index from the set consisting of InitialOwnedMemory and MoreOwnedMemory for the referenced range.
         /// </summary>
@@ -46,7 +46,7 @@ namespace Lazinator.Buffers
         /// </summary>
         public int? LengthInt => Length > int.MaxValue ? null : (int)Length;
 
-        public bool IsEmpty => SingleMemoryChunk == null && (MultipleMemoryChunks == null || Length == 0);
+        public bool IsEmpty => (SingleMemoryChunk == null && MultipleMemoryChunks == null) || Length == 0;
         public long AllocationID => (SingleMemoryChunk.MemoryAsLoaded as ExpandableBytes)?.AllocationID ?? -1;
 
         public static Memory<byte> EmptyMemory = new Memory<byte>();
@@ -88,6 +88,8 @@ namespace Lazinator.Buffers
         {
             MultipleMemoryChunks = moreMemoryChunks;
             StartIndex = startIndex;
+            if (StartIndex >= MultipleMemoryChunks.NumMemoryChunks)
+                throw new Exception("DEBUG");
         }
 
         public LazinatorMemory(IEnumerable<MemoryChunk> moreMemoryChunks, int startIndex, int startPosition, long length) : this(null, startPosition, length)
@@ -95,6 +97,8 @@ namespace Lazinator.Buffers
             MultipleMemoryChunks = new MemoryChunkCollection();
             MultipleMemoryChunks.SetContents(moreMemoryChunks);
             StartIndex = startIndex;
+            if (StartIndex >= MultipleMemoryChunks.NumMemoryChunks)
+                throw new Exception("DEBUG");
         }
 
         public LazinatorMemory(MemoryChunk memoryChunk, long length) : this(memoryChunk, 0, length)
@@ -256,7 +260,7 @@ namespace Lazinator.Buffers
                 if (remainingBytesThisMemory <= positionRemaining)
                 {
                     positionRemaining -= remainingBytesThisMemory;
-                    if (positionRemaining == 0 && revisedStartIndex == moreMemoryCount)
+                    if (positionRemaining == 0 && revisedStartIndex == moreMemoryCount - 1)
                         break; // we are at the very end of the last LazinatorMemory
                     revisedStartIndex++;
                     revisedStartPosition = 0;
