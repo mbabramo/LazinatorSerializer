@@ -162,24 +162,18 @@ namespace Lazinator.Buffers
                 activeMemoryChunk.SliceInfo = new MemoryBlockSlice(0, activeLength);
                 byID[activeMemoryBlockID] = activeMemoryChunk;
             }
-            MemoryChunk initialMemoryChunk = null;
-            List<MemoryChunk> moreMemory = null;
+            List<MemoryChunk> memoryChunks = new List<MemoryChunk>(); 
             long length = 0;
             for (int i = 0; i < RecycledMemoryChunkReferences.Count; i++)
             {
-                if (i == 1)
-                    moreMemory = new List<MemoryChunk>();
                 MemoryChunkReference reference = RecycledMemoryChunkReferences[i];
                 MemoryChunk memoryChunk = byID[reference.MemoryBlockID];
                 MemoryChunk resliced = memoryChunk.DeepCopy();
                 resliced.SliceInfo = new MemoryBlockSlice(reference.AdditionalOffset, reference.FinalLength);
                 length += reference.FinalLength;
-                if (i == 0)
-                    initialMemoryChunk = resliced;
-                else
-                    moreMemory.Add(resliced);
+                memoryChunks.Add(resliced);
             }
-            return new LazinatorMemory(initialMemoryChunk, moreMemory, 0, 0, length);
+            return new LazinatorMemory(memoryChunks, 0, 0, length);
         }
 
         /// <summary>

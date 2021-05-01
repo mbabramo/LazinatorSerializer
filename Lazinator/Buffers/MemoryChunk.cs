@@ -63,19 +63,12 @@ namespace Lazinator.Buffers
 
         }
 
-        static int DEBUG = 0;
-
         public MemoryChunk(IReadableBytes memoryAsLoaded, MemoryBlockLoadingInfo loadingInfo, MemoryBlockSlice sliceInfo, bool isPersisted)
         {
             MemoryAsLoaded = memoryAsLoaded;
             LoadingInfo = loadingInfo ?? new MemoryBlockLoadingInfo(0, memoryAsLoaded.ReadOnlyMemory.Length);
             SliceInfo = sliceInfo;
             IsPersisted = isPersisted;
-            Debug.WriteLine(SliceInfo); // DEBUG
-            if (++DEBUG == 161)
-            {
-                var DEBUG2 = 0;
-            }
         }
 
         public virtual MemoryChunk DeepCopy() => new MemoryChunk(MemoryAsLoaded, LoadingInfo, SliceInfo, IsPersisted);

@@ -62,7 +62,8 @@ namespace LazinatorTests.Tests
                 }
                 if (i == 0)
                     m = new LazinatorMemory(b);
-                else m = m.WithAppendedChunk(new MemoryChunk(new ReadOnlyBytes(b), new MemoryBlockLoadingInfo(i, b.Length), new MemoryBlockSlice(0, b.Length), false));
+                else 
+                    m = m.WithAppendedChunk(new MemoryChunk(new ReadOnlyBytes(b), new MemoryBlockLoadingInfo(i, b.Length), new MemoryBlockSlice(0, b.Length), false));
             }
 
             const int numChecks = 15;
@@ -106,7 +107,7 @@ namespace LazinatorTests.Tests
                 overallMemoryOwners.Add(new ReadOnlyBytes(mainChunks[i]));
                 overallMemoryChunks.Add(new MemoryChunk(overallMemoryOwners[i], new MemoryBlockLoadingInfo(i, bytesPerChunk), new MemoryBlockSlice(0, bytesPerChunk), false));
             }
-            LazinatorMemory overallLazinatorMemory = new LazinatorMemory(overallMemoryChunks.First(), overallMemoryChunks.Skip(1).ToList(), 0, 0, continuousUnderlying.Length);
+            LazinatorMemory overallLazinatorMemory = new LazinatorMemory(overallMemoryChunks.ToList(), 0, 0, continuousUnderlying.Length);
             const int numRepetitions = 100;
             for (int rep = 0; rep < numRepetitions; rep++)
             {
@@ -132,7 +133,7 @@ namespace LazinatorTests.Tests
                 }
                 int totalBytesReferredTo = memoryChunks.Sum(x => x.LoadingInfo.PreTruncationLength);
                 referencedBytes.Count().Should().Equals(totalBytesReferredTo);
-                LazinatorMemory cobbledMemory = new LazinatorMemory(memoryChunks.First(), memoryChunks.Skip(1).ToList(), 0, 0, totalBytesReferredTo);
+                LazinatorMemory cobbledMemory = new LazinatorMemory(memoryChunks.ToList(), 0, 0, totalBytesReferredTo);
 
                 // Now, we are going to index into this range, first just by using LINQ, and then by getting a bytes segment, which should give us a pointer into overallLazinatorMemory.
                 int startingPositionWithinLazinatorMemorySubrange = r.Next(0, totalBytesReferredTo);
@@ -174,9 +175,9 @@ namespace LazinatorTests.Tests
         {
             if (lazinatorMemory.MemoryAtIndex(0).LoadingInfo.MemoryBlockID == memoryBlockID)
                 return 0;
-            if (lazinatorMemory.MoreMemoryChunks == null)
+            if (lazinatorMemory.MultipleMemoryChunks == null)
                 return null;
-            var index = GetFirstIndexOfMemoryBlockID(lazinatorMemory.MoreMemoryChunks, memoryBlockID);
+            var index = GetFirstIndexOfMemoryBlockID(lazinatorMemory.MultipleMemoryChunks, memoryBlockID);
             if (index == null)
                 return null;
             return index + 1;

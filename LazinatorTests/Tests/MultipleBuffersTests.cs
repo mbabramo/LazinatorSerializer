@@ -31,7 +31,7 @@ namespace LazinatorTests.Tests
             Example e = GetTypicalExample();
             LazinatorMemory singleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false));
             LazinatorMemory multipleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 10));
-            multipleBufferResult.MoreMemoryChunks.Count().Should().BeGreaterThan(0);
+            multipleBufferResult.MultipleMemoryChunks.Count().Should().BeGreaterThan(0);
             LazinatorMemory consolidated = new LazinatorMemory(multipleBufferResult.GetConsolidatedMemory());
             consolidated.Matches(singleBufferResult.ReadOnlyMemory.Span).Should().BeTrue();
 
@@ -54,7 +54,7 @@ namespace LazinatorTests.Tests
             BinaryTree.Add(1);
             LazinatorMemory singleBufferResult = BinaryTree.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false));
             LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 1));
-            multipleBufferResult.MoreMemoryChunks.Count().Should().BeGreaterThan(0);
+            multipleBufferResult.MultipleMemoryChunks.Count().Should().BeGreaterThan(0);
             LazinatorMemory multipleConsolidated = new LazinatorMemory(multipleBufferResult.GetConsolidatedMemory());
             string mString = multipleConsolidated.ToString();
             string sString = singleBufferResult.ToString();
@@ -70,7 +70,7 @@ namespace LazinatorTests.Tests
             node.RightNode = new LazinatorBinaryTreeNode<WByte>() { Data = 2 };
             LazinatorMemory singleBufferResult = node.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false));
             LazinatorMemory multipleBufferResult = node.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 1));
-            multipleBufferResult.MoreMemoryChunks.Count().Should().BeGreaterThan(0);
+            multipleBufferResult.MultipleMemoryChunks.Count().Should().BeGreaterThan(0);
             LazinatorMemory multipleConsolidated = new LazinatorMemory(multipleBufferResult.GetConsolidatedMemory());
             string mString = multipleConsolidated.ToString();
             string sString = singleBufferResult.ToString();
