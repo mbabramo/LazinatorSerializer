@@ -1230,7 +1230,7 @@ namespace Lazinator.Core
         public async static ValueTask<LazinatorMemory> GetChildSliceAsync(LazinatorMemory serializedBytes, int byteOffset, int byteLength, int? fixedLength)
         {
             var result = GetChildSlice(serializedBytes, byteOffset, byteLength, fixedLength);
-            await result.LoadReadOnlyMemoryAsync();
+            await result.LoadInitialReadOnlyMemoryAsync();
             return result;
         }
 

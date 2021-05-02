@@ -83,7 +83,7 @@ namespace LazinatorCollections.Tree
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Root_ByteIndex, _Root_ByteLength, null);
-                childData.LoadReadOnlyMemory();
+                childData.LoadInitialReadOnlyMemory();
                 _Root = DeserializationFactory.Instance.CreateBaseOrDerivedType(257, (c, p) => new LazinatorBinaryTreeNode<T>(c, p), childData, this); 
                 childData.ConsiderUnloadReadOnlyMemory();
             }

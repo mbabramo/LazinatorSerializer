@@ -83,7 +83,7 @@ namespace LazinatorTests.Examples
                 if (!_ByteSpan_Accessed)
                 {
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ByteSpan_ByteIndex, _ByteSpan_ByteLength, null);
-                    childData.LoadReadOnlyMemory();
+                    childData.LoadInitialReadOnlyMemory();
                     return childData.InitialReadOnlyMemory.Span;
                 }
                 return _ByteSpan.Span;
@@ -141,7 +141,7 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleGrandchild_ByteIndex, _MyExampleGrandchild_ByteLength, null);
-                childData.LoadReadOnlyMemory();
+                childData.LoadInitialReadOnlyMemory();
                 _MyExampleGrandchild = DeserializationFactory.Instance.CreateBaseOrDerivedType(1079, (c, p) => new ExampleGrandchild(c, p), childData, this); 
                 childData.ConsiderUnloadReadOnlyMemory();
             }
@@ -210,7 +210,7 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyWrapperContainer_ByteIndex, _MyWrapperContainer_ByteLength, null);
-                childData.LoadReadOnlyMemory();
+                childData.LoadInitialReadOnlyMemory();
                 _MyWrapperContainer = DeserializationFactory.Instance.CreateBaseOrDerivedType(1048, (c, p) => new WrapperContainer(c, p), childData, this); 
                 childData.ConsiderUnloadReadOnlyMemory();
             }

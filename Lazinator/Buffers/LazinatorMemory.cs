@@ -315,7 +315,7 @@ namespace Lazinator.Buffers
             {
                 if (IsEmpty)
                     return EmptyReadOnlyMemory;
-                LoadReadOnlyMemory();
+                LoadInitialReadOnlyMemory();
                 if (SingleMemory)
                     return SingleMemoryChunk.ReadOnlyMemory.Slice(Offset, (int)Length);
                 else
@@ -334,11 +334,11 @@ namespace Lazinator.Buffers
         /// Asynchronously returns the first referenced memory chunk.
         /// </summary>
         /// <returns></returns>
-        public async ValueTask<ReadOnlyMemory<byte>> GetReadOnlyMemoryAsync()
+        public async ValueTask<ReadOnlyMemory<byte>> GetInitialReadOnlyMemoryAsync()
         {
             if (IsEmpty)
                 return EmptyMemory;
-            await LoadReadOnlyMemoryAsync();
+            await LoadInitialReadOnlyMemoryAsync();
             if (SingleMemory)
                 return SingleMemoryChunk.ReadOnlyMemory.Slice(Offset, (int)Length);
             else
@@ -354,11 +354,6 @@ namespace Lazinator.Buffers
         /// A read-only version of the first referenced memory chunk, returned asynchronously.
         /// </summary>
         public ReadOnlyMemory<byte> GetInitialReadOnlyMemory() => InitialReadOnlyMemory;
-
-        /// <summary>
-        /// A read-only version of the first referenced memory chunk, returned asynchronously.
-        /// </summary>
-        public async ValueTask<ReadOnlyMemory<byte>> GetInitialReadOnlyMemoryAsync() => await GetReadOnlyMemoryAsync();
 
         /// <summary>
         /// The only memory chunk. This will throw if there are multiple memory chunks.
@@ -377,7 +372,7 @@ namespace Lazinator.Buffers
         /// Loads the first referenced memory chunk synchronously if it is not loaded.
         /// </summary>
         /// <returns></returns>
-        public void LoadReadOnlyMemory()
+        public void LoadInitialReadOnlyMemory()
         {
             if (SingleMemory)
             {
@@ -388,7 +383,7 @@ namespace Lazinator.Buffers
             LoadMemoryChunk(memoryChunk);
         }
 
-        public async ValueTask LoadReadOnlyMemoryAsync()
+        public async ValueTask LoadInitialReadOnlyMemoryAsync()
         {
             if (SingleMemory)
             {
@@ -420,7 +415,7 @@ namespace Lazinator.Buffers
         /// </summary>
         public void LoadAllMemory()
         {
-            LoadReadOnlyMemory();
+            LoadInitialReadOnlyMemory();
             if (MultipleMemoryChunks != null)
                 foreach (var additional in MultipleMemoryChunks)
                     LoadMemoryChunk(additional);
@@ -428,7 +423,7 @@ namespace Lazinator.Buffers
 
         public async ValueTask LoadAllMemoryAsync()
         {
-            await LoadReadOnlyMemoryAsync();
+            await LoadInitialReadOnlyMemoryAsync();
             if (MultipleMemoryChunks != null)
                 foreach (var additional in MultipleMemoryChunks)
                     await LoadMemoryChunkAsync(additional);

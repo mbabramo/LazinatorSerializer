@@ -1196,7 +1196,7 @@ namespace Lazinator.CodeDescription
                                         else
                                         {{
                                             LazinatorMemory childData = {ChildSliceString};{IIF(WithinAsync, $@"
-                                            childData.LoadReadOnlyMemory();")}
+                                            childData.LoadInitialReadOnlyMemory();")}
                                             var toReturn = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}(childData);
                                             toReturn.IsDirty = false;{IIF(WithinAsync, $@"
                                             childData.ConsiderUnloadReadOnlyMemory();")}
@@ -1377,7 +1377,7 @@ namespace Lazinator.CodeDescription
         {
             return $@"
             {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || NonNullableThatCanBeUninitialized, "LazinatorMemoryStorage.Length == 0", createDefault, $@"{IIF(defineChildData, "LazinatorMemory ")}childData = {(async ? ChildSliceStringDefinitelyAsync : ChildSliceString)};{IIF(!async && WithinAsync, $@"
-                childData.LoadReadOnlyMemory();")}{recreation}{IIF(async, $@"
+                childData.LoadInitialReadOnlyMemory();")}{recreation}{IIF(async, $@"
                 await childData.ConsiderUnloadReadOnlyMemoryAsync();")}{IIF(!async && WithinAsync, $@"
                 childData.ConsiderUnloadReadOnlyMemory();")}")}{IIF(BackingAccessFieldIncluded, $@"
             {BackingFieldAccessedString} = true;")}";
@@ -1431,7 +1431,7 @@ namespace Lazinator.CodeDescription
             get
             {{
                 {ConditionalCodeGenerator.ElseConsequentPossibleOnlyIf(BackingAccessFieldIncluded, new ConditionCodeGenerator(BackingFieldNotAccessedString), $@"LazinatorMemory childData = {ChildSliceString};{IIF(WithinAsync, $@"
-                    childData.LoadReadOnlyMemory();")}
+                    childData.LoadInitialReadOnlyMemory();")}
                     {coreOfGet}")}
                 return {castToSpanOfCorrectType};
             }}{StepThroughPropertiesString}
