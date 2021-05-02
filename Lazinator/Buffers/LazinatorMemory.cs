@@ -280,7 +280,7 @@ namespace Lazinator.Buffers
         #region Equality
 
         public override bool Equals(object obj) => obj == null ? throw new LazinatorSerializationException("Invalid comparison of LazinatorMemory to null") :
-            obj is LazinatorMemory lm && lm.SingleMemoryChunk.Equals(SingleMemoryChunk) && lm.Offset == Offset && lm.Length == Length;
+            obj is LazinatorMemory lm && ( (lm.SingleMemoryChunk != null && lm.SingleMemoryChunk.Equals(SingleMemoryChunk)) || (lm.MultipleMemoryChunks != null && lm.MultipleMemoryChunks.Equals(MultipleMemoryChunks)) ) && lm.Offset == Offset && lm.Length == Length;
 
         public override int GetHashCode()
         {
@@ -299,7 +299,7 @@ namespace Lazinator.Buffers
 
         #endregion
 
-        #region Initial memory
+        #region Single memory
 
         /// <summary>
         /// True if there is only a single memory chunk.
