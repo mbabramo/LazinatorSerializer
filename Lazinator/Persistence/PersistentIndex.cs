@@ -315,7 +315,7 @@ namespace Lazinator.Persistence
         {
             string indexPath = GetPathForIndex();
             SerializeLazinator();
-            ReadOnlyMemory<byte> bytes = LazinatorMemoryStorage.ReadOnlyMemory;
+            ReadOnlyMemory<byte> bytes = LazinatorMemoryStorage.InitialReadOnlyMemory;
             BlobManager.Write(indexPath, bytes);
         }
 
@@ -323,7 +323,7 @@ namespace Lazinator.Persistence
         {
             string indexPath = GetPathForIndex();
             SerializeLazinator();
-            ReadOnlyMemory<byte> bytes = LazinatorMemoryStorage.ReadOnlyMemory; // this is not separable (currently), so it will all be together
+            ReadOnlyMemory<byte> bytes = LazinatorMemoryStorage.InitialReadOnlyMemory; // this is not separable (currently), so it will all be together
             await BlobManager.WriteAsync(indexPath, bytes);
         }
 

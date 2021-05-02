@@ -114,7 +114,7 @@ namespace Lazinator.Core
             if (storage.IsEmpty || storage.Length == 1)
                 return default;
             int bytesSoFar = 0;
-            var span = (ReadOnlySpan<byte>)storage.ReadOnlyMemory.Span;
+            var span = (ReadOnlySpan<byte>)storage.InitialReadOnlyMemory.Span;
             int uniqueID = span.ToDecompressedInt32(ref bytesSoFar);
             T itemToReturn;
             if (!UniqueIDToTypeMap.ContainsKey(uniqueID))
@@ -160,10 +160,10 @@ namespace Lazinator.Core
         /// <param name="parent">The Lazinator parent of the item being created, or null if the item is at the top of the hierarchy or its parent is a struct</param>
         public ILazinator CreateFromBytesIncludingID(LazinatorMemory storage, ILazinator parent = null)
         {
-            if (storage.ReadOnlyMemory.Span.Length <= 1)
+            if (storage.InitialReadOnlyMemory.Span.Length <= 1)
                 return null;
             int bytesSoFar = 0;
-            int uniqueID = ((ReadOnlySpan<byte>)storage.ReadOnlyMemory.Span).ToDecompressedInt32(ref bytesSoFar);
+            int uniqueID = ((ReadOnlySpan<byte>)storage.InitialReadOnlyMemory.Span).ToDecompressedInt32(ref bytesSoFar);
             ILazinator itemToReturn = CreateKnownID(uniqueID, storage, parent);
             return itemToReturn;
         }
@@ -184,7 +184,7 @@ namespace Lazinator.Core
             {
                 (Type t, int numGenericParameters) = UniqueIDToTypeMap[uniqueID];
                 if (numGenericParameters > 0)
-                    lazinatorObject = CreateGenericFromBytesIncludingID(storage.ReadOnlyMemory.Span, storage, parent);
+                    lazinatorObject = CreateGenericFromBytesIncludingID(storage.InitialReadOnlyMemory.Span, storage, parent);
             }
             if (lazinatorObject == null)
                 throw new UnknownSerializedTypeException(uniqueID);
@@ -220,7 +220,7 @@ namespace Lazinator.Core
                 if (storage.Length <= 1)
                     yield break;
                 int bytesSoFar = 0;
-                int uniqueID = fixedUniqueID ?? ((ReadOnlySpan<byte>)storage.ReadOnlyMemory.Span).ToDecompressedInt32(ref bytesSoFar);
+                int uniqueID = fixedUniqueID ?? ((ReadOnlySpan<byte>)storage.InitialReadOnlyMemory.Span).ToDecompressedInt32(ref bytesSoFar);
                 ILazinator itemToReturn = CreateKnownID(uniqueID, storage, null);
                 int bytes = (int)itemToReturn.LazinatorMemoryStorage.Length;
                 storage = storage.Slice(bytes);

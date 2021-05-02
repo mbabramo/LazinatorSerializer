@@ -163,7 +163,7 @@ namespace Lazinator.Wrappers
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.ReadOnlyMemory.Span;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
             if (span.Length == 0)
             {
                 return 0;
@@ -318,7 +318,7 @@ namespace Lazinator.Wrappers
         
         int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.ReadOnlyMemory.Span;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             int lengthForLengths = 0;
             int totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
@@ -545,7 +545,7 @@ namespace Lazinator.Wrappers
             {
                 FreeInMemoryObjects();
                 int bytesSoFar = 0;
-                ReadOnlySpan<byte> span = LazinatorMemoryStorage.ReadOnlyMemory.Span;
+                ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
                 if (span.Length == 0)
                 {
                     return 0;
@@ -638,7 +638,7 @@ namespace Lazinator.Wrappers
             
             int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
             {
-                ReadOnlySpan<byte> span = LazinatorMemoryStorage.ReadOnlyMemory.Span;
+                ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
                 ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
                 int lengthForLengths = 0;
                 int totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);

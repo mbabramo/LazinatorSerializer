@@ -33,7 +33,7 @@ namespace LazinatorTests.Tests
             LazinatorMemory multipleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 10));
             multipleBufferResult.MultipleMemoryChunks.Count().Should().BeGreaterThan(0);
             LazinatorMemory consolidated = new LazinatorMemory(multipleBufferResult.GetConsolidatedMemory());
-            consolidated.Matches(singleBufferResult.ReadOnlyMemory.Span).Should().BeTrue();
+            consolidated.Matches(singleBufferResult.InitialReadOnlyMemory.Span).Should().BeTrue();
 
             Example e2 = new Example(consolidated);
             ExampleEqual(e, e2).Should().BeTrue();
@@ -59,7 +59,7 @@ namespace LazinatorTests.Tests
             string mString = multipleConsolidated.ToString();
             string sString = singleBufferResult.ToString();
             mString.Should().Be(sString);
-            multipleConsolidated.Matches(singleBufferResult.ReadOnlyMemory.Span).Should().BeTrue();
+            multipleConsolidated.Matches(singleBufferResult.InitialReadOnlyMemory.Span).Should().BeTrue();
         }
 
         [Fact]
@@ -75,7 +75,7 @@ namespace LazinatorTests.Tests
             string mString = multipleConsolidated.ToString();
             string sString = singleBufferResult.ToString();
             mString.Should().Be(sString);
-            multipleConsolidated.Matches(singleBufferResult.ReadOnlyMemory.Span).Should().BeTrue();
+            multipleConsolidated.Matches(singleBufferResult.InitialReadOnlyMemory.Span).Should().BeTrue();
         }
 
 

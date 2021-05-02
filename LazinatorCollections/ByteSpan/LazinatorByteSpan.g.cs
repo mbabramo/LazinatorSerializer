@@ -51,7 +51,7 @@ namespace LazinatorCollections.ByteSpan
                 if (!_ReadOnly_Accessed)
                 {
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ReadOnly_ByteIndex, _ReadOnly_ByteLength, null);
-                    return childData.ReadOnlyMemory.Span;
+                    return childData.InitialReadOnlyMemory.Span;
                 }
                 return _ReadOnly.Span;
             }
@@ -215,7 +215,7 @@ namespace LazinatorCollections.ByteSpan
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.ReadOnlyMemory.Span;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
             if (span.Length == 0)
             {
                 return 0;
@@ -383,7 +383,7 @@ namespace LazinatorCollections.ByteSpan
         
         protected virtual int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.ReadOnlyMemory.Span;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             int lengthForLengths = 8;
             int totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
@@ -534,7 +534,7 @@ namespace LazinatorCollections.ByteSpan
         
         private static Memory<Byte> ConvertFromBytes_Memory_Gbyte_g(LazinatorMemory storage)
         {
-            return storage.ReadOnlyMemory.ToArray();
+            return storage.InitialReadOnlyMemory.ToArray();
         }
         
         private static void ConvertToBytes_Memory_Gbyte_g(ref BufferWriter writer, Memory<Byte> itemToConvert, LazinatorSerializationOptions options)

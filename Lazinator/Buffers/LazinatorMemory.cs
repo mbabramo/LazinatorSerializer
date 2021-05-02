@@ -309,7 +309,7 @@ namespace Lazinator.Buffers
         /// <summary>
         /// The first referenced memory chunk
         /// </summary>
-        public ReadOnlyMemory<byte> ReadOnlyMemory
+        public ReadOnlyMemory<byte> InitialReadOnlyMemory
         {
             get
             {
@@ -328,34 +328,6 @@ namespace Lazinator.Buffers
                 }
             }
         }
-
-        /// <summary>
-        /// The first referenced memory chunk
-        /// </summary>
-        public Memory<byte> ReadWriteMemory
-        {
-            get
-            {
-                if (IsEmpty)
-                    return EmptyMemory;
-                LoadReadOnlyMemory();
-                if (SingleMemory)
-                    return SingleMemoryChunk.ReadWriteMemory.Slice(Offset, (int)Length);
-                else
-                {
-                    MemoryChunk memoryOwner = MemoryAtIndex(StartIndex);
-                    var memory = memoryOwner.ReadOnlyMemory;
-                    int overallMemoryLength = memory.Length;
-                    int lengthOfMemoryChunkAfterStartPosition = overallMemoryLength - Offset;
-                    return memoryOwner.ReadWriteMemory.Slice(Offset, lengthOfMemoryChunkAfterStartPosition);
-                }
-            }
-        }
-
-        /// <summary>
-        /// A read-only version of the first referenced memory chunk.
-        /// </summary>
-        public ReadOnlyMemory<byte> InitialReadOnlyMemory => ReadOnlyMemory;
 
 
         /// <summary>
@@ -381,7 +353,7 @@ namespace Lazinator.Buffers
         /// <summary>
         /// A read-only version of the first referenced memory chunk, returned asynchronously.
         /// </summary>
-        public ReadOnlyMemory<byte> GetInitialReadOnlyMemory() => ReadOnlyMemory;
+        public ReadOnlyMemory<byte> GetInitialReadOnlyMemory() => InitialReadOnlyMemory;
 
         /// <summary>
         /// A read-only version of the first referenced memory chunk, returned asynchronously.
@@ -864,7 +836,7 @@ namespace Lazinator.Buffers
             BufferWriter w = new BufferWriter((int) totalLength);
             foreach (byte b in EnumerateBytes(includeOutsideOfRange))
                 w.Write(b);
-            return w.LazinatorMemory.ReadOnlyMemory;
+            return w.LazinatorMemory.InitialReadOnlyMemory;
         }
 
         public async ValueTask<ReadOnlyMemory<byte>> GetConsolidatedMemoryAsync(bool includeOutsideOfRange = false)
@@ -884,7 +856,7 @@ namespace Lazinator.Buffers
             BufferWriter w = new BufferWriter((int)totalLength);
             foreach (byte b in EnumerateBytes(includeOutsideOfRange))
                 w.Write(b);
-            return w.LazinatorMemory.ReadOnlyMemory;
+            return w.LazinatorMemory.InitialReadOnlyMemory;
         }
 
         public string ToStringByChunk()

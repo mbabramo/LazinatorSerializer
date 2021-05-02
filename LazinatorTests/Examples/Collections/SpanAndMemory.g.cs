@@ -352,7 +352,7 @@ namespace LazinatorTests.Examples.Collections
                 if (!_MyReadOnlySpanByte_Accessed)
                 {
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanByte_ByteIndex, _MyReadOnlySpanByte_ByteLength, null);
-                    return childData.ReadOnlyMemory.Span;
+                    return childData.InitialReadOnlyMemory.Span;
                 }
                 return _MyReadOnlySpanByte.Span;
             }
@@ -374,7 +374,7 @@ namespace LazinatorTests.Examples.Collections
                 if (!_MyReadOnlySpanChar_Accessed)
                 {
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanChar_ByteIndex, _MyReadOnlySpanChar_ByteLength, null);
-                    return MemoryMarshal.Cast<byte, char>(childData.ReadOnlyMemory.Span);
+                    return MemoryMarshal.Cast<byte, char>(childData.InitialReadOnlyMemory.Span);
                 }
                 return MemoryMarshal.Cast<byte, char>(_MyReadOnlySpanChar.Span);
             }
@@ -396,7 +396,7 @@ namespace LazinatorTests.Examples.Collections
                 if (!_MyReadOnlySpanLong_Accessed)
                 {
                     LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlySpanLong_ByteIndex, _MyReadOnlySpanLong_ByteLength, null);
-                    return MemoryMarshal.Cast<byte, long>(childData.ReadOnlyMemory.Span);
+                    return MemoryMarshal.Cast<byte, long>(childData.InitialReadOnlyMemory.Span);
                 }
                 return MemoryMarshal.Cast<byte, long>(_MyReadOnlySpanLong.Span);
             }
@@ -510,7 +510,7 @@ namespace LazinatorTests.Examples.Collections
         {
             FreeInMemoryObjects();
             int bytesSoFar = 0;
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.ReadOnlyMemory.Span;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
             if (span.Length == 0)
             {
                 return 0;
@@ -735,7 +735,7 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            ReadOnlySpan<byte> span = LazinatorMemoryStorage.ReadOnlyMemory.Span;
+            ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             int lengthForLengths = 44;
             int totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
@@ -1042,7 +1042,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static Memory<Byte> ConvertFromBytes_Memory_Gbyte_g(LazinatorMemory storage)
         {
-            return storage.ReadOnlyMemory.ToArray();
+            return storage.InitialReadOnlyMemory.ToArray();
         }
         
         private static void ConvertToBytes_Memory_Gbyte_g(ref BufferWriter writer, Memory<Byte> itemToConvert, LazinatorSerializationOptions options)
@@ -1067,7 +1067,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static Memory<Int32> ConvertFromBytes_Memory_Gint_g(LazinatorMemory storage)
         {
-            ReadOnlySpan<byte> span = storage.ReadOnlyMemory.Span;
+            ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
@@ -1116,7 +1116,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return null;
             }
-            ReadOnlySpan<byte> span = storage.ReadOnlyMemory.Span.Slice(1);
+            ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span.Slice(1);
             return span.ToArray();
         }
         
@@ -1158,7 +1158,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return null;
             }
-            ReadOnlySpan<byte> span = storage.ReadOnlyMemory.Span.Slice(1);
+            ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span.Slice(1);
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
@@ -1211,7 +1211,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 return null;
             }
-            ReadOnlySpan<byte> span = storage.ReadOnlyMemory.Span.Slice(1);
+            ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span.Slice(1);
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
@@ -1258,7 +1258,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static ReadOnlyMemory<Byte> ConvertFromBytes_ReadOnlyMemory_Gbyte_g(LazinatorMemory storage)
         {
-            return storage.ReadOnlyMemory.ToArray();
+            return storage.InitialReadOnlyMemory.ToArray();
         }
         
         private static void ConvertToBytes_ReadOnlyMemory_Gbyte_g(ref BufferWriter writer, ReadOnlyMemory<Byte> itemToConvert, LazinatorSerializationOptions options)
@@ -1283,7 +1283,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static ReadOnlyMemory<Char> ConvertFromBytes_ReadOnlyMemory_Gchar_g(LazinatorMemory storage)
         {
-            ReadOnlySpan<byte> span = storage.ReadOnlyMemory.Span;
+            ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
@@ -1326,7 +1326,7 @@ namespace LazinatorTests.Examples.Collections
         
         private static ReadOnlyMemory<Int32> ConvertFromBytes_ReadOnlyMemory_Gint_g(LazinatorMemory storage)
         {
-            ReadOnlySpan<byte> span = storage.ReadOnlyMemory.Span;
+            ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
