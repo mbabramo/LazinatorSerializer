@@ -18,8 +18,6 @@ namespace Lazinator.Exceptions
 
         private static string tooLargeMessage(int maxValue) => $"Contents exceeded maximum length of {maxValue} bytes.";
 
-        internal static void ThrowChildStorageMissingException() => throw new LazinatorSerializationException("Internal error. Child storage missing.");
-
         public static void ThrowUnsetNonnullableLazinatorException() => throw new UnsetNonnullableLazinatorException();
         public static void ThrowMemoryNotWritableException() => throw new Exception("Memory chunk is not writable");
     }
