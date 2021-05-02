@@ -525,6 +525,8 @@ namespace Lazinator.Buffers
         /// <returns>An enumerable where each element consists of the chunk index, the start position, and the number of bytes</returns>
         private IEnumerable<MemoryChunkIndexReference> EnumerateMemoryChunksByIndex(bool includeOutsideOfRange = false)
         {
+            if (includeOutsideOfRange)
+                throw new Exception("DEBUG");
             if (!includeOutsideOfRange && Length == 0)
                 yield break;
             int startIndexOrZero = includeOutsideOfRange ? 0 : StartIndex;
@@ -617,6 +619,8 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public IEnumerable<ReadOnlyMemory<byte>> EnumerateRawMemory(bool includeOutsideOfRange = false)
         {
+            if (includeOutsideOfRange)
+                throw new Exception("DEBUG");
             MemoryChunk lastMemoryReferenceLoaded = null;
             foreach (var rangeInfo in EnumerateMemoryChunksByIndex(includeOutsideOfRange))
             {
@@ -747,6 +751,8 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public void WriteToBuffer(ref BufferWriter writer, bool includeOutsideOfRange = false)
         {
+            if (includeOutsideOfRange)
+                throw new Exception("DEBUG");
             foreach (ReadOnlyMemory<byte> memory in EnumerateRawMemory(includeOutsideOfRange))
                 writer.Write(memory.Span);
         }
@@ -758,6 +764,8 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public IEnumerable<byte> EnumerateBytes(bool includeOutsideOfRange = false)
         {
+            if (includeOutsideOfRange)
+                throw new Exception("DEBUG");
             if (!includeOutsideOfRange && Length == 0)
                 yield break;
             int startIndexOrZero = includeOutsideOfRange ? 0 : StartIndex;
@@ -816,6 +824,8 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public ReadOnlyMemory<byte> GetConsolidatedMemory(bool includeOutsideOfRange = false)
         {
+            if (includeOutsideOfRange)
+                throw new Exception("DEBUG");
             if (SingleMemory)
             {
                 SingleMemoryChunk.LoadMemory();
@@ -836,6 +846,8 @@ namespace Lazinator.Buffers
 
         public async ValueTask<ReadOnlyMemory<byte>> GetConsolidatedMemoryAsync(bool includeOutsideOfRange = false)
         {
+            if (includeOutsideOfRange)
+                throw new Exception("DEBUG");
             if (SingleMemory)
             {
                 await SingleMemoryChunk.LoadMemoryAsync();
@@ -868,113 +880,6 @@ namespace Lazinator.Buffers
         public string ToStringConsolidated()
         {
             return String.Join(",", EnumerateBytes().Select(x => x.ToString().PadLeft(3, '0')));
-        }
-
-        #endregion
-
-        #region Defragmenting
-
-
-        internal List<(int memoryBlockID, int totalBytesReferenced)> GetMemoryChunksByUsedSize(int maxTotalBytesReference = int.MaxValue)
-        {
-            return EnumerateMemoryChunks(false)
-                .Select(x => x.Reference)
-                .GroupBy(x => x.MemoryBlockID)
-                .Select(x => (x.Key, x.Sum(y => y.FinalLength)))
-                .Where(x => x.Item2 <= maxTotalBytesReference)
-                .OrderBy(x => x.Item2)
-                .ToList();
-        }
-
-        public LazinatorMemory WithConsolidatedMemoryRanges(int maxUsedSizeOldChunk, int maxSizePerNewChunk, int maxNumNewChunks)
-        {
-            List<List<int>> packingPlan = new List<List<int>>(); // lists the set of chunks to be added to new memory chunks. 
-            Dictionary<int, int> memoryBlockIDMap = new Dictionary<int, int>(); // maps the source memory chunk ID to a new target memory chunk ID
-            Dictionary<int, int> totalBytesInTargetMemoryBlockID = new Dictionary<int, int>(); // tracks the total bytes in each target memory chunk ID
-            var candidateChunks = GetMemoryChunksByUsedSize(maxUsedSizeOldChunk); // chunks where there are sufficiently few bytes referenced so that we might be able to combine them
-            int firstPlannedMemoryBlockID = GetNextMemoryBlockID();
-            int currentPlannedMemoryBlockID = firstPlannedMemoryBlockID;
-            int bytesInCurrentChunk = 0;
-            packingPlan.Add(new List<int>());
-            int numChunksAdded = 1;
-            foreach (var candidateChunk in candidateChunks)
-            {
-                // See if the candidate chunk can fit in the current chunk. If not, move to the next chunk, or return if max new chunks is hit.
-                int bytesRemainingInCurrentChunk = maxSizePerNewChunk - bytesInCurrentChunk;
-                if (candidateChunk.totalBytesReferenced > bytesRemainingInCurrentChunk)
-                { // too big
-                    bool chunkIsEmpty = bytesRemainingInCurrentChunk == maxSizePerNewChunk;
-                    if (numChunksAdded == maxNumNewChunks || chunkIsEmpty)
-                    {
-                        if (chunkIsEmpty)
-                        {
-                            numChunksAdded--;
-                            packingPlan.RemoveAt(packingPlan.Count - 1);
-                        }
-                        break; // can't add anything else
-                    }
-                    // prepare for next chunk
-                    packingPlan.Add(new List<int>()); 
-                    bytesInCurrentChunk = 0;
-                    currentPlannedMemoryBlockID++;
-                    numChunksAdded++;
-                }
-                // Plan to add the candidate chunk.
-                packingPlan.Last().Add(candidateChunk.memoryBlockID);
-                bytesInCurrentChunk += candidateChunk.totalBytesReferenced;
-                int targetChunkID = firstPlannedMemoryBlockID + numChunksAdded;
-                memoryBlockIDMap[candidateChunk.memoryBlockID] = targetChunkID;
-                totalBytesInTargetMemoryBlockID[targetChunkID] = bytesInCurrentChunk;
-            }
-
-            if (!packingPlan.Any() || (packingPlan.Count() == 1 && packingPlan[0].Count() == 1 && packingPlan[0][0] == SingleMemoryChunk.MemoryBlockID))
-                return this; // avoid repacking the initial memory chunk without anything else, since that accomplishes nothing.
-
-            Dictionary<int, int> memoryBlockIDsToPack = new Dictionary<int, int>();
-            for (int i = 0; i < packingPlan.Count; i++)
-            {
-                int targetChunkID = firstPlannedMemoryBlockID + i;
-                List<int> existingChunks = packingPlan[i];
-                foreach (var existingChunk in existingChunks)
-                    memoryBlockIDMap[existingChunk] = targetChunkID;
-            }
-
-            List<MemoryChunk> sourceMemoryChunksToInclude = new List<MemoryChunk>();
-            List<MemoryChunk> targetMemoryChunksToInclude = new List<MemoryChunk>();
-            Dictionary<int, MemoryChunk> memoryChunksIncludedByID = new Dictionary<int, MemoryChunk>();
-            Dictionary<int, int> bytesSoFarInTargetMemoryBlockID = new Dictionary<int, int>();
-            foreach (var sourceMemoryChunk in EnumerateMemoryChunks(false))
-            {
-                if (memoryBlockIDMap.ContainsKey(sourceMemoryChunk.MemoryBlockID))
-                {
-                    int targetMemoryBlockID = memoryBlockIDMap[sourceMemoryChunk.MemoryBlockID];
-                    int totalBytesInTarget = totalBytesInTargetMemoryBlockID[targetMemoryBlockID];
-                    int bytesInTargetSoFar = bytesSoFarInTargetMemoryBlockID.GetValueOrDefault(targetMemoryBlockID, 0);
-                    int bytesToCopyToTarget = sourceMemoryChunk.Length;
-                    MemoryChunkReference reference = new MemoryChunkReference(targetMemoryBlockID, 0, totalBytesInTarget, bytesInTargetSoFar, bytesToCopyToTarget);
-                    MemoryChunk chunk;
-                    if (!memoryChunksIncludedByID.ContainsKey(targetMemoryBlockID))
-                    {
-                        chunk = memoryChunksIncludedByID[targetMemoryBlockID] = new MemoryChunk(new ReadWriteBytes(new byte[totalBytesInTarget]));
-                        targetMemoryChunksToInclude.Add(sourceMemoryChunk);
-                    }
-                    else
-                        chunk = memoryChunksIncludedByID[targetMemoryBlockID]; // problem -- how do we know this is writable?
-                    Memory<byte> targetBytes = chunk.WritableMemory.Memory.Slice(bytesInTargetSoFar, bytesToCopyToTarget);
-                    sourceMemoryChunk.ReadOnlyMemory.CopyTo(targetBytes);
-                    bytesSoFarInTargetMemoryBlockID[targetMemoryBlockID] = bytesInTargetSoFar + bytesToCopyToTarget;
-                }
-                else
-                {
-                    if (!memoryChunksIncludedByID.ContainsKey(sourceMemoryChunk.MemoryBlockID))
-                    {
-                        sourceMemoryChunksToInclude.Add(sourceMemoryChunk);
-                        memoryChunksIncludedByID[sourceMemoryChunk.MemoryBlockID] = sourceMemoryChunk;
-                    }
-                }
-            }
-            LazinatorMemory replacement = new LazinatorMemory(sourceMemoryChunksToInclude.ToList(), 0, 0, Length);
-            return replacement;
         }
 
         #endregion
