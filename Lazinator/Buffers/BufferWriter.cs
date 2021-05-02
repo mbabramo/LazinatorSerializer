@@ -85,7 +85,7 @@ namespace Lazinator.Buffers
                 {
                     if (ActiveMemoryPosition == 0)
                         return MultipleBufferInfo.ToLazinatorMemory();
-                    var withAppended = MultipleBufferInfo.WithAppendedMemoryChunk(new MemoryChunk(ActiveMemory.ReadOnlyBytes, new MemoryBlockLoadingInfo(MultipleBufferInfo.GetActiveMemoryBlockID(), ActiveMemoryPosition), new MemoryBlockSlice(0, ActiveMemoryPosition), false));
+                    var withAppended = MultipleBufferInfo.WithAppendedMemoryChunk(new MemoryChunk(ActiveMemory.ReadOnlyBytes, new MemoryBlockLoadingInfo(MultipleBufferInfo.GetNextMemoryBlockID(), ActiveMemoryPosition), new MemoryBlockSlice(0, ActiveMemoryPosition), false));
                     return withAppended.ToLazinatorMemory();
                 }
                 return new LazinatorMemory(new MemoryChunk(ActiveMemory.ReadOnlyBytes), 0, ActiveMemoryPosition);
@@ -249,11 +249,11 @@ namespace Lazinator.Buffers
         {
             if (ActiveMemoryPosition > 0)
             {
-                var chunk = new MemoryChunk(ActiveMemory.ReadWriteBytes, new MemoryBlockLoadingInfo(MultipleBufferInfo?.GetActiveMemoryBlockID() ?? 0,  ActiveMemoryPosition), new MemoryBlockSlice(0, ActiveMemoryPosition), false);
+                var chunk = new MemoryChunk(ActiveMemory.ReadWriteBytes, new MemoryBlockLoadingInfo(MultipleBufferInfo?.GetNextMemoryBlockID() ?? 0,  ActiveMemoryPosition), new MemoryBlockSlice(0, ActiveMemoryPosition), false);
                 if (MultipleBufferInfo == null)
                     MultipleBufferInfo = new MultipleBufferInfo(chunk, false);
                 else
-                    MultipleBufferInfo.AppendChunk(chunk);
+                    MultipleBufferInfo.AppendMemoryChunk(chunk);
                 ActiveMemory = new ExpandableBytes(minSizeofNewBuffer);
                 ActiveMemoryPosition = 0;
                 MultipleBufferInfo.NumActiveMemoryBytesAddedToRecycling = 0;
@@ -265,7 +265,7 @@ namespace Lazinator.Buffers
             if (MultipleBufferInfo is null)
                 throw new Exception("No LazinatorMemory to patch");
             MultipleBufferInfo.RecordLastActiveMemoryChunkReference(ActiveMemoryPosition);
-            int activeMemoryBlockID = MultipleBufferInfo.GetActiveMemoryBlockID();
+            int activeMemoryBlockID = MultipleBufferInfo.GetNextMemoryBlockID();
             int activeLength = NumActiveMemoryBytesAddedToRecycling;
             if (activeLength > 0)
             {

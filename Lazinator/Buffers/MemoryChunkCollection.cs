@@ -10,7 +10,7 @@ namespace Lazinator.Buffers
     public class MemoryChunkCollection : IEnumerable<MemoryChunk>
     {
 
-        List<MemoryChunk> MemoryChunks = new List<MemoryChunk>();
+        protected List<MemoryChunk> MemoryChunks = new List<MemoryChunk>();
         public long Length { get; private set; }
 
         public MemoryChunkCollection()
@@ -27,6 +27,8 @@ namespace Lazinator.Buffers
 
         public MemoryChunkCollection(List<MemoryChunk> memoryChunks)
         {
+            if (memoryChunks == null)
+                throw new Exception("DEBUG");
             MemoryChunks = memoryChunks;
             MaxMemoryBlockID = MemoryChunks.Any() ? MemoryChunks.Max(x => x.MemoryBlockID) : 0;
             Length = MemoryChunks.Sum(x => (long) x.Length);
@@ -36,6 +38,13 @@ namespace Lazinator.Buffers
         {
         }
 
+        public virtual MemoryChunkCollection WithAppendedMemoryChunk(MemoryChunk memoryChunk)
+        {
+            List<MemoryChunk> memoryChunks = MemoryChunks.Select(x => x.WithPreTruncationLengthIncreasedIfNecessary(memoryChunk)).ToList();
+            var collection = new MemoryChunkCollection(memoryChunks);
+            collection.AppendMemoryChunk(memoryChunk);
+            return collection;
+        }
         public LazinatorMemory ToLazinatorMemory()
         {
             return new LazinatorMemory(this);
@@ -54,14 +63,6 @@ namespace Lazinator.Buffers
             if (memoryChunk.MemoryBlockID > MaxMemoryBlockID)
                 MaxMemoryBlockID = memoryChunk.MemoryBlockID;
             Length += (long)memoryChunk.Length;
-        }
-
-        public MemoryChunkCollection WithAppendedMemoryChunk(MemoryChunk memoryChunk)
-        {
-            List<MemoryChunk> memoryChunks = MemoryChunks.Select(x => x.WithPreTruncationLengthIncreasedIfNecessary(memoryChunk)).ToList();
-            var collection = new MemoryChunkCollection(memoryChunks);
-            collection.AppendMemoryChunk(memoryChunk);
-            return collection;
         }
 
         public int MaxMemoryBlockID { get; private set; }
