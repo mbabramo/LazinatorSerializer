@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Buffers
 {
-    public class MemoryChunkCollection : IMemoryChunkCollection
+    public class MemoryChunkCollection : IEnumerable<MemoryChunk>
     {
 
         List<MemoryChunk> MemoryChunks = new List<MemoryChunk>();

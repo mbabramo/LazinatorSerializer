@@ -27,7 +27,7 @@ namespace Lazinator.Buffers
         /// <summary>
         /// Multiple chunks of memory
         /// </summary>
-        public readonly IMemoryChunkCollection MultipleMemoryChunks;
+        public readonly MemoryChunkCollection MultipleMemoryChunks;
         /// <summary>
         /// The starting index from the set consisting of InitialOwnedMemory and MoreOwnedMemory for the referenced range.
         /// </summary>
@@ -75,7 +75,7 @@ namespace Lazinator.Buffers
                 Length = length;
         }
 
-        public LazinatorMemory(IMemoryChunkCollection memoryChunkCollection)
+        public LazinatorMemory(MemoryChunkCollection memoryChunkCollection)
         {
             MultipleMemoryChunks = memoryChunkCollection.DeepCopy(); // DEBUG -- DeepCopy necessary?
             SingleMemoryChunk = null;
@@ -84,7 +84,7 @@ namespace Lazinator.Buffers
             Length = memoryChunkCollection.Length;
         }
 
-        public LazinatorMemory(IMemoryChunkCollection moreMemoryChunks, int startIndex, int startPosition, long length) : this(null, startPosition, length)
+        public LazinatorMemory(MemoryChunkCollection moreMemoryChunks, int startIndex, int startPosition, long length) : this(null, startPosition, length)
         {
             MultipleMemoryChunks = moreMemoryChunks;
             StartIndex = startIndex;

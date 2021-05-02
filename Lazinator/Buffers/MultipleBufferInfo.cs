@@ -17,7 +17,7 @@ namespace Lazinator.Buffers
         {
         }
 
-        public MultipleBufferInfo(IMemoryChunkCollection memoryChunkCollection, bool recycle)
+        public MultipleBufferInfo(MemoryChunkCollection memoryChunkCollection, bool recycle)
         {
             MemoryChunks = memoryChunkCollection;
             if (recycle)
@@ -30,7 +30,7 @@ namespace Lazinator.Buffers
         /// Bytes that were previously written. They may have been written in the same serialization pass (created when ExpandableBytes became full) or 
         /// in a previous serialization pass (when serializing diffs).
         /// </summary>
-        public IMemoryChunkCollection MemoryChunks { get; internal set; }
+        public MemoryChunkCollection MemoryChunks { get; internal set; }
 
         public int NumMemoryChunks => MemoryChunks.NumMemoryChunks;
 

@@ -188,7 +188,7 @@ namespace LazinatorTests.Tests
         /// </summary>
         /// <param name="memoryBlockID"></param>
         /// <returns></returns>
-        private int? GetFirstIndexOfMemoryBlockID(IMemoryChunkCollection memoryChunkCollection, int memoryBlockID)
+        private int? GetFirstIndexOfMemoryBlockID(MemoryChunkCollection memoryChunkCollection, int memoryBlockID)
         {
             int count = memoryChunkCollection.NumMemoryChunks;
             for (int i = 0; i < count; i++)
