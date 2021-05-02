@@ -35,8 +35,6 @@ namespace Lazinator.Buffers
         {
             List<MemoryChunk> memoryChunks = MemoryChunks.Select(x => x.WithPreTruncationLengthIncreasedIfNecessary(memoryChunk)).ToList();
             var collection = new MultipleBufferInfo(memoryChunks, RecycledMemoryChunkReferences != null);
-            if (collection.Last().MemoryBlockID + 1 != memoryChunk.MemoryBlockID)
-                throw new Exception("DEBUG");
             collection.AppendMemoryChunk(memoryChunk);
             return collection;
         }

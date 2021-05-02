@@ -11,10 +11,6 @@ namespace Lazinator.Buffers
         public MemoryBlockLoadingInfo(int memoryBlockID, int preTruncationLength)
         {
             MemoryBlockID = memoryBlockID;
-            if (memoryBlockID == 15)
-            {
-                var DEBUG = 0;
-            }
             PreTruncationLength = preTruncationLength;
         }
     }

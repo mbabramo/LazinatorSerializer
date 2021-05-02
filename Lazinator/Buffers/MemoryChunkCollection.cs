@@ -42,8 +42,6 @@ namespace Lazinator.Buffers
         {
             List<MemoryChunk> memoryChunks = MemoryChunks.Select(x => x.WithPreTruncationLengthIncreasedIfNecessary(memoryChunk)).ToList();
             var collection = new MemoryChunkCollection(memoryChunks);
-            if (collection.Last().MemoryBlockID + 1 != memoryChunk.MemoryBlockID)
-                throw new Exception("DEBUG");
             collection.AppendMemoryChunk(memoryChunk);
             return collection;
         }
@@ -61,8 +59,6 @@ namespace Lazinator.Buffers
 
         public void AppendMemoryChunk(MemoryChunk memoryChunk)
         {
-            if (MemoryChunks.Any() && MemoryChunks.Last().MemoryBlockID + 1 != memoryChunk.MemoryBlockID)
-                throw new Exception("DEBUG");
             MemoryChunks.Add(memoryChunk);
             if (memoryChunk.MemoryBlockID > MaxMemoryBlockID)
                 MaxMemoryBlockID = memoryChunk.MemoryBlockID;
