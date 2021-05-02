@@ -433,7 +433,7 @@ namespace Lazinator.Buffers
         /// Allows for unloading the first referenced memory chunk, if it is loaded. The memory can be unloaded only if the owner of the first memory
         /// chunk is a MemoryReference that supports this functionality.
         /// </summary>
-        public void ConsiderUnloadReadOnlyMemory()
+        public void ConsiderUnloadInitialReadOnlyMemory()
         {
             if (SingleMemory)
                 return;

@@ -1199,7 +1199,7 @@ namespace Lazinator.CodeDescription
                                             childData.LoadInitialReadOnlyMemory();")}
                                             var toReturn = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}(childData);
                                             toReturn.IsDirty = false;{IIF(WithinAsync, $@"
-                                            childData.ConsiderUnloadReadOnlyMemory();")}
+                                            childData.ConsiderUnloadInitialReadOnlyMemory();")}
                                             return toReturn;
                                         }}")}
                                     {IIF(PropertyType == LazinatorPropertyType.LazinatorStructNullable, $@"if ({BackingFieldString} == null)
@@ -1379,7 +1379,7 @@ namespace Lazinator.CodeDescription
             {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || NonNullableThatCanBeUninitialized, "LazinatorMemoryStorage.Length == 0", createDefault, $@"{IIF(defineChildData, "LazinatorMemory ")}childData = {(async ? ChildSliceStringDefinitelyAsync : ChildSliceString)};{IIF(!async && WithinAsync, $@"
                 childData.LoadInitialReadOnlyMemory();")}{recreation}{IIF(async, $@"
                 await childData.ConsiderUnloadReadOnlyMemoryAsync();")}{IIF(!async && WithinAsync, $@"
-                childData.ConsiderUnloadReadOnlyMemory();")}")}{IIF(BackingAccessFieldIncluded, $@"
+                childData.ConsiderUnloadInitialReadOnlyMemory();")}")}{IIF(BackingAccessFieldIncluded, $@"
             {BackingFieldAccessedString} = true;")}";
         }
 

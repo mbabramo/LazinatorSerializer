@@ -100,7 +100,7 @@ namespace LazinatorCollections.Tree
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Data_ByteIndex, _Data_ByteLength, null);
                 childData.LoadInitialReadOnlyMemory();
                 _Data = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
-                childData.ConsiderUnloadReadOnlyMemory();
+                childData.ConsiderUnloadInitialReadOnlyMemory();
             }
             _Data_Accessed = true;
         }
@@ -176,7 +176,7 @@ namespace LazinatorCollections.Tree
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _LeftNode_ByteIndex, _LeftNode_ByteLength, null);
                 childData.LoadInitialReadOnlyMemory();
                 _LeftNode = DeserializationFactory.Instance.CreateBaseOrDerivedType(257, (c, p) => new LazinatorBinaryTreeNode<T>(c, p), childData, this); 
-                childData.ConsiderUnloadReadOnlyMemory();
+                childData.ConsiderUnloadInitialReadOnlyMemory();
             }
             _LeftNode_Accessed = true;
         }
@@ -248,7 +248,7 @@ namespace LazinatorCollections.Tree
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _RightNode_ByteIndex, _RightNode_ByteLength, null);
                 childData.LoadInitialReadOnlyMemory();
                 _RightNode = DeserializationFactory.Instance.CreateBaseOrDerivedType(257, (c, p) => new LazinatorBinaryTreeNode<T>(c, p), childData, this); 
-                childData.ConsiderUnloadReadOnlyMemory();
+                childData.ConsiderUnloadInitialReadOnlyMemory();
             }
             _RightNode_Accessed = true;
         }
