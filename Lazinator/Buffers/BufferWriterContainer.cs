@@ -18,7 +18,11 @@ namespace Lazinator.Buffers
         {
             return Writer.ToString();
         }
-        public BufferWriterContainer(int minimumSize, LazinatorMemory? completedMemory = null)
+        public BufferWriterContainer(int minimumSize)
+        {
+            Writer = new BufferWriter(minimumSize);
+        }
+        public BufferWriterContainer(int minimumSize, LazinatorMemory completedMemory)
         {
             Writer = new BufferWriter(minimumSize, completedMemory);
         }

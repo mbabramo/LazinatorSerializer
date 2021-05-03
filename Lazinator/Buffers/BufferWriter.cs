@@ -21,7 +21,7 @@ namespace Lazinator.Buffers
 
         public override string ToString()
         {
-            return ActiveMemory == null ? "" : String.Join(",", ActiveMemoryWrittenSpan.ToArray()) + " " + MultipleBufferInfo?.ToString();
+            return ActiveMemory == null ? "" : String.Join(",", ActiveMemoryWrittenSpan.ToArray()) + " " + MemorySegmentCollection?.ToString();
         }
 
         /// <summary>
@@ -35,27 +35,22 @@ namespace Lazinator.Buffers
         /// <summary>
         /// Information related to writing multiple buffers.
         /// </summary>
-        public MemorySegmentCollection MultipleBufferInfo { get; set; }
+        public MemorySegmentCollection MemorySegmentCollection { get; set; }
 
-        private bool Recycling => MultipleBufferInfo?.Recycling ?? false;
+        private bool Recycling => MemorySegmentCollection?.Recycling ?? false;
 
-        internal int NumActiveMemoryBytesAddedToRecycling => MultipleBufferInfo?.NumActiveMemoryBytesAddedToRecycling ?? 0;
+        internal int NumActiveMemoryBytesAddedToRecycling => MemorySegmentCollection?.NumActiveMemoryBytesAddedToRecycling ?? 0;
 
         #region Construction and initialization
 
-        public BufferWriter(int minimumSize, LazinatorMemory? completedMemory = null)
+        public BufferWriter(int minimumSize)
         {
             if (minimumSize == 0)
                 minimumSize = ExpandableBytes.DefaultMinBufferSize;
             ActiveMemory = new ExpandableBytes(minimumSize);
-            if (completedMemory != null)
-            {
-                MultipleBufferInfo = new MemorySegmentCollection(completedMemory.Value, true);
-            }
-            else
-                MultipleBufferInfo = null;
             ActiveMemory.UsedBytesInCurrentBuffer = 0;
             LengthsPosition = (0, 0);
+            MemorySegmentCollection = null;
         }
 
         public BufferWriter(int minimumSize, LazinatorMemory completedMemory)
@@ -65,7 +60,7 @@ namespace Lazinator.Buffers
             ActiveMemory = new ExpandableBytes(minimumSize);
             ActiveMemory.UsedBytesInCurrentBuffer = 0;
             LengthsPosition = (0, 0);
-            MultipleBufferInfo = new MemorySegmentCollection(completedMemory, true);
+            MemorySegmentCollection = new MemorySegmentCollection(completedMemory, true);
         }
 
         private void InitializeIfNecessary()
@@ -91,11 +86,11 @@ namespace Lazinator.Buffers
                     return PatchLazinatorMemoryFromRecycled();
                 }
                 ActiveMemory.UsedBytesInCurrentBuffer = ActiveMemoryPosition;
-                if (MultipleBufferInfo != null)
+                if (MemorySegmentCollection != null)
                 {
                     if (ActiveMemoryPosition == 0)
-                        return MultipleBufferInfo.ToLazinatorMemory();
-                    var withAppended = MultipleBufferInfo.WithAppendedMemoryChunk(new MemoryChunk(ActiveMemory.ReadOnlyBytes, new MemoryBlockLoadingInfo(MultipleBufferInfo.GetNextMemoryBlockID(), ActiveMemoryPosition), new MemoryBlockSlice(0, ActiveMemoryPosition), false));
+                        return MemorySegmentCollection.ToLazinatorMemory();
+                    var withAppended = MemorySegmentCollection.WithAppendedMemoryChunk(new MemoryChunk(ActiveMemory.ReadOnlyBytes, new MemoryBlockLoadingInfo(MemorySegmentCollection.GetNextMemoryBlockID(), ActiveMemoryPosition), new MemoryBlockSlice(0, ActiveMemoryPosition), false));
                     return withAppended.ToLazinatorMemory();
                 }
                 return new LazinatorMemory(new MemoryChunk(ActiveMemory.ReadOnlyBytes), 0, ActiveMemoryPosition);
@@ -149,15 +144,15 @@ namespace Lazinator.Buffers
         {
             get
             {
-                if (MultipleBufferInfo is null)
+                if (MemorySegmentCollection is null)
                     return ActiveMemoryPosition;
                 if (!Recycling)
                 {
-                    return ActiveMemoryPosition + (MultipleBufferInfo?.Length ?? 0);
+                    return ActiveMemoryPosition + (MemorySegmentCollection?.Length ?? 0);
                 }
                 else
                 {
-                    return ActiveMemoryPosition - MultipleBufferInfo.NumActiveMemoryBytesAddedToRecycling + MultipleBufferInfo.RecycledTotalLength;
+                    return ActiveMemoryPosition - MemorySegmentCollection.NumActiveMemoryBytesAddedToRecycling + MemorySegmentCollection.RecycledTotalLength;
                 }
             }
         }
@@ -166,9 +161,9 @@ namespace Lazinator.Buffers
         {
             get
             {
-                if (MultipleBufferInfo is null)
+                if (MemorySegmentCollection is null)
                     return (0, ActiveMemoryPosition);
-                int completedMemoryChunks = MultipleBufferInfo.NumMemoryChunks;
+                int completedMemoryChunks = MemorySegmentCollection.NumMemoryChunks;
                 return (completedMemoryChunks, ActiveMemoryPosition);
             }
         }
@@ -240,7 +235,7 @@ namespace Lazinator.Buffers
 
         public void InsertReferenceToCompletedMemory(int memoryChunkIndex, int startPosition, long numBytes)
         {
-            MultipleBufferInfo?.InsertReferenceToCompletedMemory(memoryChunkIndex, startPosition, numBytes, ActiveMemoryPosition);
+            MemorySegmentCollection?.InsertReferenceToCompletedMemory(memoryChunkIndex, startPosition, numBytes, ActiveMemoryPosition);
         }
 
         /// <summary>
@@ -248,7 +243,7 @@ namespace Lazinator.Buffers
         /// </summary>
         internal void RecordLastActiveMemoryChunkReferenceIfAny()
         {
-            MultipleBufferInfo?.RecordLastActiveMemoryChunkReference(ActiveMemoryPosition);
+            MemorySegmentCollection?.RecordLastActiveMemoryChunkReference(ActiveMemoryPosition);
         }
 
         /// <summary>
@@ -259,29 +254,29 @@ namespace Lazinator.Buffers
         {
             if (ActiveMemoryPosition > 0)
             {
-                var chunk = new MemoryChunk(ActiveMemory.ReadWriteBytes, new MemoryBlockLoadingInfo(MultipleBufferInfo?.GetNextMemoryBlockID() ?? 0,  ActiveMemoryPosition), new MemoryBlockSlice(0, ActiveMemoryPosition), false);
-                if (MultipleBufferInfo == null)
-                    MultipleBufferInfo = new MemorySegmentCollection(chunk, false);
+                var chunk = new MemoryChunk(ActiveMemory.ReadWriteBytes, new MemoryBlockLoadingInfo(MemorySegmentCollection?.GetNextMemoryBlockID() ?? 0,  ActiveMemoryPosition), new MemoryBlockSlice(0, ActiveMemoryPosition), false);
+                if (MemorySegmentCollection == null)
+                    MemorySegmentCollection = new MemorySegmentCollection(chunk, false);
                 else
-                    MultipleBufferInfo.AppendMemoryChunk(chunk);
+                    MemorySegmentCollection.AppendMemoryChunk(chunk);
                 ActiveMemory = new ExpandableBytes(minSizeofNewBuffer);
                 ActiveMemoryPosition = 0;
-                MultipleBufferInfo.NumActiveMemoryBytesAddedToRecycling = 0;
+                MemorySegmentCollection.NumActiveMemoryBytesAddedToRecycling = 0;
             }
         }
 
         public LazinatorMemory PatchLazinatorMemoryFromRecycled()
         {
-            if (MultipleBufferInfo is null)
+            if (MemorySegmentCollection is null)
                 throw new Exception("No LazinatorMemory to patch");
-            MultipleBufferInfo.RecordLastActiveMemoryChunkReference(ActiveMemoryPosition);
-            int activeMemoryBlockID = MultipleBufferInfo.GetNextMemoryBlockID();
+            MemorySegmentCollection.RecordLastActiveMemoryChunkReference(ActiveMemoryPosition);
+            int activeMemoryBlockID = MemorySegmentCollection.GetNextMemoryBlockID();
             int activeLength = NumActiveMemoryBytesAddedToRecycling;
             if (activeLength > 0)
             {
                 MoveActiveToCompletedMemory();
             }
-            return MultipleBufferInfo.CompletePatchLazinatorMemory(activeLength, activeMemoryBlockID);
+            return MemorySegmentCollection.CompletePatchLazinatorMemory(activeLength, activeMemoryBlockID);
         }
 
         #endregion
@@ -482,9 +477,9 @@ namespace Lazinator.Buffers
         {
             get
             {
-                if (MultipleBufferInfo == null || LengthsPosition.index == (MultipleBufferInfo?.NumMemoryChunks ?? 0))
+                if (MemorySegmentCollection == null || LengthsPosition.index == (MemorySegmentCollection?.NumMemoryChunks ?? 0))
                     return ActiveSpan.Slice(LengthsPosition.offset);
-                return MultipleBufferInfo.MemoryAtIndex(LengthsPosition.index).Slice(LengthsPosition.offset).ReadWriteMemory.Span;
+                return MemorySegmentCollection.MemoryAtIndex(LengthsPosition.index).Slice(LengthsPosition.offset).ReadWriteMemory.Span;
             }
         }
 
