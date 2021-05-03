@@ -7,34 +7,27 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Buffers
 {
-    public class MultipleBufferInfo : MemoryChunkCollection
+    public class MemorySegmentCollection : MemoryChunkCollection
     {
-        public MultipleBufferInfo(LazinatorMemory lazinatorMemory, bool recycle) : this(lazinatorMemory.EnumerateMemoryChunks().ToList(), recycle)
+        public MemorySegmentCollection(LazinatorMemory lazinatorMemory, bool recycle) : this(lazinatorMemory.EnumerateMemoryChunks().ToList(), recycle)
         {
         }
 
-        public MultipleBufferInfo(MemoryChunk chunk, bool recycle) : this(new List<MemoryChunk> { chunk }, recycle)
+        public MemorySegmentCollection(MemoryChunk chunk, bool recycle) : this(new List<MemoryChunk> { chunk }, recycle)
         {
         }
 
-        public MultipleBufferInfo(List<MemoryChunk> memoryChunks, bool recycle) : base(memoryChunks)
+        public MemorySegmentCollection(List<MemoryChunk> memoryChunks, bool recycle) : base(memoryChunks)
         {
-            if (memoryChunks == null)
-                throw new Exception("DEBUG");
             if (recycle)
                 RecycledMemoryChunkReferences = new List<MemoryChunkReference>();
         }
 
-        public MultipleBufferInfo()
-        {
-             throw new Exception("DEBUG");
-        }
 
-
-        public override MultipleBufferInfo WithAppendedMemoryChunk(MemoryChunk memoryChunk)
+        public override MemorySegmentCollection WithAppendedMemoryChunk(MemoryChunk memoryChunk)
         {
             List<MemoryChunk> memoryChunks = MemoryChunks.Select(x => x.WithPreTruncationLengthIncreasedIfNecessary(memoryChunk)).ToList();
-            var collection = new MultipleBufferInfo(memoryChunks, RecycledMemoryChunkReferences != null);
+            var collection = new MemorySegmentCollection(memoryChunks, RecycledMemoryChunkReferences != null);
             collection.AppendMemoryChunk(memoryChunk);
             return collection;
         }

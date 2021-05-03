@@ -35,7 +35,7 @@ namespace Lazinator.Buffers
         /// <summary>
         /// Information related to writing multiple buffers.
         /// </summary>
-        public MultipleBufferInfo MultipleBufferInfo { get; set; }
+        public MemorySegmentCollection MultipleBufferInfo { get; set; }
 
         private bool Recycling => MultipleBufferInfo?.Recycling ?? false;
 
@@ -50,7 +50,7 @@ namespace Lazinator.Buffers
             ActiveMemory = new ExpandableBytes(minimumSize);
             if (completedMemory != null)
             {
-                MultipleBufferInfo = new MultipleBufferInfo(completedMemory.Value, true);
+                MultipleBufferInfo = new MemorySegmentCollection(completedMemory.Value, true);
             }
             else
                 MultipleBufferInfo = null;
@@ -251,7 +251,7 @@ namespace Lazinator.Buffers
             {
                 var chunk = new MemoryChunk(ActiveMemory.ReadWriteBytes, new MemoryBlockLoadingInfo(MultipleBufferInfo?.GetNextMemoryBlockID() ?? 0,  ActiveMemoryPosition), new MemoryBlockSlice(0, ActiveMemoryPosition), false);
                 if (MultipleBufferInfo == null)
-                    MultipleBufferInfo = new MultipleBufferInfo(chunk, false);
+                    MultipleBufferInfo = new MemorySegmentCollection(chunk, false);
                 else
                     MultipleBufferInfo.AppendMemoryChunk(chunk);
                 ActiveMemory = new ExpandableBytes(minSizeofNewBuffer);
