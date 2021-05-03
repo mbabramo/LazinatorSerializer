@@ -58,6 +58,16 @@ namespace Lazinator.Buffers
             LengthsPosition = (0, 0);
         }
 
+        public BufferWriter(int minimumSize, LazinatorMemory completedMemory)
+        {
+            if (minimumSize == 0)
+                minimumSize = ExpandableBytes.DefaultMinBufferSize;
+            ActiveMemory = new ExpandableBytes(minimumSize);
+            ActiveMemory.UsedBytesInCurrentBuffer = 0;
+            LengthsPosition = (0, 0);
+            MultipleBufferInfo = new MemorySegmentCollection(completedMemory, true);
+        }
+
         private void InitializeIfNecessary()
         {
             if (ActiveMemory == null)
