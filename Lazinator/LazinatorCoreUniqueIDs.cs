@@ -49,5 +49,6 @@ namespace Lazinator
         IPersistentLazinator,
         IMemoryBlockLoadingInfo,
         IMemoryBlockInsetLoadingInfo,
+        IMemoryChunkCollection,
     }
 }

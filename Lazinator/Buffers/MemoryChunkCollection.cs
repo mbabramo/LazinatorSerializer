@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Buffers
 {
-    public class MemoryChunkCollection : IEnumerable<MemoryChunk>
+    public partial class MemoryChunkCollection : IMemoryChunkCollection, IEnumerable<MemoryChunk>
     {
 
         protected List<MemoryChunk> MemoryChunks = new List<MemoryChunk>();
@@ -18,24 +18,11 @@ namespace Lazinator.Buffers
 
         }
 
-        public MemoryChunkCollection(MemoryChunk memoryChunk)
-        {
-            MemoryChunks = new List<MemoryChunk>() { memoryChunk };
-            MaxMemoryBlockID = memoryChunk.MemoryBlockID;
-            Length = memoryChunk.Length;
-        }
-
         public MemoryChunkCollection(List<MemoryChunk> memoryChunks)
         {
-            if (memoryChunks == null)
-                throw new Exception("DEBUG");
             MemoryChunks = memoryChunks;
             MaxMemoryBlockID = MemoryChunks.Any() ? MemoryChunks.Max(x => x.MemoryBlockID) : 0;
             Length = MemoryChunks.Sum(x => (long) x.Length);
-        }
-
-        public MemoryChunkCollection(LazinatorMemory lazinatorMemory) : this(lazinatorMemory.EnumerateMemoryChunks().ToList())
-        {
         }
 
         public virtual MemoryChunkCollection WithAppendedMemoryChunk(MemoryChunk memoryChunk)
