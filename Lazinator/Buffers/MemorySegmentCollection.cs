@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Buffers
 {
-    public class MemorySegmentCollection : MemoryChunkCollection
+    public partial class MemorySegmentCollection : MemoryChunkCollection, IMemorySegmentCollection
     {
         public MemorySegmentCollection(LazinatorMemory lazinatorMemory, bool recycle) : this(lazinatorMemory.EnumerateMemoryChunks().ToList(), recycle)
         {

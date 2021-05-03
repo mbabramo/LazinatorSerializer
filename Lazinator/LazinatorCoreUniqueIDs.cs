@@ -50,5 +50,6 @@ namespace Lazinator
         IMemoryBlockLoadingInfo,
         IMemoryBlockInsetLoadingInfo,
         IMemoryChunkCollection,
+        IMemorySegmentCollection,
     }
 }
