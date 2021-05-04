@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace Lazinator.Buffers
     {
 
         protected List<MemoryChunk> MemoryChunks = new List<MemoryChunk>();
+        protected Dictionary<int, MemoryChunk> MemoryChunksByID = null;
         public long Length { get; private set; }
 
         public MemoryChunkCollection()
@@ -29,6 +31,7 @@ namespace Lazinator.Buffers
         {
             List<MemoryChunk> memoryChunks = MemoryChunks.Select(x => x.WithPreTruncationLengthIncreasedIfNecessary(memoryChunk)).ToList();
             var collection = new MemoryChunkCollection(memoryChunks);
+            collection.MemoryChunksByID = null;
             collection.AppendMemoryChunk(memoryChunk);
             return collection;
         }
@@ -46,6 +49,8 @@ namespace Lazinator.Buffers
 
         public void AppendMemoryChunk(MemoryChunk memoryChunk)
         {
+            if (MemoryChunksByID != null)
+                MemoryChunksByID[memoryChunk.MemoryBlockID] = memoryChunk;
             MemoryChunks.Add(memoryChunk);
             if (memoryChunk.MemoryBlockID > MaxMemoryBlockID)
                 MaxMemoryBlockID = memoryChunk.MemoryBlockID;
@@ -99,7 +104,22 @@ namespace Lazinator.Buffers
             return GetEnumerator();
         }
 
-        public Dictionary<int, MemoryChunk> GetMemoryChunksByID()
+        public MemoryChunk GetMemoryChunkByMemoryBlockID(int memoryBlockID)
+        {
+            var d = GetMemoryChunksByMemoryBlockID();
+            if (!d.ContainsKey(memoryBlockID))
+                return null;
+            return d[memoryBlockID];
+        }
+
+        public Dictionary<int, MemoryChunk> GetMemoryChunksByMemoryBlockID()
+        {
+            if (MemoryChunksByID == null)
+                LoadMemoryChunksByMemoryBlockID();
+            return MemoryChunksByID;
+        }
+
+        private void LoadMemoryChunksByMemoryBlockID()
         {
             Dictionary<int, MemoryChunk> d = new Dictionary<int, MemoryChunk>();
             foreach (MemoryChunk memoryChunk in MemoryChunks)
@@ -108,7 +128,7 @@ namespace Lazinator.Buffers
                 if (!d.ContainsKey(chunkID))
                     d[chunkID] = memoryChunk;
             }
-            return d;
+            MemoryChunksByID = d;
         }
 
         public int GetNextMemoryBlockID() => MaxMemoryBlockID + 1;
