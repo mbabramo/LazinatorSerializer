@@ -88,8 +88,6 @@ namespace Lazinator.Buffers
         {
             MultipleMemoryChunks = moreMemoryChunks;
             StartIndex = startIndex;
-            if (StartIndex >= MultipleMemoryChunks.NumMemoryChunks)
-                throw new Exception("DEBUG");
         }
 
         public LazinatorMemory(IEnumerable<MemoryChunk> moreMemoryChunks, int startIndex, int startPosition, long length) : this(null, startPosition, length)
@@ -97,8 +95,6 @@ namespace Lazinator.Buffers
             MultipleMemoryChunks = new MemoryChunkCollection();
             MultipleMemoryChunks.SetContents(moreMemoryChunks);
             StartIndex = startIndex;
-            if (StartIndex >= MultipleMemoryChunks.NumMemoryChunks)
-                throw new Exception("DEBUG");
         }
 
         public LazinatorMemory(MemoryChunk memoryChunk, long length) : this(memoryChunk, 0, length)
@@ -299,7 +295,7 @@ namespace Lazinator.Buffers
 
         #endregion
 
-        #region Single memory
+        #region Single and initial memory
 
         /// <summary>
         /// True if there is only a single memory chunk.
@@ -367,6 +363,10 @@ namespace Lazinator.Buffers
                 return SingleMemoryChunk.ReadOnlyMemory.Slice(Offset, (int) Length);
             }
         }
+
+        #endregion
+
+        #region Loading
 
         /// <summary>
         /// Loads the first referenced memory chunk synchronously if it is not loaded.
@@ -507,14 +507,12 @@ namespace Lazinator.Buffers
         /// <returns>An enumerable where each element consists of the chunk index, the start position, and the number of bytes</returns>
         private IEnumerable<MemoryBlockIndexAndSlice> EnumerateMemoryChunksByIndex(bool includeOutsideOfRange = false)
         {
-            if (includeOutsideOfRange)
-                throw new Exception("DEBUG");
             if (!includeOutsideOfRange && Length == 0)
                 yield break;
             int startIndexOrZero = includeOutsideOfRange ? 0 : StartIndex;
             int totalItems = NumMemoryChunks();
-            long lengthRemaining = Length;
-            for (int i = StartIndex; i < totalItems; i++)
+            long lengthRemaining = includeOutsideOfRange ? GetGrossLength() : Length;
+            for (int i = startIndexOrZero; i < totalItems; i++)
             {
                 var m = MemoryAtIndex(i);
                 int startPositionOrZero;
@@ -531,18 +529,6 @@ namespace Lazinator.Buffers
                     yield break;
             }
         }
-
-        // Explanation of how delta serialization works:
-        // Assume we have a large LazinatorMemory consisting of a set of MemoryReferences, each a lazy loadable long range of bytes. As we go from one version to the next, we will be adding additional ranges.
-        // Then assume we have a cobbled-together LazinatorMemory with references to these big ranges. This is effectively the result of potentially multiple generations of delta serialization.
-        // Eventually, some parts of the large LazinatorMemory may be deleted, because the more recent delta serializations don't refer to them anymore.
-        // Now, changes are made to this object graph, and the goal is to do another delta serialization. 
-        // BufferWriter will be compiling a list of the ranges we are writing to in the large LazinatorMemory.
-        // When an object has changed, then BufferWriter's action depends on whether it is writing some entirely new data or repeating previously serialized data.
-        // When writing previously serialized data, it simply records a new MemoryChunkReference, which points to the location in this range of bytes in some
-        // existing memory chunk from the original LazinatorMemory. When writing new data, it adds to its ActiveMemory but also adds a MemoryChunkReference
-        // (or extends an existing such reference) so that the set of MemoryChunkReferences will always encompass all of the data.
-        // Note that as usual, if BufferWriter needs to, it will append its active memory chunk to the LazinatorMemory and move to a new active chunk.
 
 
         /// <summary>
@@ -566,7 +552,7 @@ namespace Lazinator.Buffers
         /// <param name="relativeStartPositionOfSubrange"></param>
         /// <param name="numBytesInSubrange"></param>
         /// <returns></returns>
-        private IEnumerable<MemoryBlockIndexAndSlice> EnumerateMemoryChunkIndices(long relativeStartPositionOfSubrange, long numBytesInSubrange)
+        public IEnumerable<MemoryBlockIndexAndSlice> EnumerateMemoryChunkIndices(long relativeStartPositionOfSubrange, long numBytesInSubrange)
         {
             long bytesBeforeSubrangeRemaining = relativeStartPositionOfSubrange;
             long bytesOfSubrangeRemaining = numBytesInSubrange;
@@ -643,7 +629,7 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// Enumerates each of the memory owners, whether included within the referenced range or not.
+        /// Enumerates each of the memory chunks, whether included within the referenced range or not.
         /// </summary>
         /// <returns></returns>
         public IEnumerable<MemoryChunk> EnumerateMemoryChunks(bool includeOutsideOfRange = false)
@@ -742,10 +728,9 @@ namespace Lazinator.Buffers
         /// </summary>
         /// <param name="includeOutsideOfRange">If true, bytes outside the referenced range are included.</param>
         /// <returns></returns>
+
         public IEnumerable<byte> EnumerateBytes(bool includeOutsideOfRange = false)
         {
-            if (includeOutsideOfRange)
-                throw new Exception("DEBUG");
             if (!includeOutsideOfRange && Length == 0)
                 yield break;
             int startIndexOrZero = includeOutsideOfRange ? 0 : StartIndex;

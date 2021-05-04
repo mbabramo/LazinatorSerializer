@@ -79,6 +79,13 @@ namespace Lazinator.Buffers
         /// </summary>
         public virtual ReadOnlyMemory<byte> ReadOnlyMemory => MemoryAsLoaded == null ? LazinatorMemory.EmptyReadOnlyMemory : MemoryAsLoaded.ReadOnlyMemory.Slice(SliceInfo.Offset, Length);
 
+        public IEnumerable<byte> EnumerateBytes()
+        {
+            int length = ReadOnlyMemory.Length;
+            for (int i = 0; i < length; i++)
+                yield return ReadOnlyMemory.Span[i];
+        }
+
         public virtual Memory<byte> ReadWriteMemory
         {
             get
