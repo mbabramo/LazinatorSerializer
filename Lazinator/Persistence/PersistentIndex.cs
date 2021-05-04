@@ -329,9 +329,10 @@ namespace Lazinator.Persistence
 
         private void UpdateMemoryChunkReferenceToLoadingOffset(int memoryBlockID, long offset)
         {
-            for (int i = 0; i < MemoryChunkReferences.Count; i++)
-                if (MemoryChunkReferences[i].MemoryBlockID == memoryBlockID)
-                    MemoryChunkReferences[i] = MemoryChunkReferences[i].WithLoadingOffset(offset);
+            // DEBUG -- SUPERDEBUG
+            //for (int i = 0; i < MemoryChunkReferences.Count; i++)
+            //    if (MemoryChunkReferences[i].MemoryBlockID == memoryBlockID)
+            //        MemoryChunkReferences[i] = MemoryChunkReferences[i].WithLoadingOffset(offset);
         }
 
     }

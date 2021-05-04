@@ -6,6 +6,10 @@ namespace Lazinator.Buffers
     [Lazinator((int)LazinatorCoreUniqueIDs.IMemoryChunkCollection)]
     public interface IMemoryChunkCollection
     {
+        [Uncompressed]
+        string BaseBlobPath { get; set; }
+        bool ContainedInSingleBlob { get; set; }
+        bool IsPersisted { get; set; }
         List<MemoryBlockLoadingInfo> MemoryBlocksLoadingInfo { get; set; }
     }
 }
