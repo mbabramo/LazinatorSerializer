@@ -157,7 +157,7 @@ namespace Lazinator.Buffers
 
         private List<MemoryChunk> GetReferencedMemoryChunks(MemoryChunk chunkBeingAdded)
         {
-            List<ReferenceMemoryBlockSegmentByIndex> memoryChunkIndexReferences = EnumerateMemoryChunksByIndex().ToList();
+            List<MemoryBlockIndexAndSlice> memoryChunkIndexReferences = EnumerateMemoryChunksByIndex().ToList();
             var additionalMemoryChunks = new List<MemoryChunk>();
             foreach (var indexReference in memoryChunkIndexReferences)
                 additionalMemoryChunks.Add(GetMemoryChunkFromMemorySegmentByIndex(indexReference).WithPreTruncationLengthIncreasedIfNecessary(chunkBeingAdded));
@@ -490,7 +490,7 @@ namespace Lazinator.Buffers
 
         public bool SpansLastChunk => Offset + Length == GetGrossLength();
 
-        private MemoryChunk GetMemoryChunkFromMemorySegmentByIndex(ReferenceMemoryBlockSegmentByIndex memoryChunkIndexReference) => MemoryAtIndex(memoryChunkIndexReference.MemoryBlockIndex);
+        private MemoryChunk GetMemoryChunkFromMemorySegmentByIndex(MemoryBlockIndexAndSlice memoryChunkIndexReference) => MemoryAtIndex(memoryChunkIndexReference.MemoryBlockIndex);
 
         internal int GetNextMemoryBlockID()
         {
@@ -505,7 +505,7 @@ namespace Lazinator.Buffers
         /// </summary>
         /// <param name="includeOutsideOfRange">If true, then the full range of bytes in all contained memory chunks is included; if false, only those bytes referenced by this LazinatorMemory are included</param>
         /// <returns>An enumerable where each element consists of the chunk index, the start position, and the number of bytes</returns>
-        private IEnumerable<ReferenceMemoryBlockSegmentByIndex> EnumerateMemoryChunksByIndex(bool includeOutsideOfRange = false)
+        private IEnumerable<MemoryBlockIndexAndSlice> EnumerateMemoryChunksByIndex(bool includeOutsideOfRange = false)
         {
             if (includeOutsideOfRange)
                 throw new Exception("DEBUG");
@@ -525,7 +525,7 @@ namespace Lazinator.Buffers
                 int numBytes = m.Length - startPositionOrZero;
                 if (numBytes > lengthRemaining)
                     numBytes = (int) lengthRemaining;
-                yield return new ReferenceMemoryBlockSegmentByIndex(i, startPositionOrZero, numBytes);
+                yield return new MemoryBlockIndexAndSlice(i, startPositionOrZero, numBytes);
                 lengthRemaining -= numBytes;
                 if (lengthRemaining == 0)
                     yield break;
@@ -553,7 +553,7 @@ namespace Lazinator.Buffers
         /// <returns>An enumerable where each element consists of the chunk index, the start position, and the number of bytes</returns>
         public IEnumerable<MemoryChunkReference> EnumerateMemoryChunkReferences(long offset, long length)
         {
-            foreach (ReferenceMemoryBlockSegmentByIndex memoryChunkIndexReference in EnumerateMemoryChunkIndices(offset, length))
+            foreach (MemoryBlockIndexAndSlice memoryChunkIndexReference in EnumerateMemoryChunkIndices(offset, length))
             {
                 MemoryChunk memoryChunk = MemoryAtIndex(memoryChunkIndexReference.MemoryBlockIndex);
                 yield return memoryChunk.Reference.Slice(memoryChunkIndexReference.Offset, memoryChunkIndexReference.Length);
@@ -566,7 +566,7 @@ namespace Lazinator.Buffers
         /// <param name="relativeStartPositionOfSubrange"></param>
         /// <param name="numBytesInSubrange"></param>
         /// <returns></returns>
-        private IEnumerable<ReferenceMemoryBlockSegmentByIndex> EnumerateMemoryChunkIndices(long relativeStartPositionOfSubrange, long numBytesInSubrange)
+        private IEnumerable<MemoryBlockIndexAndSlice> EnumerateMemoryChunkIndices(long relativeStartPositionOfSubrange, long numBytesInSubrange)
         {
             long bytesBeforeSubrangeRemaining = relativeStartPositionOfSubrange;
             long bytesOfSubrangeRemaining = numBytesInSubrange;
@@ -584,7 +584,7 @@ namespace Lazinator.Buffers
                 if (withinSubrange)
                 {
                     int numBytesToInclude = (int)Math.Min(bytesOfSubrangeRemaining, rangeInfo.Length - skipOverBytes);
-                    yield return new ReferenceMemoryBlockSegmentByIndex(rangeInfo.MemoryBlockIndex, (int)(rangeInfo.Offset + skipOverBytes), numBytesToInclude);
+                    yield return new MemoryBlockIndexAndSlice(rangeInfo.MemoryBlockIndex, (int)(rangeInfo.Offset + skipOverBytes), numBytesToInclude);
                     bytesOfSubrangeRemaining -= numBytesToInclude;
                     if (bytesOfSubrangeRemaining == 0)
                         yield break;

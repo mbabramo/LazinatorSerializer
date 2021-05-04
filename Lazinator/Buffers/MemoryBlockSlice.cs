@@ -8,8 +8,8 @@ namespace Lazinator.Buffers
 {
     public readonly struct MemoryBlockSlice
     {
-        public readonly int Offset;
-        public readonly int Length;
+        public readonly int Offset { get; }
+        public readonly int Length { get; }
 
         public MemoryBlockSlice(int offset, int length)
         {
