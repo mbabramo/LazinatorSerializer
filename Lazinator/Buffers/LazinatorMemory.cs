@@ -157,10 +157,10 @@ namespace Lazinator.Buffers
 
         private List<MemoryChunk> GetReferencedMemoryChunks(MemoryChunk chunkBeingAdded)
         {
-            List<MemoryChunkIndexReference> memoryChunkIndexReferences = EnumerateMemoryChunksByIndex().ToList();
+            List<ReferenceMemoryBlockSegmentByIndex> memoryChunkIndexReferences = EnumerateMemoryChunksByIndex().ToList();
             var additionalMemoryChunks = new List<MemoryChunk>();
             foreach (var indexReference in memoryChunkIndexReferences)
-                additionalMemoryChunks.Add(GetMemoryChunkFromMemoryChunkIndexReference(indexReference).WithPreTruncationLengthIncreasedIfNecessary(chunkBeingAdded));
+                additionalMemoryChunks.Add(GetMemoryChunkFromMemorySegmentByIndex(indexReference).WithPreTruncationLengthIncreasedIfNecessary(chunkBeingAdded));
             return additionalMemoryChunks;
         }
 
@@ -490,25 +490,7 @@ namespace Lazinator.Buffers
 
         public bool SpansLastChunk => Offset + Length == GetGrossLength();
 
-        /// <summary>
-        /// A reference to a portion of a stored memory chunk. Unlike MemoryChunkReference, each reference refers
-        /// to a particular memory chunk by index instead of memory chunk ID.
-        /// </summary>
-        private readonly struct MemoryChunkIndexReference
-        {
-            public readonly int MemoryChunkIndex;
-            public readonly int Offset;
-            public readonly int Length;
-
-            public MemoryChunkIndexReference(int memoryChunkIndex, int offset, int length)
-            {
-                this.MemoryChunkIndex = memoryChunkIndex;
-                this.Offset = offset;
-                this.Length = length;
-            }
-        }
-
-        private MemoryChunk GetMemoryChunkFromMemoryChunkIndexReference(MemoryChunkIndexReference memoryChunkIndexReference) => MemoryAtIndex(memoryChunkIndexReference.MemoryChunkIndex);
+        private MemoryChunk GetMemoryChunkFromMemorySegmentByIndex(ReferenceMemoryBlockSegmentByIndex memoryChunkIndexReference) => MemoryAtIndex(memoryChunkIndexReference.MemoryBlockIndex);
 
         internal int GetNextMemoryBlockID()
         {
@@ -523,7 +505,7 @@ namespace Lazinator.Buffers
         /// </summary>
         /// <param name="includeOutsideOfRange">If true, then the full range of bytes in all contained memory chunks is included; if false, only those bytes referenced by this LazinatorMemory are included</param>
         /// <returns>An enumerable where each element consists of the chunk index, the start position, and the number of bytes</returns>
-        private IEnumerable<MemoryChunkIndexReference> EnumerateMemoryChunksByIndex(bool includeOutsideOfRange = false)
+        private IEnumerable<ReferenceMemoryBlockSegmentByIndex> EnumerateMemoryChunksByIndex(bool includeOutsideOfRange = false)
         {
             if (includeOutsideOfRange)
                 throw new Exception("DEBUG");
@@ -543,7 +525,7 @@ namespace Lazinator.Buffers
                 int numBytes = m.Length - startPositionOrZero;
                 if (numBytes > lengthRemaining)
                     numBytes = (int) lengthRemaining;
-                yield return new MemoryChunkIndexReference(i, startPositionOrZero, numBytes);
+                yield return new ReferenceMemoryBlockSegmentByIndex(i, startPositionOrZero, numBytes);
                 lengthRemaining -= numBytes;
                 if (lengthRemaining == 0)
                     yield break;
@@ -571,9 +553,9 @@ namespace Lazinator.Buffers
         /// <returns>An enumerable where each element consists of the chunk index, the start position, and the number of bytes</returns>
         public IEnumerable<MemoryChunkReference> EnumerateMemoryChunkReferences(long offset, long length)
         {
-            foreach (MemoryChunkIndexReference memoryChunkIndexReference in EnumerateMemoryChunkIndices(offset, length))
+            foreach (ReferenceMemoryBlockSegmentByIndex memoryChunkIndexReference in EnumerateMemoryChunkIndices(offset, length))
             {
-                MemoryChunk memoryChunk = MemoryAtIndex(memoryChunkIndexReference.MemoryChunkIndex);
+                MemoryChunk memoryChunk = MemoryAtIndex(memoryChunkIndexReference.MemoryBlockIndex);
                 yield return memoryChunk.Reference.Slice(memoryChunkIndexReference.Offset, memoryChunkIndexReference.Length);
             }
         }
@@ -584,7 +566,7 @@ namespace Lazinator.Buffers
         /// <param name="relativeStartPositionOfSubrange"></param>
         /// <param name="numBytesInSubrange"></param>
         /// <returns></returns>
-        private IEnumerable<MemoryChunkIndexReference> EnumerateMemoryChunkIndices(long relativeStartPositionOfSubrange, long numBytesInSubrange)
+        private IEnumerable<ReferenceMemoryBlockSegmentByIndex> EnumerateMemoryChunkIndices(long relativeStartPositionOfSubrange, long numBytesInSubrange)
         {
             long bytesBeforeSubrangeRemaining = relativeStartPositionOfSubrange;
             long bytesOfSubrangeRemaining = numBytesInSubrange;
@@ -602,7 +584,7 @@ namespace Lazinator.Buffers
                 if (withinSubrange)
                 {
                     int numBytesToInclude = (int)Math.Min(bytesOfSubrangeRemaining, rangeInfo.Length - skipOverBytes);
-                    yield return new MemoryChunkIndexReference(rangeInfo.MemoryChunkIndex, (int)(rangeInfo.Offset + skipOverBytes), numBytesToInclude);
+                    yield return new ReferenceMemoryBlockSegmentByIndex(rangeInfo.MemoryBlockIndex, (int)(rangeInfo.Offset + skipOverBytes), numBytesToInclude);
                     bytesOfSubrangeRemaining -= numBytesToInclude;
                     if (bytesOfSubrangeRemaining == 0)
                         yield break;
@@ -619,12 +601,10 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public IEnumerable<ReadOnlyMemory<byte>> EnumerateRawMemory(bool includeOutsideOfRange = false)
         {
-            if (includeOutsideOfRange)
-                throw new Exception("DEBUG");
             MemoryChunk lastMemoryReferenceLoaded = null;
             foreach (var rangeInfo in EnumerateMemoryChunksByIndex(includeOutsideOfRange))
             {
-                var memoryChunk = MemoryAtIndex(rangeInfo.MemoryChunkIndex);
+                var memoryChunk = MemoryAtIndex(rangeInfo.MemoryBlockIndex);
                 if (memoryChunk.IsLoaded == false)
                 {
                     if (lastMemoryReferenceLoaded != null && lastMemoryReferenceLoaded != memoryChunk)
@@ -648,7 +628,7 @@ namespace Lazinator.Buffers
             MemoryChunk lastMemoryReferenceLoaded = null;
             foreach (var rangeInfo in EnumerateMemoryChunksByIndex(includeOutsideOfRange))
             {
-                var m = MemoryAtIndex(rangeInfo.MemoryChunkIndex);
+                var m = MemoryAtIndex(rangeInfo.MemoryBlockIndex);
                 if (m is MemoryChunk memoryChunk && memoryChunk.IsLoaded == false)
                 {
                     if (lastMemoryReferenceLoaded != null && lastMemoryReferenceLoaded != memoryChunk)
@@ -658,7 +638,7 @@ namespace Lazinator.Buffers
                     }
                     await memoryChunk.LoadMemoryAsync();
                 }
-                yield return m.ReadOnlyMemory.Slice(rangeInfo.MemoryChunkIndex, rangeInfo.Length);
+                yield return m.ReadOnlyMemory.Slice(rangeInfo.MemoryBlockIndex, rangeInfo.Length);
             }
         }
 

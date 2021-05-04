@@ -20,7 +20,7 @@ namespace Lazinator.Buffers
         public MemorySegmentCollection(List<MemoryChunk> memoryChunks, bool recycle) : base(memoryChunks)
         {
             if (recycle)
-                Segments = new List<(int memoryBlockID, int offset, int length)>();
+                Segments = new List<ReferenceMemoryBlockSegmentByID>();
         }
 
 
@@ -57,9 +57,9 @@ namespace Lazinator.Buffers
                     for (int i = 0; i < Segments.Count; i++)
                     {
                         var segment = Segments[i];
-                        if (segment.memoryBlockID == newSegment.MemoryBlockID) 
+                        if (segment.MemoryBlockID == newSegment.MemoryBlockID) 
                         {
-                            MemoryChunk existingChunk = GetMemoryChunkByMemoryBlockID(segment.memoryBlockID);
+                            MemoryChunk existingChunk = GetMemoryChunkByMemoryBlockID(segment.MemoryBlockID);
                             if (existingChunk != null)
                             {
                                 existingChunk.LoadingInfo.PreTruncationLength = newSegment.PreTruncationLength;
@@ -68,15 +68,15 @@ namespace Lazinator.Buffers
                     }
                 }
                 var last = Segments.Last();
-                if (last.memoryBlockID == newSegment.MemoryBlockID && last.offset == newSegment.LoadingOffset && last.length == newSegment.PreTruncationLength && newSegment.AdditionalOffset == last.offset + last.length)
+                if (last.MemoryBlockID == newSegment.MemoryBlockID && last.Offset == newSegment.LoadingOffset && last.Length == newSegment.PreTruncationLength && newSegment.AdditionalOffset == last.Offset + last.Length)
                 {
-                    last.length += newSegment.FinalLength;
+                    last = new ReferenceMemoryBlockSegmentByID(last.MemoryBlockID, last.Offset, last.Length + newSegment.FinalLength);
                     Segments[Segments.Count - 1] = last;
                     RecycledTotalLength += newSegment.FinalLength;
                     return;
                 }
             }
-            Segments.Add((newSegment.MemoryBlockID, newSegment.AdditionalOffset, newSegment.FinalLength));
+            Segments.Add(new ReferenceMemoryBlockSegmentByID(newSegment.MemoryBlockID, newSegment.AdditionalOffset, newSegment.FinalLength));
             RecycledTotalLength += newSegment.FinalLength;
         }
 
@@ -156,10 +156,10 @@ namespace Lazinator.Buffers
             for (int i = 0; i < Segments.Count; i++)
             {
                 var segment = Segments[i];
-                MemoryChunk memoryChunk = byID[segment.memoryBlockID];
+                MemoryChunk memoryChunk = byID[segment.MemoryBlockID];
                 MemoryChunk resliced = memoryChunk.DeepCopy();
-                resliced.SliceInfo = new MemoryBlockSlice(segment.offset, segment.length);
-                length += segment.length;
+                resliced.SliceInfo = new MemoryBlockSlice(segment.Offset, segment.Length);
+                length += segment.Length;
                 memoryChunks.Add(resliced);
             }
             return new LazinatorMemory(memoryChunks, 0, 0, length);
