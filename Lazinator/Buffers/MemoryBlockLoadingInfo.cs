@@ -13,5 +13,7 @@ namespace Lazinator.Buffers
             MemoryBlockID = memoryBlockID;
             PreTruncationLength = preTruncationLength;
         }
+
+        public MemoryBlockInsetLoadingInfo WithLoadingOffset(long loadingOffset) => new MemoryBlockInsetLoadingInfo(MemoryBlockID, PreTruncationLength, loadingOffset);
     }
 }

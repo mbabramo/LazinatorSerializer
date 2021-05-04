@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Lazinator.Persistence;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +12,9 @@ namespace Lazinator.Buffers
 {
     public partial class MemoryChunkCollection : IMemoryChunkCollection, IEnumerable<MemoryChunk>
     {
+
+
+        public IBlobManager BlobManager { get; set; }
 
         protected List<MemoryChunk> MemoryChunks = new List<MemoryChunk>();
         protected Dictionary<int, MemoryChunk> MemoryChunksByID = null;
@@ -150,6 +155,110 @@ namespace Lazinator.Buffers
                 }
             }
             return memoryChunks;
+        }
+
+        public void PersistMemoryChunks(bool isInitialVersion)
+        {
+            var memoryChunksToPersist = GetUnpersistedMemoryChunks();
+
+            long offset = 0;
+            string pathForSingleBlob = ContainedInSingleBlob ? GetPathForMemoryChunk(0) : null;
+            if (ContainedInSingleBlob)
+            {
+                if (isInitialVersion)
+                {
+                    if (BlobManager.Exists(pathForSingleBlob))
+                        BlobManager.Delete(pathForSingleBlob);
+                    offset = 0;
+                }
+                else
+                    offset = BlobManager.GetLength(pathForSingleBlob);
+                BlobManager.OpenForWriting(pathForSingleBlob);
+            }
+            foreach (var memoryChunkToPersist in memoryChunksToPersist)
+            {
+                memoryChunkToPersist.LoadMemory();
+                int memoryBlockID = memoryChunkToPersist.MemoryBlockID;
+                string path = GetPathForMemoryChunk(memoryBlockID);
+                if (ContainedInSingleBlob)
+                {
+                    BlobManager.Append(path, memoryChunkToPersist.MemoryAsLoaded.ReadOnlyMemory);
+                    UpdateMemoryChunkReferenceToLoadingOffset(memoryChunkToPersist.MemoryBlockID, offset);
+                    offset += memoryChunkToPersist.LoadingInfo.PreTruncationLength;
+                }
+                else
+                    BlobManager.Write(path, memoryChunkToPersist.MemoryAsLoaded.ReadOnlyMemory);
+                memoryChunkToPersist.IsPersisted = true;
+                OnMemoryChunkPersisted(memoryBlockID);
+            }
+            if (ContainedInSingleBlob)
+                BlobManager.CloseAfterWriting(pathForSingleBlob);
+        }
+
+        public async ValueTask PersistMemoryChunksAsync(bool isInitialVersion)
+        {
+            var memoryChunksToPersist = GetUnpersistedMemoryChunks();
+
+            long offset = 0;
+            string pathForSingleBlob = ContainedInSingleBlob ? GetPathForMemoryChunk(0) : null;
+            if (ContainedInSingleBlob)
+            {
+                if (isInitialVersion)
+                {
+                    if (BlobManager.Exists(pathForSingleBlob))
+                        BlobManager.Delete(pathForSingleBlob);
+                    offset = 0;
+                }
+                else
+                    offset = BlobManager.GetLength(pathForSingleBlob);
+                BlobManager.OpenForWriting(pathForSingleBlob);
+            }
+            foreach (var memoryChunkToPersist in memoryChunksToPersist)
+            {
+                await memoryChunkToPersist.LoadMemoryAsync();
+                int memoryBlockID = memoryChunkToPersist.MemoryBlockID;
+                string path = GetPathForMemoryChunk(memoryBlockID);
+                if (ContainedInSingleBlob)
+                {
+                    await BlobManager.AppendAsync(path, memoryChunkToPersist.MemoryAsLoaded.ReadOnlyMemory);
+                    UpdateMemoryChunkReferenceToLoadingOffset(memoryChunkToPersist.MemoryBlockID, offset);
+                    offset += memoryChunkToPersist.LoadingInfo.PreTruncationLength;
+                }
+                else
+                    BlobManager.Write(path, memoryChunkToPersist.MemoryAsLoaded.ReadOnlyMemory);
+                memoryChunkToPersist.IsPersisted = true;
+                OnMemoryChunkPersisted(memoryBlockID);
+            }
+            if (ContainedInSingleBlob)
+                BlobManager.CloseAfterWriting(pathForSingleBlob);
+        }
+
+        private void UpdateMemoryChunkReferenceToLoadingOffset(int memoryBlockID, long offset)
+        {
+            for (int i = 0; i < MemoryBlocksLoadingInfo.Count; i++)
+                if (MemoryBlocksLoadingInfo[i].MemoryBlockID == memoryBlockID)
+                    MemoryBlocksLoadingInfo[i] = MemoryBlocksLoadingInfo[i].WithLoadingOffset(offset);
+        }
+
+        public virtual void OnMemoryChunkPersisted(int memoryBlockID)
+        {
+
+        }
+
+        public virtual string GetPathForIndex() => GetPathHelper(BaseBlobPath, null, " Index");
+        public virtual string GetPathForMemoryChunk(int memoryBlockID) => GetPathHelper(BaseBlobPath, null, ContainedInSingleBlob ? " AllChunks" : (" Chunk " + memoryBlockID.ToString()));
+
+        public static string GetPathForIndex(string baseBlobPath, IEnumerable<int> forkInformation, int versionNumber) => GetPathHelper(baseBlobPath, forkInformation, " Index " + versionNumber.ToString());
+
+        public static string GetPathHelper(string baseBlobPath, IEnumerable<int> forkInformation, string identifyingInformation)
+        {
+            string pathOnly = Path.GetDirectoryName(baseBlobPath);
+            if (pathOnly != null && pathOnly.Length > 0)
+                pathOnly += "\\";
+            string withoutExtension = Path.GetFileNameWithoutExtension(baseBlobPath);
+            string forkInformationString = forkInformation == null || !forkInformation.Any() ? "" : " " + String.Join(",", forkInformation);
+            string combined = pathOnly + withoutExtension + forkInformationString + identifyingInformation + Path.GetExtension(baseBlobPath);
+            return combined;
         }
 
         public int GetNextMemoryBlockID() => MaxMemoryBlockID + 1;

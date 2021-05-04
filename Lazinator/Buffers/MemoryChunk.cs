@@ -32,8 +32,6 @@ namespace Lazinator.Buffers
         public MemoryBlockLoadingInfo LoadingInfo { get; set; }
         public MemoryBlockSlice SliceInfo { get; set; } 
 
-        public MemoryChunkReference Reference => new MemoryChunkReference(LoadingInfo.MemoryBlockID, (LoadingInfo as IMemoryBlockInsetLoadingInfo)?.LoadingOffset ?? 0, LoadingInfo.PreTruncationLength, SliceInfo.Offset, SliceInfo.Length);
-
         public int MemoryBlockID => LoadingInfo.MemoryBlockID;
         public int Length => SliceInfo.Length;
 
