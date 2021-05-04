@@ -77,7 +77,7 @@ namespace Lazinator.Buffers
 
         public LazinatorMemory(MemoryChunkCollection memoryChunkCollection)
         {
-            MultipleMemoryChunks = memoryChunkCollection.DeepCopy(); // DEBUG -- DeepCopy necessary?
+            MultipleMemoryChunks = memoryChunkCollection; 
             SingleMemoryChunk = null;
             StartIndex = 0;
             Offset = 0;
@@ -717,8 +717,6 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public void WriteToBuffer(ref BufferWriter writer, bool includeOutsideOfRange = false)
         {
-            if (includeOutsideOfRange)
-                throw new Exception("DEBUG");
             foreach (ReadOnlyMemory<byte> memory in EnumerateRawMemory(includeOutsideOfRange))
                 writer.Write(memory.Span);
         }
@@ -789,8 +787,6 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public ReadOnlyMemory<byte> GetConsolidatedMemory(bool includeOutsideOfRange = false)
         {
-            if (includeOutsideOfRange)
-                throw new Exception("DEBUG");
             if (SingleMemory)
             {
                 SingleMemoryChunk.LoadMemory();
@@ -811,8 +807,6 @@ namespace Lazinator.Buffers
 
         public async ValueTask<ReadOnlyMemory<byte>> GetConsolidatedMemoryAsync(bool includeOutsideOfRange = false)
         {
-            if (includeOutsideOfRange)
-                throw new Exception("DEBUG");
             if (SingleMemory)
             {
                 await SingleMemoryChunk.LoadMemoryAsync();

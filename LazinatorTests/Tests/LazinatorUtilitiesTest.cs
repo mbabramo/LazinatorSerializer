@@ -141,11 +141,11 @@ namespace LazinatorTests.Tests
                 referencedBytes = referencedBytes.Skip(startingPositionWithinLazinatorMemorySubrange).Take(numBytesWithinLazinatorMemorySubrange).ToList();
                 // Debug.WriteLine($"startingPositionWithinLazinatorMemorySubrange {startingPositionWithinLazinatorMemorySubrange } numBytesWithinLazinatorMemorySubrange {numBytesWithinLazinatorMemorySubrange}");
 
-                List<MemoryChunkReference> memoryChunkReferences = cobbledMemory.EnumerateMemoryChunkReferences(startingPositionWithinLazinatorMemorySubrange, numBytesWithinLazinatorMemorySubrange).ToList();
-                memoryChunkReferences.Sum(x => x.PreTruncationLength).Should().Equals(numBytesWithinLazinatorMemorySubrange);
+                List<MemoryBlockIndexAndSlice> memoryChunkIndices = cobbledMemory.EnumerateMemoryChunkIndices(startingPositionWithinLazinatorMemorySubrange, numBytesWithinLazinatorMemorySubrange).ToList();
+                memoryChunkIndices.Sum(x => x.Length).Should().Equals(numBytesWithinLazinatorMemorySubrange);
                 List<byte> bytesFound = new List<byte>();
-                foreach (var memoryChunkReference in memoryChunkReferences)
-                    bytesFound.AddRange(GetMemoryAtMemoryChunkReference(cobbledMemory, memoryChunkReference).ToArray());
+                foreach (var memoryChunkReference in memoryChunkIndices)
+                    bytesFound.AddRange(GetMemoryAtBlockAndOffset(cobbledMemory, memoryChunkReference).ToArray());
                 bytesFound.SequenceEqual(referencedBytes).Should().BeTrue();
             }
         }
@@ -153,51 +153,14 @@ namespace LazinatorTests.Tests
         /// <summary>
         /// Returns the Memory block of bytes corresponding to a memory chunk reference. It is required that each memory owner be a MemoryChunk.
         /// </summary>
-        /// <param name="memoryChunkReference">The memory chunk reference</param>
+        /// <param name="memoryBlockInfo">The memory chunk reference</param>
         /// <returns></returns>
-        private ReadOnlyMemory<byte> GetMemoryAtMemoryChunkReference(LazinatorMemory lazinatorMemory, MemoryChunkReference memoryChunkReference)
+        private ReadOnlyMemory<byte> GetMemoryAtBlockAndOffset(LazinatorMemory lazinatorMemory, MemoryBlockIndexAndSlice memoryBlockInfo)
         {
-            var memoryChunk = GetFirstMemoryChunkWithID(lazinatorMemory, memoryChunkReference.MemoryBlockID);
+            var memoryChunk = lazinatorMemory.MemoryAtIndex(memoryBlockInfo.MemoryBlockIndex);
             memoryChunk.LoadMemory();
-            var underlyingReadOnlyMemory = memoryChunk.MemoryAsLoaded.ReadOnlyMemory.Slice(memoryChunkReference.AdditionalOffset, memoryChunkReference.FinalLength);
+            var underlyingReadOnlyMemory = memoryChunk.ReadOnlyMemory.Slice(memoryBlockInfo.Offset, memoryBlockInfo.Length);
             return underlyingReadOnlyMemory;
-        }
-
-        private MemoryChunk GetFirstMemoryChunkWithID(LazinatorMemory lazinatorMemory, int memoryBlockID)
-        {
-            int? index = GetFirstIndexOfMemoryBlockID(lazinatorMemory, memoryBlockID);
-            if (index == null)
-                return null;
-            return (MemoryChunk)lazinatorMemory.MemoryAtIndex((int)index);
-        }
-
-        private int? GetFirstIndexOfMemoryBlockID(LazinatorMemory lazinatorMemory, int memoryBlockID)
-        {
-            if (lazinatorMemory.MemoryAtIndex(0).LoadingInfo.MemoryBlockID == memoryBlockID)
-                return 0;
-            if (lazinatorMemory.MultipleMemoryChunks == null)
-                return null;
-            var index = GetFirstIndexOfMemoryBlockID(lazinatorMemory.MultipleMemoryChunks, memoryBlockID);
-            if (index == null)
-                return null;
-            return index;
-        }
-
-        /// <summary>
-        /// Returns the first index within the memory chunk collection of the specified memory chunk ID, or null if not found. This will be one less than the index within a LazinatorMemory containing this collection.
-        /// </summary>
-        /// <param name="memoryBlockID"></param>
-        /// <returns></returns>
-        private int? GetFirstIndexOfMemoryBlockID(MemoryChunkCollection memoryChunkCollection, int memoryBlockID)
-        {
-            int count = memoryChunkCollection.NumMemoryChunks;
-            for (int i = 0; i < count; i++)
-            {
-                var memoryChunk = memoryChunkCollection.MemoryAtIndex(i);
-                if (memoryChunk.LoadingInfo.MemoryBlockID == memoryBlockID)
-                    return i;
-            }
-            return null;
         }
 
         [Fact]

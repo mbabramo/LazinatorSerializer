@@ -766,8 +766,6 @@ namespace LazinatorTests.Tests
 
         }
 
-        // DEBUG -- we need to test defragmenting
-
         private static string GetPathForIndexAndBlobs(bool useFile, bool binaryTree)
         {
             string path = @"C:\Users\Admin\Desktop\testfolder";
