@@ -170,7 +170,6 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(MemoryBlockInsetLoadingInfo), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(MemoryChunkCollection), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(MemorySegmentCollection), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws);
-
             await CompleteGenerateCode(typeof(PersistentIndex), project: "Lazinator", mainFolder: "/Persistence/", subfolder: "", ws);
         }
 

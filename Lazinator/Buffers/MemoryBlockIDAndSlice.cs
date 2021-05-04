@@ -22,5 +22,7 @@ namespace Lazinator.Buffers
         public MemoryBlockIDAndSlice Slice(int offset, int length) => new MemoryBlockIDAndSlice(MemoryBlockID, Offset + offset, length);
 
         public MemoryBlockIDAndSlice Slice(int offset) => new MemoryBlockIDAndSlice(MemoryBlockID, Offset + offset, Length - offset);
+
+        public MemoryBlockSlice GetSlice() => new MemoryBlockSlice(Offset, Length);
     }
 }

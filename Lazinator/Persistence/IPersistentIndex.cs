@@ -6,7 +6,7 @@ using Lazinator.Buffers;
 namespace Lazinator.Persistence
 {
     [Lazinator((int) LazinatorCoreUniqueIDs.IPersistentIndex)]
-    public interface IPersistentIndex
+    public interface IPersistentIndex : IMemorySegmentCollection
     {
         [Uncompressed]
         string BaseBlobPath { get; set; }
@@ -16,6 +16,5 @@ namespace Lazinator.Persistence
         Memory<byte> MemoryChunkStatus { get; set; }
         bool ContainedInSingleBlob { get; set; }
         bool IsPersisted { get; set; }
-        List<MemoryChunkReference> MemoryChunkReferences { get; set; }
     }
 }

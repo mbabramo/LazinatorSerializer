@@ -41,7 +41,7 @@ namespace Lazinator.Buffers
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected List<MemoryBlockLoadingInfo> _MemoryBlockLoadingInfo;
-        public List<MemoryBlockLoadingInfo> MemoryBlockLoadingInfo
+        public List<MemoryBlockLoadingInfo> MemoryBlocksLoadingInfo
         {
             [DebuggerStepThrough]
             get
@@ -271,7 +271,7 @@ namespace Lazinator.Buffers
         {
             clone.FreeInMemoryObjects();
             MemoryChunkCollection typedClone = (MemoryChunkCollection) clone;
-            typedClone.MemoryBlockLoadingInfo = CloneOrChange_List_GMemoryBlockLoadingInfo_g(MemoryBlockLoadingInfo, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.MemoryBlocksLoadingInfo = CloneOrChange_List_GMemoryBlockLoadingInfo_g(MemoryBlocksLoadingInfo, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }
@@ -302,13 +302,13 @@ namespace Lazinator.Buffers
         
         public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
         {
-            yield return ("MemoryBlockLoadingInfo", (object)MemoryBlockLoadingInfo);
+            yield return ("MemoryBlockLoadingInfo", (object)MemoryBlocksLoadingInfo);
             yield break;
         }
         
         public virtual ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
-            if ((!exploreOnlyDeserializedChildren && MemoryBlockLoadingInfo != null) || (_MemoryBlockLoadingInfo_Accessed && _MemoryBlockLoadingInfo != null))
+            if ((!exploreOnlyDeserializedChildren && MemoryBlocksLoadingInfo != null) || (_MemoryBlockLoadingInfo_Accessed && _MemoryBlockLoadingInfo != null))
             {
                 _MemoryBlockLoadingInfo = (List<MemoryBlockLoadingInfo>) CloneOrChange_List_GMemoryBlockLoadingInfo_g(_MemoryBlockLoadingInfo, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
@@ -448,7 +448,7 @@ namespace Lazinator.Buffers
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MemoryBlockLoadingInfo_Accessed)
             {
-                var deserialized = MemoryBlockLoadingInfo;
+                var deserialized = MemoryBlocksLoadingInfo;
             }
             WriteNonLazinatorObject(
             nonLazinatorObject: _MemoryBlockLoadingInfo, isBelievedDirty: _MemoryBlockLoadingInfo_Accessed || (options.IncludeChildrenMode != OriginalIncludeChildrenMode),

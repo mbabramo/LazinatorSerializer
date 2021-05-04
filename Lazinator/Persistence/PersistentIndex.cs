@@ -11,12 +11,13 @@ using System.Diagnostics;
 
 namespace Lazinator.Persistence
 {
-    public partial class PersistentIndex : IPersistentIndex
+    public partial class PersistentIndex : MemorySegmentCollection, IPersistentIndex
     {
 
         IBlobManager BlobManager;
 
         public PersistentIndex PreviousPersistentIndex = null;
+
 
         /// <summary>
         /// Prepares for index file to be created, not based on any previous index
@@ -179,14 +180,15 @@ namespace Lazinator.Persistence
         {
             List<MemoryChunk> memoryChunks = new List<MemoryChunk>();
             long numBytesProcessed = 0;
-            for (int i = 0; i < MemoryChunkReferences.Count; i++)
+            for (int i = 0; i < Segments.Count; i++)
             {
-                MemoryChunkReference memoryChunkReference = MemoryChunkReferences[i];
-                string referencePath = GetPathForMemoryChunk(memoryChunkReference.MemoryBlockID);
-                var blobMemoryChunk = new BlobMemoryChunk(referencePath, (IBlobManager)this.BlobManager, memoryChunkReference.LoadingInfo, memoryChunkReference.SliceInfo);
+                MemoryBlockIDAndSlice memoryBlockIDAndSlice = Segments[i];
+                MemoryChunk memoryBlock = GetMemoryChunkByMemoryBlockID(memoryBlockIDAndSlice.MemoryBlockID);
+                string referencePath = GetPathForMemoryChunk(memoryBlockIDAndSlice.MemoryBlockID);
+                BlobMemoryChunk blobMemoryChunk = new BlobMemoryChunk(referencePath, (IBlobManager)this.BlobManager, memoryBlock.LoadingInfo, memoryBlockIDAndSlice.GetSlice());
                 blobMemoryChunk.IsPersisted = GetMemoryChunkStatus(blobMemoryChunk.MemoryBlockID) != PersistentIndexMemoryChunkStatus.NotYetUsed;
                 memoryChunks.Add(blobMemoryChunk);
-                numBytesProcessed += memoryChunkReference.FinalLength;
+                numBytesProcessed += memoryBlockIDAndSlice.Length;
             }
             return memoryChunks;
         }
@@ -223,9 +225,8 @@ namespace Lazinator.Persistence
 
         public void PersistLazinatorMemory(LazinatorMemory lazinatorMemory)
         {
-            var memoryChunks = lazinatorMemory.EnumerateMemoryChunks(false).ToList();
-            var memoryChunksToPersist = lazinatorMemory.GetUnpersistedMemoryChunks();
-            MemoryChunkReferences = memoryChunks.Select(x => x.Reference).ToList();
+            SetFromLazinatorMemory(lazinatorMemory);
+            var memoryChunksToPersist = GetUnpersistedMemoryChunks();
 
             long offset = 0;
             string pathForSingleBlob = ContainedInSingleBlob ? GetPathForMemoryChunk(0) : null;
@@ -268,9 +269,8 @@ namespace Lazinator.Persistence
 
         public async ValueTask PersistLazinatorMemoryAsync(LazinatorMemory lazinatorMemory)
         {
-            var memoryChunks = lazinatorMemory.EnumerateMemoryChunks(false).ToList();
-            var memoryChunksToPersist = lazinatorMemory.GetUnpersistedMemoryChunks();
-            MemoryChunkReferences = memoryChunks.Select(x => x.Reference).ToList();
+            SetFromLazinatorMemory(lazinatorMemory);
+            var memoryChunksToPersist = GetUnpersistedMemoryChunks();
 
             long offset = 0;
             string pathForSingleBlob = ContainedInSingleBlob ? GetPathForMemoryChunk(0) : null;

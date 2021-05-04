@@ -141,7 +141,7 @@ namespace LazinatorTests.Tests
                 referencedBytes = referencedBytes.Skip(startingPositionWithinLazinatorMemorySubrange).Take(numBytesWithinLazinatorMemorySubrange).ToList();
                 // Debug.WriteLine($"startingPositionWithinLazinatorMemorySubrange {startingPositionWithinLazinatorMemorySubrange } numBytesWithinLazinatorMemorySubrange {numBytesWithinLazinatorMemorySubrange}");
 
-                List<MemoryBlockIndexAndSlice> memoryChunkIndices = cobbledMemory.EnumerateMemoryChunkIndices(startingPositionWithinLazinatorMemorySubrange, numBytesWithinLazinatorMemorySubrange).ToList();
+                List<MemoryBlockIndexAndSlice> memoryChunkIndices = cobbledMemory.EnumeratePortionOfMemoryBlockIndexAndSlices(startingPositionWithinLazinatorMemorySubrange, numBytesWithinLazinatorMemorySubrange).ToList();
                 memoryChunkIndices.Sum(x => x.Length).Should().Equals(numBytesWithinLazinatorMemorySubrange);
                 List<byte> bytesFound = new List<byte>();
                 foreach (var memoryChunkReference in memoryChunkIndices)

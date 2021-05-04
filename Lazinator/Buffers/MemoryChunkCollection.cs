@@ -23,6 +23,7 @@ namespace Lazinator.Buffers
         public MemoryChunkCollection(List<MemoryChunk> memoryChunks)
         {
             MemoryChunks = memoryChunks;
+            MemoryBlocksLoadingInfo = memoryChunks.Select(x => x.LoadingInfo).ToList();
             MaxMemoryBlockID = MemoryChunks.Any() ? MemoryChunks.Max(x => x.MemoryBlockID) : 0;
             Length = MemoryChunks.Sum(x => (long) x.Length);
         }
@@ -43,7 +44,7 @@ namespace Lazinator.Buffers
         public MemoryChunkCollection DeepCopy()
         {
             var collection = new MemoryChunkCollection();
-            collection.SetContents(MemoryChunks);
+            collection.SetChunks(MemoryChunks);
             return collection;
         }
 
@@ -52,6 +53,7 @@ namespace Lazinator.Buffers
             if (MemoryChunksByID != null)
                 MemoryChunksByID[memoryChunk.MemoryBlockID] = memoryChunk;
             MemoryChunks.Add(memoryChunk);
+            MemoryBlocksLoadingInfo.Add(memoryChunk.LoadingInfo);
             if (memoryChunk.MemoryBlockID > MaxMemoryBlockID)
                 MaxMemoryBlockID = memoryChunk.MemoryBlockID;
             Length += (long)memoryChunk.Length;
@@ -71,9 +73,10 @@ namespace Lazinator.Buffers
             return MemoryChunks[i];
         }
 
-        public void SetContents(IEnumerable<MemoryChunk> chunks)
+        public void SetChunks(IEnumerable<MemoryChunk> chunks)
         {
             MemoryChunks = new List<MemoryChunk>();
+            MemoryBlocksLoadingInfo = new List<MemoryBlockLoadingInfo>();
             Length = 0;
             int i = 0;
             if (chunks == null)
@@ -86,10 +89,10 @@ namespace Lazinator.Buffers
                 if (i == 0 || chunk.MemoryBlockID > MaxMemoryBlockID)
                     MaxMemoryBlockID = chunk.MemoryBlockID;
                 MemoryChunks.Add(chunk);
+                MemoryBlocksLoadingInfo.Add(chunk.LoadingInfo);
                 Length += (long)chunk.Length;
                 i++;
             }
-
         }
 
         public IEnumerator<MemoryChunk> GetEnumerator()
@@ -129,6 +132,24 @@ namespace Lazinator.Buffers
                     d[chunkID] = memoryChunk;
             }
             MemoryChunksByID = d;
+        }
+
+        internal List<MemoryChunk> GetUnpersistedMemoryChunks()
+        {
+            List<MemoryChunk> memoryChunks = new List<MemoryChunk>();
+            HashSet<int> ids = new HashSet<int>();
+            foreach (MemoryChunk memoryChunk in MemoryChunks)
+            {
+                if (memoryChunk.IsPersisted)
+                    continue;
+                int chunkID = memoryChunk.MemoryBlockID;
+                if (!ids.Contains(chunkID))
+                {
+                    ids.Add(chunkID);
+                    memoryChunks.Add(memoryChunk);
+                }
+            }
+            return memoryChunks;
         }
 
         public int GetNextMemoryBlockID() => MaxMemoryBlockID + 1;

@@ -93,7 +93,7 @@ namespace Lazinator.Buffers
         public LazinatorMemory(IEnumerable<MemoryChunk> moreMemoryChunks, int startIndex, int startPosition, long length) : this(null, startPosition, length)
         {
             MultipleMemoryChunks = new MemoryChunkCollection();
-            MultipleMemoryChunks.SetContents(moreMemoryChunks);
+            MultipleMemoryChunks.SetChunks(moreMemoryChunks);
             StartIndex = startIndex;
         }
 
@@ -144,16 +144,22 @@ namespace Lazinator.Buffers
             // some memory that isn't referenced. If, for example, that memory is at the end of the range, then adding
             // an additional chunk will not allow us to reference that memory. 
 
-            List<MemoryChunk> additionalMemoryChunks = GetReferencedMemoryChunks(chunk);
+            List<MemoryChunk> additionalMemoryChunks = GetMemoryChunksWithinLimits(chunk);
             additionalMemoryChunks.Add(chunk);
             MemoryChunkCollection memoryChunkCollection = new MemoryChunkCollection();
-            memoryChunkCollection.SetContents(additionalMemoryChunks);
+            memoryChunkCollection.SetChunks(additionalMemoryChunks);
             return new LazinatorMemory(memoryChunkCollection, StartIndex, Offset, Length);
         }
 
-        private List<MemoryChunk> GetReferencedMemoryChunks(MemoryChunk chunkBeingAdded)
+        /// <summary>
+        /// Returns memory chunks within the region specified by StartIndex, Offset, and Length. This is not affected by any 
+        /// recycled references specified in MultipleMemoryChunks.
+        /// </summary>
+        /// <param name="chunkBeingAdded"></param>
+        /// <returns></returns>
+        private List<MemoryChunk> GetMemoryChunksWithinLimits(MemoryChunk chunkBeingAdded)
         {
-            List<MemoryBlockIndexAndSlice> memoryChunkIndexReferences = EnumerateMemoryChunksByIndex().ToList();
+            List<MemoryBlockIndexAndSlice> memoryChunkIndexReferences = EnumerateMemoryBlockIndexAndSlices().ToList();
             var additionalMemoryChunks = new List<MemoryChunk>();
             foreach (var indexReference in memoryChunkIndexReferences)
                 additionalMemoryChunks.Add(GetMemoryChunkFromMemorySegmentByIndex(indexReference).WithPreTruncationLengthIncreasedIfNecessary(chunkBeingAdded));
@@ -501,22 +507,34 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// Enumerates memory chunk ranges corresponding to this LazinatorMemory. Note that memory chunks are referred to by index instead of by ID.
+        /// Enumerates memory chunk ranges corresponding to the MemoryChunks in this LazinatorMemory, but ignoring the segments. Note that memory chunks are referred to by index instead of by ID. 
         /// </summary>
-        /// <param name="includeOutsideOfRange">If true, then the full range of bytes in all contained memory chunks is included; if false, only those bytes referenced by this LazinatorMemory are included</param>
+        /// <param name="ignoringSlicesAndPatches">If true, then the full range of bytes in all contained memory chunks is included; if false, only those bytes referenced by this LazinatorMemory are included</param>
         /// <returns>An enumerable where each element consists of the chunk index, the start position, and the number of bytes</returns>
-        private IEnumerable<MemoryBlockIndexAndSlice> EnumerateMemoryChunksByIndex(bool includeOutsideOfRange = false)
+        private IEnumerable<MemoryBlockIndexAndSlice> EnumerateMemoryBlockIndexAndSlices(bool ignoringSlicesAndPatches = false)
         {
-            if (!includeOutsideOfRange && Length == 0)
+            if (!ignoringSlicesAndPatches && Length == 0)
                 yield break;
-            int startIndexOrZero = includeOutsideOfRange ? 0 : StartIndex;
+
+            if (ignoringSlicesAndPatches && MultipleMemoryChunks != null && MultipleMemoryChunks is MemorySegmentCollection segmentCollection && segmentCollection.Recycling)
+            {
+                var segments = segmentCollection.Segments.ToList();
+                foreach (var segment in segments)
+                {
+                    int index = segmentCollection.GetIndexFromMemoryBlockID(segment.MemoryBlockID);
+                    yield return new MemoryBlockIndexAndSlice(index, segment.Offset, segment.Length);
+                }
+                yield break;
+            }
+
+            int startIndexOrZero = ignoringSlicesAndPatches ? 0 : StartIndex;
             int totalItems = NumMemoryChunks();
-            long lengthRemaining = includeOutsideOfRange ? GetGrossLength() : Length;
+            long lengthRemaining = ignoringSlicesAndPatches ? GetGrossLength() : Length;
             for (int i = startIndexOrZero; i < totalItems; i++)
             {
                 var m = MemoryAtIndex(i);
                 int startPositionOrZero;
-                if (i == StartIndex && !includeOutsideOfRange)
+                if (i == StartIndex && !ignoringSlicesAndPatches)
                     startPositionOrZero = Offset;
                 else
                     startPositionOrZero = 0;
@@ -530,19 +548,25 @@ namespace Lazinator.Buffers
             }
         }
 
-
         /// <summary>
-        /// Enumerates memory chunk ranges corresponding to a subset of the bytes referenced by this LazinatorMemory
+        /// Enumerates memory chunk ranges corresponding to this LazinatorMemory.
         /// </summary>
-        /// <param name="offset">The byte index at which to start enumerating</param>
-        /// <param name="length">The number of bytes to include</param>
-        /// <returns>An enumerable where each element consists of the chunk index, the start position, and the number of bytes</returns>
-        public IEnumerable<MemoryChunkReference> EnumerateMemoryChunkReferences(long offset, long length)
+        /// <param name="ignoringSlicesAndPatches">If true, then the full range of bytes in all contained memory chunks is included; if false, only those bytes referenced by this LazinatorMemory are included</param>
+        /// <returns>An enumerable where each element consists of the chunk ID, the start position, and the number of bytes</returns>
+        public IEnumerable<MemoryBlockIDAndSlice> EnumerateMemoryBlockIDsAndSlices(bool ignoringSlicesAndPatches = false)
         {
-            foreach (MemoryBlockIndexAndSlice memoryChunkIndexReference in EnumerateMemoryChunkIndices(offset, length))
+            if (ignoringSlicesAndPatches && MultipleMemoryChunks != null && MultipleMemoryChunks is MemorySegmentCollection segmentCollection && segmentCollection.Recycling)
             {
-                MemoryChunk memoryChunk = MemoryAtIndex(memoryChunkIndexReference.MemoryBlockIndex);
-                yield return memoryChunk.Reference.Slice(memoryChunkIndexReference.Offset, memoryChunkIndexReference.Length);
+                var segments = segmentCollection.Segments.ToList();
+                foreach (var segment in segments)
+                    yield return segment;
+                yield break;
+            }
+            foreach (MemoryBlockIndexAndSlice indexAndSlice in EnumerateMemoryBlockIndexAndSlices(ignoringSlicesAndPatches))
+            {
+                MemoryChunk memoryBlock = MemoryAtIndex(indexAndSlice.MemoryBlockIndex);
+                MemoryBlockIDAndSlice result = new MemoryBlockIDAndSlice(memoryBlock.MemoryBlockID, indexAndSlice.Offset, indexAndSlice.Length);
+                yield return result;
             }
         }
 
@@ -552,12 +576,12 @@ namespace Lazinator.Buffers
         /// <param name="relativeStartPositionOfSubrange"></param>
         /// <param name="numBytesInSubrange"></param>
         /// <returns></returns>
-        public IEnumerable<MemoryBlockIndexAndSlice> EnumerateMemoryChunkIndices(long relativeStartPositionOfSubrange, long numBytesInSubrange)
+        public IEnumerable<MemoryBlockIndexAndSlice> EnumeratePortionOfMemoryBlockIndexAndSlices(long relativeStartPositionOfSubrange, long numBytesInSubrange, bool ignoringSlicesAndPatches = false)
         {
             long bytesBeforeSubrangeRemaining = relativeStartPositionOfSubrange;
             long bytesOfSubrangeRemaining = numBytesInSubrange;
             bool withinSubrange = false;
-            foreach (var rangeInfo in EnumerateMemoryChunksByIndex(false))
+            foreach (var rangeInfo in EnumerateMemoryBlockIndexAndSlices(ignoringSlicesAndPatches))
             {
                 long skipOverBytes = 0;
                 if (!withinSubrange)
@@ -583,12 +607,12 @@ namespace Lazinator.Buffers
         /// <summary>
         /// Enumerates all memory blocks.
         /// </summary>
-        /// <param name="includeOutsideOfRange">If true, includes all memory blocks, including those beyond the range referenced in this LazinatorMemory; if false, includes only the portion of memory represented by the range referenced in this LazinatorMemory </param>
+        /// <param name="ignoringSlicesAndPatches">If true, includes all memory blocks, including those beyond the range referenced in this LazinatorMemory; if false, includes only the portion of memory represented by the range referenced in this LazinatorMemory </param>
         /// <returns></returns>
-        public IEnumerable<ReadOnlyMemory<byte>> EnumerateRawMemory(bool includeOutsideOfRange = false)
+        public IEnumerable<ReadOnlyMemory<byte>> EnumerateRawMemory(bool ignoringSlicesAndPatches = false)
         {
             MemoryChunk lastMemoryReferenceLoaded = null;
-            foreach (var rangeInfo in EnumerateMemoryChunksByIndex(includeOutsideOfRange))
+            foreach (var rangeInfo in EnumerateMemoryBlockIndexAndSlices(ignoringSlicesAndPatches))
             {
                 var memoryChunk = MemoryAtIndex(rangeInfo.MemoryBlockIndex);
                 if (memoryChunk.IsLoaded == false)
@@ -607,12 +631,12 @@ namespace Lazinator.Buffers
         /// <summary>
         /// Enumerates all memory blocks asynchronously, asynchronously loading and unloading blocks of memory as needed.
         /// </summary>
-        /// <param name="includeOutsideOfRange">If true, includes all memory blocks, including those beyond the range referenced in this LazinatorMemory; if false, includes only the portion of memory represented by the range referenced in this LazinatorMemory </param>
+        /// <param name="ignoringSlicesAndPatches">If true, includes all memory blocks, including those beyond the range referenced in this LazinatorMemory; if false, includes only the portion of memory represented by the range referenced in this LazinatorMemory </param>
         /// <returns></returns>
-        public async IAsyncEnumerable<ReadOnlyMemory<byte>> EnumerateRawMemoryAsync(bool includeOutsideOfRange = false)
+        public async IAsyncEnumerable<ReadOnlyMemory<byte>> EnumerateRawMemoryAsync(bool ignoringSlicesAndPatches = false)
         {
             MemoryChunk lastMemoryReferenceLoaded = null;
-            foreach (var rangeInfo in EnumerateMemoryChunksByIndex(includeOutsideOfRange))
+            foreach (var rangeInfo in EnumerateMemoryBlockIndexAndSlices(ignoringSlicesAndPatches))
             {
                 var m = MemoryAtIndex(rangeInfo.MemoryBlockIndex);
                 if (m is MemoryChunk memoryChunk && memoryChunk.IsLoaded == false)
@@ -632,9 +656,9 @@ namespace Lazinator.Buffers
         /// Enumerates each of the memory chunks, whether included within the referenced range or not.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<MemoryChunk> EnumerateMemoryChunks(bool includeOutsideOfRange = false)
+        public IEnumerable<MemoryChunk> EnumerateMemoryChunks(bool ignoringSlicesAndPatches = false)
         {
-            if (includeOutsideOfRange)
+            if (ignoringSlicesAndPatches)
             {
                 if (SingleMemoryChunk != null)
                     yield return SingleMemoryChunk;
@@ -670,41 +694,21 @@ namespace Lazinator.Buffers
         /// Enumerates the referenced memory owners (including portions of referenced memory chunks not referenced).
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<IReadableBytes> EnumerateReadOnlyBytesSegments(bool includeOutsideOfRange = false)
+        private IEnumerable<IReadableBytes> EnumerateReadOnlyBytesSegments(bool ignoringSlicesAndPatches = false)
         {
             foreach (var memoryChunk in EnumerateMemoryChunks(false))
                 yield return memoryChunk.MemoryAsLoaded;
-        }
-
-        
-
-        public List<MemoryChunk> GetUnpersistedMemoryChunks()
-        {
-            List<MemoryChunk> memoryChunks = new List<MemoryChunk>();
-            HashSet<int> ids = new HashSet<int>();
-            foreach (MemoryChunk memoryChunk in EnumerateMemoryChunks(true))
-            {
-                if (memoryChunk.IsPersisted)
-                    continue;
-                int chunkID = memoryChunk.MemoryBlockID;
-                if (!ids.Contains(chunkID))
-                {
-                    ids.Add(chunkID);
-                    memoryChunks.Add(memoryChunk);
-                }
-            }
-            return memoryChunks;
         }
 
         /// <summary>
         /// Writes the memory to the binary buffer writer asynchronously.
         /// </summary>
         /// <param name="writer">The binary buffer writer container</param>
-        /// <param name="includeOutsideOfRange">True if contained memory that is NOT written should be written.</param>
+        /// <param name="ignoringSlicesAndPatches">True if contained memory that is NOT written should be written.</param>
         /// <returns></returns>
-        public async ValueTask WriteToBufferAsync(BufferWriterContainer writer, bool includeOutsideOfRange = false)
+        public async ValueTask WriteToBufferAsync(BufferWriterContainer writer, bool ignoringSlicesAndPatches = false)
         {
-            await foreach (ReadOnlyMemory<byte> memory in EnumerateRawMemoryAsync(includeOutsideOfRange))
+            await foreach (ReadOnlyMemory<byte> memory in EnumerateRawMemoryAsync(ignoringSlicesAndPatches))
                 writer.Write(memory.Span);
         }
 
@@ -713,25 +717,25 @@ namespace Lazinator.Buffers
         /// Writes the memory to the binary buffer writer 
         /// </summary>
         /// <param name="writer">The binary buffer writer </param>
-        /// <param name="includeOutsideOfRange">True if contained memory that is NOT written should be written.</param>
+        /// <param name="ignoringSlicesAndPatches">True if contained memory that is NOT written should be written.</param>
         /// <returns></returns>
-        public void WriteToBuffer(ref BufferWriter writer, bool includeOutsideOfRange = false)
+        public void WriteToBuffer(ref BufferWriter writer, bool ignoringSlicesAndPatches = false)
         {
-            foreach (ReadOnlyMemory<byte> memory in EnumerateRawMemory(includeOutsideOfRange))
+            foreach (ReadOnlyMemory<byte> memory in EnumerateRawMemory(ignoringSlicesAndPatches))
                 writer.Write(memory.Span);
         }
 
         /// <summary>
         /// Enumerates individual bytes referenced by this LazinatorMemory.
         /// </summary>
-        /// <param name="includeOutsideOfRange">If true, bytes outside the referenced range are included.</param>
+        /// <param name="ignoringSlicesAndPatches">If true, bytes outside the referenced range are included.</param>
         /// <returns></returns>
 
-        public IEnumerable<byte> EnumerateBytes(bool includeOutsideOfRange = false)
+        public IEnumerable<byte> EnumerateBytes(bool ignoringSlicesAndPatches = false)
         {
-            if (!includeOutsideOfRange && Length == 0)
+            if (!ignoringSlicesAndPatches && Length == 0)
                 yield break;
-            int startIndexOrZero = includeOutsideOfRange ? 0 : StartIndex;
+            int startIndexOrZero = ignoringSlicesAndPatches ? 0 : StartIndex;
             int totalItems = NumMemoryChunks();
             int numYielded = 0;
             for (int i = StartIndex; i < totalItems; i++)
@@ -739,7 +743,7 @@ namespace Lazinator.Buffers
                 var memoryChunk = MemoryAtIndex(i);
                 memoryChunk.LoadMemory();
                 int startPositionOrZero;
-                if (i == StartIndex && !includeOutsideOfRange)
+                if (i == StartIndex && !ignoringSlicesAndPatches)
                     startPositionOrZero = Offset;
                 else
                     startPositionOrZero = 0;
@@ -748,7 +752,7 @@ namespace Lazinator.Buffers
                 {
                     yield return memoryChunk.ReadOnlyMemory.Span[j];
                     numYielded++;
-                    if (!includeOutsideOfRange && numYielded == Length)
+                    if (!ignoringSlicesAndPatches && numYielded == Length)
                         yield break;
                 }
             }
@@ -783,44 +787,44 @@ namespace Lazinator.Buffers
         /// Returns a single memory block consolidating all of the memory from the LazinatorMemory. If there is only a single memory chunk, 
         /// then the memory is not copied.
         /// </summary>
-        /// <param name="includeOutsideOfRange"></param>
+        /// <param name="ignoringSlicesAndPatches"></param>
         /// <returns></returns>
-        public ReadOnlyMemory<byte> GetConsolidatedMemory(bool includeOutsideOfRange = false)
+        public ReadOnlyMemory<byte> GetConsolidatedMemory(bool ignoringSlicesAndPatches = false)
         {
             if (SingleMemory)
             {
                 SingleMemoryChunk.LoadMemory();
-                if (includeOutsideOfRange)
+                if (ignoringSlicesAndPatches)
                     return SingleMemoryChunk.ReadOnlyMemory;
                 else
                     return SingleMemoryChunk.ReadOnlyMemory.Slice(Offset, (int) Length);
             }
 
-            long totalLength = includeOutsideOfRange ? GetGrossLength() : Length;
+            long totalLength = ignoringSlicesAndPatches ? GetGrossLength() : Length;
             if (totalLength > Int32.MaxValue)
                 ThrowHelper.ThrowTooLargeException(Int32.MaxValue);
             BufferWriter w = new BufferWriter((int) totalLength);
-            foreach (byte b in EnumerateBytes(includeOutsideOfRange))
+            foreach (byte b in EnumerateBytes(ignoringSlicesAndPatches))
                 w.Write(b);
             return w.LazinatorMemory.InitialReadOnlyMemory;
         }
 
-        public async ValueTask<ReadOnlyMemory<byte>> GetConsolidatedMemoryAsync(bool includeOutsideOfRange = false)
+        public async ValueTask<ReadOnlyMemory<byte>> GetConsolidatedMemoryAsync(bool ignoringSlicesAndPatches = false)
         {
             if (SingleMemory)
             {
                 await SingleMemoryChunk.LoadMemoryAsync();
-                if (includeOutsideOfRange)
+                if (ignoringSlicesAndPatches)
                     return SingleMemoryChunk.ReadOnlyMemory;
                 else
                     return SingleMemoryChunk.ReadOnlyMemory.Slice(Offset, (int)Length);
             }
             await LoadAllMemoryAsync();
-            long totalLength = includeOutsideOfRange ? GetGrossLength() : Length;
+            long totalLength = ignoringSlicesAndPatches ? GetGrossLength() : Length;
             if (totalLength > Int32.MaxValue)
                 ThrowHelper.ThrowTooLargeException(Int32.MaxValue);
             BufferWriter w = new BufferWriter((int)totalLength);
-            foreach (byte b in EnumerateBytes(includeOutsideOfRange))
+            foreach (byte b in EnumerateBytes(ignoringSlicesAndPatches))
                 w.Write(b);
             return w.LazinatorMemory.InitialReadOnlyMemory;
         }
