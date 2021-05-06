@@ -35,7 +35,7 @@ namespace Lazinator.Buffers
         public int MemoryBlockID => LoadingInfo.MemoryBlockID;
         public int Length => SliceInfo.Length;
 
-        public bool IsLoaded => MemoryAsLoaded != null;
+        public bool IsLoaded => MemoryAsLoaded != null; // DEBUG -- when loading later
 
         public virtual bool IsPersisted { get; set; }
 

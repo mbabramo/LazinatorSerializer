@@ -154,29 +154,6 @@ namespace Lazinator.Buffers
             }
         }
 
-        internal LazinatorMemory CompletePatchLazinatorMemory(int activeLength, int activeMemoryBlockID)
-        {
-            var byID = GetMemoryChunksByMemoryBlockID();
-            if (activeLength > 0)
-            {
-                var activeMemoryChunk = byID[activeMemoryBlockID];
-                activeMemoryChunk.SliceInfo = new MemoryBlockSlice(0, activeLength);
-                byID[activeMemoryBlockID] = activeMemoryChunk;
-            }
-            List<MemoryChunk> memoryChunks = new List<MemoryChunk>(); 
-            long length = 0;
-            for (int i = 0; i < Segments.Count; i++)
-            {
-                var segment = Segments[i];
-                MemoryChunk memoryChunk = byID[segment.MemoryBlockID];
-                MemoryChunk resliced = memoryChunk.DeepCopy();
-                resliced.SliceInfo = new MemoryBlockSlice(segment.Offset, segment.Length);
-                length += segment.Length;
-                memoryChunks.Add(resliced);
-            }
-            return new LazinatorMemory(memoryChunks, 0, 0, length);
-        }
-
         public int GetIndexFromMemoryBlockID(int memoryBlockID)
         {
             for (int i = 0; i < MemoryChunks.Count; i++)

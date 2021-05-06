@@ -276,7 +276,7 @@ namespace Lazinator.Buffers
             {
                 MoveActiveToCompletedMemory();
             }
-            return MemorySegmentCollection.CompletePatchLazinatorMemory(activeLength, activeMemoryBlockID);
+            return MemorySegmentCollection.ToLazinatorMemory();
         }
 
         #endregion

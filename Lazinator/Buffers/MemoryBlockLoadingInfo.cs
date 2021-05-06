@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lazinator.Persistence;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,5 +16,7 @@ namespace Lazinator.Buffers
         }
 
         public MemoryBlockInsetLoadingInfo WithLoadingOffset(long loadingOffset) => new MemoryBlockInsetLoadingInfo(MemoryBlockID, PreTruncationLength, loadingOffset);
+
+        public virtual long GetLoadingOffset() => 0;
     }
 }

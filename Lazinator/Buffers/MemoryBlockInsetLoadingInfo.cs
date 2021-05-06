@@ -12,5 +12,7 @@ namespace Lazinator.Buffers
         {
             LoadingOffset = loadingOffset;
         }
+
+        public override long GetLoadingOffset() => LoadingOffset;
     }
 }

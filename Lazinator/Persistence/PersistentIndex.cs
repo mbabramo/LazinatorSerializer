@@ -146,35 +146,16 @@ namespace Lazinator.Persistence
 
         public LazinatorMemory GetLazinatorMemory()
         {
-            var memoryChunks = GetMemoryChunks();
-            LazinatorMemory lazinatorMemory = new LazinatorMemory(memoryChunks.ToList(), 0, 0, memoryChunks.Sum(x => x.Length));
+            LazinatorMemory lazinatorMemory = new LazinatorMemory(this);
             lazinatorMemory.LoadInitialReadOnlyMemory();
             return lazinatorMemory;
         }
 
         public async ValueTask<LazinatorMemory> GetLazinatorMemoryAsync()
         {
-            var memoryChunks = GetMemoryChunks();
-            LazinatorMemory lazinatorMemory = new LazinatorMemory(memoryChunks.ToList(), 0, 0, memoryChunks.Sum(x => x.Length));
+            LazinatorMemory lazinatorMemory = new LazinatorMemory(this);
             await lazinatorMemory.LoadInitialReadOnlyMemoryAsync();
             return lazinatorMemory;
-        }
-
-        private List<MemoryChunk> GetMemoryChunks()
-        {
-            List<MemoryChunk> memoryChunks = new List<MemoryChunk>();
-            long numBytesProcessed = 0;
-            for (int i = 0; i < Segments.Count; i++)
-            {
-                MemoryBlockIDAndSlice memoryBlockIDAndSlice = Segments[i];
-                MemoryChunk memoryBlock = GetMemoryChunkByMemoryBlockID(memoryBlockIDAndSlice.MemoryBlockID);
-                string referencePath = GetPathForMemoryChunk(memoryBlockIDAndSlice.MemoryBlockID);
-                BlobMemoryChunk blobMemoryChunk = new BlobMemoryChunk(referencePath, (IBlobManager)this.BlobManager, memoryBlock.LoadingInfo, memoryBlockIDAndSlice.GetSlice());
-                blobMemoryChunk.IsPersisted = GetMemoryChunkStatus(blobMemoryChunk.MemoryBlockID) != PersistentIndexMemoryChunkStatus.NotYetUsed;
-                memoryChunks.Add(blobMemoryChunk);
-                numBytesProcessed += memoryBlockIDAndSlice.Length;
-            }
-            return memoryChunks;
         }
 
         public void Delete(PersistentIndexMemoryChunkStatus statusToDelete, bool includeChunksFromEarlierForks)

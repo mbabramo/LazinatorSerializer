@@ -513,8 +513,10 @@ namespace LazinatorTests.Tests
             if (fullPath == null)
                 return;
             int round = 0;
-            int numRounds = 10;
-            MultipleRoundsOfRandomChanges(numRounds, 10, 3, () =>
+            int numRounds = 2; // DEBUG 10
+            int numChangesFirstRound = 1; // DEBUG 10
+            int numChangesSubsequentRounds = 1; // DEBUG 3
+            MultipleRoundsOfRandomChanges(numRounds, numChangesFirstRound, numChangesSubsequentRounds, () =>
             {
                 //Debug.WriteLine($"Round {round}");
 
