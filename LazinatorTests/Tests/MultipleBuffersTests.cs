@@ -523,6 +523,11 @@ namespace LazinatorTests.Tests
                 LazinatorSerializationOptions options = neverIncludeReferenceToPreviousBuffer ? new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, int.MaxValue, int.MaxValue) : new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20, 5);
                 LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(options);
 
+                // DEBUG
+                Debug.WriteLine("Multiple buffer result:");
+                Debug.WriteLine(multipleBufferResult.ToStringByChunk());
+                Debug.WriteLine($"Consolidated{round}: " + multipleBufferResult.ToStringConsolidated());
+
                 // Write to one or more blobs
                 var index = (useConsolidatedMemory || indices == null || !indices.Any()) ? new PersistentIndex(fullPath, blobManager, containedInSingleBlob) : new PersistentIndex(indices.Last());
                 index.PersistLazinatorMemory(multipleBufferResult);
@@ -541,8 +546,10 @@ namespace LazinatorTests.Tests
                     }
                 }
 
-                //Debug.WriteLine(revisedMemory.ToStringByChunk());
-                //Debug.WriteLine($"Consolidated{round}: " + revisedMemory.ToStringConsolidated());
+                // DEBUG
+                Debug.WriteLine("Revised memory result:");
+                Debug.WriteLine(revisedMemory.ToStringByChunk());
+                Debug.WriteLine($"Consolidated{round}: " + revisedMemory.ToStringConsolidated());
 
                 BinaryTree = new LazinatorBinaryTree<WDouble>(revisedMemory);
                 round++;

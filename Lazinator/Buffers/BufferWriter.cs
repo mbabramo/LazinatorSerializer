@@ -37,7 +37,7 @@ namespace Lazinator.Buffers
         /// </summary>
         public MemorySegmentCollection MemorySegmentCollection { get; set; }
 
-        private bool Recycling => MemorySegmentCollection?.Recycling ?? false;
+        private bool Patching => MemorySegmentCollection?.Recycling ?? false;
 
         internal int NumActiveMemoryBytesAddedToRecycling => MemorySegmentCollection?.NumActiveMemoryBytesAddedToRecycling ?? 0;
 
@@ -81,9 +81,9 @@ namespace Lazinator.Buffers
             get
             {
                 InitializeIfNecessary();
-                if (Recycling)
+                if (Patching)
                 {
-                    return PatchLazinatorMemoryFromRecycled();
+                    return GetLazinatorMemoryWithPatches(); 
                 }
                 ActiveMemory.UsedBytesInCurrentBuffer = ActiveMemoryPosition;
                 if (MemorySegmentCollection != null)
@@ -146,7 +146,7 @@ namespace Lazinator.Buffers
             {
                 if (MemorySegmentCollection is null)
                     return ActiveMemoryPosition;
-                if (!Recycling)
+                if (!Patching)
                 {
                     return ActiveMemoryPosition + (MemorySegmentCollection?.Length ?? 0);
                 }
@@ -265,7 +265,7 @@ namespace Lazinator.Buffers
             }
         }
 
-        public LazinatorMemory PatchLazinatorMemoryFromRecycled()
+        private LazinatorMemory GetLazinatorMemoryWithPatches()
         {
             if (MemorySegmentCollection is null)
                 throw new Exception("No LazinatorMemory to patch");
@@ -479,7 +479,7 @@ namespace Lazinator.Buffers
             {
                 if (MemorySegmentCollection == null || LengthsPosition.index == (MemorySegmentCollection?.NumMemoryChunks ?? 0))
                     return ActiveSpan.Slice(LengthsPosition.offset);
-                return MemorySegmentCollection.MemoryAtIndex(LengthsPosition.index).Slice(LengthsPosition.offset).ReadWriteMemory.Span;
+                return MemorySegmentCollection.MemoryAtIndex(LengthsPosition.index).ReadWriteMemory.Slice(LengthsPosition.offset).Span; // DEBUG -- here we are indeed referring to the memory block index -- also maybe we can eliminate that 
             }
         }
 

@@ -106,7 +106,7 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public virtual MemoryChunk Slice(int offset, int length)
         {
-            var chunk = new MemoryChunk(MemoryAsLoaded, LoadingInfo, SliceInfo.Slice(offset, length), IsPersisted);
+            var chunk = new MemoryChunk(MemoryAsLoaded, LoadingInfo, SliceInfo.Slice(offset, length), IsPersisted); 
             return chunk;
         }
 

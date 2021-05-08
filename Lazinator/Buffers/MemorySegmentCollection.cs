@@ -34,8 +34,8 @@ namespace Lazinator.Buffers
 
         public void SetFromLazinatorMemory(LazinatorMemory lazinatorMemory)
         {
-            SetChunks(lazinatorMemory.EnumerateMemoryChunks(false));
-            SetSegments(lazinatorMemory.EnumerateMemoryBlockIDsAndSlices(true).ToList());
+            SetChunks(lazinatorMemory.EnumerateMemoryChunks());
+            SetSegments(lazinatorMemory.EnumerateMemoryBlockIDsAndSlices().ToList());
         }
 
         private void SetSegments(List<MemoryBlockIDAndSlice> segments)

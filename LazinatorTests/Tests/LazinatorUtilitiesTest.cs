@@ -63,7 +63,7 @@ namespace LazinatorTests.Tests
                 if (i == 0)
                     m = new LazinatorMemory(b);
                 else 
-                    m = m.WithAppendedChunk(new MemoryChunk(new ReadOnlyBytes(b), new MemoryBlockLoadingInfo(i, b.Length), new MemoryBlockSlice(0, b.Length), false));
+                    m = m.WithAppendedChunk(new MemoryChunk(new ReadOnlyBytes(b), new MemoryBlockLoadingInfo(i, b.Length), new MemoryBlockSlice(0, b.Length), false)); 
             }
 
             const int numChecks = 15;
@@ -73,7 +73,7 @@ namespace LazinatorTests.Tests
                 int startPosition = r.Next(0, c.Length);
                 int numBytes = r.Next(0, c.Length - startPosition);
                 var s = m.Slice(startPosition, numBytes);
-                var consolidated = s.GetConsolidatedMemory(false).ToArray();
+                var consolidated = s.GetConsolidatedMemory().ToArray(); // DEBUG -- might have problem here, because this was previously set to false
                 var comparison = c.Skip(startPosition).Take(numBytes).ToArray();
                 if (!comparison.SequenceEqual(consolidated))
                     throw new Exception("LazinatorMemory did not match");
@@ -83,8 +83,6 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorMemorySubranges()
         {
-            // See LazinatorMemory for an explanation of how delta serialization works. This test ignores BufferWriter and makes sure that LazinatorMemory returns the correct data.
-
             Random r = new Random(1);
             int numMainChunks = 5;
             int bytesPerChunk = 100;
@@ -121,7 +119,7 @@ namespace LazinatorTests.Tests
                 for (int i = 0; i < numReferenceChunks; i++)
                 {
                     int mainChunkIndex = r.Next(0, numMainChunks);
-                    int startPosition = r.Next(0, bytesPerChunk);
+                    int startPosition = 0; // Note: No longer allowing the start position to vary (we can do that with segments) r.Next(0, bytesPerChunk);
                     int numBytes = r.Next(0, bytesPerChunk - startPosition);
                     var overallMemoryOwner = overallMemoryOwners[mainChunkIndex];
                     var overallMemoryOwnerLoaded = new ReadOnlyBytes(overallMemoryOwner.ReadOnlyMemory);
@@ -148,6 +146,28 @@ namespace LazinatorTests.Tests
                     bytesFound.AddRange(GetMemoryAtBlockAndOffset(cobbledMemory, memoryChunkReference).ToArray());
                 bytesFound.SequenceEqual(referencedBytes).Should().BeTrue();
             }
+        }
+
+        [Fact]
+        public void MemorySegmentCollectionSubranges()
+        {
+            MemorySegmentCollection c = new MemorySegmentCollection(new List<MemoryChunk>
+            {
+                new MemoryChunk(new ReadOnlyBytes(new byte[] { 1, 2, 3 })) { LoadingInfo = new MemoryBlockLoadingInfo(0, 3) },
+                new MemoryChunk(new ReadOnlyBytes(new byte[] { 200, 200, 4, 5, 6, 200, 200 })) { LoadingInfo = new MemoryBlockLoadingInfo(1, 7), SliceInfo = new MemoryBlockSlice(2, 3) },
+                new MemoryChunk(new ReadOnlyBytes(new byte[] { 7, 8, 9, 200 }))  { LoadingInfo = new MemoryBlockLoadingInfo(2, 4), SliceInfo = new MemoryBlockSlice(0, 3) },
+                new MemoryChunk(new ReadOnlyBytes(new byte[] { 10, 11, 12 })) { LoadingInfo = new MemoryBlockLoadingInfo(3, 3) },
+            }, true);
+            c.Segments = new List<MemoryBlockIDAndSlice>()
+            {
+                new MemoryBlockIDAndSlice(2, 1, 2), // 8, 9
+                new MemoryBlockIDAndSlice(2, 0, 3), // 7, 8, 9
+                new MemoryBlockIDAndSlice(3, 0, 2), // 10, 11, 12
+                new MemoryBlockIDAndSlice(1, 1, 1) // 5
+            };
+            LazinatorMemory memory = new LazinatorMemory(c);
+            memory.GetConsolidatedMemory().ToArray();
+            // DEBUG -- finish
         }
 
         /// <summary>

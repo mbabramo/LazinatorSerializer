@@ -59,11 +59,13 @@ namespace Lazinator.Buffers
         public void AppendMemoryChunk(MemoryChunk memoryChunk)
         {
             bool alreadyContained = false;
-            alreadyContained = MemoryChunksByID.ContainsKey(memoryChunk.MemoryBlockID);
+            alreadyContained = MemoryChunksByID?.ContainsKey(memoryChunk.MemoryBlockID) ?? false;
             if (!alreadyContained)
             {
                 if (MemoryBlocksLoadingInfo == null)
                     MemoryBlocksLoadingInfo = new List<MemoryBlockLoadingInfo>();
+                if (MemoryChunksByID == null)
+                    MemoryChunksByID = new Dictionary<int, MemoryChunk>();
                 MemoryBlocksLoadingInfo.Add(memoryChunk.LoadingInfo);
                 MemoryChunksByID[memoryChunk.MemoryBlockID] = memoryChunk;
             }
