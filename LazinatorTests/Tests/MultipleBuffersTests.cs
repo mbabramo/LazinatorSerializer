@@ -469,9 +469,9 @@ namespace LazinatorTests.Tests
             List<byte> fullSequence = new List<byte>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             var initialBytes = new ReadOnlyBytes(new byte[3] { 1, 2, 3 });
             var nextBytes = new ReadOnlyBytes(new byte[3] { 4, 5, 6 });
-            MemoryChunk nextBytesAsChunk = new MemoryChunk(nextBytes, new MemoryBlockLoadingInfo(1, 3), new MemoryBlockSlice(0, 3), false);
+            MemoryChunk nextBytesAsChunk = new MemoryChunk(nextBytes, new MemoryBlockLoadingInfo(1, 3), false);
             var lastBytes = new ReadOnlyBytes(new byte[4] { 7, 8, 9, 10 });
-            MemoryChunk lastBytesAsChunk = new MemoryChunk(lastBytes, new MemoryBlockLoadingInfo(2, 4), new MemoryBlockSlice(0, 4), false);
+            MemoryChunk lastBytesAsChunk = new MemoryChunk(lastBytes, new MemoryBlockLoadingInfo(2, 4), false);
             LazinatorMemory initialMemory = new LazinatorMemory(initialBytes);
             LazinatorMemory memory1 = initialMemory.WithAppendedChunk(nextBytesAsChunk).WithAppendedChunk(lastBytesAsChunk);
 

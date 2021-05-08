@@ -30,10 +30,9 @@ namespace Lazinator.Buffers
         }
 
         public MemoryBlockLoadingInfo LoadingInfo { get; set; }
-        public MemoryBlockSlice SliceInfo { get; set; } 
 
         public int MemoryBlockID => LoadingInfo.MemoryBlockID;
-        public int Length => SliceInfo.Length;
+        public int Length => LoadingInfo.PreTruncationLength;
 
         public bool IsLoaded => MemoryAsLoaded != null; // DEBUG -- when loading later
 
@@ -51,31 +50,30 @@ namespace Lazinator.Buffers
 
         }
 
-        public MemoryChunk(IReadableBytes memoryAsLoaded) : this(memoryAsLoaded, null, new MemoryBlockSlice(0, memoryAsLoaded.ReadOnlyMemory.Length), false)
+        public MemoryChunk(IReadableBytes memoryAsLoaded) : this(memoryAsLoaded, null, false)
         {
 
         }
 
-        public MemoryChunk(ReadWriteBytes memoryAsLoaded) : this(memoryAsLoaded, null, new MemoryBlockSlice(0, memoryAsLoaded.Memory.Length), false)
+        public MemoryChunk(ReadWriteBytes memoryAsLoaded) : this(memoryAsLoaded, null,  false)
         {
 
         }
 
-        public MemoryChunk(IReadableBytes memoryAsLoaded, MemoryBlockLoadingInfo loadingInfo, MemoryBlockSlice sliceInfo, bool isPersisted)
+        public MemoryChunk(IReadableBytes memoryAsLoaded, MemoryBlockLoadingInfo loadingInfo, bool isPersisted)
         {
             MemoryAsLoaded = memoryAsLoaded;
             LoadingInfo = loadingInfo ?? new MemoryBlockLoadingInfo(0, memoryAsLoaded.ReadOnlyMemory.Length);
-            SliceInfo = sliceInfo;
             IsPersisted = isPersisted;
         }
 
-        public virtual MemoryChunk DeepCopy() => new MemoryChunk(MemoryAsLoaded, LoadingInfo, SliceInfo, IsPersisted);
+        public virtual MemoryChunk DeepCopy() => new MemoryChunk(MemoryAsLoaded, LoadingInfo, IsPersisted);
 
         /// <summary>
         /// Returns the memory being referred to, taking into account the additional offset to be applied after loading.
         /// If the memory hasn't been loaded, empty memory will be returned.
         /// </summary>
-        public virtual ReadOnlyMemory<byte> ReadOnlyMemory => MemoryAsLoaded == null ? LazinatorMemory.EmptyReadOnlyMemory : MemoryAsLoaded.ReadOnlyMemory.Slice(SliceInfo.Offset, Length);
+        public virtual ReadOnlyMemory<byte> ReadOnlyMemory => MemoryAsLoaded == null ? LazinatorMemory.EmptyReadOnlyMemory : MemoryAsLoaded.ReadOnlyMemory.Slice(0, Length);
 
         public IEnumerable<byte> EnumerateBytes()
         {
@@ -94,36 +92,8 @@ namespace Lazinator.Buffers
                     return null; // will not execute
                 }
                 else
-                    return WritableMemory.Memory.Slice(SliceInfo.Offset, Length);
+                    return WritableMemory.Memory.Slice(0, Length);
             }
-        }
-
-        /// <summary>
-        /// Slices the memory being referred to. The information for loading remains the same.
-        /// </summary>
-        /// <param name="offset">An additional offset to be applied, in addition to the existing additional offset</param>
-        /// <param name="length">The final length of the slice</param>
-        /// <returns></returns>
-        public virtual MemoryChunk Slice(int offset, int length)
-        {
-            var chunk = new MemoryChunk(MemoryAsLoaded, LoadingInfo, SliceInfo.Slice(offset, length), IsPersisted); 
-            return chunk;
-        }
-
-        public virtual MemoryChunk Slice(int offset)
-        {
-            var chunk = new MemoryChunk(MemoryAsLoaded, LoadingInfo, SliceInfo.Slice(offset), IsPersisted);
-            return chunk;
-        }
-
-        internal MemoryChunk WithPreTruncationLengthIncreasedIfNecessary(MemoryChunk otherMemoryChunk)
-        {
-            if ((otherMemoryChunk.MemoryBlockID == MemoryBlockID) && LoadingInfo.PreTruncationLength < otherMemoryChunk.LoadingInfo.PreTruncationLength)
-            {
-                LoadingInfo.PreTruncationLength = otherMemoryChunk.LoadingInfo.PreTruncationLength;
-                MemoryAsLoaded = otherMemoryChunk.MemoryAsLoaded;
-            }
-            return this;
         }
 
         /// <summary>

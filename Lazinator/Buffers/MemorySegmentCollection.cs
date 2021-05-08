@@ -26,7 +26,7 @@ namespace Lazinator.Buffers
 
         public override MemorySegmentCollection WithAppendedMemoryChunk(MemoryChunk memoryChunk)
         {
-            List<MemoryChunk> memoryChunks = MemoryChunks.Select(x => x.WithPreTruncationLengthIncreasedIfNecessary(memoryChunk)).ToList();
+            List<MemoryChunk> memoryChunks = MemoryChunks.ToList();
             var collection = new MemorySegmentCollection(memoryChunks, Recycling);
             collection.AppendMemoryChunk(memoryChunk);
             return collection;
@@ -112,33 +112,9 @@ namespace Lazinator.Buffers
         internal void InsertReferenceToCompletedMemory(int memoryChunkIndex, int startPosition, long numBytes, int activeMemoryPosition)
         {
             RecordLastActiveMemoryChunkReference(activeMemoryPosition);
-            IEnumerable<MemoryBlockIDAndSlice> segmentsToAdd = EnumerateMemoryChunkReferences(memoryChunkIndex, startPosition, numBytes);
+            IEnumerable<MemoryBlockIDAndSlice> segmentsToAdd = EnumerateMemoryBlockIDAndSlice(memoryChunkIndex, startPosition, numBytes);
             ExtendMemoryChunkReferencesList(segmentsToAdd);
             // Debug.WriteLine($"Reference to completed memory added. References are {String.Join(", ", RecycledMemoryChunkReferences)}");
-        }
-
-
-        /// <summary>
-        /// Enumerates memory chunk references based on an initial memory chunk index (not an ID), an offset into that memory chunk, and a length.
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<MemoryBlockIDAndSlice> EnumerateMemoryChunkReferences(int initialMemoryChunkIndex, int offset, long length)
-        {
-            int memoryChunkIndex = initialMemoryChunkIndex;
-            long numBytesOfLengthRemaining = length;
-            while (numBytesOfLengthRemaining > 0)
-            {
-                var memoryChunk = MemoryAtIndex(memoryChunkIndex);
-
-                int numBytesThisChunk = memoryChunk.Length;
-                int bytesToUseThisChunk = (int)Math.Min(numBytesThisChunk - offset, numBytesOfLengthRemaining);
-                var sliceInfo = memoryChunk.SliceInfo.Slice(offset, bytesToUseThisChunk);
-                yield return new MemoryBlockIDAndSlice(memoryChunk.MemoryBlockID, sliceInfo.Offset, sliceInfo.Length);
-
-                numBytesOfLengthRemaining -= bytesToUseThisChunk;
-                memoryChunkIndex++;
-                offset = 0;
-            }
         }
 
         /// <summary>

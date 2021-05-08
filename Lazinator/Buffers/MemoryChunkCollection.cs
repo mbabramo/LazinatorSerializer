@@ -49,7 +49,7 @@ namespace Lazinator.Buffers
 
         public virtual MemoryChunkCollection WithAppendedMemoryChunk(MemoryChunk memoryChunk)
         {
-            List<MemoryChunk> memoryChunks = MemoryChunks.Select(x => x.WithPreTruncationLengthIncreasedIfNecessary(memoryChunk)).ToList();
+            List<MemoryChunk> memoryChunks = MemoryChunks.ToList();
             var collection = new MemoryChunkCollection(memoryChunks);
             collection.MemoryChunksByID = null;
             collection.AppendMemoryChunk(memoryChunk);
@@ -79,7 +79,7 @@ namespace Lazinator.Buffers
 
         #region MemoryChunk access
 
-        public MemoryChunk MemoryAtIndex(int i)
+        public virtual MemoryChunk MemoryAtIndex(int i)
         {
             if (MemoryChunks == null)
                 MemoryChunks = MemoryBlocksLoadingInfo.Select(x => (MemoryChunk)null).ToList();
@@ -88,7 +88,7 @@ namespace Lazinator.Buffers
             return MemoryChunks[i];
         }
 
-        public IEnumerable<MemoryChunk> EnumerateMemoryChunks()
+        public virtual IEnumerable<MemoryChunk> EnumerateMemoryChunks()
         {
             if (MemoryChunks is not null)
                 for (int i = 0; i < MemoryChunks.Count; i++)
@@ -181,6 +181,82 @@ namespace Lazinator.Buffers
             for (int i = 0; i < MemoryBlocksLoadingInfo.Count; i++)
                 if (MemoryBlocksLoadingInfo[i].MemoryBlockID == memoryBlockID)
                     MemoryBlocksLoadingInfo[i] = MemoryBlocksLoadingInfo[i].WithLoadingOffset(offset);
+        }
+
+        #endregion
+
+        #region Slicing
+
+        public virtual MemorySegmentIndexAndSlice GetMemorySegmentAtOffset(int startIndex, int startOffset, long furtherOffset)
+        {
+            long positionRemaining = furtherOffset;
+            int revisedStartIndex = startIndex;
+            int revisedStartPosition = startOffset;
+            int numChunks = NumMemoryChunks; 
+            int revisedLength = 0;
+            while (positionRemaining > 0)
+            {
+                MemoryBlockLoadingInfo current = MemoryBlocksLoadingInfo[revisedStartIndex];
+                int remainingBytesThisMemory = current.PreTruncationLength - revisedStartPosition;
+                if (remainingBytesThisMemory <= positionRemaining)
+                {
+                    positionRemaining -= remainingBytesThisMemory;
+                    if (positionRemaining == 0 && revisedStartIndex == numChunks - 1)
+                        break; // we are at the very end of the last LazinatorMemory
+                    revisedStartIndex++;
+                    revisedStartPosition = 0;
+                }
+                else
+                {
+                    revisedStartPosition += (int)positionRemaining;
+                    revisedLength = current.PreTruncationLength - revisedStartPosition;
+                    positionRemaining = 0;
+                }
+            }
+            return new MemorySegmentIndexAndSlice(revisedStartIndex, revisedStartPosition, revisedLength);
+        }
+
+        debug; // add length to next. Then use above to get starting position, and call below.
+
+        public virtual IEnumerable<MemorySegmentIndexAndSlice> EnumerateMemoryBlockIndexAndSlice(int startIndex, int offset)
+        {
+            int index = 0;
+            long bytesRemaining = Length;
+            int i = 0;
+            foreach (var memoryChunk in EnumerateMemoryChunks())
+            {
+                if (index == startIndex)
+                {
+                    int lengthToInclude = (int)Math.Min(memoryChunk.Length - offset, bytesRemaining);
+                    bytesRemaining -= lengthToInclude;
+                    yield return new MemorySegmentIndexAndSlice(i, offset, lengthToInclude);
+                }
+                else if (index > startIndex && bytesRemaining > 0)
+                {
+                    int lengthToInclude = (int)Math.Min(memoryChunk.Length, bytesRemaining);
+                    bytesRemaining -= lengthToInclude;
+                    yield return new MemorySegmentIndexAndSlice(i, 0, lengthToInclude);
+                }
+                if (bytesRemaining == 0)
+                    yield break;
+                i++;
+            }
+        }
+
+        public virtual IEnumerable<MemoryBlockIDAndSlice> EnumerateMemoryBlockIDAndSlice(int startIndex, int offset)
+        {
+            foreach (MemorySegmentIndexAndSlice indexAndSlice in EnumerateMemoryBlockIndexAndSlice(startIndex, offset))
+            {
+                yield return new MemoryBlockIDAndSlice(MemoryChunks[indexAndSlice.MemorySegmentIndex].MemoryBlockID, indexAndSlice.Offset, indexAndSlice.Length);
+            }
+        }
+
+        public virtual IEnumerable<MemorySegment> EnumerateMemorySegment(int startIndex, int offset)
+        {
+            foreach (MemorySegmentIndexAndSlice indexAndSlice in EnumerateMemoryBlockIndexAndSlice(startIndex, offset))
+            {
+                yield return new MemorySegment(MemoryChunks[indexAndSlice.MemorySegmentIndex], new MemoryBlockSlice(indexAndSlice.Offset, indexAndSlice.Length));
+            }
         }
 
         #endregion

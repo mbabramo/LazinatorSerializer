@@ -90,7 +90,7 @@ namespace Lazinator.Buffers
                 {
                     if (ActiveMemoryPosition == 0)
                         return MemorySegmentCollection.ToLazinatorMemory();
-                    var withAppended = MemorySegmentCollection.WithAppendedMemoryChunk(new MemoryChunk(ActiveMemory.ReadOnlyBytes, new MemoryBlockLoadingInfo(MemorySegmentCollection.GetNextMemoryBlockID(), ActiveMemoryPosition), new MemoryBlockSlice(0, ActiveMemoryPosition), false));
+                    var withAppended = MemorySegmentCollection.WithAppendedMemoryChunk(new MemoryChunk(ActiveMemory.ReadOnlyBytes, new MemoryBlockLoadingInfo(MemorySegmentCollection.GetNextMemoryBlockID(), ActiveMemoryPosition), false));
                     return withAppended.ToLazinatorMemory();
                 }
                 return new LazinatorMemory(new MemoryChunk(ActiveMemory.ReadOnlyBytes), 0, ActiveMemoryPosition);
@@ -254,7 +254,7 @@ namespace Lazinator.Buffers
         {
             if (ActiveMemoryPosition > 0)
             {
-                var chunk = new MemoryChunk(ActiveMemory.ReadWriteBytes, new MemoryBlockLoadingInfo(MemorySegmentCollection?.GetNextMemoryBlockID() ?? 0,  ActiveMemoryPosition), new MemoryBlockSlice(0, ActiveMemoryPosition), false);
+                var chunk = new MemoryChunk(ActiveMemory.ReadWriteBytes, new MemoryBlockLoadingInfo(MemorySegmentCollection?.GetNextMemoryBlockID() ?? 0,  ActiveMemoryPosition), false);
                 if (MemorySegmentCollection == null)
                     MemorySegmentCollection = new MemorySegmentCollection(chunk, false);
                 else
