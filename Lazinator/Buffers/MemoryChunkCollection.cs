@@ -10,15 +10,18 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Buffers
 {
-    public partial class MemoryChunkCollection : IMemoryChunkCollection, IEnumerable<MemoryChunk>
+    public partial class MemoryChunkCollection : IMemoryChunkCollection, IEnumerable<MemorySegment>
     {
         public IBlobManager BlobManager { get; set; }
         protected List<MemoryChunk> MemoryChunks = new List<MemoryChunk>();
-        protected Dictionary<int, MemoryChunk> MemoryChunksByID = null;
+        protected Dictionary<int, int> MemoryChunksIndexFromID = null;
         public long Length { get; private set; }
         public int MaxMemoryBlockID { get; private set; }
         public int GetNextMemoryBlockID() => MaxMemoryBlockID + 1;
-        public int NumMemoryChunks => MemoryChunks?.Count ?? 0;
+        protected int NumMemoryChunks => MemoryChunks?.Count ?? 0;
+        public virtual int NumMemorySegments => NumMemoryChunks;
+
+        protected virtual int GetLengthOfSegment(int segmentIndex) => MemoryBlocksLoadingInfo[segmentIndex].PreTruncationLength;
 
         #region Construction
 
@@ -27,9 +30,9 @@ namespace Lazinator.Buffers
 
         }
 
-        public MemoryChunkCollection(List<MemoryChunk> memoryChunks)
+        public MemoryChunkCollection(IEnumerable<MemoryChunk> memoryChunks)
         {
-            MemoryChunks = memoryChunks;
+            MemoryChunks = memoryChunks.ToList();
             MaxMemoryBlockID = MemoryChunks.Any() ? MemoryChunks.Max(x => x.MemoryBlockID) : 0;
             Length = MemoryChunks.Sum(x => (long) x.Length);
             InitializeMemoryBlocksInformation();
@@ -40,104 +43,25 @@ namespace Lazinator.Buffers
             return new LazinatorMemory(this);
         }
 
-        public MemoryChunkCollection DeepCopy()
+        public virtual MemoryChunkCollection DeepCopy()
         {
-            var collection = new MemoryChunkCollection();
-            collection.SetChunks(MemoryChunks);
+            var collection = new MemoryChunkCollection(MemoryChunks);
             return collection;
         }
 
-        public virtual MemoryChunkCollection WithAppendedMemoryChunk(MemoryChunk memoryChunk)
+        public virtual void AppendMemoryChunk(MemoryChunk memoryChunk)
         {
-            List<MemoryChunk> memoryChunks = MemoryChunks.ToList();
-            var collection = new MemoryChunkCollection(memoryChunks);
-            collection.MemoryChunksByID = null;
-            collection.AppendMemoryChunk(memoryChunk);
-            return collection;
-        }
-
-        public void AppendMemoryChunk(MemoryChunk memoryChunk)
-        {
-            bool alreadyContained = false;
-            alreadyContained = MemoryChunksByID?.ContainsKey(memoryChunk.MemoryBlockID) ?? false;
-            if (!alreadyContained)
-            {
-                if (MemoryBlocksLoadingInfo == null)
-                    MemoryBlocksLoadingInfo = new List<MemoryBlockLoadingInfo>();
-                if (MemoryChunksByID == null)
-                    MemoryChunksByID = new Dictionary<int, MemoryChunk>();
-                MemoryBlocksLoadingInfo.Add(memoryChunk.LoadingInfo);
-                MemoryChunksByID[memoryChunk.MemoryBlockID] = memoryChunk;
-            }
+            if (MemoryBlocksLoadingInfo == null)
+                MemoryBlocksLoadingInfo = new List<MemoryBlockLoadingInfo>();
+            if (MemoryChunksIndexFromID == null)
+                MemoryChunksIndexFromID = new Dictionary<int, int>();
+            MemoryBlocksLoadingInfo.Add(memoryChunk.LoadingInfo);
+            MemoryChunksIndexFromID[memoryChunk.MemoryBlockID] = MemoryBlocksLoadingInfo.Count() - 1;
             MemoryChunks.Add(memoryChunk);
             if (memoryChunk.MemoryBlockID > MaxMemoryBlockID)
                 MaxMemoryBlockID = memoryChunk.MemoryBlockID;
             Length += (long)memoryChunk.Length;
         }
-
-        #endregion
-
-        #region MemoryChunk access
-
-        public virtual MemoryChunk MemoryAtIndex(int i)
-        {
-            if (MemoryChunks == null)
-                MemoryChunks = MemoryBlocksLoadingInfo.Select(x => (MemoryChunk)null).ToList();
-            if (MemoryChunks[i] == null)
-                LoadMemoryAtIndex(i);
-            return MemoryChunks[i];
-        }
-
-        public virtual IEnumerable<MemoryChunk> EnumerateMemoryChunks()
-        {
-            if (MemoryChunks is not null)
-                for (int i = 0; i < MemoryChunks.Count; i++)
-                {
-                    yield return MemoryAtIndex(i);
-                }
-        }
-
-        public IEnumerator<MemoryChunk> GetEnumerator()
-        {
-            foreach (var memoryChunk in EnumerateMemoryChunks())
-                yield return memoryChunk;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        // DEBUG TODO -- delete BlobMemoryChunk and replace with a chunk type that is connected to MemoryChunkCollection, so that we can load and unload. In this case, we could just create the MemoryChunks in advance, but maybe there is no reason to do this before it is needed. Also make it so that we can unload after persisting all. But then we need to ensure that if a MemoryChunk calls unload, the unloading can be accomplished here. Ideally, we should make it so that MemoryChunk is purely internal and is never accessed by the consumer code. So long as all the MemoryChunks are stored in a MemoryChunkCollection, just unloading the one memory chunk should suffice. Users may still have access to ReadOnlyMemory<byte>, however. (MemoryChunks can be sliced, but if it's internal, that will only be done by this library.) 
-
-        private void LoadMemoryAtIndex(int i)
-        {
-            string path = GetPathForIndex();
-            var loadingInfo = MemoryBlocksLoadingInfo[i];
-            ReadOnlyMemory<byte> memory = BlobManager.Read(path, loadingInfo.GetLoadingOffset(), loadingInfo.PreTruncationLength);
-            ReadOnlyBytes readOnlyBytes = new ReadOnlyBytes(memory);
-            MemoryChunk chunk = new MemoryChunk(readOnlyBytes) { IsPersisted = true }; 
-            MemoryChunks[i] = chunk;
-        }
-
-        public MemoryChunk GetMemoryChunkByMemoryBlockID(int memoryBlockID)
-        {
-            var d = GetMemoryChunksByMemoryBlockID();
-            if (!d.ContainsKey(memoryBlockID))
-                return null;
-            return d[memoryBlockID];
-        }
-
-        public Dictionary<int, MemoryChunk> GetMemoryChunksByMemoryBlockID()
-        {
-            if (MemoryChunksByID == null)
-                InitializeMemoryBlocksInformation();
-            return MemoryChunksByID;
-        }
-
-        #endregion
-
-        #region Memory blocks loading information
 
         public void SetChunks(IEnumerable<MemoryChunk> chunks)
         {
@@ -160,44 +84,128 @@ namespace Lazinator.Buffers
             InitializeMemoryBlocksInformation();
         }
 
+        #endregion
+
+        #region MemoryChunk access
+
+        public virtual MemorySegment MemoryAtIndex(int i)
+        {
+            if (MemoryChunks == null)
+                MemoryChunks = MemoryBlocksLoadingInfo.Select(x => (MemoryChunk)null).ToList();
+            if (MemoryChunks[i] == null)
+                LoadMemoryAtIndex(i);
+            var chunk = MemoryChunks[i];
+            return new MemorySegment(chunk, new MemoryBlockSlice(0, chunk.Length));
+        }
+
+        public async virtual ValueTask<MemorySegment> MemoryAtIndexAsync(int i)
+        {
+            if (MemoryChunks == null)
+                MemoryChunks = MemoryBlocksLoadingInfo.Select(x => (MemoryChunk)null).ToList();
+            if (MemoryChunks[i] == null)
+                await LoadMemoryAtIndexAsync(i);
+            var chunk = MemoryChunks[i];
+            return new MemorySegment(chunk, new MemoryBlockSlice(0, chunk.Length));
+        }
+
+        public virtual IEnumerable<MemorySegment> EnumerateMemoryChunks()
+        {
+            if (MemoryChunks is not null)
+                for (int i = 0; i < MemoryChunks.Count; i++)
+                {
+                    yield return MemoryAtIndex(i);
+                }
+        }
+
+        public IEnumerator<MemorySegment> GetEnumerator()
+        {
+            foreach (var memoryChunk in EnumerateMemoryChunks())
+                yield return memoryChunk;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        // DEBUG TODO -- delete BlobMemoryChunk and replace with a chunk type that is connected to MemoryChunkCollection, so that we can load and unload. In this case, we could just create the MemoryChunks in advance, but maybe there is no reason to do this before it is needed. Also make it so that we can unload after persisting all. But then we need to ensure that if a MemoryChunk calls unload, the unloading can be accomplished here. Ideally, we should make it so that MemoryChunk is purely internal and is never accessed by the consumer code. So long as all the MemoryChunks are stored in a MemoryChunkCollection, just unloading the one memory chunk should suffice. Users may still have access to ReadOnlyMemory<byte>, however. (MemoryChunks can be sliced, but if it's internal, that will only be done by this library.) 
+
+        private void LoadMemoryAtIndex(int i)
+        {
+            string path = GetPathForIndex();
+            var loadingInfo = MemoryBlocksLoadingInfo[i];
+            ReadOnlyMemory<byte> memory = BlobManager.Read(path, loadingInfo.GetLoadingOffset(), loadingInfo.PreTruncationLength);
+            ReadOnlyBytes readOnlyBytes = new ReadOnlyBytes(memory);
+            MemoryChunk chunk = new MemoryChunk(readOnlyBytes) { IsPersisted = true }; 
+            MemoryChunks[i] = chunk;
+        }
+
+        private async ValueTask LoadMemoryAtIndexAsync(int i)
+        {
+            string path = GetPathForIndex();
+            var loadingInfo = MemoryBlocksLoadingInfo[i];
+            ReadOnlyMemory<byte> memory = await BlobManager.ReadAsync(path, loadingInfo.GetLoadingOffset(), loadingInfo.PreTruncationLength);
+            ReadOnlyBytes readOnlyBytes = new ReadOnlyBytes(memory);
+            MemoryChunk chunk = new MemoryChunk(readOnlyBytes) { IsPersisted = true };
+            MemoryChunks[i] = chunk;
+        }
+
+        public MemoryChunk GetMemoryChunkByMemoryBlockID(int memoryBlockID)
+        {
+            var d = GetMemoryChunkIndicesFromIDs();
+            if (!d.ContainsKey(memoryBlockID))
+                return null;
+            return MemoryChunks[d[memoryBlockID]];
+        }
+
+        private Dictionary<int, int> GetMemoryChunkIndicesFromIDs()
+        {
+            if (MemoryChunksIndexFromID == null)
+                InitializeMemoryBlocksInformation();
+            return MemoryChunksIndexFromID;
+        }
+
+        #endregion
+
+        #region Memory blocks loading information
         private void InitializeMemoryBlocksInformation()
         {
-            Dictionary<int, MemoryChunk> d = new Dictionary<int, MemoryChunk>(); 
+            Dictionary<int, int> d = new Dictionary<int, int>(); 
             MemoryBlocksLoadingInfo = new List<MemoryBlockLoadingInfo>();
-            foreach (MemoryChunk memoryChunk in MemoryChunks)
+            for (int i = 0; i < MemoryChunks.Count; i++)
             {
+                MemoryChunk memoryChunk = MemoryChunks[i];
                 int chunkID = memoryChunk.MemoryBlockID;
                 if (!d.ContainsKey(chunkID))
                 {
-                    d[chunkID] = memoryChunk;
+                    d[chunkID] = i;
                     MemoryBlocksLoadingInfo.Add(memoryChunk.LoadingInfo);
                 }
             }
-            MemoryChunksByID = d;
+            MemoryChunksIndexFromID = d;
         }
 
         private void UpdateLoadingOffset(int memoryBlockID, long offset)
         {
-            for (int i = 0; i < MemoryBlocksLoadingInfo.Count; i++)
-                if (MemoryBlocksLoadingInfo[i].MemoryBlockID == memoryBlockID)
-                    MemoryBlocksLoadingInfo[i] = MemoryBlocksLoadingInfo[i].WithLoadingOffset(offset);
+            int i = GetMemoryChunkIndicesFromIDs()[memoryBlockID];
+            MemoryBlocksLoadingInfo[i] = MemoryBlocksLoadingInfo[i].WithLoadingOffset(offset);
         }
 
         #endregion
 
         #region Slicing
 
-        public virtual MemorySegmentIndexAndSlice GetMemorySegmentAtOffset(int startIndex, int startOffset, long furtherOffset)
+        public virtual MemorySegmentIndexAndSlice GetMemorySegmentAtOffsetFromStartPosition(int indexInitialSegment, int offsetInInitialSegment, long offsetFromStart)
         {
-            long positionRemaining = furtherOffset;
-            int revisedStartIndex = startIndex;
-            int revisedStartPosition = startOffset;
+            long positionRemaining = offsetFromStart;
+            int revisedStartIndex = indexInitialSegment;
+            int revisedStartPosition = offsetInInitialSegment;
             int numChunks = NumMemoryChunks; 
             int revisedLength = 0;
             while (positionRemaining > 0)
             {
-                MemoryBlockLoadingInfo current = MemoryBlocksLoadingInfo[revisedStartIndex];
-                int remainingBytesThisMemory = current.PreTruncationLength - revisedStartPosition;
+                int segmentLength = GetLengthOfSegment(revisedStartIndex);
+                int remainingBytesThisMemory = segmentLength - revisedStartPosition;
                 if (remainingBytesThisMemory <= positionRemaining)
                 {
                     positionRemaining -= remainingBytesThisMemory;
@@ -209,51 +217,48 @@ namespace Lazinator.Buffers
                 else
                 {
                     revisedStartPosition += (int)positionRemaining;
-                    revisedLength = current.PreTruncationLength - revisedStartPosition;
+                    revisedLength = segmentLength - revisedStartPosition;
                     positionRemaining = 0;
                 }
             }
             return new MemorySegmentIndexAndSlice(revisedStartIndex, revisedStartPosition, revisedLength);
         }
 
-        debug; // add length to next. Then use above to get starting position, and call below.
-
-        public virtual IEnumerable<MemorySegmentIndexAndSlice> EnumerateMemoryBlockIndexAndSlice(int startIndex, int offset)
+        public virtual IEnumerable<MemorySegmentIndexAndSlice> EnumerateMemorySegmentIndexAndSlices(int indexInitialSegment, int offsetInInitialSegment, long length)
         {
-            int index = 0;
-            long bytesRemaining = Length;
-            int i = 0;
-            foreach (var memoryChunk in EnumerateMemoryChunks())
+            long bytesRemaining = length;
+            int numSegments = NumMemorySegments;
+            for (int index = 0; index < numSegments; index++)
             {
-                if (index == startIndex)
-                {
-                    int lengthToInclude = (int)Math.Min(memoryChunk.Length - offset, bytesRemaining);
+                int segmentLength = GetLengthOfSegment(index);
+                if (index == indexInitialSegment)
+                { // return memory block starting at offset
+                    int lengthToInclude = (int)Math.Min(segmentLength - offsetInInitialSegment, bytesRemaining);
                     bytesRemaining -= lengthToInclude;
-                    yield return new MemorySegmentIndexAndSlice(i, offset, lengthToInclude);
+                    yield return new MemorySegmentIndexAndSlice(index, offsetInInitialSegment, lengthToInclude);
                 }
-                else if (index > startIndex && bytesRemaining > 0)
-                {
-                    int lengthToInclude = (int)Math.Min(memoryChunk.Length, bytesRemaining);
+                else if (index > indexInitialSegment && bytesRemaining > 0)
+                { // return memory block until end or until bytes remaining are exhausted
+                    int lengthToInclude = (int)Math.Min(segmentLength, bytesRemaining);
                     bytesRemaining -= lengthToInclude;
-                    yield return new MemorySegmentIndexAndSlice(i, 0, lengthToInclude);
+                    yield return new MemorySegmentIndexAndSlice(index, 0, lengthToInclude);
                 }
                 if (bytesRemaining == 0)
                     yield break;
-                i++;
             }
         }
 
-        public virtual IEnumerable<MemoryBlockIDAndSlice> EnumerateMemoryBlockIDAndSlice(int startIndex, int offset)
+        public IEnumerable<MemoryBlockIDAndSlice> EnumerateMemoryBlockIDAndSlices(int indexInitialSegment, int offsetInInitialSegment, long length)
         {
-            foreach (MemorySegmentIndexAndSlice indexAndSlice in EnumerateMemoryBlockIndexAndSlice(startIndex, offset))
+            foreach (MemorySegmentIndexAndSlice indexAndSlice in EnumerateMemorySegmentIndexAndSlices(indexInitialSegment, offsetInInitialSegment, length))
             {
                 yield return new MemoryBlockIDAndSlice(MemoryChunks[indexAndSlice.MemorySegmentIndex].MemoryBlockID, indexAndSlice.Offset, indexAndSlice.Length);
             }
         }
 
-        public virtual IEnumerable<MemorySegment> EnumerateMemorySegment(int startIndex, int offset)
+        public IEnumerable<MemorySegment> EnumerateMemorySegments(int indexInitialSegment, int offsetInInitialSegment, long length)
         {
-            foreach (MemorySegmentIndexAndSlice indexAndSlice in EnumerateMemoryBlockIndexAndSlice(startIndex, offset))
+            foreach (MemorySegmentIndexAndSlice indexAndSlice in EnumerateMemorySegmentIndexAndSlices(indexInitialSegment, offsetInInitialSegment, length))
             {
                 yield return new MemorySegment(MemoryChunks[indexAndSlice.MemorySegmentIndex], new MemoryBlockSlice(indexAndSlice.Offset, indexAndSlice.Length));
             }

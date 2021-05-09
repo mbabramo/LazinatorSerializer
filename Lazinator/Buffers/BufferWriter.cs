@@ -37,7 +37,7 @@ namespace Lazinator.Buffers
         /// </summary>
         public MemorySegmentCollection MemorySegmentCollection { get; set; }
 
-        private bool Patching => MemorySegmentCollection?.Recycling ?? false;
+        private bool Patching => MemorySegmentCollection?.Patching ?? false;
 
         internal int NumActiveMemoryBytesAddedToRecycling => MemorySegmentCollection?.NumActiveMemoryBytesAddedToRecycling ?? 0;
 
@@ -90,7 +90,8 @@ namespace Lazinator.Buffers
                 {
                     if (ActiveMemoryPosition == 0)
                         return MemorySegmentCollection.ToLazinatorMemory();
-                    var withAppended = MemorySegmentCollection.WithAppendedMemoryChunk(new MemoryChunk(ActiveMemory.ReadOnlyBytes, new MemoryBlockLoadingInfo(MemorySegmentCollection.GetNextMemoryBlockID(), ActiveMemoryPosition), false));
+                    var withAppended = MemorySegmentCollection.DeepCopy();
+                    withAppended.AppendMemoryChunk(new MemoryChunk(ActiveMemory.ReadOnlyBytes, new MemoryBlockLoadingInfo(MemorySegmentCollection.GetNextMemoryBlockID(), ActiveMemoryPosition), false));
                     return withAppended.ToLazinatorMemory();
                 }
                 return new LazinatorMemory(new MemoryChunk(ActiveMemory.ReadOnlyBytes), 0, ActiveMemoryPosition);
@@ -163,7 +164,7 @@ namespace Lazinator.Buffers
             {
                 if (MemorySegmentCollection is null)
                     return (0, ActiveMemoryPosition);
-                int completedMemoryChunks = MemorySegmentCollection.NumMemoryChunks;
+                int completedMemoryChunks = MemorySegmentCollection.NumMemorySegments;
                 return (completedMemoryChunks, ActiveMemoryPosition);
             }
         }
@@ -477,9 +478,9 @@ namespace Lazinator.Buffers
         {
             get
             {
-                if (MemorySegmentCollection == null || LengthsPosition.index == (MemorySegmentCollection?.NumMemoryChunks ?? 0))
+                if (MemorySegmentCollection == null || LengthsPosition.index == (MemorySegmentCollection?.NumMemorySegments ?? 0))
                     return ActiveSpan.Slice(LengthsPosition.offset);
-                return MemorySegmentCollection.MemoryAtIndex(LengthsPosition.index).ReadWriteMemory.Slice(LengthsPosition.offset).Span; // DEBUG -- here we are indeed referring to the memory block index -- also maybe we can eliminate that 
+                return MemorySegmentCollection.MemoryAtIndex(LengthsPosition.index).Memory.Slice(LengthsPosition.offset).Span;
             }
         }
 

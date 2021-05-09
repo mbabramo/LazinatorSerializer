@@ -139,11 +139,11 @@ namespace LazinatorTests.Tests
                 referencedBytes = referencedBytes.Skip(startingPositionWithinLazinatorMemorySubrange).Take(numBytesWithinLazinatorMemorySubrange).ToList();
                 // Debug.WriteLine($"startingPositionWithinLazinatorMemorySubrange {startingPositionWithinLazinatorMemorySubrange } numBytesWithinLazinatorMemorySubrange {numBytesWithinLazinatorMemorySubrange}");
 
-                List<MemorySegmentIndexAndSlice> memoryChunkIndices = cobbledMemory.EnumeratePortionOfMemoryBlockIndexAndSlices(startingPositionWithinLazinatorMemorySubrange, numBytesWithinLazinatorMemorySubrange).ToList();
-                memoryChunkIndices.Sum(x => x.Length).Should().Equals(numBytesWithinLazinatorMemorySubrange);
+                List<MemorySegmentIndexAndSlice> memorySegmentIndexAndSlices = cobbledMemory.Slice((long) startingPositionWithinLazinatorMemorySubrange, (long) numBytesWithinLazinatorMemorySubrange).EnumerateMemorySegmentIndexAndSlices().ToList();
+                memorySegmentIndexAndSlices.Sum(x => x.Length).Should().Equals(numBytesWithinLazinatorMemorySubrange);
                 List<byte> bytesFound = new List<byte>();
-                foreach (var memoryChunkReference in memoryChunkIndices)
-                    bytesFound.AddRange(GetMemoryAtBlockAndOffset(cobbledMemory, memoryChunkReference).ToArray());
+                foreach (var memorySegmentIndexAndSlice in memorySegmentIndexAndSlices)
+                    bytesFound.AddRange(GetMemoryAtBlockAndOffset(cobbledMemory, memorySegmentIndexAndSlice).ToArray());
                 bytesFound.SequenceEqual(referencedBytes).Should().BeTrue();
             }
         }
@@ -177,8 +177,7 @@ namespace LazinatorTests.Tests
         /// <returns></returns>
         private ReadOnlyMemory<byte> GetMemoryAtBlockAndOffset(LazinatorMemory lazinatorMemory, MemorySegmentIndexAndSlice memoryBlockInfo)
         {
-            var memoryChunk = lazinatorMemory.MemoryAtIndex(memoryBlockInfo.MemorySegmentIndex);
-            memoryChunk.LoadMemory();
+            var memoryChunk = lazinatorMemory.MemorySegmentAtIndex(memoryBlockInfo.MemorySegmentIndex);
             var underlyingReadOnlyMemory = memoryChunk.ReadOnlyMemory.Slice(memoryBlockInfo.Offset, memoryBlockInfo.Length);
             return underlyingReadOnlyMemory;
         }
