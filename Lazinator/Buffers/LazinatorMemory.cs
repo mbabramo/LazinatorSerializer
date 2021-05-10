@@ -248,7 +248,8 @@ namespace Lazinator.Buffers
                     return EmptyReadOnlyMemory;
                 LoadInitialReadOnlyMemory();
                 ReadOnlyMemory<byte> memory = SingleMemoryChunk?.ReadOnlyMemory ?? MemorySegmentAtIndex(StartIndex).ReadOnlyMemory;
-                return memory.Slice(Offset, memory.Length - Offset);
+                int length = (int)Math.Min(memory.Length - Offset, Length);
+                return memory.Slice(Offset, length);
             }
         }
 
