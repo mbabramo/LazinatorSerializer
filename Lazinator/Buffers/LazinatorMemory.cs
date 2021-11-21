@@ -29,7 +29,7 @@ namespace Lazinator.Buffers
         /// </summary>
         public readonly MemoryChunkCollection MultipleMemoryChunks;
         /// <summary>
-        /// The starting index from the set consisting of InitialOwnedMemory and MoreOwnedMemory for the referenced range.
+        /// The starting index from SingleMemoryChunk or MultipleMemoryChunks for the referenced range.
         /// </summary>
         public readonly int StartIndex;
         /// <summary>
@@ -166,9 +166,9 @@ namespace Lazinator.Buffers
 
         private MemorySegment SingleMemorySegment => new MemorySegment(SingleMemoryChunk, new MemoryBlockSlice(0, SingleMemoryChunk.Length));
 
-        public MemorySegment MemorySegmentAtIndex(int i) => MultipleMemoryChunks == null && i == 0 ? SingleMemorySegment : MultipleMemoryChunks.MemoryAtIndex(i);
+        public MemorySegment MemorySegmentAtIndex(int i) => MultipleMemoryChunks == null && i == 0 ? SingleMemorySegment : MultipleMemoryChunks.MemorySegmentAtIndex(i);
 
-        public async ValueTask<MemorySegment> MemorySegmentAtIndexAsync(int i) => MultipleMemoryChunks == null && i == 0 ? SingleMemorySegment : await MultipleMemoryChunks.MemoryAtIndexAsync(i);
+        public async ValueTask<MemorySegment> MemorySegmentAtIndexAsync(int i) => MultipleMemoryChunks == null && i == 0 ? SingleMemorySegment : await MultipleMemoryChunks.MemorySegmentAtIndexAsync(i);
 
         /// <summary>
         /// Slices the first referenced memory chunk only, producing a new LazinatorMemory.
@@ -418,7 +418,7 @@ namespace Lazinator.Buffers
                     yield return idAndSlice;
         }
 
-        public IEnumerable<MemorySegment> EnuemrateMemorySegments()
+        public IEnumerable<MemorySegment> EnumerateMemorySegments()
         {
             if (SingleMemoryChunk != null)
             {

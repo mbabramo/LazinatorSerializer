@@ -88,9 +88,9 @@ namespace Lazinator.Buffers
 
         #endregion
 
-        #region MemoryChunk access
+        #region MemorySegment access
 
-        public virtual MemorySegment MemoryAtIndex(int i)
+        public virtual MemorySegment MemorySegmentAtIndex(int i)
         {
             if (MemoryChunks == null)
                 MemoryChunks = MemoryBlocksLoadingInfo.Select(x => (MemoryChunk)null).ToList();
@@ -100,7 +100,7 @@ namespace Lazinator.Buffers
             return new MemorySegment(chunk, new MemoryBlockSlice(0, chunk.Length));
         }
 
-        public async virtual ValueTask<MemorySegment> MemoryAtIndexAsync(int i)
+        public async virtual ValueTask<MemorySegment> MemorySegmentAtIndexAsync(int i)
         {
             if (MemoryChunks == null)
                 MemoryChunks = MemoryBlocksLoadingInfo.Select(x => (MemoryChunk)null).ToList();
@@ -115,7 +115,7 @@ namespace Lazinator.Buffers
             if (MemoryChunks is not null)
                 for (int i = 0; i < MemoryChunks.Count; i++)
                 {
-                    yield return MemoryAtIndex(i);
+                    yield return MemorySegmentAtIndex(i);
                 }
         }
 

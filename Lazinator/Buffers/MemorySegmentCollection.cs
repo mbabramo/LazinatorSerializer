@@ -39,10 +39,9 @@ namespace Lazinator.Buffers
         internal long PatchesTotalLength { get; set; }
 
         /// <summary>
-        /// When serializing diffs, when a section of ActiveMemory is added to RecycledMemoryChunkReferences, this will equal the index
-        /// of the last byte added plus 1. 
+        /// The number of bytes of active memory that have already been referenced by MemorySegments.
         /// </summary>
-        internal int NumActiveMemoryBytesAddedToRecycling;
+        internal int NumActiveMemoryBytesReferenced;
 
         /// <summary>
         /// Extends a memory chunk references list by adding a new reference. If the new reference is contiguous to the last existing reference,
@@ -113,11 +112,11 @@ namespace Lazinator.Buffers
         /// </summary>
         internal void RecordLastActiveMemoryChunkReference(int activeMemoryPosition)
         {
-            if (activeMemoryPosition > NumActiveMemoryBytesAddedToRecycling)
+            if (activeMemoryPosition > NumActiveMemoryBytesReferenced)
             {
                 int activeMemoryBlockID = GetNextMemoryBlockID();
-                ExtendSegments(new MemoryBlockIDAndSlice(activeMemoryBlockID, NumActiveMemoryBytesAddedToRecycling, activeMemoryPosition - NumActiveMemoryBytesAddedToRecycling), true);
-                NumActiveMemoryBytesAddedToRecycling = activeMemoryPosition;
+                ExtendSegments(new MemoryBlockIDAndSlice(activeMemoryBlockID, NumActiveMemoryBytesReferenced, activeMemoryPosition - NumActiveMemoryBytesReferenced), true);
+                NumActiveMemoryBytesReferenced = activeMemoryPosition;
             }
         }
 
@@ -141,7 +140,7 @@ namespace Lazinator.Buffers
 
         protected override int GetLengthOfSegment(int segmentIndex) => Segments[segmentIndex].Length; 
         
-        public override MemorySegment MemoryAtIndex(int i)
+        public override MemorySegment MemorySegmentAtIndex(int i)
         {
             var segment = Segments[i];
             var block = MemoryChunks[GetIndexFromMemoryBlockID(segment.MemoryBlockID)];
@@ -149,7 +148,7 @@ namespace Lazinator.Buffers
             return new MemorySegment(block, new MemoryBlockSlice(0, block.Length));
         }
 
-        public async override ValueTask<MemorySegment> MemoryAtIndexAsync(int i)
+        public async override ValueTask<MemorySegment> MemorySegmentAtIndexAsync(int i)
         {
             var segment = Segments[i];
             var block = MemoryChunks[GetIndexFromMemoryBlockID(segment.MemoryBlockID)];
@@ -160,7 +159,7 @@ namespace Lazinator.Buffers
         public override IEnumerable<MemorySegment> EnumerateMemorySegments()
         {
             for (int i = 0; i < NumMemorySegments; i++)
-                yield return MemoryAtIndex(i);
+                yield return MemorySegmentAtIndex(i);
         }
     }
 }

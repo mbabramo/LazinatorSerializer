@@ -39,7 +39,7 @@ namespace Lazinator.Buffers
 
         private bool Patching => MemorySegmentCollection?.Patching ?? false;
 
-        internal int NumActiveMemoryBytesAddedToRecycling => MemorySegmentCollection?.NumActiveMemoryBytesAddedToRecycling ?? 0;
+        internal int NumActiveMemoryBytesReferenced => MemorySegmentCollection?.NumActiveMemoryBytesReferenced ?? 0;
 
         #region Construction and initialization
 
@@ -153,7 +153,7 @@ namespace Lazinator.Buffers
                 }
                 else
                 {
-                    return ActiveMemoryPosition - MemorySegmentCollection.NumActiveMemoryBytesAddedToRecycling + MemorySegmentCollection.PatchesTotalLength;
+                    return ActiveMemoryPosition - MemorySegmentCollection.NumActiveMemoryBytesReferenced + MemorySegmentCollection.PatchesTotalLength;
                 }
             }
         }
@@ -226,7 +226,7 @@ namespace Lazinator.Buffers
 
         public void ConsiderSwitchToNextBuffer(ref LazinatorSerializationOptions options)
         {
-            if (ActiveMemoryPosition - NumActiveMemoryBytesAddedToRecycling >= options.NextBufferThreshold)
+            if (ActiveMemoryPosition - NumActiveMemoryBytesReferenced >= options.NextBufferThreshold)
             {
                 if (options.SerializeDiffs)
                     RecordLastActiveMemoryChunkReferenceIfAny();
@@ -240,7 +240,7 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// Extends the bytes segment list to include the portion of active memory that is not included in active memory. 
+        /// Extends the bytes segment list to include the portion of active memory that has not yet been referred to. 
         /// </summary>
         internal void RecordLastActiveMemoryChunkReferenceIfAny()
         {
@@ -262,7 +262,7 @@ namespace Lazinator.Buffers
                     MemorySegmentCollection.AppendMemoryChunk(chunk);
                 ActiveMemory = new ExpandableBytes(minSizeofNewBuffer);
                 ActiveMemoryPosition = 0;
-                MemorySegmentCollection.NumActiveMemoryBytesAddedToRecycling = 0;
+                MemorySegmentCollection.NumActiveMemoryBytesReferenced = 0;
             }
         }
 
@@ -272,7 +272,7 @@ namespace Lazinator.Buffers
                 throw new Exception("No LazinatorMemory to patch");
             MemorySegmentCollection.RecordLastActiveMemoryChunkReference(ActiveMemoryPosition);
             int activeMemoryBlockID = MemorySegmentCollection.GetNextMemoryBlockID();
-            int activeLength = NumActiveMemoryBytesAddedToRecycling;
+            int activeLength = NumActiveMemoryBytesReferenced;
             if (activeLength > 0)
             {
                 MoveActiveToCompletedMemory();
@@ -480,7 +480,7 @@ namespace Lazinator.Buffers
             {
                 if (MemorySegmentCollection == null || LengthsPosition.index == (MemorySegmentCollection?.NumMemorySegments ?? 0))
                     return ActiveSpan.Slice(LengthsPosition.offset);
-                return MemorySegmentCollection.MemoryAtIndex(LengthsPosition.index).Memory.Slice(LengthsPosition.offset).Span;
+                return MemorySegmentCollection.MemorySegmentAtIndex(LengthsPosition.index).Memory.Slice(LengthsPosition.offset).Span;
             }
         }
 
@@ -498,8 +498,8 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// Resets the lengths position to the previous position. This is called at the beginning of an object,
-        /// so that a child object has a different span for lengths from the parent.
+        /// Resets the lengths position to the previous position. This is called after writing the child properties,
+        /// since that would result in changing the LengthsPosition to the appropriate value for the child.
         /// </summary>
         /// <param name="previousPosition"></param>
         public void ResetLengthsPosition((int index, int offset) indexedPosition)
