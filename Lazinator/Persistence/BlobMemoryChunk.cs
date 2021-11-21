@@ -5,6 +5,7 @@ using Lazinator.Buffers;
 
 namespace Lazinator.Persistence
 {
+    // DEBUG -- are we using this?
     /// <summary>
     /// Saves or loads memory references referring either to parts of a single file or to consecutively numbered files. The initial file contains information on all the other components, so that these can be asynchronously loaded if necessary.
     /// </summary>

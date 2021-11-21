@@ -45,7 +45,7 @@ namespace Lazinator.Persistence
             InitializeMemoryChunkStatusFromPrevious();
             if (additionalFork is int forkToAdd)
             {
-                ForkInformation = previousPersistentIndex.ForkInformation?.ToList() ?? new List<(int lastMemoryChunkBeforeFork, int forkNumber)>();
+                ForkInformation = previousPersistentIndex.ForkInformation?.ToList() ?? new List<(int lastMemoryBlockIDBeforeFork, int forkNumber)>();
                 ForkInformation.Add((PreviousPersistentIndex.GetLastMemoryBlockID(), forkToAdd));
             }
         }
@@ -84,11 +84,11 @@ namespace Lazinator.Persistence
             if (ForkInformation == null)
                 yield break;
             foreach (var fi in ForkInformation)
-                if (fi.lastMemoryChunkBeforeFork < memoryBlockID)
+                if (fi.lastMemoryBlockIDBeforeFork < memoryBlockID)
                     yield return fi.forkNumber;
         }
 
-        private bool MemoryChunkIsOnSameFork(int memoryBlockID)
+        private bool MemoryBlockIsOnSameFork(int memoryBlockID)
         {
             return GetForkNumbers().SequenceEqual(GetForkNumbersPrecedingMemoryBlockID(memoryBlockID));
         }
@@ -174,7 +174,7 @@ namespace Lazinator.Persistence
                 PersistentIndexMemoryChunkStatus status = GetMemoryChunkStatus(memoryBlockID);
                 if (status == statusToDelete)
                 {
-                    if (includeChunksFromEarlierForks || MemoryChunkIsOnSameFork(memoryBlockID))
+                    if (includeChunksFromEarlierForks || MemoryBlockIsOnSameFork(memoryBlockID))
                     {
                         string fullPath = GetPathForMemoryChunk(memoryBlockID);
                         yield return fullPath;

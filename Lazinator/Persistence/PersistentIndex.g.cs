@@ -57,8 +57,8 @@ namespace Lazinator.Persistence
         }
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected List<(Int32 lastMemoryChunkBeforeFork, Int32 forkNumber)> _ForkInformation;
-        public List<(Int32 lastMemoryChunkBeforeFork, Int32 forkNumber)> ForkInformation
+        protected List<(Int32 lastMemoryBlockIDBeforeFork, Int32 forkNumber)> _ForkInformation;
+        public List<(Int32 lastMemoryBlockIDBeforeFork, Int32 forkNumber)> ForkInformation
         {
             [DebuggerStepThrough]
             get
@@ -85,11 +85,11 @@ namespace Lazinator.Persistence
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
-                _ForkInformation = default(List<(Int32 lastMemoryChunkBeforeFork, Int32 forkNumber)>);
+                _ForkInformation = default(List<(Int32 lastMemoryBlockIDBeforeFork, Int32 forkNumber)>);
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ForkInformation_ByteIndex, _ForkInformation_ByteLength, null);_ForkInformation = ConvertFromBytes_List_G_Pint_C32lastMemoryChunkBeforeFork_c_C32int_C32forkNumber_p_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ForkInformation_ByteIndex, _ForkInformation_ByteLength, null);_ForkInformation = ConvertFromBytes_List_G_Pint_C32lastMemoryBlockIDBeforeFork_c_C32int_C32forkNumber_p_g(childData);
             }
             _ForkInformation_Accessed = true;
         }
@@ -165,7 +165,7 @@ namespace Lazinator.Persistence
             base.AssignCloneProperties(clone, includeChildrenMode);
             PersistentIndex typedClone = (PersistentIndex) clone;
             typedClone.IndexVersion = IndexVersion;
-            typedClone.ForkInformation = CloneOrChange_List_G_Pint_C32lastMemoryChunkBeforeFork_c_C32int_C32forkNumber_p_g(ForkInformation, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.ForkInformation = CloneOrChange_List_G_Pint_C32lastMemoryBlockIDBeforeFork_c_C32int_C32forkNumber_p_g(ForkInformation, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             typedClone.MemoryChunkStatus = CloneOrChange_Memory_Gbyte_g(MemoryChunkStatus, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
@@ -200,7 +200,7 @@ namespace Lazinator.Persistence
             base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, false);
             if ((!exploreOnlyDeserializedChildren && ForkInformation != null) || (_ForkInformation_Accessed && _ForkInformation != null))
             {
-                _ForkInformation = (List<(Int32 lastMemoryChunkBeforeFork, Int32 forkNumber)>) CloneOrChange_List_G_Pint_C32lastMemoryChunkBeforeFork_c_C32int_C32forkNumber_p_g(_ForkInformation, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
+                _ForkInformation = (List<(Int32 lastMemoryBlockIDBeforeFork, Int32 forkNumber)>) CloneOrChange_List_G_Pint_C32lastMemoryBlockIDBeforeFork_c_C32int_C32forkNumber_p_g(_ForkInformation, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             if (!exploreOnlyDeserializedChildren)
             {
@@ -302,7 +302,7 @@ namespace Lazinator.Persistence
             base.UpdateDeserializedChildren(ref writer, startPosition);
             if (_ForkInformation_Accessed && _ForkInformation != null)
             {
-                _ForkInformation = (List<(Int32 lastMemoryChunkBeforeFork, Int32 forkNumber)>) CloneOrChange_List_G_Pint_C32lastMemoryChunkBeforeFork_c_C32int_C32forkNumber_p_g(_ForkInformation, l => l.RemoveBufferInHierarchy(), true);
+                _ForkInformation = (List<(Int32 lastMemoryBlockIDBeforeFork, Int32 forkNumber)>) CloneOrChange_List_G_Pint_C32lastMemoryBlockIDBeforeFork_c_C32int_C32forkNumber_p_g(_ForkInformation, l => l.RemoveBufferInHierarchy(), true);
             }
             
         }
@@ -360,7 +360,7 @@ namespace Lazinator.Persistence
             getChildSliceForFieldFn: () => GetChildSlice(LazinatorMemoryStorage, _ForkInformation_ByteIndex, _ForkInformation_ByteLength, null),
             verifyCleanness: false,
             binaryWriterAction: (ref BufferWriter w, bool v) =>
-            ConvertToBytes_List_G_Pint_C32lastMemoryChunkBeforeFork_c_C32int_C32forkNumber_p_g(ref w, _ForkInformation,
+            ConvertToBytes_List_G_Pint_C32lastMemoryBlockIDBeforeFork_c_C32int_C32forkNumber_p_g(ref w, _ForkInformation,
             options));
             if (options.UpdateStoredBuffer)
             {
@@ -393,22 +393,22 @@ namespace Lazinator.Persistence
         }
         /* Conversion of supported collections and tuples */
         
-        private static List<(Int32 lastMemoryChunkBeforeFork, Int32 forkNumber)> ConvertFromBytes_List_G_Pint_C32lastMemoryChunkBeforeFork_c_C32int_C32forkNumber_p_g(LazinatorMemory storage)
+        private static List<(Int32 lastMemoryBlockIDBeforeFork, Int32 forkNumber)> ConvertFromBytes_List_G_Pint_C32lastMemoryBlockIDBeforeFork_c_C32int_C32forkNumber_p_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
-                return default(List<(Int32 lastMemoryChunkBeforeFork, Int32 forkNumber)>);
+                return default(List<(Int32 lastMemoryBlockIDBeforeFork, Int32 forkNumber)>);
             }
             ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
-            List<(Int32 lastMemoryChunkBeforeFork, Int32 forkNumber)> collection = new List<(Int32 lastMemoryChunkBeforeFork, Int32 forkNumber)>(collectionLength);
+            List<(Int32 lastMemoryBlockIDBeforeFork, Int32 forkNumber)> collection = new List<(Int32 lastMemoryBlockIDBeforeFork, Int32 forkNumber)>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
                 LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember);
-                var item = ConvertFromBytes__Pint_C32lastMemoryChunkBeforeFork_c_C32int_C32forkNumber_p(childData);
+                var item = ConvertFromBytes__Pint_C32lastMemoryBlockIDBeforeFork_c_C32int_C32forkNumber_p(childData);
                 collection.Add(item);
                 bytesSoFar += lengthCollectionMember;
             }
@@ -416,9 +416,9 @@ namespace Lazinator.Persistence
             return collection;
         }
         
-        private static void ConvertToBytes_List_G_Pint_C32lastMemoryChunkBeforeFork_c_C32int_C32forkNumber_p_g(ref BufferWriter writer, List<(Int32 lastMemoryChunkBeforeFork, Int32 forkNumber)> itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_List_G_Pint_C32lastMemoryBlockIDBeforeFork_c_C32int_C32forkNumber_p_g(ref BufferWriter writer, List<(Int32 lastMemoryBlockIDBeforeFork, Int32 forkNumber)> itemToConvert, LazinatorSerializationOptions options)
         {
-            if (itemToConvert == default(List<(Int32 lastMemoryChunkBeforeFork, Int32 forkNumber)>))
+            if (itemToConvert == default(List<(Int32 lastMemoryBlockIDBeforeFork, Int32 forkNumber)>))
             {
                 return;
             }
@@ -426,29 +426,29 @@ namespace Lazinator.Persistence
             int itemToConvertCount = itemToConvert.Count;
             for (int itemIndex = 0; itemIndex < itemToConvertCount; itemIndex++)
             {
-                void action(ref BufferWriter w) => ConvertToBytes__Pint_C32lastMemoryChunkBeforeFork_c_C32int_C32forkNumber_p(ref w, itemToConvert[itemIndex], options);
+                void action(ref BufferWriter w) => ConvertToBytes__Pint_C32lastMemoryBlockIDBeforeFork_c_C32int_C32forkNumber_p(ref w, itemToConvert[itemIndex], options);
                 WriteToBinaryWithInt32LengthPrefix(ref writer, action);
             }
         }
         
-        private static List<(Int32 lastMemoryChunkBeforeFork, Int32 forkNumber)> CloneOrChange_List_G_Pint_C32lastMemoryChunkBeforeFork_c_C32int_C32forkNumber_p_g(List<(Int32 lastMemoryChunkBeforeFork, Int32 forkNumber)> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static List<(Int32 lastMemoryBlockIDBeforeFork, Int32 forkNumber)> CloneOrChange_List_G_Pint_C32lastMemoryBlockIDBeforeFork_c_C32int_C32forkNumber_p_g(List<(Int32 lastMemoryBlockIDBeforeFork, Int32 forkNumber)> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
                 return default;
             }
             int collectionLength = itemToClone.Count;
-            List<(Int32 lastMemoryChunkBeforeFork, Int32 forkNumber)> collection = new List<(Int32 lastMemoryChunkBeforeFork, Int32 forkNumber)>(collectionLength);
+            List<(Int32 lastMemoryBlockIDBeforeFork, Int32 forkNumber)> collection = new List<(Int32 lastMemoryBlockIDBeforeFork, Int32 forkNumber)>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var itemCopied = ((Int32 lastMemoryChunkBeforeFork, Int32 forkNumber)) CloneOrChange__Pint_C32lastMemoryChunkBeforeFork_c_C32int_C32forkNumber_p(itemToClone[itemIndex], cloneOrChangeFunc, avoidCloningIfPossible);
+                var itemCopied = ((Int32 lastMemoryBlockIDBeforeFork, Int32 forkNumber)) CloneOrChange__Pint_C32lastMemoryBlockIDBeforeFork_c_C32int_C32forkNumber_p(itemToClone[itemIndex], cloneOrChangeFunc, avoidCloningIfPossible);
                 collection.Add(itemCopied);
             }
             return collection;
         }
         
-        private static (Int32 lastMemoryChunkBeforeFork, Int32 forkNumber) ConvertFromBytes__Pint_C32lastMemoryChunkBeforeFork_c_C32int_C32forkNumber_p(LazinatorMemory storage)
+        private static (Int32 lastMemoryBlockIDBeforeFork, Int32 forkNumber) ConvertFromBytes__Pint_C32lastMemoryBlockIDBeforeFork_c_C32int_C32forkNumber_p(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -467,7 +467,7 @@ namespace Lazinator.Persistence
             return itemToCreate;
         }
         
-        private static void ConvertToBytes__Pint_C32lastMemoryChunkBeforeFork_c_C32int_C32forkNumber_p(ref BufferWriter writer, (Int32 lastMemoryChunkBeforeFork, Int32 forkNumber) itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes__Pint_C32lastMemoryBlockIDBeforeFork_c_C32int_C32forkNumber_p(ref BufferWriter writer, (Int32 lastMemoryBlockIDBeforeFork, Int32 forkNumber) itemToConvert, LazinatorSerializationOptions options)
         {
             
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Item1);
@@ -475,7 +475,7 @@ namespace Lazinator.Persistence
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Item2);
         }
         
-        private static (Int32 lastMemoryChunkBeforeFork, Int32 forkNumber) CloneOrChange__Pint_C32lastMemoryChunkBeforeFork_c_C32int_C32forkNumber_p((Int32 lastMemoryChunkBeforeFork, Int32 forkNumber) itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static (Int32 lastMemoryBlockIDBeforeFork, Int32 forkNumber) CloneOrChange__Pint_C32lastMemoryBlockIDBeforeFork_c_C32int_C32forkNumber_p((Int32 lastMemoryBlockIDBeforeFork, Int32 forkNumber) itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             return ((int) (itemToConvert.Item1), (int) (itemToConvert.Item2));
         }

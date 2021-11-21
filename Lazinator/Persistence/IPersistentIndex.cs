@@ -10,7 +10,8 @@ namespace Lazinator.Persistence
     {
         [SetterAccessibility("private")]
         int IndexVersion { get; }
-        List<(int lastMemoryChunkBeforeFork, int forkNumber)> ForkInformation { get; set; }
+        List<(int lastMemoryBlockIDBeforeFork, int forkNumber)> ForkInformation { get; set; }
+        // DEBUG -- should this be MemoryBlockStatus?
         Memory<byte> MemoryChunkStatus { get; set; }
     }
 }
