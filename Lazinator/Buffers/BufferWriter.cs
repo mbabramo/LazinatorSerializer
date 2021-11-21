@@ -153,7 +153,7 @@ namespace Lazinator.Buffers
                 }
                 else
                 {
-                    return ActiveMemoryPosition - MemorySegmentCollection.NumActiveMemoryBytesAddedToRecycling + MemorySegmentCollection.RecycledTotalLength;
+                    return ActiveMemoryPosition - MemorySegmentCollection.NumActiveMemoryBytesAddedToRecycling + MemorySegmentCollection.PatchesTotalLength;
                 }
             }
         }

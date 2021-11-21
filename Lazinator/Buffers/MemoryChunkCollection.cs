@@ -36,6 +36,8 @@ namespace Lazinator.Buffers
             MaxMemoryBlockID = MemoryChunks.Any() ? MemoryChunks.Max(x => x.MemoryBlockID) : 0;
             Length = MemoryChunks.Sum(x => (long) x.Length);
             InitializeMemoryBlocksInformation();
+            if (MemoryChunks.Count != MemoryBlocksLoadingInfo.Count)
+                throw new Exception("DEBUG");
         }
 
         public LazinatorMemory ToLazinatorMemory()
@@ -108,7 +110,7 @@ namespace Lazinator.Buffers
             return new MemorySegment(chunk, new MemoryBlockSlice(0, chunk.Length));
         }
 
-        public virtual IEnumerable<MemorySegment> EnumerateMemoryChunks()
+        public virtual IEnumerable<MemorySegment> EnumerateMemorySegments()
         {
             if (MemoryChunks is not null)
                 for (int i = 0; i < MemoryChunks.Count; i++)
@@ -119,8 +121,8 @@ namespace Lazinator.Buffers
 
         public IEnumerator<MemorySegment> GetEnumerator()
         {
-            foreach (var memoryChunk in EnumerateMemoryChunks())
-                yield return memoryChunk;
+            foreach (var memorySegment in EnumerateMemorySegments())
+                yield return memorySegment;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -176,11 +178,8 @@ namespace Lazinator.Buffers
             {
                 MemoryChunk memoryChunk = MemoryChunks[i];
                 int chunkID = memoryChunk.MemoryBlockID;
-                if (!d.ContainsKey(chunkID))
-                {
-                    d[chunkID] = i;
-                    MemoryBlocksLoadingInfo.Add(memoryChunk.LoadingInfo);
-                }
+                d[chunkID] = i;
+                MemoryBlocksLoadingInfo.Add(memoryChunk.LoadingInfo);
             }
             MemoryChunksIndexFromID = d;
         }
