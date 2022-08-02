@@ -4,7 +4,7 @@ using System.Text;
 using Lazinator.Buffers;
 using Lazinator.Core;
 using Lazinator.Wrappers;
-using LazinatorCollections.Remote;
+using Lazinator.Collections.Remote;
 
 namespace LazinatorTests.Examples.RemoteHierarchy
 {

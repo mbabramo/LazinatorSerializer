@@ -1,7 +1,7 @@
 ﻿#nullable enable
 
 using Lazinator.Attributes;
-using LazinatorCollections;
+using Lazinator.Collections;
 using LazinatorTests.Examples.Structs;
 using System;
 using System.Collections.Generic;

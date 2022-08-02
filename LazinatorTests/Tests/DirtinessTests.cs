@@ -8,7 +8,7 @@ using Lazinator.Core;
 using Xunit;
 using LazinatorTests.Examples.Structs;
 using Lazinator.Wrappers;
-using LazinatorCollections.Tuples;
+using Lazinator.Collections.Tuples;
 using LazinatorTests.Examples.ExampleHierarchy;
 using System.Reflection;
 

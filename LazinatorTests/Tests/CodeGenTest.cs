@@ -8,11 +8,11 @@ using LazinatorTests.Examples;
 using LazinatorTests.Examples.Collections;
 using LazinatorTests.Examples.Tuples;
 using Xunit;
-using LazinatorCollections;
+using Lazinator.Collections;
 using Lazinator.Wrappers;
 using Microsoft.CodeAnalysis;
 using System.Threading.Tasks;
-using LazinatorCollections.Dictionary;
+using Lazinator.Collections.Dictionary;
 using LazinatorAnalyzer.Settings;
 using LazinatorCodeGen.Roslyn;
 using LazinatorTests.Examples.NonAbstractGenerics;
@@ -24,12 +24,12 @@ using LazinatorTests.Examples.Hierarchy;
 using LazinatorTests.Examples.NonLazinator;
 using LazinatorTests.Examples.Structs;
 using LazinatorTests.Examples.Subclasses;
-using LazinatorCollections.OffsetList;
-using LazinatorCollections.Tree;
-using LazinatorCollections.Tuples;
-using LazinatorCollections.BitArray;
-using LazinatorCollections.ByteSpan;
-using LazinatorCollections.Remote;
+using Lazinator.Collections.OffsetList;
+using Lazinator.Collections.Tree;
+using Lazinator.Collections.Tuples;
+using Lazinator.Collections.BitArray;
+using Lazinator.Collections.ByteSpan;
+using Lazinator.Collections.Remote;
 using LazinatorTests.Examples.RemoteHierarchy;
 using LazinatorTests.Examples.ExampleHierarchy;
 using System.Security.Cryptography.X509Certificates;
@@ -131,32 +131,32 @@ public class MyOtherClass
         public async Task CodeGenerationProducesActualCode_CoreCollections()
         {
             AdhocWorkspace ws = GetAdhocWorkspace();
-            await CompleteGenerateCode(typeof(LazinatorBitArray), project: "LazinatorCollections", mainFolder: "/BitArray/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorByteSpan), project: "LazinatorCollections", mainFolder: "/ByteSpan/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorFastReadList<>), project: "LazinatorCollections", mainFolder: "/OffsetList/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorFastReadListInt16), project: "LazinatorCollections", mainFolder: "/OffsetList/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorFastReadListInt32), project: "LazinatorCollections", mainFolder: "/OffsetList/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorOffsetList), project: "LazinatorCollections", mainFolder: "/OffsetList/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(Remote<,>), project: "LazinatorCollections", mainFolder: "/Remote/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorLinkedListNode<>), project: "LazinatorCollections", mainFolder: "", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorLinkedList<>), project: "LazinatorCollections", mainFolder: "", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorSortedLinkedList<>), project: "LazinatorCollections", mainFolder: "", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorList<>), project: "LazinatorCollections", mainFolder: "", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorSortedList<>), project: "LazinatorCollections", mainFolder: "", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorArray<>), project: "LazinatorCollections", mainFolder: "", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorQueue<>), project: "LazinatorCollections", mainFolder: "", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorStack<>), project: "LazinatorCollections", mainFolder: "", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorGeneralTree<>), project: "LazinatorCollections", mainFolder: "/Tree/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorBinaryTreeNode<>), project: "LazinatorCollections", mainFolder: "/Tree/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorBinaryTree<>), project: "LazinatorCollections", mainFolder: "/Tree/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorLocationAwareTree<>), project: "LazinatorCollections", mainFolder: "/Tree/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorLocationAwareTree<>), project: "LazinatorCollections", mainFolder: "/Tree/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(DictionaryBucket<,>), project: "LazinatorCollections", mainFolder: "/Dictionary/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorDictionary<,>), project: "LazinatorCollections", mainFolder: "/Dictionary/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorTuple<,>), project: "LazinatorCollections", mainFolder: "/Tuples/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorKeyValue<,>), project: "LazinatorCollections", mainFolder: "/Tuples/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorComparableKeyValue<,>), project: "LazinatorCollections", mainFolder: "/Tuples/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(LazinatorTriple<,,>), project: "LazinatorCollections", mainFolder: "/Tuples/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorBitArray), project: "Lazinator.Collections", mainFolder: "/BitArray/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorByteSpan), project: "Lazinator.Collections", mainFolder: "/ByteSpan/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorFastReadList<>), project: "Lazinator.Collections", mainFolder: "/OffsetList/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorFastReadListInt16), project: "Lazinator.Collections", mainFolder: "/OffsetList/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorFastReadListInt32), project: "Lazinator.Collections", mainFolder: "/OffsetList/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorOffsetList), project: "Lazinator.Collections", mainFolder: "/OffsetList/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(Remote<,>), project: "Lazinator.Collections", mainFolder: "/Remote/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorLinkedListNode<>), project: "Lazinator.Collections", mainFolder: "", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorLinkedList<>), project: "Lazinator.Collections", mainFolder: "", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorSortedLinkedList<>), project: "Lazinator.Collections", mainFolder: "", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorList<>), project: "Lazinator.Collections", mainFolder: "", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorSortedList<>), project: "Lazinator.Collections", mainFolder: "", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorArray<>), project: "Lazinator.Collections", mainFolder: "", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorQueue<>), project: "Lazinator.Collections", mainFolder: "", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorStack<>), project: "Lazinator.Collections", mainFolder: "", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorGeneralTree<>), project: "Lazinator.Collections", mainFolder: "/Tree/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorBinaryTreeNode<>), project: "Lazinator.Collections", mainFolder: "/Tree/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorBinaryTree<>), project: "Lazinator.Collections", mainFolder: "/Tree/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorLocationAwareTree<>), project: "Lazinator.Collections", mainFolder: "/Tree/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorLocationAwareTree<>), project: "Lazinator.Collections", mainFolder: "/Tree/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(DictionaryBucket<,>), project: "Lazinator.Collections", mainFolder: "/Dictionary/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorDictionary<,>), project: "Lazinator.Collections", mainFolder: "/Dictionary/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorTuple<,>), project: "Lazinator.Collections", mainFolder: "/Tuples/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorKeyValue<,>), project: "Lazinator.Collections", mainFolder: "/Tuples/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorComparableKeyValue<,>), project: "Lazinator.Collections", mainFolder: "/Tuples/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(LazinatorTriple<,,>), project: "Lazinator.Collections", mainFolder: "/Tuples/", subfolder: "", ws);
         }
 
 
@@ -354,12 +354,12 @@ public class MyOtherClass
             return new List<string>()
             {
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Attributes",
-                ReadCodeFile.GetCodeBasePath("LazinatorCollections"),
-                ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/ByteSpan",
-                ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/BitArray",
-                ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/Dictionary",
-                ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/Enumerators",
-                ReadCodeFile.GetCodeBasePath("LazinatorCollections") + "/OffsetList",
+                ReadCodeFile.GetCodeBasePath("Lazinator.Collections"),
+                ReadCodeFile.GetCodeBasePath("Lazinator.Collections") + "/ByteSpan",
+                ReadCodeFile.GetCodeBasePath("Lazinator.Collections") + "/BitArray",
+                ReadCodeFile.GetCodeBasePath("Lazinator.Collections") + "/Dictionary",
+                ReadCodeFile.GetCodeBasePath("Lazinator.Collections") + "/Enumerators",
+                ReadCodeFile.GetCodeBasePath("Lazinator.Collections") + "/OffsetList",
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Wrappers",
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Buffers",
                 ReadCodeFile.GetCodeBasePath("Lazinator") + "/Persistence",

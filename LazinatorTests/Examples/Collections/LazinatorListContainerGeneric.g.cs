@@ -13,10 +13,10 @@ namespace LazinatorTests.Examples.Collections
 {
     using Lazinator.Attributes;
     using Lazinator.Buffers;
+    using Lazinator.Collections;
     using Lazinator.Core;
     using Lazinator.Exceptions;
     using Lazinator.Support;
-    using LazinatorCollections;
     using static Lazinator.Buffers.WriteUncompressedPrimitives;
     using System;
     using System.Buffers;

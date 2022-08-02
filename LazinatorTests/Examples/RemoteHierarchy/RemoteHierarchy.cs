@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Lazinator.Wrappers;
-using LazinatorCollections.Remote;
+using Lazinator.Collections.Remote;
 
 namespace LazinatorTests.Examples.RemoteHierarchy
 {

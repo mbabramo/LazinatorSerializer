@@ -6,7 +6,7 @@ using Xunit;
 using Lazinator.Wrappers;
 using LazinatorTests.Examples.Abstract;
 using LazinatorTests.Examples.NonAbstractGenerics;
-using LazinatorCollections.Remote;
+using Lazinator.Collections.Remote;
 using LazinatorTests.Utilities;
 using LazinatorTests.Examples.RemoteHierarchy;
 using System.Threading.Tasks;

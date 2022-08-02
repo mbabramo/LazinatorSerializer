@@ -1,13 +1,13 @@
 using System;
 using System.Linq;
 using FluentAssertions;
-using LazinatorCollections;
+using Lazinator.Collections;
 using LazinatorTests.Examples;
 using Lazinator.Core;
 using Xunit;
 using Lazinator.Wrappers;
 using LazinatorTests.Examples.Structs;
-using LazinatorCollections.Tuples;
+using Lazinator.Collections.Tuples;
 
 namespace LazinatorTests.Tests
 {

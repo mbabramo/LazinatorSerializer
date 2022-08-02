@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2036
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{81F4BA7C-3E60-454B-87CF-A4032FE82939}"
 	ProjectSection(SolutionItems) = preProject
@@ -26,7 +26,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LazinatorAnalyzer", "Lazina
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LazinatorAnalyzer.Vsix", "LazinatorAnalyzer.Vsix\LazinatorAnalyzer.Vsix.csproj", "{461F19AC-4F96-4132-ABDE-D10A437E4031}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LazinatorCollections", "LazinatorCollections\LazinatorCollections.csproj", "{98223F72-4EE1-4E41-BDDE-3AEC975553FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lazinator.Collections", "Lazinator.Collections\Lazinator.Collections.csproj", "{98223F72-4EE1-4E41-BDDE-3AEC975553FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,7 +59,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45
 		SolutionGuid = {58D89D99-DE35-4C68-AE67-A62D4D9FEC7D}
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45
 	EndGlobalSection
 EndGlobal

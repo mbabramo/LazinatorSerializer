@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using LazinatorCollections;
+using Lazinator.Collections;
 using LazinatorTests.Examples;
 using Xunit;
 

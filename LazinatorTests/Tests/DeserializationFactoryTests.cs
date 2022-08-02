@@ -8,7 +8,7 @@ using Lazinator.Wrappers;
 using LazinatorTests.Examples.Abstract;
 using System.Linq;
 using Lazinator.Buffers;
-using LazinatorCollections.Tuples;
+using Lazinator.Collections.Tuples;
 
 namespace LazinatorTests.Tests
 {
@@ -42,7 +42,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void CanGetTypeFromGenericTypeIDs_MultipleTypeParameters()
         {
-            List<int> IDs = new List<int>() { (int)LazinatorCollections.LazinatorCollectionUniqueIDs.ILazinatorTriple, (int)ExampleUniqueIDs.GenericFromBase, (int)Lazinator.LazinatorCoreUniqueIDs.IWInt32, (int)Lazinator.LazinatorCoreUniqueIDs.IWInt64, (int)ExampleUniqueIDs.GenericFromBase, (int)ExampleUniqueIDs.GenericFromBase, (int)Lazinator.LazinatorCoreUniqueIDs.IWByte };
+            List<int> IDs = new List<int>() { (int)Lazinator.Collections.LazinatorCollectionUniqueIDs.ILazinatorTriple, (int)ExampleUniqueIDs.GenericFromBase, (int)Lazinator.LazinatorCoreUniqueIDs.IWInt32, (int)Lazinator.LazinatorCoreUniqueIDs.IWInt64, (int)ExampleUniqueIDs.GenericFromBase, (int)ExampleUniqueIDs.GenericFromBase, (int)Lazinator.LazinatorCoreUniqueIDs.IWByte };
             DeserializationFactory deserializationFactory = DeserializationFactory.Instance;
             (Type t, int numberIDsConsumed) = deserializationFactory.GetTypeBasedOnGenericIDType(new LazinatorGenericIDType(IDs));
             Type expectedType = typeof(LazinatorTriple<GenericFromBase<WInt32>, WInt64, GenericFromBase<GenericFromBase<WByte>>>);

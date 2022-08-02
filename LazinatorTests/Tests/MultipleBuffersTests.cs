@@ -10,16 +10,16 @@ using Lazinator.Wrappers;
 using LazinatorTests.Examples.Hierarchy;
 using LazinatorTests.Examples.Structs;
 using LazinatorTests.Examples.NonAbstractGenerics;
-using LazinatorCollections.Tuples;
+using Lazinator.Collections.Tuples;
 using Lazinator.Buffers;
 using LazinatorTests.Examples.ExampleHierarchy;
 using System.Threading.Tasks;
 using System.Diagnostics;
-using LazinatorCollections.Tree;
+using Lazinator.Collections.Tree;
 using LazinatorTests.Utilities;
 using System.Buffers;
 using Lazinator.Persistence;
-using LazinatorCollections;
+using Lazinator.Collections;
 
 namespace LazinatorTests.Tests
 {

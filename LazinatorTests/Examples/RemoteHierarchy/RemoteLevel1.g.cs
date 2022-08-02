@@ -13,11 +13,11 @@ namespace LazinatorTests.Examples.RemoteHierarchy
 {
     using Lazinator.Attributes;
     using Lazinator.Buffers;
+    using Lazinator.Collections.Remote;
     using Lazinator.Core;
     using Lazinator.Exceptions;
     using Lazinator.Support;
     using Lazinator.Wrappers;
-    using LazinatorCollections.Remote;
     using static Lazinator.Buffers.WriteUncompressedPrimitives;
     using System;
     using System.Buffers;

@@ -1,7 +1,7 @@
 ﻿using Lazinator.Core;
 using Lazinator.Attributes;
 using Lazinator.Wrappers;
-using LazinatorCollections.Remote;
+using Lazinator.Collections.Remote;
 
 namespace LazinatorTests.Examples.RemoteHierarchy
 {

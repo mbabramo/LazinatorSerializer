@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
-using LazinatorCollections;
+using Lazinator.Collections;
 using LazinatorTests.Examples;
 using LazinatorTests.Examples.Collections;
 using Lazinator.Core;
