@@ -130,7 +130,7 @@ namespace LazinatorTests.Tests
                     // Debug.WriteLine($"Overall referenced bytes {String.Join(",", referencedBytes)}");
                 }
                 int totalBytesReferredTo = memoryChunks.Sum(x => x.LoadingInfo.PreTruncationLength);
-                referencedBytes.Count().Should().Equals(totalBytesReferredTo);
+                referencedBytes.Count().Should().Be(totalBytesReferredTo);
                 LazinatorMemory cobbledMemory = new LazinatorMemory(memoryChunks.ToList(), 0, 0, totalBytesReferredTo);
 
                 // Now, we are going to index into this range, first just by using LINQ, and then by getting a bytes segment, which should give us a pointer into overallLazinatorMemory.
@@ -140,7 +140,7 @@ namespace LazinatorTests.Tests
                 // Debug.WriteLine($"startingPositionWithinLazinatorMemorySubrange {startingPositionWithinLazinatorMemorySubrange } numBytesWithinLazinatorMemorySubrange {numBytesWithinLazinatorMemorySubrange}");
 
                 List<MemorySegmentIndexAndSlice> memorySegmentIndexAndSlices = cobbledMemory.Slice((long) startingPositionWithinLazinatorMemorySubrange, (long) numBytesWithinLazinatorMemorySubrange).EnumerateMemorySegmentIndexAndSlices().ToList();
-                memorySegmentIndexAndSlices.Sum(x => x.Length).Should().Equals(numBytesWithinLazinatorMemorySubrange);
+                memorySegmentIndexAndSlices.Sum(x => x.Length).Should().Be(numBytesWithinLazinatorMemorySubrange);
                 List<byte> bytesFound = new List<byte>();
                 foreach (var memorySegmentIndexAndSlice in memorySegmentIndexAndSlices)
                     bytesFound.AddRange(GetMemoryAtBlockAndOffset(cobbledMemory, memorySegmentIndexAndSlice).ToArray());
