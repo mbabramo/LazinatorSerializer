@@ -51,6 +51,8 @@ namespace Lazinator.Buffers
         /// <param name="newSegment"></param>
         public void ExtendSegments(MemoryBlockIDAndSlice blockAndSlice, bool extendEarlierReferencesForSameChunk)
         {
+            if (!Patching)
+                throw new Exception("DEBUG");
             if (Segments.Any())
             {
                 if (extendEarlierReferencesForSameChunk)
@@ -133,15 +135,18 @@ namespace Lazinator.Buffers
         public override void AppendMemoryChunk(MemoryChunk memoryChunk)
         {
             base.AppendMemoryChunk(memoryChunk);
-            Segments.Add(new MemoryBlockIDAndSlice(memoryChunk.MemoryBlockID, 0, memoryChunk.Length));
+            if (Segments != null)
+                Segments.Add(new MemoryBlockIDAndSlice(memoryChunk.MemoryBlockID, 0, memoryChunk.Length));
         }
 
         public override int NumMemorySegments => Patching ? Segments.Count : base.NumMemorySegments;
 
-        protected override int GetLengthOfSegment(int segmentIndex) => Segments[segmentIndex].Length; 
+        protected override int GetLengthOfSegment(int segmentIndex) => Patching ? Segments[segmentIndex].Length : base.GetLengthOfSegment(segmentIndex); 
         
         public override MemorySegment MemorySegmentAtIndex(int i)
         {
+            if (Segments == null)
+                return base.MemorySegmentAtIndex(i);
             var segment = Segments[i];
             var block = MemoryChunks[GetIndexFromMemoryBlockID(segment.MemoryBlockID)];
             block.LoadMemory();
@@ -150,6 +155,8 @@ namespace Lazinator.Buffers
 
         public async override ValueTask<MemorySegment> MemorySegmentAtIndexAsync(int i)
         {
+            if (Segments == null)
+                return await base.MemorySegmentAtIndexAsync(i);
             var segment = Segments[i];
             var block = MemoryChunks[GetIndexFromMemoryBlockID(segment.MemoryBlockID)];
             await block.LoadMemoryAsync();
@@ -158,8 +165,16 @@ namespace Lazinator.Buffers
 
         public override IEnumerable<MemorySegment> EnumerateMemorySegments()
         {
-            for (int i = 0; i < NumMemorySegments; i++)
-                yield return MemorySegmentAtIndex(i);
+            if (Segments == null)
+            {
+                foreach (var segment in base.EnumerateMemorySegments())
+                    yield return segment;
+            }
+            else
+            {
+                for (int i = 0; i < NumMemorySegments; i++)
+                    yield return MemorySegmentAtIndex(i);
+            }
         }
     }
 }

@@ -270,15 +270,15 @@ namespace Lazinator.Buffers
         internal List<MemoryChunk> GetUnpersistedMemoryChunks()
         {
             List<MemoryChunk> memoryChunks = new List<MemoryChunk>();
-            HashSet<int> ids = new HashSet<int>();
+            HashSet<int> memoryBlockIDs = new HashSet<int>();
             foreach (MemoryChunk memoryChunk in MemoryChunks)
             {
                 if (memoryChunk.IsPersisted)
                     continue;
-                int chunkID = memoryChunk.MemoryBlockID;
-                if (!ids.Contains(chunkID))
+                int memoryBlockID = memoryChunk.MemoryBlockID;
+                if (!memoryBlockIDs.Contains(memoryBlockID))
                 {
-                    ids.Add(chunkID);
+                    memoryBlockIDs.Add(memoryBlockID);
                     memoryChunks.Add(memoryChunk);
                 }
             }
@@ -307,7 +307,7 @@ namespace Lazinator.Buffers
             {
                 memoryChunkToPersist.LoadMemory();
                 int memoryBlockID = memoryChunkToPersist.MemoryBlockID;
-                string path = GetPathForMemoryChunk(memoryBlockID);
+                string path = ContainedInSingleBlob ? pathForSingleBlob : GetPathForMemoryChunk(memoryBlockID); 
                 if (ContainedInSingleBlob)
                 {
                     BlobManager.Append(path, memoryChunkToPersist.MemoryAsLoaded.ReadOnlyMemory);
@@ -345,7 +345,7 @@ namespace Lazinator.Buffers
             {
                 await memoryChunkToPersist.LoadMemoryAsync();
                 int memoryBlockID = memoryChunkToPersist.MemoryBlockID;
-                string path = GetPathForMemoryChunk(memoryBlockID);
+                string path = ContainedInSingleBlob ? pathForSingleBlob : GetPathForMemoryChunk(memoryBlockID);
                 if (ContainedInSingleBlob)
                 {
                     await BlobManager.AppendAsync(path, memoryChunkToPersist.MemoryAsLoaded.ReadOnlyMemory);
@@ -375,7 +375,7 @@ namespace Lazinator.Buffers
 
         public static string GetPathForIndex(string baseBlobPath, IEnumerable<int> forkInformation, int versionNumber) => GetPathHelper(baseBlobPath, forkInformation, " Index " + versionNumber.ToString());
 
-        public static string GetPathHelper(string baseBlobPath, IEnumerable<int> forkInformation, string identifyingInformation)
+        internal static string GetPathHelper(string baseBlobPath, IEnumerable<int> forkInformation, string identifyingInformation)
         {
             string pathOnly = Path.GetDirectoryName(baseBlobPath);
             if (pathOnly != null && pathOnly.Length > 0)
