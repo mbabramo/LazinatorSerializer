@@ -1,0 +1,136 @@
+Score 1823 Iteration 3
+Score 1821 Iteration 4
+Score 1819 Iteration 5
+Score 1817 Iteration 8
+Score 1811 Iteration 10
+Score 1805 Iteration 14
+Score 1794 Iteration 17
+Score 1793 Iteration 25
+Score 1790 Iteration 27
+Score 1702 Iteration 29
+Score 1701 Iteration 33
+Score 1700 Iteration 34
+Score 1699 Iteration 35
+Score 1697 Iteration 37
+Score 1694 Iteration 39
+Score 1689 Iteration 43
+Score 1677 Iteration 51
+Score 1326 Iteration 64
+Score 1322 Iteration 65
+Score 1222 Iteration 69
+Score 1220 Iteration 74
+Score 1215 Iteration 76
+Score 1211 Iteration 80
+Score 1210 Iteration 82
+Score 646 Iteration 83
+Score 48 Iteration 92
+Score 44 Iteration 102
+Score 41 Iteration 118
+Score 39 Iteration 127
+Score 37 Iteration 200
+Score 32 Iteration 271
+Score 31 Iteration 880
+Score 30 Iteration 1190
+Score 26 Iteration 1389
+Score 25 Iteration 1805
+Score 23 Iteration 1933
+Score 22 Iteration 33818
+Score 9 Iteration 33847
+Score 7 Iteration 33929
+Score 6 Iteration 33960
+Score 5 Iteration 34106
+Score 3 Iteration 34421
+Score 0 Iteration 34423
+Iterations 34423
+
+(0, 0, new Team("Firebolts"),
+(0, 1, new Team("Lightning"),
+(0, 2, new Team("Diamond Dragons"),
+(0, 3, new Team("Golden Jaguars"),
+(0, 4, new Team("Tiny Titans"),
+(0, 5, new Team("Rainbows"),
+
+(1, 0, new Team("Comets"),
+(1, 1, new Team("Tiny Titans"),
+(1, 2, new Team("Rainbows"),
+(1, 3, new Team("Firebolts"),
+(1, 4, new Team("Lightning"),
+(1, 5, new Team("Diamond Dragons"),
+
+(2, 0, new Team("Rainbows"),
+(2, 1, new Team("Comets"),
+(2, 2, new Team("Diamond Dragons"),
+(2, 3, new Team("Lightning"),
+(2, 4, new Team("Firebolts"),
+(2, 5, new Team("Golden Jaguars"),
+
+(3, 0, new Team("Golden Jaguars"),
+(3, 1, new Team("Lightning"),
+(3, 2, new Team("Firebolts"),
+(3, 3, new Team("Comets"),
+(3, 4, new Team("Diamond Dragons"),
+(3, 5, new Team("Tiny Titans"),
+
+(4, 0, new Team("Rainbows"),
+(4, 1, new Team("Diamond Dragons"),
+(4, 2, new Team("Tiny Titans"),
+(4, 3, new Team("Golden Jaguars"),
+(4, 4, new Team("Comets"),
+(4, 5, new Team("Lightning"),
+
+(5, 0, new Team("Diamond Dragons"),
+(5, 1, new Team("Firebolts"),
+(5, 2, new Team("Lightning"),
+(5, 3, new Team("Rainbows"),
+(5, 4, new Team("Comets"),
+(5, 5, new Team("Golden Jaguars"),
+
+(6, 0, new Team("Golden Jaguars"),
+(6, 1, new Team("Tiny Titans"),
+(6, 2, new Team("Comets"),
+(6, 3, new Team("Diamond Dragons"),
+(6, 4, new Team("Rainbows"),
+(6, 5, new Team("Firebolts"),
+
+(7, 0, new Team("Golden Jaguars"),
+(7, 1, new Team("Rainbows"),
+(7, 2, new Team("Tiny Titans"),
+(7, 3, new Team("Firebolts"),
+(7, 4, new Team("Lightning"),
+(7, 5, new Team("Comets"),
+
+
+
+3/26/2022 10:30 p.m. Key 2: Firebolts (A) v. Lightning (H)
+3/26/2022 12:00 p.m. Key 1: Diamond Dragons (A) v. Golden Jaguars (H)
+3/26/2022 12:00 p.m. Key 2: Tiny Titans (A) v. Rainbows (H)
+
+4/2/2022 10:30 p.m. Key 2: Comets (A) v. Tiny Titans (H)
+4/2/2022 12:00 p.m. Key 1: Rainbows (A) v. Firebolts (H)
+4/2/2022 12:00 p.m. Key 2: Lightning (A) v. Diamond Dragons (H)
+
+4/23/2022 10:30 p.m. Key 2: Rainbows (A) v. Comets (H)
+4/23/2022 12:00 p.m. Key 1: Diamond Dragons (A) v. Lightning (H)
+4/23/2022 12:00 p.m. Key 2: Firebolts (A) v. Golden Jaguars (H)
+
+4/30/2022 10:30 p.m. Key 2: Golden Jaguars (A) v. Lightning (H)
+4/30/2022 12:00 p.m. Key 1: Firebolts (A) v. Comets (H)
+4/30/2022 2:00 p.m. Key 2: Diamond Dragons (A) v. Tiny Titans (H)
+
+5/7/2022 10:30 p.m. Key 2: Rainbows (A) v. Diamond Dragons (H)
+5/7/2022 12:00 p.m. Key 1: Tiny Titans (A) v. Golden Jaguars (H)
+5/7/2022 12:00 p.m. Key 2: Comets (A) v. Lightning (H)
+
+5/14/2022 10:30 p.m. Key 2: Diamond Dragons (A) v. Firebolts (H)
+5/14/2022 12:00 p.m. Key 1: Lightning (A) v. Rainbows (H)
+5/14/2022 2:00 p.m. Key 2: Comets (A) v. Golden Jaguars (H)
+
+5/21/2022 10:30 p.m. Key 2: Golden Jaguars (A) v. Tiny Titans (H)
+5/21/2022 12:00 p.m. Key 1: Comets (A) v. Diamond Dragons (H)
+5/21/2022 12:00 p.m. Key 2: Rainbows (A) v. Firebolts (H)
+
+6/4/2022 10:30 p.m. Key 2: Golden Jaguars (A) v. Rainbows (H)
+6/4/2022 12:00 p.m. Key 1: Tiny Titans (A) v. Firebolts (H)
+6/4/2022 12:00 p.m. Key 2: Lightning (A) v. Comets (H)
+
+
