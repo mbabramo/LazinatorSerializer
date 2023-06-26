@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -196,28 +197,28 @@ namespace Lazinator.Buffers
 
         public virtual MemorySegmentIndexAndSlice GetMemorySegmentAtOffsetFromStartPosition(int indexInitialSegment, int offsetInInitialSegment, long offsetFromStart)
         {
-            long positionRemaining = offsetFromStart;
+            long offsetRemaining = offsetFromStart;
             int revisedStartIndex = indexInitialSegment;
             int revisedStartPosition = offsetInInitialSegment;
             int numChunks = NumMemoryChunks; 
             int revisedLength = 0;
-            while (positionRemaining > 0)
+            while (offsetRemaining > 0)
             {
                 int segmentLength = GetLengthOfSegment(revisedStartIndex);
                 int remainingBytesThisMemory = segmentLength - revisedStartPosition;
-                if (remainingBytesThisMemory <= positionRemaining)
+                if (remainingBytesThisMemory <= offsetRemaining)
                 {
-                    positionRemaining -= remainingBytesThisMemory;
-                    if (positionRemaining == 0 && revisedStartIndex == numChunks - 1)
+                    offsetRemaining -= remainingBytesThisMemory;
+                    if (offsetRemaining == 0 && revisedStartIndex == numChunks - 1)
                         break; // we are at the very end of the last LazinatorMemory
                     revisedStartIndex++;
                     revisedStartPosition = 0;
                 }
                 else
                 {
-                    revisedStartPosition += (int)positionRemaining;
+                    revisedStartPosition += (int)offsetRemaining;
                     revisedLength = segmentLength - revisedStartPosition;
-                    positionRemaining = 0;
+                    offsetRemaining = 0;
                 }
             }
             return new MemorySegmentIndexAndSlice(revisedStartIndex, revisedStartPosition, revisedLength);
@@ -234,6 +235,8 @@ namespace Lazinator.Buffers
                 { // return memory block starting at offset
                     int lengthToInclude = (int)Math.Min(segmentLength - offsetInInitialSegment, bytesRemaining);
                     bytesRemaining -= lengthToInclude;
+                    var blockLoadingInfo = MemoryBlocksLoadingInfo[index];
+                    Debug; // this isn't right. The offsetInInitialSegment has to be the offset of the segment. 
                     yield return new MemorySegmentIndexAndSlice(index, offsetInInitialSegment, lengthToInclude);
                 }
                 else if (index > indexInitialSegment && bytesRemaining > 0)

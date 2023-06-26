@@ -148,7 +148,7 @@ namespace Lazinator.Buffers
             LoadMemory();
             var bytes = ReadOnlyMemory.ToArray();
             string result = String.Join(",", bytes.Select(x => x.ToString().PadLeft(3, '0')));
-            return $"Chunk {MemoryBlockID.ToString().PadLeft(3, '0')}: {result}";
+            return $"Chunk {MemoryBlockID.ToString().PadLeft(3, '0')}:\n{result}";
         }
     }
 }

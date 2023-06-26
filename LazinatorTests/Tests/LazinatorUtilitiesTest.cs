@@ -163,11 +163,11 @@ namespace LazinatorTests.Tests
                 new MemoryBlockIDAndSlice(2, 1, 2), // 8, 9
                 new MemoryBlockIDAndSlice(2, 0, 3), // 7, 8, 9
                 new MemoryBlockIDAndSlice(3, 0, 2), // 10, 11, 12
-                new MemoryBlockIDAndSlice(1, 1, 1) // 5
+                new MemoryBlockIDAndSlice(1, 1, 1) // 200
             };
             LazinatorMemory memory = new LazinatorMemory(c);
-            memory.GetConsolidatedMemory().ToArray();
-            // DEBUG -- finish
+            var result = memory.GetConsolidatedMemory().ToArray();
+            result.Should().BeEquivalentTo(new byte[] { 8, 9, 7, 8, 9, 10, 11, 12 });
         }
 
         /// <summary>

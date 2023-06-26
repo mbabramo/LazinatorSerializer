@@ -268,8 +268,6 @@ namespace LazinatorTests.Tests
                 PersistentIndex index = new PersistentIndex(fullPath, blobManager, containedInSingleBlob); 
                 index.PersistLazinatorMemory(multipleBufferResult);
 
-                
-
                 if (recreateIndex)
                     index = PersistentIndex.ReadFromBlob(blobManager, fullPath, null, index.IndexVersion);
                 var revisedMemory = index.GetLazinatorMemory();
@@ -526,7 +524,7 @@ namespace LazinatorTests.Tests
                 // DEBUG
                 Debug.WriteLine("Multiple buffer result:");
                 Debug.WriteLine(multipleBufferResult.ToStringByChunk());
-                Debug.WriteLine($"Consolidated{round}: " + multipleBufferResult.ToStringConsolidated());
+                Debug.WriteLine($"Consolidated{round}:\n" + multipleBufferResult.ToStringConsolidated());
 
                 // Write to one or more blobs
                 var index = (useConsolidatedMemory || indices == null || !indices.Any()) ? new PersistentIndex(fullPath, blobManager, containedInSingleBlob) : new PersistentIndex(indices.Last());
@@ -549,7 +547,7 @@ namespace LazinatorTests.Tests
                 // DEBUG
                 Debug.WriteLine("Revised memory result:");
                 Debug.WriteLine(revisedMemory.ToStringByChunk());
-                Debug.WriteLine($"Consolidated{round}: " + revisedMemory.ToStringConsolidated());
+                Debug.WriteLine($"Consolidated{round}:\n" + revisedMemory.ToStringConsolidated());
 
                 BinaryTree = new LazinatorBinaryTree<WDouble>(revisedMemory);
                 round++;
