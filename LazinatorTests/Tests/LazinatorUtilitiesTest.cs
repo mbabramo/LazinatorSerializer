@@ -151,23 +151,24 @@ namespace LazinatorTests.Tests
         [Fact]
         public void MemorySegmentCollectionSubranges()
         {
+            // Note that the LoadingInfos should be irrelevant. The chunks consist of the memory as loaded.
             MemorySegmentCollection c = new MemorySegmentCollection(new List<MemoryChunk>
             {
                 new MemoryChunk(new ReadOnlyBytes(new byte[] { 1, 2, 3 })) { LoadingInfo = new MemoryBlockLoadingInfo(0, 3) },
                 new MemoryChunk(new ReadOnlyBytes(new byte[] { 200, 200, 4, 5, 6, 200, 200 })) { LoadingInfo = new MemoryBlockLoadingInfo(1, 7) },
-                new MemoryChunk(new ReadOnlyBytes(new byte[] { 7, 8, 9, 200 }))  { LoadingInfo = new MemoryBlockLoadingInfo(2, 4) },
+                new MemoryChunk(new ReadOnlyBytes(new byte[] { 7, 8, 9, 200 }))  { LoadingInfo = new MemoryBlockLoadingInfo(2, 409) },
                 new MemoryChunk(new ReadOnlyBytes(new byte[] { 10, 11, 12 })) { LoadingInfo = new MemoryBlockLoadingInfo(3, 3) },
             }, true);
-            c.Segments = new List<MemoryBlockIDAndSlice>()
+            c.Segments = new List<MemorySegmentIDAndSlice>()
             {
-                new MemoryBlockIDAndSlice(2, 1, 2), // 8, 9
-                new MemoryBlockIDAndSlice(2, 0, 3), // 7, 8, 9
-                new MemoryBlockIDAndSlice(3, 0, 2), // 10, 11, 12
-                new MemoryBlockIDAndSlice(1, 1, 1) // 200
+                new MemorySegmentIDAndSlice(2, 1, 2), // 8, 9
+                new MemorySegmentIDAndSlice(2, 0, 3), // 7, 8, 9, 200
+                new MemorySegmentIDAndSlice(3, 0, 2), // 10, 11, 12
+                new MemorySegmentIDAndSlice(1, 1, 1) // 200
             };
             LazinatorMemory memory = new LazinatorMemory(c);
             var result = memory.GetConsolidatedMemory().ToArray();
-            result.Should().BeEquivalentTo(new byte[] { 8, 9, 7, 8, 9, 10, 11, 12 });
+            result.Should().BeEquivalentTo(new byte[] { 8, 9, 7, 8, 9, 200, 10, 11, 12, 200 });
         }
 
         /// <summary>
@@ -178,7 +179,7 @@ namespace LazinatorTests.Tests
         private ReadOnlyMemory<byte> GetMemoryAtBlockAndOffset(LazinatorMemory lazinatorMemory, MemorySegmentIndexAndSlice memoryBlockInfo)
         {
             var memoryChunk = lazinatorMemory.MemorySegmentAtIndex(memoryBlockInfo.MemorySegmentIndex);
-            var underlyingReadOnlyMemory = memoryChunk.ReadOnlyMemory.Slice(memoryBlockInfo.Offset, memoryBlockInfo.Length);
+            var underlyingReadOnlyMemory = memoryChunk.ReadOnlyMemory.Slice(memoryBlockInfo.OffsetIntoMemoryChunk, memoryBlockInfo.Length);
             return underlyingReadOnlyMemory;
         }
 

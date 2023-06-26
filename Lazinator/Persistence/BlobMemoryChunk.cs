@@ -40,6 +40,7 @@ namespace Lazinator.Persistence
                 return;
             ReadOnlyMemory<byte> bytes = await BlobManager.ReadAsync(BlobPath, LoadingOffset, LoadingInfo.PreTruncationLength);
             MemoryAsLoaded = new ReadOnlyBytes(bytes);
+            Length = LoadingInfo.PreTruncationLength;
         }
 
         private long LoadingOffset

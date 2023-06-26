@@ -20,7 +20,7 @@ namespace Lazinator.Buffers
         public MemorySegmentCollection(List<MemoryChunk> memoryChunks, bool recycle) : base(memoryChunks)
         {
             if (recycle)
-                Segments = new List<MemoryBlockIDAndSlice>();
+                Segments = new List<MemorySegmentIDAndSlice>();
         }
 
         public void SetFromLazinatorMemory(LazinatorMemory lazinatorMemory)
@@ -29,7 +29,7 @@ namespace Lazinator.Buffers
             SetSegments(lazinatorMemory.EnumerateMemoryBlockIDsAndSlices().ToList());
         }
 
-        private void SetSegments(List<MemoryBlockIDAndSlice> segments)
+        private void SetSegments(List<MemorySegmentIDAndSlice> segments)
         {
             Segments = segments.ToList();
         }
@@ -49,7 +49,7 @@ namespace Lazinator.Buffers
         /// </summary>
         /// <param name="memoryChunkReferences"></param>
         /// <param name="newSegment"></param>
-        public void ExtendSegments(MemoryBlockIDAndSlice blockAndSlice, bool extendEarlierReferencesForSameChunk)
+        public void ExtendSegments(MemorySegmentIDAndSlice blockAndSlice, bool extendEarlierReferencesForSameChunk)
         {
             if (!Patching)
                 throw new Exception("DEBUG");
@@ -71,15 +71,15 @@ namespace Lazinator.Buffers
                     }
                 }
                 var last = Segments.Last();
-                if (last.MemoryBlockID == blockAndSlice.MemoryBlockID && blockAndSlice.Offset == last.Offset + last.Length)
+                if (last.MemoryBlockID == blockAndSlice.MemoryBlockID && blockAndSlice.OffsetIntoMemoryChunk == last.OffsetIntoMemoryChunk + last.Length)
                 {
-                    last = new MemoryBlockIDAndSlice(last.MemoryBlockID, last.Offset, last.Length + blockAndSlice.Length);
+                    last = new MemorySegmentIDAndSlice(last.MemoryBlockID, last.OffsetIntoMemoryChunk, last.Length + blockAndSlice.Length);
                     Segments[Segments.Count - 1] = last;
                     PatchesTotalLength += blockAndSlice.Length;
                     return;
                 }
             }
-            Segments.Add(new MemoryBlockIDAndSlice(blockAndSlice.MemoryBlockID, blockAndSlice.Offset, blockAndSlice.Length));
+            Segments.Add(new MemorySegmentIDAndSlice(blockAndSlice.MemoryBlockID, blockAndSlice.OffsetIntoMemoryChunk, blockAndSlice.Length));
             PatchesTotalLength += blockAndSlice.Length;
         }
 
@@ -88,7 +88,7 @@ namespace Lazinator.Buffers
         /// </summary>
         /// <param name="memoryChunkReferences"></param>
         /// <param name="newSegments"></param>
-        public void ExtendSegments(IEnumerable<MemoryBlockIDAndSlice> newSegments)
+        public void ExtendSegments(IEnumerable<MemorySegmentIDAndSlice> newSegments)
         {
             foreach (var newSegment in newSegments)
                 ExtendSegments(newSegment, false);
@@ -104,7 +104,7 @@ namespace Lazinator.Buffers
         internal void InsertReferenceToCompletedMemory(int memoryChunkIndex, int startPosition, long numBytes, int activeMemoryPosition)
         {
             RecordLastActiveMemoryChunkReference(activeMemoryPosition);
-            IEnumerable<MemoryBlockIDAndSlice> segmentsToAdd = EnumerateMemoryBlockIDAndSlices(memoryChunkIndex, startPosition, numBytes);
+            IEnumerable<MemorySegmentIDAndSlice> segmentsToAdd = EnumerateMemoryBlockIDAndSlices(memoryChunkIndex, startPosition, numBytes);
             ExtendSegments(segmentsToAdd);
             // Debug.WriteLine($"Reference to completed memory added. References are {String.Join(", ", RecycledMemoryChunkReferences)}");
         }
@@ -117,7 +117,7 @@ namespace Lazinator.Buffers
             if (activeMemoryPosition > NumActiveMemoryBytesReferenced)
             {
                 int activeMemoryBlockID = GetNextMemoryBlockID();
-                ExtendSegments(new MemoryBlockIDAndSlice(activeMemoryBlockID, NumActiveMemoryBytesReferenced, activeMemoryPosition - NumActiveMemoryBytesReferenced), true);
+                ExtendSegments(new MemorySegmentIDAndSlice(activeMemoryBlockID, NumActiveMemoryBytesReferenced, activeMemoryPosition - NumActiveMemoryBytesReferenced), true);
                 NumActiveMemoryBytesReferenced = activeMemoryPosition;
             }
         }
@@ -136,7 +136,7 @@ namespace Lazinator.Buffers
         {
             base.AppendMemoryChunk(memoryChunk);
             if (Segments != null)
-                Segments.Add(new MemoryBlockIDAndSlice(memoryChunk.MemoryBlockID, 0, memoryChunk.Length));
+                Segments.Add(new MemorySegmentIDAndSlice(memoryChunk.MemoryBlockID, 0, memoryChunk.Length));
         }
 
         public override int NumMemorySegments => Patching ? Segments.Count : base.NumMemorySegments;
@@ -148,9 +148,9 @@ namespace Lazinator.Buffers
             if (Segments == null)
                 return base.MemorySegmentAtIndex(i);
             var segment = Segments[i];
-            var block = MemoryChunks[GetIndexFromMemoryBlockID(segment.MemoryBlockID)];
-            block.LoadMemory();
-            return new MemorySegment(block, new MemoryBlockSlice(0, block.Length));
+            var chunk = MemoryChunks[GetIndexFromMemoryBlockID(segment.MemoryBlockID)];
+            chunk.LoadMemory();
+            return new MemorySegment(chunk, new MemoryChunkSlice(0, chunk.Length));
         }
 
         public async override ValueTask<MemorySegment> MemorySegmentAtIndexAsync(int i)
@@ -158,9 +158,9 @@ namespace Lazinator.Buffers
             if (Segments == null)
                 return await base.MemorySegmentAtIndexAsync(i);
             var segment = Segments[i];
-            var block = MemoryChunks[GetIndexFromMemoryBlockID(segment.MemoryBlockID)];
-            await block.LoadMemoryAsync();
-            return new MemorySegment(block, new MemoryBlockSlice(0, block.Length));
+            var chunk = MemoryChunks[GetIndexFromMemoryBlockID(segment.MemoryBlockID)];
+            await chunk.LoadMemoryAsync();
+            return new MemorySegment(chunk, new MemoryChunkSlice(0, chunk.Length));
         }
 
         public override IEnumerable<MemorySegment> EnumerateMemorySegments()

@@ -32,7 +32,10 @@ namespace Lazinator.Buffers
         public MemoryBlockLoadingInfo LoadingInfo { get; set; }
 
         public int MemoryBlockID => LoadingInfo.MemoryBlockID;
-        public int Length => LoadingInfo.PreTruncationLength;
+
+        private int _Length = 0;
+        public int Length { get => _Length; set => _Length = value; }
+        public int MemoryBlockLength => LoadingInfo.PreTruncationLength;
 
         public bool IsLoaded => MemoryAsLoaded != null; // DEBUG -- when loading later
 
@@ -63,7 +66,8 @@ namespace Lazinator.Buffers
         public MemoryChunk(IReadableBytes memoryAsLoaded, MemoryBlockLoadingInfo loadingInfo, bool isPersisted)
         {
             MemoryAsLoaded = memoryAsLoaded;
-            LoadingInfo = loadingInfo ?? new MemoryBlockLoadingInfo(0, memoryAsLoaded.ReadOnlyMemory.Length);
+            Length = memoryAsLoaded.ReadOnlyMemory.Length;
+            LoadingInfo = loadingInfo ?? new MemoryBlockLoadingInfo(0, Length);
             IsPersisted = isPersisted;
         }
 
@@ -77,7 +81,7 @@ namespace Lazinator.Buffers
 
         public IEnumerable<byte> EnumerateBytes()
         {
-            int length = ReadOnlyMemory.Length;
+            int length = Length;
             for (int i = 0; i < length; i++)
                 yield return ReadOnlyMemory.Span[i];
         }

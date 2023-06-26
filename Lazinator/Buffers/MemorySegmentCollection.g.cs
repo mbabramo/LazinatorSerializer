@@ -37,8 +37,8 @@ namespace Lazinator.Buffers
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected List<MemoryBlockIDAndSlice> _Segments;
-        public List<MemoryBlockIDAndSlice> Segments
+        protected List<MemorySegmentIDAndSlice> _Segments;
+        public List<MemorySegmentIDAndSlice> Segments
         {
             [DebuggerStepThrough]
             get
@@ -65,7 +65,7 @@ namespace Lazinator.Buffers
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
-                _Segments = default(List<MemoryBlockIDAndSlice>);
+                _Segments = default(List<MemorySegmentIDAndSlice>);
             }
             else
             {
@@ -137,7 +137,7 @@ namespace Lazinator.Buffers
             base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, false);
             if ((!exploreOnlyDeserializedChildren && Segments != null) || (_Segments_Accessed && _Segments != null))
             {
-                _Segments = (List<MemoryBlockIDAndSlice>) CloneOrChange_List_GMemoryBlockIDAndSlice_g(_Segments, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
+                _Segments = (List<MemorySegmentIDAndSlice>) CloneOrChange_List_GMemoryBlockIDAndSlice_g(_Segments, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             if (changeThisLevel && changeFunc != null)
             {
@@ -232,7 +232,7 @@ namespace Lazinator.Buffers
             base.UpdateDeserializedChildren(ref writer, startPosition);
             if (_Segments_Accessed && _Segments != null)
             {
-                _Segments = (List<MemoryBlockIDAndSlice>) CloneOrChange_List_GMemoryBlockIDAndSlice_g(_Segments, l => l.RemoveBufferInHierarchy(), true);
+                _Segments = (List<MemorySegmentIDAndSlice>) CloneOrChange_List_GMemoryBlockIDAndSlice_g(_Segments, l => l.RemoveBufferInHierarchy(), true);
             }
             
         }
@@ -304,17 +304,17 @@ namespace Lazinator.Buffers
         }
         /* Conversion of supported collections and tuples */
         
-        private static List<MemoryBlockIDAndSlice> ConvertFromBytes_List_GMemoryBlockIDAndSlice_g(LazinatorMemory storage)
+        private static List<MemorySegmentIDAndSlice> ConvertFromBytes_List_GMemoryBlockIDAndSlice_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
-                return default(List<MemoryBlockIDAndSlice>);
+                return default(List<MemorySegmentIDAndSlice>);
             }
             ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
-            List<MemoryBlockIDAndSlice> collection = new List<MemoryBlockIDAndSlice>(collectionLength);
+            List<MemorySegmentIDAndSlice> collection = new List<MemorySegmentIDAndSlice>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
@@ -327,9 +327,9 @@ namespace Lazinator.Buffers
             return collection;
         }
         
-        private static void ConvertToBytes_List_GMemoryBlockIDAndSlice_g(ref BufferWriter writer, List<MemoryBlockIDAndSlice> itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_List_GMemoryBlockIDAndSlice_g(ref BufferWriter writer, List<MemorySegmentIDAndSlice> itemToConvert, LazinatorSerializationOptions options)
         {
-            if (itemToConvert == default(List<MemoryBlockIDAndSlice>))
+            if (itemToConvert == default(List<MemorySegmentIDAndSlice>))
             {
                 return;
             }
@@ -342,24 +342,24 @@ namespace Lazinator.Buffers
             }
         }
         
-        private static List<MemoryBlockIDAndSlice> CloneOrChange_List_GMemoryBlockIDAndSlice_g(List<MemoryBlockIDAndSlice> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static List<MemorySegmentIDAndSlice> CloneOrChange_List_GMemoryBlockIDAndSlice_g(List<MemorySegmentIDAndSlice> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
                 return default;
             }
             int collectionLength = itemToClone.Count;
-            List<MemoryBlockIDAndSlice> collection = new List<MemoryBlockIDAndSlice>(collectionLength);
+            List<MemorySegmentIDAndSlice> collection = new List<MemorySegmentIDAndSlice>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var itemCopied = (MemoryBlockIDAndSlice) CloneOrChange_MemoryBlockIDAndSlice(itemToClone[itemIndex], cloneOrChangeFunc, avoidCloningIfPossible);
+                var itemCopied = (MemorySegmentIDAndSlice) CloneOrChange_MemoryBlockIDAndSlice(itemToClone[itemIndex], cloneOrChangeFunc, avoidCloningIfPossible);
                 collection.Add(itemCopied);
             }
             return collection;
         }
         
-        private static MemoryBlockIDAndSlice ConvertFromBytes_MemoryBlockIDAndSlice(LazinatorMemory storage)
+        private static MemorySegmentIDAndSlice ConvertFromBytes_MemoryBlockIDAndSlice(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -375,24 +375,24 @@ namespace Lazinator.Buffers
             
             int item3 = span.ToDecompressedInt32(ref bytesSoFar);
             
-            var itemToCreate = new MemoryBlockIDAndSlice(item1, item2, item3);
+            var itemToCreate = new MemorySegmentIDAndSlice(item1, item2, item3);
             
             return itemToCreate;
         }
         
-        private static void ConvertToBytes_MemoryBlockIDAndSlice(ref BufferWriter writer, MemoryBlockIDAndSlice itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_MemoryBlockIDAndSlice(ref BufferWriter writer, MemorySegmentIDAndSlice itemToConvert, LazinatorSerializationOptions options)
         {
             
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.MemoryBlockID);
             
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Offset);
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.OffsetIntoMemoryChunk);
             
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Length);
         }
         
-        private static MemoryBlockIDAndSlice CloneOrChange_MemoryBlockIDAndSlice(MemoryBlockIDAndSlice itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static MemorySegmentIDAndSlice CloneOrChange_MemoryBlockIDAndSlice(MemorySegmentIDAndSlice itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            return new MemoryBlockIDAndSlice((int) (itemToConvert.MemoryBlockID), (int) (itemToConvert.Offset), (int) (itemToConvert.Length));
+            return new MemorySegmentIDAndSlice((int) (itemToConvert.MemoryBlockID), (int) (itemToConvert.OffsetIntoMemoryChunk), (int) (itemToConvert.Length));
         }
         
     }
