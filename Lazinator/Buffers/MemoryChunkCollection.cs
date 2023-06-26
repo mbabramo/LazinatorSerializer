@@ -24,6 +24,7 @@ namespace Lazinator.Buffers
         public virtual int NumMemorySegments => NumMemoryChunks;
 
         protected virtual int GetLengthOfSegment(int segmentIndex) => MemoryBlocksLoadingInfo[segmentIndex].PreTruncationLength;
+        protected virtual int GetOffsetIntoChunkForSegment(int segmentIndex) => 0;
 
         #region Construction
 
@@ -234,17 +235,19 @@ namespace Lazinator.Buffers
             for (int index = 0; index < numSegments; index++)
             {
                 int segmentLength = GetLengthOfSegment(index);
+                int offsetIntoChunk = GetOffsetIntoChunkForSegment(index);
                 if (index == indexInitialSegment)
                 { // return memory segment starting at offset
+                    int totalOffset = offsetIntoChunk + offsetInInitialSegment;
                     int lengthToInclude = (int)Math.Min(segmentLength - offsetInInitialSegment, bytesRemaining);
                     bytesRemaining -= lengthToInclude;
-                    yield return new MemorySegmentIndexAndSlice(index, offsetInInitialSegment, lengthToInclude);
+                    yield return new MemorySegmentIndexAndSlice(index, totalOffset, lengthToInclude);
                 }
                 else if (index > indexInitialSegment && bytesRemaining > 0)
                 { // return memory segment until end or until bytes remaining are exhausted
                     int lengthToInclude = (int)Math.Min(segmentLength, bytesRemaining);
                     bytesRemaining -= lengthToInclude;
-                    yield return new MemorySegmentIndexAndSlice(index, 0, lengthToInclude);
+                    yield return new MemorySegmentIndexAndSlice(index, offsetIntoChunk, lengthToInclude);
                 }
                 if (bytesRemaining == 0)
                     yield break;

@@ -142,6 +142,7 @@ namespace Lazinator.Buffers
         public override int NumMemorySegments => Patching ? Segments.Count : base.NumMemorySegments;
 
         protected override int GetLengthOfSegment(int segmentIndex) => Patching ? Segments[segmentIndex].Length : base.GetLengthOfSegment(segmentIndex); 
+        protected override int GetOffsetIntoChunkForSegment(int segmentIndex) => Patching ? Segments[segmentIndex].OffsetIntoMemoryChunk : 0;
         
         public override MemorySegment MemorySegmentAtIndex(int i)
         {

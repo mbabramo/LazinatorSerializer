@@ -160,19 +160,19 @@ namespace LazinatorTests.Tests
             {
                 new MemoryChunk(new ReadOnlyBytes(new byte[] { 1, 2, 3 })) { LoadingInfo = new MemoryBlockLoadingInfo(0, 3) },
                 new MemoryChunk(new ReadOnlyBytes(new byte[] { 200, 200, 4, 5, 6, 200, 200 })) { LoadingInfo = new MemoryBlockLoadingInfo(1, 7) },
-                new MemoryChunk(new ReadOnlyBytes(new byte[] { 7, 8, 9, 200 }))  { LoadingInfo = new MemoryBlockLoadingInfo(2, 409) },
+                new MemoryChunk(new ReadOnlyBytes(new byte[] { 7, 8, 9, 200 }))  { LoadingInfo = new MemoryBlockLoadingInfo(2, 409 /* should't matter that pretruncation length is large */ ) },
                 new MemoryChunk(new ReadOnlyBytes(new byte[] { 10, 11, 12 })) { LoadingInfo = new MemoryBlockLoadingInfo(3, 3) },
             }, true);
             c.Segments = new List<MemorySegmentIDAndSlice>()
             {
                 new MemorySegmentIDAndSlice(2, 1, 2), // 8, 9
-                new MemorySegmentIDAndSlice(2, 0, 3), // 7, 8, 9, 200
-                new MemorySegmentIDAndSlice(3, 0, 2), // 10, 11, 12
+                new MemorySegmentIDAndSlice(2, 0, 3), // 7, 8, 9
+                new MemorySegmentIDAndSlice(3, 0, 2), // 10, 11
                 new MemorySegmentIDAndSlice(1, 1, 1) // 200
             };
             LazinatorMemory memory = new LazinatorMemory(c);
             var result = memory.GetConsolidatedMemory().ToArray();
-            result.Should().BeEquivalentTo(new byte[] { 8, 9, 7, 8, 9, 200, 10, 11, 12, 200 });
+            result.Should().BeEquivalentTo(new byte[] { 8, 9, 7, 8, 9, 10, 11, 200 });
         }
 
         /// <summary>
