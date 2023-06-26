@@ -113,12 +113,16 @@ namespace LazinatorTests.Tests
                 // We'll copy this byte range (which may not be continuous in the original) to referencedBytes. 
                 //Debug.WriteLine($"Repetition: {rep}");
                 List<byte> referencedBytes = new List<byte>();
-                const int maxNumReferenceChunks = 10;
+                int maxNumReferenceChunks = numMainChunks;
                 int numReferenceChunks = r.Next(1, maxNumReferenceChunks); // CompletedMemory will always have at least one chunk
                 List<MemoryChunk> memoryChunks = new List<MemoryChunk>();
+                HashSet<int> chunksReferenced = new HashSet<int>();
                 for (int i = 0; i < numReferenceChunks; i++)
                 {
-                    int mainChunkIndex = r.Next(0, numMainChunks);
+                    int mainChunkIndex = -1;
+                    while (mainChunkIndex == -1 || chunksReferenced.Contains(mainChunkIndex))
+                        mainChunkIndex = r.Next(0, numMainChunks);
+                    chunksReferenced.Add(mainChunkIndex);
                     int startPosition = 0; // Note: No longer allowing the start position to vary (we can do that with segments) r.Next(0, bytesPerChunk);
                     int numBytes = r.Next(0, bytesPerChunk - startPosition);
                     var overallMemoryOwner = overallMemoryOwners[mainChunkIndex];
