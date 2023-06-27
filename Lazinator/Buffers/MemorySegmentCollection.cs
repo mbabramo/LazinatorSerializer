@@ -60,9 +60,9 @@ namespace Lazinator.Buffers
                     for (int i = 0; i < Segments.Count; i++)
                     {
                         var segment = Segments[i];
-                        if (segment.MemoryBlockID == blockAndSlice.MemoryBlockID) 
+                        if (segment.GetMemoryBlockID() == blockAndSlice.GetMemoryBlockID()) 
                         {
-                            MemoryChunk existingChunk = GetMemoryChunkByMemoryBlockID(segment.MemoryBlockID);
+                            MemoryChunk existingChunk = GetMemoryChunkByMemoryBlockID(segment.GetMemoryBlockID());
                             if (existingChunk != null)
                             {
                                 existingChunk.LoadingInfo.PreTruncationLength = blockAndSlice.Length;
@@ -71,15 +71,15 @@ namespace Lazinator.Buffers
                     }
                 }
                 var last = Segments.Last();
-                if (last.MemoryBlockID == blockAndSlice.MemoryBlockID && blockAndSlice.OffsetIntoMemoryChunk == last.OffsetIntoMemoryChunk + last.Length)
+                if (last.GetMemoryBlockID() == blockAndSlice.GetMemoryBlockID() && blockAndSlice.OffsetIntoMemoryChunk == last.OffsetIntoMemoryChunk + last.Length)
                 {
-                    last = new MemorySegmentIDAndSlice(last.MemoryBlockID, last.OffsetIntoMemoryChunk, last.Length + blockAndSlice.Length);
+                    last = new MemorySegmentIDAndSlice(last.GetMemoryBlockID(), last.OffsetIntoMemoryChunk, last.Length + blockAndSlice.Length);
                     Segments[Segments.Count - 1] = last;
                     PatchesTotalLength += blockAndSlice.Length;
                     return;
                 }
             }
-            Segments.Add(new MemorySegmentIDAndSlice(blockAndSlice.MemoryBlockID, blockAndSlice.OffsetIntoMemoryChunk, blockAndSlice.Length));
+            Segments.Add(new MemorySegmentIDAndSlice(blockAndSlice.GetMemoryBlockID(), blockAndSlice.OffsetIntoMemoryChunk, blockAndSlice.Length));
             PatchesTotalLength += blockAndSlice.Length;
         }
 
@@ -149,7 +149,7 @@ namespace Lazinator.Buffers
             if (Segments == null)
                 return base.MemorySegmentAtIndex(i);
             var segment = Segments[i];
-            int index = GetIndexFromMemoryBlockID(segment.MemoryBlockID);
+            int index = GetIndexFromMemoryBlockID(segment.GetMemoryBlockID());
             if (index == -1)
             {
                 var DEBUG = 0;
@@ -164,7 +164,7 @@ namespace Lazinator.Buffers
             if (Segments == null)
                 return await base.MemorySegmentAtIndexAsync(i);
             var segment = Segments[i];
-            var chunk = MemoryChunks[GetIndexFromMemoryBlockID(segment.MemoryBlockID)];
+            var chunk = MemoryChunks[GetIndexFromMemoryBlockID(segment.GetMemoryBlockID())];
             await chunk.LoadMemoryAsync();
             return new MemorySegment(chunk, new MemoryChunkSlice(0, chunk.Length));
         }

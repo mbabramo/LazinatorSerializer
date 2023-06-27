@@ -11,7 +11,7 @@ namespace Lazinator.Buffers
         /// <summary>
         /// The MemoryBlockID, used to find the corresponding MemoryChunk in a MemoryChunkCollection.
         /// </summary>
-        public readonly MemoryBlockID MemoryBlockID { get; }
+        public readonly int MemoryBlockIntID { get; }
         /// <summary>
         /// The offset into the MemoryChunk (not into the underlying MemoryBlock).
         /// </summary>
@@ -21,16 +21,25 @@ namespace Lazinator.Buffers
         /// </summary>
         public readonly int Length { get; }
 
-        public MemorySegmentIDAndSlice(MemoryBlockID memoryBlockID, int offsetIntoMemoryChunk, int length)
+        public MemoryBlockID GetMemoryBlockID() => new MemoryBlockID(MemoryBlockIntID);
+
+        public MemorySegmentIDAndSlice(int memoryBlockIntID, int offsetIntoMemoryChunk, int length)
         {
-            this.MemoryBlockID = memoryBlockID;
+            this.MemoryBlockIntID = memoryBlockIntID;
             this.OffsetIntoMemoryChunk = offsetIntoMemoryChunk;
             this.Length = length;
         }
 
-        public MemorySegmentIDAndSlice Slice(int offset, int length) => new MemorySegmentIDAndSlice(MemoryBlockID, OffsetIntoMemoryChunk + offset, length);
+        public MemorySegmentIDAndSlice(MemoryBlockID memoryBlockID, int offsetIntoMemoryChunk, int length)
+        {
+            this.MemoryBlockIntID = memoryBlockID.GetIntID();
+            this.OffsetIntoMemoryChunk = offsetIntoMemoryChunk;
+            this.Length = length;
+        }
 
-        public MemorySegmentIDAndSlice Slice(int offset) => new MemorySegmentIDAndSlice(MemoryBlockID, OffsetIntoMemoryChunk + offset, Length - offset);
+        public MemorySegmentIDAndSlice Slice(int offset, int length) => new MemorySegmentIDAndSlice(new MemoryBlockID(MemoryBlockIntID), OffsetIntoMemoryChunk + offset, length);
+
+        public MemorySegmentIDAndSlice Slice(int offset) => new MemorySegmentIDAndSlice(new MemoryBlockID(MemoryBlockIntID), OffsetIntoMemoryChunk + offset, Length - offset);
 
         public MemoryChunkSlice GetSlice() => new MemoryChunkSlice(OffsetIntoMemoryChunk, Length);
     }

@@ -36,7 +36,7 @@ namespace Lazinator.Buffers
         public MemoryChunkCollection(IEnumerable<MemoryChunk> memoryChunks)
         {
             MemoryChunks = memoryChunks.ToList();
-            HighestMemoryBlockID = MemoryChunks.Any() ? MemoryChunks.Max(x => x.MemoryBlockID) : new MemoryBlockID(0);
+            HighestMemoryBlockID = MemoryChunks.Any() ? new MemoryBlockID(MemoryChunks.Max(x => x.MemoryBlockID.GetIntID())) : new MemoryBlockID(0);
             Length = MemoryChunks.Sum(x => (long) x.Length);
             InitializeMemoryBlocksInformation();
             if (MemoryChunks.Count != MemoryBlocksLoadingInfo.Count)

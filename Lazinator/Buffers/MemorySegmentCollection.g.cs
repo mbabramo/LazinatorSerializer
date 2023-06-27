@@ -375,7 +375,7 @@ namespace Lazinator.Buffers
             
             int item3 = span.ToDecompressedInt32(ref bytesSoFar);
             
-            var itemToCreate = new MemorySegmentIDAndSlice(new MemoryBlockID(item1), item2, item3);
+            var itemToCreate = new MemorySegmentIDAndSlice(item1, item2, item3);
             
             return itemToCreate;
         }
@@ -383,7 +383,7 @@ namespace Lazinator.Buffers
         private static void ConvertToBytes_MemorySegmentIDAndSlice(ref BufferWriter writer, MemorySegmentIDAndSlice itemToConvert, LazinatorSerializationOptions options)
         {
             
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.MemoryBlockID.GetIntID());
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.MemoryBlockIntID);
             
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.OffsetIntoMemoryChunk);
             
@@ -392,7 +392,7 @@ namespace Lazinator.Buffers
         
         private static MemorySegmentIDAndSlice CloneOrChange_MemorySegmentIDAndSlice(MemorySegmentIDAndSlice itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            return new MemorySegmentIDAndSlice((itemToConvert.MemoryBlockID), (int) (itemToConvert.OffsetIntoMemoryChunk), (int) (itemToConvert.Length));
+            return new MemorySegmentIDAndSlice((int) (itemToConvert.MemoryBlockIntID), (int) (itemToConvert.OffsetIntoMemoryChunk), (int) (itemToConvert.Length));
         }
         
     }
