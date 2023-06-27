@@ -79,21 +79,21 @@ namespace Lazinator.Persistence
                 yield return fi.forkNumber;
         }
 
-        private IEnumerable<int> GetForkNumbersPrecedingMemoryBlockID(int memoryBlockID)
+        private IEnumerable<int> GetForkNumbersPrecedingMemoryBlockID(MemoryBlockID memoryBlockID)
         {
             if (ForkInformation == null)
                 yield break;
             foreach (var fi in ForkInformation)
-                if (fi.lastMemoryBlockIDBeforeFork < memoryBlockID)
+                if (fi.lastMemoryBlockIDBeforeFork < memoryBlockID.GetIntID())
                     yield return fi.forkNumber;
         }
-
-        private bool MemoryBlockIsOnSameFork(int memoryBlockID)
+        
+        private bool MemoryBlockIsOnSameFork(MemoryBlockID memoryBlockID)
         {
             return GetForkNumbers().SequenceEqual(GetForkNumbersPrecedingMemoryBlockID(memoryBlockID));
         }
         public override string GetPathForIndex() => GetPathHelper(BaseBlobPath, GetForkNumbers(), " Index " + IndexVersion.ToString());
-        public override string GetPathForMemoryChunk(int memoryBlockID) => GetPathHelper(BaseBlobPath, GetForkNumbersPrecedingMemoryBlockID(memoryBlockID), ContainedInSingleBlob ? " AllChunks" : (" Chunk " + memoryBlockID.ToString()));
+        public override string GetPathForMemoryChunk(MemoryBlockID memoryBlockID) => GetPathHelper(BaseBlobPath, GetForkNumbersPrecedingMemoryBlockID(memoryBlockID), ContainedInSingleBlob ? " AllChunks" : (" Chunk " + memoryBlockID.ToString()));
 
         public PersistentIndexMemoryChunkStatus GetMemoryChunkStatus(int memoryBlockID)
         {
@@ -102,17 +102,17 @@ namespace Lazinator.Persistence
             return (PersistentIndexMemoryChunkStatus)MemoryChunkStatus.Span[memoryBlockID];
         }
 
-        private void SetMemoryChunkStatus(int memoryBlockID, PersistentIndexMemoryChunkStatus status)
+        private void SetMemoryChunkStatus(MemoryBlockID memoryBlockID, PersistentIndexMemoryChunkStatus status)
         {
-            if (memoryBlockID >= MemoryChunkStatus.Length)
+            if (memoryBlockID.GetIntID() >= MemoryChunkStatus.Length)
             {
                 const int numToAddAtOnce = 10;
-                byte[] memoryChunkStatus = new byte[memoryBlockID + numToAddAtOnce];
+                byte[] memoryChunkStatus = new byte[memoryBlockID.GetIntID() + numToAddAtOnce];
                 for (int i = 0; i < MemoryChunkStatus.Length; i++)
                     memoryChunkStatus[i] = (byte)MemoryChunkStatus.Span[i];
                 MemoryChunkStatus = memoryChunkStatus;
             }
-            MemoryChunkStatus.Span[memoryBlockID] = (byte)status;
+            MemoryChunkStatus.Span[memoryBlockID.GetIntID()] = (byte)status;
         }
 
         private void InitializeMemoryChunkStatusFromPrevious()
@@ -174,9 +174,9 @@ namespace Lazinator.Persistence
                 PersistentIndexMemoryChunkStatus status = GetMemoryChunkStatus(memoryBlockID);
                 if (status == statusToDelete)
                 {
-                    if (includeChunksFromEarlierForks || MemoryBlockIsOnSameFork(memoryBlockID))
+                    if (includeChunksFromEarlierForks || MemoryBlockIsOnSameFork(new MemoryBlockID(memoryBlockID)))
                     {
-                        string fullPath = GetPathForMemoryChunk(memoryBlockID);
+                        string fullPath = GetPathForMemoryChunk(new MemoryBlockID(memoryBlockID));
                         yield return fullPath;
                     }
                 }
@@ -204,7 +204,7 @@ namespace Lazinator.Persistence
             PersistSelf();
         }
 
-        public override void OnMemoryChunkPersisted(int memoryBlockID) => SetMemoryChunkStatus(memoryBlockID, PersistentIndexMemoryChunkStatus.NewlyIncluded);
+        public override void OnMemoryChunkPersisted(MemoryBlockID memoryBlockID) => SetMemoryChunkStatus(memoryBlockID, PersistentIndexMemoryChunkStatus.NewlyIncluded);
 
         private void PersistSelf()
         {

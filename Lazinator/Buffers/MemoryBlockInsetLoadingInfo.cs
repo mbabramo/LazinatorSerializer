@@ -8,7 +8,7 @@ namespace Lazinator.Buffers
 {
     public partial class MemoryBlockInsetLoadingInfo : MemoryBlockLoadingInfo, IMemoryBlockInsetLoadingInfo
     {
-        public MemoryBlockInsetLoadingInfo(int memoryBlockID, int preTruncationLength, long loadingOffsetWithinMultiBlockBlob) : base(memoryBlockID, preTruncationLength)
+        public MemoryBlockInsetLoadingInfo(MemoryBlockID memoryBlockID, int preTruncationLength, long loadingOffsetWithinMultiBlockBlob) : base(memoryBlockID, preTruncationLength)
         {
             LoadingOffset = loadingOffsetWithinMultiBlockBlob;
         }

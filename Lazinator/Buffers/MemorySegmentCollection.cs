@@ -116,13 +116,13 @@ namespace Lazinator.Buffers
         {
             if (activeMemoryPosition > NumActiveMemoryBytesReferenced)
             {
-                int activeMemoryBlockID = GetNextMemoryBlockID();
+                MemoryBlockID activeMemoryBlockID = GetNextMemoryBlockID();
                 ExtendSegments(new MemorySegmentIDAndSlice(activeMemoryBlockID, NumActiveMemoryBytesReferenced, activeMemoryPosition - NumActiveMemoryBytesReferenced), true);
                 NumActiveMemoryBytesReferenced = activeMemoryPosition;
             }
         }
 
-        public int GetIndexFromMemoryBlockID(int memoryBlockID)
+        public int GetIndexFromMemoryBlockID(MemoryBlockID memoryBlockID)
         {
             for (int i = 0; i < MemoryChunks.Count; i++)
             {

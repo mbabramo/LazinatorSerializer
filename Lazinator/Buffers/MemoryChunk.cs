@@ -31,7 +31,7 @@ namespace Lazinator.Buffers
 
         public MemoryBlockLoadingInfo LoadingInfo { get; set; }
 
-        public int MemoryBlockID => LoadingInfo.MemoryBlockID;
+        public MemoryBlockID MemoryBlockID => LoadingInfo.MemoryBlockID;
 
         private int _Length = 0;
         public int Length { get => _Length; set => _Length = value; }
@@ -67,7 +67,7 @@ namespace Lazinator.Buffers
         {
             MemoryAsLoaded = memoryAsLoaded;
             Length = memoryAsLoaded.ReadOnlyMemory.Length;
-            LoadingInfo = loadingInfo ?? new MemoryBlockLoadingInfo(0, Length);
+            LoadingInfo = loadingInfo ?? new MemoryBlockLoadingInfo(new MemoryBlockID(0), Length);
             IsPersisted = isPersisted;
         }
 

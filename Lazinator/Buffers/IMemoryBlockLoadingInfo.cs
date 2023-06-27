@@ -5,7 +5,7 @@ namespace Lazinator.Buffers
     [Lazinator((int)LazinatorCoreUniqueIDs.IMemoryBlockLoadingInfo)]
     public interface IMemoryBlockLoadingInfo
     {
-        int MemoryBlockID { get; set; }
+        int MemoryBlockIntID { get; set; }
         int PreTruncationLength { get; set; }
     }
 }

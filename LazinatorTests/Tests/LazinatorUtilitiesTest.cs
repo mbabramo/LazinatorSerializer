@@ -63,7 +63,7 @@ namespace LazinatorTests.Tests
                 if (i == 0)
                     m = new LazinatorMemory(b);
                 else 
-                    m = m.WithAppendedChunk(new MemoryChunk(new ReadOnlyBytes(b), new MemoryBlockLoadingInfo(i, b.Length), false)); 
+                    m = m.WithAppendedChunk(new MemoryChunk(new ReadOnlyBytes(b), new MemoryBlockLoadingInfo(new MemoryBlockID(i), b.Length), false)); 
             }
 
             const int numChecks = 15;
@@ -103,7 +103,7 @@ namespace LazinatorTests.Tests
                     continuousUnderlying[overallIndex++] = mainChunks[i][j];
                 }
                 overallMemoryOwners.Add(new ReadOnlyBytes(mainChunks[i]));
-                overallMemoryChunks.Add(new MemoryChunk(overallMemoryOwners[i], new MemoryBlockLoadingInfo(i, bytesPerChunk), false));
+                overallMemoryChunks.Add(new MemoryChunk(overallMemoryOwners[i], new MemoryBlockLoadingInfo(new MemoryBlockID(i), bytesPerChunk), false));
             }
             LazinatorMemory overallLazinatorMemory = new LazinatorMemory(overallMemoryChunks.ToList(), 0, 0, continuousUnderlying.Length);
             const int numRepetitions = 100;
@@ -127,7 +127,7 @@ namespace LazinatorTests.Tests
                     int numBytes = r.Next(0, bytesPerChunk - startPosition);
                     var overallMemoryOwner = overallMemoryOwners[mainChunkIndex];
                     var overallMemoryOwnerLoaded = new ReadOnlyBytes(overallMemoryOwner.ReadOnlyMemory);
-                    memoryChunks.Add(new MemoryChunk(overallMemoryOwnerLoaded, new MemoryBlockLoadingInfo(mainChunkIndex, numBytes), false));
+                    memoryChunks.Add(new MemoryChunk(overallMemoryOwnerLoaded, new MemoryBlockLoadingInfo(new MemoryBlockID(mainChunkIndex), numBytes), false));
                     IEnumerable<byte> bytesToAdd = overallMemoryOwners[mainChunkIndex].ReadOnlyMemory.ToArray().Skip(startPosition).Take(numBytes);
                     referencedBytes.AddRange(bytesToAdd);
                     // Debug.WriteLine($"Main chunk {mainChunkIndex} start {startPosition} numBytes {numBytes} bytes {String.Join(",", bytesToAdd)}");
@@ -158,17 +158,17 @@ namespace LazinatorTests.Tests
             // Note that the LoadingInfos should be irrelevant. The chunks consist of the memory as loaded.
             MemorySegmentCollection c = new MemorySegmentCollection(new List<MemoryChunk>
             {
-                new MemoryChunk(new ReadOnlyBytes(new byte[] { 1, 2, 3 })) { LoadingInfo = new MemoryBlockLoadingInfo(0, 3) },
-                new MemoryChunk(new ReadOnlyBytes(new byte[] { 200, 200, 4, 5, 6, 200, 200 })) { LoadingInfo = new MemoryBlockLoadingInfo(1, 7) },
-                new MemoryChunk(new ReadOnlyBytes(new byte[] { 7, 8, 9, 200 }))  { LoadingInfo = new MemoryBlockLoadingInfo(2, 409 /* should't matter that pretruncation length is large */ ) },
-                new MemoryChunk(new ReadOnlyBytes(new byte[] { 10, 11, 12 })) { LoadingInfo = new MemoryBlockLoadingInfo(3, 3) },
+                new MemoryChunk(new ReadOnlyBytes(new byte[] { 1, 2, 3 })) { LoadingInfo = new MemoryBlockLoadingInfo(new MemoryBlockID(0), 3) },
+                new MemoryChunk(new ReadOnlyBytes(new byte[] { 200, 200, 4, 5, 6, 200, 200 })) { LoadingInfo = new MemoryBlockLoadingInfo(new MemoryBlockID(1), 7) },
+                new MemoryChunk(new ReadOnlyBytes(new byte[] { 7, 8, 9, 200 }))  { LoadingInfo = new MemoryBlockLoadingInfo(new MemoryBlockID(2), 409 /* should't matter that pretruncation length is large */ ) },
+                new MemoryChunk(new ReadOnlyBytes(new byte[] { 10, 11, 12 })) { LoadingInfo = new MemoryBlockLoadingInfo(new MemoryBlockID(3), 3) },
             }, true);
             c.Segments = new List<MemorySegmentIDAndSlice>()
             {
-                new MemorySegmentIDAndSlice(2, 1, 2), // 8, 9
-                new MemorySegmentIDAndSlice(2, 0, 3), // 7, 8, 9
-                new MemorySegmentIDAndSlice(3, 0, 2), // 10, 11
-                new MemorySegmentIDAndSlice(1, 1, 1) // 200
+                new MemorySegmentIDAndSlice(new MemoryBlockID(2), 1, 2), // 8, 9
+                new MemorySegmentIDAndSlice(new MemoryBlockID(2), 0, 3), // 7, 8, 9
+                new MemorySegmentIDAndSlice(new MemoryBlockID(3), 0, 2), // 10, 11
+                new MemorySegmentIDAndSlice(new MemoryBlockID(1), 1, 1) // 200
             };
             LazinatorMemory memory = new LazinatorMemory(c);
             var result = memory.GetConsolidatedMemory().ToArray();

@@ -256,7 +256,7 @@ namespace Lazinator.Buffers
         {
             if (ActiveMemoryPosition > 0)
             {
-                var chunk = new MemoryChunk(ActiveMemory.ReadWriteBytes, new MemoryBlockLoadingInfo(MemorySegmentCollection?.GetNextMemoryBlockID() ?? 0,  ActiveMemoryPosition), false);
+                var chunk = new MemoryChunk(ActiveMemory.ReadWriteBytes, new MemoryBlockLoadingInfo(MemorySegmentCollection?.GetNextMemoryBlockID() ?? new MemoryBlockID(0),  ActiveMemoryPosition), false);
                 if (MemorySegmentCollection == null)
                     MemorySegmentCollection = new MemorySegmentCollection(chunk, false);
                 else
@@ -272,7 +272,7 @@ namespace Lazinator.Buffers
             if (MemorySegmentCollection is null)
                 throw new Exception("No LazinatorMemory to patch");
             MemorySegmentCollection.RecordLastActiveMemoryChunkReference(ActiveMemoryPosition);
-            int activeMemoryBlockID = MemorySegmentCollection.GetNextMemoryBlockID();
+            MemoryBlockID activeMemoryBlockID = MemorySegmentCollection.GetNextMemoryBlockID();
             int activeLength = NumActiveMemoryBytesReferenced;
             if (activeLength > 0)
             {

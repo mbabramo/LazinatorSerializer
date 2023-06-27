@@ -382,12 +382,12 @@ namespace Lazinator.Buffers
 
         #region Multiple memory management
 
-        internal int GetNextMemoryBlockID()
+        internal MemoryBlockID GetNextMemoryBlockID()
         {
             if (IsEmpty)
-                return 0;
-            int maxMemoryBlockID = SingleMemoryChunk == null ? MultipleMemoryChunks.MaxMemoryBlockID : SingleMemoryChunk.MemoryBlockID; // not always the ID of the last chunk, because patching may reassemble into a different order. We are guaranteed, however, that if we're doing versioning, the most recent memory chunk ID will be included.
-            return maxMemoryBlockID + 1;
+                return new MemoryBlockID(0);
+            MemoryBlockID maxMemoryBlockID = SingleMemoryChunk == null ? MultipleMemoryChunks.HighestMemoryBlockID : SingleMemoryChunk.MemoryBlockID; // not always the ID of the last chunk, because patching may reassemble into a different order. We are guaranteed, however, that if we're doing versioning, the most recent memory chunk ID will be included.
+            return maxMemoryBlockID.Next();
         }
 
         /// <summary>
@@ -413,7 +413,7 @@ namespace Lazinator.Buffers
         {
             if (SingleMemoryChunk != null)
             {
-                yield return new MemorySegmentIDAndSlice(0, Offset, (int)Length);
+                yield return new MemorySegmentIDAndSlice(new MemoryBlockID(0), Offset, (int)Length);
             }
             else
                 foreach (MemorySegmentIDAndSlice idAndSlice in MultipleMemoryChunks.EnumerateMemoryBlockIDAndSlices(StartIndex, Offset, Length))

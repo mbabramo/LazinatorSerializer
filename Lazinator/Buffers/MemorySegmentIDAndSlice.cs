@@ -11,7 +11,7 @@ namespace Lazinator.Buffers
         /// <summary>
         /// The MemoryBlockID, used to find the corresponding MemoryChunk in a MemoryChunkCollection.
         /// </summary>
-        public readonly int MemoryBlockID { get; }
+        public readonly MemoryBlockID MemoryBlockID { get; }
         /// <summary>
         /// The offset into the MemoryChunk (not into the underlying MemoryBlock).
         /// </summary>
@@ -21,7 +21,7 @@ namespace Lazinator.Buffers
         /// </summary>
         public readonly int Length { get; }
 
-        public MemorySegmentIDAndSlice(int memoryBlockID, int offsetIntoMemoryChunk, int length)
+        public MemorySegmentIDAndSlice(MemoryBlockID memoryBlockID, int offsetIntoMemoryChunk, int length)
         {
             this.MemoryBlockID = memoryBlockID;
             this.OffsetIntoMemoryChunk = offsetIntoMemoryChunk;
