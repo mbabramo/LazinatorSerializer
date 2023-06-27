@@ -94,7 +94,7 @@ namespace Lazinator.Persistence
         
         public override string GetPathForIndex() => GetPathHelper(BaseBlobPath, GetForkNumbers(), " Index " + IndexVersion.ToString());
         
-        public override string GetPathForMemoryBlock(MemoryBlockID memoryBlockID) => GetPathHelper(BaseBlobPath, GetForkNumbersPrecedingMemoryBlockID(memoryBlockID), ContainedInSingleBlob ? " AllChunks" : (" Block " + memoryBlockID.ToString()));
+        public override string GetPathForMemoryBlock(MemoryBlockID memoryBlockID) => GetPathHelper(BaseBlobPath, GetForkNumbersPrecedingMemoryBlockID(memoryBlockID), ContainedInSingleBlob ? " AllBlocks" : (" Block " + memoryBlockID.ToString()));
 
         public PersistentIndexMemoryBlockStatus GetMemoryBlockStatus(int memoryBlockID)
         {
@@ -195,8 +195,6 @@ namespace Lazinator.Persistence
             PersistMemoryChunks(IndexVersion == 0);
             PersistSelf();
         }
-
-        
 
         public async ValueTask PersistLazinatorMemoryAsync(LazinatorMemory lazinatorMemory)
         {
