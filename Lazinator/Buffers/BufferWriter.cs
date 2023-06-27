@@ -83,7 +83,7 @@ namespace Lazinator.Buffers
                 InitializeIfNecessary();
                 if (Patching)
                 {
-                    return GetLazinatorMemoryWithPatches(); 
+                    return GetLazinatorMemoryWithPatches();
                 }
                 ActiveMemory.UsedBytesInCurrentBuffer = ActiveMemoryPosition;
                 if (MemorySegmentCollection != null)
@@ -230,7 +230,7 @@ namespace Lazinator.Buffers
             {
                 // I don't think this is necessary -- if we are serializing diffs then the segment will get recorded when we MoveActiveToCompletedMemory
                 // if (options.SerializeDiffs)
-                    // RecordLastActiveMemoryChunkReferenceIfAny();
+                // RecordLastActiveMemoryChunkReferenceIfAny();
                 MoveActiveToCompletedMemory((int)(options.NextBufferThreshold * 1.2));
             }
         }
@@ -256,7 +256,7 @@ namespace Lazinator.Buffers
         {
             if (ActiveMemoryPosition > 0)
             {
-                var chunk = new MemoryChunk(ActiveMemory.ReadWriteBytes, new MemoryBlockLoadingInfo(MemorySegmentCollection?.GetNextMemoryBlockID() ?? new MemoryBlockID(0),  ActiveMemoryPosition), false);
+                var chunk = new MemoryChunk(ActiveMemory.ReadWriteBytes, new MemoryBlockLoadingInfo(MemorySegmentCollection?.GetNextMemoryBlockID() ?? new MemoryBlockID(0), ActiveMemoryPosition), false);
                 if (MemorySegmentCollection == null)
                     MemorySegmentCollection = new MemorySegmentCollection(chunk, false);
                 else
@@ -541,5 +541,58 @@ namespace Lazinator.Buffers
         }
 
         #endregion
+
+        #region Tracewriting
+
+#if TRACEWRITING
+
+        // TRACEWRITING can be defined to allow visibility into each step of a buffer change.
+
+        // Note that TRACEWRITING may be defined in the Lazinator project file as follows:
+        //<PropertyGroup Condition = "'$(Configuration)|$(Platform)'=='Debug|AnyCPU'" >
+        //  <AllowUnsafeBlocks> false </AllowUnsafeBlocks >
+        //  <DefineConstants>$(DefineConstants);TRACEWRITING</DefineConstants>
+        //</PropertyGroup>
+
+        public static int _TraceWritingStep;
+        public static int TraceWritingStep
+        {
+            get => _TraceWritingStep;
+            set => _TraceWritingStep = value;
+        }
+
+        static string PreviousString = "";
+
+        public string WithStep() => $"Step {TraceWritingStep++}: {ToString()}";
+
+        public void WriteTrace()
+        {
+            string s = WithStep();
+            
+            PrintHighlightedDifference(PreviousString, s);
+
+            PreviousString = s;
+        }
+
+        private static void PrintHighlightedDifference(string s1, string s2)
+        {
+            for (int i = 0; i < s2.Length; i++)
+            {
+                if (i >= s1.Length || s1[i] != s2[i])
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write(s2[i]);
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.Write(s2[i]);
+                    Console.ResetColor();
+                }
+            }
+        }
+#endif
+    #endregion
     }
 }
