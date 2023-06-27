@@ -304,7 +304,7 @@ namespace Lazinator.Buffers
             var memoryChunksToPersist = GetUnpersistedMemoryChunks();
 
             long offset = 0;
-            string pathForSingleBlob = ContainedInSingleBlob ? GetPathForMemoryChunk(new MemoryBlockID(0)) : null;
+            string pathForSingleBlob = ContainedInSingleBlob ? GetPathForMemoryBlock(new MemoryBlockID(0)) : null;
             if (ContainedInSingleBlob)
             {
                 if (isInitialVersion)
@@ -321,7 +321,7 @@ namespace Lazinator.Buffers
             {
                 memoryChunkToPersist.LoadMemory();
                 MemoryBlockID memoryBlockID = memoryChunkToPersist.MemoryBlockID;
-                string path = ContainedInSingleBlob ? pathForSingleBlob : GetPathForMemoryChunk(memoryBlockID); 
+                string path = ContainedInSingleBlob ? pathForSingleBlob : GetPathForMemoryBlock(memoryBlockID); 
                 if (ContainedInSingleBlob)
                 {
                     BlobManager.Append(path, memoryChunkToPersist.MemoryAsLoaded.ReadOnlyMemory);
@@ -342,7 +342,7 @@ namespace Lazinator.Buffers
             var memoryChunksToPersist = GetUnpersistedMemoryChunks();
 
             long offset = 0;
-            string pathForSingleBlob = ContainedInSingleBlob ? GetPathForMemoryChunk(new MemoryBlockID(0)) : null;
+            string pathForSingleBlob = ContainedInSingleBlob ? GetPathForMemoryBlock(new MemoryBlockID(0)) : null;
             if (ContainedInSingleBlob)
             {
                 if (isInitialVersion)
@@ -359,7 +359,7 @@ namespace Lazinator.Buffers
             {
                 await memoryChunkToPersist.LoadMemoryAsync();
                 MemoryBlockID memoryBlockID = memoryChunkToPersist.MemoryBlockID;
-                string path = ContainedInSingleBlob ? pathForSingleBlob : GetPathForMemoryChunk(memoryBlockID);
+                string path = ContainedInSingleBlob ? pathForSingleBlob : GetPathForMemoryBlock(memoryBlockID);
                 if (ContainedInSingleBlob)
                 {
                     await BlobManager.AppendAsync(path, memoryChunkToPersist.MemoryAsLoaded.ReadOnlyMemory);
@@ -385,7 +385,7 @@ namespace Lazinator.Buffers
         #region Path
 
         public virtual string GetPathForIndex() => GetPathHelper(BaseBlobPath, null, " Index");
-        public virtual string GetPathForMemoryChunk(MemoryBlockID memoryBlockID) => GetPathHelper(BaseBlobPath, null, ContainedInSingleBlob ? " AllChunks" : (" Chunk " + memoryBlockID.ToString()));
+        public virtual string GetPathForMemoryBlock(MemoryBlockID memoryBlockID) => GetPathHelper(BaseBlobPath, null, ContainedInSingleBlob ? " AllChunks" : (" Chunk " + memoryBlockID.ToString()));
 
         public static string GetPathForIndex(string baseBlobPath, IEnumerable<int> forkInformation, int versionNumber) => GetPathHelper(baseBlobPath, forkInformation, " Index " + versionNumber.ToString());
 

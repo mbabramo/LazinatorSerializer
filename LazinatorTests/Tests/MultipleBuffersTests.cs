@@ -561,11 +561,11 @@ namespace LazinatorTests.Tests
             for (int i = 0; i < indices.Count(); i++)
             {
                 var indexToDelete = indices[i];
-                indexToDelete.Delete(PersistentIndexMemoryChunkStatus.NewlyOmitted, true);
+                indexToDelete.Delete(PersistentIndexMemoryBlockStatus.NewlyOmitted, true);
                 if (i == indices.Count() - 1)
                 {
-                    indexToDelete.Delete(PersistentIndexMemoryChunkStatus.PreviouslyIncluded, true);
-                    indexToDelete.Delete(PersistentIndexMemoryChunkStatus.NewlyIncluded, true);
+                    indexToDelete.Delete(PersistentIndexMemoryBlockStatus.PreviouslyIncluded, true);
+                    indexToDelete.Delete(PersistentIndexMemoryBlockStatus.NewlyIncluded, true);
                 }
                 indexToDelete.DeleteIndex();
             }
@@ -744,30 +744,30 @@ namespace LazinatorTests.Tests
 
             index_root.DeleteIndex();
             VerifyProperPersistence(index_child1, child1);
-            index_child1.Delete(PersistentIndexMemoryChunkStatus.PreviouslyIncluded, false);
-            index_child1.Delete(PersistentIndexMemoryChunkStatus.NewlyOmitted, false);
-            index_child1.Delete(PersistentIndexMemoryChunkStatus.NewlyIncluded, false);
+            index_child1.Delete(PersistentIndexMemoryBlockStatus.PreviouslyIncluded, false);
+            index_child1.Delete(PersistentIndexMemoryBlockStatus.NewlyOmitted, false);
+            index_child1.Delete(PersistentIndexMemoryBlockStatus.NewlyIncluded, false);
             index_child1.DeleteIndex();
             VerifyProperPersistence(index_child2, child2);
-            index_child2.Delete(PersistentIndexMemoryChunkStatus.NewlyOmitted, true); // only newly omitted, because there are forks
+            index_child2.Delete(PersistentIndexMemoryBlockStatus.NewlyOmitted, true); // only newly omitted, because there are forks
             index_child2.DeleteIndex();
             VerifyProperPersistence(index_child3, child3);
-            index_child3.Delete(PersistentIndexMemoryChunkStatus.PreviouslyIncluded, false);
-            index_child3.Delete(PersistentIndexMemoryChunkStatus.NewlyOmitted, false);
-            index_child3.Delete(PersistentIndexMemoryChunkStatus.NewlyIncluded, false);
+            index_child3.Delete(PersistentIndexMemoryBlockStatus.PreviouslyIncluded, false);
+            index_child3.Delete(PersistentIndexMemoryBlockStatus.NewlyOmitted, false);
+            index_child3.Delete(PersistentIndexMemoryBlockStatus.NewlyIncluded, false);
             index_child3.DeleteIndex();
             VerifyProperPersistence(index_child2_1, child2_1);
-            index_child2_1.Delete(PersistentIndexMemoryChunkStatus.PreviouslyIncluded, false);
-            index_child2_1.Delete(PersistentIndexMemoryChunkStatus.NewlyOmitted, false);
-            index_child2_1.Delete(PersistentIndexMemoryChunkStatus.NewlyIncluded, false);
+            index_child2_1.Delete(PersistentIndexMemoryBlockStatus.PreviouslyIncluded, false);
+            index_child2_1.Delete(PersistentIndexMemoryBlockStatus.NewlyOmitted, false);
+            index_child2_1.Delete(PersistentIndexMemoryBlockStatus.NewlyIncluded, false);
             index_child2_1.DeleteIndex();
             VerifyProperPersistence(index_child2_2, child2_2);
-            index_child2_2.Delete(PersistentIndexMemoryChunkStatus.NewlyOmitted, true); // only newly omitted, because there are forks
+            index_child2_2.Delete(PersistentIndexMemoryBlockStatus.NewlyOmitted, true); // only newly omitted, because there are forks
             index_child2_2.DeleteIndex();
             VerifyProperPersistence(index_child2_2_1, child2_2_1);
-            index_child2_2_1.Delete(PersistentIndexMemoryChunkStatus.PreviouslyIncluded, true);
-            index_child2_2_1.Delete(PersistentIndexMemoryChunkStatus.NewlyOmitted, false);
-            index_child2_2_1.Delete(PersistentIndexMemoryChunkStatus.NewlyIncluded, false);
+            index_child2_2_1.Delete(PersistentIndexMemoryBlockStatus.PreviouslyIncluded, true);
+            index_child2_2_1.Delete(PersistentIndexMemoryBlockStatus.NewlyOmitted, false);
+            index_child2_2_1.Delete(PersistentIndexMemoryBlockStatus.NewlyIncluded, false);
             index_child2_2_1.DeleteIndex();
 
             blobManager.Storage.Any().Should().BeFalse();

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Persistence
 {
-    public enum PersistentIndexMemoryChunkStatus : byte
+    public enum PersistentIndexMemoryBlockStatus : byte
     {
         NotYetUsed = 0,
         PreviouslyIncluded,
