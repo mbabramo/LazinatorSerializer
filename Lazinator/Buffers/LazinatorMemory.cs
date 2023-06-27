@@ -466,8 +466,8 @@ namespace Lazinator.Buffers
             if (SingleMemoryChunk != null)
                 yield return SingleMemoryChunk;
             else if (MultipleMemoryChunks != null)
-                foreach (var additional in MultipleMemoryChunks)
-                    yield return additional.MemoryChunk;
+                foreach (var additional in MultipleMemoryChunks.EnumerateMemoryChunks())
+                    yield return additional;
         }
 
         /// <summary>

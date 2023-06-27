@@ -122,6 +122,13 @@ namespace Lazinator.Buffers
                 }
         }
 
+        public IEnumerable<MemoryChunk> EnumerateMemoryChunks()
+        {
+            if (MemoryChunks != null)
+                foreach (var chunk in MemoryChunks)
+                    yield return chunk;
+        }
+
         public IEnumerator<MemorySegment> GetEnumerator()
         {
             foreach (var memorySegment in EnumerateMemorySegments())
@@ -181,9 +188,8 @@ namespace Lazinator.Buffers
             {
                 MemoryChunk memoryChunk = MemoryChunks[i];
                 int chunkID = memoryChunk.MemoryBlockID;
-                if (d.ContainsKey(chunkID))
-                    throw new LazinatorDeserializationException("Internal error. Memory block can be referened in no more than one memory chunk.");
-                d[chunkID] = i;
+                if (!d.ContainsKey(chunkID))
+                    d[chunkID] = i;
                 MemoryBlocksLoadingInfo.Add(memoryChunk.LoadingInfo);
             }
             MemoryChunksIndexFromBlockID = d;

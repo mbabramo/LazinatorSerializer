@@ -96,7 +96,7 @@ namespace Lazinator.Buffers
 
 
         /// <summary>
-        /// Writes from CompletedMemory. Instead of copying the bytes, it simply adds a BytesSegment reference to where those bytes are in the overall sets of bytes.
+        /// Writes from CompletedMemory. Instead of copying the bytes, it simply adds one or more segments referring to where those bytes are in the overall sets of bytes.
         /// </summary>
         /// <param name="memoryChunkIndex">The index of the memory chunk</param>
         /// <param name="startPosition">The position of the first byte of the memory within the indexed memory chunk</param>
@@ -149,7 +149,12 @@ namespace Lazinator.Buffers
             if (Segments == null)
                 return base.MemorySegmentAtIndex(i);
             var segment = Segments[i];
-            var chunk = MemoryChunks[GetIndexFromMemoryBlockID(segment.MemoryBlockID)];
+            int index = GetIndexFromMemoryBlockID(segment.MemoryBlockID);
+            if (index == -1)
+            {
+                var DEBUG = 0;
+            }
+            var chunk = MemoryChunks[index];
             chunk.LoadMemory();
             return new MemorySegment(chunk, new MemoryChunkSlice(0, chunk.Length));
         }

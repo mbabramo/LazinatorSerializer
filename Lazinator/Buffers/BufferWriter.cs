@@ -228,8 +228,9 @@ namespace Lazinator.Buffers
         {
             if (ActiveMemoryPosition - NumActiveMemoryBytesReferenced >= options.NextBufferThreshold)
             {
-                if (options.SerializeDiffs)
-                    RecordLastActiveMemoryChunkReferenceIfAny();
+                // I don't think this is necessary -- if we are serializing diffs then the segment will get recorded when we MoveActiveToCompletedMemory
+                // if (options.SerializeDiffs)
+                    // RecordLastActiveMemoryChunkReferenceIfAny();
                 MoveActiveToCompletedMemory((int)(options.NextBufferThreshold * 1.2));
             }
         }
