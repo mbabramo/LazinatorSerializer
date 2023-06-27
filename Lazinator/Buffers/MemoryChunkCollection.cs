@@ -162,6 +162,12 @@ namespace Lazinator.Buffers
             MemoryChunks[i] = chunk;
         }
 
+        public int GetMemoryChunkIndexFromBlockID(MemoryBlockID memoryBlockID)
+        {
+            var d = GetMemoryChunkIndicesFromIDs();
+            return d.ContainsKey(memoryBlockID) ? d[memoryBlockID] : -1;
+        }
+
         public MemoryChunk GetMemoryChunkByMemoryBlockID(MemoryBlockID memoryBlockID)
         {
             var d = GetMemoryChunkIndicesFromIDs();
@@ -169,8 +175,8 @@ namespace Lazinator.Buffers
                 return null;
             return MemoryChunks[d[memoryBlockID]];
         }
-
-        private Dictionary<MemoryBlockID, int> GetMemoryChunkIndicesFromIDs()
+        
+        protected Dictionary<MemoryBlockID, int> GetMemoryChunkIndicesFromIDs()
         {
             if (MemoryChunksIndexFromBlockID == null)
                 InitializeMemoryBlocksInformation();
