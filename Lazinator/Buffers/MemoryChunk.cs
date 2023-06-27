@@ -149,10 +149,16 @@ namespace Lazinator.Buffers
 
         public override string ToString()
         {
+            string result = ContentToString();
+            return $"Chunk {MemoryBlockID.ToString().PadLeft(3, '0')}:\n{result}";
+        }
+
+        public string ContentToString()
+        {
             LoadMemory();
             var bytes = ReadOnlyMemory.ToArray();
             string result = String.Join(",", bytes.Select(x => x.ToString().PadLeft(3, '0')));
-            return $"Chunk {MemoryBlockID.ToString().PadLeft(3, '0')}:\n{result}";
+            return result;
         }
     }
 }

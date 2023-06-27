@@ -6,6 +6,7 @@ using System.Linq;
 using System.Diagnostics;
 using System.Buffers;
 using Lazinator.Core;
+using Newtonsoft.Json.Serialization;
 
 namespace Lazinator.Buffers
 {
@@ -21,7 +22,12 @@ namespace Lazinator.Buffers
 
         public override string ToString()
         {
-            return ActiveMemory == null ? "" : String.Join(",", ActiveMemoryWrittenSpan.ToArray()) + " " + MemorySegmentCollection?.ToString();
+            return ActiveMemoryString() + " " + MemorySegmentCollection?.ToStringByChunk();
+        }
+
+        private string ActiveMemoryString()
+        {
+            return ActiveMemory == null ? "" : String.Join(",", ActiveMemoryWrittenSpan.ToArray());
         }
 
         /// <summary>
@@ -228,9 +234,9 @@ namespace Lazinator.Buffers
         {
             if (ActiveMemoryPosition - NumActiveMemoryBytesReferenced >= options.NextBufferThreshold)
             {
-                // I don't think this is necessary -- if we are serializing diffs then the segment will get recorded when we MoveActiveToCompletedMemory
-                // if (options.SerializeDiffs)
-                // RecordLastActiveMemoryChunkReferenceIfAny();
+                // DEBUG -- commented out code not needed?
+                //if (options.SerializeDiffs)
+                //    RecordLastActiveMemoryChunkReferenceIfAny();
                 MoveActiveToCompletedMemory((int)(options.NextBufferThreshold * 1.2));
             }
         }
@@ -512,6 +518,7 @@ namespace Lazinator.Buffers
         {
             LengthsSpan[0] = length;
             LengthsPosition = (LengthsPosition.index, LengthsPosition.offset + 1);
+            WriteTrace();
         }
 
         public void RecordLength(Int16 length)
@@ -520,6 +527,7 @@ namespace Lazinator.Buffers
                 WriteInt16LittleEndian(LengthsSpan, length);
             else
                 WriteInt16BigEndian(LengthsSpan, length);
+            WriteTrace();
             LengthsPosition = (LengthsPosition.index, LengthsPosition.offset + sizeof(Int16));
         }
 
@@ -529,6 +537,7 @@ namespace Lazinator.Buffers
                 WriteInt32LittleEndian(LengthsSpan, length);
             else
                 WriteInt32BigEndian(LengthsSpan, length);
+            WriteTrace();
             LengthsPosition = (LengthsPosition.index, LengthsPosition.offset + sizeof(int));
         }
         public void RecordLength(Int64 length)
@@ -537,6 +546,7 @@ namespace Lazinator.Buffers
                 WriteInt64LittleEndian(LengthsSpan, length);
             else
                 WriteInt64BigEndian(LengthsSpan, length);
+            WriteTrace();
             LengthsPosition = (LengthsPosition.index, LengthsPosition.offset + sizeof(Int64));
         }
 
@@ -563,18 +573,66 @@ namespace Lazinator.Buffers
 
         static string PreviousString = "";
 
-        public string WithStep() => $"Step {TraceWritingStep++}: {ToString()}";
-
         public void WriteTrace()
         {
-            string s = WithStep();
-            
-            PrintHighlightedDifference(PreviousString, s);
+            string s = ToString().Trim();
+
+            string highlighted = GetHighlightedDifference(PreviousString, s);
 
             PreviousString = s;
+
+            int stepNum = TraceWritingStep;
+
+            Debug.WriteLine($"Step {stepNum:D3}: {highlighted}");
+
+            TraceWritingStep++;
         }
 
-        private static void PrintHighlightedDifference(string s1, string s2)
+        public static string GetHighlightedDifference(string s1, string s2)
+        {
+            if (s1 == null || s2.StartsWith(s1))
+                return s2; // no highlighting needed
+
+            int startIndex = -1;
+            int endIndex = -1;
+
+            for (int i = 0; i < s2.Length; i++)
+            {
+                if (i >= s1.Length || s1[i] != s2[i])
+                {
+                    if (startIndex == -1)
+                    {
+                        startIndex = i;
+                        endIndex = i;
+                    }
+                    else
+                    {
+                        endIndex = i;
+                    }
+                }
+            }
+
+            string highlightedDifference = "";
+
+            for (int i = 0; i < s2.Length; i++)
+            {
+                if (i == startIndex)
+                {
+                    highlightedDifference += "***";
+                }
+
+                highlightedDifference += s2[i];
+
+                if (i == endIndex)
+                {
+                    highlightedDifference += "***";
+                }
+            }
+
+            return highlightedDifference;
+        }
+
+        private static void PrintHighlightedDifference_Console(string s1, string s2)
         {
             for (int i = 0; i < s2.Length; i++)
             {

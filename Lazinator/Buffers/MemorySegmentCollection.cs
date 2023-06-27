@@ -36,7 +36,11 @@ namespace Lazinator.Buffers
 
         public bool Patching => Segments != null;
 
-        internal long PatchesTotalLength { get; set; }
+        internal long PatchesTotalLength 
+        { 
+            get; 
+            set; 
+        }
 
         /// <summary>
         /// The number of bytes of active memory that have already been referenced by MemorySegments.

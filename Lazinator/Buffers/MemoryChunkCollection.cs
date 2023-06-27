@@ -177,6 +177,11 @@ namespace Lazinator.Buffers
             return MemoryChunksIndexFromBlockID;
         }
 
+        public string ToStringByChunk()
+        {
+            return String.Join("; ", EnumerateMemoryChunks().Select(x => x.ToString().Replace("\n", " ")));
+        }
+
         #endregion
 
         #region Memory blocks loading information
