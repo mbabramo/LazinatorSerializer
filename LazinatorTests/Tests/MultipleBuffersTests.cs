@@ -549,6 +549,7 @@ namespace LazinatorTests.Tests
                 Debug.WriteLine(revisedMemory.ToStringByChunk());
                 Debug.WriteLine($"Consolidated{round}:\n" + revisedMemory.ToStringConsolidated());
 
+                // DEBUG -- this isn't right -- we should not be passing the revisedMemory from a PersistentIndex to a LazinatorBinaryTree.
                 BinaryTree = new LazinatorBinaryTree<WDouble>(revisedMemory);
                 round++;
             });

@@ -97,27 +97,27 @@ namespace Lazinator.Persistence
 
         public PersistentIndexMemoryChunkStatus GetMemoryChunkStatus(int memoryBlockID)
         {
-            if (memoryBlockID >= MemoryChunkStatus.Length)
+            if (memoryBlockID >= MemoryBlockStatus.Length)
                 return PersistentIndexMemoryChunkStatus.NotYetUsed;
-            return (PersistentIndexMemoryChunkStatus)MemoryChunkStatus.Span[memoryBlockID];
+            return (PersistentIndexMemoryChunkStatus)MemoryBlockStatus.Span[memoryBlockID];
         }
 
         private void SetMemoryChunkStatus(MemoryBlockID memoryBlockID, PersistentIndexMemoryChunkStatus status)
         {
-            if (memoryBlockID.GetIntID() >= MemoryChunkStatus.Length)
+            if (memoryBlockID.GetIntID() >= MemoryBlockStatus.Length)
             {
                 const int numToAddAtOnce = 10;
                 byte[] memoryChunkStatus = new byte[memoryBlockID.GetIntID() + numToAddAtOnce];
-                for (int i = 0; i < MemoryChunkStatus.Length; i++)
-                    memoryChunkStatus[i] = (byte)MemoryChunkStatus.Span[i];
-                MemoryChunkStatus = memoryChunkStatus;
+                for (int i = 0; i < MemoryBlockStatus.Length; i++)
+                    memoryChunkStatus[i] = (byte)MemoryBlockStatus.Span[i];
+                MemoryBlockStatus = memoryChunkStatus;
             }
-            MemoryChunkStatus.Span[memoryBlockID.GetIntID()] = (byte)status;
+            MemoryBlockStatus.Span[memoryBlockID.GetIntID()] = (byte)status;
         }
 
         private void InitializeMemoryChunkStatusFromPrevious()
         {
-            int length = PreviousPersistentIndex.MemoryChunkStatus.Length;
+            int length = PreviousPersistentIndex.MemoryBlockStatus.Length;
             byte[] updated = new byte[length];
             for (int memoryBlockID = 0; memoryBlockID < length; memoryBlockID++)
             {
@@ -133,12 +133,12 @@ namespace Lazinator.Persistence
                 };
                 updated[memoryBlockID] = (byte)revisedStatus;
             }
-            MemoryChunkStatus = updated;
+            MemoryBlockStatus = updated;
         }
 
         public int GetLastMemoryBlockID()
         {
-            int memoryBlockID = MemoryChunkStatus.Length;
+            int memoryBlockID = MemoryBlockStatus.Length;
             while (GetMemoryChunkStatus(memoryBlockID) == PersistentIndexMemoryChunkStatus.NotYetUsed)
                 memoryBlockID--;
             return memoryBlockID;
@@ -168,7 +168,7 @@ namespace Lazinator.Persistence
 
         private IEnumerable<string> GetPathsOfMemoryChunksToDelete(PersistentIndexMemoryChunkStatus statusToDelete, bool includeChunksFromEarlierForks)
         {
-            int numIDs = MemoryChunkStatus.Length;
+            int numIDs = MemoryBlockStatus.Length;
             for (int memoryBlockID = 0; memoryBlockID < numIDs; memoryBlockID++)
             {
                 PersistentIndexMemoryChunkStatus status = GetMemoryChunkStatus(memoryBlockID);
