@@ -98,7 +98,7 @@ namespace Lazinator.Buffers
             if (MemoryChunks == null)
                 MemoryChunks = MemoryBlocksLoadingInfo.Select(x => (MemoryChunk)null).ToList();
             if (MemoryChunks[i] == null)
-                LoadMemoryAtIndex(i);
+                MemoryChunks[i] = CreateMemoryChunkForIndex(i);
             var chunk = MemoryChunks[i];
             return new MemorySegment(chunk, new MemoryChunkSlice(0, chunk.Length));
         }
@@ -108,7 +108,7 @@ namespace Lazinator.Buffers
             if (MemoryChunks == null)
                 MemoryChunks = MemoryBlocksLoadingInfo.Select(x => (MemoryChunk)null).ToList();
             if (MemoryChunks[i] == null)
-                await LoadMemoryAtIndexAsync(i);
+                MemoryChunks[i] = await CreateMemoryChunkForIndexAsync(i);
             var chunk = MemoryChunks[i];
             return new MemorySegment(chunk, new MemoryChunkSlice(0, chunk.Length));
         }
@@ -140,28 +140,6 @@ namespace Lazinator.Buffers
             return GetEnumerator();
         }
 
-        // DEBUG TODO -- delete BlobMemoryChunk and replace with a chunk type that is connected to MemoryChunkCollection, so that we can load and unload. In this case, we could just create the MemoryChunks in advance, but maybe there is no reason to do this before it is needed. Also make it so that we can unload after persisting all. But then we need to ensure that if a MemoryChunk calls unload, the unloading can be accomplished here. Ideally, we should make it so that MemoryChunk is purely internal and is never accessed by the consumer code. So long as all the MemoryChunks are stored in a MemoryChunkCollection, just unloading the one memory chunk should suffice. Users may still have access to ReadOnlyMemory<byte>, however. (MemoryChunks can be sliced, but if it's internal, that will only be done by this library.) 
-
-        private void LoadMemoryAtIndex(int i)
-        {
-            string path = GetPathForIndex();
-            var loadingInfo = MemoryBlocksLoadingInfo[i];
-            ReadOnlyMemory<byte> memory = BlobManager.Read(path, loadingInfo.GetLoadingOffset(), loadingInfo.PreTruncationLength);
-            ReadOnlyBytes readOnlyBytes = new ReadOnlyBytes(memory);
-            MemoryChunk chunk = new MemoryChunk(readOnlyBytes) { IsPersisted = true }; 
-            MemoryChunks[i] = chunk;
-        }
-
-        private async ValueTask LoadMemoryAtIndexAsync(int i)
-        {
-            string path = GetPathForIndex();
-            var loadingInfo = MemoryBlocksLoadingInfo[i];
-            ReadOnlyMemory<byte> memory = await BlobManager.ReadAsync(path, loadingInfo.GetLoadingOffset(), loadingInfo.PreTruncationLength);
-            ReadOnlyBytes readOnlyBytes = new ReadOnlyBytes(memory);
-            MemoryChunk chunk = new MemoryChunk(readOnlyBytes) { IsPersisted = true };
-            MemoryChunks[i] = chunk;
-        }
-
         public int GetMemoryChunkIndexFromBlockID(MemoryBlockID memoryBlockID)
         {
             var d = GetMemoryChunkIndicesFromIDs();
@@ -191,6 +169,7 @@ namespace Lazinator.Buffers
         #endregion
 
         #region Memory blocks loading information
+        
         private void InitializeMemoryBlocksInformation()
         {
             Dictionary<MemoryBlockID, int> d = new Dictionary<MemoryBlockID, int>(); 
@@ -210,6 +189,30 @@ namespace Lazinator.Buffers
         {
             int i = GetMemoryChunkIndicesFromIDs()[memoryBlockID];
             MemoryBlocksLoadingInfo[i] = MemoryBlocksLoadingInfo[i].WithLoadingOffset(offset);
+        }
+
+        #endregion
+
+        #region Memory chunk creation
+
+        private MemoryChunk CreateMemoryChunkForIndex(int i)
+        {
+            string path = GetPathForIndex();
+            var loadingInfo = MemoryBlocksLoadingInfo[i];
+            ReadOnlyMemory<byte> memory = BlobManager.Read(path, loadingInfo.GetLoadingOffset(), loadingInfo.PreTruncationLength);
+            ReadOnlyBytes readOnlyBytes = new ReadOnlyBytes(memory);
+            MemoryChunk chunk = new MemoryChunk(readOnlyBytes) { IsPersisted = true };
+            return chunk;
+        }
+
+        private async ValueTask<MemoryChunk> CreateMemoryChunkForIndexAsync(int i)
+        {
+            string path = GetPathForIndex();
+            var loadingInfo = MemoryBlocksLoadingInfo[i];
+            ReadOnlyMemory<byte> memory = await BlobManager.ReadAsync(path, loadingInfo.GetLoadingOffset(), loadingInfo.PreTruncationLength);
+            ReadOnlyBytes readOnlyBytes = new ReadOnlyBytes(memory);
+            MemoryChunk chunk = new MemoryChunk(readOnlyBytes) { IsPersisted = true };
+            return chunk;
         }
 
         #endregion
@@ -271,7 +274,7 @@ namespace Lazinator.Buffers
             }
         }
         
-        public IEnumerable<MemorySegmentIDAndSlice> EnumerateMemoryBlockIDAndSlices(int indexInitialSegment, int offsetInInitialSegment, long length)
+        public IEnumerable<MemorySegmentIDAndSlice> EnumerateMemorySegmentIDAndSlices(int indexInitialSegment, int offsetInInitialSegment, long length)
         {
             foreach (MemorySegmentIndexAndSlice indexAndSlice in EnumerateMemorySegmentIndexAndSlices(indexInitialSegment, offsetInInitialSegment, length))
             {

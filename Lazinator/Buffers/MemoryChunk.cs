@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Buffers
 {
+    // DEBUG -- maybe MemoryChunk should be LoadableMemoryBlock or just MemoryBlock
+
     public class MemoryChunk
     {
 
@@ -101,7 +103,7 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// This method should be overridden for a MemoryReference subclass that loads memory lazily. The subclass method
+        /// This method should be overridden for a MemoryChunk subclass that loads memory lazily. The subclass method
         /// should set ReferencedMemory. The base class always has memory available and thus this method does nothing.
         /// </summary>
         /// <returns></returns>
@@ -114,7 +116,7 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// This method should be overridden for a MemoryReference subclass that loads memory lazily. The subclass method
+        /// This method should be overridden for a MemoryChunk subclass that loads memory lazily. The subclass method
         /// should set ReferencedMemory. The base class always has memory available and thus this method does nothing.
         /// </summary>
         /// <returns></returns>

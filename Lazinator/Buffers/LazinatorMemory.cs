@@ -391,9 +391,9 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// Enumerates memory chunk ranges corresponding to the MemoryChunks in this LazinatorMemory. Note that memory chunks are referred to by index instead of by ID. 
+        /// Enumerates memory segment ranges in this LazinatorMemory. Note that memory segments are referred to by index instead of by ID. 
         /// </summary>
-        /// <returns>An enumerable where each element consists of the chunk index, the start position, and the number of bytes</returns>
+        /// <returns>An enumerable where each element consists of the segment index, the start position, and the number of bytes</returns>
         public IEnumerable<MemorySegmentIndexAndSlice> EnumerateMemorySegmentIndexAndSlices()
         {
             if (SingleMemoryChunk != null)
@@ -406,9 +406,9 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// Enumerates memory chunk ranges corresponding to this LazinatorMemory.
+        /// Enumerates memory segment ranges corresponding to this LazinatorMemory. Note that memory segments are referred to by MemoryBlockID.
         /// </summary>
-        /// <returns>An enumerable where each element consists of the chunk ID, the start position, and the number of bytes</returns>
+        /// <returns>An enumerable where each element consists of the memory block ID, the start position, and the number of bytes</returns>
         public IEnumerable<MemorySegmentIDAndSlice> EnumerateMemoryBlockIDsAndSlices()
         {
             if (SingleMemoryChunk != null)
@@ -416,10 +416,14 @@ namespace Lazinator.Buffers
                 yield return new MemorySegmentIDAndSlice(new MemoryBlockID(0), Offset, (int)Length);
             }
             else
-                foreach (MemorySegmentIDAndSlice idAndSlice in MultipleMemoryChunks.EnumerateMemoryBlockIDAndSlices(StartIndex, Offset, Length))
+                foreach (MemorySegmentIDAndSlice idAndSlice in MultipleMemoryChunks.EnumerateMemorySegmentIDAndSlices(StartIndex, Offset, Length))
                     yield return idAndSlice;
         }
 
+        /// <summary>
+        /// Enumerates memory segments.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<MemorySegment> EnumerateMemorySegments()
         {
             if (SingleMemoryChunk != null)
@@ -432,20 +436,17 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// Enumerates all memory blocks.
+        /// Enumerates the memory segments as ReadOnlyMemory<byte>.
         /// </summary>
         /// <returns></returns>
         public IEnumerable<ReadOnlyMemory<byte>> EnumerateReadOnlyMemory()
         {
-            foreach (var memoryBlockIndexAndSlice in EnumerateMemorySegmentIndexAndSlices())
-            {
-                var memorySegment = MemorySegmentAtIndex(memoryBlockIndexAndSlice.MemorySegmentIndex);
-                yield return memorySegment.ReadOnlyMemory.Slice(memoryBlockIndexAndSlice.OffsetIntoMemoryChunk, memoryBlockIndexAndSlice.Length);
-            }
+            foreach (MemorySegment memorySegment in EnumerateMemorySegments())
+                yield return memorySegment.ReadOnlyMemory;
         }
 
         /// <summary>
-        /// Enumerates all memory blocks asynchronously, asynchronously loading and unloading blocks of memory as needed.
+        /// Enumerates all memory blocks asynchronously, asynchronously loading memory if needed.
         /// </summary>
         /// <returns></returns>
         public async IAsyncEnumerable<ReadOnlyMemory<byte>> EnumerateReadOnlyMemoryAsync()
@@ -453,7 +454,7 @@ namespace Lazinator.Buffers
             foreach (var memoryBlockIndexAndSlice in EnumerateMemorySegmentIndexAndSlices())
             {
                 var memorySegment = await MemorySegmentAtIndexAsync(memoryBlockIndexAndSlice.MemorySegmentIndex);
-                yield return memorySegment.ReadOnlyMemory.Slice(memoryBlockIndexAndSlice.OffsetIntoMemoryChunk, memoryBlockIndexAndSlice.Length);
+                yield return memorySegment.ReadOnlyMemory;
             }
         }
 
@@ -471,7 +472,7 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// Enumerates the referenced memory owners (including portions of referenced memory chunks not referenced).
+        /// Enumerates the referenced memory owners, whether included within the referenced range or not.
         /// </summary>
         /// <returns></returns>
         private IEnumerable<IReadableBytes> EnumerateReadOnlyBytesSegments()

@@ -170,8 +170,8 @@ namespace Lazinator.Buffers
             {
                 if (MemorySegmentCollection is null)
                     return (0, ActiveMemoryPosition);
-                int completedMemoryChunks = MemorySegmentCollection.NumMemorySegments;
-                return (completedMemoryChunks, ActiveMemoryPosition);
+                int completedSegments = MemorySegmentCollection.NumMemorySegments;
+                return (completedSegments, ActiveMemoryPosition);
             }
         }
 
@@ -485,9 +485,13 @@ namespace Lazinator.Buffers
         {
             get
             {
-                if (MemorySegmentCollection == null || LengthsPosition.index == (MemorySegmentCollection?.NumMemorySegments ?? 0))
+                if (MemorySegmentCollection == null)
                     return ActiveSpan.Slice(LengthsPosition.offset);
-                return MemorySegmentCollection.MemorySegmentAtIndex(LengthsPosition.index).Memory.Slice(LengthsPosition.offset).Span;
+                // It is still possible that we need to write into the ActiveSpan. The LengthsPosition.index refers to a segment number. We need to find the corresponding BlockID number. If there is no such number (because the active span has not been copied yet into the stored memory chunks), then we still need to write into the ActiveSpan.
+                MemorySegment segment = MemorySegmentCollection.MemorySegmentAtIndex(LengthsPosition.index);
+                if (segment.MemoryChunk == null) // no such block yet
+                    return ActiveSpan.Slice(LengthsPosition.offset);
+                return segment.Memory.Slice(LengthsPosition.offset).Span;
             }
         }
 

@@ -163,7 +163,7 @@ namespace LazinatorTests.Tests
                 new MemoryChunk(new ReadOnlyBytes(new byte[] { 7, 8, 9, 200 }))  { LoadingInfo = new MemoryBlockLoadingInfo(new MemoryBlockID(2), 409 /* should't matter that pretruncation length is large */ ) },
                 new MemoryChunk(new ReadOnlyBytes(new byte[] { 10, 11, 12 })) { LoadingInfo = new MemoryBlockLoadingInfo(new MemoryBlockID(3), 3) },
             }, true);
-            c.Segments = new List<MemorySegmentIDAndSlice>()
+            c.SegmentInfos = new List<MemorySegmentIDAndSlice>()
             {
                 new MemorySegmentIDAndSlice(new MemoryBlockID(2), 1, 2), // 8, 9
                 new MemorySegmentIDAndSlice(new MemoryBlockID(2), 0, 3), // 7, 8, 9
