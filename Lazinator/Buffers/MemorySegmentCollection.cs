@@ -104,13 +104,13 @@ namespace Lazinator.Buffers
         /// <summary>
         /// Writes from CompletedMemory. Instead of copying the bytes, it simply adds one or more segments referring to where those bytes are in the overall sets of bytes.
         /// </summary>
-        /// <param name="memoryChunkIndex">The index of the memory chunk</param>
+        /// <param name="memorySegmentIndex">The index of the memory chunk</param>
         /// <param name="startPosition">The position of the first byte of the memory within the indexed memory chunk</param>
         /// <param name="numBytes"></param>
-        internal void InsertReferenceToCompletedMemory(int memoryChunkIndex, int startPosition, long numBytes, int activeMemoryPosition)
+        internal void InsertReferenceToCompletedMemory(int memorySegmentIndex, int startPosition, long numBytes, int activeMemoryPosition)
         {
             RecordLastActiveMemoryChunkReference(activeMemoryPosition);
-            IEnumerable<MemorySegmentLocationByID> segmentsToAdd = EnumerateMemorySegmentLocationsByID(memoryChunkIndex, startPosition, numBytes);
+            IEnumerable<MemorySegmentLocationByID> segmentsToAdd = EnumerateMemorySegmentLocationsByID(memorySegmentIndex, startPosition, numBytes);
             ExtendSegments(segmentsToAdd);
             // Debug.WriteLine($"Reference to completed memory added. References are {String.Join(", ", RecycledMemoryChunkReferences)}");
         }

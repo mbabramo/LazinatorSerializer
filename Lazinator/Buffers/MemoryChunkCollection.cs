@@ -262,6 +262,7 @@ namespace Lazinator.Buffers
             return new MemorySegmentLocationByIndex(revisedStartIndex, revisedStartPosition, revisedLength);
         }
 
+        Debug; // problem: We call this for 0, 30, 9 (meaning memory chunk index 0, location 30, length 9), which is the location of where the memory was. But now, we've been adding segments when writing. So, we actually do need for at least this purpose for this to be MemoryChunks, and then we need to be sure that is what is passed in. We need to see whther we actually want indexInInitialMemoryChunk, offsetInInitialMemoryChunk for all places where this is called.
         public IEnumerable<MemorySegmentLocationByIndex> EnumerateMemorySegmentLocationsByIndex(int indexInitialSegment, int offsetInInitialSegment, long length)
         {
             long bytesRemaining = length;

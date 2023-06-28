@@ -241,9 +241,9 @@ namespace Lazinator.Buffers
             }
         }
 
-        public void InsertReferenceToCompletedMemory(int memoryChunkIndex, int startPosition, long numBytes)
+        public void InsertReferenceToCompletedMemory(int memorySegmentIndex, int startPosition, long numBytes)
         {
-            MemorySegmentCollection?.InsertReferenceToCompletedMemory(memoryChunkIndex, startPosition, numBytes, ActiveMemoryPosition);
+            MemorySegmentCollection?.InsertReferenceToCompletedMemory(memorySegmentIndex, startPosition, numBytes, ActiveMemoryPosition);
         }
 
         /// <summary>
