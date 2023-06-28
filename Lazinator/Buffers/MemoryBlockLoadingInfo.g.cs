@@ -54,7 +54,7 @@ namespace Lazinator.Buffers
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected int _PreTruncationLength;
-        public int PreTruncationLength
+        public int MemoryBlockLength
         {
             [DebuggerStepThrough]
             get
@@ -263,7 +263,7 @@ namespace Lazinator.Buffers
             clone.FreeInMemoryObjects();
             MemoryBlockLoadingInfo typedClone = (MemoryBlockLoadingInfo) clone;
             typedClone.MemoryBlockIntID = MemoryBlockIntID;
-            typedClone.PreTruncationLength = PreTruncationLength;
+            typedClone.MemoryBlockLength = MemoryBlockLength;
             
             return typedClone;
         }
@@ -295,7 +295,7 @@ namespace Lazinator.Buffers
         public virtual IEnumerable<(string propertyName, object descendant)> EnumerateNonLazinatorProperties()
         {
             yield return ("MemoryBlockIntID", (object)MemoryBlockIntID);
-            yield return ("PreTruncationLength", (object)PreTruncationLength);
+            yield return ("PreTruncationLength", (object)MemoryBlockLength);
             yield break;
         }
         

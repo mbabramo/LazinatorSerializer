@@ -9,15 +9,15 @@ namespace Lazinator.Buffers
 {
     public partial class MemoryBlockLoadingInfo : IMemoryBlockLoadingInfo
     {
-        public MemoryBlockLoadingInfo(MemoryBlockID memoryBlockID, int preTruncationLength)
+        public MemoryBlockLoadingInfo(MemoryBlockID memoryBlockID, int memoryBlockLength)
         {
             MemoryBlockIntID = memoryBlockID.GetIntID();
-            PreTruncationLength = preTruncationLength;
+            MemoryBlockLength = memoryBlockLength;
         }
 
         public MemoryBlockID MemoryBlockID => new MemoryBlockID(MemoryBlockIntID); 
 
-        public MemoryBlockInsetLoadingInfo WithLoadingOffset(long loadingOffset) => new MemoryBlockInsetLoadingInfo(MemoryBlockID, PreTruncationLength, loadingOffset);
+        public MemoryBlockInsetLoadingInfo WithLoadingOffset(long loadingOffset) => new MemoryBlockInsetLoadingInfo(MemoryBlockID, MemoryBlockLength, loadingOffset);
 
         public virtual long GetLoadingOffset() => 0;
     }

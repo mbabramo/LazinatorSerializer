@@ -6,6 +6,6 @@ namespace Lazinator.Buffers
     public interface IMemoryBlockLoadingInfo
     {
         int MemoryBlockIntID { get; set; }
-        int PreTruncationLength { get; set; }
+        int MemoryBlockLength { get; set; }
     }
 }
