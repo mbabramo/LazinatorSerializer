@@ -38,7 +38,7 @@ namespace Lazinator.Buffers
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected List<MemoryRangeByID> _SegmentInfos;
-        public List<MemoryRangeByID> SegmentInfos
+        public List<MemoryRangeByID> Ranges
         {
             [DebuggerStepThrough]
             get
@@ -105,7 +105,7 @@ namespace Lazinator.Buffers
         {
             base.AssignCloneProperties(clone, includeChildrenMode);
             MemoryRangeCollection typedClone = (MemoryRangeCollection) clone;
-            typedClone.SegmentInfos = CloneOrChange_List_GMemoryRangeByID_g(SegmentInfos, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
+            typedClone.Ranges = CloneOrChange_List_GMemoryRangeByID_g(Ranges, l => l?.CloneLazinator(includeChildrenMode, CloneBufferOptions.NoBuffer), false);
             
             return typedClone;
         }
@@ -128,14 +128,14 @@ namespace Lazinator.Buffers
             {
                 yield return inheritedYield;
             }
-            yield return ("SegmentInfos", (object)SegmentInfos);
+            yield return ("SegmentInfos", (object)Ranges);
             yield break;
         }
         
         public override ILazinator ForEachLazinator(Func<ILazinator, ILazinator> changeFunc, bool exploreOnlyDeserializedChildren, bool changeThisLevel)
         {
             base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, false);
-            if ((!exploreOnlyDeserializedChildren && SegmentInfos != null) || (_SegmentInfos_Accessed && _SegmentInfos != null))
+            if ((!exploreOnlyDeserializedChildren && Ranges != null) || (_SegmentInfos_Accessed && _SegmentInfos != null))
             {
                 _SegmentInfos = (List<MemoryRangeByID>) CloneOrChange_List_GMemoryRangeByID_g(_SegmentInfos, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
@@ -281,7 +281,7 @@ namespace Lazinator.Buffers
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_SegmentInfos_Accessed)
             {
-                var deserialized = SegmentInfos;
+                var deserialized = Ranges;
             }
             WriteNonLazinatorObject(
             nonLazinatorObject: _SegmentInfos, isBelievedDirty: _SegmentInfos_Accessed || (options.IncludeChildrenMode != OriginalIncludeChildrenMode),

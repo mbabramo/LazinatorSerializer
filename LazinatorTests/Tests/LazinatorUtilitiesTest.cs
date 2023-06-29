@@ -163,7 +163,7 @@ namespace LazinatorTests.Tests
                 new MemoryChunk(new ReadOnlyBytes(new byte[] { 7, 8, 9, 200 }))  { LoadingInfo = new MemoryBlockLoadingInfo(new MemoryBlockID(2), 5 ) },
                 new MemoryChunk(new ReadOnlyBytes(new byte[] { 10, 11, 12 })) { LoadingInfo = new MemoryBlockLoadingInfo(new MemoryBlockID(3), 3) },
             }, true);
-            c.SegmentInfos = new List<MemoryRangeByID>()
+            c.Ranges = new List<MemoryRangeByID>()
             {
                 new MemoryRangeByID(new MemoryBlockID(2), 1, 2), // 8, 9
                 new MemoryRangeByID(new MemoryBlockID(2), 0, 3), // 7, 8, 9

@@ -6,6 +6,6 @@ namespace Lazinator.Buffers
     [Lazinator((int)LazinatorCoreUniqueIDs.IMemorySegmentCollection)]
     public interface IMemoryRangeCollection : IMemoryChunkCollection
     {
-        List<MemoryRangeByID> SegmentInfos { get; set; }
+        List<MemoryRangeByID> Ranges { get; set; }
     }
 }

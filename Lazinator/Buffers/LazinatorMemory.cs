@@ -168,9 +168,9 @@ namespace Lazinator.Buffers
 
         private MemoryRange SingleMemorySegment => new MemoryRange(SingleMemoryChunk, new MemoryChunkSlice(0, SingleMemoryChunk.Length));
 
-        public MemoryRange MemorySegmentAtIndex(int i) => MultipleMemoryChunks == null && i == 0 ? SingleMemorySegment : MultipleMemoryChunks.MemorySegmentAtIndex(i);
+        public MemoryRange MemorySegmentAtIndex(int i) => MultipleMemoryChunks == null && i == 0 ? SingleMemorySegment : MultipleMemoryChunks.MemoryRangeAtIndex(i);
 
-        public async ValueTask<MemoryRange> MemorySegmentAtIndexAsync(int i) => MultipleMemoryChunks == null && i == 0 ? SingleMemorySegment : await MultipleMemoryChunks.MemorySegmentAtIndexAsync(i);
+        public async ValueTask<MemoryRange> MemorySegmentAtIndexAsync(int i) => MultipleMemoryChunks == null && i == 0 ? SingleMemorySegment : await MultipleMemoryChunks.MemoryRangeAtIndexAsync(i);
 
         /// <summary>
         /// Slices the first referenced memory chunk only, producing a new LazinatorMemory.
@@ -410,14 +410,14 @@ namespace Lazinator.Buffers
         /// Enumerates memory segment ranges corresponding to this LazinatorMemory. Note that memory segments are referred to by MemoryBlockID.
         /// </summary>
         /// <returns>An enumerable where each element consists of the memory block ID, the start position, and the number of bytes</returns>
-        public IEnumerable<MemoryRangeByID> EnumerateMemoryBlockIDsAndSlices()
+        public IEnumerable<MemoryRangeByID> EnumerateMemoryRangesByID()
         {
             if (SingleMemoryChunk != null)
             {
                 yield return new MemoryRangeByID(new MemoryBlockID(0), Offset, (int)Length);
             }
             else
-                foreach (MemoryRangeByID idAndSlice in MultipleMemoryChunks.EnumerateMemorySegmentLocationsByID(StartIndex, Offset, Length))
+                foreach (MemoryRangeByID idAndSlice in MultipleMemoryChunks.EnumerateMemoryRangesByID(StartIndex, Offset, Length))
                     yield return idAndSlice;
         }
 
