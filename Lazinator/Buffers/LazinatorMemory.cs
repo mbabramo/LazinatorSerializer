@@ -205,6 +205,7 @@ namespace Lazinator.Buffers
 
             MemorySegmentLocationByIndex segmentInfo = MultipleMemoryChunks.GetMemorySegmentInfoAtOffsetFromStartPosition(StartIndex, Offset, furtherOffset);
 
+            // DEBUG5 would seem to suggest that we are referring to the memory segment
             return new LazinatorMemory(MultipleMemoryChunks.DeepCopy(), segmentInfo.MemorySegmentIndex, segmentInfo.OffsetIntoMemoryChunk, length);
         }
 
