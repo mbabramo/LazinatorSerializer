@@ -159,15 +159,15 @@ namespace Lazinator.Persistence
             return lazinatorMemory;
         }
 
-        public void Delete(PersistentIndexMemoryBlockStatus statusToDelete, bool includeChunksFromEarlierForks)
+        public void Delete(PersistentIndexMemoryBlockStatus statusToDelete, bool includeBlocksFromEarlierForks)
         {
-            foreach (string path in GetPathsOfMemoryChunksToDelete(statusToDelete, includeChunksFromEarlierForks))
+            foreach (string path in GetPathsOfMemoryBlocksToDelete(statusToDelete, includeBlocksFromEarlierForks))
             {
                 BlobManager.Delete(path);
             }
         }
 
-        private IEnumerable<string> GetPathsOfMemoryChunksToDelete(PersistentIndexMemoryBlockStatus statusToDelete, bool includeChunksFromEarlierForks)
+        private IEnumerable<string> GetPathsOfMemoryBlocksToDelete(PersistentIndexMemoryBlockStatus statusToDelete, bool includeBlocksFromEarlierForks)
         {
             int numIDs = MemoryBlockStatus.Length;
             for (int memoryBlockID = 0; memoryBlockID < numIDs; memoryBlockID++)
@@ -175,7 +175,7 @@ namespace Lazinator.Persistence
                 PersistentIndexMemoryBlockStatus status = GetMemoryBlockStatus(memoryBlockID);
                 if (status == statusToDelete)
                 {
-                    if (includeChunksFromEarlierForks || MemoryBlockIsOnSameFork(new MemoryBlockID(memoryBlockID)))
+                    if (includeBlocksFromEarlierForks || MemoryBlockIsOnSameFork(new MemoryBlockID(memoryBlockID)))
                     {
                         string fullPath = GetPathForMemoryBlock(new MemoryBlockID(memoryBlockID));
                         yield return fullPath;
@@ -192,18 +192,18 @@ namespace Lazinator.Persistence
         public void PersistLazinatorMemory(LazinatorMemory lazinatorMemory)
         {
             SetFromLazinatorMemory(lazinatorMemory);
-            PersistMemoryChunks(IndexVersion == 0);
+            PersistMemoryBlocks(IndexVersion == 0);
             PersistSelf();
         }
 
         public async ValueTask PersistLazinatorMemoryAsync(LazinatorMemory lazinatorMemory)
         {
             SetFromLazinatorMemory(lazinatorMemory);
-            await PersistMemoryChunksAsync(IndexVersion == 0);
+            await PersistMemoryBlocksAsync(IndexVersion == 0);
             PersistSelf();
         }
 
-        public override void OnMemoryChunkPersisted(MemoryBlockID memoryBlockID) => SetMemoryBlockStatus(memoryBlockID, PersistentIndexMemoryBlockStatus.NewlyIncluded);
+        public override void OnMemoryBlockPersisted(MemoryBlockID memoryBlockID) => SetMemoryBlockStatus(memoryBlockID, PersistentIndexMemoryBlockStatus.NewlyIncluded);
 
         private void PersistSelf()
         {

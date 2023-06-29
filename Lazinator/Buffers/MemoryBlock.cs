@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Buffers
 {
-    // DEBUG -- maybe MemoryChunk should be LoadableMemoryBlock or just MemoryBlock
+    // DEBUG -- maybe MemoryBlock should be LoadableMemoryBlock or just MemoryBlock
 
-    public class MemoryChunk
+    public class MemoryBlock
     {
 
         public IReadableBytes MemoryAsLoaded { get; set; }
@@ -50,22 +50,22 @@ namespace Lazinator.Buffers
             _ => throw new NotImplementedException()
         };
 
-        public MemoryChunk()
+        public MemoryBlock()
         {
 
         }
 
-        public MemoryChunk(IReadableBytes memoryAsLoaded) : this(memoryAsLoaded, null, false)
+        public MemoryBlock(IReadableBytes memoryAsLoaded) : this(memoryAsLoaded, null, false)
         {
 
         }
 
-        public MemoryChunk(ReadWriteBytes memoryAsLoaded) : this(memoryAsLoaded, null,  false)
+        public MemoryBlock(ReadWriteBytes memoryAsLoaded) : this(memoryAsLoaded, null,  false)
         {
 
         }
 
-        public MemoryChunk(IReadableBytes memoryAsLoaded, MemoryBlockLoadingInfo loadingInfo, bool isPersisted)
+        public MemoryBlock(IReadableBytes memoryAsLoaded, MemoryBlockLoadingInfo loadingInfo, bool isPersisted)
         {
             MemoryAsLoaded = memoryAsLoaded;
             Length = memoryAsLoaded.ReadOnlyMemory.Length;
@@ -73,7 +73,7 @@ namespace Lazinator.Buffers
             IsPersisted = isPersisted;
         }
 
-        public virtual MemoryChunk DeepCopy() => new MemoryChunk(MemoryAsLoaded, LoadingInfo, IsPersisted);
+        public virtual MemoryBlock DeepCopy() => new MemoryBlock(MemoryAsLoaded, LoadingInfo, IsPersisted);
 
         /// <summary>
         /// Returns the memory being referred to, taking into account the additional offset to be applied after loading.
@@ -103,7 +103,7 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// This method should be overridden for a MemoryChunk subclass that loads memory lazily. The subclass method
+        /// This method should be overridden for a MemoryBlock subclass that loads memory lazily. The subclass method
         /// should set ReferencedMemory. The base class always has memory available and thus this method does nothing.
         /// </summary>
         /// <returns></returns>
@@ -116,7 +116,7 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// This method should be overridden for a MemoryChunk subclass that loads memory lazily. The subclass method
+        /// This method should be overridden for a MemoryBlock subclass that loads memory lazily. The subclass method
         /// should set ReferencedMemory. The base class always has memory available and thus this method does nothing.
         /// </summary>
         /// <returns></returns>
@@ -152,7 +152,7 @@ namespace Lazinator.Buffers
         public override string ToString()
         {
             string result = ContentToString();
-            return $"Chunk {MemoryBlockID.ToString().PadLeft(3, '0')}:\n{result}";
+            return $"Block {MemoryBlockID.ToString().PadLeft(3, '0')}:\n{result}";
         }
 
         public string ContentToString()

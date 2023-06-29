@@ -57,9 +57,9 @@ namespace Lazinator.Buffers
         public void ConsiderSwitchToNextBuffer(ref LazinatorSerializationOptions options) => Writer.ConsiderSwitchToNextBuffer(ref options);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void InsertReferenceToCompletedMemory(int memoryChunkIndex, int startPosition, long numBytes) => Writer.InsertReferenceToCompletedMemory(memoryChunkIndex, startPosition, numBytes);
+        public void InsertReferenceToCompletedMemory(int memoryBlockIndex, int startPosition, long numBytes) => Writer.InsertReferenceToCompletedMemory(memoryBlockIndex, startPosition, numBytes);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        internal void RecordLastActiveMemoryChunkReferenceIfAny() => Writer.RecordLastActiveMemoryChunkReferenceIfAny();
+        internal void RecordLastActiveMemoryBlockReferenceIfAny() => Writer.RecordLastActiveMemoryBlockReferenceIfAny();
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(bool value) => Writer.Write(value);
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

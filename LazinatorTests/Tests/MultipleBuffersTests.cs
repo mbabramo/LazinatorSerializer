@@ -31,7 +31,7 @@ namespace LazinatorTests.Tests
             Example e = GetTypicalExample();
             LazinatorMemory singleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false));
             LazinatorMemory multipleBufferResult = e.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 10));
-            multipleBufferResult.MultipleMemoryChunks.Count().Should().BeGreaterThan(0);
+            multipleBufferResult.MultipleMemoryBlocks.Count().Should().BeGreaterThan(0);
             LazinatorMemory consolidated = new LazinatorMemory(multipleBufferResult.GetConsolidatedMemory());
             consolidated.Matches(singleBufferResult.InitialReadOnlyMemory.Span).Should().BeTrue();
 
@@ -54,7 +54,7 @@ namespace LazinatorTests.Tests
             BinaryTree.Add(1);
             LazinatorMemory singleBufferResult = BinaryTree.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false));
             LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 1));
-            multipleBufferResult.MultipleMemoryChunks.Count().Should().BeGreaterThan(0);
+            multipleBufferResult.MultipleMemoryBlocks.Count().Should().BeGreaterThan(0);
             LazinatorMemory multipleConsolidated = new LazinatorMemory(multipleBufferResult.GetConsolidatedMemory());
             string mString = multipleConsolidated.ToString();
             string sString = singleBufferResult.ToString();
@@ -70,7 +70,7 @@ namespace LazinatorTests.Tests
             node.RightNode = new LazinatorBinaryTreeNode<WByte>() { Data = 2 };
             LazinatorMemory singleBufferResult = node.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false));
             LazinatorMemory multipleBufferResult = node.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 1));
-            multipleBufferResult.MultipleMemoryChunks.Count().Should().BeGreaterThan(0);
+            multipleBufferResult.MultipleMemoryBlocks.Count().Should().BeGreaterThan(0);
             LazinatorMemory multipleConsolidated = new LazinatorMemory(multipleBufferResult.GetConsolidatedMemory());
             string mString = multipleConsolidated.ToString();
             string sString = singleBufferResult.ToString();
@@ -467,11 +467,11 @@ namespace LazinatorTests.Tests
             List<byte> fullSequence = new List<byte>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
             var initialBytes = new ReadOnlyBytes(new byte[3] { 1, 2, 3 });
             var nextBytes = new ReadOnlyBytes(new byte[3] { 4, 5, 6 });
-            MemoryChunk nextBytesAsChunk = new MemoryChunk(nextBytes, new MemoryBlockLoadingInfo(new MemoryBlockID(1), 3), false);
+            MemoryBlock nextBytesAsBlock = new MemoryBlock(nextBytes, new MemoryBlockLoadingInfo(new MemoryBlockID(1), 3), false);
             var lastBytes = new ReadOnlyBytes(new byte[4] { 7, 8, 9, 10 });
-            MemoryChunk lastBytesAsChunk = new MemoryChunk(lastBytes, new MemoryBlockLoadingInfo(new MemoryBlockID(2), 4), false);
+            MemoryBlock lastBytesAsBlock = new MemoryBlock(lastBytes, new MemoryBlockLoadingInfo(new MemoryBlockID(2), 4), false);
             LazinatorMemory initialMemory = new LazinatorMemory(initialBytes);
-            LazinatorMemory memory1 = initialMemory.WithAppendedChunk(nextBytesAsChunk).WithAppendedChunk(lastBytesAsChunk);
+            LazinatorMemory memory1 = initialMemory.WithAppendedBlock(nextBytesAsBlock).WithAppendedBlock(lastBytesAsBlock);
 
             IBlobManager blobManager = useFile ? new FileBlobManager() : new InMemoryBlobManager();
             string fullPath = GetPathForIndexAndBlobs(useFile, true);
@@ -531,7 +531,7 @@ namespace LazinatorTests.Tests
 
                 // DEBUG
                 Debug.WriteLine("Multiple buffer result:");
-                Debug.WriteLine(multipleBufferResult.ToStringByChunk());
+                Debug.WriteLine(multipleBufferResult.ToStringByBlock());
                 Debug.WriteLine($"Consolidated{round}:\n" + multipleBufferResult.ToStringConsolidated());
 
                 // Write to one or more blobs
@@ -554,16 +554,16 @@ namespace LazinatorTests.Tests
 
                 // DEBUG
                 Debug.WriteLine("Revised memory result:");
-                Debug.WriteLine(revisedMemory.ToStringByChunk());
+                Debug.WriteLine(revisedMemory.ToStringByBlock());
                 Debug.WriteLine($"Consolidated{round}:\n" + revisedMemory.ToStringConsolidated());
 
-                BinaryTree = new LazinatorBinaryTree<WDouble>(revisedMemory); // Note that revisedMemory is LazinatorMemory, containing potentially multiple chunks, and this is an acceptable way of initializing.
+                BinaryTree = new LazinatorBinaryTree<WDouble>(revisedMemory); // Note that revisedMemory is LazinatorMemory, containing potentially multiple blocks, and this is an acceptable way of initializing.
                 round++;
             });
-            DeleteChunksAndIndex(useConsolidatedMemory, indices, blobManager);
+            DeleteBlocksAndIndex(useConsolidatedMemory, indices, blobManager);
         }
 
-        private static void DeleteChunksAndIndex(bool useConsolidatedMemory, List<PersistentIndex> indices, IBlobManager blobManager)
+        private static void DeleteBlocksAndIndex(bool useConsolidatedMemory, List<PersistentIndex> indices, IBlobManager blobManager)
         {
             for (int i = 0; i < indices.Count(); i++)
             {
@@ -576,7 +576,7 @@ namespace LazinatorTests.Tests
                 }
                 indexToDelete.DeleteIndex();
             }
-            if (blobManager is InMemoryBlobManager inMemoryBlobManager && !useConsolidatedMemory) // if using consolidated memory, the memory chunks from the previous version will not be in the next, so we won't be deleting everything.
+            if (blobManager is InMemoryBlobManager inMemoryBlobManager && !useConsolidatedMemory) // if using consolidated memory, the memory blocks from the previous version will not be in the next, so we won't be deleting everything.
             {
                 if (inMemoryBlobManager.Storage.Any())
                     throw new Exception("Blob storage should be empty.");
@@ -619,13 +619,13 @@ namespace LazinatorTests.Tests
                     }
                 }
 
-                //Debug.WriteLine(revisedMemory.ToStringByChunk());
+                //Debug.WriteLine(revisedMemory.ToStringByBlock());
                 //Debug.WriteLine($"Consolidated{round}: " + revisedMemory.ToStringConsolidated());
 
                 BinaryTree = new LazinatorBinaryTree<WDouble>(revisedMemory);
                 round++;
             });
-            DeleteChunksAndIndex(useConsolidatedMemory, indices, blobManager); // note that there is no DeleteAsync, so we use the same methods here
+            DeleteBlocksAndIndex(useConsolidatedMemory, indices, blobManager); // note that there is no DeleteAsync, so we use the same methods here
         }
 
         [Fact]
@@ -747,7 +747,7 @@ namespace LazinatorTests.Tests
             VerifyProperPersistence(index_child2_2_1, child2_2_1);
 
             // now verify contents after progressive deletion. When an index has forks from it, we will only delete things that we know are safe to delete.
-            // This illustrates the proper approach. When we are done with a version from which there are forks, we can delete newly omitted memory chunks (not relevant for root), plus the index itself. When we are done with a version that has no forks, but is itself forked from something else, we can delete previously included, newly omitted, and newly included, but not before the last fork. If it's the last one, though, we make it so that all previously included chunks are deleted, including those preceding the last fork.
+            // This illustrates the proper approach. When we are done with a version from which there are forks, we can delete newly omitted memory blocks (not relevant for root), plus the index itself. When we are done with a version that has no forks, but is itself forked from something else, we can delete previously included, newly omitted, and newly included, but not before the last fork. If it's the last one, though, we make it so that all previously included blocks are deleted, including those preceding the last fork.
 
             index_root.DeleteIndex();
             VerifyProperPersistence(index_child1, child1);

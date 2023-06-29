@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace Lazinator.Buffers
 {
-    [Lazinator((int)LazinatorCoreUniqueIDs.IMemoryChunkCollection)]
-    public interface IMemoryChunkCollection
+    [Lazinator((int)LazinatorCoreUniqueIDs.IMemoryBlockCollection)]
+    public interface IMemoryBlockCollection
     {
         [Uncompressed]
         string BaseBlobPath { get; set; }

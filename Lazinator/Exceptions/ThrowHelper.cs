@@ -19,6 +19,6 @@ namespace Lazinator.Exceptions
         private static string tooLargeMessage(int maxValue) => $"Contents exceeded maximum length of {maxValue} bytes.";
 
         public static void ThrowUnsetNonnullableLazinatorException() => throw new UnsetNonnullableLazinatorException();
-        public static void ThrowMemoryNotWritableException() => throw new Exception("Memory chunk is not writable");
+        public static void ThrowMemoryNotWritableException() => throw new Exception("Memory block is not writable");
     }
 }

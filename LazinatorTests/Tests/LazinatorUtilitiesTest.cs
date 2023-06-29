@@ -46,24 +46,24 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorMemoryAggregationAndSlicing()
         {
-            int numChunks = 5;
-            int memoryPerChunk =   100; 
-            // build a single combined chunk and many individual chunks -- then see if the whole and slices match
-            byte[] c = new byte[memoryPerChunk * numChunks];
+            int numBlocks = 5;
+            int memoryPerBlock =   100; 
+            // build a single combined block and many individual blocks -- then see if the whole and slices match
+            byte[] c = new byte[memoryPerBlock * numBlocks];
             LazinatorMemory m = default;
-            for (int i = 0; i < numChunks; i++)
+            for (int i = 0; i < numBlocks; i++)
             {
-                byte[] b = new byte[memoryPerChunk];
-                for (int j = 0; j < memoryPerChunk; j++)
+                byte[] b = new byte[memoryPerBlock];
+                for (int j = 0; j < memoryPerBlock; j++)
                 {
-                    int overallIndex = i * memoryPerChunk + j;
+                    int overallIndex = i * memoryPerBlock + j;
                     b[j] = (byte)(overallIndex % 255);
                     c[overallIndex] = b[j];
                 }
                 if (i == 0)
                     m = new LazinatorMemory(b);
                 else 
-                    m = m.WithAppendedChunk(new MemoryChunk(new ReadOnlyBytes(b), new MemoryBlockLoadingInfo(new MemoryBlockID(i), b.Length), false)); 
+                    m = m.WithAppendedBlock(new MemoryBlock(new ReadOnlyBytes(b), new MemoryBlockLoadingInfo(new MemoryBlockID(i), b.Length), false)); 
             }
 
             const int numChecks = 15;
@@ -84,28 +84,28 @@ namespace LazinatorTests.Tests
         public void LazinatorMemorySubranges()
         {
             Random r = new Random(1);
-            int numMainChunks = 5;
-            int bytesPerChunk = 100;
-            byte[][] mainChunks = new byte[numMainChunks][];
-            byte[] continuousUnderlying = new byte[numMainChunks * bytesPerChunk];
+            int numMainBlocks = 5;
+            int bytesPerBlock = 100;
+            byte[][] mainBlocks = new byte[numMainBlocks][];
+            byte[] continuousUnderlying = new byte[numMainBlocks * bytesPerBlock];
             List<ReadOnlyBytes> overallMemoryOwners = new List<ReadOnlyBytes>();
-            List<MemoryChunk> overallMemoryChunks = new List<MemoryChunk>();
+            List<MemoryBlock> overallMemoryBlocks = new List<MemoryBlock>();
             int overallIndex = 0;
-            // record some values (it doesn't really matter what) in mainChunks and in continuousUnderlying,
+            // record some values (it doesn't really matter what) in mainBlocks and in continuousUnderlying,
             // which contains the same bytes but arranged in one dimension
-            // also create memory owners for the main chunks and references to those memory owners
-            for (int i = 0; i < numMainChunks; i++)
+            // also create memory owners for the main blocks and references to those memory owners
+            for (int i = 0; i < numMainBlocks; i++)
             {
-                mainChunks[i] = new byte[bytesPerChunk];
-                for (int j = 0; j < bytesPerChunk; j++)
+                mainBlocks[i] = new byte[bytesPerBlock];
+                for (int j = 0; j < bytesPerBlock; j++)
                 {
-                    mainChunks[i][j] = (byte) (overallIndex % 256);
-                    continuousUnderlying[overallIndex++] = mainChunks[i][j];
+                    mainBlocks[i][j] = (byte) (overallIndex % 256);
+                    continuousUnderlying[overallIndex++] = mainBlocks[i][j];
                 }
-                overallMemoryOwners.Add(new ReadOnlyBytes(mainChunks[i]));
-                overallMemoryChunks.Add(new MemoryChunk(overallMemoryOwners[i], new MemoryBlockLoadingInfo(new MemoryBlockID(i), bytesPerChunk), false));
+                overallMemoryOwners.Add(new ReadOnlyBytes(mainBlocks[i]));
+                overallMemoryBlocks.Add(new MemoryBlock(overallMemoryOwners[i], new MemoryBlockLoadingInfo(new MemoryBlockID(i), bytesPerBlock), false));
             }
-            LazinatorMemory overallLazinatorMemory = new LazinatorMemory(overallMemoryChunks.ToList(), 0, 0, continuousUnderlying.Length);
+            LazinatorMemory overallLazinatorMemory = new LazinatorMemory(overallMemoryBlocks.ToList(), 0, 0, continuousUnderlying.Length);
             const int numRepetitions = 100;
             for (int rep = 0; rep < numRepetitions; rep++)
             {
@@ -113,29 +113,29 @@ namespace LazinatorTests.Tests
                 // We'll copy this byte range (which may not be continuous in the original) to referencedBytes. 
                 //Debug.WriteLine($"Repetition: {rep}");
                 List<byte> referencedBytes = new List<byte>();
-                int maxNumReferenceChunks = numMainChunks;
-                int numReferenceChunks = r.Next(1, maxNumReferenceChunks); // CompletedMemory will always have at least one chunk
-                List<MemoryChunk> memoryChunks = new List<MemoryChunk>();
-                HashSet<int> chunksReferenced = new HashSet<int>();
-                for (int i = 0; i < numReferenceChunks; i++)
+                int maxNumReferenceBlocks = numMainBlocks;
+                int numReferenceBlocks = r.Next(1, maxNumReferenceBlocks); // CompletedMemory will always have at least one block
+                List<MemoryBlock> memoryBlocks = new List<MemoryBlock>();
+                HashSet<int> blocksReferenced = new HashSet<int>();
+                for (int i = 0; i < numReferenceBlocks; i++)
                 {
-                    int mainChunkIndex = -1;
-                    while (mainChunkIndex == -1 || chunksReferenced.Contains(mainChunkIndex))
-                        mainChunkIndex = r.Next(0, numMainChunks);
-                    chunksReferenced.Add(mainChunkIndex);
-                    int startPosition = 0; // Note: No longer allowing the start position to vary (we can do that with segments) r.Next(0, bytesPerChunk);
-                    int numBytes = r.Next(0, bytesPerChunk - startPosition);
-                    var overallMemoryOwner = overallMemoryOwners[mainChunkIndex];
+                    int mainBlockIndex = -1;
+                    while (mainBlockIndex == -1 || blocksReferenced.Contains(mainBlockIndex))
+                        mainBlockIndex = r.Next(0, numMainBlocks);
+                    blocksReferenced.Add(mainBlockIndex);
+                    int startPosition = 0; // Note: No longer allowing the start position to vary (we can do that with segments) r.Next(0, bytesPerBlock);
+                    int numBytes = r.Next(0, bytesPerBlock - startPosition);
+                    var overallMemoryOwner = overallMemoryOwners[mainBlockIndex];
                     var overallMemoryOwnerLoaded = new ReadOnlyBytes(overallMemoryOwner.ReadOnlyMemory);
-                    memoryChunks.Add(new MemoryChunk(overallMemoryOwnerLoaded, new MemoryBlockLoadingInfo(new MemoryBlockID(mainChunkIndex), numBytes), false));
-                    IEnumerable<byte> bytesToAdd = overallMemoryOwners[mainChunkIndex].ReadOnlyMemory.ToArray().Skip(startPosition).Take(numBytes);
+                    memoryBlocks.Add(new MemoryBlock(overallMemoryOwnerLoaded, new MemoryBlockLoadingInfo(new MemoryBlockID(mainBlockIndex), numBytes), false));
+                    IEnumerable<byte> bytesToAdd = overallMemoryOwners[mainBlockIndex].ReadOnlyMemory.ToArray().Skip(startPosition).Take(numBytes);
                     referencedBytes.AddRange(bytesToAdd);
-                    // Debug.WriteLine($"Main chunk {mainChunkIndex} start {startPosition} numBytes {numBytes} bytes {String.Join(",", bytesToAdd)}");
+                    // Debug.WriteLine($"Main block {mainBlockIndex} start {startPosition} numBytes {numBytes} bytes {String.Join(",", bytesToAdd)}");
                     // Debug.WriteLine($"Overall referenced bytes {String.Join(",", referencedBytes)}");
                 }
-                int totalBytesReferredTo = memoryChunks.Sum(x => x.LoadingInfo.MemoryBlockLength);
+                int totalBytesReferredTo = memoryBlocks.Sum(x => x.LoadingInfo.MemoryBlockLength);
                 referencedBytes.Count().Should().Be(totalBytesReferredTo);
-                LazinatorMemory cobbledMemory = new LazinatorMemory(memoryChunks.ToList(), 0, 0, totalBytesReferredTo);
+                LazinatorMemory cobbledMemory = new LazinatorMemory(memoryBlocks.ToList(), 0, 0, totalBytesReferredTo);
 
                 // Now, we are going to index into this range, first just by using LINQ, and then by getting a bytes segment, which should give us a pointer into overallLazinatorMemory.
                 int startingPositionWithinLazinatorMemorySubrange = r.Next(0, totalBytesReferredTo);
@@ -155,13 +155,13 @@ namespace LazinatorTests.Tests
         [Fact]
         public void MemorySegmentCollectionSubranges()
         {
-            // Note that the LoadingInfos should be irrelevant. The chunks consist of the memory as loaded.
-            MemoryRangeCollection c = new MemoryRangeCollection(new List<MemoryChunk>
+            // Note that the LoadingInfos should be irrelevant. The blocks consist of the memory as loaded.
+            MemoryRangeCollection c = new MemoryRangeCollection(new List<MemoryBlock>
             {
-                new MemoryChunk(new ReadOnlyBytes(new byte[] { 1, 2, 3 })) { LoadingInfo = new MemoryBlockLoadingInfo(new MemoryBlockID(0), 409 /* should't matter that pretruncation length is large */) },
-                new MemoryChunk(new ReadOnlyBytes(new byte[] { 200, 200, 4, 5, 6, 200, 200 })) { LoadingInfo = new MemoryBlockLoadingInfo(new MemoryBlockID(1), 7) },
-                new MemoryChunk(new ReadOnlyBytes(new byte[] { 7, 8, 9, 200 }))  { LoadingInfo = new MemoryBlockLoadingInfo(new MemoryBlockID(2), 5 ) },
-                new MemoryChunk(new ReadOnlyBytes(new byte[] { 10, 11, 12 })) { LoadingInfo = new MemoryBlockLoadingInfo(new MemoryBlockID(3), 3) },
+                new MemoryBlock(new ReadOnlyBytes(new byte[] { 1, 2, 3 })) { LoadingInfo = new MemoryBlockLoadingInfo(new MemoryBlockID(0), 409 /* should't matter that pretruncation length is large */) },
+                new MemoryBlock(new ReadOnlyBytes(new byte[] { 200, 200, 4, 5, 6, 200, 200 })) { LoadingInfo = new MemoryBlockLoadingInfo(new MemoryBlockID(1), 7) },
+                new MemoryBlock(new ReadOnlyBytes(new byte[] { 7, 8, 9, 200 }))  { LoadingInfo = new MemoryBlockLoadingInfo(new MemoryBlockID(2), 5 ) },
+                new MemoryBlock(new ReadOnlyBytes(new byte[] { 10, 11, 12 })) { LoadingInfo = new MemoryBlockLoadingInfo(new MemoryBlockID(3), 3) },
             }, true);
             c.Ranges = new List<MemoryRangeByID>()
             {
@@ -176,14 +176,14 @@ namespace LazinatorTests.Tests
         }
 
         /// <summary>
-        /// Returns the Memory block of bytes corresponding to a memory chunk reference. It is required that each memory owner be a MemoryChunk.
+        /// Returns the Memory block of bytes corresponding to a memory block reference. It is required that each memory owner be a MemoryBlock.
         /// </summary>
-        /// <param name="memoryBlockInfo">The memory chunk reference</param>
+        /// <param name="memoryBlockInfo">The memory block reference</param>
         /// <returns></returns>
         private ReadOnlyMemory<byte> GetMemoryAtBlockAndOffset(LazinatorMemory lazinatorMemory, MemoryRangeByIndex memoryBlockInfo)
         {
-            var memoryChunk = lazinatorMemory.MemorySegmentAtIndex(memoryBlockInfo.MemoryBlockIndex);
-            var underlyingReadOnlyMemory = memoryChunk.ReadOnlyMemory.Slice(memoryBlockInfo.OffsetIntoMemoryChunk, memoryBlockInfo.Length);
+            var memoryBlock = lazinatorMemory.MemorySegmentAtIndex(memoryBlockInfo.MemoryBlockIndex);
+            var underlyingReadOnlyMemory = memoryBlock.ReadOnlyMemory.Slice(memoryBlockInfo.OffsetIntoMemoryBlock, memoryBlockInfo.Length);
             return underlyingReadOnlyMemory;
         }
 

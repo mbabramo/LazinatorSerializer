@@ -12,35 +12,35 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Buffers
 {
-    public partial class MemoryChunkCollection : IMemoryChunkCollection, IEnumerable<MemoryRange>
+    public partial class MemoryBlockCollection : IMemoryBlockCollection, IEnumerable<MemoryRange>
     {
         public IBlobManager BlobManager { get; set; }
-        protected List<MemoryChunk> MemoryChunks = new List<MemoryChunk>();
-        protected Dictionary<MemoryBlockID, int> MemoryChunksIndexFromBlockID = null;
+        protected List<MemoryBlock> MemoryBlocks = new List<MemoryBlock>();
+        protected Dictionary<MemoryBlockID, int> MemoryBlocksIndexFromBlockID = null;
         public long Length { get; private set; }
         public MemoryBlockID HighestMemoryBlockID { get; private set; }
         public MemoryBlockID GetNextMemoryBlockID() => HighestMemoryBlockID.Next();
-        protected int NumMemoryChunks => MemoryChunks?.Count ?? 0;
-        public virtual int NumMemoryRanges => NumMemoryChunks;
+        protected int NumMemoryBlocks => MemoryBlocks?.Count ?? 0;
+        public virtual int NumMemoryRanges => NumMemoryBlocks;
 
         protected virtual int GetRangeLength(int segmentIndex) => MemoryBlocksLoadingInfo[segmentIndex].MemoryBlockLength;
-        protected virtual int GetOffsetIntoChunkForRange(int segmentIndex) => 0;
-        protected virtual int GetMemoryChunkIndexFromMemoryRangeIndex(int i) => i;
+        protected virtual int GetOffsetIntoBlockForRange(int segmentIndex) => 0;
+        protected virtual int GetMemoryBlockIndexFromMemoryRangeIndex(int i) => i;
 
         #region Construction
 
-        public MemoryChunkCollection()
+        public MemoryBlockCollection()
         {
 
         }
 
-        public MemoryChunkCollection(IEnumerable<MemoryChunk> memoryChunks)
+        public MemoryBlockCollection(IEnumerable<MemoryBlock> memoryBlocks)
         {
-            MemoryChunks = memoryChunks.ToList();
-            HighestMemoryBlockID = MemoryChunks.Any() ? new MemoryBlockID(MemoryChunks.Max(x => x.MemoryBlockID.GetIntID())) : new MemoryBlockID(0);
-            Length = MemoryChunks.Sum(x => (long) x.Length);
+            MemoryBlocks = memoryBlocks.ToList();
+            HighestMemoryBlockID = MemoryBlocks.Any() ? new MemoryBlockID(MemoryBlocks.Max(x => x.MemoryBlockID.GetIntID())) : new MemoryBlockID(0);
+            Length = MemoryBlocks.Sum(x => (long) x.Length);
             InitializeMemoryBlocksInformation();
-            if (MemoryChunks.Count != MemoryBlocksLoadingInfo.Count)
+            if (MemoryBlocks.Count != MemoryBlocksLoadingInfo.Count)
                 throw new Exception("DEBUG");
         }
 
@@ -49,42 +49,42 @@ namespace Lazinator.Buffers
             return new LazinatorMemory(this);
         }
 
-        public virtual MemoryChunkCollection DeepCopy()
+        public virtual MemoryBlockCollection DeepCopy()
         {
-            var collection = new MemoryChunkCollection(MemoryChunks);
+            var collection = new MemoryBlockCollection(MemoryBlocks);
             return collection;
         }
 
-        public virtual void AppendMemoryChunk(MemoryChunk memoryChunk)
+        public virtual void AppendMemoryBlock(MemoryBlock memoryBlock)
         {
             if (MemoryBlocksLoadingInfo == null)
                 MemoryBlocksLoadingInfo = new List<MemoryBlockLoadingInfo>();
-            if (MemoryChunksIndexFromBlockID == null)
-                MemoryChunksIndexFromBlockID = new Dictionary<MemoryBlockID, int>();
-            MemoryBlocksLoadingInfo.Add(memoryChunk.LoadingInfo);
-            MemoryChunksIndexFromBlockID[memoryChunk.MemoryBlockID] = MemoryBlocksLoadingInfo.Count() - 1;
-            MemoryChunks.Add(memoryChunk);
-            if (memoryChunk.MemoryBlockID > HighestMemoryBlockID)
-                HighestMemoryBlockID = memoryChunk.MemoryBlockID;
-            Length += (long)memoryChunk.Length;
+            if (MemoryBlocksIndexFromBlockID == null)
+                MemoryBlocksIndexFromBlockID = new Dictionary<MemoryBlockID, int>();
+            MemoryBlocksLoadingInfo.Add(memoryBlock.LoadingInfo);
+            MemoryBlocksIndexFromBlockID[memoryBlock.MemoryBlockID] = MemoryBlocksLoadingInfo.Count() - 1;
+            MemoryBlocks.Add(memoryBlock);
+            if (memoryBlock.MemoryBlockID > HighestMemoryBlockID)
+                HighestMemoryBlockID = memoryBlock.MemoryBlockID;
+            Length += (long)memoryBlock.Length;
         }
 
-        public void SetChunks(IEnumerable<MemoryChunk> chunks)
+        public void SetBlocks(IEnumerable<MemoryBlock> blocks)
         {
-            MemoryChunks = new List<MemoryChunk>();
+            MemoryBlocks = new List<MemoryBlock>();
             Length = 0;
             int i = 0;
-            if (chunks == null)
+            if (blocks == null)
             {
                 HighestMemoryBlockID = new MemoryBlockID(-1);
                 return;
             }
-            foreach (var chunk in chunks)
+            foreach (var block in blocks)
             {
-                if (i == 0 || chunk.MemoryBlockID > HighestMemoryBlockID)
-                    HighestMemoryBlockID = chunk.MemoryBlockID;
-                MemoryChunks.Add(chunk);
-                Length += (long)chunk.Length;
+                if (i == 0 || block.MemoryBlockID > HighestMemoryBlockID)
+                    HighestMemoryBlockID = block.MemoryBlockID;
+                MemoryBlocks.Add(block);
+                Length += (long)block.Length;
                 i++;
             }
             InitializeMemoryBlocksInformation();
@@ -94,18 +94,18 @@ namespace Lazinator.Buffers
 
         #region MemorySegment access
 
-        // In MemoryChunkCollection, a segment is a chunk.
+        // In MemoryBlockCollection, a segment is a block.
 
         public virtual MemoryRange MemoryRangeAtIndex(int i)
         {
-            var chunk = MemoryChunkAtIndex(i);
-            return new MemoryRange(chunk, new MemoryChunkSlice(0, chunk.Length));
+            var block = MemoryBlockAtIndex(i);
+            return new MemoryRange(block, new MemoryBlockSlice(0, block.Length));
         }
 
         public async virtual ValueTask<MemoryRange> MemoryRangeAtIndexAsync(int i)
         {
-            var chunk = await MemoryChunkAtIndexAsync(i);
-            return new MemoryRange(chunk, new MemoryChunkSlice(0, chunk.Length));
+            var block = await MemoryBlockAtIndexAsync(i);
+            return new MemoryRange(block, new MemoryBlockSlice(0, block.Length));
         }
 
         public virtual IEnumerable<MemoryRange> EnumerateMemorySegments()
@@ -116,11 +116,11 @@ namespace Lazinator.Buffers
             }
         }
 
-        public IEnumerable<MemoryChunk> EnumerateMemoryChunks()
+        public IEnumerable<MemoryBlock> EnumerateMemoryBlocks()
         {
-            if (MemoryChunks != null)
-                foreach (var chunk in MemoryChunks)
-                    yield return chunk;
+            if (MemoryBlocks != null)
+                foreach (var block in MemoryBlocks)
+                    yield return block;
         }
 
         public IEnumerator<MemoryRange> GetEnumerator()
@@ -134,30 +134,30 @@ namespace Lazinator.Buffers
             return GetEnumerator();
         }
 
-        public int GetMemoryChunkIndexFromBlockID(MemoryBlockID memoryBlockID)
+        public int GetMemoryBlockIndexFromBlockID(MemoryBlockID memoryBlockID)
         {
-            var d = GetMemoryChunkIndicesFromIDs();
+            var d = GetMemoryBlockIndicesFromIDs();
             return d.ContainsKey(memoryBlockID) ? d[memoryBlockID] : -1;
         }
 
-        public MemoryChunk GetMemoryChunkByMemoryBlockID(MemoryBlockID memoryBlockID)
+        public MemoryBlock GetMemoryBlockByMemoryBlockID(MemoryBlockID memoryBlockID)
         {
-            var d = GetMemoryChunkIndicesFromIDs();
+            var d = GetMemoryBlockIndicesFromIDs();
             if (!d.ContainsKey(memoryBlockID))
                 return null;
-            return MemoryChunkAtIndex(d[memoryBlockID]);
+            return MemoryBlockAtIndex(d[memoryBlockID]);
         }
         
-        protected Dictionary<MemoryBlockID, int> GetMemoryChunkIndicesFromIDs()
+        protected Dictionary<MemoryBlockID, int> GetMemoryBlockIndicesFromIDs()
         {
-            if (MemoryChunksIndexFromBlockID == null)
+            if (MemoryBlocksIndexFromBlockID == null)
                 InitializeMemoryBlocksInformation();
-            return MemoryChunksIndexFromBlockID;
+            return MemoryBlocksIndexFromBlockID;
         }
 
-        public string ToStringByChunk()
+        public string ToStringByBlock()
         {
-            return String.Join("; ", EnumerateMemoryChunks().Select(x => x.ToString().Replace("\n", " ")));
+            return String.Join("; ", EnumerateMemoryBlocks().Select(x => x.ToString().Replace("\n", " ")));
         }
 
         #endregion
@@ -168,65 +168,65 @@ namespace Lazinator.Buffers
         {
             Dictionary<MemoryBlockID, int> d = new Dictionary<MemoryBlockID, int>(); 
             MemoryBlocksLoadingInfo = new List<MemoryBlockLoadingInfo>();
-            for (int i = 0; i < MemoryChunks.Count; i++)
+            for (int i = 0; i < MemoryBlocks.Count; i++)
             {
-                MemoryChunk memoryChunk = MemoryChunks[i];
-                MemoryBlockID chunkID = memoryChunk.MemoryBlockID;
-                if (!d.ContainsKey(chunkID))
-                    d[chunkID] = i;
-                MemoryBlocksLoadingInfo.Add(memoryChunk.LoadingInfo);
+                MemoryBlock memoryBlock = MemoryBlocks[i];
+                MemoryBlockID blockID = memoryBlock.MemoryBlockID;
+                if (!d.ContainsKey(blockID))
+                    d[blockID] = i;
+                MemoryBlocksLoadingInfo.Add(memoryBlock.LoadingInfo);
             }
-            MemoryChunksIndexFromBlockID = d;
+            MemoryBlocksIndexFromBlockID = d;
         }
 
         private void UpdateLoadingOffset(MemoryBlockID memoryBlockID, long offset)
         {
-            int i = GetMemoryChunkIndicesFromIDs()[memoryBlockID];
+            int i = GetMemoryBlockIndicesFromIDs()[memoryBlockID];
             MemoryBlocksLoadingInfo[i] = MemoryBlocksLoadingInfo[i].WithLoadingOffset(offset);
         }
 
         #endregion
 
-        #region Memory chunk creation and loading
+        #region Memory block creation and loading
 
-        public MemoryChunk MemoryChunkAtIndex(int i)
+        public MemoryBlock MemoryBlockAtIndex(int i)
         {
-            if (MemoryChunks == null)
-                MemoryChunks = MemoryBlocksLoadingInfo.Select(x => (MemoryChunk)null).ToList();
-            if (MemoryChunks[i] == null)
-                MemoryChunks[i] = CreateMemoryChunkForIndex(i);
-            var chunk = MemoryChunks[i];
-            return MemoryChunks[i];
+            if (MemoryBlocks == null)
+                MemoryBlocks = MemoryBlocksLoadingInfo.Select(x => (MemoryBlock)null).ToList();
+            if (MemoryBlocks[i] == null)
+                MemoryBlocks[i] = CreateMemoryBlockForIndex(i);
+            var block = MemoryBlocks[i];
+            return MemoryBlocks[i];
         }
 
-        public async ValueTask<MemoryChunk> MemoryChunkAtIndexAsync(int i)
+        public async ValueTask<MemoryBlock> MemoryBlockAtIndexAsync(int i)
         {
-            if (MemoryChunks == null)
-                MemoryChunks = MemoryBlocksLoadingInfo.Select(x => (MemoryChunk)null).ToList();
-            if (MemoryChunks[i] == null)
-                MemoryChunks[i] = await CreateMemoryChunkForIndexAsync(i);
-            var chunk = MemoryChunks[i];
-            return MemoryChunks[i];
+            if (MemoryBlocks == null)
+                MemoryBlocks = MemoryBlocksLoadingInfo.Select(x => (MemoryBlock)null).ToList();
+            if (MemoryBlocks[i] == null)
+                MemoryBlocks[i] = await CreateMemoryBlockForIndexAsync(i);
+            var block = MemoryBlocks[i];
+            return MemoryBlocks[i];
         }
 
-        private MemoryChunk CreateMemoryChunkForIndex(int i)
+        private MemoryBlock CreateMemoryBlockForIndex(int i)
         {
             string path = GetPathForIndex();
             var loadingInfo = MemoryBlocksLoadingInfo[i];
             ReadOnlyMemory<byte> memory = BlobManager.Read(path, loadingInfo.GetLoadingOffset(), loadingInfo.MemoryBlockLength);
             ReadOnlyBytes readOnlyBytes = new ReadOnlyBytes(memory);
-            MemoryChunk chunk = new MemoryChunk(readOnlyBytes) { IsPersisted = true };
-            return chunk;
+            MemoryBlock block = new MemoryBlock(readOnlyBytes) { IsPersisted = true };
+            return block;
         }
 
-        private async ValueTask<MemoryChunk> CreateMemoryChunkForIndexAsync(int i)
+        private async ValueTask<MemoryBlock> CreateMemoryBlockForIndexAsync(int i)
         {
             string path = GetPathForIndex();
             var loadingInfo = MemoryBlocksLoadingInfo[i];
             ReadOnlyMemory<byte> memory = await BlobManager.ReadAsync(path, loadingInfo.GetLoadingOffset(), loadingInfo.MemoryBlockLength);
             ReadOnlyBytes readOnlyBytes = new ReadOnlyBytes(memory);
-            MemoryChunk chunk = new MemoryChunk(readOnlyBytes) { IsPersisted = true };
-            return chunk;
+            MemoryBlock block = new MemoryBlock(readOnlyBytes) { IsPersisted = true };
+            return block;
         }
 
         #endregion
@@ -262,7 +262,7 @@ namespace Lazinator.Buffers
             return new MemoryRangeByIndex(revisedStartIndex, revisedStartPosition, revisedLength);
         }
 
-        // DEBUG5 problem: We call this for 0, 30, 9 (meaning memory chunk index 0, location 30, length 9), which is the location of where the memory was. But now, we've been adding segments when writing. So, we actually do need for at least this purpose for this to be MemoryChunks, and then we need to be sure that is what is passed in. We need to see whther we actually want indexInInitialMemoryChunk, offsetInInitialMemoryChunk for all places where this is called.
+        // DEBUG5 problem: We call this for 0, 30, 9 (meaning memory block index 0, location 30, length 9), which is the location of where the memory was. But now, we've been adding segments when writing. So, we actually do need for at least this purpose for this to be MemoryBlocks, and then we need to be sure that is what is passed in. We need to see whther we actually want indexInInitialMemoryBlock, offsetInInitialMemoryBlock for all places where this is called.
         public IEnumerable<MemoryRangeByIndex> EnumerateMemorySegmentLocationsByIndex(int indexInitialSegment, int offsetInInitialSegment, long length)
         {
             long bytesRemaining = length;
@@ -270,10 +270,10 @@ namespace Lazinator.Buffers
             for (int index = 0; index < numSegments; index++)
             {
                 int segmentLength = GetRangeLength(index);
-                int offsetIntoChunk = GetOffsetIntoChunkForRange(index);
+                int offsetIntoBlock = GetOffsetIntoBlockForRange(index);
                 if (index == indexInitialSegment)
                 { // return memory segment starting at offset
-                    int totalOffset = offsetIntoChunk + offsetInInitialSegment;
+                    int totalOffset = offsetIntoBlock + offsetInInitialSegment;
                     int lengthToInclude = (int)Math.Min(segmentLength - offsetInInitialSegment, bytesRemaining);
                     bytesRemaining -= lengthToInclude;
                     yield return new MemoryRangeByIndex(index, totalOffset, lengthToInclude);
@@ -282,7 +282,7 @@ namespace Lazinator.Buffers
                 { // return memory segment until end or until bytes remaining are exhausted
                     int lengthToInclude = (int)Math.Min(segmentLength, bytesRemaining);
                     bytesRemaining -= lengthToInclude;
-                    yield return new MemoryRangeByIndex(index, offsetIntoChunk, lengthToInclude);
+                    yield return new MemoryRangeByIndex(index, offsetIntoBlock, lengthToInclude);
                 }
                 if (bytesRemaining == 0)
                     yield break;
@@ -295,13 +295,13 @@ namespace Lazinator.Buffers
             {
                 int memorySegmentIndex = indexAndSlice.MemoryBlockIndex;
                 var memoryBlockID = GetMemoryBlockIDForMemorySegmentIndex(memorySegmentIndex);
-                yield return new MemoryRangeByID(memoryBlockID, indexAndSlice.OffsetIntoMemoryChunk, indexAndSlice.Length);
+                yield return new MemoryRangeByID(memoryBlockID, indexAndSlice.OffsetIntoMemoryBlock, indexAndSlice.Length);
             }
         }
 
         private MemoryBlockID GetMemoryBlockIDForMemorySegmentIndex(int memorySegmentIndex)
         {
-            return MemoryChunkAtIndex(GetMemoryChunkIndexFromMemoryRangeIndex(memorySegmentIndex)).MemoryBlockID;
+            return MemoryBlockAtIndex(GetMemoryBlockIndexFromMemoryRangeIndex(memorySegmentIndex)).MemoryBlockID;
         }
 
         public virtual IEnumerable<MemoryRange> EnumerateMemorySegments(int indexInitialSegment, int offsetInInitialSegment, long length)
@@ -317,27 +317,27 @@ namespace Lazinator.Buffers
 
         #region Persistence
 
-        internal List<MemoryChunk> GetUnpersistedMemoryChunks()
+        internal List<MemoryBlock> GetUnpersistedMemoryBlocks()
         {
-            List<MemoryChunk> memoryChunks = new List<MemoryChunk>();
+            List<MemoryBlock> memoryBlocks = new List<MemoryBlock>();
             HashSet<MemoryBlockID> memoryBlockIDs = new HashSet<MemoryBlockID>();
-            foreach (MemoryChunk memoryChunk in MemoryChunks)
+            foreach (MemoryBlock memoryBlock in MemoryBlocks)
             {
-                if (memoryChunk.IsPersisted)
+                if (memoryBlock.IsPersisted)
                     continue;
-                MemoryBlockID memoryBlockID = memoryChunk.MemoryBlockID;
+                MemoryBlockID memoryBlockID = memoryBlock.MemoryBlockID;
                 if (!memoryBlockIDs.Contains(memoryBlockID))
                 {
                     memoryBlockIDs.Add(memoryBlockID);
-                    memoryChunks.Add(memoryChunk);
+                    memoryBlocks.Add(memoryBlock);
                 }
             }
-            return memoryChunks;
+            return memoryBlocks;
         }
 
-        public void PersistMemoryChunks(bool isInitialVersion)
+        public void PersistMemoryBlocks(bool isInitialVersion)
         {
-            var memoryChunksToPersist = GetUnpersistedMemoryChunks();
+            var memoryBlocksToPersist = GetUnpersistedMemoryBlocks();
 
             long offset = 0;
             string pathForSingleBlob = ContainedInSingleBlob ? GetPathForMemoryBlock(new MemoryBlockID(0)) : null;
@@ -353,29 +353,29 @@ namespace Lazinator.Buffers
                     offset = BlobManager.GetLength(pathForSingleBlob);
                 BlobManager.OpenForWriting(pathForSingleBlob);
             }
-            foreach (var memoryChunkToPersist in memoryChunksToPersist)
+            foreach (var memoryBlockToPersist in memoryBlocksToPersist)
             {
-                memoryChunkToPersist.LoadMemory();
-                MemoryBlockID memoryBlockID = memoryChunkToPersist.MemoryBlockID;
+                memoryBlockToPersist.LoadMemory();
+                MemoryBlockID memoryBlockID = memoryBlockToPersist.MemoryBlockID;
                 string path = ContainedInSingleBlob ? pathForSingleBlob : GetPathForMemoryBlock(memoryBlockID); 
                 if (ContainedInSingleBlob)
                 {
-                    BlobManager.Append(path, memoryChunkToPersist.MemoryAsLoaded.ReadOnlyMemory);
-                    UpdateLoadingOffset(memoryChunkToPersist.MemoryBlockID, offset);
-                    offset += memoryChunkToPersist.LoadingInfo.MemoryBlockLength;
+                    BlobManager.Append(path, memoryBlockToPersist.MemoryAsLoaded.ReadOnlyMemory);
+                    UpdateLoadingOffset(memoryBlockToPersist.MemoryBlockID, offset);
+                    offset += memoryBlockToPersist.LoadingInfo.MemoryBlockLength;
                 }
                 else
-                    BlobManager.Write(path, memoryChunkToPersist.MemoryAsLoaded.ReadOnlyMemory);
-                memoryChunkToPersist.IsPersisted = true;
-                OnMemoryChunkPersisted(memoryBlockID);
+                    BlobManager.Write(path, memoryBlockToPersist.MemoryAsLoaded.ReadOnlyMemory);
+                memoryBlockToPersist.IsPersisted = true;
+                OnMemoryBlockPersisted(memoryBlockID);
             }
             if (ContainedInSingleBlob)
                 BlobManager.CloseAfterWriting(pathForSingleBlob);
         }
 
-        public async ValueTask PersistMemoryChunksAsync(bool isInitialVersion)
+        public async ValueTask PersistMemoryBlocksAsync(bool isInitialVersion)
         {
-            var memoryChunksToPersist = GetUnpersistedMemoryChunks();
+            var memoryBlocksToPersist = GetUnpersistedMemoryBlocks();
 
             long offset = 0;
             string pathForSingleBlob = ContainedInSingleBlob ? GetPathForMemoryBlock(new MemoryBlockID(0)) : null;
@@ -391,27 +391,27 @@ namespace Lazinator.Buffers
                     offset = BlobManager.GetLength(pathForSingleBlob);
                 BlobManager.OpenForWriting(pathForSingleBlob);
             }
-            foreach (var memoryChunkToPersist in memoryChunksToPersist)
+            foreach (var memoryBlockToPersist in memoryBlocksToPersist)
             {
-                await memoryChunkToPersist.LoadMemoryAsync();
-                MemoryBlockID memoryBlockID = memoryChunkToPersist.MemoryBlockID;
+                await memoryBlockToPersist.LoadMemoryAsync();
+                MemoryBlockID memoryBlockID = memoryBlockToPersist.MemoryBlockID;
                 string path = ContainedInSingleBlob ? pathForSingleBlob : GetPathForMemoryBlock(memoryBlockID);
                 if (ContainedInSingleBlob)
                 {
-                    await BlobManager.AppendAsync(path, memoryChunkToPersist.MemoryAsLoaded.ReadOnlyMemory);
-                    UpdateLoadingOffset(memoryChunkToPersist.MemoryBlockID, offset);
-                    offset += memoryChunkToPersist.LoadingInfo.MemoryBlockLength;
+                    await BlobManager.AppendAsync(path, memoryBlockToPersist.MemoryAsLoaded.ReadOnlyMemory);
+                    UpdateLoadingOffset(memoryBlockToPersist.MemoryBlockID, offset);
+                    offset += memoryBlockToPersist.LoadingInfo.MemoryBlockLength;
                 }
                 else
-                    BlobManager.Write(path, memoryChunkToPersist.MemoryAsLoaded.ReadOnlyMemory);
-                memoryChunkToPersist.IsPersisted = true;
-                OnMemoryChunkPersisted(memoryBlockID);
+                    BlobManager.Write(path, memoryBlockToPersist.MemoryAsLoaded.ReadOnlyMemory);
+                memoryBlockToPersist.IsPersisted = true;
+                OnMemoryBlockPersisted(memoryBlockID);
             }
             if (ContainedInSingleBlob)
                 BlobManager.CloseAfterWriting(pathForSingleBlob);
         }
 
-        public virtual void OnMemoryChunkPersisted(MemoryBlockID memoryBlockID)
+        public virtual void OnMemoryBlockPersisted(MemoryBlockID memoryBlockID)
         {
 
         }
@@ -421,7 +421,7 @@ namespace Lazinator.Buffers
         #region Path
 
         public virtual string GetPathForIndex() => GetPathHelper(BaseBlobPath, null, " Index");
-        public virtual string GetPathForMemoryBlock(MemoryBlockID memoryBlockID) => GetPathHelper(BaseBlobPath, null, ContainedInSingleBlob ? " AllChunks" : (" Chunk " + memoryBlockID.ToString()));
+        public virtual string GetPathForMemoryBlock(MemoryBlockID memoryBlockID) => GetPathHelper(BaseBlobPath, null, ContainedInSingleBlob ? " AllBlocks" : (" Block " + memoryBlockID.ToString()));
 
         public static string GetPathForIndex(string baseBlobPath, IEnumerable<int> forkInformation, int versionNumber) => GetPathHelper(baseBlobPath, forkInformation, " Index " + versionNumber.ToString());
 

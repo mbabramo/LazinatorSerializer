@@ -4,7 +4,7 @@ namespace Lazinator.Exceptions
 {
     public class LazinatorCompoundMemoryException : Exception
     {
-        private const string explanation = "This operation is not supported when Lazinator's memory storage is split into multiple chunks.";
+        private const string explanation = "This operation is not supported when Lazinator's memory storage is split into multiple blocks.";
 
         public LazinatorCompoundMemoryException() : this(explanation)
         {

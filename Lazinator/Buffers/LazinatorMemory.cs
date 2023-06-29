@@ -15,30 +15,30 @@ using Lazinator.Wrappers;
 namespace Lazinator.Buffers
 {
     /// <summary>
-    /// An immutable memory owner used by Lazinator to store and reference serialized Lazinator data. The memory may be split across multiple memory chunks.
-    /// The memory referenced is defined by the index of the first memory chunk, the index of the first byte within that chunk, and the number of 
+    /// An immutable memory owner used by Lazinator to store and reference serialized Lazinator data. The memory may be split across multiple memory blocks.
+    /// The memory referenced is defined by the index of the first memory block, the index of the first byte within that block, and the number of 
     /// bytes altogether. 
     /// </summary>
     public readonly struct LazinatorMemory
     {
         /// <summary>
-        /// A single chunk of memory
+        /// A single block of memory
         /// </summary>
-        public readonly MemoryChunk SingleMemoryChunk;
+        public readonly MemoryBlock SingleMemoryBlock;
         /// <summary>
-        /// Multiple chunks of memory
+        /// Multiple blocks of memory
         /// </summary>
-        public readonly MemoryChunkCollection MultipleMemoryChunks;
+        public readonly MemoryBlockCollection MultipleMemoryBlocks;
         /// <summary>
-        /// The starting index from SingleMemoryChunk or MultipleMemoryChunks for the referenced range.
+        /// The starting index from SingleMemoryBlock or MultipleMemoryBlocks for the referenced range.
         /// </summary>
         public readonly int StartIndex;
         /// <summary>
-        /// The starting position within the chunk of memory referred to by StartIndex of the referenced range.
+        /// The starting position within the block of memory referred to by StartIndex of the referenced range.
         /// </summary>
         public readonly int Offset;
         /// <summary>
-        /// The total number of bytes in the referenced range, potentially spanning multiple chunks of memory.
+        /// The total number of bytes in the referenced range, potentially spanning multiple blocks of memory.
         /// </summary>
         public readonly long Length;
 
@@ -48,8 +48,8 @@ namespace Lazinator.Buffers
         /// </summary>
         public int? LengthInt => Length > int.MaxValue ? null : (int)Length;
 
-        public bool IsEmpty => (SingleMemoryChunk == null && MultipleMemoryChunks == null) || Length == 0;
-        public long AllocationID => (SingleMemoryChunk.MemoryAsLoaded as ExpandableBytes)?.AllocationID ?? -1;
+        public bool IsEmpty => (SingleMemoryBlock == null && MultipleMemoryBlocks == null) || Length == 0;
+        public long AllocationID => (SingleMemoryBlock.MemoryAsLoaded as ExpandableBytes)?.AllocationID ?? -1;
 
         public static Memory<byte> EmptyMemory = new Memory<byte>();
         public static ReadOnlyMemory<byte> EmptyReadOnlyMemory = new ReadOnlyMemory<byte>();
@@ -63,10 +63,10 @@ namespace Lazinator.Buffers
 
         #region Construction
 
-        public LazinatorMemory(MemoryChunk memoryChunk, int startPosition, long length)
+        public LazinatorMemory(MemoryBlock memoryBlock, int startPosition, long length)
         {
-            SingleMemoryChunk = memoryChunk;
-            MultipleMemoryChunks = null;
+            SingleMemoryBlock = memoryBlock;
+            MultipleMemoryBlocks = null;
             StartIndex = 0;
             if (startPosition < 0)
                 throw new ArgumentException();
@@ -77,65 +77,65 @@ namespace Lazinator.Buffers
                 Length = length;
         }
 
-        public LazinatorMemory(MemoryChunkCollection memoryChunkCollection)
+        public LazinatorMemory(MemoryBlockCollection memoryBlockCollection)
         {
-            MultipleMemoryChunks = memoryChunkCollection; 
-            SingleMemoryChunk = null;
+            MultipleMemoryBlocks = memoryBlockCollection; 
+            SingleMemoryBlock = null;
             StartIndex = 0;
             Offset = 0;
-            Length = memoryChunkCollection.Length;
+            Length = memoryBlockCollection.Length;
         }
 
-        public LazinatorMemory(MemoryChunkCollection moreMemoryChunks, int startIndex, int startPosition, long length) : this(null, startPosition, length)
+        public LazinatorMemory(MemoryBlockCollection moreMemoryBlocks, int startIndex, int startPosition, long length) : this(null, startPosition, length)
         {
-            MultipleMemoryChunks = moreMemoryChunks;
+            MultipleMemoryBlocks = moreMemoryBlocks;
             StartIndex = startIndex;
         }
 
-        public LazinatorMemory(IEnumerable<MemoryChunk> moreMemoryChunks, int startIndex, int startPosition, long length) : this(null, startPosition, length)
+        public LazinatorMemory(IEnumerable<MemoryBlock> moreMemoryBlocks, int startIndex, int startPosition, long length) : this(null, startPosition, length)
         {
-            MultipleMemoryChunks = new MemoryChunkCollection(moreMemoryChunks);
+            MultipleMemoryBlocks = new MemoryBlockCollection(moreMemoryBlocks);
             StartIndex = startIndex;
         }
 
-        public LazinatorMemory(MemoryChunk memoryChunk, long length) : this(memoryChunk, 0, length)
+        public LazinatorMemory(MemoryBlock memoryBlock, long length) : this(memoryBlock, 0, length)
         {
         }
 
-        public LazinatorMemory(MemoryChunk memoryChunk) : this(memoryChunk, 0, memoryChunk.ReadOnlyMemory.Length)
+        public LazinatorMemory(MemoryBlock memoryBlock) : this(memoryBlock, 0, memoryBlock.ReadOnlyMemory.Length)
         {
         }
 
-        public LazinatorMemory(IReadableBytes readOnlyBytes) : this(new MemoryChunk(readOnlyBytes))
+        public LazinatorMemory(IReadableBytes readOnlyBytes) : this(new MemoryBlock(readOnlyBytes))
         {
         }
 
-        public LazinatorMemory(ReadOnlyBytes readOnlyBytes) : this(new MemoryChunk(readOnlyBytes))
+        public LazinatorMemory(ReadOnlyBytes readOnlyBytes) : this(new MemoryBlock(readOnlyBytes))
         {
         }
 
-        public LazinatorMemory(ReadOnlyMemory<byte> memory) : this(new MemoryChunk(new ReadOnlyBytes(memory)))
+        public LazinatorMemory(ReadOnlyMemory<byte> memory) : this(new MemoryBlock(new ReadOnlyBytes(memory)))
         {
         }
 
-        public LazinatorMemory(byte[] array) : this(new MemoryChunk(new ReadOnlyBytes(array)))
+        public LazinatorMemory(byte[] array) : this(new MemoryBlock(new ReadOnlyBytes(array)))
         {
         }
 
         /// <summary>
-        /// Returns a new LazinatorMemory with an appended memory chunk.
+        /// Returns a new LazinatorMemory with an appended memory block.
         /// </summary>
-        /// <param name="chunk"></param>
+        /// <param name="block"></param>
         /// <returns></returns>
-        public LazinatorMemory WithAppendedChunk(MemoryChunk chunk)
+        public LazinatorMemory WithAppendedBlock(MemoryBlock block)
         {
             if (IsEmpty)
-                return new LazinatorMemory(chunk);
+                return new LazinatorMemory(block);
 
-            var withAppendedChunk = new MemoryRangeCollection();
-            withAppendedChunk.SetFromLazinatorMemory(this);
-            withAppendedChunk.AppendMemoryChunk(chunk);
-            return new LazinatorMemory(withAppendedChunk, StartIndex, Offset, Length + chunk.Length);
+            var withAppendedBlock = new MemoryRangeCollection();
+            withAppendedBlock.SetFromLazinatorMemory(this);
+            withAppendedBlock.AppendMemoryBlock(block);
+            return new LazinatorMemory(withAppendedBlock, StartIndex, Offset, Length + block.Length);
         }
 
         public bool Disposed => EnumerateReadOnlyBytesSegments().Any(x => x != null && (x is IMemoryAllocationInfo info && info.Disposed) || (x is ReadOnlyBytes s && s.Disposed));
@@ -146,9 +146,9 @@ namespace Lazinator.Buffers
 
         public void Dispose()
         {
-            SingleMemoryChunk?.Dispose();
-            if (MultipleMemoryChunks != null)
-                foreach (var additional in MultipleMemoryChunks)
+            SingleMemoryBlock?.Dispose();
+            if (MultipleMemoryBlocks != null)
+                foreach (var additional in MultipleMemoryBlocks)
                     additional.Dispose();
         }
 
@@ -166,19 +166,19 @@ namespace Lazinator.Buffers
             return new LazinatorMemory(array);
         }
 
-        private MemoryRange SingleMemorySegment => new MemoryRange(SingleMemoryChunk, new MemoryChunkSlice(0, SingleMemoryChunk.Length));
+        private MemoryRange SingleMemorySegment => new MemoryRange(SingleMemoryBlock, new MemoryBlockSlice(0, SingleMemoryBlock.Length));
 
-        public MemoryRange MemorySegmentAtIndex(int i) => MultipleMemoryChunks == null && i == 0 ? SingleMemorySegment : MultipleMemoryChunks.MemoryRangeAtIndex(i);
+        public MemoryRange MemorySegmentAtIndex(int i) => MultipleMemoryBlocks == null && i == 0 ? SingleMemorySegment : MultipleMemoryBlocks.MemoryRangeAtIndex(i);
 
-        public async ValueTask<MemoryRange> MemorySegmentAtIndexAsync(int i) => MultipleMemoryChunks == null && i == 0 ? SingleMemorySegment : await MultipleMemoryChunks.MemoryRangeAtIndexAsync(i);
+        public async ValueTask<MemoryRange> MemorySegmentAtIndexAsync(int i) => MultipleMemoryBlocks == null && i == 0 ? SingleMemorySegment : await MultipleMemoryBlocks.MemoryRangeAtIndexAsync(i);
 
         /// <summary>
-        /// Slices the first referenced memory chunk only, producing a new LazinatorMemory.
+        /// Slices the first referenced memory block only, producing a new LazinatorMemory.
         /// </summary>
         /// <param name="offset">An offset relative to the existing Offset, which must refer to the initial memory</param>
         /// <param name="length"></param>
         /// <returns></returns>
-        private LazinatorMemory SliceSingle(int offset, long length) => length == 0 ? LazinatorMemory.EmptyLazinatorMemory : new LazinatorMemory(SingleMemoryChunk, Offset + offset, length);
+        private LazinatorMemory SliceSingle(int offset, long length) => length == 0 ? LazinatorMemory.EmptyLazinatorMemory : new LazinatorMemory(SingleMemoryBlock, Offset + offset, length);
 
         /// <summary>
         /// Slices the memory, returning a new LazinatorMemory beginning at the specified offset, beyond the offset already existing in this LazinatorMemory.
@@ -203,10 +203,10 @@ namespace Lazinator.Buffers
                 return SliceSingle((int) furtherOffset, length);
             }
 
-            MemoryRangeByIndex segmentInfo = MultipleMemoryChunks.GetMemorySegmentInfoAtOffsetFromStartPosition(StartIndex, Offset, furtherOffset);
+            MemoryRangeByIndex segmentInfo = MultipleMemoryBlocks.GetMemorySegmentInfoAtOffsetFromStartPosition(StartIndex, Offset, furtherOffset);
 
             // DEBUG5 would seem to suggest that we are referring to the memory segment
-            return new LazinatorMemory(MultipleMemoryChunks.DeepCopy(), segmentInfo.MemoryBlockIndex, segmentInfo.OffsetIntoMemoryChunk, length);
+            return new LazinatorMemory(MultipleMemoryBlocks.DeepCopy(), segmentInfo.MemoryBlockIndex, segmentInfo.OffsetIntoMemoryBlock, length);
         }
 
         #endregion
@@ -214,7 +214,7 @@ namespace Lazinator.Buffers
         #region Equality
 
         public override bool Equals(object obj) => obj == null ? throw new LazinatorSerializationException("Invalid comparison of LazinatorMemory to null") :
-            obj is LazinatorMemory lm && ( (lm.SingleMemoryChunk != null && lm.SingleMemoryChunk.Equals(SingleMemoryChunk)) || (lm.MultipleMemoryChunks != null && lm.MultipleMemoryChunks.Equals(MultipleMemoryChunks)) ) && lm.Offset == Offset && lm.Length == Length;
+            obj is LazinatorMemory lm && ( (lm.SingleMemoryBlock != null && lm.SingleMemoryBlock.Equals(SingleMemoryBlock)) || (lm.MultipleMemoryBlocks != null && lm.MultipleMemoryBlocks.Equals(MultipleMemoryBlocks)) ) && lm.Offset == Offset && lm.Length == Length;
 
         public override int GetHashCode()
         {
@@ -236,12 +236,12 @@ namespace Lazinator.Buffers
         #region Single and initial memory
 
         /// <summary>
-        /// True if there is only a single memory chunk.
+        /// True if there is only a single memory block.
         /// </summary>
-        public bool SingleMemory => MultipleMemoryChunks == null;
+        public bool SingleMemory => MultipleMemoryBlocks == null;
 
         /// <summary>
-        /// The first referenced memory chunk
+        /// The first referenced memory block
         /// </summary>
         public ReadOnlyMemory<byte> InitialReadOnlyMemory
         {
@@ -250,7 +250,7 @@ namespace Lazinator.Buffers
                 if (IsEmpty)
                     return EmptyReadOnlyMemory;
                 LoadInitialReadOnlyMemory();
-                ReadOnlyMemory<byte> memory = SingleMemoryChunk?.ReadOnlyMemory ?? MemorySegmentAtIndex(StartIndex).ReadOnlyMemory;
+                ReadOnlyMemory<byte> memory = SingleMemoryBlock?.ReadOnlyMemory ?? MemorySegmentAtIndex(StartIndex).ReadOnlyMemory;
                 int length = (int)Math.Min(memory.Length - Offset, Length);
                 return memory.Slice(Offset, length);
             }
@@ -258,7 +258,7 @@ namespace Lazinator.Buffers
 
 
         /// <summary>
-        /// Asynchronously returns the first referenced memory chunk.
+        /// Asynchronously returns the first referenced memory block.
         /// </summary>
         /// <returns></returns>
         public async ValueTask<ReadOnlyMemory<byte>> GetInitialReadOnlyMemoryAsync()
@@ -266,12 +266,12 @@ namespace Lazinator.Buffers
             if (IsEmpty)
                 return EmptyMemory;
             await LoadInitialReadOnlyMemoryAsync();
-            ReadOnlyMemory<byte> memory = SingleMemoryChunk?.ReadOnlyMemory ?? MemorySegmentAtIndex(StartIndex).ReadOnlyMemory;
+            ReadOnlyMemory<byte> memory = SingleMemoryBlock?.ReadOnlyMemory ?? MemorySegmentAtIndex(StartIndex).ReadOnlyMemory;
             return memory.Slice(Offset, memory.Length - Offset);
         }
 
         /// <summary>
-        /// The only memory chunk. This will throw if there are multiple memory chunks.
+        /// The only memory block. This will throw if there are multiple memory blocks.
         /// </summary>
         public ReadOnlyMemory<byte> OnlyMemory
         {
@@ -290,44 +290,44 @@ namespace Lazinator.Buffers
         // DEBUG -- remove all the Load stuff once we can make it transparent within the memory
 
         /// <summary>
-        /// Loads the first referenced memory chunk synchronously if it is not loaded.
+        /// Loads the first referenced memory block synchronously if it is not loaded.
         /// </summary>
         /// <returns></returns>
         public void LoadInitialReadOnlyMemory()
         {
             if (SingleMemory)
             {
-                LoadMemoryChunk(SingleMemoryChunk);
+                LoadMemoryBlock(SingleMemoryBlock);
                 return;
             }
             MemoryRange memorySegment = MemorySegmentAtIndex(StartIndex);
-            LoadMemoryChunk(memorySegment.MemoryChunk);
+            LoadMemoryBlock(memorySegment.MemoryBlock);
         }
 
         public async ValueTask LoadInitialReadOnlyMemoryAsync()
         {
             if (SingleMemory)
             {
-                await LoadMemoryChunkAsync(SingleMemoryChunk);
+                await LoadMemoryBlockAsync(SingleMemoryBlock);
                 return;
             }
             MemoryRange memorySegment = MemorySegmentAtIndex(StartIndex);
-            await LoadMemoryChunkAsync(memorySegment.MemoryChunk);
+            await LoadMemoryBlockAsync(memorySegment.MemoryBlock);
         }
 
-        private static void LoadMemoryChunk(MemoryChunk memoryChunk)
+        private static void LoadMemoryBlock(MemoryBlock memoryBlock)
         {
-            if (memoryChunk.IsLoaded == false)
+            if (memoryBlock.IsLoaded == false)
             {
-                memoryChunk.LoadMemory();
+                memoryBlock.LoadMemory();
             }
         }
 
-        private static async ValueTask LoadMemoryChunkAsync(MemoryChunk memoryChunk)
+        private static async ValueTask LoadMemoryBlockAsync(MemoryBlock memoryBlock)
         {
-            if (memoryChunk.IsLoaded == false)
+            if (memoryBlock.IsLoaded == false)
             {
-                await memoryChunk.LoadMemoryAsync();
+                await memoryBlock.LoadMemoryAsync();
             }
         }
 
@@ -337,37 +337,37 @@ namespace Lazinator.Buffers
         public void LoadAllMemory()
         {
             LoadInitialReadOnlyMemory();
-            if (MultipleMemoryChunks != null)
-                foreach (var additional in MultipleMemoryChunks)
-                    LoadMemoryChunk(additional.MemoryChunk);
+            if (MultipleMemoryBlocks != null)
+                foreach (var additional in MultipleMemoryBlocks)
+                    LoadMemoryBlock(additional.MemoryBlock);
         }
 
         public async ValueTask LoadAllMemoryAsync()
         {
             await LoadInitialReadOnlyMemoryAsync();
-            if (MultipleMemoryChunks != null)
-                foreach (var additional in MultipleMemoryChunks)
-                    await LoadMemoryChunkAsync(additional.MemoryChunk);
+            if (MultipleMemoryBlocks != null)
+                foreach (var additional in MultipleMemoryBlocks)
+                    await LoadMemoryBlockAsync(additional.MemoryBlock);
         }
 
         /// <summary>
-        /// Allows for unloading the first referenced memory chunk, if it is loaded. The memory can be unloaded only if the owner of the first memory
-        /// chunk is a MemoryReference that supports this functionality.
+        /// Allows for unloading the first referenced memory block, if it is loaded. The memory can be unloaded only if the owner of the first memory
+        /// block is a MemoryReference that supports this functionality.
         /// </summary>
         public void ConsiderUnloadInitialReadOnlyMemory()
         {
             if (SingleMemory)
                 return;
             MemoryRange memorySegment = MemorySegmentAtIndex(StartIndex);
-            if (memorySegment.MemoryChunk.IsLoaded == true)
+            if (memorySegment.MemoryBlock.IsLoaded == true)
             {
-                memorySegment.MemoryChunk.ConsiderUnloadMemory();
+                memorySegment.MemoryBlock.ConsiderUnloadMemory();
             }
         }
 
         /// <summary>
-        /// Allows for asynchronously unloading the first referenced memory chunk, if it is loaded. The memory can be unloaded only if the owner of the first memory
-        /// chunk is a MemoryReference that supports this functionality.
+        /// Allows for asynchronously unloading the first referenced memory block, if it is loaded. The memory can be unloaded only if the owner of the first memory
+        /// block is a MemoryReference that supports this functionality.
         /// </summary>
         /// <returns></returns>
         public async ValueTask ConsiderUnloadReadOnlyMemoryAsync()
@@ -375,8 +375,8 @@ namespace Lazinator.Buffers
             if (SingleMemory)
                 return;
             MemoryRange memorySegment = MemorySegmentAtIndex(StartIndex);
-            if (memorySegment.MemoryChunk.IsLoaded == true)
-                await memorySegment.MemoryChunk.ConsiderUnloadMemoryAsync();
+            if (memorySegment.MemoryBlock.IsLoaded == true)
+                await memorySegment.MemoryBlock.ConsiderUnloadMemoryAsync();
         }
 
         #endregion
@@ -387,7 +387,7 @@ namespace Lazinator.Buffers
         {
             if (IsEmpty)
                 return new MemoryBlockID(0);
-            MemoryBlockID maxMemoryBlockID = SingleMemoryChunk == null ? MultipleMemoryChunks.HighestMemoryBlockID : SingleMemoryChunk.MemoryBlockID; // not always the ID of the last chunk, because patching may reassemble into a different order. We are guaranteed, however, that if we're doing versioning, the most recent memory chunk ID will be included.
+            MemoryBlockID maxMemoryBlockID = SingleMemoryBlock == null ? MultipleMemoryBlocks.HighestMemoryBlockID : SingleMemoryBlock.MemoryBlockID; // not always the ID of the last block, because patching may reassemble into a different order. We are guaranteed, however, that if we're doing versioning, the most recent memory block ID will be included.
             return maxMemoryBlockID.Next();
         }
 
@@ -397,12 +397,12 @@ namespace Lazinator.Buffers
         /// <returns>An enumerable where each element consists of the segment index, the start position, and the number of bytes</returns>
         public IEnumerable<MemoryRangeByIndex> EnumerateMemorySegmentIndexAndSlices()
         {
-            if (SingleMemoryChunk != null)
+            if (SingleMemoryBlock != null)
             {
                 yield return new MemoryRangeByIndex(0, Offset, (int)Length);
             }
             else 
-                foreach (MemoryRangeByIndex indexAndSlice in MultipleMemoryChunks.EnumerateMemorySegmentLocationsByIndex(StartIndex, Offset, Length))
+                foreach (MemoryRangeByIndex indexAndSlice in MultipleMemoryBlocks.EnumerateMemorySegmentLocationsByIndex(StartIndex, Offset, Length))
                     yield return indexAndSlice;
         }
 
@@ -412,12 +412,12 @@ namespace Lazinator.Buffers
         /// <returns>An enumerable where each element consists of the memory block ID, the start position, and the number of bytes</returns>
         public IEnumerable<MemoryRangeByID> EnumerateMemoryRangesByID()
         {
-            if (SingleMemoryChunk != null)
+            if (SingleMemoryBlock != null)
             {
                 yield return new MemoryRangeByID(new MemoryBlockID(0), Offset, (int)Length);
             }
             else
-                foreach (MemoryRangeByID idAndSlice in MultipleMemoryChunks.EnumerateMemoryRangesByID(StartIndex, Offset, Length))
+                foreach (MemoryRangeByID idAndSlice in MultipleMemoryBlocks.EnumerateMemoryRangesByID(StartIndex, Offset, Length))
                     yield return idAndSlice;
         }
 
@@ -427,12 +427,12 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public IEnumerable<MemoryRange> EnumerateMemorySegments()
         {
-            if (SingleMemoryChunk != null)
+            if (SingleMemoryBlock != null)
             {
                 yield return SingleMemorySegment.Slice(Offset, (int) Length);
             }
             else
-                foreach (MemoryRange memorySegment in MultipleMemoryChunks.EnumerateMemorySegments(StartIndex, Offset, Length))
+                foreach (MemoryRange memorySegment in MultipleMemoryBlocks.EnumerateMemorySegments(StartIndex, Offset, Length))
                     yield return memorySegment;
         }
 
@@ -460,15 +460,15 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// Enumerates each of the memory chunks, whether included within the referenced range or not.
+        /// Enumerates each of the memory blocks, whether included within the referenced range or not.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<MemoryChunk> EnumerateMemoryChunks()
+        public IEnumerable<MemoryBlock> EnumerateMemoryBlocks()
         {
-            if (SingleMemoryChunk != null)
-                yield return SingleMemoryChunk;
-            else if (MultipleMemoryChunks != null)
-                foreach (var additional in MultipleMemoryChunks.EnumerateMemoryChunks())
+            if (SingleMemoryBlock != null)
+                yield return SingleMemoryBlock;
+            else if (MultipleMemoryBlocks != null)
+                foreach (var additional in MultipleMemoryBlocks.EnumerateMemoryBlocks())
                     yield return additional;
         }
 
@@ -478,8 +478,8 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         private IEnumerable<IReadableBytes> EnumerateReadOnlyBytesSegments()
         {
-            foreach (var memoryChunk in EnumerateMemoryChunks())
-                yield return memoryChunk.MemoryAsLoaded;
+            foreach (var memoryBlock in EnumerateMemoryBlocks())
+                yield return memoryBlock.MemoryAsLoaded;
         }
 
         /// <summary>
@@ -543,7 +543,7 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// Returns a single memory block consolidating all of the memory from the LazinatorMemory. If there is only a single memory chunk, 
+        /// Returns a single memory block consolidating all of the memory from the LazinatorMemory. If there is only a single memory block, 
         /// then the memory is not copied.
         /// </summary>
         /// <returns></returns>
@@ -551,8 +551,8 @@ namespace Lazinator.Buffers
         {
             if (SingleMemory)
             {
-                SingleMemoryChunk.LoadMemory();
-                return SingleMemoryChunk.ReadOnlyMemory.Slice(Offset, (int) Length);
+                SingleMemoryBlock.LoadMemory();
+                return SingleMemoryBlock.ReadOnlyMemory.Slice(Offset, (int) Length);
             }
 
             long totalLength = Length;
@@ -568,8 +568,8 @@ namespace Lazinator.Buffers
         {
             if (SingleMemory)
             {
-                await SingleMemoryChunk.LoadMemoryAsync();
-                return SingleMemoryChunk.ReadOnlyMemory.Slice(Offset, (int)Length);
+                await SingleMemoryBlock.LoadMemoryAsync();
+                return SingleMemoryBlock.ReadOnlyMemory.Slice(Offset, (int)Length);
             }
             await LoadAllMemoryAsync();
             long totalLength = Length;
@@ -582,13 +582,13 @@ namespace Lazinator.Buffers
         }
 
         // DEBUG -- delete this
-        public string ToStringByChunk()
+        public string ToStringByBlock()
         {
-            var chunks = EnumerateMemoryChunks().ToList();
+            var blocks = EnumerateMemoryBlocks().ToList();
             StringBuilder sb = new StringBuilder();
-            foreach (var chunk in chunks)
+            foreach (var block in blocks)
             {
-                sb.AppendLine(chunk.ToString());
+                sb.AppendLine(block.ToString());
             }
             return sb.ToString();
         }

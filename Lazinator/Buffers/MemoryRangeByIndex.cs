@@ -10,18 +10,18 @@ namespace Lazinator.Buffers
     public readonly struct MemoryRangeByIndex
     {
         public readonly int MemoryBlockIndex { get; }
-        public readonly int OffsetIntoMemoryChunk { get; }
+        public readonly int OffsetIntoMemoryBlock { get; }
         public readonly int Length { get; }
 
-        public MemoryRangeByIndex(int memoryBlockIndex, int offsetIntoMemoryChunk, int length)
+        public MemoryRangeByIndex(int memoryBlockIndex, int offsetIntoMemoryBlock, int length)
         {
             this.MemoryBlockIndex = memoryBlockIndex;
-            this.OffsetIntoMemoryChunk = offsetIntoMemoryChunk;
+            this.OffsetIntoMemoryBlock = offsetIntoMemoryBlock;
             this.Length = length;
         }
-        public MemoryRangeByIndex SubsegmentSlice(int offset, int length) => new MemoryRangeByIndex(MemoryBlockIndex, OffsetIntoMemoryChunk + offset, length);
+        public MemoryRangeByIndex SubsegmentSlice(int offset, int length) => new MemoryRangeByIndex(MemoryBlockIndex, OffsetIntoMemoryBlock + offset, length);
 
-        public MemoryRangeByIndex SubsegmentSlice(int offset) => new MemoryRangeByIndex(MemoryBlockIndex, OffsetIntoMemoryChunk + offset, Length - offset);
-        public MemoryChunkSlice GetChunkSlice() => new MemoryChunkSlice(OffsetIntoMemoryChunk, Length);
+        public MemoryRangeByIndex SubsegmentSlice(int offset) => new MemoryRangeByIndex(MemoryBlockIndex, OffsetIntoMemoryBlock + offset, Length - offset);
+        public MemoryBlockSlice GetBlockSlice() => new MemoryBlockSlice(OffsetIntoMemoryBlock, Length);
     }
 }
