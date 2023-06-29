@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Buffers
 {
-    public readonly struct MemorySegment
+    public readonly struct MemoryRange
     {
         public readonly MemoryChunk MemoryChunk { get; private init; }
         public readonly MemoryChunkSlice SliceInfo { get; private init; }
 
-        public MemorySegment(MemoryChunk memoryChunk, MemoryChunkSlice sliceInfo)
+        public MemoryRange(MemoryChunk memoryChunk, MemoryChunkSlice sliceInfo)
         {
             MemoryChunk = memoryChunk;
             SliceInfo = sliceInfo;
         }
 
-        public readonly MemorySegment Slice(int furtherOffset, int length) => new MemorySegment(MemoryChunk, SliceInfo.Slice(furtherOffset, length));
+        public readonly MemoryRange Slice(int furtherOffset, int length) => new MemoryRange(MemoryChunk, SliceInfo.Slice(furtherOffset, length));
 
         public readonly Memory<byte> Memory => MemoryChunk.ReadWriteMemory.Slice(SliceInfo.OffsetIntoMemoryChunk, SliceInfo.Length);
         public readonly ReadOnlyMemory<byte> ReadOnlyMemory => MemoryChunk.ReadOnlyMemory.Slice(SliceInfo.OffsetIntoMemoryChunk, SliceInfo.Length);

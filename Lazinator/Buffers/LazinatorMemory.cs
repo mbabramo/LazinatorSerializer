@@ -132,7 +132,7 @@ namespace Lazinator.Buffers
             if (IsEmpty)
                 return new LazinatorMemory(chunk);
 
-            var withAppendedChunk = new MemorySegmentCollection();
+            var withAppendedChunk = new MemoryRangeCollection();
             withAppendedChunk.SetFromLazinatorMemory(this);
             withAppendedChunk.AppendMemoryChunk(chunk);
             return new LazinatorMemory(withAppendedChunk, StartIndex, Offset, Length + chunk.Length);
@@ -166,11 +166,11 @@ namespace Lazinator.Buffers
             return new LazinatorMemory(array);
         }
 
-        private MemorySegment SingleMemorySegment => new MemorySegment(SingleMemoryChunk, new MemoryChunkSlice(0, SingleMemoryChunk.Length));
+        private MemoryRange SingleMemorySegment => new MemoryRange(SingleMemoryChunk, new MemoryChunkSlice(0, SingleMemoryChunk.Length));
 
-        public MemorySegment MemorySegmentAtIndex(int i) => MultipleMemoryChunks == null && i == 0 ? SingleMemorySegment : MultipleMemoryChunks.MemorySegmentAtIndex(i);
+        public MemoryRange MemorySegmentAtIndex(int i) => MultipleMemoryChunks == null && i == 0 ? SingleMemorySegment : MultipleMemoryChunks.MemorySegmentAtIndex(i);
 
-        public async ValueTask<MemorySegment> MemorySegmentAtIndexAsync(int i) => MultipleMemoryChunks == null && i == 0 ? SingleMemorySegment : await MultipleMemoryChunks.MemorySegmentAtIndexAsync(i);
+        public async ValueTask<MemoryRange> MemorySegmentAtIndexAsync(int i) => MultipleMemoryChunks == null && i == 0 ? SingleMemorySegment : await MultipleMemoryChunks.MemorySegmentAtIndexAsync(i);
 
         /// <summary>
         /// Slices the first referenced memory chunk only, producing a new LazinatorMemory.
@@ -203,10 +203,10 @@ namespace Lazinator.Buffers
                 return SliceSingle((int) furtherOffset, length);
             }
 
-            MemorySegmentLocationByIndex segmentInfo = MultipleMemoryChunks.GetMemorySegmentInfoAtOffsetFromStartPosition(StartIndex, Offset, furtherOffset);
+            MemoryRangeByIndex segmentInfo = MultipleMemoryChunks.GetMemorySegmentInfoAtOffsetFromStartPosition(StartIndex, Offset, furtherOffset);
 
             // DEBUG5 would seem to suggest that we are referring to the memory segment
-            return new LazinatorMemory(MultipleMemoryChunks.DeepCopy(), segmentInfo.MemorySegmentIndex, segmentInfo.OffsetIntoMemoryChunk, length);
+            return new LazinatorMemory(MultipleMemoryChunks.DeepCopy(), segmentInfo.MemoryBlockIndex, segmentInfo.OffsetIntoMemoryChunk, length);
         }
 
         #endregion
@@ -300,7 +300,7 @@ namespace Lazinator.Buffers
                 LoadMemoryChunk(SingleMemoryChunk);
                 return;
             }
-            MemorySegment memorySegment = MemorySegmentAtIndex(StartIndex);
+            MemoryRange memorySegment = MemorySegmentAtIndex(StartIndex);
             LoadMemoryChunk(memorySegment.MemoryChunk);
         }
 
@@ -311,7 +311,7 @@ namespace Lazinator.Buffers
                 await LoadMemoryChunkAsync(SingleMemoryChunk);
                 return;
             }
-            MemorySegment memorySegment = MemorySegmentAtIndex(StartIndex);
+            MemoryRange memorySegment = MemorySegmentAtIndex(StartIndex);
             await LoadMemoryChunkAsync(memorySegment.MemoryChunk);
         }
 
@@ -358,7 +358,7 @@ namespace Lazinator.Buffers
         {
             if (SingleMemory)
                 return;
-            MemorySegment memorySegment = MemorySegmentAtIndex(StartIndex);
+            MemoryRange memorySegment = MemorySegmentAtIndex(StartIndex);
             if (memorySegment.MemoryChunk.IsLoaded == true)
             {
                 memorySegment.MemoryChunk.ConsiderUnloadMemory();
@@ -374,7 +374,7 @@ namespace Lazinator.Buffers
         {
             if (SingleMemory)
                 return;
-            MemorySegment memorySegment = MemorySegmentAtIndex(StartIndex);
+            MemoryRange memorySegment = MemorySegmentAtIndex(StartIndex);
             if (memorySegment.MemoryChunk.IsLoaded == true)
                 await memorySegment.MemoryChunk.ConsiderUnloadMemoryAsync();
         }
@@ -395,14 +395,14 @@ namespace Lazinator.Buffers
         /// Enumerates memory segment ranges in this LazinatorMemory. Note that memory segments are referred to by index instead of by ID. 
         /// </summary>
         /// <returns>An enumerable where each element consists of the segment index, the start position, and the number of bytes</returns>
-        public IEnumerable<MemorySegmentLocationByIndex> EnumerateMemorySegmentIndexAndSlices()
+        public IEnumerable<MemoryRangeByIndex> EnumerateMemorySegmentIndexAndSlices()
         {
             if (SingleMemoryChunk != null)
             {
-                yield return new MemorySegmentLocationByIndex(0, Offset, (int)Length);
+                yield return new MemoryRangeByIndex(0, Offset, (int)Length);
             }
             else 
-                foreach (MemorySegmentLocationByIndex indexAndSlice in MultipleMemoryChunks.EnumerateMemorySegmentLocationsByIndex(StartIndex, Offset, Length))
+                foreach (MemoryRangeByIndex indexAndSlice in MultipleMemoryChunks.EnumerateMemorySegmentLocationsByIndex(StartIndex, Offset, Length))
                     yield return indexAndSlice;
         }
 
@@ -410,14 +410,14 @@ namespace Lazinator.Buffers
         /// Enumerates memory segment ranges corresponding to this LazinatorMemory. Note that memory segments are referred to by MemoryBlockID.
         /// </summary>
         /// <returns>An enumerable where each element consists of the memory block ID, the start position, and the number of bytes</returns>
-        public IEnumerable<MemorySegmentLocationByID> EnumerateMemoryBlockIDsAndSlices()
+        public IEnumerable<MemoryRangeByID> EnumerateMemoryBlockIDsAndSlices()
         {
             if (SingleMemoryChunk != null)
             {
-                yield return new MemorySegmentLocationByID(new MemoryBlockID(0), Offset, (int)Length);
+                yield return new MemoryRangeByID(new MemoryBlockID(0), Offset, (int)Length);
             }
             else
-                foreach (MemorySegmentLocationByID idAndSlice in MultipleMemoryChunks.EnumerateMemorySegmentLocationsByID(StartIndex, Offset, Length))
+                foreach (MemoryRangeByID idAndSlice in MultipleMemoryChunks.EnumerateMemorySegmentLocationsByID(StartIndex, Offset, Length))
                     yield return idAndSlice;
         }
 
@@ -425,14 +425,14 @@ namespace Lazinator.Buffers
         /// Enumerates memory segments.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<MemorySegment> EnumerateMemorySegments()
+        public IEnumerable<MemoryRange> EnumerateMemorySegments()
         {
             if (SingleMemoryChunk != null)
             {
                 yield return SingleMemorySegment.Slice(Offset, (int) Length);
             }
             else
-                foreach (MemorySegment memorySegment in MultipleMemoryChunks.EnumerateMemorySegments(StartIndex, Offset, Length))
+                foreach (MemoryRange memorySegment in MultipleMemoryChunks.EnumerateMemorySegments(StartIndex, Offset, Length))
                     yield return memorySegment;
         }
 
@@ -442,7 +442,7 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public IEnumerable<ReadOnlyMemory<byte>> EnumerateReadOnlyMemory()
         {
-            foreach (MemorySegment memorySegment in EnumerateMemorySegments())
+            foreach (MemoryRange memorySegment in EnumerateMemorySegments())
                 yield return memorySegment.ReadOnlyMemory;
         }
 
@@ -454,7 +454,7 @@ namespace Lazinator.Buffers
         {
             foreach (var memoryBlockIndexAndSlice in EnumerateMemorySegmentIndexAndSlices())
             {
-                var memorySegment = await MemorySegmentAtIndexAsync(memoryBlockIndexAndSlice.MemorySegmentIndex);
+                var memorySegment = await MemorySegmentAtIndexAsync(memoryBlockIndexAndSlice.MemoryBlockIndex);
                 yield return memorySegment.ReadOnlyMemory;
             }
         }

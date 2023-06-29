@@ -4,8 +4,8 @@ using System.Collections.Generic;
 namespace Lazinator.Buffers
 {
     [Lazinator((int)LazinatorCoreUniqueIDs.IMemorySegmentCollection)]
-    public interface IMemorySegmentCollection : IMemoryChunkCollection
+    public interface IMemoryRangeCollection : IMemoryChunkCollection
     {
-        List<MemorySegmentLocationByID> SegmentInfos { get; set; }
+        List<MemoryRangeByID> SegmentInfos { get; set; }
     }
 }

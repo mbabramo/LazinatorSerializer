@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Buffers
 {
-    public partial class MemoryChunkCollection : IMemoryChunkCollection, IEnumerable<MemorySegment>
+    public partial class MemoryChunkCollection : IMemoryChunkCollection, IEnumerable<MemoryRange>
     {
         public IBlobManager BlobManager { get; set; }
         protected List<MemoryChunk> MemoryChunks = new List<MemoryChunk>();
@@ -96,19 +96,19 @@ namespace Lazinator.Buffers
 
         // In MemoryChunkCollection, a segment is a chunk.
 
-        public virtual MemorySegment MemorySegmentAtIndex(int i)
+        public virtual MemoryRange MemorySegmentAtIndex(int i)
         {
             var chunk = MemoryChunkAtIndex(i);
-            return new MemorySegment(chunk, new MemoryChunkSlice(0, chunk.Length));
+            return new MemoryRange(chunk, new MemoryChunkSlice(0, chunk.Length));
         }
 
-        public async virtual ValueTask<MemorySegment> MemorySegmentAtIndexAsync(int i)
+        public async virtual ValueTask<MemoryRange> MemorySegmentAtIndexAsync(int i)
         {
             var chunk = await MemoryChunkAtIndexAsync(i);
-            return new MemorySegment(chunk, new MemoryChunkSlice(0, chunk.Length));
+            return new MemoryRange(chunk, new MemoryChunkSlice(0, chunk.Length));
         }
 
-        public virtual IEnumerable<MemorySegment> EnumerateMemorySegments()
+        public virtual IEnumerable<MemoryRange> EnumerateMemorySegments()
         {
             for (int i = 0; i < NumMemorySegments; i++)
             {
@@ -123,7 +123,7 @@ namespace Lazinator.Buffers
                     yield return chunk;
         }
 
-        public IEnumerator<MemorySegment> GetEnumerator()
+        public IEnumerator<MemoryRange> GetEnumerator()
         {
             foreach (var memorySegment in EnumerateMemorySegments())
                 yield return memorySegment;
@@ -233,7 +233,7 @@ namespace Lazinator.Buffers
 
         #region Slicing
 
-        public virtual MemorySegmentLocationByIndex GetMemorySegmentInfoAtOffsetFromStartPosition(int indexInitialSegment, int offsetInInitialSegment, long offsetFromStart)
+        public virtual MemoryRangeByIndex GetMemorySegmentInfoAtOffsetFromStartPosition(int indexInitialSegment, int offsetInInitialSegment, long offsetFromStart)
         {
             long offsetRemaining = offsetFromStart;
             int revisedStartIndex = indexInitialSegment;
@@ -259,11 +259,11 @@ namespace Lazinator.Buffers
                     offsetRemaining = 0;
                 }
             }
-            return new MemorySegmentLocationByIndex(revisedStartIndex, revisedStartPosition, revisedLength);
+            return new MemoryRangeByIndex(revisedStartIndex, revisedStartPosition, revisedLength);
         }
 
         // DEBUG5 problem: We call this for 0, 30, 9 (meaning memory chunk index 0, location 30, length 9), which is the location of where the memory was. But now, we've been adding segments when writing. So, we actually do need for at least this purpose for this to be MemoryChunks, and then we need to be sure that is what is passed in. We need to see whther we actually want indexInInitialMemoryChunk, offsetInInitialMemoryChunk for all places where this is called.
-        public IEnumerable<MemorySegmentLocationByIndex> EnumerateMemorySegmentLocationsByIndex(int indexInitialSegment, int offsetInInitialSegment, long length)
+        public IEnumerable<MemoryRangeByIndex> EnumerateMemorySegmentLocationsByIndex(int indexInitialSegment, int offsetInInitialSegment, long length)
         {
             long bytesRemaining = length;
             int numSegments = NumMemorySegments;
@@ -276,26 +276,26 @@ namespace Lazinator.Buffers
                     int totalOffset = offsetIntoChunk + offsetInInitialSegment;
                     int lengthToInclude = (int)Math.Min(segmentLength - offsetInInitialSegment, bytesRemaining);
                     bytesRemaining -= lengthToInclude;
-                    yield return new MemorySegmentLocationByIndex(index, totalOffset, lengthToInclude);
+                    yield return new MemoryRangeByIndex(index, totalOffset, lengthToInclude);
                 }
                 else if (index > indexInitialSegment && bytesRemaining > 0)
                 { // return memory segment until end or until bytes remaining are exhausted
                     int lengthToInclude = (int)Math.Min(segmentLength, bytesRemaining);
                     bytesRemaining -= lengthToInclude;
-                    yield return new MemorySegmentLocationByIndex(index, offsetIntoChunk, lengthToInclude);
+                    yield return new MemoryRangeByIndex(index, offsetIntoChunk, lengthToInclude);
                 }
                 if (bytesRemaining == 0)
                     yield break;
             }
         }
         
-        public IEnumerable<MemorySegmentLocationByID> EnumerateMemorySegmentLocationsByID(int indexInitialSegment, int offsetInInitialSegment, long length)
+        public IEnumerable<MemoryRangeByID> EnumerateMemorySegmentLocationsByID(int indexInitialSegment, int offsetInInitialSegment, long length)
         {
-            foreach (MemorySegmentLocationByIndex indexAndSlice in EnumerateMemorySegmentLocationsByIndex(indexInitialSegment, offsetInInitialSegment, length))
+            foreach (MemoryRangeByIndex indexAndSlice in EnumerateMemorySegmentLocationsByIndex(indexInitialSegment, offsetInInitialSegment, length))
             {
-                int memorySegmentIndex = indexAndSlice.MemorySegmentIndex;
+                int memorySegmentIndex = indexAndSlice.MemoryBlockIndex;
                 var memoryBlockID = GetMemoryBlockIDForMemorySegmentIndex(memorySegmentIndex);
-                yield return new MemorySegmentLocationByID(memoryBlockID, indexAndSlice.OffsetIntoMemoryChunk, indexAndSlice.Length);
+                yield return new MemoryRangeByID(memoryBlockID, indexAndSlice.OffsetIntoMemoryChunk, indexAndSlice.Length);
             }
         }
 
@@ -304,11 +304,11 @@ namespace Lazinator.Buffers
             return MemoryChunkAtIndex(GetMemoryChunkIndexFromMemorySegmentIndex(memorySegmentIndex)).MemoryBlockID;
         }
 
-        public virtual IEnumerable<MemorySegment> EnumerateMemorySegments(int indexInitialSegment, int offsetInInitialSegment, long length)
+        public virtual IEnumerable<MemoryRange> EnumerateMemorySegments(int indexInitialSegment, int offsetInInitialSegment, long length)
         {
-            foreach (MemorySegmentLocationByIndex indexAndSlice in EnumerateMemorySegmentLocationsByIndex(indexInitialSegment, offsetInInitialSegment, length))
+            foreach (MemoryRangeByIndex indexAndSlice in EnumerateMemorySegmentLocationsByIndex(indexInitialSegment, offsetInInitialSegment, length))
             {
-                MemorySegment memorySegment = MemorySegmentAtIndex(indexAndSlice.MemorySegmentIndex);
+                MemoryRange memorySegment = MemorySegmentAtIndex(indexAndSlice.MemoryBlockIndex);
                 yield return memorySegment;
             }
         }

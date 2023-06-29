@@ -143,7 +143,7 @@ namespace LazinatorTests.Tests
                 referencedBytes = referencedBytes.Skip(startingPositionWithinLazinatorMemorySubrange).Take(numBytesWithinLazinatorMemorySubrange).ToList();
                 // Debug.WriteLine($"startingPositionWithinLazinatorMemorySubrange {startingPositionWithinLazinatorMemorySubrange } numBytesWithinLazinatorMemorySubrange {numBytesWithinLazinatorMemorySubrange}");
 
-                List<MemorySegmentLocationByIndex> memorySegmentIndexAndSlices = cobbledMemory.Slice((long) startingPositionWithinLazinatorMemorySubrange, (long) numBytesWithinLazinatorMemorySubrange).EnumerateMemorySegmentIndexAndSlices().ToList();
+                List<MemoryRangeByIndex> memorySegmentIndexAndSlices = cobbledMemory.Slice((long) startingPositionWithinLazinatorMemorySubrange, (long) numBytesWithinLazinatorMemorySubrange).EnumerateMemorySegmentIndexAndSlices().ToList();
                 memorySegmentIndexAndSlices.Sum(x => x.Length).Should().Be(numBytesWithinLazinatorMemorySubrange);
                 List<byte> bytesFound = new List<byte>();
                 foreach (var memorySegmentIndexAndSlice in memorySegmentIndexAndSlices)
@@ -156,19 +156,19 @@ namespace LazinatorTests.Tests
         public void MemorySegmentCollectionSubranges()
         {
             // Note that the LoadingInfos should be irrelevant. The chunks consist of the memory as loaded.
-            MemorySegmentCollection c = new MemorySegmentCollection(new List<MemoryChunk>
+            MemoryRangeCollection c = new MemoryRangeCollection(new List<MemoryChunk>
             {
                 new MemoryChunk(new ReadOnlyBytes(new byte[] { 1, 2, 3 })) { LoadingInfo = new MemoryBlockLoadingInfo(new MemoryBlockID(0), 409 /* should't matter that pretruncation length is large */) },
                 new MemoryChunk(new ReadOnlyBytes(new byte[] { 200, 200, 4, 5, 6, 200, 200 })) { LoadingInfo = new MemoryBlockLoadingInfo(new MemoryBlockID(1), 7) },
                 new MemoryChunk(new ReadOnlyBytes(new byte[] { 7, 8, 9, 200 }))  { LoadingInfo = new MemoryBlockLoadingInfo(new MemoryBlockID(2), 5 ) },
                 new MemoryChunk(new ReadOnlyBytes(new byte[] { 10, 11, 12 })) { LoadingInfo = new MemoryBlockLoadingInfo(new MemoryBlockID(3), 3) },
             }, true);
-            c.SegmentInfos = new List<MemorySegmentLocationByID>()
+            c.SegmentInfos = new List<MemoryRangeByID>()
             {
-                new MemorySegmentLocationByID(new MemoryBlockID(2), 1, 2), // 8, 9
-                new MemorySegmentLocationByID(new MemoryBlockID(2), 0, 3), // 7, 8, 9
-                new MemorySegmentLocationByID(new MemoryBlockID(3), 0, 2), // 10, 11
-                new MemorySegmentLocationByID(new MemoryBlockID(1), 1, 1) // 200
+                new MemoryRangeByID(new MemoryBlockID(2), 1, 2), // 8, 9
+                new MemoryRangeByID(new MemoryBlockID(2), 0, 3), // 7, 8, 9
+                new MemoryRangeByID(new MemoryBlockID(3), 0, 2), // 10, 11
+                new MemoryRangeByID(new MemoryBlockID(1), 1, 1) // 200
             };
             LazinatorMemory memory = new LazinatorMemory(c);
             var result = memory.GetConsolidatedMemory().ToArray();
@@ -180,9 +180,9 @@ namespace LazinatorTests.Tests
         /// </summary>
         /// <param name="memoryBlockInfo">The memory chunk reference</param>
         /// <returns></returns>
-        private ReadOnlyMemory<byte> GetMemoryAtBlockAndOffset(LazinatorMemory lazinatorMemory, MemorySegmentLocationByIndex memoryBlockInfo)
+        private ReadOnlyMemory<byte> GetMemoryAtBlockAndOffset(LazinatorMemory lazinatorMemory, MemoryRangeByIndex memoryBlockInfo)
         {
-            var memoryChunk = lazinatorMemory.MemorySegmentAtIndex(memoryBlockInfo.MemorySegmentIndex);
+            var memoryChunk = lazinatorMemory.MemorySegmentAtIndex(memoryBlockInfo.MemoryBlockIndex);
             var underlyingReadOnlyMemory = memoryChunk.ReadOnlyMemory.Slice(memoryBlockInfo.OffsetIntoMemoryChunk, memoryBlockInfo.Length);
             return underlyingReadOnlyMemory;
         }

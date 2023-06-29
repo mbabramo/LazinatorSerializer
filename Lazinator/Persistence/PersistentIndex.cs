@@ -11,7 +11,7 @@ using System.Diagnostics;
 
 namespace Lazinator.Persistence
 {
-    public partial class PersistentIndex : MemorySegmentCollection, IPersistentIndex
+    public partial class PersistentIndex : MemoryRangeCollection, IPersistentIndex
     {
 
         public PersistentIndex PreviousPersistentIndex = null;

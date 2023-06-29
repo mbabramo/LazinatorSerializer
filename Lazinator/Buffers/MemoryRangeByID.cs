@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Buffers
 {
-    public readonly struct MemorySegmentLocationByID
+    public readonly struct MemoryRangeByID
     {
         /// <summary>
         /// The MemoryBlockID, used to find the corresponding MemoryChunk in a MemoryChunkCollection.
@@ -28,7 +28,7 @@ namespace Lazinator.Buffers
 
         public MemoryBlockID GetMemoryBlockID() => new MemoryBlockID(MemoryBlockIntID);
 
-        public MemorySegmentLocationByID(int memoryBlockIntID, int offsetIntoMemoryChunk, int length)
+        public MemoryRangeByID(int memoryBlockIntID, int offsetIntoMemoryChunk, int length)
         {
             if (memoryBlockIntID == 2)
             {
@@ -39,16 +39,16 @@ namespace Lazinator.Buffers
             this.Length = length;
         }
 
-        public MemorySegmentLocationByID(MemoryBlockID memoryBlockID, int offsetIntoMemoryChunk, int length)
+        public MemoryRangeByID(MemoryBlockID memoryBlockID, int offsetIntoMemoryChunk, int length)
         {
             this.MemoryBlockIntID = memoryBlockID.GetIntID();
             this.OffsetIntoMemoryChunk = offsetIntoMemoryChunk;
             this.Length = length;
         }
 
-        public MemorySegmentLocationByID SubsegmentSlice(int offset, int length) => new MemorySegmentLocationByID(new MemoryBlockID(MemoryBlockIntID), OffsetIntoMemoryChunk + offset, length);
+        public MemoryRangeByID SubsegmentSlice(int offset, int length) => new MemoryRangeByID(new MemoryBlockID(MemoryBlockIntID), OffsetIntoMemoryChunk + offset, length);
 
-        public MemorySegmentLocationByID SubsegmentSlice(int offset) => new MemorySegmentLocationByID(new MemoryBlockID(MemoryBlockIntID), OffsetIntoMemoryChunk + offset, Length - offset);
+        public MemoryRangeByID SubsegmentSlice(int offset) => new MemoryRangeByID(new MemoryBlockID(MemoryBlockIntID), OffsetIntoMemoryChunk + offset, Length - offset);
 
         public MemoryChunkSlice GetChunkSlice() => new MemoryChunkSlice(OffsetIntoMemoryChunk, Length);
     }

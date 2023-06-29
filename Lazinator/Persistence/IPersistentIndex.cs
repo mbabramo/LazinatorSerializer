@@ -6,7 +6,7 @@ using Lazinator.Buffers;
 namespace Lazinator.Persistence
 {
     [Lazinator((int) LazinatorCoreUniqueIDs.IPersistentIndex)]
-    public interface IPersistentIndex : IMemorySegmentCollection
+    public interface IPersistentIndex : IMemoryRangeCollection
     {
         [SetterAccessibility("private")]
         int IndexVersion { get; }
