@@ -30,13 +30,13 @@ namespace Lazinator.Buffers
         /// </summary>
         public readonly MemoryBlockCollection MultipleMemoryBlocks;
         /// <summary>
-        /// The starting index from SingleMemoryBlock or MultipleMemoryBlocks for the referenced range.
+        /// The index of the MemoryRange from MultipleMemoryBlocks (or 0 with a single block) for the referenced range. Note that this is not necessarily the index of the memory block, since MemoryRanges may consist of patched ranges of blocks.
         /// </summary>
-        public readonly int StartIndex;
+        public readonly int MemoryRangeIndex;
         /// <summary>
-        /// The starting position within the block of memory referred to by StartIndex of the referenced range.
+        /// The starting position within the block of memory referred by the MemoryRange at MemoryRangeIndex. With a single memory, this is just an offset into that single block. With MultipleMemoryBlocks, this will be added to the offset of the MemoryRange at MemoryRangeIndex to determine the total offset into the memory block.
         /// </summary>
-        public readonly int Offset;
+        public readonly int OffsetIntoMemoryBlock;
         /// <summary>
         /// The total number of bytes in the referenced range, potentially spanning multiple blocks of memory.
         /// </summary>
@@ -67,10 +67,10 @@ namespace Lazinator.Buffers
         {
             SingleMemoryBlock = memoryBlock;
             MultipleMemoryBlocks = null;
-            StartIndex = 0;
+            MemoryRangeIndex = 0;
             if (startPosition < 0)
                 throw new ArgumentException();
-            Offset = startPosition;
+            OffsetIntoMemoryBlock = startPosition;
             if (length < 0)
                 Length = 0;
             else
@@ -81,21 +81,21 @@ namespace Lazinator.Buffers
         {
             MultipleMemoryBlocks = memoryBlockCollection; 
             SingleMemoryBlock = null;
-            StartIndex = 0;
-            Offset = 0;
+            MemoryRangeIndex = 0;
+            OffsetIntoMemoryBlock = 0;
             Length = memoryBlockCollection.Length;
         }
 
-        public LazinatorMemory(MemoryBlockCollection moreMemoryBlocks, int startIndex, int startPosition, long length) : this(null, startPosition, length)
+        public LazinatorMemory(MemoryBlockCollection moreMemoryBlocks, int memoryRangeIndex, int startPosition, long length) : this(null, startPosition, length)
         {
             MultipleMemoryBlocks = moreMemoryBlocks;
-            StartIndex = startIndex;
+            MemoryRangeIndex = memoryRangeIndex;
         }
 
-        public LazinatorMemory(IEnumerable<MemoryBlock> moreMemoryBlocks, int startIndex, int startPosition, long length) : this(null, startPosition, length)
+        public LazinatorMemory(IEnumerable<MemoryBlock> moreMemoryBlocks, int memoryRangeIndex, int startPosition, long length) : this(null, startPosition, length)
         {
             MultipleMemoryBlocks = new MemoryBlockCollection(moreMemoryBlocks);
-            StartIndex = startIndex;
+            MemoryRangeIndex = memoryRangeIndex;
         }
 
         public LazinatorMemory(MemoryBlock memoryBlock, long length) : this(memoryBlock, 0, length)
@@ -135,7 +135,7 @@ namespace Lazinator.Buffers
             var withAppendedBlock = new MemoryRangeCollection();
             withAppendedBlock.SetFromLazinatorMemory(this);
             withAppendedBlock.AppendMemoryBlock(block);
-            return new LazinatorMemory(withAppendedBlock, StartIndex, Offset, Length + block.Length);
+            return new LazinatorMemory(withAppendedBlock, MemoryRangeIndex, OffsetIntoMemoryBlock, Length + block.Length);
         }
 
         public bool Disposed => EnumerateReadOnlyBytesSegments().Any(x => x != null && (x is IMemoryAllocationInfo info && info.Disposed) || (x is ReadOnlyBytes s && s.Disposed));
@@ -166,11 +166,11 @@ namespace Lazinator.Buffers
             return new LazinatorMemory(array);
         }
 
-        private MemoryRange SingleMemorySegment => new MemoryRange(SingleMemoryBlock, new MemoryBlockSlice(0, SingleMemoryBlock.Length));
+        private MemoryRange SingleMemoryRange => new MemoryRange(SingleMemoryBlock, new MemoryBlockSlice(0, SingleMemoryBlock.Length));
 
-        public MemoryRange MemorySegmentAtIndex(int i) => MultipleMemoryBlocks == null && i == 0 ? SingleMemorySegment : MultipleMemoryBlocks.MemoryRangeAtIndex(i);
+        public MemoryRange MemoryRangeAtIndex(int i) => MultipleMemoryBlocks == null && i == 0 ? SingleMemoryRange : MultipleMemoryBlocks.MemoryRangeAtIndex(i);
 
-        public async ValueTask<MemoryRange> MemorySegmentAtIndexAsync(int i) => MultipleMemoryBlocks == null && i == 0 ? SingleMemorySegment : await MultipleMemoryBlocks.MemoryRangeAtIndexAsync(i);
+        public async ValueTask<MemoryRange> MemoryRangeAtIndexAsync(int i) => MultipleMemoryBlocks == null && i == 0 ? SingleMemoryRange : await MultipleMemoryBlocks.MemoryRangeAtIndexAsync(i);
 
         /// <summary>
         /// Slices the first referenced memory block only, producing a new LazinatorMemory.
@@ -178,7 +178,7 @@ namespace Lazinator.Buffers
         /// <param name="offset">An offset relative to the existing Offset, which must refer to the initial memory</param>
         /// <param name="length"></param>
         /// <returns></returns>
-        private LazinatorMemory SliceSingle(int offset, long length) => length == 0 ? LazinatorMemory.EmptyLazinatorMemory : new LazinatorMemory(SingleMemoryBlock, Offset + offset, length);
+        private LazinatorMemory SliceSingle(int offset, long length) => length == 0 ? LazinatorMemory.EmptyLazinatorMemory : new LazinatorMemory(SingleMemoryBlock, OffsetIntoMemoryBlock + offset, length);
 
         /// <summary>
         /// Slices the memory, returning a new LazinatorMemory beginning at the specified offset, beyond the offset already existing in this LazinatorMemory.
@@ -203,10 +203,9 @@ namespace Lazinator.Buffers
                 return SliceSingle((int) furtherOffset, length);
             }
 
-            MemoryRangeByBlockIndex segmentInfo = MultipleMemoryBlocks.GetMemoryRangeAtOffsetFromStartPosition(StartIndex, Offset, furtherOffset);
+            MemoryRangeByBlockIndex memoryRange = default; // SUPERDEBUG MultipleMemoryBlocks.GetMemoryRangeAtOffsetFromStartPosition(MemoryRangeIndex, OffsetIntoMemoryBlock, furtherOffset);
 
-            // DEBUG5 would seem to suggest that we are referring to the memory segment
-            return new LazinatorMemory(MultipleMemoryBlocks.DeepCopy(), segmentInfo.MemoryBlockIndex, segmentInfo.OffsetIntoMemoryBlock, length);
+            return default; // SUPERDEBUG new LazinatorMemory(MultipleMemoryBlocks.DeepCopy(), debug memoryRange.MemoryBlockIndex, memoryRange.OffsetIntoMemoryBlock, length);
         }
 
         #endregion
@@ -214,7 +213,7 @@ namespace Lazinator.Buffers
         #region Equality
 
         public override bool Equals(object obj) => obj == null ? throw new LazinatorSerializationException("Invalid comparison of LazinatorMemory to null") :
-            obj is LazinatorMemory lm && ( (lm.SingleMemoryBlock != null && lm.SingleMemoryBlock.Equals(SingleMemoryBlock)) || (lm.MultipleMemoryBlocks != null && lm.MultipleMemoryBlocks.Equals(MultipleMemoryBlocks)) ) && lm.Offset == Offset && lm.Length == Length;
+            obj is LazinatorMemory lm && ( (lm.SingleMemoryBlock != null && lm.SingleMemoryBlock.Equals(SingleMemoryBlock)) || (lm.MultipleMemoryBlocks != null && lm.MultipleMemoryBlocks.Equals(MultipleMemoryBlocks)) ) && lm.OffsetIntoMemoryBlock == OffsetIntoMemoryBlock && lm.Length == Length;
 
         public override int GetHashCode()
         {
@@ -250,9 +249,9 @@ namespace Lazinator.Buffers
                 if (IsEmpty)
                     return EmptyReadOnlyMemory;
                 LoadInitialReadOnlyMemory();
-                ReadOnlyMemory<byte> memory = SingleMemoryBlock?.ReadOnlyMemory ?? MemorySegmentAtIndex(StartIndex).ReadOnlyMemory;
-                int length = (int)Math.Min(memory.Length - Offset, Length);
-                return memory.Slice(Offset, length);
+                ReadOnlyMemory<byte> memory = SingleMemoryBlock?.ReadOnlyMemory ?? MemoryRangeAtIndex(MemoryRangeIndex).ReadOnlyMemory;
+                int length = (int)Math.Min(memory.Length - OffsetIntoMemoryBlock, Length);
+                return memory.Slice(OffsetIntoMemoryBlock, length);
             }
         }
 
@@ -266,8 +265,8 @@ namespace Lazinator.Buffers
             if (IsEmpty)
                 return EmptyMemory;
             await LoadInitialReadOnlyMemoryAsync();
-            ReadOnlyMemory<byte> memory = SingleMemoryBlock?.ReadOnlyMemory ?? MemorySegmentAtIndex(StartIndex).ReadOnlyMemory;
-            return memory.Slice(Offset, memory.Length - Offset);
+            ReadOnlyMemory<byte> memory = SingleMemoryBlock?.ReadOnlyMemory ?? MemoryRangeAtIndex(MemoryRangeIndex).ReadOnlyMemory;
+            return memory.Slice(OffsetIntoMemoryBlock, memory.Length - OffsetIntoMemoryBlock);
         }
 
         /// <summary>
@@ -300,8 +299,8 @@ namespace Lazinator.Buffers
                 LoadMemoryBlock(SingleMemoryBlock);
                 return;
             }
-            MemoryRange memorySegment = MemorySegmentAtIndex(StartIndex);
-            LoadMemoryBlock(memorySegment.MemoryBlock);
+            MemoryRange memoryRange = MemoryRangeAtIndex(MemoryRangeIndex);
+            LoadMemoryBlock(memoryRange.MemoryBlock);
         }
 
         public async ValueTask LoadInitialReadOnlyMemoryAsync()
@@ -311,7 +310,7 @@ namespace Lazinator.Buffers
                 await LoadMemoryBlockAsync(SingleMemoryBlock);
                 return;
             }
-            MemoryRange memorySegment = MemorySegmentAtIndex(StartIndex);
+            MemoryRange memorySegment = MemoryRangeAtIndex(MemoryRangeIndex);
             await LoadMemoryBlockAsync(memorySegment.MemoryBlock);
         }
 
@@ -358,7 +357,7 @@ namespace Lazinator.Buffers
         {
             if (SingleMemory)
                 return;
-            MemoryRange memorySegment = MemorySegmentAtIndex(StartIndex);
+            MemoryRange memorySegment = MemoryRangeAtIndex(MemoryRangeIndex);
             if (memorySegment.MemoryBlock.IsLoaded == true)
             {
                 memorySegment.MemoryBlock.ConsiderUnloadMemory();
@@ -374,7 +373,7 @@ namespace Lazinator.Buffers
         {
             if (SingleMemory)
                 return;
-            MemoryRange memorySegment = MemorySegmentAtIndex(StartIndex);
+            MemoryRange memorySegment = MemoryRangeAtIndex(MemoryRangeIndex);
             if (memorySegment.MemoryBlock.IsLoaded == true)
                 await memorySegment.MemoryBlock.ConsiderUnloadMemoryAsync();
         }
@@ -392,32 +391,32 @@ namespace Lazinator.Buffers
         }
 
         /// <summary>
-        /// Enumerates memory segment ranges in this LazinatorMemory. Note that memory segments are referred to by index instead of by ID. 
+        /// Enumerates references to memory ranges in this LazinatorMemory, by block ID.
         /// </summary>
-        /// <returns>An enumerable where each element consists of the segment index, the start position, and the number of bytes</returns>
-        public IEnumerable<MemoryRangeByBlockIndex> EnumerateMemorySegmentIndexAndSlices()
+        /// <returns>An enumerable where each element refers to a particular memory range.</returns>
+        public IEnumerable<MemoryRangeByBlockIndex> EnumerateMemoryRangesByBlockIndex()
         {
             if (SingleMemoryBlock != null)
             {
-                yield return new MemoryRangeByBlockIndex(0, Offset, (int)Length);
+                yield return new MemoryRangeByBlockIndex(0, OffsetIntoMemoryBlock, (int)Length);
             }
             else 
-                foreach (MemoryRangeByBlockIndex indexAndSlice in MultipleMemoryBlocks.EnumerateMemoryRangesByBlockIndex(StartIndex, Offset, Length))
+                foreach (MemoryRangeByBlockIndex indexAndSlice in MultipleMemoryBlocks.EnumerateMemoryRangesByBlockIndex(MemoryRangeIndex, OffsetIntoMemoryBlock, Length))
                     yield return indexAndSlice;
         }
 
         /// <summary>
-        /// Enumerates memory segment ranges corresponding to this LazinatorMemory. Note that memory segments are referred to by MemoryBlockID.
+        /// Enumerates memory ranges corresponding to this LazinatorMemory, with reference by block ID.
         /// </summary>
         /// <returns>An enumerable where each element consists of the memory block ID, the start position, and the number of bytes</returns>
         public IEnumerable<MemoryRangeByBlockID> EnumerateMemoryRangesByID()
         {
             if (SingleMemoryBlock != null)
             {
-                yield return new MemoryRangeByBlockID(new MemoryBlockID(0), Offset, (int)Length);
+                yield return new MemoryRangeByBlockID(new MemoryBlockID(0), OffsetIntoMemoryBlock, (int)Length);
             }
             else
-                foreach (MemoryRangeByBlockID idAndSlice in MultipleMemoryBlocks.EnumerateMemoryRangesByID(StartIndex, Offset, Length))
+                foreach (MemoryRangeByBlockID idAndSlice in MultipleMemoryBlocks.EnumerateMemoryRangesByBlockID(MemoryRangeIndex, OffsetIntoMemoryBlock, Length))
                     yield return idAndSlice;
         }
 
@@ -429,10 +428,10 @@ namespace Lazinator.Buffers
         {
             if (SingleMemoryBlock != null)
             {
-                yield return SingleMemorySegment.Slice(Offset, (int) Length);
+                yield return SingleMemoryRange.Slice(OffsetIntoMemoryBlock, (int) Length);
             }
             else
-                foreach (MemoryRange memorySegment in MultipleMemoryBlocks.EnumerateMemorySegments(StartIndex, Offset, Length))
+                foreach (MemoryRange memorySegment in MultipleMemoryBlocks.EnumerateMemoryRanges(MemoryRangeIndex, OffsetIntoMemoryBlock, Length))
                     yield return memorySegment;
         }
 
@@ -452,9 +451,9 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public async IAsyncEnumerable<ReadOnlyMemory<byte>> EnumerateReadOnlyMemoryAsync()
         {
-            foreach (var memoryBlockIndexAndSlice in EnumerateMemorySegmentIndexAndSlices())
+            foreach (var memoryBlockIndexAndSlice in EnumerateMemoryRangesByBlockIndex())
             {
-                var memorySegment = await MemorySegmentAtIndexAsync(memoryBlockIndexAndSlice.MemoryBlockIndex);
+                var memorySegment = await MemoryRangeAtIndexAsync(memoryBlockIndexAndSlice.MemoryBlockIndex);
                 yield return memorySegment.ReadOnlyMemory;
             }
         }
@@ -552,7 +551,7 @@ namespace Lazinator.Buffers
             if (SingleMemory)
             {
                 SingleMemoryBlock.LoadMemory();
-                return SingleMemoryBlock.ReadOnlyMemory.Slice(Offset, (int) Length);
+                return SingleMemoryBlock.ReadOnlyMemory.Slice(OffsetIntoMemoryBlock, (int) Length);
             }
 
             long totalLength = Length;
@@ -569,7 +568,7 @@ namespace Lazinator.Buffers
             if (SingleMemory)
             {
                 await SingleMemoryBlock.LoadMemoryAsync();
-                return SingleMemoryBlock.ReadOnlyMemory.Slice(Offset, (int)Length);
+                return SingleMemoryBlock.ReadOnlyMemory.Slice(OffsetIntoMemoryBlock, (int)Length);
             }
             await LoadAllMemoryAsync();
             long totalLength = Length;

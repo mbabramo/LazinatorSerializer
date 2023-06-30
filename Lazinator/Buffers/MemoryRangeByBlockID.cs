@@ -17,7 +17,7 @@ namespace Lazinator.Buffers
         /// </summary>
         public readonly int OffsetIntoMemoryBlock { get; }
         /// <summary>
-        /// The length of information in the MemoryBlock.
+        /// The length of the range, which may be smaller than the remaining length of the memory block.
         /// </summary>
         public readonly int Length { get; }
 

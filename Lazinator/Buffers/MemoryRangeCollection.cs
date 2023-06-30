@@ -68,7 +68,7 @@ namespace Lazinator.Buffers
                         var rangeI = Ranges[i];
                         if (rangeI.GetMemoryBlockID() == range.GetMemoryBlockID()) 
                         {
-                            MemoryBlock existingBlock = GetMemoryBlockByMemoryBlockID(rangeI.GetMemoryBlockID());
+                            MemoryBlock existingBlock = GetMemoryBlockByBlockID(rangeI.GetMemoryBlockID());
                             if (existingBlock != null)
                             {
                                 existingBlock.LoadingInfo.MemoryBlockLength = range.Length;
@@ -109,7 +109,7 @@ namespace Lazinator.Buffers
         internal void InsertReferenceToCompletedMemory(MemoryRangeCollection completedMemoryRangeCollection, int rangeIndex, int startPosition, long numBytes, int activeMemoryPosition)
         {
             RecordLastActiveMemoryBlockReference(activeMemoryPosition);
-            IEnumerable<MemoryRangeByBlockID> rangesToAdd = completedMemoryRangeCollection.EnumerateMemoryRangesByID(rangeIndex, startPosition, numBytes);
+            IEnumerable<MemoryRangeByBlockID> rangesToAdd = completedMemoryRangeCollection.EnumerateMemoryRangesByBlockID(rangeIndex, startPosition, numBytes);
             ExtendRanges(rangesToAdd);
             // Debug.WriteLine($"Reference to completed memory added. References are {String.Join(", ", RecycledMemoryBlockReferences)}");
         }

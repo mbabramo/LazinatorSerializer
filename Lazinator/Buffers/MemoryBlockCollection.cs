@@ -1,5 +1,6 @@
 ﻿using Lazinator.Exceptions;
 using Lazinator.Persistence;
+using Lazinator.Support;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,8 +24,8 @@ namespace Lazinator.Buffers
         protected int NumMemoryBlocks => MemoryBlocks?.Count ?? 0;
         public virtual int NumMemoryRanges => NumMemoryBlocks;
 
-        protected virtual int GetRangeLength(int segmentIndex) => MemoryBlocksLoadingInfo[segmentIndex].MemoryBlockLength;
-        protected virtual int GetOffsetIntoBlockForRange(int segmentIndex) => 0;
+        protected virtual int GetRangeLength(int rangeIndex) => MemoryBlocksLoadingInfo[rangeIndex].MemoryBlockLength;
+        protected virtual int GetOffsetIntoBlockForRange(int rangeIndex) => 0;
         protected virtual int GetMemoryBlockIndexFromMemoryRangeIndex(int i) => i;
 
         #region Construction
@@ -90,7 +91,7 @@ namespace Lazinator.Buffers
 
         #region MemoryRanges
 
-        // In MemoryBlockCollection, a range is always equal to a block.
+        // In MemoryBlockCollection, a range is always equal to a block. In an inherited class, that is not necessarily the case.
 
         public virtual MemoryRange MemoryRangeAtIndex(int i)
         {
@@ -121,8 +122,8 @@ namespace Lazinator.Buffers
 
         public IEnumerator<MemoryRange> GetEnumerator()
         {
-            foreach (var memorySegment in EnumerateMemoryRanges())
-                yield return memorySegment;
+            foreach (var memoryRange in EnumerateMemoryRanges())
+                yield return memoryRange;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -136,7 +137,7 @@ namespace Lazinator.Buffers
             return d.ContainsKey(memoryBlockID) ? d[memoryBlockID] : -1;
         }
 
-        public MemoryBlock GetMemoryBlockByMemoryBlockID(MemoryBlockID memoryBlockID)
+        public MemoryBlock GetMemoryBlockByBlockID(MemoryBlockID memoryBlockID)
         {
             var d = GetMemoryBlockIndicesFromIDs();
             if (!d.ContainsKey(memoryBlockID))
@@ -228,84 +229,61 @@ namespace Lazinator.Buffers
         #endregion
 
         #region Slicing
-
-        public virtual MemoryRangeByBlockIndex GetMemoryRangeAtOffsetFromStartPosition(int indexInitialSegment, int offsetInInitialSegment, long offsetFromStart)
+            
+        
+        public virtual MemoryRangeReference GetMemoryRangeAtOffsetFromStartPosition(int initialMemoryRangeIndex, int furtherOffsetInMemoryBlock, long offsetFromInitialPosition)
         {
-            long offsetRemaining = offsetFromStart;
-            int revisedStartIndex = indexInitialSegment;
-            int revisedStartPosition = offsetInInitialSegment;
-            int numSegments = NumMemoryRanges; 
-            int revisedLength = 0;
-            while (offsetRemaining > 0)
-            {
-                int segmentLength = GetRangeLength(revisedStartIndex);
-                int remainingBytesThisMemory = segmentLength - revisedStartPosition;
-                if (remainingBytesThisMemory <= offsetRemaining)
-                {
-                    offsetRemaining -= remainingBytesThisMemory;
-                    if (offsetRemaining == 0 && revisedStartIndex == numSegments - 1)
-                        break; // we are at the very end of the last LazinatorMemory
-                    revisedStartIndex++;
-                    revisedStartPosition = 0;
-                }
-                else
-                {
-                    revisedStartPosition += (int)offsetRemaining;
-                    revisedLength = segmentLength - revisedStartPosition;
-                    offsetRemaining = 0;
-                }
-            }
-            return new MemoryRangeByBlockIndex(revisedStartIndex, revisedStartPosition, revisedLength);
+            (int finalMemoryRangeIndex, int finalFurtherOffset) = Offseter.MoveForward(NumMemoryRanges, r => GetRangeLength(r), initialMemoryRangeIndex, furtherOffsetInMemoryBlock, offsetFromInitialPosition);
+            
+            return new MemoryRangeReference(finalMemoryRangeIndex, finalFurtherOffset);
         }
 
-        // DEBUG5 problem: We call this for 0, 30, 9 (meaning memory block index 0, location 30, length 9), which is the location of where the memory was. But now, we've been adding segments when writing. So, we actually do need for at least this purpose for this to be MemoryBlocks, and then we need to be sure that is what is passed in. We need to see whther we actually want indexInInitialMemoryBlock, offsetInInitialMemoryBlock for all places where this is called.
-        public IEnumerable<MemoryRangeByBlockIndex> EnumerateMemoryRangesByBlockIndex(int indexInitialSegment, int offsetInInitialSegment, long length)
+        // DEBUG5 problem: We call this for 0, 30, 9 (meaning memory block index 0, location 30, length 9), which is the location of where the memory was. But now, we've been adding ranges when writing. So, we actually do need for at least this purpose for this to be MemoryBlocks, and then we need to be sure that is what is passed in. We need to see whther we actually want indexInInitialMemoryBlock, offsetInInitialMemoryBlock for all places where this is called.
+        
+        public IEnumerable<MemoryRangeByBlockIndex> EnumerateMemoryRangesByBlockIndex(int initialMemoryRangeIndex, int furtherOffsetInMemoryBlock, long length)
         {
-            long bytesRemaining = length;
-            int numSegments = NumMemoryRanges;
-            for (int index = 0; index < numSegments; index++)
+
+            (int finalMemoryRangeIndex, int finalFurtherOffset) = Offseter.MoveForward(NumMemoryRanges, r => GetRangeLength(r), initialMemoryRangeIndex, furtherOffsetInMemoryBlock, length);
+            for (int r = initialMemoryRangeIndex; r <= finalMemoryRangeIndex; r++)
             {
-                int segmentLength = GetRangeLength(index);
-                int offsetIntoBlock = GetOffsetIntoBlockForRange(index);
-                if (index == indexInitialSegment)
-                { // return memory segment starting at offset
-                    int totalOffset = offsetIntoBlock + offsetInInitialSegment;
-                    int lengthToInclude = (int)Math.Min(segmentLength - offsetInInitialSegment, bytesRemaining);
-                    bytesRemaining -= lengthToInclude;
-                    yield return new MemoryRangeByBlockIndex(index, totalOffset, lengthToInclude);
+                int rangeLength = GetRangeLength(r);
+                if (rangeLength > 0)
+                {
+                    int startingPositionRelativeToRange = (r == initialMemoryRangeIndex) ? furtherOffsetInMemoryBlock : 0;
+                    int endingPositionRelativeToRange = (r == finalMemoryRangeIndex) ? finalFurtherOffset : rangeLength - 1;
+                    if (startingPositionRelativeToRange < endingPositionRelativeToRange)
+                    {
+                        int memoryBlockIndex = GetMemoryBlockIndexFromMemoryRangeIndex(r);
+                        int initialOffsetInMemoryBlock = GetOffsetIntoBlockForRange(r);
+                        int revisedOffsetInMemoryBlock = startingPositionRelativeToRange + initialOffsetInMemoryBlock;
+                        int lengthInMemoryRange = endingPositionRelativeToRange - startingPositionRelativeToRange;
+                        yield return new MemoryRangeByBlockIndex(memoryBlockIndex, revisedOffsetInMemoryBlock, lengthInMemoryRange);
+                    }
                 }
-                else if (index > indexInitialSegment && bytesRemaining > 0)
-                { // return memory segment until end or until bytes remaining are exhausted
-                    int lengthToInclude = (int)Math.Min(segmentLength, bytesRemaining);
-                    bytesRemaining -= lengthToInclude;
-                    yield return new MemoryRangeByBlockIndex(index, offsetIntoBlock, lengthToInclude);
-                }
-                if (bytesRemaining == 0)
-                    yield break;
             }
         }
         
-        public IEnumerable<MemoryRangeByBlockID> EnumerateMemoryRangesByID(int indexInitialSegment, int offsetInInitialSegment, long length)
+        public IEnumerable<MemoryRangeByBlockID> EnumerateMemoryRangesByBlockID(int memoryRangeIndex, int furtherOffsetInMemoryBlock, long length)
         {
-            foreach (MemoryRangeByBlockIndex indexAndSlice in EnumerateMemoryRangesByBlockIndex(indexInitialSegment, offsetInInitialSegment, length))
+            foreach (MemoryRangeByBlockIndex indexAndSlice in EnumerateMemoryRangesByBlockIndex(memoryRangeIndex, furtherOffsetInMemoryBlock, length))
             {
-                int memorySegmentIndex = indexAndSlice.MemoryBlockIndex;
-                var memoryBlockID = GetMemoryBlockIDForMemorySegmentIndex(memorySegmentIndex);
+                int memoryBlockIndex = indexAndSlice.MemoryBlockIndex;
+                var memoryBlockID = GetMemoryBlockIDForMemoryRangeIndex(memoryBlockIndex);
                 yield return new MemoryRangeByBlockID(memoryBlockID, indexAndSlice.OffsetIntoMemoryBlock, indexAndSlice.Length);
             }
         }
 
-        private MemoryBlockID GetMemoryBlockIDForMemorySegmentIndex(int memorySegmentIndex)
+        private MemoryBlockID GetMemoryBlockIDForMemoryRangeIndex(int memoryRangeIndex)
         {
-            return MemoryBlockAtIndex(GetMemoryBlockIndexFromMemoryRangeIndex(memorySegmentIndex)).MemoryBlockID;
+            return MemoryBlockAtIndex(GetMemoryBlockIndexFromMemoryRangeIndex(memoryRangeIndex)).MemoryBlockID;
         }
 
-        public virtual IEnumerable<MemoryRange> EnumerateMemorySegments(int indexInitialSegment, int offsetInInitialSegment, long length)
+        public virtual IEnumerable<MemoryRange> EnumerateMemoryRanges(int indexInitialRange, int offsetInInitialRange, long length)
         {
-            foreach (MemoryRangeByBlockIndex indexAndSlice in EnumerateMemoryRangesByBlockIndex(indexInitialSegment, offsetInInitialSegment, length))
+            foreach (MemoryRangeByBlockIndex indexAndSlice in EnumerateMemoryRangesByBlockIndex(indexInitialRange, offsetInInitialRange, length))
             {
-                MemoryRange memorySegment = MemoryRangeAtIndex(indexAndSlice.MemoryBlockIndex);
-                yield return memorySegment;
+                MemoryRange memoryRange = MemoryRangeAtIndex(indexAndSlice.MemoryBlockIndex);
+                yield return memoryRange;
             }
         }
 

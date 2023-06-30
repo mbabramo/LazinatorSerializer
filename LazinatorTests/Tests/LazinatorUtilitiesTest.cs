@@ -143,7 +143,7 @@ namespace LazinatorTests.Tests
                 referencedBytes = referencedBytes.Skip(startingPositionWithinLazinatorMemorySubrange).Take(numBytesWithinLazinatorMemorySubrange).ToList();
                 // Debug.WriteLine($"startingPositionWithinLazinatorMemorySubrange {startingPositionWithinLazinatorMemorySubrange } numBytesWithinLazinatorMemorySubrange {numBytesWithinLazinatorMemorySubrange}");
 
-                List<MemoryRangeByBlockIndex> memorySegmentIndexAndSlices = cobbledMemory.Slice((long) startingPositionWithinLazinatorMemorySubrange, (long) numBytesWithinLazinatorMemorySubrange).EnumerateMemorySegmentIndexAndSlices().ToList();
+                List<MemoryRangeByBlockIndex> memorySegmentIndexAndSlices = cobbledMemory.Slice((long) startingPositionWithinLazinatorMemorySubrange, (long) numBytesWithinLazinatorMemorySubrange).EnumerateMemoryRangesByBlockIndex().ToList();
                 memorySegmentIndexAndSlices.Sum(x => x.Length).Should().Be(numBytesWithinLazinatorMemorySubrange);
                 List<byte> bytesFound = new List<byte>();
                 foreach (var memorySegmentIndexAndSlice in memorySegmentIndexAndSlices)
@@ -182,7 +182,7 @@ namespace LazinatorTests.Tests
         /// <returns></returns>
         private ReadOnlyMemory<byte> GetMemoryAtBlockAndOffset(LazinatorMemory lazinatorMemory, MemoryRangeByBlockIndex memoryBlockInfo)
         {
-            var memoryBlock = lazinatorMemory.MemorySegmentAtIndex(memoryBlockInfo.MemoryBlockIndex);
+            var memoryBlock = lazinatorMemory.MemoryRangeAtIndex(memoryBlockInfo.MemoryBlockIndex);
             var underlyingReadOnlyMemory = memoryBlock.ReadOnlyMemory.Slice(memoryBlockInfo.OffsetIntoMemoryBlock, memoryBlockInfo.Length);
             return underlyingReadOnlyMemory;
         }
