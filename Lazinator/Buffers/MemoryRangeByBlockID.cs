@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Buffers
 {
-    public readonly struct MemoryRangeByID
+    public readonly struct MemoryRangeByBlockID
     {
         /// <summary>
         /// The MemoryBlockID, used to find the corresponding MemoryBlock in a MemoryBlockCollection.
@@ -28,7 +28,7 @@ namespace Lazinator.Buffers
 
         public MemoryBlockID GetMemoryBlockID() => new MemoryBlockID(MemoryBlockIntID);
 
-        public MemoryRangeByID(int memoryBlockIntID, int offsetIntoMemoryBlock, int length)
+        public MemoryRangeByBlockID(int memoryBlockIntID, int offsetIntoMemoryBlock, int length)
         {
             if (memoryBlockIntID == 2)
             {
@@ -39,16 +39,16 @@ namespace Lazinator.Buffers
             this.Length = length;
         }
 
-        public MemoryRangeByID(MemoryBlockID memoryBlockID, int offsetIntoMemoryBlock, int length)
+        public MemoryRangeByBlockID(MemoryBlockID memoryBlockID, int offsetIntoMemoryBlock, int length)
         {
             this.MemoryBlockIntID = memoryBlockID.GetIntID();
             this.OffsetIntoMemoryBlock = offsetIntoMemoryBlock;
             this.Length = length;
         }
 
-        public MemoryRangeByID SubsegmentSlice(int offset, int length) => new MemoryRangeByID(new MemoryBlockID(MemoryBlockIntID), OffsetIntoMemoryBlock + offset, length);
+        public MemoryRangeByBlockID SubsegmentSlice(int offset, int length) => new MemoryRangeByBlockID(new MemoryBlockID(MemoryBlockIntID), OffsetIntoMemoryBlock + offset, length);
 
-        public MemoryRangeByID SubsegmentSlice(int offset) => new MemoryRangeByID(new MemoryBlockID(MemoryBlockIntID), OffsetIntoMemoryBlock + offset, Length - offset);
+        public MemoryRangeByBlockID SubsegmentSlice(int offset) => new MemoryRangeByBlockID(new MemoryBlockID(MemoryBlockIntID), OffsetIntoMemoryBlock + offset, Length - offset);
 
         public MemoryBlockSlice GetBlockSlice() => new MemoryBlockSlice(OffsetIntoMemoryBlock, Length);
     }

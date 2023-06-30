@@ -21,7 +21,7 @@ namespace Lazinator.Buffers
         public MemoryRangeCollection(List<MemoryBlock> memoryBlocks, bool recycle) : base(memoryBlocks)
         {
             if (recycle)
-                Ranges = new List<MemoryRangeByID>();
+                Ranges = new List<MemoryRangeByBlockID>();
         }
 
         public void SetFromLazinatorMemory(LazinatorMemory lazinatorMemory)
@@ -30,7 +30,7 @@ namespace Lazinator.Buffers
             SetRanges(lazinatorMemory.EnumerateMemoryRangesByID().ToList());
         }
 
-        private void SetRanges(List<MemoryRangeByID> ranges)
+        private void SetRanges(List<MemoryRangeByBlockID> ranges)
         {
             Ranges = ranges.ToList();
             PatchesTotalLength = Ranges.Sum(x => (long) x.Length);
@@ -55,7 +55,7 @@ namespace Lazinator.Buffers
         /// </summary>
         /// <param name="memoryBlockReferences"></param>
         /// <param name="newRange"></param>
-        public void ExtendRanges(MemoryRangeByID range, bool extendEarlierReferencesForSameBlock)
+        public void ExtendRanges(MemoryRangeByBlockID range, bool extendEarlierReferencesForSameBlock)
         {
             if (!Patching)
                 throw new Exception("Internal error."); // DEBUG -- should be able to delete.
@@ -79,13 +79,13 @@ namespace Lazinator.Buffers
                 var last = Ranges.Last();
                 if (last.GetMemoryBlockID() == range.GetMemoryBlockID() && range.OffsetIntoMemoryBlock == last.OffsetIntoMemoryBlock + last.Length)
                 {
-                    var replacementLast = new MemoryRangeByID(last.GetMemoryBlockID(), last.OffsetIntoMemoryBlock, last.Length + range.Length);
+                    var replacementLast = new MemoryRangeByBlockID(last.GetMemoryBlockID(), last.OffsetIntoMemoryBlock, last.Length + range.Length);
                     Ranges[Ranges.Count - 1] = replacementLast;
                     PatchesTotalLength += range.Length; // i.e., we're replacing last.Length with last>Length + blockAndSlice.Length, so this is the increment.
                     return;
                 }
             }
-            Ranges.Add(new MemoryRangeByID(range.GetMemoryBlockID(), range.OffsetIntoMemoryBlock, range.Length));
+            Ranges.Add(new MemoryRangeByBlockID(range.GetMemoryBlockID(), range.OffsetIntoMemoryBlock, range.Length));
             PatchesTotalLength += range.Length;
         }
 
@@ -93,7 +93,7 @@ namespace Lazinator.Buffers
         /// Adds new ranges. The list is consolidated to avoid having consecutive entries for contiguous ranges.
         /// </summary>
         /// <param name="newRanges"></param>
-        public void ExtendRanges(IEnumerable<MemoryRangeByID> newRanges)
+        public void ExtendRanges(IEnumerable<MemoryRangeByBlockID> newRanges)
         {
             foreach (var newRange in newRanges)
                 ExtendRanges(newRange, false);
@@ -109,7 +109,7 @@ namespace Lazinator.Buffers
         internal void InsertReferenceToCompletedMemory(MemoryRangeCollection completedMemoryRangeCollection, int rangeIndex, int startPosition, long numBytes, int activeMemoryPosition)
         {
             RecordLastActiveMemoryBlockReference(activeMemoryPosition);
-            IEnumerable<MemoryRangeByID> rangesToAdd = completedMemoryRangeCollection.EnumerateMemoryRangesByID(rangeIndex, startPosition, numBytes);
+            IEnumerable<MemoryRangeByBlockID> rangesToAdd = completedMemoryRangeCollection.EnumerateMemoryRangesByID(rangeIndex, startPosition, numBytes);
             ExtendRanges(rangesToAdd);
             // Debug.WriteLine($"Reference to completed memory added. References are {String.Join(", ", RecycledMemoryBlockReferences)}");
         }
@@ -122,7 +122,7 @@ namespace Lazinator.Buffers
             if (activeMemoryPosition > NumActiveMemoryBytesReferenced)
             {
                 MemoryBlockID activeMemoryBlockID = GetNextMemoryBlockID();
-                ExtendRanges(new MemoryRangeByID(activeMemoryBlockID, NumActiveMemoryBytesReferenced, activeMemoryPosition - NumActiveMemoryBytesReferenced), true);
+                ExtendRanges(new MemoryRangeByBlockID(activeMemoryBlockID, NumActiveMemoryBytesReferenced, activeMemoryPosition - NumActiveMemoryBytesReferenced), true);
                 NumActiveMemoryBytesReferenced = activeMemoryPosition;
             }
         }
@@ -132,7 +132,7 @@ namespace Lazinator.Buffers
             base.AppendMemoryBlock(memoryBlock);
             if (Ranges != null)
             {
-                Ranges.Add(new MemoryRangeByID(memoryBlock.MemoryBlockID, 0, memoryBlock.Length));
+                Ranges.Add(new MemoryRangeByBlockID(memoryBlock.MemoryBlockID, 0, memoryBlock.Length));
                 PatchesTotalLength += memoryBlock.Length;
             }
         }

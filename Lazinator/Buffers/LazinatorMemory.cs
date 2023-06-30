@@ -203,7 +203,7 @@ namespace Lazinator.Buffers
                 return SliceSingle((int) furtherOffset, length);
             }
 
-            MemoryRangeByIndex segmentInfo = MultipleMemoryBlocks.GetMemorySegmentInfoAtOffsetFromStartPosition(StartIndex, Offset, furtherOffset);
+            MemoryRangeByBlockIndex segmentInfo = MultipleMemoryBlocks.GetMemoryRangeAtOffsetFromStartPosition(StartIndex, Offset, furtherOffset);
 
             // DEBUG5 would seem to suggest that we are referring to the memory segment
             return new LazinatorMemory(MultipleMemoryBlocks.DeepCopy(), segmentInfo.MemoryBlockIndex, segmentInfo.OffsetIntoMemoryBlock, length);
@@ -395,14 +395,14 @@ namespace Lazinator.Buffers
         /// Enumerates memory segment ranges in this LazinatorMemory. Note that memory segments are referred to by index instead of by ID. 
         /// </summary>
         /// <returns>An enumerable where each element consists of the segment index, the start position, and the number of bytes</returns>
-        public IEnumerable<MemoryRangeByIndex> EnumerateMemorySegmentIndexAndSlices()
+        public IEnumerable<MemoryRangeByBlockIndex> EnumerateMemorySegmentIndexAndSlices()
         {
             if (SingleMemoryBlock != null)
             {
-                yield return new MemoryRangeByIndex(0, Offset, (int)Length);
+                yield return new MemoryRangeByBlockIndex(0, Offset, (int)Length);
             }
             else 
-                foreach (MemoryRangeByIndex indexAndSlice in MultipleMemoryBlocks.EnumerateMemorySegmentLocationsByIndex(StartIndex, Offset, Length))
+                foreach (MemoryRangeByBlockIndex indexAndSlice in MultipleMemoryBlocks.EnumerateMemoryRangesByBlockIndex(StartIndex, Offset, Length))
                     yield return indexAndSlice;
         }
 
@@ -410,14 +410,14 @@ namespace Lazinator.Buffers
         /// Enumerates memory segment ranges corresponding to this LazinatorMemory. Note that memory segments are referred to by MemoryBlockID.
         /// </summary>
         /// <returns>An enumerable where each element consists of the memory block ID, the start position, and the number of bytes</returns>
-        public IEnumerable<MemoryRangeByID> EnumerateMemoryRangesByID()
+        public IEnumerable<MemoryRangeByBlockID> EnumerateMemoryRangesByID()
         {
             if (SingleMemoryBlock != null)
             {
-                yield return new MemoryRangeByID(new MemoryBlockID(0), Offset, (int)Length);
+                yield return new MemoryRangeByBlockID(new MemoryBlockID(0), Offset, (int)Length);
             }
             else
-                foreach (MemoryRangeByID idAndSlice in MultipleMemoryBlocks.EnumerateMemoryRangesByID(StartIndex, Offset, Length))
+                foreach (MemoryRangeByBlockID idAndSlice in MultipleMemoryBlocks.EnumerateMemoryRangesByID(StartIndex, Offset, Length))
                     yield return idAndSlice;
         }
 

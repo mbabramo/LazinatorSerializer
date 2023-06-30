@@ -37,8 +37,8 @@ namespace Lazinator.Buffers
         
         
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        protected List<MemoryRangeByID> _Ranges;
-        public List<MemoryRangeByID> Ranges
+        protected List<MemoryRangeByBlockID> _Ranges;
+        public List<MemoryRangeByBlockID> Ranges
         {
             [DebuggerStepThrough]
             get
@@ -65,7 +65,7 @@ namespace Lazinator.Buffers
         {
             if (LazinatorMemoryStorage.Length == 0)
             {
-                _Ranges = default(List<MemoryRangeByID>);
+                _Ranges = default(List<MemoryRangeByBlockID>);
             }
             else
             {
@@ -137,7 +137,7 @@ namespace Lazinator.Buffers
             base.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, false);
             if ((!exploreOnlyDeserializedChildren && Ranges != null) || (_Ranges_Accessed && _Ranges != null))
             {
-                _Ranges = (List<MemoryRangeByID>) CloneOrChange_List_GMemoryRangeByID_g(_Ranges, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
+                _Ranges = (List<MemoryRangeByBlockID>) CloneOrChange_List_GMemoryRangeByID_g(_Ranges, l => l?.ForEachLazinator(changeFunc, exploreOnlyDeserializedChildren, true), true);
             }
             if (changeThisLevel && changeFunc != null)
             {
@@ -232,7 +232,7 @@ namespace Lazinator.Buffers
             base.UpdateDeserializedChildren(ref writer, startPosition);
             if (_Ranges_Accessed && _Ranges != null)
             {
-                _Ranges = (List<MemoryRangeByID>) CloneOrChange_List_GMemoryRangeByID_g(_Ranges, l => l.RemoveBufferInHierarchy(), true);
+                _Ranges = (List<MemoryRangeByBlockID>) CloneOrChange_List_GMemoryRangeByID_g(_Ranges, l => l.RemoveBufferInHierarchy(), true);
             }
             
         }
@@ -304,17 +304,17 @@ namespace Lazinator.Buffers
         }
         /* Conversion of supported collections and tuples */
         
-        private static List<MemoryRangeByID> ConvertFromBytes_List_GMemoryRangeByID_g(LazinatorMemory storage)
+        private static List<MemoryRangeByBlockID> ConvertFromBytes_List_GMemoryRangeByID_g(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
-                return default(List<MemoryRangeByID>);
+                return default(List<MemoryRangeByBlockID>);
             }
             ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
             int bytesSoFar = 0;
             int collectionLength = span.ToDecompressedInt32(ref bytesSoFar);
             
-            List<MemoryRangeByID> collection = new List<MemoryRangeByID>(collectionLength);
+            List<MemoryRangeByBlockID> collection = new List<MemoryRangeByBlockID>(collectionLength);
             for (int itemIndex = 0; itemIndex < collectionLength; itemIndex++)
             {
                 int lengthCollectionMember = span.ToInt32(ref bytesSoFar);
@@ -327,9 +327,9 @@ namespace Lazinator.Buffers
             return collection;
         }
         
-        private static void ConvertToBytes_List_GMemoryRangeByID_g(ref BufferWriter writer, List<MemoryRangeByID> itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_List_GMemoryRangeByID_g(ref BufferWriter writer, List<MemoryRangeByBlockID> itemToConvert, LazinatorSerializationOptions options)
         {
-            if (itemToConvert == default(List<MemoryRangeByID>))
+            if (itemToConvert == default(List<MemoryRangeByBlockID>))
             {
                 return;
             }
@@ -342,24 +342,24 @@ namespace Lazinator.Buffers
             }
         }
         
-        private static List<MemoryRangeByID> CloneOrChange_List_GMemoryRangeByID_g(List<MemoryRangeByID> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static List<MemoryRangeByBlockID> CloneOrChange_List_GMemoryRangeByID_g(List<MemoryRangeByBlockID> itemToClone, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
             if (itemToClone == null)
             {
                 return default;
             }
             int collectionLength = itemToClone.Count;
-            List<MemoryRangeByID> collection = new List<MemoryRangeByID>(collectionLength);
+            List<MemoryRangeByBlockID> collection = new List<MemoryRangeByBlockID>(collectionLength);
             int itemToCloneCount = itemToClone.Count;
             for (int itemIndex = 0; itemIndex < itemToCloneCount; itemIndex++)
             {
-                var itemCopied = (MemoryRangeByID) CloneOrChange_MemoryRangeByID(itemToClone[itemIndex], cloneOrChangeFunc, avoidCloningIfPossible);
+                var itemCopied = (MemoryRangeByBlockID) CloneOrChange_MemoryRangeByID(itemToClone[itemIndex], cloneOrChangeFunc, avoidCloningIfPossible);
                 collection.Add(itemCopied);
             }
             return collection;
         }
         
-        private static MemoryRangeByID ConvertFromBytes_MemoryRangeByID(LazinatorMemory storage)
+        private static MemoryRangeByBlockID ConvertFromBytes_MemoryRangeByID(LazinatorMemory storage)
         {
             if (storage.Length == 0)
             {
@@ -375,12 +375,12 @@ namespace Lazinator.Buffers
             
             int item3 = span.ToDecompressedInt32(ref bytesSoFar);
             
-            var itemToCreate = new MemoryRangeByID(item1, item2, item3);
+            var itemToCreate = new MemoryRangeByBlockID(item1, item2, item3);
             
             return itemToCreate;
         }
         
-        private static void ConvertToBytes_MemoryRangeByID(ref BufferWriter writer, MemoryRangeByID itemToConvert, LazinatorSerializationOptions options)
+        private static void ConvertToBytes_MemoryRangeByID(ref BufferWriter writer, MemoryRangeByBlockID itemToConvert, LazinatorSerializationOptions options)
         {
             
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.MemoryBlockIntID);
@@ -390,9 +390,9 @@ namespace Lazinator.Buffers
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.Length);
         }
         
-        private static MemoryRangeByID CloneOrChange_MemoryRangeByID(MemoryRangeByID itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        private static MemoryRangeByBlockID CloneOrChange_MemoryRangeByID(MemoryRangeByBlockID itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            return new MemoryRangeByID((int) (itemToConvert.MemoryBlockIntID), (int) (itemToConvert.OffsetIntoMemoryBlock), (int) (itemToConvert.Length));
+            return new MemoryRangeByBlockID((int) (itemToConvert.MemoryBlockIntID), (int) (itemToConvert.OffsetIntoMemoryBlock), (int) (itemToConvert.Length));
         }
         
     }
