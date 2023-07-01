@@ -186,7 +186,7 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void MoveForward_Should_Throw_Exception_When_There_Are_Insufficient_Items()
+        public void MoveForward_Should_Go_To_End_Of_Collection_With_Insufficient_Items()
         {
             // Arrange
             int numBuckets = 3;
@@ -198,13 +198,13 @@ namespace LazinatorTests.Tests
             // Reasoning:
             // Starting from position (1, 2) with 5 items to move forward:
             // - We are at the last item in bucket 1, and there is only one item in bucket 2.
-            // - So, trying to move 5 items forward should throw an exception due to insufficient items.
+            // - So, trying to move 5 items forward should move to the end of the collection.
 
             // Act
-            Action act = () => Offseter.MoveForward(numBuckets, numItemsInBucket, startingBucketIndex, startingItemIndex, numItemsToMoveForward);
+            var result = Offseter.MoveForward(numBuckets, numItemsInBucket, startingBucketIndex, startingItemIndex, numItemsToMoveForward);
 
             // Assert
-            act.Should().Throw<Exception>().WithMessage("Internal error. Unexpected end.");
+            result.Should().Be((2, 1));
         }
 
 

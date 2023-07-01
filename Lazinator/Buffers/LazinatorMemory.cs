@@ -203,9 +203,9 @@ namespace Lazinator.Buffers
                 return SliceSingle((int) furtherOffset, length);
             }
 
-            MemoryRangeByBlockIndex memoryRange = default; // SUPERDEBUG MultipleMemoryBlocks.GetMemoryRangeAtOffsetFromStartPosition(MemoryRangeIndex, OffsetIntoMemoryBlock, furtherOffset);
+            MemoryRangeByBlockIndex memoryRange = MultipleMemoryBlocks.GetMemoryRangeAtOffsetFromStartPosition(MemoryRangeIndex, OffsetIntoMemoryBlock, furtherOffset);
 
-            return default; // SUPERDEBUG new LazinatorMemory(MultipleMemoryBlocks.DeepCopy(), debug memoryRange.MemoryBlockIndex, memoryRange.OffsetIntoMemoryBlock, length);
+            return new LazinatorMemory(MultipleMemoryBlocks.DeepCopy(), debug memoryRange.MemoryBlockIndex, memoryRange.OffsetIntoMemoryBlock, length);
         }
 
         #endregion
