@@ -121,7 +121,7 @@ namespace Lazinator.Buffers
         internal void InsertReferenceToPreviousVersion(MemoryBlockCollection previousVersion, int rangeIndex, int startPosition, long numBytes, int activeMemoryPosition)
         {
             RecordLastActiveMemoryBlockReference(activeMemoryPosition);
-            IEnumerable<MemoryRangeByBlockID> rangesToAdd = previousVersion.EnumerateMemoryRangesByBlockID(rangeIndex, startPosition, numBytes);
+            IEnumerable<MemoryRangeByBlockID> rangesToAdd = previousVersion.EnumerateMemoryRangesWithBlockID(rangeIndex, startPosition, numBytes);
             AddRanges(rangesToAdd);
             // Debug.WriteLine($"Reference to completed memory added. References are {String.Join(", ", RecycledMemoryBlockReferences)}");
         }

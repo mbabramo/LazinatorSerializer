@@ -64,7 +64,7 @@ namespace Lazinator.Buffers
             else
             {
                 if (MemoryRangeCollection == null)
-                    throw new Exception("Internal error.");
+                    return new MemoryBlockID(0);
                 NextMemoryBlockID = MemoryRangeCollection.GetNextMemoryBlockID();
                 return NextMemoryBlockID.Value;
             }
@@ -572,7 +572,9 @@ namespace Lazinator.Buffers
         {
             LengthsSpan[0] = length;
             LengthsPosition = (LengthsPosition.index, LengthsPosition.offset + 1);
+#if TRACEWRITING
             WriteTrace();
+#endif
         }
 
         public void RecordLength(Int16 length)
@@ -581,7 +583,9 @@ namespace Lazinator.Buffers
                 WriteInt16LittleEndian(LengthsSpan, length);
             else
                 WriteInt16BigEndian(LengthsSpan, length);
+#if TRACEWRITING
             WriteTrace();
+#endif
             LengthsPosition = (LengthsPosition.index, LengthsPosition.offset + sizeof(Int16));
         }
 
@@ -591,7 +595,9 @@ namespace Lazinator.Buffers
                 WriteInt32LittleEndian(LengthsSpan, length);
             else
                 WriteInt32BigEndian(LengthsSpan, length);
+#if TRACEWRITING
             WriteTrace();
+#endif
             LengthsPosition = (LengthsPosition.index, LengthsPosition.offset + sizeof(int));
         }
         public void RecordLength(Int64 length)
@@ -600,11 +606,13 @@ namespace Lazinator.Buffers
                 WriteInt64LittleEndian(LengthsSpan, length);
             else
                 WriteInt64BigEndian(LengthsSpan, length);
+#if TRACEWRITING
             WriteTrace();
+#endif
             LengthsPosition = (LengthsPosition.index, LengthsPosition.offset + sizeof(Int64));
         }
 
-        #endregion
+#endregion
 
         #region Tracewriting
 
@@ -705,6 +713,6 @@ namespace Lazinator.Buffers
             }
         }
 #endif
-    #endregion
+#endregion
     }
 }

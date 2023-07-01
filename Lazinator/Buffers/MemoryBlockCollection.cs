@@ -250,7 +250,7 @@ namespace Lazinator.Buffers
             return new MemoryRangeReference(finalMemoryRangeIndex, finalFurtherOffset);
         }
         
-        public IEnumerable<MemoryRangeByBlockIndex> EnumerateMemoryRangesByBlockIndex(int initialMemoryRangeIndex, int furtherOffsetInMemoryBlock, long length)
+        public IEnumerable<MemoryRangeByBlockIndex> EnumerateMemoryRangesWithBlockIndex(int initialMemoryRangeIndex, int furtherOffsetInMemoryBlock, long length)
         {
             (int finalMemoryRangeIndex, int finalFurtherOffset) = Offseter.MoveForward(NumMemoryRanges, r => GetRangeLength(r), initialMemoryRangeIndex, furtherOffsetInMemoryBlock, length);
             for (int r = initialMemoryRangeIndex; r <= finalMemoryRangeIndex; r++)
@@ -272,12 +272,12 @@ namespace Lazinator.Buffers
             }
         }
         
-        public IEnumerable<MemoryRangeByBlockID> EnumerateMemoryRangesByBlockID(int memoryRangeIndex, int furtherOffsetInMemoryBlock, long length)
+        public IEnumerable<MemoryRangeByBlockID> EnumerateMemoryRangesWithBlockID(int memoryRangeIndex, int furtherOffsetInMemoryBlock, long length)
         {
-            foreach (MemoryRangeByBlockIndex indexAndSlice in EnumerateMemoryRangesByBlockIndex(memoryRangeIndex, furtherOffsetInMemoryBlock, length))
+            foreach (MemoryRangeByBlockIndex indexAndSlice in EnumerateMemoryRangesWithBlockIndex(memoryRangeIndex, furtherOffsetInMemoryBlock, length))
             {
                 int memoryBlockIndex = indexAndSlice.MemoryBlockIndex;
-                var memoryBlockID = GetMemoryBlockIDForMemoryRangeIndex(memoryBlockIndex);
+                var memoryBlockID = MemoryBlockAtIndex(memoryBlockIndex).MemoryBlockID;
                 yield return new MemoryRangeByBlockID(memoryBlockID, indexAndSlice.OffsetIntoMemoryBlock, indexAndSlice.Length);
             }
         }
@@ -289,7 +289,7 @@ namespace Lazinator.Buffers
 
         public virtual IEnumerable<MemoryRange> EnumerateMemoryRanges(int indexInitialRange, int offsetInInitialRange, long length)
         {
-            foreach (MemoryRangeByBlockIndex indexAndSlice in EnumerateMemoryRangesByBlockIndex(indexInitialRange, offsetInInitialRange, length))
+            foreach (MemoryRangeByBlockIndex indexAndSlice in EnumerateMemoryRangesWithBlockIndex(indexInitialRange, offsetInInitialRange, length))
             {
                 var block = MemoryBlockAtIndex(indexAndSlice.MemoryBlockIndex);
                 yield return new MemoryRange(block, new MemoryBlockSlice(indexAndSlice.OffsetIntoMemoryBlock, indexAndSlice.Length));
