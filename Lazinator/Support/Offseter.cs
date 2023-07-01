@@ -23,9 +23,9 @@ namespace Lazinator.Support
                     do
                     {
                         currentBucketIndex++;
-                        if (currentBucketIndex >= numBuckets)
+                        if (currentBucketIndex == numBuckets)
                         {
-                            ThrowMoveForwardException();
+                            return (currentBucketIndex - 1, numItemsInBucket(currentBucketIndex - 1));
                         }
                         itemsInCurrentBucket = numItemsInBucket(currentBucketIndex);
                     } while (itemsInCurrentBucket == 0);
@@ -44,19 +44,14 @@ namespace Lazinator.Support
                     currentBucketIndex++;
                     currentItemIndex = 0;
 
-                    if (currentBucketIndex >= numBuckets)
+                    if (currentBucketIndex == numBuckets)
                     {
-                        ThrowMoveForwardException();
+                        return (currentBucketIndex - 1, numItemsInBucket(currentBucketIndex - 1));
                     }
                 }
             }
 
             return (currentBucketIndex, currentItemIndex);
-        }
-
-        private static void ThrowMoveForwardException()
-        {
-            throw new Exception("Internal error.");
         }
     }
 

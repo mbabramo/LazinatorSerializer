@@ -22,7 +22,7 @@ namespace Lazinator.Buffers
 
         public override string ToString()
         {
-            return ActiveMemoryString() + " " + MemorySegmentCollection?.ToStringByBlock();
+            return ActiveMemoryString() + " " + MemoryRangeCollection?.ToStringByBlock();
         }
 
         private string ActiveMemoryString()
@@ -32,7 +32,7 @@ namespace Lazinator.Buffers
 
         /// <summary>
         /// Bytes that have been written by the current BufferWriter. These bytes do not necessarily occur logically after the CompletedMemory bytes.
-        /// When diffs are serialized, the ActiveMemory may consist of bytes that will replace bytes in CompletedMemory. The BytesSegments are then used
+        /// When diffs are serialized, the ActiveMemory may consist of bytes that will replace bytes in CompletedMemory. The BytesRanges are then used
         /// to indicate the order of reference of bytes in ActiveMemory and bytes in CompletedMemory. However, when serializing without diffs, ActiveMemory
         /// does contain bytes that occur logically after the bytes in CompletedMemory. 
         /// </summary>
@@ -41,18 +41,18 @@ namespace Lazinator.Buffers
         /// <summary>
         /// When storing multiple buffers, this is used to store them.
         /// </summary>
-        public MemoryRangeCollection MemorySegmentCollection { get; set; }
+        public MemoryRangeCollection MemoryRangeCollection { get; set; }
 
         /// <summary>
         /// When a BufferWriter is based on completed memory, it will be stored here,
         /// so that we can begin writing on a clean slate, while still being able
         /// to refer to completed memory.
         /// </summary>
-        public MemoryRangeCollection CompletedMemorySegmentCollection { get; set; }
+        public MemoryRangeCollection CompletedMemoryRangeCollection { get; set; }
 
-        private bool Patching => MemorySegmentCollection?.Patching ?? false;
+        private bool Patching => MemoryRangeCollection?.Patching ?? false;
 
-        internal int NumActiveMemoryBytesReferenced => MemorySegmentCollection?.NumActiveMemoryBytesReferenced ?? 0;
+        internal int NumActiveMemoryBytesReferenced => MemoryRangeCollection?.NumActiveMemoryBytesReferenced ?? 0;
 
         #region Construction and initialization
 
@@ -63,8 +63,8 @@ namespace Lazinator.Buffers
             ActiveMemory = new ExpandableBytes(minimumSize);
             ActiveMemory.UsedBytesInCurrentBuffer = 0;
             LengthsPosition = (0, 0);
-            MemorySegmentCollection = null;
-            CompletedMemorySegmentCollection = null;
+            MemoryRangeCollection = null;
+            CompletedMemoryRangeCollection = null;
         }
 
         public BufferWriter(int minimumSize, LazinatorMemory completedMemory)
@@ -74,8 +74,8 @@ namespace Lazinator.Buffers
             ActiveMemory = new ExpandableBytes(minimumSize);
             ActiveMemory.UsedBytesInCurrentBuffer = 0;
             LengthsPosition = (0, 0);
-            CompletedMemorySegmentCollection = new MemoryRangeCollection(completedMemory, false /* keep segments */);
-            MemorySegmentCollection = null;
+            CompletedMemoryRangeCollection = new MemoryRangeCollection(completedMemory, false /* keep ranges */);
+            MemoryRangeCollection = null;
         }
 
         private void InitializeIfNecessary()
@@ -101,12 +101,12 @@ namespace Lazinator.Buffers
                     return GetLazinatorMemoryWithPatches();
                 }
                 ActiveMemory.UsedBytesInCurrentBuffer = ActiveMemoryPosition;
-                if (MemorySegmentCollection != null)
+                if (MemoryRangeCollection != null)
                 {
                     if (ActiveMemoryPosition == 0)
-                        return MemorySegmentCollection.ToLazinatorMemory();
-                    var withAppended = MemorySegmentCollection.DeepCopy();
-                    withAppended.AppendMemoryBlock(new MemoryBlock(ActiveMemory.ReadOnlyBytes, new MemoryBlockLoadingInfo(MemorySegmentCollection.GetNextMemoryBlockID(), ActiveMemoryPosition), false));
+                        return MemoryRangeCollection.ToLazinatorMemory();
+                    var withAppended = MemoryRangeCollection.DeepCopy();
+                    withAppended.AppendMemoryBlock(new MemoryBlock(ActiveMemory.ReadOnlyBytes, new MemoryBlockLoadingInfo(MemoryRangeCollection.GetNextMemoryBlockID(), ActiveMemoryPosition), false));
                     return withAppended.ToLazinatorMemory();
                 }
                 return new LazinatorMemory(new MemoryBlock(ActiveMemory.ReadOnlyBytes), 0, ActiveMemoryPosition);
@@ -160,15 +160,15 @@ namespace Lazinator.Buffers
         {
             get
             {
-                if (MemorySegmentCollection is null)
+                if (MemoryRangeCollection is null)
                     return ActiveMemoryPosition;
                 if (!Patching)
                 {
-                    return ActiveMemoryPosition + (MemorySegmentCollection?.Length ?? 0);
+                    return ActiveMemoryPosition + (MemoryRangeCollection?.LengthOfMemoryBlocks ?? 0);
                 }
                 else
                 {
-                    return ActiveMemoryPosition - MemorySegmentCollection.NumActiveMemoryBytesReferenced + MemorySegmentCollection.PatchesTotalLength;
+                    return ActiveMemoryPosition - MemoryRangeCollection.NumActiveMemoryBytesReferenced + MemoryRangeCollection.PatchesTotalLength;
                 }
             }
         }
@@ -177,10 +177,10 @@ namespace Lazinator.Buffers
         {
             get
             {
-                if (MemorySegmentCollection is null)
+                if (MemoryRangeCollection is null)
                     return (0, ActiveMemoryPosition);
-                int completedSegments = MemorySegmentCollection.NumMemoryRanges;
-                return (completedSegments, ActiveMemoryPosition);
+                int completedRanges = MemoryRangeCollection.NumMemoryRanges;
+                return (completedRanges, ActiveMemoryPosition);
             }
         }
 
@@ -250,17 +250,17 @@ namespace Lazinator.Buffers
             }
         }
 
-        public void InsertReferenceToCompletedMemory(int memorySegmentIndex, int startPosition, long numBytes)
+        public void InsertReferenceToCompletedMemory(int memoryRangeIndex, int startPosition, long numBytes)
         {
-            MemorySegmentCollection?.InsertReferenceToCompletedMemory(CompletedMemorySegmentCollection, memorySegmentIndex, startPosition, numBytes, ActiveMemoryPosition);
+            MemoryRangeCollection?.InsertReferenceToCompletedMemory(CompletedMemoryRangeCollection, memoryRangeIndex, startPosition, numBytes, ActiveMemoryPosition);
         }
 
         /// <summary>
-        /// Extends the bytes segment list to include the portion of active memory that has not yet been referred to. 
+        /// Extends the bytes range list to include the portion of active memory that has not yet been referred to. 
         /// </summary>
         internal void RecordLastActiveMemoryBlockReferenceIfAny()
         {
-            MemorySegmentCollection?.RecordLastActiveMemoryBlockReference(ActiveMemoryPosition);
+            MemoryRangeCollection?.RecordLastActiveMemoryBlockReference(ActiveMemoryPosition);
         }
 
         /// <summary>
@@ -271,29 +271,29 @@ namespace Lazinator.Buffers
         {
             if (ActiveMemoryPosition > 0)
             {
-                var block = new MemoryBlock(ActiveMemory.ReadWriteBytes, new MemoryBlockLoadingInfo(MemorySegmentCollection?.GetNextMemoryBlockID() ?? new MemoryBlockID(0), ActiveMemoryPosition), false);
-                if (MemorySegmentCollection == null)
-                    MemorySegmentCollection = new MemoryRangeCollection(block, false);
+                var block = new MemoryBlock(ActiveMemory.ReadWriteBytes, new MemoryBlockLoadingInfo(MemoryRangeCollection?.GetNextMemoryBlockID() ?? new MemoryBlockID(0), ActiveMemoryPosition), false);
+                if (MemoryRangeCollection == null)
+                    MemoryRangeCollection = new MemoryRangeCollection(block, false);
                 else
-                    MemorySegmentCollection.AppendMemoryBlock(block);
+                    MemoryRangeCollection.AppendMemoryBlock(block);
                 ActiveMemory = new ExpandableBytes(minSizeofNewBuffer);
                 ActiveMemoryPosition = 0;
-                MemorySegmentCollection.NumActiveMemoryBytesReferenced = 0;
+                MemoryRangeCollection.NumActiveMemoryBytesReferenced = 0;
             }
         }
 
         private LazinatorMemory GetLazinatorMemoryWithPatches()
         {
-            if (MemorySegmentCollection is null)
+            if (MemoryRangeCollection is null)
                 throw new Exception("No LazinatorMemory to patch");
-            MemorySegmentCollection.RecordLastActiveMemoryBlockReference(ActiveMemoryPosition);
-            MemoryBlockID activeMemoryBlockID = MemorySegmentCollection.GetNextMemoryBlockID();
+            MemoryRangeCollection.RecordLastActiveMemoryBlockReference(ActiveMemoryPosition);
+            MemoryBlockID activeMemoryBlockID = MemoryRangeCollection.GetNextMemoryBlockID();
             int activeLength = NumActiveMemoryBytesReferenced;
             if (activeLength > 0)
             {
                 MoveActiveToCompletedMemory();
             }
-            return MemorySegmentCollection.ToLazinatorMemory();
+            return MemoryRangeCollection.ToLazinatorMemory();
         }
 
         #endregion
@@ -494,13 +494,13 @@ namespace Lazinator.Buffers
         {
             get
             {
-                if (MemorySegmentCollection == null)
+                if (MemoryRangeCollection == null)
                     return ActiveSpan.Slice(LengthsPosition.offset);
-                // It is still possible that we need to write into the ActiveSpan. The LengthsPosition.index refers to a segment number. We need to find the corresponding BlockID number. If there is no such number (because the active span has not been copied yet into the stored memory blocks), then we still need to write into the ActiveSpan.
-                MemoryRange segment = MemorySegmentCollection.MemoryRangeAtIndex(LengthsPosition.index);
-                if (segment.MemoryBlock == null) // no such block yet
+                // It is still possible that we need to write into the ActiveSpan. The LengthsPosition.index refers to a range number. We need to find the corresponding BlockID number. If there is no such number (because the active span has not been copied yet into the stored memory blocks), then we still need to write into the ActiveSpan.
+                MemoryRange range = MemoryRangeCollection.MemoryRangeAtIndex(LengthsPosition.index);
+                if (range.MemoryBlock == null) // no such block yet
                     return ActiveSpan.Slice(LengthsPosition.offset);
-                return segment.Memory.Slice(LengthsPosition.offset).Span;
+                return range.Memory.Slice(LengthsPosition.offset).Span;
             }
         }
 

@@ -18,11 +18,12 @@ namespace Lazinator.Buffers
         public IBlobManager BlobManager { get; set; }
         protected List<MemoryBlock> MemoryBlocks = new List<MemoryBlock>();
         protected Dictionary<MemoryBlockID, int> MemoryBlocksIndexFromBlockID = null;
-        public long Length { get; private set; }
+        public long LengthOfMemoryBlocks { get; private set; }
         public MemoryBlockID HighestMemoryBlockID { get; private set; }
         public MemoryBlockID GetNextMemoryBlockID() => HighestMemoryBlockID.Next();
         protected int NumMemoryBlocks => MemoryBlocks?.Count ?? 0;
         public virtual int NumMemoryRanges => NumMemoryBlocks;
+        public virtual long LengthReferenced => LengthOfMemoryBlocks;
 
         protected virtual int GetRangeLength(int rangeIndex) => MemoryBlocksLoadingInfo[rangeIndex].MemoryBlockLength;
         protected virtual int GetOffsetIntoBlockForRange(int rangeIndex) => 0;
@@ -39,7 +40,7 @@ namespace Lazinator.Buffers
         {
             MemoryBlocks = memoryBlocks.ToList();
             HighestMemoryBlockID = MemoryBlocks.Any() ? new MemoryBlockID(MemoryBlocks.Max(x => x.MemoryBlockID.GetIntID())) : new MemoryBlockID(0);
-            Length = MemoryBlocks.Sum(x => (long) x.Length);
+            LengthOfMemoryBlocks = MemoryBlocks.Sum(x => (long) x.Length);
             InitializeMemoryBlocksInformation();
             if (MemoryBlocks.Count != MemoryBlocksLoadingInfo.Count)
                 throw new Exception("DEBUG");
@@ -67,15 +68,14 @@ namespace Lazinator.Buffers
             MemoryBlocks.Add(memoryBlock);
             if (memoryBlock.MemoryBlockID > HighestMemoryBlockID)
                 HighestMemoryBlockID = memoryBlock.MemoryBlockID;
-            Length += (long)memoryBlock.Length;
+            LengthOfMemoryBlocks += (long)memoryBlock.Length;
         }
 
         public void SetBlocks(IEnumerable<MemoryBlock> blocks)
         {
             MemoryBlocks = new List<MemoryBlock>();
             MemoryBlocksIndexFromBlockID = new Dictionary<MemoryBlockID, int>();
-            Length = 0;
-            int i = 0;
+            LengthOfMemoryBlocks = 0;
             if (blocks == null)
             {
                 HighestMemoryBlockID = new MemoryBlockID(-1);
@@ -237,12 +237,9 @@ namespace Lazinator.Buffers
             
             return new MemoryRangeReference(finalMemoryRangeIndex, finalFurtherOffset);
         }
-
-        // DEBUG5 problem: We call this for 0, 30, 9 (meaning memory block index 0, location 30, length 9), which is the location of where the memory was. But now, we've been adding ranges when writing. So, we actually do need for at least this purpose for this to be MemoryBlocks, and then we need to be sure that is what is passed in. We need to see whther we actually want indexInInitialMemoryBlock, offsetInInitialMemoryBlock for all places where this is called.
         
         public IEnumerable<MemoryRangeByBlockIndex> EnumerateMemoryRangesByBlockIndex(int initialMemoryRangeIndex, int furtherOffsetInMemoryBlock, long length)
         {
-
             (int finalMemoryRangeIndex, int finalFurtherOffset) = Offseter.MoveForward(NumMemoryRanges, r => GetRangeLength(r), initialMemoryRangeIndex, furtherOffsetInMemoryBlock, length);
             for (int r = initialMemoryRangeIndex; r <= finalMemoryRangeIndex; r++)
             {
@@ -250,13 +247,13 @@ namespace Lazinator.Buffers
                 if (rangeLength > 0)
                 {
                     int startingPositionRelativeToRange = (r == initialMemoryRangeIndex) ? furtherOffsetInMemoryBlock : 0;
-                    int endingPositionRelativeToRange = (r == finalMemoryRangeIndex) ? finalFurtherOffset : rangeLength - 1;
-                    if (startingPositionRelativeToRange < endingPositionRelativeToRange)
+                    int endingPositionRelativeToRange = (r == finalMemoryRangeIndex) ? finalFurtherOffset : rangeLength;
+                    int lengthInMemoryRange = endingPositionRelativeToRange - startingPositionRelativeToRange;
+                    if (lengthInMemoryRange > 0)
                     {
                         int memoryBlockIndex = GetMemoryBlockIndexFromMemoryRangeIndex(r);
                         int initialOffsetInMemoryBlock = GetOffsetIntoBlockForRange(r);
                         int revisedOffsetInMemoryBlock = startingPositionRelativeToRange + initialOffsetInMemoryBlock;
-                        int lengthInMemoryRange = endingPositionRelativeToRange - startingPositionRelativeToRange;
                         yield return new MemoryRangeByBlockIndex(memoryBlockIndex, revisedOffsetInMemoryBlock, lengthInMemoryRange);
                     }
                 }
@@ -282,8 +279,8 @@ namespace Lazinator.Buffers
         {
             foreach (MemoryRangeByBlockIndex indexAndSlice in EnumerateMemoryRangesByBlockIndex(indexInitialRange, offsetInInitialRange, length))
             {
-                MemoryRange memoryRange = MemoryRangeAtIndex(indexAndSlice.MemoryBlockIndex);
-                yield return memoryRange;
+                var block = MemoryBlockAtIndex(indexAndSlice.MemoryBlockIndex);
+                yield return new MemoryRange(block, new MemoryBlockSlice(indexAndSlice.OffsetIntoMemoryBlock, indexAndSlice.Length));
             }
         }
 

@@ -83,7 +83,7 @@ namespace Lazinator.Buffers
             SingleMemoryBlock = null;
             MemoryRangeIndex = 0;
             OffsetIntoMemoryBlock = 0;
-            Length = memoryBlockCollection.Length;
+            Length = memoryBlockCollection.LengthReferenced;
         }
 
         public LazinatorMemory(MemoryBlockCollection moreMemoryBlocks, int memoryRangeIndex, int startPosition, long length) : this(null, startPosition, length)

@@ -204,7 +204,7 @@ namespace LazinatorTests.Tests
             Action act = () => Offseter.MoveForward(numBuckets, numItemsInBucket, startingBucketIndex, startingItemIndex, numItemsToMoveForward);
 
             // Assert
-            act.Should().Throw<Exception>().WithMessage("Internal error.");
+            act.Should().Throw<Exception>().WithMessage("Internal error. Unexpected end.");
         }
 
 

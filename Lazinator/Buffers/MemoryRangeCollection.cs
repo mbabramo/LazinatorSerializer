@@ -10,6 +10,8 @@ namespace Lazinator.Buffers
 {
     public partial class MemoryRangeCollection : MemoryBlockCollection, IMemoryRangeCollection
     {
+        // DEBUG -- is "recycle" still needed, now that we always create a new one in BufferWriter?
+
         public MemoryRangeCollection(LazinatorMemory lazinatorMemory, bool recycle) : this(lazinatorMemory.EnumerateMemoryBlocks().ToList(), recycle)
         {
         }
@@ -22,6 +24,11 @@ namespace Lazinator.Buffers
         {
             if (recycle)
                 Ranges = new List<MemoryRangeByBlockID>();
+        }
+
+        public MemoryRangeCollection(List<MemoryBlock> memoryBlocks, List<MemoryRangeByBlockID> memoryRanges) : base(memoryBlocks)
+        {
+            SetRanges(memoryRanges);
         }
 
         public void SetFromLazinatorMemory(LazinatorMemory lazinatorMemory)
@@ -43,6 +50,8 @@ namespace Lazinator.Buffers
             get; 
             set; 
         }
+
+        public override long LengthReferenced => PatchesTotalLength;
 
         /// <summary>
         /// The number of bytes of active memory that have already been referenced by ranges.

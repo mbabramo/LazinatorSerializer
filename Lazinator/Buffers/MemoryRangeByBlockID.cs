@@ -30,10 +30,6 @@ namespace Lazinator.Buffers
 
         public MemoryRangeByBlockID(int memoryBlockIntID, int offsetIntoMemoryBlock, int length)
         {
-            if (memoryBlockIntID == 2)
-            {
-                var DEBUG = 0;
-            }
             this.MemoryBlockIntID = memoryBlockIntID;
             this.OffsetIntoMemoryBlock = offsetIntoMemoryBlock;
             this.Length = length;

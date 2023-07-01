@@ -153,7 +153,7 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void MemorySegmentCollectionSubranges()
+        public void MemoryRangeCollectionSubranges()
         {
             // Note that the LoadingInfos should be irrelevant. The blocks consist of the memory as loaded.
             MemoryRangeCollection c = new MemoryRangeCollection(new List<MemoryBlock>
@@ -162,14 +162,14 @@ namespace LazinatorTests.Tests
                 new MemoryBlock(new ReadOnlyBytes(new byte[] { 200, 200, 4, 5, 6, 200, 200 })) { LoadingInfo = new MemoryBlockLoadingInfo(new MemoryBlockID(1), 7) },
                 new MemoryBlock(new ReadOnlyBytes(new byte[] { 7, 8, 9, 200 }))  { LoadingInfo = new MemoryBlockLoadingInfo(new MemoryBlockID(2), 5 ) },
                 new MemoryBlock(new ReadOnlyBytes(new byte[] { 10, 11, 12 })) { LoadingInfo = new MemoryBlockLoadingInfo(new MemoryBlockID(3), 3) },
-            }, true);
-            c.Ranges = new List<MemoryRangeByBlockID>()
+            }, new List<MemoryRangeByBlockID>()
             {
                 new MemoryRangeByBlockID(new MemoryBlockID(2), 1, 2), // 8, 9
                 new MemoryRangeByBlockID(new MemoryBlockID(2), 0, 3), // 7, 8, 9
                 new MemoryRangeByBlockID(new MemoryBlockID(3), 0, 2), // 10, 11
                 new MemoryRangeByBlockID(new MemoryBlockID(1), 1, 1) // 200
-            };
+            });
+            //DEBUGc.Length = c.Ranges.Sum(x => (long)x.Length);
             LazinatorMemory memory = new LazinatorMemory(c);
             var result = memory.GetConsolidatedMemory().ToArray();
             result.Should().BeEquivalentTo(new byte[] { 8, 9, 7, 8, 9, 10, 11, 200 });
