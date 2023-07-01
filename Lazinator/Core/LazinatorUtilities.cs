@@ -460,7 +460,7 @@ namespace Lazinator.Core
             if (childStorage.IsEmpty)
                 childStorage = getChildSliceFn(); // this is the storage holding the child, which has never been accessed
             if (considerWriteReferenceOnly && !childStorage.IsEmpty && childStorage.Length > serializeDiffsThreshold)
-                writer.InsertReferenceToCompletedMemory(childStorage.MemoryRangeIndex, childStorage.OffsetIntoMemoryBlock, childStorage.Length);
+                writer.InsertReferenceToPreviousVersion(childStorage.MemoryRangeIndex, childStorage.OffsetIntoMemoryBlock, childStorage.Length);
             else
                 childStorage.WriteToBuffer(ref writer);
             return childStorage;
@@ -479,7 +479,7 @@ namespace Lazinator.Core
             if (childStorage.IsEmpty)
                 childStorage = await getChildSliceFn(); // this is the storage holding the child, which has never been accessed
             if (writeReferenceOnly && !childStorage.IsEmpty)
-                writer.InsertReferenceToCompletedMemory(childStorage.MemoryRangeIndex, childStorage.OffsetIntoMemoryBlock, childStorage.Length);
+                writer.InsertReferenceToPreviousVersion(childStorage.MemoryRangeIndex, childStorage.OffsetIntoMemoryBlock, childStorage.Length);
             else
                 await childStorage.WriteToBufferAsync(writer);
             return childStorage;

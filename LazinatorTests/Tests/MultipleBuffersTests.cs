@@ -26,6 +26,47 @@ namespace LazinatorTests.Tests
     public class MultipleBuffersTests : SerializationDeserializationTestBase
     {
         [Fact]
+        public void MoveActiveToCompletedMemoryWorks()
+        {
+            BufferWriter w = new BufferWriter(1024);
+            w.Write((byte)1);
+            w.Write((byte)2);
+            w.LazinatorMemory.EnumerateBytes().ToList().Should().Equal(new byte[] { 1, 2 });
+            w.MoveActiveToCompletedMemory();
+            w.Write((byte)3);
+            w.Write((byte)4);
+            w.LazinatorMemory.EnumerateBytes().ToList().Should().Equal(new byte[] { 1, 2, 3, 4 });
+            w.Write((byte)5);
+            w.Write((byte)6);
+            w.LazinatorMemory.EnumerateBytes().ToList().Should().Equal(new byte[] { 1, 2, 3, 4, 5, 6 });
+            bool isMemoryRangeCollection = w.LazinatorMemory.MultipleMemoryBlocks is MemoryRangeCollection;
+            isMemoryRangeCollection.Should().BeFalse();
+        }
+
+        [Fact]
+        public void BufferWriterWithPreviousVersionWorks_MemoryBlockCollectionWithSingleBlock()
+        {
+            List<byte> GetBytesList(BufferWriter bw) => bw.LazinatorMemory.EnumerateBytes().ToList();
+            
+            BufferWriter w = new BufferWriter(1024);
+            for (byte i = 0; i < 3; i++)
+                w.Write(i);
+            LazinatorMemory previousVersion = w.LazinatorMemory;
+            BufferWriter w2 = new BufferWriter(1024, previousVersion);
+            for (byte i = 10; i < 13; i++)
+                w2.Write(i);
+            GetBytesList(w2).Should().Equal(new byte[] { 10, 11, 12 });
+            GetBytesList(w2).Should().Equal(new byte[] { 10, 11, 12 }); // enumeration should have no effect
+            w2.InsertReferenceToPreviousVersion(0, 1, 2);
+            GetBytesList(w2).Should().Equal(new byte[] { 10, 11, 12, 1, 2 });
+            w2.InsertReferenceToPreviousVersion(0, 2, 1);
+            GetBytesList(w2).Should().Equal(new byte[] { 10, 11, 12, 1, 2, 2 });
+            w2.Write((byte) 20);
+            var DEBUG = w2.LazinatorMemory;
+            GetBytesList(w2).Should().Equal(new byte[] { 10, 11, 12, 1, 2, 2, 20 });
+        }
+
+        [Fact]
         public void SplittableEntitiesWork()
         {
             Example e = GetTypicalExample();
@@ -489,10 +530,10 @@ namespace LazinatorTests.Tests
             BufferWriter writer = new BufferWriter(0, memory2);
             writer.Write((byte)11);
             writer.Write((byte)12);
-            writer.InsertReferenceToCompletedMemory(2, 1, 2); // 8, 9
-            writer.InsertReferenceToCompletedMemory(0, 0, 3); // 1, 2, 3
-            writer.InsertReferenceToCompletedMemory(1, 1, 1); // 5
-            writer.InsertReferenceToCompletedMemory(2, 0, 2); // 7, 8
+            writer.InsertReferenceToPreviousVersion(2, 1, 2); // 8, 9
+            writer.InsertReferenceToPreviousVersion(0, 0, 3); // 1, 2, 3
+            writer.InsertReferenceToPreviousVersion(1, 1, 1); // 5
+            writer.InsertReferenceToPreviousVersion(2, 0, 2); // 7, 8
             writer.Write((byte)13);
             var memory3 = writer.LazinatorMemory;
             var memory3List = memory3.GetConsolidatedMemory().ToArray().ToList();

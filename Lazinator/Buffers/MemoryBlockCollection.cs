@@ -141,6 +141,12 @@ namespace Lazinator.Buffers
             return d.ContainsKey(memoryBlockID) ? d[memoryBlockID] : -1;
         }
 
+        public bool ContainsMemoryBlockID(MemoryBlockID memoryBlockID)
+        {
+            var d = GetMemoryBlockIndicesFromIDs();
+            return d.ContainsKey(memoryBlockID);
+        }
+
         public MemoryBlock GetMemoryBlockByBlockID(MemoryBlockID memoryBlockID)
         {
             var d = GetMemoryBlockIndicesFromIDs();

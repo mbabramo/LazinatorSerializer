@@ -10,20 +10,17 @@ namespace Lazinator.Buffers
 {
     public partial class MemoryRangeCollection : MemoryBlockCollection, IMemoryRangeCollection
     {
-        // DEBUG -- is "recycle" still needed, now that we always create a new one in BufferWriter?
-
-        public MemoryRangeCollection(LazinatorMemory lazinatorMemory, bool recycle) : this(lazinatorMemory.EnumerateMemoryBlocks().ToList(), recycle)
+        
+        public MemoryRangeCollection(MemoryBlock block, bool initiatePatching) : this(new List<MemoryBlock> { block }, initiatePatching)
         {
         }
 
-        public MemoryRangeCollection(MemoryBlock block, bool recycle) : this(new List<MemoryBlock> { block }, recycle)
+        public MemoryRangeCollection(List<MemoryBlock> memoryBlocks, bool initiatePatching) : base(memoryBlocks)
         {
-        }
-
-        public MemoryRangeCollection(List<MemoryBlock> memoryBlocks, bool recycle) : base(memoryBlocks)
-        {
-            if (recycle)
-                Ranges = new List<MemoryRangeByBlockID>();
+            if (initiatePatching)
+            {
+                Ranges = new List<MemoryRangeByBlockID>(); // We don't actually create the ranges yet
+            }
         }
 
         public MemoryRangeCollection(List<MemoryBlock> memoryBlocks, List<MemoryRangeByBlockID> memoryRanges) : base(memoryBlocks)
@@ -43,6 +40,9 @@ namespace Lazinator.Buffers
             PatchesTotalLength = Ranges.Sum(x => (long) x.Length);
         }
 
+        /// <summary>
+        /// Whether this MemoryRangeCollection uses patching (i.e., includes a list of MemoryRanges). If false, this is functioning just like a MemoryBlockCollection, but one that can be converted to a MemoryRangeCollection if necessary.
+        /// </summary>
         public bool Patching => Ranges != null;
 
         internal long PatchesTotalLength 
@@ -64,10 +64,12 @@ namespace Lazinator.Buffers
         /// </summary>
         /// <param name="memoryBlockReferences"></param>
         /// <param name="newRange"></param>
-        public void ExtendRanges(MemoryRangeByBlockID range, bool extendEarlierReferencesForSameBlock)
+        public void AddRange(MemoryRangeByBlockID range, bool extendEarlierReferencesForSameBlock)
         {
             if (!Patching)
-                throw new Exception("Internal error."); // DEBUG -- should be able to delete.
+            {
+                SetRanges(EnumerateMemoryBlocks().Select(x => new MemoryRangeByBlockID(x.MemoryBlockID, 0, x.Length)).ToList());
+            }
             if (Ranges.Any())
             {
                 if (extendEarlierReferencesForSameBlock)
@@ -80,6 +82,7 @@ namespace Lazinator.Buffers
                             MemoryBlock existingBlock = GetMemoryBlockByBlockID(rangeI.GetMemoryBlockID());
                             if (existingBlock != null)
                             {
+                                throw new Exception("DEBUGCHECK"); // is this really correct?
                                 existingBlock.LoadingInfo.MemoryBlockLength = range.Length;
                             }
                         }
@@ -102,24 +105,24 @@ namespace Lazinator.Buffers
         /// Adds new ranges. The list is consolidated to avoid having consecutive entries for contiguous ranges.
         /// </summary>
         /// <param name="newRanges"></param>
-        public void ExtendRanges(IEnumerable<MemoryRangeByBlockID> newRanges)
+        public void AddRanges(IEnumerable<MemoryRangeByBlockID> newRanges)
         {
             foreach (var newRange in newRanges)
-                ExtendRanges(newRange, false);
+                AddRange(newRange, false);
         }
 
 
         /// <summary>
-        /// Writes from CompletedMemory. Instead of copying the bytes, it simply adds one or more ranges referring to where those bytes are in the overall sets of bytes.
+        /// Writes from previous version. Instead of copying the bytes, it simply adds one or more ranges referring to where those bytes are in the overall sets of bytes.
         /// </summary>
         /// <param name="rangeIndex">The index of the memory block</param>
         /// <param name="startPosition">The position of the first byte of the memory within the indexed memory block</param>
         /// <param name="numBytes"></param>
-        internal void InsertReferenceToCompletedMemory(MemoryRangeCollection completedMemoryRangeCollection, int rangeIndex, int startPosition, long numBytes, int activeMemoryPosition)
+        internal void InsertReferenceToPreviousVersion(MemoryBlockCollection previousVersion, int rangeIndex, int startPosition, long numBytes, int activeMemoryPosition)
         {
             RecordLastActiveMemoryBlockReference(activeMemoryPosition);
-            IEnumerable<MemoryRangeByBlockID> rangesToAdd = completedMemoryRangeCollection.EnumerateMemoryRangesByBlockID(rangeIndex, startPosition, numBytes);
-            ExtendRanges(rangesToAdd);
+            IEnumerable<MemoryRangeByBlockID> rangesToAdd = previousVersion.EnumerateMemoryRangesByBlockID(rangeIndex, startPosition, numBytes);
+            AddRanges(rangesToAdd);
             // Debug.WriteLine($"Reference to completed memory added. References are {String.Join(", ", RecycledMemoryBlockReferences)}");
         }
 
@@ -131,7 +134,7 @@ namespace Lazinator.Buffers
             if (activeMemoryPosition > NumActiveMemoryBytesReferenced)
             {
                 MemoryBlockID activeMemoryBlockID = GetNextMemoryBlockID();
-                ExtendRanges(new MemoryRangeByBlockID(activeMemoryBlockID, NumActiveMemoryBytesReferenced, activeMemoryPosition - NumActiveMemoryBytesReferenced), true);
+                AddRange(new MemoryRangeByBlockID(activeMemoryBlockID, NumActiveMemoryBytesReferenced, activeMemoryPosition - NumActiveMemoryBytesReferenced), true);
                 NumActiveMemoryBytesReferenced = activeMemoryPosition;
             }
         }
@@ -141,8 +144,17 @@ namespace Lazinator.Buffers
             base.AppendMemoryBlock(memoryBlock);
             if (Ranges != null)
             {
-                Ranges.Add(new MemoryRangeByBlockID(memoryBlock.MemoryBlockID, 0, memoryBlock.Length));
-                PatchesTotalLength += memoryBlock.Length;
+                // See if we have already been adding ranges referring to this memory block.
+                int numBytesAlreadyReferredTo = 0;
+                if (Ranges.Any())
+                {
+                    var previousRange = Ranges.Last();
+                    if (previousRange.MemoryBlockIntID == memoryBlock.MemoryBlockID.GetIntID())
+                        numBytesAlreadyReferredTo = previousRange.Length;
+                }
+                // Now add a range referring to the memory block or what hasn't been referred to yet
+                if (numBytesAlreadyReferredTo < memoryBlock.Length)
+                    AddRange(new MemoryRangeByBlockID(memoryBlock.MemoryBlockID, numBytesAlreadyReferredTo, memoryBlock.Length - numBytesAlreadyReferredTo), false);
             }
         }
 

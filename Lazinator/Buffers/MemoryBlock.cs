@@ -37,7 +37,6 @@ namespace Lazinator.Buffers
 
         private int _Length = 0;
         public int Length { get => _Length; set => _Length = value; }
-        public int MemoryBlockLength => LoadingInfo.MemoryBlockLength;
 
         public bool IsLoaded => MemoryAsLoaded != null; // DEBUG -- when loading later
 

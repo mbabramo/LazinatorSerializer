@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Buffers;
 using Lazinator.Core;
 using Newtonsoft.Json.Serialization;
+using System.Runtime.CompilerServices;
 
 namespace Lazinator.Buffers
 {
@@ -44,15 +45,30 @@ namespace Lazinator.Buffers
         public MemoryRangeCollection MemoryRangeCollection { get; set; }
 
         /// <summary>
-        /// When a BufferWriter is based on completed memory, it will be stored here,
+        /// When a BufferWriter is based on a previous version, it will be stored here,
         /// so that we can begin writing on a clean slate, while still being able
         /// to refer to completed memory.
         /// </summary>
-        public MemoryRangeCollection CompletedMemoryRangeCollection { get; set; }
+        public MemoryBlockCollection PreviousVersion { get; set; }
 
         private bool Patching => MemoryRangeCollection?.Patching ?? false;
 
         internal int NumActiveMemoryBytesReferenced => MemoryRangeCollection?.NumActiveMemoryBytesReferenced ?? 0;
+        
+        MemoryBlockID? NextMemoryBlockID = null;
+        
+        MemoryBlockID GetNextMemoryBlockID()
+        {
+            if (NextMemoryBlockID is MemoryBlockID memoryBlockID)
+                return memoryBlockID;
+            else
+            {
+                if (MemoryRangeCollection == null)
+                    throw new Exception("Internal error.");
+                NextMemoryBlockID = MemoryRangeCollection.GetNextMemoryBlockID();
+                return NextMemoryBlockID.Value;
+            }
+        }
 
         #region Construction and initialization
 
@@ -64,17 +80,25 @@ namespace Lazinator.Buffers
             ActiveMemory.UsedBytesInCurrentBuffer = 0;
             _LengthsPosition = (0, 0);
             MemoryRangeCollection = null;
-            CompletedMemoryRangeCollection = null;
+            PreviousVersion = null;
         }
 
-        public BufferWriter(int minimumSize, LazinatorMemory completedMemory)
+        public BufferWriter(int minimumSize, LazinatorMemory previousVersion)
         {
             if (minimumSize == 0)
                 minimumSize = ExpandableBytes.DefaultMinBufferSize;
             ActiveMemory = new ExpandableBytes(minimumSize);
             ActiveMemory.UsedBytesInCurrentBuffer = 0;
             _LengthsPosition = (0, 0);
-            CompletedMemoryRangeCollection = new MemoryRangeCollection(completedMemory, false /* keep ranges */);
+            if (previousVersion.MultipleMemoryBlocks == null)
+            {
+                if (previousVersion.SingleMemoryBlock != null)
+                    PreviousVersion = new MemoryBlockCollection(new List<MemoryBlock>() { previousVersion.SingleMemoryBlock });
+                else
+                    PreviousVersion = default;
+            }
+            else
+                PreviousVersion = previousVersion.MultipleMemoryBlocks.DeepCopy();
             MemoryRangeCollection = null;
         }
 
@@ -106,7 +130,7 @@ namespace Lazinator.Buffers
                     if (ActiveMemoryPosition == 0)
                         return MemoryRangeCollection.ToLazinatorMemory();
                     var withAppended = MemoryRangeCollection.DeepCopy();
-                    withAppended.AppendMemoryBlock(new MemoryBlock(ActiveMemory.ReadOnlyBytes, new MemoryBlockLoadingInfo(MemoryRangeCollection.GetNextMemoryBlockID(), ActiveMemoryPosition), false));
+                    withAppended.AppendMemoryBlock(new MemoryBlock(ActiveMemory.ReadOnlyBytes, new MemoryBlockLoadingInfo(withAppended.GetNextMemoryBlockID(), ActiveMemoryPosition), false));
                     return withAppended.ToLazinatorMemory();
                 }
                 return new LazinatorMemory(new MemoryBlock(ActiveMemory.ReadOnlyBytes), 0, ActiveMemoryPosition);
@@ -248,20 +272,22 @@ namespace Lazinator.Buffers
         {
             if (ActiveMemoryPosition - NumActiveMemoryBytesReferenced >= options.NextBufferThreshold)
             {
-                // DEBUG -- commented out code not needed?
-                //if (options.SerializeDiffs)
-                //    RecordLastActiveMemoryBlockReferenceIfAny();
                 MoveActiveToCompletedMemory((int)(options.NextBufferThreshold * 1.2));
             }
         }
 
-        public void InsertReferenceToCompletedMemory(int memoryRangeIndex, int startPosition, long numBytes)
+        public void InsertReferenceToPreviousVersion(int memoryRangeIndex, int startPosition, long numBytes)
         {
-            MemoryRangeCollection?.InsertReferenceToCompletedMemory(CompletedMemoryRangeCollection, memoryRangeIndex, startPosition, numBytes, ActiveMemoryPosition);
+            if (MemoryRangeCollection == null)
+            {
+                MemoryRangeCollection = new MemoryRangeCollection(PreviousVersion.EnumerateMemoryBlocks().ToList(), true); // load all the memory block from previous version into the new memory range collection, and prepare to add references
+                MoveActiveToCompletedMemory();
+            }
+            MemoryRangeCollection.InsertReferenceToPreviousVersion(PreviousVersion, memoryRangeIndex, startPosition, numBytes, ActiveMemoryPosition);
         }
 
         /// <summary>
-        /// Extends the bytes range list to include the portion of active memory that has not yet been referred to. 
+        /// Extends the bytes range list to include the portion of active memory (which has not been added to completed memory yet) that has not yet been referred to. 
         /// </summary>
         internal void RecordLastActiveMemoryBlockReferenceIfAny()
         {
@@ -276,11 +302,22 @@ namespace Lazinator.Buffers
         {
             if (ActiveMemoryPosition > 0)
             {
-                var block = new MemoryBlock(ActiveMemory.ReadWriteBytes, new MemoryBlockLoadingInfo(MemoryRangeCollection?.GetNextMemoryBlockID() ?? new MemoryBlockID(0), ActiveMemoryPosition), false);
-                if (MemoryRangeCollection == null)
-                    MemoryRangeCollection = new MemoryRangeCollection(block, false);
-                else
-                    MemoryRangeCollection.AppendMemoryBlock(block);
+                bool memoryBlockAlreadyIncluded = false;
+                if (MemoryRangeCollection != null)
+                {
+                    memoryBlockAlreadyIncluded = MemoryRangeCollection.ContainsMemoryBlockID(GetNextMemoryBlockID());
+                }
+                if (!memoryBlockAlreadyIncluded)
+                {
+                    var block = new MemoryBlock(ActiveMemory.ReadWriteBytes, new MemoryBlockLoadingInfo(GetNextMemoryBlockID(), ActiveMemoryPosition), false);
+                    if (MemoryRangeCollection == null)
+                        MemoryRangeCollection = new MemoryRangeCollection(block, false);
+                    else
+                    {
+                        MemoryRangeCollection.AppendMemoryBlock(block); // Append the memory block (and any part of the range of the block not already referred to)
+                    }
+                    NextMemoryBlockID = null;
+                }
                 ActiveMemory = new ExpandableBytes(minSizeofNewBuffer);
                 ActiveMemoryPosition = 0;
                 MemoryRangeCollection.NumActiveMemoryBytesReferenced = 0;
@@ -292,7 +329,6 @@ namespace Lazinator.Buffers
             if (MemoryRangeCollection is null)
                 throw new Exception("No LazinatorMemory to patch");
             MemoryRangeCollection.RecordLastActiveMemoryBlockReference(ActiveMemoryPosition);
-            MemoryBlockID activeMemoryBlockID = MemoryRangeCollection.GetNextMemoryBlockID();
             int activeLength = NumActiveMemoryBytesReferenced;
             if (activeLength > 0)
             {
