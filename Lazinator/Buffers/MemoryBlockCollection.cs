@@ -96,6 +96,8 @@ namespace Lazinator.Buffers
         public virtual MemoryRange MemoryRangeAtIndex(int i)
         {
             var block = MemoryBlockAtIndex(i);
+            if (block == null)
+                return default;
             return new MemoryRange(block, new MemoryBlockSlice(0, block.Length));
         }
 
@@ -109,7 +111,9 @@ namespace Lazinator.Buffers
         {
             for (int i = 0; i < NumMemoryRanges; i++)
             {
-                yield return MemoryRangeAtIndex(i);
+                var result = MemoryRangeAtIndex(i);
+                if (result.MemoryBlock != null)
+                    yield return result;
             }
         }
 
@@ -190,6 +194,8 @@ namespace Lazinator.Buffers
         {
             if (MemoryBlocks == null)
                 MemoryBlocks = MemoryBlocksLoadingInfo.Select(x => (MemoryBlock)null).ToList();
+            if (i >= MemoryBlocks.Count)
+                return null;
             if (MemoryBlocks[i] == null)
                 MemoryBlocks[i] = CreateMemoryBlockForIndex(i);
             var block = MemoryBlocks[i];

@@ -51,7 +51,7 @@ namespace Lazinator.Buffers
             set; 
         }
 
-        public override long LengthReferenced => PatchesTotalLength;
+        public override long LengthReferenced => Patching ? PatchesTotalLength : base.LengthReferenced;
 
         /// <summary>
         /// The number of bytes of active memory that have already been referenced by ranges.

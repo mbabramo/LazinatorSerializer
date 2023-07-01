@@ -62,7 +62,7 @@ namespace Lazinator.Buffers
                 minimumSize = ExpandableBytes.DefaultMinBufferSize;
             ActiveMemory = new ExpandableBytes(minimumSize);
             ActiveMemory.UsedBytesInCurrentBuffer = 0;
-            LengthsPosition = (0, 0);
+            _LengthsPosition = (0, 0);
             MemoryRangeCollection = null;
             CompletedMemoryRangeCollection = null;
         }
@@ -73,7 +73,7 @@ namespace Lazinator.Buffers
                 minimumSize = ExpandableBytes.DefaultMinBufferSize;
             ActiveMemory = new ExpandableBytes(minimumSize);
             ActiveMemory.UsedBytesInCurrentBuffer = 0;
-            LengthsPosition = (0, 0);
+            _LengthsPosition = (0, 0);
             CompletedMemoryRangeCollection = new MemoryRangeCollection(completedMemory, false /* keep ranges */);
             MemoryRangeCollection = null;
         }
@@ -184,7 +184,12 @@ namespace Lazinator.Buffers
             }
         }
 
-        private (int index, int offset) LengthsPosition;
+        private (int index, int offset) _LengthsPosition;
+        private (int index, int offset) LengthsPosition
+        {
+            get => _LengthsPosition;
+            set => _LengthsPosition = value;
+        }
 
         Span<byte> ActiveSpan => ActiveMemory == null ? new Span<byte>() : ActiveMemory.CurrentBuffer.Memory.Span;
 
