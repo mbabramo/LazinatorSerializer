@@ -231,7 +231,7 @@ namespace Lazinator.Collections.Tree
         {
             int totalChildrenBytes = 0;
             totalChildrenBytes = base.ConvertFromBytesForChildProperties(span, OriginalIncludeChildrenMode, serializedVersionNumber, indexOfFirstChild, ref bytesSoFar);
-            TabbedText.WriteLine($"Reading length of Locations at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
+            TabbedText.WriteLine($"Locations: Length is at {bytesSoFar}; start location is {indexOfFirstChild + totalChildrenBytes}"); 
             _Locations_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {

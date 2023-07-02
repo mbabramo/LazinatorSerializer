@@ -375,10 +375,10 @@ namespace Lazinator.Collections.ByteSpan
         protected virtual int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
         {
             int totalChildrenBytes = 0;
-            TabbedText.WriteLine($"Reading length of ReadOnly at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
+            TabbedText.WriteLine($"ReadOnly: Length is at {bytesSoFar}; start location is {indexOfFirstChild + totalChildrenBytes}"); 
             _ReadOnly_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            TabbedText.WriteLine($"Reading length of ReadOrWrite at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
+            TabbedText.WriteLine($"ReadOrWrite: Length is at {bytesSoFar}; start location is {indexOfFirstChild + totalChildrenBytes}"); 
             _ReadOrWrite_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             _LazinatorByteSpan_EndByteIndex = indexOfFirstChild + totalChildrenBytes;

@@ -369,10 +369,10 @@ namespace Lazinator.Collections
         protected virtual int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
         {
             int totalChildrenBytes = 0;
-            TabbedText.WriteLine($"Reading length of MainListSerialized at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
+            TabbedText.WriteLine($"MainListSerialized: Length is at {bytesSoFar}; start location is {indexOfFirstChild + totalChildrenBytes}"); 
             _MainListSerialized_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            TabbedText.WriteLine($"Reading length of Offsets at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
+            TabbedText.WriteLine($"Offsets: Length is at {bytesSoFar}; start location is {indexOfFirstChild + totalChildrenBytes}"); 
             _Offsets_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {

@@ -491,13 +491,13 @@ namespace Lazinator.Collections.Dictionary
         protected virtual int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
         {
             int totalChildrenBytes = 0;
-            TabbedText.WriteLine($"Reading length of Keys at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
+            TabbedText.WriteLine($"Keys: Length is at {bytesSoFar}; start location is {indexOfFirstChild + totalChildrenBytes}"); 
             _Keys_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            TabbedText.WriteLine($"Reading length of Values at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
+            TabbedText.WriteLine($"Values: Length is at {bytesSoFar}; start location is {indexOfFirstChild + totalChildrenBytes}"); 
             _Values_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {

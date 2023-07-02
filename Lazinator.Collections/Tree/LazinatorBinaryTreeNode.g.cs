@@ -865,19 +865,19 @@ namespace Lazinator.Collections.Tree
         protected virtual int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
         {
             int totalChildrenBytes = 0;
-            TabbedText.WriteLine($"Reading length of Data at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
+            TabbedText.WriteLine($"Data: Length is at {bytesSoFar}; start location is {indexOfFirstChild + totalChildrenBytes}"); 
             _Data_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            TabbedText.WriteLine($"Reading length of LeftNode at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
+            TabbedText.WriteLine($"LeftNode: Length is at {bytesSoFar}; start location is {indexOfFirstChild + totalChildrenBytes}"); 
             _LeftNode_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            TabbedText.WriteLine($"Reading length of RightNode at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
+            TabbedText.WriteLine($"RightNode: Length is at {bytesSoFar}; start location is {indexOfFirstChild + totalChildrenBytes}"); 
             _RightNode_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {

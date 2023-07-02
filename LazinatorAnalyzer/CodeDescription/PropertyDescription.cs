@@ -1566,7 +1566,7 @@ namespace Lazinator.CodeDescription
             {
                 if (includeTracingCode)
                 {
-                    sb.AppendLine($"TabbedText.WriteLine($\"Reading length of {PropertyName} at byte location {{bytesSoFar}} to determine location: {{indexOfFirstChild + totalChildrenBytes}}\"); ");
+                    sb.AppendLine($"TabbedText.WriteLine($\"{PropertyName}: Length is at {{bytesSoFar}}; start location is {{indexOfFirstChild + totalChildrenBytes}}\"); ");
                 }
                 sb.Append($@"{BackingFieldByteIndex} = indexOfFirstChild + totalChildrenBytes;{skipCheckString}
                         ");

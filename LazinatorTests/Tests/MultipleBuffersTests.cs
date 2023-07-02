@@ -562,16 +562,16 @@ namespace LazinatorTests.Tests
                 var DEBUG4 = BinaryTree.ToList();
 
                 LazinatorSerializationOptions options = neverIncludeReferenceToPreviousBuffer ? new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, int.MaxValue, int.MaxValue) : new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20, 5);
-                LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(options);
+              LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(options);
                 //LazinatorSerializationOptions options = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false);
                 //BinaryTree.SerializeLazinator();
                 //LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(options);
 
                 Debug.WriteLine("CURRENT STATE: " + String.Join(",", BinaryTree.ToList())); // DEBUG
-                var DEBUG_ShouldBeCopy = new LazinatorBinaryTree<WDouble>(multipleBufferResult);
-                var DEBUG_AsList = DEBUG_ShouldBeCopy.ToList();
-                var DEBUG6 = BinaryTree.Root.LeftNode;
-                var DEBUG7 = DEBUG_ShouldBeCopy.Root.LeftNode;
+                //var DEBUG_ShouldBeCopy = new LazinatorBinaryTree<WDouble>(multipleBufferResult);
+                //var DEBUG_AsList = DEBUG_ShouldBeCopy.ToList();
+                //var DEBUG6 = BinaryTree.Root.LeftNode;
+                //var DEBUG7 = DEBUG_ShouldBeCopy.Root.LeftNode;
 
                 // DEBUG
                 Debug.WriteLine("Multiple buffer result:");
