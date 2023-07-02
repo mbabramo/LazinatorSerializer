@@ -40,11 +40,9 @@ namespace Lazinator.Collections.Tree
         protected override int _OverallEndByteIndex => _LazinatorLocationAwareTree_T_EndByteIndex;
         
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected LazinatorDictionary<T, LazinatorList<WInt32>> _Locations;
         public virtual LazinatorDictionary<T, LazinatorList<WInt32>> Locations
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_Locations_Accessed)
@@ -53,7 +51,6 @@ namespace Lazinator.Collections.Tree
                 } 
                 return _Locations;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (_Locations != null)
@@ -71,7 +68,6 @@ namespace Lazinator.Collections.Tree
                 _Locations_Accessed = true;
             }
         }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _Locations_Accessed;
         private void LazinateLocations()
         {
@@ -204,16 +200,12 @@ namespace Lazinator.Collections.Tree
         
         /* Conversion */
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorUniqueID => 218;
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override bool ContainsOpenGenericParameters => true;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<LazinatorLocationAwareTree<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(218, new Type[] { typeof(T) }));
         
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorObjectVersion { get; set; } = 0;
         
         

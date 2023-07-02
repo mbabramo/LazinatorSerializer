@@ -567,8 +567,11 @@ namespace LazinatorTests.Tests
                 //BinaryTree.SerializeLazinator();
                 //LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(options);
 
-                var DEBUG2 = new LazinatorBinaryTree<WDouble>(multipleBufferResult);
-                var DEBUG3 = DEBUG2.ToList();
+                Debug.WriteLine("CURRENT STATE: " + String.Join(",", BinaryTree.ToList())); // DEBUG
+                var DEBUG_ShouldBeCopy = new LazinatorBinaryTree<WDouble>(multipleBufferResult);
+                var DEBUG_AsList = DEBUG_ShouldBeCopy.ToList();
+                var DEBUG6 = BinaryTree.Root.LeftNode;
+                var DEBUG7 = DEBUG_ShouldBeCopy.Root.LeftNode;
 
                 // DEBUG
                 Debug.WriteLine("Multiple buffer result:");

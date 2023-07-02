@@ -32,16 +32,13 @@ namespace Lazinator.Buffers
         
         
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected long _LoadingOffset;
         public long LoadingOffset
         {
-            [DebuggerStepThrough]
             get
             {
                 return _LoadingOffset;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -128,16 +125,12 @@ namespace Lazinator.Buffers
         
         /* Conversion */
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorUniqueID => 46;
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override bool ContainsOpenGenericParameters => false;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override LazinatorGenericIDType LazinatorGenericID => default;
         
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorObjectVersion { get; set; } = 0;
         
         
