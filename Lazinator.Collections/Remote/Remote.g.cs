@@ -498,17 +498,20 @@ namespace Lazinator.Collections.Remote
         
         protected virtual void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
+            TabbedText.WriteLine($"Reading StoreLocally at byte location {bytesSoFar}"); 
             _StoreLocally = span.ToBoolean(ref bytesSoFar);
         }
         
         protected virtual int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
         {
             int totalChildrenBytes = 0;
+            TabbedText.WriteLine($"Reading length of Key at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
             _Key_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
+            TabbedText.WriteLine($"Reading length of Local at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
             _Local_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -520,6 +523,7 @@ namespace Lazinator.Collections.Remote
         
         public virtual void SerializeToExistingBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options)
         {
+            TabbedText.WriteLine($"Initiating serialization of Lazinator.Collections.Remote.Remote<TKey, TValue> ");
             int startPosition = writer.ActiveMemoryPosition;
             WritePropertiesIntoBuffer(ref writer, options, true);
             if (options.UpdateStoredBuffer)
@@ -574,6 +578,9 @@ namespace Lazinator.Collections.Remote
         protected virtual void WritePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
             int startPosition = writer.ActiveMemoryPosition;
+            TabbedText.WriteLine($"Writing properties for Lazinator.Collections.Remote.Remote<TKey, TValue> starting at {writer.ActiveMemoryPosition}.");
+            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {options.IncludeChildrenMode} True");
+            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
             {
                 if (!ContainsOpenGenericParameters)
@@ -598,14 +605,19 @@ namespace Lazinator.Collections.Remote
             }
             
             var previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Leaving {lengthForLengths} bytes to store lengths of child objects");
             WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of Remote<TKey, TValue>) ");
             
         }
         
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, StoreLocally value {_StoreLocally}");
+            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteBool(ref writer, _StoreLocally);
+            TabbedText.Tabs--;
         }
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
         {
@@ -615,6 +627,8 @@ namespace Lazinator.Collections.Remote
             }
             int startOfChildPosition = 0;
             int lengthValue = 0;
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Key value {_Key}");
+            TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -635,6 +649,9 @@ namespace Lazinator.Collections.Remote
                 _Key_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Local value {_Local}");
+            TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -655,6 +672,7 @@ namespace Lazinator.Collections.Remote
                 _Local_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
+            TabbedText.Tabs--;
             if (options.UpdateStoredBuffer)
             {
                 _Remote_TKey_TValue_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;

@@ -231,6 +231,7 @@ namespace Lazinator.Collections.Tree
         {
             int totalChildrenBytes = 0;
             totalChildrenBytes = base.ConvertFromBytesForChildProperties(span, OriginalIncludeChildrenMode, serializedVersionNumber, indexOfFirstChild, ref bytesSoFar);
+            TabbedText.WriteLine($"Reading length of Locations at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
             _Locations_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -242,6 +243,7 @@ namespace Lazinator.Collections.Tree
         
         public override void SerializeToExistingBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options)
         {
+            TabbedText.WriteLine($"Initiating serialization of Lazinator.Collections.Tree.LazinatorLocationAwareTree<T> ");
             int startPosition = writer.ActiveMemoryPosition;
             WritePropertiesIntoBuffer(ref writer, options, true);
             if (options.UpdateStoredBuffer)
@@ -289,6 +291,9 @@ namespace Lazinator.Collections.Tree
         protected override void WritePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
             int startPosition = writer.ActiveMemoryPosition;
+            TabbedText.WriteLine($"Writing properties for Lazinator.Collections.Tree.LazinatorLocationAwareTree<T> starting at {writer.ActiveMemoryPosition}.");
+            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {options.IncludeChildrenMode} True");
+            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
             {
                 if (!ContainsOpenGenericParameters)
@@ -313,8 +318,10 @@ namespace Lazinator.Collections.Tree
             }
             
             var previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Leaving {lengthForLengths} bytes to store lengths of child objects");
             WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of LazinatorLocationAwareTree<T>) ");
             
         }
         
@@ -331,6 +338,8 @@ namespace Lazinator.Collections.Tree
             }
             int startOfChildPosition = 0;
             int lengthValue = 0;
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Locations (accessed? {_Locations_Accessed}) (backing var null? {_Locations == null}) ");
+            TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -351,6 +360,7 @@ namespace Lazinator.Collections.Tree
                 _Locations_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
+            TabbedText.Tabs--;
             if (options.UpdateStoredBuffer)
             {
                 _LazinatorLocationAwareTree_T_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;

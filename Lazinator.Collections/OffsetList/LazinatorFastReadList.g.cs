@@ -334,6 +334,7 @@ namespace Lazinator.Collections.OffsetList
         protected virtual int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
         {
             int totalChildrenBytes = 0;
+            TabbedText.WriteLine($"Reading length of ReadOnlyBytes at byte location {bytesSoFar} to determine location: {indexOfFirstChild + totalChildrenBytes}"); 
             _ReadOnlyBytes_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             _LazinatorFastReadList_T_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
@@ -342,6 +343,7 @@ namespace Lazinator.Collections.OffsetList
         
         public virtual void SerializeToExistingBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options)
         {
+            TabbedText.WriteLine($"Initiating serialization of Lazinator.Collections.OffsetList.LazinatorFastReadList<T> ");
             PreSerialization(options.VerifyCleanness, options.UpdateStoredBuffer);
             int startPosition = writer.ActiveMemoryPosition;
             WritePropertiesIntoBuffer(ref writer, options, true);
@@ -381,6 +383,9 @@ namespace Lazinator.Collections.OffsetList
         protected virtual void WritePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
             int startPosition = writer.ActiveMemoryPosition;
+            TabbedText.WriteLine($"Writing properties for Lazinator.Collections.OffsetList.LazinatorFastReadList<T> starting at {writer.ActiveMemoryPosition}.");
+            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} False, IncludeChildrenMode {options.IncludeChildrenMode} True");
+            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
             {
                 if (!ContainsOpenGenericParameters)
@@ -400,8 +405,10 @@ namespace Lazinator.Collections.OffsetList
             int lengthForLengths = 4;
             
             var previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Leaving {lengthForLengths} bytes to store lengths of child objects");
             WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of LazinatorFastReadList<T>) ");
             
         }
         
@@ -415,6 +422,8 @@ namespace Lazinator.Collections.OffsetList
                 options = options.WithoutSplittingPossible();
             }
             int startOfChildPosition = 0;
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, ReadOnlyBytes (accessed? {_ReadOnlyBytes_Accessed})");
+            TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             WriteNonLazinatorObject(
             nonLazinatorObject: _ReadOnlyBytes, isBelievedDirty: _ReadOnlyBytes_Accessed || (options.IncludeChildrenMode != OriginalIncludeChildrenMode),
@@ -429,6 +438,7 @@ namespace Lazinator.Collections.OffsetList
                 _ReadOnlyBytes_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
+            TabbedText.Tabs--;
             if (options.UpdateStoredBuffer)
             {
                 _LazinatorFastReadList_T_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;
