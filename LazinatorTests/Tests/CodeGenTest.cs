@@ -367,7 +367,7 @@ public class MyOtherClass
             };
         }
 
-        private static async Task CompleteGenerateCode(Type existingType, string project, string mainFolder, string subfolder, AdhocWorkspace ws, Action<LazinatorConfig> configModify = null)
+        private static async Task CompleteGenerateCode(Type existingType, string project, string mainFolder, string subfolder, AdhocWorkspace ws, Action<LazinatorConfig> modifyDefaultConfig = null)
         {
             if (mainFolder == "" && subfolder == "")
                 mainFolder = "/";
@@ -376,17 +376,19 @@ public class MyOtherClass
             string projectPath = ReadCodeFile.GetCodeBasePath(project);
             string name = ReadCodeFile.GetNameOfType(existingType);
             ReadCodeFile.GetCodeInFile(projectPath, mainFolder, subfolder, name, ".g.cs", out string codeBehindPath, out string codeBehind);
+            
             LazinatorConfig config = FindConfigFileStartingFromSubfolder(mainFolder, subfolder, projectPath);
             if (config == null)
                 config = new LazinatorConfig();
-            if (configModify != null)
+            // Note that if there is a config file already for the directory, that will take precedence over any modifications here
+            if (modifyDefaultConfig != null)
             {
-                configModify(config);
+                modifyDefaultConfig(config); 
             }
-            
             // uncomment to include tracing code
             // DEBUG
             config.IncludeTracingCode = true;
+
 
             var compilation = await AdhocWorkspaceManager.GetCompilation(ws);
             LazinatorCompilation lazinatorCompilation = new LazinatorCompilation(compilation, existingType, config);
