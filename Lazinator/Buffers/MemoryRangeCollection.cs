@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.CodeAnalysis.Host;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -171,24 +172,46 @@ namespace Lazinator.Buffers
         
         public override MemoryRange MemoryRangeAtIndex(int i)
         {
+            if (i == -1)
+                return default;
             if (Ranges == null)
                 return base.MemoryRangeAtIndex(i);
-            int memoryBlockIndex = GetMemoryBlockIndexFromMemoryRangeIndex(i);
-            if (memoryBlockIndex == -1)
+            if (i >= Ranges.Count)
                 return default;
+            InitializeMemoryBlocksInformationIfNecessary();
+            int memoryBlockIndex = GetMemoryBlockIndexFromMemoryRangeIndex(i);
             var range = Ranges[i];
+            if (memoryBlockIndex == -1)
+            {
+                MemoryBlockID memoryBlockID = range.GetMemoryBlockID();
+                var match = MemoryBlocksLoadingInfo.Select((loadingInfo, index) => (loadingInfo, index)).FirstOrDefault(x => x.loadingInfo.MemoryBlockID == memoryBlockID);
+                if (match.loadingInfo == null)
+                    return default;
+                memoryBlockIndex = match.index;
+            }
             var block = MemoryBlockAtIndex(memoryBlockIndex);
             return new MemoryRange(block, new MemoryBlockSlice(range.OffsetIntoMemoryBlock, range.Length)); 
         }
 
         public async override ValueTask<MemoryRange> MemoryRangeAtIndexAsync(int i)
         {
+            if (i == -1)
+                return default;
             if (Ranges == null)
                 return await base.MemoryRangeAtIndexAsync(i);
-            int memoryBlockIndex = GetMemoryBlockIndexFromMemoryRangeIndex(i);
-            if (memoryBlockIndex == -1)
+            if (i >= Ranges.Count)
                 return default;
+            InitializeMemoryBlocksInformationIfNecessary();
+            int memoryBlockIndex = GetMemoryBlockIndexFromMemoryRangeIndex(i);
             var range = Ranges[i];
+            if (memoryBlockIndex == -1)
+            {
+                MemoryBlockID memoryBlockID = range.GetMemoryBlockID();
+                var match = MemoryBlocksLoadingInfo.Select((loadingInfo, index) => (loadingInfo, index)).FirstOrDefault(x => x.loadingInfo.MemoryBlockID == memoryBlockID);
+                if (match.loadingInfo == null)
+                    return default;
+                memoryBlockIndex = match.index;
+            }
             var block = await MemoryBlockAtIndexAsync(memoryBlockIndex);
             return new MemoryRange(block, new MemoryBlockSlice(range.OffsetIntoMemoryBlock, range.Length));
         }
@@ -200,8 +223,23 @@ namespace Lazinator.Buffers
             if (Ranges.Count < i + 1)
                 return -1;
             var range = Ranges[i];
-            int index = GetMemoryBlockIndexFromBlockID(range.GetMemoryBlockID());
+            int index = GetMemoryBlockIndexFromBlockID(GetMemoryBlockIndexFromMemoryRange(range));
             return index;
+        }
+
+        protected MemoryBlockID? GetMemoryBlockIDFromMemoryRangeIndex(int i)
+        {
+            if (Ranges == null || !Ranges.Any())
+                return MemoryBlockAtIndex(i).MemoryBlockID;
+            if (Ranges.Count < i + 1)
+                return null;
+            var range = Ranges[i];
+            return new MemoryBlockID(range.MemoryBlockIntID);
+        }
+
+        private static MemoryBlockID GetMemoryBlockIndexFromMemoryRange(MemoryRangeByBlockID range)
+        {
+            return range.GetMemoryBlockID();
         }
 
         public override string ToString()

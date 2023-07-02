@@ -144,11 +144,11 @@ namespace Lazinator.Buffers
 
         #region Memory blocks index and loading information
 
-        private void InitializeMemoryBlocksInformation()
+        protected void InitializeMemoryBlocksInformationIfNecessary()
         {
             if (MemoryBlocks == null)
                 InitializeMemoryBlocksInformationFromLoadingInformation();
-            else if (MemoryBlocksLoadingInfo != null)
+            else if (MemoryBlocksLoadingInfo == null)
                 InitializeMemoryBlocksInformationFromMemoryBlocks();
         }
 
@@ -194,7 +194,7 @@ namespace Lazinator.Buffers
         {
             if (MemoryBlocksIndexFromBlockID == null)
             {
-                InitializeMemoryBlocksInformation();
+                InitializeMemoryBlocksInformationIfNecessary();
             }
             return MemoryBlocksIndexFromBlockID;
         }
