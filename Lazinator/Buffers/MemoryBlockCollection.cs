@@ -154,11 +154,11 @@ namespace Lazinator.Buffers
 
         private void InitializeMemoryBlocksInformationFromLoadingInformation()
         {
-            if (MemoryBlocksLoadingInfo != null)
+            if (MemoryBlocksLoadingInfo != null && MemoryBlocks == null)
             {
                 MemoryBlocks = MemoryBlocksLoadingInfo.Select(x => (MemoryBlock)null).ToList();
+                CreateMemoryBlocksIndexFromBlockID();
             }
-            CreateMemoryBlocksIndexFromBlockID();
         }
 
         private void CreateMemoryBlocksIndexFromBlockID()
@@ -182,7 +182,7 @@ namespace Lazinator.Buffers
                 MemoryBlockID blockID = memoryBlock.MemoryBlockID;
                 MemoryBlocksLoadingInfo.Add(memoryBlock.LoadingInfo);
             }
-            InitializeMemoryBlocksInformationFromLoadingInformation();
+            CreateMemoryBlocksIndexFromBlockID();
         }
 
         private void UpdateLoadingOffset(MemoryBlockID memoryBlockID, long offset)
@@ -226,7 +226,7 @@ namespace Lazinator.Buffers
         public MemoryBlock MemoryBlockAtIndex(int i)
         {
             if (MemoryBlocks == null)
-                MemoryBlocks = MemoryBlocksLoadingInfo.Select(x => (MemoryBlock)null).ToList(); 
+                InitializeMemoryBlocksInformationFromLoadingInformation(); 
             if (i >= MemoryBlocks.Count)
                 return null;
             if (MemoryBlocks[i] == null)
