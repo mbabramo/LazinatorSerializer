@@ -168,8 +168,8 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(MemoryBlockLoadingInfo), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(MemoryBlockInsetLoadingInfo), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(MemoryBlockCollection), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(MemoryRangeCollection), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(PersistentIndex), project: "Lazinator", mainFolder: "/Persistence/", subfolder: "", ws);
+            await CompleteGenerateCode(typeof(MemoryRangeCollection), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws, c => { c.DefaultAllowRecordLikeReadOnlyStructs = true; });
+            await CompleteGenerateCode(typeof(PersistentIndex), project: "Lazinator", mainFolder: "/Persistence/", subfolder: "", ws, c => { c.DefaultAllowRecordLikeReadOnlyStructs = true; });
         }
 
         [Fact]
@@ -367,7 +367,7 @@ public class MyOtherClass
             };
         }
 
-        private static async Task CompleteGenerateCode(Type existingType, string project, string mainFolder, string subfolder, AdhocWorkspace ws)
+        private static async Task CompleteGenerateCode(Type existingType, string project, string mainFolder, string subfolder, AdhocWorkspace ws, Action<LazinatorConfig> configModify = null)
         {
             if (mainFolder == "" && subfolder == "")
                 mainFolder = "/";
@@ -377,11 +377,15 @@ public class MyOtherClass
             string name = ReadCodeFile.GetNameOfType(existingType);
             ReadCodeFile.GetCodeInFile(projectPath, mainFolder, subfolder, name, ".g.cs", out string codeBehindPath, out string codeBehind);
             LazinatorConfig config = FindConfigFileStartingFromSubfolder(mainFolder, subfolder, projectPath);
-
-            // uncomment to include tracing code
-            // DEBUG
             if (config == null)
                 config = new LazinatorConfig();
+            if (configModify != null)
+            {
+                configModify(config);
+            }
+            
+            // uncomment to include tracing code
+            // DEBUG
             config.IncludeTracingCode = true;
 
             var compilation = await AdhocWorkspaceManager.GetCompilation(ws);

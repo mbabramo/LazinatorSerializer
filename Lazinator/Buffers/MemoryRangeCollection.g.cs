@@ -36,11 +36,9 @@ namespace Lazinator.Buffers
         protected override int _OverallEndByteIndex => _MemoryRangeCollection_EndByteIndex;
         
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected List<MemoryRangeByBlockID> _Ranges;
         public List<MemoryRangeByBlockID> Ranges
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_Ranges_Accessed)
@@ -50,7 +48,6 @@ namespace Lazinator.Buffers
                 IsDirty = true; 
                 return _Ranges;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -59,7 +56,6 @@ namespace Lazinator.Buffers
                 _Ranges_Accessed = true;
             }
         }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _Ranges_Accessed;
         private void LazinateRanges()
         {
@@ -159,16 +155,12 @@ namespace Lazinator.Buffers
         
         /* Conversion */
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorUniqueID => 48;
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override bool ContainsOpenGenericParameters => false;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override LazinatorGenericIDType LazinatorGenericID => default;
         
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorObjectVersion { get; set; } = 0;
         
         
