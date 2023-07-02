@@ -146,15 +146,17 @@ namespace Lazinator.Buffers
 
         protected void InitializeMemoryBlocksInformationIfNecessary()
         {
-            if (MemoryBlocks == null)
+            if ((MemoryBlocksLoadingInfo != null && MemoryBlocksLoadingInfo.Count > 0) && (MemoryBlocks == null || MemoryBlocks.Count == 0))
                 InitializeMemoryBlocksInformationFromLoadingInformation();
             else if (MemoryBlocksLoadingInfo == null)
                 InitializeMemoryBlocksInformationFromMemoryBlocks();
+            if (MemoryBlocksIndexFromBlockID == null)
+                CreateMemoryBlocksIndexFromBlockID();
         }
 
         private void InitializeMemoryBlocksInformationFromLoadingInformation()
         {
-            if (MemoryBlocksLoadingInfo != null && MemoryBlocks == null)
+            if ((MemoryBlocksLoadingInfo != null && MemoryBlocksLoadingInfo.Count > 0) && (MemoryBlocks == null || MemoryBlocks.Count == 0))
             {
                 MemoryBlocks = MemoryBlocksLoadingInfo.Select(x => (MemoryBlock)null).ToList();
                 CreateMemoryBlocksIndexFromBlockID();
@@ -195,6 +197,8 @@ namespace Lazinator.Buffers
             if (MemoryBlocksIndexFromBlockID == null)
             {
                 InitializeMemoryBlocksInformationIfNecessary();
+                if (MemoryBlocksIndexFromBlockID == null)
+                    CreateMemoryBlocksIndexFromBlockID();
             }
             return MemoryBlocksIndexFromBlockID;
         }
@@ -202,6 +206,10 @@ namespace Lazinator.Buffers
         public int GetMemoryBlockIndexFromBlockID(MemoryBlockID memoryBlockID)
         {
             var d = GetMemoryBlockIndicesFromIDs();
+            if (d == null)
+            {
+                var DEBUG = 0;
+            }
             return d.ContainsKey(memoryBlockID) ? d[memoryBlockID] : -1;
         }
 

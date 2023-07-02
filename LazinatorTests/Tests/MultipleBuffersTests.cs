@@ -603,6 +603,7 @@ namespace LazinatorTests.Tests
 
 
                 BinaryTree = new LazinatorBinaryTree<WDouble>(revisedMemory); // Note that revisedMemory is LazinatorMemory, containing potentially multiple blocks, and this is an acceptable way of initializing.
+                var DEBUG = BinaryTree.Root;
                 round++;
             });
             DeleteBlocksAndIndex(useConsolidatedMemory, indices, blobManager);

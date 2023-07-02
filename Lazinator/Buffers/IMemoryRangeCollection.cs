@@ -7,5 +7,6 @@ namespace Lazinator.Buffers
     public interface IMemoryRangeCollection : IMemoryBlockCollection
     {
         List<MemoryRangeByBlockID> Ranges { get; set; }
+        long PatchesTotalLength { get; set; }
     }
 }

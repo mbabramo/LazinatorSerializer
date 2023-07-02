@@ -147,6 +147,7 @@ namespace Lazinator.Persistence
 
         public LazinatorMemory GetLazinatorMemory()
         {
+            InitializeMemoryBlocksInformationIfNecessary();
             LazinatorMemory lazinatorMemory = new LazinatorMemory(this);
             lazinatorMemory.LoadInitialReadOnlyMemory();
             return lazinatorMemory;

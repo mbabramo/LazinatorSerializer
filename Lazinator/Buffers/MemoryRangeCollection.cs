@@ -11,7 +11,12 @@ namespace Lazinator.Buffers
 {
     public partial class MemoryRangeCollection : MemoryBlockCollection, IMemoryRangeCollection
     {
-        
+        public long PatchesTotalLength
+        {
+            get;
+            set;
+        }
+
         public MemoryRangeCollection(MemoryBlock block, bool initiatePatching) : this(new List<MemoryBlock> { block }, initiatePatching)
         {
         }
@@ -51,12 +56,6 @@ namespace Lazinator.Buffers
         /// Whether this MemoryRangeCollection uses patching (i.e., includes a list of MemoryRanges). If false, this is functioning just like a MemoryBlockCollection, but one that can be converted to a MemoryRangeCollection if necessary.
         /// </summary>
         public bool Patching => Ranges != null;
-
-        internal long PatchesTotalLength 
-        { 
-            get; 
-            set; 
-        }
 
         public override long LengthReferenced => Patching ? PatchesTotalLength : base.LengthReferenced;
 
