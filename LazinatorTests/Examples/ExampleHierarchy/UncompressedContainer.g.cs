@@ -614,24 +614,43 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         protected virtual void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
+            TabbedText.WriteLine($"Reading MyUncompressed at byte location {bytesSoFar}"); 
             _MyUncompressed = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedDateTime at byte location {bytesSoFar}"); 
             _MyUncompressedDateTime = span.ToDateTime(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedDecimal at byte location {bytesSoFar}"); 
             _MyUncompressedDecimal = span.ToDecimal(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedInt at byte location {bytesSoFar}"); 
             _MyUncompressedInt = span.ToInt32(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedLong at byte location {bytesSoFar}"); 
             _MyUncompressedLong = span.ToInt64(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedNullableDateTime at byte location {bytesSoFar}"); 
             _MyUncompressedNullableDateTime = span.ToNullableDateTime(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedNullableDecimal at byte location {bytesSoFar}"); 
             _MyUncompressedNullableDecimal = span.ToNullableDecimal(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedNullableInt at byte location {bytesSoFar}"); 
             _MyUncompressedNullableInt = span.ToNullableInt32(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedNullableLong at byte location {bytesSoFar}"); 
             _MyUncompressedNullableLong = span.ToNullableInt64(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedNullableShort at byte location {bytesSoFar}"); 
             _MyUncompressedNullableShort = span.ToNullableInt16(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedNullableTimeSpan at byte location {bytesSoFar}"); 
             _MyUncompressedNullableTimeSpan = span.ToNullableTimeSpan(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedNullableUInt at byte location {bytesSoFar}"); 
             _MyUncompressedNullableUInt = span.ToNullableUInt32(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedNullableULong at byte location {bytesSoFar}"); 
             _MyUncompressedNullableULong = span.ToNullableUInt64(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedNullableUShort at byte location {bytesSoFar}"); 
             _MyUncompressedNullableUShort = span.ToNullableUInt16(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedShort at byte location {bytesSoFar}"); 
             _MyUncompressedShort = span.ToInt16(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedTimeSpan at byte location {bytesSoFar}"); 
             _MyUncompressedTimeSpan = span.ToTimeSpan(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedUInt at byte location {bytesSoFar}"); 
             _MyUncompressedUInt = span.ToUInt32(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedULong at byte location {bytesSoFar}"); 
             _MyUncompressedULong = span.ToUInt64(ref bytesSoFar);
+            TabbedText.WriteLine($"Reading MyUncompressedUShort at byte location {bytesSoFar}"); 
             _MyUncompressedUShort = span.ToUInt16(ref bytesSoFar);
         }
         
@@ -643,6 +662,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         public virtual void SerializeToExistingBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options)
         {
+            TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.ExampleHierarchy.UncompressedContainer ");
             int startPosition = writer.ActiveMemoryPosition;
             WritePropertiesIntoBuffer(ref writer, options, true);
             if (options.UpdateStoredBuffer)
@@ -680,6 +700,9 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         
         protected virtual void WritePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
+            TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.ExampleHierarchy.UncompressedContainer starting at {writer.ActiveMemoryPosition}.");
+            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} True, Object version {LazinatorObjectVersion} True, IncludeChildrenMode {options.IncludeChildrenMode} True");
+            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
             {
                 if (!ContainsOpenGenericParameters)
@@ -697,30 +720,88 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             // write properties
             
             WritePrimitivePropertiesIntoBuffer(ref writer, options, includeUniqueID);
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of UncompressedContainer) ");
             
         }
         
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyUncompressed value {_MyUncompressed}");
+            TabbedText.Tabs++;
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _MyUncompressed);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyUncompressedDateTime value {_MyUncompressedDateTime}");
+            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteDateTime(ref writer, _MyUncompressedDateTime);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyUncompressedDecimal value {_MyUncompressedDecimal}");
+            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteDecimal(ref writer, _MyUncompressedDecimal);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyUncompressedInt value {_MyUncompressedInt}");
+            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteInt(ref writer, _MyUncompressedInt);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyUncompressedLong value {_MyUncompressedLong}");
+            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteLong(ref writer, _MyUncompressedLong);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyUncompressedNullableDateTime value {_MyUncompressedNullableDateTime}");
+            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteNullableDateTime(ref writer, _MyUncompressedNullableDateTime);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyUncompressedNullableDecimal value {_MyUncompressedNullableDecimal}");
+            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteNullableDecimal(ref writer, _MyUncompressedNullableDecimal);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyUncompressedNullableInt value {_MyUncompressedNullableInt}");
+            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteNullableInt(ref writer, _MyUncompressedNullableInt);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyUncompressedNullableLong value {_MyUncompressedNullableLong}");
+            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteNullableLong(ref writer, _MyUncompressedNullableLong);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyUncompressedNullableShort value {_MyUncompressedNullableShort}");
+            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteNullableShort(ref writer, _MyUncompressedNullableShort);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyUncompressedNullableTimeSpan value {_MyUncompressedNullableTimeSpan}");
+            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteNullableTimeSpan(ref writer, _MyUncompressedNullableTimeSpan);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyUncompressedNullableUInt value {_MyUncompressedNullableUInt}");
+            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteNullableUInt(ref writer, _MyUncompressedNullableUInt);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyUncompressedNullableULong value {_MyUncompressedNullableULong}");
+            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteNullableULong(ref writer, _MyUncompressedNullableULong);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyUncompressedNullableUShort value {_MyUncompressedNullableUShort}");
+            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteNullableUShort(ref writer, _MyUncompressedNullableUShort);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyUncompressedShort value {_MyUncompressedShort}");
+            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteShort(ref writer, _MyUncompressedShort);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyUncompressedTimeSpan value {_MyUncompressedTimeSpan}");
+            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteTimeSpan(ref writer, _MyUncompressedTimeSpan);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyUncompressedUInt value {_MyUncompressedUInt}");
+            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteUInt(ref writer, _MyUncompressedUInt);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyUncompressedULong value {_MyUncompressedULong}");
+            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteULong(ref writer, _MyUncompressedULong);
+            TabbedText.Tabs--;
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyUncompressedUShort value {_MyUncompressedUShort}");
+            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteUShort(ref writer, _MyUncompressedUShort);
+            TabbedText.Tabs--;
         }
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
         {

@@ -601,6 +601,7 @@ namespace LazinatorTests.Tests
                 Debug.WriteLine(revisedMemory.ToStringByBlock());
                 Debug.WriteLine($"Consolidated{round}:\n" + revisedMemory.ToStringConsolidated());
 
+
                 BinaryTree = new LazinatorBinaryTree<WDouble>(revisedMemory); // Note that revisedMemory is LazinatorMemory, containing potentially multiple blocks, and this is an acceptable way of initializing.
                 round++;
             });

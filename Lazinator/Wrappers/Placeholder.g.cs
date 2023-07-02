@@ -301,6 +301,7 @@ namespace Lazinator.Wrappers
         
         public void SerializeToExistingBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options)
         {
+            TabbedText.WriteLine($"Initiating serialization of Lazinator.Wrappers.Placeholder ");
             int startPosition = writer.ActiveMemoryPosition;
             WritePropertiesIntoBuffer(ref writer, options, false);
             if (options.UpdateStoredBuffer)
@@ -338,6 +339,9 @@ namespace Lazinator.Wrappers
         
         void WritePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
+            TabbedText.WriteLine($"Writing properties for Lazinator.Wrappers.Placeholder starting at {writer.ActiveMemoryPosition}.");
+            TabbedText.WriteLine($"Includes? uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {includeUniqueID}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} False, Object version {LazinatorObjectVersion} False, IncludeChildrenMode {options.IncludeChildrenMode} False");
+            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
             {
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, LazinatorUniqueID);
@@ -347,6 +351,7 @@ namespace Lazinator.Wrappers
             // write properties
             
             
+            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of Placeholder) ");
             
         }
         

@@ -28,6 +28,12 @@ namespace Lazinator.Buffers
             SetRanges(memoryRanges);
         }
 
+        public override MemoryBlockCollection DeepCopy()
+        {
+            var collection = new MemoryRangeCollection(MemoryBlocks, Ranges);
+            return collection;
+        }
+
         public void SetFromLazinatorMemory(LazinatorMemory lazinatorMemory)
         {
             SetBlocks(lazinatorMemory.EnumerateMemoryBlocks());

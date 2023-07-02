@@ -864,7 +864,6 @@ namespace Lazinator.Collections.Tree
         
         protected virtual int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
         {
-            Debug; // The problem is that when we get here after the second round change to BinaryTree, span[11] == 0 instead of 28. We need to figure out why that is.
             int totalChildrenBytes = 0;
             TabbedText.WriteLine($"Data: Length is at {bytesSoFar}; start location is {indexOfFirstChild + totalChildrenBytes}"); 
             _Data_ByteIndex = indexOfFirstChild + totalChildrenBytes;
