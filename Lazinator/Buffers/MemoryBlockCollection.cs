@@ -41,7 +41,7 @@ namespace Lazinator.Buffers
             MemoryBlocks = memoryBlocks.ToList();
             HighestMemoryBlockID = MemoryBlocks.Any() ? new MemoryBlockID(MemoryBlocks.Max(x => x.MemoryBlockID.GetIntID())) : new MemoryBlockID(0);
             LengthOfMemoryBlocks = MemoryBlocks.Sum(x => (long) x.Length);
-            InitializeMemoryBlocksInformation();
+            InitializeMemoryBlocksInformationFromMemoryBlocks();
             if (MemoryBlocks.Count != MemoryBlocksLoadingInfo.Count)
                 throw new Exception("DEBUG");
         }
@@ -135,6 +135,70 @@ namespace Lazinator.Buffers
             return GetEnumerator();
         }
 
+        public string ToStringByBlock()
+        {
+            return String.Join("; ", EnumerateMemoryBlocks().Select(x => x.ToString().Replace("\n", " ")));
+        }
+
+        #endregion
+
+        #region Memory blocks index and loading information
+
+        private void InitializeMemoryBlocksInformation()
+        {
+            if (MemoryBlocks == null)
+                InitializeMemoryBlocksInformationFromLoadingInformation();
+            else if (MemoryBlocksLoadingInfo != null)
+                InitializeMemoryBlocksInformationFromMemoryBlocks();
+        }
+
+        private void InitializeMemoryBlocksInformationFromLoadingInformation()
+        {
+            if (MemoryBlocksLoadingInfo != null)
+            {
+                MemoryBlocks = MemoryBlocksLoadingInfo.Select(x => (MemoryBlock)null).ToList();
+            }
+            CreateMemoryBlocksIndexFromBlockID();
+        }
+
+        private void CreateMemoryBlocksIndexFromBlockID()
+        {
+            Dictionary<MemoryBlockID, int> d = new Dictionary<MemoryBlockID, int>();
+            for (int i = 0; i < MemoryBlocksLoadingInfo.Count; i++)
+            {
+                MemoryBlockID blockID = MemoryBlocksLoadingInfo[i].MemoryBlockID;
+                if (!d.ContainsKey(blockID))
+                    d[blockID] = i;
+            }
+            MemoryBlocksIndexFromBlockID = d;
+        }
+
+        private void InitializeMemoryBlocksInformationFromMemoryBlocks()
+        {
+            MemoryBlocksLoadingInfo = new List<MemoryBlockLoadingInfo>();
+            for (int i = 0; i < MemoryBlocks.Count; i++)
+            {
+                MemoryBlock memoryBlock = MemoryBlocks[i];
+                MemoryBlockID blockID = memoryBlock.MemoryBlockID;
+                MemoryBlocksLoadingInfo.Add(memoryBlock.LoadingInfo);
+            }
+            InitializeMemoryBlocksInformationFromLoadingInformation();
+        }
+
+        private void UpdateLoadingOffset(MemoryBlockID memoryBlockID, long offset)
+        {
+            int i = GetMemoryBlockIndicesFromIDs()[memoryBlockID];
+            MemoryBlocksLoadingInfo[i] = MemoryBlocksLoadingInfo[i].WithLoadingOffset(offset);
+        }
+        protected Dictionary<MemoryBlockID, int> GetMemoryBlockIndicesFromIDs()
+        {
+            if (MemoryBlocksIndexFromBlockID == null)
+            {
+                InitializeMemoryBlocksInformation();
+            }
+            return MemoryBlocksIndexFromBlockID;
+        }
+
         public int GetMemoryBlockIndexFromBlockID(MemoryBlockID memoryBlockID)
         {
             var d = GetMemoryBlockIndicesFromIDs();
@@ -154,43 +218,6 @@ namespace Lazinator.Buffers
                 return null;
             return MemoryBlockAtIndex(d[memoryBlockID]);
         }
-        
-        protected Dictionary<MemoryBlockID, int> GetMemoryBlockIndicesFromIDs()
-        {
-            if (MemoryBlocksIndexFromBlockID == null)
-                InitializeMemoryBlocksInformation();
-            return MemoryBlocksIndexFromBlockID;
-        }
-
-        public string ToStringByBlock()
-        {
-            return String.Join("; ", EnumerateMemoryBlocks().Select(x => x.ToString().Replace("\n", " ")));
-        }
-
-        #endregion
-
-        #region Memory blocks loading information
-        
-        private void InitializeMemoryBlocksInformation()
-        {
-            Dictionary<MemoryBlockID, int> d = new Dictionary<MemoryBlockID, int>(); 
-            MemoryBlocksLoadingInfo = new List<MemoryBlockLoadingInfo>();
-            for (int i = 0; i < MemoryBlocks.Count; i++)
-            {
-                MemoryBlock memoryBlock = MemoryBlocks[i];
-                MemoryBlockID blockID = memoryBlock.MemoryBlockID;
-                if (!d.ContainsKey(blockID))
-                    d[blockID] = i;
-                MemoryBlocksLoadingInfo.Add(memoryBlock.LoadingInfo);
-            }
-            MemoryBlocksIndexFromBlockID = d;
-        }
-
-        private void UpdateLoadingOffset(MemoryBlockID memoryBlockID, long offset)
-        {
-            int i = GetMemoryBlockIndicesFromIDs()[memoryBlockID];
-            MemoryBlocksLoadingInfo[i] = MemoryBlocksLoadingInfo[i].WithLoadingOffset(offset);
-        }
 
         #endregion
 
@@ -199,11 +226,11 @@ namespace Lazinator.Buffers
         public MemoryBlock MemoryBlockAtIndex(int i)
         {
             if (MemoryBlocks == null)
-                MemoryBlocks = MemoryBlocksLoadingInfo.Select(x => (MemoryBlock)null).ToList();
+                MemoryBlocks = MemoryBlocksLoadingInfo.Select(x => (MemoryBlock)null).ToList(); 
             if (i >= MemoryBlocks.Count)
                 return null;
             if (MemoryBlocks[i] == null)
-                MemoryBlocks[i] = CreateMemoryBlockForIndex(i);
+                MemoryBlocks[i] = LoadMemoryBlockForIndex(i);
             var block = MemoryBlocks[i];
             return block;
         }
@@ -211,14 +238,14 @@ namespace Lazinator.Buffers
         public async ValueTask<MemoryBlock> MemoryBlockAtIndexAsync(int i)
         {
             if (MemoryBlocks == null)
-                MemoryBlocks = MemoryBlocksLoadingInfo.Select(x => (MemoryBlock)null).ToList();
+                InitializeMemoryBlocksInformationFromLoadingInformation();
             if (MemoryBlocks[i] == null)
-                MemoryBlocks[i] = await CreateMemoryBlockForIndexAsync(i);
+                MemoryBlocks[i] = await LoadMemoryBlockForIndexAsync(i);
             var block = MemoryBlocks[i];
             return block;
         }
 
-        private MemoryBlock CreateMemoryBlockForIndex(int i)
+        private MemoryBlock LoadMemoryBlockForIndex(int i)
         {
             string path = GetPathForIndex();
             var loadingInfo = MemoryBlocksLoadingInfo[i];
@@ -228,7 +255,7 @@ namespace Lazinator.Buffers
             return block;
         }
 
-        private async ValueTask<MemoryBlock> CreateMemoryBlockForIndexAsync(int i)
+        private async ValueTask<MemoryBlock> LoadMemoryBlockForIndexAsync(int i)
         {
             string path = GetPathForIndex();
             var loadingInfo = MemoryBlocksLoadingInfo[i];
