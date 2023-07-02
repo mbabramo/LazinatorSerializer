@@ -389,7 +389,6 @@ public class MyOtherClass
             // DEBUG
             config.IncludeTracingCode = true;
 
-
             var compilation = await AdhocWorkspaceManager.GetCompilation(ws);
             LazinatorCompilation lazinatorCompilation = new LazinatorCompilation(compilation, existingType, config);
 
