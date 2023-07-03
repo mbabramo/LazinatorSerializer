@@ -69,6 +69,10 @@ namespace Lazinator.Buffers
             if (memoryBlock.MemoryBlockID > HighestMemoryBlockID)
                 HighestMemoryBlockID = memoryBlock.MemoryBlockID;
             LengthOfMemoryBlocks += (long)memoryBlock.Length;
+            if (MemoryBlocks.Count(x => x.MemoryBlockID.GetIntID() == 0) > 1)
+            {
+                var DEBUG = "x";
+            }
         }
 
         public void SetBlocks(IEnumerable<MemoryBlock> blocks)
@@ -294,7 +298,7 @@ namespace Lazinator.Buffers
             string path = GetPathForMemoryBlock(loadingInfo.MemoryBlockID);
             ReadOnlyMemory<byte> memory = BlobManager.Read(path, loadingInfo.GetLoadingOffset(), loadingInfo.MemoryBlockLength);
             ReadOnlyBytes readOnlyBytes = new ReadOnlyBytes(memory);
-            MemoryBlock block = new MemoryBlock(readOnlyBytes) { IsPersisted = true };
+            MemoryBlock block = new MemoryBlock(readOnlyBytes, loadingInfo, true);
             return block;
         }
 
@@ -304,7 +308,7 @@ namespace Lazinator.Buffers
             string path = GetPathForMemoryBlock(loadingInfo.MemoryBlockID);
             ReadOnlyMemory<byte> memory = await BlobManager.ReadAsync(path, loadingInfo.GetLoadingOffset(), loadingInfo.MemoryBlockLength);
             ReadOnlyBytes readOnlyBytes = new ReadOnlyBytes(memory);
-            MemoryBlock block = new MemoryBlock(readOnlyBytes) { IsPersisted = true };
+            MemoryBlock block = new MemoryBlock(readOnlyBytes, loadingInfo, true);
             return block;
         }
 

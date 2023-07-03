@@ -239,6 +239,8 @@ namespace Lazinator.Buffers
         /// </summary>
         public bool SingleMemory => MultipleMemoryBlocks == null;
 
+        static int DEBUGCount = 0;
+
         /// <summary>
         /// The first referenced memory block
         /// </summary>
@@ -248,6 +250,11 @@ namespace Lazinator.Buffers
             {
                 if (IsEmpty)
                     return EmptyReadOnlyMemory;
+                DEBUGCount++;
+                if (DEBUGCount == 40)
+                {
+                    var DEBUGasdf = 0;
+                }
                 ReadOnlyMemory<byte> memory = SingleMemoryBlock?.ReadOnlyMemory ?? MemoryRangeAtIndex(MemoryRangeIndex).ReadOnlyMemory;
                 int length = (int)Math.Min(memory.Length - OffsetIntoMemoryBlock, Length);
                 return memory.Slice(OffsetIntoMemoryBlock, length);
