@@ -299,6 +299,7 @@ namespace Lazinator.Buffers
                 LoadMemoryBlock(SingleMemoryBlock);
                 return;
             }
+            Debug;
             MemoryRange memoryRange = MemoryRangeAtIndex(MemoryRangeIndex);
             LoadMemoryBlock(memoryRange.MemoryBlock);
         }

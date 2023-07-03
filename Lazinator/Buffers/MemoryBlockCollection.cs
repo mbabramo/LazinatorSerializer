@@ -119,9 +119,10 @@ namespace Lazinator.Buffers
 
         public IEnumerable<MemoryBlock> EnumerateMemoryBlocks()
         {
+            InitializeMemoryBlocksInformationIfNecessary();
             if (MemoryBlocks != null)
-                foreach (var block in MemoryBlocks)
-                    yield return block;
+                for (int i = 0; i < MemoryBlocks.Count; i++)
+                    yield return MemoryBlockAtIndex(i);
         }
 
         public IEnumerator<MemoryRange> GetEnumerator()
@@ -341,6 +342,8 @@ namespace Lazinator.Buffers
             HashSet<MemoryBlockID> memoryBlockIDs = new HashSet<MemoryBlockID>();
             foreach (MemoryBlock memoryBlock in MemoryBlocks)
             {
+                if (memoryBlock == null)
+                    continue; // not loaded
                 if (memoryBlock.IsPersisted)
                     continue;
                 MemoryBlockID memoryBlockID = memoryBlock.MemoryBlockID;
