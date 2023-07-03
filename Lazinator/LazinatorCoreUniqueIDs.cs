@@ -44,12 +44,10 @@ namespace Lazinator
         IWInt32Array,
         IWInt64Array,
         IPlaceholder,
-        IMemoryBlockReference,
-        IPersistentIndex,
-        IPersistentLazinator,
         IMemoryBlockLoadingInfo,
         IMemoryBlockInsetLoadingInfo,
         IMemoryBlockCollection,
-        IMemorySegmentCollection,
+        IMemoryRangeCollection,
+        IPersistentIndex,
     }
 }

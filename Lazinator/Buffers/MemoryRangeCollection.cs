@@ -11,11 +11,6 @@ namespace Lazinator.Buffers
 {
     public partial class MemoryRangeCollection : MemoryBlockCollection, IMemoryRangeCollection
     {
-        public long PatchesTotalLength
-        {
-            get;
-            set;
-        }
 
         public MemoryRangeCollection(MemoryBlock block, bool initiatePatching) : this(new List<MemoryBlock> { block }, initiatePatching)
         {

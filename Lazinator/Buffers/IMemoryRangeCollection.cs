@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Lazinator.Buffers
 {
-    [Lazinator((int)LazinatorCoreUniqueIDs.IMemorySegmentCollection)]
+    [Lazinator((int)LazinatorCoreUniqueIDs.IMemoryRangeCollection)]
     public interface IMemoryRangeCollection : IMemoryBlockCollection
     {
         List<MemoryRangeByBlockID> Ranges { get; set; }

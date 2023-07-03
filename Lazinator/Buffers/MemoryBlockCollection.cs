@@ -255,8 +255,8 @@ namespace Lazinator.Buffers
 
         private MemoryBlock LoadMemoryBlockForIndex(int i)
         {
-            string path = GetPathForIndex();
             var loadingInfo = MemoryBlocksLoadingInfo[i];
+            string path = GetPathForMemoryBlock(loadingInfo.MemoryBlockID);
             ReadOnlyMemory<byte> memory = BlobManager.Read(path, loadingInfo.GetLoadingOffset(), loadingInfo.MemoryBlockLength);
             ReadOnlyBytes readOnlyBytes = new ReadOnlyBytes(memory);
             MemoryBlock block = new MemoryBlock(readOnlyBytes) { IsPersisted = true };
@@ -265,8 +265,8 @@ namespace Lazinator.Buffers
 
         private async ValueTask<MemoryBlock> LoadMemoryBlockForIndexAsync(int i)
         {
-            string path = GetPathForIndex();
             var loadingInfo = MemoryBlocksLoadingInfo[i];
+            string path = GetPathForMemoryBlock(loadingInfo.MemoryBlockID);
             ReadOnlyMemory<byte> memory = await BlobManager.ReadAsync(path, loadingInfo.GetLoadingOffset(), loadingInfo.MemoryBlockLength);
             ReadOnlyBytes readOnlyBytes = new ReadOnlyBytes(memory);
             MemoryBlock block = new MemoryBlock(readOnlyBytes) { IsPersisted = true };

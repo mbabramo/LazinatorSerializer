@@ -215,7 +215,7 @@ namespace Lazinator.Persistence
         
         /* Conversion */
         
-        public override int LazinatorUniqueID => 43;
+        public override int LazinatorUniqueID => 46;
         
         protected override bool ContainsOpenGenericParameters => false;
         public override LazinatorGenericIDType LazinatorGenericID => default;

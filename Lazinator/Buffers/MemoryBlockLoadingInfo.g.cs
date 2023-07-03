@@ -302,7 +302,7 @@ namespace Lazinator.Buffers
         
         /* Conversion */
         
-        public virtual int LazinatorUniqueID => 45;
+        public virtual int LazinatorUniqueID => 42;
         
         protected virtual bool ContainsOpenGenericParameters => false;
         public virtual LazinatorGenericIDType LazinatorGenericID => default;

@@ -125,7 +125,7 @@ namespace Lazinator.Buffers
         
         /* Conversion */
         
-        public override int LazinatorUniqueID => 46;
+        public override int LazinatorUniqueID => 43;
         
         protected override bool ContainsOpenGenericParameters => false;
         public override LazinatorGenericIDType LazinatorGenericID => default;
