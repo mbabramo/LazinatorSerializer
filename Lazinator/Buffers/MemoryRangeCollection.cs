@@ -43,8 +43,8 @@ namespace Lazinator.Buffers
 
         private void SetRanges(List<MemoryRangeByBlockID> ranges)
         {
-            Ranges = ranges.ToList();
-            PatchesTotalLength = Ranges.Sum(x => (long) x.Length);
+            Ranges = ranges?.ToList();
+            PatchesTotalLength = Ranges != null ? Ranges.Sum(x => (long)x.Length) : 0;
         }
 
         /// <summary>

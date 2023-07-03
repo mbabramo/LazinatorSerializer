@@ -125,6 +125,30 @@ namespace Lazinator.Buffers
                     yield return MemoryBlockAtIndex(i);
         }
 
+        public async IAsyncEnumerable<MemoryBlock> EnumerateMemoryBlocksAsync()
+        {
+            InitializeMemoryBlocksInformationIfNecessary();
+            if (MemoryBlocks != null)
+                for (int i = 0; i < MemoryBlocks.Count; i++)
+                    yield return await MemoryBlockAtIndexAsync(i);
+        }
+
+        public void LoadAllMemory()
+        {
+            foreach (var memoryBlock in EnumerateMemoryBlocks())
+            {
+                // nothing to do but enumerate
+            }
+        }
+
+        public async ValueTask LoadAllMemoryAsync()
+        {
+            await foreach (var memoryBlock in EnumerateMemoryBlocksAsync())
+            {
+                // nothing to do but enumerate
+            }
+        }
+
         public IEnumerator<MemoryRange> GetEnumerator()
         {
             foreach (var memoryRange in EnumerateMemoryRanges())
@@ -134,6 +158,16 @@ namespace Lazinator.Buffers
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public virtual void ConsiderUnloadMemoryBlockAtMemoryRangeIndex(int memoryRangeIndex)
+        {
+            // For future use
+        }
+        public virtual ValueTask ConsiderUnloadMemoryBlockAtMemoryRangeIndexAsync(int memoryRangeIndex)
+        {
+            // For future use
+            return ValueTask.CompletedTask;
         }
 
         public string ToStringByBlock()
@@ -376,7 +410,6 @@ namespace Lazinator.Buffers
             }
             foreach (var memoryBlockToPersist in memoryBlocksToPersist)
             {
-                memoryBlockToPersist.LoadMemory();
                 MemoryBlockID memoryBlockID = memoryBlockToPersist.MemoryBlockID;
                 string path = ContainedInSingleBlob ? pathForSingleBlob : GetPathForMemoryBlock(memoryBlockID); 
                 if (ContainedInSingleBlob)
@@ -414,7 +447,6 @@ namespace Lazinator.Buffers
             }
             foreach (var memoryBlockToPersist in memoryBlocksToPersist)
             {
-                await memoryBlockToPersist.LoadMemoryAsync();
                 MemoryBlockID memoryBlockID = memoryBlockToPersist.MemoryBlockID;
                 string path = ContainedInSingleBlob ? pathForSingleBlob : GetPathForMemoryBlock(memoryBlockID);
                 if (ContainedInSingleBlob)

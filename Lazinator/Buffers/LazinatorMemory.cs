@@ -30,7 +30,7 @@ namespace Lazinator.Buffers
         /// </summary>
         public readonly MemoryBlockCollection MultipleMemoryBlocks;
         /// <summary>
-        /// The index of the MemoryRange from MultipleMemoryBlocks (or 0 with a single block) for the referenced range. Note that this is not necessarily the index of the memory block, since MemoryRanges may consist of patched ranges of blocks.
+        /// The index of the MemoryRange from MultipleMemoryBlocks (or 0 with a single block) for the referenced range. This is not necessarily the index of the memory block, since MemoryRanges may consist of patched ranges of blocks.
         /// </summary>
         public readonly int MemoryRangeIndex;
         /// <summary>
@@ -248,7 +248,6 @@ namespace Lazinator.Buffers
             {
                 if (IsEmpty)
                     return EmptyReadOnlyMemory;
-                LoadInitialReadOnlyMemory();
                 ReadOnlyMemory<byte> memory = SingleMemoryBlock?.ReadOnlyMemory ?? MemoryRangeAtIndex(MemoryRangeIndex).ReadOnlyMemory;
                 int length = (int)Math.Min(memory.Length - OffsetIntoMemoryBlock, Length);
                 return memory.Slice(OffsetIntoMemoryBlock, length);
@@ -296,39 +295,18 @@ namespace Lazinator.Buffers
         {
             if (SingleMemory)
             {
-                LoadMemoryBlock(SingleMemoryBlock);
                 return;
             }
-            Debug;
             MemoryRange memoryRange = MemoryRangeAtIndex(MemoryRangeIndex);
-            LoadMemoryBlock(memoryRange.MemoryBlock);
         }
 
         public async ValueTask LoadInitialReadOnlyMemoryAsync()
         {
             if (SingleMemory)
             {
-                await LoadMemoryBlockAsync(SingleMemoryBlock);
                 return;
             }
-            MemoryRange memoryRange = MemoryRangeAtIndex(MemoryRangeIndex);
-            await LoadMemoryBlockAsync(memoryRange.MemoryBlock);
-        }
-
-        private static void LoadMemoryBlock(MemoryBlock memoryBlock)
-        {
-            if (memoryBlock.IsLoaded == false)
-            {
-                memoryBlock.LoadMemory();
-            }
-        }
-
-        private static async ValueTask LoadMemoryBlockAsync(MemoryBlock memoryBlock)
-        {
-            if (memoryBlock.IsLoaded == false)
-            {
-                await memoryBlock.LoadMemoryAsync();
-            }
+            MemoryRange memoryRange = await MemoryRangeAtIndexAsync(MemoryRangeIndex);
         }
 
         /// <summary>
@@ -336,18 +314,14 @@ namespace Lazinator.Buffers
         /// </summary>
         public void LoadAllMemory()
         {
-            LoadInitialReadOnlyMemory();
             if (MultipleMemoryBlocks != null)
-                foreach (var additional in MultipleMemoryBlocks)
-                    LoadMemoryBlock(additional.MemoryBlock);
+                MultipleMemoryBlocks.LoadAllMemory();
         }
 
         public async ValueTask LoadAllMemoryAsync()
         {
-            await LoadInitialReadOnlyMemoryAsync();
             if (MultipleMemoryBlocks != null)
-                foreach (var additional in MultipleMemoryBlocks)
-                    await LoadMemoryBlockAsync(additional.MemoryBlock);
+                await MultipleMemoryBlocks.LoadAllMemoryAsync();
         }
 
         /// <summary>
@@ -356,13 +330,8 @@ namespace Lazinator.Buffers
         /// </summary>
         public void ConsiderUnloadInitialReadOnlyMemory()
         {
-            if (SingleMemory)
-                return;
-            MemoryRange memoryRange = MemoryRangeAtIndex(MemoryRangeIndex);
-            if (memoryRange.MemoryBlock.IsLoaded == true)
-            {
-                memoryRange.MemoryBlock.ConsiderUnloadMemory();
-            }
+            if (MultipleMemoryBlocks != null)
+                MultipleMemoryBlocks.ConsiderUnloadMemoryBlockAtMemoryRangeIndex(0);
         }
 
         /// <summary>
@@ -372,11 +341,8 @@ namespace Lazinator.Buffers
         /// <returns></returns>
         public async ValueTask ConsiderUnloadReadOnlyMemoryAsync()
         {
-            if (SingleMemory)
-                return;
-            MemoryRange memoryRange = MemoryRangeAtIndex(MemoryRangeIndex);
-            if (memoryRange.MemoryBlock.IsLoaded == true)
-                await memoryRange.MemoryBlock.ConsiderUnloadMemoryAsync();
+            if (MultipleMemoryBlocks != null)
+                await MultipleMemoryBlocks.ConsiderUnloadMemoryBlockAtMemoryRangeIndexAsync(0);
         }
 
         #endregion
@@ -551,7 +517,6 @@ namespace Lazinator.Buffers
         {
             if (SingleMemory)
             {
-                SingleMemoryBlock.LoadMemory();
                 return SingleMemoryBlock.ReadOnlyMemory.Slice(OffsetIntoMemoryBlock, (int) Length);
             }
 
@@ -568,7 +533,6 @@ namespace Lazinator.Buffers
         {
             if (SingleMemory)
             {
-                await SingleMemoryBlock.LoadMemoryAsync();
                 return SingleMemoryBlock.ReadOnlyMemory.Slice(OffsetIntoMemoryBlock, (int)Length);
             }
             await LoadAllMemoryAsync();

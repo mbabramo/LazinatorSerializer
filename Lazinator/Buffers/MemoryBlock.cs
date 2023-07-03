@@ -101,48 +101,6 @@ namespace Lazinator.Buffers
             }
         }
 
-        /// <summary>
-        /// This method should be overridden for a MemoryBlock subclass that loads memory lazily. The subclass method
-        /// should set ReferencedMemory. The base class always has memory available and thus this method does nothing.
-        /// </summary>
-        /// <returns></returns>
-        public virtual void LoadMemory()
-        {
-            if (IsLoaded)
-                return;
-            var task = Task.Run(async () => await LoadMemoryAsync());
-            task.Wait();
-        }
-
-        /// <summary>
-        /// This method should be overridden for a MemoryBlock subclass that loads memory lazily. The subclass method
-        /// should set ReferencedMemory. The base class always has memory available and thus this method does nothing.
-        /// </summary>
-        /// <returns></returns>
-        public virtual ValueTask LoadMemoryAsync()
-        {
-            return ValueTask.CompletedTask;
-        }
-
-        /// <summary>
-        /// This method may be overridden for a MemoryReference subclass that saves memory lazily. This will be called
-        /// after memory that is loaded is read and may no longer be necessary.  A subclass may, like this base class, 
-        /// choose not to unload memory.
-        /// </summary>
-        public virtual void ConsiderUnloadMemory()
-        {
-        }
-
-        /// <summary>
-        /// This method may be overridden for a MemoryReference subclass that saves memory lazily. This will be called
-        /// after memory that is loaded is read and may no longer be necessary.  A subclass may, like this base class, 
-        /// choose not to unload memory.
-        /// </summary>
-        public virtual ValueTask ConsiderUnloadMemoryAsync()
-        {
-            return ValueTask.CompletedTask;
-        }
-
         public void Dispose()
         {
             MemoryAsLoaded?.Dispose();
@@ -156,7 +114,6 @@ namespace Lazinator.Buffers
 
         public string ContentToString()
         {
-            LoadMemory();
             var bytes = ReadOnlyMemory.ToArray();
             string result = String.Join(",", bytes.Select(x => x.ToString().PadLeft(3, '0')));
             return result;
