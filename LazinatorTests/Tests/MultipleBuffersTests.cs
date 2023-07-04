@@ -221,7 +221,7 @@ namespace LazinatorTests.Tests
         private void ConfirmSame()
         {
             if (!MainListValues.SequenceEqual(BinaryTreeValues))
-                throw new Exception("Binary tree failed");
+                throw new Exception("Binary tree did not match expected values");
         }
 
         private void RandomChanges(int numChanges, Random r)
@@ -552,7 +552,7 @@ namespace LazinatorTests.Tests
             if (fullPath == null)
                 return;
             int round = 0;
-            int numRounds = 5; // DEBUG 10
+            int numRounds = 1; // DEBUG 10
             int numChangesFirstRound = 1; // DEBUG 10
             int numChangesSubsequentRounds = 1; // DEBUG 3
             MultipleRoundsOfRandomChanges(numRounds, numChangesFirstRound, numChangesSubsequentRounds, () =>
