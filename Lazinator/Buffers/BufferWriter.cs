@@ -58,19 +58,13 @@ namespace Lazinator.Buffers
 
         internal int NumActiveMemoryBytesReferenced => MemoryRangeCollection?.NumActiveMemoryBytesReferenced ?? 0;
         
-        MemoryBlockID? NextMemoryBlockID = null;
-        
-        MemoryBlockID GetNextMemoryBlockID()
+        MemoryBlockID GetActiveMemoryBlockID()
         {
-            if (NextMemoryBlockID is MemoryBlockID memoryBlockID)
-                return memoryBlockID;
-            else
-            {
-                if (MemoryRangeCollection == null)
-                    return new MemoryBlockID(0);
-                NextMemoryBlockID = MemoryRangeCollection.GetNextMemoryBlockID();
-                return NextMemoryBlockID.Value;
-            }
+            if (MemoryRangeCollection != null)
+                return MemoryRangeCollection.GetNextMemoryBlockID();
+            if (PreviousVersion != null)
+                return PreviousVersion.GetNextMemoryBlockID();
+            return new MemoryBlockID(0);
         }
 
         #region Construction and initialization
@@ -92,7 +86,6 @@ namespace Lazinator.Buffers
                 minimumSize = ExpandableBytes.DefaultMinBufferSize;
             ActiveMemory = new ExpandableBytes(minimumSize);
             ActiveMemory.UsedBytesInCurrentBuffer = 0;
-            _LengthsPosition = (0, 0);
             if (previousVersion.MultipleMemoryBlocks == null)
             {
                 if (previousVersion.SingleMemoryBlock != null)
@@ -102,6 +95,8 @@ namespace Lazinator.Buffers
             }
             else
                 PreviousVersion = previousVersion.MultipleMemoryBlocks.DeepCopy();
+            NextMemoryBlockID = PreviousVersion?.GetNextMemoryBlockID() ?? new MemoryBlockID(0);
+            _LengthsPosition = (NextMemoryBlockID, 0);
             MemoryRangeCollection = null;
         }
 
@@ -204,10 +199,7 @@ namespace Lazinator.Buffers
         {
             get
             {
-                if (MemoryRangeCollection is null)
-                    return (0, ActiveMemoryPosition);
-                int nextMemoryBlockID = GetNextMemoryBlockID().GetIntID();
-                return (nextMemoryBlockID, ActiveMemoryPosition);
+                return (GetActiveMemoryBlockID().GetIntID(), ActiveMemoryPosition);
             }
         }
 
@@ -226,7 +218,7 @@ namespace Lazinator.Buffers
 
         public string ToLocationString()
         {
-            return $"{OverallMemoryPosition} (lengths {LengthsPosition}) Next block: {GetNextMemoryBlockID()}";
+            return $"{OverallMemoryPosition} (lengths {LengthsPosition}) Active MemoryBlockID: {GetActiveMemoryBlockID()}";
         }
 
         Span<byte> ActiveSpan => ActiveMemory == null ? new Span<byte>() : ActiveMemory.CurrentBuffer.Memory.Span;
@@ -316,15 +308,17 @@ namespace Lazinator.Buffers
         {
             if (ActiveMemoryPosition > 0)
             {
-                TabbedText.WriteLine("Moving active memory to completed memory"); // DEBUG
+#if TRACING
+                TabbedText.WriteLine($"Moving active memory to completed memory, block {GetActiveMemoryBlockID()}");
+#endif
                 bool memoryBlockAlreadyIncluded = false;
                 if (MemoryRangeCollection != null)
                 {
-                    memoryBlockAlreadyIncluded = MemoryRangeCollection.ContainsMemoryBlockID(GetNextMemoryBlockID());
+                    memoryBlockAlreadyIncluded = MemoryRangeCollection.ContainsMemoryBlockID(GetActiveMemoryBlockID());
                 }
                 if (!memoryBlockAlreadyIncluded)
                 {
-                    var block = new MemoryBlock(ActiveMemory.ReadWriteBytes, new MemoryBlockLoadingInfo(GetNextMemoryBlockID(), ActiveMemoryPosition), false);
+                    var block = new MemoryBlock(ActiveMemory.ReadWriteBytes, new MemoryBlockLoadingInfo(GetActiveMemoryBlockID(), ActiveMemoryPosition), false);
                     if (MemoryRangeCollection == null)
                         MemoryRangeCollection = new MemoryRangeCollection(block, false);
                     else
@@ -550,7 +544,7 @@ namespace Lazinator.Buffers
         {
             get
             {
-                if (MemoryRangeCollection == null || LengthsPosition.index == GetNextMemoryBlockID().GetIntID())
+                if (MemoryRangeCollection == null || LengthsPosition.index == GetActiveMemoryBlockID().GetIntID())
                     return ActiveSpan.Slice(LengthsPosition.offset);
                 MemoryBlock block = MemoryRangeCollection.MemoryBlockAtIndex(LengthsPosition.index);
                 return block.ReadWriteMemory.Slice(LengthsPosition.offset).Span;
