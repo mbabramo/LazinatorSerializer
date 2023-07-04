@@ -1445,13 +1445,13 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                             {IIF(primitiveProperties.Any() || IsDerivedFromNonAbstractLazinator, $@"WritePrimitivePropertiesIntoBuffer({MaybeAsyncRefWriterParameter}, options, includeUniqueID);")}{IIF(childrenProperties.Any() || IsDerivedFromNonAbstractLazinator, $@"
                             {GetLengthsCalculation(false, true)}
                             var previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);{IIF(IncludeTracingCode, $@"
-                            TabbedText.WriteLine($""Byte {{writer.ActiveMemoryPosition}}, After skipping {{lengthForLengths}} bytes to store lengths of child objects"");")}
+                            TabbedText.WriteLine($""Location {{writer.ToLocationString()}}, after skipping {{lengthForLengths}} bytes to store lengths of child objects"");")}
                             {MaybeAwaitWord}WriteChildrenPropertiesIntoBuffer{MaybeAsyncWord}({MaybeAsyncRefIfNot}writer, options, includeUniqueID, startPosition);
                             writer.ResetLengthsPosition(previousLengthsPosition);")}");
 
             if (IncludeTracingCode)
             {
-                sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.ActiveMemoryPosition}} (end of {NameIncludingGenerics}) "");");
+                sb.AppendLine($@"TabbedText.WriteLine($""Position {{writer.ToLocationString()}} (end of {NameIncludingGenerics}) "");");
             }
 
             if (ImplementsOnPropertiesWritten)
@@ -1598,7 +1598,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             {
                 if (property.PropertyType == LazinatorPropertyType.LazinatorClassOrInterface || (property.PropertyType == LazinatorPropertyType.LazinatorStructNullable) || (property.PropertyType == LazinatorPropertyType.LazinatorNonnullableClassOrInterface))
                 {
-                    sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.ActiveMemoryPosition}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) (backing var null? {{{property.BackingFieldString} == null}}) "");");
+                    sb.AppendLine($@"TabbedText.WriteLine($""Position {{writer.ToLocationString()}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) (backing var null? {{{property.BackingFieldString} == null}}) "");");
                 }
                 else if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
                 {
@@ -1635,7 +1635,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             sb.Append($@"{ProtectedIfApplicable}{DerivationKeyword}{TypeForLengths} ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
                 {{{IIF(IncludeTracingCode, $@"
 TabbedText.WriteLine($"""");")}{IIF(IncludeTracingCode, $@"
-TabbedText.WriteLine($""Converting {ILazinatorTypeSymbol} from bytes at: "" + LazinatorMemoryStorage.ToLocationString());")}
+TabbedText.WriteLine($""Converting {ILazinatorTypeSymbol} at position: "" + LazinatorMemoryStorage.ToLocationString());")}
                     ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
                     ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);{IIF(IncludeTracingCode, $@"
 TabbedText.Tabs++;")}
