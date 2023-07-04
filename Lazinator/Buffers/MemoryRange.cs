@@ -21,6 +21,8 @@ namespace Lazinator.Buffers
 
         public readonly Memory<byte> Memory => MemoryBlock.ReadWriteMemory.Slice(SliceInfo.OffsetIntoMemoryBlock, SliceInfo.Length);
         public readonly ReadOnlyMemory<byte> ReadOnlyMemory => MemoryBlock.ReadOnlyMemory.Slice(SliceInfo.OffsetIntoMemoryBlock, SliceInfo.Length);
+        
+        public string ToMemoryString() => String.Join(",", ReadOnlyMemory.ToArray().Select(x => x.ToString().PadLeft(3, '0')).ToArray());
         public int Length => SliceInfo.Length;
         public void Dispose()
         {

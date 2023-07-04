@@ -565,14 +565,37 @@ namespace Lazinator.Buffers
             StringBuilder sb = new StringBuilder();
             foreach (var block in blocks)
             {
-                sb.AppendLine(block.ToString());
+                sb.Append(block.ToString());
             }
             return sb.ToString();
+        }
+
+        public string ToStringByRange()
+        {
+            var ranges = EnumerateMemoryRanges();
+            if (ranges != null && ranges.Any())
+            {
+                var rangesWithInfo = ranges.Zip(EnumerateMemoryRangesByID(), (range, info) => (range, info));
+                StringBuilder sb = new StringBuilder();
+                int i = 0;
+                foreach (var rangeWithInfo in rangesWithInfo)
+                {
+                    sb.AppendLine($"Range {i++}: {rangeWithInfo.info.ToString()}");
+                    sb.AppendLine($"     Memory: {rangeWithInfo.range.ToMemoryString()}");
+                }
+                return sb.ToString();
+            }
+            return "";
         }
 
         public string ToStringConsolidated()
         {
             return String.Join(",", EnumerateBytes().Select(x => x.ToString().PadLeft(3, '0')));
+        }
+
+        public string ToStringFullMemory()
+        {
+            return ToStringByBlock() + ToStringByRange() + ToStringConsolidated();
         }
 
         #endregion
