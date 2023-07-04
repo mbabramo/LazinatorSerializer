@@ -11,6 +11,7 @@ using Lazinator.Core;
 using Lazinator.Exceptions;
 using Lazinator.Support;
 using Lazinator.Wrappers;
+using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 namespace Lazinator.Buffers
 {
@@ -550,6 +551,11 @@ namespace Lazinator.Buffers
             foreach (byte b in EnumerateBytes())
                 w.Write(b);
             return w.LazinatorMemory.InitialReadOnlyMemory;
+        }
+
+        public string ToLocationString()
+        {
+            return $"Index: {MemoryRangeIndex} Offset {OffsetIntoMemoryBlock} Length {Length}";
         }
 
         // DEBUG -- delete this

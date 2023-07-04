@@ -8,6 +8,7 @@ using System.Buffers;
 using Lazinator.Core;
 using Newtonsoft.Json.Serialization;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace Lazinator.Buffers
 {
@@ -23,12 +24,12 @@ namespace Lazinator.Buffers
 
         public override string ToString()
         {
-            return ActiveMemoryString() + " " + MemoryRangeCollection?.ToStringByBlock();
+            return ActiveMemoryString() + " >>> " + MemoryRangeCollection?.ToStringByBlock();
         }
 
         private string ActiveMemoryString()
         {
-            return ActiveMemory == null ? "" : String.Join(",", ActiveMemoryWrittenSpan.ToArray());
+            return ActiveMemory == null ? "" : String.Join(",", ActiveMemoryWrittenSpan.ToArray().Select(x => x.ToString().PadLeft(3, '0')));
         }
 
         /// <summary>
@@ -213,6 +214,11 @@ namespace Lazinator.Buffers
         {
             get => _LengthsPosition;
             set => _LengthsPosition = value;
+        }
+
+        public string ToLocationString()
+        {
+            return $"{OverallMemoryPosition} (lengths {LengthsPosition}) Next block: {GetNextMemoryBlockID()}";
         }
 
         Span<byte> ActiveSpan => ActiveMemory == null ? new Span<byte>() : ActiveMemory.CurrentBuffer.Memory.Span;
@@ -655,43 +661,21 @@ namespace Lazinator.Buffers
             if (s1 == null || s2.StartsWith(s1))
                 return s2; // no highlighting needed
 
-            int startIndex = -1;
-            int endIndex = -1;
+            StringBuilder highlightedDifference = new StringBuilder();
+            highlightedDifference.AppendLine(s2);
+            highlightedDifference.Append("          "); // width of "Step XXX: "
 
             for (int i = 0; i < s2.Length; i++)
             {
-                if (i >= s1.Length || s1[i] != s2[i])
+                if (s1.Length < i + 1 || s1[i] != s2[i])
                 {
-                    if (startIndex == -1)
-                    {
-                        startIndex = i;
-                        endIndex = i;
-                    }
-                    else
-                    {
-                        endIndex = i;
-                    }
+                    highlightedDifference.Append("*");
                 }
+                else
+                    highlightedDifference.Append(" ");
             }
 
-            string highlightedDifference = "";
-
-            for (int i = 0; i < s2.Length; i++)
-            {
-                if (i == startIndex)
-                {
-                    highlightedDifference += "***";
-                }
-
-                highlightedDifference += s2[i];
-
-                if (i == endIndex)
-                {
-                    highlightedDifference += "***";
-                }
-            }
-
-            return highlightedDifference;
+            return highlightedDifference.ToString();
         }
 
         private static void PrintHighlightedDifference_Console(string s1, string s2)

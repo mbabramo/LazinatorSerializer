@@ -109,7 +109,7 @@ namespace Lazinator.Buffers
         public override string ToString()
         {
             string result = ContentToString();
-            return $"Block {MemoryBlockID.ToString().PadLeft(3, '0')}:\n{result}";
+            return $"Block {MemoryBlockID.ToString().PadLeft(3, '0')}: {result}\n";
         }
 
         public string ContentToString()

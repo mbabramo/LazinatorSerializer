@@ -176,7 +176,7 @@ namespace Lazinator.Buffers
 
         public string ToStringByBlock()
         {
-            return String.Join("; ", EnumerateMemoryBlocks().Select(x => x.ToString().Replace("\n", " ")));
+            return String.Join("; ", EnumerateMemoryBlocks().Select(x => x.ToString().Replace("\n", " >>> ")));
         }
 
         #endregion
