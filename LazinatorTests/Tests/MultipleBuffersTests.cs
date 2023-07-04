@@ -552,7 +552,7 @@ namespace LazinatorTests.Tests
             if (fullPath == null)
                 return;
             int round = 0;
-            int numRounds = 1; // DEBUG 10
+            int numRounds = 2; // DEBUG 10
             int numChangesFirstRound = 1; // DEBUG 10
             int numChangesSubsequentRounds = 1; // DEBUG 3
             MultipleRoundsOfRandomChanges(numRounds, numChangesFirstRound, numChangesSubsequentRounds, () =>

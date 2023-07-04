@@ -216,7 +216,7 @@ namespace Lazinator.Buffers
             get => _LengthsPosition;
             set
             {
-                TabbedText.WriteLine($"Setting lengths position to {value}"); // DEBUG
+                TabbedText.WriteLine($"Setting lengths position to {value}. Currently writing otherwise at {IndexedMemoryPosition}"); // DEBUG
                 _LengthsPosition = value;
             }
         }
@@ -313,6 +313,7 @@ namespace Lazinator.Buffers
         {
             if (ActiveMemoryPosition > 0)
             {
+                TabbedText.WriteLine("Moving active memory to completed memory"); // DEBUG
                 bool memoryBlockAlreadyIncluded = false;
                 if (MemoryRangeCollection != null)
                 {

@@ -1254,7 +1254,8 @@ namespace Lazinator.CodeDescription
 
             if (IncludeTracingCode)
             {
-                sb.AppendLine($@"TabbedText.WriteLine($""\nInitiating serialization of {ILazinatorTypeSymbol} at position {{writer.ToLocationString()}}"");");
+                sb.AppendLine($@"TabbedText.WriteLine("""");");
+                sb.AppendLine($@"TabbedText.WriteLine($""Initiating serialization of {ILazinatorTypeSymbol} at position {{writer.ToLocationString()}}"");");
             }
 
             sb.AppendLine($@"{ IIF(ImplementsPreSerialization, $@"PreSerialization(options.VerifyCleanness, options.UpdateStoredBuffer);
@@ -1406,7 +1407,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             if (IncludeTracingCode)
             {
                 sb.AppendLine($@"TabbedText.WriteLine($""Writing properties for {ILazinatorTypeSymbol}."");");
-                sb.AppendLine($@"TabbedText.WriteLine($""Includes? uniqueID {{(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("""","""",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))}} {{includeUniqueID}}, Lazinator version {{Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion}} {!SuppressLazinatorVersionByte}, Object version {{LazinatorObjectVersion}} {Version != -1}, IncludeChildrenMode {{options.IncludeChildrenMode}} {!CanNeverHaveChildren}"");");
+                sb.AppendLine($@"TabbedText.WriteLine($""Properties uniqueID {{(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("""","""",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))}} {{(includeUniqueID ? ""Included"" : ""Omitted"")}}, Lazinator version {{Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion}} {!SuppressLazinatorVersionByte}, Object version {{LazinatorObjectVersion}} {Version != -1}, IncludeChildrenMode {{options.IncludeChildrenMode}} {!CanNeverHaveChildren}"");");
                 sb.AppendLine($@"TabbedText.WriteLine($""IsDirty {{IsDirty}} DescendantIsDirty {{DescendantIsDirty}} HasParentClass {{LazinatorParents.Any()}}"");");
             }
 
@@ -1633,10 +1634,13 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 
             sb.Append($@"{ProtectedIfApplicable}{DerivationKeyword}{TypeForLengths} ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
                 {{{IIF(IncludeTracingCode, $@"
-TabbedText.WriteLine($""Converting from bytes at: "" + LazinatorMemoryStorage.ToLocationString());")}
+TabbedText.WriteLine($"""");")}{IIF(IncludeTracingCode, $@"
+TabbedText.WriteLine($""Converting {ILazinatorTypeSymbol} from bytes at: "" + LazinatorMemoryStorage.ToLocationString());")}
                     ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
-                    ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-                    {GetLengthsCalculation(true, false)}{TypeForLengths} totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);
+                    ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);{IIF(IncludeTracingCode, $@"
+TabbedText.Tabs++;")}
+                    {GetLengthsCalculation(true, false)}{TypeForLengths} totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);;{IIF(IncludeTracingCode, $@"
+TabbedText.Tabs--;")}
                     return bytesSoFar + totalChildrenSize;
                 }}
                     
