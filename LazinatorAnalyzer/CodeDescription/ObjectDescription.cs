@@ -1407,7 +1407,7 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
             if (IncludeTracingCode)
             {
                 sb.AppendLine($@"TabbedText.WriteLine($""Writing properties for {ILazinatorTypeSymbol}."");");
-                sb.AppendLine($@"TabbedText.WriteLine($""Properties uniqueID {{(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))}} {{(includeUniqueID ? ""Included"" : ""Omitted"")}}, Lazinator version {{Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion}} {!SuppressLazinatorVersionByte}, Object version {{LazinatorObjectVersion}} {Version != -1}, IncludeChildrenMode {{options.IncludeChildrenMode}} {!CanNeverHaveChildren}"");");
+                sb.AppendLine($@"TabbedText.WriteLine($""Properties uniqueID {{(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join("","",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))}} {{(includeUniqueID ? ""Included"" : ""Omitted"")}}, Lazinator version {{Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion}} {IIF(!SuppressLazinatorVersionByte, "Included", "Omitted")}, Object version {{LazinatorObjectVersion}} {IIF(Version != -1, "Included", "Omitted")}, IncludeChildrenMode {{options.IncludeChildrenMode}} {IIF(!CanNeverHaveChildren, "Included", "Omitted")}"");");
                 sb.AppendLine($@"TabbedText.WriteLine($""IsDirty {{IsDirty}} DescendantIsDirty {{DescendantIsDirty}} HasParentClass {{LazinatorParents.Any()}}"");");
             }
 
