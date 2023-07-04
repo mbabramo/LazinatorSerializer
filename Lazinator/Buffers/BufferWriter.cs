@@ -216,7 +216,9 @@ namespace Lazinator.Buffers
             get => _LengthsPosition;
             set
             {
-                TabbedText.WriteLine($"Setting lengths position to {value}. Currently writing otherwise at {IndexedMemoryPosition}"); // DEBUG
+#if TRACING
+                TabbedText.WriteLine($"Setting lengths position to {value}. Currently writing otherwise at {IndexedMemoryPosition}");
+#endif
                 _LengthsPosition = value;
             }
         }
@@ -275,7 +277,7 @@ namespace Lazinator.Buffers
             return FreeSpan.Slice(0, desiredSize);
         }
 
-        #endregion
+#endregion
 
         #region Multiple buffers management
 
@@ -581,7 +583,7 @@ namespace Lazinator.Buffers
         {
             LengthsSpan[0] = length;
             LengthsPosition = (LengthsPosition.index, LengthsPosition.offset + 1);
-#if TRACEWRITING
+#if TRACING_DETAILED
             WriteTrace();
 #endif
         }
@@ -592,7 +594,7 @@ namespace Lazinator.Buffers
                 WriteInt16LittleEndian(LengthsSpan, length);
             else
                 WriteInt16BigEndian(LengthsSpan, length);
-#if TRACEWRITING
+#if TRACING_DETAILED
             WriteTrace();
 #endif
             LengthsPosition = (LengthsPosition.index, LengthsPosition.offset + sizeof(Int16));
@@ -604,7 +606,7 @@ namespace Lazinator.Buffers
                 WriteInt32LittleEndian(LengthsSpan, length);
             else
                 WriteInt32BigEndian(LengthsSpan, length);
-#if TRACEWRITING
+#if TRACING_DETAILED
             WriteTrace();
 #endif
             LengthsPosition = (LengthsPosition.index, LengthsPosition.offset + sizeof(int));
@@ -615,7 +617,7 @@ namespace Lazinator.Buffers
                 WriteInt64LittleEndian(LengthsSpan, length);
             else
                 WriteInt64BigEndian(LengthsSpan, length);
-#if TRACEWRITING
+#if TRACING_DETAILED
             WriteTrace();
 #endif
             LengthsPosition = (LengthsPosition.index, LengthsPosition.offset + sizeof(Int64));
@@ -625,14 +627,14 @@ namespace Lazinator.Buffers
 
         #region Tracewriting
 
-#if TRACEWRITING
+#if TRACING_DETAILED
 
-        // TRACEWRITING can be defined to allow visibility into each step of a buffer change.
+        // TRACING_DETAILED can be defined to allow visibility into each step of a buffer change.
 
-        // Note that TRACEWRITING may be defined in the Lazinator project file as follows:
+        // Note that TRACING_DETAILED may be defined in the Lazinator project file as follows:
         //<PropertyGroup Condition = "'$(Configuration)|$(Platform)'=='Debug|AnyCPU'" >
         //  <AllowUnsafeBlocks> false </AllowUnsafeBlocks >
-        //  <DefineConstants>$(DefineConstants);TRACEWRITING</DefineConstants>
+        //  <DefineConstants>$(DefineConstants);TRACING_DETAILED</DefineConstants>
         //</PropertyGroup>
 
         public static int _TraceWritingStep;

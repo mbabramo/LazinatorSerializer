@@ -16,7 +16,7 @@ namespace Lazinator.Buffers
         public static byte WriteBool(ref BufferWriter writer, bool value)
         {
             writer.Write(value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)sizeof(byte);
@@ -26,7 +26,7 @@ namespace Lazinator.Buffers
         public static byte WriteByte(ref BufferWriter writer, byte value)
         {
             writer.Write(value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)sizeof(byte);
@@ -36,7 +36,7 @@ namespace Lazinator.Buffers
         public static byte WriteSByte(ref BufferWriter writer, sbyte value)
         {
             writer.Write(value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)sizeof(sbyte);
@@ -46,7 +46,7 @@ namespace Lazinator.Buffers
         public static byte WriteShort(ref BufferWriter writer, short value)
         {
             writer.Write(value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)sizeof(short);
@@ -56,7 +56,7 @@ namespace Lazinator.Buffers
         public static byte WriteUShort(ref BufferWriter writer, ushort value)
         {
             writer.Write(value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)sizeof(ushort);
@@ -66,7 +66,7 @@ namespace Lazinator.Buffers
         public static byte WriteInt(ref BufferWriter writer, int value)
         {
             writer.Write(value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)sizeof(int);
@@ -76,7 +76,7 @@ namespace Lazinator.Buffers
         public static byte WriteUInt(ref BufferWriter writer, uint value)
         {
             writer.Write(value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)sizeof(uint);
@@ -86,7 +86,7 @@ namespace Lazinator.Buffers
         public static byte WriteLong(ref BufferWriter writer, long value)
         {
             writer.Write(value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)sizeof(long);
@@ -96,7 +96,7 @@ namespace Lazinator.Buffers
         public static byte WriteULong(ref BufferWriter writer, ulong value)
         {
             writer.Write(value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)sizeof(ulong);
@@ -106,7 +106,7 @@ namespace Lazinator.Buffers
         public static byte WriteSingle(ref BufferWriter writer, float value)
         {
             writer.Write(value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)sizeof(float);
@@ -116,7 +116,7 @@ namespace Lazinator.Buffers
         public static byte WriteDouble(ref BufferWriter writer, double value)
         {
             writer.Write(value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)sizeof(double);
@@ -126,7 +126,7 @@ namespace Lazinator.Buffers
         public static byte WriteDecimal(ref BufferWriter writer, decimal value)
         {
             writer.Write(value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)sizeof(decimal);
@@ -136,7 +136,7 @@ namespace Lazinator.Buffers
         public static byte WriteDateTime(ref BufferWriter writer, DateTime value)
         {
             writer.Write(value.Ticks);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)sizeof(long);
@@ -146,7 +146,7 @@ namespace Lazinator.Buffers
         public static byte WriteTimeSpan(ref BufferWriter writer, TimeSpan value)
         {
             writer.Write(value.Ticks);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)sizeof(long);
@@ -156,7 +156,7 @@ namespace Lazinator.Buffers
         public static byte WriteGuid(ref BufferWriter writer, Guid value)
         {
             writer.Write(value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)16;
@@ -168,14 +168,14 @@ namespace Lazinator.Buffers
             if (value == null)
             {
                 writer.Write((byte)0);
-#if TRACEWRITING
+#if TRACING_DETAILED
                 writer.WriteTrace();
 #endif
                 return 1;
             }
             writer.Write((byte)1);
             writer.Write(value.Value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)(sizeof(byte) + 1);
@@ -187,14 +187,14 @@ namespace Lazinator.Buffers
             if (value == null)
             {
                 writer.Write((byte)0);
-#if TRACEWRITING
+#if TRACING_DETAILED
                 writer.WriteTrace();
 #endif
                 return 1;
             }
             writer.Write((byte)1);
             writer.Write(value.Value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)(sizeof(byte) + 1);
@@ -206,14 +206,14 @@ namespace Lazinator.Buffers
             if (value == null)
             {
                 writer.Write((byte)0);
-#if TRACEWRITING
+#if TRACING_DETAILED
                 writer.WriteTrace();
 #endif
                 return 1;
             }
             writer.Write((byte)1);
             writer.Write(value.Value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)sizeof(sbyte) + 1;
@@ -225,14 +225,14 @@ namespace Lazinator.Buffers
             if (value == null)
             {
                 writer.Write((byte)0);
-#if TRACEWRITING
+#if TRACING_DETAILED
                 writer.WriteTrace();
 #endif
                 return 1;
             }
             writer.Write((byte)1);
             writer.Write(value.Value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)sizeof(short) + 1;
@@ -244,14 +244,14 @@ namespace Lazinator.Buffers
             if (value == null)
             {
                 writer.Write((byte)0);
-#if TRACEWRITING
+#if TRACING_DETAILED
                 writer.WriteTrace();
 #endif
                 return 1;
             }
             writer.Write((byte)1);
             writer.Write(value.Value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)sizeof(ushort) + 1;
@@ -263,14 +263,14 @@ namespace Lazinator.Buffers
             if (value == null)
             {
                 writer.Write((byte)0);
-#if TRACEWRITING
+#if TRACING_DETAILED
                 writer.WriteTrace();
 #endif
                 return 1;
             }
             writer.Write((byte)1);
             writer.Write(value.Value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)sizeof(int) + 1;
@@ -282,14 +282,14 @@ namespace Lazinator.Buffers
             if (value == null)
             {
                 writer.Write((byte)0);
-#if TRACEWRITING
+#if TRACING_DETAILED
                 writer.WriteTrace();
 #endif
                 return 1;
             }
             writer.Write((byte)1);
             writer.Write(value.Value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)sizeof(uint) + 1;
@@ -301,14 +301,14 @@ namespace Lazinator.Buffers
             if (value == null)
             {
                 writer.Write((byte)0);
-#if TRACEWRITING
+#if TRACING_DETAILED
                 writer.WriteTrace();
 #endif
                 return 1;
             }
             writer.Write((byte)1);
             writer.Write(value.Value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)sizeof(long) + 1;
@@ -320,14 +320,14 @@ namespace Lazinator.Buffers
             if (value == null)
             {
                 writer.Write((byte)0);
-#if TRACEWRITING
+#if TRACING_DETAILED
                 writer.WriteTrace();
 #endif
                 return 1;
             }
             writer.Write((byte)1);
             writer.Write(value.Value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)sizeof(ulong) + 1;
@@ -339,14 +339,14 @@ namespace Lazinator.Buffers
             if (value == null)
             {
                 writer.Write((byte)0);
-#if TRACEWRITING
+#if TRACING_DETAILED
                 writer.WriteTrace();
 #endif
                 return 1;
             }
             writer.Write((byte)1);
             writer.Write(value.Value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)sizeof(float) + 1;
@@ -358,14 +358,14 @@ namespace Lazinator.Buffers
             if (value == null)
             {
                 writer.Write((byte)0);
-#if TRACEWRITING
+#if TRACING_DETAILED
                 writer.WriteTrace();
 #endif
                 return 1;
             }
             writer.Write((byte)1);
             writer.Write(value.Value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)sizeof(double) + 1;
@@ -377,14 +377,14 @@ namespace Lazinator.Buffers
             if (value == null)
             {
                 writer.Write((byte)0);
-#if TRACEWRITING
+#if TRACING_DETAILED
                 writer.WriteTrace();
 #endif
                 return 1;
             }
             writer.Write((byte)1);
             writer.Write((decimal)value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)17;
@@ -396,14 +396,14 @@ namespace Lazinator.Buffers
             if (value == null)
             {
                 writer.Write((byte)0);
-#if TRACEWRITING
+#if TRACING_DETAILED
                 writer.WriteTrace();
 #endif
                 return 1;
             }
             writer.Write((byte)1);
             writer.Write(value.Value.Ticks);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)17;
@@ -415,7 +415,7 @@ namespace Lazinator.Buffers
             if (value == null)
             {
                 writer.Write((byte)0);
-#if TRACEWRITING
+#if TRACING_DETAILED
                 writer.WriteTrace();
 #endif
                 return 1;
@@ -431,14 +431,14 @@ namespace Lazinator.Buffers
             if (value == null)
             {
                 writer.Write((byte)0);
-#if TRACEWRITING
+#if TRACING_DETAILED
                 writer.WriteTrace();
 #endif
                 return 1;
             }
             writer.Write((byte)1);
             writer.Write((Guid)value);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return (byte)17;

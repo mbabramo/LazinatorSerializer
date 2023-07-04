@@ -20,7 +20,8 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <!-- <DefineConstants>$(DefineConstants);TRACEWRITING</DefineConstants> -->
+	  <DefineConstants>$(DefineConstants);TRACING</DefineConstants>
+    <!-- <DefineConstants>$(DefineConstants);TRACING_DETAILED</DefineConstants> -->
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

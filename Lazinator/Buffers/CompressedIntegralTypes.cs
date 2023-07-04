@@ -17,7 +17,7 @@ namespace Lazinator.Buffers
             while (num >= 128U)
             {
                 writer.Write((byte) (num | 128U));
-#if TRACEWRITING
+#if TRACING_DETAILED
                 writer.WriteTrace();
 #endif
                 num >>= 7;
@@ -25,7 +25,7 @@ namespace Lazinator.Buffers
             }
 
             writer.Write((byte) num);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             numBytes++;
@@ -63,7 +63,7 @@ namespace Lazinator.Buffers
             while (num >= 128U)
             {
                 writer.Write((byte) (num | 128U));
-#if TRACEWRITING
+#if TRACING_DETAILED
                 writer.WriteTrace();
 #endif
                 num >>= 7;
@@ -71,7 +71,7 @@ namespace Lazinator.Buffers
             }
             
             writer.Write((byte) num);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             numBytes++;
@@ -160,7 +160,7 @@ namespace Lazinator.Buffers
             {
                 writer.Write((byte) (127 + 128));
                 writer.Write((byte) 0);
-#if TRACEWRITING
+#if TRACING_DETAILED
                 writer.WriteTrace();
 #endif
                 return 2;
@@ -190,7 +190,7 @@ namespace Lazinator.Buffers
             {
                 writer.Write((byte) (127 + 128));
                 writer.Write((byte) 0);
-#if TRACEWRITING
+#if TRACING_DETAILED
                 writer.WriteTrace();
 #endif
                 return 2;
@@ -283,7 +283,7 @@ namespace Lazinator.Buffers
                 writer.Write((byte) 0);
             else
                 writer.Write((byte) 2);
-#if TRACEWRITING
+#if TRACING_DETAILED
             writer.WriteTrace();
 #endif
             return 1;
