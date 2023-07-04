@@ -58,14 +58,8 @@ namespace Lazinator.Buffers
 
         internal int NumActiveMemoryBytesReferenced => MemoryRangeCollection?.NumActiveMemoryBytesReferenced ?? 0;
         
-        MemoryBlockID GetActiveMemoryBlockID()
-        {
-            if (MemoryRangeCollection != null)
-                return MemoryRangeCollection.GetNextMemoryBlockID();
-            if (PreviousVersion != null)
-                return PreviousVersion.GetNextMemoryBlockID();
-            return new MemoryBlockID(0);
-        }
+        MemoryBlockID GetActiveMemoryBlockID() =>
+            MemoryRangeCollection?.GetNextMemoryBlockID() ?? PreviousVersion?.GetNextMemoryBlockID() ?? new MemoryBlockID(0);
 
         #region Construction and initialization
 
@@ -95,8 +89,7 @@ namespace Lazinator.Buffers
             }
             else
                 PreviousVersion = previousVersion.MultipleMemoryBlocks.DeepCopy();
-            NextMemoryBlockID = PreviousVersion?.GetNextMemoryBlockID() ?? new MemoryBlockID(0);
-            _LengthsPosition = (NextMemoryBlockID, 0);
+            _LengthsPosition = (PreviousVersion?.GetNextMemoryBlockID().GetIntID() ?? 0, 0);
             MemoryRangeCollection = null;
         }
 
@@ -141,7 +134,6 @@ namespace Lazinator.Buffers
         /// <param name="position">The start position</param>
         /// <returns></returns>
         public LazinatorMemory Slice(long position) => LazinatorMemory.Slice(position);
-
 
         /// <summary>
         /// Returns the memory in the buffer beginning at the specified position and with the specified length
@@ -218,7 +210,7 @@ namespace Lazinator.Buffers
 
         public string ToLocationString()
         {
-            return $"{OverallMemoryPosition} (lengths {LengthsPosition}) Active MemoryBlockID: {GetActiveMemoryBlockID()}";
+            return $"{OverallMemoryPosition} (lengths {LengthsPosition}) ActiveMemoryBlockID: {GetActiveMemoryBlockID()}";
         }
 
         Span<byte> ActiveSpan => ActiveMemory == null ? new Span<byte>() : ActiveMemory.CurrentBuffer.Memory.Span;
@@ -325,7 +317,6 @@ namespace Lazinator.Buffers
                     {
                         MemoryRangeCollection.AppendMemoryBlock(block); // Append the memory block (and any part of the range of the block not already referred to)
                     }
-                    NextMemoryBlockID = null;
                 }
                 ActiveMemory = new ExpandableBytes(minSizeofNewBuffer);
                 ActiveMemoryPosition = 0;
@@ -544,7 +535,7 @@ namespace Lazinator.Buffers
         {
             get
             {
-                if (MemoryRangeCollection == null || LengthsPosition.index == GetActiveMemoryBlockID().GetIntID())
+                if (LengthsPosition.index == GetActiveMemoryBlockID().GetIntID())
                     return ActiveSpan.Slice(LengthsPosition.offset);
                 MemoryBlock block = MemoryRangeCollection.MemoryBlockAtIndex(LengthsPosition.index);
                 return block.ReadWriteMemory.Slice(LengthsPosition.offset).Span;
