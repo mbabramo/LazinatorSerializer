@@ -113,7 +113,7 @@ namespace LazinatorTests.Examples.Abstract
         public abstract int LazinatorObjectVersion { get; set; }
         protected abstract int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
         protected abstract void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar);
-        protected abstract int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar);
+        protected abstract int ConvertFromBytesForChildLengths(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar);
         public abstract void SerializeToExistingBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options);
         protected abstract LazinatorMemory EncodeToNewBuffer(in LazinatorSerializationOptions options);
         protected abstract void UpdateDeserializedChildren(ref BufferWriter writer, long startPosition);

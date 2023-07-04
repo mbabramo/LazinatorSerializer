@@ -380,7 +380,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 lengthForLengths += 8;
             }
-            long totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);;
+            long totalChildrenSize = ConvertFromBytesForChildLengths(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);;
             TabbedText.Tabs--;
             return bytesSoFar + totalChildrenSize;
         }
@@ -389,7 +389,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
         }
         
-        protected virtual long ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
+        protected virtual long ConvertFromBytesForChildLengths(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
         {
             long totalChildrenBytes = 0;
             TabbedText.WriteLine($"Contents: Length is {bytesSoFar} past above position; start location is {indexOfFirstChild + totalChildrenBytes} past above position"); 
