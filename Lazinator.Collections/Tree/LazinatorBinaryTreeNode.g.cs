@@ -857,6 +857,7 @@ namespace Lazinator.Collections.Tree
             {
                 lengthForLengths += 12;
             }
+            TabbedText.WriteLine($"Location of child properties of BinaryTreeNode: {LazinatorMemoryStorage.ToLocationString()}");
             int totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);;
             TabbedText.Tabs--;
             return bytesSoFar + totalChildrenSize;
@@ -990,10 +991,10 @@ namespace Lazinator.Collections.Tree
             }
             
             var previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, After skipping {lengthForLengths} bytes to store lengths of child objects");
+            TabbedText.WriteLine($"{writer.ToLocationString()}, after skipping {lengthForLengths} bytes to store lengths of child objects");
             WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of LazinatorBinaryTreeNode<T>) ");
+            TabbedText.WriteLine($"{writer.ToLocationString()} (end of LazinatorBinaryTreeNode<T>) ");
             
         }
         async protected virtual ValueTask WritePropertiesIntoBufferAsync(BufferWriterContainer writer, LazinatorSerializationOptions options, bool includeUniqueID)

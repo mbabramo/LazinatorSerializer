@@ -201,16 +201,13 @@ namespace Lazinator.Buffers
             get => _LengthsPosition;
             set
             {
-#if TRACING
-                TabbedText.WriteLine($"Setting lengths position to {value}. Currently writing otherwise at {IndexedMemoryPosition}");
-#endif
                 _LengthsPosition = value;
             }
         }
 
         public string ToLocationString()
         {
-            return $"{OverallMemoryPosition} (lengths {LengthsPosition}) ActiveMemoryBlockID: {GetActiveMemoryBlockID()}";
+            return $"Overall {OverallMemoryPosition} Indexed {IndexedMemoryPosition} (length {LengthsPosition})";
         }
 
         Span<byte> ActiveSpan => ActiveMemory == null ? new Span<byte>() : ActiveMemory.CurrentBuffer.Memory.Span;
@@ -551,8 +548,19 @@ namespace Lazinator.Buffers
         {
             (int index, int offset) previousPosition = LengthsPosition;
             LengthsPosition = IndexedMemoryPosition;
+#if TRACING
+            TabbedText.WriteLine($"Setting lengths position to {LengthsPosition} and then skipping {bytesToReserve} reserved bytes.");
+#endif
             Skip(bytesToReserve);
             return previousPosition;
+        }
+
+        public void AdvanceLengthsPosition(int bytesToAdvance)
+        {
+            LengthsPosition = (LengthsPosition.index, LengthsPosition.offset + bytesToAdvance);
+#if TRACING
+            TabbedText.WriteLine($"Advancing lengths position {bytesToAdvance} bytes to {LengthsPosition} (while writing at {IndexedMemoryPosition}.");
+#endif
         }
 
         /// <summary>
@@ -563,6 +571,9 @@ namespace Lazinator.Buffers
         public void ResetLengthsPosition((int index, int offset) indexedPosition)
         {
             LengthsPosition = indexedPosition;
+#if TRACING
+            TabbedText.WriteLine($"Returning to write length at {LengthsPosition}.");
+#endif
         }
 
         public void RecordLength(byte length)
@@ -571,7 +582,7 @@ namespace Lazinator.Buffers
             TabbedText.WriteLine($"Setting lengths value to {length} at {LengthsPosition}. Currently writing otherwise at {IndexedMemoryPosition}");
 #endif
             LengthsSpan[0] = length;
-            LengthsPosition = (LengthsPosition.index, LengthsPosition.offset + 1);
+            AdvanceLengthsPosition(1);
 #if TRACING_DETAILED
             WriteTrace();
 #endif
@@ -589,7 +600,7 @@ namespace Lazinator.Buffers
 #if TRACING_DETAILED
             WriteTrace();
 #endif
-            LengthsPosition = (LengthsPosition.index, LengthsPosition.offset + sizeof(Int16));
+            AdvanceLengthsPosition(sizeof(Int16));
         }
 
         public void RecordLength(int length)
@@ -604,7 +615,7 @@ namespace Lazinator.Buffers
 #if TRACING_DETAILED
             WriteTrace();
 #endif
-            LengthsPosition = (LengthsPosition.index, LengthsPosition.offset + sizeof(int));
+            AdvanceLengthsPosition(sizeof(int));
         }
         public void RecordLength(Int64 length)
         {
@@ -618,7 +629,8 @@ namespace Lazinator.Buffers
 #if TRACING_DETAILED
             WriteTrace();
 #endif
-            LengthsPosition = (LengthsPosition.index, LengthsPosition.offset + sizeof(Int64));
+
+            AdvanceLengthsPosition(sizeof(Int64));
         }
 
 #endregion
