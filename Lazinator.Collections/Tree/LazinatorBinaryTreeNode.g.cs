@@ -848,8 +848,8 @@ namespace Lazinator.Collections.Tree
         protected virtual int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             TabbedText.WriteLine($"");
-            TabbedText.WriteLine($"Converting Lazinator.Collections.Tree.LazinatorBinaryTreeNode<T> at position: " + LazinatorMemoryStorage.ToLocationString());
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
+            TabbedText.WriteLine($"Converting Lazinator.Collections.Tree.LazinatorBinaryTreeNode<T> at position: " + LazinatorMemoryStorage.ToLocationString());
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             TabbedText.Tabs++;
             int lengthForLengths = 0;

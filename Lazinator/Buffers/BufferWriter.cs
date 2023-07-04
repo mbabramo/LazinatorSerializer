@@ -207,7 +207,7 @@ namespace Lazinator.Buffers
 
         public string ToLocationString()
         {
-            return $"Overall {OverallMemoryPosition} Indexed {IndexedMemoryPosition} (length {LengthsPosition})";
+            return $"Overall {OverallMemoryPosition} Indexed {IndexedMemoryPosition} (length {LengthsPosition})"; 
         }
 
         Span<byte> ActiveSpan => ActiveMemory == null ? new Span<byte>() : ActiveMemory.CurrentBuffer.Memory.Span;
@@ -298,7 +298,7 @@ namespace Lazinator.Buffers
             if (ActiveMemoryPosition > 0)
             {
 #if TRACING
-                TabbedText.WriteLine($"Moving active memory to completed memory, block {GetActiveMemoryBlockID()}");
+                TabbedText.WriteLine($"Moving active memory to completed memory, block {GetActiveMemoryBlockID()} ({ActiveMemoryPosition} bytes)");
 #endif
                 bool memoryBlockAlreadyIncluded = false;
                 if (MemoryRangeCollection != null)
