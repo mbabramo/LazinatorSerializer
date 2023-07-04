@@ -10,6 +10,7 @@ using Newtonsoft.Json.Serialization;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Lazinator.Support;
+using Newtonsoft.Json.Linq;
 
 namespace Lazinator.Buffers
 {
@@ -581,6 +582,9 @@ namespace Lazinator.Buffers
 
         public void RecordLength(byte length)
         {
+#if TRACING
+            TabbedText.WriteLine($"Setting lengths value to {length} at {LengthsPosition}. Currently writing otherwise at {IndexedMemoryPosition}");
+#endif
             LengthsSpan[0] = length;
             LengthsPosition = (LengthsPosition.index, LengthsPosition.offset + 1);
 #if TRACING_DETAILED
@@ -590,6 +594,9 @@ namespace Lazinator.Buffers
 
         public void RecordLength(Int16 length)
         {
+#if TRACING
+            TabbedText.WriteLine($"Setting lengths value to {length} at {LengthsPosition}. Currently writing otherwise at {IndexedMemoryPosition}");
+#endif
             if (BufferWriter.LittleEndianStorage)
                 WriteInt16LittleEndian(LengthsSpan, length);
             else
@@ -602,6 +609,9 @@ namespace Lazinator.Buffers
 
         public void RecordLength(int length)
         {
+#if TRACING
+            TabbedText.WriteLine($"Setting lengths value to {length} at {LengthsPosition}. Currently writing otherwise at {IndexedMemoryPosition}");
+#endif
             if (BufferWriter.LittleEndianStorage)
                 WriteInt32LittleEndian(LengthsSpan, length);
             else
@@ -613,6 +623,9 @@ namespace Lazinator.Buffers
         }
         public void RecordLength(Int64 length)
         {
+#if TRACING
+            TabbedText.WriteLine($"Setting lengths value to {length} at {LengthsPosition}. Currently writing otherwise at {IndexedMemoryPosition}");
+#endif
             if (BufferWriter.LittleEndianStorage)
                 WriteInt64LittleEndian(LengthsSpan, length);
             else
