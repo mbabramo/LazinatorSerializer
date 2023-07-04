@@ -329,7 +329,7 @@ namespace Lazinator.Wrappers
         int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             TabbedText.WriteLine($"");
-            TabbedText.WriteLine($"Converting Lazinator.Wrappers.WFloatArray from bytes at: " + LazinatorMemoryStorage.ToLocationString());
+            TabbedText.WriteLine($"Converting Lazinator.Wrappers.WFloatArray at position: " + LazinatorMemoryStorage.ToLocationString());
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             TabbedText.Tabs++;
@@ -346,7 +346,7 @@ namespace Lazinator.Wrappers
         int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
         {
             int totalChildrenBytes = 0;
-            TabbedText.WriteLine($"WrappedValue: Length is at {bytesSoFar}; start location is {indexOfFirstChild + totalChildrenBytes}"); 
+            TabbedText.WriteLine($"WrappedValue: Length is {bytesSoFar} past above position; start location is {indexOfFirstChild + totalChildrenBytes} past above position"); 
             _WrappedValue_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             
             totalChildrenBytes = span.Length - bytesSoFar;
@@ -415,10 +415,10 @@ namespace Lazinator.Wrappers
             int lengthForLengths = 0;
             
             var previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, After skipping {lengthForLengths} bytes to store lengths of child objects");
+            TabbedText.WriteLine($"Location {writer.ToLocationString()}, after skipping {lengthForLengths} bytes to store lengths of child objects");
             WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of WFloatArray) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()} (end of WFloatArray) ");
             
         }
         

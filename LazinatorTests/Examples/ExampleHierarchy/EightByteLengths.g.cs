@@ -372,7 +372,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected virtual long ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             TabbedText.WriteLine($"");
-            TabbedText.WriteLine($"Converting LazinatorTests.Examples.ExampleHierarchy.EightByteLengths from bytes at: " + LazinatorMemoryStorage.ToLocationString());
+            TabbedText.WriteLine($"Converting LazinatorTests.Examples.ExampleHierarchy.EightByteLengths at position: " + LazinatorMemoryStorage.ToLocationString());
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             TabbedText.Tabs++;
@@ -393,7 +393,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         protected virtual long ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
         {
             long totalChildrenBytes = 0;
-            TabbedText.WriteLine($"Example: Length is at {bytesSoFar}; start location is {indexOfFirstChild + totalChildrenBytes}"); 
+            TabbedText.WriteLine($"Example: Length is {bytesSoFar} past above position; start location is {indexOfFirstChild + totalChildrenBytes} past above position"); 
             _Example_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -476,10 +476,10 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             }
             
             var previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, After skipping {lengthForLengths} bytes to store lengths of child objects");
+            TabbedText.WriteLine($"Location {writer.ToLocationString()}, after skipping {lengthForLengths} bytes to store lengths of child objects");
             WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of EightByteLengths) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()} (end of EightByteLengths) ");
             
         }
         
@@ -490,7 +490,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
         {
             long startOfChildPosition = 0;
             long lengthValue = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Example (accessed? {_Example_Accessed}) (backing var null? {_Example == null}) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, Example (accessed? {_Example_Accessed}) (backing var null? {_Example == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)

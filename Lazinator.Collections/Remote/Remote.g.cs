@@ -486,7 +486,7 @@ namespace Lazinator.Collections.Remote
         protected virtual int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             TabbedText.WriteLine($"");
-            TabbedText.WriteLine($"Converting Lazinator.Collections.Remote.Remote<TKey, TValue> from bytes at: " + LazinatorMemoryStorage.ToLocationString());
+            TabbedText.WriteLine($"Converting Lazinator.Collections.Remote.Remote<TKey, TValue> at position: " + LazinatorMemoryStorage.ToLocationString());
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             TabbedText.Tabs++;
@@ -509,13 +509,13 @@ namespace Lazinator.Collections.Remote
         protected virtual int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
         {
             int totalChildrenBytes = 0;
-            TabbedText.WriteLine($"Key: Length is at {bytesSoFar}; start location is {indexOfFirstChild + totalChildrenBytes}"); 
+            TabbedText.WriteLine($"Key: Length is {bytesSoFar} past above position; start location is {indexOfFirstChild + totalChildrenBytes} past above position"); 
             _Key_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            TabbedText.WriteLine($"Local: Length is at {bytesSoFar}; start location is {indexOfFirstChild + totalChildrenBytes}"); 
+            TabbedText.WriteLine($"Local: Length is {bytesSoFar} past above position; start location is {indexOfFirstChild + totalChildrenBytes} past above position"); 
             _Local_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -610,10 +610,10 @@ namespace Lazinator.Collections.Remote
             }
             
             var previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, After skipping {lengthForLengths} bytes to store lengths of child objects");
+            TabbedText.WriteLine($"Location {writer.ToLocationString()}, after skipping {lengthForLengths} bytes to store lengths of child objects");
             WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of Remote<TKey, TValue>) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()} (end of Remote<TKey, TValue>) ");
             
         }
         

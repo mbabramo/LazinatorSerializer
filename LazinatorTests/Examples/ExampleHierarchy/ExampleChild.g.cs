@@ -772,7 +772,7 @@ namespace LazinatorTests.Examples
         protected virtual int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             TabbedText.WriteLine($"");
-            TabbedText.WriteLine($"Converting LazinatorTests.Examples.ExampleChild from bytes at: " + LazinatorMemoryStorage.ToLocationString());
+            TabbedText.WriteLine($"Converting LazinatorTests.Examples.ExampleChild at position: " + LazinatorMemoryStorage.ToLocationString());
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             TabbedText.Tabs++;
@@ -797,16 +797,16 @@ namespace LazinatorTests.Examples
         protected virtual int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
         {
             int totalChildrenBytes = 0;
-            TabbedText.WriteLine($"ByteSpan: Length is at {bytesSoFar}; start location is {indexOfFirstChild + totalChildrenBytes}"); 
+            TabbedText.WriteLine($"ByteSpan: Length is {bytesSoFar} past above position; start location is {indexOfFirstChild + totalChildrenBytes} past above position"); 
             _ByteSpan_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            TabbedText.WriteLine($"MyExampleGrandchild: Length is at {bytesSoFar}; start location is {indexOfFirstChild + totalChildrenBytes}"); 
+            TabbedText.WriteLine($"MyExampleGrandchild: Length is {bytesSoFar} past above position; start location is {indexOfFirstChild + totalChildrenBytes} past above position"); 
             _MyExampleGrandchild_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            TabbedText.WriteLine($"MyWrapperContainer: Length is at {bytesSoFar}; start location is {indexOfFirstChild + totalChildrenBytes}"); 
+            TabbedText.WriteLine($"MyWrapperContainer: Length is {bytesSoFar} past above position; start location is {indexOfFirstChild + totalChildrenBytes} past above position"); 
             _MyWrapperContainer_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -907,10 +907,10 @@ namespace LazinatorTests.Examples
             }
             
             var previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, After skipping {lengthForLengths} bytes to store lengths of child objects");
+            TabbedText.WriteLine($"Location {writer.ToLocationString()}, after skipping {lengthForLengths} bytes to store lengths of child objects");
             WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of ExampleChild) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()} (end of ExampleChild) ");
             
         }
         async protected virtual ValueTask WritePropertiesIntoBufferAsync(BufferWriterContainer writer, LazinatorSerializationOptions options, bool includeUniqueID)
@@ -943,10 +943,10 @@ namespace LazinatorTests.Examples
             }
             
             var previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, After skipping {lengthForLengths} bytes to store lengths of child objects");
+            TabbedText.WriteLine($"Location {writer.ToLocationString()}, after skipping {lengthForLengths} bytes to store lengths of child objects");
             await WriteChildrenPropertiesIntoBufferAsync(writer, options, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of ExampleChild) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()} (end of ExampleChild) ");
             
         }
         
@@ -987,7 +987,7 @@ namespace LazinatorTests.Examples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyExampleGrandchild (accessed? {_MyExampleGrandchild_Accessed}) (backing var null? {_MyExampleGrandchild == null}) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyExampleGrandchild (accessed? {_MyExampleGrandchild_Accessed}) (backing var null? {_MyExampleGrandchild == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
@@ -1010,7 +1010,7 @@ namespace LazinatorTests.Examples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyWrapperContainer (accessed? {_MyWrapperContainer_Accessed}) (backing var null? {_MyWrapperContainer == null}) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyWrapperContainer (accessed? {_MyWrapperContainer_Accessed}) (backing var null? {_MyWrapperContainer == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
@@ -1064,7 +1064,7 @@ namespace LazinatorTests.Examples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyExampleGrandchild (accessed? {_MyExampleGrandchild_Accessed}) (backing var null? {_MyExampleGrandchild == null}) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyExampleGrandchild (accessed? {_MyExampleGrandchild_Accessed}) (backing var null? {_MyExampleGrandchild == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Writer.ActiveMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
@@ -1087,7 +1087,7 @@ namespace LazinatorTests.Examples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyWrapperContainer (accessed? {_MyWrapperContainer_Accessed}) (backing var null? {_MyWrapperContainer == null}) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyWrapperContainer (accessed? {_MyWrapperContainer_Accessed}) (backing var null? {_MyWrapperContainer == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Writer.ActiveMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)

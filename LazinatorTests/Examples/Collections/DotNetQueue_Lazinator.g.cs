@@ -331,7 +331,7 @@ namespace LazinatorTests.Examples.Collections
         protected virtual int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             TabbedText.WriteLine($"");
-            TabbedText.WriteLine($"Converting LazinatorTests.Examples.Collections.DotNetQueue_Lazinator from bytes at: " + LazinatorMemoryStorage.ToLocationString());
+            TabbedText.WriteLine($"Converting LazinatorTests.Examples.Collections.DotNetQueue_Lazinator at position: " + LazinatorMemoryStorage.ToLocationString());
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             TabbedText.Tabs++;
@@ -348,7 +348,7 @@ namespace LazinatorTests.Examples.Collections
         protected virtual int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
         {
             int totalChildrenBytes = 0;
-            TabbedText.WriteLine($"MyQueueSerialized: Length is at {bytesSoFar}; start location is {indexOfFirstChild + totalChildrenBytes}"); 
+            TabbedText.WriteLine($"MyQueueSerialized: Length is {bytesSoFar} past above position; start location is {indexOfFirstChild + totalChildrenBytes} past above position"); 
             _MyQueueSerialized_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             _DotNetQueue_Lazinator_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
@@ -424,10 +424,10 @@ namespace LazinatorTests.Examples.Collections
             int lengthForLengths = 4;
             
             var previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, After skipping {lengthForLengths} bytes to store lengths of child objects");
+            TabbedText.WriteLine($"Location {writer.ToLocationString()}, after skipping {lengthForLengths} bytes to store lengths of child objects");
             WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of DotNetQueue_Lazinator) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()} (end of DotNetQueue_Lazinator) ");
             
         }
         

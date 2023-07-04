@@ -315,7 +315,7 @@ namespace LazinatorTests.AnotherNamespace
         int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             TabbedText.WriteLine($"");
-            TabbedText.WriteLine($"Converting LazinatorTests.AnotherNamespace.StructInAnotherNamespace from bytes at: " + LazinatorMemoryStorage.ToLocationString());
+            TabbedText.WriteLine($"Converting LazinatorTests.AnotherNamespace.StructInAnotherNamespace at position: " + LazinatorMemoryStorage.ToLocationString());
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             TabbedText.Tabs++;
@@ -392,7 +392,7 @@ namespace LazinatorTests.AnotherNamespace
             // write properties
             
             WritePrimitivePropertiesIntoBuffer(ref writer, options, includeUniqueID);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of StructInAnotherNamespace) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()} (end of StructInAnotherNamespace) ");
             
         }
         

@@ -300,7 +300,7 @@ namespace LazinatorTests.Examples.Subclasses
         protected virtual int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             TabbedText.WriteLine($"");
-            TabbedText.WriteLine($"Converting LazinatorTests.Examples.Subclasses.ClassWithForeignEnum from bytes at: " + LazinatorMemoryStorage.ToLocationString());
+            TabbedText.WriteLine($"Converting LazinatorTests.Examples.Subclasses.ClassWithForeignEnum at position: " + LazinatorMemoryStorage.ToLocationString());
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             TabbedText.Tabs++;
@@ -383,7 +383,7 @@ namespace LazinatorTests.Examples.Subclasses
             // write properties
             
             WritePrimitivePropertiesIntoBuffer(ref writer, options, includeUniqueID);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of ClassWithForeignEnum) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()} (end of ClassWithForeignEnum) ");
             
         }
         

@@ -317,7 +317,7 @@ namespace LazinatorTests.Examples
         protected virtual int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             TabbedText.WriteLine($"");
-            TabbedText.WriteLine($"Converting LazinatorTests.Examples.ExampleGrandchild from bytes at: " + LazinatorMemoryStorage.ToLocationString());
+            TabbedText.WriteLine($"Converting LazinatorTests.Examples.ExampleGrandchild at position: " + LazinatorMemoryStorage.ToLocationString());
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             TabbedText.Tabs++;
@@ -402,7 +402,7 @@ namespace LazinatorTests.Examples
             // write properties
             
             WritePrimitivePropertiesIntoBuffer(ref writer, options, includeUniqueID);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of ExampleGrandchild) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()} (end of ExampleGrandchild) ");
             
         }
         

@@ -300,7 +300,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         protected virtual int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             TabbedText.WriteLine($"");
-            TabbedText.WriteLine($"Converting LazinatorTests.Examples.RemoteHierarchy.RemoteLevel2 from bytes at: " + LazinatorMemoryStorage.ToLocationString());
+            TabbedText.WriteLine($"Converting LazinatorTests.Examples.RemoteHierarchy.RemoteLevel2 at position: " + LazinatorMemoryStorage.ToLocationString());
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             TabbedText.Tabs++;
@@ -383,7 +383,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             // write properties
             
             WritePrimitivePropertiesIntoBuffer(ref writer, options, includeUniqueID);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of RemoteLevel2) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()} (end of RemoteLevel2) ");
             
         }
         

@@ -559,7 +559,7 @@ namespace Lazinator.Buffers
         {
             LengthsPosition = (LengthsPosition.index, LengthsPosition.offset + bytesToAdvance);
 #if TRACING
-            TabbedText.WriteLine($"Advancing lengths position {bytesToAdvance} bytes to {LengthsPosition} (while writing at {IndexedMemoryPosition}.");
+            TabbedText.WriteLine($"Advancing lengths position {bytesToAdvance} bytes to {LengthsPosition} (while writing at {IndexedMemoryPosition}).");
 #endif
         }
 

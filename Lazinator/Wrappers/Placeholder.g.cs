@@ -283,7 +283,7 @@ namespace Lazinator.Wrappers
         int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             TabbedText.WriteLine($"");
-            TabbedText.WriteLine($"Converting Lazinator.Wrappers.Placeholder from bytes at: " + LazinatorMemoryStorage.ToLocationString());
+            TabbedText.WriteLine($"Converting Lazinator.Wrappers.Placeholder at position: " + LazinatorMemoryStorage.ToLocationString());
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             TabbedText.Tabs++;
@@ -356,7 +356,7 @@ namespace Lazinator.Wrappers
             // write properties
             
             
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of Placeholder) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()} (end of Placeholder) ");
             
         }
         

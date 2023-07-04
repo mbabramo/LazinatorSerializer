@@ -848,7 +848,7 @@ namespace Lazinator.Collections.Tree
         protected virtual int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             TabbedText.WriteLine($"");
-            TabbedText.WriteLine($"Converting Lazinator.Collections.Tree.LazinatorBinaryTreeNode<T> from bytes at: " + LazinatorMemoryStorage.ToLocationString());
+            TabbedText.WriteLine($"Converting Lazinator.Collections.Tree.LazinatorBinaryTreeNode<T> at position: " + LazinatorMemoryStorage.ToLocationString());
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             TabbedText.Tabs++;
@@ -857,7 +857,6 @@ namespace Lazinator.Collections.Tree
             {
                 lengthForLengths += 12;
             }
-            TabbedText.WriteLine($"Location of child properties of BinaryTreeNode: {LazinatorMemoryStorage.ToLocationString()}");
             int totalChildrenSize = ConvertFromBytesForChildProperties(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);;
             TabbedText.Tabs--;
             return bytesSoFar + totalChildrenSize;
@@ -870,19 +869,19 @@ namespace Lazinator.Collections.Tree
         protected virtual int ConvertFromBytesForChildProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
         {
             int totalChildrenBytes = 0;
-            TabbedText.WriteLine($"Data: Length is at {bytesSoFar}; start location is {indexOfFirstChild + totalChildrenBytes}"); 
+            TabbedText.WriteLine($"Data: Length is {bytesSoFar} past above position; start location is {indexOfFirstChild + totalChildrenBytes} past above position"); 
             _Data_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            TabbedText.WriteLine($"LeftNode: Length is at {bytesSoFar}; start location is {indexOfFirstChild + totalChildrenBytes}"); 
+            TabbedText.WriteLine($"LeftNode: Length is {bytesSoFar} past above position; start location is {indexOfFirstChild + totalChildrenBytes} past above position"); 
             _LeftNode_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            TabbedText.WriteLine($"RightNode: Length is at {bytesSoFar}; start location is {indexOfFirstChild + totalChildrenBytes}"); 
+            TabbedText.WriteLine($"RightNode: Length is {bytesSoFar} past above position; start location is {indexOfFirstChild + totalChildrenBytes} past above position"); 
             _RightNode_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -991,10 +990,10 @@ namespace Lazinator.Collections.Tree
             }
             
             var previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
-            TabbedText.WriteLine($"{writer.ToLocationString()}, after skipping {lengthForLengths} bytes to store lengths of child objects");
+            TabbedText.WriteLine($"Location {writer.ToLocationString()}, after skipping {lengthForLengths} bytes to store lengths of child objects");
             WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
-            TabbedText.WriteLine($"{writer.ToLocationString()} (end of LazinatorBinaryTreeNode<T>) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()} (end of LazinatorBinaryTreeNode<T>) ");
             
         }
         async protected virtual ValueTask WritePropertiesIntoBufferAsync(BufferWriterContainer writer, LazinatorSerializationOptions options, bool includeUniqueID)
@@ -1027,10 +1026,10 @@ namespace Lazinator.Collections.Tree
             }
             
             var previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, After skipping {lengthForLengths} bytes to store lengths of child objects");
+            TabbedText.WriteLine($"Location {writer.ToLocationString()}, after skipping {lengthForLengths} bytes to store lengths of child objects");
             await WriteChildrenPropertiesIntoBufferAsync(writer, options, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition} (end of LazinatorBinaryTreeNode<T>) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()} (end of LazinatorBinaryTreeNode<T>) ");
             
         }
         
@@ -1066,7 +1065,7 @@ namespace Lazinator.Collections.Tree
             }
             TabbedText.Tabs--;
             writer.ConsiderSwitchToNextBuffer(ref options);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, LeftNode (accessed? {_LeftNode_Accessed}) (backing var null? {_LeftNode == null}) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, LeftNode (accessed? {_LeftNode_Accessed}) (backing var null? {_LeftNode == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
@@ -1090,7 +1089,7 @@ namespace Lazinator.Collections.Tree
             }
             TabbedText.Tabs--;
             writer.ConsiderSwitchToNextBuffer(ref options);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, RightNode (accessed? {_RightNode_Accessed}) (backing var null? {_RightNode == null}) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, RightNode (accessed? {_RightNode_Accessed}) (backing var null? {_RightNode == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
@@ -1147,7 +1146,7 @@ namespace Lazinator.Collections.Tree
             }
             TabbedText.Tabs--;
             writer.ConsiderSwitchToNextBuffer(ref options);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, LeftNode (accessed? {_LeftNode_Accessed}) (backing var null? {_LeftNode == null}) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, LeftNode (accessed? {_LeftNode_Accessed}) (backing var null? {_LeftNode == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
@@ -1171,7 +1170,7 @@ namespace Lazinator.Collections.Tree
             }
             TabbedText.Tabs--;
             writer.ConsiderSwitchToNextBuffer(ref options);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, RightNode (accessed? {_RightNode_Accessed}) (backing var null? {_RightNode == null}) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, RightNode (accessed? {_RightNode_Accessed}) (backing var null? {_RightNode == null}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
