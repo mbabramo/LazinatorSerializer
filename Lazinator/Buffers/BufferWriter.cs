@@ -9,6 +9,7 @@ using Lazinator.Core;
 using Newtonsoft.Json.Serialization;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Lazinator.Support;
 
 namespace Lazinator.Buffers
 {
@@ -204,8 +205,8 @@ namespace Lazinator.Buffers
             {
                 if (MemoryRangeCollection is null)
                     return (0, ActiveMemoryPosition);
-                int completedRanges = MemoryRangeCollection.NumMemoryRanges;
-                return (completedRanges, ActiveMemoryPosition);
+                int nextMemoryBlockID = GetNextMemoryBlockID().GetIntID();
+                return (nextMemoryBlockID, ActiveMemoryPosition);
             }
         }
 
@@ -213,7 +214,11 @@ namespace Lazinator.Buffers
         private (int index, int offset) LengthsPosition
         {
             get => _LengthsPosition;
-            set => _LengthsPosition = value;
+            set
+            {
+                TabbedText.WriteLine($"Setting lengths position to {value}"); // DEBUG
+                _LengthsPosition = value;
+            }
         }
 
         public string ToLocationString()
