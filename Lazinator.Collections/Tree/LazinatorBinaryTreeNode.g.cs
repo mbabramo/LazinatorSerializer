@@ -847,7 +847,7 @@ namespace Lazinator.Collections.Tree
         
         protected virtual int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            TabbedText.WriteLine(LazinatorMemoryStorage.ToLocationString());
+            TabbedText.WriteLine($"Converting from bytes at: " + LazinatorMemoryStorage.ToLocationString());
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             int lengthForLengths = 0;
