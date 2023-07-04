@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.Collections.Generic;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Lazinator.Support
 {
@@ -55,17 +56,27 @@ namespace Lazinator.Support
             OutputAndAccumulate(local);
         }
 
+        static object StringBuilderAppend = new object(); // StringBuilder is not threadsafe
+
         private static void OutputAndAccumulate(StringBuilder builder)
         {
             string localString = builder.ToString();
             if (EnableOutput)
+            {
                 Debug.Write(localString);
-            AccumulatedText.Append(localString);
+            }
+            lock (StringBuilderAppend)
+            {
+                AccumulatedText.Append(localString);
+            }
         }
 
         public static void ResetAccumulated()
         {
-            AccumulatedText = new StringBuilder();
+            lock (StringBuilderAppend)
+            {
+                AccumulatedText = new StringBuilder();
+            }
         }
 
         public static void WriteBytesVertically(IEnumerable<byte> bytes, bool includeIndices, IEnumerable<byte> previousForComparison = null, int startingIndex = 0)

@@ -546,13 +546,10 @@ namespace Lazinator.Buffers
         {
             get
             {
-                if (MemoryRangeCollection == null)
+                if (MemoryRangeCollection == null || LengthsPosition.index == GetNextMemoryBlockID().GetIntID())
                     return ActiveSpan.Slice(LengthsPosition.offset);
-                // It is still possible that we need to write into the ActiveSpan. The LengthsPosition.index refers to a range number. We need to find the corresponding BlockID number. If there is no such number (because the active span has not been copied yet into the stored memory blocks), then we still need to write into the ActiveSpan.
-                MemoryRange range = MemoryRangeCollection.MemoryRangeAtIndex(LengthsPosition.index);
-                if (range.MemoryBlock == null) // no such block yet
-                    return ActiveSpan.Slice(LengthsPosition.offset);
-                return range.Memory.Slice(LengthsPosition.offset).Span;
+                MemoryBlock block = MemoryRangeCollection.MemoryBlockAtIndex(LengthsPosition.index);
+                return block.ReadWriteMemory.Slice(LengthsPosition.offset).Span;
             }
         }
 
