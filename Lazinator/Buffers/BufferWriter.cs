@@ -69,7 +69,7 @@ namespace Lazinator.Buffers
                 minimumSize = ExpandableBytes.DefaultMinBufferSize;
             ActiveMemory = new ExpandableBytes(minimumSize);
             ActiveMemory.UsedBytesInCurrentBuffer = 0;
-            _LengthsPosition = (0, 0);
+            _LengthsPosition = (new MemoryBlockID(0), 0);
             MemoryRangeCollection = null;
             PreviousVersion = null;
         }
@@ -89,7 +89,7 @@ namespace Lazinator.Buffers
             }
             else
                 PreviousVersion = previousVersion.MultipleMemoryBlocks.DeepCopy();
-            _LengthsPosition = (PreviousVersion?.GetNextMemoryBlockID().AsInt ?? 0, 0);
+            _LengthsPosition = (PreviousVersion?.GetNextMemoryBlockID() ?? new MemoryBlockID(0), 0);
             MemoryRangeCollection = null;
         }
 
@@ -187,16 +187,16 @@ namespace Lazinator.Buffers
             }
         }
 
-        public (int index, int offset) IndexedMemoryPosition
+        public (MemoryBlockID id, int offset) IndexedMemoryPosition
         {
             get
             {
-                return (GetActiveMemoryBlockID().AsInt, ActiveMemoryPosition);
+                return (GetActiveMemoryBlockID(), ActiveMemoryPosition);
             }
         }
 
-        private (int index, int offset) _LengthsPosition;
-        private (int index, int offset) LengthsPosition
+        private (MemoryBlockID id, int offset) _LengthsPosition;
+        private (MemoryBlockID id, int offset) LengthsPosition
         {
             get => _LengthsPosition;
             set
@@ -537,9 +537,9 @@ namespace Lazinator.Buffers
         {
             get
             {
-                if (LengthsPosition.index == GetActiveMemoryBlockID().AsInt)
+                if (LengthsPosition.id == GetActiveMemoryBlockID())
                     return ActiveSpan.Slice(LengthsPosition.offset);
-                MemoryBlock block = MemoryRangeCollection.GetMemoryBlockByBlockID(new MemoryBlockID(LengthsPosition.index));
+                MemoryBlock block = MemoryRangeCollection.GetMemoryBlockByBlockID(LengthsPosition.id);
                 return block.ReadWriteMemory.Slice(LengthsPosition.offset).Span;
             }
         }
@@ -549,9 +549,9 @@ namespace Lazinator.Buffers
         /// If there are multiple child objects, the lengths will be stored consecutively.
         /// </summary>
         /// <param name="bytesToReserve">The number of bytes to reserve</param>
-        public (int index, int offset) SetLengthsPosition(int bytesToReserve)
+        public (MemoryBlockID id, int offset) SetLengthsPosition(int bytesToReserve)
         {
-            (int index, int offset) previousPosition = LengthsPosition;
+            (MemoryBlockID id, int offset) previousPosition = LengthsPosition;
             LengthsPosition = IndexedMemoryPosition;
 #if TRACING
             TabbedText.WriteLine($"Setting lengths position to {LengthsPosition} and then skipping {bytesToReserve} reserved bytes.");
@@ -562,13 +562,9 @@ namespace Lazinator.Buffers
 
         public void AdvanceLengthsPosition(int bytesToAdvance)
         {
-            LengthsPosition = (LengthsPosition.index, LengthsPosition.offset + bytesToAdvance);
+            LengthsPosition = (LengthsPosition.id, LengthsPosition.offset + bytesToAdvance);
 #if TRACING
             TabbedText.WriteLine($"Advancing lengths position {bytesToAdvance} bytes to {LengthsPosition} (while writing at {IndexedMemoryPosition}).");
-            if (LengthsPosition == (1, 22))
-            {
-                var DEBUG = 0;
-            }
 #endif
         }
 
@@ -577,7 +573,7 @@ namespace Lazinator.Buffers
         /// since that would result in changing the LengthsPosition to the appropriate value for the child.
         /// </summary>
         /// <param name="previousPosition"></param>
-        public void ResetLengthsPosition((int index, int offset) indexedPosition)
+        public void ResetLengthsPosition((MemoryBlockID id, int offset) indexedPosition)
         {
             LengthsPosition = indexedPosition;
 #if TRACING

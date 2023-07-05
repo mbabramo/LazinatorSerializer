@@ -73,10 +73,6 @@ namespace Lazinator.Buffers
             if (memoryBlock.MemoryBlockID > HighestMemoryBlockID)
                 HighestMemoryBlockID = memoryBlock.MemoryBlockID;
             LengthOfMemoryBlocks += (long)memoryBlock.Length;
-            if (MemoryBlocks.Count(x => x.MemoryBlockID.AsInt == 0) > 1)
-            {
-                var DEBUG = "x";
-            }
         }
 
         public void SetBlocks(IEnumerable<MemoryBlock> blocks)
