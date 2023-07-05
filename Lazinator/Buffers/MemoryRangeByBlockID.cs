@@ -23,10 +23,10 @@ namespace Lazinator.Buffers
 
         public override string ToString()
         {
-            return $"{MemoryBlockIntID}, {OffsetIntoMemoryBlock}, {Length}";
+            return $"{MemoryBlockID}, {OffsetIntoMemoryBlock}, {Length}";
         }
 
-        public MemoryBlockID GetMemoryBlockID() => new MemoryBlockID(MemoryBlockIntID);
+        public MemoryBlockID MemoryBlockID => new MemoryBlockID(MemoryBlockIntID);
 
         public MemoryRangeByBlockID(int memoryBlockIntID, int offsetIntoMemoryBlock, int length)
         {

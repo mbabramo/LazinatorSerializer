@@ -300,11 +300,7 @@ namespace Lazinator.Buffers
 #if TRACING
                 TabbedText.WriteLine($"Moving active memory to completed memory, block {GetActiveMemoryBlockID()} ({ActiveMemoryPosition} bytes)");
 #endif
-
-                if (GetActiveMemoryBlockID().AsInt == 6)
-                {
-                    var DEBUG = 0;
-                }
+                
                 bool memoryBlockAlreadyIncluded = false;
                 if (MemoryRangeCollection != null)
                 {

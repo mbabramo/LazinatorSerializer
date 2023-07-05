@@ -79,9 +79,9 @@ namespace Lazinator.Buffers
                     for (int i = 0; i < Ranges.Count; i++)
                     {
                         var rangeI = Ranges[i];
-                        if (rangeI.GetMemoryBlockID() == range.GetMemoryBlockID()) 
+                        if (rangeI.MemoryBlockID == range.MemoryBlockID) 
                         {
-                            MemoryBlock existingBlock = GetMemoryBlockByBlockID(rangeI.GetMemoryBlockID());
+                            MemoryBlock existingBlock = GetMemoryBlockByBlockID(rangeI.MemoryBlockID);
                             if (existingBlock != null)
                             {
                                 throw new Exception("DEBUGCHECK"); // is this really correct?
@@ -91,15 +91,15 @@ namespace Lazinator.Buffers
                     }
                 }
                 var last = Ranges.Last();
-                if (last.GetMemoryBlockID() == range.GetMemoryBlockID() && range.OffsetIntoMemoryBlock == last.OffsetIntoMemoryBlock + last.Length)
+                if (last.MemoryBlockID == range.MemoryBlockID && range.OffsetIntoMemoryBlock == last.OffsetIntoMemoryBlock + last.Length)
                 {
-                    var replacementLast = new MemoryRangeByBlockID(last.GetMemoryBlockID(), last.OffsetIntoMemoryBlock, last.Length + range.Length);
+                    var replacementLast = new MemoryRangeByBlockID(last.MemoryBlockID, last.OffsetIntoMemoryBlock, last.Length + range.Length);
                     Ranges[Ranges.Count - 1] = replacementLast;
                     PatchesTotalLength += range.Length; // i.e., we're replacing last.Length with last>Length + blockAndSlice.Length, so this is the increment.
                     return;
                 }
             }
-            Ranges.Add(new MemoryRangeByBlockID(range.GetMemoryBlockID(), range.OffsetIntoMemoryBlock, range.Length));
+            Ranges.Add(new MemoryRangeByBlockID(range.MemoryBlockID, range.OffsetIntoMemoryBlock, range.Length));
             PatchesTotalLength += range.Length;
         }
 
@@ -155,7 +155,7 @@ namespace Lazinator.Buffers
                 if (Ranges.Any())
                 {
                     var previousRange = Ranges.Last();
-                    if (previousRange.MemoryBlockIntID == memoryBlock.MemoryBlockID.AsInt)
+                    if (previousRange.MemoryBlockID == memoryBlock.MemoryBlockID)
                         numBytesAlreadyReferredTo = previousRange.Length;
                     else if (HighestMemoryBlockID.AsInt == memoryBlock.MemoryBlockID.AsInt)
                     {
@@ -164,7 +164,7 @@ namespace Lazinator.Buffers
                         for (int r = Ranges.Count - 2; r >= 0; r--)
                         {
                             var earlierRange = Ranges[r];
-                            if (earlierRange.MemoryBlockIntID == memoryBlock.MemoryBlockID.AsInt)
+                            if (earlierRange.MemoryBlockID == memoryBlock.MemoryBlockID)
                             {
                                 numBytesAlreadyReferredTo = earlierRange.Length;
                                 break;
@@ -196,7 +196,7 @@ namespace Lazinator.Buffers
             var range = Ranges[i];
             if (memoryBlockIndex == -1)
             {
-                MemoryBlockID memoryBlockID = range.GetMemoryBlockID();
+                MemoryBlockID memoryBlockID = range.MemoryBlockID;
                 var match = MemoryBlocksLoadingInfo.Select((loadingInfo, index) => (loadingInfo, index)).FirstOrDefault(x => x.loadingInfo.MemoryBlockID == memoryBlockID);
                 if (match.loadingInfo == null)
                     return default;
@@ -219,7 +219,7 @@ namespace Lazinator.Buffers
             var range = Ranges[i];
             if (memoryBlockIndex == -1)
             {
-                MemoryBlockID memoryBlockID = range.GetMemoryBlockID();
+                MemoryBlockID memoryBlockID = range.MemoryBlockID;
                 var match = MemoryBlocksLoadingInfo.Select((loadingInfo, index) => (loadingInfo, index)).FirstOrDefault(x => x.loadingInfo.MemoryBlockID == memoryBlockID);
                 if (match.loadingInfo == null)
                     return default;
@@ -247,12 +247,12 @@ namespace Lazinator.Buffers
             if (Ranges.Count < i + 1)
                 return null;
             var range = Ranges[i];
-            return new MemoryBlockID(range.MemoryBlockIntID);
+            return range.MemoryBlockID;
         }
 
         private static MemoryBlockID GetMemoryBlockIndexFromMemoryRange(MemoryRangeByBlockID range)
         {
-            return range.GetMemoryBlockID();
+            return range.MemoryBlockID;
         }
 
         public override string ToString()
