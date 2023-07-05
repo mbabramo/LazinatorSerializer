@@ -400,7 +400,14 @@ namespace Lazinator.Buffers
             
             int bytesSoFar = 0;
             
-            int item1 = span.ToDecompressedInt32(ref bytesSoFar);
+            MemoryBlockID item1 = default(MemoryBlockID);
+            int lengthCollectionMember_item1 = span.ToInt32(ref bytesSoFar);
+            if (lengthCollectionMember_item1 != 0)
+            {
+                LazinatorMemory childData = storage.Slice(bytesSoFar, lengthCollectionMember_item1);
+                item1 = ConvertFromBytes_MemoryBlockID(childData);
+            }
+            bytesSoFar += lengthCollectionMember_item1;
             
             int item2 = span.ToDecompressedInt32(ref bytesSoFar);
             
@@ -414,7 +421,8 @@ namespace Lazinator.Buffers
         private static void ConvertToBytes_MemoryRangeByBlockID(ref BufferWriter writer, MemoryRangeByBlockID itemToConvert, LazinatorSerializationOptions options)
         {
             
-            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.MemoryBlockIntID);
+            void actionMemoryBlockID(ref BufferWriter w) => ConvertToBytes_MemoryBlockID(ref w, itemToConvert.MemoryBlockID, options);
+            WriteToBinaryWithInt32LengthPrefix(ref writer, actionMemoryBlockID);
             
             CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.OffsetIntoMemoryBlock);
             
@@ -423,7 +431,35 @@ namespace Lazinator.Buffers
         
         private static MemoryRangeByBlockID CloneOrChange_MemoryRangeByBlockID(MemoryRangeByBlockID itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
         {
-            return new MemoryRangeByBlockID((int) (itemToConvert.MemoryBlockIntID), (int) (itemToConvert.OffsetIntoMemoryBlock), (int) (itemToConvert.Length));
+            return new MemoryRangeByBlockID((MemoryBlockID) CloneOrChange_MemoryBlockID((itemToConvert.MemoryBlockID), cloneOrChangeFunc, avoidCloningIfPossible), (int) (itemToConvert.OffsetIntoMemoryBlock), (int) (itemToConvert.Length));
+        }
+        
+        private static MemoryBlockID ConvertFromBytes_MemoryBlockID(LazinatorMemory storage)
+        {
+            if (storage.Length == 0)
+            {
+                return default;
+            }
+            ReadOnlySpan<byte> span = storage.InitialReadOnlyMemory.Span;
+            
+            int bytesSoFar = 0;
+            
+            int item1 = span.ToDecompressedInt32(ref bytesSoFar);
+            
+            var itemToCreate = new MemoryBlockID(item1);
+            
+            return itemToCreate;
+        }
+        
+        private static void ConvertToBytes_MemoryBlockID(ref BufferWriter writer, MemoryBlockID itemToConvert, LazinatorSerializationOptions options)
+        {
+            
+            CompressedIntegralTypes.WriteCompressedInt(ref writer, itemToConvert.AsInt);
+        }
+        
+        private static MemoryBlockID CloneOrChange_MemoryBlockID(MemoryBlockID itemToConvert, Func<ILazinator, ILazinator> cloneOrChangeFunc, bool avoidCloningIfPossible)
+        {
+            return new MemoryBlockID((int) (itemToConvert.AsInt));
         }
         
     }

@@ -11,7 +11,7 @@ namespace Lazinator.Buffers
         /// <summary>
         /// The MemoryBlockID, used to find the corresponding MemoryBlock in a MemoryBlockCollection.
         /// </summary>
-        public readonly int MemoryBlockIntID { get; }
+        public readonly MemoryBlockID MemoryBlockID { get; }
         /// <summary>
         /// The offset into the MemoryBlock (not into the underlying MemoryBlock).
         /// </summary>
@@ -26,18 +26,19 @@ namespace Lazinator.Buffers
             return $"{MemoryBlockID}, {OffsetIntoMemoryBlock}, {Length}";
         }
 
-        public MemoryBlockID MemoryBlockID => new MemoryBlockID(MemoryBlockIntID);
+        public int MemoryBlockIntID => MemoryBlockID.AsInt;
 
+        // DEBUG -- delete?
         public MemoryRangeByBlockID(int memoryBlockIntID, int offsetIntoMemoryBlock, int length)
         {
-            this.MemoryBlockIntID = memoryBlockIntID;
+            this.MemoryBlockID = new MemoryBlockID(memoryBlockIntID);
             this.OffsetIntoMemoryBlock = offsetIntoMemoryBlock;
             this.Length = length;
         }
 
         public MemoryRangeByBlockID(MemoryBlockID memoryBlockID, int offsetIntoMemoryBlock, int length)
         {
-            this.MemoryBlockIntID = memoryBlockID.AsInt;
+            this.MemoryBlockID = memoryBlockID;
             this.OffsetIntoMemoryBlock = offsetIntoMemoryBlock;
             this.Length = length;
         }
