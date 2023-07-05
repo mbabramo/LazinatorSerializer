@@ -1602,14 +1602,14 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
                 }
                 else if (property.PropertyType == LazinatorPropertyType.LazinatorStruct)
                 {
-                    sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.ActiveMemoryPosition}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) "");");
+                    sb.AppendLine($@"TabbedText.WriteLine($""Position {{writer.ToLocationString()}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) "");");
                 }
                 else if (property.TrackDirtinessNonSerialized)
-                    sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.ActiveMemoryPosition}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) (dirty? {{{property.BackingDirtyFieldString}}})"");");
+                    sb.AppendLine($@"TabbedText.WriteLine($""Position {{writer.ToLocationString()}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")}) (dirty? {{{property.BackingDirtyFieldString}}})"");");
                 else if (property.PropertyType == LazinatorPropertyType.NonLazinator || property.PropertyType == LazinatorPropertyType.SupportedCollection || property.PropertyType == LazinatorPropertyType.SupportedTuple)
-                    sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.ActiveMemoryPosition}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")})"");");
+                    sb.AppendLine($@"TabbedText.WriteLine($""Position {{writer.ToLocationString()}}, {property.PropertyName} (accessed? {IIF(property.BackingAccessFieldIncluded, $"{{{property.BackingFieldAccessedString}}}")})"");");
                 else
-                    sb.AppendLine($@"TabbedText.WriteLine($""Byte {{writer.ActiveMemoryPosition}}, {property.PropertyName} value {{{property.BackingFieldString}}}"");");
+                    sb.AppendLine($@"TabbedText.WriteLine($""Position {{writer.ToLocationString()}}, {property.PropertyName} value {{{property.BackingFieldString}}}"");");
                 sb.AppendLine($@"TabbedText.Tabs++;");
             }
             property.AppendPropertyWriteString(sb);
@@ -1720,7 +1720,7 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
                         throw new ArgumentNullException(""{x.PropertyNameForConstructorParameter}"");
                     }}"));
                 lazinateInSecondConstructor = $@"LazinatorMemory childData;
-                            " + String.Join("", allPropertiesRequiringInitialization.Select(x => x.GetLazinateContentsForConstructor()));
+                            " + String.Join("", allPropertiesRequiringInitialization.Select(x => x.GetLazinateContentsForConstructor(IncludeTracingCode)));
                 firstConstructor = $@"public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}({parametersString}, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren){IIF(inheritFromBaseType, " : base({parametersForBaseClassString}), originalIncludeChildrenMode")}{IIF(IsStruct, " : this()")}
                         {{
                             {initializationString}{throwIfNullString}{IIF(!inheritFromBaseType, $@"

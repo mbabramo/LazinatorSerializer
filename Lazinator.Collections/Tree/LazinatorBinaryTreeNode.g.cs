@@ -95,6 +95,7 @@ namespace Lazinator.Collections.Tree
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Data_ByteIndex, _Data_ByteLength, null);
                 childData.LoadInitialReadOnlyMemory();
+                TabbedText.WriteLine($"Data location: {childData.ToLocationString()}");
                 _Data = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
                 childData.ConsiderUnloadInitialReadOnlyMemory();
             }

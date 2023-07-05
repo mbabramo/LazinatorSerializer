@@ -1171,10 +1171,10 @@ TabbedText.WriteLine($""Accessing {PropertyName}"");")}
         }}{(GetModifiedDerivationKeyword() == "override " || !BackingAccessFieldIncluded ? "" : $@"
         {ContainingObjectDescription.HideBackingField}{ContainingObjectDescription.ProtectedIfApplicable}bool {BackingFieldAccessedString};")}{IIF(BackingAccessFieldIncluded, $@"
         private void Lazinate{PropertyName}()
-        {{{GetLazinateContents(createDefault, recreation, true, false)}
+        {{{GetLazinateContents(createDefault, recreation, true, false, includeTracingCode)}
         }}")}{IIF(BackingAccessFieldIncluded && WithinAsync, $@"
         private async Task Lazinate{PropertyName}Async()
-        {{{GetLazinateContents(createDefault, recreation, true, true)}
+        {{{GetLazinateContents(createDefault, recreation, true, true, includeTracingCode)}
         }}
         public async ValueTask<{AppropriatelyQualifiedTypeName}> Get{PropertyName}Async()
         {{{propertyGetContents(true)}
@@ -1373,12 +1373,13 @@ TabbedText.WriteLine($""Accessing {PropertyName}"");")}
             return recreation;
         }
 
-        public string GetLazinateContentsForConstructor() => GetLazinateContents(GetCreateDefaultString(), GetRecreationString(GetAssignmentString()), false, false);
-        private string GetLazinateContents(string createDefault, string recreation, bool defineChildData, bool async)
+        public string GetLazinateContentsForConstructor(bool includeTracingCode) => GetLazinateContents(GetCreateDefaultString(), GetRecreationString(GetAssignmentString()), false, false, includeTracingCode);
+        private string GetLazinateContents(string createDefault, string recreation, bool defineChildData, bool async, bool includeTracingCode)
         {
             return $@"
             {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || NonNullableThatCanBeUninitialized, "LazinatorMemoryStorage.Length == 0", createDefault, $@"{IIF(defineChildData, "LazinatorMemory ")}childData = {(async ? ChildSliceStringDefinitelyAsync : ChildSliceString)};{IIF(!async && WithinAsync, $@"
-                childData.LoadInitialReadOnlyMemory();")}{recreation}{IIF(async, $@"
+                childData.LoadInitialReadOnlyMemory();")}{IIF(includeTracingCode, $@"
+TabbedText.WriteLine($""Data location: {{childData.ToLocationString()}}"");")}{recreation}{IIF(async, $@"
                 await childData.ConsiderUnloadReadOnlyMemoryAsync();")}{IIF(!async && WithinAsync, $@"
                 childData.ConsiderUnloadInitialReadOnlyMemory();")}")}{IIF(BackingAccessFieldIncluded, $@"
             {BackingFieldAccessedString} = true;")}";

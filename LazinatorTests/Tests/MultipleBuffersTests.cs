@@ -575,6 +575,7 @@ namespace LazinatorTests.Tests
                 TabbedText.WriteLine(serializedBinaryTree.ToStringFullMemory());
                 TabbedText.WriteLine("CURRENT STATE OF TREE: " + String.Join(",", AdditionalBinaryTree.ToList()));
 
+                // Seek an early indication of potential serialization trouble.
                 var consolidatedString = serializedBinaryTree.ToStringConsolidated();
                 var comparisonString = additionalSerialized.ToStringConsolidated();
                 if (consolidatedString != comparisonString)
@@ -589,13 +590,12 @@ namespace LazinatorTests.Tests
 
 
                 // Write to one or more blobs
-                var index = (useConsolidatedMemory || indices == null || !indices.Any()) ? new PersistentIndex(fullPath, blobManager, containedInSingleBlob) : new PersistentIndex(indices.Last());
-                index.PersistLazinatorMemory(serializedBinaryTree);
-                indices.Add(index);
-
+                var persistentIndex = (useConsolidatedMemory || indices == null || !indices.Any()) ? new PersistentIndex(fullPath, blobManager, containedInSingleBlob) : new PersistentIndex(indices.Last());
+                persistentIndex.PersistLazinatorMemory(serializedBinaryTree);
+                indices.Add(persistentIndex);
                 if (recreateIndex)
-                    index = PersistentIndex.ReadFromBlob(blobManager, fullPath, null, index.IndexVersion);
-                var serializedIndex = index.GetLazinatorMemory();
+                    persistentIndex = PersistentIndex.ReadFromBlob(blobManager, fullPath, null, persistentIndex.IndexVersion);
+                var serializedIndex = persistentIndex.GetLazinatorMemory();
                 if (useConsolidatedMemory)
                 {
                     var consolidatedMemory = serializedIndex.GetConsolidatedMemory();
@@ -605,17 +605,14 @@ namespace LazinatorTests.Tests
                         indices.RemoveAt(0); // with consolidated memory, we're not using diff serialization
                     }
                 }
-
-                Debug.WriteLine("Serialized index:");
-                Debug.WriteLine(serializedIndex.ToStringFullMemory());
+                TabbedText.WriteLine("Serialized persistent:");
+                TabbedText.WriteLine(serializedIndex.ToStringFullMemory());
 
 
                 BinaryTree = new LazinatorBinaryTree<WDouble>(serializedIndex); // Note that revisedMemory is LazinatorMemory, containing potentially multiple blocks, and this is an acceptable way of initializing.
-
-                Debug.WriteLine("Serialized reconstructed binary tree:");
-                Debug.WriteLine(BinaryTree.LazinatorMemoryStorage.ToStringFullMemory());
-
-                var DEBUG = BinaryTree.Root;
+                TabbedText.WriteLine("Serialized reconstructed binary tree:");
+                TabbedText.WriteLine(BinaryTree.LazinatorMemoryStorage.ToStringFullMemory());
+                
                 round++;
             });
             DeleteBlocksAndIndex(useConsolidatedMemory, indices, blobManager);
