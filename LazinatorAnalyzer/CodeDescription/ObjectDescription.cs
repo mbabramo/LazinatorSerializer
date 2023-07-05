@@ -896,7 +896,7 @@ namespace Lazinator.CodeDescription
 
             foreach (var property in thisLevel)
             {
-                property.AppendPropertyDefinitionString(sb);
+                property.AppendPropertyDefinitionString(sb, IncludeTracingCode);
             }
         }
 

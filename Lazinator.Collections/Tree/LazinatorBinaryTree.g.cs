@@ -47,6 +47,7 @@ namespace Lazinator.Collections.Tree
             {
                 if (!_Root_Accessed)
                 {
+                    TabbedText.WriteLine($"Lazinating Root.");
                     LazinateRoot();
                 } 
                 return _Root;

@@ -560,7 +560,7 @@ namespace Lazinator.Buffers
         public string ToLocationString()
         {
             MemoryRange range = MemoryRangeAtIndex(MemoryRangeIndex);
-            var result = $"MemoryRangeIndex: {MemoryRangeIndex} OffsetIntoMemoryBlock {FurtherOffsetIntoMemoryBlock} Length {Length} (first block: MemoryBlockID {range.MemoryBlock.MemoryBlockID.GetIntID()} TotalOffsetIntoMemoryBlock {range.SliceInfo.OffsetIntoMemoryBlock + FurtherOffsetIntoMemoryBlock} Length {range.SliceInfo.Length})";
+            var result = $"RInd: {MemoryRangeIndex} Off {FurtherOffsetIntoMemoryBlock} L {Length} (MBID: {range.MemoryBlock.MemoryBlockID.GetIntID()} Off {range.SliceInfo.OffsetIntoMemoryBlock + FurtherOffsetIntoMemoryBlock} L {range.SliceInfo.Length})";
             return result;
         }
         

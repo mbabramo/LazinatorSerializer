@@ -1041,14 +1041,14 @@ namespace Lazinator.CodeDescription
         #region Defining
 
 
-        public void AppendPropertyDefinitionString(CodeStringBuilder sb)
+        public void AppendPropertyDefinitionString(CodeStringBuilder sb, bool includeTracingCode)
         {
             if (ContainingObjectDescription.IsAbstract)
                 AppendAbstractPropertyDefinitionString(sb);
             else if (PropertyType == LazinatorPropertyType.PrimitiveType || PropertyType == LazinatorPropertyType.PrimitiveTypeNullable)
                 AppendPrimitivePropertyDefinitionString(sb);
             else
-                AppendNonPrimitivePropertyDefinitionString(sb);
+                AppendNonPrimitivePropertyDefinitionString(sb, includeTracingCode);
         }
 
         private void AppendAbstractPropertyDefinitionString(CodeStringBuilder sb)
@@ -1113,7 +1113,7 @@ namespace Lazinator.CodeDescription
             sb.Append(propertyString);
         }
 
-        private void AppendNonPrimitivePropertyDefinitionString(CodeStringBuilder sb)
+        private void AppendNonPrimitivePropertyDefinitionString(CodeStringBuilder sb, bool includeTracingCode)
         {
             if (PlaceholderMemoryWriteMethod != null)
             {
@@ -1145,7 +1145,8 @@ namespace Lazinator.CodeDescription
 
             string propertyGetContents(bool async) => $@"
                 {IIF(BackingAccessFieldIncluded, $@"if ({BackingFieldNotAccessedString})
-                {{
+                {{{IIF(includeTracingCode, $@"
+TabbedText.WriteLine($""Accessing {PropertyName}"");")}
                     {AwaitIfNeeded(async)}Lazinate{PropertyName}{AsyncIfNeeded(async)}();
                 }}")}{IIF(IsMemory || (IsNonLazinatorType && !TrackDirtinessNonSerialized && (!RoslynHelpers.IsReadOnlyStruct(Symbol) || ContainsLazinatorInnerProperty || ContainsOpenGenericInnerProperty)), $@"
                     IsDirty = true;")} {IIF(CodeOnAccessed != "", $@"
