@@ -37,7 +37,7 @@ namespace Lazinator.Buffers
 
         public MemoryRangeByBlockID(MemoryBlockID memoryBlockID, int offsetIntoMemoryBlock, int length)
         {
-            this.MemoryBlockIntID = memoryBlockID.GetIntID();
+            this.MemoryBlockIntID = memoryBlockID.AsInt;
             this.OffsetIntoMemoryBlock = offsetIntoMemoryBlock;
             this.Length = length;
         }

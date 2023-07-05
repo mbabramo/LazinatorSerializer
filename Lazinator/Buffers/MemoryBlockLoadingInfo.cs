@@ -11,7 +11,7 @@ namespace Lazinator.Buffers
     {
         public MemoryBlockLoadingInfo(MemoryBlockID memoryBlockID, int memoryBlockLength)
         {
-            MemoryBlockIntID = memoryBlockID.GetIntID();
+            MemoryBlockIntID = memoryBlockID.AsInt;
             MemoryBlockLength = memoryBlockLength;
         }
 

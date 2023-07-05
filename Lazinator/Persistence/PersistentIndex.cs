@@ -83,7 +83,7 @@ namespace Lazinator.Persistence
             if (ForkInformation == null)
                 yield break;
             foreach (var fi in ForkInformation)
-                if (fi.lastMemoryBlockIDBeforeFork < memoryBlockID.GetIntID())
+                if (fi.lastMemoryBlockIDBeforeFork < memoryBlockID.AsInt)
                     yield return fi.forkNumber;
         }
         
@@ -105,15 +105,15 @@ namespace Lazinator.Persistence
 
         private void SetMemoryBlockStatus(MemoryBlockID memoryBlockID, PersistentIndexMemoryBlockStatus status)
         {
-            if (memoryBlockID.GetIntID() >= MemoryBlockStatus.Length)
+            if (memoryBlockID.AsInt >= MemoryBlockStatus.Length)
             {
                 const int numToAddAtOnce = 10;
-                byte[] memoryBlockStatus = new byte[memoryBlockID.GetIntID() + numToAddAtOnce];
+                byte[] memoryBlockStatus = new byte[memoryBlockID.AsInt + numToAddAtOnce];
                 for (int i = 0; i < MemoryBlockStatus.Length; i++)
                     memoryBlockStatus[i] = (byte)MemoryBlockStatus.Span[i];
                 MemoryBlockStatus = memoryBlockStatus;
             }
-            MemoryBlockStatus.Span[memoryBlockID.GetIntID()] = (byte)status;
+            MemoryBlockStatus.Span[memoryBlockID.AsInt] = (byte)status;
         }
 
         private void InitializeMemoryBlockStatusFromPrevious()

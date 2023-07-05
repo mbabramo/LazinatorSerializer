@@ -89,7 +89,7 @@ namespace Lazinator.Buffers
             }
             else
                 PreviousVersion = previousVersion.MultipleMemoryBlocks.DeepCopy();
-            _LengthsPosition = (PreviousVersion?.GetNextMemoryBlockID().GetIntID() ?? 0, 0);
+            _LengthsPosition = (PreviousVersion?.GetNextMemoryBlockID().AsInt ?? 0, 0);
             MemoryRangeCollection = null;
         }
 
@@ -191,7 +191,7 @@ namespace Lazinator.Buffers
         {
             get
             {
-                return (GetActiveMemoryBlockID().GetIntID(), ActiveMemoryPosition);
+                return (GetActiveMemoryBlockID().AsInt, ActiveMemoryPosition);
             }
         }
 
@@ -301,7 +301,7 @@ namespace Lazinator.Buffers
                 TabbedText.WriteLine($"Moving active memory to completed memory, block {GetActiveMemoryBlockID()} ({ActiveMemoryPosition} bytes)");
 #endif
 
-                if (GetActiveMemoryBlockID().GetIntID() == 6)
+                if (GetActiveMemoryBlockID().AsInt == 6)
                 {
                     var DEBUG = 0;
                 }
@@ -537,7 +537,7 @@ namespace Lazinator.Buffers
         {
             get
             {
-                if (LengthsPosition.index == GetActiveMemoryBlockID().GetIntID())
+                if (LengthsPosition.index == GetActiveMemoryBlockID().AsInt)
                     return ActiveSpan.Slice(LengthsPosition.offset);
                 MemoryBlock block = MemoryRangeCollection.GetMemoryBlockByBlockID(new MemoryBlockID(LengthsPosition.index));
                 return block.ReadWriteMemory.Slice(LengthsPosition.offset).Span;

@@ -16,7 +16,7 @@ namespace Lazinator.Buffers
             _MemoryBlockID = id;
         }
 
-        public int GetIntID() => _MemoryBlockID;
+        public int AsInt => _MemoryBlockID;
 
         public MemoryBlockID Next() => new MemoryBlockID(_MemoryBlockID + 1);
 

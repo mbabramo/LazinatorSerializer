@@ -43,7 +43,7 @@ namespace Lazinator.Buffers
         public MemoryBlockCollection(IEnumerable<MemoryBlock> memoryBlocks)
         {
             MemoryBlocks = memoryBlocks.ToList();
-            HighestMemoryBlockID = MemoryBlocks.Any() ? new MemoryBlockID(MemoryBlocks.Max(x => x.MemoryBlockID.GetIntID())) : new MemoryBlockID(0);
+            HighestMemoryBlockID = MemoryBlocks.Any() ? new MemoryBlockID(MemoryBlocks.Max(x => x.MemoryBlockID.AsInt)) : new MemoryBlockID(0);
             LengthOfMemoryBlocks = MemoryBlocks.Sum(x => (long) x.Length);
             InitializeMemoryBlocksInformationFromMemoryBlocks();
             if (MemoryBlocks.Count != MemoryBlocksLoadingInfo.Count)
@@ -73,7 +73,7 @@ namespace Lazinator.Buffers
             if (memoryBlock.MemoryBlockID > HighestMemoryBlockID)
                 HighestMemoryBlockID = memoryBlock.MemoryBlockID;
             LengthOfMemoryBlocks += (long)memoryBlock.Length;
-            if (MemoryBlocks.Count(x => x.MemoryBlockID.GetIntID() == 0) > 1)
+            if (MemoryBlocks.Count(x => x.MemoryBlockID.AsInt == 0) > 1)
             {
                 var DEBUG = "x";
             }

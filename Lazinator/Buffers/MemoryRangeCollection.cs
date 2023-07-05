@@ -155,16 +155,16 @@ namespace Lazinator.Buffers
                 if (Ranges.Any())
                 {
                     var previousRange = Ranges.Last();
-                    if (previousRange.MemoryBlockIntID == memoryBlock.MemoryBlockID.GetIntID())
+                    if (previousRange.MemoryBlockIntID == memoryBlock.MemoryBlockID.AsInt)
                         numBytesAlreadyReferredTo = previousRange.Length;
-                    else if (HighestMemoryBlockID.GetIntID() == memoryBlock.MemoryBlockID.GetIntID())
+                    else if (HighestMemoryBlockID.AsInt == memoryBlock.MemoryBlockID.AsInt)
                     {
                         // This memory block may have already been referred to, but it's not the most recent
                         // (because a reference was added to a previously created memory block)
                         for (int r = Ranges.Count - 2; r >= 0; r--)
                         {
                             var earlierRange = Ranges[r];
-                            if (earlierRange.MemoryBlockIntID == memoryBlock.MemoryBlockID.GetIntID())
+                            if (earlierRange.MemoryBlockIntID == memoryBlock.MemoryBlockID.AsInt)
                             {
                                 numBytesAlreadyReferredTo = earlierRange.Length;
                                 break;
@@ -257,7 +257,7 @@ namespace Lazinator.Buffers
 
         public override string ToString()
         {
-            return $"Blocks: {String.Join(",", MemoryBlocks.Select(x => x.MemoryBlockID.GetIntID()))} Ranges: {String.Join("; ", Ranges)}";
+            return $"Blocks: {String.Join(",", MemoryBlocks.Select(x => x.MemoryBlockID.AsInt))} Ranges: {String.Join("; ", Ranges)}";
         }
     }
 }
