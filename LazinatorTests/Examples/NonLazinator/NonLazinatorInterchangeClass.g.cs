@@ -417,11 +417,11 @@ namespace LazinatorTests.Examples
         
         void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyInt value {_MyInt}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyInt value {_MyInt}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyInt);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyString value {_MyString}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyString value {_MyString}");
             TabbedText.Tabs++;
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _MyString);
             TabbedText.Tabs--;

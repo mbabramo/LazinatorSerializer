@@ -98,7 +98,8 @@ namespace LazinatorTests.Examples.Abstract
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList4_ByteIndex, _IntList4_ByteLength, null);_IntList4 = ConvertFromBytes_List_Gint_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList4_ByteIndex, _IntList4_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_IntList4 = ConvertFromBytes_List_Gint_g(childData);
             }
             _IntList4_Accessed = true;
         }
@@ -135,7 +136,8 @@ namespace LazinatorTests.Examples.Abstract
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList5_ByteIndex, _IntList5_ByteLength, null);_IntList5 = ConvertFromBytes_List_Gint_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList5_ByteIndex, _IntList5_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_IntList5 = ConvertFromBytes_List_Gint_g(childData);
             }
             _IntList5_Accessed = true;
         }
@@ -383,11 +385,11 @@ namespace LazinatorTests.Examples.Abstract
         protected override void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
             base.WritePrimitivePropertiesIntoBuffer(ref writer, options, includeUniqueID);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, String4 value {_String4}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, String4 value {_String4}");
             TabbedText.Tabs++;
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _String4);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, String5 value {_String5}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, String5 value {_String5}");
             TabbedText.Tabs++;
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _String5);
             TabbedText.Tabs--;
@@ -400,7 +402,7 @@ namespace LazinatorTests.Examples.Abstract
                 options = options.WithoutSplittingPossible();
             }
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, IntList4 (accessed? {_IntList4_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, IntList4 (accessed? {_IntList4_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_IntList4_Accessed)
@@ -421,7 +423,7 @@ namespace LazinatorTests.Examples.Abstract
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, IntList5 (accessed? {_IntList5_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, IntList5 (accessed? {_IntList5_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_IntList5_Accessed)

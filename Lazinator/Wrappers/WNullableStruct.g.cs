@@ -82,6 +82,7 @@ namespace Lazinator.Wrappers
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NonNullValue_ByteIndex, _NonNullValue_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _NonNullValue = DeserializationFactory.Instance.CreateBasedOnType<T>(childData); 
             }
             _NonNullValue_Accessed = true;
@@ -466,7 +467,7 @@ namespace Lazinator.Wrappers
         
         void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, HasValue value {_HasValue}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, HasValue value {_HasValue}");
             TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteBool(ref writer, _HasValue);
             TabbedText.Tabs--;
@@ -478,7 +479,7 @@ namespace Lazinator.Wrappers
                 options = options.WithoutSplittingPossible();
             }
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, NonNullValue value {_NonNullValue}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, NonNullValue value {_NonNullValue}");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)

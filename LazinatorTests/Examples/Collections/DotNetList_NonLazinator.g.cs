@@ -74,7 +74,8 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType_ByteIndex, _MyListNonLazinatorType_ByteLength, null);_MyListNonLazinatorType = ConvertFromBytes_List_GNonLazinatorClass_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType_ByteIndex, _MyListNonLazinatorType_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyListNonLazinatorType = ConvertFromBytes_List_GNonLazinatorClass_g(childData);
             }
             _MyListNonLazinatorType_Accessed = true;
         }
@@ -129,7 +130,8 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType2_ByteIndex, _MyListNonLazinatorType2_ByteLength, null);_MyListNonLazinatorType2 = ConvertFromBytes_List_GNonLazinatorClass_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNonLazinatorType2_ByteIndex, _MyListNonLazinatorType2_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyListNonLazinatorType2 = ConvertFromBytes_List_GNonLazinatorClass_g(childData);
             }
             _MyListNonLazinatorType2_Accessed = true;
         }
@@ -514,7 +516,7 @@ namespace LazinatorTests.Examples.Collections
                 options = options.WithoutSplittingPossible();
             }
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyListNonLazinatorType (accessed? {_MyListNonLazinatorType_Accessed}) (dirty? {_MyListNonLazinatorType_Dirty})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyListNonLazinatorType (accessed? {_MyListNonLazinatorType_Accessed}) (dirty? {_MyListNonLazinatorType_Dirty})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyListNonLazinatorType_Accessed)
@@ -535,7 +537,7 @@ namespace LazinatorTests.Examples.Collections
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyListNonLazinatorType2 (accessed? {_MyListNonLazinatorType2_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyListNonLazinatorType2 (accessed? {_MyListNonLazinatorType2_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyListNonLazinatorType2_Accessed)

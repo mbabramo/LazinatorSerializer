@@ -79,6 +79,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Contents_ByteIndex, _Contents_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _Contents = DeserializationFactory.Instance.CreateBaseOrDerivedType(1094, (c, p) => new EightByteLengths(c, p), childData, this); 
             }
             _Contents_Accessed = true;

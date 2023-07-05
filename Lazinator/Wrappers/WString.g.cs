@@ -383,7 +383,7 @@ namespace Lazinator.Wrappers
         
         void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, WrappedValue value {_WrappedValue}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, WrappedValue value {_WrappedValue}");
             TabbedText.Tabs++;
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _WrappedValue);
             TabbedText.Tabs--;
@@ -699,7 +699,7 @@ namespace Lazinator.Wrappers
             
             void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
             {
-                TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, WrappedValue value {_WrappedValue}");
+                TabbedText.WriteLine($"Position {writer.ToLocationString()}, WrappedValue value {_WrappedValue}");
                 TabbedText.Tabs++;
                 EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _WrappedValue);
                 TabbedText.Tabs--;

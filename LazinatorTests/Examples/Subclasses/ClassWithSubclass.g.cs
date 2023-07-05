@@ -96,6 +96,7 @@ namespace LazinatorTests.Examples.Subclasses
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _SubclassInstance1_ByteIndex, _SubclassInstance1_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _SubclassInstance1 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1058, (c, p) => new global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass(c, p), childData, this); 
             }
             _SubclassInstance1_Accessed = true;
@@ -142,6 +143,7 @@ namespace LazinatorTests.Examples.Subclasses
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _SubclassInstance2_ByteIndex, _SubclassInstance2_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _SubclassInstance2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1058, (c, p) => new global::LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass(c, p), childData, this); 
             }
             _SubclassInstance2_Accessed = true;
@@ -601,7 +603,7 @@ namespace LazinatorTests.Examples.Subclasses
         
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, IntWithinSuperclass value {_IntWithinSuperclass}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, IntWithinSuperclass value {_IntWithinSuperclass}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _IntWithinSuperclass);
             TabbedText.Tabs--;

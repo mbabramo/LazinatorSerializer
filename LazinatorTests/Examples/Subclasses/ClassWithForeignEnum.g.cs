@@ -389,7 +389,7 @@ namespace LazinatorTests.Examples.Subclasses
         
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyEnum value {_MyEnum}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyEnum value {_MyEnum}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, (int) _MyEnum);
             TabbedText.Tabs--;

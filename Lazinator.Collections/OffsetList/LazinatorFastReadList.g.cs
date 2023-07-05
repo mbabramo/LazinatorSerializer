@@ -427,7 +427,7 @@ namespace Lazinator.Collections.OffsetList
                 options = options.WithoutSplittingPossible();
             }
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, ReadOnlyBytes (accessed? {_ReadOnlyBytes_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, ReadOnlyBytes (accessed? {_ReadOnlyBytes_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             WriteNonLazinatorObject(

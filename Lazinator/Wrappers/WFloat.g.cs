@@ -383,7 +383,7 @@ namespace Lazinator.Wrappers
         
         void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, WrappedValue value {_WrappedValue}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, WrappedValue value {_WrappedValue}");
             TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteSingle(ref writer, _WrappedValue);
             TabbedText.Tabs--;

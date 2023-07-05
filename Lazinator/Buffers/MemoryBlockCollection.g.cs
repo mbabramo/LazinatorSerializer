@@ -110,7 +110,8 @@ namespace Lazinator.Buffers
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MemoryBlocksLoadingInfo_ByteIndex, _MemoryBlocksLoadingInfo_ByteLength, null);_MemoryBlocksLoadingInfo = ConvertFromBytes_List_GMemoryBlockLoadingInfo_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MemoryBlocksLoadingInfo_ByteIndex, _MemoryBlocksLoadingInfo_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MemoryBlocksLoadingInfo = ConvertFromBytes_List_GMemoryBlockLoadingInfo_g(childData);
             }
             _MemoryBlocksLoadingInfo_Accessed = true;
         }
@@ -485,15 +486,15 @@ namespace Lazinator.Buffers
         
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, BaseBlobPath value {_BaseBlobPath}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, BaseBlobPath value {_BaseBlobPath}");
             TabbedText.Tabs++;
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _BaseBlobPath);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, ContainedInSingleBlob value {_ContainedInSingleBlob}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, ContainedInSingleBlob value {_ContainedInSingleBlob}");
             TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteBool(ref writer, _ContainedInSingleBlob);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, IsPersisted value {_IsPersisted}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, IsPersisted value {_IsPersisted}");
             TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteBool(ref writer, _IsPersisted);
             TabbedText.Tabs--;
@@ -505,7 +506,7 @@ namespace Lazinator.Buffers
                 options = options.WithoutSplittingPossible();
             }
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MemoryBlocksLoadingInfo (accessed? {_MemoryBlocksLoadingInfo_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MemoryBlocksLoadingInfo (accessed? {_MemoryBlocksLoadingInfo_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MemoryBlocksLoadingInfo_Accessed)

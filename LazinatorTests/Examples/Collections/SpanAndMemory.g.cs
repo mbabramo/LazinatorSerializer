@@ -90,7 +90,8 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyMemoryByte_ByteIndex, _MyMemoryByte_ByteLength, null);_MyMemoryByte = ConvertFromBytes_Memory_Gbyte_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyMemoryByte_ByteIndex, _MyMemoryByte_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyMemoryByte = ConvertFromBytes_Memory_Gbyte_g(childData);
             }
             _MyMemoryByte_Accessed = true;
         }
@@ -127,7 +128,8 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyMemoryInt_ByteIndex, _MyMemoryInt_ByteLength, null);_MyMemoryInt = ConvertFromBytes_Memory_Gint_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyMemoryInt_ByteIndex, _MyMemoryInt_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyMemoryInt = ConvertFromBytes_Memory_Gint_g(childData);
             }
             _MyMemoryInt_Accessed = true;
         }
@@ -164,7 +166,8 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNullableMemoryByte_ByteIndex, _MyNullableMemoryByte_ByteLength, null);_MyNullableMemoryByte = ConvertFromBytes_Memory_Gbyte_g_n(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNullableMemoryByte_ByteIndex, _MyNullableMemoryByte_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyNullableMemoryByte = ConvertFromBytes_Memory_Gbyte_g_n(childData);
             }
             _MyNullableMemoryByte_Accessed = true;
         }
@@ -201,7 +204,8 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNullableMemoryInt_ByteIndex, _MyNullableMemoryInt_ByteLength, null);_MyNullableMemoryInt = ConvertFromBytes_Memory_Gint_g_n(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNullableMemoryInt_ByteIndex, _MyNullableMemoryInt_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyNullableMemoryInt = ConvertFromBytes_Memory_Gint_g_n(childData);
             }
             _MyNullableMemoryInt_Accessed = true;
         }
@@ -238,7 +242,8 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNullableReadOnlyMemoryInt_ByteIndex, _MyNullableReadOnlyMemoryInt_ByteLength, null);_MyNullableReadOnlyMemoryInt = ConvertFromBytes_ReadOnlyMemory_Gint_g_n(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNullableReadOnlyMemoryInt_ByteIndex, _MyNullableReadOnlyMemoryInt_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyNullableReadOnlyMemoryInt = ConvertFromBytes_ReadOnlyMemory_Gint_g_n(childData);
             }
             _MyNullableReadOnlyMemoryInt_Accessed = true;
         }
@@ -274,7 +279,8 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlyMemoryByte_ByteIndex, _MyReadOnlyMemoryByte_ByteLength, null);_MyReadOnlyMemoryByte = ConvertFromBytes_ReadOnlyMemory_Gbyte_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlyMemoryByte_ByteIndex, _MyReadOnlyMemoryByte_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyReadOnlyMemoryByte = ConvertFromBytes_ReadOnlyMemory_Gbyte_g(childData);
             }
             _MyReadOnlyMemoryByte_Accessed = true;
         }
@@ -310,7 +316,8 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlyMemoryChar_ByteIndex, _MyReadOnlyMemoryChar_ByteLength, null);_MyReadOnlyMemoryChar = ConvertFromBytes_ReadOnlyMemory_Gchar_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlyMemoryChar_ByteIndex, _MyReadOnlyMemoryChar_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyReadOnlyMemoryChar = ConvertFromBytes_ReadOnlyMemory_Gchar_g(childData);
             }
             _MyReadOnlyMemoryChar_Accessed = true;
         }
@@ -346,7 +353,8 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlyMemoryInt_ByteIndex, _MyReadOnlyMemoryInt_ByteLength, null);_MyReadOnlyMemoryInt = ConvertFromBytes_ReadOnlyMemory_Gint_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyReadOnlyMemoryInt_ByteIndex, _MyReadOnlyMemoryInt_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyReadOnlyMemoryInt = ConvertFromBytes_ReadOnlyMemory_Gint_g(childData);
             }
             _MyReadOnlyMemoryInt_Accessed = true;
         }
@@ -876,7 +884,7 @@ namespace LazinatorTests.Examples.Collections
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
         {
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyMemoryByte (accessed? {_MyMemoryByte_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyMemoryByte (accessed? {_MyMemoryByte_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyMemoryByte_Accessed)
@@ -897,7 +905,7 @@ namespace LazinatorTests.Examples.Collections
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyMemoryInt (accessed? {_MyMemoryInt_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyMemoryInt (accessed? {_MyMemoryInt_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyMemoryInt_Accessed)
@@ -918,7 +926,7 @@ namespace LazinatorTests.Examples.Collections
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyNullableMemoryByte (accessed? {_MyNullableMemoryByte_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyNullableMemoryByte (accessed? {_MyNullableMemoryByte_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyNullableMemoryByte_Accessed)
@@ -939,7 +947,7 @@ namespace LazinatorTests.Examples.Collections
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyNullableMemoryInt (accessed? {_MyNullableMemoryInt_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyNullableMemoryInt (accessed? {_MyNullableMemoryInt_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyNullableMemoryInt_Accessed)
@@ -960,7 +968,7 @@ namespace LazinatorTests.Examples.Collections
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyNullableReadOnlyMemoryInt (accessed? {_MyNullableReadOnlyMemoryInt_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyNullableReadOnlyMemoryInt (accessed? {_MyNullableReadOnlyMemoryInt_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyNullableReadOnlyMemoryInt_Accessed)
@@ -981,7 +989,7 @@ namespace LazinatorTests.Examples.Collections
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyReadOnlyMemoryByte (accessed? {_MyReadOnlyMemoryByte_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyReadOnlyMemoryByte (accessed? {_MyReadOnlyMemoryByte_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyReadOnlyMemoryByte_Accessed)
@@ -1002,7 +1010,7 @@ namespace LazinatorTests.Examples.Collections
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyReadOnlyMemoryChar (accessed? {_MyReadOnlyMemoryChar_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyReadOnlyMemoryChar (accessed? {_MyReadOnlyMemoryChar_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyReadOnlyMemoryChar_Accessed)
@@ -1023,7 +1031,7 @@ namespace LazinatorTests.Examples.Collections
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyReadOnlyMemoryInt (accessed? {_MyReadOnlyMemoryInt_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyReadOnlyMemoryInt (accessed? {_MyReadOnlyMemoryInt_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyReadOnlyMemoryInt_Accessed)
@@ -1044,7 +1052,7 @@ namespace LazinatorTests.Examples.Collections
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyReadOnlySpanByte (accessed? {_MyReadOnlySpanByte_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyReadOnlySpanByte (accessed? {_MyReadOnlySpanByte_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             WriteNonLazinatorObject(
@@ -1061,7 +1069,7 @@ namespace LazinatorTests.Examples.Collections
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyReadOnlySpanChar (accessed? {_MyReadOnlySpanChar_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyReadOnlySpanChar (accessed? {_MyReadOnlySpanChar_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             WriteNonLazinatorObject(
@@ -1078,7 +1086,7 @@ namespace LazinatorTests.Examples.Collections
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyReadOnlySpanLong (accessed? {_MyReadOnlySpanLong_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyReadOnlySpanLong (accessed? {_MyReadOnlySpanLong_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             WriteNonLazinatorObject(

@@ -104,7 +104,8 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExternalRecordLikeStruct_ByteIndex, _ExternalRecordLikeStruct_ByteLength, null);_ExternalRecordLikeStruct = ConvertFromBytes_Point(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExternalRecordLikeStruct_ByteIndex, _ExternalRecordLikeStruct_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_ExternalRecordLikeStruct = ConvertFromBytes_Point(childData);
             }
             _ExternalRecordLikeStruct_Accessed = true;
         }
@@ -140,7 +141,8 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyMismatchedRecordLikeType_ByteIndex, _MyMismatchedRecordLikeType_ByteLength, null);_MyMismatchedRecordLikeType = ConvertFromBytes_MismatchedRecordLikeType(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyMismatchedRecordLikeType_ByteIndex, _MyMismatchedRecordLikeType_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyMismatchedRecordLikeType = ConvertFromBytes_MismatchedRecordLikeType(childData);
             }
             _MyMismatchedRecordLikeType_Accessed = true;
         }
@@ -177,7 +179,8 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorRecordWithConstructor_ByteIndex, _MyNonLazinatorRecordWithConstructor_ByteLength, null);_MyNonLazinatorRecordWithConstructor = ConvertFromBytes_NonLazinatorRecordWithConstructor(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorRecordWithConstructor_ByteIndex, _MyNonLazinatorRecordWithConstructor_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyNonLazinatorRecordWithConstructor = ConvertFromBytes_NonLazinatorRecordWithConstructor(childData);
             }
             _MyNonLazinatorRecordWithConstructor_Accessed = true;
         }
@@ -214,7 +217,8 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorRecordWithoutConstructor_ByteIndex, _MyNonLazinatorRecordWithoutConstructor_ByteLength, null);_MyNonLazinatorRecordWithoutConstructor = ConvertFromBytes_NonLazinatorRecordWithoutConstructor(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorRecordWithoutConstructor_ByteIndex, _MyNonLazinatorRecordWithoutConstructor_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyNonLazinatorRecordWithoutConstructor = ConvertFromBytes_NonLazinatorRecordWithoutConstructor(childData);
             }
             _MyNonLazinatorRecordWithoutConstructor_Accessed = true;
         }
@@ -251,7 +255,8 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorSubrecordWithConstructor_ByteIndex, _MyNonLazinatorSubrecordWithConstructor_ByteLength, null);_MyNonLazinatorSubrecordWithConstructor = ConvertFromBytes_NonLazinatorSubrecordWithConstructor(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorSubrecordWithConstructor_ByteIndex, _MyNonLazinatorSubrecordWithConstructor_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyNonLazinatorSubrecordWithConstructor = ConvertFromBytes_NonLazinatorSubrecordWithConstructor(childData);
             }
             _MyNonLazinatorSubrecordWithConstructor_Accessed = true;
         }
@@ -288,7 +293,8 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorSubrecordWithoutConstructor_ByteIndex, _MyNonLazinatorSubrecordWithoutConstructor_ByteLength, null);_MyNonLazinatorSubrecordWithoutConstructor = ConvertFromBytes_NonLazinatorSubrecordWithoutConstructor(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorSubrecordWithoutConstructor_ByteIndex, _MyNonLazinatorSubrecordWithoutConstructor_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyNonLazinatorSubrecordWithoutConstructor = ConvertFromBytes_NonLazinatorSubrecordWithoutConstructor(childData);
             }
             _MyNonLazinatorSubrecordWithoutConstructor_Accessed = true;
         }
@@ -325,7 +331,8 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeClass_ByteIndex, _MyRecordLikeClass_ByteLength, null);_MyRecordLikeClass = ConvertFromBytes_RecordLikeClass(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeClass_ByteIndex, _MyRecordLikeClass_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyRecordLikeClass = ConvertFromBytes_RecordLikeClass(childData);
             }
             _MyRecordLikeClass_Accessed = true;
         }
@@ -361,7 +368,8 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeStruct_ByteIndex, _MyRecordLikeStruct_ByteLength, null);_MyRecordLikeStruct = ConvertFromBytes_RecordLikeStruct(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeStruct_ByteIndex, _MyRecordLikeStruct_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyRecordLikeStruct = ConvertFromBytes_RecordLikeStruct(childData);
             }
             _MyRecordLikeStruct_Accessed = true;
         }
@@ -398,7 +406,8 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeTypeWithLazinator_ByteIndex, _MyRecordLikeTypeWithLazinator_ByteLength, null);_MyRecordLikeTypeWithLazinator = ConvertFromBytes_RecordLikeTypeWithLazinator(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyRecordLikeTypeWithLazinator_ByteIndex, _MyRecordLikeTypeWithLazinator_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyRecordLikeTypeWithLazinator = ConvertFromBytes_RecordLikeTypeWithLazinator(childData);
             }
             _MyRecordLikeTypeWithLazinator_Accessed = true;
         }
@@ -857,7 +866,7 @@ namespace LazinatorTests.Examples.Tuples
         
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyInt value {_MyInt}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyInt value {_MyInt}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyInt);
             TabbedText.Tabs--;
@@ -869,7 +878,7 @@ namespace LazinatorTests.Examples.Tuples
                 options = options.WithoutSplittingPossible();
             }
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, ExternalRecordLikeStruct (accessed? {_ExternalRecordLikeStruct_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, ExternalRecordLikeStruct (accessed? {_ExternalRecordLikeStruct_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_ExternalRecordLikeStruct_Accessed)
@@ -890,7 +899,7 @@ namespace LazinatorTests.Examples.Tuples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyMismatchedRecordLikeType (accessed? {_MyMismatchedRecordLikeType_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyMismatchedRecordLikeType (accessed? {_MyMismatchedRecordLikeType_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyMismatchedRecordLikeType_Accessed)
@@ -911,7 +920,7 @@ namespace LazinatorTests.Examples.Tuples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyNonLazinatorRecordWithConstructor (accessed? {_MyNonLazinatorRecordWithConstructor_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyNonLazinatorRecordWithConstructor (accessed? {_MyNonLazinatorRecordWithConstructor_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyNonLazinatorRecordWithConstructor_Accessed)
@@ -932,7 +941,7 @@ namespace LazinatorTests.Examples.Tuples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyNonLazinatorRecordWithoutConstructor (accessed? {_MyNonLazinatorRecordWithoutConstructor_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyNonLazinatorRecordWithoutConstructor (accessed? {_MyNonLazinatorRecordWithoutConstructor_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyNonLazinatorRecordWithoutConstructor_Accessed)
@@ -953,7 +962,7 @@ namespace LazinatorTests.Examples.Tuples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyNonLazinatorSubrecordWithConstructor (accessed? {_MyNonLazinatorSubrecordWithConstructor_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyNonLazinatorSubrecordWithConstructor (accessed? {_MyNonLazinatorSubrecordWithConstructor_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyNonLazinatorSubrecordWithConstructor_Accessed)
@@ -974,7 +983,7 @@ namespace LazinatorTests.Examples.Tuples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyNonLazinatorSubrecordWithoutConstructor (accessed? {_MyNonLazinatorSubrecordWithoutConstructor_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyNonLazinatorSubrecordWithoutConstructor (accessed? {_MyNonLazinatorSubrecordWithoutConstructor_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyNonLazinatorSubrecordWithoutConstructor_Accessed)
@@ -995,7 +1004,7 @@ namespace LazinatorTests.Examples.Tuples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyRecordLikeClass (accessed? {_MyRecordLikeClass_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyRecordLikeClass (accessed? {_MyRecordLikeClass_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyRecordLikeClass_Accessed)
@@ -1016,7 +1025,7 @@ namespace LazinatorTests.Examples.Tuples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyRecordLikeStruct (accessed? {_MyRecordLikeStruct_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyRecordLikeStruct (accessed? {_MyRecordLikeStruct_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyRecordLikeStruct_Accessed)
@@ -1037,7 +1046,7 @@ namespace LazinatorTests.Examples.Tuples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyRecordLikeTypeWithLazinator (accessed? {_MyRecordLikeTypeWithLazinator_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyRecordLikeTypeWithLazinator (accessed? {_MyRecordLikeTypeWithLazinator_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyRecordLikeTypeWithLazinator_Accessed)

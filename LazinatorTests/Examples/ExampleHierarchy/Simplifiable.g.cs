@@ -175,6 +175,7 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ANonSkippableEarlierExample_ByteIndex, _ANonSkippableEarlierExample_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _ANonSkippableEarlierExample = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, (c, p) => new Example(c, p), childData, this); 
             }
             _ANonSkippableEarlierExample_Accessed = true;
@@ -221,6 +222,7 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Example_ByteIndex, _Example_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _Example = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, (c, p) => new Example(c, p), childData, this); 
             }
             _Example_Accessed = true;
@@ -267,6 +269,7 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Example2_ByteIndex, _Example2_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _Example2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, (c, p) => new Example(c, p), childData, this); 
             }
             _Example2_Accessed = true;
@@ -313,6 +316,7 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Example3_ByteIndex, _Example3_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _Example3 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, (c, p) => new Example(c, p), childData, this); 
             }
             _Example3_Accessed = true;
@@ -936,30 +940,30 @@ namespace LazinatorTests.Examples
         
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyIntsAre3 value {_MyIntsAre3}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyIntsAre3 value {_MyIntsAre3}");
             TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteBool(ref writer, _MyIntsAre3);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Example2Char value {_Example2Char}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, Example2Char value {_Example2Char}");
             TabbedText.Tabs++;
             EncodeCharAndString.WriteNullableChar(ref writer, _Example2Char);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Example3IsNull value {_Example3IsNull}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, Example3IsNull value {_Example3IsNull}");
             TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteBool(ref writer, _Example3IsNull);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, ExampleHasDefaultValue value {_ExampleHasDefaultValue}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, ExampleHasDefaultValue value {_ExampleHasDefaultValue}");
             TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteBool(ref writer, _ExampleHasDefaultValue);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyInt value {_MyInt}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyInt value {_MyInt}");
             TabbedText.Tabs++;
             if (!(MyIntsAre3))
             {
                 CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyInt);
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyOtherInt value {_MyOtherInt}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyOtherInt value {_MyOtherInt}");
             TabbedText.Tabs++;
             if (!(MyIntsAre3))
             {

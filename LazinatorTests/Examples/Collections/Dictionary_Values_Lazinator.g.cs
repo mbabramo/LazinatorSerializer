@@ -78,7 +78,8 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionary_ByteIndex, _MyDictionary_ByteLength, null);_MyDictionary = ConvertFromBytes_Dictionary_Gint_c_C32ExampleChild_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionary_ByteIndex, _MyDictionary_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyDictionary = ConvertFromBytes_Dictionary_Gint_c_C32ExampleChild_g(childData);
             }
             _MyDictionary_Accessed = true;
         }
@@ -115,7 +116,8 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionaryStructs_ByteIndex, _MyDictionaryStructs_ByteLength, null);_MyDictionaryStructs = ConvertFromBytes_Dictionary_GWInt32_c_C32WInt32_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionaryStructs_ByteIndex, _MyDictionaryStructs_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyDictionaryStructs = ConvertFromBytes_Dictionary_GWInt32_c_C32WInt32_g(childData);
             }
             _MyDictionaryStructs_Accessed = true;
         }
@@ -152,7 +154,8 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MySortedDictionary_ByteIndex, _MySortedDictionary_ByteLength, null);_MySortedDictionary = ConvertFromBytes_SortedDictionary_Gint_c_C32ExampleChild_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MySortedDictionary_ByteIndex, _MySortedDictionary_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MySortedDictionary = ConvertFromBytes_SortedDictionary_Gint_c_C32ExampleChild_g(childData);
             }
             _MySortedDictionary_Accessed = true;
         }
@@ -189,7 +192,8 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MySortedList_ByteIndex, _MySortedList_ByteLength, null);_MySortedList = ConvertFromBytes_SortedList_Gint_c_C32ExampleChild_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MySortedList_ByteIndex, _MySortedList_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MySortedList = ConvertFromBytes_SortedList_Gint_c_C32ExampleChild_g(childData);
             }
             _MySortedList_Accessed = true;
         }
@@ -602,7 +606,7 @@ namespace LazinatorTests.Examples.Collections
                 options = options.WithoutSplittingPossible();
             }
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyDictionary (accessed? {_MyDictionary_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyDictionary (accessed? {_MyDictionary_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyDictionary_Accessed)
@@ -626,7 +630,7 @@ namespace LazinatorTests.Examples.Collections
                 }
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyDictionaryStructs (accessed? {_MyDictionaryStructs_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyDictionaryStructs (accessed? {_MyDictionaryStructs_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyDictionaryStructs_Accessed)
@@ -650,7 +654,7 @@ namespace LazinatorTests.Examples.Collections
                 }
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MySortedDictionary (accessed? {_MySortedDictionary_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MySortedDictionary (accessed? {_MySortedDictionary_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MySortedDictionary_Accessed)
@@ -674,7 +678,7 @@ namespace LazinatorTests.Examples.Collections
                 }
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MySortedList (accessed? {_MySortedList_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MySortedList (accessed? {_MySortedList_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MySortedList_Accessed)

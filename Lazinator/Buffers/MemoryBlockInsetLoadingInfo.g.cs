@@ -237,7 +237,7 @@ namespace Lazinator.Buffers
         protected override void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
             base.WritePrimitivePropertiesIntoBuffer(ref writer, options, includeUniqueID);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, LoadingOffset value {_LoadingOffset}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, LoadingOffset value {_LoadingOffset}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedLong(ref writer, _LoadingOffset);
             TabbedText.Tabs--;

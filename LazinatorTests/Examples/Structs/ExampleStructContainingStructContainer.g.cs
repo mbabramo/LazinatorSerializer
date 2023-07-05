@@ -73,7 +73,8 @@ namespace LazinatorTests.Examples.Structs
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, null);_Subcontainer = new ExampleStructContainingStruct(childData)
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Subcontainer_ByteIndex, _Subcontainer_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_Subcontainer = new ExampleStructContainingStruct(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
@@ -496,7 +497,7 @@ namespace LazinatorTests.Examples.Structs
             }
             int startOfChildPosition = 0;
             int lengthValue = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Subcontainer (accessed? {_Subcontainer_Accessed}) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, Subcontainer (accessed? {_Subcontainer_Accessed}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)

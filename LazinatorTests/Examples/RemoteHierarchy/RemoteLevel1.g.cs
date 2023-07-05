@@ -96,6 +96,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _RemoteLevel2Item_ByteIndex, _RemoteLevel2Item_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _RemoteLevel2Item = DeserializationFactory.Instance.CreateBaseOrDerivedType(254, (c, p) => new Remote<WGuid, RemoteLevel2>(c, p), childData, this); 
             }
             _RemoteLevel2Item_Accessed = true;
@@ -506,7 +507,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, RemoteLevel1Int value {_RemoteLevel1Int}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, RemoteLevel1Int value {_RemoteLevel1Int}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _RemoteLevel1Int);
             TabbedText.Tabs--;

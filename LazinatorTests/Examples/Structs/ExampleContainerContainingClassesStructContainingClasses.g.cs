@@ -83,7 +83,8 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntWrapper_ByteIndex, _IntWrapper_ByteLength, null);_IntWrapper = new WInt32(childData)
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntWrapper_ByteIndex, _IntWrapper_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_IntWrapper = new WInt32(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
@@ -151,7 +152,8 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, null);_MyExampleStructContainingClasses = new ExampleStructContainingClasses(childData)
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyExampleStructContainingClasses_ByteIndex, _MyExampleStructContainingClasses_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyExampleStructContainingClasses = new ExampleStructContainingClasses(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
@@ -217,7 +219,8 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyHashSetExampleStruct_ByteIndex, _MyHashSetExampleStruct_ByteLength, null);_MyHashSetExampleStruct = ConvertFromBytes_HashSet_GExampleStructContainingClasses_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyHashSetExampleStruct_ByteIndex, _MyHashSetExampleStruct_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyHashSetExampleStruct = ConvertFromBytes_HashSet_GExampleStructContainingClasses_g(childData);
             }
             _MyHashSetExampleStruct_Accessed = true;
         }
@@ -254,7 +257,8 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListExampleStruct_ByteIndex, _MyListExampleStruct_ByteLength, null);_MyListExampleStruct = ConvertFromBytes_List_GExampleStructContainingClasses_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListExampleStruct_ByteIndex, _MyListExampleStruct_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyListExampleStruct = ConvertFromBytes_List_GExampleStructContainingClasses_g(childData);
             }
             _MyListExampleStruct_Accessed = true;
         }
@@ -291,7 +295,8 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableExampleStruct_ByteIndex, _MyListNullableExampleStruct_ByteLength, null);_MyListNullableExampleStruct = ConvertFromBytes_List_GWNullableStruct_GExampleStructContainingClasses_g_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListNullableExampleStruct_ByteIndex, _MyListNullableExampleStruct_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyListNullableExampleStruct = ConvertFromBytes_List_GWNullableStruct_GExampleStructContainingClasses_g_g(childData);
             }
             _MyListNullableExampleStruct_Accessed = true;
         }
@@ -328,7 +333,8 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListUnwrappedNullableExampleStruct_ByteIndex, _MyListUnwrappedNullableExampleStruct_ByteLength, null);_MyListUnwrappedNullableExampleStruct = ConvertFromBytes_List_GExampleStructContainingClasses_n_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListUnwrappedNullableExampleStruct_ByteIndex, _MyListUnwrappedNullableExampleStruct_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyListUnwrappedNullableExampleStruct = ConvertFromBytes_List_GExampleStructContainingClasses_n_g(childData);
             }
             _MyListUnwrappedNullableExampleStruct_Accessed = true;
         }
@@ -806,7 +812,7 @@ namespace LazinatorTests.Examples
             }
             int startOfChildPosition = 0;
             int lengthValue = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, IntWrapper (accessed? {_IntWrapper_Accessed}) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, IntWrapper (accessed? {_IntWrapper_Accessed}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
@@ -829,7 +835,7 @@ namespace LazinatorTests.Examples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyExampleStructContainingClasses (accessed? {_MyExampleStructContainingClasses_Accessed}) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyExampleStructContainingClasses (accessed? {_MyExampleStructContainingClasses_Accessed}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
@@ -852,7 +858,7 @@ namespace LazinatorTests.Examples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyHashSetExampleStruct (accessed? {_MyHashSetExampleStruct_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyHashSetExampleStruct (accessed? {_MyHashSetExampleStruct_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyHashSetExampleStruct_Accessed)
@@ -876,7 +882,7 @@ namespace LazinatorTests.Examples
                 }
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyListExampleStruct (accessed? {_MyListExampleStruct_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyListExampleStruct (accessed? {_MyListExampleStruct_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyListExampleStruct_Accessed)
@@ -897,7 +903,7 @@ namespace LazinatorTests.Examples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyListNullableExampleStruct (accessed? {_MyListNullableExampleStruct_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyListNullableExampleStruct (accessed? {_MyListNullableExampleStruct_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyListNullableExampleStruct_Accessed)
@@ -918,7 +924,7 @@ namespace LazinatorTests.Examples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyListUnwrappedNullableExampleStruct (accessed? {_MyListUnwrappedNullableExampleStruct_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyListUnwrappedNullableExampleStruct (accessed? {_MyListUnwrappedNullableExampleStruct_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyListUnwrappedNullableExampleStruct_Accessed)

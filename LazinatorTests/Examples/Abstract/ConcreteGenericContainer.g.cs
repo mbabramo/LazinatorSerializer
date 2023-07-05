@@ -75,6 +75,7 @@ namespace LazinatorTests.Examples.Abstract
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Item_ByteIndex, _Item_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _Item = DeserializationFactory.Instance.CreateBasedOnType<IAbstractGeneric1<Int32>>(childData, this); 
             }
             _Item_Accessed = true;

@@ -114,6 +114,7 @@ namespace LazinatorTests.Examples.Collections
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyList_ByteIndex, _MyList_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _MyList = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, (c, p) => new LazinatorList<ExampleChild>(c, p), childData, this); 
             }
             _MyList_Accessed = true;
@@ -160,6 +161,7 @@ namespace LazinatorTests.Examples.Collections
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyStructList_ByteIndex, _MyStructList_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _MyStructList = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, (c, p) => new LazinatorList<WByte>(c, p), childData, this); 
             }
             _MyStructList_Accessed = true;
@@ -623,11 +625,11 @@ namespace LazinatorTests.Examples.Collections
         
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyInt value {_MyInt}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyInt value {_MyInt}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyInt);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyLong value {_MyLong}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyLong value {_MyLong}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedLong(ref writer, _MyLong);
             TabbedText.Tabs--;

@@ -67,7 +67,8 @@ namespace Lazinator.Wrappers
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedValue_ByteIndex, _WrappedValue_ByteLength, null);_WrappedValue = ConvertFromBytes_float_B_b(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedValue_ByteIndex, _WrappedValue_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_WrappedValue = ConvertFromBytes_float_B_b(childData);
             }
             _WrappedValue_Accessed = true;
         }
@@ -430,7 +431,7 @@ namespace Lazinator.Wrappers
                 options = options.WithoutSplittingPossible();
             }
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, WrappedValue (accessed? {_WrappedValue_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, WrappedValue (accessed? {_WrappedValue_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_WrappedValue_Accessed)

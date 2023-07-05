@@ -405,11 +405,11 @@ namespace Lazinator.Buffers
         
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MemoryBlockIntID value {_MemoryBlockIntID}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MemoryBlockIntID value {_MemoryBlockIntID}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MemoryBlockIntID);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MemoryBlockLength value {_MemoryBlockLength}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MemoryBlockLength value {_MemoryBlockLength}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MemoryBlockLength);
             TabbedText.Tabs--;

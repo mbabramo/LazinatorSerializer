@@ -80,6 +80,7 @@ namespace Lazinator.Collections.Tree
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Root_ByteIndex, _Root_ByteLength, null);
                 childData.LoadInitialReadOnlyMemory();
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _Root = DeserializationFactory.Instance.CreateBaseOrDerivedType(257, (c, p) => new LazinatorBinaryTreeNode<T>(c, p), childData, this); 
                 childData.ConsiderUnloadInitialReadOnlyMemory();
             }
@@ -94,6 +95,7 @@ namespace Lazinator.Collections.Tree
             else
             {
                 LazinatorMemory childData = await GetChildSliceAsync(LazinatorMemoryStorage, _Root_ByteIndex, _Root_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _Root = DeserializationFactory.Instance.CreateBaseOrDerivedType(257, (c, p) => new LazinatorBinaryTreeNode<T>(c, p), childData, this); 
                 await childData.ConsiderUnloadReadOnlyMemoryAsync();
             }

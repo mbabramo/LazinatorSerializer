@@ -78,6 +78,7 @@ namespace Lazinator.Collections
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _UnderlyingList_ByteIndex, _UnderlyingList_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _UnderlyingList = DeserializationFactory.Instance.CreateBasedOnType<ILazinatorListable<T>>(childData, this); 
             }
             _UnderlyingList_Accessed = true;

@@ -92,7 +92,8 @@ namespace Lazinator.Collections.ByteSpan
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ReadOrWrite_ByteIndex, _ReadOrWrite_ByteLength, null);_ReadOrWrite = ConvertFromBytes_Memory_Gbyte_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ReadOrWrite_ByteIndex, _ReadOrWrite_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_ReadOrWrite = ConvertFromBytes_Memory_Gbyte_g(childData);
             }
             _ReadOrWrite_Accessed = true;
         }
@@ -469,7 +470,7 @@ namespace Lazinator.Collections.ByteSpan
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
         {
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, ReadOnly (accessed? {_ReadOnly_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, ReadOnly (accessed? {_ReadOnly_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             WriteNonLazinatorObject(
@@ -486,7 +487,7 @@ namespace Lazinator.Collections.ByteSpan
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, ReadOrWrite (accessed? {_ReadOrWrite_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, ReadOrWrite (accessed? {_ReadOrWrite_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_ReadOrWrite_Accessed)

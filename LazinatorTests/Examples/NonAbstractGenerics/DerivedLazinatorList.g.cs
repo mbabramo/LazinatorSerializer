@@ -234,7 +234,7 @@ namespace LazinatorTests.Examples
         protected override void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
             base.WritePrimitivePropertiesIntoBuffer(ref writer, options, includeUniqueID);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyListName value {_MyListName}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyListName value {_MyListName}");
             TabbedText.Tabs++;
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _MyListName);
             TabbedText.Tabs--;

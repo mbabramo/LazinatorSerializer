@@ -72,7 +72,8 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListT_ByteIndex, _MyListT_ByteLength, null);_MyListT = ConvertFromBytes_List_GT_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListT_ByteIndex, _MyListT_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyListT = ConvertFromBytes_List_GT_g(childData);
             }
             _MyListT_Accessed = true;
         }
@@ -129,6 +130,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _MyT = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
             }
             _MyT_Accessed = true;
@@ -562,7 +564,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             }
             int startOfChildPosition = 0;
             int lengthValue = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyListT (accessed? {_MyListT_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyListT (accessed? {_MyListT_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyListT_Accessed)
@@ -583,7 +585,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyT value {_MyT}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyT value {_MyT}");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)

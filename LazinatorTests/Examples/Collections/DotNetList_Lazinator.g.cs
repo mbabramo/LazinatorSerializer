@@ -72,7 +72,8 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListSerialized_ByteIndex, _MyListSerialized_ByteLength, null);_MyListSerialized = ConvertFromBytes_List_GExampleChild_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyListSerialized_ByteIndex, _MyListSerialized_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyListSerialized = ConvertFromBytes_List_GExampleChild_g(childData);
             }
             _MyListSerialized_Accessed = true;
         }
@@ -461,7 +462,7 @@ namespace LazinatorTests.Examples.Collections
                 options = options.WithoutSplittingPossible();
             }
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyListSerialized (accessed? {_MyListSerialized_Accessed}) (dirty? {_MyListSerialized_Dirty})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyListSerialized (accessed? {_MyListSerialized_Accessed}) (dirty? {_MyListSerialized_Dirty})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyListSerialized_Accessed)

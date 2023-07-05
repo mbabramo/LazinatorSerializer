@@ -75,7 +75,8 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyArrayInt_ByteIndex, _MyArrayInt_ByteLength, null);_MyArrayInt = ConvertFromBytes_int_B_b(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyArrayInt_ByteIndex, _MyArrayInt_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyArrayInt = ConvertFromBytes_int_B_b(childData);
             }
             _MyArrayInt_Accessed = true;
         }
@@ -130,7 +131,8 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyArrayNullableInt_ByteIndex, _MyArrayNullableInt_ByteLength, null);_MyArrayNullableInt = ConvertFromBytes_int_n_B_b(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyArrayNullableInt_ByteIndex, _MyArrayNullableInt_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyArrayNullableInt = ConvertFromBytes_int_n_B_b(childData);
             }
             _MyArrayNullableInt_Accessed = true;
         }
@@ -167,7 +169,8 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyJaggedArrayInt_ByteIndex, _MyJaggedArrayInt_ByteLength, null);_MyJaggedArrayInt = ConvertFromBytes_int_B_b_B_b(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyJaggedArrayInt_ByteIndex, _MyJaggedArrayInt_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyJaggedArrayInt = ConvertFromBytes_int_B_b_B_b(childData);
             }
             _MyJaggedArrayInt_Accessed = true;
         }
@@ -566,7 +569,7 @@ namespace LazinatorTests.Examples.Collections
                 options = options.WithoutSplittingPossible();
             }
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyArrayInt (accessed? {_MyArrayInt_Accessed}) (dirty? {_MyArrayInt_Dirty})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyArrayInt (accessed? {_MyArrayInt_Accessed}) (dirty? {_MyArrayInt_Dirty})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyArrayInt_Accessed)
@@ -587,7 +590,7 @@ namespace LazinatorTests.Examples.Collections
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyArrayNullableInt (accessed? {_MyArrayNullableInt_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyArrayNullableInt (accessed? {_MyArrayNullableInt_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyArrayNullableInt_Accessed)
@@ -608,7 +611,7 @@ namespace LazinatorTests.Examples.Collections
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyJaggedArrayInt (accessed? {_MyJaggedArrayInt_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyJaggedArrayInt (accessed? {_MyJaggedArrayInt_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyJaggedArrayInt_Accessed)

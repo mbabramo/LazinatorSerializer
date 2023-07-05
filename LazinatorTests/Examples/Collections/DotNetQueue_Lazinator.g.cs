@@ -71,7 +71,8 @@ namespace LazinatorTests.Examples.Collections
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyQueueSerialized_ByteIndex, _MyQueueSerialized_ByteLength, null);_MyQueueSerialized = ConvertFromBytes_Queue_GExampleChild_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyQueueSerialized_ByteIndex, _MyQueueSerialized_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyQueueSerialized = ConvertFromBytes_Queue_GExampleChild_g(childData);
             }
             _MyQueueSerialized_Accessed = true;
         }
@@ -442,7 +443,7 @@ namespace LazinatorTests.Examples.Collections
                 options = options.WithoutSplittingPossible();
             }
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyQueueSerialized (accessed? {_MyQueueSerialized_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyQueueSerialized (accessed? {_MyQueueSerialized_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyQueueSerialized_Accessed)

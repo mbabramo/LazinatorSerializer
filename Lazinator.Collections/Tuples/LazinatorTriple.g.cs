@@ -93,6 +93,7 @@ namespace Lazinator.Collections.Tuples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Item1_ByteIndex, _Item1_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _Item1 = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
             }
             _Item1_Accessed = true;
@@ -149,6 +150,7 @@ namespace Lazinator.Collections.Tuples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Item2_ByteIndex, _Item2_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _Item2 = DeserializationFactory.Instance.CreateBasedOnType<U>(childData, this); 
             }
             _Item2_Accessed = true;
@@ -205,6 +207,7 @@ namespace Lazinator.Collections.Tuples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Item3_ByteIndex, _Item3_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _Item3 = DeserializationFactory.Instance.CreateBasedOnType<V>(childData, this); 
             }
             _Item3_Accessed = true;
@@ -730,7 +733,7 @@ namespace Lazinator.Collections.Tuples
             }
             int startOfChildPosition = 0;
             int lengthValue = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Item1 value {_Item1}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, Item1 value {_Item1}");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
@@ -753,7 +756,7 @@ namespace Lazinator.Collections.Tuples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Item2 value {_Item2}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, Item2 value {_Item2}");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
@@ -776,7 +779,7 @@ namespace Lazinator.Collections.Tuples
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Item3 value {_Item3}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, Item3 value {_Item3}");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)

@@ -95,7 +95,8 @@ namespace Lazinator.Collections.BitArray
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntStorage_ByteIndex, _IntStorage_ByteLength, null);_IntStorage = ConvertFromBytes_Memory_Gint_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntStorage_ByteIndex, _IntStorage_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_IntStorage = ConvertFromBytes_Memory_Gint_g(childData);
             }
             _IntStorage_Accessed = true;
         }
@@ -458,11 +459,11 @@ namespace Lazinator.Collections.BitArray
         
         void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, _version value {__version}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, _version value {__version}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, __version);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, m_length value {_m_length}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, m_length value {_m_length}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _m_length);
             TabbedText.Tabs--;
@@ -470,7 +471,7 @@ namespace Lazinator.Collections.BitArray
         void WriteChildrenPropertiesIntoBuffer(ref BufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
         {
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, IntStorage (accessed? {_IntStorage_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, IntStorage (accessed? {_IntStorage_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_IntStorage_Accessed)

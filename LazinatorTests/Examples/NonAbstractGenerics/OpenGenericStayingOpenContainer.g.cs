@@ -90,6 +90,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericBase_ByteIndex, _ClosedGenericBase_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _ClosedGenericBase = DeserializationFactory.Instance.CreateBaseOrDerivedType(1033, (c, p) => new OpenGeneric<Base>(c, p), childData, this); 
             }
             _ClosedGenericBase_Accessed = true;
@@ -136,6 +137,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericFloat_ByteIndex, _ClosedGenericFloat_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _ClosedGenericFloat = DeserializationFactory.Instance.CreateBaseOrDerivedType(1033, (c, p) => new OpenGeneric<WFloat>(c, p), childData, this); 
             }
             _ClosedGenericFloat_Accessed = true;
@@ -182,6 +184,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericFromBaseWithBase_ByteIndex, _ClosedGenericFromBaseWithBase_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _ClosedGenericFromBaseWithBase = DeserializationFactory.Instance.CreateBaseOrDerivedType(1067, (c, p) => new GenericFromBase<Base>(c, p), childData, this); 
             }
             _ClosedGenericFromBaseWithBase_Accessed = true;
@@ -228,6 +231,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericInterface_ByteIndex, _ClosedGenericInterface_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _ClosedGenericInterface = DeserializationFactory.Instance.CreateBaseOrDerivedType(1033, (c, p) => new OpenGeneric<IExampleChild>(c, p), childData, this); 
             }
             _ClosedGenericInterface_Accessed = true;
@@ -274,6 +278,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ClosedGenericNonexclusiveInterface_ByteIndex, _ClosedGenericNonexclusiveInterface_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _ClosedGenericNonexclusiveInterface = DeserializationFactory.Instance.CreateBaseOrDerivedType(1033, (c, p) => new OpenGeneric<IExampleNonexclusiveInterface>(c, p), childData, this); 
             }
             _ClosedGenericNonexclusiveInterface_Accessed = true;

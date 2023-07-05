@@ -391,7 +391,7 @@ namespace LazinatorTests.Examples.Subclasses
             
             protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
             {
-                TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, StringWithinSubclass value {_StringWithinSubclass}");
+                TabbedText.WriteLine($"Position {writer.ToLocationString()}, StringWithinSubclass value {_StringWithinSubclass}");
                 TabbedText.Tabs++;
                 EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _StringWithinSubclass);
                 TabbedText.Tabs--;

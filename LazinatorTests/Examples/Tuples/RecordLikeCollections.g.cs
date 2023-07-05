@@ -89,7 +89,8 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionaryWithRecordLikeContainers_ByteIndex, _MyDictionaryWithRecordLikeContainers_ByteLength, null);_MyDictionaryWithRecordLikeContainers = ConvertFromBytes_Dictionary_Gint_c_C32RecordLikeContainer_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionaryWithRecordLikeContainers_ByteIndex, _MyDictionaryWithRecordLikeContainers_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyDictionaryWithRecordLikeContainers = ConvertFromBytes_Dictionary_Gint_c_C32RecordLikeContainer_g(childData);
             }
             _MyDictionaryWithRecordLikeContainers_Accessed = true;
         }
@@ -126,7 +127,8 @@ namespace LazinatorTests.Examples.Tuples
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionaryWithRecordLikeTypeValues_ByteIndex, _MyDictionaryWithRecordLikeTypeValues_ByteLength, null);_MyDictionaryWithRecordLikeTypeValues = ConvertFromBytes_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyDictionaryWithRecordLikeTypeValues_ByteIndex, _MyDictionaryWithRecordLikeTypeValues_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyDictionaryWithRecordLikeTypeValues = ConvertFromBytes_Dictionary_Gint_c_C32RecordLikeTypeWithLazinator_g(childData);
             }
             _MyDictionaryWithRecordLikeTypeValues_Accessed = true;
         }
@@ -507,7 +509,7 @@ namespace LazinatorTests.Examples.Tuples
         
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyInt value {_MyInt}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyInt value {_MyInt}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyInt);
             TabbedText.Tabs--;
@@ -519,7 +521,7 @@ namespace LazinatorTests.Examples.Tuples
                 options = options.WithoutSplittingPossible();
             }
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyDictionaryWithRecordLikeContainers (accessed? {_MyDictionaryWithRecordLikeContainers_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyDictionaryWithRecordLikeContainers (accessed? {_MyDictionaryWithRecordLikeContainers_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyDictionaryWithRecordLikeContainers_Accessed)
@@ -543,7 +545,7 @@ namespace LazinatorTests.Examples.Tuples
                 }
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyDictionaryWithRecordLikeTypeValues (accessed? {_MyDictionaryWithRecordLikeTypeValues_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyDictionaryWithRecordLikeTypeValues (accessed? {_MyDictionaryWithRecordLikeTypeValues_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyDictionaryWithRecordLikeTypeValues_Accessed)

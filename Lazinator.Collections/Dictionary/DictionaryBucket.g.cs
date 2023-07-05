@@ -95,6 +95,7 @@ namespace Lazinator.Collections.Dictionary
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Keys_ByteIndex, _Keys_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _Keys = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, (c, p) => new LazinatorList<TKey>(c, p), childData, this); 
             }
             _Keys_Accessed = true;
@@ -140,6 +141,7 @@ namespace Lazinator.Collections.Dictionary
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Values_ByteIndex, _Values_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _Values = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, (c, p) => new LazinatorList<TValue>(c, p), childData, this); 
             }
             _Values_Accessed = true;
@@ -599,7 +601,7 @@ namespace Lazinator.Collections.Dictionary
         
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Initialized value {_Initialized}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, Initialized value {_Initialized}");
             TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteBool(ref writer, _Initialized);
             TabbedText.Tabs--;

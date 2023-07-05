@@ -93,6 +93,7 @@ namespace Lazinator.Collections.Dictionary
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Buckets_ByteIndex, _Buckets_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _Buckets = DeserializationFactory.Instance.CreateBaseOrDerivedType(201, (c, p) => new LazinatorList<DictionaryBucket<TKey, TValue>>(c, p), childData, this); 
             }
             _Buckets_Accessed = true;
@@ -503,7 +504,7 @@ namespace Lazinator.Collections.Dictionary
         
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Count value {_Count}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, Count value {_Count}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _Count);
             TabbedText.Tabs--;

@@ -105,6 +105,7 @@ namespace Lazinator.Collections.Remote
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Key_ByteIndex, _Key_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _Key = DeserializationFactory.Instance.CreateBasedOnType<TKey>(childData, this); 
             }
             _Key_Accessed = true;
@@ -154,6 +155,7 @@ namespace Lazinator.Collections.Remote
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Local_ByteIndex, _Local_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _Local = DeserializationFactory.Instance.CreateBasedOnType<TValue>(childData, this); 
             }
             _Local_Accessed = true;
@@ -621,7 +623,7 @@ namespace Lazinator.Collections.Remote
         
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, StoreLocally value {_StoreLocally}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, StoreLocally value {_StoreLocally}");
             TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteBool(ref writer, _StoreLocally);
             TabbedText.Tabs--;
@@ -634,7 +636,7 @@ namespace Lazinator.Collections.Remote
             }
             int startOfChildPosition = 0;
             int lengthValue = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Key value {_Key}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, Key value {_Key}");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
@@ -657,7 +659,7 @@ namespace Lazinator.Collections.Remote
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Local value {_Local}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, Local value {_Local}");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)

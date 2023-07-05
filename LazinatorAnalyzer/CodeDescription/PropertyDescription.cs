@@ -1379,7 +1379,7 @@ TabbedText.WriteLine($""Accessing {PropertyName}"");")}
             return $@"
             {ConditionalCodeGenerator.ConsequentPossibleOnlyIf(Nullable || NonNullableThatCanBeUninitialized, "LazinatorMemoryStorage.Length == 0", createDefault, $@"{IIF(defineChildData, "LazinatorMemory ")}childData = {(async ? ChildSliceStringDefinitelyAsync : ChildSliceString)};{IIF(!async && WithinAsync, $@"
                 childData.LoadInitialReadOnlyMemory();")}{IIF(includeTracingCode, $@"
-TabbedText.WriteLine($""Data location: {{childData.ToLocationString()}}"");")}{recreation}{IIF(async, $@"
+TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationString()}}"");")}{recreation}{IIF(async, $@"
                 await childData.ConsiderUnloadReadOnlyMemoryAsync();")}{IIF(!async && WithinAsync, $@"
                 childData.ConsiderUnloadInitialReadOnlyMemory();")}")}{IIF(BackingAccessFieldIncluded, $@"
             {BackingFieldAccessedString} = true;")}";

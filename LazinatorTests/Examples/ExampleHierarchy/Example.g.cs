@@ -313,6 +313,7 @@ namespace LazinatorTests.Examples
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IncludableChild_ByteIndex, _IncludableChild_ByteLength, null);
                 childData.LoadInitialReadOnlyMemory();
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _IncludableChild = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, (c, p) => new ExampleChild(c, p), childData, this); 
                 childData.ConsiderUnloadInitialReadOnlyMemory();
             }
@@ -327,6 +328,7 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = await GetChildSliceAsync(LazinatorMemoryStorage, _IncludableChild_ByteIndex, _IncludableChild_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _IncludableChild = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, (c, p) => new ExampleChild(c, p), childData, this); 
                 await childData.ConsiderUnloadReadOnlyMemoryAsync();
             }
@@ -385,6 +387,7 @@ namespace LazinatorTests.Examples
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild1_ByteIndex, _MyChild1_ByteLength, null);
                 childData.LoadInitialReadOnlyMemory();
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _MyChild1 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, (c, p) => new ExampleChild(c, p), childData, this); 
                 OnMyChild1Deserialized(_MyChild1);
                 childData.ConsiderUnloadInitialReadOnlyMemory();
@@ -400,6 +403,7 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = await GetChildSliceAsync(LazinatorMemoryStorage, _MyChild1_ByteIndex, _MyChild1_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _MyChild1 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, (c, p) => new ExampleChild(c, p), childData, this); 
                 OnMyChild1Deserialized(_MyChild1);
                 await childData.ConsiderUnloadReadOnlyMemoryAsync();
@@ -459,6 +463,7 @@ namespace LazinatorTests.Examples
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild2_ByteIndex, _MyChild2_ByteLength, null);
                 childData.LoadInitialReadOnlyMemory();
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _MyChild2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, (c, p) => new ExampleChild(c, p), childData, this); 
                 childData.ConsiderUnloadInitialReadOnlyMemory();
             }
@@ -473,6 +478,7 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = await GetChildSliceAsync(LazinatorMemoryStorage, _MyChild2_ByteIndex, _MyChild2_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _MyChild2 = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, (c, p) => new ExampleChild(c, p), childData, this); 
                 await childData.ConsiderUnloadReadOnlyMemoryAsync();
             }
@@ -530,6 +536,7 @@ namespace LazinatorTests.Examples
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyChild2Previous_ByteIndex, _MyChild2Previous_ByteLength, null);
                 childData.LoadInitialReadOnlyMemory();
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _MyChild2Previous = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, (c, p) => new ExampleChild(c, p), childData, this); 
                 childData.ConsiderUnloadInitialReadOnlyMemory();
             }
@@ -544,6 +551,7 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = await GetChildSliceAsync(LazinatorMemoryStorage, _MyChild2Previous_ByteIndex, _MyChild2Previous_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _MyChild2Previous = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, (c, p) => new ExampleChild(c, p), childData, this); 
                 await childData.ConsiderUnloadReadOnlyMemoryAsync();
             }
@@ -601,6 +609,7 @@ namespace LazinatorTests.Examples
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyInterfaceImplementer_ByteIndex, _MyInterfaceImplementer_ByteLength, null);
                 childData.LoadInitialReadOnlyMemory();
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _MyInterfaceImplementer = DeserializationFactory.Instance.CreateBasedOnType<IExampleNonexclusiveInterface>(childData, this); 
                 childData.ConsiderUnloadInitialReadOnlyMemory();
             }
@@ -615,6 +624,7 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = await GetChildSliceAsync(LazinatorMemoryStorage, _MyInterfaceImplementer_ByteIndex, _MyInterfaceImplementer_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _MyInterfaceImplementer = DeserializationFactory.Instance.CreateBasedOnType<IExampleNonexclusiveInterface>(childData, this); 
                 await childData.ConsiderUnloadReadOnlyMemoryAsync();
             }
@@ -664,7 +674,8 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyNonLazinatorChild_ByteIndex, _MyNonLazinatorChild_ByteLength, null);
-                childData.LoadInitialReadOnlyMemory();_MyNonLazinatorChild = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData);
+                childData.LoadInitialReadOnlyMemory();
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyNonLazinatorChild = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData);
                 childData.ConsiderUnloadInitialReadOnlyMemory();
             }
             _MyNonLazinatorChild_Accessed = true;
@@ -678,7 +689,8 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = await GetChildSliceAsync(LazinatorMemoryStorage, _MyNonLazinatorChild_ByteIndex, _MyNonLazinatorChild_ByteLength, null);_MyNonLazinatorChild = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData);
+                LazinatorMemory childData = await GetChildSliceAsync(LazinatorMemoryStorage, _MyNonLazinatorChild_ByteIndex, _MyNonLazinatorChild_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyNonLazinatorChild = NonLazinatorDirectConverter.ConvertFromBytes_NonLazinatorClass(childData);
                 await childData.ConsiderUnloadReadOnlyMemoryAsync();
             }
             _MyNonLazinatorChild_Accessed = true;
@@ -746,7 +758,8 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, null);
-                childData.LoadInitialReadOnlyMemory();_WrappedInt = new WInt32(childData)
+                childData.LoadInitialReadOnlyMemory();
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_WrappedInt = new WInt32(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
@@ -764,7 +777,8 @@ namespace LazinatorTests.Examples
             }
             else
             {
-                LazinatorMemory childData = await GetChildSliceAsync(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, null);_WrappedInt = new WInt32(childData)
+                LazinatorMemory childData = await GetChildSliceAsync(LazinatorMemoryStorage, _WrappedInt_ByteIndex, _WrappedInt_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_WrappedInt = new WInt32(childData)
                 {
                     LazinatorParents = new LazinatorParentsCollection(this)
                 };
@@ -852,6 +866,7 @@ namespace LazinatorTests.Examples
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ExcludableChild_ByteIndex, _ExcludableChild_ByteLength, null);
                 childData.LoadInitialReadOnlyMemory();
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _ExcludableChild = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, (c, p) => new ExampleChild(c, p), childData, this); 
                 childData.ConsiderUnloadInitialReadOnlyMemory();
             }
@@ -866,6 +881,7 @@ namespace LazinatorTests.Examples
             else
             {
                 LazinatorMemory childData = await GetChildSliceAsync(LazinatorMemoryStorage, _ExcludableChild_ByteIndex, _ExcludableChild_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _ExcludableChild = DeserializationFactory.Instance.CreateBaseOrDerivedType(1013, (c, p) => new ExampleChild(c, p), childData, this); 
                 await childData.ConsiderUnloadReadOnlyMemoryAsync();
             }
@@ -2114,61 +2130,61 @@ namespace LazinatorTests.Examples
         
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, /*<$$ if=async,0 $$>*/in /*<$$/if $$>*//*<$$ if=async,1 $$>*//*<$$/if $$>*/LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyNullableDouble value {_MyNullableDouble}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyNullableDouble value {_MyNullableDouble}");
             TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteNullableDouble(ref writer, _MyNullableDouble);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyBool value {_MyBool}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyBool value {_MyBool}");
             TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteBool(ref writer, _MyBool);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyChar value {_MyChar}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyChar value {_MyChar}");
             TabbedText.Tabs++;
             EncodeCharAndString.WriteCharInTwoBytes(ref writer, _MyChar);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyDateTime value {_MyDateTime}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyDateTime value {_MyDateTime}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedDateTime(ref writer, _MyDateTime);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyNewString value {_MyNewString}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyNewString value {_MyNewString}");
             TabbedText.Tabs++;
             if (LazinatorObjectVersion >= 3)
             {
                 EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _MyNewString);
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyNullableDecimal value {_MyNullableDecimal}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyNullableDecimal value {_MyNullableDecimal}");
             TabbedText.Tabs++;
             CompressedDecimal.WriteCompressedNullableDecimal(ref writer, _MyNullableDecimal);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyNullableTimeSpan value {_MyNullableTimeSpan}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyNullableTimeSpan value {_MyNullableTimeSpan}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedNullableTimeSpan(ref writer, _MyNullableTimeSpan);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyOldString value {_MyOldString}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyOldString value {_MyOldString}");
             TabbedText.Tabs++;
             if (LazinatorObjectVersion < 3)
             {
                 EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _MyOldString);
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyString value {_MyString}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyString value {_MyString}");
             TabbedText.Tabs++;
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _MyString);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyStringUncompressed value {_MyStringUncompressed}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyStringUncompressed value {_MyStringUncompressed}");
             TabbedText.Tabs++;
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _MyStringUncompressed);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyTestEnum value {_MyTestEnum}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyTestEnum value {_MyTestEnum}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, (int) _MyTestEnum);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyTestEnumByteNullable value {_MyTestEnumByteNullable}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyTestEnumByteNullable value {_MyTestEnumByteNullable}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedNullableByte(ref writer, (byte?) _MyTestEnumByteNullable);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyUInt value {_MyUInt}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyUInt value {_MyUInt}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedUInt(ref writer, _MyUInt);
             TabbedText.Tabs--;
@@ -2297,7 +2313,7 @@ namespace LazinatorTests.Examples
             }
             TabbedText.Tabs--;
             writer.ConsiderSwitchToNextBuffer(ref options);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyNonLazinatorChild (accessed? {_MyNonLazinatorChild_Accessed}) (dirty? {_MyNonLazinatorChild_Dirty})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyNonLazinatorChild (accessed? {_MyNonLazinatorChild_Accessed}) (dirty? {_MyNonLazinatorChild_Dirty})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.OverallMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyNonLazinatorChild_Accessed)
@@ -2319,7 +2335,7 @@ namespace LazinatorTests.Examples
             }
             TabbedText.Tabs--;
             writer.ConsiderSwitchToNextBuffer(ref options);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, WrappedInt (accessed? {_WrappedInt_Accessed}) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, WrappedInt (accessed? {_WrappedInt_Accessed}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
@@ -2496,7 +2512,7 @@ namespace LazinatorTests.Examples
             }
             TabbedText.Tabs--;
             writer.ConsiderSwitchToNextBuffer(ref options);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyNonLazinatorChild (accessed? {_MyNonLazinatorChild_Accessed}) (dirty? {_MyNonLazinatorChild_Dirty})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyNonLazinatorChild (accessed? {_MyNonLazinatorChild_Accessed}) (dirty? {_MyNonLazinatorChild_Dirty})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Writer.OverallMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyNonLazinatorChild_Accessed)
@@ -2518,7 +2534,7 @@ namespace LazinatorTests.Examples
             }
             TabbedText.Tabs--;
             writer.ConsiderSwitchToNextBuffer(ref options);
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, WrappedInt (accessed? {_WrappedInt_Accessed}) ");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, WrappedInt (accessed? {_WrappedInt_Accessed}) ");
             TabbedText.Tabs++;
             startOfChildPosition = writer.Writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)

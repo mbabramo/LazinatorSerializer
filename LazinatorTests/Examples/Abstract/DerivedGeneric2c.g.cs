@@ -131,6 +131,7 @@ namespace LazinatorTests.Examples.Abstract
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyT_ByteIndex, _MyT_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _MyT = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
             }
             _MyT_Accessed = true;
@@ -553,15 +554,15 @@ namespace LazinatorTests.Examples.Abstract
         
         protected override void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyEnumWithinAbstractGeneric value {_MyEnumWithinAbstractGeneric}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyEnumWithinAbstractGeneric value {_MyEnumWithinAbstractGeneric}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, (int) _MyEnumWithinAbstractGeneric);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyEnumWithinAbstractGeneric2 value {_MyEnumWithinAbstractGeneric2}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyEnumWithinAbstractGeneric2 value {_MyEnumWithinAbstractGeneric2}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, (int) _MyEnumWithinAbstractGeneric2);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyUnofficialInt value {_MyUnofficialInt}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyUnofficialInt value {_MyUnofficialInt}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyUnofficialInt);
             TabbedText.Tabs--;
@@ -574,7 +575,7 @@ namespace LazinatorTests.Examples.Abstract
             }
             int startOfChildPosition = 0;
             int lengthValue = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyT value {_MyT}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyT value {_MyT}");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)

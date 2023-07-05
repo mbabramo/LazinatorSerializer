@@ -410,7 +410,7 @@ namespace Lazinator.Wrappers
         void WriteChildrenPropertiesIntoBuffer(ref BufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
         {
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Value (accessed? {_Value_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, Value (accessed? {_Value_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             var serializedBytesCopy_Value = LazinatorMemoryStorage;

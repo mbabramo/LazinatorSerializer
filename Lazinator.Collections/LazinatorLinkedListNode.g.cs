@@ -80,6 +80,7 @@ namespace Lazinator.Collections
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _NextNode_ByteIndex, _NextNode_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _NextNode = DeserializationFactory.Instance.CreateBaseOrDerivedType(224, (c, p) => new LazinatorLinkedListNode<T>(c, p), childData, this); 
             }
             _NextNode_Accessed = true;
@@ -136,6 +137,7 @@ namespace Lazinator.Collections
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Value_ByteIndex, _Value_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _Value = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
             }
             _Value_Accessed = true;
@@ -627,7 +629,7 @@ namespace Lazinator.Collections
                 
             }
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Value value {_Value}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, Value value {_Value}");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)

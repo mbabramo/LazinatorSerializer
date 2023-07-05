@@ -153,6 +153,7 @@ namespace LazinatorTests.Examples.Abstract
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _LazinatorExample_ByteIndex, _LazinatorExample_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _LazinatorExample = DeserializationFactory.Instance.CreateBaseOrDerivedType(1012, (c, p) => new Example(c, p), childData, this); 
             }
             _LazinatorExample_Accessed = true;
@@ -579,23 +580,23 @@ namespace LazinatorTests.Examples.Abstract
         
         protected override void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyEnumWithinAbstractGeneric value {_MyEnumWithinAbstractGeneric}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyEnumWithinAbstractGeneric value {_MyEnumWithinAbstractGeneric}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, (int) _MyEnumWithinAbstractGeneric);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyEnumWithinAbstractGeneric2 value {_MyEnumWithinAbstractGeneric2}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyEnumWithinAbstractGeneric2 value {_MyEnumWithinAbstractGeneric2}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, (int) _MyEnumWithinAbstractGeneric2);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyT value {_MyT}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyT value {_MyT}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyT);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyUnofficialInt value {_MyUnofficialInt}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyUnofficialInt value {_MyUnofficialInt}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _MyUnofficialInt);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, AnotherProperty value {_AnotherProperty}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, AnotherProperty value {_AnotherProperty}");
             TabbedText.Tabs++;
             EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _AnotherProperty);
             TabbedText.Tabs--;

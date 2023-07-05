@@ -85,7 +85,8 @@ namespace LazinatorTests.Examples.Subclasses
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyEnumList_ByteIndex, _MyEnumList_ByteLength, null);_MyEnumList = ConvertFromBytes_List_GEnumWithinClass_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MyEnumList_ByteIndex, _MyEnumList_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MyEnumList = ConvertFromBytes_List_GEnumWithinClass_g(childData);
             }
             _MyEnumList_Accessed = true;
         }
@@ -452,7 +453,7 @@ namespace LazinatorTests.Examples.Subclasses
         
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyEnum value {_MyEnum}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyEnum value {_MyEnum}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, (int) _MyEnum);
             TabbedText.Tabs--;
@@ -464,7 +465,7 @@ namespace LazinatorTests.Examples.Subclasses
                 options = options.WithoutSplittingPossible();
             }
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, MyEnumList (accessed? {_MyEnumList_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MyEnumList (accessed? {_MyEnumList_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MyEnumList_Accessed)

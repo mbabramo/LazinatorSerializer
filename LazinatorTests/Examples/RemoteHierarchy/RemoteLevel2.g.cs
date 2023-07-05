@@ -389,7 +389,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
         
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, RemoteLevel2Int value {_RemoteLevel2Int}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, RemoteLevel2Int value {_RemoteLevel2Int}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _RemoteLevel2Int);
             TabbedText.Tabs--;

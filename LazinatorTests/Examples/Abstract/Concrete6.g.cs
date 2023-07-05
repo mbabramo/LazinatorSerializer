@@ -68,7 +68,8 @@ namespace LazinatorTests.Examples.Abstract
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList6_ByteIndex, _IntList6_ByteLength, null);_IntList6 = ConvertFromBytes_List_Gint_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _IntList6_ByteIndex, _IntList6_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_IntList6 = ConvertFromBytes_List_Gint_g(childData);
             }
             _IntList6_Accessed = true;
         }
@@ -293,7 +294,7 @@ namespace LazinatorTests.Examples.Abstract
                 options = options.WithoutSplittingPossible();
             }
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, IntList6 (accessed? {_IntList6_Accessed})");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, IntList6 (accessed? {_IntList6_Accessed})");
             TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_IntList6_Accessed)

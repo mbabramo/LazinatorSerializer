@@ -106,6 +106,7 @@ namespace Lazinator.Collections
             else
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _FirstNode_ByteIndex, _FirstNode_ByteLength, null);
+                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _FirstNode = DeserializationFactory.Instance.CreateBaseOrDerivedType(224, (c, p) => new LazinatorLinkedListNode<T>(c, p), childData, this); 
             }
             _FirstNode_Accessed = true;
@@ -520,11 +521,11 @@ namespace Lazinator.Collections
         
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, AllowDuplicates value {_AllowDuplicates}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, AllowDuplicates value {_AllowDuplicates}");
             TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteBool(ref writer, _AllowDuplicates);
             TabbedText.Tabs--;
-            TabbedText.WriteLine($"Byte {writer.ActiveMemoryPosition}, Count value {_Count}");
+            TabbedText.WriteLine($"Position {writer.ToLocationString()}, Count value {_Count}");
             TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _Count);
             TabbedText.Tabs--;
