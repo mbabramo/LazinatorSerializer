@@ -256,9 +256,16 @@ namespace Lazinator.Buffers
             {
                 if (IsEmpty)
                     return EmptyReadOnlyMemory;
-                ReadOnlyMemory<byte> memory = SingleMemoryBlock?.ReadOnlyMemory ?? MemoryRangeAtIndex(MemoryRangeIndex).ReadOnlyMemory;
-                int length = (int)Math.Min(memory.Length - FurtherOffsetIntoMemoryBlock, Length);
-                var result = memory.Slice(FurtherOffsetIntoMemoryBlock, length); Debug; // We aren't properly adding the memory range index offset to this further offset into memory block. 
+                ReadOnlyMemory<byte>? memory = SingleMemoryBlock?.ReadOnlyMemory;
+                int offsetFromMemoryRange = 0;
+                if (memory == null)
+                {
+                    MemoryRange memoryRange = MemoryRangeAtIndex(MemoryRangeIndex);
+                    memory = memoryRange.ReadOnlyMemory;
+                    offsetFromMemoryRange = memoryRange.SliceInfo.OffsetIntoMemoryBlock;
+                }
+                int length = (int)Math.Min(memory.Value.Length - FurtherOffsetIntoMemoryBlock, Length);
+                var result = memory.Value.Slice(offsetFromMemoryRange + FurtherOffsetIntoMemoryBlock, length);  
                 return result;
             }
         }
