@@ -46,6 +46,7 @@ namespace Lazinator.Collections
             {
                 if (!_UnderlyingList_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing UnderlyingList");
                     LazinateUnderlyingList();
                 } 
                 return _UnderlyingList;

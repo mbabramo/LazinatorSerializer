@@ -67,6 +67,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyMemoryByte_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyMemoryByte");
                     LazinateMyMemoryByte();
                 }
                 IsDirty = true; 
@@ -103,6 +104,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyMemoryInt_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyMemoryInt");
                     LazinateMyMemoryInt();
                 }
                 IsDirty = true; 
@@ -139,6 +141,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyNullableMemoryByte_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyNullableMemoryByte");
                     LazinateMyNullableMemoryByte();
                 }
                 IsDirty = true; 
@@ -175,6 +178,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyNullableMemoryInt_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyNullableMemoryInt");
                     LazinateMyNullableMemoryInt();
                 }
                 IsDirty = true; 
@@ -211,6 +215,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyNullableReadOnlyMemoryInt_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyNullableReadOnlyMemoryInt");
                     LazinateMyNullableReadOnlyMemoryInt();
                 }
                 IsDirty = true; 
@@ -247,6 +252,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyReadOnlyMemoryByte_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyReadOnlyMemoryByte");
                     LazinateMyReadOnlyMemoryByte();
                 } 
                 return _MyReadOnlyMemoryByte;
@@ -282,6 +288,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyReadOnlyMemoryChar_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyReadOnlyMemoryChar");
                     LazinateMyReadOnlyMemoryChar();
                 } 
                 return _MyReadOnlyMemoryChar;
@@ -317,6 +324,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyReadOnlyMemoryInt_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyReadOnlyMemoryInt");
                     LazinateMyReadOnlyMemoryInt();
                 } 
                 return _MyReadOnlyMemoryInt;

@@ -138,7 +138,7 @@ namespace Lazinator.Collections.Tree
                     yield return t;
         }
 
-        private IEnumerable<T> TraversePreOrder(LazinatorBinaryTreeNode<T> parent)
+        public IEnumerable<T> TraversePreOrder(LazinatorBinaryTreeNode<T> parent)
         {
             if (parent != null)
             {

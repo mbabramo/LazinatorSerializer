@@ -46,6 +46,7 @@ namespace Lazinator.Collections.Tuples
             {
                 if (!_Key_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing Key");
                     LazinateKey();
                 } 
                 return _Key;
@@ -81,6 +82,7 @@ namespace Lazinator.Collections.Tuples
             {
                 if (!_Value_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing Value");
                     LazinateValue();
                 } 
                 return _Value;

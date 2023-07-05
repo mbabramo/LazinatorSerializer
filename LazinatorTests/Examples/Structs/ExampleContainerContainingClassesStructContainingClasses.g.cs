@@ -58,6 +58,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_IntWrapper_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing IntWrapper");
                     LazinateIntWrapper();
                 } 
                 return _IntWrapper;
@@ -125,6 +126,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyExampleStructContainingClasses_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyExampleStructContainingClasses");
                     LazinateMyExampleStructContainingClasses();
                 } 
                 return _MyExampleStructContainingClasses;
@@ -192,6 +194,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyHashSetExampleStruct_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyHashSetExampleStruct");
                     LazinateMyHashSetExampleStruct();
                 }
                 IsDirty = true; 
@@ -228,6 +231,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyListExampleStruct_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyListExampleStruct");
                     LazinateMyListExampleStruct();
                 }
                 IsDirty = true; 
@@ -264,6 +268,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyListNullableExampleStruct_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyListNullableExampleStruct");
                     LazinateMyListNullableExampleStruct();
                 }
                 IsDirty = true; 
@@ -300,6 +305,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyListUnwrappedNullableExampleStruct_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyListUnwrappedNullableExampleStruct");
                     LazinateMyListUnwrappedNullableExampleStruct();
                 }
                 IsDirty = true; 

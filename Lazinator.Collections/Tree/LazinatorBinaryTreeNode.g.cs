@@ -51,6 +51,7 @@ namespace Lazinator.Collections.Tree
             {
                 if (!_Data_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing Data");
                     LazinateData();
                 } 
                 return _Data;
@@ -121,6 +122,7 @@ namespace Lazinator.Collections.Tree
         {
             if (!_Data_Accessed)
             {
+                TabbedText.WriteLine($"Accessing Data");
                 await LazinateDataAsync();
             } 
             return _Data;
@@ -134,6 +136,7 @@ namespace Lazinator.Collections.Tree
             {
                 if (!_LeftNode_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing LeftNode");
                     LazinateLeftNode();
                 } 
                 return _LeftNode;
@@ -189,6 +192,7 @@ namespace Lazinator.Collections.Tree
         {
             if (!_LeftNode_Accessed)
             {
+                TabbedText.WriteLine($"Accessing LeftNode");
                 await LazinateLeftNodeAsync();
             } 
             return _LeftNode;
@@ -202,6 +206,7 @@ namespace Lazinator.Collections.Tree
             {
                 if (!_RightNode_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing RightNode");
                     LazinateRightNode();
                 } 
                 return _RightNode;
@@ -257,6 +262,7 @@ namespace Lazinator.Collections.Tree
         {
             if (!_RightNode_Accessed)
             {
+                TabbedText.WriteLine($"Accessing RightNode");
                 await LazinateRightNodeAsync();
             } 
             return _RightNode;

@@ -76,6 +76,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_IntList4_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing IntList4");
                     LazinateIntList4();
                 }
                 IsDirty = true; 
@@ -111,6 +112,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_IntList5_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing IntList5");
                     LazinateIntList5();
                 }
                 IsDirty = true; 

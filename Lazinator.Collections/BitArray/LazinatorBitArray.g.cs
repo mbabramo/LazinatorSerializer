@@ -72,6 +72,7 @@ namespace Lazinator.Collections.BitArray
             {
                 if (!_IntStorage_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing IntStorage");
                     LazinateIntStorage();
                 }
                 IsDirty = true; 

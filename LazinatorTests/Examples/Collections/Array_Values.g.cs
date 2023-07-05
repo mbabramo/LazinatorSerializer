@@ -51,6 +51,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyArrayInt_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyArrayInt");
                     LazinateMyArrayInt();
                 } 
                 return _MyArrayInt;
@@ -106,6 +107,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyArrayNullableInt_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyArrayNullableInt");
                     LazinateMyArrayNullableInt();
                 }
                 IsDirty = true; 
@@ -142,6 +144,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyJaggedArrayInt_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyJaggedArrayInt");
                     LazinateMyJaggedArrayInt();
                 }
                 IsDirty = true; 

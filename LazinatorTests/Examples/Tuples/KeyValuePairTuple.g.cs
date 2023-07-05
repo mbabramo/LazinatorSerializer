@@ -48,6 +48,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyKeyValuePairSerialized_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyKeyValuePairSerialized");
                     LazinateMyKeyValuePairSerialized();
                 }
                 IsDirty = true; 

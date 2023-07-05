@@ -46,6 +46,7 @@ namespace Lazinator.Collections.OffsetList
             {
                 if (!_FourByteItems_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing FourByteItems");
                     LazinateFourByteItems();
                 } 
                 return _FourByteItems;
@@ -100,6 +101,7 @@ namespace Lazinator.Collections.OffsetList
             {
                 if (!_TwoByteItems_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing TwoByteItems");
                     LazinateTwoByteItems();
                 } 
                 return _TwoByteItems;

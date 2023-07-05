@@ -20,6 +20,7 @@ using LazinatorTests.Utilities;
 using System.Buffers;
 using Lazinator.Persistence;
 using Lazinator.Collections;
+using Lazinator.Support;
 
 namespace LazinatorTests.Tests
 {
@@ -186,9 +187,12 @@ namespace LazinatorTests.Tests
         private void DeleteFromMainList(double d) => RegularSortedList.Remove(d);
 
         private LazinatorBinaryTree<WDouble> BinaryTree;
+        private LazinatorBinaryTree<WDouble> AdditionalBinaryTree;
         private List<double> BinaryTreeValues => BinaryTree.Select(x => x.WrappedValue).ToList();
         private void AddToBinaryTree(double d) => BinaryTree.Add(d);
+        private void AddToAdditionalBinaryTree(double d) => AdditionalBinaryTree.Add(d);
         private void DeleteFromBinaryTree(double d) => BinaryTree.Remove(d);
+        private void DeleteFromAdditionalBinaryTree(double d) => AdditionalBinaryTree.Remove(d);
         private int Count = 0;
 
         private void RandomAddition(Random r)
@@ -196,6 +200,7 @@ namespace LazinatorTests.Tests
             double d = r.NextDouble();
             AddToMainList(d);
             AddToBinaryTree(d);
+            AddToAdditionalBinaryTree(d);
             Count++;
         }
 
@@ -207,6 +212,7 @@ namespace LazinatorTests.Tests
                 var key = RegularSortedList.Keys[i];
                 DeleteFromMainList(key);
                 DeleteFromBinaryTree(key);
+                DeleteFromAdditionalBinaryTree(key);
                 Count--;
             }
         }
@@ -215,6 +221,7 @@ namespace LazinatorTests.Tests
         {
             RegularSortedList = new SortedList<double, string>();
             BinaryTree = new LazinatorBinaryTree<WDouble>();
+            AdditionalBinaryTree = new LazinatorBinaryTree<WDouble>();
             Count = 0;
         }
 
@@ -557,26 +564,29 @@ namespace LazinatorTests.Tests
             int numChangesSubsequentRounds = 1; // DEBUG 3
             MultipleRoundsOfRandomChanges(numRounds, numChangesFirstRound, numChangesSubsequentRounds, () =>
             {
-                //Debug.WriteLine($"Round {round}");
-
-                var DEBUG4 = BinaryTree.ToList();
+                TabbedText.WriteLine($"Round {round}");
 
                 LazinatorSerializationOptions options = neverIncludeReferenceToPreviousBuffer ? new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, int.MaxValue, int.MaxValue) : new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, true, 20, 5);
-              LazinatorMemory serializedBinaryTree = BinaryTree.SerializeLazinator(options);
-                //LazinatorSerializationOptions options = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false);
-                //BinaryTree.SerializeLazinator();
-                //LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(options);
+                LazinatorSerializationOptions noDiffsOptions = new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false);
+                LazinatorMemory serializedBinaryTree = BinaryTree.SerializeLazinator(options);
+                LazinatorMemory additionalSerialized = AdditionalBinaryTree.SerializeLazinator(noDiffsOptions); // This just provides us a comparison, so we can match serializations at each round (in addition to checking at completion if there is a match with the underlying list).
 
-                Debug.WriteLine("Serialized binary tree:");
-                Debug.WriteLine(serializedBinaryTree.ToStringFullMemory());
+                TabbedText.WriteLine("Serialized binary tree:");
+                TabbedText.WriteLine(serializedBinaryTree.ToStringFullMemory());
+                TabbedText.WriteLine("CURRENT STATE OF TREE: " + String.Join(",", AdditionalBinaryTree.ToList()));
 
-                Debug.WriteLine("CURRENT STATE: " + String.Join(",", BinaryTree.ToList())); // DEBUG
-                var DEBUG_ShouldBeCopy = new LazinatorBinaryTree<WDouble>(serializedBinaryTree);
-                var DEBUG_AsList = DEBUG_ShouldBeCopy.ToList();
-                if (BinaryTree.Count() != DEBUG_AsList.Count())
-                    throw new Exception();
-                //var DEBUG6 = BinaryTree.Root.LeftNode;
-                //var DEBUG7 = DEBUG_ShouldBeCopy.Root.LeftNode;
+                var consolidatedString = serializedBinaryTree.ToStringConsolidated();
+                var comparisonString = additionalSerialized.ToStringConsolidated();
+                if (consolidatedString != comparisonString)
+                {
+                    TabbedText.WriteLine($"Consolidated serialized string differs from comparison with vanilla options. \nSerialized:\n{consolidatedString}\nComparison:\n{comparisonString}");
+                    TabbedText.WriteLine("Traversing tree to help narrow down the problem.");
+                    var copyOfTree = new LazinatorBinaryTree<WDouble>(serializedBinaryTree);
+                    foreach (var item in copyOfTree.TraversePreOrder(copyOfTree.Root))
+                        TabbedText.WriteLine($"Data value: {item}");
+                    throw new Exception("Serialization does not match.");
+                }
+
 
                 // Write to one or more blobs
                 var index = (useConsolidatedMemory || indices == null || !indices.Any()) ? new PersistentIndex(fullPath, blobManager, containedInSingleBlob) : new PersistentIndex(indices.Last());

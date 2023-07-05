@@ -48,6 +48,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyList_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyList");
                     LazinateMyList();
                 } 
                 return _MyList;

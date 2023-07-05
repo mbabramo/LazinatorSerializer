@@ -48,6 +48,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyNestedTuple_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyNestedTuple");
                     LazinateMyNestedTuple();
                 }
                 IsDirty = true; 

@@ -48,6 +48,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyQueueSerialized_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyQueueSerialized");
                     LazinateMyQueueSerialized();
                 }
                 IsDirty = true; 

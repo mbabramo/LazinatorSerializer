@@ -224,6 +224,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_ExplicitlyNullable_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing ExplicitlyNullable");
                     LazinateExplicitlyNullable();
                 } 
                 return _ExplicitlyNullable;
@@ -269,6 +270,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_ExplicitlyNullableInterface_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing ExplicitlyNullableInterface");
                     LazinateExplicitlyNullableInterface();
                 } 
                 return _ExplicitlyNullableInterface;
@@ -528,6 +530,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NonNullableMemoryOfBytes_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NonNullableMemoryOfBytes");
                     LazinateNonNullableMemoryOfBytes();
                 }
                 IsDirty = true; 
@@ -602,6 +605,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NonNullableReadOnlyMemoryOfBytes_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NonNullableReadOnlyMemoryOfBytes");
                     LazinateNonNullableReadOnlyMemoryOfBytes();
                 } 
                 return _NonNullableReadOnlyMemoryOfBytes;
@@ -750,6 +754,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NonNullableStruct_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NonNullableStruct");
                     LazinateNonNullableStruct();
                 } 
                 return _NonNullableStruct;
@@ -817,6 +822,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableArrayOfNonNullables_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NullableArrayOfNonNullables");
                     LazinateNullableArrayOfNonNullables();
                 }
                 IsDirty = true; 
@@ -853,6 +859,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableArrayOfNullables_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NullableArrayOfNullables");
                     LazinateNullableArrayOfNullables();
                 }
                 IsDirty = true; 
@@ -889,6 +896,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableDictionaryWithNonNullable_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NullableDictionaryWithNonNullable");
                     LazinateNullableDictionaryWithNonNullable();
                 }
                 IsDirty = true; 
@@ -925,6 +933,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableDictionaryWithNullable_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NullableDictionaryWithNullable");
                     LazinateNullableDictionaryWithNullable();
                 }
                 IsDirty = true; 
@@ -961,6 +970,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableLazinatorListNonNullable_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NullableLazinatorListNonNullable");
                     LazinateNullableLazinatorListNonNullable();
                 } 
                 return _NullableLazinatorListNonNullable;
@@ -1006,6 +1016,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableLazinatorListNullable_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NullableLazinatorListNullable");
                     LazinateNullableLazinatorListNullable();
                 } 
                 return _NullableLazinatorListNullable;
@@ -1051,6 +1062,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableListOfNonNullables_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NullableListOfNonNullables");
                     LazinateNullableListOfNonNullables();
                 }
                 IsDirty = true; 
@@ -1087,6 +1099,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableListOfNullables_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NullableListOfNullables");
                     LazinateNullableListOfNullables();
                 }
                 IsDirty = true; 
@@ -1123,6 +1136,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableMemoryOfBytes_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NullableMemoryOfBytes");
                     LazinateNullableMemoryOfBytes();
                 }
                 IsDirty = true; 
@@ -1159,6 +1173,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableQueueOfNonNullables_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NullableQueueOfNonNullables");
                     LazinateNullableQueueOfNonNullables();
                 }
                 IsDirty = true; 
@@ -1195,6 +1210,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableQueueOfNullables_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NullableQueueOfNullables");
                     LazinateNullableQueueOfNullables();
                 }
                 IsDirty = true; 
@@ -1231,6 +1247,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableReadOnlyMemoryOfBytes_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NullableReadOnlyMemoryOfBytes");
                     LazinateNullableReadOnlyMemoryOfBytes();
                 }
                 IsDirty = true; 
@@ -1267,6 +1284,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableRecordLikeClass_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NullableRecordLikeClass");
                     LazinateNullableRecordLikeClass();
                 }
                 IsDirty = true; 
@@ -1303,6 +1321,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableRecordLikeStruct_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NullableRecordLikeStruct");
                     LazinateNullableRecordLikeStruct();
                 }
                 IsDirty = true; 
@@ -1339,6 +1358,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableRegularTupleWithNonNullable_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NullableRegularTupleWithNonNullable");
                     LazinateNullableRegularTupleWithNonNullable();
                 }
                 IsDirty = true; 
@@ -1375,6 +1395,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableRegularTupleWithNullable_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NullableRegularTupleWithNullable");
                     LazinateNullableRegularTupleWithNullable();
                 }
                 IsDirty = true; 
@@ -1411,6 +1432,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableStackOfNonNullables_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NullableStackOfNonNullables");
                     LazinateNullableStackOfNonNullables();
                 }
                 IsDirty = true; 
@@ -1447,6 +1469,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableStackOfNullables_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NullableStackOfNullables");
                     LazinateNullableStackOfNullables();
                 }
                 IsDirty = true; 
@@ -1483,6 +1506,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableStruct_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NullableStruct");
                     LazinateNullableStruct();
                 } 
                 return _NullableStruct;
@@ -1566,6 +1590,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableValueTupleWithNonNullable_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NullableValueTupleWithNonNullable");
                     LazinateNullableValueTupleWithNonNullable();
                 }
                 IsDirty = true; 
@@ -1602,6 +1627,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_NullableValueTupleWithNullable_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NullableValueTupleWithNullable");
                     LazinateNullableValueTupleWithNullable();
                 }
                 IsDirty = true; 
@@ -1638,6 +1664,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_ValueTupleWithNonNullable_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing ValueTupleWithNonNullable");
                     LazinateValueTupleWithNonNullable();
                 }
                 IsDirty = true; 
@@ -1674,6 +1701,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_ValueTupleWithNullable_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing ValueTupleWithNullable");
                     LazinateValueTupleWithNullable();
                 }
                 IsDirty = true; 

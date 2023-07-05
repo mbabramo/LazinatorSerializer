@@ -89,6 +89,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_MyT_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyT");
                     LazinateMyT();
                 } 
                 return _MyT;

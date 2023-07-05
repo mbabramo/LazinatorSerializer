@@ -50,6 +50,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListNonLazinatorType_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyListNonLazinatorType");
                     LazinateMyListNonLazinatorType();
                 } 
                 return _MyListNonLazinatorType;
@@ -105,6 +106,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListNonLazinatorType2_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyListNonLazinatorType2");
                     LazinateMyListNonLazinatorType2();
                 }
                 IsDirty = true; 

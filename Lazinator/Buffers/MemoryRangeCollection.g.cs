@@ -57,6 +57,7 @@ namespace Lazinator.Buffers
             {
                 if (!_Ranges_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing Ranges");
                     LazinateRanges();
                 }
                 IsDirty = true; 

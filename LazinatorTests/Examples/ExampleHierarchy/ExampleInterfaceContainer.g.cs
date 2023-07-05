@@ -50,6 +50,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (!_ExampleByInterface_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing ExampleByInterface");
                     LazinateExampleByInterface();
                 } 
                 return _ExampleByInterface;
@@ -95,6 +96,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (!_ExampleListByInterface_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing ExampleListByInterface");
                     LazinateExampleListByInterface();
                 }
                 IsDirty = true; 

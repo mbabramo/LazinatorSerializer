@@ -64,6 +64,7 @@ namespace LazinatorTests.Examples.RemoteHierarchy
             {
                 if (!_RemoteLevel1Item_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing RemoteLevel1Item");
                     LazinateRemoteLevel1Item();
                 } 
                 return _RemoteLevel1Item;

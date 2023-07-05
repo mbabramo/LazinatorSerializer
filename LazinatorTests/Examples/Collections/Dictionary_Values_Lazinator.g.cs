@@ -55,6 +55,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyDictionary_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyDictionary");
                     LazinateMyDictionary();
                 }
                 IsDirty = true; 
@@ -91,6 +92,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyDictionaryStructs_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyDictionaryStructs");
                     LazinateMyDictionaryStructs();
                 }
                 IsDirty = true; 
@@ -127,6 +129,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MySortedDictionary_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MySortedDictionary");
                     LazinateMySortedDictionary();
                 }
                 IsDirty = true; 
@@ -163,6 +166,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MySortedList_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MySortedList");
                     LazinateMySortedList();
                 }
                 IsDirty = true; 

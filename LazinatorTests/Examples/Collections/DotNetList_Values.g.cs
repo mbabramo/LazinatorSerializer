@@ -56,6 +56,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyLinkedListInt_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyLinkedListInt");
                     LazinateMyLinkedListInt();
                 } 
                 return _MyLinkedListInt;
@@ -111,6 +112,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListInt_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyListInt");
                     LazinateMyListInt();
                 } 
                 return _MyListInt;
@@ -166,6 +168,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListInt2_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyListInt2");
                     LazinateMyListInt2();
                 }
                 IsDirty = true; 
@@ -202,6 +205,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListNullableEnabledContext_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyListNullableEnabledContext");
                     LazinateMyListNullableEnabledContext();
                 }
                 IsDirty = true; 
@@ -238,6 +242,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MySortedSetInt_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MySortedSetInt");
                     LazinateMySortedSetInt();
                 } 
                 return _MySortedSetInt;

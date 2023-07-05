@@ -48,6 +48,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyHashSetSerialized_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyHashSetSerialized");
                     LazinateMyHashSetSerialized();
                 }
                 IsDirty = true; 

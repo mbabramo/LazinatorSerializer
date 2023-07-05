@@ -80,6 +80,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyOfficialObject_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyOfficialObject");
                     LazinateMyOfficialObject();
                 } 
                 return _MyOfficialObject;
@@ -125,6 +126,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyUnofficialObject_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyUnofficialObject");
                     LazinateMyUnofficialObject();
                 } 
                 return _MyUnofficialObject;

@@ -69,6 +69,7 @@ namespace Lazinator.Collections.ByteSpan
             {
                 if (!_ReadOrWrite_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing ReadOrWrite");
                     LazinateReadOrWrite();
                 }
                 IsDirty = true; 

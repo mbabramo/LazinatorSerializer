@@ -61,6 +61,7 @@ namespace Lazinator.Collections.Dictionary
             {
                 if (!_Buckets_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing Buckets");
                     LazinateBuckets();
                 } 
                 return _Buckets;

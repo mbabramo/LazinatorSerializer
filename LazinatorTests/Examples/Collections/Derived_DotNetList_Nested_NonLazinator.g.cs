@@ -61,6 +61,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyLevel2ListNestedNonLazinatorType_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyLevel2ListNestedNonLazinatorType");
                     LazinateMyLevel2ListNestedNonLazinatorType();
                 }
                 IsDirty = true; 

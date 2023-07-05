@@ -87,6 +87,7 @@ namespace Lazinator.Buffers
             {
                 if (!_MemoryBlocksLoadingInfo_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MemoryBlocksLoadingInfo");
                     LazinateMemoryBlocksLoadingInfo();
                 }
                 IsDirty = true; 

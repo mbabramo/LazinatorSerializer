@@ -59,6 +59,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_EnumTuple_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing EnumTuple");
                     LazinateEnumTuple();
                 }
                 IsDirty = true; 
@@ -95,6 +96,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyNamedTuple_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyNamedTuple");
                     LazinateMyNamedTuple();
                 }
                 IsDirty = true; 
@@ -131,6 +133,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyNullableTuple_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyNullableTuple");
                     LazinateMyNullableTuple();
                 }
                 IsDirty = true; 
@@ -167,6 +170,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyValueTupleNullableStructs_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyValueTupleNullableStructs");
                     LazinateMyValueTupleNullableStructs();
                 }
                 IsDirty = true; 
@@ -203,6 +207,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyValueTupleSerialized_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyValueTupleSerialized");
                     LazinateMyValueTupleSerialized();
                 }
                 IsDirty = true; 
@@ -239,6 +244,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyValueTupleStructs_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyValueTupleStructs");
                     LazinateMyValueTupleStructs();
                 }
                 IsDirty = true; 

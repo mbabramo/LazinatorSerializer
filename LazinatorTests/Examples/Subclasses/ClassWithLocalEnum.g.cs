@@ -62,6 +62,7 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 if (!_MyEnumList_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyEnumList");
                     LazinateMyEnumList();
                 }
                 IsDirty = true; 

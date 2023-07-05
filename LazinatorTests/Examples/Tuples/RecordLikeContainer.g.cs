@@ -81,6 +81,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_ExternalRecordLikeStruct_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing ExternalRecordLikeStruct");
                     LazinateExternalRecordLikeStruct();
                 }
                 IsDirty = true; 
@@ -117,6 +118,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyMismatchedRecordLikeType_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyMismatchedRecordLikeType");
                     LazinateMyMismatchedRecordLikeType();
                 } 
                 return _MyMismatchedRecordLikeType;
@@ -152,6 +154,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyNonLazinatorRecordWithConstructor_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyNonLazinatorRecordWithConstructor");
                     LazinateMyNonLazinatorRecordWithConstructor();
                 }
                 IsDirty = true; 
@@ -188,6 +191,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyNonLazinatorRecordWithoutConstructor_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyNonLazinatorRecordWithoutConstructor");
                     LazinateMyNonLazinatorRecordWithoutConstructor();
                 }
                 IsDirty = true; 
@@ -224,6 +228,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyNonLazinatorSubrecordWithConstructor_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyNonLazinatorSubrecordWithConstructor");
                     LazinateMyNonLazinatorSubrecordWithConstructor();
                 }
                 IsDirty = true; 
@@ -260,6 +265,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyNonLazinatorSubrecordWithoutConstructor_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyNonLazinatorSubrecordWithoutConstructor");
                     LazinateMyNonLazinatorSubrecordWithoutConstructor();
                 }
                 IsDirty = true; 
@@ -296,6 +302,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyRecordLikeClass_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyRecordLikeClass");
                     LazinateMyRecordLikeClass();
                 }
                 IsDirty = true; 
@@ -332,6 +339,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyRecordLikeStruct_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyRecordLikeStruct");
                     LazinateMyRecordLikeStruct();
                 } 
                 return _MyRecordLikeStruct;
@@ -367,6 +375,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyRecordLikeTypeWithLazinator_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyRecordLikeTypeWithLazinator");
                     LazinateMyRecordLikeTypeWithLazinator();
                 }
                 IsDirty = true; 

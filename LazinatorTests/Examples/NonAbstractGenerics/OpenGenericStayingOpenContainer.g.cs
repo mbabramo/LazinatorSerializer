@@ -58,6 +58,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_ClosedGenericBase_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing ClosedGenericBase");
                     LazinateClosedGenericBase();
                 } 
                 return _ClosedGenericBase;
@@ -103,6 +104,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_ClosedGenericFloat_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing ClosedGenericFloat");
                     LazinateClosedGenericFloat();
                 } 
                 return _ClosedGenericFloat;
@@ -148,6 +150,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_ClosedGenericFromBaseWithBase_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing ClosedGenericFromBaseWithBase");
                     LazinateClosedGenericFromBaseWithBase();
                 } 
                 return _ClosedGenericFromBaseWithBase;
@@ -193,6 +196,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_ClosedGenericInterface_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing ClosedGenericInterface");
                     LazinateClosedGenericInterface();
                 } 
                 return _ClosedGenericInterface;
@@ -238,6 +242,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_ClosedGenericNonexclusiveInterface_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing ClosedGenericNonexclusiveInterface");
                     LazinateClosedGenericNonexclusiveInterface();
                 } 
                 return _ClosedGenericNonexclusiveInterface;

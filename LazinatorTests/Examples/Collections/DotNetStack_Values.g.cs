@@ -47,6 +47,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyStackInt_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyStackInt");
                     LazinateMyStackInt();
                 } 
                 return _MyStackInt;

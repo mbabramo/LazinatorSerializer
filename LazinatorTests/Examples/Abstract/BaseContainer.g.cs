@@ -47,6 +47,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_MyBase_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyBase");
                     LazinateMyBase();
                 } 
                 return _MyBase;

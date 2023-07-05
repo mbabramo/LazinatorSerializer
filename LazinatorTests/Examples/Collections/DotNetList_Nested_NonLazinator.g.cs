@@ -48,6 +48,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListNestedNonLazinatorType_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyListNestedNonLazinatorType");
                     LazinateMyListNestedNonLazinatorType();
                 }
                 IsDirty = true; 

@@ -49,6 +49,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (!_RecursiveClass_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing RecursiveClass");
                     LazinateRecursiveClass();
                 } 
                 return _RecursiveClass;
@@ -94,6 +95,7 @@ namespace LazinatorTests.Examples.Hierarchy
             {
                 if (!_RecursiveInterface_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing RecursiveInterface");
                     LazinateRecursiveInterface();
                 } 
                 return _RecursiveInterface;

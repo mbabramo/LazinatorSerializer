@@ -44,6 +44,7 @@ namespace Lazinator.Wrappers
             {
                 if (!_WrappedValue_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing WrappedValue");
                     LazinateWrappedValue();
                 }
                 IsDirty = true; 

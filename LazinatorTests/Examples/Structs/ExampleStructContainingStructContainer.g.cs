@@ -48,6 +48,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_Subcontainer_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing Subcontainer");
                     LazinateSubcontainer();
                 } 
                 return _Subcontainer;

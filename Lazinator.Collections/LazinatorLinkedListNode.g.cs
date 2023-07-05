@@ -48,6 +48,7 @@ namespace Lazinator.Collections
             {
                 if (!_NextNode_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NextNode");
                     LazinateNextNode();
                 } 
                 return _NextNode;
@@ -92,6 +93,7 @@ namespace Lazinator.Collections
             {
                 if (!_Value_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing Value");
                     LazinateValue();
                 } 
                 return _Value;

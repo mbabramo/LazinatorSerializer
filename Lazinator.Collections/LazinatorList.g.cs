@@ -68,6 +68,7 @@ namespace Lazinator.Collections
             {
                 if (!_Offsets_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing Offsets");
                     LazinateOffsets();
                 } 
                 return _Offsets;

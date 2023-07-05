@@ -47,6 +47,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_AbstractProperty_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing AbstractProperty");
                     LazinateAbstractProperty();
                 } 
                 return _AbstractProperty;

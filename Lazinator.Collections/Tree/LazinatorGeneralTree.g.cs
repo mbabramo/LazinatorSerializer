@@ -49,6 +49,7 @@ namespace Lazinator.Collections.Tree
             {
                 if (!_Children_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing Children");
                     LazinateChildren();
                 } 
                 return _Children;
@@ -93,6 +94,7 @@ namespace Lazinator.Collections.Tree
             {
                 if (!_Item_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing Item");
                     LazinateItem();
                 } 
                 return _Item;

@@ -48,6 +48,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListSerialized_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyListSerialized");
                     LazinateMyListSerialized();
                 } 
                 return _MyListSerialized;

@@ -107,6 +107,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_MyT_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyT");
                     LazinateMyT();
                 } 
                 return _MyT;
@@ -151,6 +152,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_LazinatorExample_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing LazinatorExample");
                     LazinateLazinatorExample();
                 } 
                 return _LazinatorExample;

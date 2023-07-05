@@ -280,6 +280,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_IncludableChild_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing IncludableChild");
                     LazinateIncludableChild();
                 } 
                 return _IncludableChild;
@@ -335,6 +336,7 @@ namespace LazinatorTests.Examples
         {
             if (!_IncludableChild_Accessed)
             {
+                TabbedText.WriteLine($"Accessing IncludableChild");
                 await LazinateIncludableChildAsync();
             } 
             return _IncludableChild;
@@ -349,6 +351,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyChild1_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyChild1");
                     LazinateMyChild1();
                 } 
                 OnMyChild1Accessed(_MyChild1);
@@ -407,6 +410,7 @@ namespace LazinatorTests.Examples
         {
             if (!_MyChild1_Accessed)
             {
+                TabbedText.WriteLine($"Accessing MyChild1");
                 await LazinateMyChild1Async();
             } 
             OnMyChild1Accessed(_MyChild1);
@@ -422,6 +426,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyChild2_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyChild2");
                     LazinateMyChild2();
                 } 
                 return _MyChild2;
@@ -477,6 +482,7 @@ namespace LazinatorTests.Examples
         {
             if (!_MyChild2_Accessed)
             {
+                TabbedText.WriteLine($"Accessing MyChild2");
                 await LazinateMyChild2Async();
             } 
             return _MyChild2;
@@ -491,6 +497,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyChild2Previous_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyChild2Previous");
                     LazinateMyChild2Previous();
                 } 
                 return _MyChild2Previous;
@@ -546,6 +553,7 @@ namespace LazinatorTests.Examples
         {
             if (!_MyChild2Previous_Accessed)
             {
+                TabbedText.WriteLine($"Accessing MyChild2Previous");
                 await LazinateMyChild2PreviousAsync();
             } 
             return _MyChild2Previous;
@@ -560,6 +568,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyInterfaceImplementer_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyInterfaceImplementer");
                     LazinateMyInterfaceImplementer();
                 } 
                 return _MyInterfaceImplementer;
@@ -615,6 +624,7 @@ namespace LazinatorTests.Examples
         {
             if (!_MyInterfaceImplementer_Accessed)
             {
+                TabbedText.WriteLine($"Accessing MyInterfaceImplementer");
                 await LazinateMyInterfaceImplementerAsync();
             } 
             return _MyInterfaceImplementer;
@@ -629,6 +639,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyNonLazinatorChild_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyNonLazinatorChild");
                     LazinateMyNonLazinatorChild();
                 } 
                 return _MyNonLazinatorChild;
@@ -676,6 +687,7 @@ namespace LazinatorTests.Examples
         {
             if (!_MyNonLazinatorChild_Accessed)
             {
+                TabbedText.WriteLine($"Accessing MyNonLazinatorChild");
                 await LazinateMyNonLazinatorChildAsync();
             } 
             return _MyNonLazinatorChild;
@@ -708,6 +720,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_WrappedInt_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing WrappedInt");
                     LazinateWrappedInt();
                 } 
                 return _WrappedInt;
@@ -764,6 +777,7 @@ namespace LazinatorTests.Examples
         {
             if (!_WrappedInt_Accessed)
             {
+                TabbedText.WriteLine($"Accessing WrappedInt");
                 await LazinateWrappedIntAsync();
             } 
             return _WrappedInt;
@@ -805,6 +819,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_ExcludableChild_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing ExcludableChild");
                     LazinateExcludableChild();
                 } 
                 return _ExcludableChild;
@@ -860,6 +875,7 @@ namespace LazinatorTests.Examples
         {
             if (!_ExcludableChild_Accessed)
             {
+                TabbedText.WriteLine($"Accessing ExcludableChild");
                 await LazinateExcludableChildAsync();
             } 
             return _ExcludableChild;

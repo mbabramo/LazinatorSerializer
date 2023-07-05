@@ -143,6 +143,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_ANonSkippableEarlierExample_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing ANonSkippableEarlierExample");
                     LazinateANonSkippableEarlierExample();
                 } 
                 return _ANonSkippableEarlierExample;
@@ -188,6 +189,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_Example_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing Example");
                     LazinateExample();
                 } 
                 return _Example;
@@ -233,6 +235,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_Example2_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing Example2");
                     LazinateExample2();
                 } 
                 return _Example2;
@@ -278,6 +281,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_Example3_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing Example3");
                     LazinateExample3();
                 } 
                 return _Example3;

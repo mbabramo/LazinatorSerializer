@@ -47,6 +47,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyExampleNullableStruct_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyExampleNullableStruct");
                     LazinateMyExampleNullableStruct();
                 } 
                 return _MyExampleNullableStruct;
@@ -120,6 +121,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyExampleStructContainingClasses_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyExampleStructContainingClasses");
                     LazinateMyExampleStructContainingClasses();
                 } 
                 return _MyExampleStructContainingClasses;

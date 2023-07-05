@@ -50,6 +50,7 @@ namespace Lazinator.Collections.Tuples
             {
                 if (!_Item1_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing Item1");
                     LazinateItem1();
                 } 
                 return _Item1;
@@ -105,6 +106,7 @@ namespace Lazinator.Collections.Tuples
             {
                 if (!_Item2_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing Item2");
                     LazinateItem2();
                 } 
                 return _Item2;
@@ -160,6 +162,7 @@ namespace Lazinator.Collections.Tuples
             {
                 if (!_Item3_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing Item3");
                     LazinateItem3();
                 } 
                 return _Item3;

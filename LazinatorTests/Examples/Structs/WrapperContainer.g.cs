@@ -48,6 +48,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedInt_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing WrappedInt");
                     LazinateWrappedInt();
                 } 
                 return _WrappedInt;

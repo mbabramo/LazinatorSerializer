@@ -51,6 +51,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_MyNullableT_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyNullableT");
                     LazinateMyNullableT();
                 } 
                 return _MyNullableT;
@@ -95,6 +96,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_MyT_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyT");
                     LazinateMyT();
                 } 
                 return _MyT;
@@ -134,6 +136,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_MyU_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyU");
                     LazinateMyU();
                 } 
                 return _MyU;

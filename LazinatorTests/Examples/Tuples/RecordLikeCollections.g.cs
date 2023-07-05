@@ -66,6 +66,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyDictionaryWithRecordLikeContainers_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyDictionaryWithRecordLikeContainers");
                     LazinateMyDictionaryWithRecordLikeContainers();
                 }
                 IsDirty = true; 
@@ -102,6 +103,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyDictionaryWithRecordLikeTypeValues_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyDictionaryWithRecordLikeTypeValues");
                     LazinateMyDictionaryWithRecordLikeTypeValues();
                 }
                 IsDirty = true; 

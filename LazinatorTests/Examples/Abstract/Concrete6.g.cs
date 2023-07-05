@@ -45,6 +45,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_IntList6_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing IntList6");
                     LazinateIntList6();
                 }
                 IsDirty = true; 

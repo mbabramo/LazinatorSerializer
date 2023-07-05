@@ -60,6 +60,7 @@ namespace Lazinator.Persistence
             {
                 if (!_ForkInformation_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing ForkInformation");
                     LazinateForkInformation();
                 }
                 IsDirty = true; 
@@ -95,6 +96,7 @@ namespace Lazinator.Persistence
             {
                 if (!_MemoryBlockStatus_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MemoryBlockStatus");
                     LazinateMemoryBlockStatus();
                 }
                 IsDirty = true; 

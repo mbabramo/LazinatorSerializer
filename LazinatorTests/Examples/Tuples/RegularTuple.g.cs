@@ -58,6 +58,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyListTuple_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyListTuple");
                     LazinateMyListTuple();
                 }
                 IsDirty = true; 
@@ -94,6 +95,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyTupleSerialized_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyTupleSerialized");
                     LazinateMyTupleSerialized();
                 }
                 IsDirty = true; 
@@ -130,6 +132,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyTupleSerialized2_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyTupleSerialized2");
                     LazinateMyTupleSerialized2();
                 }
                 IsDirty = true; 
@@ -166,6 +169,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyTupleSerialized3_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyTupleSerialized3");
                     LazinateMyTupleSerialized3();
                 }
                 IsDirty = true; 
@@ -202,6 +206,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyTupleSerialized4_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyTupleSerialized4");
                     LazinateMyTupleSerialized4();
                 }
                 IsDirty = true; 
@@ -238,6 +243,7 @@ namespace LazinatorTests.Examples.Tuples
             {
                 if (!_MyTupleSerialized5_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyTupleSerialized5");
                     LazinateMyTupleSerialized5();
                 }
                 IsDirty = true; 

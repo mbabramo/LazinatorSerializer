@@ -60,6 +60,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyGrandchildInInherited_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyGrandchildInInherited");
                     LazinateMyGrandchildInInherited();
                 } 
                 return _MyGrandchildInInherited;

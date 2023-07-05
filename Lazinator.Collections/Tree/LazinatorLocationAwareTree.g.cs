@@ -47,6 +47,7 @@ namespace Lazinator.Collections.Tree
             {
                 if (!_Locations_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing Locations");
                     LazinateLocations();
                 } 
                 return _Locations;

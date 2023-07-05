@@ -52,6 +52,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListInt_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyListInt");
                     LazinateMyListInt();
                 } 
                 return _MyListInt;
@@ -107,6 +108,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListNullableByte_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyListNullableByte");
                     LazinateMyListNullableByte();
                 }
                 IsDirty = true; 
@@ -143,6 +145,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyListNullableInt_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyListNullableInt");
                     LazinateMyListNullableInt();
                 }
                 IsDirty = true; 

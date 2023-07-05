@@ -49,6 +49,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_MyListT_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyListT");
                     LazinateMyListT();
                 }
                 IsDirty = true; 
@@ -85,6 +86,7 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
             {
                 if (!_MyT_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyT");
                     LazinateMyT();
                 } 
                 return _MyT;

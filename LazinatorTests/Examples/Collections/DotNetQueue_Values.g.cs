@@ -47,6 +47,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyQueueInt_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyQueueInt");
                     LazinateMyQueueInt();
                 } 
                 return _MyQueueInt;

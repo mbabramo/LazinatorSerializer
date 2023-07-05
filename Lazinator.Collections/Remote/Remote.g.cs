@@ -62,6 +62,7 @@ namespace Lazinator.Collections.Remote
             {
                 if (!_Key_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing Key");
                     LazinateKey();
                 } 
                 return _Key;
@@ -117,6 +118,7 @@ namespace Lazinator.Collections.Remote
             {
                 if (!_Local_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing Local");
                     LazinateLocal();
                 } 
                 return _Local;

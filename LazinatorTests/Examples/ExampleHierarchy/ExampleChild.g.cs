@@ -110,6 +110,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyExampleGrandchild_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyExampleGrandchild");
                     LazinateMyExampleGrandchild();
                 } 
                 return _MyExampleGrandchild;
@@ -165,6 +166,7 @@ namespace LazinatorTests.Examples
         {
             if (!_MyExampleGrandchild_Accessed)
             {
+                TabbedText.WriteLine($"Accessing MyExampleGrandchild");
                 await LazinateMyExampleGrandchildAsync();
             } 
             return _MyExampleGrandchild;
@@ -179,6 +181,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyWrapperContainer_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyWrapperContainer");
                     LazinateMyWrapperContainer();
                 } 
                 return _MyWrapperContainer;
@@ -234,6 +237,7 @@ namespace LazinatorTests.Examples
         {
             if (!_MyWrapperContainer_Accessed)
             {
+                TabbedText.WriteLine($"Accessing MyWrapperContainer");
                 await LazinateMyWrapperContainerAsync();
             } 
             return _MyWrapperContainer;

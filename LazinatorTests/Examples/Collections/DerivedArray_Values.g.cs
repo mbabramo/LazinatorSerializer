@@ -45,6 +45,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyArrayInt_DerivedLevel_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyArrayInt_DerivedLevel");
                     LazinateMyArrayInt_DerivedLevel();
                 } 
                 return _MyArrayInt_DerivedLevel;

@@ -63,6 +63,7 @@ namespace Lazinator.Collections.Dictionary
             {
                 if (!_Keys_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing Keys");
                     LazinateKeys();
                 } 
                 return _Keys;
@@ -107,6 +108,7 @@ namespace Lazinator.Collections.Dictionary
             {
                 if (!_Values_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing Values");
                     LazinateValues();
                 } 
                 return _Values;

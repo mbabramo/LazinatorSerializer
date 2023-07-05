@@ -62,6 +62,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_ItemU_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing ItemU");
                     LazinateItemU();
                 } 
                 return _ItemU;

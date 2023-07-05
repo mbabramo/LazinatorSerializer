@@ -74,6 +74,7 @@ namespace Lazinator.Collections
             {
                 if (!_FirstNode_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing FirstNode");
                     LazinateFirstNode();
                 } 
                 return _FirstNode;

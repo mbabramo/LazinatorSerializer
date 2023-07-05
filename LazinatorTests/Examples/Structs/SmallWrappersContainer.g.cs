@@ -65,6 +65,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_ListWrappedBytes_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing ListWrappedBytes");
                     LazinateListWrappedBytes();
                 } 
                 return _ListWrappedBytes;
@@ -110,6 +111,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedBool_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing WrappedBool");
                     LazinateWrappedBool();
                 } 
                 return _WrappedBool;
@@ -177,6 +179,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedByte_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing WrappedByte");
                     LazinateWrappedByte();
                 } 
                 return _WrappedByte;
@@ -244,6 +247,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedChar_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing WrappedChar");
                     LazinateWrappedChar();
                 } 
                 return _WrappedChar;
@@ -311,6 +315,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedNullableBool_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing WrappedNullableBool");
                     LazinateWrappedNullableBool();
                 } 
                 return _WrappedNullableBool;
@@ -378,6 +383,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedNullableByte_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing WrappedNullableByte");
                     LazinateWrappedNullableByte();
                 } 
                 return _WrappedNullableByte;
@@ -445,6 +451,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedNullableChar_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing WrappedNullableChar");
                     LazinateWrappedNullableChar();
                 } 
                 return _WrappedNullableChar;
@@ -512,6 +519,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedNullableSByte_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing WrappedNullableSByte");
                     LazinateWrappedNullableSByte();
                 } 
                 return _WrappedNullableSByte;
@@ -579,6 +587,7 @@ namespace LazinatorTests.Examples.Structs
             {
                 if (!_WrappedSByte_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing WrappedSByte");
                     LazinateWrappedSByte();
                 } 
                 return _WrappedSByte;

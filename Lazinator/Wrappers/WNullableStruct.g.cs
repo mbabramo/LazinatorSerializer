@@ -58,6 +58,7 @@ namespace Lazinator.Wrappers
             {
                 if (!_NonNullValue_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NonNullValue");
                     LazinateNonNullValue();
                 } 
                 return _NonNullValue;

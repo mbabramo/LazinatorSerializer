@@ -64,6 +64,7 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 if (!_SubclassInstance1_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing SubclassInstance1");
                     LazinateSubclassInstance1();
                 } 
                 return _SubclassInstance1;
@@ -109,6 +110,7 @@ namespace LazinatorTests.Examples.Subclasses
             {
                 if (!_SubclassInstance2_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing SubclassInstance2");
                     LazinateSubclassInstance2();
                 } 
                 return _SubclassInstance2;

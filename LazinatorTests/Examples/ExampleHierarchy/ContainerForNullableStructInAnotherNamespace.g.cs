@@ -48,6 +48,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_MyNullableStruct_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyNullableStruct");
                     LazinateMyNullableStruct();
                 } 
                 return _MyNullableStruct;

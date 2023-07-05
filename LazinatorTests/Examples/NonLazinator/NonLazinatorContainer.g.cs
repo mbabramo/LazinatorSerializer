@@ -51,6 +51,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_NonLazinatorClass_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NonLazinatorClass");
                     LazinateNonLazinatorClass();
                 }
                 IsDirty = true; 
@@ -87,6 +88,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_NonLazinatorInterchangeableClass_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NonLazinatorInterchangeableClass");
                     LazinateNonLazinatorInterchangeableClass();
                 }
                 IsDirty = true; 
@@ -123,6 +125,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_NonLazinatorInterchangeableStruct_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NonLazinatorInterchangeableStruct");
                     LazinateNonLazinatorInterchangeableStruct();
                 } 
                 return _NonLazinatorInterchangeableStruct;
@@ -158,6 +161,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_NonLazinatorStruct_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing NonLazinatorStruct");
                     LazinateNonLazinatorStruct();
                 }
                 IsDirty = true; 

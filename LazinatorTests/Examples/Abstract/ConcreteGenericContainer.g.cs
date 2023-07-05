@@ -44,6 +44,7 @@ namespace LazinatorTests.Examples.Abstract
             {
                 if (!_Item_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing Item");
                     LazinateItem();
                 } 
                 return _Item;

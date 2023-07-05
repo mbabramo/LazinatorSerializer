@@ -48,6 +48,7 @@ namespace LazinatorTests.Examples.ExampleHierarchy
             {
                 if (!_Example_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing Example");
                     LazinateExample();
                 } 
                 return _Example;

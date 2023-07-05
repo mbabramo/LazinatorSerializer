@@ -62,6 +62,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_SpanList_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing SpanList");
                     LazinateSpanList();
                 }
                 IsDirty = true; 

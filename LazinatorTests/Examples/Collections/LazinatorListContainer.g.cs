@@ -82,6 +82,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyList_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyList");
                     LazinateMyList();
                 } 
                 return _MyList;
@@ -127,6 +128,7 @@ namespace LazinatorTests.Examples.Collections
             {
                 if (!_MyStructList_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyStructList");
                     LazinateMyStructList();
                 } 
                 return _MyStructList;

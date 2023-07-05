@@ -83,6 +83,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyChild1_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyChild1");
                     LazinateMyChild1();
                 } 
                 return _MyChild1;
@@ -119,6 +120,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyChild2_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyChild2");
                     LazinateMyChild2();
                 } 
                 return _MyChild2;
@@ -155,6 +157,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyLazinatorList_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyLazinatorList");
                     LazinateMyLazinatorList();
                 } 
                 return _MyLazinatorList;
@@ -210,6 +213,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyListValues_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyListValues");
                     LazinateMyListValues();
                 }
                 IsDirty = true; 
@@ -246,6 +250,7 @@ namespace LazinatorTests.Examples
             {
                 if (!_MyTuple_Accessed)
                 {
+                    TabbedText.WriteLine($"Accessing MyTuple");
                     LazinateMyTuple();
                 }
                 IsDirty = true; 
