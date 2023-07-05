@@ -110,12 +110,16 @@ namespace Lazinator.Collections
         
         /* Conversion */
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorUniqueID => 226;
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override bool ContainsOpenGenericParameters => true;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<LazinatorSortedLinkedList<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(226, new Type[] { typeof(T) }));
         
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorObjectVersion { get; set; } = 0;
         
         

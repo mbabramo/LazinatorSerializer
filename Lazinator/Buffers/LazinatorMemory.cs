@@ -168,8 +168,8 @@ namespace Lazinator.Buffers
             return new LazinatorMemory(array);
         }
 
-        private MemoryRange SingleMemoryRange => new MemoryRange(SingleMemoryBlock, new MemoryBlockSlice(0, SingleMemoryBlock.Length));
-
+        public MemoryRange SingleMemoryRange => new MemoryRange(SingleMemoryBlock, new MemoryBlockSlice(0, SingleMemoryBlock.Length));
+        
         public MemoryRange MemoryRangeAtIndex(int i) => MultipleMemoryBlocks == null && i == 0 ? SingleMemoryRange : MultipleMemoryBlocks.MemoryRangeAtIndex(i);
 
         public async ValueTask<MemoryRange> MemoryRangeAtIndexAsync(int i) => MultipleMemoryBlocks == null && i == 0 ? SingleMemoryRange : await MultipleMemoryBlocks.MemoryRangeAtIndexAsync(i);
@@ -207,7 +207,7 @@ namespace Lazinator.Buffers
 
             MemoryRangeReference startingPoint = MultipleMemoryBlocks.GetMemoryRangeAtOffsetFromStartPosition(MemoryRangeIndex, FurtherOffsetIntoMemoryBlock, furtherOffset);
 
-            var result = new LazinatorMemory(MultipleMemoryBlocks.DeepCopy(), startingPoint.MemoryRangeIndex, startingPoint.FurtherOffsetIntoMemoryBlock, length);
+            var result = new LazinatorMemory(MultipleMemoryBlocks, startingPoint.MemoryRangeIndex, startingPoint.FurtherOffsetIntoMemoryBlock, length);
 
 #if TRACING
             TabbedText.WriteLine($"Slicing {ToLocationString()} at offset {furtherOffset} and length {length} ==> {result.ToLocationString()}");
@@ -388,7 +388,7 @@ namespace Lazinator.Buffers
         /// Enumerates memory ranges corresponding to this LazinatorMemory, with reference by block ID.
         /// </summary>
         /// <returns>An enumerable where each element consists of the memory block ID, the start position, and the number of bytes</returns>
-        public IEnumerable<MemoryRangeByBlockID> EnumerateMemoryRangesByID()
+        internal IEnumerable<MemoryRangeByBlockID> EnumerateMemoryRangesByID()
         {
             if (SingleMemoryBlock != null)
             {
