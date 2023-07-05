@@ -26,16 +26,6 @@ namespace Lazinator.Buffers
             return $"{MemoryBlockID}, {OffsetIntoMemoryBlock}, {Length}";
         }
 
-        public int MemoryBlockIntID => MemoryBlockID.AsInt;
-
-        // DEBUG -- delete?
-        public MemoryRangeByBlockID(int memoryBlockIntID, int offsetIntoMemoryBlock, int length)
-        {
-            this.MemoryBlockID = new MemoryBlockID(memoryBlockIntID);
-            this.OffsetIntoMemoryBlock = offsetIntoMemoryBlock;
-            this.Length = length;
-        }
-
         public MemoryRangeByBlockID(MemoryBlockID memoryBlockID, int offsetIntoMemoryBlock, int length)
         {
             this.MemoryBlockID = memoryBlockID;
@@ -43,9 +33,9 @@ namespace Lazinator.Buffers
             this.Length = length;
         }
 
-        public MemoryRangeByBlockID SubsegmentSlice(int offset, int length) => new MemoryRangeByBlockID(new MemoryBlockID(MemoryBlockIntID), OffsetIntoMemoryBlock + offset, length);
-
-        public MemoryRangeByBlockID SubsegmentSlice(int offset) => new MemoryRangeByBlockID(new MemoryBlockID(MemoryBlockIntID), OffsetIntoMemoryBlock + offset, Length - offset);
+        public MemoryRangeByBlockID SubsegmentSlice(int offset, int length) => new MemoryRangeByBlockID(MemoryBlockID, OffsetIntoMemoryBlock + offset, length);
+        
+        public MemoryRangeByBlockID SubsegmentSlice(int offset) => new MemoryRangeByBlockID(MemoryBlockID, OffsetIntoMemoryBlock + offset, Length - offset);
 
         public MemoryBlockSlice GetBlockSlice() => new MemoryBlockSlice(OffsetIntoMemoryBlock, Length);
     }

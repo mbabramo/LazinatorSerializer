@@ -11,9 +11,9 @@ namespace Lazinator.Buffers
     {
         public readonly int AsInt { get; }
         
-        public MemoryBlockID(int asInt)
+        public MemoryBlockID(int AsInt)
         {
-            AsInt = asInt;
+            this.AsInt = AsInt;
         }
 
         public MemoryBlockID Next() => new MemoryBlockID(AsInt + 1);

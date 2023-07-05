@@ -40,9 +40,14 @@ namespace LazinatorAnalyzer.Settings
         public bool HideMainProperties;
         public bool HideILazinatorProperties;
 
-        public LazinatorConfig()
+        public LazinatorConfig() 
         {
-
+            StepThroughProperties = true;
+            GeneratedCodeFileExtension = ".laz.cs";
+            DefaultAutoChangeParent = true;
+            DefaultAllowRecordLikeReadOnlyStructs = true;
+            HideBackingFields = true;
+            HideILazinatorProperties = true;
         }
 
         public LazinatorConfig(string configPath, string configString)

@@ -32,13 +32,16 @@ namespace Lazinator.Buffers
         
         
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected long _LoadingOffset;
         public long LoadingOffset
         {
+            [DebuggerStepThrough]
             get
             {
                 return _LoadingOffset;
             }
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -125,12 +128,16 @@ namespace Lazinator.Buffers
         
         /* Conversion */
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorUniqueID => 43;
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override bool ContainsOpenGenericParameters => false;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override LazinatorGenericIDType LazinatorGenericID => default;
         
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorObjectVersion { get; set; } = 0;
         
         
@@ -141,7 +148,7 @@ namespace Lazinator.Buffers
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
             TabbedText.Tabs++;
-            int lengthForLengths = 0;
+            int lengthForLengths = 4;
             int totalChildrenSize = ConvertFromBytesForChildLengths(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);;
             TabbedText.Tabs--;
             return bytesSoFar + totalChildrenSize;
@@ -224,7 +231,7 @@ namespace Lazinator.Buffers
             // write properties
             
             WritePrimitivePropertiesIntoBuffer(ref writer, options, includeUniqueID);
-            int lengthForLengths = 0;
+            int lengthForLengths = 4;
             
             var previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
             TabbedText.WriteLine($"Location {writer.ToLocationString()}, after skipping {lengthForLengths} bytes to store lengths of child objects");

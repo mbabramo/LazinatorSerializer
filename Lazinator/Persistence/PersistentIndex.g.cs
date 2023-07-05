@@ -39,13 +39,16 @@ namespace Lazinator.Persistence
         protected override int _OverallEndByteIndex => _PersistentIndex_EndByteIndex;
         
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected int _IndexVersion;
         public int IndexVersion
         {
+            [DebuggerStepThrough]
             get
             {
                 return _IndexVersion;
             }
+            [DebuggerStepThrough]
             private set
             {
                 IsDirty = true;
@@ -53,9 +56,11 @@ namespace Lazinator.Persistence
             }
         }
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected List<(Int32 lastMemoryBlockIDBeforeFork, Int32 forkNumber)> _ForkInformation;
         public List<(Int32 lastMemoryBlockIDBeforeFork, Int32 forkNumber)> ForkInformation
         {
+            [DebuggerStepThrough]
             get
             {
                 if (!_ForkInformation_Accessed)
@@ -66,6 +71,7 @@ namespace Lazinator.Persistence
                 IsDirty = true; 
                 return _ForkInformation;
             }
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -74,6 +80,7 @@ namespace Lazinator.Persistence
                 _ForkInformation_Accessed = true;
             }
         }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _ForkInformation_Accessed;
         private void LazinateForkInformation()
         {
@@ -90,9 +97,11 @@ namespace Lazinator.Persistence
         }
         
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected Memory<Byte> _MemoryBlockStatus;
         public Memory<Byte> MemoryBlockStatus
         {
+            [DebuggerStepThrough]
             get
             {
                 if (!_MemoryBlockStatus_Accessed)
@@ -103,6 +112,7 @@ namespace Lazinator.Persistence
                 IsDirty = true; 
                 return _MemoryBlockStatus;
             }
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -111,6 +121,7 @@ namespace Lazinator.Persistence
                 _MemoryBlockStatus_Accessed = true;
             }
         }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _MemoryBlockStatus_Accessed;
         private void LazinateMemoryBlockStatus()
         {
@@ -219,12 +230,16 @@ namespace Lazinator.Persistence
         
         /* Conversion */
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorUniqueID => 46;
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override bool ContainsOpenGenericParameters => false;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override LazinatorGenericIDType LazinatorGenericID => default;
         
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorObjectVersion { get; set; } = 0;
         
         

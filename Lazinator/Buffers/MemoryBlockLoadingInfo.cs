@@ -9,13 +9,12 @@ namespace Lazinator.Buffers
 {
     public partial class MemoryBlockLoadingInfo : IMemoryBlockLoadingInfo
     {
+
         public MemoryBlockLoadingInfo(MemoryBlockID memoryBlockID, int memoryBlockLength)
         {
-            MemoryBlockIntID = memoryBlockID.AsInt;
+            MemoryBlockID = memoryBlockID;
             MemoryBlockLength = memoryBlockLength;
         }
-
-        public MemoryBlockID MemoryBlockID => new MemoryBlockID(MemoryBlockIntID); 
 
         public MemoryBlockInsetLoadingInfo WithLoadingOffset(long loadingOffset) => new MemoryBlockInsetLoadingInfo(MemoryBlockID, MemoryBlockLength, loadingOffset);
 
