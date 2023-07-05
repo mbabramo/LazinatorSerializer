@@ -257,15 +257,13 @@ namespace Lazinator.Buffers
                 if (IsEmpty)
                     return EmptyReadOnlyMemory;
                 ReadOnlyMemory<byte>? memory = SingleMemoryBlock?.ReadOnlyMemory;
-                int offsetFromMemoryRange = 0;
                 if (memory == null)
                 {
                     MemoryRange memoryRange = MemoryRangeAtIndex(MemoryRangeIndex);
                     memory = memoryRange.ReadOnlyMemory;
-                    offsetFromMemoryRange = memoryRange.SliceInfo.OffsetIntoMemoryBlock;
                 }
                 int length = (int)Math.Min(memory.Value.Length - FurtherOffsetIntoMemoryBlock, Length);
-                var result = memory.Value.Slice(offsetFromMemoryRange + FurtherOffsetIntoMemoryBlock, length);  
+                var result = memory.Value.Slice(FurtherOffsetIntoMemoryBlock, length);  // Note: The memory range's offset has already been taken into account by the call to memoryRange.ReadOnlyMemory. 
                 return result;
             }
         }
@@ -562,7 +560,7 @@ namespace Lazinator.Buffers
         public string ToLocationString()
         {
             MemoryRange range = MemoryRangeAtIndex(MemoryRangeIndex);
-            var result = $"MemoryRangeIndex: {MemoryRangeIndex} OffsetIntoMemoryBlock {FurtherOffsetIntoMemoryBlock} Length {Length} (first block: MemoryBlockID {range.MemoryBlock.MemoryBlockID.GetIntID()} OffsetIntoMemoryBlock {FurtherOffsetIntoMemoryBlock} Length {range.SliceInfo.Length})"; Debug; // shouldn't we be adding this offset with the memory range's?
+            var result = $"MemoryRangeIndex: {MemoryRangeIndex} OffsetIntoMemoryBlock {FurtherOffsetIntoMemoryBlock} Length {Length} (first block: MemoryBlockID {range.MemoryBlock.MemoryBlockID.GetIntID()} TotalOffsetIntoMemoryBlock {range.SliceInfo.OffsetIntoMemoryBlock + FurtherOffsetIntoMemoryBlock} Length {range.SliceInfo.Length})";
             return result;
         }
         
