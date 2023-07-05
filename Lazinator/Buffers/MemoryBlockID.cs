@@ -7,36 +7,34 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Buffers
 {
-    public struct MemoryBlockID
+    public readonly struct MemoryBlockID
     {
-        private int _MemoryBlockID;
+        public readonly int AsInt { get; }
         
-        public MemoryBlockID(int id)
+        public MemoryBlockID(int asInt)
         {
-            _MemoryBlockID = id;
+            AsInt = asInt;
         }
 
-        public int AsInt => _MemoryBlockID;
+        public MemoryBlockID Next() => new MemoryBlockID(AsInt + 1);
 
-        public MemoryBlockID Next() => new MemoryBlockID(_MemoryBlockID + 1);
+        public static bool operator <(MemoryBlockID l, MemoryBlockID f) => l.AsInt < f.AsInt;
+        public static bool operator >(MemoryBlockID l, MemoryBlockID f) => l.AsInt > f.AsInt;
+        public static bool operator <=(MemoryBlockID l, MemoryBlockID f) => l.AsInt <= f.AsInt;
+        public static bool operator >=(MemoryBlockID l, MemoryBlockID f) => l.AsInt >= f.AsInt;
 
-        public static bool operator <(MemoryBlockID l, MemoryBlockID f) => l._MemoryBlockID < f._MemoryBlockID;
-        public static bool operator >(MemoryBlockID l, MemoryBlockID f) => l._MemoryBlockID > f._MemoryBlockID;
-        public static bool operator <=(MemoryBlockID l, MemoryBlockID f) => l._MemoryBlockID <= f._MemoryBlockID;
-        public static bool operator >=(MemoryBlockID l, MemoryBlockID f) => l._MemoryBlockID >= f._MemoryBlockID;
-
-        public static bool operator ==(MemoryBlockID l, MemoryBlockID f) => l._MemoryBlockID == f._MemoryBlockID;
-        public static bool operator !=(MemoryBlockID l, MemoryBlockID f) => l._MemoryBlockID != f._MemoryBlockID;
+        public static bool operator ==(MemoryBlockID l, MemoryBlockID f) => l.AsInt == f.AsInt;
+        public static bool operator !=(MemoryBlockID l, MemoryBlockID f) => l.AsInt != f.AsInt;
 
         public override string ToString()
         {
-            return _MemoryBlockID.ToString();
+            return AsInt.ToString();
         }
 
         public override bool Equals([NotNullWhen(true)] object obj)
         {
-            return ((MemoryBlockID)obj)._MemoryBlockID == _MemoryBlockID;
+            return ((MemoryBlockID)obj).AsInt == AsInt;
         }
-        public override int GetHashCode() => _MemoryBlockID.GetHashCode();
+        public override int GetHashCode() => AsInt.GetHashCode();
     }
 }
