@@ -290,15 +290,15 @@ namespace LazinatorTests.Tests
             int round = 0;
             MultipleRoundsOfRandomChanges(10, 10, 5, () => 
             {
-                Debug.WriteLine($"Round {round}");
+                TabbedText.WriteLine($"Round {round}");
                 LazinatorMemory lazinatorMemory = BinaryTree.SerializeLazinator(LazinatorSerializationOptions.Default);
 
-                Debug.WriteLine($"Consolidated{round++}: " + lazinatorMemory.ToStringConsolidated());
+                TabbedText.WriteLine($"Consolidated{round++}: " + lazinatorMemory.ToStringConsolidated());
 
                 BinaryTree = new LazinatorBinaryTree<WDouble>(lazinatorMemory);
             });
         }
-
+        
         [Theory]
         [ClassData(typeof(BoolPermutations_4))]
         public void BinaryTreeTest_ReloadingFromBlobs(bool useFile, bool containedInSingleBlob, bool recreateIndex, bool poolMemory)

@@ -19,7 +19,11 @@ namespace Lazinator.Buffers
         protected List<MemoryBlock> MemoryBlocks = new List<MemoryBlock>();
         protected Dictionary<MemoryBlockID, int> MemoryBlocksIndexFromBlockID = null;
         public long LengthOfMemoryBlocks { get; private set; }
-        public MemoryBlockID HighestMemoryBlockID { get; private set; }
+        public MemoryBlockID HighestMemoryBlockID 
+        { 
+            get; 
+            private set; 
+        }
         public MemoryBlockID GetNextMemoryBlockID() => HighestMemoryBlockID.Next();
         protected int NumMemoryBlocks => MemoryBlocks?.Count ?? 0;
         public virtual int NumMemoryRanges => NumMemoryBlocks;

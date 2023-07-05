@@ -300,6 +300,11 @@ namespace Lazinator.Buffers
 #if TRACING
                 TabbedText.WriteLine($"Moving active memory to completed memory, block {GetActiveMemoryBlockID()} ({ActiveMemoryPosition} bytes)");
 #endif
+
+                if (GetActiveMemoryBlockID().GetIntID() == 6)
+                {
+                    var DEBUG = 0;
+                }
                 bool memoryBlockAlreadyIncluded = false;
                 if (MemoryRangeCollection != null)
                 {
@@ -534,7 +539,7 @@ namespace Lazinator.Buffers
             {
                 if (LengthsPosition.index == GetActiveMemoryBlockID().GetIntID())
                     return ActiveSpan.Slice(LengthsPosition.offset);
-                MemoryBlock block = MemoryRangeCollection.MemoryBlockAtIndex(LengthsPosition.index);
+                MemoryBlock block = MemoryRangeCollection.GetMemoryBlockByBlockID(new MemoryBlockID(LengthsPosition.index));
                 return block.ReadWriteMemory.Slice(LengthsPosition.offset).Span;
             }
         }
@@ -560,6 +565,10 @@ namespace Lazinator.Buffers
             LengthsPosition = (LengthsPosition.index, LengthsPosition.offset + bytesToAdvance);
 #if TRACING
             TabbedText.WriteLine($"Advancing lengths position {bytesToAdvance} bytes to {LengthsPosition} (while writing at {IndexedMemoryPosition}).");
+            if (LengthsPosition == (1, 22))
+            {
+                var DEBUG = 0;
+            }
 #endif
         }
 
@@ -666,7 +675,7 @@ namespace Lazinator.Buffers
 
             int stepNum = TraceWritingStep;
 
-            Debug.WriteLine($"Step {stepNum:D3}: {highlighted}");
+            TabbedText.WriteLine($"Step {stepNum:D3}: {highlighted}");
 
             TraceWritingStep++;
         }
