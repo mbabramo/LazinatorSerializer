@@ -67,7 +67,7 @@ namespace Lazinator.Buffers
         /// </summary>
         /// <param name="memoryBlockReferences"></param>
         /// <param name="newRange"></param>
-        public void AddRange(MemoryRangeByBlockID range, bool extendEarlierReferencesForSameBlock)
+        public void AddRange(MemoryRangeByBlockID range)
         {
             if (!Patching)
             {
@@ -75,21 +75,6 @@ namespace Lazinator.Buffers
             }
             if (Ranges.Any())
             {
-                if (extendEarlierReferencesForSameBlock)
-                {
-                    for (int i = 0; i < Ranges.Count; i++)
-                    {
-                        var rangeI = Ranges[i];
-                        if (rangeI.MemoryBlockID == range.MemoryBlockID) 
-                        {
-                            MemoryBlock existingBlock = GetMemoryBlockByBlockID(rangeI.MemoryBlockID);
-                            if (existingBlock != null)
-                            {
-                                existingBlock.LoadingInfo.MemoryBlockLength = range.Length;
-                            }
-                        }
-                    }
-                }
                 var last = Ranges.Last();
                 if (last.MemoryBlockID == range.MemoryBlockID && range.OffsetIntoMemoryBlock == last.OffsetIntoMemoryBlock + last.Length)
                 {
@@ -110,7 +95,7 @@ namespace Lazinator.Buffers
         public void AddRanges(IEnumerable<MemoryRangeByBlockID> newRanges)
         {
             foreach (var newRange in newRanges)
-                AddRange(newRange, false);
+                AddRange(newRange);
         }
 
 
@@ -143,7 +128,7 @@ namespace Lazinator.Buffers
                 int numBytesAlreadyReferredTo = GetNumBytesAlreadyReferredTo(activeMemoryBlockID);
                 if (NumActiveMemoryBytesReferenced > numBytesAlreadyReferredTo)
                     numBytesAlreadyReferredTo = NumActiveMemoryBytesReferenced;
-                AddRange(new MemoryRangeByBlockID(activeMemoryBlockID, numBytesAlreadyReferredTo, activeMemoryPosition - numBytesAlreadyReferredTo), true);
+                AddRange(new MemoryRangeByBlockID(activeMemoryBlockID, numBytesAlreadyReferredTo, activeMemoryPosition - numBytesAlreadyReferredTo));
                 NumActiveMemoryBytesReferenced = activeMemoryPosition;
             }
         }
@@ -157,7 +142,7 @@ namespace Lazinator.Buffers
                 int numBytesAlreadyReferredTo = GetNumBytesAlreadyReferredTo(memoryBlock.MemoryBlockID);
                 // Now add a range referring to the memory block or what hasn't been referred to yet
                 if (numBytesAlreadyReferredTo < memoryBlock.Length)
-                    AddRange(new MemoryRangeByBlockID(memoryBlock.MemoryBlockID, numBytesAlreadyReferredTo, memoryBlock.Length - numBytesAlreadyReferredTo), false);
+                    AddRange(new MemoryRangeByBlockID(memoryBlock.MemoryBlockID, numBytesAlreadyReferredTo, memoryBlock.Length - numBytesAlreadyReferredTo));
             }
         }
 
