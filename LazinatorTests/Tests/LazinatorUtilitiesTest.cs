@@ -73,7 +73,7 @@ namespace LazinatorTests.Tests
                 int startPosition = r.Next(0, c.Length);
                 int numBytes = r.Next(0, c.Length - startPosition);
                 var s = m.Slice(startPosition, numBytes);
-                var consolidated = s.GetConsolidatedMemory().ToArray(); // DEBUG -- might have problem here, because this was previously set to false
+                var consolidated = s.GetConsolidatedMemory().ToArray(); 
                 var comparison = c.Skip(startPosition).Take(numBytes).ToArray();
                 if (!comparison.SequenceEqual(consolidated))
                     throw new Exception("LazinatorMemory did not match");
@@ -169,7 +169,6 @@ namespace LazinatorTests.Tests
                 new MemoryRangeByBlockID(new MemoryBlockID(3), 0, 2), // 10, 11
                 new MemoryRangeByBlockID(new MemoryBlockID(1), 1, 1) // 200
             });
-            //DEBUGc.Length = c.Ranges.Sum(x => (long)x.Length);
             LazinatorMemory memory = new LazinatorMemory(c);
             var result = memory.GetConsolidatedMemory().ToArray();
             result.Should().BeEquivalentTo(new byte[] { 8, 9, 7, 8, 9, 10, 11, 200 });

@@ -46,8 +46,6 @@ namespace Lazinator.Buffers
             HighestMemoryBlockID = MemoryBlocks.Any() ? new MemoryBlockID(MemoryBlocks.Max(x => x.MemoryBlockID.AsInt)) : new MemoryBlockID(0);
             LengthOfMemoryBlocks = MemoryBlocks.Sum(x => (long) x.Length);
             InitializeMemoryBlocksInformationFromMemoryBlocks();
-            if (MemoryBlocks.Count != MemoryBlocksLoadingInfo.Count)
-                throw new Exception("DEBUG");
         }
 
         public LazinatorMemory ToLazinatorMemory()

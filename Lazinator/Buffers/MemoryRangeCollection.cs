@@ -69,10 +69,6 @@ namespace Lazinator.Buffers
         /// <param name="newRange"></param>
         public void AddRange(MemoryRangeByBlockID range, bool extendEarlierReferencesForSameBlock)
         {
-            if (range.MemoryBlockID == new MemoryBlockID(16) && range.OffsetIntoMemoryBlock == 19)
-            {
-                var DEBUGS = 0;
-            }
             if (!Patching)
             {
                 SetRanges(EnumerateMemoryBlocks().Select(x => new MemoryRangeByBlockID(x.MemoryBlockID, 0, x.Length)).ToList());
@@ -89,7 +85,6 @@ namespace Lazinator.Buffers
                             MemoryBlock existingBlock = GetMemoryBlockByBlockID(rangeI.MemoryBlockID);
                             if (existingBlock != null)
                             {
-                                throw new Exception("DEBUGCHECK"); // is this really correct?
                                 existingBlock.LoadingInfo.MemoryBlockLength = range.Length;
                             }
                         }
@@ -145,10 +140,6 @@ namespace Lazinator.Buffers
             if (activeMemoryPosition > NumActiveMemoryBytesReferenced)
             {
                 MemoryBlockID activeMemoryBlockID = GetNextMemoryBlockID();
-                if (activeMemoryBlockID == new MemoryBlockID(16))
-                {
-                    var DEBUG = 0;
-                }
                 int numBytesAlreadyReferredTo = GetNumBytesAlreadyReferredTo(activeMemoryBlockID);
                 if (NumActiveMemoryBytesReferenced > numBytesAlreadyReferredTo)
                     numBytesAlreadyReferredTo = NumActiveMemoryBytesReferenced;
@@ -164,10 +155,6 @@ namespace Lazinator.Buffers
             {
                 // See if we have already been adding ranges referring to this memory block.
                 int numBytesAlreadyReferredTo = GetNumBytesAlreadyReferredTo(memoryBlock.MemoryBlockID);
-                if (memoryBlock.MemoryBlockID == new MemoryBlockID(16))
-                {
-                    var DEBUG = 0;
-                }
                 // Now add a range referring to the memory block or what hasn't been referred to yet
                 if (numBytesAlreadyReferredTo < memoryBlock.Length)
                     AddRange(new MemoryRangeByBlockID(memoryBlock.MemoryBlockID, numBytesAlreadyReferredTo, memoryBlock.Length - numBytesAlreadyReferredTo), false);

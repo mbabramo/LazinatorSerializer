@@ -63,7 +63,6 @@ namespace LazinatorTests.Tests
             w2.InsertReferenceToPreviousVersion(0, 2, 1);
             GetBytesList(w2).Should().Equal(new byte[] { 10, 11, 12, 1, 2, 2 });
             w2.Write((byte) 20);
-            var DEBUG = w2.LazinatorMemory;
             GetBytesList(w2).Should().Equal(new byte[] { 10, 11, 12, 1, 2, 2, 20 });
         }
 

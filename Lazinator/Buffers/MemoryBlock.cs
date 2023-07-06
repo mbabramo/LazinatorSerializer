@@ -9,8 +9,6 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Buffers
 {
-    // DEBUG -- maybe MemoryBlock should be LoadableMemoryBlock or just MemoryBlock
-
     public class MemoryBlock
     {
 
@@ -37,8 +35,6 @@ namespace Lazinator.Buffers
 
         private int _Length = 0;
         public int Length { get => _Length; set => _Length = value; }
-
-        public bool IsLoaded => MemoryAsLoaded != null; // DEBUG -- when loading later
 
         public virtual bool IsPersisted { get; set; }
 
