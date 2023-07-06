@@ -65,7 +65,6 @@ namespace Lazinator.Persistence
             {
                 if (!_ForkInformation_Accessed)
                 {
-                    TabbedText.WriteLine($"Accessing ForkInformation");
                     LazinateForkInformation();
                 }
                 IsDirty = true; 
@@ -90,8 +89,7 @@ namespace Lazinator.Persistence
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ForkInformation_ByteIndex, _ForkInformation_ByteLength, null);
-                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_ForkInformation = ConvertFromBytes_List_G_Pint_C32lastMemoryBlockIDBeforeFork_c_C32int_C32forkNumber_p_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _ForkInformation_ByteIndex, _ForkInformation_ByteLength, null);_ForkInformation = ConvertFromBytes_List_G_Pint_C32lastMemoryBlockIDBeforeFork_c_C32int_C32forkNumber_p_g(childData);
             }
             _ForkInformation_Accessed = true;
         }
@@ -106,7 +104,6 @@ namespace Lazinator.Persistence
             {
                 if (!_MemoryBlockStatus_Accessed)
                 {
-                    TabbedText.WriteLine($"Accessing MemoryBlockStatus");
                     LazinateMemoryBlockStatus();
                 }
                 IsDirty = true; 
@@ -131,8 +128,7 @@ namespace Lazinator.Persistence
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MemoryBlockStatus_ByteIndex, _MemoryBlockStatus_ByteLength, null);
-                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MemoryBlockStatus = ConvertFromBytes_Memory_Gbyte_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MemoryBlockStatus_ByteIndex, _MemoryBlockStatus_ByteLength, null);_MemoryBlockStatus = ConvertFromBytes_Memory_Gbyte_g(childData);
             }
             _MemoryBlockStatus_Accessed = true;
         }
@@ -245,21 +241,16 @@ namespace Lazinator.Persistence
         
         protected override int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            TabbedText.WriteLine($"");
-            TabbedText.WriteLine($"Converting Lazinator.Persistence.PersistentIndex at position: " + LazinatorMemoryStorage.ToLocationString());
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            TabbedText.Tabs++;
             int lengthForLengths = 16;
             int totalChildrenSize = ConvertFromBytesForChildLengths(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);;
-            TabbedText.Tabs--;
             return bytesSoFar + totalChildrenSize;
         }
         
         protected override void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
             base.ConvertFromBytesForPrimitiveProperties(span, OriginalIncludeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            TabbedText.WriteLine($"Reading IndexVersion at byte location {bytesSoFar}"); 
             _IndexVersion = span.ToDecompressedInt32(ref bytesSoFar);
         }
         
@@ -267,10 +258,8 @@ namespace Lazinator.Persistence
         {
             int totalChildrenBytes = 0;
             totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeChildrenMode, serializedVersionNumber, indexOfFirstChild, ref bytesSoFar);
-            TabbedText.WriteLine($"ForkInformation: Length is {bytesSoFar} past above position; start location is {indexOfFirstChild + totalChildrenBytes} past above position"); 
             _ForkInformation_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             totalChildrenBytes += span.ToInt32(ref bytesSoFar);
-            TabbedText.WriteLine($"MemoryBlockStatus: Length is {bytesSoFar} past above position; start location is {indexOfFirstChild + totalChildrenBytes} past above position"); 
             _MemoryBlockStatus_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             _PersistentIndex_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
@@ -279,8 +268,6 @@ namespace Lazinator.Persistence
         
         public override void SerializeToExistingBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options)
         {
-            TabbedText.WriteLine("");
-            TabbedText.WriteLine($"Initiating serialization of Lazinator.Persistence.PersistentIndex at position {writer.ToLocationString()}");
             int startPosition = writer.ActiveMemoryPosition;
             WritePropertiesIntoBuffer(ref writer, options, true);
             if (options.UpdateStoredBuffer)
@@ -324,9 +311,6 @@ namespace Lazinator.Persistence
         protected override void WritePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
             int startPosition = writer.ActiveMemoryPosition;
-            TabbedText.WriteLine($"Writing properties for Lazinator.Persistence.PersistentIndex.");
-            TabbedText.WriteLine($"Properties uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join(",",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {(includeUniqueID ? "Included" : "Omitted")}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} Included, Object version {LazinatorObjectVersion} Included, IncludeChildrenMode {options.IncludeChildrenMode} Included");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
             {
                 if (!ContainsOpenGenericParameters)
@@ -347,20 +331,15 @@ namespace Lazinator.Persistence
             int lengthForLengths = 16;
             
             var previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
-            TabbedText.WriteLine($"Location {writer.ToLocationString()}, after skipping {lengthForLengths} bytes to store lengths of child objects");
             WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
-            TabbedText.WriteLine($"Position {writer.ToLocationString()} (end of PersistentIndex) ");
             
         }
         
         protected override void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
             base.WritePrimitivePropertiesIntoBuffer(ref writer, options, includeUniqueID);
-            TabbedText.WriteLine($"Position {writer.ToLocationString()}, IndexVersion value {_IndexVersion}");
-            TabbedText.Tabs++;
             CompressedIntegralTypes.WriteCompressedInt(ref writer, _IndexVersion);
-            TabbedText.Tabs--;
         }
         protected override void WriteChildrenPropertiesIntoBuffer(ref BufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
         {
@@ -370,8 +349,6 @@ namespace Lazinator.Persistence
                 options = options.WithoutSplittingPossible();
             }
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Position {writer.ToLocationString()}, ForkInformation (accessed? {_ForkInformation_Accessed})");
-            TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_ForkInformation_Accessed)
             {
@@ -390,9 +367,6 @@ namespace Lazinator.Persistence
                 _ForkInformation_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MemoryBlockStatus (accessed? {_MemoryBlockStatus_Accessed})");
-            TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MemoryBlockStatus_Accessed)
             {
@@ -411,7 +385,6 @@ namespace Lazinator.Persistence
                 _MemoryBlockStatus_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
-            TabbedText.Tabs--;
             if (options.UpdateStoredBuffer)
             {
                 _PersistentIndex_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;

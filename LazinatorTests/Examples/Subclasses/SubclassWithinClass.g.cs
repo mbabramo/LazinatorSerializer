@@ -301,20 +301,15 @@ namespace LazinatorTests.Examples.Subclasses
             
             protected virtual int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
             {
-                TabbedText.WriteLine($"");
-                TabbedText.WriteLine($"Converting LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass at position: " + LazinatorMemoryStorage.ToLocationString());
                 ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
                 ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-                TabbedText.Tabs++;
                 int lengthForLengths = 0;
                 int totalChildrenSize = ConvertFromBytesForChildLengths(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);;
-                TabbedText.Tabs--;
                 return bytesSoFar + totalChildrenSize;
             }
             
             protected virtual void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
             {
-                TabbedText.WriteLine($"Reading StringWithinSubclass at byte location {bytesSoFar}"); 
                 _StringWithinSubclass = span.ToString_BrotliCompressedWithLength(ref bytesSoFar);
             }
             
@@ -326,8 +321,6 @@ namespace LazinatorTests.Examples.Subclasses
             
             public virtual void SerializeToExistingBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options)
             {
-                TabbedText.WriteLine("");
-                TabbedText.WriteLine($"Initiating serialization of LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass at position {writer.ToLocationString()}");
                 int startPosition = writer.ActiveMemoryPosition;
                 WritePropertiesIntoBuffer(ref writer, options, true);
                 if (options.UpdateStoredBuffer)
@@ -365,9 +358,6 @@ namespace LazinatorTests.Examples.Subclasses
             
             protected virtual void WritePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
             {
-                TabbedText.WriteLine($"Writing properties for LazinatorTests.Examples.Subclasses.ClassWithSubclass.SubclassWithinClass.");
-                TabbedText.WriteLine($"Properties uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join(",",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {(includeUniqueID ? "Included" : "Omitted")}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} Included, Object version {LazinatorObjectVersion} Included, IncludeChildrenMode {options.IncludeChildrenMode} Included");
-                TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
                 if (includeUniqueID)
                 {
                     if (!ContainsOpenGenericParameters)
@@ -385,16 +375,12 @@ namespace LazinatorTests.Examples.Subclasses
                 // write properties
                 
                 WritePrimitivePropertiesIntoBuffer(ref writer, options, includeUniqueID);
-                TabbedText.WriteLine($"Position {writer.ToLocationString()} (end of SubclassWithinClass) ");
                 
             }
             
             protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
             {
-                TabbedText.WriteLine($"Position {writer.ToLocationString()}, StringWithinSubclass value {_StringWithinSubclass}");
-                TabbedText.Tabs++;
                 EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _StringWithinSubclass);
-                TabbedText.Tabs--;
             }
             protected virtual void WriteChildrenPropertiesIntoBuffer(ref BufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
             {

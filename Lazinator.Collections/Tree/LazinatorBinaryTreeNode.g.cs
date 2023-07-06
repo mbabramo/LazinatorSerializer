@@ -54,7 +54,6 @@ namespace Lazinator.Collections.Tree
             {
                 if (!_Data_Accessed)
                 {
-                    TabbedText.WriteLine($"Accessing Data");
                     LazinateData();
                 } 
                 return _Data;
@@ -100,7 +99,6 @@ namespace Lazinator.Collections.Tree
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _Data_ByteIndex, _Data_ByteLength, null);
                 childData.LoadInitialReadOnlyMemory();
-                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _Data = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
                 childData.ConsiderUnloadInitialReadOnlyMemory();
             }
@@ -119,7 +117,6 @@ namespace Lazinator.Collections.Tree
             else
             {
                 LazinatorMemory childData = await GetChildSliceAsync(LazinatorMemoryStorage, _Data_ByteIndex, _Data_ByteLength, null);
-                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _Data = DeserializationFactory.Instance.CreateBasedOnType<T>(childData, this); 
                 await childData.ConsiderUnloadReadOnlyMemoryAsync();
             }
@@ -129,7 +126,6 @@ namespace Lazinator.Collections.Tree
         {
             if (!_Data_Accessed)
             {
-                TabbedText.WriteLine($"Accessing Data");
                 await LazinateDataAsync();
             } 
             return _Data;
@@ -145,7 +141,6 @@ namespace Lazinator.Collections.Tree
             {
                 if (!_LeftNode_Accessed)
                 {
-                    TabbedText.WriteLine($"Accessing LeftNode");
                     LazinateLeftNode();
                 } 
                 return _LeftNode;
@@ -180,7 +175,6 @@ namespace Lazinator.Collections.Tree
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _LeftNode_ByteIndex, _LeftNode_ByteLength, null);
                 childData.LoadInitialReadOnlyMemory();
-                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _LeftNode = DeserializationFactory.Instance.CreateBaseOrDerivedType(257, (c, p) => new LazinatorBinaryTreeNode<T>(c, p), childData, this); 
                 childData.ConsiderUnloadInitialReadOnlyMemory();
             }
@@ -195,7 +189,6 @@ namespace Lazinator.Collections.Tree
             else
             {
                 LazinatorMemory childData = await GetChildSliceAsync(LazinatorMemoryStorage, _LeftNode_ByteIndex, _LeftNode_ByteLength, null);
-                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _LeftNode = DeserializationFactory.Instance.CreateBaseOrDerivedType(257, (c, p) => new LazinatorBinaryTreeNode<T>(c, p), childData, this); 
                 await childData.ConsiderUnloadReadOnlyMemoryAsync();
             }
@@ -205,7 +198,6 @@ namespace Lazinator.Collections.Tree
         {
             if (!_LeftNode_Accessed)
             {
-                TabbedText.WriteLine($"Accessing LeftNode");
                 await LazinateLeftNodeAsync();
             } 
             return _LeftNode;
@@ -221,7 +213,6 @@ namespace Lazinator.Collections.Tree
             {
                 if (!_RightNode_Accessed)
                 {
-                    TabbedText.WriteLine($"Accessing RightNode");
                     LazinateRightNode();
                 } 
                 return _RightNode;
@@ -256,7 +247,6 @@ namespace Lazinator.Collections.Tree
             {
                 LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _RightNode_ByteIndex, _RightNode_ByteLength, null);
                 childData.LoadInitialReadOnlyMemory();
-                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _RightNode = DeserializationFactory.Instance.CreateBaseOrDerivedType(257, (c, p) => new LazinatorBinaryTreeNode<T>(c, p), childData, this); 
                 childData.ConsiderUnloadInitialReadOnlyMemory();
             }
@@ -271,7 +261,6 @@ namespace Lazinator.Collections.Tree
             else
             {
                 LazinatorMemory childData = await GetChildSliceAsync(LazinatorMemoryStorage, _RightNode_ByteIndex, _RightNode_ByteLength, null);
-                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");
                 _RightNode = DeserializationFactory.Instance.CreateBaseOrDerivedType(257, (c, p) => new LazinatorBinaryTreeNode<T>(c, p), childData, this); 
                 await childData.ConsiderUnloadReadOnlyMemoryAsync();
             }
@@ -281,7 +270,6 @@ namespace Lazinator.Collections.Tree
         {
             if (!_RightNode_Accessed)
             {
-                TabbedText.WriteLine($"Accessing RightNode");
                 await LazinateRightNodeAsync();
             } 
             return _RightNode;
@@ -886,18 +874,14 @@ namespace Lazinator.Collections.Tree
         
         protected virtual int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            TabbedText.WriteLine($"");
-            TabbedText.WriteLine($"Converting Lazinator.Collections.Tree.LazinatorBinaryTreeNode<T> at position: " + LazinatorMemoryStorage.ToLocationString());
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            TabbedText.Tabs++;
             int lengthForLengths = 0;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 lengthForLengths += 12;
             }
             int totalChildrenSize = ConvertFromBytesForChildLengths(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);;
-            TabbedText.Tabs--;
             return bytesSoFar + totalChildrenSize;
         }
         
@@ -908,19 +892,16 @@ namespace Lazinator.Collections.Tree
         protected virtual int ConvertFromBytesForChildLengths(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
         {
             int totalChildrenBytes = 0;
-            TabbedText.WriteLine($"Data: Length is {bytesSoFar} past above position; start location is {indexOfFirstChild + totalChildrenBytes} past above position"); 
             _Data_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            TabbedText.WriteLine($"LeftNode: Length is {bytesSoFar} past above position; start location is {indexOfFirstChild + totalChildrenBytes} past above position"); 
             _LeftNode_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
                 totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             }
-            TabbedText.WriteLine($"RightNode: Length is {bytesSoFar} past above position; start location is {indexOfFirstChild + totalChildrenBytes} past above position"); 
             _RightNode_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             if (includeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && includeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -932,8 +913,6 @@ namespace Lazinator.Collections.Tree
         
         public virtual void SerializeToExistingBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options)
         {
-            TabbedText.WriteLine("");
-            TabbedText.WriteLine($"Initiating serialization of Lazinator.Collections.Tree.LazinatorBinaryTreeNode<T> at position {writer.ToLocationString()}");
             long startPosition = writer.OverallMemoryPosition;
             WritePropertiesIntoBuffer(ref writer, options, true);
             if (options.UpdateStoredBuffer)
@@ -943,8 +922,6 @@ namespace Lazinator.Collections.Tree
         }
         async public virtual ValueTask SerializeToExistingBufferAsync(BufferWriterContainer writer, LazinatorSerializationOptions options)
         {
-            TabbedText.WriteLine("");
-            TabbedText.WriteLine($"Initiating serialization of Lazinator.Collections.Tree.LazinatorBinaryTreeNode<T> at position {writer.ToLocationString()}");
             long startPosition = writer.OverallMemoryPosition;
             await WritePropertiesIntoBufferAsync(writer, options, true);
             if (options.UpdateStoredBuffer)
@@ -1002,9 +979,6 @@ namespace Lazinator.Collections.Tree
         protected virtual void WritePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
             long startPosition = writer.OverallMemoryPosition;
-            TabbedText.WriteLine($"Writing properties for Lazinator.Collections.Tree.LazinatorBinaryTreeNode<T>.");
-            TabbedText.WriteLine($"Properties uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join(",",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {(includeUniqueID ? "Included" : "Omitted")}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} Included, Object version {LazinatorObjectVersion} Included, IncludeChildrenMode {options.IncludeChildrenMode} Included");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
             {
                 if (!ContainsOpenGenericParameters)
@@ -1029,18 +1003,13 @@ namespace Lazinator.Collections.Tree
             }
             
             var previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
-            TabbedText.WriteLine($"Location {writer.ToLocationString()}, after skipping {lengthForLengths} bytes to store lengths of child objects");
             WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
-            TabbedText.WriteLine($"Position {writer.ToLocationString()} (end of LazinatorBinaryTreeNode<T>) ");
             
         }
         async protected virtual ValueTask WritePropertiesIntoBufferAsync(BufferWriterContainer writer, LazinatorSerializationOptions options, bool includeUniqueID)
         {
             long startPosition = writer.OverallMemoryPosition;
-            TabbedText.WriteLine($"Writing properties for Lazinator.Collections.Tree.LazinatorBinaryTreeNode<T>.");
-            TabbedText.WriteLine($"Properties uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join(",",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {(includeUniqueID ? "Included" : "Omitted")}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} Included, Object version {LazinatorObjectVersion} Included, IncludeChildrenMode {options.IncludeChildrenMode} Included");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
             {
                 if (!ContainsOpenGenericParameters)
@@ -1065,10 +1034,8 @@ namespace Lazinator.Collections.Tree
             }
             
             var previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
-            TabbedText.WriteLine($"Location {writer.ToLocationString()}, after skipping {lengthForLengths} bytes to store lengths of child objects");
             await WriteChildrenPropertiesIntoBufferAsync(writer, options, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
-            TabbedText.WriteLine($"Position {writer.ToLocationString()} (end of LazinatorBinaryTreeNode<T>) ");
             
         }
         
@@ -1080,8 +1047,6 @@ namespace Lazinator.Collections.Tree
         {
             long startOfChildPosition = 0;
             long lengthValue = 0;
-            TabbedText.WriteLine($"Position {writer.ToLocationString()}, Data value {_Data}");
-            TabbedText.Tabs++;
             startOfChildPosition = writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -1102,10 +1067,7 @@ namespace Lazinator.Collections.Tree
                 _Data_ByteIndex = (int) (startOfChildPosition - startOfObjectPosition);
                 
             }
-            TabbedText.Tabs--;
             writer.ConsiderSwitchToNextBuffer(ref options);
-            TabbedText.WriteLine($"Position {writer.ToLocationString()}, LeftNode (accessed? {_LeftNode_Accessed}) (backing var null? {_LeftNode == null}) ");
-            TabbedText.Tabs++;
             startOfChildPosition = writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -1126,10 +1088,7 @@ namespace Lazinator.Collections.Tree
                 _LeftNode_ByteIndex = (int) (startOfChildPosition - startOfObjectPosition);
                 
             }
-            TabbedText.Tabs--;
             writer.ConsiderSwitchToNextBuffer(ref options);
-            TabbedText.WriteLine($"Position {writer.ToLocationString()}, RightNode (accessed? {_RightNode_Accessed}) (backing var null? {_RightNode == null}) ");
-            TabbedText.Tabs++;
             startOfChildPosition = writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -1150,7 +1109,6 @@ namespace Lazinator.Collections.Tree
                 _RightNode_ByteIndex = (int) (startOfChildPosition - startOfObjectPosition);
                 
             }
-            TabbedText.Tabs--;
             if (options.UpdateStoredBuffer)
             {
                 _LazinatorBinaryTreeNode_T_EndByteIndex = (int) (writer.ActiveMemoryPosition - startOfObjectPosition);
@@ -1161,8 +1119,6 @@ namespace Lazinator.Collections.Tree
         {
             long startOfChildPosition = 0;
             long lengthValue = 0;
-            TabbedText.WriteLine($"Position {writer.ToLocationString()}, Data value {_Data}");
-            TabbedText.Tabs++;
             startOfChildPosition = writer.Writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -1183,10 +1139,7 @@ namespace Lazinator.Collections.Tree
                 _Data_ByteIndex = (int) (startOfChildPosition - startOfObjectPosition);
                 
             }
-            TabbedText.Tabs--;
             writer.ConsiderSwitchToNextBuffer(ref options);
-            TabbedText.WriteLine($"Position {writer.ToLocationString()}, LeftNode (accessed? {_LeftNode_Accessed}) (backing var null? {_LeftNode == null}) ");
-            TabbedText.Tabs++;
             startOfChildPosition = writer.Writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -1207,10 +1160,7 @@ namespace Lazinator.Collections.Tree
                 _LeftNode_ByteIndex = (int) (startOfChildPosition - startOfObjectPosition);
                 
             }
-            TabbedText.Tabs--;
             writer.ConsiderSwitchToNextBuffer(ref options);
-            TabbedText.WriteLine($"Position {writer.ToLocationString()}, RightNode (accessed? {_RightNode_Accessed}) (backing var null? {_RightNode == null}) ");
-            TabbedText.Tabs++;
             startOfChildPosition = writer.Writer.OverallMemoryPosition;
             if (options.IncludeChildrenMode != IncludeChildrenMode.ExcludeAllChildren && options.IncludeChildrenMode != IncludeChildrenMode.IncludeOnlyIncludableChildren)
             {
@@ -1231,7 +1181,6 @@ namespace Lazinator.Collections.Tree
                 _RightNode_ByteIndex = (int) (startOfChildPosition - startOfObjectPosition);
                 
             }
-            TabbedText.Tabs--;
             if (options.UpdateStoredBuffer)
             {
                 _LazinatorBinaryTreeNode_T_EndByteIndex = (int) (writer.ActiveMemoryPosition - startOfObjectPosition);

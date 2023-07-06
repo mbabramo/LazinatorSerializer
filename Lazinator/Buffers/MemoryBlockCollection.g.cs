@@ -99,7 +99,6 @@ namespace Lazinator.Buffers
             {
                 if (!_MemoryBlocksLoadingInfo_Accessed)
                 {
-                    TabbedText.WriteLine($"Accessing MemoryBlocksLoadingInfo");
                     LazinateMemoryBlocksLoadingInfo();
                 }
                 IsDirty = true; 
@@ -124,8 +123,7 @@ namespace Lazinator.Buffers
             }
             else
             {
-                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MemoryBlocksLoadingInfo_ByteIndex, _MemoryBlocksLoadingInfo_ByteLength, null);
-                TabbedText.WriteLine($"ILazinator location: {childData.ToLocationString()}");_MemoryBlocksLoadingInfo = ConvertFromBytes_List_GMemoryBlockLoadingInfo_g(childData);
+                LazinatorMemory childData = GetChildSlice(LazinatorMemoryStorage, _MemoryBlocksLoadingInfo_ByteIndex, _MemoryBlocksLoadingInfo_ByteLength, null);_MemoryBlocksLoadingInfo = ConvertFromBytes_List_GMemoryBlockLoadingInfo_g(childData);
             }
             _MemoryBlocksLoadingInfo_Accessed = true;
         }
@@ -405,31 +403,23 @@ namespace Lazinator.Buffers
         
         protected virtual int ConvertFromBytesAfterHeader(IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            TabbedText.WriteLine($"");
-            TabbedText.WriteLine($"Converting Lazinator.Buffers.MemoryBlockCollection at position: " + LazinatorMemoryStorage.ToLocationString());
             ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
             ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);
-            TabbedText.Tabs++;
             int lengthForLengths = 4;
             int totalChildrenSize = ConvertFromBytesForChildLengths(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);;
-            TabbedText.Tabs--;
             return bytesSoFar + totalChildrenSize;
         }
         
         protected virtual void ConvertFromBytesForPrimitiveProperties(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, ref int bytesSoFar)
         {
-            TabbedText.WriteLine($"Reading BaseBlobPath at byte location {bytesSoFar}"); 
             _BaseBlobPath = span.ToString_VarIntLengthUtf8(ref bytesSoFar);
-            TabbedText.WriteLine($"Reading ContainedInSingleBlob at byte location {bytesSoFar}"); 
             _ContainedInSingleBlob = span.ToBoolean(ref bytesSoFar);
-            TabbedText.WriteLine($"Reading IsPersisted at byte location {bytesSoFar}"); 
             _IsPersisted = span.ToBoolean(ref bytesSoFar);
         }
         
         protected virtual int ConvertFromBytesForChildLengths(ReadOnlySpan<byte> span, IncludeChildrenMode includeChildrenMode, int serializedVersionNumber, int indexOfFirstChild, ref int bytesSoFar)
         {
             int totalChildrenBytes = 0;
-            TabbedText.WriteLine($"MemoryBlocksLoadingInfo: Length is {bytesSoFar} past above position; start location is {indexOfFirstChild + totalChildrenBytes} past above position"); 
             _MemoryBlocksLoadingInfo_ByteIndex = indexOfFirstChild + totalChildrenBytes;
             totalChildrenBytes += span.ToInt32(ref bytesSoFar);
             _MemoryBlockCollection_EndByteIndex = indexOfFirstChild + totalChildrenBytes;
@@ -438,8 +428,6 @@ namespace Lazinator.Buffers
         
         public virtual void SerializeToExistingBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options)
         {
-            TabbedText.WriteLine("");
-            TabbedText.WriteLine($"Initiating serialization of Lazinator.Buffers.MemoryBlockCollection at position {writer.ToLocationString()}");
             int startPosition = writer.ActiveMemoryPosition;
             WritePropertiesIntoBuffer(ref writer, options, true);
             if (options.UpdateStoredBuffer)
@@ -482,9 +470,6 @@ namespace Lazinator.Buffers
         protected virtual void WritePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
             int startPosition = writer.ActiveMemoryPosition;
-            TabbedText.WriteLine($"Writing properties for Lazinator.Buffers.MemoryBlockCollection.");
-            TabbedText.WriteLine($"Properties uniqueID {(LazinatorGenericID.IsEmpty ? LazinatorUniqueID.ToString() : String.Join(",",LazinatorGenericID.TypeAndInnerTypeIDs.ToArray()))} {(includeUniqueID ? "Included" : "Omitted")}, Lazinator version {Lazinator.Support.LazinatorVersionInfo.LazinatorIntVersion} Included, Object version {LazinatorObjectVersion} Included, IncludeChildrenMode {options.IncludeChildrenMode} Included");
-            TabbedText.WriteLine($"IsDirty {IsDirty} DescendantIsDirty {DescendantIsDirty} HasParentClass {LazinatorParents.Any()}");
             if (includeUniqueID)
             {
                 if (!ContainsOpenGenericParameters)
@@ -505,27 +490,16 @@ namespace Lazinator.Buffers
             int lengthForLengths = 4;
             
             var previousLengthsPosition = writer.SetLengthsPosition(lengthForLengths);
-            TabbedText.WriteLine($"Location {writer.ToLocationString()}, after skipping {lengthForLengths} bytes to store lengths of child objects");
             WriteChildrenPropertiesIntoBuffer(ref writer, options, includeUniqueID, startPosition);
             writer.ResetLengthsPosition(previousLengthsPosition);
-            TabbedText.WriteLine($"Position {writer.ToLocationString()} (end of MemoryBlockCollection) ");
             
         }
         
         protected virtual void WritePrimitivePropertiesIntoBuffer(ref BufferWriter writer, in LazinatorSerializationOptions options, bool includeUniqueID)
         {
-            TabbedText.WriteLine($"Position {writer.ToLocationString()}, BaseBlobPath value {_BaseBlobPath}");
-            TabbedText.Tabs++;
             EncodeCharAndString.WriteStringUtf8WithVarIntPrefix(ref writer, _BaseBlobPath);
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Position {writer.ToLocationString()}, ContainedInSingleBlob value {_ContainedInSingleBlob}");
-            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteBool(ref writer, _ContainedInSingleBlob);
-            TabbedText.Tabs--;
-            TabbedText.WriteLine($"Position {writer.ToLocationString()}, IsPersisted value {_IsPersisted}");
-            TabbedText.Tabs++;
             WriteUncompressedPrimitives.WriteBool(ref writer, _IsPersisted);
-            TabbedText.Tabs--;
         }
         protected virtual void WriteChildrenPropertiesIntoBuffer(ref BufferWriter writer, LazinatorSerializationOptions options, bool includeUniqueID, int startOfObjectPosition)
         {
@@ -534,8 +508,6 @@ namespace Lazinator.Buffers
                 options = options.WithoutSplittingPossible();
             }
             int startOfChildPosition = 0;
-            TabbedText.WriteLine($"Position {writer.ToLocationString()}, MemoryBlocksLoadingInfo (accessed? {_MemoryBlocksLoadingInfo_Accessed})");
-            TabbedText.Tabs++;
             startOfChildPosition = writer.ActiveMemoryPosition;
             if ((options.IncludeChildrenMode != IncludeChildrenMode.IncludeAllChildren || options.IncludeChildrenMode != OriginalIncludeChildrenMode) && !_MemoryBlocksLoadingInfo_Accessed)
             {
@@ -554,7 +526,6 @@ namespace Lazinator.Buffers
                 _MemoryBlocksLoadingInfo_ByteIndex = startOfChildPosition - startOfObjectPosition;
                 
             }
-            TabbedText.Tabs--;
             if (options.UpdateStoredBuffer)
             {
                 _MemoryBlockCollection_EndByteIndex = writer.ActiveMemoryPosition - startOfObjectPosition;
