@@ -559,9 +559,9 @@ namespace LazinatorTests.Tests
             if (fullPath == null)
                 return;
             int round = 0;
-            int numRounds = 10; // DEBUG
+            int numRounds = 20; // DEBUG
             int numChangesFirstRound = 1; // DEBUG 10
-            int numChangesSubsequentRounds = 1; // DEBUG 3
+            int numChangesSubsequentRounds = 3; // DEBUG 3
             MultipleRoundsOfRandomChanges(numRounds, numChangesFirstRound, numChangesSubsequentRounds, () =>
             {
                 TabbedText.WriteLine($"Round {round}");
