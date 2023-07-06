@@ -41,7 +41,7 @@ namespace LazinatorTests.Tests
             w.Write((byte)6);
             w.LazinatorMemory.EnumerateBytes().ToList().Should().Equal(new byte[] { 1, 2, 3, 4, 5, 6 });
             bool isMemoryRangeCollection = w.LazinatorMemory.MultipleMemoryBlocks is MemoryRangeCollection;
-            isMemoryRangeCollection.Should().BeFalse();
+            isMemoryRangeCollection.Should().BeTrue();
         }
 
         [Fact]
