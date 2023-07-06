@@ -385,8 +385,8 @@ public class MyOtherClass
             {
                 modifyDefaultConfig(config); 
             }
-            // uncomment to include tracing code
-            config.IncludeTracingCode = false;
+            // uncomment to include tracing code -- also look at IncludeTracingCode in ObjectDescription.cs and the properties set in the Lazinator project file. 
+            //config.IncludeTracingCode = true;
 
             var compilation = await AdhocWorkspaceManager.GetCompilation(ws);
             LazinatorCompilation lazinatorCompilation = new LazinatorCompilation(compilation, existingType, config);
