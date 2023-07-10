@@ -113,7 +113,7 @@ namespace LazinatorAnalyzer.Analyzer
         public static async Task<Solution> AttemptFixGenerateLazinatorCodeBehind(Document originalDocument, LazinatorPairInformation lazinatorPairInformation, CancellationToken cancellationToken)
         {
             var originalSolution = originalDocument.Project.Solution;
-            LazinatorConfig config = lazinatorPairInformation.LoadLazinatorConfig();
+            LazinatorConfig? config = lazinatorPairInformation.LoadLazinatorConfig();
 
             var semanticModel = await originalDocument.GetSemanticModelAsync(cancellationToken);
             LazinatorCompilation generator = null;
@@ -152,10 +152,10 @@ namespace LazinatorAnalyzer.Analyzer
             }
             else
             { // we have a config file specifying a common directory
-                codeBehindFilePath = config.GeneratedCodePath;
+                codeBehindFilePath = config.Value.GeneratedCodePath;
                 if (!codeBehindFilePath.EndsWith("\\"))
                     codeBehindFilePath += "\\";
-                codeBehindFolders = config.RelativeGeneratedCodePath.Split('\\', '/');
+                codeBehindFolders = config.Value.RelativeGeneratedCodePath.Split('\\', '/');
             }
             codeBehindFilePath = System.IO.Path.GetDirectoryName(codeBehindFilePath);
             while (codeBehindFilePath.EndsWith(".cs"))

@@ -24,7 +24,7 @@ namespace Lazinator.CodeDescription
         public INamedTypeSymbol InterfaceTypeSymbol { get; set; }
         public LazinatorObjectType ObjectType { get; set; }
         public LazinatorCompilation Compilation { get; set; }
-        public LazinatorConfig Config { get; set; }
+        public LazinatorConfig? Config { get; set; }
         public Guid Hash { get; set; }
         public string CodeToInsert { get; set; }
 

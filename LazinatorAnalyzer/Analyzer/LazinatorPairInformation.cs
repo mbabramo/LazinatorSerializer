@@ -47,11 +47,11 @@ namespace LazinatorAnalyzer.Analyzer
 
         private void CategorizeLocations(IReadOnlyList<Location> locations)
         {
-            LazinatorConfig config = LoadLazinatorConfig();
+            LazinatorConfig? config = LoadLazinatorConfig();
             (CodeBehindLocation, IncorrectCodeBehindLocations, LazinatorObjectLocationsExcludingCodeBehind) = CategorizeLocations(config, LazinatorObject, new List<Location>(locations));
         }
 
-        public static (Location codeBehindLocation, List<Location> incorrectCodeBehindLocations, List<Location> lazinatorObjectLocationsExcludingCodeBehind) CategorizeLocations(LazinatorConfig config, INamedTypeSymbol lazinatorObject, List<Location> mainTypeLocations)
+        public static (Location codeBehindLocation, List<Location> incorrectCodeBehindLocations, List<Location> lazinatorObjectLocationsExcludingCodeBehind) CategorizeLocations(LazinatorConfig? config, INamedTypeSymbol lazinatorObject, List<Location> mainTypeLocations)
         {
             string generatedCodeFileExtension = config?.GeneratedCodeFileExtension ?? ".laz.cs";
             bool useFullyQualifiedNames = (config?.UseFullyQualifiedNames ?? false) || lazinatorObject.ContainingType != null || lazinatorObject.IsGenericType;
@@ -66,9 +66,9 @@ namespace LazinatorAnalyzer.Analyzer
 
 
 
-        public LazinatorConfig LoadLazinatorConfig()
+        public LazinatorConfig? LoadLazinatorConfig()
         {
-            LazinatorConfig config = null;
+            LazinatorConfig? config = null;
             if (Config != null && Config != "")
             {
                 try

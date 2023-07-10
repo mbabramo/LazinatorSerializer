@@ -168,8 +168,8 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(MemoryBlockLoadingInfo), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(MemoryBlockInsetLoadingInfo), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws);
             await CompleteGenerateCode(typeof(MemoryBlockCollection), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws);
-            await CompleteGenerateCode(typeof(MemoryRangeCollection), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws, c => { c.DefaultAllowRecordLikeReadOnlyStructs = true; });
-            await CompleteGenerateCode(typeof(PersistentIndex), project: "Lazinator", mainFolder: "/Persistence/", subfolder: "", ws, c => { c.DefaultAllowRecordLikeReadOnlyStructs = true; });
+            await CompleteGenerateCode(typeof(MemoryRangeCollection), project: "Lazinator", mainFolder: "/Buffers/", subfolder: "", ws, c => (c ?? new LazinatorConfig()).WithDefaultAllowRecordLikeReadOnlyStructs(true));
+            await CompleteGenerateCode(typeof(PersistentIndex), project: "Lazinator", mainFolder: "/Persistence/", subfolder: "", ws, c => (c ?? new LazinatorConfig()).WithDefaultAllowRecordLikeReadOnlyStructs(true));
         }
 
         [Fact]
@@ -367,7 +367,7 @@ public class MyOtherClass
             };
         }
 
-        private static async Task CompleteGenerateCode(Type existingType, string project, string mainFolder, string subfolder, AdhocWorkspace ws, Action<LazinatorConfig> modifyDefaultConfig = null)
+        private static async Task CompleteGenerateCode(Type existingType, string project, string mainFolder, string subfolder, AdhocWorkspace ws, Func<LazinatorConfig?, LazinatorConfig> modifyDefaultConfig = null)
         {
             if (mainFolder == "" && subfolder == "")
                 mainFolder = "/";
@@ -377,13 +377,13 @@ public class MyOtherClass
             string name = ReadCodeFile.GetNameOfType(existingType);
             ReadCodeFile.GetCodeInFile(projectPath, mainFolder, subfolder, name, ".g.cs", out string codeBehindPath, out string codeBehind);
             
-            LazinatorConfig config = FindConfigFileStartingFromSubfolder(mainFolder, subfolder, projectPath);
+            LazinatorConfig? config = FindConfigFileStartingFromSubfolder(mainFolder, subfolder, projectPath);
             if (config == null)
                 config = new LazinatorConfig();
             // Note that if there is a config file already for the directory, that will take precedence over any modifications here
             if (modifyDefaultConfig != null)
             {
-                modifyDefaultConfig(config); 
+                config = modifyDefaultConfig(config); 
             }
             // uncomment to include tracing code -- also look at IncludeTracingCode in ObjectDescription.cs and the properties set in the Lazinator project file. 
             //config.IncludeTracingCode = true;
@@ -404,14 +404,14 @@ public class MyOtherClass
                 match.Should().BeTrue();
         }
 
-        private static LazinatorConfig FindConfigFileStartingFromSubfolder(string mainFolder, string subfolder, string projectPath)
+        private static LazinatorConfig? FindConfigFileStartingFromSubfolder(string mainFolder, string subfolder, string projectPath)
         {
             ReadCodeFile.GetCodeInFile(projectPath, mainFolder, subfolder, "LazinatorConfig", ".json", out string configPath, out string configText);
             if (configText == null)
                 ReadCodeFile.GetCodeInFile(projectPath, mainFolder, "/", "LazinatorConfig", ".json", out configPath, out configText);
             if (configText == null)
                 ReadCodeFile.GetCodeInFile(projectPath, "/", "", "LazinatorConfig", ".json", out configPath, out configText);
-            LazinatorConfig config = null;
+            LazinatorConfig? config = null;
             if (configText != null)
                 config = JsonConvert.DeserializeObject<LazinatorConfig>(configText);
             return config;

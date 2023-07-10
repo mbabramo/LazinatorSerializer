@@ -83,8 +83,8 @@ namespace LazinatorAnalyzer.Analyzer
         private readonly INamedTypeSymbol _lazinatorAttributeType;
         private readonly INamedTypeSymbol _lazinatorInterfaceType;
         private readonly string _configPath, _configString;
-        private LazinatorConfig _config;
-        public LazinatorConfig Config => _config;
+        private LazinatorConfig? _config;
+        public LazinatorConfig? Config => _config;
 
         #endregion
 

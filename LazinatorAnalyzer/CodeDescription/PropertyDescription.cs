@@ -308,7 +308,7 @@ namespace Lazinator.CodeDescription
         private bool AllowLazinatorInNonLazinator { get; set; }
 
         /* Output customization */
-        public LazinatorConfig Config => ContainingObjectDescription.Config;
+        public LazinatorConfig? Config => ContainingObjectDescription.Config;
         private string StepThroughPropertiesString => IIF(ContainingObjectDescription.StepThroughProperties, $@"
                         [DebuggerStepThrough]");
         private string ConfirmDirtinessConsistencyCheck => $@"
