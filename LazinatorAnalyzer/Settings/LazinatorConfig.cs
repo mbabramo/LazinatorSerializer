@@ -74,6 +74,9 @@ namespace LazinatorAnalyzer.Settings
         }
 
         public LazinatorConfig WithDefaultAllowRecordLikeReadOnlyStructs(bool value) => new LazinatorConfig(GeneratedCodeFileExtension, UseFullyQualifiedNames, InterchangeConverters, DirectConverters, DefaultAutoChangeParent, DefaultAllowRecordLikeClasses, DefaultAllowRecordLikeRegularStructs, value, IgnoreRecordLikeTypes, IncludeRecordLikeTypes, ConfigFilePath, RelativeGeneratedCodePath, GeneratedCodePath, IncludeTracingCode, StepThroughProperties, ProhibitLazinatorInNonLazinator, HideBackingFields, HideMainProperties, HideILazinatorProperties);
+        public LazinatorConfig WithDefaultAllowRecordLikeStructs(bool value) => new LazinatorConfig(GeneratedCodeFileExtension, UseFullyQualifiedNames, InterchangeConverters, DirectConverters, DefaultAutoChangeParent, DefaultAllowRecordLikeClasses, value, DefaultAllowRecordLikeReadOnlyStructs, IgnoreRecordLikeTypes, IncludeRecordLikeTypes, ConfigFilePath, RelativeGeneratedCodePath, GeneratedCodePath, IncludeTracingCode, StepThroughProperties, ProhibitLazinatorInNonLazinator, HideBackingFields, HideMainProperties, HideILazinatorProperties);
+
+        public LazinatorConfig WithDefaultAllowRecordLikeClasses(bool value) => new LazinatorConfig(GeneratedCodeFileExtension, UseFullyQualifiedNames, InterchangeConverters, DirectConverters, DefaultAutoChangeParent, value, DefaultAllowRecordLikeRegularStructs, DefaultAllowRecordLikeReadOnlyStructs, IgnoreRecordLikeTypes, IncludeRecordLikeTypes, ConfigFilePath, RelativeGeneratedCodePath, GeneratedCodePath, IncludeTracingCode, StepThroughProperties, ProhibitLazinatorInNonLazinator, HideBackingFields, HideMainProperties, HideILazinatorProperties);
 
         public LazinatorConfig(string configPath, string configString)
         {

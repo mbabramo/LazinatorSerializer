@@ -672,7 +672,10 @@ namespace Lazinator.CodeDescription
                     return true;
                 }
             }
-
+            if (t.ToString().Contains("Point"))
+            {
+                var DEBUG3 = -0;
+            }
             return (HandleRecordLikeType(t));
         }
 

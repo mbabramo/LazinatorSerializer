@@ -339,7 +339,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(RegularTuple), "LazinatorTests", "/Examples/", "Tuples/", ws);
             await CompleteGenerateCode(typeof(KeyValuePairTuple), "LazinatorTests", "/Examples/", "Tuples/", ws);
             await CompleteGenerateCode(typeof(NestedTuple), "LazinatorTests", "/Examples/", "Tuples/", ws);
-            await CompleteGenerateCode(typeof(RecordLikeContainer), "LazinatorTests", "/Examples/", "Tuples/", ws);
+            await CompleteGenerateCode(typeof(RecordLikeContainer), "LazinatorTests", "/Examples/", "Tuples/", ws, c => (c ?? new LazinatorConfig()).WithDefaultAllowRecordLikeStructs(true).WithDefaultAllowRecordLikeClasses(true).WithDefaultAllowRecordLikeReadOnlyStructs(true));
             await CompleteGenerateCode(typeof(RecordLikeCollections), "LazinatorTests", "/Examples/", "Tuples/", ws);
             await CompleteGenerateCode(typeof(ClassWithLocalEnum), "LazinatorTests", "/Examples/", "Subclasses/", ws);
             await CompleteGenerateCode(typeof(ClassWithForeignEnum), "LazinatorTests", "/Examples/", "Subclasses/", ws);

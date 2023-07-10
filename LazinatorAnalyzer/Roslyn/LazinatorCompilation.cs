@@ -450,6 +450,10 @@ namespace LazinatorCodeGen.Roslyn
 
         private void ConsiderAddingAsRecordLikeType(INamedTypeSymbol type)
         {
+            if (type.ToString().Contains("Point"))
+            {
+                var DEBUG2 = 0;
+            }
             string typeName = TypeSymbolToString(type);
             if (RecordLikeTypes.ContainsKey(typeName) || RecordLikeTypesExclusions.Contains(typeName))
                 return;
@@ -500,6 +504,10 @@ namespace LazinatorCodeGen.Roslyn
                 List<PropertyWithDefinitionInfo> propertiesToMatchWithConstructor = GetProperties(true);
                 foreach (var candidate in constructorCandidates)
                 {
+                    if (candidate.ToString().Contains("Point"))
+                    {
+                        var DEBUG = 0;
+                    }
                     var parameters = candidate.Parameters.ToList();
                     if (parameters.Count() > propertiesToMatchWithConstructor.Count())
                         continue;
