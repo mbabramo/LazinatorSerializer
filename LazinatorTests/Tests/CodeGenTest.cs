@@ -13,7 +13,7 @@ using Lazinator.Wrappers;
 using Microsoft.CodeAnalysis;
 using System.Threading.Tasks;
 using Lazinator.Collections.Dictionary;
-using LazinatorAnalyzer.Settings;
+using LazinatorGenerator.Settings;
 using LazinatorCodeGen.Roslyn;
 using LazinatorTests.Examples.NonAbstractGenerics;
 using LazinatorTests.Support;

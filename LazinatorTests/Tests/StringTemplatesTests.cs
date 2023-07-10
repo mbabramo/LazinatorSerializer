@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Buffers;
 using System;
 using System.Security.Cryptography.X509Certificates;
-using LazinatorAnalyzer.Support;
+using LazinatorGenerator.Support;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 

@@ -23,8 +23,8 @@
   
   <ItemGroup>
     <AdditionalFiles Include="LazinatorConfig.json" />
-    <ProjectReference Include="..\LazinatorAnalyzer\LazinatorAnalyzer.csproj" />
     <ProjectReference Include="..\Lazinator.Collections\Lazinator.Collections.csproj" />
+    <ProjectReference Include="..\LazinatorGenerator\LazinatorGenerator.csproj" />
     <ProjectReference Include="..\Lazinator\Lazinator.csproj" />
   </ItemGroup>
   
