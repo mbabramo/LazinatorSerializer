@@ -1,4 +1,8 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
+using System.Collections.Immutable;
+using System.Text;
 
 namespace LazinatorGenerator.Generator
 {
@@ -7,6 +11,63 @@ namespace LazinatorGenerator.Generator
     {
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
+            IncrementalValuesProvider<InterfaceDeclarationSyntax> ilazinatorInterfaceDeclarations = context.SyntaxProvider
+                .CreateSyntaxProvider(
+                    predicate: static (s, _) => IsSyntaxTargetForGeneration(s), // select interfaces with attributes
+                    transform: static (ctx, _) => GetSemanticTargetForGeneration(ctx)) // select interfaces with Lazinator attributes
+                .Where(static m => m is not null)!; // filter out attributed enums that we don't care about
+
+            // Combine the selected enums with the `Compilation`
+            IncrementalValueProvider<(Compilation, ImmutableArray<InterfaceDeclarationSyntax>)> compilationAndInterfaceSyntaxes
+                = context.CompilationProvider.Combine(ilazinatorInterfaceDeclarations.Collect());
+
+            // Generate the source using the compilation and enums
+            context.RegisterSourceOutput(compilationAndInterfaceSyntaxes,
+                static (spc, source) => Execute(source.Item1, source.Item2, spc));
         }
+
+        static bool IsSyntaxTargetForGeneration(SyntaxNode node)
+    => node is InterfaceDeclarationSyntax m && m.AttributeLists.Count > 0;
+
+        static InterfaceDeclarationSyntax GetSemanticTargetForGeneration(GeneratorSyntaxContext context)
+        {
+            // we know the node is an InterfaceDeclarationSyntax thanks to IsSyntaxTargetForGeneration
+            var interfaceDeclarationContext = (InterfaceDeclarationSyntax)context.Node;
+
+            // loop through all the attributes on the method
+            foreach (AttributeListSyntax attributeListSyntax in interfaceDeclarationContext.AttributeLists)
+            {
+                foreach (AttributeSyntax attributeSyntax in attributeListSyntax.Attributes)
+                {
+                    if (context.SemanticModel.GetSymbolInfo(attributeSyntax).Symbol is not IMethodSymbol attributeSymbol)
+                    {
+                        // weird, we couldn't get the symbol, ignore it
+                        continue;
+                    }
+
+                    INamedTypeSymbol attributeContainingTypeSymbol = attributeSymbol.ContainingType;
+                    string fullName = attributeContainingTypeSymbol.ToDisplayString();
+
+                    // Is the attribute the [EnumExtensions] attribute?
+                    if (fullName == "Lazinator.Attributes.LazinatorAttribute")
+                    {
+                        // return the context
+                        return interfaceDeclarationContext;
+                    }
+                }
+            }
+
+            // we didn't find the attribute we were looking for
+            return null;
+        }
+
+        static void Execute(Compilation compilation, ImmutableArray<InterfaceDeclarationSyntax> interfaceDeclarations, SourceProductionContext context)
+        {
+            
+            context.AddSource("DEBUG.g.cs", SourceText.From(result, Encoding.UTF8));
+        }
+
     }
+
+    
 }
