@@ -9,8 +9,9 @@ namespace LazinatorGenerator.Generator
     [Generator]
     public class LazinatorSourceGenerator : IIncrementalGenerator
     {
-        public void Initialize(IncrementalGeneratorInitializationContext context)
-        {
+        public void Initialize(IncrementalGeneratorInitializationContext 
+context)
+        { // DEBUG -- change to ForAttributeWithMetadataName -- https://www.thinktecture.com/en/net-core/roslyn-source-generators-high-level-api-forattributewithmetadataname/ and https://github.com/dotnet/roslyn/blob/7d64f6edcc0ee5fe4399a7966e1a6b2bd3ef9005/src/Compilers/Core/Portable/SourceGeneration/Nodes/SyntaxValueProvider_ForAttributeWithMetadataName.cs#L78
             IncrementalValuesProvider<InterfaceDeclarationSyntax> ilazinatorInterfaceDeclarations = context.SyntaxProvider
                 .CreateSyntaxProvider(
                     predicate: static (s, _) => IsSyntaxTargetForGeneration(s), // select interfaces with attributes
@@ -63,8 +64,8 @@ namespace LazinatorGenerator.Generator
 
         static void Execute(Compilation compilation, ImmutableArray<InterfaceDeclarationSyntax> interfaceDeclarations, SourceProductionContext context)
         {
-            
-            context.AddSource("DEBUG.g.cs", SourceText.From(result, Encoding.UTF8));
+            foreach (var interfaceDeclaration in interfaceDeclarations)
+                context.AddSource($"{interfaceDeclaration.Identifier}.g.cs", SourceText.From($"// {interfaceDeclaration.Identifier}", Encoding.UTF8));
         }
 
     }

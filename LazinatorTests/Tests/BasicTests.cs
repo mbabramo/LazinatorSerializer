@@ -35,9 +35,9 @@ namespace LazinatorTests.Tests
             var result = original.CloneLazinatorTyped();
             ExampleEqual(copy, result).Should().BeTrue();
         }
-
+        
         [Fact]
-        public async ValueTask AsynchronousSerializationWorks()
+        public async Task AsynchronousSerializationWorks()
         {
 
             var original = GetTypicalExample();

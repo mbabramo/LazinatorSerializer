@@ -223,18 +223,18 @@ $@"LazinatorTests.Examples.Example
             string result = tree.ToString();
             result.Should().Be(twoLevelExpected);
         }
-
+        
         [Fact]
-        public async ValueTask HierarchyTreeWorksAsync_TwoLevel()
+        public async Task HierarchyTreeWorksAsync_TwoLevel()
         {
             var hierarchy = GetTypicalExample();
             HierarchyTree tree = await HierarchyTree.ConstructAsync(hierarchy);
             string result = tree.ToString();
             result.Should().Be(twoLevelExpected);
         }
-
+        
         [Fact]
-        public async ValueTask EnumerateAllNodesAsyncWorks()
+        public async Task EnumerateAllNodesAsyncWorks()
         {
             var hierarchy = GetTypicalExample();
             var result = hierarchy.EnumerateAllNodes().ToList();
