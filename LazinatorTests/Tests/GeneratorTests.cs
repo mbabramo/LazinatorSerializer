@@ -10,6 +10,7 @@ using VerifyTests;
 using System.Collections.Generic;
 using Lazinator.Attributes;
 using LazinatorTests.Support;
+using System.Linq;
 
 namespace LazinatorTests.Tests
 {
@@ -19,7 +20,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public Task DEBUG()
         {        // The source code to test
-            var source = @"
+            var interfaceSource = @"
 using Lazinator.Attributes;
 
 namespace MyCode
@@ -31,22 +32,37 @@ namespace MyCode
     }
 }";
 
-            // Pass the source code to our helper and snapshot test the output
-            return VerifySourceGenerator(source);
+            var classSource = @"
+using Lazinator.Attributes;
+
+namespace MyCode
+{
+    public partial class MyExample : IMyExample
+    {
+    }
+}";
+
+            var sources = new List<(string filename, string text)>()
+            {
+                ("IMyExample.cs", interfaceSource),
+                ("MyExample.cs", classSource)
+            };
+
+            return VerifySourceGenerator(sources);
         }
 
-        public static Task VerifySourceGenerator(string source)
+        private static Task VerifySourceGenerator(IEnumerable<(string filename, string text)> sources)
         {
             // Parse the provided string into a C# syntax tree
-            SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(source);
+            IEnumerable<SyntaxTree> syntaxTrees = sources.Select(x => CSharpSyntaxTree.ParseText(x.text, path: x.filename)).ToArray();
 
             // Create references for assemblies we required
-            IEnumerable<PortableExecutableReference> references = AdhocWorkspaceManager.GetProjectReferences();
+            IEnumerable <PortableExecutableReference> references = AdhocWorkspaceManager.GetProjectReferences();
 
             // Create a Roslyn compilation for the syntax tree.
             CSharpCompilation compilation = CSharpCompilation.Create(
                 assemblyName: "Tests",
-                syntaxTrees: new[] { syntaxTree },
+                syntaxTrees: syntaxTrees,
                 references: references
                 );
 
