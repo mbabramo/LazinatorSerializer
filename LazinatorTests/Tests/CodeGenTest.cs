@@ -36,6 +36,7 @@ using System.Security.Cryptography.X509Certificates;
 using LazinatorTests.AnotherNamespace;
 using Lazinator.Buffers;
 using Lazinator.Persistence;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace LazinatorTests.Tests
 {
@@ -388,7 +389,7 @@ public class MyOtherClass
             // uncomment to include tracing code -- also look at IncludeTracingCode in ObjectDescription.cs and the properties set in the Lazinator project file. 
             //config.IncludeTracingCode = true;
 
-            var compilation = await AdhocWorkspaceManager.GetCompilation(ws);
+            Compilation compilation = await AdhocWorkspaceManager.GetCompilation(ws);
             LazinatorCompilation lazinatorCompilation = new LazinatorCompilation(compilation, existingType, config);
 
             var d = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, codeBehindPath, true);
