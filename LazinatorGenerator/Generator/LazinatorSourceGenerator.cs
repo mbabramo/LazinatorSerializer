@@ -24,7 +24,7 @@ context)
 
             // Generate the source using the compilation and enums
             context.RegisterSourceOutput(compilationAndInterfaceSyntaxes,
-                static (spc, source) => Execute(source.Item1, source.Item2, spc));
+                static (spc, source) => AddSourceFromInterfaceDeclarations(source.Item1, source.Item2, spc));
         }
 
         static bool IsSyntaxTargetForGeneration(SyntaxNode node)
@@ -42,7 +42,8 @@ context)
                 {
                     if (context.SemanticModel.GetSymbolInfo(attributeSyntax).Symbol is not IMethodSymbol attributeSymbol)
                     {
-                        // weird, we couldn't get the symbol, ignore it
+                        // weird, we couldn't get the symbol, ignore it.
+                        // This could be a result of a failure to add a reference.
                         continue;
                     }
 
@@ -62,7 +63,7 @@ context)
             return null;
         }
 
-        static void Execute(Compilation compilation, ImmutableArray<InterfaceDeclarationSyntax> interfaceDeclarations, SourceProductionContext context)
+        static void AddSourceFromInterfaceDeclarations(Compilation compilation, ImmutableArray<InterfaceDeclarationSyntax> interfaceDeclarations, SourceProductionContext context)
         {
             foreach (var interfaceDeclaration in interfaceDeclarations)
                 context.AddSource($"{interfaceDeclaration.Identifier}.g.cs", SourceText.From($"// {interfaceDeclaration.Identifier}", Encoding.UTF8));

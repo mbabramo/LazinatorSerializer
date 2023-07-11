@@ -76,11 +76,18 @@ namespace LazinatorTests.Support
             project = project.WithDocuments(new DocumentInfo[] { document });
 
             adhocWorkspace.AddProject(project);
-
+            
             return adhocWorkspace;
         }
 
         private static ProjectInfo AddProjectReferences(ProjectInfo project)
+        {
+            List<PortableExecutableReference> references = GetProjectReferences();
+            project = project.WithMetadataReferences(references);
+            return project;
+        }
+
+        public static List<PortableExecutableReference> GetProjectReferences()
         {
             var trustedAssembliesPaths = ((string)AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES")).Split(Path.PathSeparator);
             //var neededAssemblies = new[]
@@ -94,8 +101,7 @@ namespace LazinatorTests.Support
                 // Apparently, we need some other ones. .Where(p => neededAssemblies.Contains(Path.GetFileNameWithoutExtension(p)))
                 .Select(p => MetadataReference.CreateFromFile(p))
                 .ToList();
-            project = project.WithMetadataReferences(references);
-            return project;
+            return references;
         }
     }
 }
