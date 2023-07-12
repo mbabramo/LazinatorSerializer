@@ -391,8 +391,8 @@ public class MyOtherClass
 
             Compilation compilation = await AdhocWorkspaceManager.GetCompilation(ws);
             LazinatorCompilation lazinatorCompilation = new LazinatorCompilation(compilation, existingType, config);
-
-            var d = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, codeBehindPath, true);
+            
+            var d = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, config, true);
             var result = d.GetCodeBehind();
             bool match = codeBehind == result;
 

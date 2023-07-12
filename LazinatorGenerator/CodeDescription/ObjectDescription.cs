@@ -91,7 +91,6 @@ namespace Lazinator.CodeDescription
         public string ProtectedIfApplicable => (ObjectType == LazinatorObjectType.Struct || IsSealed || GeneratingRefStruct) ? "" : "protected ";
 
         /* Names */
-        public string FilePath { get; set; }
         public string Namespace { get; set; }
         public string NameIncludingGenerics { get; set; }
         public string NameIncludingGenerics_RefStruct => IsGeneric ? NameIncludingGenerics.Replace("<", "_RefStruct<") : NameIncludingGenerics + "_RefStruct";
@@ -223,15 +222,14 @@ namespace Lazinator.CodeDescription
 
         }
 
-        public ObjectDescription(INamedTypeSymbol iLazinatorTypeSymbol, LazinatorCompilation compilation, string filePath, bool suppressDate = false)
+        public ObjectDescription(INamedTypeSymbol iLazinatorTypeSymbol, LazinatorCompilation compilation, LazinatorConfig? config, bool suppressDate = false)
         {
             ILazinatorTypeSymbol = iLazinatorTypeSymbol;
             var implementedAttributes = iLazinatorTypeSymbol.GetAttributesIncludingBase<CloneImplementsAttribute>();
             ImplementedMethods = implementedAttributes.SelectMany(x => x.Implemented).ToArray();
             CodeToInsert = iLazinatorTypeSymbol.GetKnownAttribute<CloneInsertCodeAttribute>()?.CodeToInsert;
-            FilePath = filePath;
             Compilation = compilation;
-            Config = compilation.GetConfigForPath(FilePath);
+            Config = config;
             SuppressDate = suppressDate;
             Accessibility = compilation.ImplementingTypeAccessibility;
             Namespace = iLazinatorTypeSymbol.GetFullNamespace();
@@ -261,11 +259,11 @@ namespace Lazinator.CodeDescription
 
                 ClosesGeneric = (!SymbolEqualityComparer.Default.Equals(baseILazinatorType.ConstructedFrom, baseILazinatorType));
                 if (ClosesGeneric)
-                    ClosedGenericConstructedFrom = new ObjectDescription(baseILazinatorType.ConstructedFrom, compilation, baseILazinatorType.ConstructedFrom.Locations.Select(x => x?.SourceTree?.FilePath).FirstOrDefault());
+                    ClosedGenericConstructedFrom = new ObjectDescription(baseILazinatorType.ConstructedFrom, compilation, Config);
 
                 if (baseILazinatorType != null && baseILazinatorType.Name != "Object")
                 {
-                    BaseLazinatorObject = new ObjectDescription(baseILazinatorType, compilation, baseILazinatorType.Locations.Select(x => x?.SourceTree?.FilePath).FirstOrDefault());
+                    BaseLazinatorObject = new ObjectDescription(baseILazinatorType, compilation, Config);
                     if (BaseLazinatorObject.IsNonLazinatorBaseClass)
                         BaseLazinatorObject = null; // ignore base non-lazinator
                 }

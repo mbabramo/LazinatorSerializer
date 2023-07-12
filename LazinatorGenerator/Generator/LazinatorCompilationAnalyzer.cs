@@ -12,6 +12,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
+using System.Diagnostics;
 
 namespace LazinatorGenerator.Generator
 {
@@ -23,7 +24,7 @@ namespace LazinatorGenerator.Generator
 
         public const string LazinatorAttributeName = "Lazinator.Attributes.LazinatorAttribute";
         public const string LazinatorInterfaceName = "Lazinator.Core.ILazinator";
-
+        
         public static LazinatorCompilationAnalyzer CreateCompilationAnalyzer(Compilation compilation,
             CancellationToken cancellationToken, ImmutableArray<AdditionalText> additionalFiles)
         {
@@ -40,7 +41,7 @@ namespace LazinatorGenerator.Generator
             {
                 return null;
             }
-
+            
             (string configPath, string configString) = LazinatorConfigLoader.GetConfigPathAndText(additionalFiles, cancellationToken);
             LazinatorConfig config = new LazinatorConfig(configPath, configString);
 
@@ -50,8 +51,7 @@ namespace LazinatorGenerator.Generator
             return analyzer;
         }
 
-        public static async Task<LazinatorCompilationAnalyzer> CreateCompilationAnalyzer(Compilation compilation,
-            CancellationToken cancellationToken, ImmutableArray<TextDocument> additionalFiles)
+        public static LazinatorCompilationAnalyzer CreateCompilationAnalyzer_WithoutConfig(Compilation compilation)
         {
             // Check if the attribute type LazinatorAttribute is defined.
             INamedTypeSymbol lazinatorAttributeType = compilation.GetTypeByMetadataName(LazinatorAttributeName);
@@ -66,14 +66,11 @@ namespace LazinatorGenerator.Generator
             {
                 return null;
             }
-
-            (string configPath, string configString) = await LazinatorConfigLoader.GetConfigPathAndText(additionalFiles, cancellationToken);
-            LazinatorConfig config = new LazinatorConfig(configPath, configString);
-
-            // Initialize state in the start action.
-            var analyzer = new LazinatorCompilationAnalyzer(lazinatorAttributeType, lazinatorInterfaceType, configPath, configString, config);
+            
+            var analyzer = new LazinatorCompilationAnalyzer(lazinatorAttributeType, lazinatorInterfaceType, null, null, new LazinatorConfig());
 
             return analyzer;
+
         }
 
         #endregion
@@ -178,7 +175,7 @@ namespace LazinatorGenerator.Generator
             }
         }
 
-        private LazinatorPairInformation GetLazinatorPairInfo(Compilation compilation, INamedTypeSymbol namedType)
+        internal LazinatorPairInformation GetLazinatorPairInfo(Compilation compilation, INamedTypeSymbol namedType)
         {
             INamedTypeSymbol lazinatorObjectType;
             INamedTypeSymbol namedInterfaceType;

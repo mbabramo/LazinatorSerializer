@@ -28,11 +28,11 @@ namespace LazinatorGenerator.Settings
                 if (file == null)
                     return (null, null);
             }
-
+            
             return GetTextAndPathFromAdditionalText(file, cancellationToken);
         }
 
-        private static (string path, string text) GetTextAndPathFromAdditionalText(AdditionalText file, CancellationToken cancellationToken)
+        public static (string path, string text) GetTextAndPathFromAdditionalText(AdditionalText file, CancellationToken cancellationToken)
         {
             var fileText = file.GetText();
 

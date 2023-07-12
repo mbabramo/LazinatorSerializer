@@ -68,7 +68,7 @@ namespace MyCode
 
 
             // Create an instance of our incremental source generator
-            var generator = new LazinatorSourceGenerator();
+            var generator = new LazinatorIncrementalGenerator();
 
             // The GeneratorDriver is used to run our generator against a compilation
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);

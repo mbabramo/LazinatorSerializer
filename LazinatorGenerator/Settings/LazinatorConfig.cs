@@ -39,6 +39,7 @@ namespace LazinatorGenerator.Settings
         public readonly bool HideBackingFields;
         public readonly bool HideMainProperties;
         public readonly bool HideILazinatorProperties;
+        private readonly int CachedHashCode;
 
         public LazinatorConfig() 
         {
@@ -48,6 +49,7 @@ namespace LazinatorGenerator.Settings
             DefaultAllowRecordLikeReadOnlyStructs = true;
             HideBackingFields = true;
             HideILazinatorProperties = true;
+            CachedHashCode = 1;
         }
 
         public LazinatorConfig(string GeneratedCodeFileExtension, bool UseFullyQualifiedNames, Dictionary<string, string> InterchangeConverters, Dictionary<string, string> DirectConverters, bool DefaultAutoChangeParent, bool DefaultAllowRecordLikeClasses, bool DefaultAllowRecordLikeRegularStructs, bool DefaultAllowRecordLikeReadOnlyStructs, List<string> IgnoreRecordLikeTypes, List<string> IncludeRecordLikeTypes, string ConfigFilePath, string RelativeGeneratedCodePath, string GeneratedCodePath, bool IncludeTracingCode, bool StepThroughProperties, bool ProhibitLazinatorInNonLazinator, bool HideBackingFields, bool HideMainProperties, bool HideILazinatorProperties)
@@ -71,6 +73,7 @@ namespace LazinatorGenerator.Settings
             this.HideBackingFields = HideBackingFields;
             this.HideMainProperties = HideMainProperties;
             this.HideILazinatorProperties = HideILazinatorProperties;
+            CachedHashCode = (GeneratedCodeFileExtension, UseFullyQualifiedNames, InterchangeConverters, DirectConverters, DefaultAutoChangeParent, DefaultAllowRecordLikeClasses, DefaultAllowRecordLikeRegularStructs, DefaultAllowRecordLikeReadOnlyStructs, IgnoreRecordLikeTypes, IncludeRecordLikeTypes, ConfigFilePath, RelativeGeneratedCodePath, GeneratedCodePath, IncludeTracingCode, StepThroughProperties, ProhibitLazinatorInNonLazinator, HideBackingFields, HideMainProperties, HideILazinatorProperties).GetHashCode();
         }
 
         public LazinatorConfig WithDefaultAllowRecordLikeReadOnlyStructs(bool value) => new LazinatorConfig(GeneratedCodeFileExtension, UseFullyQualifiedNames, InterchangeConverters, DirectConverters, DefaultAutoChangeParent, DefaultAllowRecordLikeClasses, DefaultAllowRecordLikeRegularStructs, value, IgnoreRecordLikeTypes, IncludeRecordLikeTypes, ConfigFilePath, RelativeGeneratedCodePath, GeneratedCodePath, IncludeTracingCode, StepThroughProperties, ProhibitLazinatorInNonLazinator, HideBackingFields, HideMainProperties, HideILazinatorProperties);
@@ -80,6 +83,7 @@ namespace LazinatorGenerator.Settings
 
         public LazinatorConfig(string configPath, string configString)
         {
+            CachedHashCode = (configPath, configString).GetHashCode();
             InterchangeConverters = new Dictionary<string, string>(); // default
             DirectConverters = new Dictionary<string, string>();
             IgnoreRecordLikeTypes = new List<string>();
@@ -109,6 +113,7 @@ namespace LazinatorGenerator.Settings
                     ConfigFilePath = configPath?.Replace("\\LazinatorConfig.json", "");
                     if (ConfigFilePath != null)
                     {
+                        ConfigFilePath = ConfigFilePath.TrimEnd(Path.DirectorySeparatorChar); // normalize
                         RelativeGeneratedCodePath = json[RelativeGeneratedCodePathString];
                         if (RelativeGeneratedCodePath == null)
                             RelativeGeneratedCodePath = "LazinatorCode"; // needed for test project
@@ -164,6 +169,12 @@ namespace LazinatorGenerator.Settings
             if (DirectConverters.ContainsKey(name))
                 return DirectConverters[name];
             return null;
+        }
+
+        public override int GetHashCode()
+        {
+            // We're using a cached hash code so that we don't need to redo a cache calculation every time this config is hashed in source generation.
+            return CachedHashCode;
         }
     }
 }
