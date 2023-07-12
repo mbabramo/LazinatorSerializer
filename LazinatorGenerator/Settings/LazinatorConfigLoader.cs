@@ -11,8 +11,8 @@ namespace LazinatorGenerator.Settings
 {
     public static class LazinatorConfigLoader
     {
-        private const string ConfigFileName = "LazinatorConfig.json";
-        private const string AltConfigFileName = "Lazinatorconfig.json";
+        public const string ConfigFileName = "LazinatorConfig.json";
+        public const string AltConfigFileName = "Lazinatorconfig.json";
 
         // The following two methods are essentially the same, but one works with files of type AdditionalText (available from the analyzer) and one works with files of type TextDocument (available directly from the project). Repeating the code is simpler than creating a common interface type and converting.
 
@@ -29,6 +29,11 @@ namespace LazinatorGenerator.Settings
                     return (null, null);
             }
 
+            return GetTextAndPathFromAdditionalText(file, cancellationToken);
+        }
+
+        private static (string path, string text) GetTextAndPathFromAdditionalText(AdditionalText file, CancellationToken cancellationToken)
+        {
             var fileText = file.GetText();
 
             using (var stream = new MemoryStream())
