@@ -23,13 +23,14 @@ namespace LazinatorGenerator.Generator
             Config = config;
         }
         
-        internal string GenerateSource(SourceProductionContext spc)
+        internal void GenerateSource(SourceProductionContext spc)
         {
             LazinatorPairInformation pairInfo = GetLazinatorPairInformation();
             var x = pairInfo;
             LazinatorCompilation lazinatorCompilation = new LazinatorCompilation(Compilation, pairInfo.LazinatorObject, Config);
             var d = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, Config, true);
-            return d.GetCodeBehind();
+            var resultingSource = d.GetCodeBehind();
+            spc.AddSource(d.ObjectNameEncodable + Config.GeneratedCodeFileExtension, resultingSource);
         }
 
         private LazinatorPairInformation GetLazinatorPairInformation()
