@@ -26,11 +26,13 @@ namespace LazinatorGenerator.Generator
         internal void GenerateSource(SourceProductionContext spc)
         {
             LazinatorPairInformation pairInfo = GetLazinatorPairInformation();
-            var x = pairInfo;
-            LazinatorCompilation lazinatorCompilation = new LazinatorCompilation(Compilation, pairInfo.LazinatorObject, Config);
-            var d = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, Config, true);
-            var resultingSource = d.GetCodeBehind();
-            spc.AddSource(d.ObjectNameEncodable + Config.GeneratedCodeFileExtension, resultingSource);
+            if (pairInfo != null)
+            {
+                LazinatorCompilation lazinatorCompilation = new LazinatorCompilation(Compilation, pairInfo.LazinatorObject, Config);
+                var d = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, Config, true);
+                var resultingSource = d.GetCodeBehind();
+                spc.AddSource(d.ObjectNameEncodable + Config.GeneratedCodeFileExtension, resultingSource);
+            }
         }
 
         private LazinatorPairInformation GetLazinatorPairInformation()
