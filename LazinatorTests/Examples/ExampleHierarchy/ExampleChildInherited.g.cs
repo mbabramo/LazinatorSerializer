@@ -37,14 +37,16 @@ namespace LazinatorTests.Examples
         protected override int _OverallEndByteIndex => _ExampleChildInherited_EndByteIndex;
         
         
-        protected int _MyInt;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected int _MyInt;
         public int MyInt
         {
+            [DebuggerStepThrough]
             get
             {
                 return _MyInt;
             }
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -52,10 +54,11 @@ namespace LazinatorTests.Examples
             }
         }
         
-        protected ExampleGrandchild _MyGrandchildInInherited;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected ExampleGrandchild _MyGrandchildInInherited;
         public ExampleGrandchild MyGrandchildInInherited
         {
+            [DebuggerStepThrough]
             get
             {
                 if (!_MyGrandchildInInherited_Accessed)
@@ -64,6 +67,7 @@ namespace LazinatorTests.Examples
                 } 
                 return _MyGrandchildInInherited;
             }
+            [DebuggerStepThrough]
             set
             {
                 if (_MyGrandchildInInherited != null)
@@ -81,6 +85,7 @@ namespace LazinatorTests.Examples
                 _MyGrandchildInInherited_Accessed = true;
             }
         }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _MyGrandchildInInherited_Accessed;
         private void LazinateMyGrandchildInInherited()
         {
@@ -215,12 +220,16 @@ namespace LazinatorTests.Examples
         
         /* Conversion */
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorUniqueID => 1014;
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override bool ContainsOpenGenericParameters => false;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override LazinatorGenericIDType LazinatorGenericID => default;
         
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorObjectVersion { get; set; } = 0;
         
         

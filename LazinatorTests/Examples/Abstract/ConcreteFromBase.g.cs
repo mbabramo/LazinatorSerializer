@@ -33,14 +33,16 @@ namespace LazinatorTests.Examples.Abstract
         
         
         
-        protected int _IntInConcreteFromBase;
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        protected int _IntInConcreteFromBase;
         public int IntInConcreteFromBase
         {
+            [DebuggerStepThrough]
             get
             {
                 return _IntInConcreteFromBase;
             }
+            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -127,12 +129,16 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Conversion */
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorUniqueID => 1074;
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override bool ContainsOpenGenericParameters => false;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override LazinatorGenericIDType LazinatorGenericID => default;
         
         
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorObjectVersion { get; set; } = 0;
         
         

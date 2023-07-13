@@ -36,7 +36,7 @@ namespace LazinatorGenerator.Settings
         public readonly string RelativeGeneratedCodePath, GeneratedCodePath;
         public readonly bool IncludeTracingCode, StepThroughProperties;
         public readonly bool ProhibitLazinatorInNonLazinator;
-        public readonly bool HideBackingFields;
+        public readonly bool HideBackingFields = true;
         public readonly bool HideMainProperties;
         public readonly bool HideILazinatorProperties;
         private readonly int CachedHashCode;
@@ -47,7 +47,6 @@ namespace LazinatorGenerator.Settings
             GeneratedCodeFileExtension = ".laz.cs";
             DefaultAutoChangeParent = true;
             DefaultAllowRecordLikeReadOnlyStructs = true;
-            HideBackingFields = true;
             HideILazinatorProperties = true;
             CachedHashCode = 1;
         }
