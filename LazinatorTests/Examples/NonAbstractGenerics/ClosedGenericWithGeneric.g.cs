@@ -34,16 +34,14 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected int _AnotherPropertyAddedHereToo;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public int AnotherPropertyAddedHereToo
         {
-            [DebuggerStepThrough]
             get
             {
                 return _AnotherPropertyAddedHereToo;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -130,16 +128,12 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
         /* Conversion */
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorUniqueID => 1077;
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override bool ContainsOpenGenericParameters => false;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override LazinatorGenericIDType LazinatorGenericID => default;
         
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorObjectVersion { get; set; } = 0;
         
         

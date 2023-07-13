@@ -35,16 +35,16 @@ namespace LazinatorTests.Examples.Abstract
         protected virtual int _IntList4_ByteLength { get; }
         
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _String4_Accessed = false;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public abstract string String4
         {
             get;
             set;
         }
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _IntList4_Accessed = false;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public abstract List<Int32> IntList4
         {
             get;

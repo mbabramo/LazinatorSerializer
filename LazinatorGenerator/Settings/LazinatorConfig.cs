@@ -6,7 +6,7 @@ using LightJson;
 
 namespace LazinatorGenerator.Settings
 {
-    public readonly struct LazinatorConfig
+    public struct LazinatorConfig // note: this can't be readyonly or Json serialization won't work
     {
         private const string RelativeGeneratedCodePathString = "RelativeGeneratedCodePath";
         private const string GeneratedCodeFileExtensionString = "GeneratedCodeFileExtension";
@@ -25,33 +25,28 @@ namespace LazinatorGenerator.Settings
         private const string HideBackingFieldsString = "HideBackingFields";
         private const string HideMainPropertiesString = "HideMainProperties";
         private const string HideILazinatorPropertiesString = "HideILazinatorProperties";
-        public readonly string GeneratedCodeFileExtension;
-        public readonly bool UseFullyQualifiedNames;
-        public readonly Dictionary<string, string> InterchangeConverters = new Dictionary<string, string>();
-        public readonly Dictionary<string, string> DirectConverters = new Dictionary<string, string>();
-        public readonly bool DefaultAutoChangeParent, DefaultAllowRecordLikeClasses, DefaultAllowRecordLikeRegularStructs, DefaultAllowRecordLikeReadOnlyStructs; // only read only structs allowed by default
-        public readonly List<string> IgnoreRecordLikeTypes = new List<string>();
-        public readonly List<string> IncludeRecordLikeTypes = new List<string>();
-        public readonly string ConfigFilePath;
-        public readonly string RelativeGeneratedCodePath, GeneratedCodePath;
-        public readonly bool IncludeTracingCode, StepThroughProperties;
-        public readonly bool ProhibitLazinatorInNonLazinator;
-        public readonly bool HideBackingFields = true;
-        public readonly bool HideMainProperties;
-        public readonly bool HideILazinatorProperties;
-        private readonly int CachedHashCode;
+        public string GeneratedCodeFileExtension;
+        public bool UseFullyQualifiedNames;
+        public Dictionary<string, string> InterchangeConverters = new Dictionary<string, string>();
+        public Dictionary<string, string> DirectConverters = new Dictionary<string, string>();
+        public bool DefaultAutoChangeParent, DefaultAllowRecordLikeClasses, DefaultAllowRecordLikeRegularStructs, DefaultAllowRecordLikeReadOnlyStructs; // only read only structs allowed by default
+        public List<string> IgnoreRecordLikeTypes = new List<string>();
+        public List<string> IncludeRecordLikeTypes = new List<string>();
+        public string ConfigFilePath;
+        public string RelativeGeneratedCodePath, GeneratedCodePath;
+        public bool IncludeTracingCode, StepThroughProperties;
+        public bool ProhibitLazinatorInNonLazinator;
+        public bool HideBackingFields;
+        public bool HideMainProperties;
+        public bool HideILazinatorProperties;
+        private int CachedHashCode;
 
-        public LazinatorConfig() 
+        public LazinatorConfig() : this(UseFullyQualifiedNames: false) // use defaults in next constructor
         {
-            StepThroughProperties = true;
-            GeneratedCodeFileExtension = ".laz.cs";
-            DefaultAutoChangeParent = true;
-            DefaultAllowRecordLikeReadOnlyStructs = true;
-            HideILazinatorProperties = true;
-            CachedHashCode = 1;
+            
         }
 
-        public LazinatorConfig(string GeneratedCodeFileExtension, bool UseFullyQualifiedNames, Dictionary<string, string> InterchangeConverters, Dictionary<string, string> DirectConverters, bool DefaultAutoChangeParent, bool DefaultAllowRecordLikeClasses, bool DefaultAllowRecordLikeRegularStructs, bool DefaultAllowRecordLikeReadOnlyStructs, List<string> IgnoreRecordLikeTypes, List<string> IncludeRecordLikeTypes, string ConfigFilePath, string RelativeGeneratedCodePath, string GeneratedCodePath, bool IncludeTracingCode, bool StepThroughProperties, bool ProhibitLazinatorInNonLazinator, bool HideBackingFields, bool HideMainProperties, bool HideILazinatorProperties)
+        public LazinatorConfig(string GeneratedCodeFileExtension = ".laz.cs", bool UseFullyQualifiedNames = false, Dictionary<string, string> InterchangeConverters = null, Dictionary<string, string> DirectConverters = null, bool DefaultAutoChangeParent = true, bool DefaultAllowRecordLikeClasses = false, bool DefaultAllowRecordLikeRegularStructs = false, bool DefaultAllowRecordLikeReadOnlyStructs = true, List<string> IgnoreRecordLikeTypes = null, List<string> IncludeRecordLikeTypes = null, string ConfigFilePath = null, string RelativeGeneratedCodePath = null, string GeneratedCodePath = null, bool IncludeTracingCode = false, bool StepThroughProperties = true, bool ProhibitLazinatorInNonLazinator = false, bool HideBackingFields = true, bool HideMainProperties = false, bool HideILazinatorProperties = true)
         {
             this.GeneratedCodeFileExtension = GeneratedCodeFileExtension;
             this.UseFullyQualifiedNames = UseFullyQualifiedNames;
@@ -157,7 +152,7 @@ namespace LazinatorGenerator.Settings
         public string GetInterchangeConverterTypeName(INamedTypeSymbol type)
         {
             string name = UseFullyQualifiedNames ? type.GetFullNamespacePlusSimpleName() : type.GetMinimallyQualifiedName(false);
-            if (InterchangeConverters.ContainsKey(name))
+            if (InterchangeConverters != null && InterchangeConverters.ContainsKey(name))
                 return InterchangeConverters[name];
             return null;
         }
@@ -165,7 +160,7 @@ namespace LazinatorGenerator.Settings
         public string GetDirectConverterTypeName(INamedTypeSymbol type)
         {
             string name = UseFullyQualifiedNames ? type.GetFullNamespacePlusSimpleName() : type.GetMinimallyQualifiedName(false);
-            if (DirectConverters.ContainsKey(name))
+            if (DirectConverters != null && DirectConverters.ContainsKey(name))
                 return DirectConverters[name];
             return null;
         }

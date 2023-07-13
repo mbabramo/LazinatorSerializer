@@ -34,16 +34,14 @@ namespace LazinatorTests.Examples
         
         
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected string _MyListName;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public string MyListName
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyListName;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -113,16 +111,12 @@ namespace LazinatorTests.Examples
         
         /* Conversion */
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorUniqueID => 1003;
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override bool ContainsOpenGenericParameters => true;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<DerivedLazinatorList<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(1003, new Type[] { typeof(T) }));
         
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorObjectVersion { get; set; } = 0;
         
         

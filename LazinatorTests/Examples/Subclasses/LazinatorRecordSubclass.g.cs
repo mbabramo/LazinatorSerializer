@@ -33,16 +33,14 @@ namespace LazinatorTests.Examples.Subclasses
         
         
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected int _MySubclassInt;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public int MySubclassInt
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MySubclassInt;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -129,16 +127,12 @@ namespace LazinatorTests.Examples.Subclasses
         
         /* Conversion */
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorUniqueID => 1091;
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override bool ContainsOpenGenericParameters => false;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override LazinatorGenericIDType LazinatorGenericID => default;
         
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorObjectVersion { get; set; } = 0;
         
         

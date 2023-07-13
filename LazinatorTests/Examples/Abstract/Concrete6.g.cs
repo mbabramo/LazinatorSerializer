@@ -37,11 +37,10 @@ namespace LazinatorTests.Examples.Abstract
         protected override int _OverallEndByteIndex => _Concrete6_EndByteIndex;
         
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected List<Int32> _IntList6;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public List<Int32> IntList6
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_IntList6_Accessed)
@@ -51,7 +50,6 @@ namespace LazinatorTests.Examples.Abstract
                 IsDirty = true; 
                 return _IntList6;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -60,7 +58,6 @@ namespace LazinatorTests.Examples.Abstract
                 _IntList6_Accessed = true;
             }
         }
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _IntList6_Accessed;
         private void LazinateIntList6()
         {
@@ -160,16 +157,12 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Conversion */
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorUniqueID => 1049;
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override bool ContainsOpenGenericParameters => false;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override LazinatorGenericIDType LazinatorGenericID => default;
         
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorObjectVersion { get; set; } = 0;
         
         

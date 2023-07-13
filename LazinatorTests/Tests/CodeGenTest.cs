@@ -414,7 +414,7 @@ public class MyOtherClass
                 ReadCodeFile.GetCodeInFile(projectPath, "/", "", "LazinatorConfig", ".json", out configPath, out configText);
             LazinatorConfig? config = null;
             if (configText != null)
-                config = JsonConvert.DeserializeObject<LazinatorConfig>(configText);
+                config = new LazinatorConfig(projectPath, configText);
             return config;
         }
 

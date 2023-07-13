@@ -36,16 +36,14 @@ namespace LazinatorTests.Examples.Abstract
         protected virtual int _OverallEndByteIndex => _DerivedGeneric2c_T_EndByteIndex;
         
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected global::LazinatorTests.Examples.Abstract.AbstractGeneric1<T>.EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override global::LazinatorTests.Examples.Abstract.AbstractGeneric1<T>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyEnumWithinAbstractGeneric;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -53,16 +51,14 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected global::LazinatorTests.Examples.Abstract.AbstractGeneric1<global::System.Int32>.EnumWithinAbstractGeneric _MyEnumWithinAbstractGeneric2;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override global::LazinatorTests.Examples.Abstract.AbstractGeneric1<global::System.Int32>.EnumWithinAbstractGeneric MyEnumWithinAbstractGeneric2
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyEnumWithinAbstractGeneric2;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -70,16 +66,14 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected int _MyUnofficialInt;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int MyUnofficialInt
         {
-            [DebuggerStepThrough]
             get
             {
                 return _MyUnofficialInt;
             }
-            [DebuggerStepThrough]
             set
             {
                 IsDirty = true;
@@ -87,11 +81,10 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected T _MyT;
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override T MyT
         {
-            [DebuggerStepThrough]
             get
             {
                 if (!_MyT_Accessed)
@@ -100,7 +93,6 @@ namespace LazinatorTests.Examples.Abstract
                 } 
                 return _MyT;
             }
-            [DebuggerStepThrough]
             set
             {
                 if (value != null && value.IsStruct)
@@ -164,25 +156,19 @@ namespace LazinatorTests.Examples.Abstract
             DescendantHasChanged = false;
         }
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override LazinatorParentsCollection LazinatorParents { get; set; }
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override LazinatorMemory LazinatorMemoryStorage
         {
             get;
             set;
         }
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override IncludeChildrenMode OriginalIncludeChildrenMode { get; set; }
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override bool HasChanged { get; set; }
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _IsDirty;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override bool IsDirty
         {
             [DebuggerStepThrough]
@@ -202,9 +188,7 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _DescendantHasChanged;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override bool DescendantHasChanged
         {
             [DebuggerStepThrough]
@@ -216,9 +200,7 @@ namespace LazinatorTests.Examples.Abstract
             }
         }
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected bool _DescendantIsDirty;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override bool DescendantIsDirty
         {
             [DebuggerStepThrough]
@@ -435,16 +417,12 @@ namespace LazinatorTests.Examples.Abstract
         
         /* Conversion */
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorUniqueID => 1064;
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         protected override bool ContainsOpenGenericParameters => true;
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override LazinatorGenericIDType LazinatorGenericID => LazinatorGenericIDType.GetCachedForType<DerivedGeneric2c<T>>(() => DeserializationFactory.Instance.GetUniqueIDListForGenericType(1064, new Type[] { typeof(T) }));
         
         
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         public override int LazinatorObjectVersion { get; set; } = 0;
         
         
