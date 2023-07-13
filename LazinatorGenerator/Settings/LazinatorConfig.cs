@@ -6,7 +6,7 @@ using LightJson;
 
 namespace LazinatorGenerator.Settings
 {
-    public struct LazinatorConfig // note: this can't be readyonly or Json serialization won't work
+    public readonly struct LazinatorConfig // note: this can't be readyonly or Json serialization won't work
     {
         private const string RelativeGeneratedCodePathString = "RelativeGeneratedCodePath";
         private const string GeneratedCodeFileExtensionString = "GeneratedCodeFileExtension";
@@ -25,21 +25,21 @@ namespace LazinatorGenerator.Settings
         private const string HideBackingFieldsString = "HideBackingFields";
         private const string HideMainPropertiesString = "HideMainProperties";
         private const string HideILazinatorPropertiesString = "HideILazinatorProperties";
-        public string GeneratedCodeFileExtension;
-        public bool UseFullyQualifiedNames;
-        public Dictionary<string, string> InterchangeConverters = new Dictionary<string, string>();
-        public Dictionary<string, string> DirectConverters = new Dictionary<string, string>();
-        public bool DefaultAutoChangeParent, DefaultAllowRecordLikeClasses, DefaultAllowRecordLikeRegularStructs, DefaultAllowRecordLikeReadOnlyStructs; // only read only structs allowed by default
-        public List<string> IgnoreRecordLikeTypes = new List<string>();
-        public List<string> IncludeRecordLikeTypes = new List<string>();
-        public string ConfigFilePath;
-        public string RelativeGeneratedCodePath, GeneratedCodePath;
-        public bool IncludeTracingCode, StepThroughProperties;
-        public bool ProhibitLazinatorInNonLazinator;
-        public bool HideBackingFields;
-        public bool HideMainProperties;
-        public bool HideILazinatorProperties;
-        private int CachedHashCode;
+        public readonly string GeneratedCodeFileExtension;
+        public readonly bool UseFullyQualifiedNames;
+        public readonly Dictionary<string, string> InterchangeConverters = new Dictionary<string, string>();
+        public readonly Dictionary<string, string> DirectConverters = new Dictionary<string, string>();
+        public readonly bool DefaultAutoChangeParent, DefaultAllowRecordLikeClasses, DefaultAllowRecordLikeRegularStructs, DefaultAllowRecordLikeReadOnlyStructs; // only read only structs allowed by default
+        public readonly List<string> IgnoreRecordLikeTypes = new List<string>();
+        public readonly List<string> IncludeRecordLikeTypes = new List<string>();
+        public readonly string ConfigFilePath;
+        public readonly string RelativeGeneratedCodePath, GeneratedCodePath;
+        public readonly bool IncludeTracingCode, StepThroughProperties;
+        public readonly bool ProhibitLazinatorInNonLazinator;
+        public readonly bool HideBackingFields;
+        public readonly bool HideMainProperties;
+        public readonly bool HideILazinatorProperties;
+        private readonly int CachedHashCode;
 
         public LazinatorConfig() : this(UseFullyQualifiedNames: false) // use defaults in next constructor
         {
