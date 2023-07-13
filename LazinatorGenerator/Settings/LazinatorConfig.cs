@@ -117,7 +117,6 @@ namespace LazinatorGenerator.Settings
                             GeneratedCodePath = null;
                         else
                             GeneratedCodePath = ConfigFilePath + "\\" + RelativeGeneratedCodePath;
-                        System.IO.Directory.CreateDirectory(GeneratedCodePath); // create if it doesn't exist
                     }
                 }
                 catch
