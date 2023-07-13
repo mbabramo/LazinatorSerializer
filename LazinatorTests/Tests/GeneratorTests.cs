@@ -14,6 +14,7 @@ using System.Linq;
 using FluentAssertions;
 using System.IO;
 using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Resources;
+using System;
 
 namespace LazinatorTests.Tests
 {
@@ -84,11 +85,19 @@ namespace MyCode
             {
                 outputsOrdered[i].text.Should().Be(originalsOrdered[i].Text);
             }
-            
+
             // DEBUG TODO2 -- should also do other projects besides Lazinator.Collections.
+            throw new System.Exception("DEBUG TODO2");
 
             return Task.CompletedTask;
         }
+        
+        [Fact]
+        public Task SourceGeneratorProvidesDiagnostics()
+        {
+            throw new NotImplementedException();
+        }
+        
         
         private static IEnumerable<(string Path, string Text)> GetAllCsFiles(string rootFolderPath)
         {

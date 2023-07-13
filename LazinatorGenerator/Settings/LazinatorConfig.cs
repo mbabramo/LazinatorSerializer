@@ -39,6 +39,7 @@ namespace LazinatorGenerator.Settings
         public readonly bool HideBackingFields;
         public readonly bool HideMainProperties;
         public readonly bool HideILazinatorProperties;
+        public readonly string Comment;
         private readonly int CachedHashCode;
 
         public LazinatorConfig() : this(UseFullyQualifiedNames: false) // use defaults in next constructor
@@ -46,7 +47,7 @@ namespace LazinatorGenerator.Settings
             
         }
 
-        public LazinatorConfig(string GeneratedCodeFileExtension = ".laz.cs", bool UseFullyQualifiedNames = false, Dictionary<string, string> InterchangeConverters = null, Dictionary<string, string> DirectConverters = null, bool DefaultAutoChangeParent = true, bool DefaultAllowRecordLikeClasses = false, bool DefaultAllowRecordLikeRegularStructs = false, bool DefaultAllowRecordLikeReadOnlyStructs = true, List<string> IgnoreRecordLikeTypes = null, List<string> IncludeRecordLikeTypes = null, string ConfigFilePath = null, string RelativeGeneratedCodePath = null, string GeneratedCodePath = null, bool IncludeTracingCode = false, bool StepThroughProperties = true, bool ProhibitLazinatorInNonLazinator = false, bool HideBackingFields = true, bool HideMainProperties = false, bool HideILazinatorProperties = true)
+        public LazinatorConfig(string GeneratedCodeFileExtension = ".laz.cs", bool UseFullyQualifiedNames = false, Dictionary<string, string> InterchangeConverters = null, Dictionary<string, string> DirectConverters = null, bool DefaultAutoChangeParent = true, bool DefaultAllowRecordLikeClasses = false, bool DefaultAllowRecordLikeRegularStructs = false, bool DefaultAllowRecordLikeReadOnlyStructs = true, List<string> IgnoreRecordLikeTypes = null, List<string> IncludeRecordLikeTypes = null, string ConfigFilePath = null, string RelativeGeneratedCodePath = null, string GeneratedCodePath = null, bool IncludeTracingCode = false, bool StepThroughProperties = true, bool ProhibitLazinatorInNonLazinator = false, bool HideBackingFields = true, bool HideMainProperties = false, bool HideILazinatorProperties = true, string Comment = null)
         {
             this.GeneratedCodeFileExtension = GeneratedCodeFileExtension;
             this.UseFullyQualifiedNames = UseFullyQualifiedNames;
@@ -67,7 +68,8 @@ namespace LazinatorGenerator.Settings
             this.HideBackingFields = HideBackingFields;
             this.HideMainProperties = HideMainProperties;
             this.HideILazinatorProperties = HideILazinatorProperties;
-            CachedHashCode = (GeneratedCodeFileExtension, UseFullyQualifiedNames, InterchangeConverters, DirectConverters, DefaultAutoChangeParent, DefaultAllowRecordLikeClasses, DefaultAllowRecordLikeRegularStructs, DefaultAllowRecordLikeReadOnlyStructs, IgnoreRecordLikeTypes, IncludeRecordLikeTypes, ConfigFilePath, RelativeGeneratedCodePath, GeneratedCodePath, IncludeTracingCode, StepThroughProperties, ProhibitLazinatorInNonLazinator, HideBackingFields, HideMainProperties, HideILazinatorProperties).GetHashCode();
+            this.Comment = Comment;
+            CachedHashCode = (GeneratedCodeFileExtension, UseFullyQualifiedNames, InterchangeConverters, DirectConverters, DefaultAutoChangeParent, DefaultAllowRecordLikeClasses, DefaultAllowRecordLikeRegularStructs, DefaultAllowRecordLikeReadOnlyStructs, IgnoreRecordLikeTypes, IncludeRecordLikeTypes, ConfigFilePath, RelativeGeneratedCodePath, GeneratedCodePath, IncludeTracingCode, StepThroughProperties, ProhibitLazinatorInNonLazinator, HideBackingFields, HideMainProperties, HideILazinatorProperties, Comment).GetHashCode();
         }
 
         public LazinatorConfig WithDefaultAllowRecordLikeReadOnlyStructs(bool value) => new LazinatorConfig(GeneratedCodeFileExtension, UseFullyQualifiedNames, InterchangeConverters, DirectConverters, DefaultAutoChangeParent, DefaultAllowRecordLikeClasses, DefaultAllowRecordLikeRegularStructs, value, IgnoreRecordLikeTypes, IncludeRecordLikeTypes, ConfigFilePath, RelativeGeneratedCodePath, GeneratedCodePath, IncludeTracingCode, StepThroughProperties, ProhibitLazinatorInNonLazinator, HideBackingFields, HideMainProperties, HideILazinatorProperties);
