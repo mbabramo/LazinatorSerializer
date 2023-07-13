@@ -20,6 +20,10 @@ namespace LazinatorGenerator.Generator
         internal LazinatorSingleSourceInfo(GeneratorAttributeSyntaxContext syntaxContext, LazinatorConfig config)
         {
             SyntaxContext = syntaxContext;
+            if (SyntaxContext.TargetNode.ToString().Contains("FastRead"))
+            {
+                var DEBUG = 0;
+            }
             Config = config;
         }
         

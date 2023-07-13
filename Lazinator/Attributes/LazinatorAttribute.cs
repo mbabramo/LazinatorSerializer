@@ -11,6 +11,9 @@ namespace Lazinator.Attributes
     {
         public bool Autogenerate { get; private set; }
         public int UniqueID { get; private set; }
+        /// <summary>
+        /// A version number. Set this to -1 to indicate that the UniqueID should not be persisted. 
+        /// </summary>
         public int Version { get; private set; }
 
         public LazinatorAttribute(int uniqueID)

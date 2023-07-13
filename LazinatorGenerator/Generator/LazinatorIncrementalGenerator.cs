@@ -42,10 +42,15 @@ context)
             context.RegisterSourceOutput(singleSourceInfos,
                 static (spc, singleSourceInfo) => singleSourceInfo.GenerateSource(spc));
         }
-        
+
         static bool IsSyntaxTargetForGeneration(SyntaxNode node, CancellationToken cancellationToken)
-    => node is InterfaceDeclarationSyntax m && m.AttributeLists.Count > 0;
-        
+        {
+            if (node.ToString().Contains("FastRead"))
+            {
+                var DEBUG = 0;
+            }
+            return node is InterfaceDeclarationSyntax m && m.AttributeLists.Count > 0;
+        }
 
         static LazinatorConfig ChooseAppropriateConfig(string path, ImmutableArray<LazinatorConfig> candidateConfigs)
         {
