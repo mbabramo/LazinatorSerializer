@@ -1874,11 +1874,13 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
             FullyQualifiedObjectName = iLazinatorType.GetFullyQualifiedNameWithoutGlobal(NullableModeEnabled);
         }
 
+        private bool ImplementsILazinator(ITypeSymbol typeSymbol) => typeSymbol.Interfaces.Any(y => y.Name == "ILazinator" || y.Name == "ILazinator?" || (!SymbolEqualityComparer.Default.Equals(y, typeSymbol) && ImplementsILazinator(y)));
+
         private bool IsNonlazinatorGeneric(ITypeSymbol typeSymbol)
         {
             return !(
                         ( // each generic argument must implement ILazinator or be constrained to ILazinator
-                            typeSymbol.Interfaces.Any(y => y.Name == "ILazinator" || y.Name == "ILazinator?")
+                            ImplementsILazinator(typeSymbol)
                             ||
                             (((typeSymbol as ITypeParameterSymbol)?.ConstraintTypes.Any(y => y.Name == "ILazinator" || y.Name == "ILazinator?") ?? false))
                         )

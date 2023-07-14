@@ -10,6 +10,7 @@ namespace LazinatorCodeGen.Roslyn
     {
         /// <summary>
         /// Return a clone of a Lazinator attribute based on the AttributeData produced by Roslyn.
+        /// We use this approach because our generator code does not reference the Lazinator library.
         /// </summary>
         /// <param name="attributeData"></param>
         /// <returns></returns>

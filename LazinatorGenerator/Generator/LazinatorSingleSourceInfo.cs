@@ -21,6 +21,10 @@ namespace LazinatorGenerator.Generator
         {
             SyntaxContext = syntaxContext;
             Config = config;
+            if (InterfaceSymbol.ToString().Contains("Nested"))
+            {
+                var DEBUG = 0;
+            }
         }
         
         internal void GenerateSource(SourceProductionContext spc)

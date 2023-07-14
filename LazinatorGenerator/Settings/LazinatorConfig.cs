@@ -109,7 +109,7 @@ namespace LazinatorGenerator.Settings
                     ConfigFilePath = configPath?.Replace("\\LazinatorConfig.json", "");
                     if (ConfigFilePath != null)
                     {
-                        ConfigFilePath = ConfigFilePath.TrimEnd(Path.DirectorySeparatorChar); // normalize
+                        ConfigFilePath = AbbreviatedPath(ConfigFilePath);
                         RelativeGeneratedCodePath = json[RelativeGeneratedCodePathString];
                         if (RelativeGeneratedCodePath == null)
                             RelativeGeneratedCodePath = "LazinatorCode"; // needed for test project
@@ -125,7 +125,16 @@ namespace LazinatorGenerator.Settings
                 }
             }
         }
+        
+        private static string AbbreviatedPath(string fullPath) => WithoutLazinatorConfigFilename(fullPath.TrimEnd(Path.DirectorySeparatorChar)).TrimEnd(Path.DirectorySeparatorChar);
 
+        private static string WithoutLazinatorConfigFilename(string fullPath)
+        {
+            if (fullPath.EndsWith("LazinatorConfig.json") || fullPath.EndsWith("Lazinatorconfig.json"))
+                return fullPath.Substring(0, fullPath.Length - "LazinatorConfig.json".Length);
+            return fullPath;
+        }
+        
         private void LoadIgnoreRecordLikeTypes(JsonObject json)
         {
             JsonArray typeList = json[IgnoreRecordLikeTypesString];
