@@ -32,14 +32,26 @@ context)
             });
             // Parse the JSON to generate LazinatorConfig objects, placed into an ImmutableArray. Note that we have designed LazinatorConfig to have fast hashing, so that the generator can use appropriate caching efficiently.
             IncrementalValueProvider<ImmutableArray<LazinatorConfig>> configLocationsAndContents = additionalTextsPathAndContents.Where(x => x.path != null).Select((x, cancellationToken) => new LazinatorConfig(x.path, x.text)).Collect();
-            // Now, we store the SyntaxContext and potentially applicable configuration files. Note that we defer choosing the appropriate source until we know that we need to generate the source, to save time early in the pipeline.
+            // Now, we store the SyntaxContext and the applicable configuration file. It may seem tempting to defer choosing the appropriate source until we know that we need to generate the source, to save time early in the pipeline, but then changing any config file would force regeneration of every file in the project.
             IncrementalValuesProvider<(GeneratorAttributeSyntaxContext SyntaxContext, ImmutableArray<LazinatorConfig> ConfigFiles)> sourcesAndConfigs = syntaxContexts.Combine(configLocationsAndContents).Select((x, cancellationToken) => (x.Left, x.Right));
-            IncrementalValuesProvider<LazinatorSingleSourceInfo> singleSourceInfos = sourcesAndConfigs.Select((x, cancellationToken) => new LazinatorSingleSourceInfo(x.SyntaxContext, x.ConfigFiles));
+            IncrementalValuesProvider<LazinatorSingleSourceInfo> singleSourceInfos = sourcesAndConfigs.Select((x, cancellationToken) => new LazinatorSingleSourceInfo(x.SyntaxContext, ChooseAppropriateConfig(Path.GetDirectoryName(x.SyntaxContext.TargetNode.SyntaxTree.FilePath), x.ConfigFiles)));
 
             
             // Generate the source using the compilation and enums
             context.RegisterSourceOutput(singleSourceInfos,
                 static (spc, singleSourceInfo) => singleSourceInfo.GenerateSource(spc));
+        }
+
+        static LazinatorConfig ChooseAppropriateConfig(string path, ImmutableArray<LazinatorConfig> candidateConfigs)
+        {
+            LazinatorConfig? bestConfigSoFar = null;
+            for (int i = 0; i < candidateConfigs.Length; i++)
+            {
+                string candidateConfigPath = candidateConfigs[i].ConfigFilePath;
+                if (candidateConfigPath.Length > (bestConfigSoFar?.ConfigFilePath.Length ?? 0) && path.StartsWith(candidateConfigPath))
+                    bestConfigSoFar = candidateConfigs[i];
+            }
+            return bestConfigSoFar ?? new LazinatorConfig();
         }
 
         static bool IsSyntaxTargetForGeneration(SyntaxNode node, CancellationToken cancellationToken)

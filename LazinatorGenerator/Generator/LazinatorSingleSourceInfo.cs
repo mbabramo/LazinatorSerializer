@@ -14,14 +14,14 @@ namespace LazinatorGenerator.Generator
     internal struct LazinatorSingleSourceInfo
     {
         internal GeneratorAttributeSyntaxContext SyntaxContext;
-        internal ImmutableArray<LazinatorConfig> ConfigFiles;
+        internal LazinatorConfig Config;
         internal SemanticModel SemanticModel => SyntaxContext.SemanticModel;
         internal Compilation Compilation => SemanticModel.Compilation;
         internal INamedTypeSymbol InterfaceSymbol => (INamedTypeSymbol) SyntaxContext.TargetSymbol;
-        internal LazinatorSingleSourceInfo(GeneratorAttributeSyntaxContext syntaxContext, ImmutableArray<LazinatorConfig> configFiles)
+        internal LazinatorSingleSourceInfo(GeneratorAttributeSyntaxContext syntaxContext, LazinatorConfig config)
         {
             SyntaxContext = syntaxContext;
-            ConfigFiles = configFiles;
+            Config = config;
         }
         
         internal void GenerateSource(SourceProductionContext spc)
@@ -30,7 +30,7 @@ namespace LazinatorGenerator.Generator
             if (pairInfo != null)
             {
                 
-                var config = ChooseAppropriateConfig(Path.GetDirectoryName(SyntaxContext.TargetNode.SyntaxTree.FilePath), ConfigFiles);
+                var config = ChooseAppropriateConfig(Path.GetDirectoryName(SyntaxContext.TargetNode.SyntaxTree.FilePath), Config);
                 LazinatorCompilation lazinatorCompilation = new LazinatorCompilation(Compilation, pairInfo.LazinatorObject, config);
                 var d = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, config, true);
                 var resultingSource = d.GetCodeBehind();
