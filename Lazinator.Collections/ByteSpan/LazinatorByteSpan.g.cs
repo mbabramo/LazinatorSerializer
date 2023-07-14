@@ -559,3 +559,4 @@ namespace Lazinator.Collections.ByteSpan
         
     }
 }
+#nullable restore

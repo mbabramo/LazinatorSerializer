@@ -541,3 +541,4 @@ namespace Lazinator.Collections.BitArray
         
     }
 }
+#nullable restore

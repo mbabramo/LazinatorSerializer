@@ -713,6 +713,8 @@ namespace Lazinator.Wrappers
                 EncodeCharAndString.WriteBrotliCompressedWithIntPrefix(ref writer, _WrappedValue);
             }
         }
+        #nullable restore
         
     }
 }
+#nullable restore

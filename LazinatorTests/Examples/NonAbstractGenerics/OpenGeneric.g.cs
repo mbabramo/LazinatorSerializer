@@ -685,3 +685,4 @@ namespace LazinatorTests.Examples.NonAbstractGenerics
         
     }
 }
+#nullable restore

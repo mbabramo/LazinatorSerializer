@@ -224,3 +224,4 @@ namespace Lazinator.Collections.OffsetList
         }
     }
 }
+#nullable restore

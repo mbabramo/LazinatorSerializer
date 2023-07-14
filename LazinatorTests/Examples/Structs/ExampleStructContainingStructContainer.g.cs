@@ -511,3 +511,4 @@ namespace LazinatorTests.Examples.Structs
         }
     }
 }
+#nullable restore
