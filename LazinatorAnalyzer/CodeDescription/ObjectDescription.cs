@@ -379,6 +379,8 @@ namespace Lazinator.CodeDescription
 
         private void AppendCodeBehindFile(CodeStringBuilder sb)
         {
+            if (NullableModeRestoreString != null && NullableModeRestoreString != "")
+                throw new Exception(NullableModeRestoreString); // DEBUG
             string partialsuperclasses;
             IEnumerable<ITypeSymbol> supertypes;
             AppendSupertypesInformation(out partialsuperclasses, out supertypes);
@@ -1224,7 +1226,7 @@ namespace Lazinator.CodeDescription
                             ");
             if (GeneratingRefStruct)
                 sb.Append($@"
-                            }}
+                            }}{NullableModeRestoreString}
                         ");
             else
                 sb.Append($@"

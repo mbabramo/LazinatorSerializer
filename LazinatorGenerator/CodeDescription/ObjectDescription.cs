@@ -36,6 +36,8 @@ namespace Lazinator.CodeDescription
         public string NullableModeSettingString => NullableModeInherited && !AlwaysSpecifyNullableMode ? "" : (NullableModeEnabled ? $@"
             #nullable enable" : $@"
             #nullable disable");
+        public string NullableModeRestoreString => NullableModeInherited && !AlwaysSpecifyNullableMode ? "" : $@"
+            #nullable restore";
         public string QuestionMarkIfNullableModeEnabled => NullableModeEnabled ? "?" : "";
         public string ILazinatorStringWithoutQuestionMark => "ILazinator";
         public string ILazinatorString => "ILazinator" + QuestionMarkIfNullableModeEnabled;
@@ -1224,12 +1226,12 @@ namespace Lazinator.CodeDescription
                             ");
             if (GeneratingRefStruct)
                 sb.Append($@"
-                            }}
+                            }}{NullableModeRestoreString}
                         ");
             else
                 sb.Append($@"
                             }}
-                        }}
+                        }}{NullableModeRestoreString}
                         ");
         }
 

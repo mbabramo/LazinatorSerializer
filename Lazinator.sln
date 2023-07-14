@@ -22,13 +22,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lazinator", "Lazinator\Lazi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LazinatorTests", "LazinatorTests\LazinatorTests.csproj", "{EA9F7315-9198-4F24-AA79-6A6D050D41CD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LazinatorAnalyzer", "LazinatorAnalyzer\LazinatorAnalyzer.csproj", "{0A58EAB9-7C0F-4F68-8DDF-280CAEFD3600}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LazinatorAnalyzer.Vsix", "LazinatorAnalyzer.Vsix\LazinatorAnalyzer.Vsix.csproj", "{461F19AC-4F96-4132-ABDE-D10A437E4031}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lazinator.Collections", "Lazinator.Collections\Lazinator.Collections.csproj", "{98223F72-4EE1-4E41-BDDE-3AEC975553FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LazinatorGenerator", "LazinatorGenerator\LazinatorGenerator.csproj", "{B319F0B0-732D-4AC2-BDA0-882503709138}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LazinatorGenerator", "LazinatorGenerator\LazinatorGenerator.csproj", "{B319F0B0-732D-4AC2-BDA0-882503709138}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,14 +40,6 @@ Global
 		{EA9F7315-9198-4F24-AA79-6A6D050D41CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA9F7315-9198-4F24-AA79-6A6D050D41CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA9F7315-9198-4F24-AA79-6A6D050D41CD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0A58EAB9-7C0F-4F68-8DDF-280CAEFD3600}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0A58EAB9-7C0F-4F68-8DDF-280CAEFD3600}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0A58EAB9-7C0F-4F68-8DDF-280CAEFD3600}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0A58EAB9-7C0F-4F68-8DDF-280CAEFD3600}.Release|Any CPU.Build.0 = Release|Any CPU
-		{461F19AC-4F96-4132-ABDE-D10A437E4031}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{461F19AC-4F96-4132-ABDE-D10A437E4031}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{461F19AC-4F96-4132-ABDE-D10A437E4031}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{461F19AC-4F96-4132-ABDE-D10A437E4031}.Release|Any CPU.Build.0 = Release|Any CPU
 		{98223F72-4EE1-4E41-BDDE-3AEC975553FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{98223F72-4EE1-4E41-BDDE-3AEC975553FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98223F72-4EE1-4E41-BDDE-3AEC975553FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -65,7 +53,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45
 		SolutionGuid = {58D89D99-DE35-4C68-AE67-A62D4D9FEC7D}
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45
 	EndGlobalSection
 EndGlobal
