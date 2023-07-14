@@ -15,13 +15,17 @@ namespace LazinatorGenerator.Generator
     {
         internal GeneratorAttributeSyntaxContext SyntaxContext;
         internal LazinatorConfig Config;
+        internal string AllPropertyDeclarations;
+        internal ImmutableArray<string> NamesOfTypesReliedOn;
         internal SemanticModel SemanticModel => SyntaxContext.SemanticModel;
         internal Compilation Compilation => SemanticModel.Compilation;
         internal INamedTypeSymbol InterfaceSymbol => (INamedTypeSymbol) SyntaxContext.TargetSymbol;
-        internal LazinatorSingleSourceInfo(GeneratorAttributeSyntaxContext syntaxContext, LazinatorConfig config)
+        internal LazinatorSingleSourceInfo(GeneratorAttributeSyntaxContext syntaxContext, LazinatorConfig config, (string allPropertyDeclarations, ImmutableArray<string> namesOfTypesReliedOn) typeInfo)
         {
             SyntaxContext = syntaxContext;
             Config = config;
+            AllPropertyDeclarations = typeInfo.allPropertyDeclarations;
+            NamesOfTypesReliedOn = typeInfo.namesOfTypesReliedOn;
         }
         
         internal void GenerateSource(SourceProductionContext spc)
@@ -29,12 +33,10 @@ namespace LazinatorGenerator.Generator
             LazinatorPairInformation pairInfo = GetLazinatorPairInformation();
             if (pairInfo != null)
             {
-                
-                var config = ChooseAppropriateConfig(Path.GetDirectoryName(SyntaxContext.TargetNode.SyntaxTree.FilePath), Config);
-                LazinatorCompilation lazinatorCompilation = new LazinatorCompilation(Compilation, pairInfo.LazinatorObject, config);
-                var d = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, config, true);
+                LazinatorCompilation lazinatorCompilation = new LazinatorCompilation(Compilation, pairInfo.LazinatorObject, Config);
+                var d = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, Config, true);
                 var resultingSource = d.GetCodeBehind();
-                spc.AddSource(d.ObjectNameEncodable + config.GeneratedCodeFileExtension, resultingSource);
+                spc.AddSource(d.ObjectNameEncodable + Config.GeneratedCodeFileExtension, resultingSource);
             }
         }
 
@@ -45,16 +47,5 @@ namespace LazinatorGenerator.Generator
             return pairInfo;
         }
 
-        static LazinatorConfig ChooseAppropriateConfig(string path, ImmutableArray<LazinatorConfig> candidateConfigs)
-        {
-            LazinatorConfig? bestConfigSoFar = null;
-            for (int i = 0; i < candidateConfigs.Length; i++)
-            {
-                string candidateConfigPath = candidateConfigs[i].ConfigFilePath;
-                if (candidateConfigPath.Length > (bestConfigSoFar?.ConfigFilePath.Length ?? 0) && path.StartsWith(candidateConfigPath))
-                    bestConfigSoFar = candidateConfigs[i];
-            }
-            return bestConfigSoFar ?? new LazinatorConfig();
-        }
     }
 }

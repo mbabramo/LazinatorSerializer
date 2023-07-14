@@ -34,12 +34,23 @@ context)
             IncrementalValueProvider<ImmutableArray<LazinatorConfig>> configLocationsAndContents = additionalTextsPathAndContents.Where(x => x.path != null).Select((x, cancellationToken) => new LazinatorConfig(x.path, x.text)).Collect();
             // Now, we store the SyntaxContext and the applicable configuration file. It may seem tempting to defer choosing the appropriate source until we know that we need to generate the source, to save time early in the pipeline, but then changing any config file would force regeneration of every file in the project.
             IncrementalValuesProvider<(GeneratorAttributeSyntaxContext SyntaxContext, ImmutableArray<LazinatorConfig> ConfigFiles)> sourcesAndConfigs = syntaxContexts.Combine(configLocationsAndContents).Select((x, cancellationToken) => (x.Left, x.Right));
-            IncrementalValuesProvider<LazinatorSingleSourceInfo> singleSourceInfos = sourcesAndConfigs.Select((x, cancellationToken) => new LazinatorSingleSourceInfo(x.SyntaxContext, ChooseAppropriateConfig(Path.GetDirectoryName(x.SyntaxContext.TargetNode.SyntaxTree.FilePath), x.ConfigFiles)));
+            IncrementalValuesProvider<LazinatorSingleSourceInfo> singleSourceInfos = sourcesAndConfigs.Select((x, cancellationToken) => new LazinatorSingleSourceInfo(x.SyntaxContext, ChooseAppropriateConfig(Path.GetDirectoryName(x.SyntaxContext.TargetNode.SyntaxTree.FilePath), x.ConfigFiles), GetPropertiesTypeInfo(x.SyntaxContext)));
 
             
             // Generate the source using the compilation and enums
             context.RegisterSourceOutput(singleSourceInfos,
                 static (spc, singleSourceInfo) => singleSourceInfo.GenerateSource(spc));
+        }
+        
+        static (string allPropertyDeclarations, ImmutableArray<string> namesOfTypesReliedOn) GetPropertiesTypeInfo(GeneratorAttributeSyntaxContext context)
+        {
+            var propertiesListedHere = String.Join(";", context.TargetNode.DescendantNodes().OfType<PropertyDeclarationSyntax>().Select(x => x.ToString()));
+            ((INamedTypeSymbol)context.TargetSymbol).GetPropertiesForType(false, out var propertiesThisLevel, out var propertiesLowerLevel);
+            var allPropertyTypeNames = propertiesThisLevel.Select(x => x.Type.GetFullyQualifiedName(false)).ToList();
+            allPropertyTypeNames.AddRange(propertiesLowerLevel.Select(x => x.Type.GetFullyQualifiedName(false)));
+            var allPropertyTypeNamesArray = allPropertyTypeNames.Distinct().ToArray();
+            ImmutableArray<string> propertyTypeNamesImmutable = ImmutableArray.Create<string>(allPropertyTypeNamesArray);
+            return (propertiesListedHere, propertyTypeNamesImmutable);
         }
 
         static LazinatorConfig ChooseAppropriateConfig(string path, ImmutableArray<LazinatorConfig> candidateConfigs)

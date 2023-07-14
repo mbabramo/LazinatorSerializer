@@ -350,7 +350,7 @@ namespace Lazinator.Core
                     .FirstOrDefault()
                     .Item2
                     .FirstOrDefault();
-                serializationSkipsUniqueIDs = lazinatorAttribute.Version == -1;
+                serializationSkipsUniqueIDs = lazinatorAttribute.Version <= -1;
                 if (serializationSkipsUniqueIDs == true)
                 {
                     // We also can't skip a unique ID if the type has a nonexclusive interface.
