@@ -32,10 +32,9 @@ context)
             });
             // Parse the JSON to generate LazinatorConfig objects, placed into an ImmutableArray. Note that we have designed LazinatorConfig to have fast hashing, so that the generator can use appropriate caching efficiently.
             IncrementalValueProvider<ImmutableArray<LazinatorConfig>> configLocationsAndContents = additionalTextsPathAndContents.Where(x => x.path != null).Select((x, cancellationToken) => new LazinatorConfig(x.path, x.text)).Collect();
-            // Now, we choose the appropriate LazinatorConfig from this ImmutableArray for each of our syntax contexts (or the default LazinatorConfig if none is found). (Note: If this step turns out to be costly, we could just store the entire immutable array within our LazinatorSingleSourceInfo object or some other object and then defer choosing the appropriate source until we know that we need to generate the source.
-            IncrementalValuesProvider<(GeneratorAttributeSyntaxContext SyntaxContext, LazinatorConfig Config)> sourcesAndConfigs = syntaxContexts.Combine(configLocationsAndContents).Select((x, cancellationToken) => (x.Left, ChooseAppropriateConfig(Path.GetDirectoryName(x.Left.TargetNode.SyntaxTree.FilePath), x.Right)));
-
-            IncrementalValuesProvider<LazinatorSingleSourceInfo> singleSourceInfos = sourcesAndConfigs.Select((x, cancellationToken) => new LazinatorSingleSourceInfo(x.SyntaxContext, x.Config));
+            // Now, we store the SyntaxContext and potentially applicable configuration files. Note that we defer choosing the appropriate source until we know that we need to generate the source, to save time early in the pipeline.
+            IncrementalValuesProvider<(GeneratorAttributeSyntaxContext SyntaxContext, ImmutableArray<LazinatorConfig> ConfigFiles)> sourcesAndConfigs = syntaxContexts.Combine(configLocationsAndContents).Select((x, cancellationToken) => (x.Left, x.Right));
+            IncrementalValuesProvider<LazinatorSingleSourceInfo> singleSourceInfos = sourcesAndConfigs.Select((x, cancellationToken) => new LazinatorSingleSourceInfo(x.SyntaxContext, x.ConfigFiles));
 
             
             // Generate the source using the compilation and enums
@@ -45,24 +44,9 @@ context)
 
         static bool IsSyntaxTargetForGeneration(SyntaxNode node, CancellationToken cancellationToken)
         {
-            if (node.ToString().Contains("FastRead"))
-            {
-                var DEBUG = 0;
-            }
             return node is InterfaceDeclarationSyntax m && m.AttributeLists.Count > 0;
         }
 
-        static LazinatorConfig ChooseAppropriateConfig(string path, ImmutableArray<LazinatorConfig> candidateConfigs)
-        {
-            LazinatorConfig? bestConfigSoFar = null;
-            for (int i = 0; i < candidateConfigs.Length; i++)
-            {
-                string candidateConfigPath = candidateConfigs[i].ConfigFilePath;
-                if (candidateConfigPath.Length > (bestConfigSoFar?.ConfigFilePath.Length ?? 0) && path.StartsWith(candidateConfigPath))
-                    bestConfigSoFar = candidateConfigs[i];
-            }
-            return bestConfigSoFar ?? new LazinatorConfig();
-        }
 
     }
 
