@@ -257,8 +257,8 @@ public class MyOtherClass
             // uncommenting the following will stop the run, so that we only run the one file that we want to focus on above.
             //throw new Exception(""); 
 
-            await CompleteGenerateCode(typeof(DotNetList_Nested_NonLazinator), "LazinatorTests", "/Examples/", "Collections/", ws); // DEBUG -- delete (repeated below).
-            
+            await CompleteGenerateCode(typeof(NullableEnabledContext), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws); // DEBUG
+
             await CompleteGenerateCode(typeof(Example), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(TwoByteLengths), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(EightByteLengths), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);

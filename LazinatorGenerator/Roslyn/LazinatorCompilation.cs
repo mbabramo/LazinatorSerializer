@@ -163,6 +163,10 @@ namespace LazinatorCodeGen.Roslyn
             {
                 IPropertySymbol property1 = propertyWithLevelInfo.Property;
                 string property1Name = property1.GetFullyQualifiedName(true);
+                if (property1Name.Contains("Numerics"))
+                {
+                    var DEBUG = 0;
+                }
                 if (!ILazinatorProperties.Contains(property1Name))
                 { // ignore a property that is actually an ILazinator property rather than a property we are looking for
                     propertiesInInterfaceWithLevel.Add(propertyWithLevelInfo);
@@ -252,6 +256,10 @@ namespace LazinatorCodeGen.Roslyn
             if (type.ContainingNamespace != null &&  type.ContainingNamespace.Name == "System" && type.ContainingNamespace.ContainingNamespace.Name == "")
                 return;
             string typeName = type.GetFullyQualifiedName(true);
+            if (typeName.Contains("Numerics"))
+            {
+                var DEBUG = 0;
+            }
             if (RelevantSymbols.ContainsKey(typeName))
                 return;
             RelevantSymbols.Add(typeName, type);
