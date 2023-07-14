@@ -40,7 +40,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void WrapperIntWorks()
         {
-            ExampleContainerContainingClassesStructContainingClasses w = new ExampleContainerContainingClassesStructContainingClasses()
+            ExampleContainerStructContainingClasses w = new ExampleContainerStructContainingClasses()
             {
                 IntWrapper = 5
             };

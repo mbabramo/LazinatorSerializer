@@ -30,7 +30,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void ClassContainingStructContainingClassWorks()
         {
-            ExampleContainerContainingClassesStructContainingClasses c = new ExampleContainerContainingClassesStructContainingClasses()
+            ExampleContainerStructContainingClasses c = new ExampleContainerStructContainingClasses()
             {
                 MyExampleStructContainingClasses = new ExampleStructContainingClasses() { MyChar = 'z', MyLazinatorList = new List<Example>() }
             };

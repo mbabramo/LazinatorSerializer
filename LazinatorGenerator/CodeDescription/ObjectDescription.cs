@@ -225,6 +225,10 @@ namespace Lazinator.CodeDescription
         public ObjectDescription(INamedTypeSymbol iLazinatorTypeSymbol, LazinatorCompilation compilation, LazinatorConfig? config, bool suppressDate = false)
         {
             ILazinatorTypeSymbol = iLazinatorTypeSymbol;
+            if (ILazinatorTypeSymbol.ToString().Contains("ExampleContainerContainingClassesStructContainingClasses"))
+            {
+                var DEBUG = 0;
+            }
             var implementedAttributes = iLazinatorTypeSymbol.GetAttributesIncludingBase<CloneImplementsAttribute>();
             ImplementedMethods = implementedAttributes.SelectMany(x => x.Implemented).ToArray();
             CodeToInsert = iLazinatorTypeSymbol.GetKnownAttribute<CloneInsertCodeAttribute>()?.CodeToInsert;

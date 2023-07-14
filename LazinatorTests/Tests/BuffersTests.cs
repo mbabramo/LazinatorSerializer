@@ -790,7 +790,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void BuffersUpdateInTandem_List_Struct()
         {
-            ExampleContainerContainingClassesStructContainingClasses e = new ExampleContainerContainingClassesStructContainingClasses()
+            ExampleContainerStructContainingClasses e = new ExampleContainerStructContainingClasses()
             {
                 MyListExampleStruct = new List<ExampleStructContainingClasses>()
                 {
@@ -893,7 +893,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void BuffersUpdateInTandem_HashSet_Struct()
         {
-            ExampleContainerContainingClassesStructContainingClasses e = new ExampleContainerContainingClassesStructContainingClasses()
+            ExampleContainerStructContainingClasses e = new ExampleContainerStructContainingClasses()
             {
                 MyHashSetExampleStruct = new HashSet<ExampleStructContainingClasses>()
                 {

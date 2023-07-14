@@ -140,9 +140,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDotNetListLazinatorStructs_Null()
         {
-            ExampleContainerContainingClassesStructContainingClasses GetObject()
+            ExampleContainerStructContainingClasses GetObject()
             {
-                return new ExampleContainerContainingClassesStructContainingClasses()
+                return new ExampleContainerStructContainingClasses()
                 {
                     MyListExampleStruct = null,
                 };
@@ -158,9 +158,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDotNetListWrappedNullableStructs()
         {
-            ExampleContainerContainingClassesStructContainingClasses GetObject()
+            ExampleContainerStructContainingClasses GetObject()
             {
-                var returnObj = new ExampleContainerContainingClassesStructContainingClasses()
+                var returnObj = new ExampleContainerStructContainingClasses()
                 {
                     MyListNullableExampleStruct = new List<WNullableStruct<ExampleStructContainingClasses>>()
                     {
@@ -182,9 +182,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDotNetListUnwrappedNullableStructs()
         {
-            ExampleContainerContainingClassesStructContainingClasses GetObject()
+            ExampleContainerStructContainingClasses GetObject()
             {
-                var returnObj = new ExampleContainerContainingClassesStructContainingClasses()
+                var returnObj = new ExampleContainerStructContainingClasses()
                 {
                     MyListUnwrappedNullableExampleStruct = new List<ExampleStructContainingClasses?>()
                     {
@@ -206,9 +206,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDotNetListLazinatorStructs_Empty()
         {
-            ExampleContainerContainingClassesStructContainingClasses GetObject()
+            ExampleContainerStructContainingClasses GetObject()
             {
-                return new ExampleContainerContainingClassesStructContainingClasses()
+                return new ExampleContainerStructContainingClasses()
                 {
                     MyListExampleStruct = new List<ExampleStructContainingClasses>(),
                 };
@@ -224,9 +224,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDotNetListLazinatorStructs_Filled()
         {
-            ExampleContainerContainingClassesStructContainingClasses GetObject()
+            ExampleContainerStructContainingClasses GetObject()
             {
-                var returnObj = new ExampleContainerContainingClassesStructContainingClasses()
+                var returnObj = new ExampleContainerStructContainingClasses()
                 {
                     MyListExampleStruct = new List<ExampleStructContainingClasses>()
                     {
@@ -248,9 +248,9 @@ namespace LazinatorTests.Tests
         [Fact]
         public void LazinatorDotNetListLazinatorNullableStructs()
         {
-            ExampleContainerContainingClassesStructContainingClasses GetObject()
+            ExampleContainerStructContainingClasses GetObject()
             {
-                var returnObj = new ExampleContainerContainingClassesStructContainingClasses()
+                var returnObj = new ExampleContainerStructContainingClasses()
                 {
                     MyListUnwrappedNullableExampleStruct = new List<ExampleStructContainingClasses?>()
                     {
