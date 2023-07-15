@@ -11,7 +11,7 @@ using System.Text;
 
 namespace LazinatorGenerator.Generator
 {
-    internal struct LazinatorSingleSourceInfo
+    internal struct LazinatorPreGenerationInfo
     {
         internal GeneratorAttributeSyntaxContext SyntaxContext;
         internal LazinatorConfig Config;
@@ -20,13 +20,15 @@ namespace LazinatorGenerator.Generator
         internal SemanticModel SemanticModel => SyntaxContext.SemanticModel;
         internal Compilation Compilation => SemanticModel.Compilation;
         internal INamedTypeSymbol InterfaceSymbol => (INamedTypeSymbol) SyntaxContext.TargetSymbol;
-        internal LazinatorSingleSourceInfo(GeneratorAttributeSyntaxContext syntaxContext, LazinatorConfig config, (string allPropertyDeclarations, ImmutableArray<string> namesOfTypesReliedOn) typeInfo)
+        internal LazinatorPreGenerationInfo(GeneratorAttributeSyntaxContext syntaxContext, LazinatorConfig config, (string allPropertyDeclarations, ImmutableArray<string> namesOfTypesReliedOn) typeInfo)
         {
             SyntaxContext = syntaxContext;
             Config = config;
             AllPropertyDeclarations = typeInfo.allPropertyDeclarations;
             NamesOfTypesReliedOn = typeInfo.namesOfTypesReliedOn;
         }
+
+        Debug; // add caching
         
         internal void GenerateSource(SourceProductionContext spc)
         {

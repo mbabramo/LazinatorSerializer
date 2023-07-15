@@ -246,7 +246,7 @@ namespace LazinatorCodeGen.Roslyn
 
         private void RecordInformationAboutTypeAndRelatedTypes(ITypeSymbol type)
         {
-            var typesAndRelatedTypes = GetTypeAndRelatedTypes(type); // NOTE: It's important that we not enumerate here. Otherwise, we may prematurely process a type and run into an error in ExclusiveInterfaceDescription.
+            var typesAndRelatedTypes = GetTypeAndRelatedTypes(type, alreadyProducedDuringCompilation); // NOTE: It's important that we not enumerate here. Otherwise, we may prematurely process a type and run into an error in ExclusiveInterfaceDescription.
             foreach (ITypeSymbol t in typesAndRelatedTypes)
                 RecordInformationAboutType(t);
         }
@@ -317,8 +317,8 @@ namespace LazinatorCodeGen.Roslyn
                 TypeToExclusiveInterface[TypeSymbolToString(namedTypeSymbol.OriginalDefinition)] = TypeSymbolToString(@interface.OriginalDefinition);
         }
 
-        HashSet<ITypeSymbol> alreadyProduced = new HashSet<ITypeSymbol>();
-        private IEnumerable<ITypeSymbol> GetTypeAndRelatedTypes(ITypeSymbol type)
+        HashSet<ITypeSymbol> alreadyProducedDuringCompilation = new HashSet<ITypeSymbol>();
+        IEnumerable<ITypeSymbol> GetTypeAndRelatedTypes(ITypeSymbol type, HashSet<ITypeSymbol> alreadyProduced)
         {
             if (alreadyProduced.Contains(type))
                 yield break;
@@ -327,13 +327,13 @@ namespace LazinatorCodeGen.Roslyn
             if (type is INamedTypeSymbol namedType)
             {
                 foreach (ITypeSymbol t in namedType.TypeArguments)
-                    foreach (ITypeSymbol t2 in GetTypeAndRelatedTypes(t))
+                    foreach (ITypeSymbol t2 in GetTypeAndRelatedTypes(t, alreadyProduced))
                     {
                         alreadyProduced.Add(t2);
                         yield return t2;
                     }
                 if (namedType.TupleUnderlyingType != null)
-                    foreach (ITypeSymbol t in GetTypeAndRelatedTypes(namedType.TupleUnderlyingType))
+                    foreach (ITypeSymbol t in GetTypeAndRelatedTypes(namedType.TupleUnderlyingType, alreadyProduced))
                     {
                         alreadyProduced.Add(t);
                         yield return t;
@@ -341,14 +341,14 @@ namespace LazinatorCodeGen.Roslyn
             }
             else if (type is IArrayTypeSymbol arrayType)
             {
-                foreach (ITypeSymbol t in GetTypeAndRelatedTypes(arrayType.ElementType))
+                foreach (ITypeSymbol t in GetTypeAndRelatedTypes(arrayType.ElementType, alreadyProduced))
                 {
                     alreadyProduced.Add(t);
                     yield return t;
                 }
             }
             if (!SymbolEqualityComparer.Default.Equals(type, type.OriginalDefinition))
-                foreach (ITypeSymbol t in GetTypeAndRelatedTypes(type.OriginalDefinition))
+                foreach (ITypeSymbol t in GetTypeAndRelatedTypes(type.OriginalDefinition, alreadyProduced))
                 {
                     alreadyProduced.Add(t);
                     yield return t;
@@ -357,7 +357,7 @@ namespace LazinatorCodeGen.Roslyn
             foreach (CloneUnofficiallyIncorporateInterfaceAttribute attribute in attributes)
             {
                 foreach (ITypeSymbol t in GetTypeAndRelatedTypes(
-                    Compilation.GetTypeByMetadataName(attribute.OtherInterfaceFullyQualifiedTypeName)))
+                    Compilation.GetTypeByMetadataName(attribute.OtherInterfaceFullyQualifiedTypeName), alreadyProducedDuringCompilation))
                 {
                     if (t == null)
                         throw new LazinatorCodeGenException($"Unofficial type {attribute.OtherInterfaceFullyQualifiedTypeName} must exist and have a Lazinator attribute.");
@@ -366,14 +366,14 @@ namespace LazinatorCodeGen.Roslyn
                 }
             }
             foreach (var @interface in type.AllInterfaces)
-                foreach (ITypeSymbol t in GetTypeAndRelatedTypes(@interface))
+                foreach (ITypeSymbol t in GetTypeAndRelatedTypes(@interface, alreadyProduced))
                 {
                     alreadyProduced.Add(t);
                     yield return t;
                 }
             if (type.BaseType != null)
             {
-                foreach (ITypeSymbol t in GetTypeAndRelatedTypes(type.BaseType))
+                foreach (ITypeSymbol t in GetTypeAndRelatedTypes(type.BaseType, alreadyProduced))
                 {
                     alreadyProduced.Add(t);
                     yield return t;
