@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.CodeAnalysis;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,25 +12,24 @@ namespace LazinatorGenerator.Generator
         internal readonly string GeneratedCode;
         internal readonly LazinatorDependencyInfo DependencyInfo;
         internal readonly Guid PipelineRunUniqueID;
+        internal readonly Diagnostic Diagnostic;
         internal readonly int HashCode;
 
         internal readonly bool IsEmpty => GeneratedType == null && Path == null;
         internal readonly bool ContainsSuccessfullyGeneratedCode => GeneratedCode != null;
-        public LazinatorCodeGenerationResult(string generatedType, string path, string generatedCode, LazinatorDependencyInfo dependencyInfo, Guid pipelineRunUniqueID)
+        internal readonly bool ContainsDiagnosticInformation => Diagnostic != null;
+        public LazinatorCodeGenerationResult(string generatedType, string path, string generatedCode, LazinatorDependencyInfo dependencyInfo, Guid pipelineRunUniqueID, Diagnostic diagnostic)
         {
             GeneratedType = generatedType;
             Path = path;
             GeneratedCode = generatedCode;
             DependencyInfo = dependencyInfo;
             PipelineRunUniqueID = pipelineRunUniqueID;
-            HashCode = (generatedType, path, generatedCode, dependencyInfo, pipelineRunUniqueID).GetHashCode();
-            if (DependencyInfo.IsUninitialized)
-            {
-                var DEBUG = 0;
-            }
+            Diagnostic = diagnostic;
+            HashCode = (generatedType, path, generatedCode, dependencyInfo, pipelineRunUniqueID, diagnostic).GetHashCode();
         }
-
-        public LazinatorCodeGenerationResult WithUpdatedHashCodes(Dictionary<string, int> typeNameToHash) => new LazinatorCodeGenerationResult(GeneratedType, Path, GeneratedCode, DependencyInfo.WithUpdatedHashCodes(typeNameToHash), PipelineRunUniqueID);
+       
+        public LazinatorCodeGenerationResult WithUpdatedHashCodes(Dictionary<string, int> typeNameToHash) => new LazinatorCodeGenerationResult(GeneratedType, Path, GeneratedCode, DependencyInfo.WithUpdatedHashCodes(typeNameToHash), PipelineRunUniqueID, Diagnostic);
 
         public override int GetHashCode()
         {

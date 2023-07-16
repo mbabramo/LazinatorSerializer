@@ -81,7 +81,7 @@ namespace LazinatorCodeGen.Roslyn
                 throw new LazinatorCodeGenException($"Internal Lazinator error. Implementing type declaration for {ImplementingTypeSymbol.GetFullMetadataName()} not found.");
 
             ImplementingTypeAccessibility = TypeDeclarations.First().GetAccessibility();
-            INamedTypeSymbol lazinatorTypeAttribute = Compilation.GetTypeByMetadataName(LazinatorCompilationAnalyzer.LazinatorAttributeName);
+            INamedTypeSymbol lazinatorTypeAttribute = Compilation.GetTypeByMetadataName(LazinatorPairFinder.LazinatorAttributeName);
             INamedTypeSymbol exclusiveInterfaceTypeSymbol = ImplementingTypeSymbol.GetTopLevelInterfaceImplementingAttribute(lazinatorTypeAttribute);
             if (exclusiveInterfaceTypeSymbol == null)
                 throw new LazinatorCodeGenException($"Type {ImplementingTypeSymbol.Name} should implement exactly one Lazinator interface (plus any Lazinator interfaces implemented by that interface, plus any number of nonexclusive interfaces).");

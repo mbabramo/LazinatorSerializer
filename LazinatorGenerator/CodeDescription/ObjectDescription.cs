@@ -228,10 +228,6 @@ namespace Lazinator.CodeDescription
         public ObjectDescription(INamedTypeSymbol iLazinatorTypeSymbol, LazinatorCompilation compilation, LazinatorConfig? config, bool suppressDate = false)
         {
             ILazinatorTypeSymbol = iLazinatorTypeSymbol;
-            if (ILazinatorTypeSymbol.ToString().Contains("ExampleContainerContainingClassesStructContainingClasses"))
-            {
-                var DEBUG = 0;
-            }
             var implementedAttributes = iLazinatorTypeSymbol.GetAttributesIncludingBase<CloneImplementsAttribute>();
             ImplementedMethods = implementedAttributes.SelectMany(x => x.Implemented).ToArray();
             CodeToInsert = iLazinatorTypeSymbol.GetKnownAttribute<CloneInsertCodeAttribute>()?.CodeToInsert;
@@ -298,9 +294,6 @@ namespace Lazinator.CodeDescription
             var sizeOfLengthAttribute = InterfaceTypeSymbol.GetAttributesIncludingBase<CloneSizeOfLengthAttribute>().FirstOrDefault();
             if (sizeOfLengthAttribute != null)
                 SizeOfLength = sizeOfLengthAttribute.SizeOfLength;
-            foreach (var baseLazinator in GetBaseLazinatorObjects())
-                if (SizeOfLength != baseLazinator.SizeOfLength)
-                    throw new LazinatorCodeGenException($"{InterfaceTypeSymbol} cannot have different Length property from base.");
 
             Splittable = InterfaceTypeSymbol.HasAttributeOfType<CloneSplittableAttribute>() || RequiresLongLengths;
             AllowNonlazinatorGenerics = InterfaceTypeSymbol.HasAttributeOfType<CloneAllowNonlazinatorOpenGenericsAttribute>();
@@ -314,8 +307,14 @@ namespace Lazinator.CodeDescription
             var nonexclusiveInterfaces = iLazinatorTypeSymbol.AllInterfaces
                                 .Where(x => Compilation.ContainsAttributeOfType<CloneNonexclusiveLazinatorAttribute>(x));
             NonexclusiveInterfaces = nonexclusiveInterfaces
-                .Select(x => new NonexclusiveInterfaceDescription(Compilation, x, NullableContextSetting, this)).ToList();
-            VerifyExclusiveInterfaceInheritsFromBaseExclusiveInterface();
+                .Select(x => new NonexclusiveInterfaceDescription(Compilation, x, NullableContextSetting, this)).ToList(); 
+        }
+
+        private void CheckForInconsistentLengthAttributes()
+        {
+            foreach (var baseLazinator in GetBaseLazinatorObjects())
+                if (SizeOfLength != baseLazinator.SizeOfLength)
+                    throw new LazinatorCodeGenException($"{InterfaceTypeSymbol} cannot have different Length property from base.");
         }
 
         private void VerifyExclusiveInterfaceInheritsFromBaseExclusiveInterface()
@@ -372,6 +371,8 @@ namespace Lazinator.CodeDescription
 
         public string GetCodeBehind()
         {
+            CheckForInconsistentLengthAttributes();
+            VerifyExclusiveInterfaceInheritsFromBaseExclusiveInterface();
             CodeStringBuilder sb = new CodeStringBuilder();
             AppendCodeBehindFile(sb);
             string result = sb.ToString();

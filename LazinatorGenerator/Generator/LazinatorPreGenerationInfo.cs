@@ -28,17 +28,33 @@ namespace LazinatorGenerator.Generator
         {
             LazinatorPairInformation pairInfo = GetLazinatorPairInformation();
             if (pairInfo == null)
-                return new LazinatorCodeGenerationResult(null, null, null, default, pipelineRunUniqueID);
+                return new LazinatorCodeGenerationResult(null, null, null, default, pipelineRunUniqueID, default);
             LazinatorCompilation lazinatorCompilation = new LazinatorCompilation(Compilation, pairInfo.LazinatorObject, Config);
-            var d = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, Config, true);
-            var generatedCode = d.GetCodeBehind();
-            string path = d.ObjectNameEncodable + Config.GeneratedCodeFileExtension;
-            return new LazinatorCodeGenerationResult(d.FullyQualifiedObjectName, path, generatedCode, d.Compilation.GetDependencyInfo(), pipelineRunUniqueID);
+
+            var objectDescription = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, Config, true);
+            try
+            {
+                var generatedCode = objectDescription.GetCodeBehind();
+                string path = objectDescription.ObjectNameEncodable + Config.GeneratedCodeFileExtension;
+                return new LazinatorCodeGenerationResult(objectDescription.FullyQualifiedObjectName, path, generatedCode, objectDescription.Compilation.GetDependencyInfo(), pipelineRunUniqueID, null);
+            }
+            catch (LazinatorCodeGenException e)
+            {
+                var descriptor = new DiagnosticDescriptor(
+                    id: "LAZIN",
+                    title: "Lazinator code generation error",
+                    messageFormat: e.Message,
+                    category: "tests",
+                    defaultSeverity: DiagnosticSeverity.Error,
+                    isEnabledByDefault: true);
+                Diagnostic diagnostic = Diagnostic.Create(descriptor, pairInfo.PrimaryLocation);
+                return new LazinatorCodeGenerationResult(objectDescription.FullyQualifiedObjectName, null, null, default, pipelineRunUniqueID, diagnostic);
+            }
         }
 
         private LazinatorPairInformation GetLazinatorPairInformation()
         {
-            LazinatorCompilationAnalyzer analyzer = LazinatorCompilationAnalyzer.CreateCompilationAnalyzer_WithoutConfig(Compilation); // we're not running the analyzer, but the analyzer code can help us get the LazinatorPairInfo.
+            LazinatorPairFinder analyzer = new LazinatorPairFinder(Compilation, Config); // we're not running the analyzer, but the analyzer code can help us get the LazinatorPairInfo.
             LazinatorPairInformation pairInfo = analyzer.GetLazinatorPairInfo(Compilation, InterfaceSymbol);
             return pairInfo;
         }
