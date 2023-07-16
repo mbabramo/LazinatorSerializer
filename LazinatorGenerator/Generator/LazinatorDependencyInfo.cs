@@ -12,6 +12,8 @@ namespace LazinatorGenerator.Generator
         internal readonly bool HashCodesAvailable;
         internal readonly int HashCode;
 
+        internal bool IsUninitialized => Dependencies.IsDefault & DependenciesWithHashCodes.IsDefault;
+
         public LazinatorDependencyInfo(ImmutableArray<string> dependencies)
         {
             this.Dependencies = dependencies;

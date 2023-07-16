@@ -23,6 +23,10 @@ namespace LazinatorGenerator.Generator
             DependencyInfo = dependencyInfo;
             PipelineRunUniqueID = pipelineRunUniqueID;
             HashCode = (generatedType, path, generatedCode, dependencyInfo, pipelineRunUniqueID).GetHashCode();
+            if (DependencyInfo.IsUninitialized)
+            {
+                var DEBUG = 0;
+            }
         }
 
         public LazinatorCodeGenerationResult WithUpdatedHashCodes(Dictionary<string, int> typeNameToHash) => new LazinatorCodeGenerationResult(GeneratedType, Path, GeneratedCode, DependencyInfo.WithUpdatedHashCodes(typeNameToHash), PipelineRunUniqueID);

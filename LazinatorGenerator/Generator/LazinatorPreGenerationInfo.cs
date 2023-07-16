@@ -33,7 +33,7 @@ namespace LazinatorGenerator.Generator
             var d = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, Config, true);
             var generatedCode = d.GetCodeBehind();
             string path = d.ObjectNameEncodable + Config.GeneratedCodeFileExtension;
-            return new LazinatorCodeGenerationResult(d.FullyQualifiedObjectName, generatedCode, path, d.Compilation.GetDependencyInfo(), pipelineRunUniqueID);
+            return new LazinatorCodeGenerationResult(d.FullyQualifiedObjectName, path, generatedCode, d.Compilation.GetDependencyInfo(), pipelineRunUniqueID);
         }
 
         private LazinatorPairInformation GetLazinatorPairInformation()

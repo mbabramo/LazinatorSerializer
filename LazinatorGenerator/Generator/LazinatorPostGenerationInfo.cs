@@ -43,6 +43,7 @@ namespace LazinatorGenerator.Generator
         {
             Dictionary<string, int> typeNameToHash = new Dictionary<string, int>();
             foreach (var input in collectedInputs)
+                if (input.AlreadyGeneratedCode.ContainsSuccessfullyGeneratedCode)
                 typeNameToHash[input.AlreadyGeneratedCode.GeneratedType] = input.HashCode;
 
             foreach (var input in collectedInputs)
