@@ -20,12 +20,10 @@ namespace LazinatorGenerator.Generator
         internal SemanticModel SemanticModel => SyntaxContext.SemanticModel;
         internal Compilation Compilation => SemanticModel.Compilation;
         internal INamedTypeSymbol InterfaceSymbol => (INamedTypeSymbol) SyntaxContext.TargetSymbol;
-        internal LazinatorPreGenerationInfo(GeneratorAttributeSyntaxContext syntaxContext, LazinatorConfig config, (string allPropertyDeclarations, ImmutableArray<string> namesOfTypesReliedOn) typeInfo)
+        internal LazinatorPreGenerationInfo(GeneratorAttributeSyntaxContext syntaxContext, LazinatorConfig config)
         {
             SyntaxContext = syntaxContext;
             Config = config;
-            AllPropertyDeclarations = typeInfo.allPropertyDeclarations;
-            NamesOfTypesReliedOn = typeInfo.namesOfTypesReliedOn;
         }
         
         internal LazinatorCodeGenerationResult DoSourceGeneration(Guid pipelineRunUniqueID)
@@ -37,7 +35,7 @@ namespace LazinatorGenerator.Generator
             var d = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, Config, true);
             var generatedCode = d.GetCodeBehind();
             string path = d.ObjectNameEncodable + Config.GeneratedCodeFileExtension;
-            return new LazinatorCodeGenerationResult(d.FullyQualifiedObjectName, generatedCode, path, d.GetDependencyInfo(), pipelineRunUniqueID);
+            return new LazinatorCodeGenerationResult(d.FullyQualifiedObjectName, generatedCode, path, default /* DEBUG */, pipelineRunUniqueID);
         }
 
         private LazinatorPairInformation GetLazinatorPairInformation()

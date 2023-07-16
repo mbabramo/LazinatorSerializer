@@ -20,6 +20,8 @@ namespace LazinatorGenerator.Generator
     /// (4) LazinatorPostGenerationInfo -> Generated code. If the LazinatorPostGenerationInfo has not changed, then the cached version will automatically be used. If LazinatorPostGenerationInfo is asked to generate code, meaning that it has changed in some way, then it must determine whether Step 2 actually ran on this step to create this object (in which case the generated code can just be returned, as it will reflect the state of all dependencies and that will help to avoid generating code twice) or was skipped in favor of a cached result (in which case the code must be generated at this point). It makes this determination by checking the PipelineRunUniqueID. If the PipelineRunUniqueID is the same as the PipelineRunUniqueID of the LazinatorPostGenerationInfo, then the code was already generated during this pipeline run and can be returned.  
     public class LazinatorIncrementalGenerator : IIncrementalGenerator
     {
+        public static Guid PipelineRunUniqueID = default;
+        
         public void Initialize(IncrementalGeneratorInitializationContext 
 context)
         {
@@ -41,17 +43,22 @@ context)
             });
             // Parse the JSON to generate LazinatorConfig objects, placed into an ImmutableArray. Note that we have designed LazinatorConfig to have fast hashing, so that the generator can use appropriate caching efficiently.
             IncrementalValueProvider<ImmutableArray<LazinatorConfig>> configLocationsAndContents = additionalTextsPathAndContents.Where(x => x.path != null).Select((x, cancellationToken) => new LazinatorConfig(x.path, x.text)).Collect();
-            // Now, we store the SyntaxContext and the applicable configuration file. It may seem tempting to defer choosing the appropriate source until we know that we need to generate the source, to save time early in the pipeline, but then changing any config file would force regeneration of every file in the project.
-            IncrementalValuesProvider<(GeneratorAttributeSyntaxContext SyntaxContext, ImmutableArray<LazinatorConfig> ConfigFiles, Guid pipelineRunUniqueID)> sourcesConfigsAndID = syntaxContexts.Combine(configLocationsAndContents).Select((x, cancellationToken) => (x.Left, x.Right));
-            IncrementalValuesProvider<LazinatorPreGenerationInfo> preGenerationInfos = sourcesConfigsAndID.Select((x, cancellationToken) => new LazinatorPreGenerationInfo(x.SyntaxContext, ChooseAppropriateConfig(Path.GetDirectoryName(x.SyntaxContext.TargetNode.SyntaxTree.FilePath), x.ConfigFiles), GetPropertiesTypeInfo(x.SyntaxContext)));
+            // Slight detour: We need to have a Guid for each run through the pipeline. Since this is a point where we just have one object (the immutable array), it's a good place to call Guid.NewGuid(), since we don't want to call it once per object. 
+            IncrementalValueProvider<ImmutableArray<LazinatorConfig>> configLocationsAndContents2 = configLocationsAndContents.Select((x, cancellationToken) =>
+            {
+                PipelineRunUniqueID = Guid.NewGuid();
+                return x;
+            });
+            // Back to our config files: Now, we store the SyntaxContext and the applicable configuration file. It may seem tempting to defer choosing the appropriate source until we know that we need to generate the source, to save time early in the pipeline, but then changing any config file would force regeneration of every file in the project.
+            IncrementalValuesProvider<(GeneratorAttributeSyntaxContext SyntaxContext, ImmutableArray<LazinatorConfig> ConfigFiles)> sourcesConfigsAndID = syntaxContexts.Combine(configLocationsAndContents2).Select((x, cancellationToken) => (x.Left, x.Right));
+            IncrementalValuesProvider<LazinatorPreGenerationInfo> preGenerationInfos = sourcesConfigsAndID.Select((x, cancellationToken) => new LazinatorPreGenerationInfo(x.SyntaxContext, ChooseAppropriateConfig(Path.GetDirectoryName(x.SyntaxContext.TargetNode.SyntaxTree.FilePath), x.ConfigFiles)));
             // Create a LazinatorPostGenerationInfo for each preGenerationInfo that hasn't been cached.
-            Guid pipelineRunUniqueID = Guid.NewGuid(); // DEBUG -- will this give a new one?
-            IncrementalValuesProvider<LazinatorPostGenerationInfo> postGenerationInfos = preGenerationInfos.Select((x, cancellationToken) => new LazinatorPostGenerationInfo(x, x.DoSourceGeneration(pipelineRunUniqueID)));  
+            IncrementalValuesProvider<LazinatorPostGenerationInfo> postGenerationInfos = preGenerationInfos.Select((x, cancellationToken) => new LazinatorPostGenerationInfo(x, x.DoSourceGeneration(PipelineRunUniqueID)));  
             IncrementalValueProvider<ImmutableArray<LazinatorPostGenerationInfo>> postGenerationInfosCollected = postGenerationInfos.Collect();
             IncrementalValuesProvider<LazinatorPostGenerationInfo> postGenerationInfosSeparated = postGenerationInfosCollected.SelectMany((x, cancellationToken) => LazinatorPostGenerationInfo.SeparateForNextPipelineStep(x));
             // Generate the source using the compilation and enums
-            context.RegisterSourceOutput(preGenerationInfos,
-                static (spc, singleSourceInfo) => singleSourceInfo.GenerateSource(spc, pipelineRunUniqueID));
+            context.RegisterSourceOutput(postGenerationInfosSeparated,
+                static (spc, postGenerationInfo) => postGenerationInfo.GenerateSource(spc, PipelineRunUniqueID));
         }
         
         static (string allPropertyDeclarations, ImmutableArray<string> namesOfTypesReliedOn) GetPropertiesTypeInfo(GeneratorAttributeSyntaxContext context)
