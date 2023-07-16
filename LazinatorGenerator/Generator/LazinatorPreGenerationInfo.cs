@@ -27,19 +27,17 @@ namespace LazinatorGenerator.Generator
             AllPropertyDeclarations = typeInfo.allPropertyDeclarations;
             NamesOfTypesReliedOn = typeInfo.namesOfTypesReliedOn;
         }
-
-        Debug; // add caching
         
-        internal void GenerateSource(SourceProductionContext spc)
+        internal LazinatorCodeGenerationResult DoSourceGeneration(Guid pipelineRunUniqueID)
         {
             LazinatorPairInformation pairInfo = GetLazinatorPairInformation();
-            if (pairInfo != null)
-            {
-                LazinatorCompilation lazinatorCompilation = new LazinatorCompilation(Compilation, pairInfo.LazinatorObject, Config);
-                var d = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, Config, true);
-                var resultingSource = d.GetCodeBehind();
-                spc.AddSource(d.ObjectNameEncodable + Config.GeneratedCodeFileExtension, resultingSource);
-            }
+            if (pairInfo == null)
+                return new LazinatorCodeGenerationResult(null, null, null, default, pipelineRunUniqueID);
+            LazinatorCompilation lazinatorCompilation = new LazinatorCompilation(Compilation, pairInfo.LazinatorObject, Config);
+            var d = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, Config, true);
+            var generatedCode = d.GetCodeBehind();
+            string path = d.ObjectNameEncodable + Config.GeneratedCodeFileExtension;
+            return new LazinatorCodeGenerationResult(d.FullyQualifiedObjectName, generatedCode, path, d.GetDependencyInfo(), pipelineRunUniqueID);
         }
 
         private LazinatorPairInformation GetLazinatorPairInformation()

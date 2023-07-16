@@ -13,22 +13,14 @@ namespace LazinatorGenerator.Generator
     internal readonly record struct LazinatorPostGenerationInfo
     {
         internal readonly LazinatorPreGenerationInfo PreGenerationInfo { get; }
-        internal readonly string TypeName { get; }
-        internal readonly string Path { get; }
-        internal readonly string AlreadyGeneratedCodeBehind { get; }
-        internal readonly Guid PipelineRunUniqueID { get; }
-        internal readonly LazinatorDependencyInfo DependencyInfo { get; }
+        internal readonly LazinatorCodeGenerationResult AlreadyGeneratedCode { get; }
         internal readonly int HashCode { get; }
 
-        public LazinatorPostGenerationInfo(LazinatorPreGenerationInfo preGenerationInfo, string typeName, string path, string alreadyGeneratedCodeBehind, Guid pipelineRunUniqueID, LazinatorDependencyInfo dependencyInfo)
+        public LazinatorPostGenerationInfo(LazinatorPreGenerationInfo preGenerationInfo, LazinatorCodeGenerationResult alreadyGeneratedCode)
         {
             PreGenerationInfo = preGenerationInfo;
-            TypeName = typeName;
-            Path = path;
-            AlreadyGeneratedCodeBehind = alreadyGeneratedCodeBehind;
-            PipelineRunUniqueID = pipelineRunUniqueID;
-            DependencyInfo = dependencyInfo;
-            HashCode = (TypeName, Path, AlreadyGeneratedCodeBehind, DependencyInfo).GetHashCode(); // only include in the hash the things that are necessary to determine if we can use a cached object.  
+            AlreadyGeneratedCode = alreadyGeneratedCode;
+            HashCode = (PreGenerationInfo, AlreadyGeneratedCode).GetHashCode();
         }
 
         public override int GetHashCode()
@@ -51,7 +43,7 @@ namespace LazinatorGenerator.Generator
         {
             Dictionary<string, int> typeNameToHash = new Dictionary<string, int>();
             foreach (var input in collectedInputs)
-                typeNameToHash[input.TypeName] = input.HashCode;
+                typeNameToHash[input.AlreadyGeneratedCode.GeneratedType] = input.HashCode;
 
             foreach (var input in collectedInputs)
                 yield return input.WithUpdatedHashCodes(typeNameToHash);
@@ -59,20 +51,23 @@ namespace LazinatorGenerator.Generator
 
         public LazinatorPostGenerationInfo WithUpdatedHashCodes(Dictionary<string, int> typeNameToHash)
         {
-
-            return new LazinatorPostGenerationInfo(PreGenerationInfo, TypeName, Path, AlreadyGeneratedCodeBehind, PipelineRunUniqueID, DependencyInfo.WithUpdatedHashCodes(typeNameToHash));
+            return new LazinatorPostGenerationInfo(PreGenerationInfo, AlreadyGeneratedCode.WithUpdatedHashCodes(typeNameToHash));
         }
 
         public void GenerateSource(SourceProductionContext spc, Guid pipelineRunUniqueID)
         {
-            if (pipelineRunUniqueID == PipelineRunUniqueID)
-                spc.AddSource(Path, AlreadyGeneratedCodeBehind); // We already generated the path and text at an earlier stage of this run through the pipeline. This was called because this LazinatorPostGenerationInfo had not been cached yet, but that doesn't matter. We know that we have just generated the source, and so we don't need to update it.
+            if (pipelineRunUniqueID == AlreadyGeneratedCode.PipelineRunUniqueID)
+            {
+                if (AlreadyGeneratedCode.GeneratedCode != null)
+                    spc.AddSource(AlreadyGeneratedCode.Path, AlreadyGeneratedCode.GeneratedCode); // We already generated the path and text at an earlier stage of this run through the pipeline. This was called because this LazinatorPostGenerationInfo had not been cached yet, but that doesn't matter. We know that we have just generated the source, and so we don't need to update it.
+                return;
+            }
             // If we get here, we're at Scenario 4. We know that the Lazinator interface itself has not changed, but the source needs to be regenerated. A challenge here is that we need the generated code to be cached. 
 
             // Now we need to generate the source again. There was no cached version of LazinatorPostGenerationInformation, and the source that was generated with the old pipeline run unique ID is stale, because some dependency has changed.  .Net hasn't cached this object, as a result of the change in the dependency information. So, we do need to regenerate the source and add it to the source production context. Note that this object will continue to have stale source, but now it will be used as the key to generate the correct source, and so this should not be called repeatedly. If somehow there was a cache miss, we would do the source generation again here, but we would then be in the cache.
-            var result = PreGenerationInfo.DoSourceGeneration();
-            if (result != null)
-                spc.AddSource(result.Value.path, result.Value.text);
+            var result = PreGenerationInfo.DoSourceGeneration(pipelineRunUniqueID);
+            if (result.ContainsSuccessfullyGeneratedCode == false)
+                spc.AddSource(result.Path, result.GeneratedCode);
         }
 
     }

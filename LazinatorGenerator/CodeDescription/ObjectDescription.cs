@@ -98,6 +98,7 @@ namespace Lazinator.CodeDescription
         public string NameIncludingGenerics_RefStruct => IsGeneric ? NameIncludingGenerics.Replace("<", "_RefStruct<") : NameIncludingGenerics + "_RefStruct";
         public string SimpleName { get; set; }
         public string FullyQualifiedObjectName { get; set; }
+        public string FullyQualifiedObjectName_InNullableMode { get; set; }
         public string ObjectNameEncodable => RoslynHelpers.EncodableTypeName(ILazinatorTypeSymbol);
 
         /* General aspects */
@@ -240,6 +241,7 @@ namespace Lazinator.CodeDescription
             Accessibility = compilation.ImplementingTypeAccessibility;
             Namespace = iLazinatorTypeSymbol.GetFullNamespace();
             FullyQualifiedObjectName = iLazinatorTypeSymbol.GetFullyQualifiedNameWithoutGlobal(NullableModeEnabled);
+            FullyQualifiedObjectName_InNullableMode = NullableModeEnabled ? FullyQualifiedObjectName : iLazinatorTypeSymbol.GetFullyQualifiedNameWithoutGlobal(true);
             NameIncludingGenerics = iLazinatorTypeSymbol.Name; // possibly updated later
             SimpleName = iLazinatorTypeSymbol.Name;
             if (iLazinatorTypeSymbol.TypeKind == TypeKind.Class)

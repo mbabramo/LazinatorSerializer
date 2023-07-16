@@ -23,6 +23,7 @@ namespace LazinatorGenerator.Generator
         public void Initialize(IncrementalGeneratorInitializationContext 
 context)
         {
+
             // Find the syntax contexts (i.e., interface declarations decorated with LazinatorAttribute)
             IncrementalValuesProvider<GeneratorAttributeSyntaxContext> syntaxContexts = context.SyntaxProvider
                           .ForAttributeWithMetadataName("Lazinator.Attributes.LazinatorAttribute", IsSyntaxTargetForGeneration, (ctx, cancellationToken) => ctx); // Note: We stick with the GeneratorAttributeSyntaxContext for now, so that we can combine with the LazinatorConfig.
@@ -41,15 +42,16 @@ context)
             // Parse the JSON to generate LazinatorConfig objects, placed into an ImmutableArray. Note that we have designed LazinatorConfig to have fast hashing, so that the generator can use appropriate caching efficiently.
             IncrementalValueProvider<ImmutableArray<LazinatorConfig>> configLocationsAndContents = additionalTextsPathAndContents.Where(x => x.path != null).Select((x, cancellationToken) => new LazinatorConfig(x.path, x.text)).Collect();
             // Now, we store the SyntaxContext and the applicable configuration file. It may seem tempting to defer choosing the appropriate source until we know that we need to generate the source, to save time early in the pipeline, but then changing any config file would force regeneration of every file in the project.
-            IncrementalValuesProvider<(GeneratorAttributeSyntaxContext SyntaxContext, ImmutableArray<LazinatorConfig> ConfigFiles)> sourcesAndConfigs = syntaxContexts.Combine(configLocationsAndContents).Select((x, cancellationToken) => (x.Left, x.Right));
-            IncrementalValuesProvider<LazinatorPreGenerationInfo> preGenerationInfos = sourcesAndConfigs.Select((x, cancellationToken) => new LazinatorPreGenerationInfo(x.SyntaxContext, ChooseAppropriateConfig(Path.GetDirectoryName(x.SyntaxContext.TargetNode.SyntaxTree.FilePath), x.ConfigFiles), GetPropertiesTypeInfo(x.SyntaxContext)));
+            IncrementalValuesProvider<(GeneratorAttributeSyntaxContext SyntaxContext, ImmutableArray<LazinatorConfig> ConfigFiles, Guid pipelineRunUniqueID)> sourcesConfigsAndID = syntaxContexts.Combine(configLocationsAndContents).Select((x, cancellationToken) => (x.Left, x.Right));
+            IncrementalValuesProvider<LazinatorPreGenerationInfo> preGenerationInfos = sourcesConfigsAndID.Select((x, cancellationToken) => new LazinatorPreGenerationInfo(x.SyntaxContext, ChooseAppropriateConfig(Path.GetDirectoryName(x.SyntaxContext.TargetNode.SyntaxTree.FilePath), x.ConfigFiles), GetPropertiesTypeInfo(x.SyntaxContext)));
             // Create a LazinatorPostGenerationInfo for each preGenerationInfo that hasn't been cached.
-            IncrementalValuesProvider<LazinatorPostGenerationInfo> postGenerationInfos = preGenerationInfos.Select((x, cancellationToken) => new LazinatorPostGenerationInfo(this, , x.DoSourceGeneration(), pipelineRunUniqueID, dependencyInfo)); // DEBUG: Problem -- we need to get a single run result, with the source generation, and put all info in that -- create a type rather than using a tuple, as we need to add dependency information, plus later diagnostic information. Maybe the type name should also be part of that. 
-                DEBUG; // must combine into immutable array, then separate out immutable array.
-            
+            Guid pipelineRunUniqueID = Guid.NewGuid(); // DEBUG -- will this give a new one?
+            IncrementalValuesProvider<LazinatorPostGenerationInfo> postGenerationInfos = preGenerationInfos.Select((x, cancellationToken) => new LazinatorPostGenerationInfo(x, x.DoSourceGeneration(pipelineRunUniqueID)));  
+            IncrementalValueProvider<ImmutableArray<LazinatorPostGenerationInfo>> postGenerationInfosCollected = postGenerationInfos.Collect();
+            IncrementalValuesProvider<LazinatorPostGenerationInfo> postGenerationInfosSeparated = postGenerationInfosCollected.SelectMany((x, cancellationToken) => LazinatorPostGenerationInfo.SeparateForNextPipelineStep(x));
             // Generate the source using the compilation and enums
             context.RegisterSourceOutput(preGenerationInfos,
-                static (spc, singleSourceInfo) => singleSourceInfo.GenerateSource(spc));
+                static (spc, singleSourceInfo) => singleSourceInfo.GenerateSource(spc, pipelineRunUniqueID));
         }
         
         static (string allPropertyDeclarations, ImmutableArray<string> namesOfTypesReliedOn) GetPropertiesTypeInfo(GeneratorAttributeSyntaxContext context)
