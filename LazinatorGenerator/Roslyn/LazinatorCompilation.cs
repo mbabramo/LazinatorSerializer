@@ -255,7 +255,7 @@ namespace LazinatorCodeGen.Roslyn
             if (attribute == null)
                 return null;
             if (attribute.Choice != "virtual" && attribute.Choice != "override" && attribute.Choice != "new")
-                throw new LazinatorCodeGenException($"Property {symbol.Name}'s DerivationKeyWordAttribution must have choice of 'virtual', 'override', or 'new'.");
+                throw new LazinatorCodeGenException($"Property {symbol.Name}'s DerivationKeywordAttribution must have choice of 'virtual', 'override', or 'new'.");
             return attribute.Choice + " ";
         }
 

@@ -344,7 +344,7 @@ namespace Lazinator.CodeDescription
             if (propertySymbol.SetMethod == null && SetterAccessibility == null)
                 throw new LazinatorCodeGenException($"ILazinator interface property {PropertyName} in {ContainingObjectDescription?.NameIncludingGenerics} must include a set method or a SetterAccessibilityAttribute.");
             if (propertySymbol.SetMethod != null && SetterAccessibility != null && SetterAccessibility.Choice != "public")
-                throw new LazinatorCodeGenException($"ILazinator interface property {PropertyName} in {ContainingObjectDescription?.NameIncludingGenerics} should omit the set because because the SetterAccessibilityAttribute specifies non-public accessibility.");
+                throw new LazinatorCodeGenException($"ILazinator interface property {PropertyName} in {ContainingObjectDescription?.NameIncludingGenerics} should omit the set because the SetterAccessibilityAttribute specifies non-public accessibility.");
 
             ParseVersionAttributes();
 
@@ -588,9 +588,14 @@ namespace Lazinator.CodeDescription
             if (InterchangeTypeName == null && DirectConverterTypeName == null)
             {
                 if (fullyQualifiedTypeName == "Lazinator.Core.ILazinator" || fullyQualifiedTypeName == "Lazinator.Core.ILazinator?")
-                    throw new LazinatorCodeGenException($"You cannot include ILazinator as a type to be serialized or as a type argument in a Lazinator interface. (The reason for this is that some Lazinator types do not serialize their ID.) To define a property that can deserialize a large number of Lazinator types, create a nonexclusive interface (possibly implementing no properties) and then define your Lazinator types as implementing that interface. This nonexclusive interface can then be used as the type for a Lazinator property.");
+                    throw new LazinatorCodeGenException($"You cannot include ILazinator as a type to be serialized or as a type argument in a Lazinator interface. (The reason for this is that some Lazinator types do not serialize their ID.) To define a property that can deserialize a large number of Lazinator types, create a nonexclusive interface (possibly implementing no properties) and then define your Lazinator types as implementing that interface. This nonexclusive interface can then be referenced in a property as a type to serialized, and you can set that property to any type implementing the interface.");
                 else
-                    throw new LazinatorCodeGenException($"Error generating {PropertyName} in {ContainingObjectDescription.SimpleName}: {fullyQualifiedTypeName} is a non-Lazinator type or interface. To use it as a type for a Lazinator property, you must either make it a Lazinator type or use a Lazinator.config file to specify either an interchange converter (i.e., a Lazinator object accept the non-Lazinator type as a parameter in its constructor) or a direct converter for it. Alternatively, if there is a constructor whose parameters match public properties (not fields) of the type, it can be handled automatically. If this is an interface, then define the NonexclusiveLazinator attribute and make sure that the interface inherits from ILazinator.");
+                {
+                    if (t.TypeKind == TypeKind.Interface)
+                        throw new LazinatorCodeGenException($"Error generating {PropertyName} in {ContainingObjectDescription.SimpleName}: {fullyQualifiedTypeName} is a non-Lazinator type or interface. Define the NonexclusiveLazinator attribute on the interface and make sure that the interface inherits from ILazinator. Alternatively, to use it as a type for a Lazinator property, you must either make it a Lazinator type or use a LazinatorConfig.json file to specify either an interchange converter (i.e., a Lazinator object accept the non-Lazinator type as a parameter in its constructor) or a direct converter for it.") ;
+                    else
+                        throw new LazinatorCodeGenException($"Error generating {PropertyName} in {ContainingObjectDescription.SimpleName}: {fullyQualifiedTypeName} is a non-Lazinator type or interface. To use it as a type for a Lazinator property, you must either make it a Lazinator type or use a LazinatorConfig.json file to specify either an interchange converter (i.e., a Lazinator object accept the non-Lazinator type as a parameter in its constructor) or a direct converter for it. Alternatively, if there is a constructor whose parameters match public properties (not fields) of the type, it can be handled automatically, depending on the LazinatorConfig.json settings. ");
+                }
             }
         }
 
@@ -719,7 +724,7 @@ namespace Lazinator.CodeDescription
                     CloneLazinatorAttribute attribute = ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneLazinatorAttribute>(exclusiveInterface); // we already know that the interface exists, and there should be only one
                     if (attribute == null)
                         throw new LazinatorCodeGenException(
-                            "Lazinator attribute is required for each interface implementing ILazinator, including inherited attributes.");
+                            "Lazinator attribute is required for each interface implementing ILazinator, including inherited interfaces.");
                     UniqueIDForLazinatorType = attribute.UniqueID;
 
                     CloneFixedLengthLazinatorAttribute fixedLengthAttribute =
@@ -755,7 +760,7 @@ namespace Lazinator.CodeDescription
             }
             catch (Exception ex)
             {
-                throw new LazinatorCodeGenException($"SetSelfSerializablePropertyType failed; message {ex.Message}");
+                throw new LazinatorCodeGenException($"Unexpected exception. SetLazinatorPropertyType failed; message {ex.Message}");
             }
         }
 
@@ -871,7 +876,7 @@ namespace Lazinator.CodeDescription
             // see if the property has already been defined (in case this is a recursive hierarchy)
             foreach (PropertyDescription pd in ContainingPropertyHierarchy())
                 if (SymbolEqualityComparer.Default.Equals(pd.TypeSymbolIfNoProperty, typeSymbol))
-                    throw new LazinatorCodeGenException($"The type {typeSymbol} is recursively defined. Recursive record-like types are not supported.");
+                    throw new LazinatorCodeGenException($"The type {typeSymbol} is recursively defined. Recursive record-like types are not supported by Lazinator.");
             // If the typeSymbol is "string" and the nullable context is disabled, then it should actually be nullable. 
             return new PropertyDescription(typeSymbol, containingObjectDescription, nullableContextSetting, outputNullableContextSetting, containingPropertyDescription, propertyName);
         }

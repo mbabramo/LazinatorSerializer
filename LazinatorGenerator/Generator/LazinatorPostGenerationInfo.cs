@@ -65,7 +65,7 @@ namespace LazinatorGenerator.Generator
             }
             // If we get here, we're at Scenario 4. We know that the Lazinator interface itself has not changed, but the source needs to be regenerated. A challenge here is that we need the generated code to be cached. 
             // Now we need to generate the source again. There was no cached version of LazinatorPostGenerationInformation, and the source that was generated with the old pipeline run unique ID is stale, because some dependency has changed.  .Net hasn't cached this object, as a result of the change in the dependency information. So, we do need to regenerate the source and add it to the source production context. Note that this object will continue to have stale source, but now it will be used as the key to generate the correct source, and so this should not be called repeatedly. If somehow there was a cache miss, we would do the source generation again here, but we would then be in the cache.
-            var result = PreGenerationInfo.DoSourceGeneration(pipelineRunUniqueID);
+            var result = PreGenerationInfo.ExecuteSourceGeneration(pipelineRunUniqueID);
             if (result.ContainsSuccessfullyGeneratedCode == false)
                 spc.AddSource(result.Path, result.GeneratedCode);
         }

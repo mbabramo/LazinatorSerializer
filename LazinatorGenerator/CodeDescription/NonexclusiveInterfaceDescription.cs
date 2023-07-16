@@ -26,7 +26,7 @@ namespace Lazinator.CodeDescription
             Container = container;
             CloneNonexclusiveLazinatorAttribute nonexclusiveLazinatorAttribute = fileSet.GetFirstAttributeOfType<CloneNonexclusiveLazinatorAttribute>(t);
             if (nonexclusiveLazinatorAttribute == null)
-                throw new LazinatorCodeGenException("Expected nonexclusive self-serialize attribute.");
+                throw new LazinatorCodeGenException("Expected NonexclusiveLazinator attribute.");
             if (fileSet.PropertiesForType.ContainsKey(typeName))
             {
                 Properties = fileSet.PropertiesForType[typeName].Select(x => new PropertyDescription(x.Property, container, NullableContextSetting, null, null, false)).ToList();

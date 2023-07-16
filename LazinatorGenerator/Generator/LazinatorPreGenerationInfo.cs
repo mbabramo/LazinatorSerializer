@@ -24,7 +24,7 @@ namespace LazinatorGenerator.Generator
             Config = config;
         }
         
-        internal LazinatorCodeGenerationResult DoSourceGeneration(Guid pipelineRunUniqueID)
+        internal LazinatorCodeGenerationResult ExecuteSourceGeneration(Guid pipelineRunUniqueID)
         {
             LazinatorPairInformation pairInfo = GetLazinatorPairInformation();
             if (pairInfo == null)
