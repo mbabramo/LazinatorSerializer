@@ -154,6 +154,21 @@ namespace LazinatorCodeGen.Roslyn
             ILazinatorProperties = new HashSet<string>(iLazinatorSymbol.GetPropertySymbols().Select(x => x.GetFullyQualifiedName(true)));
         }
         
+        public ImmutableArray<string> GetInterfaceSymbolNames()
+        {
+            HashSet<string> h = new HashSet<string>();
+            foreach (var interfaceSymbol in RelevantSymbols.Where(s => s.Value is ITypeSymbol typeSymbol && typeSymbol.TypeKind == TypeKind.Interface))
+            {
+                h.Add(interfaceSymbol.Value.GetFullyQualifiedName(true));
+            }
+            return ImmutableArray.Create<string>(h.OrderBy(x => x).ToArray());
+        }
+
+        internal LazinatorDependencyInfo GetDependencyInfo()
+        {
+            return new LazinatorDependencyInfo(GetInterfaceSymbolNames());
+        }
+        
         private void RecordPropertiesForInterface(INamedTypeSymbol @interface)
         {
             if (ILazinatorProperties == null)

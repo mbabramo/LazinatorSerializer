@@ -15,8 +15,6 @@ namespace LazinatorGenerator.Generator
     {
         internal GeneratorAttributeSyntaxContext SyntaxContext;
         internal LazinatorConfig Config;
-        internal string AllPropertyDeclarations;
-        internal ImmutableArray<string> NamesOfTypesReliedOn;
         internal SemanticModel SemanticModel => SyntaxContext.SemanticModel;
         internal Compilation Compilation => SemanticModel.Compilation;
         internal INamedTypeSymbol InterfaceSymbol => (INamedTypeSymbol) SyntaxContext.TargetSymbol;
@@ -35,7 +33,7 @@ namespace LazinatorGenerator.Generator
             var d = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, Config, true);
             var generatedCode = d.GetCodeBehind();
             string path = d.ObjectNameEncodable + Config.GeneratedCodeFileExtension;
-            return new LazinatorCodeGenerationResult(d.FullyQualifiedObjectName, generatedCode, path, default /* DEBUG */, pipelineRunUniqueID);
+            return new LazinatorCodeGenerationResult(d.FullyQualifiedObjectName, generatedCode, path, d.Compilation.GetDependencyInfo(), pipelineRunUniqueID);
         }
 
         private LazinatorPairInformation GetLazinatorPairInformation()
