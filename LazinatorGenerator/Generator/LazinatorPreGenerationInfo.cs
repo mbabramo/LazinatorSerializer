@@ -31,12 +31,12 @@ namespace LazinatorGenerator.Generator
                 return new LazinatorCodeGenerationResult(null, null, null, default, pipelineRunUniqueID, default);
             LazinatorCompilation lazinatorCompilation = new LazinatorCompilation(Compilation, pairInfo.LazinatorObject, Config);
 
-            var objectDescription = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, Config, true);
             try
             {
+                var objectDescription = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, Config, true);
                 var generatedCode = objectDescription.GetCodeBehind();
                 string path = objectDescription.ObjectNameEncodable + Config.GeneratedCodeFileExtension;
-                return new LazinatorCodeGenerationResult(objectDescription.FullyQualifiedObjectName, path, generatedCode, objectDescription.Compilation.GetDependencyInfo(), pipelineRunUniqueID, null);
+                return new LazinatorCodeGenerationResult(objectDescription.FullyQualifiedObjectName_InNullableMode, path, generatedCode, lazinatorCompilation.GetDependencyInfo(), pipelineRunUniqueID, null);
             }
             catch (LazinatorCodeGenException e)
             {
@@ -48,7 +48,7 @@ namespace LazinatorGenerator.Generator
                     defaultSeverity: DiagnosticSeverity.Error,
                     isEnabledByDefault: true);
                 Diagnostic diagnostic = Diagnostic.Create(descriptor, pairInfo.PrimaryLocation);
-                return new LazinatorCodeGenerationResult(objectDescription.FullyQualifiedObjectName, null, null, default, pipelineRunUniqueID, diagnostic);
+                return new LazinatorCodeGenerationResult(lazinatorCompilation.ImplementingTypeSymbol.GetFullyQualifiedNameWithoutGlobal(true), null, null, lazinatorCompilation.GetDependencyInfo(), pipelineRunUniqueID, diagnostic);
             }
         }
 

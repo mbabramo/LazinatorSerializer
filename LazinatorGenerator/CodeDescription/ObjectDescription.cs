@@ -1841,11 +1841,15 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
                 {NullableModeSettingString}
                 namespace { primaryNamespace }
                 {{");
+            header.Append($@"
+                        #pragma warning disable 8019");
             foreach (string other in otherNamespaces)
                 header.Append($@"
                         using {other};");
             header.Append($@"
                         using static Lazinator.Core.LazinatorUtilities;");
+            header.Append($@"
+                        #pragma warning restore 8019");
             return header.ToString();
         }
 
