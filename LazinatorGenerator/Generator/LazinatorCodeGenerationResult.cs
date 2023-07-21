@@ -35,5 +35,13 @@ namespace LazinatorGenerator.Generator
         {
             return HashCode;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is LazinatorCodeGenerationResult other))
+                return false;
+
+            return other.GeneratedType == GeneratedType && other.Path == Path && other.GeneratedCode == GeneratedCode && other.DependencyInfo.Equals(DependencyInfo) && other.PipelineRunUniqueID == PipelineRunUniqueID && ((other.Diagnostic == null && Diagnostic == null) || (other.Diagnostic != null && Diagnostic != null && other.Diagnostic.Id == Diagnostic.Id && other.Diagnostic.GetMessage() == Diagnostic.GetMessage()));
+        }
     }
 }

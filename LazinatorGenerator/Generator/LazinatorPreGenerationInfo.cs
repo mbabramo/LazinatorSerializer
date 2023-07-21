@@ -2,6 +2,7 @@
 using LazinatorCodeGen.Roslyn;
 using LazinatorGenerator.Settings;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,20 @@ namespace LazinatorGenerator.Generator
             SyntaxContext = syntaxContext;
             Config = config;
         }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
         
+        public override bool Equals(object obj)
+        {
+            return false; // DEBUG
+            if (!(obj is LazinatorPreGenerationInfo))
+                return false;
+            return Config.Equals(Config) && SyntaxContext.TargetNode.IsEquivalentTo(((LazinatorPreGenerationInfo)obj).SyntaxContext.TargetNode, false);
+        }
+
         internal LazinatorCodeGenerationResult ExecuteSourceGeneration(Guid pipelineRunUniqueID)
         {
             LazinatorPairInformation pairInfo = GetLazinatorPairInformation();
@@ -33,7 +47,7 @@ namespace LazinatorGenerator.Generator
 
             try
             {
-                var objectDescription = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, Config, true);
+                var objectDescription = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, Config, false);
                 var generatedCode = objectDescription.GetCodeBehind();
                 string path = objectDescription.ObjectNameEncodable + Config.GeneratedCodeFileExtension;
                 return new LazinatorCodeGenerationResult(objectDescription.FullyQualifiedObjectName_InNullableMode, path, generatedCode, lazinatorCompilation.GetDependencyInfo(), pipelineRunUniqueID, null);
