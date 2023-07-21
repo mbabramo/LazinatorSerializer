@@ -33,9 +33,14 @@ context)
             // For each syntax context, we need the appropriate LazinatorConfig. We will use the config file in the same directory as the source file, if it exists, or in the closest parent/ancestor directory, or the default config. 
             // Find our LazinatorConfig.json and Lazinatorconfig.json files.
             IncrementalValuesProvider<AdditionalText> additionalTextsProvider = context.AdditionalTextsProvider
-                .Where(x => x.Path.EndsWith(LazinatorConfigLoader.ConfigFileName) || x.Path.EndsWith(LazinatorConfigLoader.AltConfigFileName));
+                .Where((Func<AdditionalText, bool>)(x => PathMatches(x)));
+
+            static bool PathMatches(AdditionalText x)
+            {
+                return x.Path.EndsWith(LazinatorConfigLoader.ConfigFileName) || x.Path.EndsWith(LazinatorConfigLoader.AltConfigFileName);
+            }
             /// Extract the path and text from each of these. 
-            IncrementalValuesProvider<(string path, string text)> additionalTextsPathAndContents = additionalTextsProvider.Select<AdditionalText, (string path, string text)>((additionalText, cancellationToken) => 
+            IncrementalValuesProvider<(string path, string text)> additionalTextsPathAndContents = additionalTextsProvider.Select<AdditionalText, (string path, string text)>((additionalText, cancellationToken) =>
             {
                 string filePath = additionalText.Path.TrimEnd(Path.DirectorySeparatorChar);
                 string fileText = additionalText.GetText(cancellationToken).ToString();
@@ -53,14 +58,14 @@ context)
             IncrementalValuesProvider<(GeneratorAttributeSyntaxContext SyntaxContext, ImmutableArray<LazinatorConfig> ConfigFiles)> sourcesConfigsAndID = syntaxContexts.Combine(configLocationsAndContents2).Select((x, cancellationToken) => (x.Left, x.Right));
             IncrementalValuesProvider<LazinatorPreGenerationInfo> preGenerationInfos = sourcesConfigsAndID.Select((x, cancellationToken) => new LazinatorPreGenerationInfo(x.SyntaxContext, ChooseAppropriateConfig(Path.GetDirectoryName(x.SyntaxContext.TargetNode.SyntaxTree.FilePath), x.ConfigFiles)));
             // Create a LazinatorPostGenerationInfo for each preGenerationInfo that hasn't been cached.
-            IncrementalValuesProvider<LazinatorPostGenerationInfo> postGenerationInfos = preGenerationInfos.Select((x, cancellationToken) => new LazinatorPostGenerationInfo(x, x.ExecuteSourceGeneration(PipelineRunUniqueID))).Where(x => !x.AlreadyGeneratedCode.IsEmpty);  
+            IncrementalValuesProvider<LazinatorPostGenerationInfo> postGenerationInfos = preGenerationInfos.Select((x, cancellationToken) => new LazinatorPostGenerationInfo(x, x.ExecuteSourceGeneration(PipelineRunUniqueID))).Where(x => !x.AlreadyGeneratedCode.IsEmpty);
             IncrementalValueProvider<ImmutableArray<LazinatorPostGenerationInfo>> postGenerationInfosCollected = postGenerationInfos.Collect();
             IncrementalValuesProvider<LazinatorPostGenerationInfo> postGenerationInfosSeparated = postGenerationInfosCollected.SelectMany((x, cancellationToken) => LazinatorPostGenerationInfo.SeparateForNextPipelineStep(x));
             // Generate the source using the compilation and enums
             context.RegisterSourceOutput(postGenerationInfosSeparated,
                 static (spc, postGenerationInfo) => postGenerationInfo.GenerateSource(spc, PipelineRunUniqueID));
         }
-        
+
         static (string allPropertyDeclarations, ImmutableArray<string> namesOfTypesReliedOn) GetPropertiesTypeInfo(GeneratorAttributeSyntaxContext context)
         {
             var propertiesListedHere = String.Join(";", context.TargetNode.DescendantNodes().OfType<PropertyDeclarationSyntax>().Select(x => x.ToString()));
@@ -78,7 +83,7 @@ context)
             for (int i = 0; i < candidateConfigs.Length; i++)
             {
                 string candidateConfigPath = candidateConfigs[i].ConfigFilePath;
-                if (candidateConfigPath.Length > (bestConfigSoFar?.ConfigFilePath.Length ?? 0) && path.StartsWith(candidateConfigPath))
+                if (candidateConfigPath.Length >= (bestConfigSoFar?.ConfigFilePath.Length ?? 0) && path.StartsWith(candidateConfigPath))
                     bestConfigSoFar = candidateConfigs[i];
             }
             return bestConfigSoFar ?? new LazinatorConfig();

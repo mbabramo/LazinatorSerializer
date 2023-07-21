@@ -32,9 +32,10 @@ namespace LazinatorGenerator.Generator
         
         public override bool Equals(object obj)
         {
-            if (!(obj is LazinatorPreGenerationInfo))
+            if (!(obj is LazinatorPreGenerationInfo other))
                 return false;
-            return Config.Equals(Config) && SyntaxContext.TargetNode.IsEquivalentTo(((LazinatorPreGenerationInfo)obj).SyntaxContext.TargetNode, false);
+            bool returnVal = Config.Equals(other.Config) && SyntaxContext.TargetNode.IsEquivalentTo(other.SyntaxContext.TargetNode, false);
+            return returnVal;
         }
 
         internal LazinatorCodeGenerationResult ExecuteSourceGeneration(Guid pipelineRunUniqueID)
@@ -46,7 +47,7 @@ namespace LazinatorGenerator.Generator
 
             try
             {
-                var objectDescription = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, Config, false);
+                var objectDescription = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, Config, false, pipelineRunUniqueID);
                 var generatedCode = objectDescription.GetCodeBehind();
                 string path = objectDescription.ObjectNameEncodable + Config.GeneratedCodeFileExtension;
                 return new LazinatorCodeGenerationResult(objectDescription.FullyQualifiedObjectName_InNullableMode, path, generatedCode, lazinatorCompilation.GetDependencyInfo(), pipelineRunUniqueID, null);

@@ -109,6 +109,21 @@ namespace LazinatorTests.Tests
             return Task.CompletedTask;
         }
 
+        public Task Generator_CachingWhenChangeMadeToIrrelevantClass()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Generator_NoCachingWhenChangeMadeToBaseClass()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Generator_NoCachingWhenChangeMadeToPropertyName()
+        {
+            throw new NotImplementedException();
+        }
+
         private static void RunGeneratorForSimpleLazinator(out GeneratorExecutionResult executionResult, out (string path, string text) soleSource)
         {
             List<(string path, string text)> sources = GetSourcesForSimpleLazinator();
