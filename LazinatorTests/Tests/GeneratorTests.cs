@@ -65,7 +65,6 @@ namespace LazinatorTests.Tests
             return Task.CompletedTask;
         }
 
-
         [Fact]
         public Task GeneratorForSimpleLazinator_PipelineCaches()
         {
@@ -78,7 +77,34 @@ namespace LazinatorTests.Tests
             var executionResultWithGeneratedSources = AddGeneratedFilesToCompilation(executionResult);
             executionResultWithGeneratedSources.driver.RunGenerators(executionResultWithGeneratedSources.compilation); // rerun generators
             var filesGenerated = executionResultWithGeneratedSources.driver.GetRunResult().Results.SelectMany(x => x.GeneratedSources).ToList();
-            filesGenerated.Count.Should().Be(0);
+
+            bool exactMatch = filesGenerated[0].SourceText.ToString() == filesGeneratedInitially[0].SourceText.ToString(); // checks whether files match, including the date and version number.
+            exactMatch.Should().BeTrue();
+
+            return Task.CompletedTask;
+        }
+
+        [Fact]
+        public Task GeneratorForSimpleLazinator_NoCachingWithConfigChange()
+        {
+
+            RunGeneratorForSimpleLazinator(out GeneratorExecutionResult executionResult, out (string path, string text) soleSource);
+
+            var filesGeneratedInitially = executionResult.driver.GetRunResult().Results.SelectMany(x => x.GeneratedSources).ToList();
+
+            // Update compilation
+            var executionResultWithGeneratedSources = AddGeneratedFilesToCompilation(executionResult);
+            List<(string path, string text)> additionalTexts = new List<(string path, string text)>() { ("LazinatorConfig.json", @"{
+  ""Comment"": ""This is a change that should trigger regeneration of code.""
+}") }; 
+            executionResultWithGeneratedSources = executionResultWithGeneratedSources with { driver = AddAdditionalTextsToDriver(additionalTexts, executionResultWithGeneratedSources.driver) };
+
+            executionResultWithGeneratedSources.driver.RunGenerators(executionResultWithGeneratedSources.compilation); // rerun generators
+            var filesGenerated = executionResultWithGeneratedSources.driver.GetRunResult().Results.SelectMany(x => x.GeneratedSources).ToList();
+
+            bool exactMatch = filesGenerated[0].SourceText.ToString() == filesGeneratedInitially[0].SourceText.ToString(); // checks whether files match, including the date and version number.
+            exactMatch.Should().BeFalse();
+            // DEBUG -- make sure that nothing substantive changed
 
             return Task.CompletedTask;
         }
@@ -307,7 +333,7 @@ namespace MyCode
             IEnumerable<SyntaxTree> syntaxTrees = sources.Select(x => CSharpSyntaxTree.ParseText(x.text, path: x.path)).ToArray();
 
             // Create references for assemblies we required
-            IEnumerable <PortableExecutableReference> references = AdhocWorkspaceManager.GetProjectReferences();
+            IEnumerable<PortableExecutableReference> references = AdhocWorkspaceManager.GetProjectReferences();
 
             // Create a Roslyn compilation for the syntax tree.
             CSharpCompilation compilation = CSharpCompilation.Create(
@@ -321,11 +347,7 @@ namespace MyCode
 
             // The GeneratorDriver is used to run our generator against a compilation
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
-            if (additionalTexts != null)
-            {
-                var additionalTexts2 = ImmutableArray.CreateRange(additionalTexts.Select(x => (AdditionalText)new CustomAdditionalText(x.path, x.text)));
-                driver = driver.AddAdditionalTexts(additionalTexts2);
-            }
+            driver = AddAdditionalTextsToDriver(additionalTexts, driver);
 
             // Run the source generator!
             driver = driver.RunGenerators(compilation);
@@ -333,6 +355,17 @@ namespace MyCode
             // Look at the resulting source file
             List<(string path, string text)> outputs = driver.GetRunResult().Results[0].GeneratedSources.Select(x => (x.SyntaxTree.FilePath, x.SourceText.ToString())).ToList();
             return new GeneratorExecutionResult(generator, compilation, driver, outputs);
+        }
+
+        private static GeneratorDriver AddAdditionalTextsToDriver(IEnumerable<(string path, string text)> additionalTexts, GeneratorDriver driver)
+        {
+            if (additionalTexts != null)
+            {
+                var additionalTexts2 = ImmutableArray.CreateRange(additionalTexts.Select(x => (AdditionalText)new CustomAdditionalText(x.path, x.text)));
+                driver = driver.AddAdditionalTexts(additionalTexts2);
+            }
+
+            return driver;
         }
 
         private static GeneratorExecutionResult AddGeneratedFilesToCompilation(GeneratorExecutionResult executionResult)

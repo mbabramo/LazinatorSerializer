@@ -32,7 +32,6 @@ namespace LazinatorGenerator.Generator
         
         public override bool Equals(object obj)
         {
-            return false; // DEBUG
             if (!(obj is LazinatorPreGenerationInfo))
                 return false;
             return Config.Equals(Config) && SyntaxContext.TargetNode.IsEquivalentTo(((LazinatorPreGenerationInfo)obj).SyntaxContext.TargetNode, false);
