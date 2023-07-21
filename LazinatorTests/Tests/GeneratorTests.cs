@@ -104,7 +104,7 @@ namespace LazinatorTests.Tests
 
             bool exactMatch = filesGenerated[0].SourceText.ToString() == filesGeneratedInitially[0].SourceText.ToString(); // checks whether files match, including the date and version number.
             exactMatch.Should().BeFalse();
-            // DEBUG -- make sure that nothing substantive changed
+            // DEBUG -- this isn't working. Why? PostGenerationInfo is being created both times, so it's not actually caching. But the new version doesn't appear here. Could it be something to do with what I'm calling. 
 
             return Task.CompletedTask;
         }
