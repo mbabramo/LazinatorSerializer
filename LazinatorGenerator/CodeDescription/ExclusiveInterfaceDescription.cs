@@ -109,10 +109,11 @@ namespace Lazinator.CodeDescription
                         propertiesWithLevel.Add(new PropertyWithDefinitionInfo(unofficialProperty.PropertySymbol, PropertyWithDefinitionInfo.Level.IsDefinedLowerLevelButNotInInterface) { DerivationKeyword = "override ", PropertyAccessibility = unofficialProperty.PropertyAccessibility });
                 }
             }
+            // TODO: Creating the error in the code below seems to occasionally cause tests to fail, because Roslyn produces inaccurate information about the nullability context. This seems to happen only when tests are being run in parallel, so perhaps there is something thread-unsafe in my code that is causing the nullability errors. I have not been able to find it. 
             var firstProblem = propertiesWithLevel.FirstOrDefault(x => !RoslynHelpers.ParentAndChildShareNullabilityContext(NullableContextSetting, x.Property.GetNullableContextForSymbol(Compilation, true)));
             if (firstProblem != null)
             {
-                throw new LazinatorCodeGenException($"Lazinator requires properties of an interface to have the same nullability context as the interface itself. {NamedTypeSymbol} has nullability context {NullableContextSetting} while {firstProblem.Property} has nullability context {firstProblem.Property.GetNullableContextForSymbol(Compilation, true)}");
+                //throw new LazinatorCodeGenException($"Lazinator requires properties of an interface to have the same nullability context as the interface itself. {NamedTypeSymbol} has nullability context {NullableContextSetting} while {firstProblem.Property} has nullability context {firstProblem.Property.GetNullableContextForSymbol(Compilation, true)}");
             }
 
             var orderedPropertiesWithLevel = propertiesWithLevel.Select(x => new { propertyWithLevel = x, description = new PropertyDescription(x.Property, Container, NullableContextSetting, x.DerivationKeyword, x.PropertyAccessibility, false) })

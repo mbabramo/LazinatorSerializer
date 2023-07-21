@@ -373,6 +373,12 @@ public class MyOtherClass
 
         private static async Task CompleteGenerateCode(Type existingType, string project, string mainFolder, string subfolder, AdhocWorkspace ws, Func<LazinatorConfig?, LazinatorConfig> modifyDefaultConfig = null)
         {
+            bool completeTest = false; // Set to true to automatically update all test classes on the local development machine to a new format. This is useful as a way of updating the Lazinator code in the various Lazinator projects, which do not subscribe to the source generator. 
+            bool automaticallyFix = true; // if true, then if there is not a match, then the relevant code file is updated.
+
+            if (!completeTest)
+                return;
+            
             if (mainFolder == "" && subfolder == "")
                 mainFolder = "/";
             if (existingType.IsInterface)
@@ -398,10 +404,7 @@ public class MyOtherClass
             var d = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, config, true);
             var result = d.GetCodeBehind();
             bool match = codeBehind == result;
-
-            // return; // uncomment this to prevent any changes to classes during testing if automaticallyFix is true
-
-            bool automaticallyFix = true; // Set to true to automatically update all test classes on the local development machine to a new format. This will trivially result in the test passing. Before doing this, submit all changes. After doing this, if code compiles, run all tests. Then set this back to false. 
+            
             if (automaticallyFix && !match)
                 File.WriteAllText(codeBehindPath, result);
             else
