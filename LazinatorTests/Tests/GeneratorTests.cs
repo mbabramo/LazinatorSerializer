@@ -132,7 +132,6 @@ namespace LazinatorTests.Tests
 
         #region Sources for generator tests
 
-
         private static List<(string filename, string text)> GetSourcesForSimpleLazinator()
         {
             var mainProgramSource = @"
@@ -230,6 +229,8 @@ namespace MyCode
             return sources;
         }
 
+        private static List<(string filename, string text)> ReplaceInSources(List<(string filename, string text)> originals, string searchFor, string replaceWith) => originals.Select(x => (x.filename, x.text.Replace(searchFor, replaceWith))).ToList();
+
         #endregion
 
         #region Generator execution
@@ -288,7 +289,16 @@ namespace MyCode
             return executionResult;
         }
 
-
+        private static GeneratorExecutionResult ReplaceFileWithUpdatedVersion(GeneratorExecutionResult executionResult, string path, string text)
+        {
+            SyntaxTree oldTree = executionResult.compilation.SyntaxTrees.FirstOrDefault(x => x.FilePath == path);
+            if (oldTree == null)
+                throw new Exception("Source didn't exist as expected.");
+            executionResult = executionResult with { compilation = executionResult.compilation.RemoveSyntaxTrees(oldTree) };
+            SyntaxTree newTree = CSharpSyntaxTree.ParseText(text, null, path);
+            executionResult = executionResult with { compilation = executionResult.compilation.AddSyntaxTrees(newTree) };
+            return executionResult;
+        }
     }
 
     public static class ModuleInitializer
