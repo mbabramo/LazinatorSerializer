@@ -109,16 +109,19 @@ namespace LazinatorTests.Tests
             return Task.CompletedTask;
         }
 
+        [Fact]
         public Task Generator_CachingWhenChangeMadeToIrrelevantClass()
         {
             throw new NotImplementedException();
         }
 
+        [Fact]
         public Task Generator_NoCachingWhenChangeMadeToBaseClass()
         {
             throw new NotImplementedException();
         }
 
+        [Fact]
         public Task Generator_NoCachingWhenChangeMadeToPropertyName()
         {
             throw new NotImplementedException();
@@ -416,7 +419,7 @@ namespace MyCode
         [ModuleInitializer]
         public static void Init()
         {
-            VerifySourceGenerators.Enable();
+            //VerifySourceGenerators.Enable();
         }
     }
 
