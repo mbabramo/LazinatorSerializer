@@ -27,7 +27,7 @@ namespace LazinatorGenerator.Generator
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return (SyntaxContext, Config).GetHashCode();
         }
         
         public override bool Equals(object obj)
