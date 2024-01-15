@@ -56,18 +56,20 @@ namespace LazinatorGenerator.Generator
             return new LazinatorPostGenerationInfo(PreGenerationInfo, AlreadyGeneratedCode.WithUpdatedHashCodes(typeNameToHash));
         }
 
+        static bool DEBUG = false;
         public void GenerateSource(SourceProductionContext spc, Guid pipelineRunUniqueID, IDateTimeNow dateTimeNowProvider)
         {
             if (pipelineRunUniqueID == AlreadyGeneratedCode.PipelineRunUniqueID)
             {
                 if (AlreadyGeneratedCode.GeneratedCode != null)
-                    spc.AddSource(AlreadyGeneratedCode.Path, AlreadyGeneratedCode.GeneratedCode); // We already generated the path and text at an earlier stage of this run through the pipeline. This was called because this LazinatorPostGenerationInfo had not been cached yet, but that doesn't matter. We know that we have just generated the source, and so we don't need to update it.
+                    spc.AddSource(DEBUG ? "MyExample2.laz.cs" : AlreadyGeneratedCode.Path, AlreadyGeneratedCode.GeneratedCode); // We already generated the path and text at an earlier stage of this run through the pipeline. This was called because this LazinatorPostGenerationInfo had not been cached yet, but that doesn't matter. We know that we have just generated the source, and so we don't need to update it.
                 else
                 {
                     // Maybe we had a problem generating the code. If so, we should report the diagnostic.
                     if (AlreadyGeneratedCode.Diagnostic != null)
                         spc.ReportDiagnostic(AlreadyGeneratedCode.Diagnostic);
                 }
+                DEBUG = true;
                 return;
             }
             // If we get here, we're at Scenario 4. We know that the Lazinator interface itself has not changed, but the source needs to be regenerated. A challenge here is that we need the generated code to be cached. 

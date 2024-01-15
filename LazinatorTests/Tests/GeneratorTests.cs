@@ -88,20 +88,28 @@ namespace LazinatorTests.Tests
         [Fact]
         public Task GeneratorForSimpleLazinator_NoCachingWithConfigChange()
         {
-
-            RunGeneratorForSimpleLazinator(new FakeDateTimeNow(), out GeneratorExecutionResult executionResult, out (string path, string text) soleSource);
+            var dateTimeNowProvider = new FakeDateTimeNow();
+            RunGeneratorForSimpleLazinator(dateTimeNowProvider, out GeneratorExecutionResult executionResult, out (string path, string text) soleSource);
 
             var filesGeneratedInitially = executionResult.driver.GetRunResult().Results.SelectMany(x => x.GeneratedSources).ToList();
+
+            dateTimeNowProvider.Advance(TimeSpan.FromMinutes(1));
+
+            //RunGeneratorForSimpleLazinator(dateTimeNowProvider, out executionResult, out soleSource); // DEBUG
+            //var DEBUG2 = executionResult.driver.GetRunResult().Results.SelectMany(x => x.GeneratedSources).ToList(); // DEBUG
 
             // Update compilation
             var executionResultWithGeneratedSources = AddGeneratedFilesToCompilation(executionResult);
             List<(string path, string text)> additionalTexts = new List<(string path, string text)>() { ("LazinatorConfig.json", @"{
   ""Comment"": ""This is a change that should trigger regeneration of code.""
-}") }; 
-            executionResultWithGeneratedSources = executionResultWithGeneratedSources with { driver = AddAdditionalTextsToDriver(additionalTexts, executionResultWithGeneratedSources.driver) };
+}") };
 
-            executionResultWithGeneratedSources.driver.RunGenerators(executionResultWithGeneratedSources.compilation); // rerun generators
-            var filesGenerated = executionResultWithGeneratedSources.driver.GetRunResult().Results.SelectMany(x => x.GeneratedSources).ToList();
+
+
+            executionResultWithGeneratedSources = executionResultWithGeneratedSources with { driver = AddAdditionalTextsToDriver(additionalTexts, executionResultWithGeneratedSources.driver) }; 
+
+            var updatedDriver = executionResultWithGeneratedSources.driver.RunGenerators(executionResultWithGeneratedSources.compilation); // rerun generators
+            var filesGenerated = updatedDriver.GetRunResult().Results.SelectMany(x => x.GeneratedSources).ToList();
 
             bool exactMatch = filesGenerated[0].SourceText.ToString() == filesGeneratedInitially[0].SourceText.ToString(); // checks whether files match, including the date and version number.
             exactMatch.Should().BeFalse();
@@ -363,18 +371,17 @@ namespace MyCode
 
             // Create an instance of our incremental source generator
             var generator = new LazinatorIncrementalGenerator() { DateTimeNowProvider = dateTimeNowProvider };
-            
 
             // The GeneratorDriver is used to run our generator against a compilation
             GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
             driver = AddAdditionalTextsToDriver(additionalTexts, driver);
 
             // Run the source generator!
-            driver = driver.RunGenerators(compilation);
+            driver = driver.RunGeneratorsAndUpdateCompilation(compilation, out var outputCompilation, out _);
 
             // Look at the resulting source file
             List<(string path, string text)> outputs = driver.GetRunResult().Results[0].GeneratedSources.Select(x => (x.SyntaxTree.FilePath, x.SourceText.ToString())).ToList();
-            return new GeneratorExecutionResult(generator, compilation, driver, outputs);
+            return new GeneratorExecutionResult(generator, (CSharpCompilation) outputCompilation, driver, outputs);
         }
 
         private static GeneratorDriver AddAdditionalTextsToDriver(IEnumerable<(string path, string text)> additionalTexts, GeneratorDriver driver)
@@ -397,7 +404,8 @@ namespace MyCode
                 foreach (var source in specificRunResult.GeneratedSources)
                 {
                     SyntaxTree tree = CSharpSyntaxTree.ParseText(source.SourceText);
-                    executionResult = executionResult with { compilation = executionResult.compilation.AddSyntaxTrees(tree) };
+                    var revisedCompilation = executionResult.compilation.AddSyntaxTrees(tree);
+                    executionResult = executionResult with { compilation = revisedCompilation };
                 }
             }
             return executionResult;
