@@ -9,6 +9,7 @@ using System.Reflection.Metadata;
 using System.Reflection;
 using System.Text;
 using System.Threading.Channels;
+using LazinatorGenerator.Support;
 
 namespace LazinatorGenerator.Generator
 {
@@ -21,6 +22,8 @@ namespace LazinatorGenerator.Generator
     public class LazinatorIncrementalGenerator : IIncrementalGenerator
     {
         public static Guid PipelineRunUniqueID = default;
+
+        public IDateTimeNow DateTimeNowProvider { get; set; }
         
         public void Initialize(IncrementalGeneratorInitializationContext 
 context)
@@ -58,12 +61,12 @@ context)
             IncrementalValuesProvider<(GeneratorAttributeSyntaxContext SyntaxContext, ImmutableArray<LazinatorConfig> ConfigFiles)> sourcesConfigsAndID = syntaxContexts.Combine(configLocationsAndContents2).Select((x, cancellationToken) => (x.Left, x.Right));
             IncrementalValuesProvider<LazinatorPreGenerationInfo> preGenerationInfos = sourcesConfigsAndID.Select((x, cancellationToken) => new LazinatorPreGenerationInfo(x.SyntaxContext, ChooseAppropriateConfig(Path.GetDirectoryName(x.SyntaxContext.TargetNode.SyntaxTree.FilePath), x.ConfigFiles)));
             // Create a LazinatorPostGenerationInfo for each preGenerationInfo that hasn't been cached.
-            IncrementalValuesProvider<LazinatorPostGenerationInfo> postGenerationInfos = preGenerationInfos.Select((x, cancellationToken) => new LazinatorPostGenerationInfo(x, x.ExecuteSourceGeneration(PipelineRunUniqueID))).Where(x => !x.AlreadyGeneratedCode.IsEmpty);
+            IncrementalValuesProvider<LazinatorPostGenerationInfo> postGenerationInfos = preGenerationInfos.Select((x, cancellationToken) => new LazinatorPostGenerationInfo(x, x.ExecuteSourceGeneration(PipelineRunUniqueID, DateTimeNowProvider))).Where(x => !x.AlreadyGeneratedCode.IsEmpty);
             IncrementalValueProvider<ImmutableArray<LazinatorPostGenerationInfo>> postGenerationInfosCollected = postGenerationInfos.Collect();
             IncrementalValuesProvider<LazinatorPostGenerationInfo> postGenerationInfosSeparated = postGenerationInfosCollected.SelectMany((x, cancellationToken) => LazinatorPostGenerationInfo.SeparateForNextPipelineStep(x));
             // Generate the source using the compilation and enums
             context.RegisterSourceOutput(postGenerationInfosSeparated,
-                static (spc, postGenerationInfo) => postGenerationInfo.GenerateSource(spc, PipelineRunUniqueID));
+                (spc, postGenerationInfo) => postGenerationInfo.GenerateSource(spc, PipelineRunUniqueID, DateTimeNowProvider));
         }
 
         static (string allPropertyDeclarations, ImmutableArray<string> namesOfTypesReliedOn) GetPropertiesTypeInfo(GeneratorAttributeSyntaxContext context)

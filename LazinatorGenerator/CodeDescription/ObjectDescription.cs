@@ -221,13 +221,16 @@ namespace Lazinator.CodeDescription
 
         /* Construction */
 
+        public IDateTimeNow DateTimeNowProvider { get; set; }
+
         public ObjectDescription()
         {
 
         }
         
-        public ObjectDescription(INamedTypeSymbol iLazinatorTypeSymbol, LazinatorCompilation compilation, LazinatorConfig? config, bool suppressDate = false, Guid? pipelineID = null)
+        public ObjectDescription(INamedTypeSymbol iLazinatorTypeSymbol, LazinatorCompilation compilation, LazinatorConfig? config, IDateTimeNow dateTimeNowProvider, bool suppressDate = false, Guid? pipelineID = null)
         {
+            DateTimeNowProvider = dateTimeNowProvider;
             ILazinatorTypeSymbol = iLazinatorTypeSymbol;
             var implementedAttributes = iLazinatorTypeSymbol.GetAttributesIncludingBase<CloneImplementsAttribute>();
             ImplementedMethods = implementedAttributes.SelectMany(x => x.Implemented).ToArray();
@@ -265,11 +268,11 @@ namespace Lazinator.CodeDescription
 
                 ClosesGeneric = (!SymbolEqualityComparer.Default.Equals(baseILazinatorType.ConstructedFrom, baseILazinatorType));
                 if (ClosesGeneric)
-                    ClosedGenericConstructedFrom = new ObjectDescription(baseILazinatorType.ConstructedFrom, compilation, Config);
+                    ClosedGenericConstructedFrom = new ObjectDescription(baseILazinatorType.ConstructedFrom, compilation, Config, DateTimeNowProvider);
 
                 if (baseILazinatorType != null && baseILazinatorType.Name != "Object")
                 {
-                    BaseLazinatorObject = new ObjectDescription(baseILazinatorType, compilation, Config);
+                    BaseLazinatorObject = new ObjectDescription(baseILazinatorType, compilation, Config, DateTimeNowProvider);
                     if (BaseLazinatorObject.IsNonLazinatorBaseClass)
                         BaseLazinatorObject = null; // ignore base non-lazinator
                 }

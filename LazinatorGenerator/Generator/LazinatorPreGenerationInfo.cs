@@ -1,6 +1,7 @@
 ﻿using Lazinator.CodeDescription;
 using LazinatorCodeGen.Roslyn;
 using LazinatorGenerator.Settings;
+using LazinatorGenerator.Support;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Text;
@@ -38,7 +39,7 @@ namespace LazinatorGenerator.Generator
             return returnVal;
         }
 
-        internal LazinatorCodeGenerationResult ExecuteSourceGeneration(Guid pipelineRunUniqueID)
+        internal LazinatorCodeGenerationResult ExecuteSourceGeneration(Guid pipelineRunUniqueID, IDateTimeNow dateTimeNowProvider)
         {
             LazinatorPairInformation pairInfo = GetLazinatorPairInformation();
             if (pairInfo == null)
@@ -47,7 +48,7 @@ namespace LazinatorGenerator.Generator
 
             try
             {
-                var objectDescription = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, Config, false, pipelineRunUniqueID);
+                var objectDescription = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, Config, dateTimeNowProvider, false, pipelineRunUniqueID);
                 var generatedCode = objectDescription.GetCodeBehind();
                 string path = objectDescription.ObjectNameEncodable + Config.GeneratedCodeFileExtension;
                 return new LazinatorCodeGenerationResult(objectDescription.FullyQualifiedObjectName_InNullableMode, path, generatedCode, lazinatorCompilation.GetDependencyInfo(), pipelineRunUniqueID, null);
