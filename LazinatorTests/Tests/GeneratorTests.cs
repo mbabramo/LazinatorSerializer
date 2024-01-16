@@ -1,12 +1,10 @@
 ﻿using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis;
 using System.Threading.Tasks;
-using VerifyXunit;
 using Xunit;
 using Xunit.Abstractions;
 using LazinatorGenerator.Generator;
 using System.Runtime.CompilerServices;
-using VerifyTests;
 using System.Collections.Generic;
 using Lazinator.Attributes;
 using LazinatorTests.Support;
@@ -24,7 +22,6 @@ using LazinatorTests.Utilities;
 
 namespace LazinatorTests.Tests
 {
-    [UsesVerify]
     public class GeneratorTests
     {
 
@@ -375,16 +372,6 @@ namespace MyCode
 
         
 
-    }
-
-    public static class ModuleInitializer
-    {
-        // DEBUG -- I think this whole thing can be deleted and we can remove Verify.SourceGenerators
-        [ModuleInitializer]
-        public static void Init()
-        {
-            //VerifySourceGenerators.Enable();
-        }
     }
 
     public class CustomAdditionalText : AdditionalText
