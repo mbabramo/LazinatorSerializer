@@ -12,9 +12,9 @@ using System.Collections.Immutable;
 namespace LazinatorTests.Utilities
 {
 
-    public record GeneratorExecutionResult(LazinatorIncrementalGenerator generator, CSharpCompilation compilation, GeneratorDriver driver)
+    public record GenerationComponents(LazinatorIncrementalGenerator generator, CSharpCompilation compilation, GeneratorDriver driver)
     {
-        public GeneratorExecutionResult WithGeneratedFileAddedToCompilation()
+        public GenerationComponents WithGeneratedFileAddedToCompilation()
         {
             // Add the generated sources to the compilation
             GeneratorDriverRunResult overallRunResult = driver.GetRunResult();
@@ -31,13 +31,13 @@ namespace LazinatorTests.Utilities
             return revised;
         }
 
-        public GeneratorExecutionResult AfterRerunningGenerators()
+        public GenerationComponents AfterRerunningGenerators()
         {
             var updatedDriver = driver.RunGeneratorsAndUpdateCompilation(compilation, out var outputCompilation, out _); // rerun generators
-            return new GeneratorExecutionResult(generator, compilation, updatedDriver); // note: use original compilation
+            return new GenerationComponents(generator, compilation, updatedDriver); // note: use original compilation
         }
 
-        public GeneratorExecutionResult WithAdditionalTexts(IEnumerable<(string path, string text)> additionalTexts)
+        public GenerationComponents WithAdditionalTexts(IEnumerable<(string path, string text)> additionalTexts)
         {
             if (additionalTexts != null)
             {
@@ -54,7 +54,7 @@ namespace LazinatorTests.Utilities
             return ImmutableArray.CreateRange(additionalTexts.Select(x => (AdditionalText)new CustomAdditionalText(x.path, x.text)));
         }
 
-        public GeneratorExecutionResult WithUpdatedFile(string path, string text)
+        public GenerationComponents WithUpdatedFile(string path, string text)
         {
             SyntaxTree oldTree = compilation.SyntaxTrees.FirstOrDefault(x => x.FilePath == path);
             if (oldTree == null)
@@ -80,7 +80,9 @@ namespace LazinatorTests.Utilities
         public string GetSoleGeneratedSource()
         {
             var generatedSources = GetGeneratedSources();
-            if (generatedSources.Count != 1)
+            if (generatedSources.Count == 0)
+                throw new Exception("No source generated.");
+            if (generatedSources.Count > 1)
                 throw new Exception("Expected only one generated source.");
             return generatedSources[0].SourceText.ToString();
         }
