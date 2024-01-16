@@ -14,23 +14,6 @@ namespace LazinatorTests.Utilities
 
     public record GenerationComponents(LazinatorIncrementalGenerator generator, CSharpCompilation compilation, GeneratorDriver driver)
     {
-        public GenerationComponents WithGeneratedFileAddedToCompilation()
-        {
-            // Add the generated sources to the compilation
-            GeneratorDriverRunResult overallRunResult = driver.GetRunResult();
-            var revised = this;
-            foreach (var specificRunResult in overallRunResult.Results)
-            {
-                foreach (var source in specificRunResult.GeneratedSources)
-                {
-                    SyntaxTree tree = CSharpSyntaxTree.ParseText(source.SourceText);
-                    var revisedCompilation = compilation.AddSyntaxTrees(tree);
-                    revised = revised with { compilation = revisedCompilation };
-                }
-            }
-            return revised;
-        }
-
         public GenerationComponents AfterRerunningGenerators()
         {
             var updatedDriver = driver.RunGeneratorsAndUpdateCompilation(compilation, out var outputCompilation, out _); // rerun generators
@@ -52,6 +35,13 @@ namespace LazinatorTests.Utilities
         private static ImmutableArray<AdditionalText> GetAdditionalTextsAsArray(IEnumerable<(string path, string text)> additionalTexts)
         {
             return ImmutableArray.CreateRange(additionalTexts.Select(x => (AdditionalText)new CustomAdditionalText(x.path, x.text)));
+        }
+
+        public GenerationComponents WithAddedFile(string path, string text)
+        {
+            SyntaxTree newTree = CSharpSyntaxTree.ParseText(text, null, path);
+            var revised = this with { compilation = this.compilation.AddSyntaxTrees(newTree) };
+            return revised;
         }
 
         public GenerationComponents WithUpdatedFile(string path, string text)

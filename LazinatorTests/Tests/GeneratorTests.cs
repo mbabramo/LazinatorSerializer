@@ -78,23 +78,89 @@ namespace LazinatorTests.Tests
             return Task.CompletedTask;
         }
 
-
-
         [Fact]
         public Task GeneratorForSimpleLazinator_CachingWithNoChange()
         {
 
             var executionResult = RunGeneratorForSimpleLazinator(new FakeDateTimeNow());
-
             var sourceGeneratedInitially = executionResult.GetSoleGeneratedSource();
 
-            // Update compilation and get the diagnostics with the generated sources
-            var executionResultWithGeneratedSources = executionResult.WithGeneratedFileAddedToCompilation();
-            var executionResultAfterRerunning = executionResultWithGeneratedSources.AfterRerunningGenerators();
+            var executionResultAfterRerunning = executionResult.AfterRerunningGenerators();
             var sourceGeneratedLater = executionResultAfterRerunning.GetSoleGeneratedSource();
 
             bool exactMatch = sourceGeneratedInitially == sourceGeneratedLater; // checks whether files match, including the date and version number.
             exactMatch.Should().BeTrue();
+
+            return Task.CompletedTask;
+        }
+
+        [Fact]
+        public Task GeneratorForSimpleLazinator_CachingWithIrrelevantChange()
+        {
+
+            var executionResult = RunGeneratorForSimpleLazinator(new FakeDateTimeNow());
+            var sourceGeneratedInitially = executionResult.GetSoleGeneratedSource();
+            var irrelevantClass = GetSourceForIrrelevantClass(false);
+            var modified = executionResult.WithAddedFile(irrelevantClass.path, irrelevantClass.text);
+
+            var executionResultAfterRerunning = modified.AfterRerunningGenerators();
+            var sourceGeneratedLater = executionResultAfterRerunning.GetSoleGeneratedSource();
+
+            bool exactMatch = sourceGeneratedInitially == sourceGeneratedLater; // checks whether files match, including the date and version number.
+            exactMatch.Should().BeTrue();
+
+            return Task.CompletedTask;
+        }
+
+        [Fact]
+        public Task GeneratorForSimpleLazinator_NoCachingWithILazinatorAddedComment()
+        {
+            var executionResult = RunGeneratorForSimpleLazinator(new FakeDateTimeNow());
+            var sourceGeneratedInitially = executionResult.GetSoleGeneratedSource();
+            var ilazinatorWithAddedComment = GetILazinatorClassWithAddedComment();
+            var modified = executionResult.WithUpdatedFile(ilazinatorWithAddedComment.path, ilazinatorWithAddedComment.text);
+
+            var executionResultAfterRerunning = modified.AfterRerunningGenerators();
+            var sourceGeneratedLater = executionResultAfterRerunning.GetSoleGeneratedSource();
+
+            bool exactMatch = sourceGeneratedInitially == sourceGeneratedLater; // checks whether files match, including the date and version number.
+            exactMatch.Should().BeFalse();
+
+            return Task.CompletedTask;
+        }
+
+        [Fact]
+        public Task GeneratorForSimpleLazinator_NoCachingWithSubstantiveILazinatorChange()
+        {
+
+            var executionResult = RunGeneratorForSimpleLazinator(new FakeDateTimeNow());
+            var sourceGeneratedInitially = executionResult.GetSoleGeneratedSource();
+            var ilazinatorWithAddedComment = GetILazinatorClassExpanded();
+            var modified = executionResult.WithUpdatedFile(ilazinatorWithAddedComment.path, ilazinatorWithAddedComment.text);
+
+            var executionResultAfterRerunning = modified.AfterRerunningGenerators();
+            var sourceGeneratedLater = executionResultAfterRerunning.GetSoleGeneratedSource();
+
+            bool exactMatch = sourceGeneratedInitially == sourceGeneratedLater; // checks whether files match, including the date and version number.
+            exactMatch.Should().BeFalse();
+
+            return Task.CompletedTask;
+        }
+
+        [Fact]
+        public Task GeneratorForSimpleLazinator_NoCachingWithLazinatorChange()
+        {
+
+            var executionResult = RunGeneratorForSimpleLazinator(new FakeDateTimeNow());
+            var sourceGeneratedInitially = executionResult.GetSoleGeneratedSource();
+            var lazinatorWithAddedMethod = GetLazinatorClassExpanded();
+            var modified = executionResult.WithUpdatedFile(lazinatorWithAddedMethod.path, lazinatorWithAddedMethod.text);
+
+            var executionResultAfterRerunning = modified.AfterRerunningGenerators();
+            var sourceGeneratedLater = executionResultAfterRerunning.GetSoleGeneratedSource();
+
+            bool exactMatch = sourceGeneratedInitially == sourceGeneratedLater; // checks whether files match, including the date and version number.
+            exactMatch.Should().BeFalse();
 
             return Task.CompletedTask;
         }
@@ -110,14 +176,13 @@ namespace LazinatorTests.Tests
             diagnostics.Count.Should().Be(0);
             var firstFileGeneratedInitially = executionResult.GetSoleGeneratedSource();
             firstFileGeneratedInitially.Should().Contain("generated by the Lazinator tool");
-            var executionResultWithGeneratedSources = executionResult.WithGeneratedFileAddedToCompilation();
 
             dateTimeNowProvider.Advance(TimeSpan.FromMinutes(1));
 
             List<(string path, string text)> additionalTexts = new List<(string path, string text)>() { ("LazinatorConfig.json", @"{
   ""Comment"": ""This is a change that should trigger regeneration of code.""
 }") };
-            var executionResultsWithAdditionalTexts = executionResultWithGeneratedSources.WithAdditionalTexts(additionalTexts);
+            var executionResultsWithAdditionalTexts = executionResult.WithAdditionalTexts(additionalTexts);
             var executionResultsAfterRerunning = executionResultsWithAdditionalTexts.AfterRerunningGenerators();
             var firstFileGeneratedAfter = executionResultsAfterRerunning.GetSoleGeneratedSource();
             firstFileGeneratedAfter.Should().Contain("generated by the Lazinator tool");
@@ -129,13 +194,7 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public Task Generator_CachingWhenChangeMadeToIrrelevantClass()
-        {
-            throw new NotImplementedException();
-        }
-
-        [Fact]
-        public Task Generator_NoCachingWhenChangeMadeToBaseClass()
+        public Task Generator_CachingWhenChangeMadeToBaseClass()
         {
             throw new NotImplementedException();
         }
@@ -156,7 +215,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public Task SourceGeneratorProvidesDiagnosticForUsingNonLazinatorSource()
         {
-            List<(string path, string text)> sources = GetSourcesUsingNonLazinator();
+            List<(string path, string text)> sources = GetSourcesForLazinatorReferringToNonlazinator();
 
             var result = ExecuteGenerator(sources, null, new FakeDateTimeNow(), false);
             var diagnostics = result.compilation.GetDiagnostics();
@@ -298,7 +357,72 @@ namespace MyCode
             return sources;
         }
 
-        private static List<(string path, string text)> GetSourcesUsingNonLazinator()
+        private static List<(string path, string text)> GetSourceForLazinatorWithBaseClass()
+        {
+            var mainProgramSource = @"
+namespace MyCode
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+        }
+    }
+}";
+
+
+            var parentInterfaceSource = @"
+using Lazinator.Attributes;
+
+namespace MyCode
+{
+    [Lazinator((int)1)]
+    public interface IMyExample
+    {
+        int MyInt { get; set; }
+    }
+}";
+
+            var childInterfaceSource = @"
+using Lazinator.Attributes;
+
+namespace MyCode
+{
+    [Lazinator((int)2)]
+    public interface IMyExampleChild
+    {
+        int MyOtherInt { get; set; }
+    }
+}";
+
+            var parentClassSource = @"
+namespace MyCode
+{
+    public partial class MyExample : IMyExample
+    {
+    }
+}";
+
+            var childClassSource = @"
+namespace MyCode
+{
+    public partial class MyExampleChild : MyExample, IMyExampleChild
+    {
+    }
+}";
+
+            var sources = new List<(string path, string text)>()
+            {
+                ("Program.cs", mainProgramSource),
+                ("IMyExample.cs", parentInterfaceSource),
+                ("MyExample.cs", parentClassSource),
+                ("IMyExampleChild.cs", childInterfaceSource),
+                ("MyExampleChild.cs", childClassSource)
+            };
+            return sources;
+        }
+
+        private static List<(string path, string text)> GetSourcesForLazinatorReferringToNonlazinator()
         {
             var mainProgramSource = @"
 namespace MyCode
@@ -350,6 +474,71 @@ namespace MyCode
                 ("MyExample.cs", classSource)
             };
             return sources;
+        }
+
+        private static (string path, string text) GetLazinatorClassExpanded()
+        {
+            return ("MyExample.cs", @"
+using Lazinator.Attributes;
+
+namespace MyCode
+{
+    public partial class MyExample : IMyExample
+    {
+        public void ExtraMethod()
+        {
+        }
+    }
+}}");
+        }
+
+        private static (string path, string text) GetILazinatorClassWithAddedComment()
+        {
+            return ("IMyExample.cs", @"
+using Lazinator.Attributes;
+
+namespace MyCode
+{
+    [Lazinator((int)1)]
+    public interface IMyExample
+    {
+        int MyInt { get; set; }
+        string MyString { get; set; } 
+    }
+    // This comment shouldn't change anything.
+}");
+        }
+
+        private static (string path, string text) GetILazinatorClassExpanded()
+        {
+            return ("IMyExample.cs", @"
+using Lazinator.Attributes;
+
+namespace MyCode
+{
+    [Lazinator((int)1)]
+    public interface IMyExample
+    {
+        int MyInt { get; set; }
+        string MyString { get; set; }
+    }
+}");
+        }
+
+        private static (string path, string text) GetSourceForIrrelevantClass(bool useVariation)
+        {
+
+            // we'll do something wrong by having a Lazinator interface refer to a non-Lazinator class.
+            var nonlazinatorSource = $@"
+namespace MyCode
+{{
+    public class MyIrrelevantNonLazinator
+    {{
+        {(useVariation ? "public int MyInt { get; set; }" : "")}
+    }}
+}}
+";
+            return ("MyIrrelevantNonLazinator.cs", nonlazinatorSource);
         }
 
         private static List<(string path, string text)> ReplaceInSources(List<(string path, string text)> originals, string searchFor, string replaceWith) => originals.Select(x => (x.path, x.text.Replace(searchFor, replaceWith))).ToList();
