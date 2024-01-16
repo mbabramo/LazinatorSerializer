@@ -61,7 +61,7 @@ namespace LazinatorTests.Tests
             
             // Update compilation and get the diagnostics with the generated sources
             var executionResultWithGeneratedSources = executionResult.WithGeneratedFileAddedToCompilation();
-            var diagnosticsWithGeneratedSources = executionResultWithGeneratedSources.compilation.GetDiagnostics().ToList();
+            var diagnosticsWithGeneratedSources = executionResultWithGeneratedSources.GetDiagnostics();
             diagnosticsWithGeneratedSources.Count().Should().Be(0);
 
             return Task.CompletedTask;
@@ -73,14 +73,14 @@ namespace LazinatorTests.Tests
 
             RunGeneratorForSimpleLazinator(new FakeDateTimeNow(), out GeneratorExecutionResult executionResult, out (string path, string text) soleSource);
 
-            var filesGeneratedInitially = executionResult.driver.GetRunResult().Results.SelectMany(x => x.GeneratedSources).ToList();
+            var sourceGeneratedInitially = executionResult.GetSoleGeneratedSource();
 
             // Update compilation and get the diagnostics with the generated sources
             var executionResultWithGeneratedSources = executionResult.WithGeneratedFileAddedToCompilation();
-            executionResultWithGeneratedSources.driver.RunGenerators(executionResultWithGeneratedSources.compilation); // rerun generators
-            var filesGenerated = executionResultWithGeneratedSources.driver.GetRunResult().Results.SelectMany(x => x.GeneratedSources).ToList();
+            var executionResultAfterRerunning = executionResultWithGeneratedSources.AfterRerunningGenerators();
+            var sourceGeneratedLater = executionResultAfterRerunning.GetSoleGeneratedSource();
 
-            bool exactMatch = filesGenerated[0].SourceText.ToString() == filesGeneratedInitially[0].SourceText.ToString(); // checks whether files match, including the date and version number.
+            bool exactMatch = sourceGeneratedInitially == sourceGeneratedLater; // checks whether files match, including the date and version number.
             exactMatch.Should().BeTrue();
 
             return Task.CompletedTask;

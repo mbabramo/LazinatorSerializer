@@ -79,5 +79,7 @@ namespace LazinatorTests.Utilities
                 throw new Exception("Expected only one generated source.");
             return generatedSources[0].SourceText.ToString();
         }
+
+        public List<Diagnostic> GetDiagnostics() => compilation.GetDiagnostics().ToList();
     }
 }
