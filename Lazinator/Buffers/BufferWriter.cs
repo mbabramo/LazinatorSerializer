@@ -419,7 +419,7 @@ namespace Lazinator.Buffers
             bool success = false;
             while (!success)
             {
-                success = MemoryMarshal.TryWrite<T>(FreeSpan, ref value);
+                success = MemoryMarshal.TryWrite<T>(FreeSpan, in value);
                 if (!success)
                     EnsureMinBufferSize();
             }

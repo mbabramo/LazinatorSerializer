@@ -12,7 +12,7 @@ using System.Collections.Immutable;
 namespace LazinatorTests.Utilities
 {
 
-    public record GeneratorExecutionResult(LazinatorIncrementalGenerator generator, CSharpCompilation compilation, GeneratorDriver driver, List<(string path, string text)> outputs)
+    public record GeneratorExecutionResult(LazinatorIncrementalGenerator generator, CSharpCompilation compilation, GeneratorDriver driver)
     {
         public GeneratorExecutionResult WithGeneratedFileAddedToCompilation()
         {
@@ -34,7 +34,7 @@ namespace LazinatorTests.Utilities
         public GeneratorExecutionResult AfterRerunningGenerators()
         {
             var updatedDriver = driver.RunGeneratorsAndUpdateCompilation(compilation, out var outputCompilation, out _); // rerun generators
-            return new GeneratorExecutionResult(generator, compilation, updatedDriver, outputs); // note: use original compilation
+            return new GeneratorExecutionResult(generator, compilation, updatedDriver); // note: use original compilation
         }
 
         public GeneratorExecutionResult WithAdditionalTexts(IEnumerable<(string path, string text)> additionalTexts)
@@ -63,6 +63,11 @@ namespace LazinatorTests.Utilities
             SyntaxTree newTree = CSharpSyntaxTree.ParseText(text, null, path);
             revised = revised with { compilation = revised.compilation.AddSyntaxTrees(newTree) };
             return revised;
+        }
+
+        public List<(string path, string text)> GetGeneratedSourcesWithPaths()
+        {
+            return driver.GetRunResult().Results.SelectMany(x => x.GeneratedSources).Select(x => (x.SyntaxTree.FilePath, x.SourceText.ToString())).ToList();
         }
 
         public List<GeneratedSourceResult> GetGeneratedSources()
