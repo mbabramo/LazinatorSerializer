@@ -24,6 +24,7 @@ namespace LazinatorGenerator.Generator
         {
             SyntaxContext = syntaxContext;
             Config = config;
+            Debug.WriteLine($"Pregeneration info with hash code {GetHashCode()}"); // DEBUG
         }
 
         public override int GetHashCode()

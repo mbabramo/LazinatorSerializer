@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace LazinatorGenerator.Generator
@@ -27,6 +28,7 @@ namespace LazinatorGenerator.Generator
             PipelineRunUniqueID = pipelineRunUniqueID;
             Diagnostic = diagnostic;
             HashCode = (generatedType, path, generatedCode, dependencyInfo, pipelineRunUniqueID, diagnostic).GetHashCode();
+            Debug.WriteLine($"Generated code for {generatedType} with hash code {HashCode}"); // DEBUG
         }
        
         public LazinatorCodeGenerationResult WithUpdatedHashCodes(Dictionary<string, int> typeNameToHash) => new LazinatorCodeGenerationResult(GeneratedType, Path, GeneratedCode, DependencyInfo.WithUpdatedHashCodes(typeNameToHash), PipelineRunUniqueID, Diagnostic);

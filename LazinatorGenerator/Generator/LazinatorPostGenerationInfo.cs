@@ -22,6 +22,8 @@ namespace LazinatorGenerator.Generator
             PreGenerationInfo = preGenerationInfo;
             AlreadyGeneratedCode = alreadyGeneratedCode;
             HashCode = (PreGenerationInfo, AlreadyGeneratedCode).GetHashCode();
+
+            Debug.WriteLine($"Postgeneration info with hash code {GetHashCode()}"); // DEBUG
         }
 
         public override int GetHashCode()

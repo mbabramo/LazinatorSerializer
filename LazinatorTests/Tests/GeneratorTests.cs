@@ -151,6 +151,17 @@ namespace LazinatorTests.Tests
         public Task GeneratorForSimpleLazinator_NoCachingWithLazinatorChange()
         {
 
+            Debug; // Broad problem here is that there is only one ILazinator file. So, no dependencies can change. 
+            // Maybe that's actually the right thing -- we need to look at the code to see if we actually need changes based on the Lazinator (as opposed to the iLazinator). Ideally, we would be able
+            // to determine caching solely by iLazinators. We need to think about partial methods for this.
+            // More broadly, the strategy of listing all dependencies may be flawed. For one thing, we're getting a lot of dependencies in System.Numerics, which is a waste of time.
+            // Ideally, we would work solely based on the iLazinator dependencies. So, we need a list of hashes of the iLazinator dependencies, including any properties, including within generics, whether iLazinator or Lazinator.
+            // That is, we want dependencies of the iLazinator, specified as a list of other iLazinators, but we want this list to include iLazinators that are referred to indirectly through Lazinators that are referenced in properties.
+            // Still, if we can do it that way, this should be much faster and simpler. 
+            // The further complication is that in general, we are only dependent on whether each of our types is an iLazinator or not. With base classes (including indirect ones), we are dependent on what the members of the base class are.
+            // So, really, we need a list of the referenced iLazinators. If this list changes (regardless of whether the underlying code changse), then we need to update. Plus, we need a list of the base classes, and for those, if anything
+            // changes in the iLazinator (maybe we could narrow that to when specific information changes, such as the signature or the properties), we would need to rebuild the code.
+
             var executionResult = RunGeneratorForSimpleLazinator(new FakeDateTimeNow());
             var sourceGeneratedInitially = executionResult.GetSoleGeneratedSource();
             var lazinatorWithAddedMethod = GetLazinatorClassExpanded();
