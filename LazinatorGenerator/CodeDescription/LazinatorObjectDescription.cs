@@ -17,7 +17,7 @@ namespace Lazinator.CodeDescription
     /// <summary>
     /// A description of a Lazinator object, including information about the properties that it must contain based on its exclusive interface and any nonexclusive interfaces.
     /// </summary>
-    public class ObjectDescription
+    public class LazinatorObjectDescription
     {
         /* Main properties */
         public INamedTypeSymbol ILazinatorTypeSymbol { get; set; }
@@ -44,9 +44,9 @@ namespace Lazinator.CodeDescription
         public string ILazinatorStringNonNullableIfPropertyNonNullable(bool nonnullable) => nonnullable ? "ILazinator" : ILazinatorString;
 
         /* Derivation */
-        public ObjectDescription BaseLazinatorObject { get; set; }
+        public LazinatorObjectDescription BaseLazinatorObject { get; set; }
         public bool ClosesGeneric { get; set; }
-        public ObjectDescription ClosedGenericConstructedFrom { get; set; }
+        public LazinatorObjectDescription ClosedGenericConstructedFrom { get; set; }
         public IEnumerable<PropertyDescription> PropertiesIncludingInherited_OpeningClosedGenerics => PropertiesIncludingInherited.Select(x => OpeningClosedGenericProperty(x));
         PropertyDescription OpeningClosedGenericProperty(PropertyDescription propertyDescription)
         {
@@ -223,12 +223,12 @@ namespace Lazinator.CodeDescription
 
         public IDateTimeNow DateTimeNowProvider { get; set; }
 
-        public ObjectDescription()
+        public LazinatorObjectDescription()
         {
 
         }
         
-        public ObjectDescription(INamedTypeSymbol iLazinatorTypeSymbol, LazinatorCompilation compilation, LazinatorConfig? config, IDateTimeNow dateTimeNowProvider, bool suppressDate = false, Guid? pipelineID = null)
+        public LazinatorObjectDescription(INamedTypeSymbol iLazinatorTypeSymbol, LazinatorCompilation compilation, LazinatorConfig? config, IDateTimeNow dateTimeNowProvider, bool suppressDate = false, Guid? pipelineID = null)
         {
             DateTimeNowProvider = dateTimeNowProvider;
             ILazinatorTypeSymbol = iLazinatorTypeSymbol;
@@ -268,11 +268,11 @@ namespace Lazinator.CodeDescription
 
                 ClosesGeneric = (!SymbolEqualityComparer.Default.Equals(baseILazinatorType.ConstructedFrom, baseILazinatorType));
                 if (ClosesGeneric)
-                    ClosedGenericConstructedFrom = new ObjectDescription(baseILazinatorType.ConstructedFrom, compilation, Config, DateTimeNowProvider);
+                    ClosedGenericConstructedFrom = new LazinatorObjectDescription(baseILazinatorType.ConstructedFrom, compilation, Config, DateTimeNowProvider);
 
                 if (baseILazinatorType != null && baseILazinatorType.Name != "Object")
                 {
-                    BaseLazinatorObject = new ObjectDescription(baseILazinatorType, compilation, Config, DateTimeNowProvider);
+                    BaseLazinatorObject = new LazinatorObjectDescription(baseILazinatorType, compilation, Config, DateTimeNowProvider);
                     if (BaseLazinatorObject.IsNonLazinatorBaseClass)
                         BaseLazinatorObject = null; // ignore base non-lazinator
                 }
@@ -338,7 +338,7 @@ namespace Lazinator.CodeDescription
             }
         }
 
-        public IEnumerable<ObjectDescription> GetBaseLazinatorObjects()
+        public IEnumerable<LazinatorObjectDescription> GetBaseLazinatorObjects()
         {
             var b = BaseLazinatorObject;
             while (b != null)
@@ -352,9 +352,9 @@ namespace Lazinator.CodeDescription
         /// Returns base objects that are abstract if there properties are not implemented by base objects that are concrete.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<ObjectDescription> GetAbstractBaseObjectDescriptions()
+        public IEnumerable<LazinatorObjectDescription> GetAbstractBaseObjectDescriptions()
         {
-            foreach (ObjectDescription o in GetBaseLazinatorObjects())
+            foreach (LazinatorObjectDescription o in GetBaseLazinatorObjects())
             {
                 if (!o.IsAbstract)
                     yield break;
@@ -362,10 +362,10 @@ namespace Lazinator.CodeDescription
             }
         }
 
-        public IEnumerable<ObjectDescription> GetAbstractBaseObjectDescriptions(INamedTypeSymbol belowThisLevel)
+        public IEnumerable<LazinatorObjectDescription> GetAbstractBaseObjectDescriptions(INamedTypeSymbol belowThisLevel)
         {
             bool found = false;
-            foreach (ObjectDescription o in GetAbstractBaseObjectDescriptions())
+            foreach (LazinatorObjectDescription o in GetAbstractBaseObjectDescriptions())
             {
                 if (found)
                     yield return o;

@@ -154,10 +154,12 @@ namespace LazinatorCodeGen.Roslyn
             ILazinatorProperties = new HashSet<string>(iLazinatorSymbol.GetPropertySymbols().Select(x => x.GetFullyQualifiedName(true)));
         }
         
-        public ImmutableArray<string> GetInterfaceSymbolNames()
+        public ImmutableArray<string> GetInterfaceSymbolNames() => GetSymbolNamesFromDictionary(RelevantSymbols);
+
+        public static ImmutableArray<string> GetSymbolNamesFromDictionary(Dictionary<string, ISymbol> symbols)
         {
             HashSet<string> h = new HashSet<string>();
-            foreach (var interfaceSymbol in RelevantSymbols.Where(s => s.Value is ITypeSymbol typeSymbol && typeSymbol.TypeKind == TypeKind.Interface))
+            foreach (var interfaceSymbol in symbols.Where(s => s.Value is ITypeSymbol typeSymbol && typeSymbol.TypeKind == TypeKind.Interface))
             {
                 h.Add(interfaceSymbol.Value.GetFullyQualifiedName(true));
             }
@@ -178,10 +180,6 @@ namespace LazinatorCodeGen.Roslyn
             {
                 IPropertySymbol property1 = propertyWithLevelInfo.Property;
                 string property1Name = property1.GetFullyQualifiedName(true);
-                if (property1Name.Contains("Numerics"))
-                {
-                    var DEBUG = 0;
-                }
                 if (!ILazinatorProperties.Contains(property1Name))
                 { // ignore a property that is actually an ILazinator property rather than a property we are looking for
                     propertiesInInterfaceWithLevel.Add(propertyWithLevelInfo);

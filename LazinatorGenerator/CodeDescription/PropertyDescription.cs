@@ -21,7 +21,7 @@ namespace Lazinator.CodeDescription
         #region Properties
 
         /* Type and object information */
-        private ObjectDescription ContainingObjectDescription { get; set; }
+        private LazinatorObjectDescription ContainingObjectDescription { get; set; }
         public LazinatorCompilation LazinatorCompilation => ContainingObjectDescription.Compilation;
         private Compilation Compilation => LazinatorCompilation.Compilation;
         private bool ContainerIsClass => ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct;
@@ -327,7 +327,7 @@ namespace Lazinator.CodeDescription
 
         }
 
-        public PropertyDescription(IPropertySymbol propertySymbol, ObjectDescription container, NullableContext nullableContextSetting, string derivationKeyword, string propertyAccessibility, bool isLast)
+        public PropertyDescription(IPropertySymbol propertySymbol, LazinatorObjectDescription container, NullableContext nullableContextSetting, string derivationKeyword, string propertyAccessibility, bool isLast)
         {
             PropertySymbol = propertySymbol;
             IsAbstract = PropertySymbol.Type.IsAbstract;
@@ -358,7 +358,7 @@ namespace Lazinator.CodeDescription
         }
 
 
-        public PropertyDescription(ITypeSymbol typeSymbol, ObjectDescription containingObjectDescription, NullableContext nullableContextSetting, NullableContext outputNullableContextSetting, PropertyDescription containingPropertyDescription, string propertyName = null)
+        public PropertyDescription(ITypeSymbol typeSymbol, LazinatorObjectDescription containingObjectDescription, NullableContext nullableContextSetting, NullableContext outputNullableContextSetting, PropertyDescription containingPropertyDescription, string propertyName = null)
         {
             // This is only used for defining the type on the inside of the generics, plus underlying type for arrays.
             TypeSymbolIfNoProperty = typeSymbol;
@@ -867,7 +867,7 @@ namespace Lazinator.CodeDescription
             }
         }
 
-        public PropertyDescription GetPropertyDescriptionForPropertyDefinedElsewhere(ITypeSymbol typeSymbol, ObjectDescription containingObjectDescription, PropertyDescription containingPropertyDescription, string propertyName, NullableContext nullableContextSetting, NullableContext outputNullableContextSetting)
+        public PropertyDescription GetPropertyDescriptionForPropertyDefinedElsewhere(ITypeSymbol typeSymbol, LazinatorObjectDescription containingObjectDescription, PropertyDescription containingPropertyDescription, string propertyName, NullableContext nullableContextSetting, NullableContext outputNullableContextSetting)
         {
             // see if the property has already been defined (in case this is a recursive hierarchy)
             foreach (PropertyDescription pd in ContainingPropertyHierarchy())

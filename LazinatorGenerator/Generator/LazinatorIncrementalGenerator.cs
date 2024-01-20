@@ -69,17 +69,6 @@ context)
                 (spc, postGenerationInfo) => postGenerationInfo.GenerateSource(spc, PipelineRunUniqueID, DateTimeNowProvider));
         }
 
-        static (string allPropertyDeclarations, ImmutableArray<string> namesOfTypesReliedOn) GetPropertiesTypeInfo(GeneratorAttributeSyntaxContext context)
-        {
-            var propertiesListedHere = String.Join(";", context.TargetNode.DescendantNodes().OfType<PropertyDeclarationSyntax>().Select(x => x.ToString()));
-            ((INamedTypeSymbol)context.TargetSymbol).GetPropertiesForType(false, out var propertiesThisLevel, out var propertiesLowerLevel);
-            var allPropertyTypeNames = propertiesThisLevel.Select(x => x.Type.GetFullyQualifiedName(false)).ToList();
-            allPropertyTypeNames.AddRange(propertiesLowerLevel.Select(x => x.Type.GetFullyQualifiedName(false)));
-            var allPropertyTypeNamesArray = allPropertyTypeNames.Distinct().ToArray();
-            ImmutableArray<string> propertyTypeNamesImmutable = ImmutableArray.Create<string>(allPropertyTypeNamesArray);
-            return (propertiesListedHere, propertyTypeNamesImmutable);
-        }
-
         static LazinatorConfig ChooseAppropriateConfig(string path, ImmutableArray<LazinatorConfig> candidateConfigs)
         {
             LazinatorConfig? bestConfigSoFar = null;

@@ -49,7 +49,7 @@ namespace LazinatorGenerator.Generator
 
             try
             {
-                var objectDescription = new ObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, Config, dateTimeNowProvider, false, pipelineRunUniqueID);
+                var objectDescription = new LazinatorObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, Config, dateTimeNowProvider, false, pipelineRunUniqueID);
                 var generatedCode = objectDescription.GetCodeBehind();
                 string path = objectDescription.ObjectNameEncodable + Config.GeneratedCodeFileExtension;
                 return new LazinatorCodeGenerationResult(objectDescription.FullyQualifiedObjectName_InNullableMode, path, generatedCode, lazinatorCompilation.GetDependencyInfo(), pipelineRunUniqueID, null);

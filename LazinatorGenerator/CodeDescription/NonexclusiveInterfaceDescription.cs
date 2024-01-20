@@ -9,7 +9,7 @@ namespace Lazinator.CodeDescription
     public class NonexclusiveInterfaceDescription
     {
         public List<PropertyDescription> Properties;
-        ObjectDescription Container;
+        LazinatorObjectDescription Container;
         NullableContext NullableContextSetting;
 
         public NonexclusiveInterfaceDescription()
@@ -17,7 +17,7 @@ namespace Lazinator.CodeDescription
 
         }
 
-        public NonexclusiveInterfaceDescription(LazinatorCompilation fileSet, INamedTypeSymbol t, NullableContext nullableContextSetting, ObjectDescription container)
+        public NonexclusiveInterfaceDescription(LazinatorCompilation fileSet, INamedTypeSymbol t, NullableContext nullableContextSetting, LazinatorObjectDescription container)
         {
             string typeName = LazinatorCompilation.TypeSymbolToString(t);
             NullableContextSetting = nullableContextSetting;

@@ -12,7 +12,7 @@ namespace Lazinator.CodeDescription
     {
         public int UniqueID;
         public int Version;
-        public ObjectDescription Container;
+        public LazinatorObjectDescription Container;
         public INamedTypeSymbol NamedTypeSymbol;
         public INamedTypeSymbol BaseType => NamedTypeSymbol.BaseType;
         public List<PropertyDescription> PropertiesIncludingInherited;
@@ -30,7 +30,7 @@ namespace Lazinator.CodeDescription
 
         }
 
-        public ExclusiveInterfaceDescription(Compilation compilation, INamedTypeSymbol t, NullableContext nullableContextSetting, ObjectDescription container, bool isUnofficialInterface = false)
+        public ExclusiveInterfaceDescription(Compilation compilation, INamedTypeSymbol t, NullableContext nullableContextSetting, LazinatorObjectDescription container, bool isUnofficialInterface = false)
         {
             Compilation = compilation;
             NamedTypeSymbol = t;
