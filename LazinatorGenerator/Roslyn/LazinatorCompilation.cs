@@ -270,11 +270,9 @@ namespace LazinatorCodeGen.Roslyn
         {
             if (type.ContainingNamespace != null &&  type.ContainingNamespace.Name == "System" && type.ContainingNamespace.ContainingNamespace.Name == "")
                 return;
+            if (type.ContainingNamespace != null && type.ContainingNamespace.Name == "Numerics" && type.ContainingNamespace.ContainingNamespace.Name == "System" && type.ContainingNamespace.ContainingNamespace.ContainingNamespace.Name == "")
+                return;
             string typeName = type.GetFullyQualifiedName(true);
-            if (typeName.Contains("Numerics"))
-            {
-                var DEBUG = 0;
-            }
             if (RelevantSymbols.ContainsKey(typeName))
                 return;
             RelevantSymbols.Add(typeName, type);

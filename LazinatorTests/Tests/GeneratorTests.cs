@@ -151,7 +151,7 @@ namespace LazinatorTests.Tests
         public Task GeneratorForSimpleLazinator_NoCachingWithLazinatorChange()
         {
 
-            Debug; // Broad problem here is that there is only one ILazinator file. So, no dependencies can change. 
+            // DEBUG // Broad problem here is that there is only one ILazinator file. So, no dependencies can change. Thus, we get the cached result even if the corresponding Lazinator changes.
             // Maybe that's actually the right thing -- we need to look at the code to see if we actually need changes based on the Lazinator (as opposed to the iLazinator). Ideally, we would be able
             // to determine caching solely by iLazinators. We need to think about partial methods for this.
             // More broadly, the strategy of listing all dependencies may be flawed. For one thing, we're getting a lot of dependencies in System.Numerics, which is a waste of time.
