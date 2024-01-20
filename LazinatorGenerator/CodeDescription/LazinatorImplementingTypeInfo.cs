@@ -13,8 +13,9 @@ using LazinatorGenerator.Settings;
 using System.Collections.Concurrent;
 using System.IO;
 using Microsoft.CodeAnalysis.CSharp;
+using LazinatorCodeGen.Roslyn;
 
-namespace LazinatorCodeGen.Roslyn
+namespace LazinatorGenerator.CodeDescription
 {
     public class LazinatorImplementingTypeInfo
     {
@@ -64,7 +65,7 @@ namespace LazinatorCodeGen.Roslyn
             ImplementingTypeSymbol = implementingTypeSymbol;
             ContinueInitialization();
         }
-        
+
         public void Initialize(Compilation compilation, string implementingTypeName, string fullImplementingTypeName)
         {
             Compilation = compilation;
@@ -145,13 +146,13 @@ namespace LazinatorCodeGen.Roslyn
             TypeToExclusiveInterface[TypeSymbolToString(implementingTypeSymbol)] = TypeSymbolToString(exclusiveInterfaceTypeSymbol);
         }
 
-        private HashSet<string> ILazinatorProperties = null; 
+        private HashSet<string> ILazinatorProperties = null;
         private void RecordILazinatorProperties()
         {
             INamedTypeSymbol iLazinatorSymbol = Compilation.GetTypeByMetadataName("Lazinator.Core.ILazinator");
             ILazinatorProperties = new HashSet<string>(iLazinatorSymbol.GetPropertySymbols().Select(x => x.GetFullyQualifiedName(true)));
         }
-        
+
         public ImmutableArray<string> GetInterfaceSymbolNames() => GetSymbolNamesFromDictionary(RelevantSymbols);
 
         public static ImmutableArray<string> GetSymbolNamesFromDictionary(Dictionary<string, ISymbol> symbols)
@@ -161,14 +162,14 @@ namespace LazinatorCodeGen.Roslyn
             {
                 h.Add(interfaceSymbol.Value.GetFullyQualifiedName(true));
             }
-            return ImmutableArray.Create<string>(h.OrderBy(x => x).ToArray());
+            return ImmutableArray.Create(h.OrderBy(x => x).ToArray());
         }
 
         internal LazinatorDependencyInfo GetDependencyInfo()
         {
             return new LazinatorDependencyInfo(GetInterfaceSymbolNames());
         }
-        
+
         private void RecordPropertiesForInterface(INamedTypeSymbol @interface)
         {
             if (ILazinatorProperties == null)
@@ -228,7 +229,7 @@ namespace LazinatorCodeGen.Roslyn
                     .Select(x => new KeyValuePair<INamedTypeSymbol, ImmutableList<IPropertySymbol>>(x, x.GetPropertySymbols()))
                     .ToDictionary(x => x.Key, x => x.Value);
             }
-            namedTypeSymbol.GetPropertiesForType(includeOnlyLowerLevelPropertiesFromInterfaces, out ImmutableList <IPropertySymbol> propertiesThisLevel, out ImmutableList<IPropertySymbol> propertiesLowerLevels);
+            namedTypeSymbol.GetPropertiesForType(includeOnlyLowerLevelPropertiesFromInterfaces, out ImmutableList<IPropertySymbol> propertiesThisLevel, out ImmutableList<IPropertySymbol> propertiesLowerLevels);
             foreach (var p in propertiesThisLevel.OrderBy(x => x.Name).Where(x => !x.HasAttributeOfType<CloneDoNotAutogenerateAttribute>()))
                 yield return new PropertyWithDefinitionInfo(p, PropertyWithDefinitionInfo.Level.IsDefinedThisLevel);
             foreach (var p in propertiesLowerLevels.OrderBy(x => x.Name).Where(x => !x.HasAttributeOfType<CloneDoNotAutogenerateAttribute>()))
@@ -261,10 +262,10 @@ namespace LazinatorCodeGen.Roslyn
             foreach (ITypeSymbol t in typesAndRelatedTypes)
                 RecordInformationAboutType(t);
         }
-        
+
         private void RecordInformationAboutType(ITypeSymbol type)
         {
-            if (type.ContainingNamespace != null &&  type.ContainingNamespace.Name == "System" && type.ContainingNamespace.ContainingNamespace.Name == "")
+            if (type.ContainingNamespace != null && type.ContainingNamespace.Name == "System" && type.ContainingNamespace.ContainingNamespace.Name == "")
                 return;
             if (type.ContainingNamespace != null && type.ContainingNamespace.Name == "Numerics" && type.ContainingNamespace.ContainingNamespace.Name == "System" && type.ContainingNamespace.ContainingNamespace.ContainingNamespace.Name == "")
                 return;
@@ -277,7 +278,7 @@ namespace LazinatorCodeGen.Roslyn
                 AddKnownAttributesForSymbol(type);
                 if (namedTypeSymbol.TypeKind == TypeKind.Interface && GetFirstAttributeOfType<CloneLazinatorAttribute>(namedTypeSymbol) == null && GetFirstAttributeOfType<CloneNonexclusiveLazinatorAttribute>(namedTypeSymbol) == null)
                     return; // don't worry about IEnumerable etc.
-                
+
                 List<INamedTypeSymbol> allInterfaces = namedTypeSymbol.AllInterfaces.Where(x => !SymbolEqualityComparer.Default.Equals(x, type) && x.Name != "ILazinator")
                     .OrderByDescending(x => namedTypeSymbol.Interfaces.Contains(x))
                     .ThenByDescending(x => x.AllInterfaces.Count())
@@ -294,7 +295,7 @@ namespace LazinatorCodeGen.Roslyn
                     bool includesInterfaceWithLazinatorAttribute = false;
                     foreach (var @interface in allInterfaces)
                     {
-                        LazinatorGenerator.AttributeClones.CloneLazinatorAttribute attribute = GetFirstAttributeOfType<LazinatorGenerator.AttributeClones.CloneLazinatorAttribute>(@interface);
+                        CloneLazinatorAttribute attribute = GetFirstAttributeOfType<CloneLazinatorAttribute>(@interface);
                         if (attribute != null)
                         {
                             AddLinkFromTypeToInt32erface(namedTypeSymbol, @interface);
@@ -309,12 +310,12 @@ namespace LazinatorCodeGen.Roslyn
                 }
                 else if (namedTypeSymbol.TypeKind == TypeKind.Interface)
                 {
-                    if (GetFirstAttributeOfType<LazinatorGenerator.AttributeClones.CloneLazinatorAttribute>(type) != null)
+                    if (GetFirstAttributeOfType<CloneLazinatorAttribute>(type) != null)
                     {
                         ExclusiveInterfaces.Add(TypeSymbolToString(namedTypeSymbol));
                         RecordPropertiesForInterface(namedTypeSymbol);
                     }
-                    else if (GetFirstAttributeOfType<LazinatorGenerator.AttributeClones.CloneNonexclusiveLazinatorAttribute>(type) != null)
+                    else if (GetFirstAttributeOfType<CloneNonexclusiveLazinatorAttribute>(type) != null)
                         NonexclusiveInterfaces.Add(TypeSymbolToString(namedTypeSymbol));
                 }
             }
@@ -362,7 +363,7 @@ namespace LazinatorCodeGen.Roslyn
                     alreadyProduced.Add(t);
                     yield return t;
                 }
-            var attributes = (GetAttributesOfType<CloneUnofficiallyIncorporateInterfaceAttribute>(type)).ToList();
+            var attributes = GetAttributesOfType<CloneUnofficiallyIncorporateInterfaceAttribute>(type).ToList();
             foreach (CloneUnofficiallyIncorporateInterfaceAttribute attribute in attributes)
             {
                 foreach (ITypeSymbol t in GetTypeAndRelatedTypes(
@@ -455,8 +456,8 @@ namespace LazinatorCodeGen.Roslyn
 
         public static Guid GetHashForInterface(SyntaxNode interfaceSyntaxNode, INamedTypeSymbol implementingType, bool implementingTypeRequiresParameterlessConstructor)
         {
-            var bytes = System.Text.Encoding.UTF8.GetBytes(interfaceSyntaxNode.GetText().ToString().Where(x => x != '\r' && x != '\n').ToArray()).ToList(); // ignore the line endings b/c this differs across computers (even on same platform)
-            bytes.AddRange(LazinatorCodeGen.Roslyn.LazinatorVersionInfo.LazinatorVersionBytes); // thus, if we change the version, all code behind will need to be regenerated
+            var bytes = Encoding.UTF8.GetBytes(interfaceSyntaxNode.GetText().ToString().Where(x => x != '\r' && x != '\n').ToArray()).ToList(); // ignore the line endings b/c this differs across computers (even on same platform)
+            bytes.AddRange(LazinatorVersionInfo.LazinatorVersionBytes); // thus, if we change the version, all code behind will need to be regenerated
             var md5 = System.Security.Cryptography.MD5.Create();
             Guid hash = new Guid(md5.ComputeHash(bytes.ToArray()));
             return hash;
@@ -469,7 +470,7 @@ namespace LazinatorCodeGen.Roslyn
                 return;
             // Consider whether to add this as a record-like type
             if (type.IsAbstract)
-                return; 
+                return;
             if (!IsAllowedAsRecordLikeTypeIfProperlyFormed(type))
             {
                 RecordLikeTypesExclusions.Add(typeName);
@@ -570,7 +571,7 @@ namespace LazinatorCodeGen.Roslyn
             defaultAllowRecordLikeClasses = DefaultConfig.DefaultAllowRecordLikeClasses;
             defaultAllowRecordLikeRegularStructs = DefaultConfig.DefaultAllowRecordLikeRegularStructs;
             defaultAllowRecordLikeReadOnlyStructs = DefaultConfig.DefaultAllowRecordLikeReadOnlyStructs;
-            
+
             if (type.TypeKind == TypeKind.Class)
                 return defaultAllowRecordLikeClasses;
             if (type.IsReadOnlyStruct())
@@ -584,7 +585,7 @@ namespace LazinatorCodeGen.Roslyn
             string appropriatelyQualifiedNameWithNullableIndicators = DefaultConfig.UseFullyQualifiedNames ? type.GetFullyQualifiedNameWithoutGlobal(true) : type.GetMinimallyQualifiedName(true);
             if (DefaultConfig.IncludeRecordLikeTypes.Contains(appropriatelyQualifiedName) || DefaultConfig.IncludeRecordLikeTypes.Contains(appropriatelyQualifiedNameWithNullableIndicators))
                 return true;
-            
+
             return false;
         }
 
@@ -667,8 +668,8 @@ namespace LazinatorCodeGen.Roslyn
             {
                 if (keyValuePair.Value is INamedTypeSymbol namedSymbol)
                 {
-                    string fullyQualifiedName = RoslynHelpers.GetFullyQualifiedNameWithoutGlobal(namedSymbol, true);
-                    string fullyQualifiedMetadataName = RoslynHelpers.GetFullyQualifiedMetadataName(namedSymbol);
+                    string fullyQualifiedName = namedSymbol.GetFullyQualifiedNameWithoutGlobal(true);
+                    string fullyQualifiedMetadataName = namedSymbol.GetFullyQualifiedMetadataName();
                     if (namedSymbol.Name == name || fullyQualifiedName == name || fullyQualifiedName == RoslynHelpers.GetNameWithoutGenericArity(name) || namedSymbol.MetadataName == name || fullyQualifiedMetadataName == name)
                         return namedSymbol;
                 }
@@ -712,9 +713,9 @@ namespace LazinatorCodeGen.Roslyn
 
         public INamedTypeSymbol GetExclusiveInterface(INamedTypeSymbol iLazinatorTypeSymbol)
         {
-            string typeSymbolString = LazinatorImplementingTypeInfo.TypeSymbolToString(iLazinatorTypeSymbol.OriginalDefinition);
+            string typeSymbolString = TypeSymbolToString(iLazinatorTypeSymbol.OriginalDefinition);
             string exclusiveInterfaceString = TypeToExclusiveInterface[typeSymbolString];
-            INamedTypeSymbol interfaceTypeSymbol = LazinatorImplementingTypeInfo.NameTypedSymbolFromString
+            INamedTypeSymbol interfaceTypeSymbol = NameTypedSymbolFromString
                 [exclusiveInterfaceString];
             return interfaceTypeSymbol;
         }

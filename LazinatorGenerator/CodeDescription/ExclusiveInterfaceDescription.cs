@@ -5,6 +5,7 @@ using LazinatorGenerator.Roslyn;
 using LazinatorGenerator.AttributeClones;
 using Microsoft.CodeAnalysis;
 using LazinatorCodeGen.Roslyn;
+using LazinatorGenerator.CodeDescription;
 
 namespace Lazinator.CodeDescription
 {

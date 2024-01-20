@@ -11,6 +11,7 @@ using LazinatorCodeGen.Roslyn;
 using System.Collections.Immutable;
 using System.IO;
 using LazinatorTests.Support;
+using LazinatorGenerator.CodeDescription;
 
 namespace LazinatorTests.Tests
 {

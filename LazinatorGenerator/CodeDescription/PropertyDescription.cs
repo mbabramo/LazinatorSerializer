@@ -13,6 +13,7 @@ using LazinatorCodeGen.Roslyn;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static LazinatorCodeGen.Roslyn.RoslynHelpers;
+using LazinatorGenerator.CodeDescription;
 
 namespace Lazinator.CodeDescription
 {

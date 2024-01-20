@@ -1,5 +1,6 @@
 ﻿using Lazinator.CodeDescription;
 using LazinatorCodeGen.Roslyn;
+using LazinatorGenerator.CodeDescription;
 using LazinatorGenerator.Settings;
 using LazinatorGenerator.Support;
 using Microsoft.CodeAnalysis;
@@ -18,7 +19,6 @@ namespace LazinatorGenerator.Generator
         internal GeneratorAttributeSyntaxContext SyntaxContext;
         internal LazinatorConfig Config;
         internal SemanticModel SemanticModel => SyntaxContext.SemanticModel;
-        internal Compilation Compilation => SemanticModel.Compilation;
         internal INamedTypeSymbol InterfaceSymbol => (INamedTypeSymbol) SyntaxContext.TargetSymbol;
         internal LazinatorPreGenerationInfo(GeneratorAttributeSyntaxContext syntaxContext, LazinatorConfig config)
         {
@@ -42,10 +42,10 @@ namespace LazinatorGenerator.Generator
 
         internal LazinatorCodeGenerationResult ExecuteSourceGeneration(IDateTimeNow dateTimeNowProvider, long pipelineStartTimeStamp, Compilation compilation)
         {
-            LazinatorPairInformation pairInfo = GetLazinatorPairInformation();
+            LazinatorPairInformation pairInfo = GetLazinatorPairInformation(compilation);
             if (pairInfo == null)
                 return new LazinatorCodeGenerationResult(null, null, null, default, pipelineStartTimeStamp, default);
-            LazinatorImplementingTypeInfo implementingTypeInfo = new LazinatorImplementingTypeInfo(Compilation, pairInfo.LazinatorObject, Config);
+            LazinatorImplementingTypeInfo implementingTypeInfo = new LazinatorImplementingTypeInfo(compilation, pairInfo.LazinatorObject, Config);
 
             try
             {
@@ -68,10 +68,10 @@ namespace LazinatorGenerator.Generator
             }
         }
 
-        private LazinatorPairInformation GetLazinatorPairInformation()
+        private LazinatorPairInformation GetLazinatorPairInformation(Compilation compilation)
         {
-            LazinatorPairFinder analyzer = new LazinatorPairFinder(Compilation, Config); // we're not running the analyzer, but the analyzer code can help us get the LazinatorPairInfo.
-            LazinatorPairInformation pairInfo = analyzer.GetLazinatorPairInfo(Compilation, InterfaceSymbol);
+            LazinatorPairFinder analyzer = new LazinatorPairFinder(compilation, Config); // we're not running the analyzer, but the analyzer code can help us get the LazinatorPairInfo.
+            LazinatorPairInformation pairInfo = analyzer.GetLazinatorPairInfo(compilation, InterfaceSymbol);
             return pairInfo;
         }
 

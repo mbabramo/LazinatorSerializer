@@ -14,7 +14,6 @@ using Microsoft.CodeAnalysis;
 using System.Threading.Tasks;
 using Lazinator.Collections.Dictionary;
 using LazinatorGenerator.Settings;
-using LazinatorCodeGen.Roslyn;
 using LazinatorTests.Examples.NonAbstractGenerics;
 using LazinatorTests.Support;
 using Newtonsoft.Json;
@@ -38,6 +37,7 @@ using Lazinator.Buffers;
 using Lazinator.Persistence;
 using Microsoft.CodeAnalysis.CSharp;
 using LazinatorGenerator.Support;
+using LazinatorGenerator.CodeDescription;
 
 namespace LazinatorTests.Tests
 {

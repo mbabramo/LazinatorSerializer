@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using LazinatorGenerator.AttributeClones;
-using LazinatorCodeGen.Roslyn;
 using Microsoft.CodeAnalysis;
+using LazinatorGenerator.CodeDescription;
 
 namespace Lazinator.CodeDescription
 {
