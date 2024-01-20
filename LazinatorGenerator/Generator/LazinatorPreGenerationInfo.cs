@@ -40,19 +40,19 @@ namespace LazinatorGenerator.Generator
             return returnVal;
         }
 
-        internal LazinatorCodeGenerationResult ExecuteSourceGeneration(Guid pipelineRunUniqueID, IDateTimeNow dateTimeNowProvider)
+        internal LazinatorCodeGenerationResult ExecuteSourceGeneration(IDateTimeNow dateTimeNowProvider, long pipelineStartTimeStamp, Compilation compilation)
         {
             LazinatorPairInformation pairInfo = GetLazinatorPairInformation();
             if (pairInfo == null)
-                return new LazinatorCodeGenerationResult(null, null, null, default, pipelineRunUniqueID, default);
+                return new LazinatorCodeGenerationResult(null, null, null, default, pipelineStartTimeStamp, default);
             LazinatorImplementingTypeInfo implementingTypeInfo = new LazinatorImplementingTypeInfo(Compilation, pairInfo.LazinatorObject, Config);
 
             try
             {
-                var objectDescription = new LazinatorObjectDescription(implementingTypeInfo.ImplementingTypeSymbol, implementingTypeInfo, Config, dateTimeNowProvider, false, pipelineRunUniqueID);
+                var objectDescription = new LazinatorObjectDescription(implementingTypeInfo.ImplementingTypeSymbol, implementingTypeInfo, Config, dateTimeNowProvider, false, pipelineStartTimeStamp);
                 var generatedCode = objectDescription.GetCodeBehind();
                 string path = objectDescription.ObjectNameEncodable + Config.GeneratedCodeFileExtension;
-                return new LazinatorCodeGenerationResult(objectDescription.FullyQualifiedObjectName_InNullableMode, path, generatedCode, implementingTypeInfo.GetDependencyInfo(), pipelineRunUniqueID, null);
+                return new LazinatorCodeGenerationResult(objectDescription.FullyQualifiedObjectName_InNullableMode, path, generatedCode, implementingTypeInfo.GetDependencyInfo(), pipelineStartTimeStamp, null);
             }
             catch (LazinatorCodeGenException e)
             {
@@ -64,7 +64,7 @@ namespace LazinatorGenerator.Generator
                     defaultSeverity: DiagnosticSeverity.Error,
                     isEnabledByDefault: true);
                 Diagnostic diagnostic = Diagnostic.Create(descriptor, pairInfo.PrimaryLocation);
-                return new LazinatorCodeGenerationResult(implementingTypeInfo.ImplementingTypeSymbol.GetFullyQualifiedNameWithoutGlobal(true), null, null, implementingTypeInfo.GetDependencyInfo(), pipelineRunUniqueID, diagnostic);
+                return new LazinatorCodeGenerationResult(implementingTypeInfo.ImplementingTypeSymbol.GetFullyQualifiedNameWithoutGlobal(true), null, null, implementingTypeInfo.GetDependencyInfo(), pipelineStartTimeStamp, diagnostic);
             }
         }
 
