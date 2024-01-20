@@ -17,19 +17,19 @@ namespace Lazinator.CodeDescription
 
         }
 
-        public NonexclusiveInterfaceDescription(LazinatorCompilation fileSet, INamedTypeSymbol t, NullableContext nullableContextSetting, LazinatorObjectDescription container)
+        public NonexclusiveInterfaceDescription(LazinatorImplementingTypeInfo implementingTypeInfo, INamedTypeSymbol t, NullableContext nullableContextSetting, LazinatorObjectDescription container)
         {
-            string typeName = LazinatorCompilation.TypeSymbolToString(t);
+            string typeName = LazinatorImplementingTypeInfo.TypeSymbolToString(t);
             NullableContextSetting = nullableContextSetting;
-            if (!fileSet.NonexclusiveInterfaces.Contains(typeName))
+            if (!implementingTypeInfo.NonexclusiveInterfaces.Contains(typeName))
                 throw new LazinatorCodeGenException("NonexclusiveLazinator must be applied to a nonexclusive interface.");
             Container = container;
-            CloneNonexclusiveLazinatorAttribute nonexclusiveLazinatorAttribute = fileSet.GetFirstAttributeOfType<CloneNonexclusiveLazinatorAttribute>(t);
+            CloneNonexclusiveLazinatorAttribute nonexclusiveLazinatorAttribute = implementingTypeInfo.GetFirstAttributeOfType<CloneNonexclusiveLazinatorAttribute>(t);
             if (nonexclusiveLazinatorAttribute == null)
                 throw new LazinatorCodeGenException("Expected NonexclusiveLazinator attribute.");
-            if (fileSet.PropertiesForType.ContainsKey(typeName))
+            if (implementingTypeInfo.PropertiesForType.ContainsKey(typeName))
             {
-                Properties = fileSet.PropertiesForType[typeName].Select(x => new PropertyDescription(x.Property, container, NullableContextSetting, null, null, false)).ToList();
+                Properties = implementingTypeInfo.PropertiesForType[typeName].Select(x => new PropertyDescription(x.Property, container, NullableContextSetting, null, null, false)).ToList();
             }
         }
     }

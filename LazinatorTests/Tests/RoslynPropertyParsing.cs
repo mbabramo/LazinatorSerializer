@@ -34,7 +34,7 @@ namespace LazinatorTests.Tests
         {
             try
             {
-                LazinatorCompilation lazinatorFiles = await GetMiniRoslynFileSet(typeof(Example));
+                LazinatorImplementingTypeInfo lazinatorFiles = await GetImplementingTypeInfoFromAdHocWorkspaceWithExamples(typeof(Example));
                 INamedTypeSymbol exampleInterface = lazinatorFiles.LookupSymbol("IExample");
                 ImmutableArray<AttributeData> attributes = exampleInterface.GetAttributes();
                 attributes.Count().Should().BeGreaterOrEqualTo(1);
@@ -51,11 +51,11 @@ namespace LazinatorTests.Tests
         [Fact]
         public async Task CanParseSupportedCollections()
         {
-            LazinatorCompilation lazinatorFiles = await GetMiniRoslynFileSet(typeof(DotNetList_Lazinator));
+            LazinatorImplementingTypeInfo lazinatorFiles = await GetImplementingTypeInfoFromAdHocWorkspaceWithExamples(typeof(DotNetList_Lazinator));
 
             string interfaceName = "IDotNetList_Lazinator";
             var interfaceSymbol = lazinatorFiles.LookupSymbol(interfaceName);
-            var properties = lazinatorFiles.PropertiesForType[LazinatorCompilation.TypeSymbolToString(interfaceSymbol)];
+            var properties = lazinatorFiles.PropertiesForType[LazinatorImplementingTypeInfo.TypeSymbolToString(interfaceSymbol)];
             var property = properties.First().Property;
             property.Type.Name.Should().Be("List");
             (property.Type is INamedTypeSymbol).Should().BeTrue();
@@ -136,7 +136,7 @@ namespace LazinatorTests.Tests
         //    propertiesLowerLevels.Count().Should().Be(0);
         //}
 
-        private static async Task<LazinatorCompilation> GetMiniRoslynFileSet(Type implementingType)
+        private static async Task<LazinatorImplementingTypeInfo> GetImplementingTypeInfoFromAdHocWorkspaceWithExamples(Type implementingType)
         {
             List<(string project, string mainFolder, string subfolder, string filename)> fileinfos = new List<(string project, string mainFolder, string subfolder, string filename)>()
             {
@@ -152,8 +152,8 @@ namespace LazinatorTests.Tests
             };
             var ws = AdhocWorkspaceManager.CreateAdHocWorkspaceWithFiles(fileinfos, ".g.cs");
             var compilation = await AdhocWorkspaceManager.GetCompilation(ws);
-            var roslynFiles = new LazinatorCompilation(compilation, implementingType, null);
-            return roslynFiles;
+            var implementingTypeInfo = new LazinatorImplementingTypeInfo(compilation, implementingType, null);
+            return implementingTypeInfo;
         }
     }
 }

@@ -16,7 +16,7 @@ using Microsoft.CodeAnalysis.CSharp;
 
 namespace LazinatorCodeGen.Roslyn
 {
-    public class LazinatorCompilation
+    public class LazinatorImplementingTypeInfo
     {
 
         // We must be able to determine whether a type implements various methods, but we want to exclude methods implemented in code behind
@@ -42,17 +42,17 @@ namespace LazinatorCodeGen.Roslyn
         internal static ConcurrentDictionary<string, LazinatorConfig?> AdditionalConfigFiles = new ConcurrentDictionary<string, LazinatorConfig?>();
         static object LockObj = new object();
 
-        public LazinatorCompilation(Compilation compilation, Type type, LazinatorConfig? config) : this(compilation, RoslynHelpers.GetNameWithoutGenericArity(type), type.FullName, config)
+        public LazinatorImplementingTypeInfo(Compilation compilation, Type implementingType, LazinatorConfig? config) : this(compilation, RoslynHelpers.GetNameWithoutGenericArity(implementingType), implementingType.FullName, config)
         {
         }
 
-        public LazinatorCompilation(Compilation compilation, string implementingTypeName, string fullImplementingTypeName, LazinatorConfig? defaultConfig)
+        public LazinatorImplementingTypeInfo(Compilation compilation, string implementingTypeName, string fullImplementingTypeName, LazinatorConfig? defaultConfig)
         {
             DefaultConfig = defaultConfig ?? new LazinatorConfig();
             Initialize(compilation, implementingTypeName, fullImplementingTypeName);
         }
 
-        public LazinatorCompilation(Compilation compilation, INamedTypeSymbol implementingTypeSymbol, LazinatorConfig? defaultConfig)
+        public LazinatorImplementingTypeInfo(Compilation compilation, INamedTypeSymbol implementingTypeSymbol, LazinatorConfig? defaultConfig)
         {
             DefaultConfig = defaultConfig ?? new LazinatorConfig();
             Initialize(compilation, implementingTypeSymbol);
@@ -712,9 +712,9 @@ namespace LazinatorCodeGen.Roslyn
 
         public INamedTypeSymbol GetExclusiveInterface(INamedTypeSymbol iLazinatorTypeSymbol)
         {
-            string typeSymbolString = LazinatorCompilation.TypeSymbolToString(iLazinatorTypeSymbol.OriginalDefinition);
+            string typeSymbolString = LazinatorImplementingTypeInfo.TypeSymbolToString(iLazinatorTypeSymbol.OriginalDefinition);
             string exclusiveInterfaceString = TypeToExclusiveInterface[typeSymbolString];
-            INamedTypeSymbol interfaceTypeSymbol = LazinatorCompilation.NameTypedSymbolFromString
+            INamedTypeSymbol interfaceTypeSymbol = LazinatorImplementingTypeInfo.NameTypedSymbolFromString
                 [exclusiveInterfaceString];
             return interfaceTypeSymbol;
         }

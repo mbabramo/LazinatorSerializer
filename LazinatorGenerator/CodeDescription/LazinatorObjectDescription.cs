@@ -23,7 +23,7 @@ namespace Lazinator.CodeDescription
         public INamedTypeSymbol ILazinatorTypeSymbol { get; set; }
         public INamedTypeSymbol InterfaceTypeSymbol { get; set; }
         public LazinatorObjectType ObjectType { get; set; }
-        public LazinatorCompilation Compilation { get; set; }
+        public LazinatorImplementingTypeInfo ImplementingTypeInfo { get; set; }
         public LazinatorConfig? Config { get; set; }
         public Guid Hash { get; set; }
         public string CodeToInsert { get; set; }
@@ -228,14 +228,14 @@ namespace Lazinator.CodeDescription
 
         }
         
-        public LazinatorObjectDescription(INamedTypeSymbol iLazinatorTypeSymbol, LazinatorCompilation compilation, LazinatorConfig? config, IDateTimeNow dateTimeNowProvider, bool suppressDate = false, Guid? pipelineID = null)
+        public LazinatorObjectDescription(INamedTypeSymbol iLazinatorTypeSymbol, LazinatorImplementingTypeInfo compilation, LazinatorConfig? config, IDateTimeNow dateTimeNowProvider, bool suppressDate = false, Guid? pipelineID = null)
         {
             DateTimeNowProvider = dateTimeNowProvider;
             ILazinatorTypeSymbol = iLazinatorTypeSymbol;
             var implementedAttributes = iLazinatorTypeSymbol.GetAttributesIncludingBase<CloneImplementsAttribute>();
             ImplementedMethods = implementedAttributes.SelectMany(x => x.Implemented).ToArray();
             CodeToInsert = iLazinatorTypeSymbol.GetKnownAttribute<CloneInsertCodeAttribute>()?.CodeToInsert;
-            Compilation = compilation;
+            ImplementingTypeInfo = compilation;
             Config = config;
             SuppressDate = suppressDate;
             PipelineID = pipelineID;
@@ -278,16 +278,16 @@ namespace Lazinator.CodeDescription
                 }
             }
 
-            string typeSymbolString = LazinatorCompilation.TypeSymbolToString(iLazinatorTypeSymbol.OriginalDefinition);
-            if (!Compilation.TypeToExclusiveInterface.ContainsKey(typeSymbolString))
+            string typeSymbolString = LazinatorImplementingTypeInfo.TypeSymbolToString(iLazinatorTypeSymbol.OriginalDefinition);
+            if (!ImplementingTypeInfo.TypeToExclusiveInterface.ContainsKey(typeSymbolString))
             {
                 // This is a nonlazinator base class
                 IsNonLazinatorBaseClass = true;
                 return;
             }
 
-            string exclusiveInterfaceString = Compilation.TypeToExclusiveInterface[typeSymbolString];
-            INamedTypeSymbol interfaceTypeSymbol = LazinatorCompilation.NameTypedSymbolFromString
+            string exclusiveInterfaceString = ImplementingTypeInfo.TypeToExclusiveInterface[typeSymbolString];
+            INamedTypeSymbol interfaceTypeSymbol = LazinatorImplementingTypeInfo.NameTypedSymbolFromString
                 [exclusiveInterfaceString];
 
             InterfaceTypeSymbol = interfaceTypeSymbol;
@@ -304,15 +304,15 @@ namespace Lazinator.CodeDescription
             AllowNonlazinatorGenerics = InterfaceTypeSymbol.HasAttributeOfType<CloneAllowNonlazinatorOpenGenericsAttribute>();
             SuppressLazinatorVersionByte = InterfaceTypeSymbol.HasAttributeOfType<CloneExcludeLazinatorVersionByteAttribute>();
             GenerateRefStructIfNotGenerating = InterfaceTypeSymbol.HasAttributeOfType<CloneGenerateRefStructAttribute>();
-            Hash = Compilation.InterfaceTextHash.ContainsKey(LazinatorCompilation.TypeSymbolToString(interfaceTypeSymbol)) ? Compilation.InterfaceTextHash[LazinatorCompilation.TypeSymbolToString(interfaceTypeSymbol)] : default;
-            NullableContextSetting = interfaceTypeSymbol.GetNullableContextForSymbol(Compilation.Compilation);
+            Hash = ImplementingTypeInfo.InterfaceTextHash.ContainsKey(LazinatorImplementingTypeInfo.TypeSymbolToString(interfaceTypeSymbol)) ? ImplementingTypeInfo.InterfaceTextHash[LazinatorImplementingTypeInfo.TypeSymbolToString(interfaceTypeSymbol)] : default;
+            NullableContextSetting = interfaceTypeSymbol.GetNullableContextForSymbol(ImplementingTypeInfo.Compilation);
             ExclusiveInterface = new ExclusiveInterfaceDescription(compilation.Compilation, interfaceTypeSymbol, NullableContextSetting, this);
             if (ExclusiveInterface.GenericArgumentNames.Any())
                 HandleGenerics(iLazinatorTypeSymbol);
             var nonexclusiveInterfaces = iLazinatorTypeSymbol.AllInterfaces
-                                .Where(x => Compilation.ContainsAttributeOfType<CloneNonexclusiveLazinatorAttribute>(x));
+                                .Where(x => ImplementingTypeInfo.ContainsAttributeOfType<CloneNonexclusiveLazinatorAttribute>(x));
             NonexclusiveInterfaces = nonexclusiveInterfaces
-                .Select(x => new NonexclusiveInterfaceDescription(Compilation, x, NullableContextSetting, this)).ToList(); 
+                .Select(x => new NonexclusiveInterfaceDescription(ImplementingTypeInfo, x, NullableContextSetting, this)).ToList(); 
         }
 
         private void CheckForInconsistentLengthAttributes()
@@ -1904,7 +1904,7 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
                         )
                     )
                     && // but if this is a Lazinator interface type, that's fine too.
-                    !Compilation.ContainsAttributeOfType<CloneLazinatorAttribute>(typeSymbol);
+                    !ImplementingTypeInfo.ContainsAttributeOfType<CloneLazinatorAttribute>(typeSymbol);
         }
     }
 }

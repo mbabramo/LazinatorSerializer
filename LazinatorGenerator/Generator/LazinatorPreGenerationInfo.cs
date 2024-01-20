@@ -45,14 +45,14 @@ namespace LazinatorGenerator.Generator
             LazinatorPairInformation pairInfo = GetLazinatorPairInformation();
             if (pairInfo == null)
                 return new LazinatorCodeGenerationResult(null, null, null, default, pipelineRunUniqueID, default);
-            LazinatorCompilation lazinatorCompilation = new LazinatorCompilation(Compilation, pairInfo.LazinatorObject, Config);
+            LazinatorImplementingTypeInfo implementingTypeInfo = new LazinatorImplementingTypeInfo(Compilation, pairInfo.LazinatorObject, Config);
 
             try
             {
-                var objectDescription = new LazinatorObjectDescription(lazinatorCompilation.ImplementingTypeSymbol, lazinatorCompilation, Config, dateTimeNowProvider, false, pipelineRunUniqueID);
+                var objectDescription = new LazinatorObjectDescription(implementingTypeInfo.ImplementingTypeSymbol, implementingTypeInfo, Config, dateTimeNowProvider, false, pipelineRunUniqueID);
                 var generatedCode = objectDescription.GetCodeBehind();
                 string path = objectDescription.ObjectNameEncodable + Config.GeneratedCodeFileExtension;
-                return new LazinatorCodeGenerationResult(objectDescription.FullyQualifiedObjectName_InNullableMode, path, generatedCode, lazinatorCompilation.GetDependencyInfo(), pipelineRunUniqueID, null);
+                return new LazinatorCodeGenerationResult(objectDescription.FullyQualifiedObjectName_InNullableMode, path, generatedCode, implementingTypeInfo.GetDependencyInfo(), pipelineRunUniqueID, null);
             }
             catch (LazinatorCodeGenException e)
             {
@@ -64,7 +64,7 @@ namespace LazinatorGenerator.Generator
                     defaultSeverity: DiagnosticSeverity.Error,
                     isEnabledByDefault: true);
                 Diagnostic diagnostic = Diagnostic.Create(descriptor, pairInfo.PrimaryLocation);
-                return new LazinatorCodeGenerationResult(lazinatorCompilation.ImplementingTypeSymbol.GetFullyQualifiedNameWithoutGlobal(true), null, null, lazinatorCompilation.GetDependencyInfo(), pipelineRunUniqueID, diagnostic);
+                return new LazinatorCodeGenerationResult(implementingTypeInfo.ImplementingTypeSymbol.GetFullyQualifiedNameWithoutGlobal(true), null, null, implementingTypeInfo.GetDependencyInfo(), pipelineRunUniqueID, diagnostic);
             }
         }
 

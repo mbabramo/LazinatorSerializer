@@ -37,7 +37,7 @@ namespace Lazinator.CodeDescription
             NullableContextSetting = nullableContextSetting;
             IsUnofficialInterface = isUnofficialInterface;
             Container = container;
-            var lazinatorAttribute = Container.Compilation.GetFirstAttributeOfType<CloneLazinatorAttribute>(t);
+            var lazinatorAttribute = Container.ImplementingTypeInfo.GetFirstAttributeOfType<CloneLazinatorAttribute>(t);
             if (lazinatorAttribute == null)
                 throw new LazinatorCodeGenException("Lazinator attribute is required for each interface implementing ILazinator, including inherited interfaces.");
             UniqueID = lazinatorAttribute.UniqueID;
@@ -55,16 +55,16 @@ namespace Lazinator.CodeDescription
         {
             if (IsUnofficialInterface)
                 return new List<PropertyDescription>(); // unofficial interfaces can't incorporate other unofficial interfaces
-            var attributes = Container.Compilation.GetAttributesOfType<CloneUnofficiallyIncorporateInterfaceAttribute>(t);
+            var attributes = Container.ImplementingTypeInfo.GetAttributesOfType<CloneUnofficiallyIncorporateInterfaceAttribute>(t);
             List<PropertyDescription> propertiesToPossiblyUnofficiallyIncorporate = new List<PropertyDescription>();
             foreach (var a in attributes)
             {
-                INamedTypeSymbol namedInterfaceType = Container.Compilation.LookupSymbol(a.OtherInterfaceFullyQualifiedTypeName);
+                INamedTypeSymbol namedInterfaceType = Container.ImplementingTypeInfo.LookupSymbol(a.OtherInterfaceFullyQualifiedTypeName);
                 if (namedInterfaceType == null)
                     throw new LazinatorCodeGenException(
                         $"Unofficial type {a.OtherInterfaceFullyQualifiedTypeName} must exist and have a Lazinator attribute.");
                 var containerToUse = Container.GetBaseLazinatorObjects().LastOrDefault(x => x.InterfaceTypeSymbol != null && x.InterfaceTypeSymbol.GetKnownAttribute<CloneUnofficiallyIncorporateInterfaceAttribute>()?.OtherInterfaceFullyQualifiedTypeName == a.OtherInterfaceFullyQualifiedTypeName) ?? Container;
-                ExclusiveInterfaceDescription d = new ExclusiveInterfaceDescription(Container.Compilation.Compilation, namedInterfaceType, NullableContextSetting, containerToUse, true);
+                ExclusiveInterfaceDescription d = new ExclusiveInterfaceDescription(Container.ImplementingTypeInfo.Compilation, namedInterfaceType, NullableContextSetting, containerToUse, true);
                 foreach (var property in d.PropertiesToDefineThisLevel)
                 {
                     property.PropertyAccessibility = a.Accessibility;
@@ -77,7 +77,7 @@ namespace Lazinator.CodeDescription
 
         private void SetPropertiesIncludingInherited(INamedTypeSymbol interfaceSymbol)
         {
-            List<PropertyWithDefinitionInfo> propertiesWithLevel = Container.Compilation.PropertiesForType[LazinatorCompilation.TypeSymbolToString(interfaceSymbol)];
+            List<PropertyWithDefinitionInfo> propertiesWithLevel = Container.ImplementingTypeInfo.PropertiesForType[LazinatorImplementingTypeInfo.TypeSymbolToString(interfaceSymbol)];
             foreach (var unofficialProperty in GetUnofficialProperties(interfaceSymbol))
             {
                 if (!propertiesWithLevel.Any(x => x.Property.MetadataName == unofficialProperty.PropertySymbol.MetadataName))
@@ -86,11 +86,11 @@ namespace Lazinator.CodeDescription
             foreach (var baseType in Container.GetBaseLazinatorObjects())
             {
                 List<IPropertySymbol> additionalProperties;
-                bool baseTypeIsIndexed = Container.Compilation.TypeToExclusiveInterface.ContainsKey(LazinatorCompilation.TypeSymbolToString(baseType.ILazinatorTypeSymbol));
+                bool baseTypeIsIndexed = Container.ImplementingTypeInfo.TypeToExclusiveInterface.ContainsKey(LazinatorImplementingTypeInfo.TypeSymbolToString(baseType.ILazinatorTypeSymbol));
                 if (baseTypeIsIndexed)
                 {
-                    var baseExclusiveInterface = Container.Compilation.TypeToExclusiveInterface[LazinatorCompilation.TypeSymbolToString(baseType.ILazinatorTypeSymbol)];
-                    additionalProperties = Container.Compilation.PropertiesForType[baseExclusiveInterface].Select(x => x.Property).ToList();
+                    var baseExclusiveInterface = Container.ImplementingTypeInfo.TypeToExclusiveInterface[LazinatorImplementingTypeInfo.TypeSymbolToString(baseType.ILazinatorTypeSymbol)];
+                    additionalProperties = Container.ImplementingTypeInfo.PropertiesForType[baseExclusiveInterface].Select(x => x.Property).ToList();
                 }
                 else
                 {

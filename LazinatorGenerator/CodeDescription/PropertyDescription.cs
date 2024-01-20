@@ -22,7 +22,7 @@ namespace Lazinator.CodeDescription
 
         /* Type and object information */
         private LazinatorObjectDescription ContainingObjectDescription { get; set; }
-        public LazinatorCompilation LazinatorCompilation => ContainingObjectDescription.Compilation;
+        public LazinatorImplementingTypeInfo LazinatorCompilation => ContainingObjectDescription.ImplementingTypeInfo;
         private Compilation Compilation => LazinatorCompilation.Compilation;
         private bool ContainerIsClass => ContainingObjectDescription.ObjectType == LazinatorObjectType.Class && !ContainingObjectDescription.GeneratingRefStruct;
         private bool ContainerIsStruct => ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct || ContainingObjectDescription.GeneratingRefStruct;
@@ -235,7 +235,7 @@ namespace Lazinator.CodeDescription
         private bool HasInterchangeType => InterchangeTypeName != null;
 
         /* Attributes */
-        private IEnumerable<Attribute> UserAttributes => ContainingObjectDescription.Compilation.GetAttributes(PropertySymbol);
+        private IEnumerable<Attribute> UserAttributes => ContainingObjectDescription.ImplementingTypeInfo.GetAttributes(PropertySymbol);
         internal int RelativeOrder { get; set; }
         internal bool HasFullyQualifyAttribute => UserAttributes.OfType<CloneFullyQualifyAttribute>().Any();
         internal bool HasEagerAttribute => UserAttributes.OfType<CloneEagerAttribute>().Any();
@@ -716,15 +716,15 @@ namespace Lazinator.CodeDescription
                 IsInterface = t.TypeKind == TypeKind.Interface;
                 if (!IsInterface)
                 {
-                    var exclusiveInterface = LazinatorCompilation.NameTypedSymbolFromString[ContainingObjectDescription.Compilation.TypeToExclusiveInterface[LazinatorCompilation.TypeSymbolToString(t.OriginalDefinition)]];
-                    CloneLazinatorAttribute attribute = ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneLazinatorAttribute>(exclusiveInterface); // we already know that the interface exists, and there should be only one
+                    var exclusiveInterface = LazinatorImplementingTypeInfo.NameTypedSymbolFromString[ContainingObjectDescription.ImplementingTypeInfo.TypeToExclusiveInterface[LazinatorImplementingTypeInfo.TypeSymbolToString(t.OriginalDefinition)]];
+                    CloneLazinatorAttribute attribute = ContainingObjectDescription.ImplementingTypeInfo.GetFirstAttributeOfType<CloneLazinatorAttribute>(exclusiveInterface); // we already know that the interface exists, and there should be only one
                     if (attribute == null)
                         throw new LazinatorCodeGenException(
                             "Lazinator attribute is required for each interface implementing ILazinator, including inherited interfaces.");
                     UniqueIDForLazinatorType = attribute.UniqueID;
 
                     CloneFixedLengthLazinatorAttribute fixedLengthAttribute =
-                        ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneFixedLengthLazinatorAttribute>(exclusiveInterface);
+                        ContainingObjectDescription.ImplementingTypeInfo.GetFirstAttributeOfType<CloneFixedLengthLazinatorAttribute>(exclusiveInterface);
                     if (fixedLengthAttribute != null)
                     {
                         IsGuaranteedFixedLength = true;
@@ -733,7 +733,7 @@ namespace Lazinator.CodeDescription
                     }
 
                     // Note: This is for Lazinators only. Nonlazinators will always have length 4 (for int).
-                    CloneSizeOfLengthAttribute sizeOfLengthAttribute = ContainingObjectDescription.Compilation.GetFirstAttributeOfType<CloneSizeOfLengthAttribute>(exclusiveInterface);
+                    CloneSizeOfLengthAttribute sizeOfLengthAttribute = ContainingObjectDescription.ImplementingTypeInfo.GetFirstAttributeOfType<CloneSizeOfLengthAttribute>(exclusiveInterface);
                     if (sizeOfLengthAttribute == null)
                         SizeOfLength = 4;
                     else
@@ -830,8 +830,8 @@ namespace Lazinator.CodeDescription
             DEBUG++;
             var originalDefinition = t.OriginalDefinition; // if defined as MyClass?, then we want just MyClass
             // We look for a record-like type only after we have determined that the type does not implement ILazinator and we don't have the other supported tuple types (e.g., ValueTuples, KeyValuePair). We need to make sure that for each parameter in the constructor with the most parameters, there is a unique property with the same name (case insensitive as to first letter). If so, we assume that this property corresponds to the parameter, though there is no inherent guarantee that this is true. 
-            var recordLikeTypes = ContainingObjectDescription.Compilation.RecordLikeTypes;
-            if (recordLikeTypes == null || !recordLikeTypes.ContainsKey(LazinatorCompilation.TypeSymbolToString(originalDefinition)) || ((Config?.IgnoreRecordLikeTypes != null) && (Config?.IgnoreRecordLikeTypes.Any(x => x.ToUpper() == (UseFullyQualifiedNames ? t.GetFullyQualifiedNameWithoutGlobal(NullableModeEnabled).ToUpper() : originalDefinition.GetMinimallyQualifiedName(NullableModeEnabled))) ?? false)))
+            var recordLikeTypes = ContainingObjectDescription.ImplementingTypeInfo.RecordLikeTypes;
+            if (recordLikeTypes == null || !recordLikeTypes.ContainsKey(LazinatorImplementingTypeInfo.TypeSymbolToString(originalDefinition)) || ((Config?.IgnoreRecordLikeTypes != null) && (Config?.IgnoreRecordLikeTypes.Any(x => x.ToUpper() == (UseFullyQualifiedNames ? t.GetFullyQualifiedNameWithoutGlobal(NullableModeEnabled).ToUpper() : originalDefinition.GetMinimallyQualifiedName(NullableModeEnabled))) ?? false)))
             {
                 return false;
             }
@@ -841,7 +841,7 @@ namespace Lazinator.CodeDescription
             SupportedTupleType = LazinatorSupportedTupleType.RecordLikeType;
             Nullable = TypeReportedAsNullable;
 
-            List<(IParameterSymbol parameterSymbol, IPropertySymbol property)> recordLikeType = recordLikeTypes[LazinatorCompilation.TypeSymbolToString(originalDefinition)];
+            List<(IParameterSymbol parameterSymbol, IPropertySymbol property)> recordLikeType = recordLikeTypes[LazinatorImplementingTypeInfo.TypeSymbolToString(originalDefinition)];
             if (recordLikeType.Any(x => x.parameterSymbol == null))
                 InitializeRecordLikeTypePropertiesDirectly = true;
             InnerProperties = recordLikeType
