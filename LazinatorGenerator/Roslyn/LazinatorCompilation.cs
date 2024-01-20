@@ -33,7 +33,6 @@ namespace LazinatorCodeGen.Roslyn
         internal Dictionary<string, HashSet<string>> InterfaceToClasses = new Dictionary<string, HashSet<string>>();
         public Dictionary<string, List<PropertyWithDefinitionInfo>> PropertiesForType { get; internal set; } = new Dictionary<string, List<PropertyWithDefinitionInfo>>();
         internal Dictionary<string, string> TypeToExclusiveInterface = new Dictionary<string, string>();
-        internal HashSet<(string typeName, string methodName)> TypeImplementsMethod = new HashSet<(string typeName, string methodName)>();
         internal bool ImplementingTypeRequiresParameterlessConstructor { get; set; }
         internal Dictionary<string, HashSet<Attribute>> KnownAttributes = new Dictionary<string, HashSet<Attribute>>();
         internal Dictionary<string, List<(IParameterSymbol parameterSymbol, IPropertySymbol property)>> RecordLikeTypes = new Dictionary<string, List<(IParameterSymbol parameterSymbol, IPropertySymbol property)>>();
@@ -137,7 +136,6 @@ namespace LazinatorCodeGen.Roslyn
             RecordInformationAboutTypeAndRelatedTypes(implementingTypeSymbol);
 
             // Then deal with any implementing classes -- in particular, checking whether each implements methods.
-            TypeImplementsMethod = GetMethodImplementations(implementingTypeDeclarations, implementingTypeSymbol);
             ImplementingTypeRequiresParameterlessConstructor = RequiresParameterlessConstructor(implementingTypeSymbol, implementingTypeDeclarations);
 
             // Now, record the interface text hash
@@ -394,7 +392,7 @@ namespace LazinatorCodeGen.Roslyn
 
         private void RecordInterfaceTextHash(INamedTypeSymbol @interface, INamedTypeSymbol implementingType)
         {
-            var hash = GetHashForInterface(@interface, implementingType, TypeImplementsMethod, ImplementingTypeRequiresParameterlessConstructor);
+            var hash = GetHashForInterface(@interface, implementingType, ImplementingTypeRequiresParameterlessConstructor);
             InterfaceTextHash[TypeSymbolToString(@interface)] = hash;
         }
 
@@ -438,7 +436,7 @@ namespace LazinatorCodeGen.Roslyn
             HashSet<(string typeName, string methodName)> typeImplementsMethodHashSet =
                 GetMethodImplementations(typeDeclarations, implementingType);
             bool typeRequiresParameterlessConstructor = RequiresParameterlessConstructor(implementingType, typeDeclarations);
-            return GetHashForInterface(@interface, implementingType, typeImplementsMethodHashSet, typeRequiresParameterlessConstructor);
+            return GetHashForInterface(@interface, implementingType, typeRequiresParameterlessConstructor);
         }
 
         private static bool RequiresParameterlessConstructor(INamedTypeSymbol implementingType, IEnumerable<TypeDeclarationSyntax> typeDeclarations)
@@ -446,50 +444,26 @@ namespace LazinatorCodeGen.Roslyn
             return implementingType.IsNonAbstractTypeWithConstructor() && !typeDeclarations.Any(x => x.TypeDeclarationIncludesParameterlessConstructor()); // TODO: If typeDeclarations includes a non-Lazinator subclass, this can return false when the correct answer is true. Current workaround is to include parameterless constructor in hand-coded portion of partial class.
         }
 
-        public static Guid GetHashForInterface(INamedTypeSymbol @interface, INamedTypeSymbol implementingType, HashSet<(string typeName, string methodName)> typeImplementsMethodHashSet, bool implementingTypeRequiresParameterlessConstructor)
+        public static Guid GetHashForInterface(INamedTypeSymbol @interface, INamedTypeSymbol implementingType, bool implementingTypeRequiresParameterlessConstructor)
         {
             var syntaxNodes = GetSyntaxNodesForNamedType(@interface);
             if (syntaxNodes.Count() > 1)
                 throw new LazinatorCodeGenException("Lazinator interface must be contained in a single file.");
-            Guid hash = GetHashForInterface(syntaxNodes.Single(), implementingType, typeImplementsMethodHashSet, implementingTypeRequiresParameterlessConstructor);
+            Guid hash = GetHashForInterface(syntaxNodes.Single(), implementingType, implementingTypeRequiresParameterlessConstructor);
             return hash;
         }
 
-        public static Guid GetHashForInterface(SyntaxNode interfaceSyntaxNode, INamedTypeSymbol implementingType, HashSet<(string typeName, string methodName)> typeImplementsMethodHashSet, bool implementingTypeRequiresParameterlessConstructor)
+        public static Guid GetHashForInterface(SyntaxNode interfaceSyntaxNode, INamedTypeSymbol implementingType, bool implementingTypeRequiresParameterlessConstructor)
         {
-            // The advantage of the approach here is that we can determine whether we need an update extremely quickly, thus
-            // avoiding delaying compilation. The disadvantage is that it might miss an unusual scenario: where the interface has not
-            // changed but the types it has referenced have changed -- for example, because a Lazinator class has become non-Lazinator.
-            // The workaround for now is to regenerate the code (for example, by making a trivial change to the interface file or by deleting
-            // the code behind file).
-            var bitFieldRepresentingImplementedMethods = GetBitFieldRepresentingImplementedMethods(implementingType, typeImplementsMethodHashSet);
             var bytes = System.Text.Encoding.UTF8.GetBytes(interfaceSyntaxNode.GetText().ToString().Where(x => x != '\r' && x != '\n').ToArray()).ToList(); // ignore the line endings b/c this differs across computers (even on same platform)
-            bytes.Add(bitFieldRepresentingImplementedMethods);
             bytes.AddRange(LazinatorCodeGen.Roslyn.LazinatorVersionInfo.LazinatorVersionBytes); // thus, if we change the version, all code behind will need to be regenerated
             var md5 = System.Security.Cryptography.MD5.Create();
             Guid hash = new Guid(md5.ComputeHash(bytes.ToArray()));
             return hash;
         }
 
-        private static byte GetBitFieldRepresentingImplementedMethods(INamedTypeSymbol implementingType, HashSet<(string typeName, string methodName)> typeImplementsMethodHashSet)
-        {
-            int byteForImplementedMethods = 0;
-            for (int methodIndex = 0; methodIndex < _methodNamesToLookFor.Length; methodIndex++)
-            {
-                if (typeImplementsMethodHashSet.Contains((TypeSymbolToString(implementingType), _methodNamesToLookFor[methodIndex])))
-                    byteForImplementedMethods |= 1 << methodIndex;
-                methodIndex++;
-            }
-
-            return (byte) byteForImplementedMethods;
-        }
-
         private void ConsiderAddingAsRecordLikeType(INamedTypeSymbol type)
         {
-            if (type.ToString().Contains("Point"))
-            {
-                var DEBUG2 = 0;
-            }
             string typeName = TypeSymbolToString(type);
             if (RecordLikeTypes.ContainsKey(typeName) || RecordLikeTypesExclusions.Contains(typeName))
                 return;
