@@ -81,9 +81,11 @@ namespace LazinatorTests.Tests
         [Fact]
         public Task GeneratorForSimpleLazinator_CachingWithNoChange()
         {
-
-            var executionResult = RunGeneratorForSimpleLazinator(new FakeDateTimeNow());
+            var dateTimeNowProvider = new FakeDateTimeNow();
+            var executionResult = RunGeneratorForSimpleLazinator(dateTimeNowProvider);
             var sourceGeneratedInitially = executionResult.GetSoleGeneratedSource();
+
+            dateTimeNowProvider.Advance(TimeSpan.FromMinutes(1));
 
             var executionResultAfterRerunning = executionResult.AfterRerunningGenerators();
             var sourceGeneratedLater = executionResultAfterRerunning.GetSoleGeneratedSource();
@@ -97,11 +99,13 @@ namespace LazinatorTests.Tests
         [Fact]
         public Task GeneratorForSimpleLazinator_CachingWithIrrelevantChange()
         {
-
-            var executionResult = RunGeneratorForSimpleLazinator(new FakeDateTimeNow());
+            var dateTimeNowProvider = new FakeDateTimeNow();
+            var executionResult = RunGeneratorForSimpleLazinator(dateTimeNowProvider);
             var sourceGeneratedInitially = executionResult.GetSoleGeneratedSource();
             var irrelevantClass = GetSourceForIrrelevantClass(false);
             var modified = executionResult.WithAddedFile(irrelevantClass.path, irrelevantClass.text);
+
+            dateTimeNowProvider.Advance(TimeSpan.FromMinutes(1));
 
             var executionResultAfterRerunning = modified.AfterRerunningGenerators();
             var sourceGeneratedLater = executionResultAfterRerunning.GetSoleGeneratedSource();
@@ -115,10 +119,13 @@ namespace LazinatorTests.Tests
         [Fact]
         public Task GeneratorForSimpleLazinator_NoCachingWithILazinatorAddedComment()
         {
-            var executionResult = RunGeneratorForSimpleLazinator(new FakeDateTimeNow());
+            var dateTimeNowProvider = new FakeDateTimeNow();
+            var executionResult = RunGeneratorForSimpleLazinator(dateTimeNowProvider);
             var sourceGeneratedInitially = executionResult.GetSoleGeneratedSource();
             var ilazinatorWithAddedComment = GetILazinatorClassWithAddedComment();
             var modified = executionResult.WithUpdatedFile(ilazinatorWithAddedComment.path, ilazinatorWithAddedComment.text);
+
+            dateTimeNowProvider.Advance(TimeSpan.FromMinutes(1));
 
             var executionResultAfterRerunning = modified.AfterRerunningGenerators();
             var sourceGeneratedLater = executionResultAfterRerunning.GetSoleGeneratedSource();
@@ -132,11 +139,13 @@ namespace LazinatorTests.Tests
         [Fact]
         public Task GeneratorForSimpleLazinator_NoCachingWithSubstantiveILazinatorChange()
         {
-
-            var executionResult = RunGeneratorForSimpleLazinator(new FakeDateTimeNow());
+            var dateTimeNowProvider = new FakeDateTimeNow();
+            var executionResult = RunGeneratorForSimpleLazinator(dateTimeNowProvider);
             var sourceGeneratedInitially = executionResult.GetSoleGeneratedSource();
             var ilazinatorWithAddedComment = GetILazinatorClassExpanded();
             var modified = executionResult.WithUpdatedFile(ilazinatorWithAddedComment.path, ilazinatorWithAddedComment.text);
+
+            dateTimeNowProvider.Advance(TimeSpan.FromMinutes(1));
 
             var executionResultAfterRerunning = modified.AfterRerunningGenerators();
             var sourceGeneratedLater = executionResultAfterRerunning.GetSoleGeneratedSource();
@@ -153,16 +162,18 @@ namespace LazinatorTests.Tests
 
             // A change in the Lazinator code (i.e., the main class) should not trigger regeneration of the generated code, assuming that the class is still an iLazinator.
 
-            var executionResult = RunGeneratorForSimpleLazinator(new FakeDateTimeNow());
+            var dateTimeNowProvider = new FakeDateTimeNow();
+            var executionResult = RunGeneratorForSimpleLazinator(dateTimeNowProvider);
             var sourceGeneratedInitially = executionResult.GetSoleGeneratedSource();
             var lazinatorWithAddedMethod = GetLazinatorClassExpanded();
             var modified = executionResult.WithUpdatedFile(lazinatorWithAddedMethod.path, lazinatorWithAddedMethod.text);
 
+            dateTimeNowProvider.Advance(TimeSpan.FromMinutes(1));
             var executionResultAfterRerunning = modified.AfterRerunningGenerators();
             var sourceGeneratedLater = executionResultAfterRerunning.GetSoleGeneratedSource();
 
             bool exactMatch = sourceGeneratedInitially == sourceGeneratedLater; // checks whether files match, including the date and version number.
-            exactMatch.Should().BeFalse();
+            exactMatch.Should().BeTrue();
 
             return Task.CompletedTask;
         }
