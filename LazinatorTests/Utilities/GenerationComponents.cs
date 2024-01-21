@@ -83,6 +83,16 @@ namespace LazinatorTests.Utilities
             return generatedSources[0].SourceText.ToString();
         }
 
-        public List<Diagnostic> GetDiagnostics() => compilation.GetDiagnostics().ToList();
+        /// <summary>
+        /// Returns the diagnostics from the compilation and the source generator combined.
+        /// </summary>
+        /// <returns></returns>
+        public List<Diagnostic> GetDiagnostics(bool includeOriginalDiagnostics = true, bool includeDiagnosticsFromRun = true)
+        {
+            var diagnostics = includeOriginalDiagnostics ? compilation.GetDiagnostics().ToList() : new List<Diagnostic>();
+            if (includeDiagnosticsFromRun)
+                diagnostics.AddRange(driver.GetRunResult().Diagnostics.ToList());
+            return diagnostics;
+        }
     }
 }

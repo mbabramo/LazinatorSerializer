@@ -56,8 +56,9 @@ namespace LazinatorTests.Tests
             List<(string path, string text)> sources = GetSourcesForSimpleLazinator();
 
             GenerationComponents preExecutionGeneratorComponents = GetPreExecutionGeneratorComponents(sources, null, new FakeDateTimeNow(), includeReferencesForEntireTestsProject: false);
-            preExecutionGeneratorComponents.GetDiagnostics().Count().Should().Be(1);
-            preExecutionGeneratorComponents.GetDiagnostics().First().ToString().Should().Contain("does not implement");
+            var diagnostics = preExecutionGeneratorComponents.GetDiagnostics(includeOriginalDiagnostics: true, includeDiagnosticsFromRun: false);
+            diagnostics.Count().Should().Be(1);
+            diagnostics.First().ToString().Should().Contain("does not implement");
 
             return Task.CompletedTask;
         }
@@ -263,7 +264,7 @@ namespace LazinatorTests.Tests
             var diagnostics = result.GetDiagnostics();
 
             diagnostics.Count().Should().BeGreaterThan(0);
-            diagnostics.Any(x => x.ToString().Contains("MyNonLazinator")).Should().BeTrue();
+            diagnostics.Any(x => x.ToString().Contains("MyNonLazinator is a non-Lazinator type")).Should().BeTrue();
 
             return Task.CompletedTask;
         }
