@@ -14,6 +14,7 @@ using System.Collections.Concurrent;
 using System.IO;
 using Microsoft.CodeAnalysis.CSharp;
 using LazinatorCodeGen.Roslyn;
+using LazinatorGenerator.Support;
 
 namespace LazinatorGenerator.CodeDescription
 {
@@ -227,7 +228,7 @@ namespace LazinatorGenerator.CodeDescription
             {
                 lowerLevelInterfaces = namedTypeSymbol.GetInterfacesWithAttributeOfType<CloneLazinatorAttribute>()
                     .Select(x => new KeyValuePair<INamedTypeSymbol, ImmutableList<IPropertySymbol>>(x, x.GetPropertySymbols()))
-                    .ToDictionary(x => x.Key, x => x.Value);
+                    .ToDictionary(x => (INamedTypeSymbol)x.Key, x => x.Value, new NamedTypeSymbolEqualityComparer());
             }
             namedTypeSymbol.GetPropertiesForType(includeOnlyLowerLevelPropertiesFromInterfaces, out ImmutableList<IPropertySymbol> propertiesThisLevel, out ImmutableList<IPropertySymbol> propertiesLowerLevels);
             foreach (var p in propertiesThisLevel.OrderBy(x => x.Name).Where(x => !x.HasAttributeOfType<CloneDoNotAutogenerateAttribute>()))
@@ -327,7 +328,7 @@ namespace LazinatorGenerator.CodeDescription
                 TypeToExclusiveInterface[TypeSymbolToString(namedTypeSymbol.OriginalDefinition)] = TypeSymbolToString(@interface.OriginalDefinition);
         }
 
-        HashSet<ITypeSymbol> alreadyProducedDuringCompilation = new HashSet<ITypeSymbol>();
+        HashSet<ITypeSymbol> alreadyProducedDuringCompilation = new HashSet<ITypeSymbol>(SymbolEqualityComparer.Default);
         IEnumerable<ITypeSymbol> GetTypeAndRelatedTypes(ITypeSymbol type, HashSet<ITypeSymbol> alreadyProduced)
         {
             if (alreadyProduced.Contains(type))
