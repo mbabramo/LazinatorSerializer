@@ -1,6 +1,7 @@
 ﻿using Lazinator.Attributes;
 using Lazinator.Collections;
 using Lazinator.Wrappers;
+using ProjectForDebuggingGenerator;
 
 namespace ConsoleAppForProfiling
 {

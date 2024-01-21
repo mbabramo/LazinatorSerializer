@@ -62,6 +62,8 @@ namespace LazinatorGenerator.Generator
                 if (AlreadyGeneratedCode.Diagnostic != null)
                     spc.ReportDiagnostic(AlreadyGeneratedCode.Diagnostic);
             }
+
+            // DEBUG spc.ReportDiagnostic(Diagnostic.Create(new DiagnosticDescriptor("LAZIN", "Lazinator code generation error", $"Generated code for {AlreadyGeneratedCode.GeneratedType} with hash code {HashCode}", "tests", DiagnosticSeverity.Error, true), PreGenerationInfo.SyntaxContext.TargetNode.GetLocation()));
         }
 
     }
