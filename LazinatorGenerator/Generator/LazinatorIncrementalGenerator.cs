@@ -35,7 +35,7 @@ context)
                 DateTimeNowProvider = new RealDateTimeNow();
 
             // Get the compilation and the start time for later use.
-            IncrementalValueProvider<(Compilation compilation, long pipelineRunTimeStamp)> compilationAndpipelineRunTimeStamp = context.CompilationProvider.Select((comp, canc) => (comp, 0L)); // SUPERDEBUG DateTime.UtcNow.Ticks));
+            IncrementalValueProvider<long> pipelineRunTimeStamp = context.CompilationProvider.Select((comp, canc) => 0L); // DEBUG SUPERDEBUG DateTime.UtcNow.Ticks));
             // Find the syntax contexts (i.e., interface declarations decorated with LazinatorAttribute)
             IncrementalValuesProvider<GeneratorAttributeSyntaxContext> syntaxContexts = context.SyntaxProvider
                           .ForAttributeWithMetadataName("Lazinator.Attributes.LazinatorAttribute", IsSyntaxTargetForGeneration, (ctx, cancellationToken) => ctx); // Note: We stick with the GeneratorAttributeSyntaxContext for now, so that we can combine with the LazinatorConfig.
@@ -64,14 +64,14 @@ context)
             // Now. We want to add the compilation and the pipeline run time stamp to each LazinatorPreGenerationInfo. But we don't want to mess up the caching. That is, once a preGenerationInfo has been cached,
             // then on the next run of the pipeline, we want to recover the LazinatorPostGenerationInfo previously generated. So, we use the struct WithIgnoredState, which will find equality even if the state is
             // different. The only purpose of this state is to be able to pass it to ExecuteSourceGeneration when we create the initial LazinatorPostGenerationInfo.
-            IncrementalValuesProvider<WithIgnoredState<LazinatorPreGenerationInfo, (Compilation compilation, long pipelineRunTimeStamp)>> preGenerationInfosWithCompilation = preGenerationInfos.Combine(compilationAndpipelineRunTimeStamp).Select((x, cancellationToken) => new WithIgnoredState<LazinatorPreGenerationInfo, (Compilation compilation, long pipelineRunTimeStamp)>(x.Left, (x.Right.compilation, x.Right.pipelineRunTimeStamp)));
+            IncrementalValuesProvider<WithIgnoredState<LazinatorPreGenerationInfo, long>> preGenerationInfosWithTimeStamp = preGenerationInfos.Combine(pipelineRunTimeStamp).Select((x, cancellationToken) => new WithIgnoredState<LazinatorPreGenerationInfo, long>(x.Left, x.Right));
             // Create a LazinatorPostGenerationInfo for each preGenerationInfo that hasn't been cached.
-            IncrementalValuesProvider<LazinatorPostGenerationInfo> postGenerationInfos = preGenerationInfosWithCompilation.Select((x, cancellationToken) => new LazinatorPostGenerationInfo(x.Item, x.Item.ExecuteSourceGeneration(DateTimeNowProvider, x.State.pipelineRunTimeStamp, x.State.compilation))).Where(x => !x.AlreadyGeneratedCode.IsEmpty);
+            IncrementalValuesProvider<LazinatorPostGenerationInfo> postGenerationInfos = preGenerationInfosWithTimeStamp.Select((x, cancellationToken) => new LazinatorPostGenerationInfo(x.Item, x.Item.ExecuteSourceGeneration(DateTimeNowProvider, x.State))).Where(x => !x.AlreadyGeneratedCode.IsEmpty);
             IncrementalValueProvider<ImmutableArray<LazinatorPostGenerationInfo>> postGenerationInfosCollected = postGenerationInfos.Collect();
-            IncrementalValuesProvider<(LazinatorPostGenerationInfo postGenerationInfo, Compilation compilation, long pipelineRunTimeStamp)> postGenerationInfosSeparated = postGenerationInfosCollected.SelectMany((x, cancellationToken) => LazinatorPostGenerationInfo.SeparateForNextPipelineStep(x)).Combine(compilationAndpipelineRunTimeStamp).Select((x, cancellationToken) => (x.Left, x.Right.compilation, x.Right.pipelineRunTimeStamp));
+            IncrementalValuesProvider<(LazinatorPostGenerationInfo postGenerationInfo, long pipelineRunTimeStamp)> postGenerationInfosSeparated = postGenerationInfosCollected.SelectMany((x, cancellationToken) => LazinatorPostGenerationInfo.SeparateForNextPipelineStep(x)).Combine(pipelineRunTimeStamp).Select((x, cancellationToken) => (x.Left, x.Right));
             // Generate the source using the compilation and enums
             context.RegisterSourceOutput(postGenerationInfosSeparated,
-                (spc, postGenerationInfoPlus) => postGenerationInfoPlus.postGenerationInfo.GenerateSource(spc, DateTimeNowProvider, postGenerationInfoPlus.pipelineRunTimeStamp, postGenerationInfoPlus.compilation));
+                (spc, postGenerationInfoPlus) => postGenerationInfoPlus.postGenerationInfo.GenerateSource(spc, DateTimeNowProvider, postGenerationInfoPlus.pipelineRunTimeStamp));
         }
 
         static LazinatorConfig ChooseAppropriateConfig(string path, ImmutableArray<LazinatorConfig> candidateConfigs)

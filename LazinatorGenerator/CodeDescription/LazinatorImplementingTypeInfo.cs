@@ -515,10 +515,6 @@ namespace LazinatorGenerator.CodeDescription
                 List<PropertyWithDefinitionInfo> propertiesToMatchWithConstructor = GetProperties(true);
                 foreach (var candidate in constructorCandidates)
                 {
-                    if (candidate.ToString().Contains("Point"))
-                    {
-                        var DEBUG = 0;
-                    }
                     var parameters = candidate.Parameters.ToList();
                     if (parameters.Count() > propertiesToMatchWithConstructor.Count())
                         continue;
