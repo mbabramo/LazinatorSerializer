@@ -22,8 +22,6 @@ namespace LazinatorGenerator.Generator
     public class LazinatorIncrementalGenerator : IIncrementalGenerator
     {
 
-        public static SourceProductionContext DEBUG = default;
-
         public IDateTimeNow DateTimeNowProvider { get; set; }
         
         public void Initialize(IncrementalGeneratorInitializationContext 
@@ -35,7 +33,11 @@ context)
                 DateTimeNowProvider = new RealDateTimeNow();
 
             // Get the compilation and the start time for later use.
-            IncrementalValueProvider<long> pipelineRunTimeStamp = context.CompilationProvider.Select((comp, canc) => 0L); // DEBUG SUPERDEBUG DateTime.UtcNow.Ticks));
+            IncrementalValueProvider<long> pipelineRunTimeStamp = context.CompilationProvider.Select(
+                (comp, canc) => {
+                    return DateTime.UtcNow.Ticks;
+                }
+                );
             // Find the syntax contexts (i.e., interface declarations decorated with LazinatorAttribute)
             IncrementalValuesProvider<GeneratorAttributeSyntaxContext> syntaxContexts = context.SyntaxProvider
                           .ForAttributeWithMetadataName("Lazinator.Attributes.LazinatorAttribute", IsSyntaxTargetForGeneration, (ctx, cancellationToken) => ctx); // Note: We stick with the GeneratorAttributeSyntaxContext for now, so that we can combine with the LazinatorConfig.
@@ -66,7 +68,7 @@ context)
             // different. The only purpose of this state is to be able to pass it to ExecuteSourceGeneration when we create the initial LazinatorPostGenerationInfo.
             IncrementalValuesProvider<WithIgnoredState<LazinatorPreGenerationInfo, long>> preGenerationInfosWithTimeStamp = preGenerationInfos.Combine(pipelineRunTimeStamp).Select((x, cancellationToken) => new WithIgnoredState<LazinatorPreGenerationInfo, long>(x.Left, x.Right));
             // Create a LazinatorPostGenerationInfo for each preGenerationInfo that hasn't been cached.
-            IncrementalValuesProvider<LazinatorPostGenerationInfo> postGenerationInfos = preGenerationInfosWithTimeStamp.Select((x, cancellationToken) => new LazinatorPostGenerationInfo(x.Item, x.Item.ExecuteSourceGeneration(DateTimeNowProvider, x.State))).Where(x => !x.AlreadyGeneratedCode.IsEmpty);
+            IncrementalValuesProvider<LazinatorPostGenerationInfo> postGenerationInfos = preGenerationInfosWithTimeStamp.Select((x, cancellationToken) => new LazinatorPostGenerationInfo(x.Item, x.Item.ExecuteSourceGeneration(DateTimeNowProvider, x.ExtraInfo))).Where(x => !x.AlreadyGeneratedCode.IsEmpty);
             IncrementalValueProvider<ImmutableArray<LazinatorPostGenerationInfo>> postGenerationInfosCollected = postGenerationInfos.Collect();
             IncrementalValuesProvider<(LazinatorPostGenerationInfo postGenerationInfo, long pipelineRunTimeStamp)> postGenerationInfosSeparated = postGenerationInfosCollected.SelectMany((x, cancellationToken) => LazinatorPostGenerationInfo.SeparateForNextPipelineStep(x)).Combine(pipelineRunTimeStamp).Select((x, cancellationToken) => (x.Left, x.Right));
             // Generate the source using the compilation and enums

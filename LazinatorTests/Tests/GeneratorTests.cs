@@ -220,7 +220,6 @@ namespace LazinatorTests.Tests
 
             dateTimeNowProvider.Advance(TimeSpan.FromMinutes(1));
 
-
             var lazinatorWithAddedMethod = GetReplacementSourceForLazinatorWithBaseClass().First();
             var executionResultWithChangedBaseInterface = executionResult.WithUpdatedFile(lazinatorWithAddedMethod.path, lazinatorWithAddedMethod.text);
 

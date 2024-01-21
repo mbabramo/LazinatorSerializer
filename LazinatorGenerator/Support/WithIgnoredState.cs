@@ -12,12 +12,22 @@ namespace LazinatorGenerator.Support
     public struct WithIgnoredState<T, U>
     {
         public T Item;
-        public U State;
+        public U ExtraInfo;
 
         public WithIgnoredState(T item, U extraInfo)
         {
             Item = item;
-            State = extraInfo;
+            ExtraInfo = extraInfo;
+        }
+
+        public static bool operator==(WithIgnoredState<T, U> first, WithIgnoredState<T, U> second)
+        {
+            return first.Item.Equals(second.Item);
+        }
+
+        public static bool operator !=(WithIgnoredState<T, U> first, WithIgnoredState<T, U> second)
+        {
+            return !first.Item.Equals(second.Item);
         }
 
         public override bool Equals(object obj)
