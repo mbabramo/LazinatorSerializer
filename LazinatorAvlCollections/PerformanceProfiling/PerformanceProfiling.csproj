@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Lazinator" Version="0.1.0.394-alpha" />
+    <PackageReference Include="Lazinator.Collections" Version="0.1.0.394-alpha" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\LazinatorAvlCollections\LazinatorAvlCollections.csproj" />
+  </ItemGroup>
+
+</Project>
