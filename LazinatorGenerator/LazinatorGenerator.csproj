@@ -6,6 +6,7 @@
     <!-- 👇 We don't want to reference the source generator dll directly in consuming projects -->
     <IncludeBuildOutput>false</IncludeBuildOutput>
 	<IsRoslynComponent>true</IsRoslynComponent>
+	<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     <ImplicitUsings>true</ImplicitUsings>
     <LangVersion>Latest</LangVersion>
   </PropertyGroup>

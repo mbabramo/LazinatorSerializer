@@ -89,49 +89,6 @@ namespace LazinatorGenerator.CodeDescription
             FinishInitialization(TypeDeclarations, ImplementingTypeSymbol, exclusiveInterfaceTypeSymbol);
         }
 
-        /// <summary>
-        /// Gets the Config file for the path by checking the specified path and all higher-level paths, caching if necessary. If none is found, then the default config file is used.
-        /// </summary>
-        /// <param name="pathNameOfCodeFile"></param>
-        /// <returns></returns>
-        public LazinatorConfig? GetConfigForPath(string pathNameOfCodeFile)
-        {
-            if (pathNameOfCodeFile == null)
-                return DefaultConfig;
-            DirectoryInfo directory = Directory.GetParent(pathNameOfCodeFile);
-            pathNameOfCodeFile = directory?.FullName;
-            while (pathNameOfCodeFile != null)
-            {
-                string possibleFilePath = Path.Combine(pathNameOfCodeFile, "LazinatorConfig.json");
-                if (AdditionalConfigFiles.ContainsKey(possibleFilePath))
-                {
-                    LazinatorConfig? configFileIfAny = AdditionalConfigFiles[possibleFilePath];
-                    if (configFileIfAny == null)
-                        continue; // there is no config file in this directory
-                }
-                bool exists = File.Exists(possibleFilePath);
-                if (exists)
-                {
-                    string fileText = File.ReadAllText(possibleFilePath, Encoding.UTF8);
-                    LazinatorConfig configFile = new LazinatorConfig(possibleFilePath, fileText);
-                    AdditionalConfigFiles[possibleFilePath] = configFile;
-                    return configFile;
-                }
-                else
-                {
-                    directory = Directory.GetParent(pathNameOfCodeFile);
-                    pathNameOfCodeFile = directory?.FullName;
-                }
-            }
-
-            return DefaultConfig;
-        }
-
-        public void AnalyzeAnotherType(string implementingTypeName, string fullImplementingTypeName)
-        {
-
-        }
-
         private void FinishInitialization(List<TypeDeclarationSyntax> implementingTypeDeclarations, INamedTypeSymbol implementingTypeSymbol, INamedTypeSymbol exclusiveInterfaceTypeSymbol)
         {
             // Record information about the type, its interfaces, and inner types.

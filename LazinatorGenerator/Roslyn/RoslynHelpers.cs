@@ -515,7 +515,7 @@ namespace LazinatorCodeGen.Roslyn
 
         public static IEnumerable<ISymbol> GetAllSymbols(CSharpCompilation compilation, SyntaxNode root)
         {
-            var noDuplicates = new HashSet<ISymbol>();
+            var noDuplicates = new HashSet<ISymbol>(SymbolEqualityComparer.Default);
 
             var model = compilation.GetSemanticModel(root.SyntaxTree);
 
