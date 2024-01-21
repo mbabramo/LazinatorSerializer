@@ -21,6 +21,9 @@ namespace LazinatorGenerator.Generator
     /// (4) LazinatorPostGenerationInfo -> Generated code. If the LazinatorPostGenerationInfo with updated dependency information has not changed from a previous pipeline run, then the cached version will automatically be used. If LazinatorPostGenerationInfo is asked to generate code, meaning that it has changed in some way, then it must determine whether Step 2 actually ran on this step to create this object (in which case the generated code can just be returned, as it will reflect the state of all dependencies and that will help to avoid generating code twice) or was skipped in favor of a cached result (in which case the code must be generated at this point). It makes this determination by checking the PipelineRunUniqueID. If the PipelineRunUniqueID is the same as the PipelineRunUniqueID of the LazinatorPostGenerationInfo, then the code was already generated during this pipeline run and can be returned.  
     public class LazinatorIncrementalGenerator : IIncrementalGenerator
     {
+
+        public static SourceProductionContext DEBUG = default;
+
         public IDateTimeNow DateTimeNowProvider { get; set; }
         
         public void Initialize(IncrementalGeneratorInitializationContext 

@@ -68,6 +68,8 @@ namespace LazinatorGenerator.Generator
                     // Maybe we had a problem generating the code. If so, we should report the diagnostic.
                     if (AlreadyGeneratedCode.Diagnostic != null)
                         spc.ReportDiagnostic(AlreadyGeneratedCode.Diagnostic);
+
+                    LazinatorIncrementalGenerator.DEBUG = spc;
                 }
                 return;
             }

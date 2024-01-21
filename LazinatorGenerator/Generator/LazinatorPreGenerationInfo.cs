@@ -42,7 +42,7 @@ namespace LazinatorGenerator.Generator
 
         internal LazinatorCodeGenerationResult ExecuteSourceGeneration(IDateTimeNow dateTimeNowProvider, long pipelineStartTimeStamp, Compilation compilation)
         {
-            LazinatorPairInformation pairInfo = GetLazinatorPairInformation(compilation);
+            LazinatorPairInformation pairInfo = GetLazinatorPairInformation(SemanticModel.Compilation); // DEBUG -- should I just use compilation?
             if (pairInfo == null)
                 return new LazinatorCodeGenerationResult(null, null, null, default, pipelineStartTimeStamp, default);
             LazinatorImplementingTypeInfo implementingTypeInfo = new LazinatorImplementingTypeInfo(compilation, pairInfo.LazinatorObject, Config);
