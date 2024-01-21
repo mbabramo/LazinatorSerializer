@@ -535,7 +535,8 @@ namespace MyCode
             {
                 ("Program.cs", mainProgramSource),
                 ("IMyExample.cs", interfaceSource),
-                ("MyExample.cs", classSource)
+                ("MyExample.cs", classSource),
+                ("MyNonLazinator.cs", nonlazinatorSource)
             };
             return sources;
         }

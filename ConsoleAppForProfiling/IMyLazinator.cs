@@ -1,4 +1,6 @@
 ﻿using Lazinator.Attributes;
+using Lazinator.Collections;
+using Lazinator.Wrappers;
 
 namespace ConsoleAppForProfiling
 {
@@ -7,6 +9,7 @@ namespace ConsoleAppForProfiling
     {
         int MyInt { get; set; }
         string MyBool { get; set; }
+        LazinatorList<WInt32> MyLazinatorList { get; set; }
         List<int> MyList { get; set; }
     }
 }

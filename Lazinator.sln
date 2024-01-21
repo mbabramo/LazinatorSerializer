@@ -26,7 +26,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lazinator.Collections", "La
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LazinatorGenerator", "LazinatorGenerator\LazinatorGenerator.csproj", "{B319F0B0-732D-4AC2-BDA0-882503709138}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleAppForProfiling", "ConsoleAppForProfiling\ConsoleAppForProfiling.csproj", "{F4A9F7ED-1A73-4195-B6BC-C3F86732834A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectForDebuggingGenerator", "ConsoleAppForProfiling\ProjectForDebuggingGenerator.csproj", "{F4A9F7ED-1A73-4195-B6BC-C3F86732834A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,7 +59,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45
 		SolutionGuid = {58D89D99-DE35-4C68-AE67-A62D4D9FEC7D}
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45
 	EndGlobalSection
 EndGlobal

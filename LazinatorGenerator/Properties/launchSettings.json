@@ -1,7 +1,8 @@
 {
   "profiles": {
-    "LazinatorGenerator": {
-      "commandName": "Project"
+    "GeneratorDebugging": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "..\\ConsoleAppForProfiling\\ProjectForDebuggingGenerator.csproj"
     }
   }
 }

@@ -26,6 +26,11 @@ namespace LazinatorGenerator.Generator
         public void Initialize(IncrementalGeneratorInitializationContext 
 context)
         {
+            // Set the DateTimeNowProvider if it has not been set. Simple alternative to dependency injection
+            // when the actual generator is executed by Roslyn.
+            if (DateTimeNowProvider == null)
+                DateTimeNowProvider = new RealDateTimeNow();
+
             // Get the compilation and the start time for later use.
             IncrementalValueProvider<(Compilation compilation, long pipelineRunTimeStamp)> compilationAndpipelineRunTimeStamp = context.CompilationProvider.Select((comp, canc) => (comp, 0L)); // SUPERDEBUG DateTime.UtcNow.Ticks));
             // Find the syntax contexts (i.e., interface declarations decorated with LazinatorAttribute)
