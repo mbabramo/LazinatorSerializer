@@ -32,12 +32,11 @@ namespace LazinatorCodeGen.Roslyn
             }
         }
 
-
         public static Accessibility GetAccessibility(this TypeDeclarationSyntax typeDeclaration)
         {
-            bool isPrivate = typeDeclaration.Modifiers.Any(x => x.Kind() == SyntaxKind.PrivateKeyword);
-            bool isInternal = typeDeclaration.Modifiers.Any(x => x.Kind() == SyntaxKind.InternalKeyword);
-            bool isProtected = typeDeclaration.Modifiers.Any(x => x.Kind() == SyntaxKind.ProtectedKeyword);
+            bool isPrivate = typeDeclaration.Modifiers.Any(x => x.IsKind(SyntaxKind.PrivateKeyword));
+            bool isInternal = typeDeclaration.Modifiers.Any(x => x.IsKind(SyntaxKind.InternalKeyword));
+            bool isProtected = typeDeclaration.Modifiers.Any(x => x.IsKind(SyntaxKind.ProtectedKeyword));
             Accessibility typeAccessibility;
             if (isPrivate)
                 typeAccessibility = Accessibility.Private;
