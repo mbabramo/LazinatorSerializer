@@ -63,7 +63,7 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public Task GeneratorForSimpleLazinator_ProducesCode()
+        public Task GeneratorCaching_ProducesCode()
         {
             var executionResult = RunGeneratorForSimpleLazinator(new FakeDateTimeNow());
             var soleSource = executionResult.GetSoleGeneratedSource();
@@ -79,7 +79,7 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public Task GeneratorForSimpleLazinator_CachingWithNoChange()
+        public Task GeneratorCaching_CachingWithNoChange()
         {
             var dateTimeNowProvider = new FakeDateTimeNow();
             var executionResult = RunGeneratorForSimpleLazinator(dateTimeNowProvider);
@@ -97,7 +97,7 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public Task GeneratorForSimpleLazinator_CachingWithIrrelevantChange()
+        public Task GeneratorCaching_CachingWithIrrelevantChange()
         {
             var dateTimeNowProvider = new FakeDateTimeNow();
             var executionResult = RunGeneratorForSimpleLazinator(dateTimeNowProvider);
@@ -117,7 +117,7 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public Task GeneratorForSimpleLazinator_NoCachingWithILazinatorAddedComment()
+        public Task GeneratorCaching_NoCachingWithILazinatorAddedComment()
         {
             var dateTimeNowProvider = new FakeDateTimeNow();
             var executionResult = RunGeneratorForSimpleLazinator(dateTimeNowProvider);
@@ -137,7 +137,7 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public Task GeneratorForSimpleLazinator_NoCachingWithSubstantiveILazinatorChange()
+        public Task GeneratorCaching_NoCachingWithSubstantiveILazinatorChange()
         {
             var dateTimeNowProvider = new FakeDateTimeNow();
             var executionResult = RunGeneratorForSimpleLazinator(dateTimeNowProvider);
@@ -157,7 +157,7 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public Task GeneratorForSimpleLazinator_CachingWithLazinatorChange()
+        public Task GeneratorCaching_CachingWithLazinatorChange()
         {
 
             // A change in the Lazinator code (i.e., the main class) should not trigger regeneration of the generated code, assuming that the class is still an iLazinator.
@@ -179,7 +179,7 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public Task GeneratorForSimpleLazinator_NoCachingWithConfigChange()
+        public Task GeneratorCaching_NoCachingWithConfigChange()
         {
             var dateTimeNowProvider = new FakeDateTimeNow();
 
@@ -240,12 +240,6 @@ namespace LazinatorTests.Tests
             childClassesMatchExceptHeader.Should().BeTrue(); // header should be only thing changed, since addition of parent property shouldn't change the code
 
             return Task.CompletedTask;
-        }
-
-        [Fact]
-        public Task Generator_NoCachingWhenChangeMadeToPropertyName()
-        {
-            throw new NotImplementedException();
         }
 
         private static GenerationComponents RunGeneratorForSimpleLazinator(IDateTimeNow dateTimeNowProvider, bool[] specificReferencesToInclude = null)
