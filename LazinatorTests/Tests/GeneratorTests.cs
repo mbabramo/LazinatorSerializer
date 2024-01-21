@@ -261,7 +261,7 @@ namespace LazinatorTests.Tests
             List<(string path, string text)> sources = GetSourcesForLazinatorReferringToNonlazinator();
 
             var result = ExecuteGenerator(sources, null, new FakeDateTimeNow(), false);
-            var diagnostics = result.compilation.GetDiagnostics();
+            var diagnostics = result.GetDiagnostics();
 
             diagnostics.Count().Should().BeGreaterThan(0);
             diagnostics.Any(x => x.ToString().Contains("MyNonLazinator")).Should().BeTrue();
