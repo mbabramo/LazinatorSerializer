@@ -65,6 +65,12 @@ namespace LazinatorTests.Utilities
             return driver.GetRunResult().Results.SelectMany(x => x.GeneratedSources).ToList();
         }
 
+        public List<string> GetGeneratedSourcesAsStrings() => GetGeneratedSources().Select(x => x.SourceText.ToString()).ToList();
+
+        public (string path, string text) GetSoleGeneratedSourceWithString(string s) => GetGeneratedSources().Where(x => x.SourceText.ToString().Contains(s)).Select(x => (x.SyntaxTree.FilePath, x.SourceText.ToString())).Single();
+
+        public string GetSoleGeneratedSourceWithStringAsString(string s) => GetSoleGeneratedSourceWithString(s).text;
+
         public string GetGeneratedSourceAtIndex(int i) => GetGeneratedSources()[i].SourceText.ToString();
 
         public string GetSoleGeneratedSource()
