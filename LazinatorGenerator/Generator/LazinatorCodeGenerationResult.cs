@@ -26,7 +26,6 @@ namespace LazinatorGenerator.Generator
             DependencyInfo = dependencyInfo;
             Diagnostic = diagnostic;
             HashCode = (generatedType, path, generatedCode, dependencyInfo, diagnostic).GetHashCode();
-            Debug.WriteLine($"Generated code for {generatedType} with hash code {HashCode}"); // DEBUG
         }
        
         public LazinatorCodeGenerationResult WithUpdatedHashCodes(Dictionary<string, int> typeNameToHash) => new LazinatorCodeGenerationResult(GeneratedType, Path, GeneratedCode, DependencyInfo.WithUpdatedHashCodes(typeNameToHash), Diagnostic);

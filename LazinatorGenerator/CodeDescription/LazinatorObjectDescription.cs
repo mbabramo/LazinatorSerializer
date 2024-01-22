@@ -1725,7 +1725,12 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
                 var propertiesRequiringInitializationInBaseClass = ExclusiveInterface.PropertiesInherited.Where(x => x.NonNullableThatRequiresInitialization).ToList();
                 var propertiesRequiringInitializationHere = ExclusiveInterface.PropertiesToDefineThisLevel.Where(x => x.NonNullableThatRequiresInitialization).ToList();
                 var parametersString = String.Join(", ", allPropertiesRequiringInitialization.Select(x => x.PropertyNameWithTypeNameForConstructorParameter));
-                var parametersForBaseClassString = String.Join(", ", propertiesRequiringInitializationInBaseClass.Select(x => x.PropertyNameForConstructorParameter));
+                string parametersForBaseClassString;
+                if (propertiesRequiringInitializationInBaseClass.Any())
+                    parametersForBaseClassString = String.Join(", ", propertiesRequiringInitializationInBaseClass.Select(x => x.PropertyNameForConstructorParameter)) + ", ";
+                else
+                    parametersForBaseClassString = "";
+
                 var initializationString = String.Join("", propertiesRequiringInitializationHere.Select(x => x.AssignParameterToBackingField));
                 var throwIfNullString = String.Join("", propertiesRequiringInitializationHere.Where(x => !x.IsNonNullableRecordLikeTypeInNullableEnabledContext).Select(x => $@"
                     if ({x.PropertyNameForConstructorParameter} == null)
@@ -1734,7 +1739,7 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
                     }}"));
                 lazinateInSecondConstructor = $@"LazinatorMemory childData;
                             " + String.Join("", allPropertiesRequiringInitialization.Select(x => x.GetLazinateContentsForConstructor(IncludeTracingCode)));
-                firstConstructor = $@"public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}({parametersString}, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren){IIF(inheritFromBaseType, " : base({parametersForBaseClassString}), originalIncludeChildrenMode")}{IIF(IsStruct, " : this()")}
+                firstConstructor = $@"public {SimpleName}{IIF(GeneratingRefStruct, "_RefStruct")}({parametersString}, IncludeChildrenMode originalIncludeChildrenMode = IncludeChildrenMode.IncludeAllChildren){IIF(inheritFromBaseType, $" : base({parametersForBaseClassString}originalIncludeChildrenMode)")}{IIF(IsStruct, " : this()")}
                         {{
                             {initializationString}{throwIfNullString}{IIF(!inheritFromBaseType, $@"
                             OriginalIncludeChildrenMode = originalIncludeChildrenMode;")}

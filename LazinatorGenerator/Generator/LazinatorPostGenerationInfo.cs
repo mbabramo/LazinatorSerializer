@@ -22,8 +22,6 @@ namespace LazinatorGenerator.Generator
             PreGenerationInfo = preGenerationInfo;
             AlreadyGeneratedCode = alreadyGeneratedCode;
             HashCode = (PreGenerationInfo, AlreadyGeneratedCode).GetHashCode();
-
-            Debug.WriteLine($"Postgeneration info with hash code {GetHashCode()}"); // DEBUG
         }
 
         public override int GetHashCode()
@@ -54,16 +52,22 @@ namespace LazinatorGenerator.Generator
         public void GenerateSource(SourceProductionContext spc, IDateTimeNow dateTimeNowProvider)
         {
             if (AlreadyGeneratedCode.GeneratedCode != null)
+            {
                 spc.AddSource(AlreadyGeneratedCode.Path, AlreadyGeneratedCode.GeneratedCode); // We already generated the path and text at an earlier stage of this run through the pipeline. This was called because this LazinatorPostGenerationInfo had not been cached yet, but that doesn't matter. We know that we have just generated the source, and so we don't need to update it.
+                if (AlreadyGeneratedCode.Path.Contains("BinaryTree_T.laz.cs"))
+                {
+                    var DEBUG2 = 0;
+                }
+            }
             else
             {
                 // Maybe we had a problem generating the code. If so, we should report the diagnostic.
                 if (AlreadyGeneratedCode.Diagnostic != null)
                 {
                     var diagnosticString = AlreadyGeneratedCode.Diagnostic.ToString();
-                    Console.WriteLine(diagnosticString); // DEBUG
-                    bool regenerate = true; // DEBUG // used for debugging
-                    if (regenerate) 
+                    // Console.WriteLine(diagnosticString); // DEBUG
+                    bool regenerate = false; // DEBUG // used for debugging
+                    if (regenerate)
                         PreGenerationInfo.ExecuteSourceGeneration(dateTimeNowProvider);
                     spc.ReportDiagnostic(AlreadyGeneratedCode.Diagnostic);
                 }

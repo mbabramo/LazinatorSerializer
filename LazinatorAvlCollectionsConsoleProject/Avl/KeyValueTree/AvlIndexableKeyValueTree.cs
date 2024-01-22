@@ -11,7 +11,7 @@ using Lazinator.Collections;
 
 namespace LazinatorAvlCollections.Avl.KeyValueTree
 {
-    public partial class AvlIndexableKeyValueTree<TKey, TValue> : AvlKeyValueTree<TKey, TValue>, IAvlIndexableKeyValueTree<TKey, TValue>, IAvlIndexableKeyValueTree<TKey, TValue>, IIndexableKeyValueContainer<TKey, TValue>, IIndexableKeyMultivalueContainer<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
+    public partial class AvlIndexableKeyValueTree<TKey, TValue> : AvlKeyValueTree<TKey, TValue>, IAvlIndexableKeyValueTree<TKey, TValue>, IIndexableKeyValueContainer<TKey, TValue>, IIndexableKeyMultivalueContainer<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
         public AvlIndexableKeyValueTree(ContainerFactory innerContainerFactory, bool allowDuplicates, bool unbalanced) : base(innerContainerFactory, allowDuplicates, unbalanced)
         {
