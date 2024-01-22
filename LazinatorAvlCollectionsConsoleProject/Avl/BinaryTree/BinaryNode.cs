@@ -4,11 +4,11 @@ using System.Text;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-
-// DEBUG // must check all tree types to make sure that their interfaces inherit from corresponding interfaces
+using Lazinator.Attributes;
 
 namespace LazinatorAvlCollections.Avl.BinaryTree
 {
+    [DoNotAutogenerate] // DEBUG -- must remove
     public sealed partial class BinaryNode<T> : IBinaryNode<T>, ITreeString, INode<T, BinaryNode<T>>, ILazinator where T : ILazinator
     { 
         // We can't serialize the Parent, because an item can't appear multiple times in a hierarchy, so we use the Lazinator built-in parent as a substitute.

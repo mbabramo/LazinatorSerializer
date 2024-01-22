@@ -377,6 +377,8 @@ namespace Lazinator.CodeDescription
         
         public string GetCodeBehind()
         {
+            if (ILazinatorTypeSymbol.GetKnownAttribute<CloneDoNotAutogenerateAttribute>() is not null)
+                return "// omitted because of DoNotAutogenerateAttribute";
             CheckForInconsistentLengthAttributes();
             VerifyExclusiveInterfaceInheritsFromBaseExclusiveInterface();
             CodeStringBuilder sb = new CodeStringBuilder();

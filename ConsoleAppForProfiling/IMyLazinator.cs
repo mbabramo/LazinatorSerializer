@@ -5,7 +5,7 @@ using ProjectForDebuggingGenerator;
 
 namespace ConsoleAppForProfiling
 {
-    [Lazinator(1000)]
+    [Lazinator(21000)]
     public interface IMyLazinator
     {
         int MyInt { get; set; }

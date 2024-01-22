@@ -52,6 +52,10 @@ namespace LazinatorGenerator.Generator
                 var objectDescription = new LazinatorObjectDescription(implementingTypeInfo.ImplementingTypeSymbol, implementingTypeInfo, Config, dateTimeNowProvider, false);
                 var generatedCode = objectDescription.GetCodeBehind();
                 string path = objectDescription.ObjectNameEncodable + Config.GeneratedCodeFileExtension;
+                if (path == "BinaryNode_T.laz.cs")
+                {
+                    var DEBUG = 0;
+                }
                 return new LazinatorCodeGenerationResult(objectDescription.FullyQualifiedObjectName_InNullableMode, path, generatedCode, implementingTypeInfo.GetDependencyInfo(), null);
             }
             catch (LazinatorCodeGenException e)
