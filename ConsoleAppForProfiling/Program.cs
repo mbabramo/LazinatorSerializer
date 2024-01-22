@@ -1,4 +1,4 @@
-﻿using LazinatorTests.Tests;
+﻿
 using Lazinator.Core;
 using Lazinator.Collections;
 using Lazinator.Wrappers;
@@ -14,10 +14,10 @@ namespace ConsoleAppForProfiling
             myLazinator.MyLazinatorList = new LazinatorList<WInt32>() { 1, 2, 3 };
             var ml2 = myLazinator.CloneLazinatorTyped();
 
-            CodeGenTest t = new CodeGenTest();
-            await t.CodeGenerationProducesActualCode_CoreCollections();
-            await t.CodeGenerationProducesActualCode_Wrappers();
-            await t.CodeGenerationProducesActualCode_BuffersAndPersistence();
+            //CodeGenTest t = new CodeGenTest();
+            //await t.CodeGenerationProducesActualCode_CoreCollections();
+            //await t.CodeGenerationProducesActualCode_Wrappers();
+            //await t.CodeGenerationProducesActualCode_BuffersAndPersistence();
         }
     }
 }

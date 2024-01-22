@@ -7,12 +7,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\LazinatorTests\LazinatorTests.csproj" />
-  </ItemGroup>
-
 	<ItemGroup>
+		<ProjectReference Include="..\Lazinator.Collections\Lazinator.Collections.csproj" />
 		<ProjectReference Include="..\LazinatorGenerator\LazinatorGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+		<ProjectReference Include="..\Lazinator\Lazinator.csproj" />
 	</ItemGroup>
 
 </Project>
