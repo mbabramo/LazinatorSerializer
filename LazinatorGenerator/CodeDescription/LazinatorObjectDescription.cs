@@ -1886,7 +1886,10 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
                         AllGenericsAreNonlazinator = true;
                 }
                 else
-                    throw new LazinatorCodeGenException("Open generic parameter in non-abstract type must be constrained to type ILazinator. Add a clause like 'where T : ILazinator' to both the main class and the interface definition.");
+                {
+                    var DEBUG = IsNonlazinatorGeneric(genericArguments.Skip(1).First());
+                    throw new LazinatorCodeGenException($"Generic parameter in non-abstract type {iLazinatorType.ToString()} must be constrained to type ILazinator. Add a clause like 'where T : ILazinator' to both the main class and the interface definition, and ensure that any type used as a generic parameter is declared in user code as ILazinator.");
+                }
             }
             NameIncludingGenerics = iLazinatorType.GetMinimallyQualifiedName(NullableModeEnabled);
             GenericArgumentNames = genericArguments.Select(x => x.Name).ToList();

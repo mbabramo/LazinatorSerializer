@@ -60,7 +60,13 @@ namespace LazinatorGenerator.Generator
             {
                 // Maybe we had a problem generating the code. If so, we should report the diagnostic.
                 if (AlreadyGeneratedCode.Diagnostic != null)
+                {
+                    var diagnosticString = AlreadyGeneratedCode.Diagnostic.ToString();
+                    bool regenerate = true; // DEBUG // used for debugging
+                    if (regenerate) 
+                        PreGenerationInfo.ExecuteSourceGeneration(dateTimeNowProvider);
                     spc.ReportDiagnostic(AlreadyGeneratedCode.Diagnostic);
+                }
             }
         }
 
