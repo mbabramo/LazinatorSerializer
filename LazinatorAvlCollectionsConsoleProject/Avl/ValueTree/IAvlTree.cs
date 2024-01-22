@@ -7,7 +7,7 @@ using System.Text;
 namespace LazinatorAvlCollections.Avl.ValueTree
 {
     [Lazinator((int)LazinatorAvlCollectionUniqueIDs.IAvlTree)]
-    public interface IAvlTree<T> where T : ILazinator
+    public interface IAvlTree<T> : IAvlTreeWithNodeType<T, AvlNode<T>> where T : ILazinator
     {
     }
 }

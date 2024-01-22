@@ -9,7 +9,7 @@ using Lazinator.Collections;
 namespace LazinatorAvlCollections.Avl.ListTree
 {
     [Lazinator((int)LazinatorAvlCollectionUniqueIDs.IAvlListTree)]
-    internal interface IAvlListTree<T> where T : ILazinator
+    public interface IAvlListTree<T> where T : ILazinator
     {
         [SetterAccessibility("protected")]
         bool AllowDuplicates { get; }

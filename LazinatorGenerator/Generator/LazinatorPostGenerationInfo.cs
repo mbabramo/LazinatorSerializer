@@ -31,7 +31,6 @@ namespace LazinatorGenerator.Generator
             return HashCode;
         }
 
-
         /// <summary>
         /// This methods separates an immutable array of this type into individual items, modifying each so that it contains the most up-to-date hash codes of any other item on which it has dependencies. This helps with caching. 
         /// </summary>
@@ -62,6 +61,7 @@ namespace LazinatorGenerator.Generator
                 if (AlreadyGeneratedCode.Diagnostic != null)
                 {
                     var diagnosticString = AlreadyGeneratedCode.Diagnostic.ToString();
+                    Console.WriteLine(diagnosticString); // DEBUG
                     bool regenerate = true; // DEBUG // used for debugging
                     if (regenerate) 
                         PreGenerationInfo.ExecuteSourceGeneration(dateTimeNowProvider);

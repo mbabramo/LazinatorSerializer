@@ -6,7 +6,7 @@ using Lazinator.Collections.Interfaces;
 namespace LazinatorAvlCollections.Avl.ValueTree
 {
     [Lazinator((int)LazinatorAvlCollectionUniqueIDs.IAvlSortedTree)]
-    public interface IAvlSortedTree<T> : ISortedMultivalueContainer<T> where T : IComparable<T>, ILazinator
+    public interface IAvlSortedTree<T> : IAvlTree<T>, ISortedMultivalueContainer<T> where T : IComparable<T>, ILazinator
     {
     }
 }
