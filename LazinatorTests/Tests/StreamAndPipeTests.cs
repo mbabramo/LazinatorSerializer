@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using static LazinatorTests.Utilities.PipelinesExtensions;
 using System.Buffers;
 using System;
+using Lazinator.Exceptions;
 
 namespace LazinatorTests.Tests
 {
@@ -29,13 +30,41 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public async Task GetPipeWorks()
+        public async Task LazinatorCanBePipelined()
         {
             Example e = GetTypicalExample();
-            (Pipe p, int bytes) = e.GetPipe();
+            (Pipe p, int bytes) = GetPipe(e);
             MemoryStream stream = new MemoryStream();
             await stream.WriteAsync(p.Reader, (ulong)bytes);
             ConfirmStreamEqual(e, stream);
+        }
+
+
+        /// <summary>
+        /// Gets a pipe containing the Lazinator object. 
+        /// </summary>
+        /// <param name="lazinator"></param>
+        /// <returns></returns>
+        private static (Pipe pipe, int bytes) GetPipe(ILazinator lazinator)
+        {
+            lazinator.SerializeLazinator();
+            Pipe pipe = new Pipe();
+            AddToPipe(lazinator, pipe);
+            pipe.Writer.Complete();
+            if (lazinator.LazinatorMemoryStorage.Length > int.MaxValue)
+                ThrowHelper.ThrowTooLargeException(int.MaxValue);
+            return (pipe, (int)lazinator.LazinatorMemoryStorage.Length);
+        }
+
+        /// <summary>
+        /// Writes a Lazinator object into a pipe.
+        /// </summary>
+        /// <param name="lazinator"></param>
+        /// <param name="pipe"></param>
+        private static void AddToPipe(ILazinator lazinator, Pipe pipe)
+        {
+            foreach (ReadOnlyMemory<byte> memoryBlock in lazinator.LazinatorMemoryStorage.EnumerateReadOnlyMemory())
+                pipe.Writer.Write(memoryBlock.Span);
         }
     }
 }

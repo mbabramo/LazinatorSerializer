@@ -6,11 +6,9 @@ using System.Linq;
 using System.Diagnostics;
 using System.Buffers;
 using Lazinator.Core;
-using Newtonsoft.Json.Serialization;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Lazinator.Support;
-using Newtonsoft.Json.Linq;
 
 namespace Lazinator.Buffers
 {

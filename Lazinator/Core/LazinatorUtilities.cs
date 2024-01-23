@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Pipelines;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -1304,32 +1303,6 @@ namespace Lazinator.Core
             return ((ReadOnlyMemory<byte>)lazinator.LazinatorMemoryStorage.GetConsolidatedMemory()).GetMemoryStream();
         }
 
-        /// <summary>
-        /// Gets a pipe containing the Lazinator object. 
-        /// </summary>
-        /// <param name="lazinator"></param>
-        /// <returns></returns>
-        public static (Pipe pipe, int bytes) GetPipe(this ILazinator lazinator)
-        {
-            lazinator.SerializeLazinator();
-            Pipe pipe = new Pipe();
-            AddToPipe(lazinator, pipe);
-            pipe.Writer.Complete();
-            if (lazinator.LazinatorMemoryStorage.Length > int.MaxValue)
-                ThrowHelper.ThrowTooLargeException(int.MaxValue);
-            return (pipe, (int) lazinator.LazinatorMemoryStorage.Length);
-        }
-
-        /// <summary>
-        /// Writes a Lazinator object into a pipe.
-        /// </summary>
-        /// <param name="lazinator"></param>
-        /// <param name="pipe"></param>
-        public static void AddToPipe(this ILazinator lazinator, Pipe pipe)
-        {
-            foreach (ReadOnlyMemory<byte> memoryBlock in lazinator.LazinatorMemoryStorage.EnumerateReadOnlyMemory())
-                pipe.Writer.Write(memoryBlock.Span);
-        }
 
         /// <summary>
         /// Creates a new byte array representing the contents of a stream.

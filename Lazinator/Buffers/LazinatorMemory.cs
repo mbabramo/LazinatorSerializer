@@ -11,8 +11,6 @@ using System.Threading.Tasks;
 using Lazinator.Core;
 using Lazinator.Exceptions;
 using Lazinator.Support;
-using Lazinator.Wrappers;
-using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 
 namespace Lazinator.Buffers
 {

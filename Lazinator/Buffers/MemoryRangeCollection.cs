@@ -1,5 +1,4 @@
 ﻿using Lazinator.Support;
-using Microsoft.CodeAnalysis.Host;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

@@ -3,7 +3,6 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.Collections.Generic;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Lazinator.Support
 {
