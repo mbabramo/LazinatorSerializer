@@ -1,5 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+	<PropertyGroup>
+		<Version>0.1.0.400</Version>
+		<VersionSuffix>alpha</VersionSuffix>
+		<IncludeSymbols>true</IncludeSymbols>
+		<IncludeSource>true</IncludeSource>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<IsPackable>true</IsPackable>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+	</PropertyGroup>
+	
   <PropertyGroup>
     <!-- 👇 Source generators must target netstandard 2.0 -->
     <TargetFramework>netstandard2.0</TargetFramework> 
@@ -8,7 +20,7 @@
 	<IsRoslynComponent>true</IsRoslynComponent>
 	<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     <ImplicitUsings>true</ImplicitUsings>
-    <LangVersion>Latest</LangVersion>
+    <LangVersion>12.0</LangVersion>
   </PropertyGroup>
 
   <!-- The following libraries include the source generator interfaces and types we need -->

@@ -3,7 +3,7 @@ using Lazinator.Collections;
 using Lazinator.Wrappers;
 using ProjectForDebuggingGenerator;
 
-namespace ConsoleAppForProfiling
+namespace ProjectForDebuggingGenerator
 {
     [Lazinator(21000)]
     public interface IMyLazinator

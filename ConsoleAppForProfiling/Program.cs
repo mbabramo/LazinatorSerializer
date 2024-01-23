@@ -3,7 +3,7 @@ using Lazinator.Core;
 using Lazinator.Collections;
 using Lazinator.Wrappers;
 
-namespace ConsoleAppForProfiling
+namespace ProjectForDebuggingGenerator
 {
     internal class Program
     {
