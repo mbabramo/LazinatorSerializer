@@ -39,6 +39,8 @@ namespace Lazinator.CodeDescription
             #nullable disable");
         public string NullableModeRestoreString => NullableModeInherited && !AlwaysSpecifyNullableMode ? "" : $@"
             #nullable restore";
+
+        public string DEBUGNullableModeLookupMethod => NullableModeEnabled ? "public bool DEBUGNullable => true;" : "public bool DEBUGNullable => false;";
         public string QuestionMarkIfNullableModeEnabled => NullableModeEnabled ? "?" : "";
         public string ILazinatorStringWithoutQuestionMark => "ILazinator";
         public string ILazinatorString => "ILazinator" + QuestionMarkIfNullableModeEnabled;
@@ -447,6 +449,8 @@ namespace Lazinator.CodeDescription
             if (BaseLazinatorObject == null)
                 sb.AppendLine($@"{HideILazinatorProperty}public bool IsStruct => {(ObjectType == LazinatorObjectType.Struct || GeneratingRefStruct ? "true" : "false")};
                         ");
+
+            sb.AppendLine(DEBUGNullableModeLookupMethod);
 
             AppendFromRefStruct(sb);
         }
