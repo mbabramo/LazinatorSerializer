@@ -279,7 +279,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(ExampleStructContainingStruct), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(ExampleStructContainingStructContainer), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(NullableEnabledContext), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
-            await CompleteGenerateCode(typeof(NullableEnabledContextWithParameterlessConstructor), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws); // DEBUG
+            await CompleteGenerateCode(typeof(NullableEnabledContextWithParameterlessConstructor), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(UncompressedContainer), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(Simplifiable), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(RemoteHierarchy), "LazinatorTests", "/Examples/", "RemoteHierarchy/", ws);
@@ -373,7 +373,7 @@ public class MyOtherClass
 
         private static async Task CompleteGenerateCode(Type existingType, string project, string mainFolder, string subfolder, AdhocWorkspace ws, Func<LazinatorConfig?, LazinatorConfig> modifyDefaultConfig = null)
         {
-            bool completeTest = true; // DEBUG // Set to true to automatically update all test classes on the local development machine to a new format. This is useful as a way of updating the Lazinator code in the various Lazinator projects, which do not subscribe to the source generator. 
+            bool completeTest = false; // Set to true to automatically update all test classes on the local development machine to a new format. This is useful as a way of updating the Lazinator code in the various Lazinator projects, which do not subscribe to the source generator. 
             bool automaticallyFixIfNoDiscrepancy = false; // if true, then the relevant code file is updated even if the contents other than the version and date matched; this can be used to update the version and the date. This should usually be set to false.
             bool automaticallyFixIfDiscrepancy = true; // if true, then if there is not a match, then the relevant code file is updated.
 

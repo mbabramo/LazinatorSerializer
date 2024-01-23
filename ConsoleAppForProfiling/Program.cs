@@ -19,14 +19,6 @@ namespace ProjectForDebuggingGenerator
             {
                 Debug.WriteLine("String initialized to null, so nullable context is disabled.");
             }
-            if (myLazinator.MyLazinatorList is not null)
-            {
-                Debug.WriteLine("MyLazinatorList is not null, so nullable context is enabled.");
-            }
-            else
-            {
-                Debug.WriteLine("MyLazinatorList is null, so nullable context is disabled or violated.");
-            }
             //myLazinator.MyInt = 5;
             myLazinator.MyLazinatorList = new LazinatorList<WInt32>() { 1, 2, 3 };
             myLazinator.MyList = new List<int>() { 4, 5 };

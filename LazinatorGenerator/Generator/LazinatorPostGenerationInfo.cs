@@ -55,14 +55,11 @@ namespace LazinatorGenerator.Generator
             {
                 if (AlreadyGeneratedCode.Path.Contains("MyLazinator.laz.cs") && AlreadyGeneratedCode.GeneratedCode.Contains("# nullable disable")) // DEBUG
                 {
+                    throw new Exception("DEBUG -- Problem encountered");
                 }
                 else 
                     spc.AddSource(AlreadyGeneratedCode.Path, AlreadyGeneratedCode.GeneratedCode); // We already generated the path and text at an earlier stage of this run through the pipeline. This was called because this LazinatorPostGenerationInfo had not been cached yet, but that doesn't matter. We know that we have just generated the source, and so we don't need to update it.
-                if (AlreadyGeneratedCode.Path.Contains("MyLazinator.laz.cs"))
-                {
-                    //
-                    var DEBUG2 = 0;
-                }
+
             }
             else
             {
@@ -70,10 +67,6 @@ namespace LazinatorGenerator.Generator
                 if (AlreadyGeneratedCode.Diagnostic != null)
                 {
                     var diagnosticString = AlreadyGeneratedCode.Diagnostic.ToString();
-                    // Console.WriteLine(diagnosticString); // DEBUG
-                    bool regenerate = false; // DEBUG // used for debugging
-                    if (regenerate)
-                        PreGenerationInfo.ExecuteSourceGeneration(dateTimeNowProvider);
                     spc.ReportDiagnostic(AlreadyGeneratedCode.Diagnostic);
                 }
             }

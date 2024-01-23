@@ -1894,7 +1894,6 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
                 }
                 else
                 {
-                    var DEBUG = IsNonlazinatorGeneric(genericArguments.Skip(1).First());
                     throw new LazinatorCodeGenException($"Generic parameter in non-abstract type {iLazinatorType.ToString()} must be constrained to type ILazinator. Add a clause like 'where T : ILazinator' to both the main class and the interface definition, and ensure that any type used as a generic parameter is declared in user code as ILazinator.");
                 }
             }
