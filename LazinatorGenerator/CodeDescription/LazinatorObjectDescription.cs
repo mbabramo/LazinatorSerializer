@@ -32,8 +32,8 @@ namespace Lazinator.CodeDescription
         /* Nullable context */
         public NullableContext NullableContextSetting { get; set; }
         public bool NullableModeEnabled => NullableContextSetting.AnnotationsEnabled();
-        public bool NullableModeInherited => NullableContextSetting.AnnotationsEnabled();
-        public bool AlwaysSpecifyNullableMode => true;
+        public bool NullableModeInherited => NullableContextSetting.AnnotationsInherited();
+        public bool AlwaysSpecifyNullableMode => true; // DEBUG -- could eliminate this and next couple of lines, as well as NullableModeInherited.
         public string NullableModeSettingString => NullableModeInherited && !AlwaysSpecifyNullableMode ? "" : (NullableModeEnabled ? $@"
             #nullable enable" : $@"
             #nullable disable");
