@@ -10,10 +10,5 @@ namespace LazinatorTests.Examples.ExampleHierarchy
 {
     public partial class NullableEnabledContext : INullableEnabledContext
     {
-        // DEBUG -- remove this constructor. Just trying temporarily.
-        public NullableEnabledContext()
-        {
-
-        }
     }
 }

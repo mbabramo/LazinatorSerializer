@@ -1,6 +1,7 @@
 ﻿#nullable enable
 
 using Lazinator.Attributes;
+using System.Collections.Generic;
 
 namespace LazinatorTests.Examples
 {
@@ -8,6 +9,7 @@ namespace LazinatorTests.Examples
     public interface INullableEnabledContextWithParameterlessConstructor
     {
         string MyString { get; set; }
+        List<int> MyList { get; set; }
     }
 }
 

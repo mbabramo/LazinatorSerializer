@@ -1958,7 +1958,8 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
                     {{
                         {(SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory ? "" : $@"if (itemToConvert == {DefaultExpression})
                         {{
-                            {((NullableModeEnabled && !Nullable) ? "ThrowHelper.ThrowSerializingNullNonNullable(\"{PropertyName}\")" : "return")};
+                            {((NullableModeEnabled && !Nullable) ? $@"ThrowHelper.ThrowSerializingNullNonNullable(""{PropertyName}"");
+                            " : "")}return;
                         }}
                         ")}{writeCollectionLengthCommand}
                         {forStatement}

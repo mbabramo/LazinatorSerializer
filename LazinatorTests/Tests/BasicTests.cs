@@ -14,6 +14,7 @@ using Lazinator.Buffers;
 using LazinatorTests.Examples.ExampleHierarchy;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using Lazinator.Exceptions;
 
 namespace LazinatorTests.Tests
 {
@@ -345,13 +346,22 @@ namespace LazinatorTests.Tests
         }
 
 
-        // DEBUG -- remove this test
         [Fact]
         public void CloneLazinatorTyped_NullableEnabledContextParameterless()
         {
             NullableEnabledContextWithParameterlessConstructor original = new NullableEnabledContextWithParameterlessConstructor();
+            original.MyList = new List<int>();
             var clone = original.CloneLazinatorTyped();
             clone.MyString.Should().Be("");
+        }
+
+        [Fact]
+        public void NullableEnabledContextParameterless_SerializationOfNullThrows()
+        {
+            NullableEnabledContextWithParameterlessConstructor original = new NullableEnabledContextWithParameterlessConstructor();
+
+            Action a = () => { var x = original.CloneLazinatorTyped(); }; // note that error occurs only when looking at underlying memory
+            a.Should().Throw<LazinatorSerializationException>();
         }
 
     }

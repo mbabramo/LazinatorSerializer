@@ -28,7 +28,8 @@ namespace ProjectForDebuggingGenerator
                 Debug.WriteLine("MyLazinatorList is null, so nullable context is disabled or violated.");
             }
             //myLazinator.MyInt = 5;
-            //myLazinator.MyLazinatorList = new LazinatorList<WInt32>() { 1, 2, 3 };
+            myLazinator.MyLazinatorList = new LazinatorList<WInt32>() { 1, 2, 3 };
+            myLazinator.MyList = new List<int>() { 4, 5 };
             var ml2 = myLazinator.CloneLazinatorTyped();
 
             //CodeGenTest t = new CodeGenTest();
