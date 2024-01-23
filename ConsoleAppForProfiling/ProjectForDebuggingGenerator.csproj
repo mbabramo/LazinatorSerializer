@@ -7,6 +7,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="LazinatorConfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="LazinatorConfig.json" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<ProjectReference Include="..\Lazinator.Collections\Lazinator.Collections.csproj" />
 		<ProjectReference Include="..\LazinatorGenerator\LazinatorGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
