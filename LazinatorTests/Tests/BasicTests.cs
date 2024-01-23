@@ -338,10 +338,20 @@ namespace LazinatorTests.Tests
         }
 
         [Fact]
-        public void CloneLazinatorTyped_NullEnabledContext()
+        public void CloneLazinatorTyped_NullableEnabledContext()
         {
             var nec = CloneNoBufferTests.GetNullableEnabledContext();
             var result = nec.CloneLazinatorTyped(IncludeChildrenMode.IncludeAllChildren);
+        }
+
+
+        // DEBUG -- remove this test
+        [Fact]
+        public void CloneLazinatorTyped_NullableEnabledContextParameterless()
+        {
+            NullableEnabledContextWithParameterlessConstructor original = new NullableEnabledContextWithParameterlessConstructor();
+            var clone = original.CloneLazinatorTyped();
+            clone.MyString.Should().Be("");
         }
 
     }

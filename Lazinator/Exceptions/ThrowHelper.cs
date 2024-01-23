@@ -12,6 +12,10 @@ namespace Lazinator.Exceptions
         public static void ThrowFormatException() =>
                                 throw new FormatException("Wrong Lazinator type initialized.");
 
+        public static void ThrowComparisonOfLazinatorMemoryToNull() => throw new LazinatorSerializationException("Invalid comparison of LazinatorMemory to null.");
+
+        public static void ThrowSerializingNullNonNullable(string propertyName) => throw new LazinatorSerializationException($"Property {propertyName} is null even though it is defined as non-nullable");
+
         public static void ThrowVersioningDisabledException(string nameIncludingGenerics) => throw new LazinatorSerializationException($"Lazinator versioning disabled for {nameIncludingGenerics}.");
 
         public static void ThrowTooLargeException(int maxValue) => throw new LazinatorSerializationException(tooLargeMessage(maxValue));

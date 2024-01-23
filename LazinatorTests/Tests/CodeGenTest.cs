@@ -258,8 +258,6 @@ public class MyOtherClass
             // uncommenting the following will stop the run, so that we only run the one file that we want to focus on above.
             //throw new Exception(""); 
 
-            await CompleteGenerateCode(typeof(NullableEnabledContext), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws); // DEBUG
-
             await CompleteGenerateCode(typeof(Example), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(TwoByteLengths), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(EightByteLengths), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
@@ -281,6 +279,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(ExampleStructContainingStruct), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(ExampleStructContainingStructContainer), "LazinatorTests", "/Examples/", "Structs/", ws);
             await CompleteGenerateCode(typeof(NullableEnabledContext), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
+            await CompleteGenerateCode(typeof(NullableEnabledContextWithParameterlessConstructor), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws); // DEBUG
             await CompleteGenerateCode(typeof(UncompressedContainer), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(Simplifiable), "LazinatorTests", "/Examples/", "ExampleHierarchy/", ws);
             await CompleteGenerateCode(typeof(RemoteHierarchy), "LazinatorTests", "/Examples/", "RemoteHierarchy/", ws);

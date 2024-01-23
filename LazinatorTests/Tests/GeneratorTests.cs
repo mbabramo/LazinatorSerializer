@@ -320,6 +320,9 @@ namespace LazinatorTests.Tests
 
         public static bool CompareExcludingLinesWithPrefix(string s1, string s2, string prefix)
         {
+            if (s1 == null || s2 == null)
+                return false;
+
             using (var reader1 = new StringReader(s1))
             using (var reader2 = new StringReader(s2))
             {

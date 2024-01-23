@@ -53,9 +53,14 @@ namespace LazinatorGenerator.Generator
         {
             if (AlreadyGeneratedCode.GeneratedCode != null)
             {
-                spc.AddSource(AlreadyGeneratedCode.Path, AlreadyGeneratedCode.GeneratedCode); // We already generated the path and text at an earlier stage of this run through the pipeline. This was called because this LazinatorPostGenerationInfo had not been cached yet, but that doesn't matter. We know that we have just generated the source, and so we don't need to update it.
-                if (AlreadyGeneratedCode.Path.Contains("BinaryNode_T.laz.cs"))
+                if (AlreadyGeneratedCode.Path.Contains("MyLazinator.laz.cs") && AlreadyGeneratedCode.GeneratedCode.Contains("# nullable disable")) // DEBUG
                 {
+                }
+                else 
+                    spc.AddSource(AlreadyGeneratedCode.Path, AlreadyGeneratedCode.GeneratedCode); // We already generated the path and text at an earlier stage of this run through the pipeline. This was called because this LazinatorPostGenerationInfo had not been cached yet, but that doesn't matter. We know that we have just generated the source, and so we don't need to update it.
+                if (AlreadyGeneratedCode.Path.Contains("MyLazinator.laz.cs"))
+                {
+                    //
                     var DEBUG2 = 0;
                 }
             }
