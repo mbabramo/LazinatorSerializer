@@ -6,7 +6,8 @@ using Lazinator.Core;
 namespace Lazinator.Collections.Interfaces
 {
     /// <summary>
-    /// A nonexclusive Lazinator interface for multivalue containers.
+    /// A nonexclusive Lazinator interface for multivalue containers, allowing searches specifying MultivalueLocationOptions
+    /// in the case of collections allowing duplicates (e.g., finding the location of any item matching a particular value).
     /// </summary>
     /// <typeparam name="T">The item type</typeparam>
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IMultivalueContainer)]
@@ -20,7 +21,7 @@ namespace Lazinator.Collections.Interfaces
         bool AllowDuplicates { get; }
         /// <summary>
         /// Finds the item in the sorted container, using the comparer. If the item is found, the exact location is returned. Otherwise,
-        /// the next location is returned (or null, if it would be after the end of the list).
+        /// the next location is returned
         /// </summary>
         /// <param name="value">The value to search for</param>
         /// <param name="whichOne">The item to find (first, last, or any), if there is more than one of the item.</param>

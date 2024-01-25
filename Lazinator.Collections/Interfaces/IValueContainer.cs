@@ -6,17 +6,31 @@ using Lazinator.Core;
 namespace Lazinator.Collections.Interfaces
 {
     /// <summary>
-    /// A nonexclusive Lazinator interface for containers of values
+    /// A nonexclusive Lazinator interface for containers of values, allowing access to items and operations such as enumeration and 
+    /// finding items using a custom comparer. This is compatible with non-indexable containers and thus uses IContainerLocation to 
+    /// identify locations within the container instead of specific indices. 
     /// </summary>
     /// <typeparam name="T">The item type</typeparam>
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IValueContainer)]
     public interface IValueContainer<T> : IEnumerable<T>, ILazinator where T : ILazinator
     {
+        /// <summary>
+        /// Indicates whether the container type is balanced or not.
+        /// </summary>
         [SetterAccessibility("protected")]
         bool Unbalanced { get; }
         IValueContainer<T> CreateNewWithSameSettings();
         bool IsShorterThan(IValueContainer<T> second);
+        /// <summary>
+        /// Indicates whether this container should be split in two, given the split threshold.
+        /// </summary>
+        /// <param name="splitThreshold"></param>
+        /// <returns></returns>
         bool ShouldSplit(long splitThreshold);
+        /// <summary>
+        /// Splits off the beginning of this container.
+        /// </summary>
+        /// <returns></returns>
         IValueContainer<T> SplitOff();
         bool Any();
         T First();

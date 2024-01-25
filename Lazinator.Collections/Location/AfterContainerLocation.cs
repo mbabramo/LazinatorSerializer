@@ -3,7 +3,7 @@
 namespace Lazinator.Collections.Location
 {
     /// <summary>
-    /// A container location specified to be after all items in the container
+    /// A container location specified to be after all items in the container.
     /// </summary>
     public struct AfterContainerLocation : IContainerLocation
     {

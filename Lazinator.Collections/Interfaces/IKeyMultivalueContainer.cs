@@ -5,7 +5,8 @@ using Lazinator.Core;
 namespace Lazinator.Collections.Interfaces
 {
     /// <summary>
-    /// A nonexclusive interface for Lazinator key-multivalue containers.
+    /// A nonexclusive interface for Lazinator key-multivalue containers, allowing specification of which item when there are multiple
+    /// items corresponding to a particular key. 
     /// </summary>
     /// <typeparam name="TKey">The key type</typeparam>
     /// <typeparam name="TValue">The value type</typeparam>

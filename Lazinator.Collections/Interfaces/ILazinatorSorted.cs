@@ -7,7 +7,7 @@ using System;
 namespace Lazinator.Collections
 {
     /// <summary>
-    /// A nonexclusive interface allowing insertion and removal of comparable items, using the default comparer
+    /// A nonexclusive interface allowing insertion and removal of comparable items, using the default comparer for a type implementing IComparable<typeparamref name="T"/>
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.ILazinatorSorted)]

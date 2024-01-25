@@ -6,6 +6,7 @@ namespace Lazinator.Collections.Interfaces
 {
     /// <summary>
     /// A container for items accessible by index, where the number of copies of each item is recorded (so that the item does not need to be repeated).
+    /// This interface allows for converting locations within the tree into a range of aggregated indices at those locations.
     /// </summary>
     /// <typeparam name="T">The type of item stored in the container</typeparam>
     [NonexclusiveLazinator((int)LazinatorCollectionUniqueIDs.IAggregatedValueContainer)]

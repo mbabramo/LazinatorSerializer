@@ -8,6 +8,10 @@ using System.Threading.Tasks;
 
 namespace Lazinator.Collections.Tree
 {
+    /// <summary>
+    /// A simple binary tree class
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public partial class LazinatorBinaryTree<T> : ILazinatorBinaryTree<T>, IEnumerable<T>, IEnumerable where T : ILazinator, IComparable<T>
     {
 

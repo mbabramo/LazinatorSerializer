@@ -5,7 +5,7 @@ using Lazinator.Core;
 namespace Lazinator.Collections.Interfaces
 {
     /// <summary>
-    /// A nonexclusive Lazinator interface for key-value containers.
+    /// A nonexclusive Lazinator interface for key-value containers, allowing access through comparers.
     /// </summary>
     /// <typeparam name="TKey">The key type</typeparam>
     /// <typeparam name="TValue">The value type</typeparam>

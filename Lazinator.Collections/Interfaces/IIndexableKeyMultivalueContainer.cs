@@ -6,7 +6,7 @@ using Lazinator.Core;
 namespace Lazinator.Collections.Interfaces
 {
     /// <summary>
-    /// A nonexclusive Lazinator interface for indexable key-multivalue containers
+    /// A nonexclusive Lazinator interface for indexable key-multivalue containers. This allows finding or replacing items in multivalue containers by key. 
     /// </summary>
     /// <typeparam name="TKey">The key type</typeparam>
     /// <typeparam name="TValue">The value type</typeparam>

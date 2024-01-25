@@ -90,9 +90,7 @@ namespace LazinatorTests.Tests
         [Fact]
         public void SplittableEntitiesWork_SmallestTree()
         {
-            BinaryTree = new LazinatorBinaryTree<WDouble>();
-            BinaryTree.Add(0);
-            BinaryTree.Add(1);
+            BinaryTree = [0, 1];
             LazinatorMemory singleBufferResult = BinaryTree.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false));
             LazinatorMemory multipleBufferResult = BinaryTree.SerializeLazinator(new LazinatorSerializationOptions(IncludeChildrenMode.IncludeAllChildren, false, false, false, 1));
             multipleBufferResult.MultipleMemoryBlocks.Count().Should().BeGreaterThan(0);

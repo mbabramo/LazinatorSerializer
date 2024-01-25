@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Lazinator.Collections.Interfaces
 {
     /// <summary>
-    /// A nonexclusive Lazinator interfaces for dictionary types.
+    /// A nonexclusive Lazinator interfaces for dictionary types, allowing specification of whether a dictionary is stored in sorted order.
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
