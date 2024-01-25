@@ -11,14 +11,7 @@ namespace ProjectForDebuggingGenerator
         async static Task Main(string[] args)
         {
             MyLazinator myLazinator = new MyLazinator();
-            if (myLazinator.MyString == "")
-            {
-                Debug.WriteLine("String initialized to empty, so nullable context is enabled.");
-            }
-            else
-            {
-                Debug.WriteLine("String initialized to null, so nullable context is disabled.");
-            }
+            Debug.WriteLine($"Nullable mode: {myLazinator.DEBUGNullable}");
             //myLazinator.MyInt = 5;
             myLazinator.MyLazinatorList = new LazinatorList<WInt32>() { 1, 2, 3 };
             myLazinator.MyList = new List<int>() { 4, 5 };
