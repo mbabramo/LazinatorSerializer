@@ -40,7 +40,7 @@ namespace Lazinator.CodeDescription
         public string NullableModeRestoreString => NullableModeInherited && !AlwaysSpecifyNullableMode ? "" : $@"
             #nullable restore";
 
-        public string DEBUGNullableModeLookupMethod => NullableModeEnabled ? "public bool DEBUGNullable => true;" : "public bool DEBUGNullable => false;";
+        public string DEBUGNullableModeLookupMethod => NullableModeEnabled ? $"public {DerivationKeyword}bool IsNullableContext => true;" : $"public {DerivationKeyword}bool IsNullableContext => false;"; // must delete this once we solve the mystery of why nullable context is sometimes changing.
         public string QuestionMarkIfNullableModeEnabled => NullableModeEnabled ? "?" : "";
         public string ILazinatorStringWithoutQuestionMark => "ILazinator";
         public string ILazinatorString => "ILazinator" + QuestionMarkIfNullableModeEnabled;
