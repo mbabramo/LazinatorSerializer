@@ -26,7 +26,7 @@ namespace Lazinator.Collections.Interfaces
         /// </summary>
         /// <param name="splitThreshold"></param>
         /// <returns></returns>
-        bool ShouldSplit(long splitThreshold);
+        bool ShouldSplit(int splitThreshold);
         /// <summary>
         /// Splits off the beginning of this container.
         /// </summary>

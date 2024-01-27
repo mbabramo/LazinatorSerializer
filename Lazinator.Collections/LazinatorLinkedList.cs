@@ -369,7 +369,7 @@ namespace Lazinator.Collections
         public T GetAt(IContainerLocation location) => GetAtIndex(((IndexLocation)location).Index);
         public void SetAt(IContainerLocation location, T value) => SetAtIndex(((IndexLocation)location).Index, value);
 
-        public bool ShouldSplit(long splitThreshold)
+        public bool ShouldSplit(int splitThreshold)
         {
             return Count > splitThreshold;
         }

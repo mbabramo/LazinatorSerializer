@@ -613,7 +613,7 @@ namespace Lazinator.Collections
             this[(int)index] = value;
         }
 
-        public bool ShouldSplit(long splitThreshold)
+        public bool ShouldSplit(int splitThreshold)
         {
             return Count > splitThreshold;
         }
