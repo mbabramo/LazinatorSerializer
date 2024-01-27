@@ -1232,26 +1232,33 @@ TabbedText.WriteLine($""Accessing {PropertyName}"");")}
             {
                 if (ContainerIsClass) // change the parents collection so that it refers to the new value and not the old value. But other values in the parents collection will not be affected.
                 {
-                    if (Nullable)
-                        propertyTypeDependentSet = $@"
-                            if ({BackingFieldString} != null)
-                            {{
-                                {BackingFieldString}.LazinatorParents = {BackingFieldString}.LazinatorParents.WithRemoved(this);
-                            }}
-                            if (value != null)
-                            {{
-                                value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                            }}
-                            ";
+                    if (ContainingObjectDescription.IsSingleParent)
+                    {
+
+                    }
                     else
-                        propertyTypeDependentSet = $@"
-                            _ = value ?? throw new ArgumentNullException(nameof(value));
-                            if ({BackingFieldString} != null)
-                            {{
-                                {BackingFieldString}.LazinatorParents = {BackingFieldString}.LazinatorParents.WithRemoved(this);
-                            }}
-                            value.LazinatorParents = value.LazinatorParents.WithAdded(this);
-                            ";
+                    {
+                        if (Nullable)
+                            propertyTypeDependentSet = $@"
+                                if ({BackingFieldString} != null)
+                                {{
+                                    {BackingFieldString}.LazinatorParents = {BackingFieldString}.LazinatorParents.WithRemoved(this);
+                                }}
+                                if (value != null)
+                                {{
+                                    value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                                }}
+                                ";
+                        else
+                            propertyTypeDependentSet = $@"
+                                _ = value ?? throw new ArgumentNullException(nameof(value));
+                                if ({BackingFieldString} != null)
+                                {{
+                                    {BackingFieldString}.LazinatorParents = {BackingFieldString}.LazinatorParents.WithRemoved(this);
+                                }}
+                                value.LazinatorParents = value.LazinatorParents.WithAdded(this);
+                                ";
+                    }
                 }
                 else
                     propertyTypeDependentSet = $@"";
