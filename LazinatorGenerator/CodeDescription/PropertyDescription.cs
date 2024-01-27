@@ -1264,14 +1264,14 @@ TabbedText.WriteLine($""Accessing {PropertyName}"");")}
                         if (value.HasValue)
                         {{
                             var copy = value.Value;
-                            copy.LazinatorParents = new LazinatorParentsCollection(this);{CodeStringBuilder.GetNextLocationString()}
+                            copy.LazinatorParents = new LazinatorParentsCollection(this, null);{CodeStringBuilder.GetNextLocationString()}
                             value = copy;
                         }}
                     ")}
                         ";
                 else
                     propertyTypeDependentSet = $@"{IIF(ContainerIsClass, $@"
-                        value.LazinatorParents = new LazinatorParentsCollection(this);")}{CodeStringBuilder.GetNextLocationString()}
+                        value.LazinatorParents = new LazinatorParentsCollection(this, null);")}{CodeStringBuilder.GetNextLocationString()}
                         ";
             }
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
@@ -1280,7 +1280,7 @@ TabbedText.WriteLine($""Accessing {PropertyName}"");")}
                     propertyTypeDependentSet = $@"
                         if (value != null && value.IsStruct){CodeStringBuilder.GetNextLocationString()}
                         {{{IIF(ContainerIsClass, $@"
-                            value.LazinatorParents = new LazinatorParentsCollection(this);")}{CodeStringBuilder.GetNextLocationString()}
+                            value.LazinatorParents = new LazinatorParentsCollection(this, null);")}{CodeStringBuilder.GetNextLocationString()}
                         }}
                         else
                         {{
@@ -1308,12 +1308,12 @@ TabbedText.WriteLine($""Accessing {PropertyName}"");")}
                                         {BackingDirtyFieldString} = true; ")}";
             if (IsLazinatorStruct)
                 createDefault = $@"{BackingFieldString}{DefaultInitializationIfPossible(AppropriatelyQualifiedTypeName)};{IIF(ContainerIsClass && PropertyType != LazinatorPropertyType.LazinatorStructNullable && (!IsDefinitelyStruct || !Nullable), $@"
-                                {BackingFieldString}.LazinatorParents = new LazinatorParentsCollection(this);")}{CodeStringBuilder.GetNextLocationString()}";
+                                {BackingFieldString}.LazinatorParents = new LazinatorParentsCollection(this, null);")}{CodeStringBuilder.GetNextLocationString()}";
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
                 createDefault = $@"{BackingFieldString}{DefaultInitializationIfPossible(AppropriatelyQualifiedTypeName)};{IIF(ContainerIsClass, $@"
                                 if ({BackingFieldString} != null)
                                 {{ // {PropertyName} is a struct
-                                    {BackingFieldString}.LazinatorParents = new LazinatorParentsCollection(this);{CodeStringBuilder.GetNextLocationString()}
+                                    {BackingFieldString}.LazinatorParents = new LazinatorParentsCollection(this, null);{CodeStringBuilder.GetNextLocationString()}
                                 }}{IfInitializationRequiredAddElseThrow}")}";
             return createDefault;
         }
@@ -1402,7 +1402,7 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
                         else ";
             string lazinatorParentClassSet = ContainingObjectDescription.ObjectType == LazinatorObjectType.Struct || ContainingObjectDescription.GeneratingRefStruct ? "" : $@"
                             {{
-                                LazinatorParents = new LazinatorParentsCollection(this){CodeStringBuilder.GetNextLocationString()}
+                                LazinatorParents = new LazinatorParentsCollection(this, null){CodeStringBuilder.GetNextLocationString()}
                             }}";
 
             string doCreation = $@"{BackingFieldString} = new {AppropriatelyQualifiedTypeNameWithoutNullableIndicator}({ConstructorInitializationWithChildData}){lazinatorParentClassSet};

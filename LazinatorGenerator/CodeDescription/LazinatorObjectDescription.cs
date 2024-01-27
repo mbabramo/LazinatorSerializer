@@ -1768,7 +1768,7 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
                                 LazinatorObjectVersion = (int) lazinatorObjectVersion;
                             }}
                             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
-                            LazinatorParents = new LazinatorParentsCollection(parent);
+                            LazinatorParents = new LazinatorParentsCollection(parent, null);
                             DeserializeLazinator(serializedBytes);
                             HasChanged = false;
                             DescendantHasChanged = false;")}{lazinateInSecondConstructor}
