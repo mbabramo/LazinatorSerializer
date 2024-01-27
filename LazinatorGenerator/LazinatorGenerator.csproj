@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<Version>0.1.0.403</Version>
+		<Version>0.1.0.404</Version>
 		<VersionSuffix>alpha</VersionSuffix>
 		<IncludeSymbols>true</IncludeSymbols>
 		<IncludeSource>true</IncludeSource>
@@ -11,31 +11,30 @@
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 	</PropertyGroup>
-	
-  <PropertyGroup>
-    <!-- 👇 Source generators must target netstandard 2.0 -->
-    <TargetFramework>netstandard2.0</TargetFramework> 
-    <!-- 👇 We don't want to reference the source generator dll directly in consuming projects -->
-    <IncludeBuildOutput>false</IncludeBuildOutput>
-	<IsRoslynComponent>true</IsRoslynComponent>
-	<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
-    <ImplicitUsings>true</ImplicitUsings>
-    <LangVersion>12.0</LangVersion>
-  </PropertyGroup>
 
-  <!-- The following libraries include the source generator interfaces and types we need -->
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all" />
-    	  <PackageReference Include="Microsoft.CodeAnalysis" Version="4.8.0" PrivateAssets="all" />
-	  <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" PrivateAssets="all" />
-	  <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.8.0" PrivateAssets="all" />
-	  <PackageReference Include="System.Reflection.TypeExtensions" Version="4.7.0"  />
-	  <PackageReference Update="NETStandard.Library" PrivateAssets="all" />
-  </ItemGroup>
+	<PropertyGroup>
+		<!-- 👇 Source generators must target netstandard 2.0 -->
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<!-- 👇 We don't want to reference the source generator dll directly in consuming projects -->
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+		<IsRoslynComponent>true</IsRoslynComponent>
+		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+		<ImplicitUsings>true</ImplicitUsings>
+		<LangVersion>12.0</LangVersion>
+	</PropertyGroup>
 
-  <!-- This ensures the library will be packaged as a source generator when we use `dotnet pack` -->
-  <ItemGroup>
-    <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-  </ItemGroup>
-</Project>  
-	
+	<!-- The following libraries include the source generator interfaces and types we need -->
+	<ItemGroup>
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis" Version="4.8.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.8.0" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.8.0" PrivateAssets="all" />
+		<PackageReference Include="System.Reflection.TypeExtensions" Version="4.7.0"  />
+		<PackageReference Update="NETStandard.Library" PrivateAssets="all" />
+	</ItemGroup>
+
+	<!-- This ensures the library will be packaged as a source generator when we use `dotnet pack` -->
+	<ItemGroup>
+		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+	</ItemGroup>
+</Project>

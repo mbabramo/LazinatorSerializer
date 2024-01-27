@@ -11,7 +11,7 @@ namespace ProjectForDebuggingGenerator
         async static Task Main(string[] args)
         {
             MyLazinator myLazinator = new MyLazinator();
-            Debug.WriteLine($"Nullable mode: {myLazinator.DEBUGNullable}");
+            Debug.WriteLine($"Nullable mode: {myLazinator.IsNullableContext}");
             //myLazinator.MyInt = 5;
             myLazinator.MyLazinatorList = new LazinatorList<WInt32>() { 1, 2, 3 };
             myLazinator.MyList = new List<int>() { 4, 5 };
