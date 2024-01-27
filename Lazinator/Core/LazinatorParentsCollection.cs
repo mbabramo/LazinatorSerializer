@@ -82,8 +82,9 @@ namespace Lazinator.Core
         /// </summary>
         public int Count => SingleParent != null ? 1 : ((LastAddedReference == null ? 0 : 1) + (OtherParents?.Count() ?? 0));
 
-        public LazinatorParentsCollection(ILazinator singleParent)
+        public LazinatorParentsCollection(ILazinator singleParent, bool b, bool b2) // DEBUG
         {
+            throw new Exception("DEBUG");
             SingleParent = singleParent;
         }
 
