@@ -1234,7 +1234,26 @@ TabbedText.WriteLine($""Accessing {PropertyName}"");")}
                 {
                     if (ContainingObjectDescription.IsSingleParent)
                     {
-
+                        if (Nullable)
+                            propertyTypeDependentSet = $@"
+                                if ({BackingFieldString} != null)
+                                {{
+                                    {BackingFieldString}.LazinatorParents = new LazinatorParentsCollection(null);
+                                }}
+                                if (value != null)
+                                {{
+                                    value.LazinatorParents = new LazinatorParentsCollection(this);
+                                }}
+                                ";
+                        else
+                            propertyTypeDependentSet = $@"
+                                _ = value ?? throw new ArgumentNullException(nameof(value));
+                                if ({BackingFieldString} != null)
+                                {{
+                                    {BackingFieldString}.LazinatorParents = new LazinatorParentsCollection(null);
+                                }}
+                                value.LazinatorParents = new LazinatorParentsCollection(this);
+                                ";
                     }
                     else
                     {
@@ -1271,14 +1290,14 @@ TabbedText.WriteLine($""Accessing {PropertyName}"");")}
                         if (value.HasValue)
                         {{
                             var copy = value.Value;
-                            copy.LazinatorParents = new LazinatorParentsCollection(this, null);{CodeStringBuilder.GetNextLocationString()}
+                            copy.LazinatorParents = new LazinatorParentsCollection(this);{CodeStringBuilder.GetNextLocationString()}
                             value = copy;
                         }}
                     ")}
                         ";
                 else
                     propertyTypeDependentSet = $@"{IIF(ContainerIsClass, $@"
-                        value.LazinatorParents = new LazinatorParentsCollection(this, null);")}{CodeStringBuilder.GetNextLocationString()}
+                        value.LazinatorParents = new LazinatorParentsCollection(this);")}{CodeStringBuilder.GetNextLocationString()}
                         ";
             }
             else if (PropertyType == LazinatorPropertyType.OpenGenericParameter)
