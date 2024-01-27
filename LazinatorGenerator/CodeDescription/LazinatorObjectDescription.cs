@@ -309,7 +309,11 @@ namespace Lazinator.CodeDescription
             GenerateRefStructIfNotGenerating = InterfaceTypeSymbol.HasAttributeOfType<CloneGenerateRefStructAttribute>();
             Hash = ImplementingTypeInfo.InterfaceTextHash.ContainsKey(LazinatorImplementingTypeInfo.TypeSymbolToString(interfaceTypeSymbol)) ? ImplementingTypeInfo.InterfaceTextHash[LazinatorImplementingTypeInfo.TypeSymbolToString(interfaceTypeSymbol)] : default;
             var projectNullableContextOptions = compilation.Compilation.Options.NullableContextOptions;
-            NullableModeEnabled = projectNullableContextOptions.AnnotationsEnabled();
+
+            if (InterfaceTypeSymbol.HasAttributeOfType<CloneNullableContextSettingAttribute>())
+                NullableModeEnabled = InterfaceTypeSymbol.GetKnownAttribute<CloneNullableContextSettingAttribute>().Enabled;
+            else
+                NullableModeEnabled = projectNullableContextOptions.AnnotationsEnabled();
             ExclusiveInterface = new ExclusiveInterfaceDescription(compilation.Compilation, interfaceTypeSymbol, NullableModeEnabled, this);
             if (ExclusiveInterface.GenericArgumentNames.Any())
                 HandleGenerics(iLazinatorTypeSymbol);
