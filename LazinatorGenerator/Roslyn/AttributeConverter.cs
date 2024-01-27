@@ -49,6 +49,11 @@ namespace LazinatorCodeGen.Roslyn
                     if (writeMethod != null && !(writeMethod is string))
                         return null;
                     return new ClonePlaceholderMemoryAttribute((string)writeMethod);
+                case "NullableContextSettingAttribute":
+                    var enabled = attributeData.GetAttributeConstructorValueByParameterName("enabled");
+                    if (enabled != null && !(enabled is bool))
+                        return null;
+                    return new CloneNullableContextSettingAttribute((bool)enabled);
                 case "ImplementsAttribute":
                     var implemented = attributeData.GetAttributeConstructorValuesByParameterName("implemented");
                     if (implemented != null && implemented.Any(x => !(x is string)))
