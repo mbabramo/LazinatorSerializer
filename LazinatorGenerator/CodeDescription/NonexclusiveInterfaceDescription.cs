@@ -17,10 +17,9 @@ namespace Lazinator.CodeDescription
 
         }
 
-        public NonexclusiveInterfaceDescription(LazinatorImplementingTypeInfo implementingTypeInfo, INamedTypeSymbol t, NullableContext nullableContextSetting, LazinatorObjectDescription container)
+        public NonexclusiveInterfaceDescription(LazinatorImplementingTypeInfo implementingTypeInfo, INamedTypeSymbol t, LazinatorObjectDescription container)
         {
             string typeName = LazinatorImplementingTypeInfo.TypeSymbolToString(t);
-            NullableContextSetting = nullableContextSetting;
             if (!implementingTypeInfo.NonexclusiveInterfaces.Contains(typeName))
                 throw new LazinatorCodeGenException("NonexclusiveLazinator must be applied to a nonexclusive interface.");
             Container = container;
@@ -29,7 +28,7 @@ namespace Lazinator.CodeDescription
                 throw new LazinatorCodeGenException("Expected NonexclusiveLazinator attribute.");
             if (implementingTypeInfo.PropertiesForType.ContainsKey(typeName))
             {
-                Properties = implementingTypeInfo.PropertiesForType[typeName].Select(x => new PropertyDescription(x.Property, container, NullableContextSetting, null, null, false)).ToList();
+                Properties = implementingTypeInfo.PropertiesForType[typeName].Select(x => new PropertyDescription(x.Property, container, null, null, false)).ToList();
             }
         }
     }

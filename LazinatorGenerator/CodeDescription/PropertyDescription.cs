@@ -37,14 +37,11 @@ namespace Lazinator.CodeDescription
         internal bool GenericConstrainedToStruct => (Symbol is ITypeParameterSymbol typeParameterSymbol && typeParameterSymbol.HasValueTypeConstraint) || (PropertyType == LazinatorPropertyType.OpenGenericParameter && Symbol.IsValueType);
         internal string DerivationKeyword { get; set; }
         private bool IsAbstract { get; set; }
-        public NullableContext NullableContextSetting { get; set; }
-        public bool NullableModeEnabled => NullableContextSetting.AnnotationsEnabled(); // we care about whether we are annotating our code (and should then strive to avoid warnings)
-        public bool NullableModeInherited => NullableContextSetting.AnnotationsInherited();
+        public bool NullableModeEnabled => ContainingObjectDescription.NullableModeEnabled;
         public string QuestionMarkIfOutputNullableModeEnabled => OutputNullableModeEnabled ? "?" : "";
         public string QuestionMarkIfNullableAndNullableModeEnabled => Nullable && NullableModeEnabled ? "?" : "";
-        public NullableContext OutputNullableContextSetting { get; set; }
-        public bool OutputNullableModeEnabled => OutputNullableContextSetting.AnnotationsEnabled(); // TODO && NullableContextSetting.AnnotationsEnabled();
-        public bool OutputNullableModeInherited => OutputNullableContextSetting.AnnotationsInherited(); // TODO annotations
+        public bool OutputNullableModeEnabled => NullableModeEnabled;
+        public bool OutputNullableModeInherited => NullableModeEnabled;
         public string OutputQuestionMarkIfNullableModeEnabled => OutputNullableModeEnabled ? "?" : "";
         public string OutputQuestionMarkIfNullableAndNullableModeEnabled => Nullable && OutputNullableModeEnabled ? "?" : "";
 
@@ -328,12 +325,11 @@ namespace Lazinator.CodeDescription
 
         }
 
-        public PropertyDescription(IPropertySymbol propertySymbol, LazinatorObjectDescription container, NullableContext nullableContextSetting, string derivationKeyword, string propertyAccessibility, bool isLast)
+        public PropertyDescription(IPropertySymbol propertySymbol, LazinatorObjectDescription container, string derivationKeyword, string propertyAccessibility, bool isLast)
         {
             PropertySymbol = propertySymbol;
             IsAbstract = PropertySymbol.Type.IsAbstract;
             ContainingObjectDescription = container;
-            NullableContextSetting = OutputNullableContextSetting = nullableContextSetting;
             PropertyName = propertySymbol.Name;
             DerivationKeyword = derivationKeyword;
             PropertyAccessibility = propertyAccessibility;
@@ -359,13 +355,11 @@ namespace Lazinator.CodeDescription
         }
 
 
-        public PropertyDescription(ITypeSymbol typeSymbol, LazinatorObjectDescription containingObjectDescription, NullableContext nullableContextSetting, NullableContext outputNullableContextSetting, PropertyDescription containingPropertyDescription, string propertyName = null)
+        public PropertyDescription(ITypeSymbol typeSymbol, LazinatorObjectDescription containingObjectDescription, PropertyDescription containingPropertyDescription, string propertyName = null)
         {
             // This is only used for defining the type on the inside of the generics, plus underlying type for arrays.
             TypeSymbolIfNoProperty = typeSymbol;
             ContainingObjectDescription = containingObjectDescription;
-            NullableContextSetting = nullableContextSetting;
-            OutputNullableContextSetting = outputNullableContextSetting;
             ContainingPropertyDescription = containingPropertyDescription;
             PropertyName = propertyName;
             IsAbstract = typeSymbol.IsAbstract;
@@ -769,7 +763,7 @@ namespace Lazinator.CodeDescription
             PropertyType = LazinatorPropertyType.SupportedCollection;
             InnerProperties = new List<PropertyDescription>()
             {
-                new PropertyDescription(t.ElementType, ContainingObjectDescription, NullableContextSetting /* whether this is nullable depends on the declaring property */, NullableContextSetting, this)
+                new PropertyDescription(t.ElementType, ContainingObjectDescription, this)
             };
         }
 
@@ -844,7 +838,7 @@ namespace Lazinator.CodeDescription
             if (recordLikeType.Any(x => x.parameterSymbol == null))
                 InitializeRecordLikeTypePropertiesDirectly = true;
             InnerProperties = recordLikeType
-                .Select(x => GetPropertyDescriptionForPropertyDefinedElsewhere(x.property.Type, ContainingObjectDescription, this, x.property.Name, (((ISymbol)x.parameterSymbol ?? (ISymbol)x.property)).GetNullableContextForSymbol(Compilation), OutputNullableContextSetting)).ToList();
+                .Select(x => GetPropertyDescriptionForPropertyDefinedElsewhere(x.property.Type, ContainingObjectDescription, this, x.property.Name)).ToList();
             return true;
         }
 
@@ -866,14 +860,14 @@ namespace Lazinator.CodeDescription
             }
         }
 
-        public PropertyDescription GetPropertyDescriptionForPropertyDefinedElsewhere(ITypeSymbol typeSymbol, LazinatorObjectDescription containingObjectDescription, PropertyDescription containingPropertyDescription, string propertyName, NullableContext nullableContextSetting, NullableContext outputNullableContextSetting)
+        public PropertyDescription GetPropertyDescriptionForPropertyDefinedElsewhere(ITypeSymbol typeSymbol, LazinatorObjectDescription containingObjectDescription, PropertyDescription containingPropertyDescription, string propertyName)
         {
             // see if the property has already been defined (in case this is a recursive hierarchy)
             foreach (PropertyDescription pd in ContainingPropertyHierarchy())
                 if (SymbolEqualityComparer.Default.Equals(pd.TypeSymbolIfNoProperty, typeSymbol))
                     throw new LazinatorCodeGenException($"The type {typeSymbol} is recursively defined. Recursive record-like types are not supported by Lazinator.");
             // If the typeSymbol is "string" and the nullable context is disabled, then it should actually be nullable. 
-            return new PropertyDescription(typeSymbol, containingObjectDescription, nullableContextSetting, outputNullableContextSetting, containingPropertyDescription, propertyName);
+            return new PropertyDescription(typeSymbol, containingObjectDescription, containingPropertyDescription, propertyName);
         }
 
         private void CheckSupportedTuples(string nameWithoutArity)
@@ -921,7 +915,7 @@ namespace Lazinator.CodeDescription
         private void SetInnerProperties(ImmutableArray<ITypeSymbol> typeArguments)
         {
             InnerProperties = typeArguments
-                            .Select(x => new PropertyDescription(x, ContainingObjectDescription, NullableContextSetting, NullableContextSetting, this)).ToList();
+                            .Select(x => new PropertyDescription(x, ContainingObjectDescription, this)).ToList();
         }
 
         public IEnumerable<PropertyDescription> PropertyAndInnerProperties()
@@ -1015,7 +1009,7 @@ namespace Lazinator.CodeDescription
         private void SetSupportedCollectionInnerProperties(INamedTypeSymbol t)
         {
             InnerProperties = t.TypeArguments
-                            .Select(x => new PropertyDescription(x, ContainingObjectDescription, NullableContextSetting, NullableContextSetting, this)).ToList();
+                            .Select(x => new PropertyDescription(x, ContainingObjectDescription, this)).ToList();
 
             if (SupportedCollectionType == LazinatorSupportedCollectionType.Memory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlyMemory || SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan)
             {
@@ -1029,7 +1023,7 @@ namespace Lazinator.CodeDescription
                 if (keyValuePairType == null)
                     keyValuePairType = Compilation.GetTypeByMetadataName(typeof(KeyValuePair<,>).FullName);
                 INamedTypeSymbol constructed = keyValuePairType.Construct(t.TypeArguments.ToArray());
-                var replacementInnerProperty = new PropertyDescription(constructed, ContainingObjectDescription, NullableContextSetting, NullableContextSetting, this); // new PropertyDescription("System.Collections.Generic", "KeyValuePair", t.TypeArguments, ContainingObjectDescription);
+                var replacementInnerProperty = new PropertyDescription(constructed, ContainingObjectDescription, this); // new PropertyDescription("System.Collections.Generic", "KeyValuePair", t.TypeArguments, ContainingObjectDescription);
                 InnerProperties = new List<PropertyDescription>() { replacementInnerProperty };
             }
         }

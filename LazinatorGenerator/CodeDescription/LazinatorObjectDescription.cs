@@ -31,13 +31,11 @@ namespace Lazinator.CodeDescription
 
         /* Nullable context */
         public NullableContext NullableContextSetting { get; set; }
-        public bool NullableModeEnabled => NullableContextSetting.AnnotationsEnabled();
-        public bool NullableModeInherited => NullableContextSetting.AnnotationsInherited();
-        public bool AlwaysSpecifyNullableMode => true; // DEBUG -- could eliminate this and next couple of lines, as well as NullableModeInherited.
-        public string NullableModeSettingString => NullableModeInherited && !AlwaysSpecifyNullableMode ? "" : (NullableModeEnabled ? $@"
+        public bool NullableModeEnabled { get; set; }
+        public string NullableModeSettingString => NullableModeEnabled ? $@"
             #nullable enable" : $@"
-            #nullable disable");
-        public string NullableModeRestoreString => NullableModeInherited && !AlwaysSpecifyNullableMode ? "" : $@"
+            #nullable disable";
+        public string NullableModeRestoreString => NullableModeEnabled ? "" : $@"
             #nullable restore";
 
         public string DEBUGNullableModeLookupMethod => NullableModeEnabled ? $"public {DerivationKeyword}bool IsNullableContext => true;" : $"public {DerivationKeyword}bool IsNullableContext => false;"; // must delete this once we solve the mystery of why nullable context is sometimes changing.
@@ -310,14 +308,15 @@ namespace Lazinator.CodeDescription
             SuppressLazinatorVersionByte = InterfaceTypeSymbol.HasAttributeOfType<CloneExcludeLazinatorVersionByteAttribute>();
             GenerateRefStructIfNotGenerating = InterfaceTypeSymbol.HasAttributeOfType<CloneGenerateRefStructAttribute>();
             Hash = ImplementingTypeInfo.InterfaceTextHash.ContainsKey(LazinatorImplementingTypeInfo.TypeSymbolToString(interfaceTypeSymbol)) ? ImplementingTypeInfo.InterfaceTextHash[LazinatorImplementingTypeInfo.TypeSymbolToString(interfaceTypeSymbol)] : default;
-            NullableContextSetting = interfaceTypeSymbol.GetNullableContextForSymbol(ImplementingTypeInfo.Compilation);
-            ExclusiveInterface = new ExclusiveInterfaceDescription(compilation.Compilation, interfaceTypeSymbol, NullableContextSetting, this);
+            var projectNullableContextOptions = compilation.Compilation.Options.NullableContextOptions;
+            NullableModeEnabled = projectNullableContextOptions.AnnotationsEnabled();
+            ExclusiveInterface = new ExclusiveInterfaceDescription(compilation.Compilation, interfaceTypeSymbol, NullableModeEnabled, this);
             if (ExclusiveInterface.GenericArgumentNames.Any())
                 HandleGenerics(iLazinatorTypeSymbol);
             var nonexclusiveInterfaces = iLazinatorTypeSymbol.AllInterfaces
                                 .Where(x => ImplementingTypeInfo.ContainsAttributeOfType<CloneNonexclusiveLazinatorAttribute>(x));
             NonexclusiveInterfaces = nonexclusiveInterfaces
-                .Select(x => new NonexclusiveInterfaceDescription(ImplementingTypeInfo, x, NullableContextSetting, this)).ToList(); 
+                .Select(x => new NonexclusiveInterfaceDescription(ImplementingTypeInfo, x, this)).ToList(); 
         }
 
         private void CheckForInconsistentLengthAttributes()

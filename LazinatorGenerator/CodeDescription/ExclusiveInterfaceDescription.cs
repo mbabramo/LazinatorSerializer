@@ -20,7 +20,7 @@ namespace Lazinator.CodeDescription
         public List<PropertyDescription> PropertiesToDefineThisLevel;
         public List<PropertyDescription> PropertiesInherited;
         public List<string> GenericArgumentNames;
-        public NullableContext NullableContextSetting;
+        public bool NullableModeEnabled;
         public int TotalNumProperties;
         public bool AutoChangeParentAll;
         public bool IsUnofficialInterface;
@@ -31,11 +31,11 @@ namespace Lazinator.CodeDescription
 
         }
 
-        public ExclusiveInterfaceDescription(Compilation compilation, INamedTypeSymbol t, NullableContext nullableContextSetting, LazinatorObjectDescription container, bool isUnofficialInterface = false)
+        public ExclusiveInterfaceDescription(Compilation compilation, INamedTypeSymbol t, bool nullableModeEnabled, LazinatorObjectDescription container, bool isUnofficialInterface = false)
         {
             Compilation = compilation;
             NamedTypeSymbol = t;
-            NullableContextSetting = nullableContextSetting;
+            NullableModeEnabled = nullableModeEnabled;
             IsUnofficialInterface = isUnofficialInterface;
             Container = container;
             var lazinatorAttribute = Container.ImplementingTypeInfo.GetFirstAttributeOfType<CloneLazinatorAttribute>(t);
@@ -65,7 +65,7 @@ namespace Lazinator.CodeDescription
                     throw new LazinatorCodeGenException(
                         $"Unofficial type {a.OtherInterfaceFullyQualifiedTypeName} must exist and have a Lazinator attribute.");
                 var containerToUse = Container.GetBaseLazinatorObjects().LastOrDefault(x => x.InterfaceTypeSymbol != null && x.InterfaceTypeSymbol.GetKnownAttribute<CloneUnofficiallyIncorporateInterfaceAttribute>()?.OtherInterfaceFullyQualifiedTypeName == a.OtherInterfaceFullyQualifiedTypeName) ?? Container;
-                ExclusiveInterfaceDescription d = new ExclusiveInterfaceDescription(Container.ImplementingTypeInfo.Compilation, namedInterfaceType, NullableContextSetting, containerToUse, true);
+                ExclusiveInterfaceDescription d = new ExclusiveInterfaceDescription(Container.ImplementingTypeInfo.Compilation, namedInterfaceType, NullableModeEnabled, containerToUse, true);
                 foreach (var property in d.PropertiesToDefineThisLevel)
                 {
                     property.PropertyAccessibility = a.Accessibility;
@@ -110,14 +110,8 @@ namespace Lazinator.CodeDescription
                         propertiesWithLevel.Add(new PropertyWithDefinitionInfo(unofficialProperty.PropertySymbol, PropertyWithDefinitionInfo.Level.IsDefinedLowerLevelButNotInInterface) { DerivationKeyword = "override ", PropertyAccessibility = unofficialProperty.PropertyAccessibility });
                 }
             }
-            // TODO: Creating the error in the code below seems to occasionally cause tests to fail, because Roslyn produces inaccurate information about the nullability context. This seems to happen only when tests are being run in parallel, so perhaps there is something thread-unsafe in my code that is causing the nullability errors. I have not been able to find it. 
-            var firstProblem = propertiesWithLevel.FirstOrDefault(x => !RoslynHelpers.ParentAndChildShareNullabilityContext(NullableContextSetting, x.Property.GetNullableContextForSymbol(Compilation, true)));
-            if (firstProblem != null)
-            {
-                //throw new LazinatorCodeGenException($"Lazinator requires properties of an interface to have the same nullability context as the interface itself. {NamedTypeSymbol} has nullability context {NullableContextSetting} while {firstProblem.Property} has nullability context {firstProblem.Property.GetNullableContextForSymbol(Compilation, true)}");
-            }
 
-            var orderedPropertiesWithLevel = propertiesWithLevel.Select(x => new { propertyWithLevel = x, description = new PropertyDescription(x.Property, Container, NullableContextSetting, x.DerivationKeyword, x.PropertyAccessibility, false) })
+            var orderedPropertiesWithLevel = propertiesWithLevel.Select(x => new { propertyWithLevel = x, description = new PropertyDescription(x.Property, Container, x.DerivationKeyword, x.PropertyAccessibility, false) })
                 .OrderByDescending(x => x.description.PropertyType == LazinatorPropertyType.PrimitiveType || x.description.PropertyType == LazinatorPropertyType.PrimitiveTypeNullable) // primitive properties are always first (but will only be redefined if defined abstractly below)
                 .ThenBy(x => x.propertyWithLevel.LevelInfo == PropertyWithDefinitionInfo.Level.IsDefinedThisLevel)
                 .ThenBy(x => x.description.RelativeOrder)
