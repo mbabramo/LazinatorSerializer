@@ -13,6 +13,12 @@ namespace Lazinator.Core
     /// </summary>
     public readonly struct LazinatorParentsCollection
     {
+        /// <summary>
+        /// If a Lazinator can only have a single parent at one time (i.e., it can't be in multiple hierarchies),
+        /// then this will be set.
+        /// </summary>
+        private readonly ILazinator SingleParent;
+
         // A weak reference to the last parent added. Weak references are used so that when objects are removed from a 
         // hierarchy, we do not have a memory leak, with the previous parent's entire hierarchy unable to be garbage
         // collected. 
@@ -28,7 +34,7 @@ namespace Lazinator.Core
         /// The last Lazinator parent added. If the last added is subsequently removed, this will 
         /// be null, even if some other parents were added earlier.
         /// </summary>
-        public ILazinator LastAdded => GetWeakReferenceTargetOrNull(LastAddedReference);
+        public ILazinator LastAdded => SingleParent ?? GetWeakReferenceTargetOrNull(LastAddedReference);
 
         private ILazinator GetWeakReferenceTargetOrNull(WeakReference<ILazinator> weakLazinator)
         {
@@ -45,14 +51,16 @@ namespace Lazinator.Core
         /// <summary>
         /// Returns true if any parents exist in the collection and have not been garbage collected. Note that they might be garbage collected immediately after a call to this function.
         /// </summary>
-        public bool Any() => LastAdded != null || (OtherParents != null && OtherParents.Any());
+        public bool Any() => SingleParent != null || LastAdded != null || (OtherParents != null && OtherParents.Any());
 
         /// <summary>
         /// Returns true if any parents exist in the collection, have not been garbage collected, and meet the predicate. Note that they might be garbage collected immediately after a call to this function.
         /// </summary>
         public bool Any(Func<ILazinator, bool> predicate)
         {
-            if (LastAdded is ILazinator nonNull && predicate(nonNull))
+            if (SingleParent is ILazinator nonNull)
+                return predicate(nonNull);
+            if (LastAdded is ILazinator nonNull2 && predicate(nonNull2))
                 return true;
             if (OtherParents != null && OtherParents.Any(x => x.parent != null && x.parent.TryGetTarget(out ILazinator stillExisting) && predicate(stillExisting)))
                 return true;
@@ -72,7 +80,12 @@ namespace Lazinator.Core
         /// <summary>
         /// The number of parents stored (regardless of whether they have been garbage collected). A parent is counted only once even if stored more often.
         /// </summary>
-        public int Count => (LastAddedReference == null ? 0 : 1) + (OtherParents?.Count() ?? 0);
+        public int Count => SingleParent != null ? 1 : ((LastAddedReference == null ? 0 : 1) + (OtherParents?.Count() ?? 0));
+
+        public LazinatorParentsCollection(ILazinator singleParent)
+        {
+            SingleParent = singleParent;
+        }
 
         public LazinatorParentsCollection(ILazinator lastAdded, LinkedList<(WeakReference<ILazinator> parent, int count)> otherParents = null)
         {
@@ -91,6 +104,15 @@ namespace Lazinator.Core
         public T GetSoleParentOfType<T>() where T : class, ILazinator
         {
             T found = null;
+            if (SingleParent != null)
+            {
+                if (SingleParent is T ofCorrectedType)
+                {
+                    found = ofCorrectedType;
+                    return found;
+                }
+                return null;
+            }
             if (LastAdded != null)
                 if (LastAdded is T ofCorrectType)
                     found = ofCorrectType;
@@ -221,6 +243,11 @@ namespace Lazinator.Core
 
         public void InformParentsOfDirtiness()
         {
+            if (SingleParent != null)
+            {
+                SingleParent.DescendantIsDirty = true;
+                return;
+            }
             var lastAdded = LastAdded;
             if (lastAdded != null)
                 lastAdded.DescendantIsDirty = true;
@@ -235,6 +262,11 @@ namespace Lazinator.Core
 
         public IEnumerable<ILazinator> EnumerateParents()
         {
+            if (SingleParent != null)
+            {
+                yield return SingleParent;
+                yield break;
+            }
             var lastAdded = LastAdded;
             if (lastAdded != null)
                 yield return lastAdded;
