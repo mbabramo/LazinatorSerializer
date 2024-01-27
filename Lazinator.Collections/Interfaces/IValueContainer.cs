@@ -38,7 +38,7 @@ namespace Lazinator.Collections.Interfaces
         T Last();
         T LastOrDefault();
         /// <summary>
-        /// Finds the item in the sorted container, using the comparer. If the item is found, the exact location is returned. Otherwise,
+        /// Finds the item in a sorted container, using the comparer. If the item is found, the exact location is returned. Otherwise,
         /// the next location is returned (or null, if it would be after the end of the list).
         /// </summary>
         /// <param name="value"></param>
