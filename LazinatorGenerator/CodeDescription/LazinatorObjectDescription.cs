@@ -166,6 +166,7 @@ namespace Lazinator.CodeDescription
         public bool GeneratingRefStruct = false;
         public bool IncludeTracingCode => Config?.IncludeTracingCode ?? false;
         public bool StepThroughProperties => Config?.StepThroughProperties ?? true;
+        public bool HasSingleParent { get; set; }
         public bool NonbinaryHash => InterfaceTypeSymbol.HasAttributeOfType<CloneNonbinaryHashAttribute>();
         public int SizeOfLength { get; set; }
         public bool RequiresLongLengths => SizeOfLength == sizeof(long);
@@ -303,6 +304,7 @@ namespace Lazinator.CodeDescription
             if (sizeOfLengthAttribute != null)
                 SizeOfLength = sizeOfLengthAttribute.SizeOfLength;
 
+            HasSingleParent = InterfaceTypeSymbol.HasAttributeOfType<CloneHasSingleParentAttribute>();
             Splittable = InterfaceTypeSymbol.HasAttributeOfType<CloneSplittableAttribute>() || RequiresLongLengths;
             AllowNonlazinatorGenerics = InterfaceTypeSymbol.HasAttributeOfType<CloneAllowNonlazinatorOpenGenericsAttribute>();
             SuppressLazinatorVersionByte = InterfaceTypeSymbol.HasAttributeOfType<CloneExcludeLazinatorVersionByteAttribute>();
@@ -1768,7 +1770,7 @@ totalChildrenBytes = base.ConvertFromBytesForChildLengths(span, OriginalIncludeC
                                 LazinatorObjectVersion = (int) lazinatorObjectVersion;
                             }}
                             OriginalIncludeChildrenMode = originalIncludeChildrenMode;
-                            LazinatorParents = new LazinatorParentsCollection(parent, null);
+                            LazinatorParents = new LazinatorParentsCollection(parent{IIF(!HasSingleParent, ", null")});
                             DeserializeLazinator(serializedBytes);
                             HasChanged = false;
                             DescendantHasChanged = false;")}{lazinateInSecondConstructor}
