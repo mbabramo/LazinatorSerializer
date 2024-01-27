@@ -102,5 +102,6 @@
         EightByteLengthsContainer,
         TwoByteLengthsContainer,
         NullableEnabledContextWithParameterlessConstructor,
+        SingleParentClass,
     }
 }

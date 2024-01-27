@@ -17,6 +17,7 @@ using LazinatorTests.Examples.Tuples;
 using LazinatorTests.Utilities;
 using System.Threading.Tasks;
 using System.Buffers;
+using LazinatorTests.Examples.ExampleHierarchy;
 
 namespace LazinatorTests.Tests
 {
@@ -970,6 +971,44 @@ namespace LazinatorTests.Tests
             uint h = e.MyChild1.MyExampleGrandchild.GetBinaryHashCode32();
             uint h2 = (new ExampleGrandchild() { MyInt = 17 }).GetBinaryHashCode32();
             h.Should().Be(h2);
+        }
+
+        [Fact]
+        public void SingleParentAttributeWorks()
+        {
+            SingleParentClass s = new SingleParentClass();
+            s.SomeLazinator = new LazinatorList<WInt16>(); // doesn't matter what the child is
+
+            // with new objects (here, clones), DescendantIsDirty works
+            var s2 = s.CloneLazinatorTyped();
+            var s3 = s.CloneLazinatorTyped();
+            s2.DescendantIsDirty.Should().BeFalse();
+            s3.DescendantIsDirty.Should().BeFalse();
+            s2.SomeLazinator.Add(10); // add a value
+            s2.DescendantIsDirty.Should().BeTrue();
+            s3.DescendantIsDirty.Should().BeFalse();
+
+            // Descendant is dirty works with new list
+            s2 = s.CloneLazinatorTyped();
+            LazinatorList<WInt16> anotherList = new LazinatorList<WInt16>() { 17, 18 };
+            anotherList.LazinatorParents.Any().Should().BeFalse();
+            s2.DescendantIsDirty.Should().BeFalse();
+            s2.SomeLazinator = anotherList;
+            s2.IsDirty.Should().BeTrue();
+            s2.DescendantIsDirty.Should().BeTrue();
+            s2.SomeLazinator.Add(19);
+            s2.DescendantIsDirty.Should().BeTrue();
+
+            // Descendant is dirty not triggered when child is copied into another
+            s2 = s.CloneLazinatorTyped();
+            s3 = s.CloneLazinatorTyped();
+            s2.DescendantIsDirty.Should().BeFalse();
+            var someLazinator = s3.SomeLazinator;
+            s2.SomeLazinator = someLazinator; // could also just assign s3.SomeLazinator directly, but this highlights where users may get into trouble.
+            s2.IsDirty.Should().BeTrue();
+            s2.DescendantIsDirty.Should().BeTrue();
+            s2.SomeLazinator.Add(19);
+            s3.DescendantIsDirty.Should().BeFalse(); // this is the result that could cause confusion -- once we use SingleParentAttribute, the original parent is not notified of changes.
         }
     }
 }
