@@ -967,7 +967,7 @@ namespace Lazinator.CodeDescription
                         sb.Append($@"
                             {MaybeAsyncAndNot_Begin}public override {MaybeIAsyncEnumerable}<(string propertyName, {ILazinatorString} descendant)> EnumerateLazinatorDescendants{MaybeAsyncWord}(Func<{ILazinatorString}, bool>{QuestionMarkIfNullableModeEnabled} matchCriterion, bool stopExploringBelowMatch, Func<{ILazinatorString}, bool>{QuestionMarkIfNullableModeEnabled} exploreCriterion, bool exploreOnlyDeserializedChildren, bool enumerateNulls)
                             {{
-                                {MaybeAwaitWord}foreach (var inheritedYield in {MaybeAwaitWord}base.EnumerateLazinatorDescendants{MaybeAsyncWord}(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
+                                {MaybeAwaitWord}foreach (var inheritedYield in base.EnumerateLazinatorDescendants{MaybeAsyncWord}(matchCriterion, stopExploringBelowMatch, exploreCriterion, exploreOnlyDeserializedChildren, enumerateNulls))
                                 {{
                                     yield return inheritedYield;
                                 }}
@@ -1055,8 +1055,8 @@ namespace Lazinator.CodeDescription
             {
                 // Note: If this is the async version, we will actually call "await" only if there is a non-Lazinator child, since the non-Lazinator primitive properties can be returned without await.
                 // However, we always need the async word in this case, because we are returning IAsyncEnumerable. But this creates a problem: Warning CS1998 comes up if we don't call await.
-                // This seems to be a design flaw -- it should not be triggered in a virtual method. In this case, we need to suppress the warning.
-                bool suppressWarning = AsyncLazinatorMemory && (IsDerived || !IsSealed) && !PropertiesToDefineThisLevel.Any(x => !x.IsLazinator && x.PlaceholderMemoryWriteMethod == null && !x.IsPrimitive && !(x.PropertyType == LazinatorPropertyType.SupportedCollection && x.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan));
+                // This seems to be a design flaw -- it should not be triggered in a virtual method or in a method that implements an interface. In this case, we need to suppress the warning.
+                bool suppressWarning = AsyncLazinatorMemory && !PropertiesToDefineThisLevel.Any(x => !x.IsLazinator && x.PlaceholderMemoryWriteMethod == null && !x.IsPrimitive && !(x.PropertyType == LazinatorPropertyType.SupportedCollection && x.SupportedCollectionType == LazinatorSupportedCollectionType.ReadOnlySpan));
 
                 if (suppressWarning)
                     sb.Append($@"#pragma warning disable CS1998"); // this will appear before both async and non-async versions of method -- not ideal, but hard to work around
@@ -1067,7 +1067,7 @@ namespace Lazinator.CodeDescription
 
                         {MaybeAsyncAndNot_Begin}public override {MaybeIAsyncEnumerable}<(string propertyName, object{QuestionMarkIfNullableModeEnabled} descendant)> EnumerateNonLazinatorProperties{MaybeAsyncWord}()
                         {{
-                                foreach (var inheritedYield in {MaybeAwaitWord}base.EnumerateNonLazinatorProperties())
+                                {MaybeAwaitWord}foreach (var inheritedYield in base.EnumerateNonLazinatorProperties{MaybeAsyncWord}())
                                 {{
                                     yield return inheritedYield;
                                 }}
