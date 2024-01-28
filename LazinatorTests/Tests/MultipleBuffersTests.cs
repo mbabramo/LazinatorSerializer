@@ -859,7 +859,7 @@ namespace LazinatorTests.Tests
 
         private static string GetPathForIndexAndBlobs(bool useFile, bool binaryTree)
         {
-            string path = @"C:\Users\Admin\Desktop\testfolder";
+            string path = @"C:\testfolder";
             if (useFile && !System.IO.Directory.Exists(path))
                 return null; // ignore this error
             string fullPath = path + (binaryTree ? @"\binary-tree.fil" : @"\example.fil");
