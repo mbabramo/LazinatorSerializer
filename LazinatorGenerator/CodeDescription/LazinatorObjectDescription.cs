@@ -252,6 +252,10 @@ namespace Lazinator.CodeDescription
                 ObjectType = LazinatorObjectType.Class;
                 IsRecord = iLazinatorTypeSymbol.IsRecord();
                 IsAbstract = iLazinatorTypeSymbol.IsAbstract;
+                if (iLazinatorTypeSymbol.ToString().Contains("SealedClass"))
+                {
+                    var DEBUG = 0;
+                }
                 IsSealed = iLazinatorTypeSymbol.IsSealed;
             }
             else
@@ -1410,6 +1414,11 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 
         private void AppendWritePropertiesIntoBuffer(CodeStringBuilder sb)
         {
+            if (FullyQualifiedObjectName.Contains("SealedClass"))
+            {
+                var DEBUG = 0;
+            }
+
             if (ImplementsWritePropertiesIntoBuffer)
             {
                 sb.AppendLine($@"

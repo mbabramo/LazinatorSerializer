@@ -103,5 +103,6 @@
         TwoByteLengthsContainer,
         NullableEnabledContextWithParameterlessConstructor,
         SingleParentClass,
+        SealedClass,
     }
 }
