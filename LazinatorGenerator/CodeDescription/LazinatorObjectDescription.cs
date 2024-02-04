@@ -803,13 +803,17 @@ namespace Lazinator.CodeDescription
 
         private string GetCloneMethod()
         {
+            if (NameIncludingGenerics.Contains("AvlCountedNode") && NameIncludingGenerics.Contains("WDouble"))
+            {
+                var DEBUG = 0;
+            }
             if (GeneratingRefStruct)
                 return "";
             string parametersToFirstConstructor = "";
             var allPropertiesRequiringInitialization = ExclusiveInterface.PropertiesIncludingInherited.Where(x => x.NonNullableThatRequiresInitialization).ToList();
             if (allPropertiesRequiringInitialization.Any())
                 parametersToFirstConstructor = String.Join(", ", allPropertiesRequiringInitialization.Select(x => x.PropertyName)) + ", ";
-            return $@"{MaybeAsyncAndNot($@"public {DerivationKeyword}{MaybeAsyncReturnType($"{ILazinatorString}")} CloneLazinator{MaybeAsyncWord}(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
+            var result = $@"{MaybeAsyncAndNot($@"public {DerivationKeyword}{MaybeAsyncReturnType($"{ILazinatorString}")} CloneLazinator{MaybeAsyncWord}(IncludeChildrenMode includeChildrenMode = IncludeChildrenMode.IncludeAllChildren, CloneBufferOptions cloneBufferOptions = CloneBufferOptions.IndependentBuffers)
                         {{
                             {NameIncludingGenerics} clone;
                             if (cloneBufferOptions == CloneBufferOptions.NoBuffer)
@@ -835,6 +839,7 @@ namespace Lazinator.CodeDescription
                             typedClone.IsDirty = false;")}
                             return {MaybeAsyncReturnValue($"{MaybeAsyncConditional($"({ILazinatorString})", "")}typedClone")};
                         }}")}")}";
+            return result;
         }
 
 

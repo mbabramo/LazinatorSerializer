@@ -12,7 +12,7 @@ namespace LazinatorAvlCollections.Avl.ValueTree
     /// A counted node, keeping track of how many items are to the left and to the right of this one
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public sealed partial class AvlCountedNode<T> : IAvlCountedNode<T>, IIndexableNode<T, AvlCountedNode<T>>, ILazinator where T : ILazinator
+    public partial class AvlCountedNode<T> : IAvlCountedNode<T>, IIndexableNode<T, AvlCountedNode<T>>, ILazinator where T : ILazinator
     {
         public long SelfCount => 1;
         public long LongCount => LeftCount + SelfCount + RightCount;
