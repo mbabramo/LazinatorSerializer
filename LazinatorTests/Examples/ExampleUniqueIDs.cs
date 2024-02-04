@@ -104,5 +104,6 @@
         NullableEnabledContextWithParameterlessConstructor,
         SingleParentClass,
         SealedClass,
+        ClosedGenericSealed,
     }
 }

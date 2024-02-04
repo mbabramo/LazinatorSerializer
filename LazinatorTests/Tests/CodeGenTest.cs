@@ -313,6 +313,7 @@ public class MyOtherClass
             await CompleteGenerateCode(typeof(ClosedGenericWithoutBase), "LazinatorTests", "/Examples/", "NonAbstractGenerics/", ws);
             await CompleteGenerateCode(typeof(OpenGeneric<>), "LazinatorTests", "/Examples/", "NonAbstractGenerics/", ws);
             await CompleteGenerateCode(typeof(ClosedGeneric), "LazinatorTests", "/Examples/", "NonAbstractGenerics/", ws);
+            await CompleteGenerateCode(typeof(ClosedGenericSealed), "LazinatorTests", "/Examples/", "NonAbstractGenerics/", ws);
             await CompleteGenerateCode(typeof(ClosedGenericWithGeneric), "LazinatorTests", "/Examples/", "NonAbstractGenerics/", ws);
             await CompleteGenerateCode(typeof(InheritingClosedGeneric), "LazinatorTests", "/Examples/", "NonAbstractGenerics/", ws);
             await CompleteGenerateCode(typeof(OpenGenericStayingOpenContainer), "LazinatorTests", "/Examples/", "NonAbstractGenerics/", ws);

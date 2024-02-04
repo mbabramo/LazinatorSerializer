@@ -100,7 +100,7 @@ namespace Lazinator.CodeDescription
                 {
                     if (DerivationKeyword == "override ")
                     {
-                        return "protected override";
+                        return "protected override ";
                     }
                     else
                         return DerivationKeyword; // exclude "protected"
@@ -269,10 +269,6 @@ namespace Lazinator.CodeDescription
                 ObjectType = LazinatorObjectType.Class;
                 IsRecord = iLazinatorTypeSymbol.IsRecord();
                 IsAbstract = iLazinatorTypeSymbol.IsAbstract;
-                if (iLazinatorTypeSymbol.ToString().Contains("SealedClass"))
-                {
-                    var DEBUG = 0;
-                }
                 IsSealed = iLazinatorTypeSymbol.IsSealed;
             }
             else
@@ -830,10 +826,6 @@ namespace Lazinator.CodeDescription
 
         private string GetCloneMethod()
         {
-            if (NameIncludingGenerics.Contains("AvlCountedNode") && NameIncludingGenerics.Contains("WDouble"))
-            {
-                var DEBUG = 0;
-            }
             if (GeneratingRefStruct)
                 return "";
             string parametersToFirstConstructor = "";
@@ -1405,11 +1397,16 @@ namespace Lazinator.CodeDescription
 
         private void AppendUpdateDeserializedChildren(CodeStringBuilder sb)
         {
+
+            if (NameIncludingGenerics.Contains("AvlCountedNode") && NameIncludingGenerics.Contains("WDouble"))
+            {
+                var DEBUG = 0;
+            }
             // For now, we will not include an async method. But in case we change this, we still have the async code support.
             if (IsDerivedFromNonAbstractLazinator)
                 sb.AppendLine(
                     $@"
-                        {NotAsync_Begin}{ProtectedIfApplicable}override {MaybeAsyncReturnType("void")} UpdateDeserializedChildren{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, long startPosition)
+                        {NotAsync_Begin}{ProtectedIfApplicableWithDerivationKeyword}{MaybeAsyncReturnType("void")} UpdateDeserializedChildren{MaybeAsyncWord}({MaybeAsyncBufferWriterParameter} writer, long startPosition)
                         {{
                             {MaybeAwaitWord}base.UpdateDeserializedChildren{MaybeAsyncWord}({MaybeAsyncRefIfNot}writer, startPosition);");
             else
