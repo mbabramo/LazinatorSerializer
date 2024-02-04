@@ -98,7 +98,7 @@ namespace Lazinator.CodeDescription
             {
                 if (IsSealed)
                 {
-                    if (DerivationKeyword == "override")
+                    if (DerivationKeyword == "override ")
                     {
                         return "protected override";
                     }
