@@ -23,6 +23,7 @@ namespace LazinatorGenerator.Generator
         public void Initialize(IncrementalGeneratorInitializationContext 
 context)
         {
+
             // Set the DateTimeNowProvider if it has not been set. Simple alternative to dependency injection
             // when the actual generator is executed by Roslyn.
             if (DateTimeNowProvider == null)

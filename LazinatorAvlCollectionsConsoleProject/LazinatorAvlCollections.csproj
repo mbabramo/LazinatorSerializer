@@ -13,9 +13,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Lazinator" Version="0.1.0.408-alpha" />
-		<PackageReference Include="Lazinator.Collections" Version="0.1.0.408-alpha" />
-		<PackageReference Include="LazinatorGenerator" Version="0.1.0.408-alpha" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+		<PackageReference Include="Lazinator" Version="0.1.0.410-alpha" />
+		<PackageReference Include="Lazinator.Collections" Version="0.1.0.410-alpha" />
+		<PackageReference Include="LazinatorGenerator" Version="0.1.0.410-alpha" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -12,7 +12,7 @@ namespace LazinatorAvlCollections.Avl.ValueTree
         T Value { get; set; }
         long LeftCount { get; set; }
         long RightCount { get; set; }
-        [OnPropertyAccessed("OnChildNodeAccessed(_Left, true);")]
+        [OnPropertyAccessed("OnChildNodeAccessed(_Left, true);")] 
         AvlCountedNode<T> Left { get; set; }
         [OnPropertyAccessed("OnChildNodeAccessed(_Right, false);")]
         AvlCountedNode<T> Right { get; set; }
