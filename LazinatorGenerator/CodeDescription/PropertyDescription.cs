@@ -751,7 +751,7 @@ namespace Lazinator.CodeDescription
             }
             catch (Exception ex)
             {
-                throw new LazinatorCodeGenException($"Unexpected exception. SetLazinatorPropertyType failed; message {ex.Message}");
+                throw new LazinatorCodeGenException($"Unexpected exception. SetLazinatorPropertyType failed on property {t.ToString()} of {ContainingObjectDescription.NameIncludingGenerics}; message {ex.Message}");
             }
         }
 
