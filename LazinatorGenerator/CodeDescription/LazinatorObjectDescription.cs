@@ -91,7 +91,7 @@ namespace Lazinator.CodeDescription
                         (BaseLazinatorObject.IsDerivedFromAbstractLazinator || BaseLazinatorObject.IsAbstract) && !GeneratingRefStruct;
         public string DerivationKeyword => (IsDerivedFromNonAbstractLazinator || IsDerivedFromAbstractLazinator) ? "override " : (IsSealedOrStruct ? "" : "virtual ");
         public string BaseObjectName => BaseLazinatorObject.Namespace == Namespace ? BaseLazinatorObject.NameIncludingGenerics : BaseLazinatorObject.FullyQualifiedObjectName;
-        public string ProtectedIfApplicable => (ObjectType == LazinatorObjectType.Struct || IsSealed || GeneratingRefStruct) ? "" : "protected ";
+        public string ProtectedIfApplicable => (ObjectType == LazinatorObjectType.Struct || GeneratingRefStruct) ? "" : "protected ";
 
         /* Names */
         public string Namespace { get; set; }
