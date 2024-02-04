@@ -10,7 +10,6 @@ namespace Lazinator.CodeDescription
     {
         public List<PropertyDescription> Properties;
         LazinatorObjectDescription Container;
-        NullableContext NullableContextSetting;
 
         public NonexclusiveInterfaceDescription()
         {

@@ -91,7 +91,7 @@ namespace Lazinator.CodeDescription
                         (BaseLazinatorObject.IsDerivedFromAbstractLazinator || BaseLazinatorObject.IsAbstract) && !GeneratingRefStruct;
         public string DerivationKeyword => (IsDerivedFromNonAbstractLazinator || IsDerivedFromAbstractLazinator) ? "override " : (IsSealedOrStruct ? "" : "virtual ");
         public string BaseObjectName => BaseLazinatorObject.Namespace == Namespace ? BaseLazinatorObject.NameIncludingGenerics : BaseLazinatorObject.FullyQualifiedObjectName;
-        public string ProtectedIfApplicable => (ObjectType == LazinatorObjectType.Struct || GeneratingRefStruct) ? "" : "protected ";
+        public string ProtectedIfApplicable => (ObjectType == LazinatorObjectType.Struct || GeneratingRefStruct || IsSealed) ? "" : "protected ";
         public string ProtectedIfApplicableWithDerivationKeyword
         {
             get
@@ -100,7 +100,7 @@ namespace Lazinator.CodeDescription
                 {
                     if (DerivationKeyword == "override")
                     {
-                        return ProtectedIfApplicable + DerivationKeyword;
+                        return "protected override";
                     }
                     else
                         return DerivationKeyword; // exclude "protected"
