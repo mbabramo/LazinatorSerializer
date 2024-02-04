@@ -10,6 +10,10 @@ using Lazinator.Collections;
 
 namespace LazinatorAvlCollections.Avl.ListTree
 {
+    /// An Avl list tree (an Avl tree of lists) that uses an Avl aggregated tree as the underlying outer tree to allow for overall indexing of items within the tree
+    /// and that stores items in sorted order using the default comparer for the type
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public partial class AvlSortedIndexableListTree<T> : AvlIndexableListTree<T>, IAvlSortedIndexableListTree<T>, ISortedIndexableMultivalueContainer<T> where T : ILazinator, IComparable<T>
     { 
         public AvlSortedIndexableListTree(bool allowDuplicates, bool unbalanced, ContainerFactory innerContainerFactory) : base(allowDuplicates, unbalanced, innerContainerFactory)

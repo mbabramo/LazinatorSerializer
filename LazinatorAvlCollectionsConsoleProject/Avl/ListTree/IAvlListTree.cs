@@ -9,6 +9,8 @@ using Lazinator.Collections;
 namespace LazinatorAvlCollections.Avl.ListTree
 {
     [Lazinator((int)LazinatorAvlCollectionUniqueIDs.IAvlListTree)]
+    [SingleParent]
+    [AsyncLazinatorMemory]
     public interface IAvlListTree<T> where T : ILazinator
     {
         [SetterAccessibility("protected")]

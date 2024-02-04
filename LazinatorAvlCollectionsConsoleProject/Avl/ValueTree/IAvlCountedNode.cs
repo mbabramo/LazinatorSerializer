@@ -5,6 +5,8 @@ using System;
 namespace LazinatorAvlCollections.Avl.ValueTree
 {
     [Lazinator((int)LazinatorAvlCollectionUniqueIDs.IAvlCountedNode)]
+    [SingleParent]
+    [AsyncLazinatorMemory]
     public interface IAvlCountedNode<T> where T : ILazinator
     {
         T Value { get; set; }

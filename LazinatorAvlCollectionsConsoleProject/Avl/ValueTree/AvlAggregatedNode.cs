@@ -8,6 +8,10 @@ using System.Text;
 
 namespace LazinatorAvlCollections.Avl.ValueTree
 {
+    /// <summary>
+    /// An aggregated node for an Avl tree, keeping track of how many of each item are in the collection.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public sealed partial class AvlAggregatedNode<T> : IAvlAggregatedNode<T>, IAggregatedNode<T, AvlAggregatedNode<T>>, ILazinator where T : ILazinator, ICountableContainer
     { 
         public AvlAggregatedNode()

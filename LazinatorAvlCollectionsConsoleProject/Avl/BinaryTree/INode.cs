@@ -7,6 +7,11 @@ using System.Text;
 
 namespace LazinatorAvlCollections.Avl.BinaryTree
 {
+    /// <summary>
+    /// The most basic node type explicitly defining the node type as a generic parameter. Another node type can implement this type defining itself as the generic parameter
+    /// </summary>
+    /// <typeparam name="T">The value type</typeparam>
+    /// <typeparam name="N">The children and parent types (should be same as this type)</typeparam>
     [NonexclusiveLazinator((int) LazinatorAvlCollectionUniqueIDs.INode)]
     public interface INode<T, N> where T : ILazinator where N : class, ILazinator, new()
     {

@@ -12,6 +12,10 @@ using LazinatorAvlCollections.Avl.ValueTree;
 
 namespace LazinatorAvlCollections.Avl
 {
+    /// <summary>
+    /// An Avl list (implemented by an underlying tree) that is stored in sorted order based on the default comparer for the item type
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public partial class AvlSortedList<T> : IAvlSortedList<T>, IList<T>, ILazinatorSorted<T> where T : ILazinator, IComparable<T>
     {
         public AvlSortedList()

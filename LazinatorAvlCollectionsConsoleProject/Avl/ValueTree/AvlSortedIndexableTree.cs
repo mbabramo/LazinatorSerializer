@@ -7,7 +7,11 @@ using System.Text;
 
 namespace LazinatorAvlCollections.Avl.ValueTree
 {
-    public partial class AvlSortedIndexableTree<T> : AvlIndexableTree<T>, IAvlSortedIndexableTree<T>, ISortedIndexableContainer<T>, ISortedIndexableMultivalueContainer<T> where T : ILazinator, IComparable<T>
+    /// <summary>
+    /// An Avl tree that is sorted based on the default comparer and indexable
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public partial class AvlSortedIndexableTree<T> : AvlIndexableTreeWithNodeType<T, AvlCountedNode<T>>, IAvlSortedIndexableTree<T>, ISortedIndexableContainer<T>, ISortedIndexableMultivalueContainer<T> where T : ILazinator, IComparable<T>
     {
         public AvlSortedIndexableTree(bool allowDuplicates, bool unbalanced, bool cacheEnds) : base(allowDuplicates, unbalanced, cacheEnds)
         {

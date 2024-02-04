@@ -8,6 +8,10 @@ using Lazinator.Collections.Location;
 
 namespace LazinatorAvlCollections.Avl.ValueTree
 {
+    /// <summary>
+    /// A value node for the AvlTree
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public sealed partial class AvlNode<T> : IAvlNode<T>, ITreeString, IUpdatableNode<T, AvlNode<T>>, ILazinator where T : ILazinator
     {
         public bool NodeVisitedDuringChange { get; set; }

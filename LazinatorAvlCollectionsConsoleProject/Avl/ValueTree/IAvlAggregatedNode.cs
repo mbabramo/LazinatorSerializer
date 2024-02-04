@@ -6,6 +6,8 @@ using Lazinator.Collections;
 namespace LazinatorAvlCollections.Avl.ValueTree
 {
     [Lazinator((int)LazinatorAvlCollectionUniqueIDs.IAvlAggregatedNode)]
+    [SingleParent]
+    [AsyncLazinatorMemory]
     public interface IAvlAggregatedNode<T> where T : ILazinator, ICountableContainer
     {
         long LeftAggregatedCount { get; set; }

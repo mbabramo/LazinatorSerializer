@@ -4,6 +4,8 @@ using Lazinator.Attributes;
 namespace LazinatorAvlCollections.Avl.BinaryTree
 {
     [Lazinator((int)LazinatorAvlCollectionUniqueIDs.IBinaryNode)]
+    [SingleParent]
+    [AsyncLazinatorMemory]
     public interface IBinaryNode<T> where T : ILazinator
     {
         T Value { get; set; }

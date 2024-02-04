@@ -10,6 +10,11 @@ using System.Text;
 
 namespace LazinatorAvlCollections.Avl.KeyValueTree
 {
+    /// <summary>
+    /// An Avl key-value tree, for one or more values, where the items are stored in sorted order and can be accessed by index.
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
     public partial class AvlSortedIndexableKeyValueTree<TKey, TValue> : AvlIndexableKeyValueTree<TKey, TValue>, IAvlSortedIndexableKeyValueTree<TKey, TValue>, ISortedIndexableKeyValueContainer<TKey, TValue>, ISortedIndexableKeyMultivalueContainer<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         public AvlSortedIndexableKeyValueTree(ContainerFactory innerContainerFactory, bool allowDuplicates, bool unbalanced) : base(innerContainerFactory, allowDuplicates, unbalanced)

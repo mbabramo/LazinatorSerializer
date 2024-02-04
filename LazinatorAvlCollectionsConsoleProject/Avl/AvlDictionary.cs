@@ -14,6 +14,12 @@ using Lazinator.Collections.Enumerators;
 
 namespace LazinatorAvlCollections.Avl
 {
+    /// <summary>
+    /// An Avl dictionary class. This class uses an underlying tree to store key-value items in hash buckets based on the hashes of the keys.
+    /// If the key is comparable, you should generally use AvlSortedDictionary instead.
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
     public partial class AvlDictionary<TKey, TValue> : IAvlDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ILazinatorDictionaryable<TKey, TValue>, ILazinatorMultivalueDictionaryable<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>> where TKey : ILazinator where TValue : ILazinator
     {
 

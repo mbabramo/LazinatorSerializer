@@ -13,9 +13,15 @@ using System.Linq;
 using System.Text;
 using Lazinator.Collections;
 using Lazinator.Collections.Enumerators;
+using LazinatorAvlCollections.Avl.ListTree;
 
 namespace LazinatorAvlCollections.Avl.KeyValueTree
 {
+    /// <summary>
+    /// An Avl key-value tree, where a key can correspond to one or more values.
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
     public partial class AvlKeyValueTree<TKey, TValue> : IAvlKeyValueTree<TKey, TValue>, IKeyValueContainer<TKey, TValue>, IKeyMultivalueContainer<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>>, ITreeString where TKey : ILazinator where TValue : ILazinator
     {
         #region Construction
@@ -38,6 +44,8 @@ namespace LazinatorAvlCollections.Avl.KeyValueTree
         {
             if (UnderlyingContainer is AvlTree<LazinatorKeyValue<TKey, TValue>> tree)
                 return tree.ToTreeString();
+            if (UnderlyingContainer is AvlIndexableListTree<LazinatorKeyValue<TKey, TValue>> tree2)
+                return tree2.ToTreeString();
             return "N/A";
         }
 

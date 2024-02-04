@@ -9,6 +9,8 @@ using Lazinator.Collections;
 namespace LazinatorAvlCollections.Avl.KeyValueTree
 {
     [Lazinator((int)LazinatorAvlCollectionUniqueIDs.IAvlKeyValueTree)]
+    [SingleParent]
+    [AsyncLazinatorMemory]
     public interface IAvlKeyValueTree<TKey, TValue>
         where TKey : ILazinator
         where TValue : ILazinator

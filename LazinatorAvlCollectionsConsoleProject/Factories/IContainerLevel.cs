@@ -23,8 +23,8 @@ namespace LazinatorAvlCollections.Factories
         /// </summary>
         bool CacheEnds { get; set; }
         /// <summary>
-        /// The size at which this level should be split. If this level is an inner collection, then the inner collection is split once the inner collection exceeds this threshold. The size may represent the total number of items, if the value container is counted, or the approproximate depth, if it is not. 
+        /// The size at which this level should be split. If this level is an inner collection, then the inner collection is split once the inner collection exceeds this threshold. The size should represent the number of items in the inner layer, not the total aggregated number of items.
         /// </summary>
-        long SplitThreshold { get; set; }
+        int SplitThreshold { get; set; }
     }
 }

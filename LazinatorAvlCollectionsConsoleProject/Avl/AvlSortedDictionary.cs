@@ -11,6 +11,11 @@ using Lazinator.Collections;
 
 namespace LazinatorAvlCollections.Avl
 {
+    /// <summary>
+    /// A sorted dictionary class, which stores key-value items (potentially including multiple values for a key) in an underlying tree
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
     public partial class AvlSortedDictionary<TKey, TValue> : IAvlSortedDictionary<TKey, TValue>, IDictionary<TKey, TValue>, ILazinatorDictionaryable<TKey, TValue>, ILazinatorMultivalueDictionaryable<TKey, TValue>, IEnumerable<KeyValuePair<TKey, TValue>> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         public AvlSortedDictionary()
@@ -19,7 +24,7 @@ namespace LazinatorAvlCollections.Avl
 
         public AvlSortedDictionary(bool allowDuplicates, ContainerFactory factory)
         {
-            UnderlyingTree = (ISortedKeyMultivalueContainer<TKey, TValue>)factory.CreatePossiblySortedKeyValueContainer<TKey, TValue>();
+            UnderlyingTree = (ISortedKeyMultivalueContainer<TKey, TValue>)factory.CreateSortedKeyValueContainer<TKey, TValue>();
             AllowDuplicates = allowDuplicates;
         }
 

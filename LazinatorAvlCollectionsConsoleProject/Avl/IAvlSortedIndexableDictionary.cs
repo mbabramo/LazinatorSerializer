@@ -6,6 +6,8 @@ using Lazinator.Collections.Interfaces;
 namespace LazinatorAvlCollections.Avl
 {
     [Lazinator((int)LazinatorAvlCollectionUniqueIDs.IAvlSortedIndexableDictionary)]
+    [SingleParent]
+    [AsyncLazinatorMemory]
     public interface IAvlSortedIndexableDictionary<TKey, TValue> : IAvlSortedDictionary<TKey, TValue>
         where TKey : ILazinator, IComparable<TKey>
         where TValue : ILazinator

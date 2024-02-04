@@ -6,6 +6,10 @@ using System.Text;
 
 namespace LazinatorAvlCollections.Avl.ValueTree
 {
+    /// <summary>
+    /// A basic AvlValueTree. 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public partial class AvlTree<T> : AvlTreeWithNodeType<T, AvlNode<T>>, IAvlTree<T> where T : ILazinator
     {
         public AvlTree(bool allowDuplicates, bool unbalanced, bool cacheEnds) : base(allowDuplicates, unbalanced, cacheEnds)

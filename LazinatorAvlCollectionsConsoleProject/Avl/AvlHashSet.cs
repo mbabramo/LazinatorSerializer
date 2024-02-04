@@ -7,6 +7,10 @@ using System.Text;
 
 namespace LazinatorAvlCollections.Avl
 {
+    /// <summary>
+    /// A hashset, organized with an underlying Avl tree ordered by item hashes
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public partial class AvlHashSet<T> : IAvlHashSet<T> where T : ILazinator
     {
         public AvlHashSet()

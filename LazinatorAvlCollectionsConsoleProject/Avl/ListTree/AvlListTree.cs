@@ -16,6 +16,10 @@ using System.Diagnostics;
 
 namespace LazinatorAvlCollections.Avl.ListTree
 {
+    /// <summary>
+    /// An Avl list tree, i.e. an Avl tree whose nodes contain lists. The outer tree thus keeps overall balance, while the use of inner lists allows for greater space and time efficiency.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public partial class AvlListTree<T> : IAvlListTree<T>, IValueContainer<T>, IMultivalueContainer<T>, IMultilevelReportReceiver, ITreeString where T : ILazinator
     {
         #region Construction
@@ -160,22 +164,22 @@ namespace LazinatorAvlCollections.Avl.ListTree
         {
             if (UnderlyingTree == null || !UnderlyingTree.Any())
                 return null;
-            var outerContainer = UnderlyingTree;
+            var underlyingTree = UnderlyingTree;
             var locationOfInnerContainer = UnderlyingTree.FirstLocation();
             var innerContainer = UnderlyingTree.GetAt(locationOfInnerContainer);
             var locationInInnerContainer = innerContainer.FirstLocation();
-            return new AvlListTreeLocation<T>(outerContainer, locationOfInnerContainer, innerContainer, locationInInnerContainer);
+            return new AvlListTreeLocation<T>(underlyingTree, locationOfInnerContainer, innerContainer, locationInInnerContainer);
         }
 
         public IContainerLocation LastLocation()
         {
             if (UnderlyingTree == null || !UnderlyingTree.Any())
                 return null;
-            var outerContainer = UnderlyingTree;
+            var underlyingTree = UnderlyingTree;
             var locationOfInnerContainer = UnderlyingTree.LastLocation();
             var innerContainer = UnderlyingTree.GetAt(locationOfInnerContainer);
             var locationInInnerContainer = innerContainer.LastLocation();
-            return new AvlListTreeLocation<T>(outerContainer, locationOfInnerContainer, innerContainer, locationInInnerContainer);
+            return new AvlListTreeLocation<T>(underlyingTree, locationOfInnerContainer, innerContainer, locationInInnerContainer);
         }
 
         private void ConsiderUpdateInnermostEnds(bool firstChanged, bool lastChanged)
@@ -465,7 +469,7 @@ namespace LazinatorAvlCollections.Avl.ListTree
 
         #region Splitting
 
-        public bool ShouldSplit(long splitThreshold)
+        public bool ShouldSplit(int splitThreshold)
         {
             return UnderlyingTree.ShouldSplit(splitThreshold);
         }

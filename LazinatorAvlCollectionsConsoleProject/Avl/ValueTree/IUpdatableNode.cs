@@ -8,6 +8,8 @@ using System.Text;
 namespace LazinatorAvlCollections.Avl.BinaryTree
 {
     [NonexclusiveLazinator((int)LazinatorAvlCollectionUniqueIDs.IUpdatableNode)]
+    [SingleParent]
+    [AsyncLazinatorMemory]
     public interface IUpdatableNode<T, N> : INode<T, N> where T : ILazinator where N : class, ILazinator, new()
     {
         [DoNotAutogenerate]

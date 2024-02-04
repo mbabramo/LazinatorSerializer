@@ -11,6 +11,11 @@ using Lazinator.Collections.Enumerators;
 
 namespace LazinatorAvlCollections.Avl.BinaryTree
 {
+    /// <summary>
+    /// A binary tree with a corresponding node type. This is used as an intermediate class to allow correspondence between a binary tree type and its node type.
+    /// </summary>
+    /// <typeparam name="T">The value type</typeparam>
+    /// <typeparam name="N">The node type</typeparam>
     public partial class BinaryTreeWithNodeType<T, N> : IBinaryTreeWithNodeType<T, N>, IValueContainer<T>, IMultivalueContainer<T>, IEnumerable<T>, IMultilevelReportReceiver, ITreeString where T : ILazinator where N : class, ILazinator, INode<T, N>, new()
     {
         #region Construction
@@ -777,7 +782,7 @@ namespace LazinatorAvlCollections.Avl.BinaryTree
         }
 
 
-        public bool ShouldSplit(long splitThreshold)
+        public virtual bool ShouldSplit(int splitThreshold)
         {
             if (this is ICountableContainer countable)
                 return countable.LongCount > splitThreshold;
@@ -856,7 +861,6 @@ namespace LazinatorAvlCollections.Avl.BinaryTree
         }
 
         #endregion
-
 
         #region Path to node
 

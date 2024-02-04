@@ -10,6 +10,10 @@ using Lazinator.Collections;
 
 namespace LazinatorAvlCollections.Avl
 {
+    /// <summary>
+    /// An Avl list, where the list is implemented by an underlying balanced Avl tree structure. 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public partial class AvlList<T> : IAvlList<T>, IList<T>, ILazinatorListable<T> where T : ILazinator
     {
         public AvlList()

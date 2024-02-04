@@ -11,23 +11,29 @@ using Lazinator.Collections;
 
 namespace LazinatorAvlCollections.Avl.ListTree
 {
+    /// <summary>
+    /// A means of referencing an item within an indexable Avl list tree, specifying the location of the inner container
+    /// in the outer Avl list tree as well as the location in the inner container, while also providing references
+    /// to both the outer and inner containers.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public struct AvlIndexableListTreeLocation<T> : IContainerLocation where T : ILazinator
     {
-        public readonly AvlAggregatedTree<IIndexableMultivalueContainer<T>> Tree;
+        public readonly AvlAggregatedTree<IIndexableMultivalueContainer<T>> UnderlyingTree;
         public readonly AvlAggregatedNode<IIndexableMultivalueContainer<T>> InnerContainerNode;
         public IIndexableMultivalueContainer<T> InnerContainer => InnerContainerNode.Value;
         public readonly IContainerLocation LocationInInnerContainer;
 
         public AvlIndexableListTreeLocation(AvlAggregatedTree<IIndexableMultivalueContainer<T>> tree, AvlAggregatedNode<IIndexableMultivalueContainer<T>> innerContainerNode, IContainerLocation locationInInnerContainer)
         {
-            Tree = tree;
+            UnderlyingTree = tree;
             InnerContainerNode = innerContainerNode;
             LocationInInnerContainer = locationInInnerContainer;
         }
 
         public AvlIndexableListTreeLocation(AvlAggregatedTree<IIndexableMultivalueContainer<T>> tree, TreeLocation<IIndexableMultivalueContainer<T>, AvlAggregatedNode<IIndexableMultivalueContainer<T>>> innerContainerLocation, IContainerLocation locationInInnerContainer)
         {
-            Tree = tree;
+            UnderlyingTree = tree;
             InnerContainerNode = (AvlAggregatedNode<IIndexableMultivalueContainer<T>>)innerContainerLocation.Node;
             LocationInInnerContainer = locationInInnerContainer;
         }
@@ -43,26 +49,26 @@ namespace LazinatorAvlCollections.Avl.ListTree
         {
             var nextInner = LocationInInnerContainer.GetNextLocation();
             if (!nextInner.IsAfterContainer)
-                return new AvlIndexableListTreeLocation<T>(Tree, InnerContainerNode, nextInner);
+                return new AvlIndexableListTreeLocation<T>(UnderlyingTree, InnerContainerNode, nextInner);
             var nextOuterLocation = LocationOfInnerContainer.GetNextLocation();
             if (nextOuterLocation.IsAfterContainer)
                 return new AfterContainerLocation();
-            var nextInnerContainerNode = Tree.GetNodeAtNonaggregatedIndex(InnerContainerNode.Index + 1);
+            var nextInnerContainerNode = UnderlyingTree.GetNodeAtNonaggregatedIndex(InnerContainerNode.Index + 1);
             var nextInnerLocation = new IndexLocation(0, nextInnerContainerNode.Value.LongCount);
-            return new AvlIndexableListTreeLocation<T>(Tree, nextInnerContainerNode, nextInnerLocation);
+            return new AvlIndexableListTreeLocation<T>(UnderlyingTree, nextInnerContainerNode, nextInnerLocation);
         }
 
         public IContainerLocation GetPreviousLocation()
         {
             var previousInner = LocationInInnerContainer.GetPreviousLocation();
             if (!previousInner.IsBeforeContainer)
-                return new AvlIndexableListTreeLocation<T>(Tree, InnerContainerNode, previousInner);
+                return new AvlIndexableListTreeLocation<T>(UnderlyingTree, InnerContainerNode, previousInner);
             var previousOuterLocation = LocationOfInnerContainer.GetPreviousLocation();
             if (previousOuterLocation.IsBeforeContainer)
                 return new BeforeContainerLocation();
-            var previousInnerContainerNode = Tree.GetNodeAtNonaggregatedIndex(InnerContainerNode.Index + 1);
+            var previousInnerContainerNode = UnderlyingTree.GetNodeAtNonaggregatedIndex(InnerContainerNode.Index + 1);
             var previousInnerLocation = new IndexLocation(0, previousInnerContainerNode.Value.LongCount);
-            return new AvlIndexableListTreeLocation<T>(Tree, previousInnerContainerNode, previousInnerLocation);
+            return new AvlIndexableListTreeLocation<T>(UnderlyingTree, previousInnerContainerNode, previousInnerLocation);
         }
     }
 }

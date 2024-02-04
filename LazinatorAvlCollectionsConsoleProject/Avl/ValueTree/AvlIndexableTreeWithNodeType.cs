@@ -9,6 +9,11 @@ using LazinatorAvlCollections.Avl.BinaryTree;
 
 namespace LazinatorAvlCollections.Avl.ValueTree
 {
+    /// <summary>
+    /// An intermediate class for the Avl indexable tree, containing most of the logic for index-based access, insertion, and removal.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="N"></typeparam>
     public partial class AvlIndexableTreeWithNodeType<T, N> : AvlTreeWithNodeType<T, N>, IAvlIndexableTreeWithNodeType<T, N>, IEnumerable<T> where T : ILazinator where N : class, ILazinator, IIndexableNode<T, N>, new()
     {
         public long LongCount => (Root as N)?.LongCount ?? 0;

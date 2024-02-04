@@ -16,6 +16,10 @@ using System.Diagnostics;
 
 namespace LazinatorAvlCollections.Avl.ListTree
 {
+    /// <summary>
+    /// An Avl list tree (an Avl tree of lists) that uses an Avl aggregated tree as the underlying outer tree to allow for overall indexing of items within the tree
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public partial class AvlIndexableListTree<T> : IAvlIndexableListTree<T>, IIndexableMultivalueContainer<T>, IMultilevelReportReceiver, ITreeString where T : ILazinator
     {
         #region Construction
@@ -563,7 +567,7 @@ namespace LazinatorAvlCollections.Avl.ListTree
 
         #region Splitting
 
-        public bool ShouldSplit(long splitThreshold)
+        public bool ShouldSplit(int splitThreshold)
         {
             return UnderlyingTree.ShouldSplit(splitThreshold);
         }

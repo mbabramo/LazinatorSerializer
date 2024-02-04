@@ -12,7 +12,8 @@ using Lazinator.Collections;
 namespace LazinatorAvlCollections.Avl.ValueTree
 {
     /// <summary>
-    /// A basic AvlTree class, adding balancing to the BinaryTree class.
+    /// An intermediate class for the basic AvlTree class, adding balancing to the BinaryTree class.
+    /// This class defines the insertion and removal operations and handles balancing. 
     /// </summary>
     /// <typeparam name="T">The type of the object to be stored on each node of the tree</typeparam>
     public partial class AvlTreeWithNodeType<T, N> : BinaryTreeWithNodeType<T, N>, IAvlTreeWithNodeType<T, N>, IEnumerable<T> where T : ILazinator where N : class, ILazinator, IUpdatableNode<T, N>, new()

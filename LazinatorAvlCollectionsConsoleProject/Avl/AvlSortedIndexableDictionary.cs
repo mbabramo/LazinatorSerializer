@@ -7,6 +7,11 @@ using System.Text;
 
 namespace LazinatorAvlCollections.Avl
 {
+    /// <summary>
+    /// A sorted Avl dictionary that also allows access to individual items in the tree by index.
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
     public partial class AvlSortedIndexableDictionary<TKey, TValue> : AvlSortedDictionary<TKey, TValue>, IAvlSortedIndexableDictionary<TKey, TValue> where TKey : ILazinator, IComparable<TKey> where TValue : ILazinator
     {
         public AvlSortedIndexableDictionary()
@@ -15,7 +20,7 @@ namespace LazinatorAvlCollections.Avl
 
         public AvlSortedIndexableDictionary(bool allowDuplicates, ContainerFactory factory)
         {
-            UnderlyingTree = (ISortedIndexableKeyMultivalueContainer<TKey, TValue>)factory.CreatePossiblySortedKeyValueContainer<TKey, TValue>();
+            UnderlyingTree = (ISortedIndexableKeyMultivalueContainer<TKey, TValue>)factory.CreateSortedKeyValueContainer<TKey, TValue>();
             AllowDuplicates = allowDuplicates;
         }
 

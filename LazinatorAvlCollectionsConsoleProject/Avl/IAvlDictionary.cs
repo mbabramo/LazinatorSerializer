@@ -9,6 +9,7 @@ using System;
 namespace LazinatorAvlCollections.Avl
 {
     [Lazinator((int)LazinatorAvlCollectionUniqueIDs.IAvlDictionary)]
+    [SingleParent]
     public interface IAvlDictionary<TKey, TValue>
         where TKey : ILazinator
         where TValue : ILazinator

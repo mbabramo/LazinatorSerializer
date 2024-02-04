@@ -7,6 +7,7 @@ using Lazinator.Wrappers;
 namespace LazinatorAvlCollections.Avl
 {
     [Lazinator((int)LazinatorAvlCollectionUniqueIDs.IAvlList)]
+    [SingleParent]
     interface IAvlList<T> where T : ILazinator
     {
         IIndexableValueContainer<T> UnderlyingTree { get; set; }

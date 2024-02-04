@@ -7,9 +7,9 @@ using System.Text;
 
 namespace LazinatorAvlCollections.Avl.ListTree
 {
-    public static class ListTreeComparisons<T> where T : ILazinator
+    internal static class ListTreeComparisons<T> where T : ILazinator
     {
-        public static int CompareBasedOnEndItems(IMultivalueContainer<T> container, T item, IComparer<T> comparer)
+        internal static int CompareBasedOnEndItems(IMultivalueContainer<T> container, T item, IComparer<T> comparer)
         {
             T last = container.Last();
             var lastComparison = comparer.Compare(item, last);
@@ -28,7 +28,7 @@ namespace LazinatorAvlCollections.Avl.ListTree
         /// <param name="item"></param>
         /// <param name="comparer"></param>
         /// <returns></returns>
-        public static CustomComparer<IMultivalueContainer<T>> GetItemToInnerContainerComparer(T item, IComparer<T> comparer)
+        internal static CustomComparer<IMultivalueContainer<T>> GetItemToInnerContainerComparer(T item, IComparer<T> comparer)
         {
             return new CustomComparer<IMultivalueContainer<T>>((a, b) =>
             {
@@ -38,7 +38,7 @@ namespace LazinatorAvlCollections.Avl.ListTree
             });
         }
 
-        public static CustomComparer<IMultivalueContainer<T>> GetInnerContainersComparer(IComparer<T> comparer)
+        internal static CustomComparer<IMultivalueContainer<T>> GetInnerContainersComparer(IComparer<T> comparer)
         {
             return new CustomComparer<IMultivalueContainer<T>>((a, b) =>
             {

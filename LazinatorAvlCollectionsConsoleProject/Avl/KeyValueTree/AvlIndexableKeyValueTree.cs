@@ -8,9 +8,16 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Lazinator.Collections;
+using LazinatorAvlCollections.Avl.ListTree;
+using System.ComponentModel;
 
 namespace LazinatorAvlCollections.Avl.KeyValueTree
 {
+    /// <summary>
+    /// An Avl key-value tree, for single or multiple values, whose items are addressable by index.
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
     public partial class AvlIndexableKeyValueTree<TKey, TValue> : AvlKeyValueTree<TKey, TValue>, IAvlIndexableKeyValueTree<TKey, TValue>, IIndexableKeyValueContainer<TKey, TValue>, IIndexableKeyMultivalueContainer<TKey, TValue> where TKey : ILazinator where TValue : ILazinator
     {
         public AvlIndexableKeyValueTree(ContainerFactory innerContainerFactory, bool allowDuplicates, bool unbalanced) : base(innerContainerFactory, allowDuplicates, unbalanced)
@@ -32,9 +39,25 @@ namespace LazinatorAvlCollections.Avl.KeyValueTree
         {
             var result = UnderlyingIndexableContainer.FindContainerLocation(KeyPlusDefault(key), whichOne, KeyComparer(comparer));
             if (result.found)
-            {
-                var item = UnderlyingIndexableContainer.GetAt(result.location);
-                return (item.Value, ((IndexLocation)result.location).Index, true);
+            { 
+                long index = 0L;
+                var location = result.location;
+                var item = UnderlyingIndexableContainer.GetAt(location);
+                while (location != null)
+                {
+                    if (location is IndexLocation indexLocation)
+                    {
+                        index += indexLocation.Index;
+                        location = null;
+                    }
+                    else
+                    {
+                        var indexablelocation = (AvlIndexableListTreeLocation<LazinatorKeyValue<TKey, TValue>>)location;
+                        index += indexablelocation.InnerContainerNode.FirstAggregatedIndex;
+                        location = indexablelocation.LocationInInnerContainer;
+                    }
+                }
+                return (item.Value, index, true);
             }
             return (default, -1, false);
         }

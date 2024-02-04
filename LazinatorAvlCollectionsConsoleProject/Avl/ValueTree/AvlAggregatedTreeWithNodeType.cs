@@ -9,6 +9,12 @@ using Lazinator.Collections;
 
 namespace LazinatorAvlCollections.Avl.ValueTree
 {
+    /// <summary>
+    /// An intermediate class to construct the Avl aggregated tree, containing the logic for addressing aggregated index ranges
+    /// (i.e., where a single index into the tree corresponds to a range of indices).
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="N"></typeparam>
     public partial class AvlAggregatedTreeWithNodeType<T, N> : AvlIndexableTreeWithNodeType<T, N>, IAvlAggregatedTreeWithNodeType<T, N>, IAggregatedMultivalueContainer<T>, IMultivalueContainer<T> where T : ILazinator, ICountableContainer where N : class, ILazinator, IAggregatedNode<T, N>, new()
     {
         public long LongAggregatedCount => (Root as N)?.LongAggregatedCount ?? 0;
