@@ -362,7 +362,17 @@ namespace Lazinator.CodeDescription
                 bool match = interfacesConstructedFrom.Any(i => SymbolEqualityComparer.Default.Equals(i, baseInterfaceConstructedFrom)) || interfacesConstructedFrom.Any(i => i.ToString() == baseInterfaceConstructedFrom.ToString()); // string test seems to make a difference when we're generating many files at once and some of the generation seems to mess up the other tests.
                 if (!match)
                 {
-                    throw new LazinatorCodeGenException($"{NameIncludingGenerics} inherits from {BaseLazinatorObject.NameIncludingGenerics}, but {ExclusiveInterface.NamedTypeSymbol} does not inherit from {BaseLazinatorObject.ExclusiveInterface.NamedTypeSymbol}.");
+                    string baseConstructedFromString = baseInterfaceConstructedFrom.ToString();
+                    if (baseConstructedFromString == baseInterface.ToString())
+                        baseConstructedFromString = "";
+                    else
+                        baseConstructedFromString = " (constructed from " + baseConstructedFromString + ")";
+                    string interfaceListString = String.Join(", ", interfaces);
+                    string interfaceConstructedFromStringList = String.Join(", ", interfacesConstructedFrom);
+                    if (interfaceListString != interfaceConstructedFromStringList)
+                        interfaceListString += $" (constructed from {interfaceConstructedFromStringList})";
+
+                    throw new LazinatorCodeGenException($"{NameIncludingGenerics} inherits from {BaseLazinatorObject.NameIncludingGenerics}, but {ExclusiveInterface.NamedTypeSymbol} does not inherit from {BaseLazinatorObject.ExclusiveInterface.NamedTypeSymbol}{baseConstructedFromString}. {ExclusiveInterface.NamedTypeSymbol} implements the following interfaces: {interfaceListString}. ");
                 }
             }
         }
