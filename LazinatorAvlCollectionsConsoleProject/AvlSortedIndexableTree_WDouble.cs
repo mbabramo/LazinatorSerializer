@@ -13,7 +13,7 @@ namespace PerformanceProfiling
     /// An Avl tree that is sorted based on the default comparer and indexable
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public partial class AvlSortedIndexableTree_WDouble : AvlIndexableTreeWithNodeType<WDouble, AvlCountedNode<WDouble>>, IAvlSortedIndexableTree_WDouble, ISortedIndexableContainer<WDouble>, ISortedIndexableMultivalueContainer<WDouble> 
+    public partial class AvlSortedIndexableTree_WDouble : AvlIndexableTreeWithNodeType<WDouble, AvlCountedNode_WDouble>, IAvlSortedIndexableTree_WDouble, ISortedIndexableContainer<WDouble>, ISortedIndexableMultivalueContainer<WDouble>, ILazinator
     {
         public AvlSortedIndexableTree_WDouble(bool allowDuplicates, bool unbalanced, bool cacheEnds) : base(allowDuplicates, unbalanced, cacheEnds)
         {

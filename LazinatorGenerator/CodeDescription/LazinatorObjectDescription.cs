@@ -538,6 +538,10 @@ namespace Lazinator.CodeDescription
             string constructors = GetConstructors();
             string cloneMethod = GetCloneMethod();
 
+            if (NameIncludingGenerics.Contains("AvlCountedNode") && NameIncludingGenerics.Contains("WDouble"))
+            {
+                var DEBUG = 0;
+            }
             if (!IsDerivedFromNonAbstractLazinator)
             {
                 string generalDefinitions;
@@ -1701,7 +1705,7 @@ TabbedText.WriteLine($""Converting {ILazinatorTypeSymbol} at position: "" + Lazi
                     ReadOnlySpan<byte> span = LazinatorMemoryStorage.InitialReadOnlyMemory.Span;
                     ConvertFromBytesForPrimitiveProperties(span, includeChildrenMode, serializedVersionNumber, ref bytesSoFar);{IIF(IncludeTracingCode, $@"
 TabbedText.Tabs++;")}
-                    {GetLengthsCalculation(true, false)}{TypeForLengths} totalChildrenSize = ConvertFromBytesForChildLengths(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);;{IIF(IncludeTracingCode, $@"
+                    {GetLengthsCalculation(true, false)}{TypeForLengths} totalChildrenSize = ConvertFromBytesForChildLengths(span, includeChildrenMode, serializedVersionNumber, bytesSoFar + lengthForLengths, ref bytesSoFar);{IIF(IncludeTracingCode, $@"
 TabbedText.Tabs--;")}
                     return bytesSoFar + totalChildrenSize;
                 }}

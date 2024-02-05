@@ -7,6 +7,7 @@ namespace Lazinator.Wrappers
     /// </summary>
     [SizeOfLength(1)]
     [FixedLengthLazinator(4)]
+    [ExcludeLazinatorVersionByte]
     [NonbinaryHash]
     [Lazinator((int)LazinatorCoreUniqueIDs.IWFloat, -1)]
     interface IWFloat : IW<float>

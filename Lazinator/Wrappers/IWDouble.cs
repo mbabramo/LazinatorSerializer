@@ -7,6 +7,7 @@ namespace Lazinator.Wrappers
     /// </summary>
     [SizeOfLength(1)]
     [FixedLengthLazinator(8)]
+    [ExcludeLazinatorVersionByte]
     [NonbinaryHash]
     [Lazinator((int)LazinatorCoreUniqueIDs.IWDouble, -1)]
     interface IWDouble : IW<double>

@@ -1591,6 +1591,10 @@ TabbedText.WriteLine($""{ILazinatorString} location: {{childData.ToLocationStrin
             }
             else
             {
+                if (ContainingObjectDescription.NameIncludingGenerics.Contains("AvlCountedNode_WDouble") && PropertyName.Contains("Value"))
+                {
+                    var DEBUG234 = 0;
+                }
                 if (includeTracingCode)
                 {
                     sb.AppendLine($"TabbedText.WriteLine($\"{PropertyName}: Length is {{bytesSoFar}} past above position; start location is {{indexOfFirstChild + totalChildrenBytes}} past above position\"); ");

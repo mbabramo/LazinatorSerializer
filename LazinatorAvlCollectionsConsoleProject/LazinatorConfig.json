@@ -12,8 +12,8 @@
   "DefaultAllowRecordLikeRegularStructs": false,
   "DefaultAllowRecordLikeReadOnlyStructs": true,
   "DefaultAutoChangeParent": true,
-  "IncludeTracingCode": false,
-  "StepThroughProperties": true,
+  "IncludeTracingCode": true,
+  "StepThroughProperties": false,
   "HideBackingFields": false,
   "HideMainProperties": true,
   "HideILazinatorProperties": false

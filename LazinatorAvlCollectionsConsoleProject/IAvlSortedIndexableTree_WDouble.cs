@@ -11,7 +11,7 @@ namespace PerformanceProfiling
     [Lazinator(9003)]
     [SingleParent]
     [AsyncLazinatorMemory]
-    public interface IAvlSortedIndexableTree_WDouble : IAvlIndexableTreeWithNodeType<WDouble, AvlCountedNode<WDouble>>
+    public interface IAvlSortedIndexableTree_WDouble : IAvlIndexableTreeWithNodeType<WDouble, AvlCountedNode_WDouble>
     {
     }
 }
