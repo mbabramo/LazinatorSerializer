@@ -11,6 +11,7 @@ using LazinatorTests.Utilities;
 using LazinatorTests.Examples.RemoteHierarchy;
 using System.Threading.Tasks;
 using System;
+using Lazinator.Persistence;
 
 namespace LazinatorTests.Tests
 {

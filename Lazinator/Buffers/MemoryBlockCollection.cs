@@ -43,8 +43,16 @@ namespace Lazinator.Buffers
         public MemoryBlockCollection(IEnumerable<MemoryBlock> memoryBlocks)
         {
             MemoryBlocks = memoryBlocks.ToList();
-            HighestMemoryBlockID = MemoryBlocks.Any() ? new MemoryBlockID(MemoryBlocks.Max(x => x.MemoryBlockID.AsInt)) : new MemoryBlockID(0);
-            LengthOfMemoryBlocks = MemoryBlocks.Sum(x => (long) x.Length);
+            if (MemoryBlocks.Any(x => x == null))
+            {
+                HighestMemoryBlockID = MemoryBlocksLoadingInfo.Any() ? new MemoryBlockID(MemoryBlocksLoadingInfo.Max(x => x.MemoryBlockID.AsInt)) : new MemoryBlockID(0);
+                LengthOfMemoryBlocks = MemoryBlocksLoadingInfo.Sum(x => (long)x.MemoryBlockLength);
+            }
+            else
+            {
+                HighestMemoryBlockID = MemoryBlocks.Any() ? new MemoryBlockID(MemoryBlocks.Max(x => x.MemoryBlockID.AsInt)) : new MemoryBlockID(0);
+                LengthOfMemoryBlocks = MemoryBlocks.Sum(x => (long)x.Length);
+            }
             InitializeMemoryBlocksInformationFromMemoryBlocks();
         }
 

@@ -453,6 +453,8 @@ namespace Lazinator.Core
         /// <param name="writer">The binary writer</param>
         /// <param name="getChildSliceFn">A function that returns the Lazinator memory containing the child</param>
         /// <param name="childStorage">The Lazinator memory containing the child, if such memory has been accessed</param>
+        /// <param name="considerWriteReferenceOnly">Check whether to include a reference to previously written memory instead of the buffer itself, when serializing diffs</param>
+        /// <param name="serializeDiffsThreshold">The minimum number of bytes to justify including a reference to previously written memory</param>
         /// <returns></returns>
         public static LazinatorMemory WriteExistingChildStorage(ref BufferWriter writer, ReturnLazinatorMemoryDelegate getChildSliceFn, LazinatorMemory childStorage, bool considerWriteReferenceOnly, int serializeDiffsThreshold)
         {
@@ -469,9 +471,11 @@ namespace Lazinator.Core
         /// Writes a child to a binary buffer, where that child has not been previously accessed. This thus obtains the last version from storage (or stores a zer length if this
         /// is the first time saving the child and it really is empty).
         /// </summary>
-        /// <param name="writer"></param>
-        /// <param name="getChildSliceFn"></param>
-        /// <param name="childStorage"></param>
+        /// <param name="writer">The binary writer async container</param>
+        /// <param name="getChildSliceFn">A function that asynchronously returns the Lazinator memory containing the child</param>
+        /// <param name="childStorage">The Lazinator memory containing the child, if such memory has been accessed</param>
+        /// <param name="considerWriteReferenceOnly">Check whether to include a reference to previously written memory instead of the buffer itself, when serializing diffs</param>
+        /// <param name="serializeDiffsThreshold">The minimum number of bytes to justify including a reference to previously written memory</param>
         /// <returns></returns>
         public async static ValueTask<LazinatorMemory> WriteExistingChildStorageAsync(BufferWriterContainer writer, ReturnLazinatorMemoryDelegateAsync getChildSliceFn, LazinatorMemory childStorage, bool writeReferenceOnly)
         {

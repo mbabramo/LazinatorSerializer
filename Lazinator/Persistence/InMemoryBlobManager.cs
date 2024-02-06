@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LazinatorTests.Utilities
+namespace Lazinator.Persistence
 {
     public class InMemoryBlobManager : IBlobManager
     {
