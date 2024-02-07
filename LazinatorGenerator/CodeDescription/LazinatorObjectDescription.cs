@@ -38,7 +38,6 @@ namespace Lazinator.CodeDescription
         public string NullableModeRestoreString => NullableModeEnabled ? "" : $@"
             #nullable restore";
 
-        public string IsNullableContextString => NullableModeEnabled ? $"public {DerivationKeyword}bool IsNullableContext => true;" : $"public {DerivationKeyword}bool IsNullableContext => false;"; // must delete this once we solve the mystery of why nullable context is sometimes changing.
         public string QuestionMarkIfNullableModeEnabled => NullableModeEnabled ? "?" : "";
         public string ILazinatorStringWithoutQuestionMark => "ILazinator";
         public string ILazinatorString => "ILazinator" + QuestionMarkIfNullableModeEnabled;
@@ -481,8 +480,6 @@ namespace Lazinator.CodeDescription
             if (BaseLazinatorObject == null)
                 sb.AppendLine($@"{HideILazinatorProperty}public bool IsStruct => {(ObjectType == LazinatorObjectType.Struct || GeneratingRefStruct ? "true" : "false")};
                         ");
-
-            sb.AppendLine(IsNullableContextString);
 
             AppendFromRefStruct(sb);
         }
