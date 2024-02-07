@@ -1,4 +1,5 @@
-﻿using Lazinator.Support;
+﻿using Lazinator.Core;
+using Lazinator.Support;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -32,8 +33,9 @@ namespace Lazinator.Buffers
 
         public override MemoryBlockCollection DeepCopy()
         {
-            var collection = new MemoryRangeCollection(MemoryBlocks, Ranges);
-            return collection;
+            var copy = this.CloneLazinatorTyped();
+            CopyNonPersistedPropertiesTo(copy);
+            return copy;
         }
 
         public void SetFromLazinatorMemory(LazinatorMemory lazinatorMemory)

@@ -1,4 +1,5 @@
-﻿using Lazinator.Exceptions;
+﻿using Lazinator.Core;
+using Lazinator.Exceptions;
 using Lazinator.Persistence;
 using Lazinator.Support;
 using System;
@@ -63,8 +64,18 @@ namespace Lazinator.Buffers
 
         public virtual MemoryBlockCollection DeepCopy()
         {
-            var collection = new MemoryBlockCollection(MemoryBlocks);
-            return collection;
+            var copy = this.CloneLazinatorTyped();
+            CopyNonPersistedPropertiesTo(copy);
+            return copy;
+        }
+
+        protected void CopyNonPersistedPropertiesTo(MemoryBlockCollection copy)
+        {
+            copy.MemoryBlocks = MemoryBlocks?.ToList();
+            copy.BlobManager = BlobManager;
+            copy.MemoryBlocksIndexFromBlockID = MemoryBlocksIndexFromBlockID.ToDictionary();
+            copy.LengthOfMemoryBlocks = LengthOfMemoryBlocks;
+            copy.HighestMemoryBlockID = HighestMemoryBlockID;
         }
 
         public virtual void AppendMemoryBlock(MemoryBlock memoryBlock)
