@@ -53,7 +53,8 @@ namespace Lazinator.Persistence
         {
             string path = GetPathForIndex(baseBlobPath, forkInformation, versionNumber);
             ReadOnlyMemory<byte> bytes = blobManager.ReadAll(path);
-            return CreateFromBytes(blobManager, bytes);
+            var result = CreateFromBytes(blobManager, bytes);
+            return result;
         }
 
         public static async ValueTask<PersistentIndex> ReadFromBlobAsync(IBlobManager blobManager, string baseBlobPath, IEnumerable<int> forkInformation, int versionNumber)
@@ -67,6 +68,7 @@ namespace Lazinator.Persistence
         {
             var index = new PersistentIndex(new LazinatorMemory(bytes));
             index.BlobManager = blobManager;
+            index.InitializeUnpersistedData();
             return index;
         }
 
