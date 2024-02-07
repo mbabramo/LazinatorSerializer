@@ -216,6 +216,8 @@ namespace Lazinator.Buffers
             {
                 MemoryBlocks = MemoryBlocksLoadingInfo.Select(x => (MemoryBlock)null).ToList();
                 CreateMemoryBlocksIndexFromBlockID();
+                HighestMemoryBlockID = new MemoryBlockID(MemoryBlocksLoadingInfo.Max(x => x.MemoryBlockID.AsInt));
+                LengthOfMemoryBlocks = MemoryBlocksLoadingInfo.Sum(x => (long)x.MemoryBlockLength);
             }
         }
 

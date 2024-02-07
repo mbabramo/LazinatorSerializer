@@ -38,7 +38,7 @@ namespace Lazinator.CodeDescription
         public string NullableModeRestoreString => NullableModeEnabled ? "" : $@"
             #nullable restore";
 
-        public string DEBUGNullableModeLookupMethod => NullableModeEnabled ? $"public {DerivationKeyword}bool IsNullableContext => true;" : $"public {DerivationKeyword}bool IsNullableContext => false;"; // must delete this once we solve the mystery of why nullable context is sometimes changing.
+        public string IsNullableContextString => NullableModeEnabled ? $"public {DerivationKeyword}bool IsNullableContext => true;" : $"public {DerivationKeyword}bool IsNullableContext => false;"; // must delete this once we solve the mystery of why nullable context is sometimes changing.
         public string QuestionMarkIfNullableModeEnabled => NullableModeEnabled ? "?" : "";
         public string ILazinatorStringWithoutQuestionMark => "ILazinator";
         public string ILazinatorString => "ILazinator" + QuestionMarkIfNullableModeEnabled;
@@ -482,7 +482,7 @@ namespace Lazinator.CodeDescription
                 sb.AppendLine($@"{HideILazinatorProperty}public bool IsStruct => {(ObjectType == LazinatorObjectType.Struct || GeneratingRefStruct ? "true" : "false")};
                         ");
 
-            sb.AppendLine(DEBUGNullableModeLookupMethod);
+            sb.AppendLine(IsNullableContextString);
 
             AppendFromRefStruct(sb);
         }
@@ -538,10 +538,6 @@ namespace Lazinator.CodeDescription
             string constructors = GetConstructors();
             string cloneMethod = GetCloneMethod();
 
-            if (NameIncludingGenerics.Contains("AvlCountedNode") && NameIncludingGenerics.Contains("WDouble"))
-            {
-                var DEBUG = 0;
-            }
             if (!IsDerivedFromNonAbstractLazinator)
             {
                 string generalDefinitions;
@@ -1401,11 +1397,6 @@ namespace Lazinator.CodeDescription
 
         private void AppendUpdateDeserializedChildren(CodeStringBuilder sb)
         {
-
-            if (NameIncludingGenerics.Contains("AvlCountedNode") && NameIncludingGenerics.Contains("WDouble"))
-            {
-                var DEBUG = 0;
-            }
             // For now, we will not include an async method. But in case we change this, we still have the async code support.
             if (IsDerivedFromNonAbstractLazinator)
                 sb.AppendLine(
@@ -1447,10 +1438,6 @@ $@"_{propertyName} = ({property.AppropriatelyQualifiedTypeName}) CloneOrChange_{
 
         private void AppendWritePropertiesIntoBuffer(CodeStringBuilder sb)
         {
-            if (FullyQualifiedObjectName.Contains("SealedClass"))
-            {
-                var DEBUG = 0;
-            }
 
             if (ImplementsWritePropertiesIntoBuffer)
             {
